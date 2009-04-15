@@ -1,0 +1,10 @@
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\RotatorSimulator5\RotatorDriver\bin\Release\ASCOM.Simulator.Rotator.dll
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\RotatorSimulator5\RotatorDriver\bin\Release\ASCOM.Simulator.Rotator.pdb
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\RotatorSimulator5\RotatorDriver\bin\Release\ASCOM.RotatorSimulator.exe
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\RotatorSimulator5\RotatorDriver\bin\Release\ASCOM.RotatorSimulator.pdb
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\RotatorSimulator5\RotatorDriver\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\RotatorSimulator5\RotatorDriver\obj\Release\RotatorDriver.csproj.ResolveComReference.cache
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\RotatorSimulator5\RotatorDriver\obj\Release\ASCOM.Simulator.Properties.Resources.resources
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\RotatorSimulator5\RotatorDriver\obj\Release\RotatorDriver.csproj.GenerateResource.Cache
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\RotatorSimulator5\RotatorDriver\obj\Release\ASCOM.Simulator.Rotator.dll
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\RotatorSimulator5\RotatorDriver\obj\Release\ASCOM.Simulator.Rotator.pdb

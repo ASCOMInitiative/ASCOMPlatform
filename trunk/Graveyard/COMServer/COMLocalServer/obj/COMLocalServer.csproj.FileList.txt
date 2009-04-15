@@ -1,0 +1,6 @@
+bin\Debug\ManagedCOMLocalServer_Impl01.exe
+bin\Debug\ManagedCOMLocalServer_Impl01.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\COMLocalServer.csproj.ResolveComReference.cache
+obj\Debug\ManagedCOMLocalServer_Impl01.exe
+obj\Debug\ManagedCOMLocalServer_Impl01.pdb

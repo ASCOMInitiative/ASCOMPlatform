@@ -1,0 +1,1129 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AscomClient</name>
+    </assembly>
+    <members>
+        <member name="T:ASCOM.Dome">
+            <summary>
+            Provides universal access to ASCOM Dome drivers
+            </summary>
+        </member>
+        <member name="M:ASCOM.Dome.#ctor(System.String)">
+            <summary>
+            Constructor for Dome class. Creates a Dome based on the ProgID in the DomeID string.
+            </summary>
+            <param name="domeID">The progID of the dome to be instantiated</param>
+        </member>
+        <member name="M:ASCOM.Dome.Choose(System.String)">
+            <summary>
+            Shows the ASCOM Chooser to select a Dome.
+            </summary>
+            <param name="domeID">Prog ID of the default dome to select. Null if no default is to be set.</param>
+            <returns>The Prog ID of the Dome chosen, or Null if no dome is chose, or the dialog is canceled.</returns>
+        </member>
+        <member name="M:ASCOM.Dome.AbortSlew">
+            <summary>
+            Immediately cancel current dome operation.
+            Calling this method will immediately disable hardware slewing (Dome.Slaved will become False).
+            Raises an error if a communications failure occurs, or if the command is known to have failed. 
+            </summary>
+        </member>
+        <member name="M:ASCOM.Dome.CloseShutter">
+            <summary>
+            Close shutter or otherwise shield telescope from the sky.
+            </summary>
+        </member>
+        <member name="M:ASCOM.Dome.CommandBlind(System.String)">
+            <summary>
+            Send a string command directly to the dome without expecting response data.
+            Raises an error if not supported or if a communications failure occurs. 
+            </summary>
+            <param name="Command"></param>
+        </member>
+        <member name="M:ASCOM.Dome.CommandBool(System.String)">
+            <summary>
+            Send a string command directly to the dome, returning a True / False response.
+            Raises an error if not supported or if a communications failure occurs. 
+            </summary>
+            <param name="Command">Raw command string to be sent to the dome.</param>
+            <returns>True if the response indicated True or success, else False.</returns>
+        </member>
+        <member name="M:ASCOM.Dome.CommandString(System.String)">
+            <summary>
+            Send a string command directly to the dome, returning the response string.
+            Raises an error if not supported or if a communications failure occurs. 
+            </summary>
+            <param name="Command">Raw command string to be sent to the dome.</param>
+            <returns>Response string from controller.</returns>
+        </member>
+        <member name="M:ASCOM.Dome.FindHome">
+            <summary>
+            Description and version information about this ASCOM dome driver.
+            </summary>
+        </member>
+        <member name="M:ASCOM.Dome.OpenShutter">
+            <summary>
+            Open shutter or otherwise expose telescope to the sky.
+            Raises an error if not supported or if a communications failure occurs. 
+            </summary>
+        </member>
+        <member name="M:ASCOM.Dome.Park">
+            <summary>
+            Rotate dome in azimuth to park position.
+            After assuming programmed park position, sets Dome.AtPark flag. Raises an error if Dome.Slaved is True,
+            or if not supported, or if a communications failure has occurred. 
+            </summary>
+        </member>
+        <member name="M:ASCOM.Dome.SetPark">
+            <summary>
+            Set the current azimuth, altitude position of dome to be the park position.
+            Raises an error if not supported or if a communications failure occurs. 
+            </summary>
+        </member>
+        <member name="M:ASCOM.Dome.SetupDialog">
+            <summary>
+            Brings up a dialog box for the user to enter in custom setup parameters, such as a COM port selection.
+            </summary>
+        </member>
+        <member name="M:ASCOM.Dome.SlewToAltitude(System.Double)">
+            <summary>
+            Slew the dome to the given altitude position.
+            Raises an error if Dome.Slaved is True, if not supported, if a communications failure occurs,
+            or if the dome can not reach indicated altitude. 
+            </summary>
+            <param name="Altitude">Target dome altitude (degrees, horizon zero and increasing positive to 90 zenith)</param>
+        </member>
+        <member name="M:ASCOM.Dome.SlewToAzimuth(System.Double)">
+            <summary>
+            Slew the dome to the given azimuth position.
+            Raises an error if Dome.Slaved is True, if not supported, if a communications failure occurs,
+            or if the dome can not reach indicated azimuth. 
+            </summary>
+            <param name="Azimuth">Target azimuth (degrees, North zero and increasing clockwise. i.e., 90 East, 180 South, 270 West)</param>
+        </member>
+        <member name="M:ASCOM.Dome.SyncToAzimuth(System.Double)">
+            <summary>
+            Synchronize the current position of the dome to the given azimuth.
+            Raises an error if not supported or if a communications failure occurs. 
+            </summary>
+            <param name="Azimuth">Target azimuth (degrees, North zero and increasing clockwise. i.e., 90 East, 180 South, 270 West)</param>
+        </member>
+        <member name="M:ASCOM.Dome.Dispose">
+            <summary>
+            Dispose the late-bound interface, if needed
+            </summary>
+        </member>
+        <member name="P:ASCOM.Dome.Altitude">
+            <summary>
+            The dome altitude (degrees, horizon zero and increasing positive to 90 zenith).
+            Raises an error only if no altitude control. If actual dome altitude can not be read,
+            then reports back the last slew position. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Dome.AtHome">
+            <summary>
+            True if the dome is in the Home position.
+            Set only following a Dome.FindHome operation and reset with any azimuth slew operation.
+            Raises an error if not supported. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Dome.AtPark">
+            <summary>
+            True if the dome is in the programmed park position.
+            Set only following a Dome.Park operation and reset with any slew operation.
+            Raises an error if not supported. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Dome.Azimuth">
+            <summary>
+            The dome azimuth (degrees, North zero and increasing clockwise, i.e., 90 East, 180 South, 270 West)
+            </summary>
+        </member>
+        <member name="P:ASCOM.Dome.CanFindHome">
+            <summary>
+            True if driver can do a search for home position.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Dome.CanPark">
+            <summary>
+            True if driver is capable of setting dome altitude.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Dome.CanSetAltitude">
+            <summary>
+            True if driver is capable of setting dome altitude.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Dome.CanSetAzimuth">
+            <summary>
+            True if driver is capable of setting dome azimuth.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Dome.CanSetPark">
+            <summary>
+            True if driver can set the dome park position.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Dome.CanSetShutter">
+            <summary>
+            True if driver is capable of automatically operating shutter.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Dome.CanSlave">
+            <summary>
+            True if the dome hardware supports slaving to a telescope.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Dome.CanSyncAzimuth">
+            <summary>
+            True if driver is capable of synchronizing the dome azimuth position using the Dome.SyncToAzimuth method.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Dome.Connected">
+            <summary>
+            True if driver has established communication to dome control.
+            Set to True to establish the link and set to False to terminate the link.
+            Raises an error if connect fails. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Dome.Description">
+            <summary>
+            A long description of the dome hardware / software or whatever.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Dome.DriverInfo">
+            <summary>
+            Description and version information about this ASCOM dome driver.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Dome.InterfaceVersion">
+            <summary>
+            The ASCOM Standard interface version supported by this driver.
+            Returns 1 for this interface version. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Dome.Name">
+            <summary>
+            Short name for the dome.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Dome.ShutterStatus">
+            <summary>
+            Status of the dome shutter or roll-off roof.
+            Raises an error only if no shutter control.
+            If actual shutter status can not be read, 
+            then reports back the last shutter state. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Dome.Slaved">
+            <summary>
+            True if the dome is slaved to the telescope in its hardware, else False.
+            Set this property to True to enable dome-telescope hardware slaving,
+            if supported (see Dome.CanSlave). Raises an exception on any attempt to set 
+            this property if hardware slaving is not supported).
+            Always returns False if hardware slaving is not supported. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Dome.Slewing">
+            <summary>
+            True if any part of the dome is currently moving, False if all dome components are steady.
+            Raises an error if Dome.Slaved is True, if not supported, if a communications failure occurs,
+            or if the dome can not reach indicated azimuth. 
+            </summary>
+        </member>
+        <member name="T:ASCOM.Telescope">
+            <summary>
+            Implements a telescope class to access any registered ASCOM telescope
+            </summary>
+        </member>
+        <member name="M:ASCOM.Telescope.#ctor(System.String)">
+            <summary>
+            Creates an instance of the telescope class.
+            </summary>
+            <param name="telescopeID">The ProgID for the telescope</param>
+        </member>
+        <member name="M:ASCOM.Telescope.Choose(System.String)">
+            <summary>
+            The Choose() method returns the DriverID of the selected driver.
+            Choose() allows you to optionally pass the DriverID of a "current" driver (you probably save this in the registry),
+            and the corresponding telescope type is pre-selected in the Chooser's list.
+            In this case, the OK button starts out enabled (lit-up); the assumption is that the pre-selected driver has already been configured. 
+            </summary>
+            <param name="telescopeID">Optional DriverID of the previously selected telescope that is to be the pre-selected telescope in the list. </param>
+            <returns>The DriverID of the user selected telescope. Null if the dialog is canceled.</returns>
+        </member>
+        <member name="M:ASCOM.Telescope.AbortSlew">
+            <summary>
+            Stops a slew in progress.
+            Effective only after a call to SlewToTargetAsync(), SlewToCoordinatesAsync(), SlewToAltAzAsync(), or MoveAxis().
+            Does nothing if no slew/motion is in progress. 
+            Tracking is returned to its pre-slew state.
+            Raises an error if AtPark is true. 
+            </summary>
+        </member>
+        <member name="M:ASCOM.Telescope.AxisRates(ASCOM.Interface.TelescopeAxes)">
+            <summary>
+            Determine the rates at which the telescope may be moved about the specified axis by the MoveAxis() method.
+            See the description of MoveAxis() for more information. This method must return an empty collection if MoveAxis is not supported. 
+            </summary>
+            <param name="Axis">The axis about which rate information is desired (TelescopeAxes value)</param>
+            <returns>Collection of Axis Rates</returns>
+        </member>
+        <member name="M:ASCOM.Telescope.CanMoveAxis(ASCOM.Interface.TelescopeAxes)">
+            <summary>
+            True if this telescope is capable of programmed parking (Park() method)
+            </summary>
+            <param name="Axis"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASCOM.Telescope.CommandBlind(System.String,System.Boolean)">
+            <summary>
+            Send a string comand directly to the telescope without expecting response data.
+            If the optional Raw parameter is set True, the driver must not insert or append any delimiters;
+            this must send the unmodified raw string directly to the device. 
+            If the driver cannot support Raw=True, it must raise an error if Raw is set to True. 
+            If you use this feature of the Telescope driver interface,
+            your application will be dependent on the low-level protocol used by the particular scope you are connected to.
+            Thus your application will not work with any arbitrary type of telescope. 
+            Raises an error if there is a problem communicating with the telescope. 
+            </summary>
+            <param name="Command">The command string to be sent to the telescope.</param>
+            <param name="Raw">Bypass any delimiters or framing around the command (optional, default = False)</param>
+        </member>
+        <member name="M:ASCOM.Telescope.CommandBool(System.String,System.Boolean)">
+            <summary>
+            Send a string comand to the telescope, returning a true/false response
+            If the optional Raw parameter is set True, the driver must not insert or append any delimiters;
+            this must send the unmodified raw string directly to the device.
+            If the driver cannot support Raw=True, it must raise an error if Raw is set to True. 
+            If you use this feature of the Telescope driver interface,
+            your application will be dependent on the low-level protocol
+            used by the particular scope you are connected to.
+            Thus your application will not work with any arbitrary type of telescope. 
+            Raises an error if there is a problem communicating with the telescope. 
+            It is the responsibility of the driver implementing this interface to translate raw response data to True/False values for return.
+            If you want to see the raw response string, see CommandString(). 
+            </summary>
+            <param name="Command">The command string to be sent to the telescope</param>
+            <param name="Raw">Bypass any delimiters or framing around the command (optional, default = False)</param>
+            <returns>True if the response indicated true or success, else False.</returns>
+        </member>
+        <member name="M:ASCOM.Telescope.CommandString(System.String,System.Boolean)">
+            <summary>
+            Send a string comand to the telescope, returning a string response
+            If the optional Raw parameter is set True, the driver must not insert or append any delimiters;
+            this must send the unmodified raw string directly to the device.
+            If the driver cannot support Raw=True, it must raise an error if Raw is set to True. 
+            If you use this feature of the Telescope driver interface,
+            your application will be dependent on the low-level protocol
+            used by the particular scope you are connected to.
+            Thus your application will not work with any arbitrary type of telescope. 
+            Raises an error if there is a problem communicating with the telescope. 
+            It is the responsibility of the driver implementing this interface to translate raw response data to True/False values for return.
+            </summary>
+            <param name="Command">The command string to be sent to the telescope</param>
+            <param name="Raw">Bypass any delimiters or framing around the command (optional, default = False)</param>
+            <returns>The response data from the telescope resulting from the sent command.</returns>
+        </member>
+        <member name="M:ASCOM.Telescope.DestinationSideOfPier(System.Double,System.Double)">
+            <summary>
+            Predict side of pier for German equatorial mounts
+            </summary>
+            <param name="RightAscension">The destination right ascension (hours).</param>
+            <param name="Declination">The destination declination (degrees, positive North).</param>
+            <returns>The side of the pier on which the telescope would be on if a slew to the given equatorial coordinates is performed at the current instant of time.</returns>
+        </member>
+        <member name="M:ASCOM.Telescope.FindHome">
+            <summary>
+            Locates the telescope's "home" position (synchronous)
+            Returns only after the home position has been found.
+            At this point the AtHome property will be True.
+            Raises an error if there is a problem. 
+            Raises an error if AtPark is true. 
+            </summary>
+        </member>
+        <member name="M:ASCOM.Telescope.MoveAxis(ASCOM.Interface.TelescopeAxes,System.Double)">
+            <summary>
+            Move the telescope in one axis at the given rate.
+            This method supports control of the mount about its mechanical axes.
+            The telescope will start moving at the specified rate about the specified axis and continue indefinitely.
+            This methos can be called for each axis separately, and have them all operate concurretly at separate rates of motion. 
+            Set the rate for an axis to zero to stop the motionabout that axis.
+            Tracking motion (if enabled, see note below) is suspended during this mode of operation. 
+            Raises an error if AtPark is true. 
+            This must be implemented for the if the CanMoveAxis property returns True for the given axis. 
+            Notes: 
+            The movement rate must be within the value(s) obtained from a Rate object in the the AxisRates collection.
+            An out of range exception is raised the rate is out of range. 
+            The value of the Slewing property must be True if the telescope is moving 
+            about any of its axes as a result of this method being called. 
+            This can be used to simulate a handbox by initiating motion with the
+            MouseDown event and stopping the motion with the MouseUp event. 
+            When the motion is stopped the scope will be set to the previous 
+            TrackingRate or to no movement, depending on the state of the Tracking property. 
+            It may be possible to implement satellite tracking by using the MoveAxis()
+            method to move the scope in the required manner to track a satellite. 
+            </summary>
+            <param name="Axis">The physical axis about which movement is desired</param>
+            <param name="Rate">The rate of motion (deg/sec) about the specified axis</param>
+        </member>
+        <member name="M:ASCOM.Telescope.Park">
+            <summary>
+            Move the telescope to its park position, stop all motion (or restrict to a small safe range), and set AtPark to True.
+            Raises an error if there is a problem communicating with the telescope or if parking fails. 
+            Parking should put the telescope into a state where its pointing accuracy 
+            will not be lost if it is power-cycled (without moving it).
+            Some telescopes must be power-cycled before unparking.
+            Others may be unparked by simply calling the Unpark() method.
+            Calling this with AtPark = True does nothing (harmless) 
+            </summary>
+        </member>
+        <member name="M:ASCOM.Telescope.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)">
+            <summary>
+            Moves the scope in the given direction for the given interval or time at 
+            the rate given by the corresponding guide rate property 
+            This method returns immediately if the hardware is capable of back-to-back moves,
+            i.e. dual-axis moves. For hardware not having the dual-axis capability,
+            the method returns only after the move has completed. 
+            Raises an error if AtPark is true. 
+            The IsPulseGuiding property must be be True during pulse-guiding. 
+            The rate of motion for movements about the right ascension axis is 
+            specified by the GuideRateRightAscension property. The rate of motion
+            for movements about the declination axis is specified by the 
+            GuideRateDeclination property. These two rates may be tied together
+            into a single rate, depending on the driver's implementation
+            and the capabilities of the telescope. 
+            </summary>
+            <param name="Direction">The direction in which the guide-rate motion is to be made</param>
+            <param name="Duration">The duration of the guide-rate motion (milliseconds)</param>
+        </member>
+        <member name="M:ASCOM.Telescope.SetPark">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ASCOM.Telescope.SetupDialog">
+            <summary>
+            Sets the telescope's park position to be its current position
+            Raises an error if there is a problem. 
+            
+            </summary>
+        </member>
+        <member name="M:ASCOM.Telescope.SlewToAltAz(System.Double,System.Double)">
+            <summary>
+            Move the telescope to the given local horizontal coordinates, return when slew is complete
+            This Method must be implemented if CanSlewAltAz returns True.
+            Raises an error if the slew fails. 
+            The slew may fail if the target coordinates are beyond limits imposed within the driver component.
+            Such limits include mechanical constraints imposed by the mount or attached instruments,
+            building or dome enclosure restrictions, etc. 
+            The TargetRightAscension and TargetDeclination properties are not changed by this method. 
+            Raises an error if AtPark is True, or if Tracking is True. 
+            </summary>
+            <param name="Azimuth">Target azimuth (degrees, North-referenced, positive East/clockwise).</param>
+            <param name="Altitude">Target altitude (degrees, positive up)</param>
+        </member>
+        <member name="M:ASCOM.Telescope.SlewToAltAzAsync(System.Double,System.Double)">
+            <summary>
+            This Method must be implemented if CanSlewAltAzAsync returns True.
+            This method should only be implemented if the properties Altitude, Azimuth,
+            Right Ascension, Declination and Slewing can be read while the scope is slewing.
+            Raises an error if starting the slew fails. Returns immediately after starting the slew.
+            The client may monitor the progress of the slew by reading the Azimuth, Altitude,
+            and Slewing properties during the slew. When the slew completes, Slewing becomes False. 
+            The slew may fail if the target coordinates are beyond limits imposed within the driver component.
+            Such limits include mechanical constraints imposed by the mount or attached instruments,
+            building or dome enclosure restrictions, etc. 
+            The TargetRightAscension and TargetDeclination properties are not changed by this method. 
+            Raises an error if AtPark is True, or if Tracking is True. 
+            </summary>
+            <param name="Azimuth"></param>
+            <param name="Altitude"></param>
+        </member>
+        <member name="M:ASCOM.Telescope.SlewToCoordinates(System.Double,System.Double)">
+            <summary>
+            Move the telescope to the given equatorial coordinates, return when slew is complete
+            This Method must be implemented if CanSlew returns True. Raises an error if the slew fails. 
+            The slew may fail if the target coordinates are beyond limits imposed within the driver component.
+            Such limits include mechanical constraints imposed by the mount or attached instruments,
+            building or dome enclosure restrictions, etc. The target coordinates are copied to
+            Telescope.TargetRightAscension and Telescope.TargetDeclination whether or not the slew succeeds. 
+            Raises an error if AtPark is True, or if Tracking is False. 
+            </summary>
+            <param name="RightAscension">The destination right ascension (hours). Copied to Telescope.TargetRightAscension.</param>
+            <param name="Declination">The destination declination (degrees, positive North). Copied to Telescope.TargetDeclination.</param>
+        </member>
+        <member name="M:ASCOM.Telescope.SlewToCoordinatesAsync(System.Double,System.Double)">
+            <summary>
+            Move the telescope to the given equatorial coordinates, return immediately after starting the slew.
+            This Method must be implemented if CanSlewAsync returns True. Raises an error if starting the slew failed. 
+            Returns immediately after starting the slew. The client may monitor the progress of the slew by reading
+            the RightAscension, Declination, and Slewing properties during the slew. When the slew completes,
+            Slewing becomes False. The slew may fail to start if the target coordinates are beyond limits
+            imposed within the driver component. Such limits include mechanical constraints imposed
+            by the mount or attached instruments, building or dome enclosure restrictions, etc. 
+            The target coordinates are copied to TargetRightAscension and TargetDeclination
+            whether or not the slew succeeds. 
+            Raises an error if AtPark is True, or if Tracking is False. 
+            </summary>
+            <param name="RightAscension">The destination right ascension (hours). Copied to Telescope.TargetRightAscension.</param>
+            <param name="Declination">The destination declination (degrees, positive North). Copied to Telescope.TargetDeclination.</param>
+        </member>
+        <member name="M:ASCOM.Telescope.SlewToTarget">
+            <summary>
+            Move the telescope to the TargetRightAscension and TargetDeclination coordinates, return when slew complete.
+            This Method must be implemented if CanSlew returns True. Raises an error if the slew fails. 
+            The slew may fail if the target coordinates are beyond limits imposed within the driver component.
+            Such limits include mechanical constraints imposed by the mount or attached
+            instruments, building or dome enclosure restrictions, etc. 
+            Raises an error if AtPark is True, or if Tracking is False. 
+            </summary>
+        </member>
+        <member name="M:ASCOM.Telescope.SlewToTargetAsync">
+            <summary>
+            Move the telescope to the TargetRightAscension and TargetDeclination coordinates,
+            returns immediately after starting the slew.
+            This Method must be implemented if CanSlewAsync returns True.
+            Raises an error if starting the slew failed. 
+            Returns immediately after starting the slew. The client may
+            monitor the progress of the slew by reading the RightAscension, Declination,
+            and Slewing properties during the slew. When the slew completes, Slewing becomes False. 
+            The slew may fail to start if the target coordinates are beyond limits imposed within 
+            the driver component. Such limits include mechanical constraints imposed by the mount
+            or attached instruments, building or dome enclosure restrictions, etc. 
+            Raises an error if AtPark is True, or if Tracking is False. 
+            </summary>
+        </member>
+        <member name="M:ASCOM.Telescope.SyncToAltAz(System.Double,System.Double)">
+            <summary>
+            Matches the scope's local horizontal coordinates to the given local horizontal coordinates.
+            This must be implemented if the CanSyncAltAz property is True. Raises an error if matching fails. 
+            Raises an error if AtPark is True, or if Tracking is True. 
+            </summary>
+            <param name="Azimuth">Target azimuth (degrees, North-referenced, positive East/clockwise)</param>
+            <param name="Altitude">Target altitude (degrees, positive up)</param>
+        </member>
+        <member name="M:ASCOM.Telescope.SyncToCoordinates(System.Double,System.Double)">
+            <summary>
+            Matches the scope's equatorial coordinates to the given equatorial coordinates.
+            </summary>
+            <param name="RightAscension">The corrected right ascension (hours). Copied to the TargetRightAscension property.</param>
+            <param name="Declination">The corrected declination (degrees, positive North). Copied to the TargetDeclination property.</param>
+        </member>
+        <member name="M:ASCOM.Telescope.SyncToTarget">
+            <summary>
+            Matches the scope's equatorial coordinates to the given equatorial coordinates.
+            This must be implemented if the CanSync property is True. Raises an error if matching fails. 
+            Raises an error if AtPark is True, or if Tracking is False. 
+            </summary>
+        </member>
+        <member name="M:ASCOM.Telescope.Unpark">
+            <summary>
+            Takes telescope out of the Parked state.
+            The state of Tracking after unparking is undetermined. 
+            Valid only after Park().
+            Applications must check and change Tracking as needed after unparking. 
+            Raises an error if unparking fails. Calling this with AtPark = False does nothing (harmless) 
+            </summary>
+        </member>
+        <member name="M:ASCOM.Telescope.Dispose">
+            <summary>
+            Dispose the late-bound interface, if needed
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.AlignmentMode">
+            <summary>
+            The alignment mode of the mount.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.Altitude">
+            <summary>
+            The Altitude above the local horizon of the telescope's current position (degrees, positive up)
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.ApertureArea">
+            <summary>
+            The area of the telescope's aperture, taking into account any obstructions (square meters)
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.ApertureDiameter">
+            <summary>
+            The telescope's effective aperture diameter (meters)
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.AtHome">
+            <summary>
+            True if the telescope is stopped in the Home position. Set only following a FindHome() operation, and reset with any slew operation. This property must be False if the telescope does not support homing. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.AtPark">
+            <summary>
+            True if the telescope has been put into the parked state by the Park() method. Set False by calling the Unpark() method.
+            AtPark is True when the telescope is in the parked state. This is achieved by calling the Park method. When AtPark is true, the telescope movement is stopped (or restricted to a small safe range of movement) and all calls that would cause telescope movement (e.g. slewing, changing Tracking state) must not do so, and must raise an error. The telescope is taken out of parked state by calling the Unpark() method. If the telescope cannot be parked, then AtPark must always return False. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.Azimuth">
+            <summary>
+            The azimuth at the local horizon of the telescope's current position (degrees, North-referenced, positive East/clockwise).
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.CanFindHome">
+            <summary>
+            True if this telescope is capable of programmed finding its home position (FindHome() method).
+            May raise an error if the telescope is not connected. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.CanPark">
+            <summary>
+            True if this telescope is capable of programmed parking (Park() method)
+            May raise an error if the telescope is not connected. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.CanPulseGuide">
+            <summary>
+            True if this telescope is capable of software-pulsed guiding (via the PulseGuide() method)
+            May raise an error if the telescope is not connected. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.CanSetDeclinationRate">
+            <summary>
+            True if the DeclinationRate property can be changed to provide offset tracking in the declination axis.
+            May raise an error if the telescope is not connected. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.CanSetGuideRates">
+            <summary>
+            True if the guide rate properties used for PulseGuide() can ba adjusted.
+            May raise an error if the telescope is not connected. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.CanSetPark">
+            <summary>
+            True if this telescope is capable of programmed setting of its park position (SetPark() method)
+            May raise an error if the telescope is not connected. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.CanSetPierSide">
+            <summary>
+            True if the SideOfPier property can be set, meaning that the mount can be forced to flip.
+            This will always return False for mounts (non-German-equatorial) that do not have to be flipped. 
+            May raise an error if the telescope is not connected. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.CanSetRightAscensionRate">
+            <summary>
+            True if the RightAscensionRateproperty can be changed to provide offset tracking in the right ascension axis.
+            May raise an error if the telescope is not connected. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.CanSetTracking">
+            <summary>
+            True if the Tracking property can be changed, turning telescope sidereal tracking on and off.
+            May raise an error if the telescope is not connected. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.CanSlew">
+            <summary>
+            True if this telescope is capable of programmed slewing (synchronous or asynchronous) to equatorial coordinates
+            If this is true, then only the synchronous equatorial slewing methods are guaranteed to be supported.
+            See the CanSlewAsync property for the asynchronous slewing capability flag. 
+            May raise an error if the telescope is not connected. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.CanSlewAltAz">
+            <summary>
+            True if this telescope is capable of programmed slewing (synchronous or asynchronous) to local horizontal coordinates
+            If this is true, then only the synchronous local horizontal slewing methods are guaranteed to be supported.
+            See the CanSlewAltAzAsync property for the asynchronous slewing capability flag. 
+            May raise an error if the telescope is not connected. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.CanSlewAltAzAsync">
+            <summary>
+            True if this telescope is capable of programmed asynchronous slewing to local horizontal coordinates
+            This indicates the the asynchronous local horizontal slewing methods are supported.
+            If this is True, then CanSlewAltAz will also be true. 
+            May raise an error if the telescope is not connected. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.CanSlewAsync">
+            <summary>
+            True if this telescope is capable of programmed asynchronous slewing to equatorial coordinates.
+            This indicates the the asynchronous equatorial slewing methods are supported.
+            If this is True, then CanSlew will also be true.
+            May raise an error if the telescope is not connected. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.CanSync">
+            <summary>
+            True if this telescope is capable of programmed synching to equatorial coordinates.
+            May raise an error if the telescope is not connected. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.CanSyncAltAz">
+            <summary>
+            True if this telescope is capable of programmed synching to local horizontal coordinates
+            May raise an error if the telescope is not connected. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.CanUnpark">
+            <summary>
+            True if this telescope is capable of programmed unparking (Unpark() method).
+            If this is true, then CanPark will also be true. May raise an error if the telescope is not connected.
+            May raise an error if the telescope is not connected. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.Connected">
+            <summary>
+            True if telescope connected, False otherwise
+            Set this property to True to connect to the telescope.
+            Raises an error if there is a problem connecting. 
+            Some Telescope properties and methods will raise errors if the scope is not connected. 
+            In V2, setting the Connected property to True does not automatically unpark the telescope,
+            nor does it explicitly turn on tracking.
+            This may affect clients that use the V1 interface.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.Declination">
+            <summary>
+            The declination (degrees) of the telescope's current equatorial coordinates, in the coordinate system given by the EquatorialSystem property.
+            Reading the property will raise an error if the value is unavailable. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.DeclinationRate">
+            <summary>
+            The declination tracking rate (arcseconds per second, default = 0.0)
+            This property, together with RightAscensionRate, provides support for "offset tracking".
+            Offset tracking is used primarily for tracking objects that move relatively slowly against the equatorial coordinate system.
+            It also may be used by a software guiding system that controls rates instead of using the PulseGuide() method. 
+            NOTES:
+            The property value represents an offset from zero motion. 
+            If CanSetDeclinationRate is False, this property will always return 0. 
+            To discover whether this feature is supported, test the CanSetDeclinationRate property. 
+            The supported range of this property is telescope specific, however, if this feature is supported,
+            it can be expected that the range is sufficient to allow correction of guiding errors caused by moderate misalignment and periodic error. 
+            If this property is non-zero when an equatorial slew is initiated, the telescope should continue to update the slew destination coordinates at the given offset rate.
+            This will allow precise slews to a fast-moving target with a slow-slewing telescope.
+            When the slew completes, the TargetRightAscension and TargetDeclination properties should reflect the final (adjusted) destination.
+            This is not a required feature of this specification, however it is desirable. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.Description">
+            <summary>
+            The long description of the telescope.
+            This string may contain line endings and may be hundreds to thousands of characters long.
+            It is intended to display detailed information on the telescope itself.
+            See the DriverInfo property for descriptive info on the driver itself.
+            NOTE: this string should not be over 1000 characters in length,
+            as applications may use popup boxes to display Description.
+            Older versions of Windows have string length limitations in (e.g.) MessageBox(),
+            which will cause an application failure if the string is too long. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.DoesRefraction">
+            <summary>
+            True if the telescope or driver applies atmospheric refraction to coordinates.
+            If this property is True, the coordinates sent to, and retrieved from, the telescope are unrefracted. 
+            NOTES:
+            If the driver does not know whether the attached telescope does its own refraction,
+            and if the driver does not itself calculate refraction, this property (if implemented) must raise an error when read. 
+            Writing to this property is optional. Often, a telescope (or its driver) calculates refraction using standard atmospheric parameters.
+            If the client wishes to calculate a more accurate refraction,
+            then this property could be set to False and these client-refracted coordinates used.
+            If disabling the telescope or driver's refraction is not supported,
+            the driver must raise an error when an attempt to set this property to False is made. 
+            Setting this property to True for a telescope or driver that does refraction,
+            or to False for a telescope or driver that does not do refraction,
+            shall not raise an error. It shall have no effect. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.DriverInfo">
+            <summary>
+            Descriptive and version information about this ASCOM Telescope driver.
+            This string may contain line endings and may be hundreds to thousands of characters long.
+            It is intended to display detailed information on the ASCOM driver, including version and copyright data.
+            See the Description property for descriptive info on the telescope itself.
+            To get the driver version in a parseable string, use the DriverVersion property.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.DriverVersion">
+            <summary>
+            A string containing only the major and minor version of the driver.
+            This must be in the form "n.n".
+            Not to be confused with the InterfaceVersion property, which is the version of this specification supported by the driver (currently 2). 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.EquatorialSystem">
+            <summary>
+            Equatorial coordinate system used by this telescope.
+            Most amateur telescopes use local topocentric coordinates.
+            This coordinate system is simply the apparent position in the sky
+            (possibly uncorrected for atmospheric refraction) for "here and now",
+            thus these are the coordinates that one would use with digital setting
+            circles and most amateur scopes. More sophisticated telescopes use one of
+            the standard reference systems established by professional astronomers.
+            The most common is the Julian Epoch 2000 (J2000). 
+            These instruments apply corrections for precession,
+            nutation, abberration, etc. to adjust the coordinates from the standard system
+            to the pointing direction for the time and location of "here and now". 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.FocalLength">
+            <summary>
+            The telescope's focal length, meters
+            This property may be used by clients to calculate telescope field of view and plate scale when combined with detector pixel size and geometry. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.GuideRateDeclination">
+            <summary>
+            The current Declination movement rate offset for telescope guiding (degrees/sec)
+            This is the rate for both hardware/relay guiding and the PulseGuide() method. 
+            NOTES: 
+            To discover whether this feature is supported, test the CanSetGuideRates property. 
+            The supported range of this property is telescope specific, however,
+            if this feature is supported, it can be expected that the range is sufficient to
+            allow correction of guiding errors caused by moderate misalignment and periodic error. 
+            If a telescope does not support separate guiding rates in Right Ascension and Declination,
+            then it is permissible for GuideRateRightAscension and GuideRateDeclination to be tied together.
+            In this case, changing one of the two properties will cause a change in the other. 
+            Mounts must start up with a known or default declination guide rate,
+            and this property must return that known/default guide rate until changed. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.GuideRateRightAscension">
+            <summary>
+            The current Right Ascension movement rate offset for telescope guiding (degrees/sec)
+            This is the rate for both hardware/relay guiding and the PulseGuide() method. 
+            NOTES:
+            To discover whether this feature is supported, test the CanSetGuideRates property. 
+            The supported range of this property is telescope specific, however, if this feature is supported, 
+            it can be expected that the range is sufficient to allow correction of guiding errors caused by moderate
+            misalignment and periodic error. 
+            If a telescope does not support separate guiding rates in Right Ascension and Declination,
+            then it is permissible for GuideRateRightAscension and GuideRateDeclination to be tied together. 
+            In this case, changing one of the two properties will cause a change in the other. 
+            Mounts must start up with a known or default right ascension guide rate,
+            and this property must return that known/default guide rate until changed. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.InterfaceVersion">
+            <summary>
+            The version of this interface. Will return 2 for this version.
+            Clients can detect legacy V1 drivers by trying to read ths property.
+            If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1. 
+            In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.IsPulseGuiding">
+            <summary>
+            True if a PulseGuide() command is in progress, False otherwise
+            Raises an error if the value of the CanPulseGuide property is false
+            (the driver does not support the PulseGuide() method). 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.Name">
+            <summary>
+            The short name of the telescope, for display purposes
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.RightAscension">
+            <summary>
+            The right ascension (hours) of the telescope's current equatorial coordinates,
+            in the coordinate system given by the EquatorialSystem property
+            Reading the property will raise an error if the value is unavailable. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.RightAscensionRate">
+            <summary>
+            The right ascension tracking rate offset from sidereal (seconds per sidereal second, default = 0.0)
+            This property, together with DeclinationRate, provides support for "offset tracking".
+            Offset tracking is used primarily for tracking objects that move relatively slowly
+            against the equatorial coordinate system. It also may be used by a software guiding
+            system that controls rates instead of using the PulseGuide() method.
+            NOTES:
+            The property value represents an offset from the current selected TrackingRate. 
+            If this property is zero, tracking will be at the selected TrackingRate. 
+            If CanSetRightAscensionRate is False, this property must always return 0. 
+            To discover whether this feature is supported, test the CanSetRightAscensionRate property. 
+            The property value is in in seconds of right ascension per sidereal second. 
+            To convert a given rate in (the more common) units of sidereal seconds
+            per UTC (clock) second, multiply the value by 0.9972695677 
+            (the number of UTC seconds in a sidereal second) then set the property.
+            Please note that these units were chosen for the Telescope V1 standard,
+            and in retrospect, this was an unfortunate choice.
+            However, to maintain backwards compatibility, the units cannot be changed.
+            A simple multiplication is all that's needed, as noted. 
+            The supported range of this property is telescope specific, however,
+            if this feature is supported, it can be expected that the range
+            is sufficient to allow correction of guiding errors
+            caused by moderate misalignment and periodic error. 
+            If this property is non-zero when an equatorial slew is initiated,
+            the telescope should continue to update the slew destination coordinates 
+            at the given offset rate. This will allow precise slews to a fast-moving 
+            target with a slow-slewing telescope. When the slew completes, 
+            the TargetRightAscension and TargetDeclination properties should
+            reflect the final (adjusted) destination. This is not a required
+            feature of this specification, however it is desirable. 
+            
+            Use the Tracking property to enable and disable sidereal tracking (if supported). 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.SideOfPier">
+            <summary>
+            Indicates which side of the pier a German equatorial mount is currently on
+            It is allowed (though not required) that this property may be written to
+            force the mount to flip. Doing so, however, may change the right 
+            ascension of the telescope. During flipping,
+            Telescope.Slewing must return True. 
+            If the telescope is not a German equatorial mount
+            (Telescope.AlignmentMode is not algGermanPolar), this method will raise an error. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.SiderealTime">
+            <summary>
+            The local apparent sidereal time from the telescope's internal clock (hours, sidereal)
+            It is required for a driver to calculate this from the system clock if the telescope 
+            has no accessible source of sidereal time. Local Apparent Sidereal Time is the sidereal 
+            time used for pointing telescopes, and thus must be calculated from the Greenwich Mean
+            Sidereal time, longitude, nutation in longitude and true ecliptic obliquity. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.SiteElevation">
+            <summary>
+            The elevation above mean sea level (meters) of the site at which the telescope is located
+            Setting this property will raise an error if the given value is outside the range -300 through +10000 metres.
+            Reading the property will raise an error if the value has never been set or is otherwise unavailable. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.SiteLatitude">
+            <summary>
+            The geodetic(map) latitude (degrees, positive North, WGS84) of the site at which the telescope is located.
+            Setting this property will raise an error if the given value is outside the range -90 to +90 degrees.
+            Reading the property will raise an error if the value has never been set or is otherwise unavailable. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.SiteLongitude">
+            <summary>
+            The longitude (degrees, positive East, WGS84) of the site at which the telescope is located.
+            Setting this property will raise an error if the given value is outside the range -180 to +180 degrees.
+            Reading the property will raise an error if the value has never been set or is otherwise unavailable.
+            Note that West is negative! 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.SlewSettleTime">
+            <summary>
+            Specifies a post-slew settling time (sec.).
+            Adds additional time to slew operations. Slewing methods will not return, 
+            and the Slewing property will not become False, until the slew completes and the SlewSettleTime has elapsed.
+            This feature (if supported) may be used with mounts that require extra settling time after a slew. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.Slewing">
+            <summary>
+            True if telescope is currently moving in response to one of the
+            Slew methods or the MoveAxis() method, False at all other times.
+            Reading the property will raise an error if the value is unavailable.
+            If the telescope is not capable of asynchronous slewing,
+            this property will always be False. 
+            The definition of "slewing" excludes motion caused by sidereal tracking,
+            PulseGuide(), RightAscensionRate, and DeclinationRate.
+            It reflects only motion caused by one of the Slew commands, 
+            flipping caused by changing the SideOfPier property, or MoveAxis(). 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.TargetDeclination">
+            <summary>
+            The declination (degrees, positive North) for the target of an equatorial slew or sync operation
+            Setting this property will raise an error if the given value is outside the range -90 to +90 degrees.
+            Reading the property will raise an error if the value has never been set or is otherwise unavailable. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.TargetRightAscension">
+            <summary>
+            The right ascension (hours) for the target of an equatorial slew or sync operation
+            Setting this property will raise an error if the given value is outside the range 0 to 24 hours.
+            Reading the property will raise an error if the value has never been set or is otherwise unavailable. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.Tracking">
+            <summary>
+            The state of the telescope's sidereal tracking drive.
+            Changing the value of this property will turn the sidereal drive on and off.
+            However, some telescopes may not support changing the value of this property
+            and thus may not support turning tracking on and off.
+            See the CanSetTracking property. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.TrackingRate">
+            <summary>
+            The current tracking rate of the telescope's sidereal drive
+            Supported rates (one of the DriveRates values) are contained within the TrackingRates collection.
+            Values assigned to TrackingRate must be one of these supported rates. 
+            If an unsupported value is assigned to this property, it will raise an error. 
+            The currently selected tracking rate be further adjusted via the RightAscensionRate 
+            and DeclinationRate properties. These rate offsets are applied to the currently 
+            selected TrackingRate. Mounts must start up with a known or default tracking rate,
+            and this property must return that known/default tracking rate until changed.
+            If the mount's current tracking rate cannot be determined (for example, 
+            it is a write-only property of the mount's protocol), 
+            it is permitted for the driver to force and report a default rate on connect.
+            In this case, the preferred default is Sidereal rate. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.TrackingRates">
+            <summary>
+            Returns a collection of supported DriveRate values that describe the permissible
+            values of the TrackingRate property for this telescope type.
+            At a minimum, this must contain an item for driveSidereal. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Telescope.UTCDate">
+            <summary>
+            The UTC date/time of the telescope's internal clock
+            The driver must calculate this from the system clock if the telescope has no accessible
+            source of UTC time. In this case, the property must not be writeable 
+            (this would change the system clock!) and will instead raise an error.
+            However, it is permitted to change the telescope's internal UTC clock 
+            if it is being used for this property. This allows clients to adjust 
+            the telescope's UTC clock as needed for accuracy. Reading the property
+            will raise an error if the value has never been set or is otherwise unavailable. 
+            </summary>
+        </member>
+        <member name="T:ASCOM._Rate">
+            <summary>
+            Describes a range of rates supported by the MoveAxis() method (degrees/per second)
+            These are contained within the AxisRates collection. They serve to describe one or more supported ranges of rates of motion about a mechanical axis. 
+            It is possible that the Rate.Maximum and Rate.Minimum properties will be equal. In this case, the Rate object expresses a single discrete rate. 
+            Both the Rate.Maximum and Rate.Minimum properties are always expressed in units of degrees per second. 
+            </summary>
+        </member>
+        <member name="P:ASCOM._Rate.Maximum">
+            <summary>
+            The maximum rate (degrees per second)
+            This must always be a positive number. It indicates the maximum rate in either direction about the axis. 
+            </summary>
+        </member>
+        <member name="P:ASCOM._Rate.Minimum">
+            <summary>
+            The minimum rate (degrees per second)
+            This must always be a positive number. It indicates the maximum rate in either direction about the axis. 
+            </summary>
+        </member>
+        <member name="T:ASCOM.Focuser">
+            <summary>
+            Provides universal access to Focuser drivers
+            </summary>
+        </member>
+        <member name="M:ASCOM.Focuser.#ctor(System.String)">
+            <summary>
+            Creates a focuser object with the given Prog ID
+            </summary>
+            <param name="focuserID"></param>
+        </member>
+        <member name="M:ASCOM.Focuser.Choose(System.String)">
+            <summary>
+            Brings up the ASCOM Chooser Dialog to choose a Focuser
+            </summary>
+            <param name="focuserID">Focuser Prog ID for default or null for None</param>
+            <returns>Prog ID for chosen focuser or null for none</returns>
+        </member>
+        <member name="M:ASCOM.Focuser.Halt">
+            <summary>
+            Immediately stop any focuser motion due to a previous Move() method call.
+            Some focusers may not support this function, in which case an exception will be raised. 
+            Recommendation: Host software should call this method upon initialization and,
+            if it fails, disable the Halt button in the user interface. 
+            </summary>
+        </member>
+        <member name="M:ASCOM.Focuser.Move(System.Int32)">
+            <summary>
+            Step size (microns) for the focuser.
+            Raises an exception if the focuser does not intrinsically know what the step size is. 
+            </summary>
+            <param name="val"></param>
+        </member>
+        <member name="M:ASCOM.Focuser.SetupDialog">
+            <summary>
+            Display a dialog box for the user to enter in custom setup parameters, such as a COM port selection.
+            If no dialog is required or supported, the method shall return immediately. 
+            </summary>
+        </member>
+        <member name="M:ASCOM.Focuser.Dispose">
+            <summary>
+            Dispose the late-bound interface, if needed
+            </summary>
+        </member>
+        <member name="P:ASCOM.Focuser.Absolute">
+            <summary>
+            True if the focuser is capable of absolute position; that is, being commanded to a specific step location.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Focuser.IsMoving">
+            <summary>
+            True if the focuser is currently moving to a new position. False if the focuser is stationary.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Focuser.Link">
+            <summary>
+            State of the connection to the focuser.
+            et True to start the link to the focuser; set False to terminate the link. 
+            The current link status can also be read back as this property. 
+            An exception will be raised if the link fails to change state for any reason. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Focuser.MaxIncrement">
+            <summary>
+            Maximum increment size allowed by the focuser; 
+            i.e. the maximum number of steps allowed in one move operation.
+            For most focusers this is the same as the MaxStep property.
+            This is normally used to limit the Increment display in the host software. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Focuser.MaxStep">
+            <summary>
+            Maximum step position permitted.
+            The focuser can step between 0 and MaxStep. 
+            If an attempt is made to move the focuser beyond these limits,
+            it will automatically stop at the limit. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Focuser.Position">
+            <summary>
+            Current focuser position, in steps.
+            Valid only for absolute positioning focusers (see the Absolute property).
+            An exception will be raised for relative positioning focusers.   
+            </summary>
+        </member>
+        <member name="P:ASCOM.Focuser.StepSize">
+            <summary>
+            Step size (microns) for the focuser.
+            Raises an exception if the focuser does not intrinsically know what the step size is. 
+            
+            </summary>
+        </member>
+        <member name="P:ASCOM.Focuser.TempComp">
+            <summary>
+            The state of temperature compensation mode (if available), else always False.
+            If the TempCompAvailable property is True, then setting TempComp to True
+            puts the focuser into temperature tracking mode. While in temperature tracking mode,
+            Move commands will be rejected by the focuser. Set to False to turn off temperature tracking.
+            An exception will be raised if TempCompAvailable is False and an attempt is made to set TempComp to true. 
+            
+            </summary>
+        </member>
+        <member name="P:ASCOM.Focuser.TempCompAvailable">
+            <summary>
+            True if focuser has temperature compensation available.
+            Will be True only if the focuser's temperature compensation can be turned on and off via the TempComp property. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.Focuser.Temperature">
+            <summary>
+            Current ambient temperature as measured by the focuser.
+            Raises an exception if ambient temperature is not available.
+            Commonly available on focusers with a built-in temperature compensation mode. 
+            </summary>
+        </member>
+    </members>
+</doc>

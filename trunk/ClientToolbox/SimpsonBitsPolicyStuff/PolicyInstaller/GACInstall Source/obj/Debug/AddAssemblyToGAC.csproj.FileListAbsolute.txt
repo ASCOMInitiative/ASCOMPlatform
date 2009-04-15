@@ -1,0 +1,5 @@
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\AddAssemblyToGAC\bin\Debug\AddAssemblyToGAC.exe
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\AddAssemblyToGAC\bin\Debug\AddAssemblyToGAC.pdb
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\AddAssemblyToGAC\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\AddAssemblyToGAC\obj\Debug\AddAssemblyToGAC.exe
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\AddAssemblyToGAC\obj\Debug\AddAssemblyToGAC.pdb

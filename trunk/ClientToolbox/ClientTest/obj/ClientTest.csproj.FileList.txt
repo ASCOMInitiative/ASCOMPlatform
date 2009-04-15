@@ -1,0 +1,16 @@
+bin\Debug\ClientTest.exe
+bin\Debug\ClientTest.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\ClientTest.exe
+obj\Debug\ClientTest.pdb
+bin\Release\ClientTest.exe
+bin\Release\ClientTest.pdb
+obj\Release\ResolveAssemblyReference.cache
+obj\Release\ClientTest.exe
+obj\Release\ClientTest.pdb
+bin\Debug\ASCOM.DriverAccess.dll
+bin\Debug\ASCOM.DriverAccess.pdb
+bin\Debug\ASCOM.DriverAccess.xml
+bin\Release\ASCOM.DriverAccess.dll
+bin\Release\ASCOM.DriverAccess.pdb
+bin\Release\ASCOM.DriverAccess.xml
