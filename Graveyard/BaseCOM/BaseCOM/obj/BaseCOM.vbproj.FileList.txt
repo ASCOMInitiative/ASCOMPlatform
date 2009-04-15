@@ -1,0 +1,10 @@
+bin\Debug\BaseCOM.dll
+bin\Debug\BaseCOM.pdb
+bin\Debug\BaseCOM.xml
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\BaseCOM\BaseCOM\bin\Debug\BaseCOM.tlb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\BaseCOM.Resources.resources
+obj\Debug\BaseCOM.vbproj.GenerateResource.Cache
+obj\Debug\BaseCOM.dll
+obj\Debug\BaseCOM.xml
+obj\Debug\BaseCOM.pdb

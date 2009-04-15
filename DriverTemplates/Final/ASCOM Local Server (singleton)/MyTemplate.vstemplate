@@ -1,0 +1,33 @@
+<VSTemplate Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>ASCOM Local Server (singleton)</Name>
+    <Description>Creates an EXE based (local server/singleton) host for one or more drivers. Project name is device name, CHOOSE CAREFULLY!</Description>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>1000</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>YourNameHere</DefaultName>
+    <ProvideDefaultName>false</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.ico</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="LocalServerTemplate.csproj" File="LocalServerTemplate.csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="false" TargetFileName="ASCOM.png">ASCOM.png</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ClassFactory.cs">ClassFactory.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="frmMain.cs">frmMain.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="frmMain.Designer.cs">frmMain.Designer.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="frmMain.resx">frmMain.resx</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="GarbageCollection.cs">GarbageCollection.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="LocalServer.cs">LocalServer.cs</ProjectItem>
+      <Folder Name="Properties" TargetFolderName="Properties">
+        <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ReadMe.htm" OpenInWebBrowser="true">ReadMe.htm</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ReferenceCountedObject.cs">ReferenceCountedObject.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="SharedResources.cs">SharedResources.cs</ProjectItem>
+    </Project>
+  </TemplateContent>
+</VSTemplate>

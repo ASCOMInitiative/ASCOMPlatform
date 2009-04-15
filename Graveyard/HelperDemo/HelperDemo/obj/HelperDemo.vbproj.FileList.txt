@@ -1,0 +1,15 @@
+bin\Debug\Interop.DriverHelper.dll
+bin\Debug\Interop.IObjectSafetyTLB.dll
+bin\Debug\Interop.Scripting.dll
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\Interop.DriverHelper.dll
+obj\Debug\Interop.IObjectSafetyTLB.dll
+obj\Debug\Interop.Scripting.dll
+obj\Debug\HelperDemo.vbproj.ResolveComReference.cache
+obj\Debug\HelperDemo.vbproj.GenerateResource.Cache
+bin\Debug\HelperDemo.exe
+bin\Debug\HelperDemo.pdb
+obj\Debug\HelperDemo.frmMain.resources
+obj\Debug\HelperDemo.Resources.resources
+obj\Debug\HelperDemo.exe
+obj\Debug\HelperDemo.pdb

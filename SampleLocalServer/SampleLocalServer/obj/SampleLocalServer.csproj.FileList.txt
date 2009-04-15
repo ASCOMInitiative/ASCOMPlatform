@@ -1,0 +1,8 @@
+bin\Debug\ASCOM.SampleLocalServer.exe
+bin\Debug\ASCOM.SampleLocalServer.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\SampleLocalServer.csproj.ResolveComReference.cache
+obj\Debug\ASCOM.SampleLocalServer.frmMain.resources
+obj\Debug\SampleLocalServer.csproj.GenerateResource.Cache
+obj\Debug\ASCOM.SampleLocalServer.exe
+obj\Debug\ASCOM.SampleLocalServer.pdb

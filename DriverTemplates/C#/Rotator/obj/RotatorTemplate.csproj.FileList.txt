@@ -1,0 +1,5 @@
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\RotatorTemplate.csproj.ResolveComReference.cache
+obj\Debug\ASCOM.safeprojectname.SetupDialogForm.resources
+obj\Debug\RotatorTemplate.csproj.GenerateResource.Cache
+obj\Debug\ASCOM.Properties.Resources.resources
