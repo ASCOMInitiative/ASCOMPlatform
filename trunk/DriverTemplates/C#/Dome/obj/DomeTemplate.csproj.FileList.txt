@@ -1,0 +1,6 @@
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\DomeTemplate.csproj.ResolveComReference.cache
+obj\Debug\ASCOM.safeprojectname.SetupDialogForm.resources
+obj\Debug\DomeTemplate.csproj.GenerateResource.Cache
+obj\Debug\Interop.IasHelperLib.dll
+obj\Debug\ASCOM.Properties.Resources.resources

@@ -1,0 +1,6 @@
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\PublisherPolicy\bin\Release\policy.1.0.ASCOM.DriverAccess.dll
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\PublisherPolicy\bin\Release\policy.1.0.ASCOM.DriverAccess.pdb
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\PublisherPolicy\obj\Release\policy.1.0.ASCOM.DriverAccess.dll
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\PublisherPolicy\obj\Release\policy.1.0.ASCOM.DriverAccess.pdb
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\PublisherPolicy\obj\Release\policy.1.0.ASCOM.DriverAccess.config
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\PublisherPolicy\obj\Release\ResolveAssemblyReference.cache

@@ -1,0 +1,10 @@
+bin\Debug\ASCOM.Exceptions.dll
+bin\Debug\ASCOM.Exceptions.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\ASCOM.Exceptions.dll
+obj\Debug\ASCOM.Exceptions.pdb
+bin\Release\ASCOM.Exceptions.dll
+bin\Release\ASCOM.Exceptions.pdb
+obj\Release\ResolveAssemblyReference.cache
+obj\Release\ASCOM.Exceptions.dll
+obj\Release\ASCOM.Exceptions.pdb

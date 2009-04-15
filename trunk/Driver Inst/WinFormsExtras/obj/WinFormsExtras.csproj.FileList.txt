@@ -1,0 +1,10 @@
+bin\Debug\Microsoft.Samples.WinForms.Extras.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\Microsoft.Samples.WinForms.Extras.FolderBrowser.bmp
+obj\Debug\Microsoft.Samples.WinForms.Extras.dll
+obj\Debug\Microsoft.Samples.WinForms.Extras.pdb
+bin\Debug\Microsoft.Samples.WinForms.Extras.dll
+bin\Release\Microsoft.Samples.WinForms.Extras.dll
+obj\Release\ResolveAssemblyReference.cache
+obj\Release\Microsoft.Samples.WinForms.Extras.FolderBrowser.bmp
+obj\Release\Microsoft.Samples.WinForms.Extras.dll

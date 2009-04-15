@@ -1,0 +1,5 @@
+bin\Release\AddAssemblyToGAC.exe
+bin\Release\AddAssemblyToGAC.pdb
+obj\Release\ResolveAssemblyReference.cache
+obj\Release\AddAssemblyToGAC.exe
+obj\Release\AddAssemblyToGAC.pdb

@@ -1,0 +1,11 @@
+bin\Debug\ASCOM.SampleLocalServer.Rotator.dll
+bin\Debug\ASCOM.SampleLocalServer.Rotator.pdb
+bin\Debug\ASCOM.SampleLocalServer.exe
+bin\Debug\ASCOM.SampleLocalServer.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\SampleRotator.csproj.ResolveComReference.cache
+obj\Debug\ASCOM.SampleLocalServer.Properties.Resources.resources
+obj\Debug\ASCOM.SampleLocalServer.SetupDialogForm.resources
+obj\Debug\SampleRotator.csproj.GenerateResource.Cache
+obj\Debug\ASCOM.SampleLocalServer.Rotator.dll
+obj\Debug\ASCOM.SampleLocalServer.Rotator.pdb

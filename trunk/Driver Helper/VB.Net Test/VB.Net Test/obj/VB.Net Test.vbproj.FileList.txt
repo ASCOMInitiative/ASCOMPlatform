@@ -1,0 +1,10 @@
+bin\Debug\VB.Net Test.exe
+bin\Debug\VB.Net Test.pdb
+bin\Debug\VB.Net_Test.xml
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\VB.Net Test.vbproj.ResolveComReference.cache
+obj\Debug\VB.Net_Test.Resources.resources
+obj\Debug\VB.Net Test.vbproj.GenerateResource.Cache
+obj\Debug\VB.Net Test.exe
+obj\Debug\VB.Net_Test.xml
+obj\Debug\VB.Net Test.pdb

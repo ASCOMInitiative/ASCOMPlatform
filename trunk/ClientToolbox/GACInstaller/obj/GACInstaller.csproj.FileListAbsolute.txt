@@ -1,0 +1,5 @@
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\GACInstaller\bin\Release\GACInstaller.exe
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\GACInstaller\bin\Release\GACInstaller.pdb
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\GACInstaller\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\GACInstaller\obj\Release\GACInstaller.exe
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\GACInstaller\obj\Release\GACInstaller.pdb
