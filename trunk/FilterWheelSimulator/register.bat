@@ -1,1 +1,0 @@
-FilterWheelSim.exe /regserver

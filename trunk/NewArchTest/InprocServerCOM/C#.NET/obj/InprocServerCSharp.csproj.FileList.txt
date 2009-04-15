@@ -1,8 +1,0 @@
-obj\Debug\ResolveAssemblyReference.cache
-obj\Debug\InprocServerCSharp.csproj.ResolveComReference.cache
-bin\Debug\InprocServerCSharp.dll
-bin\Debug\InprocServerCSharp.pdb
-C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\Tutorial\InprocServerCOM\CSharp\bin\Debug\InprocServerCSharp.tlb
-obj\Debug\InprocServerCSharp.dll
-obj\Debug\InprocServerCSharp.pdb
-C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\NewArchTest\InprocServerCOM\C#.NET\bin\Debug\InprocServerCSharp.tlb

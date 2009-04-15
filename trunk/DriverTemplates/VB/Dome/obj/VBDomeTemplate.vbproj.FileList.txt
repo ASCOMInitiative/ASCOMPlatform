@@ -1,5 +1,0 @@
-obj\Debug\ResolveAssemblyReference.cache
-obj\Debug\VBDomeTemplate.vbproj.ResolveComReference.cache
-obj\Debug\ASCOM.Resources.resources
-obj\Debug\ASCOM.SetupDialogForm.resources
-obj\Debug\VBDomeTemplate.vbproj.GenerateResource.Cache
