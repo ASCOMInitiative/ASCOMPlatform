@@ -1,0 +1,5 @@
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\FocuserTemplate.csproj.ResolveComReference.cache
+obj\Debug\ASCOM.safeprojectname.SetupDialogForm.resources
+obj\Debug\FocuserTemplate.csproj.GenerateResource.Cache
+obj\Debug\ASCOM.Properties.Resources.resources

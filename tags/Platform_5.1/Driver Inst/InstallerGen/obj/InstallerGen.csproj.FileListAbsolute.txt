@@ -1,0 +1,2 @@
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\Driver Inst\InstallerGen\obj\Release\InstallerGen.exe
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\Driver Inst\InstallerGen\obj\Release\InstallerGen.pdb

@@ -1,0 +1,10 @@
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\CustomActions\bin\Release\Platform5CustomActions.dll
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\CustomActions\bin\Release\Platform5CustomActions.pdb
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\CustomActions\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\CustomActions\obj\Release\Platform5CustomActions.dll
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\CustomActions\obj\Release\Platform5CustomActions.pdb
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\CustomActions\bin\Debug\Platform5CustomActions.dll
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\CustomActions\bin\Debug\Platform5CustomActions.pdb
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\CustomActions\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\CustomActions\obj\Debug\Platform5CustomActions.dll
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\CustomActions\obj\Debug\Platform5CustomActions.pdb

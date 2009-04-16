@@ -1,0 +1,10 @@
+obj\Debug\ResolveAssemblyReference.cache
+bin\Debug\Platform5CustomActions.dll
+bin\Debug\Platform5CustomActions.pdb
+obj\Debug\Platform5CustomActions.dll
+obj\Debug\Platform5CustomActions.pdb
+bin\Release\Platform5CustomActions.dll
+bin\Release\Platform5CustomActions.pdb
+obj\Release\ResolveAssemblyReference.cache
+obj\Release\Platform5CustomActions.dll
+obj\Release\Platform5CustomActions.pdb

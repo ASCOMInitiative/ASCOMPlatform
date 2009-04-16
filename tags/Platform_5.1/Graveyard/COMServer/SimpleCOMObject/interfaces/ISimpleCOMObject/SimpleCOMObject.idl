@@ -1,0 +1,31 @@
+// SimpleCOMObject.idl : IDL source for SimpleCOMObject
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (SimpleCOMObject.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	uuid(5830FDB2-10E1-427E-B967-515F4DC05F58),
+	version(1.0),
+	helpstring("ISimpleCOMObject 1.0 Interface")
+]
+library ISimpleCOMObjectLib
+{
+	importlib("stdole2.tlb");
+	[
+		object,
+		uuid(9EB07DC7-6807-4104-95FE-AD7672A87BD7),
+		dual,
+		nonextensible,
+		helpstring("ISimpleCOMObject Interface"),
+		pointer_default(unique)
+	]
+	interface ISimpleCOMObject : IDispatch {
+		[propget, id(1), helpstring("property LongProperty")] HRESULT LongProperty([out, retval] LONG* pVal);
+		[propput, id(1), helpstring("property LongProperty")] HRESULT LongProperty([in] LONG newVal);
+		[id(2), helpstring("method Method01")] HRESULT Method01([in] BSTR strMessage);
+	};
+};

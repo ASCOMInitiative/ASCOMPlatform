@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="SimpleCOMObject_CSharpImpl">
+</Property><Property Name="Solution File" Value="C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\COM Singleton\Building COM Servers in .NET\SimpleCOMObject\implementations\C#\SimpleCOMObject_CSharpImpl\SimpleCOMObject_CSharpImpl.sln">
+</Property><Property Name="Date" Value="Friday, April 13, 2007">
+</Property><Property Name="Time" Value="8:53 AM">
+</Property></Properties><Event ErrorLevel="0" Project="SimpleCOMObject_CSharpImpl" Source="SimpleCOMObject_CSharpImpl.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="SimpleCOMObject_CSharpImpl" Source="SimpleCOMObject_CSharpImpl.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="SimpleCOMObject_CSharpImpl.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="SimpleCOMObject_CSharpImpl.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="SimpleCOMObject_CSharpImpl" Source="SimpleCOMObject_CSharpImpl.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

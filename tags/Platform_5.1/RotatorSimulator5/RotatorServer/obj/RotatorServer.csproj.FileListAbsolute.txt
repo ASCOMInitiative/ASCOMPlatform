@@ -1,0 +1,10 @@
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\RotatorSimulator5\RotatorServer\obj\Release\ASCOM.RotatorSimulator.exe
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\RotatorSimulator5\RotatorServer\obj\Release\ASCOM.RotatorSimulator.pdb
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\RotatorSimulator5\RotatorServer\bin\Release\ASCOM.RotatorSimulator.exe
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\RotatorSimulator5\RotatorServer\bin\Release\ASCOM.RotatorSimulator.pdb
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\RotatorSimulator5\RotatorServer\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\RotatorSimulator5\RotatorServer\obj\Release\RotatorServer.csproj.ResolveComReference.cache
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\RotatorSimulator5\RotatorServer\obj\Release\ASCOM.Simulator.frmMain.resources
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\RotatorSimulator5\RotatorServer\obj\Release\ASCOM.Simulator.frmSetup.resources
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\RotatorSimulator5\RotatorServer\obj\Release\ASCOM.Simulator.Properties.Resources.resources
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\RotatorSimulator5\RotatorServer\obj\Release\RotatorServer.csproj.GenerateResource.Cache

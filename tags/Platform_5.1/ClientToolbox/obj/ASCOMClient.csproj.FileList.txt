@@ -1,0 +1,14 @@
+bin\Debug\AscomClient.dll
+bin\Debug\AscomClient.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\AscomClient.dll
+obj\Debug\AscomClient.pdb
+obj\Debug\ASCOMClient.csproj.ResolveComReference.cache
+bin\Debug\AscomClient.XML
+obj\Release\ResolveAssemblyReference.cache
+obj\Release\ASCOMClient.csproj.ResolveComReference.cache
+bin\Release\ASCOM.DriverAccess.XML
+bin\Release\ASCOM.DriverAccess.dll
+bin\Release\ASCOM.DriverAccess.pdb
+obj\Release\ASCOM.DriverAccess.dll
+obj\Release\ASCOM.DriverAccess.pdb

@@ -1,0 +1,5 @@
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\CSharpBase.csproj.ResolveComReference.cache
+obj\Debug\ASCOM.DeviceName.SetupDialogForm.resources
+obj\Debug\CSharpBase.csproj.GenerateResource.Cache
+obj\Debug\ASCOM.DeviceName.Properties.Resources.resources

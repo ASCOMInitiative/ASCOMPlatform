@@ -1,0 +1,8 @@
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\CSharpSample.csproj.ResolveComReference.cache
+bin\Debug\CSharpSample.dll
+bin\Debug\CSharpSample.pdb
+obj\Debug\CSharpSample.dll
+obj\Debug\CSharpSample.pdb
+bin\Debug\LocalServerCOM.exe
+bin\Debug\LocalServerCOM.pdb
