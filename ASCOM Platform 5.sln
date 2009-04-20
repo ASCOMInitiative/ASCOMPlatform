@@ -1,14 +1,14 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ASCOM Platform 5", "ASCOM Platform 5.vdproj", "{A42F5B2C-4381-4E7D-A7A8-CB342A209235}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomActions", "CustomActions\CustomActions.csproj", "{C9BD6FCB-97C7-4096-B917-6E59B6E2C684}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9A54CA39-AB72-45B4-B09F-63679076D040}"
 	ProjectSection(SolutionItems) = preProject
 		BUILD NOTES.txt = BUILD NOTES.txt
 	EndProjectSection
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ASCOM Platform 5", "ASCOM Platform 5.vdproj", "{A42F5B2C-4381-4E7D-A7A8-CB342A209235}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomActions", "CustomActions\CustomActions.csproj", "{C9BD6FCB-97C7-4096-B917-6E59B6E2C684}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

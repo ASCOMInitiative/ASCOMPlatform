@@ -69,6 +69,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_10D513A6438F9844F6F4BAA92E540C62"
+        "OwnerKey" = "8:_1AFACAC59AB1B44E82CC5033B9E4BC1A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_117600BCB24B6816BDC151DCAF9650FC"
         "OwnerKey" = "8:_C0B902118C1C417E8FC945E02367C1FA"
         "MsmSig" = "8:_UNDEFINED"
@@ -76,7 +82,7 @@
         "Entry"
         {
         "MsmKey" = "8:_117600BCB24B6816BDC151DCAF9650FC"
-        "OwnerKey" = "8:_E08440F1D0C9D08FADEBF02C391A310D"
+        "OwnerKey" = "8:_33301FE4F6B5D729348D0644F617BC5D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -101,12 +107,6 @@
         {
         "MsmKey" = "8:_1AFACAC59AB1B44E82CC5033B9E4BC1A"
         "OwnerKey" = "8:_550DA6DD31F14886A56FAF9C85DE46CC"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_1B7788FD3272D6620C2EBD1193DC98E7"
-        "OwnerKey" = "8:_C876625BFA943ECA5901E4741B5A6742"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -141,14 +141,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_2E48B670661568E1D85B99CBE71863DD"
-        "OwnerKey" = "8:_D497913482A8D97A01BD4A2CE823E960"
+        "MsmKey" = "8:_2FD242B18B8A44E2B1BC43F95CFFD825"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_2FD242B18B8A44E2B1BC43F95CFFD825"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_33301FE4F6B5D729348D0644F617BC5D"
+        "OwnerKey" = "8:_A287D2EA9EFD4CB1B2588297FC6B25F3"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -201,6 +201,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_4A8204EBFC44040D9648077739C2F6CE"
+        "OwnerKey" = "8:_C876625BFA943ECA5901E4741B5A6742"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4EEF1B2FD4E84398A456011CBA7D6E51"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -237,12 +243,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_5AA7FF74273C4BE8809BF19486838D45"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_6028D2AF3B04465B834BC2FC5C9DBAD4"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -256,6 +256,12 @@
         "Entry"
         {
         "MsmKey" = "8:_6F4D43413A5041E0A7882495BEBAB9C9"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6F886D261FBD4D53A5E1151976408B5C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -406,7 +412,7 @@
         "Entry"
         {
         "MsmKey" = "8:_C876625BFA943ECA5901E4741B5A6742"
-        "OwnerKey" = "8:_E08440F1D0C9D08FADEBF02C391A310D"
+        "OwnerKey" = "8:_33301FE4F6B5D729348D0644F617BC5D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -441,8 +447,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_D338AEF87F69CDE0F9DC942DEFB7314C"
-        "OwnerKey" = "8:_1AFACAC59AB1B44E82CC5033B9E4BC1A"
+        "MsmKey" = "8:_CF37A10F62A2518274476615BB8D8419"
+        "OwnerKey" = "8:_D497913482A8D97A01BD4A2CE823E960"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -479,12 +485,6 @@
         {
         "MsmKey" = "8:_DDE3C17724B0490B829BD6FA9D801473"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E08440F1D0C9D08FADEBF02C391A310D"
-        "OwnerKey" = "8:_A287D2EA9EFD4CB1B2588297FC6B25F3"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -586,7 +586,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E08440F1D0C9D08FADEBF02C391A310D"
+        "OwnerKey" = "8:_33301FE4F6B5D729348D0644F617BC5D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -767,7 +767,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ASCOM.DriverAccess, Version=1.0.4.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ASCOM.DriverAccess, Version=1.0.5.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_04815B48F7C042E6952D11ECA7EE546A"
@@ -934,6 +934,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_10D513A6438F9844F6F4BAA92E540C62"
+            {
+            "SourcePath" = "8:Helper2.tlb"
+            "TargetName" = "8:Helper2.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_B3CD092F3C6E4B0EAF26D12687C81472"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_117600BCB24B6816BDC151DCAF9650FC"
             {
             "AssemblyRegister" = "3:1"
@@ -970,7 +990,7 @@
             "SourcePath" = "8:WebShortcuts\\Compatible Software (web).url"
             "TargetName" = "8:Compatible Software (web).url"
             "Tag" = "8:"
-            "Folder" = "8:_92C112E38863494AB1C39086083A302A"
+            "Folder" = "8:_6E3C5AFC12B44EAEA48CF81B1AF5A2C4"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:FALSE"
@@ -1012,26 +1032,6 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1B7788FD3272D6620C2EBD1193DC98E7"
-            {
-            "SourcePath" = "8:Helper.tlb"
-            "TargetName" = "8:Helper.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_B3CD092F3C6E4B0EAF26D12687C81472"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
@@ -1136,26 +1136,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2E48B670661568E1D85B99CBE71863DD"
-            {
-            "SourcePath" = "8:AscomMasterInterfaces.tlb"
-            "TargetName" = "8:AscomMasterInterfaces.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_B3CD092F3C6E4B0EAF26D12687C81472"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2FD242B18B8A44E2B1BC43F95CFFD825"
             {
             "SourcePath" = "8:SwitchSimulator\\SwitchSim.exe"
@@ -1174,6 +1154,37 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_33301FE4F6B5D729348D0644F617BC5D"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:ASCOM.RotatorSimulator, Version=1.0.2.0, Culture=neutral, processorArchitecture=x86"
+                "ScatterAssemblies"
+                {
+                    "_33301FE4F6B5D729348D0644F617BC5D"
+                    {
+                    "Name" = "8:ASCOM.RotatorSimulator.EXE"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:ASCOM.RotatorSimulator.EXE"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_4B90956CCCC141C3B4FC300C495C813D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_358AB60B2F5C498EB3E9B9E9CEA44732"
@@ -1241,7 +1252,7 @@
             "SourcePath" = "8:WebShortcuts\\Drivers and Downloads (web).url"
             "TargetName" = "8:Drivers and Downloads (web).url"
             "Tag" = "8:"
-            "Folder" = "8:_92C112E38863494AB1C39086083A302A"
+            "Folder" = "8:_6E3C5AFC12B44EAEA48CF81B1AF5A2C4"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:FALSE"
@@ -1260,7 +1271,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ASCOM.DriverAccess, Version=1.0.4.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ASCOM.DriverAccess, Version=1.0.5.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_408DC4DDC14E49E58A56076D83DADF55"
@@ -1356,6 +1367,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4A8204EBFC44040D9648077739C2F6CE"
+            {
+            "SourcePath" = "8:Helper.tlb"
+            "TargetName" = "8:Helper.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_B3CD092F3C6E4B0EAF26D12687C81472"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4EEF1B2FD4E84398A456011CBA7D6E51"
@@ -1489,26 +1520,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5AA7FF74273C4BE8809BF19486838D45"
-            {
-            "SourcePath" = "8:DriverTemplates\\Final\\ASCOMDriverTemplates.vsi"
-            "TargetName" = "8:ASCOMDriverTemplates.vsi"
-            "Tag" = "8:"
-            "Folder" = "8:_E57095D56CCF43A5991A7F136EFBA9C5"
-            "Condition" = "8:VSTEMPLATES=\"1\""
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6028D2AF3B04465B834BC2FC5C9DBAD4"
             {
             "SourcePath" = "8:DomeSimulator5\\DomeSim.exe"
@@ -1559,6 +1570,26 @@
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:TRUE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6F886D261FBD4D53A5E1151976408B5C"
+            {
+            "SourcePath" = "8:DriverTemplates\\Final\\ASCOMDriverTemplates50SP1.vsi"
+            "TargetName" = "8:ASCOMDriverTemplates50SP1.vsi"
+            "Tag" = "8:"
+            "Folder" = "8:_E57095D56CCF43A5991A7F136EFBA9C5"
+            "Condition" = "8:VSTEMPLATES=\"1\""
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
             "Hidden" = "11:FALSE"
             "System" = "11:FALSE"
             "Permanent" = "11:FALSE"
@@ -1694,7 +1725,7 @@
             "SourcePath" = "8:WebShortcuts\\Support (web).url"
             "TargetName" = "8:Support (web).url"
             "Tag" = "8:"
-            "Folder" = "8:_92C112E38863494AB1C39086083A302A"
+            "Folder" = "8:_6E3C5AFC12B44EAEA48CF81B1AF5A2C4"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:FALSE"
@@ -1813,7 +1844,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ASCOM.Simulator.Rotator, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ASCOM.Simulator.Rotator, Version=1.0.2.0, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_A287D2EA9EFD4CB1B2588297FC6B25F3"
@@ -2046,7 +2077,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ASCOM.RotatorSimulator, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ASCOM.RotatorSimulator, Version=1.0.2.0, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_C0B902118C1C417E8FC945E02367C1FA"
@@ -2144,10 +2175,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D338AEF87F69CDE0F9DC942DEFB7314C"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CF37A10F62A2518274476615BB8D8419"
             {
-            "SourcePath" = "8:Helper2.tlb"
-            "TargetName" = "8:Helper2.tlb"
+            "SourcePath" = "8:AscomMasterInterfaces.tlb"
+            "TargetName" = "8:AscomMasterInterfaces.tlb"
             "Tag" = "8:"
             "Folder" = "8:_B3CD092F3C6E4B0EAF26D12687C81472"
             "Condition" = "8:"
@@ -2233,37 +2264,6 @@
             "Register" = "3:4"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E08440F1D0C9D08FADEBF02C391A310D"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ASCOM.RotatorSimulator, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_E08440F1D0C9D08FADEBF02C391A310D"
-                    {
-                    "Name" = "8:ASCOM.RotatorSimulator.EXE"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:ASCOM.RotatorSimulator.EXE"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_4B90956CCCC141C3B4FC300C495C813D"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E29EE7EEB22248F79EB2E95111666FEA"
@@ -2888,13 +2888,14 @@
         "MsiBootstrapper"
         {
         "LangId" = "3:1033"
+        "RequiresElevation" = "11:FALSE"
         }
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ASCOM Platform 5.0a"
         "ProductCode" = "8:{075F543B-97C5-4118-9D54-93910DE03FE9}"
-        "PackageCode" = "8:{85E496B0-6339-4C63-A981-1D2D84B24B6A}"
+        "PackageCode" = "8:{DBC349B5-A32A-42D6-A876-F02D59D2315F}"
         "UpgradeCode" = "8:{F76ECF26-F0AC-492C-850C-6E136E8DB371}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -3211,6 +3212,20 @@
             "Icon" = "8:"
             "Feature" = "8:"
             }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_2DC382F68FC7497DA5896A3C30FD85C0"
+            {
+            "Name" = "8:Compatible Software (web)"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_18B738A700BA49348DB519C1520D778A"
+            "Folder" = "8:_92C112E38863494AB1C39086083A302A"
+            "WorkingFolder" = "8:_6E3C5AFC12B44EAEA48CF81B1AF5A2C4"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_30C52FD45B714A908FFC5ACEC7E9A6FC"
             {
             "Name" = "8:POTH Help"
@@ -3236,6 +3251,20 @@
             "Target" = "8:_2FD242B18B8A44E2B1BC43F95CFFD825"
             "Folder" = "8:_739AFEDD139F48E6B460C2352EB1C4F1"
             "WorkingFolder" = "8:_90C232AEC601445A8BEC680C97B9B96B"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_41738861C56B47A5BACE383AC259275E"
+            {
+            "Name" = "8:Support (web)"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_92FC29059B144C32BAEC58A905593927"
+            "Folder" = "8:_92C112E38863494AB1C39086083A302A"
+            "WorkingFolder" = "8:_6E3C5AFC12B44EAEA48CF81B1AF5A2C4"
             "Icon" = "8:"
             "Feature" = "8:"
             }
@@ -3530,6 +3559,20 @@
             "Target" = "8:_394E280F9CCE43A49731353F15031370"
             "Folder" = "8:_E7D2FC959187407A82C97268DB925FD3"
             "WorkingFolder" = "8:_97D53A2E91D54367879F6D90DC989066"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_DD925A8BDBC04EB882DF308E7C529059"
+            {
+            "Name" = "8:Drivers and Downloads (web)"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_3E50552B5B054A88A2F0D2CB2882D56D"
+            "Folder" = "8:_92C112E38863494AB1C39086083A302A"
+            "WorkingFolder" = "8:_6E3C5AFC12B44EAEA48CF81B1AF5A2C4"
             "Icon" = "8:"
             "Feature" = "8:"
             }
