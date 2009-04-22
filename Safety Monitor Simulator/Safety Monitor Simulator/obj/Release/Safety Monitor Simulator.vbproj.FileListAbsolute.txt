@@ -1,0 +1,13 @@
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\Safety Monitor Simulator\Safety Monitor Simulator\bin\Release\ASCOM.SafetyMonitor.Simulator.dll.config
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\Safety Monitor Simulator\Safety Monitor Simulator\bin\Release\ASCOM.SafetyMonitor.Simulator.dll
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\Safety Monitor Simulator\Safety Monitor Simulator\bin\Release\ASCOM.SafetyMonitor.Simulator.pdb
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\Safety Monitor Simulator\Safety Monitor Simulator\bin\Release\ASCOM.SafetyMonitor.Simulator.xml
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\Safety Monitor Simulator\Safety Monitor Simulator\bin\Release\ASCOM.SafetyMonitor.Simulator.tlb
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\Safety Monitor Simulator\Safety Monitor Simulator\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\Safety Monitor Simulator\Safety Monitor Simulator\obj\Release\Safety Monitor Simulator.vbproj.ResolveComReference.cache
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\Safety Monitor Simulator\Safety Monitor Simulator\obj\Release\ASCOM.Simulator.Resources.resources
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\Safety Monitor Simulator\Safety Monitor Simulator\obj\Release\ASCOM.Simulator.SetupDialogForm.resources
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\Safety Monitor Simulator\Safety Monitor Simulator\obj\Release\Safety Monitor Simulator.vbproj.GenerateResource.Cache
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\Safety Monitor Simulator\Safety Monitor Simulator\obj\Release\ASCOM.SafetyMonitor.Simulator.dll
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\Safety Monitor Simulator\Safety Monitor Simulator\obj\Release\ASCOM.SafetyMonitor.Simulator.xml
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\Safety Monitor Simulator\Safety Monitor Simulator\obj\Release\ASCOM.SafetyMonitor.Simulator.pdb
