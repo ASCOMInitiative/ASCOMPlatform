@@ -1,0 +1,10 @@
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNet Samples\HelperNet Samples\bin\Debug\HelperNet Samples.exe.config
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNet Samples\HelperNet Samples\bin\Debug\HelperNet Samples.exe
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNet Samples\HelperNet Samples\bin\Debug\HelperNet Samples.pdb
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNet Samples\HelperNet Samples\bin\Debug\HelperNet Samples.xml
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNet Samples\HelperNet Samples\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNet Samples\HelperNet Samples\obj\Debug\HelperNet_Samples.Resources.resources
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNet Samples\HelperNet Samples\obj\Debug\HelperNet Samples.vbproj.GenerateResource.Cache
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNet Samples\HelperNet Samples\obj\Debug\HelperNet Samples.exe
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNet Samples\HelperNet Samples\obj\Debug\HelperNet Samples.xml
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNet Samples\HelperNet Samples\obj\Debug\HelperNet Samples.pdb
