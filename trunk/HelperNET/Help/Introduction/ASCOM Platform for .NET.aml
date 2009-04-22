@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="3d17234a-c873-4f65-af0f-52f182081a44" revisionNumber="1">
+	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<introduction>
+		<para>This component provides native .NET access to ASCOM Platform functionality</para>
+	</introduction>
+    <section address="What hasn't changed">
+		<title>Notes</title>
+   		<content>
+      		<para>You will now find a new entry on the Visual Studio Add Reference .NET tab called
+      		<quoteInline>ASCOM Platform for .NET</quoteInline>, add this reference to your project 
+      		and you will have access to the ASCOM.HelperNET namespace where the platform components
+      		are located.</para>
+      	</content>
+    </section>
+  </developerConceptualDocument>
+</topic>
