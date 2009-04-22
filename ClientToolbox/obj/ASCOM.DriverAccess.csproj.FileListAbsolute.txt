@@ -9,3 +9,10 @@ C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projec
 C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\obj\Debug\ResolveAssemblyReference.cache
 C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\obj\Debug\ASCOM.DriverAccess.dll
 C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\obj\Debug\ASCOM.DriverAccess.pdb
+C:\Documents and Settings\Peter\My Documents\Astro\Ascom\Platform 5 Source\ASCOM\ClientToolbox\bin\Release\ASCOM.DriverAccess.XML
+C:\Documents and Settings\Peter\My Documents\Astro\Ascom\Platform 5 Source\ASCOM\ClientToolbox\bin\Release\ASCOM.DriverAccess.dll
+C:\Documents and Settings\Peter\My Documents\Astro\Ascom\Platform 5 Source\ASCOM\ClientToolbox\bin\Release\ASCOM.DriverAccess.pdb
+C:\Documents and Settings\Peter\My Documents\Astro\Ascom\Platform 5 Source\ASCOM\ClientToolbox\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\Peter\My Documents\Astro\Ascom\Platform 5 Source\ASCOM\ClientToolbox\obj\Release\ASCOM.DriverAccess.csproj.ResolveComReference.cache
+C:\Documents and Settings\Peter\My Documents\Astro\Ascom\Platform 5 Source\ASCOM\ClientToolbox\obj\Release\ASCOM.DriverAccess.dll
+C:\Documents and Settings\Peter\My Documents\Astro\Ascom\Platform 5 Source\ASCOM\ClientToolbox\obj\Release\ASCOM.DriverAccess.pdb
