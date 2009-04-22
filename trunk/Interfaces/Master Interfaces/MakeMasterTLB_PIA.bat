@@ -4,4 +4,4 @@ midl /nologo /tlb AscomMasterInterfaces.tlb AscomMasterInterfaces.idl
 del *.c
 del *.h
 echo Making ASCOM master interface PIA...
-tlbimp AscomMasterInterfaces.tlb /nologo /out:ASCOM.Interfaces.dll /asmversion:1.0.0.0 /keyfile:ASCOM.snk /primary
+tlbimp AscomMasterInterfaces.tlb /nologo /out:ASCOM.Interfaces.dll /asmversion:6.0.0.0 /keyfile:ASCOM.snk /primary
