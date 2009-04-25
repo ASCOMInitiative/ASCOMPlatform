@@ -253,7 +253,22 @@ namespace TiGra.ASCOM.Controls
 				this.panelLED.BackColor = clrLED;
 			}
 		}
-
+		private delegate void SetColourDelegate(Color ledColour);
+		/// <summary>
+		/// Sets the colour of the LED. This method is thread-safe.
+		/// </summary>
+		/// <param name="ledColour">The led colour.</param>
+		private void SetColour(Color ledColour)
+			{
+			if (this.InvokeRequired)
+				{
+				this.Invoke(new SetColourDelegate(SetColour), new object[] { ledColour });
+				}
+			else if (ledColour != this.panelLED.BackColor)
+				{
+				this.panelLED.BackColor = ledColour;
+				}
+			}
 		/// <summary>
 		/// Updates the LED on/off status based on the specified cadence pattern.
 		/// If the cadence has been changed to a continuous pattern, then the timer is disabled.
