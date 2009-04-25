@@ -11,10 +11,14 @@
     <RootNamespace>ASCOM.SettingsProvider_Public_Documentation</RootNamespace>
     <AssemblyName>ASCOM.SettingsProvider Public Documentation</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -492,7 +496,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties ExternalSources="" Sandcastle_ProduceHelp2x="True" Sandcastle_ProduceHelp1x="True" Sandcastle_PresentationName="Visual Studio 2005" Sandcastle_Version="2.4.10520.1" BuildEngineProviderName="Sandcastle" DocProjectVersion="1.11.0.0" ProcessComponentTypeName="ASCOM.SettingsProvider_Public_Documentation.BuildProcess" IsDocProject="true" Sandcastle_UseFriendlyHtmlFileNames="True" Sandcastle_DocumentationSetName="ASCOM.SettingsProvider" DoNotAskIncludeOutputInProject="True" DefaultApplyToAll="True" />
+      <UserProperties DefaultApplyToAll="True" DoNotAskIncludeOutputInProject="True" Sandcastle_DocumentationSetName="ASCOM.SettingsProvider" Sandcastle_UseFriendlyHtmlFileNames="True" IsDocProject="true" ProcessComponentTypeName="ASCOM.SettingsProvider_Public_Documentation.BuildProcess" DocProjectVersion="1.11.0.0" BuildEngineProviderName="Sandcastle" Sandcastle_Version="2.4.10520.1" Sandcastle_PresentationName="Visual Studio 2005" Sandcastle_ProduceHelp1x="True" Sandcastle_ProduceHelp2x="True" ExternalSources="" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

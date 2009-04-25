@@ -12,10 +12,14 @@
     <AssemblyName>ASCOM.SettingsProvider</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>TiGraNetworks.snk</AssemblyOriginatorKeyFile>
     <ApplicationIcon>ASCOM.ico</ApplicationIcon>
@@ -43,9 +47,6 @@
     <DocumentationFile>bin\Release\ASCOM.SettingsProvider.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ASCOM.HelperNET, Version=5.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
@@ -65,6 +66,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ASCOM.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\HelperNET\HelperNET\HelperNET.vbproj">
+      <Project>{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}</Project>
+      <Name>HelperNET</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

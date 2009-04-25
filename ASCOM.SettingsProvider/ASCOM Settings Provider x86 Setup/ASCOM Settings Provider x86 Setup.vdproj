@@ -7,10 +7,10 @@
 "LanguageId" = "3:0"
 "CodePage" = "3:1252"
 "UILanguageId" = "3:0"
-"SccProjectName" = "8:\"$/ASCOM.SettingsProvider.root/ASCOM.SettingsProvider\", ZSFBAAAA"
-"SccLocalPath" = "8:.."
+"SccProjectName" = "8:"
+"SccLocalPath" = "8:"
 "SccAuxPath" = "8:"
-"SccProvider" = "8:MSSCCI:Microsoft Visual SourceSafe"
+"SccProvider" = "8:"
     "Hierarchy"
     {
         "Entry"
@@ -404,7 +404,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ASCOM.HelperNET, Version=5.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ASCOM.HelperNET, Version=5.1.2.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_C4E8AAB3B9E1B00FE2BDC2C40324D27C"
