@@ -8,7 +8,7 @@ using System.Collections;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using ASCOM.Interface;
-using ASCOM.Helper;
+using ASCOM.HelperNET;
 
 namespace ASCOM.DriverAccess
 {
@@ -56,7 +56,7 @@ namespace ASCOM.DriverAccess
         public static string Choose(string cameraID)
         {
             Chooser oChooser = new Chooser();
-            oChooser.DeviceTypeV = "Camera";			// Requires Helper 5.0.3 (May ///07)
+            oChooser.DeviceType = "Camera";			// Requires Helper 5.0.3 (May ///07)
             return oChooser.Choose(cameraID);
         }
 

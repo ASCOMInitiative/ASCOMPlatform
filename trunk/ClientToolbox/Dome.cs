@@ -5,7 +5,7 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using ASCOM.Interface;
-using ASCOM.Helper;
+using ASCOM.HelperNET;
 
 namespace ASCOM.DriverAccess
 {
@@ -48,7 +48,7 @@ namespace ASCOM.DriverAccess
         public static string Choose(string domeID)
         {
 			Chooser oChooser = new Chooser();
-			oChooser.DeviceTypeV = "Dome";				// Requires Helper 5.0.3 (May '07)
+			oChooser.DeviceType = "Dome";				// Requires Helper 5.0.3 (May '07)
 			return oChooser.Choose(domeID);
 		}
         #region IDome Members

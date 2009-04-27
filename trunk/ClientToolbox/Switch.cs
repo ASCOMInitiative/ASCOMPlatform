@@ -5,7 +5,7 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using ASCOM.Interface;
-using ASCOM.Helper;
+using ASCOM.HelperNET;
 
 namespace ASCOM.DriverAccess
 {
@@ -51,7 +51,7 @@ namespace ASCOM.DriverAccess
         public static string Choose(string switchID)
         {
 			Chooser oChooser = new Chooser();
-            oChooser.DeviceTypeV = "Switch";			// Requires Helper 5.0.3 (May '07)
+            oChooser.DeviceType = "Switch";			// Requires Helper 5.0.3 (May '07)
             return oChooser.Choose(switchID);
 		}
     
