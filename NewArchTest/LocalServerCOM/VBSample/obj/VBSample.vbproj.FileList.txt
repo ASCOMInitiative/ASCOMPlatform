@@ -1,8 +1,0 @@
-obj\Debug\ResolveAssemblyReference.cache
-obj\Debug\VBSample.vbproj.ResolveComReference.cache
-obj\Debug\VBSample.vbproj.GenerateResource.Cache
-obj\Debug\ASCOM.LocalServerCOM.Resources.resources
-bin\Debug\VBSample.dll
-bin\Debug\VBSample.pdb
-obj\Debug\VBSample.dll
-obj\Debug\VBSample.pdb
