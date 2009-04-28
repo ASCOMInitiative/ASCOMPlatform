@@ -4,8 +4,11 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
-using ASCOM.DriverAccess;
 using Microsoft.Win32;
+using ASCOM.DriverAccess;
+using System.Collections.Generic;
+using ASCOM.HelperNET;
+using System.Diagnostics;
 
 namespace ASCOM.Controls
 {
@@ -23,43 +26,6 @@ namespace ASCOM.Controls
 		private System.Windows.Forms.ToolTip toolTipChooser;
 		private System.ComponentModel.IContainer components;
 
-		/// <summary>
-		/// Private class used by the chooser to create a collection of devices.
-		/// Used to populate the device selection combo-box.
-		/// </summary>
-		private class DeviceDescriptor
-			{
-			/// <summary>
-			/// Initialize a new DeviceDescriptor object.
-			/// </summary>
-			/// <param name="s1">DeviceID of the device (Device ID)</param>
-			/// <param name="s2">Human-readable description</param>
-			public DeviceDescriptor(string s1, string s2)
-				{
-				DeviceID = s1;
-				Description = s2;
-				}
-			/// <summary>
-			/// Gets or sets the ASCOM DeviceID.
-			/// </summary>
-			/// <value>The ASCOM DeviceID (synonymous with the COM ClsId) of the device.</value>
-			public string DeviceID { get; set; }
-			/// <summary>
-			/// Gets or sets the description of the ASCOM device.
-			/// </summary>
-			/// <value>The description.</value>
-			public string Description { get; set; }
-			/// <summary>
-			/// Returns a <see cref="T:System.String"/> containing a description of the ASCOM device.
-			/// </summary>
-			/// <returns>
-			/// A <see cref="T:System.String"/> containing a description of the ASCOM device.
-			/// </returns>
-			public override string ToString()
-				{
-				return Description;
-				}
-			}
 		/// <summary>
 		/// Default public constructor; create a new chooser object and populate the device selection combo box.
 		/// </summary>
@@ -189,27 +155,36 @@ namespace ASCOM.Controls
 		/// When this property is changed, the ComboBox is refreshed to reflect the new device type.
 		/// The selection list is positioned at the most recently used DeviceID, if possible.
 		/// </summary>
-		[Category("ASCOM"), Description("Configures the chooser for a particular class of device."),
-			Browsable(true), DefaultValue("Telescope")]
+		[Category("ASCOM")]
+		[Description("Configures the chooser for a particular class of device.")]
+		[Browsable(true)]
+		//[DefaultValue("Telescope")]
 		public string DeviceClass
-		{
+			{
 			get
-			{
+				{
 				return m_eDriverClass;
-			}
+				}
 			set
-			{
+				{
+				Trace.WriteLine(String.Format("Chooser device class changing to {0}", value));
 				m_eDriverClass = value;
 				m_MRU.MRUType = value;
 				this.DeviceID = m_MRU.MostRecentlyUsedDeviceID;	// This repopulates the device list.
-				this.labelPrompt.Text = string.Format(cstrPromptLabel, DeviceClass.ToString());
+				this.labelPrompt.Text = string.Format(cstrPromptLabel, DeviceClass);
+				}
 			}
-		}
 
 		/// <summary>
 		/// The class of device being chosen. Defaults to "Telescope".
 		/// </summary>
-		private string m_eDriverClass = "Telescope";
+		private string m_eDriverClass;
+		/// <summary>
+		/// Handles a click event on the ASCOM logo image.
+		/// Starts a web browser and navigates to <see cref="URL"/>.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void pictureASCOMLogo_Click(object sender, System.EventArgs e)
 		{
 			Cursor = Cursors.AppStarting;
@@ -228,58 +203,55 @@ namespace ASCOM.Controls
 			}
 		}
 		/// <summary>
-		/// Populates the device list by enumerating the registry entries for devices in the given DriverClass.
+		/// Populates the device list by enumerating the entries for devices in the given DriverClass.
 		/// The DriverClass comes from the DeviceClass property.
 		/// </summary>
 		internal void PopulateDeviceList()
-		{
+			{
 			if (this.DesignMode)
 				return;
 
-			string strDeviceClass = this.DeviceClass.ToString();
-			string strSubKey = strDeviceClass + " Drivers";
-			RegistryKey keyASCOMRoot = RegistryRoot;
-			RegistryKey keyDriverRoot = keyASCOMRoot.OpenSubKey(strSubKey, false);
-			if (keyDriverRoot == null)
-			{	// There is no registry key and therefore no drivers of this type are registered.
-				// Populate the combo box with a dummy entry and disable the control.
-				// The entry will read "no %DeviceClass% drivers installed".
-				this.m_strDeviceID = null;	// Ensure we don't return an obsolete device ID.
+			using (Profile P = new Profile())
+				{
+				SortedList<string, string> installedDrivers = P.GetInstalledDevices(this.DeviceClass);
+
+				if (installedDrivers.Count == 0)
+					{	// There is no registry key and therefore no drivers of this type are registered.
+					// Populate the combo box with a dummy entry and disable the control.
+					// The entry will read "no %DeviceClass% drivers installed".
+					this.m_strDeviceID = null;	// Ensure we don't return an obsolete device ID.
+					this.comboSelectDriver.BeginUpdate();
+					this.comboSelectDriver.Items.Clear();
+					string strDescription = string.Format("(no {0} drivers installed)", this.DeviceClass);
+					DeviceDescriptor objDummy = new DeviceDescriptor("null.null", strDescription);
+					this.comboSelectDriver.Items.Add(objDummy);
+					this.comboSelectDriver.SelectedIndex = 0;
+					this.comboSelectDriver.Enabled = false;	// Control is disabled while there are no items
+					this.buttonDriverProperties.Enabled = false;
+					this.comboSelectDriver.EndUpdate();
+					return;
+					}
 				this.comboSelectDriver.BeginUpdate();
 				this.comboSelectDriver.Items.Clear();
-				string strDescription = string.Format("(no {0} drivers installed)", strDeviceClass);
-				DeviceDescriptor objDummy = new DeviceDescriptor("null.null", strDescription);
-				this.comboSelectDriver.Items.Add(objDummy);
-				this.comboSelectDriver.SelectedIndex = 0;
-				this.comboSelectDriver.Enabled = false;	// Control is disabled while there are no items
-				this.buttonDriverProperties.Enabled = false;
+				int nDefaultIndex = 0;	// Default selection, defaults to first item in the list.
+				foreach (KeyValuePair<string, string> deviceProfileKey in installedDrivers)
+					{
+					DeviceDescriptor deviceDescriptor = new DeviceDescriptor(deviceProfileKey);
+					string strDescription = String.IsNullOrEmpty(deviceDescriptor.Description) ? "No description" : deviceDescriptor.Description;
+					int nItemIndex = this.comboSelectDriver.Items.Add(deviceDescriptor);
+					if (deviceDescriptor.DeviceID == DeviceID)
+						{
+						nDefaultIndex = nItemIndex;	// We've found our default item, use it's index
+						}
+					}
+				// Now, the ComboBox is populated. Set the default selection.
+				this.comboSelectDriver.SelectedIndex = nDefaultIndex;
+				this.m_strDeviceID = ((DeviceDescriptor)comboSelectDriver.Items[nDefaultIndex]).DeviceID;
+				this.comboSelectDriver.Enabled = true;	// Enable the control now that it has valid data.
+				this.buttonDriverProperties.Enabled = true;
 				this.comboSelectDriver.EndUpdate();
-				return;
-			}
-			this.comboSelectDriver.BeginUpdate();
-			this.comboSelectDriver.Items.Clear();
-			int nDefaultIndex = 0;	// Default selection, defaults to first item in the list.
-			foreach (string strProgID in keyDriverRoot.GetSubKeyNames())
-			{
-				RegistryKey keyDriver = keyDriverRoot.OpenSubKey(strProgID, false);
-				string strDescription = (string)keyDriver.GetValue(null, "No description");
-				DeviceDescriptor objDevice = new DeviceDescriptor(strProgID, strDescription);
-				int nItemIndex = this.comboSelectDriver.Items.Add(objDevice);
-				if (strProgID == DeviceID)
-				{
-					nDefaultIndex = nItemIndex;	// We've found our default item, use it's index
 				}
-				keyDriver.Close();
 			}
-			// Now, the ComboBox is populated. Set the default selection.
-			this.comboSelectDriver.SelectedIndex = nDefaultIndex;
-			this.m_strDeviceID = ((DeviceDescriptor)comboSelectDriver.Items[nDefaultIndex]).DeviceID;
-			this.comboSelectDriver.Enabled = true;	// Enable the control now that it has valid data.
-			this.buttonDriverProperties.Enabled = true;
-			this.comboSelectDriver.EndUpdate();
-			keyDriverRoot.Close();
-			keyASCOMRoot.Close();
-		}
 
 		/// <summary>
 		/// Gets the root key in the registry beneath which ASCOM device profiles are stored,
@@ -289,8 +261,11 @@ namespace ASCOM.Controls
 		{
 			get
 			{
-				RegistryKey keyRoot = Registry.LocalMachine;	// HKEY_LOCAL_MACHINE
-				keyRoot = keyRoot.OpenSubKey(@"Software\ASCOM", false);
+				RegistryKey keyRoot = Registry.LocalMachine.OpenSubKey(@"Software\ASCOM");
+				if (keyRoot == null)
+					keyRoot = Registry.LocalMachine.OpenSubKey(@"Software\Wow6432Node\ASCOM");
+				if (keyRoot == null)
+					throw new ApplicationException("Unable to locate ASCOM registry");
 				return keyRoot;
 			}
 		}
@@ -299,13 +274,33 @@ namespace ASCOM.Controls
 		/// The value of the most-recently-used DeviceID. Set by the user and used to set the default selection.
 		/// </summary>
 		private string m_strDeviceID = "";
-
+		/// <summary>
+		/// Handles the SelectionChangeCommitted event from the device selector drop-down.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void comboSelectDriver_SelectionChangeCommitted(object sender, System.EventArgs e)
 		{
 			DeviceDescriptor objDevice = (DeviceDescriptor)comboSelectDriver.SelectedItem;
 			this.m_strDeviceID = objDevice.DeviceID;
 			m_MRU.MostRecentlyUsedDeviceID = objDevice.DeviceID;
 		}
+		/// <summary>
+		/// This event occurs when the device selection changes.
+		/// </summary>
+		[Category("ASCOM")]
+		[Description("Occurs when the ASCOM device selection changes")]
+		public event System.EventHandler SelectionChanged;
+		/// <summary>
+		/// Raise the <see cref="SelectionChanged"/> event.
+		/// </summary>
+		protected void OnSelectionChanged()
+			{
+			if (SelectionChanged != null)
+				{
+				SelectionChanged(this, EventArgs.Empty);
+				}
+			}
 
 		/// <summary>
 		/// Get or Set the DeviceID.
@@ -316,6 +311,9 @@ namespace ASCOM.Controls
 		/// there has been no selection, or if there are no installed drivers.
 		/// This property is reset when the DeviceClass property is set.
 		/// </summary>
+		[Category("ASCOM")]
+		[Description("The DeviceID that is currently selected. This may be set (or bound to a Setting) to pre-select the default device.")]
+		[Browsable(true)]
 		public string DeviceID
 		{
 			get
@@ -328,6 +326,22 @@ namespace ASCOM.Controls
 				PopulateDeviceList();	// (re)populate the combo box and try to set a default entry.
 			}
 		}
+		/// <summary>
+		/// Gets the currently selected ASCOM device as a <see cref="DeviceDescriptor"/>.
+		/// If there is no currently selected device, or if the selected item is not a valid ASCOM
+		/// device, then the value <c>null</c> is returned.
+		/// </summary>
+		public DeviceDescriptor SelectedDevice
+			{
+			get 
+				{
+				if (!(this.comboSelectDriver.SelectedItem is DeviceDescriptor))
+					return null;
+				if (string.IsNullOrEmpty((this.comboSelectDriver.SelectedItem as DeviceDescriptor).DeviceID))
+					return null;
+				return this.comboSelectDriver.SelectedItem as DeviceDescriptor;
+				}
+			}
 
 		/// <summary>
 		/// Format string used to construct the on-screen prompt,
@@ -337,11 +351,7 @@ namespace ASCOM.Controls
 
 		private void buttonDriverProperties_Click(object sender, System.EventArgs e)
 		{
-			Telescope objDriver = new Telescope(this.DeviceID);
-			//LateBoundDriver objDriver = new LateBoundDriver(this.DeviceID);	// Create a late-bound driver instance
-			objDriver.SetupDialog();
-			// TODO: Invoke Dispose() if possible, but silently succeed if not.
-			objDriver = null;
+			// ToDo: Instatiate the selected driver and show its settings dialog.
 		}
 
 		private void Chooser_Load(object sender, System.EventArgs e)
