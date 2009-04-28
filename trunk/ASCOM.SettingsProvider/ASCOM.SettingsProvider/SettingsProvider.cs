@@ -138,14 +138,30 @@ namespace ASCOM
 			foreach (SettingsProperty item in collection)
 				{
 				SettingsPropertyValue spv = new SettingsPropertyValue(item);
-				//ToDo: better error checking and handling needed below.
-				DeviceIdAttribute idAttribute = item.Attributes[typeof(DeviceIdAttribute)] as DeviceIdAttribute;
-				string deviceId = idAttribute.DeviceId;
-				// Split the Device ID into a Device Name and a Device Type.
-				// eg. "ASCOM.MyDriver.Switch" --> DeviceName="ASCOM.MyDriver", DeviceType="Switch"
-				int split = deviceId.LastIndexOf('.');
-				string deviceName = deviceId.Head(split);
-				string deviceType = deviceId.RemoveHead(split + 1);
+				// Parse the ASCOM DeviceID or use default values.
+				string deviceName = null;
+				string deviceType = null;
+				string deviceId;
+				try
+					{
+					DeviceIdAttribute idAttribute = item.Attributes[typeof(DeviceIdAttribute)] as DeviceIdAttribute;
+					deviceId = idAttribute.DeviceId;
+					// Split the Device ID into a Device Name and a Device Type.
+					// eg. "ASCOM.MyDriver.Switch" --> DeviceName="ASCOM.MyDriver", DeviceType="Switch"
+					int split = deviceId.LastIndexOf('.');
+					deviceName = deviceId.Head(split);
+					deviceType = deviceId.RemoveHead(split + 1);
+					Diagnostics.TraceVerbose("Parsed DeviceID as {0}.{1}", deviceName, deviceType);
+					}
+				catch (Exception)
+					{
+					if (String.IsNullOrEmpty(deviceName))
+						deviceName = "Unnamed";
+					if (String.IsNullOrEmpty(deviceType))
+						deviceType = "Non-Device";
+					deviceId = deviceName + "." + deviceType;
+					Diagnostics.TraceWarning("Unable to parse DeviceID, using {0}.{1}", deviceName, deviceType);
+					}
 				Profile ascomProfile = new Profile();
 				ascomProfile.DeviceType = deviceType;
 				try

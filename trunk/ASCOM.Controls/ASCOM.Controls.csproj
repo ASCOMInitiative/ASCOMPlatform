@@ -16,7 +16,7 @@
     </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>ASCOM-Controls</AssemblyName>
+    <AssemblyName>ASCOM.Controls</AssemblyName>
     <AssemblyOriginatorKeyFile>ASCOM.snk</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
@@ -74,7 +74,7 @@
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -97,10 +97,9 @@
     <WarningLevel>4</WarningLevel>
     <DebugType>none</DebugType>
     <ErrorReport>prompt</ErrorReport>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ASCOM.DriverAccess, Version=1.0.4.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -137,7 +136,8 @@
     <Compile Include="ChooserMRU.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LEDRedGreen.cs">
+    <Compile Include="DeviceDescriptor.cs" />
+    <Compile Include="LEDIndicator.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
@@ -151,8 +151,8 @@
       <DependentUpon>Chooser.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="LEDRedGreen.resx">
-      <DependentUpon>LEDRedGreen.cs</DependentUpon>
+    <EmbeddedResource Include="LEDIndicator.resx">
+      <DependentUpon>LEDIndicator.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
@@ -174,24 +174,29 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="ASCOM.Interface">
-      <Guid>{76618F90-032F-4424-A680-802467A55742}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-    </COMReference>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\ASCOM.SettingsProvider.csproj">
       <Project>{4FFFD202-81D4-4549-880B-09B640D72C1D}</Project>
       <Name>ASCOM.SettingsProvider</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\ClientToolbox\ASCOM.DriverAccess.csproj">
+      <Project>{35194767-5585-45C3-803F-1BCE74CEAAFC}</Project>
+      <Name>ASCOM.DriverAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\HelperNET\HelperNET\HelperNET.vbproj">
       <Project>{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}</Project>
       <Name>HelperNET</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="ASCOM.Interface">
+      <Guid>{76618F90-032F-4424-A680-802467A55742}</Guid>
+      <VersionMajor>6</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

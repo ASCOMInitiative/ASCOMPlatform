@@ -2,6 +2,7 @@ Option Strict On
 Option Explicit On
 Imports System
 Imports System.Collections
+Imports System.Collections.Generic
 Imports ASCOM.HelperNET.Interfaces
 
 ''' <summary>
@@ -153,6 +154,30 @@ Public Class Profile
             Tl.LogFinish("Exception: " & ex.ToString)
         End Try
         Return IsRegisteredPrv
+    End Function
+
+    ''' <summary>
+    ''' Returns a collection of all the installed devices within the specified device class.
+    ''' </summary>
+    ''' <param name="DeviceClass">One of the recognised ASCOM device classes, for example, <c>"Telescope"</c>.</param>
+    ''' <returns>A SortedList{string,string} containing the DeviceIDs and Descriptions of the installed devices.</returns>
+    ''' <remarks></remarks>
+    Public Function GetInstalledDevices(ByVal DeviceClass As String) As Collections.Generic.SortedList(Of String, String)
+        '
+        ' Enumerate the available ASCOM scope drivers, and
+        ' return their descriptions and ProgIDs as a
+        ' SortedList(Of string, string).
+        Dim m_Drivers As SortedList(Of String, String)
+        m_Drivers = New SortedList(Of String, String) '' preload an empty collection.
+        Try
+            ProfileStore = New XMLAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
+            m_Drivers = ProfileStore.EnumKeys(DeviceClass & " Drivers") ' Get Key-Class pairs
+            ProfileStore.Dispose() 'Close down the profile store
+            ProfileStore = Nothing
+        Catch ex As Exception
+            ' MsgBox("GetInstalledDevices " & ex.ToString)
+        End Try
+        Return m_Drivers
     End Function
 
     ''' <summary>
