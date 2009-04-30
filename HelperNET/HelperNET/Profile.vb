@@ -108,6 +108,7 @@ Public Class Profile
     ''' </summary>
     ''' <value>String describing the type of device being accessed</value>
     ''' <returns>String describing the type of device being accessed</returns>
+    ''' <exception cref="Exceptions.InvalidValueException">Thrown on setting the device type to empty string</exception>
     ''' <remarks></remarks>
     Public Property DeviceType() As String Implements IProfile.DeviceType
         Get
@@ -115,9 +116,75 @@ Public Class Profile
         End Get
         Set(ByVal Value As String)
             Tl.LogMessage("DeviceType Set", Value.ToString)
-            If Value = "" Then Err.Raise(SCODE_ILLEGAL_DEVTYPE, ERR_SOURCE_PROFILE, MSG_ILLEGAL_DEVTYPE)
+            If Value = "" Then Throw New Exceptions.InvalidValueException(MSG_ILLEGAL_DEVTYPE) 'Err.Raise(SCODE_ILLEGAL_DEVTYPE, ERR_SOURCE_PROFILE, MSG_ILLEGAL_DEVTYPE)
             m_sDeviceType = Value
         End Set
+    End Property
+
+    ''' <summary>
+    ''' List the device types registered in the Profile store
+    ''' </summary>
+    ''' <value>List of registered device types</value>
+    ''' <returns>A sorted string array of device types</returns>
+    ''' <remarks>Use this to find the types of device that are registered in the Profile store.
+    ''' <para>Device types are returned without the suffix " Devices" that is used in key names within the 
+    ''' profile store; this allows direct use of returned device types inside For Each loops as shown in 
+    ''' the Profile code example.</para>
+    ''' </remarks>
+    ReadOnly Property RegisteredDeviceTypes() As Generic.List(Of String) Implements IProfile.RegisteredDeviceTypes
+        Get
+            Dim RootKeys As Generic.SortedList(Of String, String)
+            Dim Retval As Generic.List(Of String), DType As String
+            Retval = New Generic.List(Of String)
+            RootKeys = ProfileStore.EnumKeys("") ' Get root Keys
+            Tl.LogMessage("RegisteredDeviceTypes", "Found " & RootKeys.Count & " values")
+            For Each kvp As Generic.KeyValuePair(Of String, String) In RootKeys
+                Tl.LogMessage("RegisteredDeviceTypes", "  " & kvp.Key & " " & kvp.Value)
+                If Right(kvp.Key, 8) = " Drivers" Then
+                    DType = Left(kvp.Key, Len(kvp.Key) - 8)
+                    Tl.LogMessage("RegisteredDeviceTypes", "    Adding: " & DType)
+                    Retval.Add(DType) 'Only add keys that contain drivers
+
+                End If
+            Next
+            Retval.Sort() 'Sort the list into alphabetical order
+            Return Retval
+
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' List the devices of a given device type that are registered in the Profile store
+    ''' </summary>
+    ''' <param name="DeviceType">Type of devices to list</param>
+    ''' <value>List of registered devices</value>
+    ''' <returns>A sorted list of installed devices and associated device descriptions</returns>
+    ''' <exception cref="Exceptions.InvalidValueException">Throw if the supplied DeviceType is empty string or 
+    ''' null value.</exception>
+    ''' <remarks>
+    ''' Use this to find all the registerd devices of a given type that are in the Profile store
+    ''' <para>If a DeviceType is supplied, where no device of that type has been registered before on this system,
+    ''' an empty list will be returned</para>
+    ''' </remarks>
+    ReadOnly Property RegisteredDevices(ByVal DeviceType As String) As Generic.SortedList(Of String, String) Implements IProfile.RegisteredDevices
+        Get
+            Dim Retval As Generic.SortedList(Of String, String) = Nothing
+            If String.IsNullOrEmpty(DeviceType) Then ' Null value and empty string are invalid DeviceTypes
+                Tl.LogMessage("RegisteredDevices", "Empty string or Nothing supplied as DeviceType")
+                Throw New Exceptions.InvalidValueException("Empty string or Nothing supplied as DeviceType")
+            End If
+            Try
+                Retval = ProfileStore.EnumKeys(DeviceType & " Drivers") ' Get Key-Class pairs
+            Catch ex As System.IO.DirectoryNotFoundException 'Catch exception thrown if the Deviceype is an invalid value
+                Tl.LogMessage("RegisteredDevices", "WARNING: there are no devices of type: """ & DeviceType & """ registered on this system")
+                Retval = New Generic.SortedList(Of String, String) 'Return an empty list
+            End Try
+            Tl.LogMessage("RegisteredDevices", "Device type: " & DeviceType & " - found " & Retval.Count & " devices")
+            For Each kvp As Generic.KeyValuePair(Of String, String) In Retval
+                Tl.LogMessage("RegisteredDevices", "  " & kvp.Key & " - " & kvp.Value)
+            Next
+            Return Retval
+        End Get
     End Property
 
     ''' <summary>
@@ -255,6 +322,8 @@ Public Class Profile
     ''' <param name="SubKey">Subkey from the profile root in which to write the value</param>
     ''' <exception cref="Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
     ''' <exception cref="Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
+    ''' <exception cref="Exceptions.RestrictedAccessException">Thrown if Name and SubKey are both empty strings. This 
+    ''' value is reserved for the device description as it appears in Chooser and is set by Profile.Register</exception>
     ''' <remarks></remarks>
     Public Overloads Sub WriteValue(ByVal DriverID As String, ByVal Name As String, ByVal Value As String, ByVal SubKey As String) Implements IProfile.WriteValue
         'Create or update a profile value
@@ -263,7 +332,8 @@ Public Class Profile
 
         CheckRegistered(DriverID)
         If Name = "" And SubKey = "" Then
-            Err.Raise(SCODE_ILLEGAL_REGACC, ERR_SOURCE_PROFILE, MSG_ILLEGAL_REGACC)
+            'Err.Raise(SCODE_ILLEGAL_REGACC, ERR_SOURCE_PROFILE, MSG_ILLEGAL_REGACC)
+            Throw New Exceptions.RestrictedAccessException("The device default value is protected as it contains the device descriptio and is set by Profile.Register")
         End If
         ProfileStore.WriteProfile(MakeKey(DriverID, SubKey), Name, Value)
     End Sub

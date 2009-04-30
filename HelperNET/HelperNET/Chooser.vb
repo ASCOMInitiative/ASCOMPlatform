@@ -114,6 +114,7 @@ Public Class Chooser
     ''' <value>The type of device for which the Chooser will select a driver. (String, default = "Telescope") 
     '''</value>
     ''' <returns>The device type that has been set</returns>
+    ''' <exception cref="Exceptions.InvalidValueException">Thrown on setting the device type to empty string</exception>
     ''' <remarks>This property changes the "personality" of the Chooser, allowing it to be used to select a driver for any arbitrary 
     ''' ASCOM device type. The default value for this is "Telescope", but it could be "Focuser", "Camera", etc. 
     ''' <para>This property is independent of the Profile object's DeviceType property. Setting Chooser's DeviceType 
@@ -124,7 +125,8 @@ Public Class Chooser
             Return m_sDeviceType
         End Get
         Set(ByVal Value As String)
-            If Value = "" Then Err.Raise(SCODE_ILLEGAL_DEVTYPE, ERR_SOURCE_PROFILE, MSG_ILLEGAL_DEVTYPE)
+            If Value = "" Then Throw New Exceptions.InvalidValueException(MSG_ILLEGAL_DEVTYPE) 'Err.Raise(SCODE_ILLEGAL_DEVTYPE, ERR_SOURCE_PROFILE, MSG_ILLEGAL_DEVTYPE)
+
             m_sDeviceType = Value
         End Set
     End Property

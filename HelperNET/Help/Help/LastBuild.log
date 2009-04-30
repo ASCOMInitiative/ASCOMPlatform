@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shfbBuild product="Sandcastle Help File Builder Utilities" version="1.8.0.1" projectFile="C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\HelperNET.shfbproj" started="21/04/2009 22:08:13">
+<shfbBuild product="Sandcastle Help File Builder Utilities" version="1.8.0.1" projectFile="C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\HelperNET.shfbproj" started="29/04/2009 19:09:03">
 <buildStep step="Initializing">
 Loading and initializing plug-ins...
 Hierarchical Table of Contents Version 1.8.0.1
@@ -38,7 +38,7 @@ Generating shared content files (en-US, English (United States))...
 </buildStep>
 <buildStep step="GenerateApiFilter">
 Generating API filter for MRefBuilder...
-    Last step completed in 00:00:00.1406
+    Last step completed in 00:00:00.0313
 </buildStep>
 <buildStep step="GenerateReflectionInfo">
 Generating reflection information...
@@ -47,11 +47,11 @@ GenerateRefInfo:
   MrefBuilder (v2.4.10520.1)
   Copyright &#184; Microsoft 2006
   Info: Loaded 1 assemblies for reflection and 7 dependency assemblies.
-  Info: Wrote information on 3 namespaces, 18 types, and 239 members
+  Info: Wrote information on 3 namespaces, 19 types, and 246 members
   XslTransform (v2.4.10520.1)
   Copyright &#184; Microsoft 2005-2006
   Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\MergeDuplicates.xsl'.
-    Last step completed in 00:00:02.3751
+    Last step completed in 00:00:03.0470
 </buildStep>
 <buildStep step="GenerateNamespaceSummaries">
 Generating namespace summary information...
@@ -78,7 +78,7 @@ TransformManifest:
   XslTransform (v2.4.10520.1)
   Copyright &#184; Microsoft 2005-2006
   Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\ReflectionToManifest.xsl'.
-    Last step completed in 00:00:02.5001
+    Last step completed in 00:00:02.6407
 </buildStep>
 <buildStep step="ModifyHelpTopicFilenames">
 Modifying help topic filenames in reflection information file
@@ -193,7 +193,7 @@ C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\scripts\script_manifold.js
 C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\scripts\SplitScreen.js -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\Output\scripts\SplitScreen.js
 C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\styles\Presentation.css -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\Output\styles\Presentation.css
 C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\styles\Whidbey\presentation.css -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\Output\styles\Whidbey\presentation.css
-    Last step completed in 00:00:00.9375
+    Last step completed in 00:00:00.9532
 </buildStep>
 <buildStep step="CopyConceptualContent">
 Copying conceptual content...
@@ -210,6 +210,8 @@ Generating conceptual topic files
     C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Introduction\ASCOM Platform for COM.aml -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\ddueXml\e7734c14-0562-4010-b0c9-ddb5055cd318.xml
     Parsing topic file 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Version History\Version Summary.aml'
     C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Version History\Version Summary.aml -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\ddueXml\bfd53b69-9f13-489b-9a98-50c60d2a633b.xml
+    Parsing topic file 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Version History\Version 5.2.0.0.aml'
+    C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Version History\Version 5.2.0.0.aml -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\ddueXml\79754361-93dd-4a14-bbd8-4853f306dab7.xml
     Parsing topic file 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Version History\Version 5.1.3.0.aml'
     C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Version History\Version 5.1.3.0.aml -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\ddueXml\6c2d0f0d-6460-494e-9c1f-08545fcff623.xml
     Parsing topic file 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Version History\Version 5.1.2.0.aml'
@@ -228,6 +230,8 @@ Generating conceptual topic files
     C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Examples\Util.aml -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\ddueXml\0b546b03-9433-4bb8-bddc-adedcd4b751a.xml
     Parsing topic file 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Examples\Timer.aml'
     C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Examples\Timer.aml -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\ddueXml\1ec7d59c-b79d-41ba-8d1f-d04883c77831.xml
+    Parsing topic file 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Examples\Environment.aml'
+    C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Examples\Environment.aml -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\ddueXml\5b11959b-ead4-4443-b2fc-bb0d781bd42a.xml
     Parsing topic file 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Utilities\Serial Tracing.aml'
     C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Utilities\Serial Tracing.aml -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\ddueXml\5a679e99-87d5-4b72-a86e-88cbf10c52be.xml
     Parsing topic file 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Utilities\Profile Explorer.aml'
@@ -241,16 +245,16 @@ Creating conceptual topic configuration files...
     Companion files
     _ContentMetadata_.xml
     ConceptualManifest.xml
-    Last step completed in 00:00:00.0625
+    Last step completed in 00:00:00.0469
 </buildStep>
 <buildStep step="CopyAdditionalContent">
 Copying additional content files...
 No additional content to copy
-    Last step completed in 00:00:00.0000
+    Last step completed in 00:00:00.0156
 </buildStep>
 <buildStep step="MergeTablesOfContents">
 Merging conceptual and additional tables of contents...
-    Last step completed in 00:00:00.0313
+    Last step completed in 00:00:00.0156
 </buildStep>
 <buildStep step="CreateBuildAssemblerConfigs">
 Creating Sandcastle configuration files...
@@ -284,7 +288,7 @@ BuildConceptualTopics:
   Info: CopyFromFileComponent: Loading data file 'C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\Transforms\skeleton_conceptual.xml'.
   Info: CopyFromIndexComponent: Instantiating component.
   Info: CopyFromIndexComponent: Searching for files that match 'ddueXml\*.xml'.
-  Info: CopyFromIndexComponent: Indexed 16 elements in 16 files.
+  Info: CopyFromIndexComponent: Indexed 18 elements in 18 files.
   Info: CopyFromIndexComponent: Loaded 0 copy components.
   Info: SharedContentComponent: Instantiating component.
   Info: SharedContentComponent: Searching for files that match 'HelpFileBuilderTokens.tokens'.
@@ -293,7 +297,7 @@ BuildConceptualTopics:
   Info: SharedContentComponent: Loaded 1 shared content items.
   Info: CopyFromIndexComponent: Instantiating component.
   Info: CopyFromIndexComponent: Searching for files that match '_ContentMetadata_.xml'.
-  Info: CopyFromIndexComponent: Indexed 16 elements in 1 files.
+  Info: CopyFromIndexComponent: Indexed 18 elements in 1 files.
   Info: CopyFromIndexComponent: Loaded 0 copy components.
   Info: CodeBlockComponent: Instantiating component.
   Info: CodeBlockComponent: 
@@ -345,17 +349,18 @@ BuildConceptualTopics:
   Info: CachedResolveReferenceLinksComponent: Creating MSDN URL resolver.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Program Files\Sandcastle\Data\Reflection' for targets files of the form '*.xml'.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working' for targets files of the form 'reflection.xml'.
-  Info: CachedResolveReferenceLinksComponent: Loaded 170433 reference targets.
+  Info: CachedResolveReferenceLinksComponent: Loaded 170445 reference targets.
   Info: CachedResolveReferenceLinksComponent: 
       [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.1]
       Cached Resolve Reference  Links 2 Component.  Copyright &#184; 2006-2009, Eric Woodruff, All Rights Reserved
       http://SHFB.CodePlex.com
-  Info: CachedResolveReferenceLinksComponent: Loaded 37 cached MSDN URL entries
+  Info: CachedResolveReferenceLinksComponent: Loaded 38 cached MSDN URL entries
   Info: SaveComponent: Instantiating component.
   Info: BuildAssembler: Building topic 7d9253c2-fdfd-4c0d-8225-a96bddb49731
   Info: BuildAssembler: Building topic 3d17234a-c873-4f65-af0f-52f182081a44
   Info: BuildAssembler: Building topic e7734c14-0562-4010-b0c9-ddb5055cd318
   Info: BuildAssembler: Building topic bfd53b69-9f13-489b-9a98-50c60d2a633b
+  Info: BuildAssembler: Building topic 79754361-93dd-4a14-bbd8-4853f306dab7
   Info: BuildAssembler: Building topic 6c2d0f0d-6460-494e-9c1f-08545fcff623
   Info: BuildAssembler: Building topic 1fe76099-cb79-4c76-bb26-55d4e7305a3d
   Info: BuildAssembler: Building topic c904b112-d671-4c56-a6eb-1f8d7c3d4c4b
@@ -365,11 +370,12 @@ BuildConceptualTopics:
   Info: BuildAssembler: Building topic b5422371-8db9-4a8d-a659-04d6ba3878db
   Info: BuildAssembler: Building topic 0b546b03-9433-4bb8-bddc-adedcd4b751a
   Info: BuildAssembler: Building topic 1ec7d59c-b79d-41ba-8d1f-d04883c77831
+  Info: BuildAssembler: Building topic 5b11959b-ead4-4443-b2fc-bb0d781bd42a
   Info: BuildAssembler: Building topic 5a679e99-87d5-4b72-a86e-88cbf10c52be
   Info: BuildAssembler: Building topic 62da8408-c4ed-45d8-9398-9990dcbe8cbd
   Info: BuildAssembler: Building topic f2211b59-6f8c-46fb-b47e-2afb569f3133
-  Info: Processed 16 topics
-    Last step completed in 00:00:24.1882
+  Info: Processed 18 topics
+    Last step completed in 00:00:28.3446
 </buildStep>
 <buildStep step="BuildReferenceTopics">
 Building reference help topics...
@@ -381,7 +387,7 @@ BuildReferenceTopics:
   Info: CopyFromFileComponent: Loading data file 'C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\Transforms\skeleton.xml'.
   Info: CachedCopyFromIndexComponent: Instantiating component.
   Info: CachedCopyFromIndexComponent: Searching for files that match 'reflection.xml'.
-  Info: CachedCopyFromIndexComponent: Indexed 342 elements in 1 files.
+  Info: CachedCopyFromIndexComponent: Indexed 354 elements in 1 files.
   Info: CachedCopyFromIndexComponent: Loaded 0 copy components.
   Info: CachedCopyFromIndexComponent: 
       [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.1]
@@ -412,7 +418,7 @@ BuildReferenceTopics:
   Info: CopyFromIndexComponent: Searching for files that match 'C:\windows\Microsoft.NET\Framework\v2.0.50727\en\*.xml'.
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\NamespaceDocumentation.xml'.
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\ASCOM.HelperNET.xml'.
-  Info: CopyFromIndexComponent: Indexed 81539 elements in 51 files.
+  Info: CopyFromIndexComponent: Indexed 81547 elements in 51 files.
   Info: CopyFromIndexComponent: Loaded 0 copy components.
   Info: ForEachComponent: Instantiating component.
   Info: ForEachComponent: Loading subcomponents.
@@ -487,12 +493,12 @@ BuildReferenceTopics:
   Info: CachedResolveReferenceLinksComponent: Creating MSDN URL resolver.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Program Files\Sandcastle\Data\Reflection' for targets files of the form '*.xml'.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working' for targets files of the form 'reflection.xml'.
-  Info: CachedResolveReferenceLinksComponent: Loaded 170433 reference targets.
+  Info: CachedResolveReferenceLinksComponent: Loaded 170445 reference targets.
   Info: CachedResolveReferenceLinksComponent: 
       [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.1]
       Cached Resolve Reference  Links 2 Component.  Copyright &#184; 2006-2009, Eric Woodruff, All Rights Reserved
       http://SHFB.CodePlex.com
-  Info: CachedResolveReferenceLinksComponent: Loaded 37 cached MSDN URL entries
+  Info: CachedResolveReferenceLinksComponent: Loaded 38 cached MSDN URL entries
   Info: SaveComponent: Instantiating component.
   Info: BuildAssembler: Building topic N:ASCOM.HelperNET
   Info: BuildAssembler: Building topic T:ASCOM.HelperNET.Chooser
@@ -527,6 +533,8 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Profile.GetValue(System.String,System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Profile.IsRegistered(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Profile.Register(System.String,System.String)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Profile.RegisteredDevices(System.String)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Profile.RegisteredDeviceTypes
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Profile.SubKeys(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Profile.SubKeys(System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Profile.Unregister(System.String)
@@ -691,6 +699,14 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.ProfilePersistenceException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.ProfilePersistenceException.#ctor(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.ProfilePersistenceException.#ctor(System.String,System.Exception)
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.Exceptions.RestrictedAccessException
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.Exceptions.RestrictedAccessException
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.Exceptions.RestrictedAccessException
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.HelperNET.Exceptions.RestrictedAccessException
+  Info: BuildAssembler: Building topic Overload:ASCOM.HelperNET.Exceptions.RestrictedAccessException.#ctor
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.RestrictedAccessException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.RestrictedAccessException.#ctor(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.RestrictedAccessException.#ctor(System.String,System.Exception)
   Info: BuildAssembler: Building topic T:ASCOM.HelperNET.Exceptions.SerialPortInUseException
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.Exceptions.SerialPortInUseException
   Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.Exceptions.SerialPortInUseException
@@ -726,6 +742,8 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Interfaces.IProfile.GetValue(System.String,System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Interfaces.IProfile.IsRegistered(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Interfaces.IProfile.Register(System.String,System.String)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Interfaces.IProfile.RegisteredDevices(System.String)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Interfaces.IProfile.RegisteredDeviceTypes
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Interfaces.IProfile.SubKeys(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Interfaces.IProfile.SubKeys(System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Interfaces.IProfile.Unregister(System.String)
@@ -842,9 +860,9 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Interfaces.IUtil.TimeZoneOffset
   Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Interfaces.IUtil.UTCDate
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Interfaces.IUtil.WaitForMilliseconds(System.Int32)
-  Info: Processed 330 topics
+  Info: Processed 342 topics
   Info: CachedCopyFromIndexComponent: Used &quot;reflection&quot; cache entries: 2
-    Last step completed in 00:00:35.8761
+    Last step completed in 00:00:38.0637
 </buildStep>
 <buildStep step="GenerateIntermediateTableOfContents">
 Generating intermediate table of contents file...
@@ -856,7 +874,7 @@ GenerateIntermediateTOC:
 <plugIn name="Hierarchical Table of Contents" behavior="After" priority="1000">
 Retrieving namespace topic title from shared content...
 Creating namespace hierarchy...
-</plugIn>    Last step completed in 00:00:01.0782
+</plugIn>    Last step completed in 00:00:01.1563
 </buildStep>
 <buildStep step="ExtractingHtmlInfo">
 Extracting HTML info for Help 1.x and/or website...
@@ -866,11 +884,11 @@ Copyright &#184; 2008-2009, Eric Woodruff, All Rights Reserved
 E-Mail: Eric@EWoodruff.us
 
 Using LCID '1033', code page '65001', encoding charset 'UTF-8'.
-Processed 346 HTML files
+Processed 360 HTML files
 Sorting keywords and generating See Also indices
 Saving Help 1.x keyword index to C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\HelperNET.hhk
 Saving Help 1.x table of contents to C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\HelperNET.hhc
-    Last step completed in 00:00:02.4688
+    Last step completed in 00:00:02.6563
 </buildStep>
 <buildStep step="GenerateHelpFormatTableOfContents">
 Generating HTML Help 1.x table of contents file...
@@ -878,7 +896,7 @@ Generating HTML Help 1.x table of contents file...
 </buildStep>
 <buildStep step="UpdateTableOfContents">
 Updating table of contents with additional content items and determining default topic...
-    Last step completed in 00:00:00.0000
+    Last step completed in 00:00:00.0156
 </buildStep>
 <buildStep step="GenerateHelpFileIndex">
 Generating HTML Help 1.x index file...
@@ -886,7 +904,7 @@ Generating HTML Help 1.x index file...
 </buildStep>
 <buildStep step="GenerateHelpProject">
 Generating HTML Help 1.x project file...
-    Last step completed in 00:00:00.0000
+    Last step completed in 00:00:00.0156
 </buildStep>
 <buildStep step="CompilingHelpFile">
 Compiling HTML Help 1.x file...
@@ -904,11 +922,11 @@ Build1xHelpFile:
   
   Compile time: 0 minutes, 4 seconds
   
-  348	Topics
+  362	Topics
   
-  3,626	Local links
+  3,766	Local links
   
-  2,374	Internet links
+  2,511	Internet links
   
   0	Graphics
   
@@ -916,19 +934,19 @@ Build1xHelpFile:
   
   
   
-  Created c:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\Output\HelperNET.chm, 676,313 bytes
+  Created c:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\Output\HelperNET.chm, 699,695 bytes
   
-  Compression decreased file by 4,071,538 bytes.
+  Compression decreased file by 4,248,906 bytes.
   
-    Last step completed in 00:00:05.2033
+    Last step completed in 00:00:06.3752
 </buildStep>
 <buildStep step="CleanIntermediates">
 Removing intermediate files...
-    Last step completed in 00:00:00.2813
+    Last step completed in 00:00:00.3438
 </buildStep>
 <buildStep step="Completed">
 
-Build completed successfully at 04/21/2009 10:09 PM.  Total time: 00:01:15.5647
+Build completed successfully at 04/29/2009 07:10 PM.  Total time: 00:01:24.1588
 
 </buildStep>
 </shfbBuild>

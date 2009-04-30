@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="..\HelperNET\AllUsersFileSystemProvider.vb" />
     <Compile Include="..\HelperNET\GlobalAndInterfaces.vb" />
+    <Compile Include="..\HelperNET\HelperNETSettings.vb" />
     <Compile Include="Profile Explorer.vb">
       <SubType>Form</SubType>
     </Compile>

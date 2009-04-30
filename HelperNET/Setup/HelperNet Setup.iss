@@ -73,7 +73,7 @@ Source: "..\VB6Helper2\Helper2.dll"; DestDir: "{cf32}\ASCOM"; Flags: ignoreversi
 
 ;Copy the policy files
 Source: "..\Redirect Policy\bin\release\PublisherPolicy.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\Redirect Policy\bin\release\policy.5.1.ASCOM.HelperNET.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Redirect Policy\bin\release\policy.5.2.ASCOM.HelperNET.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 ;Make sure we have backout copies of the original helpers
 Source: "..\OriginalHelpers\Helper.dll"; DestDir: "{cf32}\ASCOM\HelperNET"; Flags: ignoreversion
@@ -111,7 +111,7 @@ Name: "{commonprograms}\ASCOM Platform\Tools\Profile Explorer"; Filename: {pf}\A
 Filename: "{app}\GACInstall.exe"; Parameters: ASCOM.HelperNET.dll; Flags: runhidden; StatusMsg: Installing HelperNET to the assembly cache
 Filename: "{app}\GACInstall.exe"; Parameters: Interop.Scripting.dll; Flags: runhidden; StatusMsg: Installing Interop.Scripting to the assembly cache
 Filename: "{win}\Microsoft.NET\Framework\v2.0.50727\regasm.exe"; Parameters: "/TLB ""{app}\ASCOM.HelperNET.dll"""; Flags: runhidden; StatusMsg: Registering HelperNET for COM
-Filename: "{app}\GACInstall.exe"; Parameters: policy.5.1.ASCOM.HelperNET.dll; Flags: runhidden; StatusMsg: Installing HelperNET redirection policy to the assembly cache
+Filename: "{app}\GACInstall.exe"; Parameters: policy.5.2.ASCOM.HelperNET.dll; Flags: runhidden; StatusMsg: Installing HelperNET redirection policy to the assembly cache
 Filename: "{cf32}\ASCOM\HelperNET\EraseProfile.exe"; Tasks: cleanprofile
 #emit 'Filename: "XCopy"; Parameters: """{app}\ASCOM.HelperNET.pdb"" ""{win}\assembly\GAC_MSIL\ASCOM.HelperNET\' + AppVer + '__565de7938946fba7""";StatusMsg: Installing debug symbols into the GAC;Flags: runhidden waituntilterminated'
 
@@ -120,7 +120,7 @@ Filename: "{cf32}\ASCOM\HelperNET\EraseProfile.exe"; Tasks: cleanprofile
 ;Filename: "{win}\Microsoft.NET\Framework\v2.0.50727\regasm.exe"; Parameters: "/TLB ""{app}\ASCOM.MasterInterfaces.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM Master Interfaces for COM
 
 [UninstallRun]
-Filename: "{app}\GACInstall.exe"; Parameters: "/U ""policy.5.1.ASCOM.HelperNET"""; Flags: runhidden; StatusMsg: Uninstalling HelperNET redirection policy from the assembly cache
+Filename: "{app}\GACInstall.exe"; Parameters: "/U ""policy.5.2.ASCOM.HelperNET"""; Flags: runhidden; StatusMsg: Uninstalling HelperNET redirection policy from the assembly cache
 Filename: "{app}\GACInstall.exe"; Parameters: "/U ""ASCOM.HelperNET"""; Flags: runhidden; StatusMsg: Uninstalling HelperNET from the assembly cache
 Filename: "{app}\GACInstall.exe"; Parameters: "/U ""Interop.Scripting"""; Flags: runhidden; StatusMsg: Uninstalling Interop.Scripting from the assembly cache
 Filename: "{win}\Microsoft.NET\Framework\v2.0.50727\regasm.exe"; Parameters: "/Unregister /TLB ""{app}\ASCOM.HelperNET.dll"""; Flags: runhidden; StatusMsg: Unregistering HelperNET for COM
@@ -149,33 +149,4 @@ begin
     end;
   end;
 end;
-
-
-
-
-
-
-//
-// Before the installer UI appears, verify that the (prerequisite)
-// ASCOM Platform 5.x is installed, including both Helper components.
-// Helper is required for all types (COM and .NET)!
-//
-//function InitializeSetup(): Boolean;
-//var
-//   H : Variant;
-//   H2 : Variant;
-//begin
-//   Result := FALSE;  // Assume failure
-//   try               // Will catch all errors including missing reg data
-//      H := CreateOLEObject('DriverHelper.Util');  // Assure both are available
-//      H2 := CreateOleObject('DriverHelper2.Util');
-//      if ((H2.PlatformVersion >= 5.0) and (H2.PlatformVersion < 6.0)) then Result := TRUE;
-//   except
-//   end;
-//   CoFreeUnusedLibraries;
-   
-   
-//   if(not Result) then
-//      MsgBox('The ASCOM Platform 5 is required for this driver. Found version ' + H2.PlatformVersion, mbInformation, MB_OK);
-//end;
 
