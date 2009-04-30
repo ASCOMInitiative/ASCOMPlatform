@@ -24,7 +24,7 @@
     End Sub
 
     Sub TickHandler() Handles ASCOMTimer.Tick
-        'This sub wil be called each time the timer event fires
-        MsgBox("TickHandler Tick") 'Show that the event has fired
+        'This sub wil be called each time the timer event fires, every 2 seconds in this exanple
+        MsgBox("ASCOMTimer has Ticked!") 'Show that the event has fired
     End Sub
 End Class

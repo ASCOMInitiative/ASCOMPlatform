@@ -3,7 +3,7 @@
     Private SerPort As ASCOM.HelperNET.Interfaces.ISerial
 
     Sub BasicExample() 'This example shows a simple use of the ASCOM serial port
-        'Define the port variable
+        'Define variables for strings to be transmitted and received
         Dim TXString, RXString As String
 
         'Serial port defaults are:  Speed 9600 baud
@@ -22,7 +22,7 @@
             SerPort.Connected = True
 
             'Send a command to the connected device
-            TXString = "DeviceCommand" 'Change to a relevent command to your device that will return a response
+            TXString = "DeviceCommand" 'Change this to a command to your device that will return a response
             SerPort.Transmit(TXString)
 
             'Get the response from the device and display it
