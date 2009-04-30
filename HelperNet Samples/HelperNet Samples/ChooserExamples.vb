@@ -4,7 +4,7 @@
         Dim SelectedDevice As String
 
         'Create a new chooser and set the required device type
-        Ch = New ASCOM.HelperNET.Chooser ' Create a new chooser coponent and set its device type
+        Ch = New ASCOM.HelperNET.Chooser ' Create a new chooser component and set its device type
         Ch.DeviceType = "Telescope"
 
         'Select the required device - use one of:

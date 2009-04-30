@@ -9,7 +9,7 @@
         RspDouble = Utl.JulianDate
         RspString = Utl.PlatformVersion
 
-        With Utl 'Use with to get several properties
+        With Utl 'Use "with" to get several properties
             RspString = .TimeZoneName 'Time zone name
             RspString = .TimeZoneOffset 'Time zone offset in hours
             RspDate = .UTCDate 'Current UTC datetime
@@ -23,6 +23,7 @@
         PrmDouble = 60.987654321 : RspString = Utl.DegreesToDMS(PrmDouble, ":", ":", "", 4)
         PrmDouble = 50.123453456 : RspString = Utl.DegreesToHM(PrmDouble)
         PrmDouble = 70.763245689 : RspString = Utl.DegreesToHMS(PrmDouble)
+        PrmDouble = 40.452387904 : RspString = Utl.DegreesToHMS(PrmDouble, " hours, ", " minutes, ", " seconds", 3)
         PrmDouble = 15.567234086 : RspString = Utl.HoursToHM(PrmDouble)
         PrmDouble = 9.4367290317 : RspString = Utl.HoursToHMS(PrmDouble)
 
