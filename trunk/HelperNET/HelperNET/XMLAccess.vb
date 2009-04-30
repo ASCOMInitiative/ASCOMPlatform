@@ -174,6 +174,16 @@ Friend Class XMLAccess
         sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
     End Sub
 
+    Sub RenameKey(ByVal CurrentSubKeyName As String, ByVal NewSubKeyName As String) Implements IAccess.RenameKey
+        sw.Reset() : sw.Start() 'Start timing this call
+        TL.LogMessage("RenameKey", "Current SubKey: """ & CurrentSubKeyName & """" & " New SubKey: """ & NewSubKeyName & """")
+        FileStore.RenameDirectory(CurrentSubKeyName, NewSubKeyName)
+        Try : KeyCache.Remove(CurrentSubKeyName) : Catch : End Try
+        'MsgBox("Removed key " & p_SubKeyName)
+        sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
+    End Sub
+
+
     Friend Sub DeleteProfile(ByVal p_SubKeyName As String, ByVal p_ValueName As String) Implements IAccess.DeleteProfile
         'Delete a value from a key
         Dim Values As Generic.SortedList(Of String, String)

@@ -18,6 +18,7 @@ Friend Class HelperNETSettings
 
     Private Const TRACE_XMLACCESS As String = "Trace XMLAccess", TRACE_XMLACCESS_DEFAULT As Boolean = False
     Private Const TRACE_PROFILE As String = "Trace Profile", TRACE_PROFILE_DEFAULT As Boolean = False
+    Private Const PROFILE_ROOT_EDIT As String = "Profile Root Edit", PROFILE_ROOT_EDIT_DEFAULT As Boolean = False
 
 #Region "New and Finalize"
     Sub New()
@@ -72,6 +73,16 @@ Friend Class HelperNETSettings
             SetName(m_SettingsKey, TRACE_PROFILE, value.ToString)
         End Set
     End Property
+
+    Property ProfileRootEdit() As Boolean
+        Get
+            Return GetBool(PROFILE_ROOT_EDIT, PROFILE_ROOT_EDIT_DEFAULT)
+        End Get
+        Set(ByVal value As Boolean)
+            SetName(m_SettingsKey, PROFILE_ROOT_EDIT, value.ToString)
+        End Set
+    End Property
+
 #End Region
 
 #Region "Utility Code"

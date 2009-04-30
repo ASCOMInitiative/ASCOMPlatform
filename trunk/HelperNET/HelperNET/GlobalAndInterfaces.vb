@@ -674,6 +674,30 @@ Namespace Interfaces
         ''' <returns>String describing the type of device being accessed</returns>
         ''' <remarks></remarks>
         Property DeviceType() As String
+
+        ''' <summary>
+        ''' List the device types registered in the Profile store
+        ''' </summary>
+        ''' <value>List of registered device types</value>
+        ''' <returns>A sorted string list of device types</returns>
+        ''' <remarks>Use this to find which types of device are registered in the Profile store.</remarks>
+        ReadOnly Property RegisteredDeviceTypes() As Generic.List(Of String)
+
+        ''' <summary>
+        ''' List the devices of a given device type that are registered in the Profile store
+        ''' </summary>
+        ''' <param name="DeviceType">Type of devices to list</param>
+        ''' <value>List of registered devices</value>
+        ''' <returns>A sorted list of installed devices and associated device descriptions</returns>
+        ''' <exception cref="Exceptions.InvalidValueException">Throw if the supplied DeviceType is empty string or 
+        ''' null value.</exception>
+        ''' <remarks>
+        ''' Use this to find all the registerd devices of a given type that are in the Profile store.
+        ''' <para>If a DeviceType is supplied, where no device of that type has been registered before on this system,
+        ''' an empty list will be returned</para>
+        ''' </remarks>
+        ReadOnly Property RegisteredDevices(ByVal DeviceType As String) As Generic.SortedList(Of String, String)
+
         ''' <summary>
         ''' Confirms whether a specific driver is registered ort unregistered in the profile store
         ''' </summary>
@@ -980,11 +1004,11 @@ Namespace Interfaces
         Sub DeleteDirectory(ByVal p_SubKeyName As String)
         Sub EraseFileStore()
         ReadOnly Property GetDirectoryNames(ByVal p_SubKeyName As String) As String()
-        'ReadOnly Property StreamReader(ByVal p_FileName As String, ByVal p_FileMode As System.IO.FileMode) As StreamReader
-        'ReadOnly Property StreamWriter(ByVal p_FileName As String, ByVal p_FileMode As System.IO.FileMode) As StreamWriter
         ReadOnly Property Exists(ByVal p_FileName As String) As Boolean
         ReadOnly Property FullPath(ByVal p_FileName As String) As String
+        ReadOnly Property BasePath() As String
         Sub Rename(ByVal p_CurrentName As String, ByVal p_NewName As String)
+        Sub RenameDirectory(ByVal CurrentName As String, ByVal NewName As String)
     End Interface 'Interface that a file store provider must implement to support a store provider
 
     Friend Interface IAccess
@@ -997,6 +1021,7 @@ Namespace Interfaces
         Sub CreateKey(ByVal p_SubKeyName As String)
         Function EnumKeys(ByVal p_SubKeyName As String) As Generic.SortedList(Of String, String)
         Sub DeleteKey(ByVal p_SubKeyName As String)
+        Sub RenameKey(ByVal CurrentSubKeyName As String, ByVal NewSubKeyName As String)
     End Interface 'Interface for a general profile store provider
 End Namespace
 #End Region
@@ -1255,6 +1280,52 @@ Namespace Exceptions
             MyBase.New(info, context)
         End Sub
     End Class
+
+    ''' <summary>
+    ''' Exception thrown when an attempt is made to write to a protected part of the the Profile store that is 
+    ''' reserved for Platform use. An example is attempting to write to the the default value of a device driver 
+    ''' profile. This value is reserved for use by the Chooser to display the device description and is set by the 
+    ''' Profile.Register method.
+    ''' </summary>
+    ''' <remarks></remarks>
+    <Serializable()> _
+        Public Class RestrictedAccessException
+        'Exception for Helper.NET component exceptions
+        Inherits HelperException
+
+        ''' <summary>
+        ''' Create a new exception with message 
+        ''' </summary>
+        ''' <param name="message">Message to be reported by the exception</param>
+        ''' <remarks></remarks>
+        Public Sub New(ByVal message As String)
+            MyBase.New(message)
+        End Sub
+
+        ''' <summary>
+        ''' Create a new exception with message 
+        ''' </summary>
+        ''' <param name="message">Message to be reported by the exception</param>
+        ''' <param name="inner">Exception to be reported as the inner exception</param>
+        ''' <remarks></remarks>
+        Public Sub New(ByVal message As String, ByVal inner As Exception)
+            MyBase.New(message, inner)
+        End Sub
+
+        ''' <summary>
+        ''' Serialise the exception
+        ''' </summary>
+        ''' <param name="info">Serialisation information</param>
+        ''' <param name="context">Serialisation context</param>
+        ''' <remarks></remarks>
+        Public Sub New( _
+                    ByVal info As System.Runtime.Serialization.SerializationInfo, _
+                    ByVal context As System.Runtime.Serialization.StreamingContext)
+            MyBase.New(info, context)
+        End Sub
+    End Class
+
+
 End Namespace
 #End Region
 

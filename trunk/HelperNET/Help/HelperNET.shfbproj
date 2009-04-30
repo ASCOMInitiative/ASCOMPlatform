@@ -140,6 +140,8 @@
     <Folder Include="Introduction\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Version History\Version 5.2.0.0.aml" />
+    <None Include="Examples\Environment.aml" />
     <None Include="Utilities\Profile Tracing.aml" />
     <None Include="Utilities\Profile Explorer.aml" />
     <None Include="Utilities\Serial Tracing.aml" />

@@ -72,30 +72,27 @@ Friend Class AllUsersFileSystemProvider
         End Get
     End Property
 
-    '    Friend ReadOnly Property StreamReader(ByVal p_FileName As String, ByVal p_FileMode As FileMode) As StreamReader Implements IFileStoreProvider.StreamReader
-    'Creates a streamreader representing a file open for read
-    'Returns a streamreader object
-    '    Get
-    '       Return New StreamReader(New FileStream(CreatePath(p_FileName), p_FileMode, FileAccess.Read))
-    '  End Get
-    'End Property
-
-    '   Friend ReadOnly Property StreamWriter(ByVal p_FileName As String, ByVal p_FileMode As System.IO.FileMode) As StreamWriter Implements IFileStoreProvider.StreamWriter
-    'Creates a streamwriter representing a file open for write
-    'Returns a streamwriter object
-    '    Get
-    '       Return New StreamWriter(New FileStream(CreatePath(p_FileName), p_FileMode, FileAccess.Write))
-    '  End Get
-    ' End Property
-
     Friend ReadOnly Property FullPath(ByVal p_FileName As String) As String Implements IFileStoreProvider.FullPath
         Get
             Return CreatePath(p_FileName)
         End Get
     End Property
+
+    Friend ReadOnly Property BasePath() As String Implements IFileStoreProvider.BasePath
+        Get
+            Return BaseFolder
+        End Get
+    End Property
+
     Friend Sub Rename(ByVal p_CurrentName As String, ByVal p_NewName As String) Implements IFileStoreProvider.Rename
         File.Delete(CreatePath(p_NewName)) 'Make sure the target file doesn't exist
         File.Move(CreatePath(p_CurrentName), CreatePath(p_NewName))
+    End Sub
+
+    Friend Sub RenameDirectory(ByVal CurrentName As String, ByVal NewName As String) Implements IFileStoreProvider.RenameDirectory
+        Try : Directory.Delete(CreatePath(NewName), True) : Catch : End Try 'Remove driectory if it already exists
+        Dim DirInfo As New DirectoryInfo(CreatePath(CurrentName))
+        DirInfo.MoveTo(CreatePath(NewName))
     End Sub
 
 #End Region
