@@ -31,7 +31,7 @@ midl_pragma warning( disable: 2400 2401 )   // rbd These warnings are n/a
 
 [
   uuid(76618F90-032F-4424-A680-802467A55742),
-  version(6.0),
+  version(5.0),
   helpstring("ASCOM Master Interfaces for .NET and COM"),
   custom(0F21F359-AB84-41E8-9A78-36D110E6D2F9, "ASCOM.Interface")   // Override PIA file name -> namespace
 ]
