@@ -1,6 +1,0 @@
-echo off
-echo Remove Assembly SimpleCOMObject_CSharpImpl from the Global Assembly Cache...
-gacutil -u SimpleCOMObject_CSharpImpl
-echo.
-echo Unregistering Assembly SimpleCOMObject_CSharpImpl.dll from the Registry...
-regasm -u .\bin\Debug\SimpleCOMObject_CSharpImpl.dll
