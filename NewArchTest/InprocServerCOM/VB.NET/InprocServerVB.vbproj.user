@@ -1,8 +1,0 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <StartAction>Program</StartAction>
-    <StartProgram>C:\WINDOWS\system32\cscript.exe</StartProgram>
-    <StartWorkingDirectory>C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\Tutorial\InprocServerCOM\VB\Tests\</StartWorkingDirectory>
-    <StartArguments>ErrorTest.vbs</StartArguments>
-  </PropertyGroup>
-</Project>
