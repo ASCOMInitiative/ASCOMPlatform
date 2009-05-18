@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D1A5A486-8C9C-4421-91AB-508F63B684C2}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -31,10 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ASCOM.SettingsProvider, Version=5.1.3405.32036, Culture=neutral, PublicKeyToken=0bc714090a24525a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Debug\ASCOM.SettingsProvider.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -62,6 +58,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frmDemo.resx">
       <DependentUpon>frmDemo.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -83,11 +80,16 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\ASCOM.SettingsProvider.csproj">
+      <Project>{4FFFD202-81D4-4549-880B-09B640D72C1D}</Project>
+      <Name>ASCOM.SettingsProvider</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\ASCOM.Controls\ASCOM.Controls.csproj">
       <Project>{63AD32E8-98FF-44BB-AA29-ED2E5A5CF026}</Project>
       <Name>ASCOM.Controls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HelperNET\HelperNET\HelperNET.vbproj">
+    <ProjectReference Include="..\..\HelperNET\HelperNET\HelperNET.vbproj">
       <Project>{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}</Project>
       <Name>HelperNET</Name>
     </ProjectReference>

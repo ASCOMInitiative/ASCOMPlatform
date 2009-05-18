@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{63AD32E8-98FF-44BB-AA29-ED2E5A5CF026}</ProjectGuid>
     <SccProjectName>
@@ -174,24 +174,25 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\ASCOM.SettingsProvider.csproj">
+    <ProjectReference Include="..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\ASCOM.SettingsProvider.csproj">
       <Project>{4FFFD202-81D4-4549-880B-09B640D72C1D}</Project>
       <Name>ASCOM.SettingsProvider</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\ClientToolbox\ASCOM.DriverAccess.csproj">
+    <ProjectReference Include="..\..\ClientToolbox\ASCOM.DriverAccess.csproj">
       <Project>{35194767-5585-45C3-803F-1BCE74CEAAFC}</Project>
       <Name>ASCOM.DriverAccess</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HelperNET\HelperNET\HelperNET.vbproj">
+    <ProjectReference Include="..\..\HelperNET\HelperNET\HelperNET.vbproj">
       <Project>{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}</Project>
       <Name>HelperNET</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="ASCOM.Interface">
       <Guid>{76618F90-032F-4424-A680-802467A55742}</Guid>
-      <VersionMajor>6</VersionMajor>
+      <VersionMajor>5</VersionMajor>
       <VersionMinor>0</VersionMinor>
       <Lcid>0</Lcid>
       <WrapperTool>primary</WrapperTool>
