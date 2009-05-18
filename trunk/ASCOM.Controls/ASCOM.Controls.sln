@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Controls", "ASCOM.Controls.csproj", "{63AD32E8-98FF-44BB-AA29-ED2E5A5CF026}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Controls", "ASCOM.Controls\ASCOM.Controls.csproj", "{63AD32E8-98FF-44BB-AA29-ED2E5A5CF026}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Referenced Projects", "Referenced Projects", "{90B17BCD-4B58-49CF-B79A-18E40286245D}"
 EndProject
@@ -11,7 +11,7 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "HelperNET", "..\HelperNET\H
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.DriverAccess", "..\ClientToolbox\ASCOM.DriverAccess.csproj", "{35194767-5585-45C3-803F-1BCE74CEAAFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Controls.Demo", "..\ASCOM.Controls.Demo\ASCOM.Controls.Demo.csproj", "{D1A5A486-8C9C-4421-91AB-508F63B684C2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Controls.Demo", "ASCOM.Controls.Demo\ASCOM.Controls.Demo.csproj", "{D1A5A486-8C9C-4421-91AB-508F63B684C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
