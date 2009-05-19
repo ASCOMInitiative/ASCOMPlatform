@@ -136,185 +136,185 @@
    Function prototypes
 */
 
-   short int app_star (double tjd, body *earth, cat_entry *star,
+   EXPORT short int app_star (double tjd, body *earth, cat_entry *star,
 
                        double *ra, double *dec);
 
-   short int app_planet (double tjd, body *ss_object, body *earth, 
+   EXPORT short int app_planet (double tjd, body *ss_object, body *earth, 
 
                          double *ra, double *dec, double *dis);
 
-   short int topo_star (double tjd, body *earth, double deltat,
+   EXPORT short int topo_star (double tjd, body *earth, double deltat,
                         cat_entry *star, site_info *location, 
 
                         double *ra, double *dec);
 
-   short int topo_planet (double tjd, body *ss_object, body *earth,
+   EXPORT short int topo_planet (double tjd, body *ss_object, body *earth,
                           double deltat, site_info *location, 
 
                           double *ra, double *dec, double *dis);
 
-   short int virtual_star (double tjd, body *earth, cat_entry *star,
+   EXPORT short int virtual_star (double tjd, body *earth, cat_entry *star,
 
                            double *ra, double *dec);
 
-   short int virtual_planet (double tjd, body *ss_object, body *earth,
+   EXPORT short int virtual_planet (double tjd, body *ss_object, body *earth,
 
                              double *ra, double *dec, double *dis);
 
-   short int local_star (double tjd, body *earth, double deltat,
+   EXPORT short int local_star (double tjd, body *earth, double deltat,
                          cat_entry *star, site_info *location,
 
                          double *ra, double *dec);
 
-   short int local_planet (double tjd, body *ss_object, body *earth,
+   EXPORT short int local_planet (double tjd, body *ss_object, body *earth,
                            double deltat, site_info *location,
 
                            double *ra, double *dec, double *dis);
 
-   short int astro_star (double tjd, body *earth, cat_entry *star,
+   EXPORT short int astro_star (double tjd, body *earth, cat_entry *star,
 
                          double *ra, double *dec);
 
-   short int astro_planet (double tjd, body *ss_object, body *earth,
+   EXPORT short int astro_planet (double tjd, body *ss_object, body *earth,
 
                            double *ra, double *dec, double *dis);
 
-   short int mean_star (double tjd, body *earth, double ra, double dec,
+   EXPORT short int mean_star (double tjd, body *earth, double ra, double dec,
 
                         double *mra, double *mdec);
 
-   void sidereal_time (double julianhi, double julianlo, double ee,
+   EXPORT void sidereal_time (double julianhi, double julianlo, double ee,
 
                        double *gst);
 
-   void pnsw (double tjd, double gast, double x, double y, 
+   EXPORT void pnsw (double tjd, double gast, double x, double y, 
               double *vece,
 
               double *vecs);
 
-   void spin (double st, double *pos1,
+   EXPORT void spin (double st, double *pos1,
 
               double *pos2);
 
-   void wobble (double x, double y, double *pos1,
+   EXPORT void wobble (double x, double y, double *pos1,
 
                double *pos2);
 
-   void terra (site_info *locale, double st,
+   EXPORT void terra (site_info *locale, double st,
 
                double *pos, double *vel);
 
-   void earthtilt (double tjd,
+   EXPORT void earthtilt (double tjd,
 
                    double *mobl, double *tobl, double *eqeq,
                    double *psi, double *eps);
 
-   void cel_pole (double del_dpsi, double del_deps);
+   EXPORT void cel_pole (double del_dpsi, double del_deps);
 
-   short int get_earth (double tjd, body *earth,
+   EXPORT short int get_earth (double tjd, body *earth,
 
                         double *tdb, double *bary_earthp,
                         double *bary_earthv, double *helio_earthp,
                         double *helio_earthv);
 
-   void proper_motion (double tjd1, double *pos1, double *vel1,
+   EXPORT void proper_motion (double tjd1, double *pos1, double *vel1,
                        double tjd2,
 
                        double *pos2);
 
-   void bary_to_geo (double *pos, double *earthvector,
+   EXPORT void bary_to_geo (double *pos, double *earthvector,
 
                      double *pos2, double *lighttime);
 
-   short int sun_field (double *pos, double *earthvector,
+   EXPORT short int sun_field (double *pos, double *earthvector,
 
                         double *pos2);
 
-   short int aberration (double *pos, double *vel, double lighttime,
+   EXPORT short int aberration (double *pos, double *vel, double lighttime,
 
                          double *pos2);
 
-   void precession (double tjd1, double *pos, double tjd2,
+   EXPORT void precession (double tjd1, double *pos, double tjd2,
 
                     double *pos2);
 
-   short int nutate (double tjd, short int fn1, double *pos,
+   EXPORT short int nutate (double tjd, short int fn1, double *pos,
 
                      double *pos2);
 
-   short int nutation_angles (double tdbtime,
+   EXPORT short int nutation_angles (double tdbtime,
 
                               double *longnutation,
                               double *obliqnutation);
 
-   void fund_args (double t,
+   EXPORT void fund_args (double t,
 
                    double a[5]);
 
-   short int vector2radec (double *pos,
+   EXPORT short int vector2radec (double *pos,
 
                            double *ra, double *dec);
 
-   void radec2vector (double ra, double dec, double dist,
+   EXPORT void radec2vector (double ra, double dec, double dist,
 
                       double *vector);
 
-   void starvectors (cat_entry *star,
+   EXPORT void starvectors (cat_entry *star,
 
                      double *pos, double *vel);
 
-   void tdb2tdt (double tdb,
+   EXPORT void tdb2tdt (double tdb,
 
                  double *tdtjd, double *secdiff);
 
-   short int set_body (short int type, short int number, char *name,
+   EXPORT short int set_body (short int type, short int number, char *name,
 
                        body *cel_obj);
 
-   short int ephemeris (double tjd, body *cel_obj, short int origin,
+   EXPORT short int ephemeris (double tjd, body *cel_obj, short int origin,
 
                         double *pos, double *vel);
 
 
-   short int solarsystem (double tjd, short int body, short int origin, 
+   EXPORT short int solarsystem (double tjd, short int body, short int origin, 
 
                           double *pos, double *vel);
 
-   double *readeph (int mp, char *name, double jd,
+   EXPORT double *readeph (int mp, char *name, double jd,
 
                     int *err);
 
-   void make_cat_entry (char catalog[4], char star_name[51],
+   EXPORT void make_cat_entry (char catalog[4], char star_name[51],
                         long int star_num, double ra, double dec,
                         double pm_ra, double pm_dec, double parallax,
                         double rad_vel,
 
                         cat_entry *star);
 
-   void transform_hip (cat_entry *hipparcos,
+   EXPORT void transform_hip (cat_entry *hipparcos,
 
                        cat_entry *fk5);
 
-   void transform_cat (short int option, double date_incat, 
+   EXPORT void transform_cat (short int option, double date_incat, 
                         cat_entry *incat, double date_newcat,
                         char newcat_id[4],
 
                         cat_entry *newcat);
 
-   void equ2hor (double tjd, double deltat, double x, double y, 
+   EXPORT void equ2hor (double tjd, double deltat, double x, double y, 
                  site_info *location, double ra, double dec, 
                  short int ref_option,
 
                  double *zd, double *az, double *rar, double *decr);
 
-   double refract (site_info *location, short int ref_option, 
+   EXPORT double refract (site_info *location, short int ref_option, 
                    double zd_obs);
 
-   double julian_date (short int year, short int month, short int day,
+   EXPORT double julian_date (short int year, short int month, short int day,
                        double hour);
 
-   void cal_date (double tjd,
+   EXPORT void cal_date (double tjd,
 
                   short int *year, short int *month, short int *day,
                   double *hour);
