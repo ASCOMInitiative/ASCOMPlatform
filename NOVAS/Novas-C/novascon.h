@@ -11,6 +11,8 @@
    Washington, DC  20392-5420
 */
 
+#include "ascom.h"	// [TPL]
+
 #ifndef _CONSTS_
    #define _CONSTS_
 

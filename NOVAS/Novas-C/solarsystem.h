@@ -19,7 +19,7 @@
    Function prototypes
 */
 
-   short int solarsystem (double tjd, short int body, short int origin,
+   EXPORT short int solarsystem (double tjd, short int body, short int origin,
 
                           double *pos, double *vel);
 
