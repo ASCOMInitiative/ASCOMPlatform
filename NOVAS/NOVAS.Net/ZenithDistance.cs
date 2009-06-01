@@ -7,9 +7,31 @@ namespace TiGra.Astronomy
 	{
 	class ZenithDistance : Bearing
 		{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZenithDistance"/> class
+		/// and sets the initial zenith distance to zero.
+		/// </summary>
+		public ZenithDistance()
+			{
+			this.m_Angle = 0.0;
+			}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZenithDistance"/> class
+		/// and sets the initial zenith distance to <paramref name="degrees"/>.
+		/// </summary>
+		/// <param name="degrees">The angular distance from the zenith, in decimal degrees.</param>
 		public ZenithDistance(double degrees)
 			{
 			this.m_Angle = this.MakeOrthogonal(degrees);
+			}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZenithDistance"/> class by
+		/// converting from the supplied <see cref="Elevation"/>.
+		/// </summary>
+		/// <param name="elevation">The elevation from the theoretical horizon, in degrees.</param>
+		public ZenithDistance(Elevation elevation)
+			{
+			this.m_Angle = 90.0 - elevation.DecimalDegrees;
 			}
 		/// <summary>
 		/// Takes an angle (which can be any double number) and returns the
