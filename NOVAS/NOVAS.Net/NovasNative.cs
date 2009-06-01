@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Globalization;
 using TiGra.ExtensionMethods;
+using TiGra.Astronomy;
 
 namespace Usno
 	{
@@ -11,6 +12,30 @@ namespace Usno
 		{
 		public static double PSI_COR = 0.0;
 		public static double EPS_COR = 0.0;
+
+		/// <summary>
+		/// Converts a spherical coordinate to a 3D vector.
+		/// </summary>
+		/// <param name="ra">The right ascension.</param>
+		/// <param name="dec">The declination.</param>
+		/// <param name="distance">The distance of the object in arbitrary units.</param>
+		/// <returns>A <see cref="Vector"/> containing the 3D rectangular coordinate of the object.</returns>
+		/// <remarks>
+		/// This method is loosely based on the method <c>radec2vector</c> from NOVAS-C.
+		/// </remarks>
+		public static Vector radec2vector(double ra, double dec, double distance)
+			{
+			EquatorialRectangularCoordinate vector = new EquatorialRectangularCoordinate();
+			// Convert everything to radians.
+			double raDegrees = 15.0 * ra;
+			double raRadians = raDegrees.DegreesToRadians();
+			double decRadians = dec.DegreesToRadians();
+			// Conversion to vectors is by simple Pythagoras.
+			vector.X =  distance * Math.Cos(decRadians) * Math.Cos(raRadians);
+			vector.Y = distance * Math.Cos(decRadians) * Math.Sin(raRadians);
+			vector.Z = distance * Math.Sin(decRadians);
+			return vector;
+			}
 
 		/// <summary>
 		/// Computes atmospheric refraction in zenith distance, given atmospheric Temperature and Pressure.

@@ -38,7 +38,7 @@
   <Class Name="TiGra.Astronomy.ZenithDistance" Collapsed="true">
     <Position X="3.75" Y="2.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
       <FileName>ZenithDistance.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -47,6 +47,27 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>RightAscension.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TiGra.Astronomy.Vector" Collapsed="true">
+    <Position X="1" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAE=</HashCode>
+      <FileName>Vector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TiGra.Astronomy.EquatorialRectangularCoordinate" Collapsed="true">
+    <Position X="6.5" Y="4" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EquatorialRectangularCoordinate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TiGra.Astronomy.EquatorialSphericalCoordinate" Collapsed="true">
+    <Position X="6.5" Y="3" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EquatorialSphericalCoordinate.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

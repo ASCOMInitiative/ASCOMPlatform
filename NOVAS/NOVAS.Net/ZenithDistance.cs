@@ -50,5 +50,10 @@ namespace TiGra.Astronomy
 				dAngle = 360.0 - dAngle;
 			return dAngle;
 			}
+		public ZenithDistance Refracted(Observatory location)
+			{
+			double zdRefracted = Usno.Novas.refract(this.m_Angle, location);
+			return new ZenithDistance(this.m_Angle - zdRefracted);
+			}
 		}
 	}

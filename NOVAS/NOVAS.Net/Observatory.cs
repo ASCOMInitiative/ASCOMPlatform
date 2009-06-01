@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TiGra.Astronomy;
+using Usno;
 
-namespace Usno
+namespace TiGra.Astronomy
 	{
 	/// <summary>
 	/// data for the observer's location.  The atmospheric
