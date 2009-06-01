@@ -14,7 +14,7 @@ namespace Usno
 	/// structure if a more sophisticated refraction model 
 	/// is employed.
 	/// </summary>
-	public class site_info
+	public class Observatory
 		{
 		/// <summary>
 		/// Creates a new instance of the <see cref="site_info"/> class initialised with default values.
@@ -22,11 +22,11 @@ namespace Usno
 		/// at the intersection of the equator and the prime meridian, and having 'standard'
 		/// atmospheric Temperature and Pressure.
 		/// </summary>
-		public static site_info Default
+		public static Observatory Default
 			{
 			get
 				{
-				site_info defaultSite = new site_info();
+				Observatory defaultSite = new Observatory();
 				defaultSite.Location = new GeographicCoordinates();
 				defaultSite.Location.Lattitude = new Latitude(0.0);
 				defaultSite.Location.Longitude = new Longitude(0.0);

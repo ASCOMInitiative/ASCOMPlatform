@@ -103,7 +103,7 @@ namespace Usno
 		/// </item>
 		///	</list>
 		/// </remarks>
-		public static double refract(double zenithDistanceObserved, site_info location)
+		public static double refract(double zenithDistanceObserved, Observatory location)
 			{
 			return refract(zenithDistanceObserved, location.Temperature, location.Pressure);
 			}

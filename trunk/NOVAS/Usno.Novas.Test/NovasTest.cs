@@ -35,12 +35,12 @@ namespace Usno.Test
 		/// <summary>
 		/// Observatory site information for Brynllefrith Observatory, IAU #J58
 		/// </summary>
-		private static site_info BrynllefrithObservatory = new site_info() { Location = BrynllefrithCoordinates, Height = 99, Pressure = 1000, Temperature = 12 };
+		private static Observatory BrynllefrithObservatory = new Observatory() { Location = BrynllefrithCoordinates, Height = 99, Pressure = 1000, Temperature = 12 };
 		/// <summary>
 		/// A theoretical standard observing site at sea level, on the equator and at the prim meridian,
 		/// with 'standard' Temperature and Pressure.
 		/// </summary>
-		private site_info StandardObservatory = site_info.Default;
+		private Observatory StandardObservatory = Observatory.Default;
 
 
 		/// <summary>
