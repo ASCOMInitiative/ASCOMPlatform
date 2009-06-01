@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TiGra.Astronomy;
 
 namespace Usno
 	{
@@ -16,24 +17,40 @@ namespace Usno
 	public class site_info
 		{
 		/// <summary>
-		/// geodetic latitude in degrees; north positive.
+		/// Creates a new instance of the <see cref="site_info"/> class initialised with default values.
+		/// The site is initialised for a theoretical observatory at sea level,
+		/// at the intersection of the equator and the prime meridian, and having 'standard'
+		/// atmospheric Temperature and Pressure.
 		/// </summary>
-		double latitude { get; set; }
+		public static site_info Default
+			{
+			get
+				{
+				site_info defaultSite = new site_info();
+				defaultSite.Location = new GeographicCoordinates();
+				defaultSite.Location.Lattitude = new Latitude(0.0);
+				defaultSite.Location.Longitude = new Longitude(0.0);
+				defaultSite.Height = 0;
+				defaultSite.Temperature = Constants.StandardTemperature;
+				defaultSite.Pressure = Constants.StandardPressure;
+				return defaultSite;
+				}
+			}
 		/// <summary>
-		/// geodetic longitude in degrees; east positive.
+		/// Geodetic coordinates, north & east positive; south & west negative.
 		/// </summary>
-		double longitude { get; set; }
+		public TiGra.Astronomy.GeographicCoordinates Location { get; set; }
 		/// <summary>
-		/// height of the observer in meters.
+		/// Height of the observer in meters.
 		/// </summary>
-		double height { get; set; }
+		public double Height { get; set; }
 		/// <summary>
-		/// temperature (degrees Celsius).
+		/// Temperature (degrees Celsius).
 		/// </summary>
-		double temperature { get; set; }
+		public double Temperature { get; set; }
 		/// <summary>
-		/// atmospheric pressure (millibars)
+		/// atmospheric Pressure (millibars)
 		/// </summary>
-		double pressure { get; set; }
+		public double Pressure { get; set; }
 		}
 	}
