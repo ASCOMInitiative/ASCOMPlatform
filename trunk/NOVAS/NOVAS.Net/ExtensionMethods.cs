@@ -88,6 +88,9 @@ namespace TiGra.ExtensionMethods
 			}
 		}
 
+	/// <summary>
+	/// Contains extension methods that are used when performing trigonometry.
+	/// </summary>
 	public static class TrigonometryExtensions
 		{
 		public static double DegreesToRadians(this double degrees)

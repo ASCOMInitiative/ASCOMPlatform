@@ -53,6 +53,8 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Declination.cs" />
     <Compile Include="Elevation.cs" />
+    <Compile Include="EquatorialRectangularCoordinate.cs" />
+    <Compile Include="EquatorialSphericalCoordinate.cs" />
     <Compile Include="GeographicCoordinates.cs" />
     <Compile Include="HourAngle.cs" />
     <Compile Include="Latitude.cs" />
@@ -63,6 +65,7 @@
     <Compile Include="Sexagesimal.cs" />
     <Compile Include="Observatory.cs" />
     <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="Vector.cs" />
     <Compile Include="ZenithDistance.cs" />
   </ItemGroup>
   <ItemGroup>
