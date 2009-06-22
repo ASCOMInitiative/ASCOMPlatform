@@ -5,6 +5,7 @@ using System.Text;
 using System.Globalization;
 using TiGra.ExtensionMethods;
 using TiGra.Astronomy;
+using TiGra.
 
 namespace Usno
 	{
@@ -13,6 +14,38 @@ namespace Usno
 		public static double PSI_COR = 0.0;
 		public static double EPS_COR = 0.0;
 
+		 EquatorialSphericalCoordinate VectorToRaDec (Vector vector)
+{
+   double xyproj;
+   EquatorialSphericalCoordinate coordRaDec = new EquatorialSphericalCoordinate();
+
+   xyproj = Math.Sqrt(Math.Pow(vector.X, 2.0) + Math.Pow(vector.Y, 2.0));
+   if ((xyproj == 0.0) && (vector.Z == 0))
+	   {
+	   // Conversion is indeterminate.
+	   // ToDo: should we just set Ra and Dec to double.NaN?
+	   coordRaDec.RightAscension.DecimalHours = 0.0;
+	   coordRaDec.Declination.DecimalDegrees = 0;
+	   Diag
+	   return coordRaDec;
+	   }
+   else if (xyproj == 0.0)
+	   {
+	   coordRaDec.RightAscension.DecimalHours = 0;	// Ra is indeterminate.
+	   if (vector.Z < 0.0)
+		   coordRaDec.Declination.DecimalDegrees=-90.0;
+	   else
+		   coordRaDec.Declination.DecimalDegrees= 90.0;
+	   return coordRaDec;
+	   }
+   else
+	   {
+	   coordRaDec.RightAscension.DecimalDegrees = Math.Atan2(vector.Y, vector.X) * Constants.RadiansToDegrees;
+	   // Note that if Ra < 0, it will be made positive by the internal logic of RightAscension.
+	   coordRaDec.Declination.DecimalDegrees=Math.Atan2(vector.Z, xyproj) * Constants.RadiansToDegrees; 
+	   }
+   return 0;
+}
 		/// <summary>
 		/// Converts a spherical coordinate to a 3D vector.
 		/// </summary>

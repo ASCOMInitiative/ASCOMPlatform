@@ -1,6 +1,7 @@
 ﻿using TiGra;
 
-namespace ReferenceApplication.Properties {
+namespace ASCOM.SettingsProvider.ReferenceApplication.Properties
+	{
     
     
     // This class allows you to handle specific events on the settings class:

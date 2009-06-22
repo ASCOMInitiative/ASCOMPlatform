@@ -10,8 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Driver Templates", "Driver 
 		Template update procedure.htm = Template update procedure.htm
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraTemplateProject", "Template Projects\CSharp\CameraTemplateProject\CameraTemplateProject.csproj", "{77D54A51-ADED-4331-B6AB-357825A86AC8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Driver Templates Unit Tests", "Template Projects\Driver Templates Unit Tests\Driver Templates Unit Tests.csproj", "{6480BA50-BB33-4B7E-B182-9C51DDDF160C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7FB3D366-A99A-4084-8DF2-22F330F07D6D}"
@@ -29,6 +27,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Referenced Projects", "Referenced Projects", "{AA4DBFA2-F255-4984-AB20-439D793A00B3}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "HelperNET", "..\HelperNET\HelperNET\HelperNET.vbproj", "{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraTemplateProjectCS", "CameraTemplateProjectCS\CameraTemplateProjectCS.csproj", "{4D736437-E342-4033-97E9-4E1D091ABE3F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Exceptions", "..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj", "{5F6CF410-7B16-4A32-99D2-0D92196C4490}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -52,11 +54,6 @@ Global
 		{13913A60-F183-4956-8B25-B7641163176A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13913A60-F183-4956-8B25-B7641163176A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13913A60-F183-4956-8B25-B7641163176A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{77D54A51-ADED-4331-B6AB-357825A86AC8}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
-		{77D54A51-ADED-4331-B6AB-357825A86AC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{77D54A51-ADED-4331-B6AB-357825A86AC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{77D54A51-ADED-4331-B6AB-357825A86AC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{77D54A51-ADED-4331-B6AB-357825A86AC8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6480BA50-BB33-4B7E-B182-9C51DDDF160C}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
 		{6480BA50-BB33-4B7E-B182-9C51DDDF160C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6480BA50-BB33-4B7E-B182-9C51DDDF160C}.Debug|Any CPU.Build.0 = Debug|Any CPU
@@ -83,14 +80,26 @@ Global
 		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D736437-E342-4033-97E9-4E1D091ABE3F}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D736437-E342-4033-97E9-4E1D091ABE3F}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
+		{4D736437-E342-4033-97E9-4E1D091ABE3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D736437-E342-4033-97E9-4E1D091ABE3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D736437-E342-4033-97E9-4E1D091ABE3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D736437-E342-4033-97E9-4E1D091ABE3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F6CF410-7B16-4A32-99D2-0D92196C4490}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F6CF410-7B16-4A32-99D2-0D92196C4490}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
+		{5F6CF410-7B16-4A32-99D2-0D92196C4490}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F6CF410-7B16-4A32-99D2-0D92196C4490}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F6CF410-7B16-4A32-99D2-0D92196C4490}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F6CF410-7B16-4A32-99D2-0D92196C4490}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{77D54A51-ADED-4331-B6AB-357825A86AC8} = {0031A430-4E2F-408E-BF56-E1E947A5E775}
 		{6480BA50-BB33-4B7E-B182-9C51DDDF160C} = {0031A430-4E2F-408E-BF56-E1E947A5E775}
 		{7FB3D366-A99A-4084-8DF2-22F330F07D6D} = {0031A430-4E2F-408E-BF56-E1E947A5E775}
+		{4D736437-E342-4033-97E9-4E1D091ABE3F} = {0031A430-4E2F-408E-BF56-E1E947A5E775}
 		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C} = {AA4DBFA2-F255-4984-AB20-439D793A00B3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

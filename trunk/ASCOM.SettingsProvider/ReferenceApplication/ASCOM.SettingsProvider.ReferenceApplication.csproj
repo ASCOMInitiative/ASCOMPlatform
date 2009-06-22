@@ -8,8 +8,8 @@
     <ProjectGuid>{13913A60-F183-4956-8B25-B7641163176A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ReferenceApplication</RootNamespace>
-    <AssemblyName>ReferenceApplication</AssemblyName>
+    <RootNamespace>ASCOM.SettingsProvider.ReferenceApplication</RootNamespace>
+    <AssemblyName>ASCOM.SettingsProvider.ReferenceApplication</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>
@@ -43,9 +43,6 @@
     <Reference Include="ASCOM.DriverAccess, Version=1.0.5.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="ASCOM.HelperNET, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
@@ -64,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Diagnostics.cs" />
     <Compile Include="TestForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -83,6 +81,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
@@ -97,6 +96,11 @@
     <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\HelperNET\HelperNET\HelperNET.vbproj">
+      <Project>{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}</Project>
+      <Name>HelperNET</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\ASCOM.SettingsProvider\ASCOM.SettingsProvider.csproj">
       <Project>{4FFFD202-81D4-4549-880B-09B640D72C1D}</Project>
       <Name>ASCOM.SettingsProvider</Name>

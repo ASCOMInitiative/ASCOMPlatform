@@ -191,6 +191,12 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\HelperNET\HelperNET\HelperNET.vbproj">
+      <Project>{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}</Project>
+      <Name>HelperNET</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Usno
+namespace TiGra.Astronomy
 	{
 	public static class Constants
 		{
@@ -19,6 +19,15 @@ namespace Usno
 		/// Multiply radians by this factor to get degrees.
 		/// </summary>
 		public const double RadiansToDegrees = 57.295779513082321;
+		/// <summary>
+		/// Multiply hours by this factor to get degrees.
+		/// </summary>
+		public const double HoursToDegrees = 15.0;
+		/// <summary>
+		/// Multiply degrees by this factor to get hours.
+		/// </summary>
+		public const double DegreesToHours = 1 / HoursToDegrees;
+
 		/// <summary>
 		/// Assumed standard atmospheric Pressure at mean sea level.
 		/// This value is generally used when no Pressure data is available.
