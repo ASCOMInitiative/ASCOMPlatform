@@ -5,28 +5,41 @@ namespace TiGra.Astronomy
 	/// <summary>
 	/// HourAngle - angular measurement expressed in hours minutes and seconds.
 	/// 24 hours is equivalent to 360 degrees.
+	/// Internally, all angles are stored in degrees.
 	/// </summary>
 	public class HourAngle : Bearing
 	{
         /// <summary>
         /// Default constructor.
         /// </summary>
-		public HourAngle()
+		public HourAngle() : this(0.0)
 		{
-			//
-			// TODO: Add constructor logic here
-			//
 		}
         /// <summary>
         /// Construct and HourAngle object from degrees, minutes and seconds.
         /// </summary>
-        /// <param name="d">Number of whole degrees, range 0..359.</param>
+        /// <param name="d">Number of whole hours, range 0..23.</param>
         /// <param name="m">Number of minutes, range 0..59.</param>
         /// <param name="s">Number of seconds, range 0..59.</param>
-		public HourAngle(int d, int m, int s)
+		public HourAngle(int hours, int minutes, int seconds)
 		{
-			this.SetDMS(d, m, s);
+		if (hours < 0 || hours > 23)
+			throw new ArgumentOutOfRangeException("h", "Hours must be in the range 0 to 23");
+		if (minutes < 0 || minutes > 59)
+			throw new ArgumentOutOfRangeException("m", "Minutes must be in the range 0 to 59");
+		if (seconds < 0 || seconds > 59)
+			throw new ArgumentOutOfRangeException("s", "Seconds must be in the range 0 to 59");
+		this.DecimalHours = hours + (minutes / 60.0) + (seconds / 3600.0);
 		}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HourAngle"/> class using the
+		/// supplied number of decimal hours.
+		/// </summary>
+		/// <param name="hours">The number of decimal hours and fractions of hours.</param>
+		public HourAngle(double hours)
+			{
+			m_Angle = this.MakeOrthogonal(hours) * Constants.HoursToDegrees;
+			}
 
 		/// <summary>
 		/// Converts an arbitrary hour angle into the equivalent positive angle modulo 24
@@ -77,11 +90,11 @@ namespace TiGra.Astronomy
 		{
 			get
 			{
-				return base.Degrees;
+				return Degrees * Constants.DegreesToHours;
 			}
 			set
 			{
-				base.Degrees = value;
+				this.SetDMS(value * Constants.HoursToDegrees, this.Minutes, this.Seconds);
 			}
 		}
 
@@ -92,11 +105,11 @@ namespace TiGra.Astronomy
 		{
 			get
 			{
-				return base.DecimalDegrees;
+				return DecimalDegrees / 15.0;
 			}
 			set
 			{
-				this.DecimalDegrees = MakeOrthogonal(value);
+				this.DecimalDegrees = MakeOrthogonal(value) * Constants.HoursToDegrees;
 			}
 		}
 

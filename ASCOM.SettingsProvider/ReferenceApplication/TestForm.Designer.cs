@@ -1,4 +1,4 @@
-﻿namespace ReferenceApplication
+﻿namespace ASCOM.SettingsProvider.ReferenceApplication
 	{
 	partial class TestForm
 		{
@@ -49,12 +49,12 @@
 			// lblSelectedDeviceID
 			// 
 			this.lblSelectedDeviceID.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.lblSelectedDeviceID.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ReferenceApplication.Properties.Settings.Default, "DeviceID", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+			this.lblSelectedDeviceID.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ASCOM.SettingsProvider.ReferenceApplication.Properties.Settings.Default, "DeviceID", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
 			this.lblSelectedDeviceID.Location = new System.Drawing.Point(12, 39);
 			this.lblSelectedDeviceID.Name = "lblSelectedDeviceID";
 			this.lblSelectedDeviceID.Size = new System.Drawing.Size(235, 23);
 			this.lblSelectedDeviceID.TabIndex = 0;
-			this.lblSelectedDeviceID.Text = global::ReferenceApplication.Properties.Settings.Default.DeviceID;
+			this.lblSelectedDeviceID.Text = global::ASCOM.SettingsProvider.ReferenceApplication.Properties.Settings.Default.DeviceID;
 			this.lblSelectedDeviceID.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// btnLoad

@@ -56,6 +56,7 @@ namespace <span class="style1">ASCOM.&lt;DeviceClass&gt;TemplateProject.Properti
                 follows:<ol>
                     <li>Assembly Name: ASCOM.&lt;DeviceName&gt;.&lt;DeviceClass&gt;</li>
                     <li>Default Namespace: ASCOM.&lt;DeviceName&gt;</li>
+                    <li>Set target framework to .NET Framework 3.5</li>
                 </ol>
             </li>
             <li><i><b>Build tab</b></i>: Set the target architecture to &quot;Any CPU&quot;</li>
@@ -64,8 +65,8 @@ namespace <span class="style1">ASCOM.&lt;DeviceClass&gt;TemplateProject.Properti
             </ol>
         </li>
         <li>Add references to the following .NET assemblies:<ol>
-            <li>&nbsp;ASCOM.SettingsProvider</li>
-            <li>ASCOM.HelperNET</li>
+            <li>&nbsp;ASCOM.SettingsProvider; CopyLocal=false</li>
+            <li>ASCOM.HelperNET; CopyLocal=false</li>
             <li>System.Configuration</li>
             </ol>
         </li>

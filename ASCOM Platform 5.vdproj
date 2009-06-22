@@ -796,7 +796,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_081A252AB6BE4294A034AF921366414A"
             {
-            "SourcePath" = "8:CCDSimulator5\\CCDSimulator.dll"
+            "SourcePath" = "8:Drivers and Simulators\\CCD Simulator\\CCDSimulator.dll"
             "TargetName" = "8:CCDSimulator.dll"
             "Tag" = "8:"
             "Folder" = "8:_0461B8CD8F1547CCA64C9DF22B7F5187"
@@ -1138,7 +1138,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2FD242B18B8A44E2B1BC43F95CFFD825"
             {
-            "SourcePath" = "8:SwitchSimulator\\SwitchSim.exe"
+            "SourcePath" = "8:Drivers and Simulators\\Switch Simulator\\SwitchSim.exe"
             "TargetName" = "8:SwitchSim.exe"
             "Tag" = "8:"
             "Folder" = "8:_90C232AEC601445A8BEC680C97B9B96B"
@@ -1189,7 +1189,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_358AB60B2F5C498EB3E9B9E9CEA44732"
             {
-            "SourcePath" = "8:POTH5\\POTHHelp.htm"
+            "SourcePath" = "8:POTH\\POTHHelp.htm"
             "TargetName" = "8:POTHHelp.htm"
             "Tag" = "8:"
             "Folder" = "8:_813A91B7F36E43FCA93E65F35DE72345"
@@ -1482,7 +1482,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_56884D48E10F433F94B2C8979497AF68"
             {
-            "SourcePath" = "8:POTH5\\POTH.exe"
+            "SourcePath" = "8:POTH\\POTH.exe"
             "TargetName" = "8:POTH.exe"
             "Tag" = "8:"
             "Folder" = "8:_813A91B7F36E43FCA93E65F35DE72345"
@@ -1522,7 +1522,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6028D2AF3B04465B834BC2FC5C9DBAD4"
             {
-            "SourcePath" = "8:DomeSimulator5\\DomeSim.exe"
+            "SourcePath" = "8:Drivers and Simulators\\Dome Simulator\\DomeSim.exe"
             "TargetName" = "8:DomeSim.exe"
             "Tag" = "8:"
             "Folder" = "8:_0DF24CED20454BB88FD23E665CD259A2"
@@ -1602,7 +1602,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6FC705EA776942DEB5F23A1D8BA6E629"
             {
-            "SourcePath" = "8:FocusSimulator5\\FocusSim.exe"
+            "SourcePath" = "8:Drivers and Simulators\\Focus Simulator\\FocusSim.exe"
             "TargetName" = "8:FocusSim.exe"
             "Tag" = "8:"
             "Folder" = "8:_1D2A40B0298A45CDACEA7B7203F12B94"
@@ -1642,7 +1642,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_76C8DFBE947D453EB5306D98F3E5FFD1"
             {
-            "SourcePath" = "8:ScopeSimulator5\\ScopeSimHelp.htm"
+            "SourcePath" = "8:Drivers and Simulators\\Scope Simulator\\ScopeSimHelp.htm"
             "TargetName" = "8:ScopeSimHelp.htm"
             "Tag" = "8:"
             "Folder" = "8:_813A91B7F36E43FCA93E65F35DE72345"
@@ -2288,7 +2288,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E2C0AF5155BD4B5FA1FF2452BB937877"
             {
-            "SourcePath" = "8:ScopeSimulator5\\ScopeSim.exe"
+            "SourcePath" = "8:Drivers and Simulators\\Scope Simulator\\ScopeSim.exe"
             "TargetName" = "8:ScopeSim.exe"
             "Tag" = "8:"
             "Folder" = "8:_813A91B7F36E43FCA93E65F35DE72345"

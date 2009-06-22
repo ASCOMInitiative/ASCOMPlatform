@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using ASCOM.HelperNET;
 
-namespace ReferenceApplication
+namespace ASCOM.SettingsProvider.ReferenceApplication
 	{
 	public partial class TestForm : Form
 		{
