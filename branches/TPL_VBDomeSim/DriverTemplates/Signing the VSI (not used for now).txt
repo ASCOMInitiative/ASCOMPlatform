@@ -1,0 +1,42 @@
+Signing the VSI file. 
+====================
+
+From http://forums.microsoft.com/MSDN/ShowPost.aspx?PostID=140730&SiteId=1
+
+From MS:
+
+First, you should download and install the powertoys from http://workspaces.gotdotnet.com/ccipowertoys. There is a known bug in the signing process that will not allow you to sign (it was caused by the final process we use to prepare for shipping), but the power toys fixes this problem. Once you have installed this tool, from a command prompt, run the tool MakeZipExe on the VSI file you created. This will bind the zip/vsi file to a stub DLL. You can then sign this stub, and finally rename it to have the VSI extension.
+
+Answer:
+
+Hi Craigs,
+I saw the answer of the thread in community and I also met that problem. Now I have install the toys. And I did follow steps:
+
+1. I copy the ZipExeStub.exe file to the folder named Common7\IDE
+
+2. Use MakeZipExe to convert the zip file to the exe file
+
+3. Use SignTool(signtool signwizard)(use the wizard) to add the signature to the exe file
+
+4. Change the exe exstension to the vsi
+
+5. Double click the vsi file but it didn't work. It just gave out a messagebox says "Attempted to read or write the memory.This is often an indication that other memory is corrupt"
+
+Answer:
+
+The problem is you cannot sign .zip files (or .zip files renamed to have the .vsi extension) -you can only sign .exe, .dll or .cab files.
+
+To enable the signing of .vsi files, Visual Studio 2005 has a utility called MakeZipExe, which takes a .zip file and creates a self-extracting .exe which can be signed using the SignCode tool, a utility which is part of the .NET framework software development kit (SDK).
+
+So, to create a .vsi file that can be signed:
+
+1. Generate the .zip file containing the vscontent in the usual way but do *not* rename the file extension to .vsi
+
+2. Then from the command line, run the following command:
+
+MakeZipExe -zipfile:"path to your .zip file" 
+
+3. Sign the .exe file that this creates, then rename the file with a .vsi extension
+
+For more details see page 66 of the booklet "Working with Microsoft Visual Studio 2005" that ships with Visual Studio.
+

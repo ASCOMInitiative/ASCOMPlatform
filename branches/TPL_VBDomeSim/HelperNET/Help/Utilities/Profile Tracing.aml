@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="f2211b59-6f8c-46fb-b47e-2afb569f3133" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>This section outlines the profile tracing options available in HelperNET</para>
+    </introduction>
+
+    <section address="Section2">
+      <title>Profile Tracing</title>
+      <content>
+         <para>Profile tracing is enabled and disabled through the Chooser dialogue and under normal circumstances
+         should be disabled. Tracing is not required for normal ASCOM operation, it is just there to help
+         when debugging a problem with profile storage.</para>
+         <para>Profile trace is Enabled and disabled by clicking on the "Profile Trace Enabled entry in the 
+         Chooser Trace Options menu and of two entries in the Chooser, Trace Options menu.</para>
+         
+         <para><legacyBold>Automatic Filenames</legacyBold> are always used and log files will appear in the 
+         "My Documents\ASCOM" folder. Within this, folders will be created with names of format: "Logs yyyy-mm-dd" 
+         where yyyy, mm and dd are the current year, month and day numbers. Within this directory profile logs will 
+         accumulate each day with names of format "ASCOM.ProfileNET.hhmm.ssffn" and "ASCOM.XMLAccess.hhmm.ssffn" 
+         where hh, mm, ss and ff are the hour, minute, second and fractional second of the time the log is started 
+         and n is an arbitary integer that ensures that two logs created at the same time don't have the same 
+         filename. </para>
+         <para>The ASCOM>ProfileNET file logs calls made to the public HelperNET Profile component only while 
+         the ASCOM.XMLAccess file logs lower level infrastructural calls concerned with retrieving and storing
+         profile information from the file system.</para>
+         
+         <para>The ASCOM.XMLAccess logs are mainly intended to assist in debugging the HelperNET component itself
+         while the ASCOM.ProfileNET logs may help in debugging driver and client issues as well. </para>
+                  
+          <para>The following is an example of an ASCOM.Profile log:</para>
+          
+         <code language="None">
+23:01:57.337 DeleteValue               Driver: Test Telescope Name: Test Name Subkey: "SubKey1\SubKey2"
+23:01:57.337   CheckRegistered         "Test Telescope"
+23:01:57.337   IsRegistered              Test Telescope Key Test Telescope found
+23:01:57.337   CheckRegistered         Driver is registered
+23:01:57.337 GetValue                  Driver: Test Telescope Name: Test Name Subkey: "SubKey1\SubKey2"
+23:01:57.337   CheckRegistered         "Test Telescope"
+23:01:57.337   IsRegistered              Test Telescope Key Test Telescope found
+23:01:57.337   CheckRegistered         Driver is registered
+23:01:57.353   GetValue                  
+23:01:57.353 Values                    Driver: ScopeSim.Telescope Subkey: ""
+23:01:57.353   CheckRegistered         "ScopeSim.Telescope"
+23:01:57.353   IsRegistered              ScopeSim.Telescope Key ScopeSim.Telescope found
+23:01:57.353   CheckRegistered         Driver is registered
+23:01:57.353   Values                    Returning 24 values
+23:01:57.353   Values                     = Simulator
+23:01:57.353   Values                    AdvancedSetup = True
+23:01:57.353   Values                    AlignMode = 2
+23:01:57.353   Values                    AlwaysOnTop = True
+23:01:57.353   Values                    Aperture =  .2
+23:01:57.353   Values                    ApertureArea =  .0269
+23:01:57.353   Values                    AutoTrack = True
+23:01:57.353   Values                    DateDelta = -7.27595761418343E-12
+23:01:57.353   Values                    DiscPark = False
+23:01:57.353   Values                    DoRefraction = True
+23:01:57.353   Values                    Elevation =  80
+23:01:57.353   Values                    EquSystem = 1
+23:01:57.353   Values                    FocalLength =  1.26
+23:01:57.353   Values                    Latitude =  51.0791666666667
+23:01:57.353   Values                    Left = 2400
+23:01:57.353   Values                    Longitude = -.2945
+23:01:57.353   Values                    MaxSlewRate =  50
+23:01:57.353   Values                    NoCoordAtPark = False
+23:01:57.353   Values                    ParkAltitude =  77.827627658844
+23:01:57.353   Values                    ParkAzimuth =  180
+23:01:57.353   Values                    RegVer = 2.2
+23:01:57.353   Values                    StartAltitude =  19.7091514951878
+23:01:57.353   Values                    StartAzimuth =  251.064049571606
+23:01:57.353   Values                    Top = 189
+23:01:57.431 WriteValue                Driver: Test Telescope Name: Test Name 1 Value: Test Value Subkey: ""
+23:01:57.431   CheckRegistered         "Test Telescope"
+23:01:57.431   IsRegistered              Test Telescope Key Test Telescope found
+23:01:57.431   CheckRegistered         Driver is registered
+
+
+         </code>
+ 
+     <para>The following is an example of an ASCOM.XMLAccess log:</para>
+     
+     <code language="None">
+12:48:28.300 EnumKeys                  SubKey: "Telescope Drivers"
+12:48:28.300   ReadValues                Cache miss      \Telescope Drivers\ACP.Telescope - added to cache - 0 milliseconds
+12:48:28.300   ReadValues                Cache miss      \Telescope Drivers\ASCOM.MI250.Telescope - added to cache - 0 milliseconds
+12:48:28.300   ReadValues                Cache miss      \Telescope Drivers\ASCOM.MI250SA.Telescope - added to cache - 0 milliseconds
+12:48:28.300   ReadValues                Cache miss      \Telescope Drivers\ASCOMDome.Telescope - added to cache - 0 milliseconds
+12:48:28.300   ReadValues                Cache miss      \Telescope Drivers\Celestron.Telescope - added to cache - 0 milliseconds
+12:48:28.300   ReadValues                Cache miss      \Telescope Drivers\FocusMax.Telescope - added to cache - 0 milliseconds
+12:48:28.300   ReadValues                Cache miss      \Telescope Drivers\Gemini.Telescope - added to cache - 0 milliseconds
+12:48:28.300   ReadValues                Cache miss      \Telescope Drivers\Hub.Telescope - added to cache - 0 milliseconds
+12:48:28.300   ReadValues                Cache miss      \Telescope Drivers\MaxPoint.Telescope - added to cache - 0 milliseconds
+12:48:28.300   ReadValues                Cache miss      \Telescope Drivers\Pipe.Telescope - added to cache - 0 milliseconds
+12:48:28.300   ReadValues                Cache miss      \Telescope Drivers\POTH.Telescope - added to cache - 0 milliseconds
+12:48:28.300   ReadValues                Cache miss      \Telescope Drivers\ScopeSim.Telescope - added to cache - 0 milliseconds
+12:48:28.300   ElapsedTime               5 milliseconds
+12:48:28.300 EnumKeys                  SubKey: "Telescope Drivers"
+12:48:28.300   ReadValues                Found in cache  \Telescope Drivers\ACP.Telescope - 0 milliseconds
+12:48:28.300   ReadValues                Found in cache  \Telescope Drivers\ASCOM.MI250.Telescope - 0 milliseconds
+12:48:28.300   ReadValues                Found in cache  \Telescope Drivers\ASCOM.MI250SA.Telescope - 0 milliseconds
+12:48:28.300   ReadValues                Found in cache  \Telescope Drivers\ASCOMDome.Telescope - 0 milliseconds
+12:48:28.300   ReadValues                Found in cache  \Telescope Drivers\Celestron.Telescope - 0 milliseconds
+12:48:28.300   ReadValues                Found in cache  \Telescope Drivers\FocusMax.Telescope - 0 milliseconds
+12:48:28.300   ReadValues                Found in cache  \Telescope Drivers\Gemini.Telescope - 0 milliseconds
+12:48:28.300   ReadValues                Found in cache  \Telescope Drivers\Hub.Telescope - 0 milliseconds
+12:48:28.300   ReadValues                Found in cache  \Telescope Drivers\MaxPoint.Telescope - 0 milliseconds
+12:48:28.300   ReadValues                Found in cache  \Telescope Drivers\Pipe.Telescope - 0 milliseconds
+12:48:28.300   ReadValues                Found in cache  \Telescope Drivers\POTH.Telescope - 0 milliseconds
+12:48:28.300   ReadValues                Found in cache  \Telescope Drivers\ScopeSim.Telescope - 0 milliseconds
+12:48:28.300   ElapsedTime               1 milliseconds
+12:48:28.316 EnumKeys                  SubKey: "Telescope Drivers"
+12:48:28.316   ReadValues                Found in cache  \Telescope Drivers\ACP.Telescope - 0 milliseconds
+12:48:28.316   ReadValues                Found in cache  \Telescope Drivers\ASCOM.MI250.Telescope - 0 milliseconds
+12:48:28.316   ReadValues                Found in cache  \Telescope Drivers\ASCOM.MI250SA.Telescope - 0 milliseconds
+12:48:28.316   ReadValues                Found in cache  \Telescope Drivers\ASCOMDome.Telescope - 0 milliseconds
+12:48:28.316   ReadValues                Found in cache  \Telescope Drivers\Celestron.Telescope - 0 milliseconds
+12:48:28.316   ReadValues                Found in cache  \Telescope Drivers\FocusMax.Telescope - 0 milliseconds
+12:48:28.316   ReadValues                Found in cache  \Telescope Drivers\Gemini.Telescope - 0 milliseconds
+12:48:28.316   ReadValues                Found in cache  \Telescope Drivers\Hub.Telescope - 0 milliseconds
+12:48:28.316   ReadValues                Found in cache  \Telescope Drivers\MaxPoint.Telescope - 0 milliseconds
+12:48:28.316   ReadValues                Found in cache  \Telescope Drivers\Pipe.Telescope - 0 milliseconds
+12:48:28.316   ReadValues                Found in cache  \Telescope Drivers\POTH.Telescope - 0 milliseconds
+12:48:28.316   ReadValues                Found in cache  \Telescope Drivers\ScopeSim.Telescope - 0 milliseconds
+12:48:28.316   ElapsedTime               0 milliseconds
+12:48:28.316 CreateKey                 SubKey: "Telescope Drivers\Test Telescope"
+12:48:28.316   WriteValues               SubKeyName: \Telescope Drivers\Test Telescope
+12:48:28.316   WriteValues List          ***** DefaultValueName ***** = ===== ***** UnsetValue ***** =====
+12:48:28.316   WriteValues               Created cache entry \Telescope Drivers\Test Telescope - 1 milliseconds
+12:48:28.316   ElapsedTime               2 milliseconds
+12:48:28.316 WriteProfile              SubKey: "Telescope Drivers\Test Telescope" Name: "" Value: "This is a test telescope"
+12:48:28.316   ReadValues                Found in cache  \Telescope Drivers\Test Telescope - 0 milliseconds
+12:48:28.316   WriteValues               SubKeyName: Telescope Drivers\Test Telescope
+12:48:28.316   WriteValues List          ***** DefaultValueName ***** = This is a test telescope
+12:48:28.316   WriteValues               Updated cache entry \Telescope Drivers\Test Telescope - 2 milliseconds
+12:48:28.316   ElapsedTime               3 milliseconds
+         </code>
+      </content>
+    </section>
+  </developerConceptualDocument>
+</topic>
