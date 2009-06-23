@@ -23,22 +23,22 @@ Partial Class HandboxForm
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel
+        Me.txtDomeAz = New System.Windows.Forms.Label
         Me.LabelShutter = New System.Windows.Forms.Label
         Me.LabelAzimuth = New System.Windows.Forms.Label
-        Me.LabelShutterValue = New System.Windows.Forms.Label
-        Me.LabelAzimuthValue = New System.Windows.Forms.Label
+        Me.txtShutter = New System.Windows.Forms.Label
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel
-        Me.LabelSlew = New System.Windows.Forms.Label
-        Me.LabelHome = New System.Windows.Forms.Label
-        Me.LabelPark = New System.Windows.Forms.Label
+        Me.lblPARK = New System.Windows.Forms.Label
+        Me.lblHOME = New System.Windows.Forms.Label
+        Me.lblSlew = New System.Windows.Forms.Label
         Me.ButtonGoto = New System.Windows.Forms.Button
         Me.ButtonSync = New System.Windows.Forms.Button
-        Me.TextBoxNewAzimuth = New System.Windows.Forms.TextBox
+        Me.txtNewAz = New System.Windows.Forms.TextBox
         Me.ButtonOpen = New System.Windows.Forms.Button
         Me.ButtonClose = New System.Windows.Forms.Button
-        Me.ButtonSlewUp = New System.Windows.Forms.Button
+        Me.ButtonSlewAltitudeUp = New System.Windows.Forms.Button
         Me.ButtonSlewStop = New System.Windows.Forms.Button
-        Me.ButtonSlewDown = New System.Windows.Forms.Button
+        Me.ButtonSlewAltitudeDown = New System.Windows.Forms.Button
         Me.ButtonClockwise = New System.Windows.Forms.Button
         Me.ButtonCounterClockwise = New System.Windows.Forms.Button
         Me.ButtonStepClockwise = New System.Windows.Forms.Button
@@ -60,10 +60,10 @@ Partial Class HandboxForm
         Me.TableLayoutPanel1.ColumnCount = 2
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.LabelAzimuthValue, 1, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.txtDomeAz, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.LabelShutter, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.LabelAzimuth, 0, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.LabelShutterValue, 1, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.txtShutter, 1, 0)
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(4, 83)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.Padding = New System.Windows.Forms.Padding(1)
@@ -72,6 +72,17 @@ Partial Class HandboxForm
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(160, 40)
         Me.TableLayoutPanel1.TabIndex = 3
+        '
+        'txtDomeAz
+        '
+        Me.txtDomeAz.AutoSize = True
+        Me.txtDomeAz.Dock = System.Windows.Forms.DockStyle.Right
+        Me.txtDomeAz.ForeColor = System.Drawing.Color.Red
+        Me.txtDomeAz.Location = New System.Drawing.Point(134, 20)
+        Me.txtDomeAz.Name = "txtDomeAz"
+        Me.txtDomeAz.Size = New System.Drawing.Size(22, 19)
+        Me.txtDomeAz.TabIndex = 3
+        Me.txtDomeAz.Text = "---.-"
         '
         'LabelShutter
         '
@@ -93,27 +104,16 @@ Partial Class HandboxForm
         Me.LabelAzimuth.TabIndex = 1
         Me.LabelAzimuth.Text = "Dome Az:"
         '
-        'LabelShutterValue
+        'txtShutter
         '
-        Me.LabelShutterValue.AutoSize = True
-        Me.LabelShutterValue.Dock = System.Windows.Forms.DockStyle.Right
-        Me.LabelShutterValue.ForeColor = System.Drawing.Color.Red
-        Me.LabelShutterValue.Location = New System.Drawing.Point(137, 1)
-        Me.LabelShutterValue.Name = "LabelShutterValue"
-        Me.LabelShutterValue.Size = New System.Drawing.Size(19, 19)
-        Me.LabelShutterValue.TabIndex = 2
-        Me.LabelShutterValue.Text = "----"
-        '
-        'LabelAzimuthValue
-        '
-        Me.LabelAzimuthValue.AutoSize = True
-        Me.LabelAzimuthValue.Dock = System.Windows.Forms.DockStyle.Right
-        Me.LabelAzimuthValue.ForeColor = System.Drawing.Color.Red
-        Me.LabelAzimuthValue.Location = New System.Drawing.Point(134, 20)
-        Me.LabelAzimuthValue.Name = "LabelAzimuthValue"
-        Me.LabelAzimuthValue.Size = New System.Drawing.Size(22, 19)
-        Me.LabelAzimuthValue.TabIndex = 3
-        Me.LabelAzimuthValue.Text = "---.-"
+        Me.txtShutter.AutoSize = True
+        Me.txtShutter.Dock = System.Windows.Forms.DockStyle.Right
+        Me.txtShutter.ForeColor = System.Drawing.Color.Red
+        Me.txtShutter.Location = New System.Drawing.Point(137, 1)
+        Me.txtShutter.Name = "txtShutter"
+        Me.txtShutter.Size = New System.Drawing.Size(19, 19)
+        Me.txtShutter.TabIndex = 2
+        Me.txtShutter.Text = "----"
         '
         'TableLayoutPanel2
         '
@@ -122,9 +122,9 @@ Partial Class HandboxForm
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel2.Controls.Add(Me.LabelPark, 2, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.LabelHome, 1, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.LabelSlew, 0, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.lblPARK, 2, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.lblHOME, 1, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.lblSlew, 0, 0)
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(4, 129)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 1
@@ -132,41 +132,41 @@ Partial Class HandboxForm
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(160, 20)
         Me.TableLayoutPanel2.TabIndex = 4
         '
-        'LabelSlew
+        'lblPARK
         '
-        Me.LabelSlew.AutoSize = True
-        Me.LabelSlew.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.LabelSlew.ForeColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.LabelSlew.Location = New System.Drawing.Point(3, 0)
-        Me.LabelSlew.Name = "LabelSlew"
-        Me.LabelSlew.Padding = New System.Windows.Forms.Padding(1, 2, 1, 1)
-        Me.LabelSlew.Size = New System.Drawing.Size(40, 16)
-        Me.LabelSlew.TabIndex = 0
-        Me.LabelSlew.Text = "SLEW"
+        Me.lblPARK.AutoSize = True
+        Me.lblPARK.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.lblPARK.ForeColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblPARK.Location = New System.Drawing.Point(109, 0)
+        Me.lblPARK.Name = "lblPARK"
+        Me.lblPARK.Padding = New System.Windows.Forms.Padding(1, 2, 1, 1)
+        Me.lblPARK.Size = New System.Drawing.Size(38, 16)
+        Me.lblPARK.TabIndex = 2
+        Me.lblPARK.Text = "PARK"
         '
-        'LabelHome
+        'lblHOME
         '
-        Me.LabelHome.AutoSize = True
-        Me.LabelHome.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.LabelHome.ForeColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.LabelHome.Location = New System.Drawing.Point(56, 0)
-        Me.LabelHome.Name = "LabelHome"
-        Me.LabelHome.Padding = New System.Windows.Forms.Padding(1, 2, 1, 1)
-        Me.LabelHome.Size = New System.Drawing.Size(41, 16)
-        Me.LabelHome.TabIndex = 1
-        Me.LabelHome.Text = "HOME"
+        Me.lblHOME.AutoSize = True
+        Me.lblHOME.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.lblHOME.ForeColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblHOME.Location = New System.Drawing.Point(56, 0)
+        Me.lblHOME.Name = "lblHOME"
+        Me.lblHOME.Padding = New System.Windows.Forms.Padding(1, 2, 1, 1)
+        Me.lblHOME.Size = New System.Drawing.Size(41, 16)
+        Me.lblHOME.TabIndex = 1
+        Me.lblHOME.Text = "HOME"
         '
-        'LabelPark
+        'lblSlew
         '
-        Me.LabelPark.AutoSize = True
-        Me.LabelPark.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.LabelPark.ForeColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.LabelPark.Location = New System.Drawing.Point(109, 0)
-        Me.LabelPark.Name = "LabelPark"
-        Me.LabelPark.Padding = New System.Windows.Forms.Padding(1, 2, 1, 1)
-        Me.LabelPark.Size = New System.Drawing.Size(38, 16)
-        Me.LabelPark.TabIndex = 2
-        Me.LabelPark.Text = "PARK"
+        Me.lblSlew.AutoSize = True
+        Me.lblSlew.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.lblSlew.ForeColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblSlew.Location = New System.Drawing.Point(3, 0)
+        Me.lblSlew.Name = "lblSlew"
+        Me.lblSlew.Padding = New System.Windows.Forms.Padding(1, 2, 1, 1)
+        Me.lblSlew.Size = New System.Drawing.Size(40, 16)
+        Me.lblSlew.TabIndex = 0
+        Me.lblSlew.Text = "SLEW"
         '
         'ButtonGoto
         '
@@ -186,12 +186,12 @@ Partial Class HandboxForm
         Me.ButtonSync.Text = "Sync:"
         Me.ButtonSync.UseVisualStyleBackColor = True
         '
-        'TextBoxNewAzimuth
+        'txtNewAz
         '
-        Me.TextBoxNewAzimuth.Location = New System.Drawing.Point(94, 180)
-        Me.TextBoxNewAzimuth.Name = "TextBoxNewAzimuth"
-        Me.TextBoxNewAzimuth.Size = New System.Drawing.Size(70, 20)
-        Me.TextBoxNewAzimuth.TabIndex = 7
+        Me.txtNewAz.Location = New System.Drawing.Point(94, 180)
+        Me.txtNewAz.Name = "txtNewAz"
+        Me.txtNewAz.Size = New System.Drawing.Size(70, 20)
+        Me.txtNewAz.TabIndex = 7
         '
         'ButtonOpen
         '
@@ -211,15 +211,15 @@ Partial Class HandboxForm
         Me.ButtonClose.Text = "Close"
         Me.ButtonClose.UseVisualStyleBackColor = True
         '
-        'ButtonSlewUp
+        'ButtonSlewAltitudeUp
         '
-        Me.ButtonSlewUp.Font = New System.Drawing.Font("Wingdings 3", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
-        Me.ButtonSlewUp.Location = New System.Drawing.Point(67, 240)
-        Me.ButtonSlewUp.Name = "ButtonSlewUp"
-        Me.ButtonSlewUp.Size = New System.Drawing.Size(34, 46)
-        Me.ButtonSlewUp.TabIndex = 10
-        Me.ButtonSlewUp.Text = "£"
-        Me.ButtonSlewUp.UseVisualStyleBackColor = True
+        Me.ButtonSlewAltitudeUp.Font = New System.Drawing.Font("Wingdings 3", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.ButtonSlewAltitudeUp.Location = New System.Drawing.Point(67, 240)
+        Me.ButtonSlewAltitudeUp.Name = "ButtonSlewAltitudeUp"
+        Me.ButtonSlewAltitudeUp.Size = New System.Drawing.Size(34, 46)
+        Me.ButtonSlewAltitudeUp.TabIndex = 10
+        Me.ButtonSlewAltitudeUp.Text = "£"
+        Me.ButtonSlewAltitudeUp.UseVisualStyleBackColor = True
         '
         'ButtonSlewStop
         '
@@ -231,15 +231,15 @@ Partial Class HandboxForm
         Me.ButtonSlewStop.Text = "Ä"
         Me.ButtonSlewStop.UseVisualStyleBackColor = True
         '
-        'ButtonSlewDown
+        'ButtonSlewAltitudeDown
         '
-        Me.ButtonSlewDown.Font = New System.Drawing.Font("Wingdings 3", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
-        Me.ButtonSlewDown.Location = New System.Drawing.Point(67, 344)
-        Me.ButtonSlewDown.Name = "ButtonSlewDown"
-        Me.ButtonSlewDown.Size = New System.Drawing.Size(34, 46)
-        Me.ButtonSlewDown.TabIndex = 12
-        Me.ButtonSlewDown.Text = "¤"
-        Me.ButtonSlewDown.UseVisualStyleBackColor = True
+        Me.ButtonSlewAltitudeDown.Font = New System.Drawing.Font("Wingdings 3", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.ButtonSlewAltitudeDown.Location = New System.Drawing.Point(67, 344)
+        Me.ButtonSlewAltitudeDown.Name = "ButtonSlewAltitudeDown"
+        Me.ButtonSlewAltitudeDown.Size = New System.Drawing.Size(34, 46)
+        Me.ButtonSlewAltitudeDown.TabIndex = 12
+        Me.ButtonSlewAltitudeDown.Text = "¤"
+        Me.ButtonSlewAltitudeDown.UseVisualStyleBackColor = True
         '
         'ButtonClockwise
         '
@@ -356,12 +356,12 @@ Partial Class HandboxForm
         Me.Controls.Add(Me.ButtonStepClockwise)
         Me.Controls.Add(Me.ButtonCounterClockwise)
         Me.Controls.Add(Me.ButtonClockwise)
-        Me.Controls.Add(Me.ButtonSlewDown)
+        Me.Controls.Add(Me.ButtonSlewAltitudeDown)
         Me.Controls.Add(Me.ButtonSlewStop)
-        Me.Controls.Add(Me.ButtonSlewUp)
+        Me.Controls.Add(Me.ButtonSlewAltitudeUp)
         Me.Controls.Add(Me.ButtonClose)
         Me.Controls.Add(Me.ButtonOpen)
-        Me.Controls.Add(Me.TextBoxNewAzimuth)
+        Me.Controls.Add(Me.txtNewAz)
         Me.Controls.Add(Me.ButtonSync)
         Me.Controls.Add(Me.ButtonGoto)
         Me.Controls.Add(Me.TableLayoutPanel2)
@@ -386,20 +386,20 @@ Partial Class HandboxForm
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents LabelShutter As System.Windows.Forms.Label
     Friend WithEvents LabelAzimuth As System.Windows.Forms.Label
-    Friend WithEvents LabelShutterValue As System.Windows.Forms.Label
-    Friend WithEvents LabelAzimuthValue As System.Windows.Forms.Label
+    Friend WithEvents txtShutter As System.Windows.Forms.Label
+    Friend WithEvents txtDomeAz As System.Windows.Forms.Label
     Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents LabelSlew As System.Windows.Forms.Label
-    Friend WithEvents LabelPark As System.Windows.Forms.Label
-    Friend WithEvents LabelHome As System.Windows.Forms.Label
+    Friend WithEvents lblSlew As System.Windows.Forms.Label
+    Friend WithEvents lblPARK As System.Windows.Forms.Label
+    Friend WithEvents lblHOME As System.Windows.Forms.Label
     Friend WithEvents ButtonGoto As System.Windows.Forms.Button
     Friend WithEvents ButtonSync As System.Windows.Forms.Button
-    Friend WithEvents TextBoxNewAzimuth As System.Windows.Forms.TextBox
+    Friend WithEvents txtNewAz As System.Windows.Forms.TextBox
     Friend WithEvents ButtonOpen As System.Windows.Forms.Button
     Friend WithEvents ButtonClose As System.Windows.Forms.Button
-    Friend WithEvents ButtonSlewUp As System.Windows.Forms.Button
+    Friend WithEvents ButtonSlewAltitudeUp As System.Windows.Forms.Button
     Friend WithEvents ButtonSlewStop As System.Windows.Forms.Button
-    Friend WithEvents ButtonSlewDown As System.Windows.Forms.Button
+    Friend WithEvents ButtonSlewAltitudeDown As System.Windows.Forms.Button
     Friend WithEvents ButtonClockwise As System.Windows.Forms.Button
     Friend WithEvents ButtonCounterClockwise As System.Windows.Forms.Button
     Friend WithEvents ButtonStepClockwise As System.Windows.Forms.Button

@@ -29,6 +29,79 @@
 Public Class Dome
     Implements IDome
 
+    ' Hand box
+
+    Public Sub New()
+
+        Dim RegVer As String = "1"                      ' Registry version, use to change registry if required by new version
+
+        g_handBox = New HandboxForm
+        g_Profile = New ASCOM.Helper.Profile
+        g_Profile.DeviceType = "Dome"            ' Dome device type
+
+
+        '
+        ' initialize variables that are not persistent
+        '
+
+        g_Profile.Register(g_csDriverID, g_csDriverDescription) ' Self reg (skips if already reg)
+
+
+        ' Now we have some default if required, update the handbox values from the registry
+        g_handBox.UpdateConfig()
+
+        ' Set handbox screen position
+        g_handBox.Left = CInt(g_Profile.GetValue(g_csDriverID, "Left"))
+        g_handBox.Top = CInt(g_Profile.GetValue(g_csDriverID, "Top"))
+
+        ' Fix bad positions (which shouldn't ever happen, ha ha)
+        If g_handBox.Left < 0 Then
+            g_handBox.Left = 100
+            g_Profile.WriteValue(g_csDriverID, "Left", g_handBox.Left.ToString)
+        End If
+        If g_handBox.Top < 0 Then
+            g_handBox.Top = 100
+            g_Profile.WriteValue(g_csDriverID, "Top", g_handBox.Top.ToString)
+        End If
+
+        ' Show the handbox now
+        g_handBox.Show()
+        g_handBox.Activate()
+    End Sub
+
+
+#Region "ASCOM Registration"
+
+    Private Shared Sub RegUnregASCOM(ByVal bRegister As Boolean)
+
+        Dim P As New Helper.Profile()
+        P.DeviceTypeV = "Dome"           '  Requires Helper 5.0.3 or later
+        If bRegister Then
+            P.Register(g_csDriverID, g_csDriverDescription)
+        Else
+            P.Unregister(g_csDriverID)
+        End If
+        Try                                 ' In case Helper becomes native .NET
+            Marshal.ReleaseComObject(P)
+        Catch ex As Exception
+            ' Ignore exception
+        End Try
+        P = Nothing
+
+    End Sub
+
+    <ComRegisterFunction()> _
+    Public Shared Sub RegisterASCOM(ByVal T As Type)
+        RegUnregASCOM(True)
+    End Sub
+
+    <ComUnregisterFunction()> _
+    Public Shared Sub UnregisterASCOM(ByVal T As Type)
+        RegUnregASCOM(False)
+    End Sub
+
+#End Region
+
 
     Public Sub AbortSlew() Implements IDome.AbortSlew
 
@@ -124,10 +197,28 @@ Public Class Dome
 
     Public Property Connected() As Boolean Implements IDome.Connected
         Get
-            Return True
+            Connected = g_bConnected
+
+            If Not g_show Is Nothing Then
+                If g_show.chkConnected.Checked Then _
+                    g_show.TrafficLine("Connected: " & Connected)
+            End If
         End Get
         Set(ByVal value As Boolean)
+            Dim out As String
 
+            If Not g_trafficDialog Is Nothing Then
+                If g_trafficDialog.chkOther.Checked Then _
+                    g_trafficDialog.TrafficStart("Connected: " & g_handBox.Connected & " -> " & value)
+            End If
+
+            g_handBox.Connected = value
+            out = " (done)"
+
+            If Not g_trafficDialog Is Nothing Then
+                If g_trafficDialog.chkOther.Checked Then _
+                    g_trafficDialog.TrafficEnd(out)
+            End If
         End Set
     End Property
 
@@ -172,7 +263,17 @@ Public Class Dome
     End Sub
 
     Public Sub SetupDialog() Implements IDome.SetupDialog
+        If Not g_show Is Nothing Then
+            If g_show.chkOther.Checked Then _
+                g_show.TrafficStart("SetupDialog")
+        End If
 
+        g_handBox.DoSetup()
+
+        If Not g_show Is Nothing Then
+            If g_show.chkOther.Checked Then _
+                g_show.TrafficEnd(" (done)")
+        End If
     End Sub
 
     Public ReadOnly Property ShutterStatus() As ShutterState Implements IDome.ShutterStatus
