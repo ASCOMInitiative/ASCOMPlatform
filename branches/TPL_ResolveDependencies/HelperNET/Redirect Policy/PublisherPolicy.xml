@@ -1,0 +1,11 @@
+<configuration>
+   <runtime>
+      <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+         <dependentAssembly>
+            <assemblyIdentity name="ASCOM.HelperNet" publicKeyToken="565de7938946fba7" culture="neutral" />
+            <bindingRedirect oldVersion="5.0.0.0-5.0.2.65535" 
+                             newVersion="5.0.3.0" />
+         </dependentAssembly>
+      </assemblyBinding>
+   </runtime>
+</configuration>
