@@ -62,6 +62,7 @@
     <Compile Include="HandboxForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Hardware.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -99,6 +100,12 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SetupDialogForm.resx">
+      <DependentUpon>SetupDialogForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ShowTrafficForm.resx">
+      <DependentUpon>ShowTrafficForm.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
