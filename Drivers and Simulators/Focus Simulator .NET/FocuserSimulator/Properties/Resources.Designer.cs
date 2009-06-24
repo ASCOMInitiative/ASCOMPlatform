@@ -67,16 +67,16 @@ namespace ASCOM.FocuserSimulator.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap cc_button_cancel_16x16 {
+        internal static System.Drawing.Bitmap button_cancel {
             get {
-                object obj = ResourceManager.GetObject("cc-button_cancel-16x16", resourceCulture);
+                object obj = ResourceManager.GetObject("button_cancel", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap cc_configure_16x16 {
+        internal static System.Drawing.Bitmap button_configure {
             get {
-                object obj = ResourceManager.GetObject("cc-configure-16x16", resourceCulture);
+                object obj = ResourceManager.GetObject("button_configure", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

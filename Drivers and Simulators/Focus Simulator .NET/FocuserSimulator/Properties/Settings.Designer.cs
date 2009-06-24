@@ -37,22 +37,10 @@ namespace ASCOM.FocuserSimulator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("3500")]
-        public int sPosition {
-            get {
-                return ((int)(this["sPosition"]));
-            }
-            set {
-                this["sPosition"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int sStepSize {
+        public decimal sStepSize {
             get {
-                return ((int)(this["sStepSize"]));
+                return ((decimal)(this["sStepSize"]));
             }
             set {
                 this["sStepSize"] = value;
@@ -109,13 +97,25 @@ namespace ASCOM.FocuserSimulator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("30000")]
-        public int sMaxStep {
+        [global::System.Configuration.DefaultSettingValueAttribute("10000")]
+        public decimal sMaxStep {
             get {
-                return ((int)(this["sMaxStep"]));
+                return ((decimal)(this["sMaxStep"]));
             }
             set {
                 this["sMaxStep"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3500")]
+        public decimal sPosition {
+            get {
+                return ((decimal)(this["sPosition"]));
+            }
+            set {
+                this["sPosition"] = value;
             }
         }
     }

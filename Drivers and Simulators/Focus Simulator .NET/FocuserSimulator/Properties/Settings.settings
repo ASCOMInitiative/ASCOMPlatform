@@ -5,10 +5,7 @@
     <Setting Name="sMaxIncrement" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">5000</Value>
     </Setting>
-    <Setting Name="sPosition" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">3500</Value>
-    </Setting>
-    <Setting Name="sStepSize" Type="System.Int32" Scope="User">
+    <Setting Name="sStepSize" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
     <Setting Name="sAbsolute" Type="System.Boolean" Scope="User">
@@ -23,8 +20,11 @@
     <Setting Name="IsMoving" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="sMaxStep" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">30000</Value>
+    <Setting Name="sMaxStep" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">10000</Value>
+    </Setting>
+    <Setting Name="sPosition" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">3500</Value>
     </Setting>
   </Settings>
 </SettingsFile>

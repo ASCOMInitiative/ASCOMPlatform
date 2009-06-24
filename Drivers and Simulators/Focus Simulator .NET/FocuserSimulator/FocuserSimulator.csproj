@@ -100,7 +100,6 @@
     <Compile Include="SetupDialogForm.designer.cs">
       <DependentUpon>SetupDialogForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SharedResources.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ASCOM.png" />
