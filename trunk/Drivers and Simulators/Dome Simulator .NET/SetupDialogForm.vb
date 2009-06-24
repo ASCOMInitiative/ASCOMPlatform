@@ -57,7 +57,12 @@ Public Class SetupDialogForm
             Home = AzScale(Home)
         End Get
         Set(ByVal value As Double)
-
+            If value < -360 Or value > 360 Then
+                txtHome.Text = "000.0"
+            Else
+                value = AzScale(value)
+                txtHome.Text = Format$(value, "000.0")
+            End If
         End Set
     End Property
 
@@ -120,7 +125,7 @@ Public Class SetupDialogForm
                 AltRate = 90
         End Get
         Set(ByVal value As Double)
-            txtAzRate.Text = Format$(value, "0.0")
+            txtAltRate.Text = Format$(value, "0.0")
         End Set
     End Property
 

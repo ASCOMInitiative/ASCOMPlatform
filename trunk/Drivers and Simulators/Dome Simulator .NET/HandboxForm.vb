@@ -37,19 +37,9 @@ Imports System.Windows.Forms
 
 <ComVisible(False)> _
 Public Class HandboxForm
-    Private m_bConnected As Boolean                     ' Tracked connected state
-    Private BtnState As Integer                         'Controls the dome slewing buttons
+    Public BtnState As Integer                         'Controls the dome slewing buttons
 #Region "Public Properties and Methods"
-    Public Property Connected() As Boolean
-        Get
-            Connected = m_bConnected
-        End Get
-        Set(ByVal value As Boolean)
-            m_bConnected = value
-            LabelButtons()
-        End Set
-    End Property
-   
+
     Public Sub UpdateConfig()
         g_Profile.WriteValue(ID, "OCDelay", CStr(g_dOCDelay))
         g_Profile.WriteValue(ID, "SetPark", CStr(g_dSetPark))
@@ -79,7 +69,7 @@ Public Class HandboxForm
     End Sub
 
     Public Sub DoSetup()
-        TimerUpdate.Enabled = False
+        g_timer.Enabled = False
 
         Dim SetupDialog As SetupDialogForm = New SetupDialogForm
 
@@ -156,11 +146,11 @@ Public Class HandboxForm
 
         ' update handbox displays
 
-        
+
         LabelButtons()
         RefreshLEDs()
 
-        TimerUpdate.Enabled = True
+        g_timer.Enabled = g_bConnected
 
         Me.Visible = True
         Me.BringToFront()
@@ -168,9 +158,9 @@ Public Class HandboxForm
 
     Public Sub RefreshLEDs()
 
-        lblPARK.ForeColor = IIf(g_bAtPark, &HFF00&, &H404080)   ' Green
-        lblHOME.ForeColor = IIf(g_bAtHome, &HFF00&, &H404080)   ' Green
-        lblSLEW.ForeColor = IIf(HW_Slewing, &HFFFF&, &H404080)  ' Yellow
+        lblPARK.ForeColor = IIf(g_bAtPark, System.Drawing.Color.Green, System.Drawing.Color.Red)   ' Green
+        lblHOME.ForeColor = IIf(g_bAtHome, System.Drawing.Color.Green, System.Drawing.Color.Red)   ' Green
+        lblSlew.ForeColor = IIf(HW_Slewing, System.Drawing.Color.Yellow, System.Drawing.Color.Red)  ' Yellow
 
     End Sub
     Public Sub LabelButtons()
@@ -237,7 +227,7 @@ Public Class HandboxForm
 #End Region
 #Region "Event Handlers"
     Private Sub HandboxForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        TimerUpdate.Enabled = True
+
     End Sub
     Private Sub HandboxForm_Unload() Handles MyBase.Disposed
         If Not g_trafficDialog Is Nothing Then _
@@ -389,147 +379,6 @@ Public Class HandboxForm
         BtnState = 8
     End Sub
 
-    Private Sub TimerUpdate_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TimerUpdate.Tick
-
-        Dim slew As Double
-        Dim distance As Double
-
-        '
-        ' Handle hand-box state first
-        '
-
-        If BtnState <> 0 Then
-            Select Case (BtnState)
-                Case 1 ' Go clockwise
-                    HW_Run(True)
-                Case 2 ' step clockwise
-                    HW_Move(AzScale(g_dDomeAz + g_dStepSize))
-                Case 3 ' Go counter clockwise
-                    HW_Run(False)
-                Case 4 ' step counter clockwise
-                    HW_Move(AzScale(g_dDomeAz - g_dStepSize))
-                Case 5 ' shutter up
-                    If g_eShutterState = ShutterState.shutterOpen Then _
-                        HW_MoveShutter(g_dMaxAlt)
-                Case 6 ' shutter down
-                    If g_eShutterState = ShutterState.shutterOpen Then _
-                        HW_MoveShutter(g_dMinAlt)
-                Case 7 ' shutter open
-                    If g_eShutterState = ShutterState.shutterClosed Then _
-                        HW_OpenShutter()
-                Case 8 ' shutter close
-                    If g_eShutterState = ShutterState.shutterOpen Or _
-                            g_eShutterState = ShutterState.shutterError Then _
-                        HW_CloseShutter()
-                Case Else ' other - halt
-                    HW_Halt()
-            End Select
-        End If
-
-        ' Azimuth slew simulation
-        If g_eSlewing <> Going.slewNowhere Then
-            slew = g_dAzRate * TIMER_INTERVAL
-            If g_eSlewing > Going.slewCW Then
-                distance = g_dTargetAz - g_dDomeAz
-                If distance < 0 Then _
-                    slew = -slew
-                If distance > 180 Then _
-                    slew = -slew
-                If distance < -180 Then _
-                    slew = -slew
-            Else
-                distance = slew * 2
-                slew = slew * g_eSlewing
-            End If
-
-            ' Are we there yet ?
-            If System.Math.Abs(distance) < System.Math.Abs(slew) Then
-                g_dDomeAz = g_dTargetAz
-                If Not g_show Is Nothing Then
-                    If g_show.chkSlew.Checked Then _
-                        g_show.TrafficLine("(Slew complete)")
-                End If
-
-                ' Handle standard (fragile) and non-standard park/home changes
-                If g_bStandardAtHome Then
-                    If g_eSlewing = Going.slewHome Then g_bAtHome = True ' Fragile (standard)
-                Else
-                    g_bAtHome = HW_AtHome                               ' Position (non-standard)
-                End If
-
-                If g_bStandardAtPark Then
-                    If g_eSlewing = Going.slewPark Then g_bAtPark = True ' Fragile (standard)
-                Else
-                    g_bAtPark = HW_AtPark                               ' Position (non-standard)
-                End If
-
-                g_eSlewing = Going.slewNowhere
-            Else
-                g_dDomeAz = AzScale(g_dDomeAz + slew)
-            End If
-        End If
-
-        ' shutter altitude control simulation
-        If (g_dDomeAlt <> g_dTargetAlt) And g_eShutterState = ShutterState.shutterOpen Then
-            slew = g_dAltRate * TIMER_INTERVAL
-            distance = g_dTargetAlt - g_dDomeAlt
-            If distance < 0 Then _
-                slew = -slew
-
-            ' Are we there yet ?
-            If System.Math.Abs(distance) < System.Math.Abs(slew) Then
-                g_dDomeAlt = g_dTargetAlt
-                If Not g_show Is Nothing Then
-                    If g_show.chkShutter.Checked Then _
-                        g_show.TrafficLine("(Shutter complete)")
-                End If
-            Else
-                g_dDomeAlt = g_dDomeAlt + slew
-            End If
-        End If
-
-        ' shutter open/close simulation
-        If g_dOCProgress > 0 Then
-            g_dOCProgress = g_dOCProgress - TIMER_INTERVAL
-            If g_dOCProgress <= 0 Then
-                If g_eShutterState = ShutterState.shutterOpening Then
-                    g_eShutterState = ShutterState.shutterOpen
-                Else
-                    g_eShutterState = ShutterState.shutterClosed
-                End If
-                If Not g_show Is Nothing Then
-                    If g_show.chkShutter.Checked Then _
-                        g_show.TrafficLine("(Shutter complete)")
-                End If
-            End If
-        End If
-
-        If g_dDomeAz = INVALID_COORDINATE Then
-            txtDomeAz.Text = "---.-"
-        Else
-
-            txtDomeAz.Text = Format$(AzScale(g_dDomeAz), "000.0")
-        End If
-        'Shutter = g_dDomeAlt
-        If g_dDomeAlt = INVALID_COORDINATE Or Not g_bCanSetShutter Then
-            txtShutter.Text = "----"
-        Else
-            Select Case g_eShutterState
-                Case ShutterState.shutterOpen
-                    If g_bCanSetAltitude Then
-                        txtShutter.Text = Format$(g_dDomeAlt, "0.0")
-                    Else
-                        txtShutter.Text = "Open"
-                    End If
-                Case ShutterState.shutterClosed : txtShutter.Text = "Closed"
-                Case ShutterState.shutterOpening : txtShutter.Text = "Opening"
-                Case ShutterState.shutterClosing : txtShutter.Text = "Closing"
-                Case ShutterState.shutterError : txtShutter.Text = "Error"
-            End Select
-        End If
-        RefreshLEDs()
-    End Sub
-
     Private Sub ButtonSlewStop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSlewStop.Click
         BtnState = 10
     End Sub
@@ -554,5 +403,5 @@ Public Class HandboxForm
 
 
 
-    
+
 End Class

@@ -90,7 +90,7 @@ Partial Class SetupDialogForm
         Me.GroupBox1.ForeColor = System.Drawing.Color.White
         Me.GroupBox1.Location = New System.Drawing.Point(13, 82)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(184, 152)
+        Me.GroupBox1.Size = New System.Drawing.Size(192, 152)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Shutter Control"
@@ -116,7 +116,7 @@ Partial Class SetupDialogForm
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(171, 123)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(179, 123)
         Me.TableLayoutPanel1.TabIndex = 0
         '
         'Label4
@@ -157,28 +157,28 @@ Partial Class SetupDialogForm
         '
         'txtAltRate
         '
-        Me.txtAltRate.Location = New System.Drawing.Point(88, 5)
+        Me.txtAltRate.Location = New System.Drawing.Point(92, 5)
         Me.txtAltRate.Name = "txtAltRate"
         Me.txtAltRate.Size = New System.Drawing.Size(67, 20)
         Me.txtAltRate.TabIndex = 1
         '
         'txtOCDelay
         '
-        Me.txtOCDelay.Location = New System.Drawing.Point(88, 35)
+        Me.txtOCDelay.Location = New System.Drawing.Point(92, 35)
         Me.txtOCDelay.Name = "txtOCDelay"
         Me.txtOCDelay.Size = New System.Drawing.Size(67, 20)
         Me.txtOCDelay.TabIndex = 2
         '
         'txtMaxAlt
         '
-        Me.txtMaxAlt.Location = New System.Drawing.Point(88, 65)
+        Me.txtMaxAlt.Location = New System.Drawing.Point(92, 65)
         Me.txtMaxAlt.Name = "txtMaxAlt"
         Me.txtMaxAlt.Size = New System.Drawing.Size(67, 20)
         Me.txtMaxAlt.TabIndex = 3
         '
         'txtMinAlt
         '
-        Me.txtMinAlt.Location = New System.Drawing.Point(88, 95)
+        Me.txtMinAlt.Location = New System.Drawing.Point(92, 95)
         Me.txtMinAlt.Name = "txtMinAlt"
         Me.txtMinAlt.Size = New System.Drawing.Size(67, 20)
         Me.txtMinAlt.TabIndex = 4
@@ -187,9 +187,9 @@ Partial Class SetupDialogForm
         '
         Me.GroupBox2.Controls.Add(Me.TableLayoutPanel2)
         Me.GroupBox2.ForeColor = System.Drawing.Color.White
-        Me.GroupBox2.Location = New System.Drawing.Point(218, 82)
+        Me.GroupBox2.Location = New System.Drawing.Point(211, 82)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(184, 152)
+        Me.GroupBox2.Size = New System.Drawing.Size(191, 152)
         Me.GroupBox2.TabIndex = 5
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Azimuth Control"
@@ -215,7 +215,7 @@ Partial Class SetupDialogForm
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(171, 123)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(177, 123)
         Me.TableLayoutPanel2.TabIndex = 0
         '
         'Label5
@@ -256,28 +256,28 @@ Partial Class SetupDialogForm
         '
         'txtAzRate
         '
-        Me.txtAzRate.Location = New System.Drawing.Point(88, 5)
+        Me.txtAzRate.Location = New System.Drawing.Point(91, 5)
         Me.txtAzRate.Name = "txtAzRate"
         Me.txtAzRate.Size = New System.Drawing.Size(67, 20)
         Me.txtAzRate.TabIndex = 1
         '
         'txtStepSize
         '
-        Me.txtStepSize.Location = New System.Drawing.Point(88, 35)
+        Me.txtStepSize.Location = New System.Drawing.Point(91, 35)
         Me.txtStepSize.Name = "txtStepSize"
         Me.txtStepSize.Size = New System.Drawing.Size(67, 20)
         Me.txtStepSize.TabIndex = 2
         '
         'txtPark
         '
-        Me.txtPark.Location = New System.Drawing.Point(88, 65)
+        Me.txtPark.Location = New System.Drawing.Point(91, 65)
         Me.txtPark.Name = "txtPark"
         Me.txtPark.Size = New System.Drawing.Size(67, 20)
         Me.txtPark.TabIndex = 3
         '
         'txtHome
         '
-        Me.txtHome.Location = New System.Drawing.Point(88, 95)
+        Me.txtHome.Location = New System.Drawing.Point(91, 95)
         Me.txtHome.Name = "txtHome"
         Me.txtHome.Size = New System.Drawing.Size(67, 20)
         Me.txtHome.TabIndex = 4
@@ -388,21 +388,23 @@ Partial Class SetupDialogForm
         '
         'cmdOK
         '
+        Me.cmdOK.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.cmdOK.Location = New System.Drawing.Point(246, 441)
         Me.cmdOK.Name = "cmdOK"
         Me.cmdOK.Size = New System.Drawing.Size(75, 23)
         Me.cmdOK.TabIndex = 7
         Me.cmdOK.Text = "OK"
-        Me.cmdOK.UseVisualStyleBackColor = True
+        Me.cmdOK.UseVisualStyleBackColor = False
         '
         'cmdCancel
         '
+        Me.cmdCancel.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.cmdCancel.Location = New System.Drawing.Point(327, 441)
         Me.cmdCancel.Name = "cmdCancel"
         Me.cmdCancel.Size = New System.Drawing.Size(75, 23)
         Me.cmdCancel.TabIndex = 8
         Me.cmdCancel.Text = "Cancel"
-        Me.cmdCancel.UseVisualStyleBackColor = True
+        Me.cmdCancel.UseVisualStyleBackColor = False
         '
         'GroupBox4
         '

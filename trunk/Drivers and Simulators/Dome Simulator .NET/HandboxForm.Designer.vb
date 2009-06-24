@@ -22,7 +22,6 @@ Partial Class HandboxForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel
         Me.txtDomeAz = New System.Windows.Forms.Label
         Me.LabelShutter = New System.Windows.Forms.Label
@@ -50,7 +49,6 @@ Partial Class HandboxForm
         Me.ButtonTraffic = New System.Windows.Forms.Button
         Me.picASCOM = New System.Windows.Forms.PictureBox
         Me.PictureBox1 = New System.Windows.Forms.PictureBox
-        Me.TimerUpdate = New System.Windows.Forms.Timer(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         CType(Me.picASCOM, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -172,21 +170,23 @@ Partial Class HandboxForm
         '
         'ButtonGoto
         '
+        Me.ButtonGoto.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.ButtonGoto.Location = New System.Drawing.Point(4, 155)
         Me.ButtonGoto.Name = "ButtonGoto"
         Me.ButtonGoto.Size = New System.Drawing.Size(57, 29)
         Me.ButtonGoto.TabIndex = 5
         Me.ButtonGoto.Text = "Goto:"
-        Me.ButtonGoto.UseVisualStyleBackColor = True
+        Me.ButtonGoto.UseVisualStyleBackColor = False
         '
         'ButtonSync
         '
+        Me.ButtonSync.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.ButtonSync.Location = New System.Drawing.Point(4, 190)
         Me.ButtonSync.Name = "ButtonSync"
         Me.ButtonSync.Size = New System.Drawing.Size(57, 29)
         Me.ButtonSync.TabIndex = 6
         Me.ButtonSync.Text = "Sync:"
-        Me.ButtonSync.UseVisualStyleBackColor = True
+        Me.ButtonSync.UseVisualStyleBackColor = False
         '
         'txtNewAz
         '
@@ -197,125 +197,138 @@ Partial Class HandboxForm
         '
         'ButtonOpen
         '
+        Me.ButtonOpen.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.ButtonOpen.Location = New System.Drawing.Point(4, 239)
         Me.ButtonOpen.Name = "ButtonOpen"
         Me.ButtonOpen.Size = New System.Drawing.Size(57, 23)
         Me.ButtonOpen.TabIndex = 8
         Me.ButtonOpen.Text = "Open"
-        Me.ButtonOpen.UseVisualStyleBackColor = True
+        Me.ButtonOpen.UseVisualStyleBackColor = False
         '
         'ButtonClose
         '
+        Me.ButtonClose.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.ButtonClose.Location = New System.Drawing.Point(107, 239)
         Me.ButtonClose.Name = "ButtonClose"
         Me.ButtonClose.Size = New System.Drawing.Size(57, 23)
         Me.ButtonClose.TabIndex = 9
         Me.ButtonClose.Text = "Close"
-        Me.ButtonClose.UseVisualStyleBackColor = True
+        Me.ButtonClose.UseVisualStyleBackColor = False
         '
         'ButtonSlewAltitudeUp
         '
+        Me.ButtonSlewAltitudeUp.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.ButtonSlewAltitudeUp.Font = New System.Drawing.Font("Wingdings 3", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.ButtonSlewAltitudeUp.Location = New System.Drawing.Point(67, 240)
         Me.ButtonSlewAltitudeUp.Name = "ButtonSlewAltitudeUp"
         Me.ButtonSlewAltitudeUp.Size = New System.Drawing.Size(34, 46)
         Me.ButtonSlewAltitudeUp.TabIndex = 10
         Me.ButtonSlewAltitudeUp.Text = "£"
-        Me.ButtonSlewAltitudeUp.UseVisualStyleBackColor = True
+        Me.ButtonSlewAltitudeUp.UseVisualStyleBackColor = False
         '
         'ButtonSlewStop
         '
+        Me.ButtonSlewStop.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.ButtonSlewStop.Font = New System.Drawing.Font("Wingdings 2", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.ButtonSlewStop.Location = New System.Drawing.Point(67, 292)
         Me.ButtonSlewStop.Name = "ButtonSlewStop"
         Me.ButtonSlewStop.Size = New System.Drawing.Size(34, 46)
         Me.ButtonSlewStop.TabIndex = 11
         Me.ButtonSlewStop.Text = "Ä"
-        Me.ButtonSlewStop.UseVisualStyleBackColor = True
+        Me.ButtonSlewStop.UseVisualStyleBackColor = False
         '
         'ButtonSlewAltitudeDown
         '
+        Me.ButtonSlewAltitudeDown.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.ButtonSlewAltitudeDown.Font = New System.Drawing.Font("Wingdings 3", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.ButtonSlewAltitudeDown.Location = New System.Drawing.Point(67, 344)
         Me.ButtonSlewAltitudeDown.Name = "ButtonSlewAltitudeDown"
         Me.ButtonSlewAltitudeDown.Size = New System.Drawing.Size(34, 46)
         Me.ButtonSlewAltitudeDown.TabIndex = 12
         Me.ButtonSlewAltitudeDown.Text = "¤"
-        Me.ButtonSlewAltitudeDown.UseVisualStyleBackColor = True
+        Me.ButtonSlewAltitudeDown.UseVisualStyleBackColor = False
         '
         'ButtonClockwise
         '
+        Me.ButtonClockwise.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.ButtonClockwise.Font = New System.Drawing.Font("Wingdings 3", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.ButtonClockwise.Location = New System.Drawing.Point(4, 292)
         Me.ButtonClockwise.Name = "ButtonClockwise"
         Me.ButtonClockwise.Size = New System.Drawing.Size(57, 46)
         Me.ButtonClockwise.TabIndex = 13
         Me.ButtonClockwise.Text = "P"
-        Me.ButtonClockwise.UseVisualStyleBackColor = True
+        Me.ButtonClockwise.UseVisualStyleBackColor = False
         '
         'ButtonCounterClockwise
         '
+        Me.ButtonCounterClockwise.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.ButtonCounterClockwise.Font = New System.Drawing.Font("Wingdings 3", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.ButtonCounterClockwise.Location = New System.Drawing.Point(107, 292)
         Me.ButtonCounterClockwise.Name = "ButtonCounterClockwise"
         Me.ButtonCounterClockwise.Size = New System.Drawing.Size(57, 46)
         Me.ButtonCounterClockwise.TabIndex = 14
         Me.ButtonCounterClockwise.Text = "Q"
-        Me.ButtonCounterClockwise.UseVisualStyleBackColor = True
+        Me.ButtonCounterClockwise.UseVisualStyleBackColor = False
         '
         'ButtonStepClockwise
         '
+        Me.ButtonStepClockwise.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.ButtonStepClockwise.Location = New System.Drawing.Point(4, 344)
         Me.ButtonStepClockwise.Name = "ButtonStepClockwise"
         Me.ButtonStepClockwise.Size = New System.Drawing.Size(57, 23)
         Me.ButtonStepClockwise.TabIndex = 15
         Me.ButtonStepClockwise.Text = "Step"
-        Me.ButtonStepClockwise.UseVisualStyleBackColor = True
+        Me.ButtonStepClockwise.UseVisualStyleBackColor = False
         '
         'ButtonStepCounterClockwise
         '
+        Me.ButtonStepCounterClockwise.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.ButtonStepCounterClockwise.Location = New System.Drawing.Point(107, 344)
         Me.ButtonStepCounterClockwise.Name = "ButtonStepCounterClockwise"
         Me.ButtonStepCounterClockwise.Size = New System.Drawing.Size(57, 23)
         Me.ButtonStepCounterClockwise.TabIndex = 16
         Me.ButtonStepCounterClockwise.Text = "Step"
-        Me.ButtonStepCounterClockwise.UseVisualStyleBackColor = True
+        Me.ButtonStepCounterClockwise.UseVisualStyleBackColor = False
         '
         'ButtonPark
         '
+        Me.ButtonPark.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.ButtonPark.Location = New System.Drawing.Point(4, 400)
         Me.ButtonPark.Name = "ButtonPark"
         Me.ButtonPark.Size = New System.Drawing.Size(57, 29)
         Me.ButtonPark.TabIndex = 17
         Me.ButtonPark.Text = "Park"
-        Me.ButtonPark.UseVisualStyleBackColor = True
+        Me.ButtonPark.UseVisualStyleBackColor = False
         '
         'ButtonHome
         '
+        Me.ButtonHome.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.ButtonHome.Location = New System.Drawing.Point(106, 400)
         Me.ButtonHome.Name = "ButtonHome"
         Me.ButtonHome.Size = New System.Drawing.Size(57, 29)
         Me.ButtonHome.TabIndex = 18
         Me.ButtonHome.Text = "Home"
-        Me.ButtonHome.UseVisualStyleBackColor = True
+        Me.ButtonHome.UseVisualStyleBackColor = False
         '
         'ButtonSetup
         '
+        Me.ButtonSetup.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.ButtonSetup.Location = New System.Drawing.Point(4, 435)
         Me.ButtonSetup.Name = "ButtonSetup"
         Me.ButtonSetup.Size = New System.Drawing.Size(57, 23)
         Me.ButtonSetup.TabIndex = 19
         Me.ButtonSetup.Text = "Setup"
-        Me.ButtonSetup.UseVisualStyleBackColor = True
+        Me.ButtonSetup.UseVisualStyleBackColor = False
         '
         'ButtonTraffic
         '
+        Me.ButtonTraffic.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.ButtonTraffic.Location = New System.Drawing.Point(106, 435)
         Me.ButtonTraffic.Name = "ButtonTraffic"
         Me.ButtonTraffic.Size = New System.Drawing.Size(57, 23)
         Me.ButtonTraffic.TabIndex = 20
         Me.ButtonTraffic.Text = "Traffic"
-        Me.ButtonTraffic.UseVisualStyleBackColor = True
+        Me.ButtonTraffic.UseVisualStyleBackColor = False
         '
         'picASCOM
         '
@@ -342,10 +355,6 @@ Partial Class HandboxForm
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
         Me.PictureBox1.TabIndex = 21
         Me.PictureBox1.TabStop = False
-        '
-        'TimerUpdate
-        '
-        Me.TimerUpdate.Interval = 250
         '
         'HandboxForm
         '
@@ -415,5 +424,4 @@ Partial Class HandboxForm
     Friend WithEvents ButtonSetup As System.Windows.Forms.Button
     Friend WithEvents ButtonTraffic As System.Windows.Forms.Button
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
-    Friend WithEvents TimerUpdate As System.Windows.Forms.Timer
 End Class
