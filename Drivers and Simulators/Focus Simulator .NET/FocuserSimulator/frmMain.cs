@@ -16,5 +16,15 @@ namespace ASCOM.FocuserSimulator
             InitializeComponent();
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            LabelMaxStep.Text = Properties.Settings.Default.sMaxStep.ToString();
+        }
+
     }
 }
