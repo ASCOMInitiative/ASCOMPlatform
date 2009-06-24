@@ -106,7 +106,7 @@ Module GlobalVariables
     '
     ' ASCOM Identifiers
     '
-    Public Const ID As String = "DomeSim.Dome"
+    Public Const ID As String = "ASCOM.DomeSimulator.Dome"
     Private Const DESC As String = "Dome Simulator"
     Private Const RegVer As String = "1.0"
 
@@ -158,12 +158,12 @@ Module GlobalVariables
     Public g_Profile As ASCOM.Helper.Profile
     Public g_trafficDialog As ShowTrafficForm           ' Traffic window
 
-
+    Public WithEvents g_timer As New Timer
     ' ----------------------------------------------------------
     ' Driver ID and descriptive string that shows in the Chooser
     ' ----------------------------------------------------------
     Public g_csDriverID As String = "ASCOM.DomeSimulator.Dome"
-    Public g_csDriverDescription As String = "DomeSimulator Dome"
+    Public g_csDriverDescription As String = "Dome Simulator"
 
     ' ----------------------
     ' Other global variables
@@ -189,4 +189,147 @@ Module GlobalVariables
         Loop
 
     End Function
+
+    Private Sub Timer_Tick() Handles g_timer.Tick
+
+        Dim slew As Double
+        Dim distance As Double
+
+        '
+        ' Handle hand-box state first
+        '
+
+        If g_handBox.BtnState <> 0 Then
+            Select Case (g_handBox.BtnState)
+                Case 1 ' Go clockwise
+                    HW_Run(True)
+                Case 2 ' step clockwise
+                    HW_Move(AzScale(g_dDomeAz + g_dStepSize))
+                Case 3 ' Go counter clockwise
+                    HW_Run(False)
+                Case 4 ' step counter clockwise
+                    HW_Move(AzScale(g_dDomeAz - g_dStepSize))
+                Case 5 ' shutter up
+                    If g_eShutterState = ShutterState.shutterOpen Then _
+                        HW_MoveShutter(g_dMaxAlt)
+                Case 6 ' shutter down
+                    If g_eShutterState = ShutterState.shutterOpen Then _
+                        HW_MoveShutter(g_dMinAlt)
+                Case 7 ' shutter open
+                    If g_eShutterState = ShutterState.shutterClosed Then _
+                        HW_OpenShutter()
+                Case 8 ' shutter close
+                    If g_eShutterState = ShutterState.shutterOpen Or _
+                            g_eShutterState = ShutterState.shutterError Then _
+                        HW_CloseShutter()
+                Case Else ' other - halt
+                    HW_Halt()
+            End Select
+
+            g_handBox.BtnState = 0
+        End If
+
+        ' Azimuth slew simulation
+        If g_eSlewing <> Going.slewNowhere Then
+            slew = g_dAzRate * TIMER_INTERVAL
+            If g_eSlewing > Going.slewCW Then
+                distance = g_dTargetAz - g_dDomeAz
+                If distance < 0 Then _
+                    slew = -slew
+                If distance > 180 Then _
+                    slew = -slew
+                If distance < -180 Then _
+                    slew = -slew
+            Else
+                distance = slew * 2
+                slew = slew * g_eSlewing
+            End If
+
+            ' Are we there yet ?
+            If System.Math.Abs(distance) < System.Math.Abs(slew) Then
+                g_dDomeAz = g_dTargetAz
+                If Not g_show Is Nothing Then
+                    If g_show.chkSlew.Checked Then _
+                        g_show.TrafficLine("(Slew complete)")
+                End If
+
+                ' Handle standard (fragile) and non-standard park/home changes
+                If g_bStandardAtHome Then
+                    If g_eSlewing = Going.slewHome Then g_bAtHome = True ' Fragile (standard)
+                Else
+                    g_bAtHome = HW_AtHome                               ' Position (non-standard)
+                End If
+
+                If g_bStandardAtPark Then
+                    If g_eSlewing = Going.slewPark Then g_bAtPark = True ' Fragile (standard)
+                Else
+                    g_bAtPark = HW_AtPark                               ' Position (non-standard)
+                End If
+
+                g_eSlewing = Going.slewNowhere
+            Else
+                g_dDomeAz = AzScale(g_dDomeAz + slew)
+            End If
+        End If
+
+        ' shutter altitude control simulation
+        If (g_dDomeAlt <> g_dTargetAlt) And g_eShutterState = ShutterState.shutterOpen Then
+            slew = g_dAltRate * TIMER_INTERVAL
+            distance = g_dTargetAlt - g_dDomeAlt
+            If distance < 0 Then _
+                slew = -slew
+
+            ' Are we there yet ?
+            If System.Math.Abs(distance) < System.Math.Abs(slew) Then
+                g_dDomeAlt = g_dTargetAlt
+                If Not g_show Is Nothing Then
+                    If g_show.chkShutter.Checked Then _
+                        g_show.TrafficLine("(Shutter complete)")
+                End If
+            Else
+                g_dDomeAlt = g_dDomeAlt + slew
+            End If
+        End If
+
+        ' shutter open/close simulation
+        If g_dOCProgress > 0 Then
+            g_dOCProgress = g_dOCProgress - TIMER_INTERVAL
+            If g_dOCProgress <= 0 Then
+                If g_eShutterState = ShutterState.shutterOpening Then
+                    g_eShutterState = ShutterState.shutterOpen
+                Else
+                    g_eShutterState = ShutterState.shutterClosed
+                End If
+                If Not g_show Is Nothing Then
+                    If g_show.chkShutter.Checked Then _
+                        g_show.TrafficLine("(Shutter complete)")
+                End If
+            End If
+        End If
+
+        If g_dDomeAz = INVALID_COORDINATE Then
+            g_handBox.txtDomeAz.Text = "---.-"
+        Else
+
+            g_handBox.txtDomeAz.Text = Format$(AzScale(g_dDomeAz), "000.0")
+        End If
+        'Shutter = g_dDomeAlt
+        If g_dDomeAlt = INVALID_COORDINATE Or Not g_bCanSetShutter Then
+            g_handBox.txtShutter.Text = "----"
+        Else
+            Select Case g_eShutterState
+                Case ShutterState.shutterOpen
+                    If g_bCanSetAltitude Then
+                        g_handBox.txtShutter.Text = Format$(g_dDomeAlt, "0.0")
+                    Else
+                        g_handBox.txtShutter.Text = "Open"
+                    End If
+                Case ShutterState.shutterClosed : g_handBox.txtShutter.Text = "Closed"
+                Case ShutterState.shutterOpening : g_handBox.txtShutter.Text = "Opening"
+                Case ShutterState.shutterClosing : g_handBox.txtShutter.Text = "Closing"
+                Case ShutterState.shutterError : g_handBox.txtShutter.Text = "Error"
+            End Select
+        End If
+        g_handBox.RefreshLEDs()
+    End Sub
 End Module

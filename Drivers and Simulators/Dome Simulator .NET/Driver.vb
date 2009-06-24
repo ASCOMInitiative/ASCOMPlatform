@@ -36,6 +36,9 @@ Public Class Dome
         Dim RegVer As String = "1"                      ' Registry version, use to change registry if required by new version
 
         g_handBox = New HandboxForm
+
+
+
         g_Profile = New ASCOM.Helper.Profile
         g_Profile.DeviceType = "Dome"            ' Dome device type
 
@@ -47,12 +50,14 @@ Public Class Dome
         g_Profile.Register(g_csDriverID, g_csDriverDescription) ' Self reg (skips if already reg)
 
 
-        ' Now we have some default if required, update the handbox values from the registry
-        g_handBox.UpdateConfig()
-
         ' Set handbox screen position
-        g_handBox.Left = CInt(g_Profile.GetValue(g_csDriverID, "Left"))
-        g_handBox.Top = CInt(g_Profile.GetValue(g_csDriverID, "Top"))
+        Try
+            g_handBox.Left = CInt(g_Profile.GetValue(g_csDriverID, "Left"))
+            g_handBox.Top = CInt(g_Profile.GetValue(g_csDriverID, "Top"))
+        Catch ex As Exception
+
+        End Try
+
 
         ' Fix bad positions (which shouldn't ever happen, ha ha)
         If g_handBox.Left < 0 Then
@@ -149,6 +154,7 @@ Public Class Dome
             g_bAtHome = HW_AtHome               ' Non standard, position, ok to wake up homed
         End If
 
+        g_timer.Interval = TIMER_INTERVAL * 1000
         
         g_handBox.LabelButtons()
         g_handBox.RefreshLEDs()
@@ -210,6 +216,8 @@ Public Class Dome
                 "Azimuth " & MSG_VAL_OUTOFRANGE)
 
     End Sub
+
+    
 #End Region
 
 #Region "IDome Impelementation"
@@ -447,10 +455,12 @@ Public Class Dome
 
             If Not g_trafficDialog Is Nothing Then
                 If g_trafficDialog.chkOther.Checked Then _
-                    g_trafficDialog.TrafficStart("Connected: " & g_handBox.Connected & " -> " & value)
+                    g_trafficDialog.TrafficStart("Connected: " & g_bConnected & " -> " & value)
             End If
 
-            g_handBox.Connected = value
+            g_bConnected = value
+            g_timer.Enabled = value
+
             out = " (done)"
 
             If Not g_trafficDialog Is Nothing Then
