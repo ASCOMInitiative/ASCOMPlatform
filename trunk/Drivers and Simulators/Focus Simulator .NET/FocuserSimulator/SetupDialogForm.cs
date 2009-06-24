@@ -24,6 +24,7 @@ namespace ASCOM.FocuserSimulator
 
         private void cmdCancel_Click(object sender, EventArgs e)
         {
+            Properties.Settings.Default.Reload();
             Dispose();
         }
 

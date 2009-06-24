@@ -100,17 +100,17 @@ namespace ASCOM.FocuserSimulator
             this.progressBar1.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "sPosition", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.progressBar1.DataBindings.Add(new System.Windows.Forms.Binding("Maximum", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "sMaxStep", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.progressBar1.Location = new System.Drawing.Point(12, 29);
-            this.progressBar1.Maximum = global::ASCOM.FocuserSimulator.Properties.Settings.Default.sMaxStep;
+            this.progressBar1.Maximum = (int)global::ASCOM.FocuserSimulator.Properties.Settings.Default.sMaxStep;
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(279, 23);
             this.progressBar1.TabIndex = 0;
-            this.progressBar1.Value = global::ASCOM.FocuserSimulator.Properties.Settings.Default.sPosition;
+            this.progressBar1.Value = (int)global::ASCOM.FocuserSimulator.Properties.Settings.Default.sPosition;
             // 
             // button2
             // 
             this.button2.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "IsMoving", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.button2.Enabled = global::ASCOM.FocuserSimulator.Properties.Settings.Default.IsMoving;
-            this.button2.Image = global::ASCOM.FocuserSimulator.Properties.Resources.cc_button_cancel_16x16;
+            this.button2.Image = global::ASCOM.FocuserSimulator.Properties.Resources.button_cancel;
             this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button2.Location = new System.Drawing.Point(226, 58);
             this.button2.Name = "button2";
@@ -122,7 +122,7 @@ namespace ASCOM.FocuserSimulator
             // 
             // button1
             // 
-            this.button1.Image = global::ASCOM.FocuserSimulator.Properties.Resources.cc_configure_16x16;
+            this.button1.Image = global::ASCOM.FocuserSimulator.Properties.Resources.button_configure;
             this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button1.Location = new System.Drawing.Point(12, 133);
             this.button1.Name = "button1";

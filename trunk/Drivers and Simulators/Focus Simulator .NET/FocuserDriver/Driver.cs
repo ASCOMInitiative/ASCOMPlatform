@@ -44,7 +44,7 @@ namespace ASCOM.FocuserSimulator
     public class Focuser : ReferenceCountedObjectBase,IFocuser
     {
         //
-        // Constructor - Must be public for COM registration!
+        // Constructor
         //
         public Focuser()
         {
@@ -68,7 +68,6 @@ namespace ASCOM.FocuserSimulator
 
         public bool IsMoving
         {
-            // TODO Replace this with your implementation
             get { return FocuserHardware.IsMoving; }
         }
 
@@ -112,10 +111,7 @@ namespace ASCOM.FocuserSimulator
         public bool TempComp
         {
             get { return FocuserHardware.TempComp; }
-            set 
-            {
-                FocuserHardware.TempComp = value;
-            }
+            set { FocuserHardware.TempComp = value; }
         }
 
         public bool TempCompAvailable
@@ -125,8 +121,7 @@ namespace ASCOM.FocuserSimulator
 
         public double Temperature
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Temperature", false); }
+            get { return FocuserHardware.Temperature; }
         }
 
         #endregion
