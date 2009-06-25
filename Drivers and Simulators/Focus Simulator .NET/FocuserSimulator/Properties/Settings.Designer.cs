@@ -61,7 +61,7 @@ namespace ASCOM.FocuserSimulator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool sTempComp {
             get {
                 return ((bool)(this["sTempComp"]));
@@ -73,7 +73,7 @@ namespace ASCOM.FocuserSimulator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool sTempCompAvailable {
             get {
                 return ((bool)(this["sTempCompAvailable"]));
@@ -116,6 +116,126 @@ namespace ASCOM.FocuserSimulator.Properties {
             }
             set {
                 this["sPosition"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool sIsStepSize {
+            get {
+                return ((bool)(this["sIsStepSize"]));
+            }
+            set {
+                this["sIsStepSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool sEnableHalt {
+            get {
+                return ((bool)(this["sEnableHalt"]));
+            }
+            set {
+                this["sEnableHalt"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool sIsTemperature {
+            get {
+                return ((bool)(this["sIsTemperature"]));
+            }
+            set {
+                this["sIsTemperature"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public decimal sTempCompPeriod {
+            get {
+                return ((decimal)(this["sTempCompPeriod"]));
+            }
+            set {
+                this["sTempCompPeriod"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LogTxt {
+            get {
+                return ((string)(this["LogTxt"]));
+            }
+            set {
+                this["LogTxt"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public decimal sStepPerDeg {
+            get {
+                return ((decimal)(this["sStepPerDeg"]));
+            }
+            set {
+                this["sStepPerDeg"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LogHaltMove {
+            get {
+                return ((bool)(this["LogHaltMove"]));
+            }
+            set {
+                this["LogHaltMove"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LogTempRelated {
+            get {
+                return ((bool)(this["LogTempRelated"]));
+            }
+            set {
+                this["LogTempRelated"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LogIsMoving {
+            get {
+                return ((bool)(this["LogIsMoving"]));
+            }
+            set {
+                this["LogIsMoving"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LogOther {
+            get {
+                return ((bool)(this["LogOther"]));
+            }
+            set {
+                this["LogOther"] = value;
             }
         }
     }
