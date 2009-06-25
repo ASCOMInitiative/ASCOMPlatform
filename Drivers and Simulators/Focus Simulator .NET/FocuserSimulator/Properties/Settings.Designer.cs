@@ -193,7 +193,7 @@ namespace ASCOM.FocuserSimulator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool LogHaltMove {
             get {
                 return ((bool)(this["LogHaltMove"]));
@@ -205,7 +205,7 @@ namespace ASCOM.FocuserSimulator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool LogTempRelated {
             get {
                 return ((bool)(this["LogTempRelated"]));
@@ -217,7 +217,7 @@ namespace ASCOM.FocuserSimulator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool LogIsMoving {
             get {
                 return ((bool)(this["LogIsMoving"]));
@@ -229,7 +229,7 @@ namespace ASCOM.FocuserSimulator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool LogOther {
             get {
                 return ((bool)(this["LogOther"]));

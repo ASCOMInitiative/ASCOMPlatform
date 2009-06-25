@@ -212,7 +212,6 @@ namespace ASCOM.FocuserSimulator
             // 
             // numericUpDown5
             // 
-            this.numericUpDown5.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "sTempCompPeriod", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.numericUpDown5.Location = new System.Drawing.Point(204, 65);
             this.numericUpDown5.Maximum = new decimal(new int[] {
             3600,
@@ -228,7 +227,11 @@ namespace ASCOM.FocuserSimulator
             this.numericUpDown5.Size = new System.Drawing.Size(53, 20);
             this.numericUpDown5.TabIndex = 16;
             this.numericUpDown5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.numericUpDown5.Value = global::ASCOM.FocuserSimulator.Properties.Settings.Default.sTempCompPeriod;
+            this.numericUpDown5.Value = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
             // 
             // label1
             // 
