@@ -80,5 +80,33 @@ namespace ASCOM.FocuserSimulator.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        internal static System.Drawing.Bitmap button_ok {
+            get {
+                object obj = ResourceManager.GetObject("button_ok", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ledred_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("ledred_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap log_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("log-16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap saturnc {
+            get {
+                object obj = ResourceManager.GetObject("saturnc", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

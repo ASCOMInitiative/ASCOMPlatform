@@ -50,5 +50,16 @@ namespace ASCOM.FocuserSimulator
             Properties.Settings.Default.Reload();
         }
 
+        private void IsTemperature_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.sTempCompAvailable = Properties.Settings.Default.sIsTemperature;
+            Properties.Settings.Default.sTempComp = Properties.Settings.Default.sIsTemperature;
+        }
+
+        private void IsTempCompAvailable_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.sTempComp = Properties.Settings.Default.sTempCompAvailable;
+        }
+
     }
 }
