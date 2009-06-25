@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Drawing;
 
 namespace ASCOM.FocuserSimulator
 {
@@ -13,8 +14,10 @@ namespace ASCOM.FocuserSimulator
         private static bool _Link;
         public static bool HaltRequested;
         public static bool _LogHaltMove, _LogIsMoving, _LogTempRelated, _LogOthers;
+        
 
         #region Focuser.Constructor
+
         static FocuserHardware()
 		{
             Properties.Settings.Default.Reload();
@@ -32,6 +35,7 @@ namespace ASCOM.FocuserSimulator
         #region Focuser.SetupDialog() method
         public static void DoSetup()
         {
+            MyLog(eLogKind.LogOther, "Calling SetupDialog()");
             SetupDialogForm F = new SetupDialogForm();
             F.ShowDialog();
         }
@@ -40,22 +44,30 @@ namespace ASCOM.FocuserSimulator
         #region Focuser.Link() method
         public static bool Link
         {
-            get { return _Link; }
-            set { _Link = value; }
+            get { MyLog(eLogKind.LogOther, "Link property request"); return _Link; }
+            set { MyLog(eLogKind.LogOther, "Set Link property to "+value.ToString()); _Link = value; }
         }
         #endregion
 
         #region Focuser.MaxIncrement property
         public static int MaxIncrement
         {
-            get { return (int)Properties.Settings.Default.sMaxIncrement; }
+            get 
+            {
+                MyLog(eLogKind.LogOther, "MaxIncrement property request");
+                return (int)Properties.Settings.Default.sMaxIncrement; 
+            }
         }
         #endregion
 
         #region Focuser.MaxStep property
         public static int MaxStep
         {
-            get { return (int)Properties.Settings.Default.sMaxStep; }
+            get 
+            {
+                MyLog(eLogKind.LogOther, "MaxStep property request");
+                return (int)Properties.Settings.Default.sMaxStep; 
+            }
         }
         #endregion
 
@@ -64,6 +76,7 @@ namespace ASCOM.FocuserSimulator
         {
             get
             {
+                MyLog(eLogKind.LogOther, "Position request");
                 if (Properties.Settings.Default.sAbsolute) return (int)Properties.Settings.Default.sPosition;
                 else throw new PropertyNotImplementedException("Position", false);
             }
@@ -75,6 +88,7 @@ namespace ASCOM.FocuserSimulator
         {
             get 
             {
+                MyLog(eLogKind.LogOther, "StepSize property request");
                 if (!Properties.Settings.Default.sIsStepSize) { throw new PropertyNotImplementedException("StepSize", false); }
                 else { return (double)Properties.Settings.Default.sStepSize; }
             }
@@ -84,13 +98,18 @@ namespace ASCOM.FocuserSimulator
         #region Focuser.Absolute property
         public static bool Absolute
         {
-            get { return Properties.Settings.Default.sAbsolute; }
+            get 
+            {
+                MyLog(eLogKind.LogOther, "Absolute property request");
+                return Properties.Settings.Default.sAbsolute; 
+            }
         }
         #endregion
 
         #region Focuser.Halt() method
         public static void Halt()
         {
+            MyLog(eLogKind.LogMove, "Focuser.Halt() called");
             if (!Properties.Settings.Default.sEnableHalt) { throw new MethodNotImplementedException("Halt"); }
             else { HaltRequested = true; }
         }
@@ -120,7 +139,11 @@ namespace ASCOM.FocuserSimulator
         #region Focuser.TempCompAvailable property
         public static bool TempCompAvailable
         {
-            get { return Properties.Settings.Default.sTempCompAvailable; }
+            get 
+            {
+                MyLog(eLogKind.LogTemp, "TempCompAvailable request");
+                return Properties.Settings.Default.sTempCompAvailable; 
+            }
         }
         #endregion
 
@@ -129,7 +152,11 @@ namespace ASCOM.FocuserSimulator
         {
             get 
             {
-                if (Properties.Settings.Default.sIsTemperature) { return (double)17.5; }
+                MyLog(eLogKind.LogTemp, "Temperature request");
+                if (Properties.Settings.Default.sIsTemperature) 
+                {
+                    return (double)17.5; 
+                }
                 else throw new PropertyNotImplementedException("Temperature", false);
             }
         }
@@ -162,15 +189,18 @@ namespace ASCOM.FocuserSimulator
             else
             {
                 MyLog(eLogKind.LogMove, "Temperature compensation move : " + Properties.Settings.Default.sStepPerDeg.ToString() + " steps");
-                val = (int)Properties.Settings.Default.sPosition + (int)Properties.Settings.Default.sStepPerDeg;
             }
             HaltRequested = false;
             if (Properties.Settings.Default.sAbsolute)
             {
-                if (val == Properties.Settings.Default.sPosition) return;
+                if (val == Properties.Settings.Default.sPosition)
+                {
+                    MyLog(eLogKind.LogOther, "No move because destination = current position");
+                    return;
+                }
                 if (val < 0)
                 {
-                    MyLog(eLogKind.LogOther, "Error : no move because destination is < 0");
+                    MyLog(eLogKind.LogOther, "No move because destination is < 0");
                     return;
                 }
                 DestPosition = (val > (int)Properties.Settings.Default.sMaxStep ? (int)Properties.Settings.Default.sMaxStep : val);
@@ -178,7 +208,7 @@ namespace ASCOM.FocuserSimulator
                 MyLog(eLogKind.LogIsMoving, "Focuser is moving");
                 if (val > Properties.Settings.Default.sPosition)  
                 {
-                    for (int i = (int)Properties.Settings.Default.sPosition; i < val; i ++)
+                    for (int i = (int)Properties.Settings.Default.sPosition; i < val; i++)
                     {
                         if (HaltRequested) 
                         { 
@@ -193,7 +223,7 @@ namespace ASCOM.FocuserSimulator
                 }
                 else
                 {
-                    for (int i = (int)Properties.Settings.Default.sPosition; i > val; i --)
+                    for (int i = (int)Properties.Settings.Default.sPosition; i > val; i--)
                     {
                         if (HaltRequested) 
                         { 
@@ -232,10 +262,21 @@ namespace ASCOM.FocuserSimulator
 
         #region private methods
 
+        /// <summary>
+        /// Fake move. Use to add some delays between each motor step
+        /// </summary>
+        /// <param name="pStep">The number of steps.</param>
         private static void Deplace(int pStep)
         {
             Thread.Sleep(1);
         }
+
+
+        /// <summary>
+        /// Logs events in the traffic window
+        /// </summary>
+        /// <param name="Kind">Kind of event.</param>
+        /// <param name="Texte">Text describing the event.</param>
         private static void MyLog(eLogKind Kind, string Texte)
         {
             if ((Properties.Settings.Default.LogHaltMove && Kind == eLogKind.LogMove) ||

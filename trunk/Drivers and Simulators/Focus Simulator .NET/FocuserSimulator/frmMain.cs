@@ -26,6 +26,7 @@ namespace ASCOM.FocuserSimulator
         {
             Properties.Settings.Default.Reload();
             LabelMaxStep.Text = Properties.Settings.Default.sMaxStep.ToString();
+
             Application.DoEvents();
         }
 
@@ -36,10 +37,9 @@ namespace ASCOM.FocuserSimulator
 
         private void ButtonTraffic_Click(object sender, EventArgs e)
         {
-            TrafficButton.Enabled = false;
-            TrafficForm F = new TrafficForm();
-            F.Location = new Point(frmMain.ActiveForm.Location.X + frmMain.ActiveForm.Size.Width + 10,frmMain.ActiveForm.Location.Y);
-            F.Show();
+            if (frmMain.ActiveForm.Height == 186) { frmMain.ActiveForm.Height = 404; }
+            else { frmMain.ActiveForm.Height = 186; }
+            Application.DoEvents();
         }
 
         private void TimerTempComp_Tick(object sender, EventArgs e)
