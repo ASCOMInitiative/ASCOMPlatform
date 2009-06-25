@@ -8,13 +8,15 @@ namespace ASCOM.FocuserSimulator
 {
     public class FocuserHardware
     {
+        #region Public variables
         public enum eLogKind { LogMove, LogTemp, LogIsMoving, LogOther };
-
         public static bool IsTempCompMove;
-        private static bool _Link;
         public static bool HaltRequested;
         public static bool _LogHaltMove, _LogIsMoving, _LogTempRelated, _LogOthers;
-        
+        #endregion
+
+        private static bool _Link;
+
 
         #region Focuser.Constructor
 
@@ -130,6 +132,7 @@ namespace ASCOM.FocuserSimulator
                 {
                     MyLog(eLogKind.LogTemp, "Setting temperature compensation "+(value ? "ON" : "OFF"));
                     Properties.Settings.Default.sTempComp = value;
+                    Properties.Settings.Default.Save();
                 }
                 else throw new MethodNotImplementedException("TempComp");
             }
@@ -174,28 +177,29 @@ namespace ASCOM.FocuserSimulator
         {
             int DestPosition = 0;
 
+            Properties.Settings.Default.Reload();
             if (!IsTempCompMove)
             {
                 if (Properties.Settings.Default.sTempComp) // No moves when in t° compensation mode
                 {
-                    MyLog(eLogKind.LogOther, "No move allowed because temperature compensation is ON");
+                    MyLog(eLogKind.LogOther, "No move because T° compensation is ON");
                     return;
                 }
                 else
                 {
-                    MyLog(eLogKind.LogMove, "Move from " + Properties.Settings.Default.sPosition.ToString() + " to " + val.ToString());
+                    MyLog(eLogKind.LogMove, "Requested move from " + Properties.Settings.Default.sPosition.ToString() + " to " + val.ToString());
                 }
             }
             else
             {
-                MyLog(eLogKind.LogMove, "Temperature compensation move : " + Properties.Settings.Default.sStepPerDeg.ToString() + " steps");
+                MyLog(eLogKind.LogMove, "T° compensation move : " + Properties.Settings.Default.sStepPerDeg.ToString() + " steps");
             }
             HaltRequested = false;
             if (Properties.Settings.Default.sAbsolute)
             {
                 if (val == Properties.Settings.Default.sPosition)
                 {
-                    MyLog(eLogKind.LogOther, "No move because destination = current position");
+                    MyLog(eLogKind.LogOther, "No move because destination = current");
                     return;
                 }
                 if (val < 0)
@@ -214,7 +218,7 @@ namespace ASCOM.FocuserSimulator
                         { 
                             Properties.Settings.Default.IsMoving = false; 
                             HaltRequested = false;
-                            MyLog(eLogKind.LogMove, "HALT requested, focuser has stopped");
+                            MyLog(eLogKind.LogMove, "HALT requested, focuser stopped");
                             return; 
                         }
                         Deplace(1);
@@ -229,7 +233,7 @@ namespace ASCOM.FocuserSimulator
                         { 
                             Properties.Settings.Default.IsMoving = false; 
                             HaltRequested = false;
-                            MyLog(eLogKind.LogMove, "HALT requested, focuser has stopped");
+                            MyLog(eLogKind.LogMove, "HALT requested, focuser stopped");
                             return; 
                         }
                         Deplace(1);
@@ -241,8 +245,9 @@ namespace ASCOM.FocuserSimulator
             }
             else  // Relative focuser move
             {
+                MyLog(eLogKind.LogMove,"Requested relative move "+val.ToString()+" steps");
                 Properties.Settings.Default.IsMoving = true;
-                
+                MyLog(eLogKind.LogIsMoving, "Focuser is moving");
                 for (int i = 0; i < Math.Abs(val); i ++)
                 {
                     // Focuser.Halt() was called
@@ -255,6 +260,7 @@ namespace ASCOM.FocuserSimulator
                     Deplace(1);  // Fake move
                 }
                 Properties.Settings.Default.IsMoving = false;
+                MyLog(eLogKind.LogIsMoving, "Relative move done");
             }
         }
         #endregion
