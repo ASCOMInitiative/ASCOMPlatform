@@ -1,27 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ASCOM.FocuserSimulator.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
   <Profiles />
-  <Settings>
-    <Setting Name="sAbsolute" Description="True if the focuser is absolute" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="sPosition" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5000</Value>
-    </Setting>
-    <Setting Name="sStepSize" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">10</Value>
-    </Setting>
-    <Setting Name="sMaxIncrement" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">5000</Value>
-    </Setting>
-    <Setting Name="sMaxStep" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">50000</Value>
-    </Setting>
-    <Setting Name="sTempComp" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="sTempCompAvailable" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-  </Settings>
+  <Settings />
 </SettingsFile>

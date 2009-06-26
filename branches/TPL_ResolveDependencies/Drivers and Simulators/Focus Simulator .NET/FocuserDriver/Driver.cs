@@ -43,17 +43,11 @@ namespace ASCOM.FocuserSimulator
     [ClassInterface(ClassInterfaceType.None)]
     public class Focuser : ReferenceCountedObjectBase,IFocuser
     {
-        private bool _Link, _IsMoving;
-
         //
-        // Constructor - Must be public for COM registration!
+        // Constructor
         //
         public Focuser()
         {
-            // TODO Implement your additional construction here
-            _Link = false;
-            _IsMoving = false;
-            Properties.Settings.Default.Reload();
         }
 
         //
@@ -64,111 +58,70 @@ namespace ASCOM.FocuserSimulator
 
         public bool Absolute
         {
-            get { return Properties.Settings.Default.sAbsolute; }
+            get { return FocuserHardware.Absolute; }
         }
 
         public void Halt()
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("Halt");
+            FocuserHardware.Halt();
         }
 
         public bool IsMoving
         {
-            // TODO Replace this with your implementation
-            get { return _IsMoving; }
+            get { return FocuserHardware.IsMoving; }
         }
 
         public bool Link
         {
-            get { return _Link; }
-            set { _Link = value; }
+            get { return FocuserHardware.Link; }
+            set { FocuserHardware.Link = value; }
         }
 
         public int MaxIncrement
         {
-            get { return (int)Properties.Settings.Default.sMaxIncrement; }
+            get { return FocuserHardware.MaxIncrement; }
         }
 
         public int MaxStep
         {
-            get { return (int)Properties.Settings.Default.sMaxStep; }
+            get { return FocuserHardware.MaxStep; }
         }
 
-
-        private void Deplace(int pStep)
-        {
-            _IsMoving = true;
-            Thread.Sleep(2);
-            _IsMoving = false;
-        }
 
         public void Move(int val)
         {
-            // TODO Replace this with your implementation
-            if (Properties.Settings.Default.sAbsolute)
-            {
-                if (val == Properties.Settings.Default.sPosition) return;
-                if (val > Properties.Settings.Default.sPosition)
-                {
-                    for (int i = Properties.Settings.Default.sPosition; i < val; i += (int)Properties.Settings.Default.sStepSize)
-                    {
-                        Deplace((int)Properties.Settings.Default.sStepSize);
-                        Properties.Settings.Default.sPosition += (int)Properties.Settings.Default.sStepSize;
-                    }
-                }
-                else
-                {
-                    for (int i = Properties.Settings.Default.sPosition; i > val; i -= (int)Properties.Settings.Default.sStepSize)
-                    {
-                        Deplace((int)Properties.Settings.Default.sStepSize);
-                        Properties.Settings.Default.sPosition -= (int)Properties.Settings.Default.sStepSize;
-                    }
-                }
-                
-            }
+            FocuserHardware.Move(val);
         }
 
         public int Position
         {
-            get 
-            {
-                if (Properties.Settings.Default.sAbsolute) return Properties.Settings.Default.sPosition;
-                else throw new PropertyNotImplementedException("Position", false); 
-            }
+            get { return FocuserHardware.Position; }
         }
 
         public void SetupDialog()
         {
-            SetupDialogForm F = new SetupDialogForm();
-            F.ShowDialog();
+            FocuserHardware.DoSetup();
         }
 
         public double StepSize
         {
-            get { return (double)Properties.Settings.Default.sStepSize; }
+            get { return FocuserHardware.StepSize; }
         }
 
         public bool TempComp
         {
-            get { return Properties.Settings.Default.sTempComp; }
-            set 
-            { 
-                
-                if (Properties.Settings.Default.sTempCompAvailable) Properties.Settings.Default.sTempComp = value;
-                else throw new MethodNotImplementedException("TempComp");
-            }
+            get { return FocuserHardware.TempComp; }
+            set { FocuserHardware.TempComp = value; }
         }
 
         public bool TempCompAvailable
         {
-            get { return Properties.Settings.Default.sTempCompAvailable; }
+            get { return FocuserHardware.TempCompAvailable; }
         }
 
         public double Temperature
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Temperature", false); }
+            get { return FocuserHardware.Temperature; }
         }
 
         #endregion
