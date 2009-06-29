@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilterWheelSim", "FilterWheelServer\FilterWheelSim.csproj", "{D659379E-3131-4AD4-8D62-5C8BAC2C9A82}"
@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilterWheelSim", "FilterWhe
 		{F0654070-4450-461F-A484-58D356E1740E} = {F0654070-4450-461F-A484-58D356E1740E}
 	EndProjectSection
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "VBFilterWheelSimDriver", "FW_Sim\VBFilterWheelSimDriver.vbproj", "{F0654070-4450-461F-A484-58D356E1740E}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "VBFilterWheelSimDriver", "FilterWheelDriver\VBFilterWheelSimDriver.vbproj", "{F0654070-4450-461F-A484-58D356E1740E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
