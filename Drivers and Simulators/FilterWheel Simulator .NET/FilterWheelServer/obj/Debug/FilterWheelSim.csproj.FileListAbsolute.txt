@@ -1,0 +1,8 @@
+C:\Users\Mark\Documents\Visual Studio 2008\Projects\ASCOM\FilterWheelSim\FilterWheelServer\obj\Debug\FilterWheelSim.csproj.ResolveComReference.cache
+C:\Users\Mark\Documents\Visual Studio 2008\Projects\ASCOM\FilterWheelSim\FilterWheelServer\bin\Debug\ASCOM.FilterWheelSim.exe
+C:\Users\Mark\Documents\Visual Studio 2008\Projects\ASCOM\FilterWheelSim\FilterWheelServer\bin\Debug\ASCOM.FilterWheelSim.pdb
+C:\Users\Mark\Documents\Visual Studio 2008\Projects\ASCOM\FilterWheelSim\FilterWheelServer\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Mark\Documents\Visual Studio 2008\Projects\ASCOM\FilterWheelSim\FilterWheelServer\obj\Debug\FilterWheelSim.csproj.GenerateResource.Cache
+C:\Users\Mark\Documents\Visual Studio 2008\Projects\ASCOM\FilterWheelSim\FilterWheelServer\obj\Debug\ASCOM.FilterWheelSim.exe
+C:\Users\Mark\Documents\Visual Studio 2008\Projects\ASCOM\FilterWheelSim\FilterWheelServer\obj\Debug\ASCOM.FilterWheelSim.pdb
+C:\Users\Mark\Documents\Visual Studio 2008\Projects\ASCOM\FilterWheelSim\FilterWheelServer\obj\Debug\ASCOM.FilterWheelSim.frmMain.resources
