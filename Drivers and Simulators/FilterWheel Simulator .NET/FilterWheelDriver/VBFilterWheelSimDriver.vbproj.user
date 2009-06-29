@@ -1,0 +1,10 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <StartAction>Project</StartAction>
+    <StartProgram>
+    </StartProgram>
+    <StartArguments>
+    </StartArguments>
+    <StartWorkingDirectory>C:\Users\Mark\Documents\Visual Studio 2008\Projects\ASCOM\FilterWheelSim.Net\FilterWheelDriver\bin\Debug\</StartWorkingDirectory>
+  </PropertyGroup>
+</Project>

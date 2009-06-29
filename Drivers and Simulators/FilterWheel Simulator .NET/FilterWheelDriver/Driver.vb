@@ -54,7 +54,7 @@
         '
         Dim rand As Random = New Random
 
-        g_Profile.Register(g_csDriverID, g_csDriverDescription) ' Self reg (skips if already reg)
+        'g_Profile.Register(g_csDriverID, g_csDriverDescription) ' Self reg (skips if already reg)
 
         '
         ' Persistent settings - Create on first start as determined by
