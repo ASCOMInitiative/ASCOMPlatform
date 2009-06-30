@@ -18,7 +18,9 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <StartAction>Project</StartAction>
     <StartProgram>C:\Windows\System32\wscript.exe</StartProgram>
-    <StartArguments>/register</StartArguments>
+    <StartArguments>
+    </StartArguments>
     <StartWorkingDirectory>C:\Users\Mark\Documents\Visual Studio 2008\Projects\ASCOM\FilterWheelSim.Net\</StartWorkingDirectory>
+    <RemoteDebugEnabled>false</RemoteDebugEnabled>
   </PropertyGroup>
 </Project>

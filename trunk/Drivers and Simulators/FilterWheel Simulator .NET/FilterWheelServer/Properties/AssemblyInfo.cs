@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("ASCOM multi-interface server for FilterWheelSim")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
-[assembly: AssemblyProduct("Filter Wheel Simulator VB.Net")]
+[assembly: AssemblyProduct("Filter Wheel Simulator [VB.Net]")]
 [assembly: AssemblyCopyright("Copyright © 2009, Mark Crossley")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

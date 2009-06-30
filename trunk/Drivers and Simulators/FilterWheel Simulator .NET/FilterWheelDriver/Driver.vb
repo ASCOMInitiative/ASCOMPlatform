@@ -27,7 +27,7 @@
 <Guid("F9043C88-F6F2-101A-A3C9-08002B2F49FC")> _
 <ClassInterface(ClassInterfaceType.None)> Public Class FilterWheel
     '	==========
-    'Inherits ReferenceCountedObjectBase
+    Inherits ReferenceCountedObjectBase
     Implements IFilterWheel ' Early-bind interface implemented by this driver
     Implements IDisposable  ' Clean-up code
     '	==========
@@ -41,66 +41,10 @@
     '
     Public Sub New()
 
-        Dim i As Integer
-        Dim RegVer As String = "1"                      ' Registry version, use to change registry if required by new version
-
         m_handBox = New HandboxForm
-        g_Profile = New ASCOM.Helper.Profile
-        g_Profile.DeviceType = "FilterWheel"            ' We're a filter wheel driver
 
-
-        '
-        ' initialize variables that are not persistent
-        '
-        Dim rand As Random = New Random
-
-        'g_Profile.Register(g_csDriverID, g_csDriverDescription) ' Self reg (skips if already reg)
-
-        '
-        ' Persistent settings - Create on first start as determined by
-        ' existence of the RegVer key, Increment RegVer if we need to change registry settings
-        ' in a new version of the driver
-        '
-        If g_Profile.GetValue(g_csDriverID, "RegVer") <> RegVer Then
-            ' Create some 'realistic' defaults
-            Dim colours() As System.Drawing.Color = New Drawing.Color() {Drawing.Color.Red, Drawing.Color.Green, _
-                                                                         Drawing.Color.Blue, Drawing.Color.Gray, _
-                                                                         Drawing.Color.DarkRed, Drawing.Color.Teal, _
-                                                                         Drawing.Color.Violet, Drawing.Color.Black}
-            Dim names() As String = New String() {"Red", "Green", "Blue", "Clear", "Ha", "OIII", "LPR", "Dark"}
-
-            g_Profile.WriteValue(g_csDriverID, "RegVer", RegVer)
-            g_Profile.WriteValue(g_csDriverID, "Position", "0")
-            g_Profile.WriteValue(g_csDriverID, "Slots", "4")
-            g_Profile.WriteValue(g_csDriverID, "Time", "1000")
-            g_Profile.WriteValue(g_csDriverID, "ImplementsNames", "True")
-            g_Profile.WriteValue(g_csDriverID, "ImplementsOffsets", "True")
-            g_Profile.WriteValue(g_csDriverID, "AlwaysOnTop", "True")
-            g_Profile.WriteValue(g_csDriverID, "Left", "100")
-            g_Profile.WriteValue(g_csDriverID, "Top", "100")
-            For i = 0 To 7
-                g_Profile.WriteValue(g_csDriverID, i.ToString, names(i), "FilterNames")
-                g_Profile.WriteValue(g_csDriverID, i.ToString, rand.Next(10000).ToString, "FocusOffsets")
-                g_Profile.WriteValue(g_csDriverID, i.ToString, System.Drawing.ColorTranslator.ToWin32(colours(i)).ToString, "FilterColours")
-            Next i
-        End If
-
-        ' Now we have some default if required, update the handbox values from the registry
-        m_handBox.UpdateConfig()
-
-        ' Set handbox screen position
-        m_handBox.Left = CInt(g_Profile.GetValue(g_csDriverID, "Left"))
-        m_handBox.Top = CInt(g_Profile.GetValue(g_csDriverID, "Top"))
-
-        ' Fix bad positions (which shouldn't ever happen, ha ha)
-        If m_handBox.Left < 0 Then
-            m_handBox.Left = 100
-            g_Profile.WriteValue(g_csDriverID, "Left", m_handBox.Left.ToString)
-        End If
-        If m_handBox.Top < 0 Then
-            m_handBox.Top = 100
-            g_Profile.WriteValue(g_csDriverID, "Top", m_handBox.Top.ToString)
-        End If
+        ' Initialise settings
+        m_handBox.DoStartup()
 
         ' Show the handbox now
         m_handBox.Show()
