@@ -31,3 +31,5 @@ C:\Users\Mark\Documents\Visual Studio 2008\Projects\ASCOM\FilterWheelSim.Net\Fil
 C:\Users\Mark\Documents\Visual Studio 2008\Projects\ASCOM\FilterWheelSim.Net\FilterWheelDriver\obj\Debug\VBFilterWheelSimDriver.vbproj.GenerateResource.Cache
 C:\Users\Mark\Documents\Visual Studio 2008\Projects\ASCOM\FilterWheelSim.Net\FilterWheelDriver\obj\Debug\ASCOM.FilterWheelSim.FilterWheel.dll
 C:\Users\Mark\Documents\Visual Studio 2008\Projects\ASCOM\FilterWheelSim.Net\FilterWheelDriver\obj\Debug\ASCOM.FilterWheelSim.FilterWheel.pdb
+C:\Users\Mark\Documents\Visual Studio 2008\Projects\ASCOM\FilterWheelSim.Net\FilterWheelDriver\bin\Debug\ASCOM.FilterWheelSim.exe
+C:\Users\Mark\Documents\Visual Studio 2008\Projects\ASCOM\FilterWheelSim.Net\FilterWheelDriver\bin\Debug\ASCOM.FilterWheelSim.pdb

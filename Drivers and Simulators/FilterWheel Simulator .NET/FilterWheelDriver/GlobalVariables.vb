@@ -31,8 +31,8 @@
     ' ----------------------------------------------------------
     ' Driver ID and descriptive string that shows in the Chooser
     ' ----------------------------------------------------------
-    Public g_csDriverID As String = "ASCOM.FilterWheelSim.FilterWheel"
-    Public g_csDriverDescription As String = "FilterWheelSimulator FilterWheel"
+    Public Const g_csDriverID As String = "ASCOM.FilterWheelSim.FilterWheel"
+    Public Const g_csDriverDescription As String = "FilterWheelSimulator FilterWheel"
 
 
 

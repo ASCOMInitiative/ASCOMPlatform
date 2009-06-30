@@ -3,7 +3,7 @@
 <ComVisible(False)> _
 Public Class HandboxForm
 
-#Region "Variables"
+#Region "Private Variables"
 
     ' button handling variables
     Private BtnState As Integer                         ' current state
@@ -22,6 +22,7 @@ Public Class HandboxForm
     Private m_bImplementsNames As Boolean               ' Return filternames?
     Private m_bImplementsOffsets As Boolean             ' Return Offsets?
     Private m_trafficDialog As ShowTrafficForm          ' API traffic display form
+
 
     ' -----------
     ' Timer stuff
@@ -427,6 +428,7 @@ Public Class HandboxForm
     End Property
 
     Public Sub DoSetup()
+        Dim i As Integer = 1
         Dim SetupDialog As SetupDialogForm = New SetupDialogForm
 
         ' Do we need to log this?
@@ -490,6 +492,65 @@ Public Class HandboxForm
         Next i
     End Sub
 
+    Public Sub DoStartup()
+        Dim i As Integer
+        Dim RegVer As String = "1"      ' Registry version, use to change registry if required by new version
+
+        g_Profile = New ASCOM.Helper.Profile
+        g_Profile.DeviceType = "FilterWheel"            ' We're a filter wheel driver
+
+        '
+        ' Persistent settings - Create on first start as determined by
+        ' existence of the RegVer key, Increment RegVer if we need to change registry settings
+        ' in a new version of the driver
+        '
+        If g_Profile.GetValue(g_csDriverID, "RegVer") <> RegVer Then
+            '
+            ' initialize variables that are not persistent
+            '
+            ' Create some 'realistic' defaults
+            Dim colours() As System.Drawing.Color = New Drawing.Color() {Drawing.Color.Red, Drawing.Color.Green, _
+                                                                         Drawing.Color.Blue, Drawing.Color.Gray, _
+                                                                         Drawing.Color.DarkRed, Drawing.Color.Teal, _
+                                                                         Drawing.Color.Violet, Drawing.Color.Black}
+            Dim names() As String = New String() {"Red", "Green", "Blue", "Clear", "Ha", "OIII", "LPR", "Dark"}
+            Dim rand As Random = New Random
+
+            g_Profile.WriteValue(g_csDriverID, "RegVer", RegVer)
+            g_Profile.WriteValue(g_csDriverID, "Position", "0")
+            g_Profile.WriteValue(g_csDriverID, "Slots", "4")
+            g_Profile.WriteValue(g_csDriverID, "Time", "1000")
+            g_Profile.WriteValue(g_csDriverID, "ImplementsNames", "True")
+            g_Profile.WriteValue(g_csDriverID, "ImplementsOffsets", "True")
+            g_Profile.WriteValue(g_csDriverID, "AlwaysOnTop", "True")
+            g_Profile.WriteValue(g_csDriverID, "Left", "100")
+            g_Profile.WriteValue(g_csDriverID, "Top", "100")
+            For i = 0 To 7
+                g_Profile.WriteValue(g_csDriverID, i.ToString, names(i), "FilterNames")
+                g_Profile.WriteValue(g_csDriverID, i.ToString, rand.Next(10000).ToString, "FocusOffsets")
+                g_Profile.WriteValue(g_csDriverID, i.ToString, System.Drawing.ColorTranslator.ToWin32(colours(i)).ToString, "FilterColours")
+            Next i
+        End If
+
+        ' Now we have some defaults if required, update the handbox values from the registry
+        Me.UpdateConfig()
+
+        ' Set handbox screen position
+        Me.Left = CInt(g_Profile.GetValue(g_csDriverID, "Left"))
+        Me.Top = CInt(g_Profile.GetValue(g_csDriverID, "Top"))
+
+        ' Fix bad positions (which shouldn't ever happen, ha ha)
+        If Me.Left < 0 Then
+            Me.Left = 100
+            g_Profile.WriteValue(g_csDriverID, "Left", Me.Left.ToString)
+        End If
+        If Me.Top < 0 Then
+            Me.Top = 100
+            g_Profile.WriteValue(g_csDriverID, "Top", Me.Top.ToString)
+        End If
+
+    End Sub
+
 #End Region
 
 #Region "helpers"
@@ -499,20 +560,20 @@ Public Class HandboxForm
         lblName.Text = m_asFilterNames(m_sPosition)
         lblOffset.Text = m_aiFocusOffsets(m_sPosition).ToString
         picFilter.BackColor = m_acFilterColours(m_sPosition)
-            If m_bConnected Then
-                btnConnect.Text = "Connected"
-                btnConnect.BackColor = System.Drawing.Color.DarkGreen
-            Else
-                btnConnect.Text = "Disconnected"
-                btnConnect.BackColor = System.Drawing.Color.Maroon
-            End If
-            btnNext.Enabled = m_bConnected
-            btnPrev.Enabled = m_bConnected
+        If m_bConnected Then
+            btnConnect.Text = "Connected"
+            btnConnect.BackColor = System.Drawing.Color.DarkGreen
+        Else
+            btnConnect.Text = "Disconnected"
+            btnConnect.BackColor = System.Drawing.Color.Maroon
+        End If
+        btnNext.Enabled = m_bConnected
+        btnPrev.Enabled = m_bConnected
     End Sub
 
 
 
-    Sub DoShutdown()
+    Private Sub DoShutdown()
 
         m_bMoving = False
         m_bConnected = False
@@ -527,6 +588,7 @@ Public Class HandboxForm
         g_Profile.WriteValue(g_csDriverID, "Top", Me.Top.ToString)
 
     End Sub
+
 
 
     '---------------------------------------------------------------------

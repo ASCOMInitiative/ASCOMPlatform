@@ -152,8 +152,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ASCOM.png" />
-    <None Include="Resources\FilterStop.gif" />
+    <Content Include="Resources\ASCOM.png" />
+    <Content Include="Resources\FilterStop.gif" />
     <Content Include="Resources\Filter-Prev.gif" />
     <Content Include="Resources\Filter-Next.gif" />
     <Content Include="Test.vbs" />
@@ -202,6 +202,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FilterWheelServer\FilterWheelSim.csproj">
+      <Project>{D659379E-3131-4AD4-8D62-5C8BAC2C9A82}</Project>
+      <Name>FilterWheelSim</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

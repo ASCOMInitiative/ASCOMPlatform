@@ -448,7 +448,7 @@ namespace ASCOM.FilterWheelSim
         #region Class Factory Support
         //
         // On startup, we register the class factories of the COM objects
-        // that we serve. This requires the class facgtory name to be
+        // that we serve. This requires the class factory name to be
         // equal to the served class name + "ClassFactory".
         //
         private static bool RegisterClassFactories()
