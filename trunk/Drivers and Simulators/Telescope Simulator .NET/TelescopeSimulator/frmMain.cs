@@ -15,6 +15,5 @@ namespace ASCOM.TelescopeSimulator
         {
             InitializeComponent();
         }
-
     }
 }

@@ -29,7 +29,7 @@ using ASCOM;
 using ASCOM.HelperNET;
 using ASCOM.Interface;
 
-namespace ASCOM.Telescope
+namespace ASCOM.TelescopeSimulator
 {
     //
     // Your driver's ID is ASCOM.Telescope.Telescope
@@ -40,9 +40,8 @@ namespace ASCOM.Telescope
     //
     [Guid("86931eac-1f52-4918-b6aa-7e9b0ff361bd")]
     [ClassInterface(ClassInterfaceType.None)]
-    public class Telescope : ITelescope
+    public class Telescope : ReferenceCountedObjectBase, ITelescope
     {
-
         //
         // Driver private data (rate collections)
         //
@@ -392,8 +391,7 @@ namespace ASCOM.Telescope
 
         public void SetupDialog()
         {
-            SetupDialogForm F = new SetupDialogForm();
-            F.ShowDialog();
+            
         }
 
         public PierSide SideOfPier
