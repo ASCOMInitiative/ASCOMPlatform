@@ -496,7 +496,7 @@ Public Class HandboxForm
         Dim i As Integer
         Dim RegVer As String = "1"      ' Registry version, use to change registry if required by new version
 
-        g_Profile = New ASCOM.Helper.Profile
+        g_Profile = New HelperNET.Profile
         g_Profile.DeviceType = "FilterWheel"            ' We're a filter wheel driver
 
         '

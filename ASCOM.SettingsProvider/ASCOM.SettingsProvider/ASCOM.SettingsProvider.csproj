@@ -71,7 +71,7 @@
     <ProjectReference Include="..\..\HelperNET\HelperNET\HelperNET.vbproj">
       <Project>{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}</Project>
       <Name>HelperNET</Name>
-      <Private>False</Private>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
       <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
