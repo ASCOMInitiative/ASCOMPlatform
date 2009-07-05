@@ -25,6 +25,9 @@ EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EraseProfile", "HelperNET\EraseProfile\EraseProfile.vbproj", "{7E1E693D-AEE1-418E-8E6C-256CE2B14984}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "HelperNET", "HelperNET\HelperNET\HelperNET.vbproj", "{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5F6CF410-7B16-4A32-99D2-0D92196C4490} = {5F6CF410-7B16-4A32-99D2-0D92196C4490}
+	EndProjectSection
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Profile Explorer", "HelperNET\Profile Explorer\Profile Explorer.vbproj", "{2CB726BB-E327-41C8-9AEC-5327E5187147}"
 EndProject
@@ -65,7 +68,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Driver Installer", "Driver 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilterWheelSim", "Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\FilterWheelSim.csproj", "{D659379E-3131-4AD4-8D62-5C8BAC2C9A82}"
 	ProjectSection(ProjectDependencies) = postProject
-		{F0654070-4450-461F-A484-58D356E1740E} = {F0654070-4450-461F-A484-58D356E1740E}
 		{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9} = {1BF4D092-6FA8-4E00-9FCB-3F05510F97C9}
 	EndProjectSection
 EndProject
@@ -94,6 +96,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platform Dependencies", "Pl
 	EndProjectSection
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "VBFilterWheelSimDriver", "Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\VBFilterWheelSimDriver.vbproj", "{F0654070-4450-461F-A484-58D356E1740E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9} = {1BF4D092-6FA8-4E00-9FCB-3F05510F97C9}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FocuserDriver", "Drivers and Simulators\Focus Simulator .NET\FocuserDriver\FocuserDriver.csproj", "{283EDA41-074E-40A1-8D2A-D76818699DAC}"
 EndProject
