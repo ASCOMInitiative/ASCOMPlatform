@@ -23,9 +23,8 @@ using System.Text;
 using System.Runtime.InteropServices;
 
 using ASCOM;
-using ASCOM.Helper;
-using ASCOM.Helper2;
 using ASCOM.Interface;
+using Helper = ASCOM.HelperNET;
 
 namespace ASCOM.Simulator
 {
@@ -65,7 +64,7 @@ namespace ASCOM.Simulator
 		private static void RegUnregASCOM(bool bRegister)
 		{
 			Helper.Profile P = new Helper.Profile();
-			P.DeviceTypeV = "Camera";					//  Requires Helper 5.0.3 or later
+			P.DeviceType = "Camera";					//  Requires Helper 5.0.3 or later
 			if (bRegister)
 				P.Register(s_csDriverID, s_csDriverDescription);
 			else
@@ -129,7 +128,7 @@ namespace ASCOM.Simulator
 			}
 			set
 			{
-				m_iBin = = value;
+				m_iBin = value;
 			}
 		}
 
@@ -389,7 +388,7 @@ namespace ASCOM.Simulator
 		/// just the first plane.
 		/// </summary>
 		/// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
-		public int ImageArray
+		public object ImageArray
 		{
 			get { throw new System.Exception("The method or operation is not implemented."); }
 		}
