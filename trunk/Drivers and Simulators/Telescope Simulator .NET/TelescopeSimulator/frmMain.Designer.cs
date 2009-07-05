@@ -31,7 +31,6 @@ namespace ASCOM.TelescopeSimulator
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.picASCOM = new System.Windows.Forms.PictureBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -50,19 +49,20 @@ namespace ASCOM.TelescopeSimulator
             this.buttonStop = new System.Windows.Forms.Button();
             this.checkBoxTrack = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.buttonUnpark = new System.Windows.Forms.Button();
-            this.buttonHome = new System.Windows.Forms.Button();
-            this.buttonSetup = new System.Windows.Forms.Button();
             this.buttonTraffic = new System.Windows.Forms.Button();
+            this.buttonSetup = new System.Windows.Forms.Button();
+            this.buttonHome = new System.Windows.Forms.Button();
+            this.buttonUnpark = new System.Windows.Forms.Button();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.lblPARK = new System.Windows.Forms.Label();
-            this.lblHOME = new System.Windows.Forms.Label();
+            this.lblTRACK = new System.Windows.Forms.Label();
             this.lblSlew = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
+            this.picASCOM = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -74,17 +74,6 @@ namespace ASCOM.TelescopeSimulator
             this.label1.Size = new System.Drawing.Size(27, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "LST";
-            // 
-            // picASCOM
-            // 
-            this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picASCOM.Image = global::ASCOM.TelescopeSimulator.Properties.Resources.ASCOM;
-            this.picASCOM.Location = new System.Drawing.Point(117, 12);
-            this.picASCOM.Name = "picASCOM";
-            this.picASCOM.Size = new System.Drawing.Size(48, 56);
-            this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.picASCOM.TabIndex = 4;
-            this.picASCOM.TabStop = false;
             // 
             // label2
             // 
@@ -139,7 +128,7 @@ namespace ASCOM.TelescopeSimulator
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(153, 100);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(163, 100);
             this.tableLayoutPanel1.TabIndex = 8;
             // 
             // labelAlt
@@ -147,7 +136,7 @@ namespace ASCOM.TelescopeSimulator
             this.labelAlt.AutoSize = true;
             this.labelAlt.Dock = System.Windows.Forms.DockStyle.Right;
             this.labelAlt.ForeColor = System.Drawing.Color.Red;
-            this.labelAlt.Location = new System.Drawing.Point(86, 80);
+            this.labelAlt.Location = new System.Drawing.Point(96, 80);
             this.labelAlt.Name = "labelAlt";
             this.labelAlt.Size = new System.Drawing.Size(64, 20);
             this.labelAlt.TabIndex = 13;
@@ -158,7 +147,7 @@ namespace ASCOM.TelescopeSimulator
             this.labelAz.AutoSize = true;
             this.labelAz.Dock = System.Windows.Forms.DockStyle.Right;
             this.labelAz.ForeColor = System.Drawing.Color.Red;
-            this.labelAz.Location = new System.Drawing.Point(80, 60);
+            this.labelAz.Location = new System.Drawing.Point(90, 60);
             this.labelAz.Name = "labelAz";
             this.labelAz.Size = new System.Drawing.Size(70, 20);
             this.labelAz.TabIndex = 12;
@@ -169,7 +158,7 @@ namespace ASCOM.TelescopeSimulator
             this.labelDec.AutoSize = true;
             this.labelDec.Dock = System.Windows.Forms.DockStyle.Right;
             this.labelDec.ForeColor = System.Drawing.Color.Red;
-            this.labelDec.Location = new System.Drawing.Point(80, 40);
+            this.labelDec.Location = new System.Drawing.Point(90, 40);
             this.labelDec.Name = "labelDec";
             this.labelDec.Size = new System.Drawing.Size(70, 20);
             this.labelDec.TabIndex = 11;
@@ -180,7 +169,7 @@ namespace ASCOM.TelescopeSimulator
             this.labelRa.AutoSize = true;
             this.labelRa.Dock = System.Windows.Forms.DockStyle.Right;
             this.labelRa.ForeColor = System.Drawing.Color.Red;
-            this.labelRa.Location = new System.Drawing.Point(86, 20);
+            this.labelRa.Location = new System.Drawing.Point(96, 20);
             this.labelRa.Name = "labelRa";
             this.labelRa.Size = new System.Drawing.Size(64, 20);
             this.labelRa.TabIndex = 10;
@@ -191,7 +180,7 @@ namespace ASCOM.TelescopeSimulator
             this.labelLst.AutoSize = true;
             this.labelLst.Dock = System.Windows.Forms.DockStyle.Right;
             this.labelLst.ForeColor = System.Drawing.Color.Red;
-            this.labelLst.Location = new System.Drawing.Point(86, 0);
+            this.labelLst.Location = new System.Drawing.Point(96, 0);
             this.labelLst.Name = "labelLst";
             this.labelLst.Size = new System.Drawing.Size(64, 20);
             this.labelLst.TabIndex = 9;
@@ -224,15 +213,15 @@ namespace ASCOM.TelescopeSimulator
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(152, 136);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(162, 136);
             this.tableLayoutPanel2.TabIndex = 9;
             // 
             // buttonNorth
             // 
             this.buttonNorth.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonNorth.Location = new System.Drawing.Point(53, 3);
+            this.buttonNorth.Location = new System.Drawing.Point(58, 3);
             this.buttonNorth.Name = "buttonNorth";
-            this.buttonNorth.Size = new System.Drawing.Size(44, 41);
+            this.buttonNorth.Size = new System.Drawing.Size(49, 41);
             this.buttonNorth.TabIndex = 0;
             this.buttonNorth.Text = "N";
             this.buttonNorth.UseVisualStyleBackColor = true;
@@ -240,7 +229,7 @@ namespace ASCOM.TelescopeSimulator
             // buttonEast
             // 
             this.buttonEast.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonEast.Location = new System.Drawing.Point(103, 50);
+            this.buttonEast.Location = new System.Drawing.Point(113, 50);
             this.buttonEast.Name = "buttonEast";
             this.buttonEast.Size = new System.Drawing.Size(46, 41);
             this.buttonEast.TabIndex = 1;
@@ -252,7 +241,7 @@ namespace ASCOM.TelescopeSimulator
             this.buttonWest.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonWest.Location = new System.Drawing.Point(3, 50);
             this.buttonWest.Name = "buttonWest";
-            this.buttonWest.Size = new System.Drawing.Size(44, 41);
+            this.buttonWest.Size = new System.Drawing.Size(49, 41);
             this.buttonWest.TabIndex = 2;
             this.buttonWest.Text = "W";
             this.buttonWest.UseVisualStyleBackColor = true;
@@ -260,9 +249,9 @@ namespace ASCOM.TelescopeSimulator
             // buttonSouth
             // 
             this.buttonSouth.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonSouth.Location = new System.Drawing.Point(53, 97);
+            this.buttonSouth.Location = new System.Drawing.Point(58, 97);
             this.buttonSouth.Name = "buttonSouth";
-            this.buttonSouth.Size = new System.Drawing.Size(44, 36);
+            this.buttonSouth.Size = new System.Drawing.Size(49, 36);
             this.buttonSouth.TabIndex = 3;
             this.buttonSouth.Text = "S";
             this.buttonSouth.UseVisualStyleBackColor = true;
@@ -271,9 +260,9 @@ namespace ASCOM.TelescopeSimulator
             // 
             this.buttonStop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonStop.Font = new System.Drawing.Font("Wingdings 2", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this.buttonStop.Location = new System.Drawing.Point(53, 50);
+            this.buttonStop.Location = new System.Drawing.Point(58, 50);
             this.buttonStop.Name = "buttonStop";
-            this.buttonStop.Size = new System.Drawing.Size(44, 41);
+            this.buttonStop.Size = new System.Drawing.Size(49, 41);
             this.buttonStop.TabIndex = 4;
             this.buttonStop.Text = "Ä";
             this.buttonStop.UseVisualStyleBackColor = true;
@@ -303,48 +292,49 @@ namespace ASCOM.TelescopeSimulator
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(152, 65);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(162, 65);
             this.tableLayoutPanel3.TabIndex = 11;
             // 
-            // buttonUnpark
+            // buttonTraffic
             // 
-            this.buttonUnpark.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonUnpark.Location = new System.Drawing.Point(3, 3);
-            this.buttonUnpark.Name = "buttonUnpark";
-            this.buttonUnpark.Size = new System.Drawing.Size(70, 26);
-            this.buttonUnpark.TabIndex = 0;
-            this.buttonUnpark.Text = "Unpark";
-            this.buttonUnpark.UseVisualStyleBackColor = true;
-            // 
-            // buttonHome
-            // 
-            this.buttonHome.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonHome.Location = new System.Drawing.Point(79, 3);
-            this.buttonHome.Name = "buttonHome";
-            this.buttonHome.Size = new System.Drawing.Size(70, 26);
-            this.buttonHome.TabIndex = 1;
-            this.buttonHome.Text = "Home";
-            this.buttonHome.UseVisualStyleBackColor = true;
+            this.buttonTraffic.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonTraffic.Location = new System.Drawing.Point(84, 35);
+            this.buttonTraffic.Name = "buttonTraffic";
+            this.buttonTraffic.Size = new System.Drawing.Size(75, 27);
+            this.buttonTraffic.TabIndex = 3;
+            this.buttonTraffic.Text = "Traffic";
+            this.buttonTraffic.UseVisualStyleBackColor = true;
             // 
             // buttonSetup
             // 
             this.buttonSetup.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonSetup.Location = new System.Drawing.Point(3, 35);
             this.buttonSetup.Name = "buttonSetup";
-            this.buttonSetup.Size = new System.Drawing.Size(70, 27);
+            this.buttonSetup.Size = new System.Drawing.Size(75, 27);
             this.buttonSetup.TabIndex = 2;
             this.buttonSetup.Text = "Setup";
             this.buttonSetup.UseVisualStyleBackColor = true;
+            this.buttonSetup.Click += new System.EventHandler(this.buttonSetup_Click);
             // 
-            // buttonTraffic
+            // buttonHome
             // 
-            this.buttonTraffic.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonTraffic.Location = new System.Drawing.Point(79, 35);
-            this.buttonTraffic.Name = "buttonTraffic";
-            this.buttonTraffic.Size = new System.Drawing.Size(70, 27);
-            this.buttonTraffic.TabIndex = 3;
-            this.buttonTraffic.Text = "Traffic";
-            this.buttonTraffic.UseVisualStyleBackColor = true;
+            this.buttonHome.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonHome.Location = new System.Drawing.Point(84, 3);
+            this.buttonHome.Name = "buttonHome";
+            this.buttonHome.Size = new System.Drawing.Size(75, 26);
+            this.buttonHome.TabIndex = 1;
+            this.buttonHome.Text = "Home";
+            this.buttonHome.UseVisualStyleBackColor = true;
+            // 
+            // buttonUnpark
+            // 
+            this.buttonUnpark.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonUnpark.Location = new System.Drawing.Point(3, 3);
+            this.buttonUnpark.Name = "buttonUnpark";
+            this.buttonUnpark.Size = new System.Drawing.Size(75, 26);
+            this.buttonUnpark.TabIndex = 0;
+            this.buttonUnpark.Text = "Unpark";
+            this.buttonUnpark.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel4
             // 
@@ -354,13 +344,13 @@ namespace ASCOM.TelescopeSimulator
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel4.Controls.Add(this.lblPARK, 2, 0);
-            this.tableLayoutPanel4.Controls.Add(this.lblHOME, 1, 0);
+            this.tableLayoutPanel4.Controls.Add(this.lblTRACK, 1, 0);
             this.tableLayoutPanel4.Controls.Add(this.lblSlew, 0, 0);
             this.tableLayoutPanel4.Location = new System.Drawing.Point(13, 89);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(152, 20);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(162, 20);
             this.tableLayoutPanel4.TabIndex = 12;
             // 
             // lblPARK
@@ -368,24 +358,24 @@ namespace ASCOM.TelescopeSimulator
             this.lblPARK.AutoSize = true;
             this.lblPARK.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblPARK.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblPARK.Location = new System.Drawing.Point(103, 0);
+            this.lblPARK.Location = new System.Drawing.Point(111, 0);
             this.lblPARK.Name = "lblPARK";
             this.lblPARK.Padding = new System.Windows.Forms.Padding(1, 2, 1, 1);
             this.lblPARK.Size = new System.Drawing.Size(38, 16);
             this.lblPARK.TabIndex = 2;
             this.lblPARK.Text = "PARK";
             // 
-            // lblHOME
+            // lblTRACK
             // 
-            this.lblHOME.AutoSize = true;
-            this.lblHOME.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblHOME.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblHOME.Location = new System.Drawing.Point(53, 0);
-            this.lblHOME.Name = "lblHOME";
-            this.lblHOME.Padding = new System.Windows.Forms.Padding(1, 2, 1, 1);
-            this.lblHOME.Size = new System.Drawing.Size(41, 16);
-            this.lblHOME.TabIndex = 1;
-            this.lblHOME.Text = "HOME";
+            this.lblTRACK.AutoSize = true;
+            this.lblTRACK.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblTRACK.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblTRACK.Location = new System.Drawing.Point(57, 0);
+            this.lblTRACK.Name = "lblTRACK";
+            this.lblTRACK.Padding = new System.Windows.Forms.Padding(1, 2, 1, 1);
+            this.lblTRACK.Size = new System.Drawing.Size(45, 16);
+            this.lblTRACK.TabIndex = 1;
+            this.lblTRACK.Text = "TRACK";
             // 
             // lblSlew
             // 
@@ -399,12 +389,23 @@ namespace ASCOM.TelescopeSimulator
             this.lblSlew.TabIndex = 0;
             this.lblSlew.Text = "SLEW";
             // 
+            // picASCOM
+            // 
+            this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.picASCOM.Image = global::ASCOM.TelescopeSimulator.Properties.Resources.ASCOM;
+            this.picASCOM.Location = new System.Drawing.Point(127, 12);
+            this.picASCOM.Name = "picASCOM";
+            this.picASCOM.Size = new System.Drawing.Size(48, 56);
+            this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.picASCOM.TabIndex = 4;
+            this.picASCOM.TabStop = false;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(177, 468);
+            this.ClientSize = new System.Drawing.Size(186, 468);
             this.Controls.Add(this.tableLayoutPanel4);
             this.Controls.Add(this.tableLayoutPanel3);
             this.Controls.Add(this.checkBoxTrack);
@@ -414,13 +415,13 @@ namespace ASCOM.TelescopeSimulator
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "frmMain";
             this.Text = "Telescope Simulator";
-            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -454,7 +455,7 @@ namespace ASCOM.TelescopeSimulator
         private System.Windows.Forms.Button buttonUnpark;
         internal System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         internal System.Windows.Forms.Label lblPARK;
-        internal System.Windows.Forms.Label lblHOME;
+        internal System.Windows.Forms.Label lblTRACK;
         internal System.Windows.Forms.Label lblSlew;
 
 

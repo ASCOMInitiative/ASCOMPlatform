@@ -81,6 +81,9 @@
     <EmbeddedResource Include="SetupDialogForm.resx">
       <DependentUpon>SetupDialogForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="TrafficForm.resx">
+      <DependentUpon>TrafficForm.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -95,6 +98,12 @@
     </Compile>
     <Compile Include="SharedResources.cs" />
     <Compile Include="TelescopeHardware.cs" />
+    <Compile Include="TrafficForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TrafficForm.Designer.cs">
+      <DependentUpon>TrafficForm.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="ASCOM.png" />
