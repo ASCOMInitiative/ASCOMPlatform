@@ -39,7 +39,7 @@ Public Class Dome
 
 
 
-        g_Profile = New ASCOM.Helper.Profile
+        g_Profile = New HelperNET.Profile
         g_Profile.DeviceType = "Dome"            ' Dome device type
 
 
@@ -169,8 +169,8 @@ Public Class Dome
 
     Private Shared Sub RegUnregASCOM(ByVal bRegister As Boolean)
 
-        Dim P As New Helper.Profile()
-        P.DeviceTypeV = "Dome"           '  Requires Helper 5.0.3 or later
+        Dim P As New HelperNET.Profile()
+        P.DeviceType = "Dome"           '  Requires Helper 5.0.3 or later
         If bRegister Then
             P.Register(g_csDriverID, g_csDriverDescription)
         Else

@@ -21,6 +21,7 @@ using System.Reflection;
 using Microsoft.Win32;
 using System.Text;
 using System.Threading;
+using Helper = ASCOM.HelperNET;
 
 namespace ASCOM.FilterWheelSim
 {
@@ -361,7 +362,7 @@ namespace ASCOM.FilterWheelSim
                     attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyProductAttribute));
                     string chooserName = ((AssemblyProductAttribute)attr).Product;
                     Helper.Profile P = new Helper.Profile();
-                    P.DeviceTypeV = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
+                    P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
                     P.Register(progid, chooserName);
                     try										// In case Helper becomes native .NET
                     {
@@ -431,7 +432,7 @@ namespace ASCOM.FilterWheelSim
                     // ASCOM
                     //
                     Helper.Profile P = new Helper.Profile();
-                    P.DeviceTypeV = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
+                    P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
                     P.Unregister(progid);
                     try										// In case Helper becomes native .NET
                     {
