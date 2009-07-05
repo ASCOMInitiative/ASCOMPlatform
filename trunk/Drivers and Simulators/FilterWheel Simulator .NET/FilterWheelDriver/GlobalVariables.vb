@@ -25,7 +25,7 @@
     ' ---------
     ' Variables
     ' ---------
-    Public g_Profile As ASCOM.Helper.Profile
+    Public g_Profile As HelperNET.Profile
 
 
     ' ----------------------------------------------------------
