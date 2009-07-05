@@ -42,19 +42,61 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Simulators", "Simulators", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraSimulator", "Drivers and Simulators\CameraSimulator.NET (incomplete)\CameraSimulator\CameraSimulator.csproj", "{103E457D-B0AA-460C-8570-560D5DEFF1DA}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "VBFilterWheelSimulator", "Drivers and Simulators\FilterWheel Simulator .NET\VBFilterWheelSimulator.vbproj", "{F0654070-4450-461F-A484-58D356E1740E}"
-EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Safety Monitor Simulator", "Drivers and Simulators\SafetyMonitor Simulator .NET\Safety Monitor Simulator\Safety Monitor Simulator.vbproj", "{AF1190B4-0DCA-41E5-8C2B-F2D533B87EF8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9} = {1BF4D092-6FA8-4E00-9FCB-3F05510F97C9}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstallerGen", "Driver Inst\InstallerGen\InstallerGen.csproj", "{A4006FB9-7B26-44C6-B66A-E3A1EFA85D16}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "VBDomeSimulator", "Drivers and Simulators\Dome Simulator .NET\VBDomeSimulator.vbproj", "{CE0387AA-0376-4001-8092-46D4561561EE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9} = {1BF4D092-6FA8-4E00-9FCB-3F05510F97C9}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrivialSimulator", "Drivers and Simulators\TrivialSwitch Simulator .NET\TrivialSimulator\TrivialSimulator.csproj", "{9AF2265C-9981-4DF5-8A40-1189EE5DBEFB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9} = {1BF4D092-6FA8-4E00-9FCB-3F05510F97C9}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsExtras", "Driver Inst\WinFormsExtras\WinFormsExtras.csproj", "{AB4FE9A1-B71D-4710-AA18-2F9DE496F43B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Driver Installer", "Driver Installer", "{2F656A36-ED02-4FE2-AA49-C212A92908AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilterWheelSim", "Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\FilterWheelSim.csproj", "{D659379E-3131-4AD4-8D62-5C8BAC2C9A82}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F0654070-4450-461F-A484-58D356E1740E} = {F0654070-4450-461F-A484-58D356E1740E}
+		{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9} = {1BF4D092-6FA8-4E00-9FCB-3F05510F97C9}
+	EndProjectSection
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "VBFilterWheelSimDriver", "Drivers and Simulators\FilterWheel Simulator .NET\FW_Sim\VBFilterWheelSimDriver.vbproj", "{F0654070-4450-461F-A484-58D356E1740E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9} = {1BF4D092-6FA8-4E00-9FCB-3F05510F97C9}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Platform.DependencyBuilder", "ASCOM.Platform.DependencyBuilder\ASCOM.Platform.DependencyBuilder.csproj", "{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platform Dependencies", "Platform Dependencies", "{F1D8A6F0-1A98-4430-8DCD-6D1432449765}"
+	ProjectSection(SolutionItems) = preProject
+		Drivers and Simulators\Platform Dependencies\ASCOM-Controls.xml = Drivers and Simulators\Platform Dependencies\ASCOM-Controls.xml
+		Drivers and Simulators\Platform Dependencies\ASCOM.Controls.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Controls.dll
+		Drivers and Simulators\Platform Dependencies\ASCOM.Controls.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.Controls.pdb
+		Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.dll = Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.dll
+		Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.pdb
+		Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.XML = Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.XML
+		Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.dll
+		Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.pdb
+		Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.XML = Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.XML
+		Drivers and Simulators\Platform Dependencies\ASCOM.HelperNET.dll = Drivers and Simulators\Platform Dependencies\ASCOM.HelperNET.dll
+		Drivers and Simulators\Platform Dependencies\ASCOM.HelperNET.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.HelperNET.pdb
+		Drivers and Simulators\Platform Dependencies\ASCOM.HelperNET.xml = Drivers and Simulators\Platform Dependencies\ASCOM.HelperNET.xml
+		Drivers and Simulators\Platform Dependencies\ASCOM.Interfaces.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Interfaces.dll
+		Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.dll = Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.dll
+		Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.pdb
+		Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.XML = Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.XML
+		Drivers and Simulators\Platform Dependencies\AscomMasterInterfaces.tlb = Drivers and Simulators\Platform Dependencies\AscomMasterInterfaces.tlb
+		Drivers and Simulators\Platform Dependencies\Interop.Scripting.dll = Drivers and Simulators\Platform Dependencies\Interop.Scripting.dll
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -118,10 +160,6 @@ Global
 		{103E457D-B0AA-460C-8570-560D5DEFF1DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{103E457D-B0AA-460C-8570-560D5DEFF1DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{103E457D-B0AA-460C-8570-560D5DEFF1DA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F0654070-4450-461F-A484-58D356E1740E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F0654070-4450-461F-A484-58D356E1740E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F0654070-4450-461F-A484-58D356E1740E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F0654070-4450-461F-A484-58D356E1740E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AF1190B4-0DCA-41E5-8C2B-F2D533B87EF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AF1190B4-0DCA-41E5-8C2B-F2D533B87EF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF1190B4-0DCA-41E5-8C2B-F2D533B87EF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -142,11 +180,24 @@ Global
 		{AB4FE9A1-B71D-4710-AA18-2F9DE496F43B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB4FE9A1-B71D-4710-AA18-2F9DE496F43B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB4FE9A1-B71D-4710-AA18-2F9DE496F43B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D659379E-3131-4AD4-8D62-5C8BAC2C9A82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D659379E-3131-4AD4-8D62-5C8BAC2C9A82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D659379E-3131-4AD4-8D62-5C8BAC2C9A82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D659379E-3131-4AD4-8D62-5C8BAC2C9A82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0654070-4450-461F-A484-58D356E1740E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0654070-4450-461F-A484-58D356E1740E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0654070-4450-461F-A484-58D356E1740E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0654070-4450-461F-A484-58D356E1740E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{F1D8A6F0-1A98-4430-8DCD-6D1432449765} = {9A54CA39-AB72-45B4-B09F-63679076D040}
 		{63AD32E8-98FF-44BB-AA29-ED2E5A5CF026} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{D1A5A486-8C9C-4421-91AB-508F63B684C2} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{4FFFD202-81D4-4549-880B-09B640D72C1D} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
@@ -155,6 +206,7 @@ Global
 		{35194767-5585-45C3-803F-1BCE74CEAAFC} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{0B492F73-66F9-460E-BD84-A6CB1FC588C6} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{5F6CF410-7B16-4A32-99D2-0D92196C4490} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
+		{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C} = {0B492F73-66F9-460E-BD84-A6CB1FC588C6}
 		{2CB726BB-E327-41C8-9AEC-5327E5187147} = {0B492F73-66F9-460E-BD84-A6CB1FC588C6}
 		{B72BC9E0-DB34-4207-B9A4-832381F58196} = {0B492F73-66F9-460E-BD84-A6CB1FC588C6}
@@ -162,11 +214,12 @@ Global
 		{E1EBDB33-D2B5-46AA-B45A-74C083066E54} = {0B492F73-66F9-460E-BD84-A6CB1FC588C6}
 		{2F656A36-ED02-4FE2-AA49-C212A92908AA} = {E61A5194-09EE-46E0-9171-1CBDC35D7A53}
 		{103E457D-B0AA-460C-8570-560D5DEFF1DA} = {358D1EAC-1E2A-479F-80DB-3E7E22E39D97}
-		{F0654070-4450-461F-A484-58D356E1740E} = {358D1EAC-1E2A-479F-80DB-3E7E22E39D97}
 		{AF1190B4-0DCA-41E5-8C2B-F2D533B87EF8} = {358D1EAC-1E2A-479F-80DB-3E7E22E39D97}
 		{CE0387AA-0376-4001-8092-46D4561561EE} = {358D1EAC-1E2A-479F-80DB-3E7E22E39D97}
 		{9AF2265C-9981-4DF5-8A40-1189EE5DBEFB} = {358D1EAC-1E2A-479F-80DB-3E7E22E39D97}
-		{A4006FB9-7B26-44C6-B66A-E3A1EFA85D16} = {2F656A36-ED02-4FE2-AA49-C212A92908AA}
+		{D659379E-3131-4AD4-8D62-5C8BAC2C9A82} = {358D1EAC-1E2A-479F-80DB-3E7E22E39D97}
+		{F0654070-4450-461F-A484-58D356E1740E} = {358D1EAC-1E2A-479F-80DB-3E7E22E39D97}
 		{AB4FE9A1-B71D-4710-AA18-2F9DE496F43B} = {2F656A36-ED02-4FE2-AA49-C212A92908AA}
+		{A4006FB9-7B26-44C6-B66A-E3A1EFA85D16} = {2F656A36-ED02-4FE2-AA49-C212A92908AA}
 	EndGlobalSection
 EndGlobal

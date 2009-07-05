@@ -1,1 +1,5 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" />
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ReferencePath>C:\Users\Tim\Visual Studio Projects\ASCOM Platform 5.1\Drivers and Simulators\Platform Dependencies\</ReferencePath>
+  </PropertyGroup>
+</Project>

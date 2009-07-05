@@ -68,12 +68,18 @@
     <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ASCOM.DriverAccess, Version=1.0.5.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
+    <Reference Include="ASCOM.DriverAccess, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Platform Dependencies\ASCOM.DriverAccess.dll</HintPath>
+    </Reference>
     <Reference Include="ASCOM.Exceptions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\Common Files\ASCOM\.net\ASCOM.Exceptions.dll</HintPath>
+      <HintPath>..\..\Platform Dependencies\ASCOM.Exceptions.dll</HintPath>
     </Reference>
-    <Reference Include="ASCOM.HelperNET, Version=5.1.1.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
+    <Reference Include="ASCOM.HelperNET, Version=5.2.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Platform Dependencies\ASCOM.HelperNET.dll</HintPath>
+    </Reference>
     <Reference Include="ASCOM.Interfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Platform Dependencies\ASCOM.Interfaces.dll</HintPath>
@@ -149,24 +155,6 @@
     <None Include="app.config" />
     <None Include="ASCOM.snk" />
     <None Include="Resources\ASCOM.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="ASCOM.Helper">
-      <Guid>{12DC26BD-E8F7-4328-8A8B-B16C6D87A077}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-    </COMReference>
-    <COMReference Include="ASCOM.Interface">
-      <Guid>{76618F90-032F-4424-A680-802467A55742}</Guid>
-      <VersionMajor>6</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-    </COMReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
