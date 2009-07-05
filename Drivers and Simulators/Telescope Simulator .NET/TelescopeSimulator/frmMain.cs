@@ -15,5 +15,24 @@ namespace ASCOM.TelescopeSimulator
         {
             InitializeComponent();
         }
+        public void DoSetupDialog()
+        {
+            SetupDialogForm setupForm = new SetupDialogForm();
+
+            
+            DialogResult ans = setupForm.ShowDialog(this);
+
+            if (ans == DialogResult.OK)
+            {
+                
+            }
+
+            setupForm.Dispose();
+        }
+
+        private void buttonSetup_Click(object sender, EventArgs e)
+        {
+            DoSetupDialog();
+        }
     }
 }

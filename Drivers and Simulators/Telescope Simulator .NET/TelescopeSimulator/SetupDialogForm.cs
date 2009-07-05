@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ASCOM.Telescope
+namespace ASCOM.TelescopeSimulator
 {
     [ComVisible(false)]					// Form not registered for COM!
     public partial class SetupDialogForm : Form
@@ -42,5 +42,6 @@ namespace ASCOM.Telescope
                 MessageBox.Show(other.Message);
             }
         }
+
     }
 }
