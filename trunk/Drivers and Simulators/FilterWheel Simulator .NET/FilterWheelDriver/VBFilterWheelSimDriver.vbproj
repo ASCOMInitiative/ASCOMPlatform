@@ -164,7 +164,6 @@
     <Content Include="Resources\FilterStop.gif" />
     <Content Include="Resources\Filter-Prev.gif" />
     <Content Include="Resources\Filter-Next.gif" />
-    <Content Include="Test.vbs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="ASCOM.Helper">
