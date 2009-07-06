@@ -106,7 +106,7 @@ Friend Class ChooserForm
 
             'Set Profile trace checked state on menu item 
             MenuProfileTraceEnabled.Checked = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT)
-
+            MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
             ' Assure window pops up on top of others.
             'Me.BringToFront()
 
@@ -315,6 +315,11 @@ Friend Class ChooserForm
         MenuProfileTraceEnabled.Checked = Not MenuProfileTraceEnabled.Checked 'Invert the selection
         SetName(TRACE_XMLACCESS, MenuProfileTraceEnabled.Checked.ToString)
         SetName(TRACE_PROFILE, MenuProfileTraceEnabled.Checked.ToString)
-
     End Sub
+
+    Private Sub MenuTransformTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuTransformTraceEnabled.Click
+        MenuTransformTraceEnabled.Checked = Not MenuTransformTraceEnabled.Checked 'Invert the selection
+        SetName(TRACE_TRANSFORM, MenuTransformTraceEnabled.Checked.ToString)
+    End Sub
+
 End Class

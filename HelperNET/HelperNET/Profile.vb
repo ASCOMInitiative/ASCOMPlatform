@@ -55,7 +55,7 @@ Public Class Profile
         m_sDeviceType = "Telescope"
         Tl = New TraceLogger("", "ProfileNET")
         Tl.Enabled = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT) 'Get enabled / disabled state from the user registry
-        Tl.LogMessage("New", "Trace logger createdOK")
+        Tl.LogMessage("New", "Trace logger created OK")
     End Sub
 
     ''' <summary>

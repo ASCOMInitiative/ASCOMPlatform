@@ -1,4 +1,4 @@
-﻿'Contains interfaes and global constants
+﻿'Contains interfaces, exceptions, global code and global constants
 
 Imports System
 Imports System.IO
@@ -15,13 +15,32 @@ Module GlobalConstants
     'HelperNET configuration constants
     Friend Const TRACE_XMLACCESS As String = "Trace XMLAccess", TRACE_XMLACCESS_DEFAULT As Boolean = False
     Friend Const TRACE_PROFILE As String = "Trace Profile", TRACE_PROFILE_DEFAULT As Boolean = False
+    Friend Const TRACE_TRANSFORM As String = "Trace Transform", TRACE_TRANSFORM_DEFAULT As Boolean = False
     Friend Const REGISTRY_CONFORM_FOLDER As String = "Software\ASCOM\HelperNET"
+
+    'NOVAS.COM Constants
+    Friend Const FN1 As Short = 1
+    Friend Const FN0 As Short = 0
+    Friend Const T0 As Double = 2451545.0 'TDB Julian date of epoch J2000.0.
+    Friend Const KMAU As Double = 149597870.0 'Astronomical Unit in kilometers.
+    Friend Const MAU As Double = 149597870000.0 'Astronomical Unit in meters.
+    Friend Const C As Double = 173.14463348 ' Speed of light in AU/Day.
+    Friend Const GS As Double = 1.3271243800000001E+20 ' Heliocentric gravitational constant.
+    Friend Const EARTHRAD As Double = 6378.14 'Radius of Earth in kilometers.
+    Friend Const F As Double = 0.00335281 'Earth ellipsoid flattening.
+    Friend Const OMEGA As Double = 0.00007292115 'Rotational angular velocity of Earth in radians/sec.
+    Friend Const TWOPI As Double = 6.2831853071795862 'Value of pi in radians.
+    Friend Const RAD2SEC As Double = 206264.80624709636 'Angle conversion constants.
+    Friend Const DEG2RAD As Double = 0.017453292519943295
+    Friend Const RAD2DEG As Double = 57.295779513082323
+
 
 End Module
 #End Region
 
-#Region "Interfaces"
 Namespace Interfaces
+
+#Region "HelperNET Public Interfaces"
     ''' <summary>
     ''' Interface to the .NET TraceLogger component
     ''' </summary>
@@ -998,6 +1017,176 @@ Namespace Interfaces
         Function ReceiveTerminatedBinary(ByVal TerminatorBytes() As Byte) As Byte()
     End Interface  'Interface to HelperNET.Serial
 
+    ''' <summary>
+    ''' Interface to the coordinate transform component; J2000 - apparent - local topocentric
+    ''' </summary>
+    ''' <remarks>Use this component to transform between J2000, apparent and local topocentric (JNow) coordinates or 
+    ''' vice versa. To use the component, instantiate it, then use one of SetJ2000 or SetJNow or SetApparent to 
+    ''' initialise with known values. Now use the RAJ2000, DECJ200, RAJNow, DECJNow, RAApparent and DECApparent 
+    ''' properties to read off the required transformed values.
+    '''<para>The component can be reused simply by setting new co-ordinates with a Set command, there
+    ''' is no need to create a new component each time a transform is required.</para>
+    ''' <para>Transforms are effected through the ASCOM NOVAS-COM engine that encapsulates the USNO NOVAS2 library. 
+    ''' The USNO NOVAS reference web page is: 
+    ''' http://www.usno.navy.mil/USNO/astronomical-applications/software-products/novas/novas-fortran/novas-fortran 
+    ''' </para>
+    ''' </remarks>
+    Public Interface ITransform
+        Inherits IDisposable
+        ''' <summary>
+        ''' Gets or sets the site latitude
+        ''' </summary>
+        ''' <value>Site latitude</value>
+        ''' <returns>Latitude in degrees</returns>
+        ''' <remarks>Positive numbers north of the equator, negative numbers south.</remarks>
+        Property SiteLatitude() As Double
+        ''' <summary>
+        ''' Gets or sets the site longitude
+        ''' </summary>
+        ''' <value>Site longitude</value>
+        ''' <returns>Longitude in degrees</returns>
+        ''' <remarks>Positive numbers east of the Greenwich meridian, negative numbes west of the Greenwich meridian.</remarks>
+        Property SiteLongitude() As Double
+        ''' <summary>
+        ''' Gets or sets the site elevation above sea level
+        ''' </summary>
+        ''' <value>Site elevation</value>
+        ''' <returns>Elevation in metres</returns>
+        ''' <remarks></remarks>
+        Property SiteElevation() As Double
+        ''' <summary>
+        ''' Gets or sets the site ambient temperature
+        ''' </summary>
+        ''' <value>Site ambient temperature</value>
+        ''' <returns>Temperature in degrees Celsius</returns>
+        ''' <remarks></remarks>
+        Property SiteTemperature() As Double
+        ''' <summary>
+        ''' Gets or sets a flag indicating whether refraction is calculated for topocentric co-ordinates
+        ''' </summary>
+        ''' <value>True / false flag indicating refaction is included / omitted from topocentric co-ordinates</value>
+        ''' <returns>Boolean flag</returns>
+        ''' <remarks></remarks>
+        Property Refraction() As Boolean
+        ''' <summary>
+        ''' Causes the transform component to recalculate values derrived from the last Set command
+        ''' </summary>
+        ''' <remarks>Use this when you have set J2000 co-ordinates and wish to ensure that the mount points to the same 
+        ''' co-ordinates allowing for local effects that change with time such as refraction.</remarks>
+        Sub Refresh()
+        ''' <summary>
+        ''' Sets the known J2000 Right Ascension and Declination coordinates that are to be transformed
+        ''' </summary>
+        ''' <param name="RA">RA in J2000 co-ordinates</param>
+        ''' <param name="DEC">DEC in J2000 co-ordinates</param>
+        ''' <remarks></remarks>
+        Sub SetJ2000(ByVal RA As Double, ByVal DEC As Double)
+        ''' <summary>
+        ''' Sets the known apparent Right Ascension and Declination coordinates that are to be transformed
+        ''' </summary>
+        ''' <param name="RA">RA in apparent co-ordinates</param>
+        ''' <param name="DEC">DEC in apparent co-ordinates</param>
+        ''' <remarks></remarks>
+        Sub SetApparent(ByVal RA As Double, ByVal DEC As Double)
+        '''<summary>
+        ''' Sets the known local topocentric Right Ascension and Declination coordinates that are to be transformed
+        ''' </summary>
+        ''' <param name="RA">RA in local topocentric co-ordinates</param>
+        ''' <param name="DEC">DEC in local topocentric co-ordinates</param>
+        ''' <remarks></remarks>
+        Sub SetTopocentric(ByVal RA As Double, ByVal DEC As Double)
+        ''' <summary>
+        ''' Returns the Right Ascension in J2000 co-ordinates
+        ''' </summary>
+        ''' <value>J2000 Right Ascension</value>
+        ''' <returns>Right Ascension in hours</returns>
+        ''' <exception cref="Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
+        ''' to read a value before any of the Set methods has been used or if the value can not be derived from the
+        ''' information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
+        ''' a SetApparent and one of the Site properties has not been set.</exception>
+        ''' <remarks></remarks>
+        ReadOnly Property RAJ2000() As Double
+        ''' <summary>
+        ''' Returns the Declination in J2000 co-ordinates
+        ''' </summary>
+        ''' <value>J2000 Declination</value>
+        ''' <returns>J2000 Declination</returns>
+        ''' <exception cref="Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
+        ''' to read a value before any of the Set methods has been used or if the value can not be derived from the
+        ''' information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
+        ''' a SetApparent and one of the Site properties has not been set.</exception>
+        ''' <remarks></remarks>
+        ReadOnly Property DECJ2000() As Double
+        ''' <summary>
+        ''' Returns the Right Ascension in local topocentric co-ordinates
+        ''' </summary>
+        ''' <value>Local topocentric Right Ascension</value>
+        ''' <returns>Local topocentric Right Ascension</returns>
+        ''' <exception cref="Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
+        ''' to read a value before any of the Set methods has been used or if the value can not be derived from the
+        ''' information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
+        ''' a SetApparent and one of the Site properties has not been set.</exception>
+        ''' <remarks></remarks>
+        ReadOnly Property RATopocentric() As Double
+        ''' <summary>
+        ''' Returns the Declination in local topocentric co-ordinates
+        ''' </summary>
+        ''' <value>Local topocentric Declination</value>
+        ''' <returns>Local topocentric Declination</returns>
+        ''' <exception cref="Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
+        ''' to read a value before any of the Set methods has been used or if the value can not be derived from the
+        ''' information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
+        ''' a SetApparent and one of the Site properties has not been set.</exception>
+        ''' <remarks></remarks>
+        ReadOnly Property DECTopocentric() As Double
+        ''' <summary>
+        ''' Returns the Right Ascension in apparent co-ordinates
+        ''' </summary>
+        ''' <value>Apparent Right Ascension</value>
+        ''' <returns>Right Ascension in hours</returns>
+        ''' <exception cref="Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
+        ''' to read a value before any of the Set methods has been used or if the value can not be derived from the
+        ''' information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
+        ''' a SetApparent and one of the Site properties has not been set.</exception>
+        ''' <remarks></remarks>
+        ReadOnly Property RAApparent() As Double
+        ''' <summary>
+        ''' Returns the Declination in apparent co-ordinates
+        ''' </summary>
+        ''' <value>Apparent Declination</value>
+        ''' <returns>Declination in degrees</returns>
+        ''' <exception cref="Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
+        ''' to read a value before any of the Set methods has been used or if the value can not be derived from the
+        ''' information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
+        ''' a SetApparent and one of the Site properties has not been set.</exception>
+        ''' <remarks></remarks>
+        ReadOnly Property DECApparent() As Double
+        ''' <summary>
+        ''' Returns the topocentric azimth angle of the target
+        ''' </summary>
+        ''' <value>Topocentric azimuth angle</value>
+        ''' <returns>Azimuth angle in degrees</returns>
+        ''' <exception cref="Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
+        ''' to read a value before any of the Set methods has been used or if the value can not be derived from the
+        ''' information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
+        ''' a SetApparent and one of the Site properties has not been set.</exception>
+        ''' <remarks></remarks>
+        ReadOnly Property AzimuthTopocentric() As Double
+        ''' <summary>
+        ''' Returns the topocentric elevation of the target
+        ''' </summary>
+        ''' <value>Topocentric elevation angle</value>
+        ''' <returns>Elevation angle in degrees</returns>
+        ''' <exception cref="Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
+        ''' to read a value before any of the Set methods has been used or if the value can not be derived from the
+        ''' information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
+        ''' a SetApparent and one of the Site properties has not been set.</exception>
+        ''' <remarks></remarks>
+        ReadOnly Property ElevationTopocentric() As Double
+    End Interface
+#End Region
+
+#Region "HelperNET Private Interfaces"
     Friend Interface IFileStoreProvider
         'Interface that a file store provider must implement to support a storage provider
         Sub CreateDirectory(ByVal p_SubKeyName As String)
@@ -1023,8 +1212,9 @@ Namespace Interfaces
         Sub DeleteKey(ByVal p_SubKeyName As String)
         Sub RenameKey(ByVal CurrentSubKeyName As String, ByVal NewSubKeyName As String)
     End Interface 'Interface for a general profile store provider
-End Namespace
 #End Region
+
+End Namespace
 
 #Region "Exceptions"
 Namespace Exceptions
@@ -1325,7 +1515,211 @@ Namespace Exceptions
         End Sub
     End Class
 
+    ''' <summary>
+    ''' Exception thrown when an attempt is made to read from the transform component before it has had co-ordinates
+    ''' set once by SetJ2000 or SetJNow.
+    ''' </summary>
+    ''' <remarks></remarks>
+    <Serializable()> _
+        Public Class TransformUninitialisedException
+        'Exception for Helper.NET component exceptions
+        Inherits HelperException
 
+        ''' <summary>
+        ''' Create a new exception with message 
+        ''' </summary>
+        ''' <param name="message">Message to be reported by the exception</param>
+        ''' <remarks></remarks>
+        Public Sub New(ByVal message As String)
+            MyBase.New(message)
+        End Sub
+
+        ''' <summary>
+        ''' Create a new exception with message 
+        ''' </summary>
+        ''' <param name="message">Message to be reported by the exception</param>
+        ''' <param name="inner">Exception to be reported as the inner exception</param>
+        ''' <remarks></remarks>
+        Public Sub New(ByVal message As String, ByVal inner As Exception)
+            MyBase.New(message, inner)
+        End Sub
+
+        ''' <summary>
+        ''' Serialise the exception
+        ''' </summary>
+        ''' <param name="info">Serialisation information</param>
+        ''' <param name="context">Serialisation context</param>
+        ''' <remarks></remarks>
+        Public Sub New( _
+                    ByVal info As System.Runtime.Serialization.SerializationInfo, _
+                    ByVal context As System.Runtime.Serialization.StreamingContext)
+            MyBase.New(info, context)
+        End Sub
+    End Class
+
+    ''' <summary>
+    ''' Exception thrown when an incompatible component is encountered that prevents HelperNET from funcitoning
+    ''' correctly.
+    ''' </summary>
+    ''' <remarks></remarks>
+    <Serializable()> _
+        Public Class CompatibilityException
+        'Exception for Helper.NET component exceptions
+        Inherits HelperException
+
+        ''' <summary>
+        ''' Create a new exception with message 
+        ''' </summary>
+        ''' <param name="message">Message to be reported by the exception</param>
+        ''' <remarks></remarks>
+        Public Sub New(ByVal message As String)
+            MyBase.New(message)
+        End Sub
+
+        ''' <summary>
+        ''' Create a new exception with message 
+        ''' </summary>
+        ''' <param name="message">Message to be reported by the exception</param>
+        ''' <param name="inner">Exception to be reported as the inner exception</param>
+        ''' <remarks></remarks>
+        Public Sub New(ByVal message As String, ByVal inner As Exception)
+            MyBase.New(message, inner)
+        End Sub
+
+        ''' <summary>
+        ''' Serialise the exception
+        ''' </summary>
+        ''' <param name="info">Serialisation information</param>
+        ''' <param name="context">Serialisation context</param>
+        ''' <remarks></remarks>
+        Public Sub New( _
+                    ByVal info As System.Runtime.Serialization.SerializationInfo, _
+                    ByVal context As System.Runtime.Serialization.StreamingContext)
+            MyBase.New(info, context)
+        End Sub
+    End Class
+
+    ''' <summary>
+    ''' Exception thrown when an attempt is made to read a value that has not yet been set.
+    ''' </summary>
+    ''' <remarks></remarks>
+    ''' 
+    <Serializable()> _
+        Public Class ValueNotSetException
+        'Exception for Helper.NET component exceptions
+        Inherits HelperException
+
+        ''' <summary>
+        ''' Create a new exception with message 
+        ''' </summary>
+        ''' <param name="message">Message to be reported by the exception</param>
+        ''' <remarks></remarks>
+        Public Sub New(ByVal message As String)
+            MyBase.New(message)
+        End Sub
+
+        ''' <summary>
+        ''' Create a new exception with message 
+        ''' </summary>
+        ''' <param name="message">Message to be reported by the exception</param>
+        ''' <param name="inner">Exception to be reported as the inner exception</param>
+        ''' <remarks></remarks>
+        Public Sub New(ByVal message As String, ByVal inner As Exception)
+            MyBase.New(message, inner)
+        End Sub
+
+        ''' <summary>
+        ''' Serialise the exception
+        ''' </summary>
+        ''' <param name="info">Serialisation information</param>
+        ''' <param name="context">Serialisation context</param>
+        ''' <remarks></remarks>
+        Public Sub New( _
+                    ByVal info As System.Runtime.Serialization.SerializationInfo, _
+                    ByVal context As System.Runtime.Serialization.StreamingContext)
+            MyBase.New(info, context)
+        End Sub
+    End Class
+    ''' <summary>
+    ''' Exception thrown when an attempt is made to read a value that has not yet been calculated.
+    ''' </summary>
+    ''' <remarks>This probably occurs because another variable has not been set or a required method has not been called.</remarks>
+    <Serializable()> _
+        Public Class ValueNotAvailableException
+        'Exception for Helper.NET component exceptions
+        Inherits HelperException
+
+        ''' <summary>
+        ''' Create a new exception with message 
+        ''' </summary>
+        ''' <param name="message">Message to be reported by the exception</param>
+        ''' <remarks></remarks>
+        Public Sub New(ByVal message As String)
+            MyBase.New(message)
+        End Sub
+
+        ''' <summary>
+        ''' Create a new exception with message 
+        ''' </summary>
+        ''' <param name="message">Message to be reported by the exception</param>
+        ''' <param name="inner">Exception to be reported as the inner exception</param>
+        ''' <remarks></remarks>
+        Public Sub New(ByVal message As String, ByVal inner As Exception)
+            MyBase.New(message, inner)
+        End Sub
+
+        ''' <summary>
+        ''' Serialise the exception
+        ''' </summary>
+        ''' <param name="info">Serialisation information</param>
+        ''' <param name="context">Serialisation context</param>
+        ''' <remarks></remarks>
+        Public Sub New( _
+                    ByVal info As System.Runtime.Serialization.SerializationInfo, _
+                    ByVal context As System.Runtime.Serialization.StreamingContext)
+            MyBase.New(info, context)
+        End Sub
+    End Class
+    ''' <summary>
+    ''' Exception thrown when a NOVAS.NET function returns a non-zero, error completion code.
+    ''' </summary>
+    ''' <remarks>This probably occurs because another variable has not been set or a required method has not been called.</remarks>
+    <Serializable()> _
+        Public Class NOVASFunctionException
+        'Exception for Helper.NET component exceptions
+        Inherits HelperException
+
+        ''' <summary>
+        ''' Create a new exception with message 
+        ''' </summary>
+        ''' <param name="message">Message to be reported by the exception</param>
+        ''' <remarks></remarks>
+        Public Sub New(ByVal message As String, ByVal FuncName As String, ByVal ErrCode As Short)
+            MyBase.New(message & " Error returned from function " & FuncName & " - error code: " & ErrCode.ToString)
+        End Sub
+
+        ''' <summary>
+        ''' Create a new exception with message 
+        ''' </summary>
+        ''' <param name="message">Message to be reported by the exception</param>
+        ''' <param name="inner">Exception to be reported as the inner exception</param>
+        ''' <remarks></remarks>
+        Public Sub New(ByVal message As String, ByVal inner As Exception)
+            MyBase.New(message, inner)
+        End Sub
+
+        ''' <summary>
+        ''' Serialise the exception
+        ''' </summary>
+        ''' <param name="info">Serialisation information</param>
+        ''' <param name="context">Serialisation context</param>
+        ''' <remarks></remarks>
+        Public Sub New( _
+                    ByVal info As System.Runtime.Serialization.SerializationInfo, _
+                    ByVal context As System.Runtime.Serialization.StreamingContext)
+            MyBase.New(info, context)
+        End Sub
+    End Class
 End Namespace
 #End Region
 
@@ -1471,9 +1865,25 @@ Module VersionCode
         TL.LogMessage("Versions", "HelperNET version: " & Assembly.GetExecutingAssembly.GetName.Version.ToString)
         TL.LogMessage("Versions", "CLR version: " & System.Environment.Version.ToString)
         AssemblyNames = Assembly.GetExecutingAssembly.GetReferencedAssemblies
-        'For Each AssName AssName As AssemblyName In AssemblyNames
-        ' TL.LogMessage("Versions", AssName.Name & " " & AssName.Version.ToString & " " & AssName.CodeBase)
-        ' Next
+
+        'Get Operating system information
+        Dim OS As System.OperatingSystem = System.Environment.OSVersion
+        TL.LogMessage("Versions", "OS Version " & OS.Platform & " Service Pack: " & OS.ServicePack & " Full: " & OS.VersionString)
+        'Get file system information
+        Dim MachineName As String = System.Environment.MachineName
+        Dim ProcCount As Integer = System.Environment.ProcessorCount
+        Dim SysDir As String = System.Environment.SystemDirectory
+        Dim WorkSet As Long = System.Environment.WorkingSet
+        TL.LogMessage("Versions", "Machine name: " & MachineName & " Number of processors: " & ProcCount & " System directory: " & SysDir & " Working set size: " & WorkSet & " bytes")
+
+        'Get fully qualified paths to particular directories in a non OS specific way
+        'There are many more options in the SpecialFolders Enum than are shown here!
+        TL.LogMessage("Versions", "Application Data: " & System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData))
+        TL.LogMessage("Versions", "Common Files: " & System.Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles))
+        TL.LogMessage("Versions", "My Documents: " & System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
+        TL.LogMessage("Versions", "Program Files: " & System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles))
+        TL.LogMessage("Versions", "System: " & System.Environment.GetFolderPath(Environment.SpecialFolder.System))
+        TL.LogMessage("Versions", "Current: " & System.Environment.CurrentDirectory)
     End Sub
 
 End Module

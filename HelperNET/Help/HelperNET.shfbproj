@@ -140,6 +140,10 @@
     <Folder Include="Introduction\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Examples\NOVAS2.aml" />
+    <None Include="Examples\NOVASCOM.aml" />
+    <None Include="Introduction\Which NOVAS.aml" />
+    <None Include="Examples\Transform.aml" />
     <None Include="Version History\Version 5.2.0.0.aml" />
     <None Include="Examples\Environment.aml" />
     <None Include="Utilities\Profile Tracing.aml" />

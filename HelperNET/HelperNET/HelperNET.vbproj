@@ -104,6 +104,25 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="HelperNETSettings.vb" />
+    <Compile Include="Kepler\KeplerStructsAndInterfaces.vb" />
+    <Compile Include="Kepler\Planets\Ear404Data.vb" />
+    <Compile Include="Kepler\KeplerEphemeris.vb" />
+    <Compile Include="Kepler\KeplerGlobal.vb" />
+    <Compile Include="Kepler\Planets\Jup404Data.vb" />
+    <Compile Include="Kepler\Planets\Mar404Data.vb" />
+    <Compile Include="Kepler\Planets\Mer404Data.vb" />
+    <Compile Include="Kepler\Planets\Mlat404Data.vb" />
+    <Compile Include="Kepler\Planets\Mlr404Data.vb" />
+    <Compile Include="Kepler\Planets\Nep404Data.vb" />
+    <Compile Include="Kepler\Planets\Plu404Data.vb" />
+    <Compile Include="Kepler\Planets\Sat404Data.vb" />
+    <Compile Include="Kepler\Planets\Ura404Data.vb" />
+    <Compile Include="Kepler\Planets\Ven404Data.vb" />
+    <Compile Include="NOVAS2.vb" />
+    <Compile Include="NOVASCOM\Deltat.vb" />
+    <Compile Include="NOVASCOM\Ephemeris.vb" />
+    <Compile Include="NOVASCOM\NOVASCOM.vb" />
+    <Compile Include="Transform.vb" />
     <Compile Include="VB6HelperSupport.vb">
       <SubType>Code</SubType>
     </Compile>
