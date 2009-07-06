@@ -52,16 +52,16 @@
   <ItemGroup>
     <Reference Include="ASCOM.DriverAccess, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Microsoft Visual Studio 9.0\Common7\IDE\Platform Dependencies\ASCOM.DriverAccess.dll</HintPath>
+      <HintPath>..\..\Platform Dependencies\ASCOM.DriverAccess.dll</HintPath>
     </Reference>
     <Reference Include="ASCOM.Exceptions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Microsoft Visual Studio 9.0\Common7\IDE\Platform Dependencies\ASCOM.Exceptions.dll</HintPath>
+      <HintPath>..\..\Platform Dependencies\ASCOM.Exceptions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ASCOM.HelperNET, Version=5.2.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Microsoft Visual Studio 9.0\Common7\IDE\Platform Dependencies\ASCOM.HelperNET.dll</HintPath>
+      <HintPath>..\..\Platform Dependencies\ASCOM.HelperNET.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.VisualBasic.PowerPacks.Vs, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
