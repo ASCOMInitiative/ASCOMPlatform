@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VSContent xmlns="http://schemas.microsoft.com/developer/vscontent/2005">
+  <Content>
+    <FileName>ASCOM Camera Driver (C#).zip</FileName>
+    <DisplayName>ASCOM Camera Driver Template (C#)</DisplayName>
+    <Description>Creates a C# skeleton project for an ASCOM Camera driver.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual C#"></Attribute>
+      <Attribute name="ProjectSubType" value=""></Attribute>
+    </Attributes>
+  </Content>
+  <Content>
+    <FileName>ASCOM Dome Driver (C#).zip</FileName>
+    <DisplayName>ASCOM Dome Driver Template (C#)</DisplayName>
+    <Description>Creates a C# skeleton project for an ASCOM Dome driver.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual C#"></Attribute>
+      <Attribute name="ProjectSubType" value=""></Attribute>
+    </Attributes>
+  </Content>
+  <Content>
+    <FileName>ASCOM FilterWheel Driver (C#).zip</FileName>
+    <DisplayName>ASCOM FilterWheel Driver Template (C#)</DisplayName>
+    <Description>Creates a C# skeleton project for an ASCOM FilterWheel driver.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual C#"></Attribute>
+      <Attribute name="ProjectSubType" value=""></Attribute>
+    </Attributes>
+  </Content>
+  <Content>
+    <FileName>ASCOM Focuser Driver (C#).zip</FileName>
+    <DisplayName>ASCOM Focuser Driver Template (C#)</DisplayName>
+    <Description>Creates a C# skeleton project for an ASCOM Focuser driver.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual C#"></Attribute>
+      <Attribute name="ProjectSubType" value=""></Attribute>
+    </Attributes>
+  </Content>
+  <Content>
+    <FileName>ASCOM Rotator Driver (C#).zip</FileName>
+    <DisplayName>ASCOM Rotator Driver Template (C#)</DisplayName>
+    <Description>Creates a C# skeleton project for an ASCOM Rotator driver.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual C#"></Attribute>
+      <Attribute name="ProjectSubType" value=""></Attribute>
+    </Attributes>
+  </Content>
+  <Content>
+    <FileName>ASCOM Switch Driver (C#).zip</FileName>
+    <DisplayName>ASCOM Switch Driver Template (C#)</DisplayName>
+    <Description>Creates a C# skeleton project for an ASCOM Switch driver.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual C#"></Attribute>
+      <Attribute name="ProjectSubType" value=""></Attribute>
+    </Attributes>
+  </Content>
+  <Content>
+    <FileName>ASCOM Telescope Driver (C#).zip</FileName>
+    <DisplayName>ASCOM Telescope Driver Template (C#)</DisplayName>
+    <Description>Creates a C# skeleton project for an ASCOM Telescope driver.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual C#"></Attribute>
+      <Attribute name="ProjectSubType" value=""></Attribute>
+    </Attributes>
+  </Content>
+  <Content>
+    <FileName>ASCOM Local Server (singleton).zip</FileName>
+    <DisplayName>ASCOM Local Server (singleton) (C#)</DisplayName>
+    <Description>Creates an EXE based server for multiple drivers/clients.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual C#"></Attribute>
+      <Attribute name="ProjectSubType" value=""></Attribute>
+    </Attributes>
+  </Content>
+  <Content>
+    <FileName>ASCOM Camera Driver (VB).zip</FileName>
+    <DisplayName>ASCOM Camera Driver Template (VB)</DisplayName>
+    <Description>Creates a VB skeleton project for an ASCOM Camera driver.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual Basic"></Attribute>
+      <Attribute name="ProjectSubType" value=""></Attribute>
+    </Attributes>
+  </Content>
+  <Content>
+    <FileName>ASCOM Dome Driver (VB).zip</FileName>
+    <DisplayName>ASCOM Dome Driver Template (VB)</DisplayName>
+    <Description>Creates a VB skeleton project for an ASCOM Dome driver.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual Basic"></Attribute>
+      <Attribute name="ProjectSubType" value=""></Attribute>
+    </Attributes>
+  </Content>
+  <Content>
+    <FileName>ASCOM FilterWheel Driver (VB).zip</FileName>
+    <DisplayName>ASCOM FilterWheel Driver Template (VB)</DisplayName>
+    <Description>Creates a VB skeleton project for an ASCOM FilterWheel driver.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual Basic"></Attribute>
+      <Attribute name="ProjectSubType" value=""></Attribute>
+    </Attributes>
+  </Content>
+  <Content>
+    <FileName>ASCOM Focuser Driver (VB).zip</FileName>
+    <DisplayName>ASCOM Focuser Driver Template (VB)</DisplayName>
+    <Description>Creates a VB skeleton project for an ASCOM Focuser driver.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual Basic"></Attribute>
+      <Attribute name="ProjectSubType" value=""></Attribute>
+    </Attributes>
+  </Content>
+  <Content>
+    <FileName>ASCOM Rotator Driver (VB).zip</FileName>
+    <DisplayName>ASCOM Rotator Driver Template (VB)</DisplayName>
+    <Description>Creates a VB skeleton project for an ASCOM Rotator driver.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual Basic"></Attribute>
+      <Attribute name="ProjectSubType" value=""></Attribute>
+    </Attributes>
+  </Content>
+  <Content>
+    <FileName>ASCOM Rotator Driver (VB).zip</FileName>
+    <DisplayName>ASCOM Rotator Driver Template (VB)</DisplayName>
+    <Description>Creates a VB skeleton project for an ASCOM Rotator driver.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual Basic"></Attribute>
+      <Attribute name="ProjectSubType" value=""></Attribute>
+    </Attributes>
+  </Content>
+  <Content>
+    <FileName>ASCOM Rotator Driver (VB).zip</FileName>
+    <DisplayName>ASCOM Rotator Driver Template (VB)</DisplayName>
+    <Description>Creates a VB skeleton project for an ASCOM Rotator driver.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual Basic"></Attribute>
+      <Attribute name="ProjectSubType" value=""></Attribute>
+    </Attributes>
+  </Content>
+  <Content>
+    <FileName>ASCOM Rotator Driver (VB).zip</FileName>
+    <DisplayName>ASCOM Rotator Driver Template (VB)</DisplayName>
+    <Description>Creates a VB skeleton project for an ASCOM Rotator driver.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual Basic"></Attribute>
+      <Attribute name="ProjectSubType" value=""></Attribute>
+    </Attributes>
+  </Content>
+	<Content>
+      <FileName>ASCOM Switch Driver (VB).zip</FileName>
+      <DisplayName>ASCOM Switch Driver Template (VB)</DisplayName>
+      <Description>Creates a VB skeleton project for an ASCOM Switch driver.</Description>
+      <FileContentType>VSTemplate</FileContentType>
+      <ContentVersion>1.0</ContentVersion>
+      <Attributes>
+        <Attribute name="TemplateType" value="Project"></Attribute>
+        <Attribute name="ProjectType" value="Visual Basic"></Attribute>
+        <Attribute name="ProjectSubType" value=""></Attribute>
+      </Attributes>
+  </Content>
+  <Content>
+    <FileName>ASCOM Telescope Driver (VB).zip</FileName>
+    <DisplayName>ASCOM Telescope Driver Template (VB)</DisplayName>
+    <Description>Creates a VB skeleton project for an ASCOM Telescope driver.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual Basic"></Attribute>
+      <Attribute name="ProjectSubType" value=""></Attribute>
+    </Attributes>
+  </Content>
+</VSContent>
+

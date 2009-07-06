@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="7d9253c2-fdfd-4c0d-8225-a96bddb49731" revisionNumber="1">
+	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<introduction>
+		<para>HelperNET is an update to ASCOM Platform 5 that introduces new native .NET implementations of the Helper 
+		components, which sit alongside the current COM components. The .NET components don't replace the COM components 
+		but do provide an alternate way for .NET applications to access their useful functionality.</para>
+		
+		<para>The opportunity has also been taken to fix some long standing issues with the COM components themselves 
+		in a way that maintains compatibility for existing clients and drivers. Key changes to 
+		the COM components are fixes for Vista security and presentation issues and replacement of the VB6 serial port component
+		with a .NET serial port implementation. This, hopefully, will fix serial port issues that a number of people are
+		experiencing with the current Helper Serial component.</para>
+		
+    	<para>This help file also documents the capabilities offered by the native .NET platform components. 
+      	Instructions on how to access these capabilities are given in the 
+      	section <link xlink:href="3d17234a-c873-4f65-af0f-52f182081a44" /></para>
+      	
+      	<para>These new components are translated from the original COM components and provide very similar functionality.
+      	They allow a .NET client or driver to use only .NET components and to function as a 32 or 64 bit application as required, 
+      	while also fixing some Vista compatibility issues in the COM components.</para>
+      	
+      	
+<alert class="note">
+  <para><legacyBold><legacyUnderline>This is a beta release.</legacyUnderline></legacyBold> It is believed to be 
+  solid but is not yet at the maturity level of the COM components... but please do test it out!</para>
+  <para>The update will appear as an entry in your installed programs list so that it can be uninstalled to return to 
+  to the standard Platform 5 configuration.</para>
+</alert>
+
+    </introduction>
+    
+    <section address="Architecture">
+    	<title>Architecture</title>
+      	<content>
+      		<para>The following notes refer to the pictures in the pdf file entitiled "HelperNET Pictures" installed in the StartMenu 
+      		ASCOM Platform/Docs/Helper Components folder.</para>
+      		
+      		<para>The first picture shows options available in ASCOM Platform Version 4. At this time all drivers and clients used COM 
+      		to access other clients and the helper components. </para>
+      		<para>The second picture shows the ASCOM Platform 5 world where COM clients continue
+      		as before and .NET clients are able to use the Client Access Toolkit to talk to drivers through either COM or 
+      		.NET interfaces. .NET clients and drivers continue to use the Helper components through COM interfaces.
+      		</para>
+      		<para>The final picture shows the changes that HelperNET brings. The new .NET components allow .NET clients and drivers 
+      		to use native .NET interfaces to access these components; they no longer need to use COM interfaces. Additionally
+      		some functionality in the COM Helpers is proxied out to the .NET components through private COM interfaces.</para> 
+      		
+      		<para>This allows some problematic code in the COM Helpers to be removed and replaced with equivalent function provided 
+      		by the .NET components while fully retaining the original COM interface. Retention of the binary COM interface is 
+      		important in order to ensure compatibility with older applications and drivers, the HelprNET approach provides 
+      		this and also allows the functionality in the .NET components to grow as the ASCOM Platform evolves.</para>
+      		
+      	</content>
+    </section>
+
+    <section address="Notes">
+    	<title>Notes</title>
+      	<content>
+      		<list class="bullet">
+ 				<listItem>See the version history for a summary of changes</listItem>
+  				<listItem>This update appears as <quoteInline>ASCOM Platform .NET Components 5.0</quoteInline> in 
+  				the add/remove programs dialogue</listItem>
+  				<listItem>Install saves copies of the original helper components and restores these if the update is 
+  				uninstalled</listItem>
+  				<listItem>You will see a message box the first time you use a component that accesses the profile 
+  				informing you that the Profile will be migrated. You should only see this once per system</listItem>
+  				<listItem>The registry based profile is not deleted and remains available to use if you uninstall the 
+  				update.</listItem>
+  				<listItem>Testing has been carried out in XP, Vista 64 and Windows 7 32 bit environments in the UK and US locales so far.</listItem>
+	  		</list>
+      	</content>
+    </section>
+
+    <section address="Acknowledgements">
+    	<title>Acknowledgements</title>
+      	<content>
+      		<para>I would like to gratefully acknowledge Tim Long, Chris Rowland and Bob Denny for constructive 
+      		discussions, knowledge transfer, help in design and for testing alpha versions of the code.</para>
+      		<para>Thanks all!</para>
+      		<para>Peter</para>
+      	</content>
+    </section>
+
+
+
+
+   	<relatedTopics>
+		<link xlink:href="3d17234a-c873-4f65-af0f-52f182081a44" />
+		<link xlink:href="e7734c14-0562-4010-b0c9-ddb5055cd318" />
+		<externalLink>
+			<linkText>ASCOM Initiative</linkText>
+			<linkAlternateText>Go to the ASCOM Initiative web site</linkAlternateText>
+			<linkUri>http://ascom-standards.org/</linkUri>
+		</externalLink>
+		<!--
+		<externalLink>
+			<linkText>HelperNET Pictures (doesn't work yet!)</linkText>
+			<linkAlternateText>This should link to the pictures pdf file, does anyone know how to code a relative URL to the pdf in the help file?</linkAlternateText>
+			<linkUri>file:///HelperNET.pdf</linkUri>
+		</externalLink>
+		-->
+		<codeEntityReference>N:ASCOM.HelperNET</codeEntityReference>
+	</relatedTopics>
+	</developerConceptualDocument>
+</topic>

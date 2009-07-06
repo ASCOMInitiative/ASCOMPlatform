@@ -1,0 +1,9 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <StartAction>Program</StartAction>
+    <StartProgram>c:\windows\System32\wscript.exe</StartProgram>
+    <StartArguments>test.vbs</StartArguments>
+    <StartWorkingDirectory>C:\Users\Mark\Documents\Visual Studio 2008\Projects\ASCOM\FilterWheelSim.Net\FilterWheelDriver\bin\Debug\</StartWorkingDirectory>
+    <RemoteDebugEnabled>false</RemoteDebugEnabled>
+  </PropertyGroup>
+</Project>

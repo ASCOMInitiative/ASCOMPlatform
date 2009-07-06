@@ -1,0 +1,127 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=Windows-1252">
+	<title>Profile Object</title>
+
+	<style type="text/css">
+		@import url(dc3_hh.css);
+	</style>
+</head>
+<body>
+
+<h1><a name="DriverHelperCLASSProfile"></a>Profile Object</h1>
+
+<p>
+<!-- See Also -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:See Also">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="DriverHelperCLASSProfileC">
+</object>&nbsp;&nbsp;&nbsp;
+<!-- Example
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:Example">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="DriverHelperCLASSProfileX">
+</object>&nbsp;&nbsp;&nbsp; -->
+<!-- Properties -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:Properties">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="DriverHelperCLASSProfileP">
+</object>&nbsp;&nbsp;&nbsp;
+<!-- Methods -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:Methods">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="DriverHelperCLASSProfileM">
+</object>&nbsp;&nbsp;&nbsp;
+<!-- Events -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:Events">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="DriverHelperCLASSProfileE">
+</object>&nbsp;&nbsp;&nbsp;
+</p>
+
+<p class=desc>
+ASCOM Scope Driver Helper Registry Profile Object</p>
+
+<h2>Remarks</h2>
+
+This object provides facilities for registering ASCOM Telescope drivers with the Chooser, and for storing persistence information in a private area of the system registry. The interface is callable from any automation-compliant client including a Windows Script Component (script implementation of an object, see the Windows Script Host documentation that comes with the ASCOM Platform). The object implements IObjectSafety, and reports itself safe for scripting, thus it may be used from within a web browser and dynamic HTML as well.
+
+<h2>System Registry Usage</h2>
+
+The Chooser identifies installed ASCOM Telescope drivers by enumerating the subkeys below the following location in the system registry:
+
+<pre><code>HKEY_LOCAL_MACHINE
+  Software
+    ASCOM
+      Telescope Drivers</code></pre>
+
+Each sub-key name is the the DriverID (COM ProgID) of an ASCOM Telescope driver. The default/unnamed value under each sub-key is the descriptive string that appears in the Chooser's dropdown list. The <a href="DriverHelperProfileMETHRegister.htm">Register()</a>, <a href="DriverHelperProfileMETHUnregister.htm">Unregister()</a>, and <a href="DriverHelperProfileMETHIsRegistered.htm">IsRegistered()</a> methods operate on these sub-keys and their unnamed values.
+
+<div class=note>Do not call the Win32 registry API directly to create entries in the Chooser's registry area. Use the <a href="DriverHelperProfileMETHRegister.htm">Register()</a> method of the <a href="DriverHelperCLASSProfile.htm">DriverHelper.Profile</a> object.</div>
+
+<p>The general-purpose methods in DriverHelper.Profile operate in the registry area <i>below the driver sub-keys</i>. All of the general purpose methods take the driver's DriverID as the first parameter, and this is how the registry methods know where to store and access data for that driver. 
+
+<p>For example, the LightBucket.Telescope driver wants to save the COM port number in the registry so that the user doesn't have to reselect the COM port each time the driver is invoked.
+
+<pre><code>Private m_Profile as DriverHelper.Profile
+Private port as Integer
+...
+Set m_Profile = New DriverHelper.Profile
+...
+port = 2
+m_Profile.WriteValue("COM Port", CStr(port))</code></pre>
+
+This would store the string representation of the port number in a named string value under
+
+<pre><code>HKEY_LOCAL_MACHINE
+  Software
+    ASCOM
+      Telescope Drivers
+        LightBucket.Telescope
+
+           COM Port    REG_SZ   "2"</code></pre>
+
+To retrieve this value the next time the driver is loaded, it would do something like this:
+
+<pre><code>port = CInt(m_Profile.GetValue("COM Port"))</code></pre>
+
+By using the Profile object, you completely insulate yourself from the registry storage details, and we can choose to move things around in the registry without affecting the operation of your driver.
+
+<hr color="silver" size=2>
+<div class=copyright>Copyright &copy; 2001-2007, The ASCOM Initiative</div>
+
+<Object type="application/x-oleobject"classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+    <param name="ALink Name" value="DriverHelperCLASSChooserC">
+</OBJECT>
+
+
+<object type="application/x-oleobject" 
+	classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+	<param name="ALink Name" value="DriverHelperCLASSProfileO">
+</object>
+
+</body>
+</html>
+

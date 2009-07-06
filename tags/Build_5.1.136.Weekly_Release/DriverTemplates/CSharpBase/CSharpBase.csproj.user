@@ -1,0 +1,9 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <StartAction>Program</StartAction>
+    <StartWorkingDirectory>
+    </StartWorkingDirectory>
+    <StartArguments>..\..\Test.js</StartArguments>
+    <StartProgram>C:\windows\system32\cscript.exe</StartProgram>
+  </PropertyGroup>
+</Project>

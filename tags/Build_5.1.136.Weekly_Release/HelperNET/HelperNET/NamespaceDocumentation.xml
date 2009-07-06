@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<doc>
+  <assembly>
+    <name>ASCOM.HelperNET</name>
+  </assembly>
+  
+  <members>
+    <member name="R:Project">
+      <summary>
+        This project is to migrate the VB6 COM based Helper components to .NET
+      </summary>
+    </member>
+    <member name="N:ASCOM.HelperNET">
+      <summary>
+        Contains the core HelperNET utilities
+      </summary>
+    </member>
+
+    <member name="N:ASCOM.HelperNET.Exceptions">
+      <summary>
+        Contains HelperNET exceptions
+      </summary>
+    </member>
+    <member name="N:ASCOM.HelperNET.Interfaces">
+      <summary>
+        Contains interfaces for the core HelperNET utilities
+      </summary>
+    </member>
+
+  </members>
+</doc>
