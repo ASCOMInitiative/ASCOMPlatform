@@ -257,11 +257,9 @@ Partial Class HandboxForm
         '
         'HandboxForm
         '
-        Me.AcceptButton = Me.btnPrev
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.Black
-        Me.CancelButton = Me.btnNext
         Me.ClientSize = New System.Drawing.Size(180, 238)
         Me.Controls.Add(Me.btnConnect)
         Me.Controls.Add(Me.TableLayoutPanel2)
@@ -269,12 +267,13 @@ Partial Class HandboxForm
         Me.Controls.Add(Me.TableLayoutPanel4)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Controls.Add(Me.picFilter)
+        Me.DataBindings.Add(New System.Windows.Forms.Binding("Location", Global.ASCOM.FilterWheelSim.My.MySettings.Default, "handboxFormLocation", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.ForeColor = System.Drawing.Color.Black
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.Location = Global.ASCOM.FilterWheelSim.My.MySettings.Default.handboxFormLocation
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "HandboxForm"
-        Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Filter Wheel Simulator"
         Me.TableLayoutPanel1.ResumeLayout(False)

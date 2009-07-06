@@ -16,10 +16,9 @@
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <StartAction>Project</StartAction>
+    <StartAction>Program</StartAction>
     <StartProgram>C:\Windows\System32\wscript.exe</StartProgram>
-    <StartArguments>
-    </StartArguments>
+    <StartArguments>test.vbs</StartArguments>
     <StartWorkingDirectory>C:\Users\Mark\Documents\Visual Studio 2008\Projects\ASCOM\FilterWheelSim.Net\</StartWorkingDirectory>
     <RemoteDebugEnabled>false</RemoteDebugEnabled>
   </PropertyGroup>

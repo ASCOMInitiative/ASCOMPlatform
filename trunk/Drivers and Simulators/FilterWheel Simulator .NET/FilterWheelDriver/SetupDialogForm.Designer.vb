@@ -351,8 +351,10 @@ Partial Class SetupDialogForm
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.picASCOM)
         Me.Controls.Add(Me.TableLayoutPanel1)
+        Me.DataBindings.Add(New System.Windows.Forms.Binding("Location", Global.ASCOM.FilterWheelSim.My.MySettings.Default, "setupFormLocation", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.ForeColor = System.Drawing.Color.White
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.Location = Global.ASCOM.FilterWheelSim.My.MySettings.Default.setupFormLocation
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "SetupDialogForm"

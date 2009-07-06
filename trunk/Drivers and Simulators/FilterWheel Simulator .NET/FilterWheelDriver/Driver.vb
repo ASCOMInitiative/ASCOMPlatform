@@ -43,9 +43,6 @@
 
         m_handBox = New HandboxForm
 
-        ' Initialise settings
-        m_handBox.DoStartup()
-
         ' Show the handbox now
         m_handBox.Show()
         m_handBox.Activate()
@@ -81,15 +78,15 @@
             ' and unmanaged resources.
             If disposing Then
                 ' Dispose managed resources.
-                'component.Dispose()
+                m_handBox.Close()
+                m_handBox.Dispose()
+                m_handBox = Nothing
             End If
 
             ' Call the appropriate methods to clean up 
             ' unmanaged resources here.
             ' If disposing is false, 
             ' only the following code is executed.
-            m_handBox.Close()
-            m_handBox = Nothing
         End If
         disposed = True
     End Sub
