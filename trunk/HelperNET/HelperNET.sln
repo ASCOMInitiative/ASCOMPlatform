@@ -12,6 +12,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Redirect Policy", "Redirect
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Profile Explorer", "Profile Explorer\Profile Explorer.vbproj", "{2CB726BB-E327-41C8-9AEC-5327E5187147}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "PreProcess404Files", "PreProcess404Files\PreProcess404Files.vbproj", "{6585A801-9A2A-4365-AE33-C6ADF8F26203}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +36,10 @@ Global
 		{2CB726BB-E327-41C8-9AEC-5327E5187147}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CB726BB-E327-41C8-9AEC-5327E5187147}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CB726BB-E327-41C8-9AEC-5327E5187147}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6585A801-9A2A-4365-AE33-C6ADF8F26203}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6585A801-9A2A-4365-AE33-C6ADF8F26203}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6585A801-9A2A-4365-AE33-C6ADF8F26203}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6585A801-9A2A-4365-AE33-C6ADF8F26203}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

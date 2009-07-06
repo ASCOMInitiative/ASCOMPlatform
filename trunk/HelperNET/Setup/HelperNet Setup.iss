@@ -63,9 +63,14 @@ Source: "..\HelperNET\bin\Release\ASCOM.HelperNET.pdb"; DestDir: "{app}"; Flags:
 Source: "..\HelperNET\bin\Release\ASCOM.HelperNET.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\HelperNET\bin\Release\Interop.Scripting.dll"; DestDir: "{app}"; Flags: ignoreversion
 
+;Install to 32bit directory as well on 64bit systems so that 32bit apps will find HelperNET in the place they expect on a 64bit system
+Source: "..\HelperNET\bin\Release\ASCOM.HelperNET.dll"; DestDir: "{cf32}\ASCOM\.net"; Flags: ignoreversion
+Source: "..\HelperNET\bin\Release\ASCOM.HelperNET.pdb"; DestDir: "{{cf32}\ASCOM\.net}"; Flags: ignoreversion
+Source: "..\HelperNET\bin\Release\ASCOM.HelperNET.xml"; DestDir: "{{cf32}\ASCOM\.net}"; Flags: ignoreversion
+Source: "..\HelperNET\bin\Release\Interop.Scripting.dll"; DestDir: "{{cf32}\ASCOM\.net}"; Flags: ignoreversion
+
 Source: "..\VB6Helper\Helper.dll"; DestDir: "{cf32}\ASCOM"; Flags: ignoreversion uninsneveruninstall 32bit
 Source: "..\VB6Helper2\Helper2.dll"; DestDir: "{cf32}\ASCOM"; Flags: ignoreversion uninsneveruninstall 32bit
-
 ;Install the ASCOM Master Interface type library introduced at 5.1.0.0
 ;Source: "..\..\ASCOM Master Interfaces\ASCOM Master Interfaces\bin\Release\ASCOM.MasterInterfaces.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "..\..\ASCOM Master Interfaces\ASCOM Master Interfaces\bin\Release\ASCOM.MasterInterfaces.pdb"; DestDir: "{app}"; Flags: ignoreversion
@@ -97,6 +102,16 @@ Source: "..\..\GACInstall\bin\Release\GACInstall.exe"; DestDir: {app}; Flags: ig
 ;ASCOM Icon
 Source: "..\HelperNET\Resources\ASCOM.ico"; DestDir: "{app}"; Flags: ignoreversion
 
+;NOVAS and Kepler PIAs
+Source: "..\..\..\..\ASCOM Source\Interfaces\NOVAS PIAs\ASCOM.NOVAS.DLL"; DestDir: {app}; Flags: ignoreversion
+Source: "..\..\..\..\ASCOM Source\Interfaces\Kepler PIAs\ASCOM.Kepler.DLL"; DestDir: {app}; Flags: ignoreversion
+
+;NOVAS C DLLs
+Source: "..\NOVAS-C x86-x64\Release\NOVAS-C.dll"; DestDir: {app}; Flags: ignoreversion
+Source: "..\NOVAS-C x86-x64\Release\NOVAS-C.pdb"; DestDir: {app}; Flags: ignoreversion
+Source: "..\NOVAS-C x86-x64\x64\Release\NOVAS-C64.dll"; DestDir: {app}; Flags: ignoreversion
+Source: "..\NOVAS-C x86-x64\x64\Release\NOVAS-C64.pdb"; DestDir: {app}; Flags: ignoreversion
+
 [Registry]
 Root: HKLM64; Subkey: "SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM64"; ValueType: string;  ValueName: ""; ValueData: "{cf}\ASCOM\.net";Flags: uninsdeletekey; Check: IsWin64
 Root: HKLM32; Subkey: "SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM64"; ValueType: string;  ValueName: ""; ValueData: "{cf64}\ASCOM\.net";Flags: uninsdeletekey; Check: IsWin64
@@ -113,11 +128,16 @@ Filename: "{app}\GACInstall.exe"; Parameters: Interop.Scripting.dll; Flags: runh
 Filename: "{win}\Microsoft.NET\Framework\v2.0.50727\regasm.exe"; Parameters: "/TLB ""{app}\ASCOM.HelperNET.dll"""; Flags: runhidden; StatusMsg: Registering HelperNET for COM
 Filename: "{app}\GACInstall.exe"; Parameters: policy.5.2.ASCOM.HelperNET.dll; Flags: runhidden; StatusMsg: Installing HelperNET redirection policy to the assembly cache
 Filename: "{cf32}\ASCOM\HelperNET\EraseProfile.exe"; Tasks: cleanprofile
-#emit 'Filename: "XCopy"; Parameters: """{app}\ASCOM.HelperNET.pdb"" ""{win}\assembly\GAC_MSIL\ASCOM.HelperNET\' + AppVer + '__565de7938946fba7""";StatusMsg: Installing debug symbols into the GAC;Flags: runhidden waituntilterminated'
+#emit 'Filename: "XCopy"; Parameters: """{app}\ASCOM.HelperNET.pdb"" ""{win}\assembly\GAC_MSIL\ASCOM.HelperNET\' + AppVer + '__565de7938946fba7""";StatusMsg: Installing HelperNET debug symbols into the GAC;Flags: runhidden waituntilterminated'
+#emit 'Filename: "XCopy"; Parameters: """{app}\NOVAS-C.dll"" ""{win}\assembly\GAC_MSIL\ASCOM.HelperNET\' + AppVer + '__565de7938946fba7""";StatusMsg: Installing NOVAS C 32bit library into the GAC;Flags: runhidden waituntilterminated'
+#emit 'Filename: "XCopy"; Parameters: """{app}\NOVAS-C.pdb"" ""{win}\assembly\GAC_MSIL\ASCOM.HelperNET\' + AppVer + '__565de7938946fba7""";StatusMsg: Installing NOVAS C 32bit library debug symbols into the GAC;Flags: runhidden waituntilterminated'
+#emit 'Filename: "XCopy"; Parameters: """{app}\NOVAS-C64.dll"" ""{win}\assembly\GAC_MSIL\ASCOM.HelperNET\' + AppVer + '__565de7938946fba7""";StatusMsg: Installing NOVAS C 64bit library into the GAC;Flags: runhidden waituntilterminated'
+#emit 'Filename: "XCopy"; Parameters: """{app}\NOVAS-C64.pdb"" ""{win}\assembly\GAC_MSIL\ASCOM.HelperNET\' + AppVer + '__565de7938946fba7""";StatusMsg: Installing NOVAS C 64bit library debug symbols into the GAC;Flags: runhidden waituntilterminated'
 
-;Master interfaces install
-;Filename: "{app}\GACInstall.exe"; Parameters: ASCOM.MasterInterfaces.dll; Flags: runhidden; StatusMsg: Installing ASCOM Master Interfaces to the assembly cache
-;Filename: "{win}\Microsoft.NET\Framework\v2.0.50727\regasm.exe"; Parameters: "/TLB ""{app}\ASCOM.MasterInterfaces.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM Master Interfaces for COM
+;NOVAS and Kepler
+Filename: "{app}\GACInstall.exe"; Parameters: ASCOM.NOVAS.dll; Flags: runhidden; StatusMsg: Installing NOVAS 2 to the assembly cache
+;Filename: "{win}\Microsoft.NET\Framework\v2.0.50727\regasm.exe"; Parameters: "/TLB ""{app}\ASCOM.NOVAS.dll"""; Flags: runhidden; StatusMsg: Registering NOVAS 2 for COM
+Filename: "{app}\GACInstall.exe"; Parameters: ASCOM.Kepler.dll; Flags: runhidden; StatusMsg: Installing Kepler to the assembly cache
 
 [UninstallRun]
 Filename: "{app}\GACInstall.exe"; Parameters: "/U ""policy.5.2.ASCOM.HelperNET"""; Flags: runhidden; StatusMsg: Uninstalling HelperNET redirection policy from the assembly cache
@@ -126,9 +146,15 @@ Filename: "{app}\GACInstall.exe"; Parameters: "/U ""Interop.Scripting"""; Flags:
 Filename: "{win}\Microsoft.NET\Framework\v2.0.50727\regasm.exe"; Parameters: "/Unregister /TLB ""{app}\ASCOM.HelperNET.dll"""; Flags: runhidden; StatusMsg: Unregistering HelperNET for COM
 Filename: "{cf32}\ASCOM\HelperNET\RestoreOriginalHelpers.cmd"; Parameters: """{cf32}\ASCOM\HelperNET\*.dll"" ""{cf32}\ASCOM"""; StatusMsg: Restoring helper dlls; Flags: runhidden
 
+;NOVAS
+Filename: "{app}\GACInstall.exe"; Parameters: "/U ""ASCOM.NOVAS"""; Flags: runhidden; StatusMsg: Uninstalling NOVAS 2 from the assembly cache
+;Filename: "{win}\Microsoft.NET\Framework\v2.0.50727\regasm.exe"; Parameters: "/Unregister /TLB ""{app}\ASCOM.NOVAS.dll"""; Flags: runhidden; StatusMsg: Unregistering NOVAS 2 for COM
+Filename: "{app}\GACInstall.exe"; Parameters: "/U ""ASCOM.Kepler"""; Flags: runhidden; StatusMsg: Uninstalling Kepler from the assembly cache
+
 ;Master interfaces uninstall
 ;Filename: "{app}\GACInstall.exe"; Parameters: "/U ""ASCOM.MasterInterfaces.dll"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM Master Interfaces from the assembly cache
 ;Filename: "{win}\Microsoft.NET\Framework\v2.0.50727\regasm.exe"; Parameters: "/Unregister /TLB ""{app}\ASCOM.MasterInterfaces.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM Master Interfaces for COM
+
 
 [UninstallDelete]
 Type: files; Name: "{cf32}\ASCOM\HelperNET\*.*"

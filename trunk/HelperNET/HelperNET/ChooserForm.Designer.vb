@@ -40,13 +40,14 @@
         Me.lblTitle = New System.Windows.Forms.Label
         Me.ChooserMenu = New System.Windows.Forms.MenuStrip
         Me.MenuTrace = New System.Windows.Forms.ToolStripMenuItem
+        Me.NormallyLeaveTheseDisabledToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator
         Me.MenuUseTraceAutoFilenames = New System.Windows.Forms.ToolStripMenuItem
         Me.MenuUseTraceManualFilename = New System.Windows.Forms.ToolStripMenuItem
         Me.MenuSerialTraceEnabled = New System.Windows.Forms.ToolStripMenuItem
-        Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog
         Me.MenuProfileTraceEnabled = New System.Windows.Forms.ToolStripMenuItem
-        Me.NormallyLeaveTheseDisabledToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator
+        Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog
+        Me.MenuTransformTraceEnabled = New System.Windows.Forms.ToolStripMenuItem
         CType(Me.picASCOM, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ChooserMenu.SuspendLayout()
         Me.SuspendLayout()
@@ -154,10 +155,21 @@
         '
         'MenuTrace
         '
-        Me.MenuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NormallyLeaveTheseDisabledToolStripMenuItem, Me.ToolStripSeparator1, Me.MenuUseTraceAutoFilenames, Me.MenuUseTraceManualFilename, Me.MenuSerialTraceEnabled, Me.MenuProfileTraceEnabled})
+        Me.MenuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NormallyLeaveTheseDisabledToolStripMenuItem, Me.ToolStripSeparator1, Me.MenuUseTraceAutoFilenames, Me.MenuUseTraceManualFilename, Me.MenuSerialTraceEnabled, Me.MenuProfileTraceEnabled, Me.MenuTransformTraceEnabled})
         Me.MenuTrace.Name = "MenuTrace"
-        Me.MenuTrace.Size = New System.Drawing.Size(86, 20)
-        Me.MenuTrace.Text = "Trace Options"
+        Me.MenuTrace.Size = New System.Drawing.Size(68, 20)
+        Me.MenuTrace.Text = "Transform"
+        '
+        'NormallyLeaveTheseDisabledToolStripMenuItem
+        '
+        Me.NormallyLeaveTheseDisabledToolStripMenuItem.Name = "NormallyLeaveTheseDisabledToolStripMenuItem"
+        Me.NormallyLeaveTheseDisabledToolStripMenuItem.Size = New System.Drawing.Size(263, 22)
+        Me.NormallyLeaveTheseDisabledToolStripMenuItem.Text = "Normally leave these disabled"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(260, 6)
         '
         'MenuUseTraceAutoFilenames
         '
@@ -183,16 +195,11 @@
         Me.MenuProfileTraceEnabled.Size = New System.Drawing.Size(263, 22)
         Me.MenuProfileTraceEnabled.Text = "Profile Trace Enabled"
         '
-        'NormallyLeaveTheseDisabledToolStripMenuItem
+        'MenuTransformTraceEnabled
         '
-        Me.NormallyLeaveTheseDisabledToolStripMenuItem.Name = "NormallyLeaveTheseDisabledToolStripMenuItem"
-        Me.NormallyLeaveTheseDisabledToolStripMenuItem.Size = New System.Drawing.Size(263, 22)
-        Me.NormallyLeaveTheseDisabledToolStripMenuItem.Text = "Normally leave these disabled"
-        '
-        'ToolStripSeparator1
-        '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(260, 6)
+        Me.MenuTransformTraceEnabled.Name = "MenuTransformTraceEnabled"
+        Me.MenuTransformTraceEnabled.Size = New System.Drawing.Size(263, 22)
+        Me.MenuTransformTraceEnabled.Text = "Transform Trace Enabled"
         '
         'ChooserForm
         '
@@ -236,5 +243,6 @@
     Friend WithEvents MenuProfileTraceEnabled As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents NormallyLeaveTheseDisabledToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents MenuTransformTraceEnabled As System.Windows.Forms.ToolStripMenuItem
 #End Region
 End Class

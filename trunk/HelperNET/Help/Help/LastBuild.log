@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shfbBuild product="Sandcastle Help File Builder Utilities" version="1.8.0.1" projectFile="C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\HelperNET.shfbproj" started="29/04/2009 19:09:03">
+<shfbBuild product="Sandcastle Help File Builder Utilities" version="1.8.0.1" projectFile="C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\HelperNET.shfbproj" started="03/07/2009 20:28:07">
 <buildStep step="Initializing">
 Loading and initializing plug-ins...
 Hierarchical Table of Contents Version 1.8.0.1
@@ -21,6 +21,7 @@ Parsing project files
 
 References to use:
     ASCOM.HelperNET
+    ASCOM.Kepler
     Microsoft.VisualBasic.Compatibility
     Scripting
     System
@@ -34,11 +35,11 @@ Copying XML comments files
 </buildStep>
 <buildStep step="GenerateSharedContent">
 Generating shared content files (en-US, English (United States))...
-    Last step completed in 00:00:00.0156
+    Last step completed in 00:00:00.1719
 </buildStep>
 <buildStep step="GenerateApiFilter">
 Generating API filter for MRefBuilder...
-    Last step completed in 00:00:00.0313
+    Last step completed in 00:00:00.0625
 </buildStep>
 <buildStep step="GenerateReflectionInfo">
 Generating reflection information...
@@ -46,26 +47,26 @@ Generating reflection information...
 GenerateRefInfo:
   MrefBuilder (v2.4.10520.1)
   Copyright &#184; Microsoft 2006
-  Info: Loaded 1 assemblies for reflection and 7 dependency assemblies.
-  Info: Wrote information on 3 namespaces, 19 types, and 246 members
+  Info: Loaded 1 assemblies for reflection and 8 dependency assemblies.
+  Info: Wrote information on 6 namespaces, 58 types, and 610 members
   XslTransform (v2.4.10520.1)
   Copyright &#184; Microsoft 2005-2006
   Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\MergeDuplicates.xsl'.
-    Last step completed in 00:00:03.0470
+    Last step completed in 00:00:05.1095
 </buildStep>
 <buildStep step="GenerateNamespaceSummaries">
 Generating namespace summary information...
-    Last step completed in 00:00:00.0000
+    Last step completed in 00:00:00.0313
 </buildStep>
 <buildStep step="ApplyVisibilityProperties">
 Applying visibility properties to reflection information file
     0 attribute nodes removed
     0 explicit interface implementations removed
     0 local and base class EII elements removed
-    6 protected members noted for removal
+    7 protected members noted for removal
     3 protected inherited framework members noted for removal
     Removing previously noted unwanted APIs and elements
-    Last step completed in 00:00:00.0938
+    Last step completed in 00:00:00.1875
 </buildStep>
 <buildStep step="TransformReflectionInfo">
 Transforming reflection output...
@@ -78,7 +79,7 @@ TransformManifest:
   XslTransform (v2.4.10520.1)
   Copyright &#184; Microsoft 2005-2006
   Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\ReflectionToManifest.xsl'.
-    Last step completed in 00:00:02.6407
+    Last step completed in 00:00:03.1407
 </buildStep>
 <buildStep step="ModifyHelpTopicFilenames">
 Modifying help topic filenames in reflection information file
@@ -193,7 +194,7 @@ C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\scripts\script_manifold.js
 C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\scripts\SplitScreen.js -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\Output\scripts\SplitScreen.js
 C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\styles\Presentation.css -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\Output\styles\Presentation.css
 C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\styles\Whidbey\presentation.css -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\Output\styles\Whidbey\presentation.css
-    Last step completed in 00:00:00.9532
+    Last step completed in 00:00:02.7344
 </buildStep>
 <buildStep step="CopyConceptualContent">
 Copying conceptual content...
@@ -208,6 +209,8 @@ Generating conceptual topic files
     C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Introduction\ASCOM Platform for .NET.aml -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\ddueXml\3d17234a-c873-4f65-af0f-52f182081a44.xml
     Parsing topic file 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Introduction\ASCOM Platform for COM.aml'
     C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Introduction\ASCOM Platform for COM.aml -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\ddueXml\e7734c14-0562-4010-b0c9-ddb5055cd318.xml
+    Parsing topic file 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Introduction\Which NOVAS.aml'
+    C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Introduction\Which NOVAS.aml -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\ddueXml\d5ab3afe-60aa-49aa-8dfb-caae4f86a8fc.xml
     Parsing topic file 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Version History\Version Summary.aml'
     C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Version History\Version Summary.aml -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\ddueXml\bfd53b69-9f13-489b-9a98-50c60d2a633b.xml
     Parsing topic file 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Version History\Version 5.2.0.0.aml'
@@ -232,20 +235,26 @@ Generating conceptual topic files
     C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Examples\Timer.aml -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\ddueXml\1ec7d59c-b79d-41ba-8d1f-d04883c77831.xml
     Parsing topic file 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Examples\Environment.aml'
     C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Examples\Environment.aml -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\ddueXml\5b11959b-ead4-4443-b2fc-bb0d781bd42a.xml
+    Parsing topic file 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Examples\Transform.aml'
+    C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Examples\Transform.aml -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\ddueXml\89c42576-83e8-490f-8e87-1e03874c4aa2.xml
+    Parsing topic file 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Examples\NOVASCOM.aml'
+    C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Examples\NOVASCOM.aml -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\ddueXml\0044dbc3-3e41-4ebe-b979-a4f50063631f.xml
+    Parsing topic file 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Examples\NOVAS2.aml'
+    C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Examples\NOVAS2.aml -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\ddueXml\28fe13af-8e51-415d-9d43-af0472b752ef.xml
     Parsing topic file 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Utilities\Serial Tracing.aml'
     C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Utilities\Serial Tracing.aml -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\ddueXml\5a679e99-87d5-4b72-a86e-88cbf10c52be.xml
     Parsing topic file 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Utilities\Profile Explorer.aml'
     C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Utilities\Profile Explorer.aml -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\ddueXml\62da8408-c4ed-45d8-9398-9990dcbe8cbd.xml
     Parsing topic file 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Utilities\Profile Tracing.aml'
     C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Utilities\Profile Tracing.aml -&gt; C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\ddueXml\f2211b59-6f8c-46fb-b47e-2afb569f3133.xml
-    Last step completed in 00:00:00.1094
+    Last step completed in 00:00:00.5313
 </buildStep>
 <buildStep step="CreateConceptualTopicConfigs">
 Creating conceptual topic configuration files...
     Companion files
     _ContentMetadata_.xml
     ConceptualManifest.xml
-    Last step completed in 00:00:00.0469
+    Last step completed in 00:00:00.1250
 </buildStep>
 <buildStep step="CopyAdditionalContent">
 Copying additional content files...
@@ -254,13 +263,13 @@ No additional content to copy
 </buildStep>
 <buildStep step="MergeTablesOfContents">
 Merging conceptual and additional tables of contents...
-    Last step completed in 00:00:00.0156
+    Last step completed in 00:00:00.0625
 </buildStep>
 <buildStep step="CreateBuildAssemblerConfigs">
 Creating Sandcastle configuration files...
     sandcastle.config
     conceptual.config
-    Last step completed in 00:00:00.0156
+    Last step completed in 00:00:00.0469
 </buildStep>
 <buildStep step="MergeCustomConfigs">
 Merging custom build component configurations
@@ -276,7 +285,7 @@ C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperN
     Skipping component 'Cached Reflection Index Data', not used in conceptual build
     Replacing default configuration for 'Code Block Component' with the custom configuration
     Removing unused ExampleComponent.
-    Last step completed in 00:00:00.0781
+    Last step completed in 00:00:00.1406
 </buildStep>
 <buildStep step="BuildConceptualTopics">
 Building conceptual help topics...
@@ -288,7 +297,7 @@ BuildConceptualTopics:
   Info: CopyFromFileComponent: Loading data file 'C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\Transforms\skeleton_conceptual.xml'.
   Info: CopyFromIndexComponent: Instantiating component.
   Info: CopyFromIndexComponent: Searching for files that match 'ddueXml\*.xml'.
-  Info: CopyFromIndexComponent: Indexed 18 elements in 18 files.
+  Info: CopyFromIndexComponent: Indexed 22 elements in 22 files.
   Info: CopyFromIndexComponent: Loaded 0 copy components.
   Info: SharedContentComponent: Instantiating component.
   Info: SharedContentComponent: Searching for files that match 'HelpFileBuilderTokens.tokens'.
@@ -297,7 +306,7 @@ BuildConceptualTopics:
   Info: SharedContentComponent: Loaded 1 shared content items.
   Info: CopyFromIndexComponent: Instantiating component.
   Info: CopyFromIndexComponent: Searching for files that match '_ContentMetadata_.xml'.
-  Info: CopyFromIndexComponent: Indexed 18 elements in 1 files.
+  Info: CopyFromIndexComponent: Indexed 22 elements in 1 files.
   Info: CopyFromIndexComponent: Loaded 0 copy components.
   Info: CodeBlockComponent: Instantiating component.
   Info: CodeBlockComponent: 
@@ -349,16 +358,17 @@ BuildConceptualTopics:
   Info: CachedResolveReferenceLinksComponent: Creating MSDN URL resolver.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Program Files\Sandcastle\Data\Reflection' for targets files of the form '*.xml'.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working' for targets files of the form 'reflection.xml'.
-  Info: CachedResolveReferenceLinksComponent: Loaded 170445 reference targets.
+  Info: CachedResolveReferenceLinksComponent: Loaded 170943 reference targets.
   Info: CachedResolveReferenceLinksComponent: 
       [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.1]
       Cached Resolve Reference  Links 2 Component.  Copyright &#184; 2006-2009, Eric Woodruff, All Rights Reserved
       http://SHFB.CodePlex.com
-  Info: CachedResolveReferenceLinksComponent: Loaded 38 cached MSDN URL entries
+  Info: CachedResolveReferenceLinksComponent: Loaded 43 cached MSDN URL entries
   Info: SaveComponent: Instantiating component.
   Info: BuildAssembler: Building topic 7d9253c2-fdfd-4c0d-8225-a96bddb49731
   Info: BuildAssembler: Building topic 3d17234a-c873-4f65-af0f-52f182081a44
   Info: BuildAssembler: Building topic e7734c14-0562-4010-b0c9-ddb5055cd318
+  Info: BuildAssembler: Building topic d5ab3afe-60aa-49aa-8dfb-caae4f86a8fc
   Info: BuildAssembler: Building topic bfd53b69-9f13-489b-9a98-50c60d2a633b
   Info: BuildAssembler: Building topic 79754361-93dd-4a14-bbd8-4853f306dab7
   Info: BuildAssembler: Building topic 6c2d0f0d-6460-494e-9c1f-08545fcff623
@@ -371,11 +381,14 @@ BuildConceptualTopics:
   Info: BuildAssembler: Building topic 0b546b03-9433-4bb8-bddc-adedcd4b751a
   Info: BuildAssembler: Building topic 1ec7d59c-b79d-41ba-8d1f-d04883c77831
   Info: BuildAssembler: Building topic 5b11959b-ead4-4443-b2fc-bb0d781bd42a
+  Info: BuildAssembler: Building topic 89c42576-83e8-490f-8e87-1e03874c4aa2
+  Info: BuildAssembler: Building topic 0044dbc3-3e41-4ebe-b979-a4f50063631f
+  Info: BuildAssembler: Building topic 28fe13af-8e51-415d-9d43-af0472b752ef
   Info: BuildAssembler: Building topic 5a679e99-87d5-4b72-a86e-88cbf10c52be
   Info: BuildAssembler: Building topic 62da8408-c4ed-45d8-9398-9990dcbe8cbd
   Info: BuildAssembler: Building topic f2211b59-6f8c-46fb-b47e-2afb569f3133
-  Info: Processed 18 topics
-    Last step completed in 00:00:28.3446
+  Info: Processed 22 topics
+    Last step completed in 00:00:28.6101
 </buildStep>
 <buildStep step="BuildReferenceTopics">
 Building reference help topics...
@@ -387,7 +400,7 @@ BuildReferenceTopics:
   Info: CopyFromFileComponent: Loading data file 'C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\Transforms\skeleton.xml'.
   Info: CachedCopyFromIndexComponent: Instantiating component.
   Info: CachedCopyFromIndexComponent: Searching for files that match 'reflection.xml'.
-  Info: CachedCopyFromIndexComponent: Indexed 354 elements in 1 files.
+  Info: CachedCopyFromIndexComponent: Indexed 852 elements in 1 files.
   Info: CachedCopyFromIndexComponent: Loaded 0 copy components.
   Info: CachedCopyFromIndexComponent: 
       [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.1]
@@ -418,7 +431,7 @@ BuildReferenceTopics:
   Info: CopyFromIndexComponent: Searching for files that match 'C:\windows\Microsoft.NET\Framework\v2.0.50727\en\*.xml'.
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\NamespaceDocumentation.xml'.
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\ASCOM.HelperNET.xml'.
-  Info: CopyFromIndexComponent: Indexed 81547 elements in 51 files.
+  Info: CopyFromIndexComponent: Indexed 81931 elements in 51 files.
   Info: CopyFromIndexComponent: Loaded 0 copy components.
   Info: ForEachComponent: Instantiating component.
   Info: ForEachComponent: Loading subcomponents.
@@ -493,12 +506,12 @@ BuildReferenceTopics:
   Info: CachedResolveReferenceLinksComponent: Creating MSDN URL resolver.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Program Files\Sandcastle\Data\Reflection' for targets files of the form '*.xml'.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working' for targets files of the form 'reflection.xml'.
-  Info: CachedResolveReferenceLinksComponent: Loaded 170445 reference targets.
+  Info: CachedResolveReferenceLinksComponent: Loaded 170943 reference targets.
   Info: CachedResolveReferenceLinksComponent: 
       [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.1]
       Cached Resolve Reference  Links 2 Component.  Copyright &#184; 2006-2009, Eric Woodruff, All Rights Reserved
       http://SHFB.CodePlex.com
-  Info: CachedResolveReferenceLinksComponent: Loaded 38 cached MSDN URL entries
+  Info: CachedResolveReferenceLinksComponent: Loaded 43 cached MSDN URL entries
   Info: SaveComponent: Instantiating component.
   Info: BuildAssembler: Building topic N:ASCOM.HelperNET
   Info: BuildAssembler: Building topic T:ASCOM.HelperNET.Chooser
@@ -608,6 +621,31 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.TraceLogger.LogMessage(System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.TraceLogger.LogMessage(System.String,System.String,System.Boolean)
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.TraceLogger.LogStart(System.String,System.String)
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.Transform
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.Transform
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.HelperNET.Transform.#ctor
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.Transform
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.HelperNET.Transform
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Transform.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.HelperNET.Transform.#ctor
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Transform.AzimuthTopocentric
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Transform.DECApparent
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Transform.DecJ2000
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Transform.DECJTopocentric
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Transform.Dispose
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Transform.ElevationTopocentric
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Transform.RAApparent
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Transform.RAJ2000
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Transform.RATopocentric
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Transform.Refraction
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Transform.Refresh
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Transform.SetApparent(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Transform.SetJ2000(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Transform.SetTopocentric(System.Double,System.Double)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Transform.SiteElevation
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Transform.SiteLatitude
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Transform.SiteLongitude
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Transform.SiteTemperature
   Info: BuildAssembler: Building topic T:ASCOM.HelperNET.Util
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.Util
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.HelperNET.Util.#ctor
@@ -667,6 +705,14 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Util.UTCDate
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Util.WaitForMilliseconds(System.Int32)
   Info: BuildAssembler: Building topic N:ASCOM.HelperNET.Exceptions
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.Exceptions.CompatibilityException
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.Exceptions.CompatibilityException
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.Exceptions.CompatibilityException
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.HelperNET.Exceptions.CompatibilityException
+  Info: BuildAssembler: Building topic Overload:ASCOM.HelperNET.Exceptions.CompatibilityException.#ctor
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.CompatibilityException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.CompatibilityException.#ctor(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.CompatibilityException.#ctor(System.String,System.Exception)
   Info: BuildAssembler: Building topic T:ASCOM.HelperNET.Exceptions.DriverNotRegisteredException
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.Exceptions.DriverNotRegisteredException
   Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.Exceptions.DriverNotRegisteredException
@@ -691,6 +737,16 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.InvalidValueException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.InvalidValueException.#ctor(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.InvalidValueException.#ctor(System.String,System.Exception)
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.Exceptions.NOVASFunctionException
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.Exceptions.NOVASFunctionException
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.Exceptions.NOVASFunctionException
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.HelperNET.Exceptions.NOVASFunctionException
+  Info: BuildAssembler: Building topic Overload:ASCOM.HelperNET.Exceptions.NOVASFunctionException.#ctor
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.NOVASFunctionException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.NOVASFunctionException.#ctor(System.String,System.Exception)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.NOVASFunctionException.#ctor(System.String,System.String,System.Int16)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;FuncName&quot;/&gt; documentation for M:ASCOM.HelperNET.Exceptions.NOVASFunctionException.#ctor(System.String,System.String,System.Int16)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;ErrCode&quot;/&gt; documentation for M:ASCOM.HelperNET.Exceptions.NOVASFunctionException.#ctor(System.String,System.String,System.Int16)
   Info: BuildAssembler: Building topic T:ASCOM.HelperNET.Exceptions.ProfilePersistenceException
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.Exceptions.ProfilePersistenceException
   Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.Exceptions.ProfilePersistenceException
@@ -715,6 +771,30 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.SerialPortInUseException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.SerialPortInUseException.#ctor(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.SerialPortInUseException.#ctor(System.String,System.Exception)
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.Exceptions.TransformUninitialisedException
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.Exceptions.TransformUninitialisedException
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.Exceptions.TransformUninitialisedException
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.HelperNET.Exceptions.TransformUninitialisedException
+  Info: BuildAssembler: Building topic Overload:ASCOM.HelperNET.Exceptions.TransformUninitialisedException.#ctor
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.TransformUninitialisedException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.TransformUninitialisedException.#ctor(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.TransformUninitialisedException.#ctor(System.String,System.Exception)
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.Exceptions.ValueNotAvailableException
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.Exceptions.ValueNotAvailableException
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.Exceptions.ValueNotAvailableException
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.HelperNET.Exceptions.ValueNotAvailableException
+  Info: BuildAssembler: Building topic Overload:ASCOM.HelperNET.Exceptions.ValueNotAvailableException.#ctor
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.ValueNotAvailableException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.ValueNotAvailableException.#ctor(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.ValueNotAvailableException.#ctor(System.String,System.Exception)
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.Exceptions.ValueNotSetException
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.Exceptions.ValueNotSetException
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.Exceptions.ValueNotSetException
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.HelperNET.Exceptions.ValueNotSetException
+  Info: BuildAssembler: Building topic Overload:ASCOM.HelperNET.Exceptions.ValueNotSetException.#ctor
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.ValueNotSetException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.ValueNotSetException.#ctor(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Exceptions.ValueNotSetException.#ctor(System.String,System.Exception)
   Info: BuildAssembler: Building topic N:ASCOM.HelperNET.Interfaces
   Info: BuildAssembler: Building topic T:ASCOM.HelperNET.Interfaces.IChooser
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.Interfaces.IChooser
@@ -806,6 +886,27 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Interfaces.ITraceLogger.LogMessage(System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Interfaces.ITraceLogger.LogMessage(System.String,System.String,System.Boolean)
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Interfaces.ITraceLogger.LogStart(System.String,System.String)
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.Interfaces.ITransform
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.Interfaces.ITransform
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.Interfaces.ITransform
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.HelperNET.Interfaces.ITransform
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Interfaces.ITransform.AzimuthTopocentric
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Interfaces.ITransform.DECApparent
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Interfaces.ITransform.DECJ2000
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Interfaces.ITransform.DECTopocentric
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Interfaces.ITransform.ElevationTopocentric
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Interfaces.ITransform.RAApparent
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Interfaces.ITransform.RAJ2000
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Interfaces.ITransform.RATopocentric
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Interfaces.ITransform.Refraction
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Interfaces.ITransform.Refresh
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Interfaces.ITransform.SetApparent(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Interfaces.ITransform.SetJ2000(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Interfaces.ITransform.SetTopocentric(System.Double,System.Double)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Interfaces.ITransform.SiteElevation
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Interfaces.ITransform.SiteLatitude
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Interfaces.ITransform.SiteLongitude
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Interfaces.ITransform.SiteTemperature
   Info: BuildAssembler: Building topic T:ASCOM.HelperNET.Interfaces.IUtil
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.Interfaces.IUtil
   Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.Interfaces.IUtil
@@ -860,9 +961,372 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Interfaces.IUtil.TimeZoneOffset
   Info: BuildAssembler: Building topic P:ASCOM.HelperNET.Interfaces.IUtil.UTCDate
   Info: BuildAssembler: Building topic M:ASCOM.HelperNET.Interfaces.IUtil.WaitForMilliseconds(System.Int32)
-  Info: Processed 342 topics
+  Info: BuildAssembler: Building topic N:ASCOM.HelperNET.KEPLER
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.KEPLER.BodyType
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.KEPLER.Ephemeris
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.KEPLER.Ephemeris
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.KEPLER.Ephemeris
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.HelperNET.KEPLER.Ephemeris
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.KEPLER.Ephemeris.#ctor
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.Ephemeris.a
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.Ephemeris.BodyType
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.Ephemeris.e
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.Ephemeris.Epoch
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.Ephemeris.G
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.KEPLER.Ephemeris.GetPositionAndVelocity(System.Double)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.Ephemeris.H
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.Ephemeris.Incl
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.Ephemeris.M
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.Ephemeris.n
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.Ephemeris.Name
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.Ephemeris.Node
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.Ephemeris.Number
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.Ephemeris.P
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.Ephemeris.Peri
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.Ephemeris.q
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.Ephemeris.z
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.KEPLER.IEphemeris
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.KEPLER.IEphemeris
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.KEPLER.IEphemeris
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.HelperNET.KEPLER.IEphemeris
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.IEphemeris.a
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.IEphemeris.BodyType
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.IEphemeris.e
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.IEphemeris.Epoch
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.IEphemeris.G
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.KEPLER.IEphemeris.GetPositionAndVelocity(System.Double)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.IEphemeris.H
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.IEphemeris.Incl
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.IEphemeris.M
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.IEphemeris.n
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.IEphemeris.Name
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.IEphemeris.Node
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.IEphemeris.Number
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.IEphemeris.P
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.IEphemeris.Peri
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.IEphemeris.q
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.KEPLER.IEphemeris.z
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.KEPLER.PlanetNumber
+  Info: BuildAssembler: Building topic N:ASCOM.HelperNET.NOVAS2
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVAS2.Body
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVAS2.BodyStruct
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.NOVAS2.BodyStruct
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.NOVAS2.BodyStruct
+  Info: BuildAssembler: Building topic Fields.T:ASCOM.HelperNET.NOVAS2.BodyStruct
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.BodyStruct.Name
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.BodyStruct.Number
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.BodyStruct.Type
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVAS2.BodyType
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVAS2.CatEntryStruct
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.NOVAS2.CatEntryStruct
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.NOVAS2.CatEntryStruct
+  Info: BuildAssembler: Building topic Fields.T:ASCOM.HelperNET.NOVAS2.CatEntryStruct
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.CatEntryStruct.Catalog
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.CatEntryStruct.Dec
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.CatEntryStruct.Parallax
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.CatEntryStruct.ProMoDec
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.CatEntryStruct.ProMoRA
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.CatEntryStruct.RA
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.CatEntryStruct.RadialVelocity
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.CatEntryStruct.StarName
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.CatEntryStruct.StarNumber
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVAS2.FundamentalArgsStruct
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.NOVAS2.FundamentalArgsStruct
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.NOVAS2.FundamentalArgsStruct
+  Info: BuildAssembler: Building topic Fields.T:ASCOM.HelperNET.NOVAS2.FundamentalArgsStruct
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.FundamentalArgsStruct.D
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.FundamentalArgsStruct.F
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.FundamentalArgsStruct.l
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.FundamentalArgsStruct.ldash
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.FundamentalArgsStruct.Omega
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVAS2.NOVAS
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.NOVAS2.NOVAS
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.HelperNET.NOVAS2.NOVAS.#ctor
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.NOVAS2.NOVAS
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.HelperNET.NOVAS2.NOVAS.#ctor
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.Aberration(System.Double[],System.Double[],System.Double,System.Double[]@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.AppPlanet(System.Double,ASCOM.HelperNET.NOVAS2.BodyStruct@,ASCOM.HelperNET.NOVAS2.BodyStruct@,System.Double@,System.Double@,System.Double@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.AppStar(System.Double,ASCOM.HelperNET.NOVAS2.BodyStruct@,ASCOM.HelperNET.NOVAS2.CatEntryStruct@,System.Double@,System.Double@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.AstroPlanet(System.Double,ASCOM.HelperNET.NOVAS2.BodyStruct@,ASCOM.HelperNET.NOVAS2.BodyStruct@,System.Double@,System.Double@,System.Double@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.AstroStar(System.Double,ASCOM.HelperNET.NOVAS2.BodyStruct@,ASCOM.HelperNET.NOVAS2.CatEntryStruct@,System.Double@,System.Double@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.BaryToGeo(System.Double[],System.Double[],System.Double[]@,System.Double@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.CalDate(System.Double,System.Int16@,System.Int16@,System.Int16@,System.Double@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.CelPole(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.EarthTilt(System.Double,System.Double@,System.Double@,System.Double@,System.Double@,System.Double@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.Ephemeris(System.Double,ASCOM.HelperNET.NOVAS2.BodyStruct@,ASCOM.HelperNET.NOVAS2.Origin,System.Double[]@,System.Double[]@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.Equ2Hor(System.Double,System.Double,System.Double,System.Double,ASCOM.HelperNET.NOVAS2.SiteInfoStruct@,System.Double,System.Double,ASCOM.HelperNET.NOVAS2.RefractionOption,System.Double@,System.Double@,System.Double@,System.Double@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.FundArgs(System.Double,System.Double[]@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.GetEarth(System.Double,ASCOM.HelperNET.NOVAS2.BodyStruct@,System.Double@,System.Double[]@,System.Double[]@,System.Double[]@,System.Double[]@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.JulianDate(System.Int16,System.Int16,System.Int16,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.LocalPlanet(System.Double,ASCOM.HelperNET.NOVAS2.BodyStruct@,ASCOM.HelperNET.NOVAS2.BodyStruct@,System.Double,ASCOM.HelperNET.NOVAS2.SiteInfoStruct@,System.Double@,System.Double@,System.Double@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.LocalStar(System.Double,ASCOM.HelperNET.NOVAS2.BodyStruct@,System.Double,ASCOM.HelperNET.NOVAS2.CatEntryStruct@,ASCOM.HelperNET.NOVAS2.SiteInfoStruct@,System.Double@,System.Double@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.MakeCatEntry(System.String,System.String,System.Int32,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,ASCOM.HelperNET.NOVAS2.CatEntryStruct@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.MeanStar(System.Double,ASCOM.HelperNET.NOVAS2.BodyStruct@,System.Double,System.Double,System.Double@,System.Double@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.Nutate(System.Double,ASCOM.HelperNET.NOVAS2.NutationDirection,System.Double[],System.Double[]@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.NutationAngles(System.Double,System.Double@,System.Double@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.Pnsw(System.Double,System.Double,System.Double,System.Double,System.Double[],System.Double[]@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.Precession(System.Double,System.Double[],System.Double,System.Double[]@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.ProperMotion(System.Double,System.Double[],System.Double[],System.Double,System.Double[]@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.RADec2Vector(System.Double,System.Double,System.Double,System.Double[]@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.Refract(ASCOM.HelperNET.NOVAS2.SiteInfoStruct@,System.Int16,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.SetBody(ASCOM.HelperNET.NOVAS2.BodyType,ASCOM.HelperNET.NOVAS2.Body,System.String,ASCOM.HelperNET.NOVAS2.BodyStruct@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.SiderealTime(System.Double,System.Double,System.Double,System.Double@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.SolarSystem(System.Double,ASCOM.HelperNET.NOVAS2.Body,ASCOM.HelperNET.NOVAS2.Origin,System.Double[]@,System.Double[]@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.Spin(System.Double,System.Double[],System.Double[]@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.StarVectors(ASCOM.HelperNET.NOVAS2.CatEntryStruct,System.Double[]@,System.Double[]@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.SunEph(System.Double,System.Double@,System.Double@,System.Double@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.SunField(System.Double[],System.Double[],System.Double[]@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.Tdb2Tdt(System.Double,System.Double@,System.Double@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.Terra(ASCOM.HelperNET.NOVAS2.SiteInfoStruct@,System.Double,System.Double[]@,System.Double[]@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.TopoPlanet(System.Double,ASCOM.HelperNET.NOVAS2.BodyStruct@,ASCOM.HelperNET.NOVAS2.BodyStruct@,System.Double,ASCOM.HelperNET.NOVAS2.SiteInfoStruct@,System.Double@,System.Double@,System.Double@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.TopoStar(System.Double,ASCOM.HelperNET.NOVAS2.BodyStruct@,System.Double,ASCOM.HelperNET.NOVAS2.CatEntryStruct@,ASCOM.HelperNET.NOVAS2.SiteInfoStruct@,System.Double@,System.Double@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.TransformCat(ASCOM.HelperNET.NOVAS2.TransformationOption,System.Double,ASCOM.HelperNET.NOVAS2.CatEntryStruct@,System.Double,System.Byte[]@,ASCOM.HelperNET.NOVAS2.CatEntryStruct@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.TransformHip(ASCOM.HelperNET.NOVAS2.CatEntryStruct@,ASCOM.HelperNET.NOVAS2.CatEntryStruct@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.Vector2RADec(System.Double[],System.Double@,System.Double@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.VirtualPlanet(System.Double,ASCOM.HelperNET.NOVAS2.BodyStruct@,ASCOM.HelperNET.NOVAS2.BodyStruct@,System.Double@,System.Double@,System.Double@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.VirtualStar(System.Double,ASCOM.HelperNET.NOVAS2.BodyStruct@,ASCOM.HelperNET.NOVAS2.CatEntryStruct@,System.Double@,System.Double@)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVAS2.NOVAS.Wobble(System.Double,System.Double,System.Double[],System.Double[]@)
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVAS2.NutationDirection
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVAS2.Origin
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVAS2.PosVector
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.NOVAS2.PosVector
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.NOVAS2.PosVector
+  Info: BuildAssembler: Building topic Fields.T:ASCOM.HelperNET.NOVAS2.PosVector
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.PosVector.x
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.PosVector.y
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.PosVector.z
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVAS2.RefractionOption
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVAS2.SiteInfoStruct
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.NOVAS2.SiteInfoStruct
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.NOVAS2.SiteInfoStruct
+  Info: BuildAssembler: Building topic Fields.T:ASCOM.HelperNET.NOVAS2.SiteInfoStruct
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.SiteInfoStruct.Height
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.SiteInfoStruct.Latitude
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.SiteInfoStruct.Longitude
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.SiteInfoStruct.Pressure
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.SiteInfoStruct.Temperature
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVAS2.TransformationOption
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVAS2.VelVector
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.NOVAS2.VelVector
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.NOVAS2.VelVector
+  Info: BuildAssembler: Building topic Fields.T:ASCOM.HelperNET.NOVAS2.VelVector
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.VelVector.x
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.VelVector.y
+  Info: BuildAssembler: Building topic F:ASCOM.HelperNET.NOVAS2.VelVector.z
+  Info: BuildAssembler: Building topic N:ASCOM.HelperNET.NOVASCOM
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVASCOM.BodyType
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVASCOM.Earth
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.NOVASCOM.Earth
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.NOVASCOM.Earth
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.HelperNET.NOVASCOM.Earth
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.Earth.#ctor
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Earth.BarycentricPosition
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Earth.BarycentricTime
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Earth.BarycentricVelocity
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Earth.EarthEphemeris
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Earth.EquationOfEquinoxes
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Earth.HeliocentricPosition
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Earth.HeliocentricVelocity
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Earth.MeanObliquity
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Earth.NutationInLongitude
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Earth.NutationInObliquity
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.Earth.SetForTime(System.Double)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Earth.TrueObliquity
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVASCOM.IEarth
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.NOVASCOM.IEarth
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.NOVASCOM.IEarth
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.HelperNET.NOVASCOM.IEarth
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IEarth.BarycentricPosition
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IEarth.BarycentricTime
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IEarth.BarycentricVelocity
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IEarth.EarthEphemeris
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IEarth.EquationOfEquinoxes
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IEarth.HeliocentricPosition
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IEarth.HeliocentricVelocity
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IEarth.MeanObliquity
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IEarth.NutationInLongitude
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IEarth.NutationInObliquity
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IEarth.SetForTime(System.Double)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IEarth.TrueObliquity
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVASCOM.IPlanet
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.NOVASCOM.IPlanet
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.NOVASCOM.IPlanet
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.HelperNET.NOVASCOM.IPlanet
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IPlanet.DeltaT
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IPlanet.EarthEphemeris
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IPlanet.Ephemeris
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IPlanet.GetApparentPosition(System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IPlanet.GetAstrometricPosition(System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IPlanet.GetLocalPosition(System.Double,ASCOM.HelperNET.NOVASCOM.Site)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IPlanet.GetTopocentricPosition(System.Double,ASCOM.HelperNET.NOVASCOM.Site,System.Boolean)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IPlanet.GetVirtualPosition(System.Double)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IPlanet.Name
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IPlanet.Number
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IPlanet.Type
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVASCOM.IPositionVector
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.NOVASCOM.IPositionVector
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.NOVASCOM.IPositionVector
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.HelperNET.NOVASCOM.IPositionVector
+  Info: BuildAssembler: Building topic Overload:ASCOM.HelperNET.NOVASCOM.IPositionVector.SetFromSiteJD
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IPositionVector.Aberration(ASCOM.HelperNET.NOVASCOM.VelocityVector)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IPositionVector.Azimuth
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IPositionVector.Declination
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IPositionVector.Distance
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IPositionVector.Elevation
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IPositionVector.LightTime
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IPositionVector.Precess(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IPositionVector.ProperMotion(ASCOM.HelperNET.NOVASCOM.VelocityVector,System.Double,System.Double)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IPositionVector.RightAscension
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IPositionVector.SetFromSite(ASCOM.HelperNET.NOVASCOM.Site,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IPositionVector.SetFromSiteJD(ASCOM.HelperNET.NOVASCOM.Site,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IPositionVector.SetFromSiteJD(ASCOM.HelperNET.NOVASCOM.Site,System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IPositionVector.SetFromStar(ASCOM.HelperNET.NOVASCOM.Star)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IPositionVector.x
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IPositionVector.y
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IPositionVector.z
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVASCOM.ISite
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.NOVASCOM.ISite
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.NOVASCOM.ISite
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.HelperNET.NOVASCOM.ISite
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.ISite.Height
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.ISite.Latitude
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.ISite.Longitude
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.ISite.Pressure
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.ISite.Set(System.Double,System.Double,System.Double)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.ISite.Temperature
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVASCOM.IStar
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.NOVASCOM.IStar
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.NOVASCOM.IStar
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.HelperNET.NOVASCOM.IStar
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IStar.Catalog
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IStar.Declination
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IStar.DeltaT
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IStar.EarthEphemeris
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IStar.GetApparentPosition(System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IStar.GetAstrometricPosition(System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IStar.GetLocalPosition(System.Double,ASCOM.HelperNET.NOVASCOM.Site)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IStar.GetTopocentricPosition(System.Double,ASCOM.HelperNET.NOVASCOM.Site,System.Boolean)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IStar.GetVirtualPosition(System.Double)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IStar.Name
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IStar.Number
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IStar.Parallax
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IStar.ProperMotionDec
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IStar.ProperMotionRA
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IStar.RadialVelocity
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IStar.RightAscension
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IStar.Set(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IStar.SetHipparcos(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVASCOM.IVelocityVector
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.NOVASCOM.IVelocityVector
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.NOVASCOM.IVelocityVector
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.HelperNET.NOVASCOM.IVelocityVector
+  Info: BuildAssembler: Building topic Overload:ASCOM.HelperNET.NOVASCOM.IVelocityVector.SetFromSiteJD
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IVelocityVector.DecVelocity
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IVelocityVector.RadialVelocity
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IVelocityVector.RAVelocity
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IVelocityVector.SetFromSite(ASCOM.HelperNET.NOVASCOM.Site,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IVelocityVector.SetFromSiteJD(ASCOM.HelperNET.NOVASCOM.Site,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IVelocityVector.SetFromSiteJD(ASCOM.HelperNET.NOVASCOM.Site,System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.IVelocityVector.SetFromStar(ASCOM.HelperNET.NOVASCOM.Star)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IVelocityVector.x
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IVelocityVector.y
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.IVelocityVector.z
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVASCOM.OriginType
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVASCOM.Planet
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.NOVASCOM.Planet
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.NOVASCOM.Planet
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.HelperNET.NOVASCOM.Planet
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.Planet.#ctor
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Planet.DeltaT
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Planet.EarthEphemeris
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Planet.Ephemeris
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.Planet.GetApparentPosition(System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.Planet.GetAstrometricPosition(System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.Planet.GetLocalPosition(System.Double,ASCOM.HelperNET.NOVASCOM.Site)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.Planet.GetTopocentricPosition(System.Double,ASCOM.HelperNET.NOVASCOM.Site,System.Boolean)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.Planet.GetVirtualPosition(System.Double)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Planet.Name
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Planet.Number
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Planet.Type
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVASCOM.PlanetNumber
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVASCOM.PositionVector
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.NOVASCOM.PositionVector
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.NOVASCOM.PositionVector
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.HelperNET.NOVASCOM.PositionVector
+  Info: BuildAssembler: Building topic Overload:ASCOM.HelperNET.NOVASCOM.PositionVector.#ctor
+  Info: BuildAssembler: Building topic Overload:ASCOM.HelperNET.NOVASCOM.PositionVector.SetFromSiteJD
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.PositionVector.#ctor
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.PositionVector.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.PositionVector.Aberration(ASCOM.HelperNET.NOVASCOM.VelocityVector)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.PositionVector.Azimuth
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.PositionVector.Declination
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.PositionVector.Distance
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.PositionVector.Elevation
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.PositionVector.LightTime
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.PositionVector.Precess(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.PositionVector.ProperMotion(ASCOM.HelperNET.NOVASCOM.VelocityVector,System.Double,System.Double)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.PositionVector.RightAscension
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.PositionVector.SetFromSite(ASCOM.HelperNET.NOVASCOM.Site,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.PositionVector.SetFromSiteJD(ASCOM.HelperNET.NOVASCOM.Site,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.PositionVector.SetFromSiteJD(ASCOM.HelperNET.NOVASCOM.Site,System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.PositionVector.SetFromStar(ASCOM.HelperNET.NOVASCOM.Star)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.PositionVector.x
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.PositionVector.y
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.PositionVector.z
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVASCOM.Site
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.NOVASCOM.Site
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.NOVASCOM.Site
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.HelperNET.NOVASCOM.Site
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.Site.#ctor
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Site.Height
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Site.Latitude
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Site.Longitude
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Site.Pressure
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.Site.Set(System.Double,System.Double,System.Double)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Site.Temperature
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVASCOM.Star
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.NOVASCOM.Star
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.NOVASCOM.Star
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.HelperNET.NOVASCOM.Star
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.Star.#ctor
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Star.Catalog
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Star.Declination
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Star.DeltaT
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Star.EarthEphemeris
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.Star.GetApparentPosition(System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.Star.GetAstrometricPosition(System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.Star.GetLocalPosition(System.Double,ASCOM.HelperNET.NOVASCOM.Site)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.Star.GetTopocentricPosition(System.Double,ASCOM.HelperNET.NOVASCOM.Site,System.Boolean)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.Star.GetVirtualPosition(System.Double)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Star.Name
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Star.Number
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Star.Parallax
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Star.ProperMotionDec
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Star.ProperMotionRA
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Star.RadialVelocity
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.Star.RightAscension
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.Star.Set(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.Star.SetHipparcos(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)
+  Info: BuildAssembler: Building topic T:ASCOM.HelperNET.NOVASCOM.VelocityVector
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.HelperNET.NOVASCOM.VelocityVector
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.HelperNET.NOVASCOM.VelocityVector
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.HelperNET.NOVASCOM.VelocityVector
+  Info: BuildAssembler: Building topic Overload:ASCOM.HelperNET.NOVASCOM.VelocityVector.SetFromSiteJD
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.VelocityVector.#ctor
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.VelocityVector.DecVelocity
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.VelocityVector.RadialVelocity
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.VelocityVector.RAVelocity
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.VelocityVector.SetFromSite(ASCOM.HelperNET.NOVASCOM.Site,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.VelocityVector.SetFromSiteJD(ASCOM.HelperNET.NOVASCOM.Site,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.VelocityVector.SetFromSiteJD(ASCOM.HelperNET.NOVASCOM.Site,System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.HelperNET.NOVASCOM.VelocityVector.SetFromStar(ASCOM.HelperNET.NOVASCOM.Star)
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.VelocityVector.x
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.VelocityVector.y
+  Info: BuildAssembler: Building topic P:ASCOM.HelperNET.NOVASCOM.VelocityVector.z
+  Info: Processed 787 topics
   Info: CachedCopyFromIndexComponent: Used &quot;reflection&quot; cache entries: 2
-    Last step completed in 00:00:38.0637
+    Last step completed in 00:00:44.0323
 </buildStep>
 <buildStep step="GenerateIntermediateTableOfContents">
 Generating intermediate table of contents file...
@@ -874,7 +1338,7 @@ GenerateIntermediateTOC:
 <plugIn name="Hierarchical Table of Contents" behavior="After" priority="1000">
 Retrieving namespace topic title from shared content...
 Creating namespace hierarchy...
-</plugIn>    Last step completed in 00:00:01.1563
+</plugIn>    Last step completed in 00:00:01.2032
 </buildStep>
 <buildStep step="ExtractingHtmlInfo">
 Extracting HTML info for Help 1.x and/or website...
@@ -884,15 +1348,15 @@ Copyright &#184; 2008-2009, Eric Woodruff, All Rights Reserved
 E-Mail: Eric@EWoodruff.us
 
 Using LCID '1033', code page '65001', encoding charset 'UTF-8'.
-Processed 360 HTML files
+Processed 809 HTML files
 Sorting keywords and generating See Also indices
 Saving Help 1.x keyword index to C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\HelperNET.hhk
 Saving Help 1.x table of contents to C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\HelperNET.hhc
-    Last step completed in 00:00:02.6563
+    Last step completed in 00:00:05.6720
 </buildStep>
 <buildStep step="GenerateHelpFormatTableOfContents">
 Generating HTML Help 1.x table of contents file...
-    Last step completed in 00:00:00.0000
+    Last step completed in 00:00:00.0156
 </buildStep>
 <buildStep step="UpdateTableOfContents">
 Updating table of contents with additional content items and determining default topic...
@@ -904,7 +1368,7 @@ Generating HTML Help 1.x index file...
 </buildStep>
 <buildStep step="GenerateHelpProject">
 Generating HTML Help 1.x project file...
-    Last step completed in 00:00:00.0156
+    Last step completed in 00:00:00.0313
 </buildStep>
 <buildStep step="CompilingHelpFile">
 Compiling HTML Help 1.x file...
@@ -920,13 +1384,13 @@ Build1xHelpFile:
   
   
   
-  Compile time: 0 minutes, 4 seconds
+  Compile time: 0 minutes, 10 seconds
   
-  362	Topics
+  811	Topics
   
-  3,766	Local links
+  9,493	Local links
   
-  2,511	Internet links
+  5,210	Internet links
   
   0	Graphics
   
@@ -934,19 +1398,19 @@ Build1xHelpFile:
   
   
   
-  Created c:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\Output\HelperNET.chm, 699,695 bytes
+  Created c:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\HelperNET\Help\Help\Working\Output\HelperNET.chm, 1,484,347 bytes
   
-  Compression decreased file by 4,248,906 bytes.
+  Compression decreased file by 9,576,156 bytes.
   
-    Last step completed in 00:00:06.3752
+    Last step completed in 00:00:11.6409
 </buildStep>
 <buildStep step="CleanIntermediates">
 Removing intermediate files...
-    Last step completed in 00:00:00.3438
+    Last step completed in 00:00:00.3281
 </buildStep>
 <buildStep step="Completed">
 
-Build completed successfully at 04/29/2009 07:10 PM.  Total time: 00:01:24.1588
+Build completed successfully at 07/03/2009 08:29 PM.  Total time: 00:01:44.6588
 
 </buildStep>
 </shfbBuild>

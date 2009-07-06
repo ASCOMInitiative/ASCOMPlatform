@@ -54,17 +54,17 @@ Public Class TraceLogger
     Protected Overridable Sub Dispose(ByVal disposing As Boolean)
         If Not Me.disposedValue Then
             If disposing Then
-            End If
-            If Not (g_LogFile Is Nothing) Then
-                Try : g_LogFile.Flush() : Catch : End Try
-                Try : g_LogFile.Close() : Catch : End Try
-                Try : g_LogFile.Dispose() : Catch : End Try
-                g_LogFile = Nothing
-            End If
-            If Not (mut Is Nothing) Then
-                Try : mut.ReleaseMutex() : Catch : End Try
-                Try : mut.Close() : Catch : End Try
-                mut = Nothing
+                If Not (g_LogFile Is Nothing) Then
+                    Try : g_LogFile.Flush() : Catch : End Try
+                    Try : g_LogFile.Close() : Catch : End Try
+                    Try : g_LogFile.Dispose() : Catch : End Try
+                    g_LogFile = Nothing
+                End If
+                If Not (mut Is Nothing) Then
+                    'Try : mut.ReleaseMutex() : Catch : End Try
+                    Try : mut.Close() : Catch : End Try
+                    mut = Nothing
+                End If
             End If
         End If
         Me.disposedValue = True

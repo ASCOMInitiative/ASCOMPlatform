@@ -37,7 +37,7 @@ Module RedirectPolicy
                 Try
                     'Create the publisher policy file that will configure redirection
                     Console.WriteLine(vbCrLf & "Writing policy xml file")
-                    My.Computer.FileSystem.DeleteFile(POLICY_FILE_NAME) 'Remove any existing file
+                    Try : My.Computer.FileSystem.DeleteFile(POLICY_FILE_NAME) : Catch : End Try    'Remove any existing file
                     My.Computer.FileSystem.WriteAllText(POLICY_FILE_NAME, "<configuration>" & vbCrLf, False, System.Text.ASCIIEncoding.ASCII)
                     My.Computer.FileSystem.WriteAllText(POLICY_FILE_NAME, "   <runtime>" & vbCrLf, True, System.Text.ASCIIEncoding.ASCII)
                     My.Computer.FileSystem.WriteAllText(POLICY_FILE_NAME, "      <assemblyBinding xmlns=""urn:schemas-microsoft-com:asm.v1"">" & vbCrLf, True, System.Text.ASCIIEncoding.ASCII)
@@ -53,7 +53,7 @@ Module RedirectPolicy
                     Try
                         Console.WriteLine("Writing batch file")
                         'Create the batch file that will actually build the rediretion policy assembly
-                        My.Computer.FileSystem.DeleteFile(BATCH_FILE_NAME) 'Remove any existing file
+                        Try : My.Computer.FileSystem.DeleteFile(BATCH_FILE_NAME) : Catch : End Try 'Remove any existing file
                         My.Computer.FileSystem.WriteAllText(BATCH_FILE_NAME, "@Echo off" & vbCrLf, False, System.Text.ASCIIEncoding.ASCII) 'Suppress line echoing
                         'Get access to the AL command by setting the dev environment variables
                         My.Computer.FileSystem.WriteAllText(BATCH_FILE_NAME, "Call ""%VS90COMNTOOLS%vsvars32""" & vbCrLf, True, System.Text.ASCIIEncoding.ASCII)
