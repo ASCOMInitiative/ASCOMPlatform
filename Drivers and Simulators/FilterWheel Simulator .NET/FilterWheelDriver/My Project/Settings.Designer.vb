@@ -53,6 +53,42 @@ Namespace My
                 Return defaultInstance
             End Get
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0, 0")>  _
+        Public Property handboxFormLocation() As Global.System.Drawing.Point
+            Get
+                Return CType(Me("handboxFormLocation"),Global.System.Drawing.Point)
+            End Get
+            Set
+                Me("handboxFormLocation") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0, 0")>  _
+        Public Property setupFormLocation() As Global.System.Drawing.Point
+            Get
+                Return CType(Me("setupFormLocation"),Global.System.Drawing.Point)
+            End Get
+            Set
+                Me("setupFormLocation") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0, 0")>  _
+        Public Property trafficFormLocation() As Global.System.Drawing.Point
+            Get
+                Return CType(Me("trafficFormLocation"),Global.System.Drawing.Point)
+            End Get
+            Set
+                Me("trafficFormLocation") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

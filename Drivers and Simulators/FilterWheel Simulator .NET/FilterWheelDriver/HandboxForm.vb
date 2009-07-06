@@ -6,17 +6,17 @@ Public Class HandboxForm
 #Region "Private Variables"
 
     ' button handling variables
-    Private BtnState As Integer                         ' current state
-    Private BtnDebounce As Integer                      ' hold key for fetch even of up occured
-    Private downclick As Boolean                        ' button just went down - state unclear
-    Private getting As Boolean                          ' timer going off - fetch in progress
+    Private m_iBtnState As Integer                      ' current state
+    Private m_iBtnDebounce As Integer                   ' hold key for fetch even of up occured
+    Private m_bDownclick As Boolean                     ' button just went down - state unclear
+    Private m_bGetting As Boolean                       ' timer going off - fetch in progress
     Private m_bConnected As Boolean                     ' Tracked connected state
     Private m_sPosition As Short                        ' Current filter position
     Private m_bMoving As Boolean                        ' FilterWheel in motion?
     Private m_bMoveNext As Boolean = True               ' Next or Prev button?
     Private m_iSlots As Integer                         ' Number of filter wheel positions
-    Private m_asFilterNames(7) As String                  ' Array of filter name strings
-    Private m_aiFocusOffsets(7) As Integer                ' Array of focus offsets
+    Private m_asFilterNames(7) As String                ' Array of filter name strings
+    Private m_aiFocusOffsets(7) As Integer              ' Array of focus offsets
     Private m_acFilterColours(7) As System.Drawing.Color ' Array of filter colours
     Private m_iTimeInterval As Integer                  ' Time to move between filter positions (miilisecs)
     Private m_bImplementsNames As Boolean               ' Return filternames?
@@ -35,31 +35,31 @@ Public Class HandboxForm
 #Region "Event Handlers"
 
     Private Sub Prev_Button_MouseDown(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPrev.MouseDown
-        downclick = True
-        BtnState = 1
-        BtnDebounce = 1
+        m_bDownclick = True
+        m_iBtnState = 1
+        m_iBtnDebounce = 1
     End Sub
 
     Private Sub Prev_Button_MouseUp(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPrev.MouseUp
-        BtnState = 0
+        m_iBtnState = 0
         'race condition handling
-        If getting Then _
-            BtnDebounce = 0
-        downclick = False
+        If m_bGetting Then _
+            m_iBtnDebounce = 0
+        m_bDownclick = False
     End Sub
 
     Private Sub Next_Button_MouseDown(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnNext.MouseDown
-        downclick = True
-        BtnState = 2
-        BtnDebounce = 2
+        m_bDownclick = True
+        m_iBtnState = 2
+        m_iBtnDebounce = 2
     End Sub
 
     Private Sub Next_Button_MouseUp(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnNext.MouseUp
-        BtnState = 0
+        m_iBtnState = 0
         'race condition handling
-        If getting Then _
-            BtnDebounce = 0
-        downclick = False
+        If m_bGetting Then _
+            m_iBtnDebounce = 0
+        m_bDownclick = False
     End Sub
 
     Private Sub picASCOM_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles picASCOM.Click
@@ -100,10 +100,10 @@ Public Class HandboxForm
     ' !!!!!!!!!!!!!!!!!!!!!!!
     Private Sub HandboxForm_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
         ' force clean state
-        BtnState = 0
-        BtnDebounce = 0
-        getting = False
-        downclick = False
+        m_iBtnState = 0
+        m_iBtnDebounce = 0
+        m_bGetting = False
+        m_bDownclick = False
         On Error Resume Next
         If Not m_trafficDialog Is Nothing Then
             m_trafficDialog.Close()
@@ -120,10 +120,10 @@ Public Class HandboxForm
         aTooltip.SetToolTip(btnConnect, "Connect/Disconnect filterwheel")
         aTooltip.SetToolTip(btnPrev, "Move position to previous filter")
         aTooltip.SetToolTip(btnNext, "Move position to next filter")
-        BtnState = 0
-        BtnDebounce = 0
-        downclick = False
-        getting = False
+        m_iBtnState = 0
+        m_iBtnDebounce = 0
+        m_bDownclick = False
+        m_bGetting = False
 
         UpdateLabels()
 
@@ -411,19 +411,19 @@ Public Class HandboxForm
     Public ReadOnly Property ButtonState() As Integer
         Get
             ' race condition check, ignore if down just occuring
-            If downclick Then
-                downclick = False
+            If m_bDownclick Then
+                m_bDownclick = False
                 ButtonState = 0     ' button not really down yet
                 Exit Property
             End If
 
-            ButtonState = BtnDebounce
+            ButtonState = m_iBtnDebounce
 
             ' race condition, make sure not to return 2 presses
-            getting = True
-            If BtnState = 0 Then _
-                BtnDebounce = 0
-            getting = False
+            m_bGetting = True
+            If m_iBtnState = 0 Then _
+                m_iBtnDebounce = 0
+            m_bGetting = False
         End Get
     End Property
 
@@ -450,7 +450,8 @@ Public Class HandboxForm
             .ImplementsOffsets = m_bImplementsOffsets
         End With
 
-        Me.Visible = False                       ' May float over setup
+        Me.Visible = False                      ' May float over setup
+        SetupDialog.TopMost = True              ' The ASCOM chooser dialog sits on top if we don't do this :(
 
         If SetupDialog.ShowDialog() = Windows.Forms.DialogResult.OK Then
             'Read new values from registry
@@ -490,65 +491,7 @@ Public Class HandboxForm
             m_aiFocusOffsets(i) = CInt(g_Profile.GetValue(g_csDriverID, i.ToString, "FocusOffsets"))
             m_acFilterColours(i) = System.Drawing.ColorTranslator.FromWin32(CInt(g_Profile.GetValue(g_csDriverID, i.ToString, "FilterColours")))
         Next i
-    End Sub
-
-    Public Sub DoStartup()
-        Dim i As Integer
-        Dim RegVer As String = "1"      ' Registry version, use to change registry if required by new version
-
-        g_Profile = New HelperNET.Profile
-        g_Profile.DeviceType = "FilterWheel"            ' We're a filter wheel driver
-
-        '
-        ' Persistent settings - Create on first start as determined by
-        ' existence of the RegVer key, Increment RegVer if we need to change registry settings
-        ' in a new version of the driver
-        '
-        If g_Profile.GetValue(g_csDriverID, "RegVer") <> RegVer Then
-            '
-            ' initialize variables that are not persistent
-            '
-            ' Create some 'realistic' defaults
-            Dim colours() As System.Drawing.Color = New Drawing.Color() {Drawing.Color.Red, Drawing.Color.Green, _
-                                                                         Drawing.Color.Blue, Drawing.Color.Gray, _
-                                                                         Drawing.Color.DarkRed, Drawing.Color.Teal, _
-                                                                         Drawing.Color.Violet, Drawing.Color.Black}
-            Dim names() As String = New String() {"Red", "Green", "Blue", "Clear", "Ha", "OIII", "LPR", "Dark"}
-            Dim rand As Random = New Random
-
-            g_Profile.WriteValue(g_csDriverID, "RegVer", RegVer)
-            g_Profile.WriteValue(g_csDriverID, "Position", "0")
-            g_Profile.WriteValue(g_csDriverID, "Slots", "4")
-            g_Profile.WriteValue(g_csDriverID, "Time", "1000")
-            g_Profile.WriteValue(g_csDriverID, "ImplementsNames", "True")
-            g_Profile.WriteValue(g_csDriverID, "ImplementsOffsets", "True")
-            g_Profile.WriteValue(g_csDriverID, "AlwaysOnTop", "True")
-            g_Profile.WriteValue(g_csDriverID, "Left", "100")
-            g_Profile.WriteValue(g_csDriverID, "Top", "100")
-            For i = 0 To 7
-                g_Profile.WriteValue(g_csDriverID, i.ToString, names(i), "FilterNames")
-                g_Profile.WriteValue(g_csDriverID, i.ToString, rand.Next(10000).ToString, "FocusOffsets")
-                g_Profile.WriteValue(g_csDriverID, i.ToString, System.Drawing.ColorTranslator.ToWin32(colours(i)).ToString, "FilterColours")
-            Next i
-        End If
-
-        ' Now we have some defaults if required, update the handbox values from the registry
-        Me.UpdateConfig()
-
-        ' Set handbox screen position
-        Me.Left = CInt(g_Profile.GetValue(g_csDriverID, "Left"))
-        Me.Top = CInt(g_Profile.GetValue(g_csDriverID, "Top"))
-
-        ' Fix bad positions (which shouldn't ever happen, ha ha)
-        If Me.Left < 0 Then
-            Me.Left = 100
-            g_Profile.WriteValue(g_csDriverID, "Left", Me.Left.ToString)
-        End If
-        If Me.Top < 0 Then
-            Me.Top = 100
-            g_Profile.WriteValue(g_csDriverID, "Top", Me.Top.ToString)
-        End If
-
+        TimerMove.Interval = m_iTimeInterval * 1000
     End Sub
 
 #End Region
@@ -602,4 +545,49 @@ Public Class HandboxForm
 
 #End Region
 
+    Public Sub New()
+        Dim i As Integer
+        Dim RegVer As String = "1"      ' Registry version, use to change registry if required by new version
+
+        ' This call is required by the Windows Form Designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+        g_Profile = New HelperNET.Profile
+        g_Profile.DeviceType = "FilterWheel"            ' We're a filter wheel driver
+
+        '
+        ' Persistent settings - Create on first start as determined by
+        ' existence of the RegVer key, Increment RegVer if we need to change registry settings
+        ' in a new version of the driver
+        '
+        If g_Profile.GetValue(g_csDriverID, "RegVer") <> RegVer Then
+            '
+            ' initialize variables that are not persistent
+            '
+            ' Create some 'realistic' defaults
+            Dim colours() As System.Drawing.Color = New Drawing.Color() {Drawing.Color.Red, Drawing.Color.Green, _
+                                                                         Drawing.Color.Blue, Drawing.Color.Gray, _
+                                                                         Drawing.Color.DarkRed, Drawing.Color.Teal, _
+                                                                         Drawing.Color.Violet, Drawing.Color.Black}
+            Dim names() As String = New String() {"Red", "Green", "Blue", "Clear", "Ha", "OIII", "LPR", "Dark"}
+            Dim rand As Random = New Random
+
+            g_Profile.WriteValue(g_csDriverID, "RegVer", RegVer)
+            g_Profile.WriteValue(g_csDriverID, "Position", "0")
+            g_Profile.WriteValue(g_csDriverID, "Slots", "4")
+            g_Profile.WriteValue(g_csDriverID, "Time", "1000")
+            g_Profile.WriteValue(g_csDriverID, "ImplementsNames", "True")
+            g_Profile.WriteValue(g_csDriverID, "ImplementsOffsets", "True")
+            For i = 0 To 7
+                g_Profile.WriteValue(g_csDriverID, i.ToString, names(i), "FilterNames")
+                g_Profile.WriteValue(g_csDriverID, i.ToString, rand.Next(10000).ToString, "FocusOffsets")
+                g_Profile.WriteValue(g_csDriverID, i.ToString, System.Drawing.ColorTranslator.ToWin32(colours(i)).ToString, "FilterColours")
+            Next i
+        End If
+
+        ' Now we have some defaults if required, update the handbox values from the registry
+        Me.UpdateConfig()
+
+    End Sub
 End Class
