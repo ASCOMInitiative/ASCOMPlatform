@@ -72,7 +72,6 @@
     <Reference Include="ASCOM.Interfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Platform Dependencies\ASCOM.Interfaces.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
@@ -80,7 +79,6 @@
   </ItemGroup>
   <ItemGroup>
     <Import Include="ASCOM" />
-    <Import Include="ASCOM.FilterWheelSim" />
     <Import Include="ASCOM.Helper" />
     <Import Include="ASCOM.Interface" />
     <Import Include="Microsoft.VisualBasic" />
@@ -209,6 +207,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "..\..\..\FilterWheelSimServedClasses\$(TargetName).dll"</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(TargetPath)" "..\..\..\FilterWheelSimServedClasses\$(TargetName).dll" /C /I /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>
