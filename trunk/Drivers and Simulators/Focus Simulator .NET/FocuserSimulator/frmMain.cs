@@ -24,6 +24,7 @@ namespace ASCOM.FocuserSimulator
 
         private void frmMain_Load(object sender, EventArgs e)
         {
+            //frmMain.ActiveForm.Width = 186;
             Properties.Settings.Default.Reload();
             LabelMaxStep.Text = Properties.Settings.Default.sMaxStep.ToString();
 
@@ -48,5 +49,24 @@ namespace ASCOM.FocuserSimulator
             FocuserHardware.Move((int)Properties.Settings.Default.sStepPerDeg);
             FocuserHardware.IsTempCompMove = false;
         }
+
+        private void label2_Validating(object sender, CancelEventArgs e)
+        {
+        }
+
+        private void frmMain_Validating(object sender, CancelEventArgs e)
+        {
+            label2.Text = Convert.ToString(Properties.Settings.Default.sPosition);
+            Application.DoEvents();
+
+        }
+
+        private void progressBar1_Validating(object sender, CancelEventArgs e)
+        {
+            label2.Text = Convert.ToString(Properties.Settings.Default.sPosition);
+            Application.DoEvents();
+
+        }
+
     }
 }
