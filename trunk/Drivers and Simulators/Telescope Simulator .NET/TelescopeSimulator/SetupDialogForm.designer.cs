@@ -70,7 +70,7 @@ namespace ASCOM.TelescopeSimulator
             this.checkBoxCanTrackingRates = new System.Windows.Forms.CheckBox();
             this.checkBoxCanTrackOnOff = new System.Windows.Forms.CheckBox();
             this.checkBoxCanAlignMode = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.checkBoxEquatorialAsync = new System.Windows.Forms.CheckBox();
             this.checkBoxCanAltAz = new System.Windows.Forms.CheckBox();
             this.checkBoxCanSlewAltAz = new System.Windows.Forms.CheckBox();
             this.checkBoxCanSlewAltAzAsync = new System.Windows.Forms.CheckBox();
@@ -525,7 +525,7 @@ namespace ASCOM.TelescopeSimulator
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanTrackingRates, 3, 1);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanTrackOnOff, 3, 0);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanAlignMode, 2, 0);
-            this.tableLayoutPanel4.Controls.Add(this.checkBox2, 0, 8);
+            this.tableLayoutPanel4.Controls.Add(this.checkBoxEquatorialAsync, 0, 8);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanAltAz, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanSlewAltAz, 0, 1);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanSlewAltAzAsync, 0, 3);
@@ -621,16 +621,16 @@ namespace ASCOM.TelescopeSimulator
             this.checkBoxCanAlignMode.Text = "Alignment Mode";
             this.checkBoxCanAlignMode.UseVisualStyleBackColor = true;
             // 
-            // checkBox2
+            // checkBoxEquatorialAsync
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.ForeColor = System.Drawing.Color.White;
-            this.checkBox2.Location = new System.Drawing.Point(3, 187);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(120, 17);
-            this.checkBox2.TabIndex = 22;
-            this.checkBox2.Text = "Alt / Az Coordinates";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBoxEquatorialAsync.AutoSize = true;
+            this.checkBoxEquatorialAsync.ForeColor = System.Drawing.Color.White;
+            this.checkBoxEquatorialAsync.Location = new System.Drawing.Point(3, 187);
+            this.checkBoxEquatorialAsync.Name = "checkBoxEquatorialAsync";
+            this.checkBoxEquatorialAsync.Size = new System.Drawing.Size(143, 17);
+            this.checkBoxEquatorialAsync.TabIndex = 22;
+            this.checkBoxEquatorialAsync.Text = "Equatorial Asynchronous";
+            this.checkBoxEquatorialAsync.UseVisualStyleBackColor = true;
             // 
             // checkBoxCanAltAz
             // 
@@ -872,7 +872,7 @@ namespace ASCOM.TelescopeSimulator
             "J2000",
             "J2050",
             "Other"});
-            this.comboBoxEquatorialSystem.Location = new System.Drawing.Point(65, 3);
+            this.comboBoxEquatorialSystem.Location = new System.Drawing.Point(64, 3);
             this.comboBoxEquatorialSystem.Name = "comboBoxEquatorialSystem";
             this.comboBoxEquatorialSystem.Size = new System.Drawing.Size(75, 21);
             this.comboBoxEquatorialSystem.TabIndex = 15;
@@ -1091,7 +1091,7 @@ namespace ASCOM.TelescopeSimulator
         private System.Windows.Forms.CheckBox checkBoxCanPark;
         private System.Windows.Forms.CheckBox checkBoxCanSetParkPosition;
         private System.Windows.Forms.CheckBox checkBoxCanUnpark;
-        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox checkBoxEquatorialAsync;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private System.Windows.Forms.ComboBox comboBoxNumberMoveAxis;
         private System.Windows.Forms.Label label8;

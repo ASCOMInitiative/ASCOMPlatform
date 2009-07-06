@@ -43,5 +43,64 @@ namespace ASCOM.TelescopeSimulator
             }
         }
 
+        #region Properties for Settings
+        public bool OnTop
+        {
+            get { return checkBoxOnTop.Checked; }
+            set { checkBoxOnTop.Checked = value; }
+        }
+        public bool VersionOneOnly
+        {
+            get { return checkBoxVersionOne.Checked; }
+            set { checkBoxVersionOne.Checked = value;}
+        }
+        public bool CanFindHome
+        {
+            get { return checkBoxCanFindHome.Checked; }
+            set { checkBoxCanFindHome.Checked = value; }
+
+        }
+        public bool CanPark
+        {
+            get { return checkBoxCanPark.Checked; }
+            set { checkBoxCanPark.Checked = value; }
+
+        }
+        public int NumberMoveAxis
+        {
+            get { return int.Parse(comboBoxNumberMoveAxis.SelectedItem.ToString()); }
+            set { comboBoxNumberMoveAxis.SelectedItem = value.ToString(); }
+        }
+
+        public bool CanPulseGuide
+        {
+            get { return checkBoxCanPulseGuide.Checked; }
+            set { checkBoxCanPulseGuide.Checked = value; }
+
+        }
+        public bool CanSetEquatorialRates
+        {
+            get { return checkBoxCanTrackingRates.Checked; }
+            set { checkBoxCanTrackingRates.Checked = value; }
+        }
+        public bool CanSetGuideRates
+        {
+            get { return checkBoxCanGuideRates.Checked; }
+            set { checkBoxCanGuideRates.Checked = value; }
+        }
+        public bool CanSetPark
+        {
+            get { return checkBoxCanSetParkPosition.Checked; }
+            set { checkBoxCanSetParkPosition.Checked = value; }
+
+        }
+        public bool CanSetSideOfPier
+        {
+            get { return checkBoxCanSetSideOfPier.Checked; }
+            set { checkBoxCanSetSideOfPier.Checked = value; }
+
+        }
+        #endregion
+
     }
 }

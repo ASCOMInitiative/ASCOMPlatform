@@ -20,12 +20,33 @@ namespace ASCOM.TelescopeSimulator
         {
             SetupDialogForm setupForm = new SetupDialogForm();
 
-            
+            setupForm.VersionOneOnly = TelescopeHardware.VersionOneOnly;
+            setupForm.CanFindHome = TelescopeHardware.CanFindHome;
+            setupForm.CanPark = TelescopeHardware.CanPark;
+            setupForm.NumberMoveAxis = TelescopeHardware.NumberMoveAxis;
+            setupForm.OnTop = TelescopeHardware.OnTop;
+            setupForm.CanPulseGuide = TelescopeHardware.CanPulseGuide;
+            setupForm.CanSetEquatorialRates = TelescopeHardware.CanSetEquatorialRates;
+            setupForm.CanSetGuideRates = TelescopeHardware.CanSetGuideRates;
+            setupForm.CanSetPark = TelescopeHardware.CanSetPark;
+            setupForm.CanSetSideOfPier = TelescopeHardware.CanSetSideOfPier;
+
             DialogResult ans = setupForm.ShowDialog(this);
 
             if (ans == DialogResult.OK)
             {
-                
+                TelescopeHardware.VersionOneOnly = setupForm.VersionOneOnly;
+                TelescopeHardware.CanFindHome = setupForm.CanFindHome;
+                TelescopeHardware.CanPark = setupForm.CanPark;
+                TelescopeHardware.NumberMoveAxis = setupForm.NumberMoveAxis;
+                TelescopeHardware.OnTop = setupForm.OnTop;
+                TelescopeHardware.CanPulseGuide = setupForm.CanPulseGuide;
+                TelescopeHardware.CanSetEquatorialRates = setupForm.CanSetEquatorialRates;
+                TelescopeHardware.CanSetGuideRates = setupForm.CanSetGuideRates;
+                TelescopeHardware.CanSetPark = setupForm.CanSetPark;
+                TelescopeHardware.CanSetSideOfPier = setupForm.CanSetSideOfPier;
+
+                this.TopMost = setupForm.OnTop;
             }
 
             setupForm.Dispose();
