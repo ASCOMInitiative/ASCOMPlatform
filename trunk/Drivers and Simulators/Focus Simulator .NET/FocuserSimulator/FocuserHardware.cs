@@ -254,7 +254,8 @@ namespace ASCOM.FocuserSimulator
                     if (HaltRequested) 
                     { 
                         Properties.Settings.Default.IsMoving = false; 
-                        HaltRequested = false; 
+                        HaltRequested = false;
+                        MyLog(eLogKind.LogMove, "HALT requested, focuser stopped");
                         return; 
                     }
                     Deplace(1);  // Fake move
