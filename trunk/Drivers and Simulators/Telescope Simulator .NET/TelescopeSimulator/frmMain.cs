@@ -11,6 +11,7 @@ namespace ASCOM.TelescopeSimulator
     {
         delegate void SetTextCallback(string text);
 
+
         public frmMain()
         {
             InitializeComponent();
@@ -33,6 +34,11 @@ namespace ASCOM.TelescopeSimulator
         private void buttonSetup_Click(object sender, EventArgs e)
         {
             DoSetupDialog();
+        }
+
+        private void buttonTraffic_Click(object sender, EventArgs e)
+        {
+            SharedResources.TrafficForm.Show();
         }
     }
 }

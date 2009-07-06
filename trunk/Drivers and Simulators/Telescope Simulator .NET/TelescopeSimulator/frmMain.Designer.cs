@@ -55,7 +55,7 @@ namespace ASCOM.TelescopeSimulator
             this.buttonUnpark = new System.Windows.Forms.Button();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.lblPARK = new System.Windows.Forms.Label();
-            this.lblTRACK = new System.Windows.Forms.Label();
+            this.lblHOME = new System.Windows.Forms.Label();
             this.lblSlew = new System.Windows.Forms.Label();
             this.picASCOM = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanel1.SuspendLayout();
@@ -304,6 +304,7 @@ namespace ASCOM.TelescopeSimulator
             this.buttonTraffic.TabIndex = 3;
             this.buttonTraffic.Text = "Traffic";
             this.buttonTraffic.UseVisualStyleBackColor = true;
+            this.buttonTraffic.Click += new System.EventHandler(this.buttonTraffic_Click);
             // 
             // buttonSetup
             // 
@@ -344,7 +345,7 @@ namespace ASCOM.TelescopeSimulator
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel4.Controls.Add(this.lblPARK, 2, 0);
-            this.tableLayoutPanel4.Controls.Add(this.lblTRACK, 1, 0);
+            this.tableLayoutPanel4.Controls.Add(this.lblHOME, 1, 0);
             this.tableLayoutPanel4.Controls.Add(this.lblSlew, 0, 0);
             this.tableLayoutPanel4.Location = new System.Drawing.Point(13, 89);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -365,17 +366,17 @@ namespace ASCOM.TelescopeSimulator
             this.lblPARK.TabIndex = 2;
             this.lblPARK.Text = "PARK";
             // 
-            // lblTRACK
+            // lblHOME
             // 
-            this.lblTRACK.AutoSize = true;
-            this.lblTRACK.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblTRACK.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblTRACK.Location = new System.Drawing.Point(57, 0);
-            this.lblTRACK.Name = "lblTRACK";
-            this.lblTRACK.Padding = new System.Windows.Forms.Padding(1, 2, 1, 1);
-            this.lblTRACK.Size = new System.Drawing.Size(45, 16);
-            this.lblTRACK.TabIndex = 1;
-            this.lblTRACK.Text = "TRACK";
+            this.lblHOME.AutoSize = true;
+            this.lblHOME.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblHOME.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblHOME.Location = new System.Drawing.Point(57, 0);
+            this.lblHOME.Name = "lblHOME";
+            this.lblHOME.Padding = new System.Windows.Forms.Padding(1, 2, 1, 1);
+            this.lblHOME.Size = new System.Drawing.Size(41, 16);
+            this.lblHOME.TabIndex = 1;
+            this.lblHOME.Text = "HOME";
             // 
             // lblSlew
             // 
@@ -455,7 +456,7 @@ namespace ASCOM.TelescopeSimulator
         private System.Windows.Forms.Button buttonUnpark;
         internal System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         internal System.Windows.Forms.Label lblPARK;
-        internal System.Windows.Forms.Label lblTRACK;
+        internal System.Windows.Forms.Label lblHOME;
         internal System.Windows.Forms.Label lblSlew;
 
 

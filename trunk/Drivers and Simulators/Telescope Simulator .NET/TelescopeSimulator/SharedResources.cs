@@ -22,12 +22,13 @@ namespace ASCOM.TelescopeSimulator
     {
         
         private static int s_z;
+        private static TrafficForm m_trafficForm;               // Traffic Form 
 
         private SharedResources() { }							// Prevent creation of instances
 
         static SharedResources()								// Static initialization
         {
-           
+            
             s_z = 0;
         }
 
@@ -35,8 +36,21 @@ namespace ASCOM.TelescopeSimulator
         // Public access to shared resources
         //
 
-        // Shared serial port 
-
         public static int z { get { return s_z++; } }
+        public static TrafficForm TrafficForm { 
+            get 
+            {
+                if (m_trafficForm == null)
+                {
+                    m_trafficForm = new TrafficForm();
+                }
+                
+                return m_trafficForm; 
+            }
+            set
+            {
+                m_trafficForm = value;
+            }
+        }
     }
 }

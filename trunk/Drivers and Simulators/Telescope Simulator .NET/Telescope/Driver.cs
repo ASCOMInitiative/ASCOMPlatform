@@ -134,7 +134,7 @@ namespace ASCOM.TelescopeSimulator
         public bool CanFindHome
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanFindHome", false); }
+            get { return TelescopeHardware.CanFindHome; }
         }
 
         public bool CanMoveAxis(TelescopeAxes Axis)
