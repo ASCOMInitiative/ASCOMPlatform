@@ -98,6 +98,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ReferenceCountedObject.cs" />
+    <Compile Include="ServedClassNameAttribute.cs" />
     <Compile Include="SetupDialogForm.cs">
       <SubType>Form</SubType>
     </Compile>

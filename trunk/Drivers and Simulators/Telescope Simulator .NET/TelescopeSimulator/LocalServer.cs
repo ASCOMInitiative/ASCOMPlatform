@@ -228,7 +228,7 @@ namespace ASCOM.TelescopeSimulator
             assyPath = assyPath.Remove(i, assyPath.Length - i) + "\\TelescopeSimulatorServedClasses";
 
             DirectoryInfo d = new DirectoryInfo(assyPath);
-            foreach (FileInfo fi in d.GetFiles("ASCOM.TelescopeSimulator.Telescope.dll"))  //Modified to only load the Simulator DLL
+            foreach (FileInfo fi in d.GetFiles("*.dll"))  //Modified to only load *.DLL
             {
                 string aPath = fi.FullName;
                 string fqClassName = fi.Name.Replace(fi.Extension, "");						// COM class FQN
@@ -239,8 +239,14 @@ namespace ASCOM.TelescopeSimulator
                 try
                 {
                     Assembly so = Assembly.LoadFrom(aPath);
-                    m_ComObjectTypes.Add(so.GetType(fqClassName, true));
-                    m_ComObjectAssys.Add(so);
+
+                    //Added check to see if the dll has the ServedClassNameAttribute
+                    object[] attributes = so.GetCustomAttributes(typeof(ASCOM.ServedClassNameAttribute),false);
+                    if (attributes.Length > 0)
+                    {
+                        m_ComObjectTypes.Add(so.GetType(fqClassName, true));
+                        m_ComObjectAssys.Add(so);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -362,8 +368,13 @@ namespace ASCOM.TelescopeSimulator
                     // ASCOM 
                     //
                     assy = type.Assembly;
-                    attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyProductAttribute));
-                    string chooserName = ((AssemblyProductAttribute)attr).Product;
+                    //attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyProductAttribute));
+                    //string chooserName = ((AssemblyProductAttribute)attr).Product;
+
+                    //Modified to pull from the customer Attribute ServedClassName
+                    attr = Attribute.GetCustomAttribute(assy, typeof(ASCOM.ServedClassNameAttribute));
+                    string chooserName = ((ASCOM.ServedClassNameAttribute)attr).ServedClassName;
+
                     ASCOM.HelperNET.Profile P = new ASCOM.HelperNET.Profile();
                     P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.1 or later
                     P.Register(progid, chooserName);
