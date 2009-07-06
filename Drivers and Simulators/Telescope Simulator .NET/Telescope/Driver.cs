@@ -140,49 +140,49 @@ namespace ASCOM.TelescopeSimulator
         public bool CanMoveAxis(TelescopeAxes Axis)
         {
             // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("CanMoveAxis");
+            return TelescopeHardware.CanMoveAxis(Axis);
         }
 
         public bool CanPark
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanPark", false); }
+            get { return TelescopeHardware.CanPark; }
         }
 
         public bool CanPulseGuide
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanPulseGuide", false); }
+            get { return TelescopeHardware.CanPulseGuide; }
         }
 
         public bool CanSetDeclinationRate
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSetDeclinationRate", false); }
+            get { return TelescopeHardware.CanSetDeclinationRate; }
         }
 
         public bool CanSetGuideRates
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSetGuideRates", false); }
+            get { return TelescopeHardware.CanSetGuideRates; }
         }
 
         public bool CanSetPark
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSetPark", false); }
+            get { return TelescopeHardware.CanSetPark; }
         }
 
         public bool CanSetPierSide
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSetPierSide", false); }
+            get { return TelescopeHardware.CanSetPierSide; }
         }
 
         public bool CanSetRightAscensionRate
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSetRightAscensionRate", false); }
+            get { return TelescopeHardware.CanSetRightAscensionRate; }
         }
 
         public bool CanSetTracking
@@ -254,8 +254,8 @@ namespace ASCOM.TelescopeSimulator
         public bool Connected
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Connected", false); }
-            set { throw new PropertyNotImplementedException("Connected", true); }
+            get { return TelescopeHardware.Connected; }
+            set { TelescopeHardware.Connected = value; }
         }
 
         public double Declination
@@ -391,7 +391,10 @@ namespace ASCOM.TelescopeSimulator
 
         public void SetupDialog()
         {
-            
+            if (TelescopeHardware.Connected)
+                throw new DriverException("The hardware is connected, cannot do SetupDialog()",
+                                    unchecked(ErrorCodes.DriverBase + 4));
+            TelescopeSimulator.m_MainForm.DoSetupDialog();
         }
 
         public PierSide SideOfPier
