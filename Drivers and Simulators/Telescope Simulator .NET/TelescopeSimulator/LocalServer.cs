@@ -102,12 +102,16 @@ namespace ASCOM.TelescopeSimulator
         static extern uint GetCurrentThreadId();
         #endregion
 
+        #region Public Data
+        public static frmMain m_MainForm = null;				// Reference to our main form. Changed to public for access in simulator
+        #endregion
+
         #region Private Data
         private static uint m_uiMainThreadId;					// Stores the main thread's thread id.
         private static int m_iObjsInUse;						// Keeps a count on the total number of objects alive.
         private static int m_iServerLocks;						// Keeps a lock count on this application.
         private static bool m_bComStart;						// True if server started by COM (-embedding)
-        private static frmMain m_MainForm = null;				// Reference to our main form
+        
         private static ArrayList m_ComObjectAssys;				// Dynamically loaded assemblies containing served COM objects
         private static ArrayList m_ComObjectTypes;				// Served COM object types
         private static ArrayList m_ClassFactories;				// Served COM object class factories
@@ -224,7 +228,7 @@ namespace ASCOM.TelescopeSimulator
             assyPath = assyPath.Remove(i, assyPath.Length - i) + "\\TelescopeSimulatorServedClasses";
 
             DirectoryInfo d = new DirectoryInfo(assyPath);
-            foreach (FileInfo fi in d.GetFiles("*.dll"))
+            foreach (FileInfo fi in d.GetFiles("ASCOM.TelescopeSimulator.Telescope.dll"))  //Modified to only load the Simulator DLL
             {
                 string aPath = fi.FullName;
                 string fqClassName = fi.Name.Replace(fi.Extension, "");						// COM class FQN
@@ -361,7 +365,7 @@ namespace ASCOM.TelescopeSimulator
                     attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyProductAttribute));
                     string chooserName = ((AssemblyProductAttribute)attr).Product;
                     ASCOM.HelperNET.Profile P = new ASCOM.HelperNET.Profile();
-                    P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
+                    P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.1 or later
                     P.Register(progid, chooserName);
                     try										// In case Helper becomes native .NET
                     {
@@ -431,7 +435,7 @@ namespace ASCOM.TelescopeSimulator
                     // ASCOM
                     //
                     ASCOM.HelperNET.Profile P = new ASCOM.HelperNET.Profile();
-                    P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
+                    P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.1 or later
                     P.Unregister(progid);
                     try										// In case Helper becomes native .NET
                     {
