@@ -1,0 +1,10 @@
+bin\Release\ASCOM.DriverAccess.dll
+bin\Release\ASCOM.DriverAccess.pdb
+obj\Release\ResolveAssemblyReference.cache
+obj\Release\ASCOM.DriverAccess.dll
+obj\Release\ASCOM.DriverAccess.pdb
+obj\Debug\ResolveAssemblyReference.cache
+bin\Debug\ASCOM.DriverAccess.dll
+bin\Debug\ASCOM.DriverAccess.pdb
+obj\Debug\ASCOM.DriverAccess.dll
+obj\Debug\ASCOM.DriverAccess.pdb

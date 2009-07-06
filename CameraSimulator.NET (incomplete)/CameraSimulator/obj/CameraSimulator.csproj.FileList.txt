@@ -1,0 +1,10 @@
+bin\Debug\ASCOM.Simulator.Camera.dll
+bin\Debug\ASCOM.Simulator.Camera.pdb
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\CameraSimulator\CameraSimulator\bin\Debug\ASCOM.Simulator.Camera.tlb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\CameraSimulator.csproj.ResolveComReference.cache
+obj\Debug\ASCOM.Simulator.Properties.Resources.resources
+obj\Debug\ASCOM.Simulator.SetupDialogForm.resources
+obj\Debug\CameraSimulator.csproj.GenerateResource.Cache
+obj\Debug\ASCOM.Simulator.Camera.dll
+obj\Debug\ASCOM.Simulator.Camera.pdb

@@ -5,7 +5,7 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using ASCOM.Interface;
-using ASCOM.HelperNET;
+using ASCOM.Helper;
 
 namespace ASCOM.DriverAccess
 {
@@ -53,7 +53,7 @@ namespace ASCOM.DriverAccess
             try
             {
                 Chooser oChooser = new Chooser();
-                oChooser.DeviceType = "Rotator";			// Requires Helper 5.0.3 (May '07)
+                oChooser.DeviceTypeV = "Rotator";			// Requires Helper 5.0.3 (May '07)
                 return oChooser.Choose(rotatorID);
             }
             catch

@@ -1,11 +1,21 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.DriverAccess", "ASCOM.DriverAccess.csproj", "{35194767-5585-45C3-803F-1BCE74CEAAFC}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Referenced Projects", "Referenced Projects", "{6AC52528-FEC4-4421-A908-CB23C1EE627D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientTest", "ClientTest\ClientTest.csproj", "{87939133-B6B9-4677-9CB3-5EFBC6EF5A2C}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "HelperNET", "..\HelperNET\HelperNET\HelperNET.vbproj", "{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublisherPolicy", "PublisherPolicy\PublisherPolicy.csproj", "{BEF83CB1-3032-4168-AF66-AB2EAE4E5FF3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GACInstaller", "GACInstaller\GACInstaller.csproj", "{4CAED72B-2C93-4196-9A39-C5C858A52277}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,15 +27,20 @@ Global
 		{35194767-5585-45C3-803F-1BCE74CEAAFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35194767-5585-45C3-803F-1BCE74CEAAFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35194767-5585-45C3-803F-1BCE74CEAAFC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87939133-B6B9-4677-9CB3-5EFBC6EF5A2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87939133-B6B9-4677-9CB3-5EFBC6EF5A2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87939133-B6B9-4677-9CB3-5EFBC6EF5A2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87939133-B6B9-4677-9CB3-5EFBC6EF5A2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEF83CB1-3032-4168-AF66-AB2EAE4E5FF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEF83CB1-3032-4168-AF66-AB2EAE4E5FF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEF83CB1-3032-4168-AF66-AB2EAE4E5FF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEF83CB1-3032-4168-AF66-AB2EAE4E5FF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CAED72B-2C93-4196-9A39-C5C858A52277}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CAED72B-2C93-4196-9A39-C5C858A52277}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CAED72B-2C93-4196-9A39-C5C858A52277}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CAED72B-2C93-4196-9A39-C5C858A52277}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C} = {6AC52528-FEC4-4421-A908-CB23C1EE627D}
 	EndGlobalSection
 EndGlobal

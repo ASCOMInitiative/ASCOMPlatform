@@ -6,7 +6,7 @@ using System.Collections;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using ASCOM.Interface;
-using ASCOM.HelperNET;
+using ASCOM.Helper;
 
 namespace ASCOM.DriverAccess
 {
@@ -55,7 +55,7 @@ namespace ASCOM.DriverAccess
         public static string Choose(string telescopeID)
         {
 			Chooser oChooser = new Chooser();
-			oChooser.DeviceType = "Telescope";			// Requires Helper 5.0.3 (May '07)
+			oChooser.DeviceTypeV = "Telescope";			// Requires Helper 5.0.3 (May '07)
 			return oChooser.Choose(telescopeID);
         }
         

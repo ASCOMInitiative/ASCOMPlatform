@@ -1,0 +1,13 @@
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\ClientTest\obj\Release\ClientTest.exe
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\ClientTest\obj\Release\ClientTest.pdb
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\ClientTest\bin\Release\ClientTest.exe
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\ClientTest\bin\Release\ClientTest.pdb
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\ClientTest\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\ClientTest\obj\Debug\ClientTest.exe
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\ClientTest\obj\Debug\ClientTest.pdb
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\ClientTest\bin\Debug\ClientTest.exe
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\ClientTest\bin\Debug\ClientTest.pdb
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\ClientTest\bin\Debug\ASCOM.DriverAccess.dll
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\ClientTest\bin\Debug\ASCOM.DriverAccess.pdb
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\ClientTest\bin\Debug\ASCOM.DriverAccess.xml
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\ClientToolbox\ClientTest\obj\Debug\ResolveAssemblyReference.cache

@@ -3,20 +3,19 @@
 // Master ASCOM Interfaces
 // =======================
 //
-// Bob Denny 	 03-May-2007
-// Bob Denny 	 05-May-2007    Change AxisRates, TrackingRates for strict typing
-// Bob Denny 	 07-May-2007    Oops, name COM interfaces starting with "I"
-// Bob Denny 	 13-May-2007    Interface names prefixed with "I" for .NET too
-// Bob Denny 	 16-May-2007    Collapse name space 1 level for .NET
-// Bob Denny 	 18-May-2007    From Telescope.idl, combine all into one TLB. Needed to keep
-//               	            them all in a single namespace. Could not ref multiple assys
-//                   	        from GAC if in same namespace! New LIBID of course. No need
-//                       	    for custom attribs on individual interfaces any more.
-// Bob Denny 	 30-May-2007    Add ICamera and IFilterWheel, version metadata
-// Bob Denny 	 05-Jun-2007    (John Brewster) Switch interface
-// Bob Denny 	 06-Jun-2007    Minor changes to parameter names for clarity and form
-// Bob Denny 	 13-Oct-2007    ICamera.ImageArray returns VARIANT
-// Peter Simpson 15-Apr-2009	Added ISafetyMonitor interface
+// Bob Denny 03-May-2007
+// Bob Denny 05-May-2007    Change AxisRates, TrackingRates for strict typing
+// Bob Denny 07-May-2007    Oops, name COM interfaces starting with "I"
+// Bob Denny 13-May-2007    Interface names prefixed with "I" for .NET too
+// Bob Denny 16-May-2007    Collapse name space 1 level for .NET
+// Bob Denny 18-May-2007    From Telescope.idl, combine all into one TLB. Needed to keep
+//                          them all in a single namespace. Could not ref multiple assys
+//                          from GAC if in same namespace! New LIBID of course. No need
+//                          for custom attribs on individual interfaces any more.
+// Bob Denny 30-May-2007    Add ICamera and IFilterWheel, version metadata
+// Bob Denny 05-Jun-2007    (John Brewster) Switch interface
+// Bob Denny 06-Jun-2007    Minor changes to parameter names for clarity and form
+// Bob Denny 13-Oct-2007    ICamera.ImageArray returns VARIANT
 
 #define VARIANT_TRUE ((VARIANT_BOOL)-1)
 #define VARIANT_FALSE ((VARIANT_BOOL)0)
@@ -31,7 +30,7 @@ midl_pragma warning( disable: 2400 2401 )   // rbd These warnings are n/a
 
 [
   uuid(76618F90-032F-4424-A680-802467A55742),
-  version(5.0),
+  version(1.0),
   helpstring("ASCOM Master Interfaces for .NET and COM"),
   custom(0F21F359-AB84-41E8-9A78-36D110E6D2F9, "ASCOM.Interface")   // Override PIA file name -> namespace
 ]
@@ -43,14 +42,7 @@ library AscomInterfacesLib
     interface IAxisRates;
     interface ITrackingRates;
     interface ITelescope;
-  	interface ISafetyMonitor;
-  	interface ICamera;
-  	interface ISwitch;
-  	interface IFilterWheel;
-  	interface IRotator;
-  	interface IDome;
-  	interface IFocuser;
-  	  	
+
     // -------------------------------------
     // Enums used by the Telescope interface
     // -------------------------------------
@@ -842,78 +834,39 @@ library AscomInterfacesLib
     ]
     interface ISwitch : IDispatch {
         [id(101), propget]
-        	HRESULT Connected([out, retval] VARIANT_BOOL* );
+        HRESULT Connected([out, retval] VARIANT_BOOL* );
         [id(101), propput]
-        	HRESULT Connected([in] VARIANT_BOOL );
+        HRESULT Connected([in] VARIANT_BOOL );
         [id(0x6803000b), propget]
-        	HRESULT Description([out, retval] BSTR* );
+        HRESULT Description([out, retval] BSTR* );
         [id(102), propget]
-        	HRESULT DriverInfo([out, retval] BSTR* );
+        HRESULT DriverInfo([out, retval] BSTR* );
         [id(103), propget]
-        	HRESULT DriverVersion([out, retval] BSTR* );
+        HRESULT DriverVersion([out, retval] BSTR* );
         [id(104), propget]
-        	HRESULT InterfaceVersion([out, retval] short* );
+        HRESULT InterfaceVersion([out, retval] short* );
         [id(105), propget]
-        	HRESULT MaxSwitch([out, retval] short* );
+        HRESULT MaxSwitch([out, retval] short* );
         [id(106), propget]
-        	HRESULT Name([out, retval] BSTR* );
+        HRESULT Name([out, retval] BSTR* );
         [id(401)]
-        	HRESULT GetSwitch(
+        HRESULT GetSwitch(
                         [in] short ID, 
                         [out, retval] VARIANT_BOOL* );
         [id(402)]
-        	HRESULT SetSwitch(
+        HRESULT SetSwitch(
                         [in] short ID, 
                         [in] VARIANT_BOOL State);
         [id(403)]
-        	HRESULT SetupDialog();
+        HRESULT SetupDialog();
         [id(404)]
-        	HRESULT GetSwitchName(
+        HRESULT GetSwitchName(
                         [in] short ID, 
                         [out, retval] BSTR* );
         [id(405)]
-        	HRESULT SetSwitchName(
+        HRESULT SetSwitchName(
                         [in] short ID, 
                         [in] BSTR State);
-    };
-    
-    // ------------------------
-    // Safety Monitor Interface
-    // ------------------------
-    
-    [
-      odl,
-      uuid(0C1E7B12-23CC-45cf-8151-7CEE42ED3E1E),
-      version(6.0),
-      helpstring("ASCOM Safety Monitor Master Interface"),
-      dual,
-      nonextensible,
-      oleautomation
-    ]
-    interface ISafetyMonitor : IDispatch {
-    	[id(101), propget, helpstring("Can the device do an emergency shutdown")]
-    		HRESULT CanEmergencyShutdown([out, retval] VARIANT_BOOL* );
-    	[id(102), propget, helpstring("Can is good")]
-    		HRESULT CanIsGood([out, retval] VARIANT_BOOL* );
-    	[id(103), propget, helpstring("Connected to the device")]
-    		HRESULT Connected([out, retval] VARIANT_BOOL* );
-    	[id(103), propput, helpstring("Connected to the device")]
-        	HRESULT Connected([in] VARIANT_BOOL );
-    	[id(104), propget, helpstring("Device description")]
-    		HRESULT Description([out, retval] BSTR* );
-    	[id(105), propget, helpstring("Driver description")]
-    		HRESULT DriverInfo([out, retval] BSTR* );
-    	[id(106), propget, helpstring("Driver version")]
-    		HRESULT DriverVersion([out, retval] BSTR* );
-    	[id(107), propget, helpstring("State of emergency shutdown")]
-    		HRESULT EmergencyShutdown([out, retval] VARIANT_BOOL* );
-    	[id(108), propget, helpstring("Safety is OK")]
-    		HRESULT IsGood([out, retval] VARIANT_BOOL* );
-    	[id(109), propget, helpstring("Device is safe")]
-    		HRESULT IsSafe([out, retval] VARIANT_BOOL* );
-
-    	[id(401), helpstring("Setup dialog")]
-    		HRESULT SetUpDialog();
     };
 
 };

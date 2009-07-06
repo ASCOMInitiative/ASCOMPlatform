@@ -1,0 +1,5 @@
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\GACInstall\bin\Release\GACInstall.exe
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\GACInstall\bin\Release\GACInstall.pdb
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\GACInstall\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\GACInstall\obj\Release\GACInstall.exe
+C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\GACInstall\obj\Release\GACInstall.pdb
