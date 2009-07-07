@@ -24,6 +24,8 @@
 ' The ClassInterface/None addribute prevents an empty interface called
 ' _FilterWheel from being created and used as the [default] interface
 '
+<Assembly: ServedClassName("Filter Wheel Simulator")>   '[TPL] Mark this assembly as something that LocalServer should be interested in.
+
 <Guid("F9043C88-F6F2-101A-A3C9-08002B2F49FC")> _
 <ClassInterface(ClassInterfaceType.None)> Public Class FilterWheel
     '	==========

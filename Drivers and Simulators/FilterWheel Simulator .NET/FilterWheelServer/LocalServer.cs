@@ -233,18 +233,22 @@ namespace ASCOM.FilterWheelSim
                 // First try to load the assembly and get the types for
                 // the class and the class facctory. If this doesn't work ????
                 //
-                try
-                {
-                    Assembly so = Assembly.LoadFrom(aPath);
-                    m_ComObjectTypes.Add(so.GetType(fqClassName, true));
-                    m_ComObjectAssys.Add(so);
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + e.Message,
-                        "FilterWheelSim", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    return false;
-                }
+				try
+				{
+					Assembly so = Assembly.LoadFrom(aPath);
+					object[] attributes = so.GetCustomAttributes(typeof(ServedClassNameAttribute), false);
+					if (attributes.Length > 0)
+					{
+						m_ComObjectTypes.Add(so.GetType(fqClassName, true));
+						m_ComObjectAssys.Add(so);
+					}
+				}
+				catch (Exception e)
+				{
+					MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + e.Message,
+						"FilterWheelSim", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+					return false;
+				}
 
             }
             return true;
@@ -359,10 +363,10 @@ namespace ASCOM.FilterWheelSim
                     // ASCOM 
                     //
                     assy = type.Assembly;
-                    attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyProductAttribute));
-                    string chooserName = ((AssemblyProductAttribute)attr).Product;
+					attr = Attribute.GetCustomAttribute(assy, typeof(ServedClassNameAttribute));
+					string chooserName = ((ServedClassNameAttribute)attr).ServedClassName;
                     Helper.Profile P = new Helper.Profile();
-                    P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
+                    P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);
                     P.Register(progid, chooserName);
                     try										// In case Helper becomes native .NET
                     {
