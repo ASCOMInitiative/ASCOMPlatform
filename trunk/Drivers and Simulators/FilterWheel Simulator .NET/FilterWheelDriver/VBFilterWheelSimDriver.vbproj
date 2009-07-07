@@ -207,6 +207,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetPath)" "..\..\..\FilterWheelSimServedClasses\$(TargetName).dll" /C /I /Y</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(TargetDir)*.*" "$(ProjectDir)..\FilterWheelSimServedClasses\" /C /I /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>

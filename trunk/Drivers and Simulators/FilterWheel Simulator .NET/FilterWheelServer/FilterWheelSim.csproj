@@ -78,10 +78,12 @@
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="ReferenceCountedObject.cs" />
+    <Compile Include="ServedClassNameAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ASCOM.png" />
     <Content Include="ReadMe.htm" />
+    <None Include="Test.js" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
