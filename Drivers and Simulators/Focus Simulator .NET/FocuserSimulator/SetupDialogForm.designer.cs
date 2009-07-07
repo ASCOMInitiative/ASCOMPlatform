@@ -28,6 +28,7 @@ namespace ASCOM.FocuserSimulator
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetupDialogForm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.RadioRelative = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -36,17 +37,18 @@ namespace ASCOM.FocuserSimulator
             this.cmdCancel = new System.Windows.Forms.Button();
             this.cmdOK = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
+            this.TempMaxi = new System.Windows.Forms.NumericUpDown();
+            this.TempMini = new System.Windows.Forms.NumericUpDown();
+            this.HelpTempComp = new System.Windows.Forms.TextBox();
+            this.UpDownPeriod = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.IsTempComp = new System.Windows.Forms.CheckBox();
             this.StepsPerDeg = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.CurrentTemp = new System.Windows.Forms.TextBox();
             this.IsTemperature = new System.Windows.Forms.CheckBox();
             this.IsHalt = new System.Windows.Forms.CheckBox();
             this.IsStepSize = new System.Windows.Forms.CheckBox();
@@ -62,7 +64,9 @@ namespace ASCOM.FocuserSimulator
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TempMaxi)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TempMini)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.UpDownPeriod)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.StepsPerDeg)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -167,48 +171,90 @@ namespace ASCOM.FocuserSimulator
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.numericUpDown5);
+            this.groupBox4.Controls.Add(this.TempMaxi);
+            this.groupBox4.Controls.Add(this.TempMini);
+            this.groupBox4.Controls.Add(this.HelpTempComp);
+            this.groupBox4.Controls.Add(this.UpDownPeriod);
             this.groupBox4.Controls.Add(this.label1);
             this.groupBox4.Controls.Add(this.IsTempComp);
             this.groupBox4.Controls.Add(this.StepsPerDeg);
             this.groupBox4.Controls.Add(this.label7);
             this.groupBox4.Controls.Add(this.label6);
-            this.groupBox4.Controls.Add(this.textBox3);
             this.groupBox4.Controls.Add(this.label5);
-            this.groupBox4.Controls.Add(this.textBox2);
             this.groupBox4.Controls.Add(this.label4);
-            this.groupBox4.Controls.Add(this.textBox1);
+            this.groupBox4.Controls.Add(this.CurrentTemp);
             this.groupBox4.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "sTempCompAvailable", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.groupBox4.Enabled = global::ASCOM.FocuserSimulator.Properties.Settings.Default.sTempCompAvailable;
             this.groupBox4.Location = new System.Drawing.Point(12, 246);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(263, 120);
+            this.groupBox4.Size = new System.Drawing.Size(263, 200);
             this.groupBox4.TabIndex = 6;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Temperature compensation";
             // 
-            // numericUpDown5
+            // TempMaxi
             // 
-            this.numericUpDown5.Location = new System.Drawing.Point(204, 65);
-            this.numericUpDown5.Maximum = new decimal(new int[] {
+            this.TempMaxi.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "sTempMax", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.TempMaxi.DataBindings.Add(new System.Windows.Forms.Binding("Minimum", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "sTempMin", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.TempMaxi.Location = new System.Drawing.Point(167, 32);
+            this.TempMaxi.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.TempMaxi.Minimum = global::ASCOM.FocuserSimulator.Properties.Settings.Default.sTempMin;
+            this.TempMaxi.Name = "TempMaxi";
+            this.TempMaxi.Size = new System.Drawing.Size(53, 20);
+            this.TempMaxi.TabIndex = 19;
+            this.TempMaxi.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.TempMaxi.Value = global::ASCOM.FocuserSimulator.Properties.Settings.Default.sTempMax;
+            // 
+            // TempMini
+            // 
+            this.TempMini.DataBindings.Add(new System.Windows.Forms.Binding("Maximum", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "sTempMax", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.TempMini.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "sTempMin", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.TempMini.Location = new System.Drawing.Point(82, 32);
+            this.TempMini.Maximum = global::ASCOM.FocuserSimulator.Properties.Settings.Default.sTempMax;
+            this.TempMini.Minimum = new decimal(new int[] {
+            40,
+            0,
+            0,
+            -2147483648});
+            this.TempMini.Name = "TempMini";
+            this.TempMini.Size = new System.Drawing.Size(53, 20);
+            this.TempMini.TabIndex = 18;
+            this.TempMini.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.TempMini.Value = global::ASCOM.FocuserSimulator.Properties.Settings.Default.sTempMin;
+            // 
+            // HelpTempComp
+            // 
+            this.HelpTempComp.BackColor = System.Drawing.SystemColors.Control;
+            this.HelpTempComp.Location = new System.Drawing.Point(6, 114);
+            this.HelpTempComp.Multiline = true;
+            this.HelpTempComp.Name = "HelpTempComp";
+            this.HelpTempComp.Size = new System.Drawing.Size(251, 80);
+            this.HelpTempComp.TabIndex = 17;
+            this.HelpTempComp.Text = resources.GetString("HelpTempComp.Text");
+            // 
+            // UpDownPeriod
+            // 
+            this.UpDownPeriod.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "sTempCompPeriod", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.UpDownPeriod.Location = new System.Drawing.Point(204, 65);
+            this.UpDownPeriod.Maximum = new decimal(new int[] {
             3600,
             0,
             0,
             0});
-            this.numericUpDown5.Minimum = new decimal(new int[] {
+            this.UpDownPeriod.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.numericUpDown5.Name = "numericUpDown5";
-            this.numericUpDown5.Size = new System.Drawing.Size(53, 20);
-            this.numericUpDown5.TabIndex = 16;
-            this.numericUpDown5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.numericUpDown5.Value = new decimal(new int[] {
-            30,
-            0,
-            0,
-            0});
+            this.UpDownPeriod.Name = "UpDownPeriod";
+            this.UpDownPeriod.Size = new System.Drawing.Size(53, 20);
+            this.UpDownPeriod.TabIndex = 16;
+            this.UpDownPeriod.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.UpDownPeriod.Value = global::ASCOM.FocuserSimulator.Properties.Settings.Default.sTempCompPeriod;
             // 
             // label1
             // 
@@ -256,38 +302,20 @@ namespace ASCOM.FocuserSimulator
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(137, 16);
+            this.label6.Location = new System.Drawing.Point(81, 16);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(48, 13);
             this.label6.TabIndex = 11;
             this.label6.Text = "Minimum";
             // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(140, 32);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(44, 20);
-            this.textBox3.TabIndex = 10;
-            this.textBox3.Text = "4.0";
-            this.textBox3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(71, 16);
+            this.label5.Location = new System.Drawing.Point(169, 16);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(51, 13);
             this.label5.TabIndex = 9;
             this.label5.Text = "Maximum";
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(74, 32);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(44, 20);
-            this.textBox2.TabIndex = 8;
-            this.textBox2.Text = "20.0";
-            this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label4
             // 
@@ -298,14 +326,14 @@ namespace ASCOM.FocuserSimulator
             this.label4.TabIndex = 7;
             this.label4.Text = "Current";
             // 
-            // textBox1
+            // CurrentTemp
             // 
-            this.textBox1.Location = new System.Drawing.Point(9, 32);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(44, 20);
-            this.textBox1.TabIndex = 6;
-            this.textBox1.Text = "17.5°";
-            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.CurrentTemp.Location = new System.Drawing.Point(9, 32);
+            this.CurrentTemp.Name = "CurrentTemp";
+            this.CurrentTemp.Size = new System.Drawing.Size(44, 20);
+            this.CurrentTemp.TabIndex = 6;
+            this.CurrentTemp.Text = "5°";
+            this.CurrentTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // IsTemperature
             // 
@@ -466,7 +494,7 @@ namespace ASCOM.FocuserSimulator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(377, 374);
+            this.ClientSize = new System.Drawing.Size(377, 451);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -488,7 +516,9 @@ namespace ASCOM.FocuserSimulator
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TempMaxi)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TempMini)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.UpDownPeriod)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.StepsPerDeg)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
@@ -515,21 +545,22 @@ namespace ASCOM.FocuserSimulator
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox CurrentTemp;
         private System.Windows.Forms.NumericUpDown numericUpDown2;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.NumericUpDown StepsPerDeg;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.CheckBox IsTempComp;
         private System.Windows.Forms.CheckBox IsStepSize;
         private System.Windows.Forms.CheckBox IsHalt;
         private System.Windows.Forms.CheckBox IsTemperature;
-        private System.Windows.Forms.NumericUpDown numericUpDown5;
+        private System.Windows.Forms.NumericUpDown UpDownPeriod;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox HelpTempComp;
+        private System.Windows.Forms.NumericUpDown TempMini;
+        private System.Windows.Forms.NumericUpDown TempMaxi;
     }
 }

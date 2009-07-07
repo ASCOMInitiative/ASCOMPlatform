@@ -10,17 +10,20 @@ namespace ASCOM.FocuserSimulator
         public SetupDialogForm()
         {
             InitializeComponent();
+            Properties.Settings.Default.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(Default_PropertyChanged);
         }
 
         private void cmdOK_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.Save();
+            Properties.Settings.Default.PropertyChanged -= new System.ComponentModel.PropertyChangedEventHandler(Default_PropertyChanged);
             Dispose();
         }
 
         private void cmdCancel_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.Reload();
+            Properties.Settings.Default.PropertyChanged -= new System.ComponentModel.PropertyChangedEventHandler(Default_PropertyChanged);
             Dispose();
         }
 
@@ -44,6 +47,10 @@ namespace ASCOM.FocuserSimulator
         private void SetupDialogForm_Load(object sender, EventArgs e)
         {
             Properties.Settings.Default.Reload();
+            HelpTempComp.Text = "If probed temperature is between " + TempMini.Value.ToString() + "° and " +
+                TempMaxi.Value.ToString() + "°, then the focuser will move forward by " +
+                Properties.Settings.Default.sStepPerDeg.ToString() + " steps each time the t° increases by 1° (and move backwards if t° decreases). " +
+                "Temperature is checked every " + Properties.Settings.Default.sTempCompPeriod.ToString() + " seconds.";
         }
 
         private void IsTemperature_Click(object sender, EventArgs e)
@@ -55,6 +62,20 @@ namespace ASCOM.FocuserSimulator
         private void IsTempCompAvailable_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.sTempComp = Properties.Settings.Default.sTempCompAvailable;
+        }
+
+        private void TempComp_TextChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        void Default_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            HelpTempComp.Text = "If probed temperature is between " + TempMini.Value.ToString() + "° and " +
+                TempMaxi.Value.ToString() + "°, then the focuser will move forward by " +
+                Properties.Settings.Default.sStepPerDeg.ToString() + " steps each time the t° increases by 1° (and move backwards if t° decreases). " +
+                "Temperature is checked every " + Properties.Settings.Default.sTempCompPeriod.ToString() + " seconds.";
+
         }
 
     }

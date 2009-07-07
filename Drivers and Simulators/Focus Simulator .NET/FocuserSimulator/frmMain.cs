@@ -8,23 +8,50 @@ namespace ASCOM.FocuserSimulator
     {
         delegate void SetTextCallback(string text);
 
+        public Random xRand;
+        public int OldTemp = 999;
+
         public frmMain()
         {
             InitializeComponent();
+            Properties.Settings.Default.PropertyChanged += new PropertyChangedEventHandler(Default_PropertyChanged);
+            xRand = new Random();
         }
+
+        void Default_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (Properties.Settings.Default.sAbsolute)
+            {
+                LabelPosition.Text = Properties.Settings.Default.sPosition.ToString();
+                LabelMinPosition.Visible = true;
+                LabelMaxStep.Visible = true;
+                LabelMaxStep.Text = Properties.Settings.Default.sMaxStep.ToString();
+                progressBar1.Visible = true;
+            }
+            else
+            {
+                LabelPosition.Text = "No position feedback";
+                LabelMinPosition.Visible = false;
+                LabelMaxStep.Visible = false;
+                progressBar1.Visible = false;
+            }
+            SetupButton.Enabled = !Properties.Settings.Default.IsMoving;
+            TimerTempComp.Interval = (int)Properties.Settings.Default.sTempCompPeriod * 1000;
+            TimerTempComp.Enabled = Properties.Settings.Default.sTempComp;
+            Application.DoEvents();
+        }
+
+
 
         private void button1_Click(object sender, EventArgs e)
         {
             FocuserHardware.DoSetup();
-            LabelMaxStep.Text = Properties.Settings.Default.sMaxStep.ToString();
         }
 
         private void frmMain_Load(object sender, EventArgs e)
         {
             //frmMain.ActiveForm.Width = 186;
             Properties.Settings.Default.Reload();
-            LabelMaxStep.Text = Properties.Settings.Default.sMaxStep.ToString();
-            Application.DoEvents();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -41,29 +68,15 @@ namespace ASCOM.FocuserSimulator
 
         private void TimerTempComp_Tick(object sender, EventArgs e)
         {
+            int Delta;
+            int xTemp = (int)((int)Properties.Settings.Default.sTempMin + 10 * xRand.NextDouble());
+            TextTemp.Text = xTemp.ToString() + "°";
+            if (OldTemp == 999 || OldTemp == xTemp) { OldTemp = xTemp; return; }   // First time : memorise temp & no move
+            Delta = xTemp - OldTemp;
             FocuserHardware.IsTempCompMove = true;
-            FocuserHardware.Move((int)Properties.Settings.Default.sStepPerDeg);
+            if (Properties.Settings.Default.sAbsolute) FocuserHardware.Move((int)Properties.Settings.Default.sPosition+Delta*(int)Properties.Settings.Default.sStepPerDeg);
+            else FocuserHardware.Move(Delta*(int)Properties.Settings.Default.sStepPerDeg);
             FocuserHardware.IsTempCompMove = false;
-        }
-
-        private void label2_Validating(object sender, CancelEventArgs e)
-        {
-        }
-
-        private void frmMain_Validating(object sender, CancelEventArgs e)
-        {
-        }
-
-        private void progressBar1_Validating(object sender, CancelEventArgs e)
-        {
-        }
-
-        private void progressBar1_Layout(object sender, LayoutEventArgs e)
-        {
-            label2.Text = Convert.ToString(Properties.Settings.Default.sPosition);
-            LogBox.AppendText("Layout" + Environment.NewLine);
-            Application.DoEvents();
-
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -71,6 +84,5 @@ namespace ASCOM.FocuserSimulator
             Properties.Settings.Default.LogTxt = "";
             Properties.Settings.Default.Save();
         }
-
     }
 }

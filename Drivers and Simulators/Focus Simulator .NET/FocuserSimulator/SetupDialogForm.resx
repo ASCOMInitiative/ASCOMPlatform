@@ -117,4 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="HelpTempComp.Text" xml:space="preserve">
+    <value>If probed temperature is between -10° and 10°, then the focuser will move forward by X steps each time the t° increases by 1° (and move backwards if t° decreases). Temperature is checked every XX seconds.</value>
+  </data>
 </root>

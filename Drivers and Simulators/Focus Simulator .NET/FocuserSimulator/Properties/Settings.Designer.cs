@@ -25,7 +25,7 @@ namespace ASCOM.FocuserSimulator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
         public decimal sMaxIncrement {
             get {
                 return ((decimal)(this["sMaxIncrement"]));
@@ -241,13 +241,25 @@ namespace ASCOM.FocuserSimulator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("3500")]
-        public string sStrPosition {
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public decimal sTempMax {
             get {
-                return ((string)(this["sStrPosition"]));
+                return ((decimal)(this["sTempMax"]));
             }
             set {
-                this["sStrPosition"] = value;
+                this["sTempMax"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-10")]
+        public decimal sTempMin {
+            get {
+                return ((decimal)(this["sTempMin"]));
+            }
+            set {
+                this["sTempMin"] = value;
             }
         }
     }
