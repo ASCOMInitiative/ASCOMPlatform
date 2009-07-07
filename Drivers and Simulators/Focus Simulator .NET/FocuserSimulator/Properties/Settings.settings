@@ -56,5 +56,8 @@
     <Setting Name="LogOther" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="sStrPosition" Type="System.String" Scope="User">
+      <Value Profile="(Default)">3500</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

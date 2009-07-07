@@ -238,5 +238,17 @@ namespace ASCOM.FocuserSimulator.Properties {
                 this["LogOther"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3500")]
+        public string sStrPosition {
+            get {
+                return ((string)(this["sStrPosition"]));
+            }
+            set {
+                this["sStrPosition"] = value;
+            }
+        }
     }
 }

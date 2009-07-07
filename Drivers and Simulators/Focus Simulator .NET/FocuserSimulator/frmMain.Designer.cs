@@ -37,6 +37,8 @@ namespace ASCOM.FocuserSimulator
             this.SetupButton = new System.Windows.Forms.Button();
             this.TimerTempComp = new System.Windows.Forms.Timer(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.LogBox = new System.Windows.Forms.TextBox();
             this.CheckOthers = new System.Windows.Forms.CheckBox();
             this.CheckIsMoving = new System.Windows.Forms.CheckBox();
@@ -47,8 +49,8 @@ namespace ASCOM.FocuserSimulator
             this.RadioMoving = new System.Windows.Forms.RadioButton();
             this.LabelMaxStep = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.label2 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -92,6 +94,7 @@ namespace ASCOM.FocuserSimulator
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.pictureBox1);
             this.groupBox1.Controls.Add(this.CheckOthers);
             this.groupBox1.Controls.Add(this.CheckIsMoving);
             this.groupBox1.Controls.Add(this.CheckTempRelated);
@@ -103,13 +106,36 @@ namespace ASCOM.FocuserSimulator
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Tracked events";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "sStrPosition", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.label2.Location = new System.Drawing.Point(113, 36);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(31, 13);
+            this.label2.TabIndex = 17;
+            this.label2.Text = global::ASCOM.FocuserSimulator.Properties.Settings.Default.sStrPosition;
+            this.label2.Validating += new System.ComponentModel.CancelEventHandler(this.label2_Validating);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::ASCOM.FocuserSimulator.Properties.Resources.button_cancel;
+            this.pictureBox1.Location = new System.Drawing.Point(211, 50);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(17, 19);
+            this.pictureBox1.TabIndex = 4;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            // 
             // LogBox
             // 
+            this.LogBox.AcceptsReturn = true;
             this.LogBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "LogTxt", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.LogBox.HideSelection = false;
             this.LogBox.Location = new System.Drawing.Point(10, 253);
             this.LogBox.Multiline = true;
             this.LogBox.Name = "LogBox";
-            this.LogBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.LogBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.LogBox.Size = new System.Drawing.Size(234, 121);
             this.LogBox.TabIndex = 16;
             this.LogBox.Text = global::ASCOM.FocuserSimulator.Properties.Settings.Default.LogTxt;
@@ -120,7 +146,7 @@ namespace ASCOM.FocuserSimulator
             this.CheckOthers.Checked = global::ASCOM.FocuserSimulator.Properties.Settings.Default.LogOther;
             this.CheckOthers.CheckState = System.Windows.Forms.CheckState.Checked;
             this.CheckOthers.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "LogOther", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.CheckOthers.Location = new System.Drawing.Point(142, 48);
+            this.CheckOthers.Location = new System.Drawing.Point(121, 42);
             this.CheckOthers.Name = "CheckOthers";
             this.CheckOthers.Size = new System.Drawing.Size(55, 17);
             this.CheckOthers.TabIndex = 3;
@@ -133,7 +159,7 @@ namespace ASCOM.FocuserSimulator
             this.CheckIsMoving.Checked = global::ASCOM.FocuserSimulator.Properties.Settings.Default.LogIsMoving;
             this.CheckIsMoving.CheckState = System.Windows.Forms.CheckState.Checked;
             this.CheckIsMoving.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "LogIsMoving", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.CheckIsMoving.Location = new System.Drawing.Point(142, 25);
+            this.CheckIsMoving.Location = new System.Drawing.Point(121, 19);
             this.CheckIsMoving.Name = "CheckIsMoving";
             this.CheckIsMoving.Size = new System.Drawing.Size(67, 17);
             this.CheckIsMoving.TabIndex = 2;
@@ -146,7 +172,7 @@ namespace ASCOM.FocuserSimulator
             this.CheckTempRelated.Checked = global::ASCOM.FocuserSimulator.Properties.Settings.Default.LogTempRelated;
             this.CheckTempRelated.CheckState = System.Windows.Forms.CheckState.Checked;
             this.CheckTempRelated.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "LogTempRelated", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.CheckTempRelated.Location = new System.Drawing.Point(17, 48);
+            this.CheckTempRelated.Location = new System.Drawing.Point(17, 42);
             this.CheckTempRelated.Name = "CheckTempRelated";
             this.CheckTempRelated.Size = new System.Drawing.Size(86, 17);
             this.CheckTempRelated.TabIndex = 1;
@@ -159,7 +185,7 @@ namespace ASCOM.FocuserSimulator
             this.CheckHaltMove.Checked = global::ASCOM.FocuserSimulator.Properties.Settings.Default.LogHaltMove;
             this.CheckHaltMove.CheckState = System.Windows.Forms.CheckState.Checked;
             this.CheckHaltMove.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "LogHaltMove", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.CheckHaltMove.Location = new System.Drawing.Point(17, 25);
+            this.CheckHaltMove.Location = new System.Drawing.Point(17, 19);
             this.CheckHaltMove.Name = "CheckHaltMove";
             this.CheckHaltMove.Size = new System.Drawing.Size(75, 17);
             this.CheckHaltMove.TabIndex = 0;
@@ -240,17 +266,8 @@ namespace ASCOM.FocuserSimulator
             this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar1.TabIndex = 0;
             this.progressBar1.Value = 3500;
+            this.progressBar1.Layout += new System.Windows.Forms.LayoutEventHandler(this.progressBar1_Layout);
             this.progressBar1.Validating += new System.ComponentModel.CancelEventHandler(this.progressBar1_Validating);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(96, 26);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
-            this.label2.TabIndex = 17;
-            this.label2.Text = "label2";
-            this.label2.Validating += new System.ComponentModel.CancelEventHandler(this.label2_Validating);
             // 
             // frmMain
             // 
@@ -277,6 +294,7 @@ namespace ASCOM.FocuserSimulator
             this.Validating += new System.ComponentModel.CancelEventHandler(this.frmMain_Validating);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -300,6 +318,7 @@ namespace ASCOM.FocuserSimulator
         private System.Windows.Forms.CheckBox CheckHaltMove;
         private System.Windows.Forms.TextBox LogBox;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.PictureBox pictureBox1;
 
 
 

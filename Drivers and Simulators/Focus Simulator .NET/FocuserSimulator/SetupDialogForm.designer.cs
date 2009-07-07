@@ -30,8 +30,6 @@ namespace ASCOM.FocuserSimulator
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.RadioRelative = new System.Windows.Forms.RadioButton();
-            this.shapeContainer1 = new Microsoft.VisualBasic.PowerPacks.ShapeContainer();
-            this.lineShape1 = new Microsoft.VisualBasic.PowerPacks.LineShape();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.picASCOM = new System.Windows.Forms.PictureBox();
@@ -80,7 +78,6 @@ namespace ASCOM.FocuserSimulator
             this.groupBox1.Controls.Add(this.LabelPosition);
             this.groupBox1.Controls.Add(this.RadioRelative);
             this.groupBox1.Controls.Add(this.RadioAbsolute);
-            this.groupBox1.Controls.Add(this.shapeContainer1);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(263, 79);
@@ -99,26 +96,6 @@ namespace ASCOM.FocuserSimulator
             this.RadioRelative.TabStop = true;
             this.RadioRelative.Text = "Relative";
             this.RadioRelative.UseVisualStyleBackColor = true;
-            // 
-            // shapeContainer1
-            // 
-            this.shapeContainer1.Location = new System.Drawing.Point(3, 16);
-            this.shapeContainer1.Margin = new System.Windows.Forms.Padding(0);
-            this.shapeContainer1.Name = "shapeContainer1";
-            this.shapeContainer1.Shapes.AddRange(new Microsoft.VisualBasic.PowerPacks.Shape[] {
-            this.lineShape1});
-            this.shapeContainer1.Size = new System.Drawing.Size(257, 60);
-            this.shapeContainer1.TabIndex = 9;
-            this.shapeContainer1.TabStop = false;
-            // 
-            // lineShape1
-            // 
-            this.lineShape1.Enabled = false;
-            this.lineShape1.Name = "lineShape1";
-            this.lineShape1.X1 = 80;
-            this.lineShape1.X2 = 80;
-            this.lineShape1.Y1 = -2;
-            this.lineShape1.Y2 = 47;
             // 
             // groupBox2
             // 
@@ -539,8 +516,6 @@ namespace ASCOM.FocuserSimulator
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox textBox1;
-        private Microsoft.VisualBasic.PowerPacks.ShapeContainer shapeContainer1;
-        private Microsoft.VisualBasic.PowerPacks.LineShape lineShape1;
         private System.Windows.Forms.NumericUpDown numericUpDown2;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
