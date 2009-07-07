@@ -46,14 +46,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Platform Dependencies\ASCOM.HelperNET.dll</HintPath>
     </Reference>
-    <Reference Include="ASCOM.Interfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
+    <Reference Include="ASCOM.Interfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Platform Dependencies\ASCOM.Interfaces.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="ASCOM" />
-    <Import Include="ASCOM.Helper" />
     <Import Include="ASCOM.Interface" />
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="System" />
