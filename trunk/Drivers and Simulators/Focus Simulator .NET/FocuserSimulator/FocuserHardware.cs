@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
-using System.Drawing;
 
 namespace ASCOM.FocuserSimulator
 {
@@ -47,7 +44,7 @@ namespace ASCOM.FocuserSimulator
         public static bool Link
         {
             get { MyLog(eLogKind.LogOther, "Link property request"); return _Link; }
-            set { MyLog(eLogKind.LogOther, "Set Link property to "+value.ToString()); _Link = value; }
+            set { MyLog(eLogKind.LogOther, "Set Link property to " + value.ToString()); _Link = value; }
         }
         #endregion
 
@@ -208,11 +205,13 @@ namespace ASCOM.FocuserSimulator
                     return;
                 }
                 DestPosition = (val > (int)Properties.Settings.Default.sMaxStep ? (int)Properties.Settings.Default.sMaxStep : val);
+                Properties.Settings.Default.Reload();
                 Properties.Settings.Default.IsMoving = true;
-                MyLog(eLogKind.LogIsMoving, "Focuser is moving");
+                int Start = (int)Properties.Settings.Default.sPosition;
+                MyLog(eLogKind.LogIsMoving, "Focuser is moving from "+Start.ToString()+" to "+val.ToString());
                 if (val > Properties.Settings.Default.sPosition)  
                 {
-                    for (int i = (int)Properties.Settings.Default.sPosition; i < val; i++)
+                    for (int i = Start; i < DestPosition; i++)
                     {
                         if (HaltRequested) 
                         { 
@@ -223,11 +222,13 @@ namespace ASCOM.FocuserSimulator
                         }
                         Deplace(1);
                         Properties.Settings.Default.sPosition ++;
+                        Properties.Settings.Default.sStrPosition = Properties.Settings.Default.sPosition.ToString();
                     }
+                    
                 }
                 else
                 {
-                    for (int i = (int)Properties.Settings.Default.sPosition; i > val; i--)
+                    for (int i = Start; i > val; i--)
                     {
                         if (HaltRequested) 
                         { 
@@ -236,18 +237,21 @@ namespace ASCOM.FocuserSimulator
                             MyLog(eLogKind.LogMove, "HALT requested, focuser stopped");
                             return; 
                         }
-                        Deplace(1);
+                        Deplace(-1);
                         Properties.Settings.Default.sPosition --;
+                        Properties.Settings.Default.sStrPosition = Properties.Settings.Default.sPosition.ToString();
                     }
                 }
+                
                 Properties.Settings.Default.IsMoving = false;
+                Properties.Settings.Default.Save();
                 MyLog(eLogKind.LogIsMoving, "Move done");
             }
             else  // Relative focuser move
             {
                 MyLog(eLogKind.LogMove,"Requested relative move "+val.ToString()+" steps");
                 Properties.Settings.Default.IsMoving = true;
-                MyLog(eLogKind.LogIsMoving, "Focuser is moving");
+                MyLog(eLogKind.LogIsMoving, "Focuser is moving "+Math.Abs(val)+" steps "+(val >= 0 ? "forward" : "backward"));
                 for (int i = 0; i < Math.Abs(val); i ++)
                 {
                     // Focuser.Halt() was called

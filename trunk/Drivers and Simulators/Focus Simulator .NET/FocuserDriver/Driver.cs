@@ -1,17 +1,11 @@
 //tabs=4
 // --------------------------------------------------------------------------------
-// TODO fill in this information for your driver, then remove this line!
+// ASCOM Focuser driver for .NET
 //
-// ASCOM Focuser driver for FocuserSimulator
-//
-// Description:	Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam 
-//				nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam 
-//				erat, sed diam voluptua. At vero eos et accusam et justo duo 
-//				dolores et ea rebum. Stet clita kasd gubergren, no sea takimata 
-//				sanctus est Lorem ipsum dolor sit amet.
+// Description:	ASCOM Focuser simulator for .NET Framework
 //
 // Implements:	ASCOM Focuser interface version: 1.0
-// Author:		(XXX) Your N. Here <your@email.here>
+// Author:		Christophe Gerbier (becafuel@lsp-fr.com)
 //
 // Edit Log:
 //

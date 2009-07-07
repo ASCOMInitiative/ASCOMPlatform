@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace ASCOM.FocuserSimulator
@@ -27,7 +24,6 @@ namespace ASCOM.FocuserSimulator
             //frmMain.ActiveForm.Width = 186;
             Properties.Settings.Default.Reload();
             LabelMaxStep.Text = Properties.Settings.Default.sMaxStep.ToString();
-
             Application.DoEvents();
         }
 
@@ -56,16 +52,24 @@ namespace ASCOM.FocuserSimulator
 
         private void frmMain_Validating(object sender, CancelEventArgs e)
         {
-            label2.Text = Convert.ToString(Properties.Settings.Default.sPosition);
-            Application.DoEvents();
-
         }
 
         private void progressBar1_Validating(object sender, CancelEventArgs e)
         {
+        }
+
+        private void progressBar1_Layout(object sender, LayoutEventArgs e)
+        {
             label2.Text = Convert.ToString(Properties.Settings.Default.sPosition);
+            LogBox.AppendText("Layout" + Environment.NewLine);
             Application.DoEvents();
 
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.LogTxt = "";
+            Properties.Settings.Default.Save();
         }
 
     }
