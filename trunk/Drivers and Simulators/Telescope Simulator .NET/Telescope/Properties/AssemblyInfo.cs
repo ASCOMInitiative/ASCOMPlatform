@@ -37,4 +37,4 @@ using System.Runtime.InteropServices;
 // TODO - Set your driver's version here
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: ASCOM.ServedClassName("Telescope Simulator .NET")]
+[assembly: ASCOM.TelescopeSimulator.ServedClassName("Telescope Simulator .NET")]

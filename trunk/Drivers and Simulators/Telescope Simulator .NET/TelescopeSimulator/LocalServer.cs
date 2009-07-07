@@ -241,7 +241,7 @@ namespace ASCOM.TelescopeSimulator
                     Assembly so = Assembly.LoadFrom(aPath);
 
                     //Added check to see if the dll has the ServedClassNameAttribute
-                    object[] attributes = so.GetCustomAttributes(typeof(ASCOM.ServedClassNameAttribute),false);
+                    object[] attributes = so.GetCustomAttributes(typeof(ServedClassNameAttribute),false);
                     if (attributes.Length > 0)
                     {
                         m_ComObjectTypes.Add(so.GetType(fqClassName, true));
@@ -371,9 +371,9 @@ namespace ASCOM.TelescopeSimulator
                     //attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyProductAttribute));
                     //string chooserName = ((AssemblyProductAttribute)attr).Product;
 
-                    //Modified to pull from the customer Attribute ServedClassName
-                    attr = Attribute.GetCustomAttribute(assy, typeof(ASCOM.ServedClassNameAttribute));
-                    string chooserName = ((ASCOM.ServedClassNameAttribute)attr).ServedClassName;
+                    //Modified to pull from the custom Attribute ServedClassName
+                    attr = Attribute.GetCustomAttribute(assy, typeof(ServedClassNameAttribute));
+                    string chooserName = ((ServedClassNameAttribute)attr).ServedClassName;
 
                     ASCOM.HelperNET.Profile P = new ASCOM.HelperNET.Profile();
                     P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.1 or later

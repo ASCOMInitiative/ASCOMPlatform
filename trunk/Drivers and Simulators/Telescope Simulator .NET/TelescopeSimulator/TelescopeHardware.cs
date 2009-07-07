@@ -42,7 +42,10 @@ namespace ASCOM.TelescopeSimulator
         private static bool m_CanSetEquatorialRates;
         private static bool m_CanSetGuideRates;
         private static bool m_CanSetPark;
-        private static bool m_CanSetSideOfPier;
+        private static bool m_CanSetPierSide;
+        private static bool m_CanSetTracking;
+        private static bool m_CanSlew;
+        private static bool m_CanSlewAltAz;
 
         private static bool m_Connected = false; //Keep track of the connection status of the hardware
 
@@ -68,7 +71,11 @@ namespace ASCOM.TelescopeSimulator
                 m_Profile.WriteValue(c_ProgramID, "CanSetEquRates", "true", "Capabilities");
                 m_Profile.WriteValue(c_ProgramID, "CanSetGuideRates", "true", "Capabilities");
                 m_Profile.WriteValue(c_ProgramID, "CanSetPark", "true", "Capabilities");
-                m_Profile.WriteValue(c_ProgramID, "CanSetSOP", "true", "Capabilities");
+                m_Profile.WriteValue(c_ProgramID, "CanSetPierSide", "true", "Capabilities");
+                m_Profile.WriteValue(c_ProgramID, "CanSetTracking", "true", "Capabilities");
+                m_Profile.WriteValue(c_ProgramID, "CanSlew", "true", "Capabilities");
+                m_Profile.WriteValue(c_ProgramID, "CanSlewAltAz", "true", "Capabilities");
+
                 
             }
 
@@ -84,7 +91,10 @@ namespace ASCOM.TelescopeSimulator
             m_CanSetEquatorialRates = bool.Parse(m_Profile.GetValue(c_ProgramID, "CanSetEquRates", "Capabilities"));
             m_CanSetGuideRates = bool.Parse(m_Profile.GetValue(c_ProgramID, "CanSetGuideRates", "Capabilities"));
             m_CanSetPark = bool.Parse(m_Profile.GetValue(c_ProgramID, "CanSetPark", "Capabilities"));
-            m_CanSetSideOfPier = bool.Parse(m_Profile.GetValue(c_ProgramID, "CanSetSOP", "Capabilities"));
+            m_CanSetPierSide = bool.Parse(m_Profile.GetValue(c_ProgramID, "CanSetPierSide", "Capabilities"));
+            m_CanSetTracking = bool.Parse(m_Profile.GetValue(c_ProgramID, "CanSetTracking", "Capabilities"));
+            m_CanSlew = bool.Parse(m_Profile.GetValue(c_ProgramID, "CanSlew", "Capabilities"));
+            m_CanSlewAltAz = bool.Parse(m_Profile.GetValue(c_ProgramID, "CanSlewAltAz", "Capabilities"));
 
 
             //Set the form setting for the Always On Top Value
@@ -120,14 +130,7 @@ namespace ASCOM.TelescopeSimulator
         }
         public static bool CanFindHome
         {
-            get
-            {
-                if (SharedResources.TrafficForm != null)
-                {
-                    SharedResources.TrafficForm.TrafficLine("CanFindHome: " + m_CanFindHome);
-                }
-                return m_CanFindHome;
-            }
+            get {return m_CanFindHome;}
             set
             {
                 m_CanFindHome = value;
@@ -137,17 +140,7 @@ namespace ASCOM.TelescopeSimulator
 
         public static bool CanPark
         {
-            get
-            {
-                if (SharedResources.TrafficForm != null)
-                {
-                    if (SharedResources.TrafficForm.Capabilities)
-                    {
-                        SharedResources.TrafficForm.TrafficLine("CanPark: " + m_CanPark);
-                    }
-                }
-                return m_CanPark;
-            }
+            get {return m_CanPark;}
             set
             {
                 m_CanPark = value;
@@ -166,17 +159,7 @@ namespace ASCOM.TelescopeSimulator
 
         public static bool CanPulseGuide
         {
-            get
-            {
-                if (SharedResources.TrafficForm != null)
-                {
-                    if (SharedResources.TrafficForm.Capabilities)
-                    {
-                        SharedResources.TrafficForm.TrafficLine("CanPulseGuide: " + m_CanPulseGuide);
-                    }
-                }
-                return m_CanPulseGuide;
-            }
+            get{return m_CanPulseGuide;}
             set
             {
                 m_CanPulseGuide = value;
@@ -186,10 +169,7 @@ namespace ASCOM.TelescopeSimulator
 
         public static bool CanSetEquatorialRates
         {
-            get
-            {
-                return m_CanSetEquatorialRates;
-            }
+            get{return m_CanSetEquatorialRates;}
             set
             {
                 m_CanSetEquatorialRates = value;
@@ -198,17 +178,7 @@ namespace ASCOM.TelescopeSimulator
         }
         public static bool CanSetGuideRates
         {
-            get
-            {
-                if (SharedResources.TrafficForm != null)
-                {
-                    if (SharedResources.TrafficForm.Capabilities)
-                    {
-                        SharedResources.TrafficForm.TrafficLine("CanSetGuideRates: " + m_CanSetGuideRates);
-                    }
-                }
-                return m_CanSetGuideRates;
-            }
+            get{return m_CanSetGuideRates;}
             set
             {
                 m_CanSetGuideRates = value;
@@ -217,33 +187,49 @@ namespace ASCOM.TelescopeSimulator
         }
         public static bool CanSetPark
         {
-            get
-            {
-                if (SharedResources.TrafficForm != null)
-                {
-                    if (SharedResources.TrafficForm.Capabilities)
-                    {
-                        SharedResources.TrafficForm.TrafficLine("CanSetPark: " + m_CanSetPark);
-                    }
-                }
-                return m_CanSetPark;
-            }
+            get {return m_CanSetPark;}
             set
             {
                 m_CanSetPark = value;
                 m_Profile.WriteValue(c_ProgramID, "CanSetPark", value.ToString(), "Capabilities");
             }
         }
-        public static bool CanSetSideOfPier
+        public static bool CanSetPierSide
         {
-            get
-            {
-                return m_CanSetSideOfPier;
-            }
+            get{return m_CanSetPierSide;}
             set
             {
-                m_CanSetSideOfPier = value;
-                m_Profile.WriteValue(c_ProgramID, "CanSetSOP", value.ToString(), "Capabilities");
+                m_CanSetPierSide = value;
+                m_Profile.WriteValue(c_ProgramID, "CanSetPierSide", value.ToString(), "Capabilities");
+            }
+        }
+
+        public static bool CanSetTracking
+        {
+            get{return m_CanSetTracking;}
+            set
+            {
+                m_CanSetTracking = value;
+                m_Profile.WriteValue(c_ProgramID, "CanSetTracking", value.ToString(), "Capabilities");
+            }
+        }
+
+        public static bool CanSlew
+        {
+            get{return m_CanSlew;}
+            set
+            {
+                m_CanSlew = value;
+                m_Profile.WriteValue(c_ProgramID, "CanSlew", value.ToString(), "Capabilities");
+            }
+        }
+        public static bool CanSlewAltAz
+        {
+            get{return m_CanSlewAltAz;}
+            set
+            {
+                m_CanSlewAltAz = value;
+                m_Profile.WriteValue(c_ProgramID, "CanSlewAltAz", value.ToString(), "Capabilities");
             }
         }
         #endregion
@@ -256,107 +242,19 @@ namespace ASCOM.TelescopeSimulator
             set
             { m_Connected = value; }
         }
-       public static bool CanMoveAxis(ASCOM.Interface.TelescopeAxes Axis)
+       public static bool CanMoveAxis(int Axis)
         {
-            if (SharedResources.TrafficForm != null)
-            {
-                if (SharedResources.TrafficForm.Capabilities)
-                {
-                    switch (Axis)
-                    {
-                        case ASCOM.Interface.TelescopeAxes.axisPrimary:
-                            SharedResources.TrafficForm.TrafficStart("CanMoveAxis Primary: ");
-                            break;
-                        case ASCOM.Interface.TelescopeAxes.axisSecondary:
-                            SharedResources.TrafficForm.TrafficStart("CanMoveAxis Secondary: ");
-                            break;
-                        case ASCOM.Interface.TelescopeAxes.axisTertiary:
-                            SharedResources.TrafficForm.TrafficStart("CanMoveAxis Tertiary: ");
-                            break;
-                    }
-                    
-                }
-            }
-            if (m_VersionOne) 
-            {
-                SharedResources.TrafficForm.TrafficEnd("false");
-                throw new MethodNotImplementedException("CanMoveAxis"); 
-            }
-
-            if (int.Parse(Axis.ToString()) < 0 || int.Parse(Axis.ToString()) > m_NumberMoveAxis)
-            {
-                SharedResources.TrafficForm.TrafficEnd("false");
-                return false;
-            }
+            if (Axis < 0 || Axis > m_NumberMoveAxis)
+            {return false;}
             else
-            {
-                SharedResources.TrafficForm.TrafficEnd("true");
-                return true;
-            }
-            
+            {return true;}
         }
        public static bool CanSetDeclinationRate
-       {
-           
-           get 
-           {
-               if (m_VersionOne)
-               {
-                   SharedResources.TrafficForm.TrafficLine("CanSetDeclinationRate: false");
-                   throw new MethodNotImplementedException("CanSetDeclinationRate");
-               }
-               if (SharedResources.TrafficForm != null)
-               {
-                   if (SharedResources.TrafficForm.Capabilities)
-                   {
-                       SharedResources.TrafficForm.TrafficLine("CanSetDeclinationRate: " + m_CanSetEquatorialRates);
-                   }
-               }
-                return m_CanSetEquatorialRates; 
-           }
-       }
+       {get {return m_CanSetEquatorialRates;}}
 
        public static bool CanSetRightAscensionRate
-       {
+       {get{return m_CanSetEquatorialRates;}}
 
-           get
-           {
-               if (m_VersionOne)
-               {
-                   SharedResources.TrafficForm.TrafficLine("CanSetRightAscensionRate: false");
-                   throw new MethodNotImplementedException("CanSetRightAscensionRate");
-               }
-               if (SharedResources.TrafficForm != null)
-               {
-                   if (SharedResources.TrafficForm.Capabilities)
-                   {
-                       SharedResources.TrafficForm.TrafficLine("CanSetRightAscensionRate: " + m_CanSetEquatorialRates);
-                   }
-               }
-               return m_CanSetEquatorialRates;
-           }
-       }
-
-       public static bool CanSetPierSide
-       {
-
-           get
-           {
-               if (m_VersionOne)
-               {
-                   SharedResources.TrafficForm.TrafficLine("CanSetPierSide: false");
-                   throw new MethodNotImplementedException("CanSetPierSide");
-               }
-               if (SharedResources.TrafficForm != null)
-               {
-                   if (SharedResources.TrafficForm.Capabilities)
-                   {
-                       SharedResources.TrafficForm.TrafficLine("CanSetPierSide: " + m_CanSetSideOfPier);
-                   }
-               }
-               return m_CanSetSideOfPier;
-           }
-       }
         #endregion
     }
 }

@@ -94,10 +94,22 @@ namespace ASCOM.TelescopeSimulator
             set { checkBoxCanSetParkPosition.Checked = value; }
 
         }
-        public bool CanSetSideOfPier
+        public bool CanSetPierSide
         {
-            get { return checkBoxCanSetSideOfPier.Checked; }
-            set { checkBoxCanSetSideOfPier.Checked = value; }
+            get { return checkBoxCanSetPierSide.Checked; }
+            set { checkBoxCanSetPierSide.Checked = value; }
+
+        }
+        public bool CanSetTracking
+        {
+            get { return checkBoxCanTrackingRates.Checked; }
+            set { checkBoxCanTrackingRates.Checked = value; }
+
+        }
+        public bool CanSlew
+        {
+            get { return checkBoxCanSlew.Checked; }
+            set { checkBoxCanSlew.Checked = value; }
 
         }
         #endregion

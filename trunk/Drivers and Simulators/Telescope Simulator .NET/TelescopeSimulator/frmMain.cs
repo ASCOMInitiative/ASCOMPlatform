@@ -29,7 +29,9 @@ namespace ASCOM.TelescopeSimulator
             setupForm.CanSetEquatorialRates = TelescopeHardware.CanSetEquatorialRates;
             setupForm.CanSetGuideRates = TelescopeHardware.CanSetGuideRates;
             setupForm.CanSetPark = TelescopeHardware.CanSetPark;
-            setupForm.CanSetSideOfPier = TelescopeHardware.CanSetSideOfPier;
+            setupForm.CanSetPierSide = TelescopeHardware.CanSetPierSide;
+            setupForm.CanSetTracking = TelescopeHardware.CanSetTracking;
+            setupForm.CanSlew = TelescopeHardware.CanSlew;
 
             DialogResult ans = setupForm.ShowDialog(this);
 
@@ -44,7 +46,9 @@ namespace ASCOM.TelescopeSimulator
                 TelescopeHardware.CanSetEquatorialRates = setupForm.CanSetEquatorialRates;
                 TelescopeHardware.CanSetGuideRates = setupForm.CanSetGuideRates;
                 TelescopeHardware.CanSetPark = setupForm.CanSetPark;
-                TelescopeHardware.CanSetSideOfPier = setupForm.CanSetSideOfPier;
+                TelescopeHardware.CanSetPierSide = setupForm.CanSetPierSide;
+                TelescopeHardware.CanSetTracking = setupForm.CanSetTracking;
+                TelescopeHardware.CanSlew = setupForm.CanSlew;
 
                 this.TopMost = setupForm.OnTop;
             }
