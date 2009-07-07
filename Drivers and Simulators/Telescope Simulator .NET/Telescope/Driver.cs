@@ -74,8 +74,70 @@ namespace ASCOM.TelescopeSimulator
 
         public AlignmentModes AlignmentMode
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("AlignmentMode", false); }
+            
+            get 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("AlignmentMode: ");
+
+                    }
+                }
+                if (!TelescopeHardware.CanAlignmentMode)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Capabilities)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("false");
+                        }
+                    }
+                    throw new MethodNotImplementedException("AlignmentMode");
+                }
+                switch (TelescopeHardware.AlignmentMode)
+                {
+                    case 0:
+                        if (SharedResources.TrafficForm != null)
+                        {
+                            if (SharedResources.TrafficForm.Capabilities)
+                            {
+                                SharedResources.TrafficForm.TrafficEnd("Alt-Azimuth");
+                            }
+                        }
+                        
+                        return AlignmentModes.algAltAz;
+                    case 1:
+                        if (SharedResources.TrafficForm != null)
+                        {
+                            if (SharedResources.TrafficForm.Capabilities)
+                            {
+                                SharedResources.TrafficForm.TrafficEnd("German Equatorial");
+                            }
+                        }
+                        
+                        return AlignmentModes.algGermanPolar;
+                    case 2:
+                        if (SharedResources.TrafficForm != null)
+                        {
+                            if (SharedResources.TrafficForm.Capabilities)
+                            {
+                                SharedResources.TrafficForm.TrafficEnd("Equatorial");
+                            }
+                        }
+                        return AlignmentModes.algPolar;
+                    default:
+                        if (SharedResources.TrafficForm != null)
+                        {
+                            if (SharedResources.TrafficForm.Capabilities)
+                            {
+                                SharedResources.TrafficForm.TrafficEnd("German Equatorial");
+                            }
+                        }
+                        return AlignmentModes.algGermanPolar;
+                }
+            }
         }
 
         public double Altitude
@@ -86,14 +148,73 @@ namespace ASCOM.TelescopeSimulator
 
         public double ApertureArea
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("ApertureArea", false); }
+            
+            get 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("ApertureArea: ");
+
+                    }
+                }
+                if (!TelescopeHardware.CanOptics)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("");
+                        }
+                    }
+                    throw new MethodNotImplementedException("ApertureArea");
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.ApertureArea.ToString());
+
+                    }
+                }
+                return TelescopeHardware.ApertureArea;
+            }
         }
 
         public double ApertureDiameter
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("ApertureDiameter", false); }
+            get
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("ApertureDiameter: ");
+
+                    }
+                }
+                if (!TelescopeHardware.CanOptics)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("");
+                        }
+                    }
+                    throw new MethodNotImplementedException("ApertureDiameter");
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.ApertureDiameter.ToString());
+
+                    }
+                }
+                return TelescopeHardware.ApertureDiameter;
+            }
         }
 
         public bool AtHome
@@ -136,7 +257,10 @@ namespace ASCOM.TelescopeSimulator
             {
                 if (SharedResources.TrafficForm != null)
                 {
-                    SharedResources.TrafficForm.TrafficLine("CanFindHome: " + TelescopeHardware.CanFindHome);
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("CanFindHome: " + TelescopeHardware.CanFindHome);
+                    }
                 }
                 return TelescopeHardware.CanFindHome; 
             }
@@ -144,14 +268,7 @@ namespace ASCOM.TelescopeSimulator
 
         public bool CanMoveAxis(TelescopeAxes Axis)
         {
-            if (TelescopeHardware.VersionOneOnly)
-            {
-                if (SharedResources.TrafficForm != null)
-                {
-                    SharedResources.TrafficForm.TrafficEnd("false");
-                }
-                throw new MethodNotImplementedException("CanMoveAxis");
-            }
+            
             if (SharedResources.TrafficForm != null)
             {
                 if (SharedResources.TrafficForm.Capabilities)
@@ -171,8 +288,25 @@ namespace ASCOM.TelescopeSimulator
 
                 }
             }
+            if (TelescopeHardware.VersionOneOnly)
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd("false");
+                    }
+                }
+                throw new MethodNotImplementedException("CanMoveAxis");
+            }
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Capabilities)
+                {
+                    SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.CanMoveAxis(int.Parse(Axis.ToString())).ToString());
+                }
+            }
             
-            SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.CanMoveAxis(int.Parse(Axis.ToString())).ToString());
             return TelescopeHardware.CanMoveAxis(int.Parse(Axis.ToString()));
         }
 
@@ -217,7 +351,10 @@ namespace ASCOM.TelescopeSimulator
                 {
                     if (SharedResources.TrafficForm != null)
                     {
-                        SharedResources.TrafficForm.TrafficLine("CanSetDeclinationRate: false");
+                        if (SharedResources.TrafficForm.Capabilities)
+                        {
+                            SharedResources.TrafficForm.TrafficLine("CanSetDeclinationRate: false");
+                        }
                     }
                     throw new MethodNotImplementedException("CanSetDeclinationRate");
                 }
@@ -273,7 +410,10 @@ namespace ASCOM.TelescopeSimulator
                 {
                     if (SharedResources.TrafficForm != null)
                     {
-                        SharedResources.TrafficForm.TrafficLine("CanSetPierSide: false");
+                        if (SharedResources.TrafficForm.Capabilities)
+                        {
+                            SharedResources.TrafficForm.TrafficLine("CanSetPierSide: false");
+                        }
                     }
                     throw new MethodNotImplementedException("CanSetPierSide");
                 }
@@ -297,7 +437,10 @@ namespace ASCOM.TelescopeSimulator
                 {
                     if (SharedResources.TrafficForm != null)
                     {
-                        SharedResources.TrafficForm.TrafficLine("CanSetRightAscensionRate: false");
+                        if (SharedResources.TrafficForm.Capabilities)
+                        {
+                            SharedResources.TrafficForm.TrafficLine("CanSetRightAscensionRate: false");
+                        }
                     }
                     throw new MethodNotImplementedException("CanSetRightAscensionRate");
                 }
@@ -353,7 +496,10 @@ namespace ASCOM.TelescopeSimulator
                 {
                     if (SharedResources.TrafficForm != null)
                     {
-                        SharedResources.TrafficForm.TrafficLine("CanSlewAltAz: false");
+                        if (SharedResources.TrafficForm.Capabilities)
+                        {
+                            SharedResources.TrafficForm.TrafficLine("CanSlewAltAz: false");
+                        }
                     }
                     throw new MethodNotImplementedException("CanSlewAltAz");
                 }

@@ -32,6 +32,11 @@ namespace ASCOM.TelescopeSimulator
             setupForm.CanSetPierSide = TelescopeHardware.CanSetPierSide;
             setupForm.CanSetTracking = TelescopeHardware.CanSetTracking;
             setupForm.CanSlew = TelescopeHardware.CanSlew;
+            setupForm.CanAlignmentMode = TelescopeHardware.CanAlignmentMode;
+            setupForm.AlignmentMode = TelescopeHardware.AlignmentMode;
+            setupForm.CanOptics = TelescopeHardware.CanOptics;
+            setupForm.ApertureArea = TelescopeHardware.ApertureArea;
+            setupForm.ApertureDiameter = TelescopeHardware.ApertureDiameter;
 
             DialogResult ans = setupForm.ShowDialog(this);
 
@@ -49,6 +54,10 @@ namespace ASCOM.TelescopeSimulator
                 TelescopeHardware.CanSetPierSide = setupForm.CanSetPierSide;
                 TelescopeHardware.CanSetTracking = setupForm.CanSetTracking;
                 TelescopeHardware.CanSlew = setupForm.CanSlew;
+                TelescopeHardware.CanAlignmentMode = setupForm.CanAlignmentMode;
+                TelescopeHardware.AlignmentMode = setupForm.AlignmentMode;
+                TelescopeHardware.ApertureArea = setupForm.ApertureArea;
+                TelescopeHardware.ApertureDiameter = setupForm.ApertureDiameter;
 
                 this.TopMost = setupForm.OnTop;
             }

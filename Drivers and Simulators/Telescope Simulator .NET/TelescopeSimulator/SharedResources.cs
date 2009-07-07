@@ -32,6 +32,20 @@ namespace ASCOM.TelescopeSimulator
             s_z = 0;
         }
 
+        //Constant Definitions
+        public static string PROGRAM_ID = "ASCOM.TelescopeSimulator.Telescope";  //Key used to store the settings
+        public static string REGISTRATION_VERSION = "1";
+
+        // ---------------------
+        // Simulation Parameters
+        // ---------------------
+        public static double INSTRUMENT_APERTURE = 0.2;            // 8 inch = 20 cm
+        public static double INSTRUMENT_APERTURE_AREA= 0.0269;    // 3 inch obstruction
+        public static double INSTRUMENT_FOCAL_LENGTH = 1.26 ;      // f/6.3 instrument
+        public static string INSTRUMENT_NAME = "Simulator" ;       // Our name
+        public static string INSTRUMENT_DESCRIPTION = "Software Telescope Simulator for ASCOM";
+        public static double INVALID_COORDINATE = 100000;
+
         //
         // Public access to shared resources
         //

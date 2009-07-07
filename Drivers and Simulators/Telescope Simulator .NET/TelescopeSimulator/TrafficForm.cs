@@ -55,5 +55,7 @@ namespace ASCOM.TelescopeSimulator
         {
             get { return checkBoxCapabilities.Checked; }
         }
+        public bool Other
+        { get { return checkBoxAllOther.Checked; } }
     }
 }

@@ -55,12 +55,9 @@ namespace ASCOM.TelescopeSimulator
             this.radioButtonAltAzimuth = new System.Windows.Forms.RadioButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.textBoxFocalLength = new System.Windows.Forms.TextBox();
-            this.textBoxApertureArea = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.textBoxAperture = new System.Windows.Forms.TextBox();
             this.numericUpDownSlewRate = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
@@ -69,7 +66,7 @@ namespace ASCOM.TelescopeSimulator
             this.checkBoxCanGuideRates = new System.Windows.Forms.CheckBox();
             this.checkBoxCanTrackingRates = new System.Windows.Forms.CheckBox();
             this.checkBoxCanTrackOnOff = new System.Windows.Forms.CheckBox();
-            this.checkBoxCanAlignMode = new System.Windows.Forms.CheckBox();
+            this.checkBoxCanAlignmentMode = new System.Windows.Forms.CheckBox();
             this.checkBoxSlewAsync = new System.Windows.Forms.CheckBox();
             this.checkBoxCanAltAz = new System.Windows.Forms.CheckBox();
             this.checkBoxCanSlewAltAz = new System.Windows.Forms.CheckBox();
@@ -102,6 +99,9 @@ namespace ASCOM.TelescopeSimulator
             this.checkBoxRefraction = new System.Windows.Forms.CheckBox();
             this.labelVersion = new System.Windows.Forms.Label();
             this.labelTime = new System.Windows.Forms.Label();
+            this.textBoxApertureArea = new System.Windows.Forms.TextBox();
+            this.textBoxAperture = new System.Windows.Forms.TextBox();
+            this.textBoxFocalLength = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
@@ -396,7 +396,7 @@ namespace ASCOM.TelescopeSimulator
             this.groupBox3.ForeColor = System.Drawing.Color.White;
             this.groupBox3.Location = new System.Drawing.Point(168, 134);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(182, 90);
+            this.groupBox3.Size = new System.Drawing.Size(205, 90);
             this.groupBox3.TabIndex = 11;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Optics";
@@ -404,14 +404,14 @@ namespace ASCOM.TelescopeSimulator
             // tableLayoutPanel3
             // 
             this.tableLayoutPanel3.ColumnCount = 2;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 54.27136F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45.72864F));
             this.tableLayoutPanel3.Controls.Add(this.textBoxFocalLength, 1, 2);
-            this.tableLayoutPanel3.Controls.Add(this.textBoxApertureArea, 1, 1);
+            this.tableLayoutPanel3.Controls.Add(this.textBoxAperture, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.label6, 0, 2);
             this.tableLayoutPanel3.Controls.Add(this.label4, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.label5, 0, 1);
-            this.tableLayoutPanel3.Controls.Add(this.textBoxAperture, 1, 0);
+            this.tableLayoutPanel3.Controls.Add(this.textBoxApertureArea, 1, 1);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -419,29 +419,15 @@ namespace ASCOM.TelescopeSimulator
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(176, 71);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(199, 71);
             this.tableLayoutPanel3.TabIndex = 0;
-            // 
-            // textBoxFocalLength
-            // 
-            this.textBoxFocalLength.Location = new System.Drawing.Point(91, 53);
-            this.textBoxFocalLength.Name = "textBoxFocalLength";
-            this.textBoxFocalLength.Size = new System.Drawing.Size(82, 20);
-            this.textBoxFocalLength.TabIndex = 11;
-            // 
-            // textBoxApertureArea
-            // 
-            this.textBoxApertureArea.Location = new System.Drawing.Point(91, 28);
-            this.textBoxApertureArea.Name = "textBoxApertureArea";
-            this.textBoxApertureArea.Size = new System.Drawing.Size(82, 20);
-            this.textBoxApertureArea.TabIndex = 10;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(3, 50);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(72, 21);
+            this.label6.Size = new System.Drawing.Size(89, 13);
             this.label6.TabIndex = 8;
             this.label6.Text = "Focal Length (m):";
             // 
@@ -459,16 +445,9 @@ namespace ASCOM.TelescopeSimulator
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(3, 25);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(75, 25);
+            this.label5.Size = new System.Drawing.Size(101, 13);
             this.label5.TabIndex = 7;
             this.label5.Text = "Aperture Area (m^2)";
-            // 
-            // textBoxAperture
-            // 
-            this.textBoxAperture.Location = new System.Drawing.Point(91, 3);
-            this.textBoxAperture.Name = "textBoxAperture";
-            this.textBoxAperture.Size = new System.Drawing.Size(82, 20);
-            this.textBoxAperture.TabIndex = 9;
             // 
             // numericUpDownSlewRate
             // 
@@ -524,7 +503,7 @@ namespace ASCOM.TelescopeSimulator
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanGuideRates, 3, 2);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanTrackingRates, 3, 1);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanTrackOnOff, 3, 0);
-            this.tableLayoutPanel4.Controls.Add(this.checkBoxCanAlignMode, 2, 0);
+            this.tableLayoutPanel4.Controls.Add(this.checkBoxCanAlignmentMode, 2, 0);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxSlewAsync, 0, 8);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanAltAz, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanSlewAltAz, 0, 1);
@@ -610,16 +589,16 @@ namespace ASCOM.TelescopeSimulator
             this.checkBoxCanTrackOnOff.Text = "Track on / off Support";
             this.checkBoxCanTrackOnOff.UseVisualStyleBackColor = true;
             // 
-            // checkBoxCanAlignMode
+            // checkBoxCanAlignmentMode
             // 
-            this.checkBoxCanAlignMode.AutoSize = true;
-            this.checkBoxCanAlignMode.ForeColor = System.Drawing.Color.White;
-            this.checkBoxCanAlignMode.Location = new System.Drawing.Point(301, 3);
-            this.checkBoxCanAlignMode.Name = "checkBoxCanAlignMode";
-            this.checkBoxCanAlignMode.Size = new System.Drawing.Size(102, 17);
-            this.checkBoxCanAlignMode.TabIndex = 24;
-            this.checkBoxCanAlignMode.Text = "Alignment Mode";
-            this.checkBoxCanAlignMode.UseVisualStyleBackColor = true;
+            this.checkBoxCanAlignmentMode.AutoSize = true;
+            this.checkBoxCanAlignmentMode.ForeColor = System.Drawing.Color.White;
+            this.checkBoxCanAlignmentMode.Location = new System.Drawing.Point(301, 3);
+            this.checkBoxCanAlignmentMode.Name = "checkBoxCanAlignmentMode";
+            this.checkBoxCanAlignmentMode.Size = new System.Drawing.Size(102, 17);
+            this.checkBoxCanAlignmentMode.TabIndex = 24;
+            this.checkBoxCanAlignmentMode.Text = "Alignment Mode";
+            this.checkBoxCanAlignmentMode.UseVisualStyleBackColor = true;
             // 
             // checkBoxSlewAsync
             // 
@@ -946,7 +925,7 @@ namespace ASCOM.TelescopeSimulator
             // 
             this.checkBoxOnTop.AutoSize = true;
             this.checkBoxOnTop.ForeColor = System.Drawing.Color.White;
-            this.checkBoxOnTop.Location = new System.Drawing.Point(382, 207);
+            this.checkBoxOnTop.Location = new System.Drawing.Point(388, 207);
             this.checkBoxOnTop.Name = "checkBoxOnTop";
             this.checkBoxOnTop.Size = new System.Drawing.Size(98, 17);
             this.checkBoxOnTop.TabIndex = 16;
@@ -957,7 +936,7 @@ namespace ASCOM.TelescopeSimulator
             // 
             this.checkBoxRefraction.AutoSize = true;
             this.checkBoxRefraction.ForeColor = System.Drawing.Color.White;
-            this.checkBoxRefraction.Location = new System.Drawing.Point(382, 184);
+            this.checkBoxRefraction.Location = new System.Drawing.Point(388, 184);
             this.checkBoxRefraction.Name = "checkBoxRefraction";
             this.checkBoxRefraction.Size = new System.Drawing.Size(92, 17);
             this.checkBoxRefraction.TabIndex = 17;
@@ -984,6 +963,27 @@ namespace ASCOM.TelescopeSimulator
             this.labelTime.Size = new System.Drawing.Size(185, 13);
             this.labelTime.TabIndex = 19;
             this.labelTime.Text = "<run time - time zone and UTC offset>";
+            // 
+            // textBoxApertureArea
+            // 
+            this.textBoxApertureArea.Location = new System.Drawing.Point(111, 28);
+            this.textBoxApertureArea.Name = "textBoxApertureArea";
+            this.textBoxApertureArea.Size = new System.Drawing.Size(85, 20);
+            this.textBoxApertureArea.TabIndex = 12;
+            // 
+            // textBoxAperture
+            // 
+            this.textBoxAperture.Location = new System.Drawing.Point(111, 3);
+            this.textBoxAperture.Name = "textBoxAperture";
+            this.textBoxAperture.Size = new System.Drawing.Size(85, 20);
+            this.textBoxAperture.TabIndex = 13;
+            // 
+            // textBoxFocalLength
+            // 
+            this.textBoxFocalLength.Location = new System.Drawing.Point(111, 53);
+            this.textBoxFocalLength.Name = "textBoxFocalLength";
+            this.textBoxFocalLength.Size = new System.Drawing.Size(85, 20);
+            this.textBoxFocalLength.TabIndex = 14;
             // 
             // SetupDialogForm
             // 
@@ -1068,12 +1068,9 @@ namespace ASCOM.TelescopeSimulator
         private System.Windows.Forms.RadioButton radioButtonEquatorial;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-        private System.Windows.Forms.TextBox textBoxFocalLength;
-        private System.Windows.Forms.TextBox textBoxApertureArea;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBoxAperture;
         private System.Windows.Forms.NumericUpDown numericUpDownSlewRate;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.GroupBox groupBox4;
@@ -1095,7 +1092,7 @@ namespace ASCOM.TelescopeSimulator
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private System.Windows.Forms.ComboBox comboBoxNumberMoveAxis;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.CheckBox checkBoxCanAlignMode;
+        private System.Windows.Forms.CheckBox checkBoxCanAlignmentMode;
         private System.Windows.Forms.CheckBox checkBoxCanSetPierSide;
         private System.Windows.Forms.CheckBox checkBoxCanSetSideOfPier;
         private System.Windows.Forms.CheckBox checkBoxCanRefraction;
@@ -1115,5 +1112,8 @@ namespace ASCOM.TelescopeSimulator
         private System.Windows.Forms.CheckBox checkBoxVersionOne;
         private System.Windows.Forms.Label labelVersion;
         private System.Windows.Forms.Label labelTime;
+        private System.Windows.Forms.TextBox textBoxApertureArea;
+        private System.Windows.Forms.TextBox textBoxFocalLength;
+        private System.Windows.Forms.TextBox textBoxAperture;
     }
 }
