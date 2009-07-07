@@ -32,41 +32,42 @@ namespace ASCOM.FocuserSimulator
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            this.label1 = new System.Windows.Forms.Label();
+            this.LabelMinPosition = new System.Windows.Forms.Label();
             this.TrafficButton = new System.Windows.Forms.Button();
             this.SetupButton = new System.Windows.Forms.Button();
             this.TimerTempComp = new System.Windows.Forms.Timer(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.LogBox = new System.Windows.Forms.TextBox();
+            this.ClearLogButton = new System.Windows.Forms.PictureBox();
             this.CheckOthers = new System.Windows.Forms.CheckBox();
             this.CheckIsMoving = new System.Windows.Forms.CheckBox();
             this.CheckTempRelated = new System.Windows.Forms.CheckBox();
             this.CheckHaltMove = new System.Windows.Forms.CheckBox();
+            this.LogBox = new System.Windows.Forms.TextBox();
             this.CheckTempComp = new System.Windows.Forms.CheckBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.HaltButton = new System.Windows.Forms.Button();
             this.RadioMoving = new System.Windows.Forms.RadioButton();
             this.LabelMaxStep = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.LabelPosition = new System.Windows.Forms.Label();
+            this.TextTemp = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ClearLogButton)).BeginInit();
             this.SuspendLayout();
             // 
-            // label1
+            // LabelMinPosition
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 36);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(13, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "0";
+            this.LabelMinPosition.AutoSize = true;
+            this.LabelMinPosition.Location = new System.Drawing.Point(12, 36);
+            this.LabelMinPosition.Name = "LabelMinPosition";
+            this.LabelMinPosition.Size = new System.Drawing.Size(13, 13);
+            this.LabelMinPosition.TabIndex = 1;
+            this.LabelMinPosition.Text = "0";
             // 
             // TrafficButton
             // 
             this.TrafficButton.Image = global::ASCOM.FocuserSimulator.Properties.Resources.log_16x16;
             this.TrafficButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.TrafficButton.Location = new System.Drawing.Point(12, 128);
+            this.TrafficButton.Location = new System.Drawing.Point(12, 154);
             this.TrafficButton.Name = "TrafficButton";
             this.TrafficButton.Size = new System.Drawing.Size(61, 23);
             this.TrafficButton.TabIndex = 11;
@@ -79,7 +80,7 @@ namespace ASCOM.FocuserSimulator
             // 
             this.SetupButton.Image = global::ASCOM.FocuserSimulator.Properties.Resources.button_configure;
             this.SetupButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.SetupButton.Location = new System.Drawing.Point(186, 128);
+            this.SetupButton.Location = new System.Drawing.Point(186, 154);
             this.SetupButton.Name = "SetupButton";
             this.SetupButton.Size = new System.Drawing.Size(60, 23);
             this.SetupButton.TabIndex = 8;
@@ -94,51 +95,27 @@ namespace ASCOM.FocuserSimulator
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.pictureBox1);
+            this.groupBox1.Controls.Add(this.ClearLogButton);
             this.groupBox1.Controls.Add(this.CheckOthers);
             this.groupBox1.Controls.Add(this.CheckIsMoving);
             this.groupBox1.Controls.Add(this.CheckTempRelated);
             this.groupBox1.Controls.Add(this.CheckHaltMove);
-            this.groupBox1.Location = new System.Drawing.Point(12, 172);
+            this.groupBox1.Location = new System.Drawing.Point(12, 183);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(234, 75);
             this.groupBox1.TabIndex = 14;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Tracked events";
             // 
-            // label2
+            // ClearLogButton
             // 
-            this.label2.AutoSize = true;
-            this.label2.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "sStrPosition", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.label2.Location = new System.Drawing.Point(113, 36);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(31, 13);
-            this.label2.TabIndex = 17;
-            this.label2.Text = global::ASCOM.FocuserSimulator.Properties.Settings.Default.sStrPosition;
-            this.label2.Validating += new System.ComponentModel.CancelEventHandler(this.label2_Validating);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::ASCOM.FocuserSimulator.Properties.Resources.button_cancel;
-            this.pictureBox1.Location = new System.Drawing.Point(211, 50);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(17, 19);
-            this.pictureBox1.TabIndex = 4;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
-            // 
-            // LogBox
-            // 
-            this.LogBox.AcceptsReturn = true;
-            this.LogBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "LogTxt", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.LogBox.HideSelection = false;
-            this.LogBox.Location = new System.Drawing.Point(10, 253);
-            this.LogBox.Multiline = true;
-            this.LogBox.Name = "LogBox";
-            this.LogBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.LogBox.Size = new System.Drawing.Size(234, 121);
-            this.LogBox.TabIndex = 16;
-            this.LogBox.Text = global::ASCOM.FocuserSimulator.Properties.Settings.Default.LogTxt;
+            this.ClearLogButton.Image = global::ASCOM.FocuserSimulator.Properties.Resources.button_cancel;
+            this.ClearLogButton.Location = new System.Drawing.Point(211, 50);
+            this.ClearLogButton.Name = "ClearLogButton";
+            this.ClearLogButton.Size = new System.Drawing.Size(17, 19);
+            this.ClearLogButton.TabIndex = 4;
+            this.ClearLogButton.TabStop = false;
+            this.ClearLogButton.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // CheckOthers
             // 
@@ -192,6 +169,19 @@ namespace ASCOM.FocuserSimulator
             this.CheckHaltMove.Text = "Halt/Move";
             this.CheckHaltMove.UseVisualStyleBackColor = true;
             // 
+            // LogBox
+            // 
+            this.LogBox.AcceptsReturn = true;
+            this.LogBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "LogTxt", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.LogBox.HideSelection = false;
+            this.LogBox.Location = new System.Drawing.Point(12, 264);
+            this.LogBox.Multiline = true;
+            this.LogBox.Name = "LogBox";
+            this.LogBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.LogBox.Size = new System.Drawing.Size(234, 134);
+            this.LogBox.TabIndex = 16;
+            this.LogBox.Text = global::ASCOM.FocuserSimulator.Properties.Settings.Default.LogTxt;
+            // 
             // CheckTempComp
             // 
             this.CheckTempComp.AutoCheck = false;
@@ -201,29 +191,29 @@ namespace ASCOM.FocuserSimulator
             this.CheckTempComp.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "sTempComp", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.CheckTempComp.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "sTempComp", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.CheckTempComp.Enabled = global::ASCOM.FocuserSimulator.Properties.Settings.Default.sTempComp;
-            this.CheckTempComp.Location = new System.Drawing.Point(15, 105);
+            this.CheckTempComp.Location = new System.Drawing.Point(12, 117);
             this.CheckTempComp.Name = "CheckTempComp";
             this.CheckTempComp.Size = new System.Drawing.Size(153, 17);
             this.CheckTempComp.TabIndex = 13;
             this.CheckTempComp.Text = "Temperature compensation";
             this.CheckTempComp.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // HaltButton
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "IsMoving", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.button2.Enabled = global::ASCOM.FocuserSimulator.Properties.Settings.Default.IsMoving;
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Image = global::ASCOM.FocuserSimulator.Properties.Resources.ledred_16x16;
-            this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button2.Location = new System.Drawing.Point(181, 82);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(65, 23);
-            this.button2.TabIndex = 9;
-            this.button2.Text = "HALT";
-            this.button2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.HaltButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.HaltButton.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "IsMoving", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.HaltButton.Enabled = global::ASCOM.FocuserSimulator.Properties.Settings.Default.IsMoving;
+            this.HaltButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.HaltButton.Image = global::ASCOM.FocuserSimulator.Properties.Resources.ledred_16x16;
+            this.HaltButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.HaltButton.Location = new System.Drawing.Point(181, 82);
+            this.HaltButton.Name = "HaltButton";
+            this.HaltButton.Size = new System.Drawing.Size(65, 23);
+            this.HaltButton.TabIndex = 9;
+            this.HaltButton.Text = "HALT";
+            this.HaltButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.HaltButton.UseVisualStyleBackColor = true;
+            this.HaltButton.Click += new System.EventHandler(this.button2_Click);
             // 
             // RadioMoving
             // 
@@ -243,22 +233,18 @@ namespace ASCOM.FocuserSimulator
             // 
             this.LabelMaxStep.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.LabelMaxStep.AutoSize = true;
-            this.LabelMaxStep.DataBindings.Add(new System.Windows.Forms.Binding("Visible", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "sAbsolute", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.LabelMaxStep.Location = new System.Drawing.Point(209, 37);
+            this.LabelMaxStep.Location = new System.Drawing.Point(209, 36);
             this.LabelMaxStep.Name = "LabelMaxStep";
             this.LabelMaxStep.Size = new System.Drawing.Size(37, 13);
             this.LabelMaxStep.TabIndex = 2;
             this.LabelMaxStep.Text = "30000";
             this.LabelMaxStep.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.LabelMaxStep.Visible = global::ASCOM.FocuserSimulator.Properties.Settings.Default.sAbsolute;
             // 
             // progressBar1
             // 
             this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar1.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "sPosition", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.progressBar1.DataBindings.Add(new System.Windows.Forms.Binding("Maximum", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "sMaxStep", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.progressBar1.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "sAbsolute", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.progressBar1.Enabled = global::ASCOM.FocuserSimulator.Properties.Settings.Default.sAbsolute;
             this.progressBar1.Location = new System.Drawing.Point(12, 53);
             this.progressBar1.Maximum = 10000;
             this.progressBar1.Name = "progressBar1";
@@ -266,35 +252,53 @@ namespace ASCOM.FocuserSimulator
             this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar1.TabIndex = 0;
             this.progressBar1.Value = 3500;
-            this.progressBar1.Layout += new System.Windows.Forms.LayoutEventHandler(this.progressBar1_Layout);
-            this.progressBar1.Validating += new System.ComponentModel.CancelEventHandler(this.progressBar1_Validating);
+            // 
+            // LabelPosition
+            // 
+            this.LabelPosition.Location = new System.Drawing.Point(48, 36);
+            this.LabelPosition.Name = "LabelPosition";
+            this.LabelPosition.Size = new System.Drawing.Size(160, 13);
+            this.LabelPosition.TabIndex = 18;
+            this.LabelPosition.Text = "N/A";
+            this.LabelPosition.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // TextTemp
+            // 
+            this.TextTemp.BackColor = System.Drawing.SystemColors.Window;
+            this.TextTemp.DataBindings.Add(new System.Windows.Forms.Binding("Visible", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "sTempComp", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.TextTemp.Location = new System.Drawing.Point(171, 115);
+            this.TextTemp.Name = "TextTemp";
+            this.TextTemp.ReadOnly = true;
+            this.TextTemp.Size = new System.Drawing.Size(35, 20);
+            this.TextTemp.TabIndex = 19;
+            this.TextTemp.Visible = global::ASCOM.FocuserSimulator.Properties.Settings.Default.sTempComp;
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(256, 380);
+            this.ClientSize = new System.Drawing.Size(256, 410);
             this.ControlBox = false;
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.TextTemp);
+            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.LabelMinPosition);
+            this.Controls.Add(this.LabelMaxStep);
             this.Controls.Add(this.LogBox);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.CheckTempComp);
             this.Controls.Add(this.TrafficButton);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.HaltButton);
             this.Controls.Add(this.SetupButton);
             this.Controls.Add(this.RadioMoving);
-            this.Controls.Add(this.LabelMaxStep);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.LabelPosition);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmMain";
             this.Text = "ASCOM Focuser Simulator View";
             this.Load += new System.EventHandler(this.frmMain_Load);
-            this.Validating += new System.ComponentModel.CancelEventHandler(this.frmMain_Validating);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ClearLogButton)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -303,11 +307,11 @@ namespace ASCOM.FocuserSimulator
         #endregion
 
         private System.Windows.Forms.ProgressBar progressBar1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label LabelMinPosition;
         private System.Windows.Forms.Label LabelMaxStep;
         private System.Windows.Forms.RadioButton RadioMoving;
         private System.Windows.Forms.Button SetupButton;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button HaltButton;
         private System.Windows.Forms.Button TrafficButton;
         private System.Windows.Forms.Timer TimerTempComp;
         private System.Windows.Forms.CheckBox CheckTempComp;
@@ -317,8 +321,9 @@ namespace ASCOM.FocuserSimulator
         private System.Windows.Forms.CheckBox CheckTempRelated;
         private System.Windows.Forms.CheckBox CheckHaltMove;
         private System.Windows.Forms.TextBox LogBox;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox ClearLogButton;
+        private System.Windows.Forms.Label LabelPosition;
+        private System.Windows.Forms.TextBox TextTemp;
 
 
 

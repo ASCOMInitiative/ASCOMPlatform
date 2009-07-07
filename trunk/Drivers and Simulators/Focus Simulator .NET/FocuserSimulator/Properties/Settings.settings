@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="sMaxIncrement" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">5000</Value>
+      <Value Profile="(Default)">50</Value>
     </Setting>
     <Setting Name="sStepSize" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">10</Value>
@@ -56,8 +56,11 @@
     <Setting Name="LogOther" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="sStrPosition" Type="System.String" Scope="User">
-      <Value Profile="(Default)">3500</Value>
+    <Setting Name="sTempMax" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="sTempMin" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">-10</Value>
     </Setting>
   </Settings>
 </SettingsFile>

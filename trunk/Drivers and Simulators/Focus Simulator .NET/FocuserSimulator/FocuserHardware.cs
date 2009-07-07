@@ -174,7 +174,7 @@ namespace ASCOM.FocuserSimulator
         {
             int DestPosition = 0;
 
-            Properties.Settings.Default.Reload();
+            //Properties.Settings.Default.Reload();
             if (!IsTempCompMove)
             {
                 if (Properties.Settings.Default.sTempComp) // No moves when in t° compensation mode
@@ -189,7 +189,7 @@ namespace ASCOM.FocuserSimulator
             }
             else
             {
-                MyLog(eLogKind.LogMove, "T° compensation move : " + Properties.Settings.Default.sStepPerDeg.ToString() + " steps");
+                MyLog(eLogKind.LogTemp, "T° compensation move");
             }
             HaltRequested = false;
             if (Properties.Settings.Default.sAbsolute)
@@ -222,7 +222,6 @@ namespace ASCOM.FocuserSimulator
                         }
                         Deplace(1);
                         Properties.Settings.Default.sPosition ++;
-                        Properties.Settings.Default.sStrPosition = Properties.Settings.Default.sPosition.ToString();
                     }
                     
                 }
@@ -239,7 +238,6 @@ namespace ASCOM.FocuserSimulator
                         }
                         Deplace(-1);
                         Properties.Settings.Default.sPosition --;
-                        Properties.Settings.Default.sStrPosition = Properties.Settings.Default.sPosition.ToString();
                     }
                 }
                 
@@ -290,12 +288,13 @@ namespace ASCOM.FocuserSimulator
         /// <param name="Texte">Text describing the event.</param>
         private static void MyLog(eLogKind Kind, string Texte)
         {
+            Properties.Settings.Default.LogTxt += Texte + Environment.NewLine;
             if ((Properties.Settings.Default.LogHaltMove && Kind == eLogKind.LogMove) ||
                 (Properties.Settings.Default.LogIsMoving && Kind == eLogKind.LogIsMoving) ||
                 (Properties.Settings.Default.LogTempRelated && Kind == eLogKind.LogTemp) ||
                 (Properties.Settings.Default.LogOther && Kind == eLogKind.LogOther))
             {
-                Properties.Settings.Default.LogTxt += Texte + Environment.NewLine;
+                Properties.Settings.Default.LogTxt += "TEST : "+Texte + Environment.NewLine;
             }
         }
 
