@@ -70,14 +70,14 @@ namespace ASCOM.TelescopeSimulator
             this.checkBoxCanTrackingRates = new System.Windows.Forms.CheckBox();
             this.checkBoxCanTrackOnOff = new System.Windows.Forms.CheckBox();
             this.checkBoxCanAlignMode = new System.Windows.Forms.CheckBox();
-            this.checkBoxEquatorialAsync = new System.Windows.Forms.CheckBox();
+            this.checkBoxSlewAsync = new System.Windows.Forms.CheckBox();
             this.checkBoxCanAltAz = new System.Windows.Forms.CheckBox();
             this.checkBoxCanSlewAltAz = new System.Windows.Forms.CheckBox();
             this.checkBoxCanSlewAltAzAsync = new System.Windows.Forms.CheckBox();
             this.checkBoxCanSyncAltAz = new System.Windows.Forms.CheckBox();
             this.checkBoxCanEquatorial = new System.Windows.Forms.CheckBox();
-            this.checkBoxCanSlewEquatorial = new System.Windows.Forms.CheckBox();
-            this.checkBoxCanSyncEquatorial = new System.Windows.Forms.CheckBox();
+            this.checkBoxCanSlew = new System.Windows.Forms.CheckBox();
+            this.checkBoxCanSync = new System.Windows.Forms.CheckBox();
             this.checkBoxCanFindHome = new System.Windows.Forms.CheckBox();
             this.checkBoxCanPark = new System.Windows.Forms.CheckBox();
             this.checkBoxCanSetParkPosition = new System.Windows.Forms.CheckBox();
@@ -85,7 +85,7 @@ namespace ASCOM.TelescopeSimulator
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.comboBoxNumberMoveAxis = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.checkBoxCanSideOfPier = new System.Windows.Forms.CheckBox();
+            this.checkBoxCanSetPierSide = new System.Windows.Forms.CheckBox();
             this.checkBoxCanSetSideOfPier = new System.Windows.Forms.CheckBox();
             this.checkBoxCanRefraction = new System.Windows.Forms.CheckBox();
             this.checkBoxCanPulseGuideDualAxis = new System.Windows.Forms.CheckBox();
@@ -525,20 +525,20 @@ namespace ASCOM.TelescopeSimulator
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanTrackingRates, 3, 1);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanTrackOnOff, 3, 0);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanAlignMode, 2, 0);
-            this.tableLayoutPanel4.Controls.Add(this.checkBoxEquatorialAsync, 0, 8);
+            this.tableLayoutPanel4.Controls.Add(this.checkBoxSlewAsync, 0, 8);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanAltAz, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanSlewAltAz, 0, 1);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanSlewAltAzAsync, 0, 3);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanSyncAltAz, 0, 2);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanEquatorial, 0, 5);
-            this.tableLayoutPanel4.Controls.Add(this.checkBoxCanSlewEquatorial, 0, 6);
-            this.tableLayoutPanel4.Controls.Add(this.checkBoxCanSyncEquatorial, 0, 7);
+            this.tableLayoutPanel4.Controls.Add(this.checkBoxCanSlew, 0, 6);
+            this.tableLayoutPanel4.Controls.Add(this.checkBoxCanSync, 0, 7);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanFindHome, 1, 0);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanPark, 1, 1);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanSetParkPosition, 1, 2);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanUnpark, 1, 3);
             this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel5, 1, 4);
-            this.tableLayoutPanel4.Controls.Add(this.checkBoxCanSideOfPier, 2, 1);
+            this.tableLayoutPanel4.Controls.Add(this.checkBoxCanSetPierSide, 2, 1);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanSetSideOfPier, 2, 2);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanRefraction, 2, 3);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanPulseGuideDualAxis, 3, 4);
@@ -621,16 +621,16 @@ namespace ASCOM.TelescopeSimulator
             this.checkBoxCanAlignMode.Text = "Alignment Mode";
             this.checkBoxCanAlignMode.UseVisualStyleBackColor = true;
             // 
-            // checkBoxEquatorialAsync
+            // checkBoxSlewAsync
             // 
-            this.checkBoxEquatorialAsync.AutoSize = true;
-            this.checkBoxEquatorialAsync.ForeColor = System.Drawing.Color.White;
-            this.checkBoxEquatorialAsync.Location = new System.Drawing.Point(3, 187);
-            this.checkBoxEquatorialAsync.Name = "checkBoxEquatorialAsync";
-            this.checkBoxEquatorialAsync.Size = new System.Drawing.Size(143, 17);
-            this.checkBoxEquatorialAsync.TabIndex = 22;
-            this.checkBoxEquatorialAsync.Text = "Equatorial Asynchronous";
-            this.checkBoxEquatorialAsync.UseVisualStyleBackColor = true;
+            this.checkBoxSlewAsync.AutoSize = true;
+            this.checkBoxSlewAsync.ForeColor = System.Drawing.Color.White;
+            this.checkBoxSlewAsync.Location = new System.Drawing.Point(3, 187);
+            this.checkBoxSlewAsync.Name = "checkBoxSlewAsync";
+            this.checkBoxSlewAsync.Size = new System.Drawing.Size(143, 17);
+            this.checkBoxSlewAsync.TabIndex = 22;
+            this.checkBoxSlewAsync.Text = "Equatorial Asynchronous";
+            this.checkBoxSlewAsync.UseVisualStyleBackColor = true;
             // 
             // checkBoxCanAltAz
             // 
@@ -687,27 +687,27 @@ namespace ASCOM.TelescopeSimulator
             this.checkBoxCanEquatorial.Text = "Equatorial Coordinates";
             this.checkBoxCanEquatorial.UseVisualStyleBackColor = true;
             // 
-            // checkBoxCanSlewEquatorial
+            // checkBoxCanSlew
             // 
-            this.checkBoxCanSlewEquatorial.AutoSize = true;
-            this.checkBoxCanSlewEquatorial.ForeColor = System.Drawing.Color.White;
-            this.checkBoxCanSlewEquatorial.Location = new System.Drawing.Point(3, 141);
-            this.checkBoxCanSlewEquatorial.Name = "checkBoxCanSlewEquatorial";
-            this.checkBoxCanSlewEquatorial.Size = new System.Drawing.Size(113, 17);
-            this.checkBoxCanSlewEquatorial.TabIndex = 16;
-            this.checkBoxCanSlewEquatorial.Text = "Equatorial Slewing";
-            this.checkBoxCanSlewEquatorial.UseVisualStyleBackColor = true;
+            this.checkBoxCanSlew.AutoSize = true;
+            this.checkBoxCanSlew.ForeColor = System.Drawing.Color.White;
+            this.checkBoxCanSlew.Location = new System.Drawing.Point(3, 141);
+            this.checkBoxCanSlew.Name = "checkBoxCanSlew";
+            this.checkBoxCanSlew.Size = new System.Drawing.Size(113, 17);
+            this.checkBoxCanSlew.TabIndex = 16;
+            this.checkBoxCanSlew.Text = "Equatorial Slewing";
+            this.checkBoxCanSlew.UseVisualStyleBackColor = true;
             // 
-            // checkBoxCanSyncEquatorial
+            // checkBoxCanSync
             // 
-            this.checkBoxCanSyncEquatorial.AutoSize = true;
-            this.checkBoxCanSyncEquatorial.ForeColor = System.Drawing.Color.White;
-            this.checkBoxCanSyncEquatorial.Location = new System.Drawing.Point(3, 164);
-            this.checkBoxCanSyncEquatorial.Name = "checkBoxCanSyncEquatorial";
-            this.checkBoxCanSyncEquatorial.Size = new System.Drawing.Size(100, 17);
-            this.checkBoxCanSyncEquatorial.TabIndex = 18;
-            this.checkBoxCanSyncEquatorial.Text = "Equatorial Sync";
-            this.checkBoxCanSyncEquatorial.UseVisualStyleBackColor = true;
+            this.checkBoxCanSync.AutoSize = true;
+            this.checkBoxCanSync.ForeColor = System.Drawing.Color.White;
+            this.checkBoxCanSync.Location = new System.Drawing.Point(3, 164);
+            this.checkBoxCanSync.Name = "checkBoxCanSync";
+            this.checkBoxCanSync.Size = new System.Drawing.Size(100, 17);
+            this.checkBoxCanSync.TabIndex = 18;
+            this.checkBoxCanSync.Text = "Equatorial Sync";
+            this.checkBoxCanSync.UseVisualStyleBackColor = true;
             // 
             // checkBoxCanFindHome
             // 
@@ -792,16 +792,16 @@ namespace ASCOM.TelescopeSimulator
             this.label8.TabIndex = 14;
             this.label8.Text = "Number of Axis For Move:";
             // 
-            // checkBoxCanSideOfPier
+            // checkBoxCanSetPierSide
             // 
-            this.checkBoxCanSideOfPier.AutoSize = true;
-            this.checkBoxCanSideOfPier.ForeColor = System.Drawing.Color.White;
-            this.checkBoxCanSideOfPier.Location = new System.Drawing.Point(301, 26);
-            this.checkBoxCanSideOfPier.Name = "checkBoxCanSideOfPier";
-            this.checkBoxCanSideOfPier.Size = new System.Drawing.Size(80, 17);
-            this.checkBoxCanSideOfPier.TabIndex = 25;
-            this.checkBoxCanSideOfPier.Text = "Side of Pier";
-            this.checkBoxCanSideOfPier.UseVisualStyleBackColor = true;
+            this.checkBoxCanSetPierSide.AutoSize = true;
+            this.checkBoxCanSetPierSide.ForeColor = System.Drawing.Color.White;
+            this.checkBoxCanSetPierSide.Location = new System.Drawing.Point(301, 26);
+            this.checkBoxCanSetPierSide.Name = "checkBoxCanSetPierSide";
+            this.checkBoxCanSetPierSide.Size = new System.Drawing.Size(80, 17);
+            this.checkBoxCanSetPierSide.TabIndex = 25;
+            this.checkBoxCanSetPierSide.Text = "Side of Pier";
+            this.checkBoxCanSetPierSide.UseVisualStyleBackColor = true;
             // 
             // checkBoxCanSetSideOfPier
             // 
@@ -1085,18 +1085,18 @@ namespace ASCOM.TelescopeSimulator
         private System.Windows.Forms.CheckBox checkBoxCanSlewAltAzAsync;
         private System.Windows.Forms.CheckBox checkBoxCanSyncAltAz;
         private System.Windows.Forms.CheckBox checkBoxCanEquatorial;
-        private System.Windows.Forms.CheckBox checkBoxCanSlewEquatorial;
+        private System.Windows.Forms.CheckBox checkBoxCanSlew;
         private System.Windows.Forms.CheckBox checkBoxCanFindHome;
-        private System.Windows.Forms.CheckBox checkBoxCanSyncEquatorial;
+        private System.Windows.Forms.CheckBox checkBoxCanSync;
         private System.Windows.Forms.CheckBox checkBoxCanPark;
         private System.Windows.Forms.CheckBox checkBoxCanSetParkPosition;
         private System.Windows.Forms.CheckBox checkBoxCanUnpark;
-        private System.Windows.Forms.CheckBox checkBoxEquatorialAsync;
+        private System.Windows.Forms.CheckBox checkBoxSlewAsync;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private System.Windows.Forms.ComboBox comboBoxNumberMoveAxis;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.CheckBox checkBoxCanAlignMode;
-        private System.Windows.Forms.CheckBox checkBoxCanSideOfPier;
+        private System.Windows.Forms.CheckBox checkBoxCanSetPierSide;
         private System.Windows.Forms.CheckBox checkBoxCanSetSideOfPier;
         private System.Windows.Forms.CheckBox checkBoxCanRefraction;
         private System.Windows.Forms.CheckBox checkBoxCanPulseGuide;

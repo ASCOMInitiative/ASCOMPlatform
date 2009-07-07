@@ -4,11 +4,7 @@
 //
 // ASCOM Telescope driver for Telescope
 //
-// Description:	Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam 
-//				nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam 
-//				erat, sed diam voluptua. At vero eos et accusam et justo duo 
-//				dolores et ea rebum. Stet clita kasd gubergren, no sea takimata 
-//				sanctus est Lorem ipsum dolor sit amet.
+// Description:	ASCOM Driver for Simulated Telescope 
 //
 // Implements:	ASCOM Telescope interface version: 2.0
 // Author:		(rbt) Robert Turner <robert@robertturnerastro.com>
@@ -135,74 +131,241 @@ namespace ASCOM.TelescopeSimulator
 
         public bool CanFindHome
         {
-            // TODO Replace this with your implementation
-            get { return TelescopeHardware.CanFindHome; }
+            
+            get 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    SharedResources.TrafficForm.TrafficLine("CanFindHome: " + TelescopeHardware.CanFindHome);
+                }
+                return TelescopeHardware.CanFindHome; 
+            }
         }
 
         public bool CanMoveAxis(TelescopeAxes Axis)
         {
-            // TODO Replace this with your implementation
-            return TelescopeHardware.CanMoveAxis(Axis);
+            if (TelescopeHardware.VersionOneOnly)
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    SharedResources.TrafficForm.TrafficEnd("false");
+                }
+                throw new MethodNotImplementedException("CanMoveAxis");
+            }
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Capabilities)
+                {
+                    switch (Axis)
+                    {
+                        case ASCOM.Interface.TelescopeAxes.axisPrimary:
+                            SharedResources.TrafficForm.TrafficStart("CanMoveAxis Primary: ");
+                            break;
+                        case ASCOM.Interface.TelescopeAxes.axisSecondary:
+                            SharedResources.TrafficForm.TrafficStart("CanMoveAxis Secondary: ");
+                            break;
+                        case ASCOM.Interface.TelescopeAxes.axisTertiary:
+                            SharedResources.TrafficForm.TrafficStart("CanMoveAxis Tertiary: ");
+                            break;
+                    }
+
+                }
+            }
+            
+            SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.CanMoveAxis(int.Parse(Axis.ToString())).ToString());
+            return TelescopeHardware.CanMoveAxis(int.Parse(Axis.ToString()));
         }
 
         public bool CanPark
         {
-            // TODO Replace this with your implementation
-            get { return TelescopeHardware.CanPark; }
+            
+            get 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("CanPark: " + TelescopeHardware.CanPark);
+                    }
+                }
+                return TelescopeHardware.CanPark; 
+            }
         }
 
         public bool CanPulseGuide
         {
             // TODO Replace this with your implementation
-            get { return TelescopeHardware.CanPulseGuide; }
+            get 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("CanPulseGuide: " + TelescopeHardware.CanPulseGuide);
+                    }
+                }
+                return TelescopeHardware.CanPulseGuide; 
+            }
         }
 
         public bool CanSetDeclinationRate
         {
-            // TODO Replace this with your implementation
-            get { return TelescopeHardware.CanSetDeclinationRate; }
+            
+            get 
+            {
+                if (TelescopeHardware.VersionOneOnly)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("CanSetDeclinationRate: false");
+                    }
+                    throw new MethodNotImplementedException("CanSetDeclinationRate");
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("CanSetDeclinationRate: " + TelescopeHardware.CanSetDeclinationRate);
+                    }
+                }
+                return TelescopeHardware.CanSetDeclinationRate; 
+            }
         }
 
         public bool CanSetGuideRates
         {
             // TODO Replace this with your implementation
-            get { return TelescopeHardware.CanSetGuideRates; }
+            get 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("CanSetGuideRates: " + TelescopeHardware.CanSetGuideRates);
+                    }
+                }
+                return TelescopeHardware.CanSetGuideRates; 
+            }
         }
 
         public bool CanSetPark
         {
-            // TODO Replace this with your implementation
-            get { return TelescopeHardware.CanSetPark; }
+            
+            get 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("CanSetPark: " + TelescopeHardware.CanSetPark);
+                    }
+                }
+                return TelescopeHardware.CanSetPark; 
+            }
         }
 
         public bool CanSetPierSide
         {
-            // TODO Replace this with your implementation
-            get { return TelescopeHardware.CanSetPierSide; }
+            
+            get 
+            {
+                if (TelescopeHardware.VersionOneOnly)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("CanSetPierSide: false");
+                    }
+                    throw new MethodNotImplementedException("CanSetPierSide");
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("CanSetPierSide: " + TelescopeHardware.CanSetPierSide);
+                    }
+                }
+                return TelescopeHardware.CanSetPierSide; 
+            }
         }
 
         public bool CanSetRightAscensionRate
         {
-            // TODO Replace this with your implementation
-            get { return TelescopeHardware.CanSetRightAscensionRate; }
+            
+            get 
+            {
+                if (TelescopeHardware.VersionOneOnly)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("CanSetRightAscensionRate: false");
+                    }
+                    throw new MethodNotImplementedException("CanSetRightAscensionRate");
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("CanSetRightAscensionRate: " + TelescopeHardware.CanSetRightAscensionRate);
+                    }
+                }
+                return TelescopeHardware.CanSetRightAscensionRate; 
+            }
         }
 
         public bool CanSetTracking
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSetTracking", false); }
+            
+            get 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("CanSetTracking: " + TelescopeHardware.CanSetTracking);
+                    }
+                }
+                return TelescopeHardware.CanSetTracking; 
+            }
         }
 
         public bool CanSlew
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSlew", false); }
+            
+            get 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("CanSlew: " + TelescopeHardware.CanSlew);
+                    }
+                }
+                return TelescopeHardware.CanSlew; 
+            }
         }
 
         public bool CanSlewAltAz
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSlewAltAz", false); }
+            
+            get 
+            {
+                if (TelescopeHardware.VersionOneOnly)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("CanSlewAltAz: false");
+                    }
+                    throw new MethodNotImplementedException("CanSlewAltAz");
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("CanSlewAltAz: " + TelescopeHardware.CanSlewAltAz);
+                    }
+                }
+                return TelescopeHardware.CanSlewAltAz;
+            }
         }
 
         public bool CanSlewAltAzAsync

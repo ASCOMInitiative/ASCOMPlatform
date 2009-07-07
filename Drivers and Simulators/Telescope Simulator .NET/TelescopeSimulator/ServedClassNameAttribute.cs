@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ASCOM
+namespace ASCOM.TelescopeSimulator
 {
     [global::System.AttributeUsage(AttributeTargets.Assembly, Inherited = false, AllowMultiple = false)]
     public sealed class ServedClassNameAttribute : Attribute
