@@ -39,6 +39,7 @@ namespace ASCOM.TelescopeSimulator
         private static bool m_VersionOne;
         private static int m_NumberMoveAxis;
         private static bool m_CanPulseGuide;
+        private static bool m_CanDualAxisPulseGuide;
         private static bool m_CanSetEquatorialRates;
         private static bool m_CanSetGuideRates;
         private static bool m_CanSetPark;
@@ -48,11 +49,29 @@ namespace ASCOM.TelescopeSimulator
         private static bool m_CanSlewAltAz;
         private static bool m_CanAlignmentMode;
         private static bool m_CanOptics;
-
+        private static bool m_CanSlewAltAzAsync;
+        private static bool m_CanSlewAsync;
+        private static bool m_CanSync;
+        private static bool m_CanSyncAltAz;
+        private static bool m_CanUnpark;
+        private static bool m_CanAltAz;
+        private static bool m_CanDateTime;
+        private static bool m_CanDoesRefraction;
+        private static bool m_CanEquatorial;
+        private static bool m_CanLatLongElev;
+        private static bool m_CanSiderealTime;
+        private static bool m_CanPierSide;
+        private static bool m_CanTrackingRates;
+        
         //Telescope Implementation
         private static int m_AlignmentMode;
         private static double m_ApertureArea;
         private static double m_ApertureDiameter;
+        private static double m_FocalLength;
+        private static bool m_AutoTrack;
+        private static bool m_DisconnectOnPark;
+        private static bool m_Refraction;
+        private static int m_EquatorialSystem;
 
         private static bool m_Connected = false; //Keep track of the connection status of the hardware
 
@@ -73,6 +92,11 @@ namespace ASCOM.TelescopeSimulator
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "AlignMode", "1");
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "ApertureArea", SharedResources.INSTRUMENT_APERTURE_AREA.ToString());
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "Aperture", SharedResources.INSTRUMENT_APERTURE.ToString());
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "FocalLength", SharedResources.INSTRUMENT_FOCAL_LENGTH.ToString());
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "AutoTrack", "false");
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "DiscPark", "false");
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "Refraction", "true");
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "EquatorialSystem", "1");
 
                 //Capabilities Settings
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "V1", "false", "Capabilities");
@@ -89,6 +113,20 @@ namespace ASCOM.TelescopeSimulator
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanSlewAltAz", "true", "Capabilities");
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanAlignMode", "true", "Capabilities");
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanOptics", "true", "Capabilities");
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanSlewAltAzAsync", "true", "Capabilities");
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanSlewAsync", "true", "Capabilities");
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanSync", "true", "Capabilities");
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanSyncAltAz", "true", "Capabilities");
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanUnpark", "true", "Capabilities");
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanAltAz", "true", "Capabilities");
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanDateTime", "true", "Capabilities");
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanDoesRefraction", "true", "Capabilities");
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanEquatorial", "true", "Capabilities");
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanLatLongElev", "true", "Capabilities");
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanSiderealTime", "true", "Capabilities");
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanPierSide", "true", "Capabilities");
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanTrackingRates", "true", "Capabilities");
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanDualAxisPulseGuide", "true", "Capabilities");
 
 
                 
@@ -101,6 +139,11 @@ namespace ASCOM.TelescopeSimulator
             m_AlignmentMode = int.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "AlignMode"));
             m_ApertureArea = double.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "ApertureArea"));
             m_ApertureArea = double.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "Aperture"));
+            m_FocalLength = double.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "FocalLength"));
+            m_AutoTrack = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "AutoTrack"));
+            m_DisconnectOnPark = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "DiscPark"));
+            m_Refraction = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "Refraction"));
+            m_EquatorialSystem = int.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "EquatorialSystem"));
 
             m_VersionOne = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "V1", "Capabilities"));
             m_CanFindHome = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanFindHome", "Capabilities"));
@@ -116,7 +159,20 @@ namespace ASCOM.TelescopeSimulator
             m_CanSlewAltAz = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanSlewAltAz", "Capabilities"));
             m_CanAlignmentMode = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanAlignMode", "Capabilities"));
             m_CanOptics = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanOptics", "Capabilities"));
-            
+            m_CanSlewAltAzAsync = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanSlewAltAzAsync", "Capabilities"));
+            m_CanSlewAsync = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanSlewAsync", "Capabilities"));
+            m_CanSync = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanSync", "Capabilities"));
+            m_CanSyncAltAz = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanSyncAltAz", "Capabilities"));
+            m_CanUnpark = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanUnpark", "Capabilities"));
+            m_CanAltAz = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanAltAz", "Capabilities"));
+            m_CanDateTime = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanDateTime", "Capabilities"));
+            m_CanDoesRefraction = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanDoesRefraction", "Capabilities"));
+            m_CanEquatorial = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanEquatorial", "Capabilities"));
+            m_CanLatLongElev = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanLatLongElev", "Capabilities"));
+            m_CanSiderealTime = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanSiderealTime", "Capabilities"));
+            m_CanPierSide = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanPierSide", "Capabilities"));
+            m_CanTrackingRates = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanTrackingRates", "Capabilities"));
+            m_CanDualAxisPulseGuide = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanDualAxisPulseGuide", "Capabilities"));
 
             //Set the form setting for the Always On Top Value
             TelescopeSimulator.m_MainForm.TopMost = m_OnTop;
@@ -131,13 +187,31 @@ namespace ASCOM.TelescopeSimulator
         #region Properties For Settings
 
         //I used some of these as dual purpose if the driver uses the same exact property
+        public static int AlignmentMode
+        {
+            get { return m_AlignmentMode; }
+            set
+            {
+                m_AlignmentMode = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "AlignMode", value.ToString());
+            }
+        }
         public static bool OnTop
         {
             get { return m_OnTop; }
             set
             {
                 m_OnTop = value;
-                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "V1", value.ToString(), "");
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "OnTop", value.ToString(), "");
+            }
+        }
+        public static bool AutoTrack
+        {
+            get { return m_AutoTrack; }
+            set
+            {
+                m_AutoTrack = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "AutoTrack", value.ToString(), "");
             }
         }
         public static bool VersionOneOnly
@@ -149,6 +223,35 @@ namespace ASCOM.TelescopeSimulator
                 m_VersionOne = value; 
             }
         }
+        public static bool DisconnectOnPark
+        {
+            get { return m_DisconnectOnPark; }
+            set
+            {
+                m_DisconnectOnPark = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "DiscPark", value.ToString(), "");
+            }
+        }
+        public static bool Refraction
+        {
+            get { return m_Refraction; }
+            set
+            {
+                m_Refraction = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "Refraction", value.ToString(), "");
+            }
+        }
+        public static int EquatorialSystem
+        {
+            get { return m_EquatorialSystem; }
+            set
+            {
+                m_EquatorialSystem = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "EquatorialSystem", value.ToString(), "");
+            }
+        }
+
+
         public static bool CanFindHome
         {
             get {return m_CanFindHome;}
@@ -195,6 +298,15 @@ namespace ASCOM.TelescopeSimulator
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanPulseGuide", value.ToString(), "Capabilities");
             }
         }
+        public static bool CanDualAxisPulseGuide
+        {
+            get { return m_CanDualAxisPulseGuide; }
+            set
+            {
+                m_CanDualAxisPulseGuide = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanDualAxisPulseGuide", value.ToString(), "Capabilities");
+            }
+        }
 
         public static bool CanSetEquatorialRates
         {
@@ -223,6 +335,15 @@ namespace ASCOM.TelescopeSimulator
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanSetPark", value.ToString(), "Capabilities");
             }
         }
+        public static bool CanPierSide
+        {
+            get { return m_CanPierSide; }
+            set
+            {
+                m_CanPierSide = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanPierSide", value.ToString(), "Capabilities");
+            }
+        }
         public static bool CanSetPierSide
         {
             get{return m_CanSetPierSide;}
@@ -242,7 +363,15 @@ namespace ASCOM.TelescopeSimulator
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanSetTracking", value.ToString(), "Capabilities");
             }
         }
-
+        public static bool CanTrackingRates
+        {
+            get { return m_CanTrackingRates; }
+            set
+            {
+                m_CanTrackingRates = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanTrackingRates", value.ToString(), "Capabilities");
+            }
+        }
         public static bool CanSlew
         {
             get{return m_CanSlew;}
@@ -250,6 +379,24 @@ namespace ASCOM.TelescopeSimulator
             {
                 m_CanSlew = value;
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanSlew", value.ToString(), "Capabilities");
+            }
+        }
+        public static bool CanSync
+        {
+            get { return m_CanSync; }
+            set
+            {
+                m_CanSync = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanSync", value.ToString(), "Capabilities");
+            }
+        }
+        public static bool CanSlewAsync
+        {
+            get { return m_CanSlewAsync; }
+            set
+            {
+                m_CanSlewAsync = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanSlewAsync", value.ToString(), "Capabilities");
             }
         }
         public static bool CanSlewAltAz
@@ -261,6 +408,33 @@ namespace ASCOM.TelescopeSimulator
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanSlewAltAz", value.ToString(), "Capabilities");
             }
         }
+        public static bool CanSyncAltAz
+        {
+            get { return m_CanSyncAltAz; }
+            set
+            {
+                m_CanSyncAltAz = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanSyncAltAz", value.ToString(), "Capabilities");
+            }
+        }
+        public static bool CanAltAz
+        {
+            get { return m_CanAltAz; }
+            set
+            {
+                m_CanAltAz = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanAltAz", value.ToString(), "Capabilities");
+            }
+        }
+        public static bool CanSlewAltAzAsync
+        {
+            get { return m_CanSlewAltAzAsync; }
+            set
+            {
+                m_CanSlewAltAzAsync = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanSlewAltAzAsync", value.ToString(), "Capabilities");
+            }
+        }
         public static bool CanAlignmentMode
         {
             get { return m_CanAlignmentMode; }
@@ -270,18 +444,64 @@ namespace ASCOM.TelescopeSimulator
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanAlignMode", value.ToString(), "Capabilities");
             }
         }
+        public static bool CanUnpark
+        {
+            get { return m_CanUnpark; }
+            set
+            {
+                m_CanUnpark = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanUnpark", value.ToString(), "Capabilities");
+            }
+        }
+        public static bool CanDateTime
+        {
+            get { return m_CanDateTime; }
+            set
+            {
+                m_CanDateTime = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanDateTime", value.ToString(), "Capabilities");
+            }
+        }
+        public static bool CanDoesRefraction
+        {
+            get { return m_CanDoesRefraction; }
+            set
+            {
+                m_CanDoesRefraction = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanDoesRefraction", value.ToString(), "Capabilities");
+            }
+        }
+        public static bool CanEquatorial
+        {
+            get { return m_CanEquatorial; }
+            set
+            {
+                m_CanEquatorial = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanEquatorial", value.ToString(), "Capabilities");
+            }
+        }
+        public static bool CanLatLongElev
+        {
+            get { return m_CanLatLongElev; }
+            set
+            {
+                m_CanLatLongElev = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanLatLongElev", value.ToString(), "Capabilities");
+            }
+        }
+        public static bool CanSiderealTime
+        {
+            get { return m_CanSiderealTime; }
+            set
+            {
+                m_CanSiderealTime = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanSiderealTime", value.ToString(), "Capabilities");
+            }
+        }
         #endregion
 
         #region Telescope Implementation
-        public static int AlignmentMode
-        {
-            get { return m_AlignmentMode; }
-            set
-            {
-                m_AlignmentMode = value;
-                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "AlignMode", value.ToString());
-            }
-        }
+        
 
         public static bool Connected
         {
@@ -321,7 +541,15 @@ namespace ASCOM.TelescopeSimulator
                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "Aperture", value.ToString());
            }
        }
-
+       public static double FocalLength
+       {
+           get { return m_FocalLength; }
+           set
+           {
+               m_FocalLength = value;
+               m_Profile.WriteValue(SharedResources.PROGRAM_ID, "FocalLength", value.ToString());
+           }
+       }
         #endregion
     }
 }

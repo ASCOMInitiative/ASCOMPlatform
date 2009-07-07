@@ -37,6 +37,23 @@ namespace ASCOM.TelescopeSimulator
             setupForm.CanOptics = TelescopeHardware.CanOptics;
             setupForm.ApertureArea = TelescopeHardware.ApertureArea;
             setupForm.ApertureDiameter = TelescopeHardware.ApertureDiameter;
+            setupForm.FocalLength = TelescopeHardware.FocalLength;
+            setupForm.CanSlewAltAz = TelescopeHardware.CanSlewAltAz;
+            setupForm.CanSlewAltAzAsync = TelescopeHardware.CanSlewAltAzAsync;
+            setupForm.CanSlewAsync = TelescopeHardware.CanSlewAsync;
+            setupForm.CanSync = TelescopeHardware.CanSync;
+            setupForm.CanSyncAltAz = TelescopeHardware.CanSyncAltAz;
+            setupForm.CanUnpark = TelescopeHardware.CanUnpark;
+            setupForm.CanAltAz = TelescopeHardware.CanAltAz;
+            setupForm.CanDateTime = TelescopeHardware.CanDateTime;
+            setupForm.CanDoesRefraction = TelescopeHardware.CanDoesRefraction;
+            setupForm.CanEquatorial = TelescopeHardware.CanEquatorial;
+            setupForm.CanLatLongElev = TelescopeHardware.CanLatLongElev;
+            setupForm.CanPierSide = TelescopeHardware.CanPierSide;
+            setupForm.CanDualAxisPulseGuide = TelescopeHardware.CanDualAxisPulseGuide;
+            setupForm.AutoTrack = TelescopeHardware.AutoTrack;
+            setupForm.DisconnectOnPark = TelescopeHardware.DisconnectOnPark;
+            setupForm.Refraction = TelescopeHardware.Refraction;
 
             DialogResult ans = setupForm.ShowDialog(this);
 
@@ -58,6 +75,21 @@ namespace ASCOM.TelescopeSimulator
                 TelescopeHardware.AlignmentMode = setupForm.AlignmentMode;
                 TelescopeHardware.ApertureArea = setupForm.ApertureArea;
                 TelescopeHardware.ApertureDiameter = setupForm.ApertureDiameter;
+                TelescopeHardware.FocalLength = setupForm.FocalLength;
+                TelescopeHardware.CanSlewAltAzAsync = setupForm.CanSlewAltAzAsync;
+                TelescopeHardware.CanSlewAltAz = setupForm.CanSlewAltAz;
+                TelescopeHardware.CanSync = setupForm.CanSync;
+                TelescopeHardware.CanSyncAltAz = setupForm.CanSyncAltAz;
+                TelescopeHardware.CanUnpark = setupForm.CanUnpark;
+                TelescopeHardware.CanAltAz = setupForm.CanAltAz;
+                TelescopeHardware.CanDateTime = setupForm.CanDateTime;
+                TelescopeHardware.CanDoesRefraction = setupForm.CanDoesRefraction;
+                TelescopeHardware.CanEquatorial = setupForm.CanEquatorial;
+                TelescopeHardware.CanLatLongElev = setupForm.CanLatLongElev;
+                TelescopeHardware.CanPierSide = setupForm.CanPierSide;
+                TelescopeHardware.CanDualAxisPulseGuide = setupForm.CanDualAxisPulseGuide;
+                TelescopeHardware.DisconnectOnPark = setupForm.DisconnectOnPark;
+                TelescopeHardware.Refraction = setupForm.Refraction;
 
                 this.TopMost = setupForm.OnTop;
             }
