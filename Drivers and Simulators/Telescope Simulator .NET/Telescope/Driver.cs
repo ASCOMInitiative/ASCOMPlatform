@@ -516,32 +516,99 @@ namespace ASCOM.TelescopeSimulator
 
         public bool CanSlewAltAzAsync
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSlewAltAzAsync", false); }
+            get
+            {
+                if (TelescopeHardware.VersionOneOnly)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Capabilities)
+                        {
+                            SharedResources.TrafficForm.TrafficLine("CanSlewAltAzAsync: false");
+                        }
+                    }
+                    throw new MethodNotImplementedException("CanSlewAltAzAsync");
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("CanSlewAltAzAsync: " + TelescopeHardware.CanSlewAltAzAsync);
+                    }
+                }
+                return TelescopeHardware.CanSlewAltAzAsync;
+            }
         }
 
         public bool CanSlewAsync
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSlewAsync", false); }
+            get
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("CanSlewAsync: " + TelescopeHardware.CanSlewAsync);
+                    }
+                }
+                return TelescopeHardware.CanSlewAsync;
+            }
         }
 
         public bool CanSync
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSync", false); }
+            get
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("CanSync: " + TelescopeHardware.CanSync);
+                    }
+                }
+                return TelescopeHardware.CanSync;
+            }
         }
 
         public bool CanSyncAltAz
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSyncAltAz", false); }
+            get
+            {
+                if (TelescopeHardware.VersionOneOnly)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Capabilities)
+                        {
+                            SharedResources.TrafficForm.TrafficLine("CanSyncAltAz: false");
+                        }
+                    }
+                    throw new MethodNotImplementedException("CanSyncAltAz");
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("CanSyncAltAz: " + TelescopeHardware.CanSyncAltAz);
+                    }
+                }
+                return TelescopeHardware.CanSyncAltAz;
+            }
         }
 
         public bool CanUnpark
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanUnpark", false); }
+            get
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("CanUnPark: " + TelescopeHardware.CanUnpark);
+                    }
+                }
+                return TelescopeHardware.CanUnpark;
+            }
         }
 
         public void CommandBlind(string Command, bool Raw)
@@ -627,8 +694,38 @@ namespace ASCOM.TelescopeSimulator
 
         public double FocalLength
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("FocalLength", false); }
+
+            get
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("FocalLength: ");
+
+                    }
+                }
+                if (!TelescopeHardware.CanOptics)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("");
+                        }
+                    }
+                    throw new MethodNotImplementedException("FocalLength");
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.FocalLength.ToString());
+
+                    }
+                }
+                return TelescopeHardware.FocalLength;
+            }
         }
 
         public double GuideRateDeclination

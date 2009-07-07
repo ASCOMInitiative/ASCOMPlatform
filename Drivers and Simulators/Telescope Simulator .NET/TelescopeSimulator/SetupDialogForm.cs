@@ -44,10 +44,25 @@ namespace ASCOM.TelescopeSimulator
         }
 
         #region Properties for Settings
+        public bool AutoTrack
+        {
+            get { return checkBoxAutoTrack.Checked; }
+            set { checkBoxAutoTrack.Checked = value; }
+        }
+        public bool DisconnectOnPark
+        {
+            get { return checkBoxDisconnectOnPark.Checked; }
+            set { checkBoxDisconnectOnPark.Checked = value; }
+        }
         public bool OnTop
         {
             get { return checkBoxOnTop.Checked; }
             set { checkBoxOnTop.Checked = value; }
+        }
+        public bool Refraction
+        {
+            get { return checkBoxRefraction.Checked; }
+            set { checkBoxRefraction.Checked = value; }
         }
         public bool VersionOneOnly
         {
@@ -78,6 +93,12 @@ namespace ASCOM.TelescopeSimulator
             set { checkBoxCanPulseGuide.Checked = value; }
 
         }
+        public bool CanDualAxisPulseGuide
+        {
+            get { return checkBoxCanDualAxisPulseGuide.Checked; }
+            set { checkBoxCanDualAxisPulseGuide.Checked = value; }
+
+        }
         public bool CanSetEquatorialRates
         {
             get { return checkBoxCanTrackingRates.Checked; }
@@ -100,16 +121,64 @@ namespace ASCOM.TelescopeSimulator
             set { checkBoxCanSetPierSide.Checked = value; }
 
         }
-        public bool CanSetTracking
+        public bool CanPierSide
+        {
+            get { return checkBoxCanPierSide.Checked; }
+            set { checkBoxCanPierSide.Checked = value; }
+
+        }
+        public bool CanTrackingRates
         {
             get { return checkBoxCanTrackingRates.Checked; }
             set { checkBoxCanTrackingRates.Checked = value; }
+
+        }
+        public bool CanSetTracking
+        {
+            get { return checkBoxCanSetTracking.Checked; }
+            set { checkBoxCanSetTracking.Checked = value; }
 
         }
         public bool CanSlew
         {
             get { return checkBoxCanSlew.Checked; }
             set { checkBoxCanSlew.Checked = value; }
+
+        }
+        public bool CanSync
+        {
+            get { return checkBoxCanSync.Checked; }
+            set { checkBoxCanSync.Checked = value; }
+
+        }
+        public bool CanSlewAsync
+        {
+            get { return checkBoxCanSlewAsync.Checked; }
+            set { checkBoxCanSlewAsync.Checked = value; }
+
+        }
+        public bool CanSlewAltAz
+        {
+            get { return checkBoxCanSlewAltAz.Checked; }
+            set { checkBoxCanSlewAltAz.Checked = value; }
+
+        }
+        public bool CanAltAz
+        {
+            get { return checkBoxCanAltAz.Checked; }
+            set { checkBoxCanAltAz.Checked = value; }
+
+        }
+        public bool CanSyncAltAz
+        {
+            get { return checkBoxCanSyncAltAz.Checked; }
+            set { checkBoxCanSyncAltAz.Checked = value; }
+
+        }
+        public bool CanSlewAltAzAsync
+        {
+            get { return checkBoxCanSlewAltAzAsync.Checked; }
+            set { checkBoxCanSlewAltAzAsync.Checked = value; }
 
         }
         public bool CanOptics
@@ -122,6 +191,42 @@ namespace ASCOM.TelescopeSimulator
         {
             get { return checkBoxCanAlignmentMode.Checked; }
             set { checkBoxCanAlignmentMode.Checked = value; }
+
+        }
+        public bool CanUnpark
+        {
+            get { return checkBoxCanUnpark.Checked; }
+            set { checkBoxCanUnpark.Checked = value; }
+
+        }
+        public bool CanDateTime
+        {
+            get { return checkBoxCanDateTime.Checked; }
+            set { checkBoxCanDateTime.Checked = value; }
+
+        }
+        public bool CanDoesRefraction
+        {
+            get { return checkBoxCanDoesRefraction.Checked; }
+            set { checkBoxCanDoesRefraction.Checked = value; }
+
+        }
+        public bool CanLatLongElev
+        {
+            get { return checkBoxCanLatLongElev.Checked; }
+            set { checkBoxCanLatLongElev.Checked = value; }
+
+        }
+        public bool CanEquatorial
+        {
+            get { return checkBoxCanEquatorial.Checked; }
+            set { checkBoxCanEquatorial.Checked = value; }
+
+        }
+        public bool CanSiderealTime
+        {
+            get { return checkBoxCanSiderealTime.Checked; }
+            set { checkBoxCanSiderealTime.Checked = value; }
 
         }
         public double ApertureArea
@@ -140,13 +245,25 @@ namespace ASCOM.TelescopeSimulator
         {
             get
             {
-                double area;
-                double.TryParse(textBoxAperture.Text, out area);
-                return area;
+                double aperture;
+                double.TryParse(textBoxAperture.Text, out aperture);
+                return aperture;
 
 
             }
             set { textBoxAperture.Text = value.ToString(); }
+        }
+        public double FocalLength
+        {
+            get
+            {
+                double focal;
+                double.TryParse(textBoxFocalLength.Text, out focal);
+                return focal;
+
+
+            }
+            set { textBoxFocalLength.Text = value.ToString(); }
         }
         public int AlignmentMode
         {
