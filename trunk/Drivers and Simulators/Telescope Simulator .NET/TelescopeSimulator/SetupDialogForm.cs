@@ -18,12 +18,12 @@ namespace ASCOM.TelescopeSimulator
 
         private void cmdOK_Click(object sender, EventArgs e)
         {
-            Dispose();
+        
         }
 
         private void cmdCancel_Click(object sender, EventArgs e)
         {
-            Dispose();
+         
         }
 
         private void BrowseToAscom(object sender, EventArgs e)
@@ -111,6 +111,70 @@ namespace ASCOM.TelescopeSimulator
             get { return checkBoxCanSlew.Checked; }
             set { checkBoxCanSlew.Checked = value; }
 
+        }
+        public bool CanOptics
+        {
+            get { return checkBoxCanOptics.Checked; }
+            set { checkBoxCanOptics.Checked = value; }
+
+        }
+        public bool CanAlignmentMode
+        {
+            get { return checkBoxCanAlignmentMode.Checked; }
+            set { checkBoxCanAlignmentMode.Checked = value; }
+
+        }
+        public double ApertureArea
+        {
+            get
+            {
+                double area;
+                double.TryParse(textBoxApertureArea.Text, out area);
+                return area; 
+
+
+            }
+            set { textBoxApertureArea.Text = value.ToString(); }
+        }
+        public double ApertureDiameter
+        {
+            get
+            {
+                double area;
+                double.TryParse(textBoxAperture.Text, out area);
+                return area;
+
+
+            }
+            set { textBoxAperture.Text = value.ToString(); }
+        }
+        public int AlignmentMode
+        {
+            get
+            {
+                if (radioButtonAltAzimuth.Checked)
+                {return 0;}
+                if (radioButtonEquatorial.Checked)
+                {return 2;}
+                if (radioButtonGermanEquatorial.Checked)
+                { return 1; }
+                return 1;
+            }
+            set
+            {
+                switch (value)
+                {
+                    case 0:
+                        radioButtonAltAzimuth.Checked = true;
+                        break;
+                    case 1:
+                        radioButtonGermanEquatorial.Checked = true;
+                        break;
+                    case 2:
+                        radioButtonEquatorial.Checked = true;
+                        break;
+                }
+            }
         }
         #endregion
 
