@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AstronomyFunctions.cs" />
     <Compile Include="ClassFactory.cs" />
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>

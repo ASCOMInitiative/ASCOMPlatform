@@ -40,6 +40,7 @@ namespace ASCOM.TelescopeSimulator
         public static double RAD_DEG = 57.2957795;
         public static double HRS_RAD = 0.2617993881;
         public static double RAD_HRS = 3.81971863;
+        public static double EARTH_ANG_ROT_DEG_MIN = 0.25068447733746215; //Angular rotation of earth in degrees/min
 
         public static double TIMER_INTERVAL = .25; //4 ticks per second
 
