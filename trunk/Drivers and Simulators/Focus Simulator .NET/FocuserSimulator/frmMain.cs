@@ -10,7 +10,6 @@ namespace ASCOM.FocuserSimulator
     {
         delegate void SetTextCallback(string text);
 
-        public enum eLogKind { LogMove, LogTemp, LogIsMoving, LogOther };
         public Random xRand;
         public int OldTemp = 999;
         public TextBoxTraceListener xLog;
@@ -58,7 +57,7 @@ namespace ASCOM.FocuserSimulator
         private void frmMain_Load(object sender, EventArgs e)
         {
             Properties.Settings.Default.Reload();
-            MyLog(eLogKind.LogOther, "Init...");
+            FocuserHardware.MyLog(FocuserHardware.eLogKind.LogOther, "Init...");
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -81,13 +80,13 @@ namespace ASCOM.FocuserSimulator
             if (OldTemp == 999 || OldTemp == xTemp) 
             { 
                 OldTemp = xTemp;
-                MyLog(eLogKind.LogTemp, "First time or same t°. No move.");
+                FocuserHardware.MyLog(FocuserHardware.eLogKind.LogTemp, "First time or same t°. No move.");
                 return; 
             }   // First time or same t° : memorise temp & no move
             if ((Properties.Settings.Default.sTempMin > xTemp) || // Probed t° not in the interval (see SetupDialog()) so don't move
                 (xTemp > Properties.Settings.Default.sTempMax)) 
             {
-                MyLog(eLogKind.LogTemp, "Probed t° not in range. No move.");
+                FocuserHardware.MyLog(FocuserHardware.eLogKind.LogTemp, "Probed t° not in range. No move.");
                 return; 
             } 
             Delta = xTemp - OldTemp;
@@ -101,18 +100,6 @@ namespace ASCOM.FocuserSimulator
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             LogBox.Clear();
-        }
-
-        private static void MyLog(eLogKind Kind, string Texte)
-        {
-            if (((Properties.Settings.Default.LogHaltMove) && (Kind == eLogKind.LogMove)) ||
-               ((Properties.Settings.Default.LogIsMoving) && (Kind == eLogKind.LogIsMoving)) ||
-               ((Properties.Settings.Default.LogTempRelated) && (Kind == eLogKind.LogTemp)) ||
-               ((Properties.Settings.Default.LogOther) && (Kind == eLogKind.LogOther)))
-            {
-                //Trace.WriteLine(Texte, Kind.ToString());
-                Trace.WriteLine(Texte);
-            }
         }
     }
 
