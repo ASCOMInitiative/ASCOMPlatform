@@ -109,7 +109,7 @@ namespace ASCOM.FocuserSimulator
         #region Focuser.Halt() method
         public static void Halt()
         {
-            MyLog(eLogKind.LogMove, "Focuser.Halt() called");
+            MyLog(eLogKind.LogMove, "HALT requested");
             if (!Properties.Settings.Default.sEnableHalt) { throw new MethodNotImplementedException("Halt"); }
             else { HaltRequested = true; }
         }
@@ -217,7 +217,7 @@ namespace ASCOM.FocuserSimulator
                         { 
                             Properties.Settings.Default.IsMoving = false; 
                             HaltRequested = false;
-                            MyLog(eLogKind.LogMove, "HALT requested, focuser stopped");
+                            MyLog(eLogKind.LogMove, "Focuser stopped");
                             Properties.Settings.Default.Save();
                             return; 
                         }
@@ -234,7 +234,7 @@ namespace ASCOM.FocuserSimulator
                         { 
                             Properties.Settings.Default.IsMoving = false; 
                             HaltRequested = false;
-                            MyLog(eLogKind.LogMove, "HALT requested, focuser stopped");
+                            MyLog(eLogKind.LogMove, "Focuser stopped");
                             Properties.Settings.Default.Save();
                             return; 
                         }
@@ -258,7 +258,7 @@ namespace ASCOM.FocuserSimulator
                     { 
                         Properties.Settings.Default.IsMoving = false; 
                         HaltRequested = false;
-                        MyLog(eLogKind.LogMove, "HALT requested, focuser stopped");
+                        MyLog(eLogKind.LogMove, "Focuser stopped");
                         Properties.Settings.Default.Save();
                         return; 
                     }
@@ -289,7 +289,7 @@ namespace ASCOM.FocuserSimulator
         /// </summary>
         /// <param name="Kind">Kind of event.</param>
         /// <param name="Texte">Text describing the event.</param>
-        private static void MyLog(eLogKind Kind, string Texte)
+        public static void MyLog(eLogKind Kind, string Texte)
         {
             if (((Properties.Settings.Default.LogHaltMove) && (Kind == eLogKind.LogMove)) ||
                ((Properties.Settings.Default.LogIsMoving) && (Kind == eLogKind.LogIsMoving)) ||
