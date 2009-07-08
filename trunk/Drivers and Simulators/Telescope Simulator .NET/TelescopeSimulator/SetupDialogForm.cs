@@ -147,7 +147,7 @@ namespace ASCOM.TelescopeSimulator
                 try
                 {
                     log = double.Parse(textBoxLongitudeDegrees.Text) + double.Parse(textBoxLongitudeMinutes.Text) / 60;
-                    if (comboBoxLatitude.SelectedItem.ToString() == "W") { log = -log; }
+                    if (comboBoxLongitude.SelectedItem.ToString() == "W") { log = -log; }
                 }
                 catch { }
                 return log;

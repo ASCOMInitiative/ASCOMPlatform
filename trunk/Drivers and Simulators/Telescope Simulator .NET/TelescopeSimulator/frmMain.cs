@@ -15,6 +15,7 @@ namespace ASCOM.TelescopeSimulator
         public frmMain()
         {
             InitializeComponent();
+
         }
         public void DoSetupDialog()
         {
@@ -122,6 +123,26 @@ namespace ASCOM.TelescopeSimulator
         private void buttonTraffic_Click(object sender, EventArgs e)
         {
             SharedResources.TrafficForm.Show();
+        }
+        public double SiderealTime
+        {
+            set
+            {
+                SetTextCallback setText = new SetTextCallback(SetLstText);
+                string text = AstronomyFunctions.ConvertDoubleToHMS(value);
+                try{this.Invoke(setText, text);}
+                catch { }
+                
+           
+            }
+        }
+        private void SetLstText(string text)
+        {
+            labelLst.Text = text;
+        }
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            TelescopeHardware.Start();
         }
     }
 }

@@ -97,7 +97,7 @@ namespace ASCOM.TelescopeSimulator
             m_Profile = new HelperNET.Profile();
             m_Timer.Elapsed += new ElapsedEventHandler(TimerEvent);
             m_Timer.Interval = SharedResources.TIMER_INTERVAL * 1000;
-            m_Timer.Start();
+            
 
             if (m_Profile.GetValue(SharedResources.PROGRAM_ID, "RegVer", "") != SharedResources.REGISTRATION_VERSION)
             {
@@ -237,12 +237,18 @@ namespace ASCOM.TelescopeSimulator
 
             //Set the form setting for the Always On Top Value
             TelescopeSimulator.m_MainForm.TopMost = m_OnTop;
+
+        }
+        public static void Start() 
+        {
+            //TelescopeSimulator.m_MainForm.SiderealTime = AstronomyFunctions.LocalSiderealTime(m_Longitude * SharedResources.DEG_RAD);
+            m_Timer.Start(); 
         }
 
         //Update the Telescope Based on Timed Events
         private static void TimerEvent(object source, ElapsedEventArgs e)
         {
-
+            TelescopeSimulator.m_MainForm.SiderealTime = AstronomyFunctions.LocalSiderealTime(m_Longitude);
         }
 
         #region Properties For Settings
@@ -685,18 +691,5 @@ namespace ASCOM.TelescopeSimulator
        }
         #endregion
 
-        #region Astronomy Functions
-       //private void CalculateRaDec()
-       //{
-
-       //}
-       //private double LocalSiderialTime()
-       //{
-       //    TimeZone localZone = TimeZone.CurrentTimeZone;
-       //    DateTime gmt = localZone.ToUniversalTime(DateTime.Now);
-           
-
-       //}
-        #endregion
     }
 }
