@@ -1,6 +1,8 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace ASCOM.FocuserSimulator
 {
@@ -8,14 +10,18 @@ namespace ASCOM.FocuserSimulator
     {
         delegate void SetTextCallback(string text);
 
+        public enum eLogKind { LogMove, LogTemp, LogIsMoving, LogOther };
         public Random xRand;
         public int OldTemp = 999;
+        public TextBoxTraceListener xLog;
 
         public frmMain()
         {
             InitializeComponent();
             Properties.Settings.Default.PropertyChanged += new PropertyChangedEventHandler(Default_PropertyChanged);
             xRand = new Random();
+            xLog = new TextBoxTraceListener(LogBox);
+            Trace.Listeners.Add(xLog);
         }
 
         void Default_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -38,6 +44,7 @@ namespace ASCOM.FocuserSimulator
             SetupButton.Enabled = !Properties.Settings.Default.IsMoving;
             TimerTempComp.Interval = (int)Properties.Settings.Default.sTempCompPeriod * 1000;
             TimerTempComp.Enabled = Properties.Settings.Default.sTempComp;
+            TextTemp.Visible = Properties.Settings.Default.sTempComp;
             Application.DoEvents();
         }
 
@@ -50,8 +57,8 @@ namespace ASCOM.FocuserSimulator
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            //frmMain.ActiveForm.Width = 186;
             Properties.Settings.Default.Reload();
+            MyLog(eLogKind.LogOther, "Init...");
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -61,8 +68,8 @@ namespace ASCOM.FocuserSimulator
 
         private void ButtonTraffic_Click(object sender, EventArgs e)
         {
-            if (frmMain.ActiveForm.Height == 186) { frmMain.ActiveForm.Height = 404; }
-            else { frmMain.ActiveForm.Height = 186; }
+            if (frmMain.ActiveForm.Height == 207) { frmMain.ActiveForm.Height = 434; }
+            else { frmMain.ActiveForm.Height = 207; }
             Application.DoEvents();
         }
 
@@ -71,8 +78,20 @@ namespace ASCOM.FocuserSimulator
             int Delta;
             int xTemp = (int)((int)Properties.Settings.Default.sTempMin + 10 * xRand.NextDouble());
             TextTemp.Text = xTemp.ToString() + "°";
-            if (OldTemp == 999 || OldTemp == xTemp) { OldTemp = xTemp; return; }   // First time : memorise temp & no move
+            if (OldTemp == 999 || OldTemp == xTemp) 
+            { 
+                OldTemp = xTemp;
+                MyLog(eLogKind.LogTemp, "First time or same t°. No move.");
+                return; 
+            }   // First time or same t° : memorise temp & no move
+            if ((Properties.Settings.Default.sTempMin > xTemp) || // Probed t° not in the interval (see SetupDialog()) so don't move
+                (xTemp > Properties.Settings.Default.sTempMax)) 
+            {
+                MyLog(eLogKind.LogTemp, "Probed t° not in range. No move.");
+                return; 
+            } 
             Delta = xTemp - OldTemp;
+            OldTemp = xTemp;
             FocuserHardware.IsTempCompMove = true;
             if (Properties.Settings.Default.sAbsolute) FocuserHardware.Move((int)Properties.Settings.Default.sPosition+Delta*(int)Properties.Settings.Default.sStepPerDeg);
             else FocuserHardware.Move(Delta*(int)Properties.Settings.Default.sStepPerDeg);
@@ -81,8 +100,51 @@ namespace ASCOM.FocuserSimulator
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.LogTxt = "";
-            Properties.Settings.Default.Save();
+            LogBox.Clear();
+        }
+
+        private static void MyLog(eLogKind Kind, string Texte)
+        {
+            if (((Properties.Settings.Default.LogHaltMove) && (Kind == eLogKind.LogMove)) ||
+               ((Properties.Settings.Default.LogIsMoving) && (Kind == eLogKind.LogIsMoving)) ||
+               ((Properties.Settings.Default.LogTempRelated) && (Kind == eLogKind.LogTemp)) ||
+               ((Properties.Settings.Default.LogOther) && (Kind == eLogKind.LogOther)))
+            {
+                //Trace.WriteLine(Texte, Kind.ToString());
+                Trace.WriteLine(Texte);
+            }
         }
     }
+
+    #region TextBox TraceListener
+    // Code by Adam Crawford, MIT License
+
+    public class TextBoxTraceListener : TraceListener
+    {
+        private System.Windows.Forms.TextBox _target;
+        private StringSendDelegate _invokeWrite;
+
+        public TextBoxTraceListener(System.Windows.Forms.TextBox target)
+        {
+            _target = target;
+            _invokeWrite = new StringSendDelegate(SendString);
+        }
+
+        public override void Write(string message)
+        {
+            _target.Invoke(_invokeWrite, new object[] { message });
+        }
+
+        public override void WriteLine(string message)
+        {
+            _target.Invoke(_invokeWrite, new object[] { message + Environment.NewLine });
+        }
+
+        private delegate void StringSendDelegate(string message);
+        private void SendString(string message)
+        {
+            _target.Text += message;
+        }
+    }
+    #endregion
 }

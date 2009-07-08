@@ -169,18 +169,6 @@ namespace ASCOM.FocuserSimulator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string LogTxt {
-            get {
-                return ((string)(this["LogTxt"]));
-            }
-            set {
-                this["LogTxt"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("5")]
         public decimal sStepPerDeg {
             get {

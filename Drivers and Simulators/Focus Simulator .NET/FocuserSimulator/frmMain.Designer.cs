@@ -172,15 +172,14 @@ namespace ASCOM.FocuserSimulator
             // LogBox
             // 
             this.LogBox.AcceptsReturn = true;
-            this.LogBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "LogTxt", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.LogBox.HideSelection = false;
             this.LogBox.Location = new System.Drawing.Point(12, 264);
             this.LogBox.Multiline = true;
             this.LogBox.Name = "LogBox";
-            this.LogBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.LogBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.LogBox.Size = new System.Drawing.Size(234, 134);
             this.LogBox.TabIndex = 16;
-            this.LogBox.Text = global::ASCOM.FocuserSimulator.Properties.Settings.Default.LogTxt;
+            this.LogBox.WordWrap = false;
             // 
             // CheckTempComp
             // 
@@ -265,13 +264,12 @@ namespace ASCOM.FocuserSimulator
             // TextTemp
             // 
             this.TextTemp.BackColor = System.Drawing.SystemColors.Window;
-            this.TextTemp.DataBindings.Add(new System.Windows.Forms.Binding("Visible", global::ASCOM.FocuserSimulator.Properties.Settings.Default, "sTempComp", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.TextTemp.Location = new System.Drawing.Point(171, 115);
             this.TextTemp.Name = "TextTemp";
             this.TextTemp.ReadOnly = true;
             this.TextTemp.Size = new System.Drawing.Size(35, 20);
             this.TextTemp.TabIndex = 19;
-            this.TextTemp.Visible = global::ASCOM.FocuserSimulator.Properties.Settings.Default.sTempComp;
+            this.TextTemp.Visible = false;
             // 
             // frmMain
             // 

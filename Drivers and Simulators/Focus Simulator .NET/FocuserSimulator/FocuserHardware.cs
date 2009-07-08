@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Diagnostics;
 
 namespace ASCOM.FocuserSimulator
 {
@@ -205,10 +206,9 @@ namespace ASCOM.FocuserSimulator
                     return;
                 }
                 DestPosition = (val > (int)Properties.Settings.Default.sMaxStep ? (int)Properties.Settings.Default.sMaxStep : val);
-                Properties.Settings.Default.Reload();
                 Properties.Settings.Default.IsMoving = true;
                 int Start = (int)Properties.Settings.Default.sPosition;
-                MyLog(eLogKind.LogIsMoving, "Focuser is moving from "+Start.ToString()+" to "+val.ToString());
+                MyLog(eLogKind.LogIsMoving, "Moving from "+Start.ToString()+" to "+val.ToString());
                 if (val > Properties.Settings.Default.sPosition)  
                 {
                     for (int i = Start; i < DestPosition; i++)
@@ -218,9 +218,10 @@ namespace ASCOM.FocuserSimulator
                             Properties.Settings.Default.IsMoving = false; 
                             HaltRequested = false;
                             MyLog(eLogKind.LogMove, "HALT requested, focuser stopped");
+                            Properties.Settings.Default.Save();
                             return; 
                         }
-                        Deplace(1);
+                        FakeMove(1);
                         Properties.Settings.Default.sPosition ++;
                     }
                     
@@ -234,22 +235,22 @@ namespace ASCOM.FocuserSimulator
                             Properties.Settings.Default.IsMoving = false; 
                             HaltRequested = false;
                             MyLog(eLogKind.LogMove, "HALT requested, focuser stopped");
+                            Properties.Settings.Default.Save();
                             return; 
                         }
-                        Deplace(-1);
+                        FakeMove(-1);
                         Properties.Settings.Default.sPosition --;
                     }
                 }
                 
                 Properties.Settings.Default.IsMoving = false;
-                Properties.Settings.Default.Save();
                 MyLog(eLogKind.LogIsMoving, "Move done");
             }
             else  // Relative focuser move
             {
                 MyLog(eLogKind.LogMove,"Requested relative move "+val.ToString()+" steps");
                 Properties.Settings.Default.IsMoving = true;
-                MyLog(eLogKind.LogIsMoving, "Focuser is moving "+Math.Abs(val)+" steps "+(val >= 0 ? "forward" : "backward"));
+                MyLog(eLogKind.LogIsMoving, "Moving "+Math.Abs(val)+" steps "+(val >= 0 ? "forward" : "backward"));
                 for (int i = 0; i < Math.Abs(val); i ++)
                 {
                     // Focuser.Halt() was called
@@ -258,13 +259,15 @@ namespace ASCOM.FocuserSimulator
                         Properties.Settings.Default.IsMoving = false; 
                         HaltRequested = false;
                         MyLog(eLogKind.LogMove, "HALT requested, focuser stopped");
+                        Properties.Settings.Default.Save();
                         return; 
                     }
-                    Deplace(1);  // Fake move
+                    FakeMove(1);  // Fake move
                 }
                 Properties.Settings.Default.IsMoving = false;
                 MyLog(eLogKind.LogIsMoving, "Relative move done");
             }
+            Properties.Settings.Default.Save();
         }
         #endregion
 
@@ -275,7 +278,7 @@ namespace ASCOM.FocuserSimulator
         /// Fake move. Use to add some delays between each motor step
         /// </summary>
         /// <param name="pStep">The number of steps.</param>
-        private static void Deplace(int pStep)
+        private static void FakeMove(int pStep)
         {
             Thread.Sleep(1);
         }
@@ -288,16 +291,18 @@ namespace ASCOM.FocuserSimulator
         /// <param name="Texte">Text describing the event.</param>
         private static void MyLog(eLogKind Kind, string Texte)
         {
-            Properties.Settings.Default.LogTxt += Texte + Environment.NewLine;
-            if ((Properties.Settings.Default.LogHaltMove && Kind == eLogKind.LogMove) ||
-                (Properties.Settings.Default.LogIsMoving && Kind == eLogKind.LogIsMoving) ||
-                (Properties.Settings.Default.LogTempRelated && Kind == eLogKind.LogTemp) ||
-                (Properties.Settings.Default.LogOther && Kind == eLogKind.LogOther))
+            if (((Properties.Settings.Default.LogHaltMove) && (Kind == eLogKind.LogMove)) ||
+               ((Properties.Settings.Default.LogIsMoving) && (Kind == eLogKind.LogIsMoving)) ||
+               ((Properties.Settings.Default.LogTempRelated) && (Kind == eLogKind.LogTemp)) ||
+               ((Properties.Settings.Default.LogOther) && (Kind == eLogKind.LogOther)))
             {
-                Properties.Settings.Default.LogTxt += "TEST : "+Texte + Environment.NewLine;
+                //Trace.WriteLine(Texte, Kind.ToString());
+                Trace.WriteLine(Texte);
             }
         }
 
         #endregion
     }
+
+
 }
