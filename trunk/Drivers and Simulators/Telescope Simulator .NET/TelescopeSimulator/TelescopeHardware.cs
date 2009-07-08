@@ -72,6 +72,22 @@ namespace ASCOM.TelescopeSimulator
         private static bool m_DisconnectOnPark;
         private static bool m_Refraction;
         private static int m_EquatorialSystem;
+        private static bool m_NoCoordinatesAtPark;
+        private static double m_Latitude;
+        private static double m_Longitude;
+        private static double m_Elevation;
+        private static int m_MaximumSlewRate;
+
+        private static double m_Altitude;
+        private static double m_Azimuth;
+        private static double m_ParkAltitude;
+        private static double m_ParkAzimuth;
+
+        private static double m_RightAscension;
+        private static double m_Declination;
+
+        private static double m_DateDelta;
+
 
         private static bool m_Connected = false; //Keep track of the connection status of the hardware
 
@@ -80,6 +96,7 @@ namespace ASCOM.TelescopeSimulator
         {
             m_Profile = new HelperNET.Profile();
             m_Timer.Elapsed += new ElapsedEventHandler(TimerEvent);
+            m_Timer.Interval = SharedResources.TIMER_INTERVAL * 1000;
             m_Timer.Start();
 
             if (m_Profile.GetValue(SharedResources.PROGRAM_ID, "RegVer", "") != SharedResources.REGISTRATION_VERSION)
@@ -95,8 +112,42 @@ namespace ASCOM.TelescopeSimulator
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "FocalLength", SharedResources.INSTRUMENT_FOCAL_LENGTH.ToString());
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "AutoTrack", "false");
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "DiscPark", "false");
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "NoCoordAtPark", "false");
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "Refraction", "true");
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "EquatorialSystem", "1");
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "MaxSlewRate", "20");
+
+                //' Geography
+                //'
+                //' Based on the UTC offset, create a longitude somewhere in
+                //' the time zone, a latitude between 0 and 60 and a site
+                //' elevation between 0 and 1000 metres. This gives the
+                //' client some geo position without having to open the
+                //' Setup dialog.
+                Random r = new Random();
+                TimeZone localZone = TimeZone.CurrentTimeZone;
+                double latitude = (r.NextDouble() * 60);
+                double longitude = (((-(double)(localZone.GetUtcOffset(DateTime.Now).Seconds) / 3600) + r.NextDouble() - 0.5) * 15);
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "Elevation", Math.Round((r.NextDouble()*1000),0).ToString());
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "Longitude", longitude.ToString());
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "Latitude", latitude.ToString());
+
+                //Start the scope in parked position
+                if (latitude >= 0)
+                {
+                    m_Profile.WriteValue(SharedResources.PROGRAM_ID, "StartAzimuth", "180");
+                    m_Profile.WriteValue(SharedResources.PROGRAM_ID, "ParkAzimuth", "180");
+                    
+                }
+                else
+                {
+                    m_Profile.WriteValue(SharedResources.PROGRAM_ID, "StartAzimuth", "0");
+                    m_Profile.WriteValue(SharedResources.PROGRAM_ID, "ParkAzimuth", "0");
+                }
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "StartAltitude", (90-Math.Abs(latitude)).ToString());
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "ParkAltitude", (90 - Math.Abs(latitude)).ToString());
+
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "DateDelta", "0");
 
                 //Capabilities Settings
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "V1", "false", "Capabilities");
@@ -144,6 +195,16 @@ namespace ASCOM.TelescopeSimulator
             m_DisconnectOnPark = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "DiscPark"));
             m_Refraction = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "Refraction"));
             m_EquatorialSystem = int.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "EquatorialSystem"));
+            m_NoCoordinatesAtPark = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "NoCoordAtPark"));
+            m_Elevation = double.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "Elevation"));
+            m_Latitude = double.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "Latitude"));
+            m_Longitude = double.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "Longitude"));
+            m_MaximumSlewRate = int.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "MaxSlewRate"));
+
+            m_Altitude = double.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "StartAltitude"));
+            m_Azimuth = double.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "StartAzimuth"));
+            m_ParkAltitude = double.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "ParkAltitude"));
+            m_ParkAzimuth = double.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "ParkAzimuth"));
 
             m_VersionOne = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "V1", "Capabilities"));
             m_CanFindHome = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanFindHome", "Capabilities"));
@@ -214,6 +275,15 @@ namespace ASCOM.TelescopeSimulator
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "AutoTrack", value.ToString(), "");
             }
         }
+        public static bool NoCoordinatesAtPark
+        {
+            get { return m_NoCoordinatesAtPark; }
+            set
+            {
+                m_NoCoordinatesAtPark = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "NoCoordAtPark", value.ToString());
+            }
+        }
         public static bool VersionOneOnly
         {
             get { return m_VersionOne; }
@@ -248,6 +318,42 @@ namespace ASCOM.TelescopeSimulator
             {
                 m_EquatorialSystem = value;
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "EquatorialSystem", value.ToString(), "");
+            }
+        }
+        public static double Elevation
+        {
+            get { return m_Elevation; }
+            set
+            {
+                m_Elevation = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "Elevation", value.ToString());
+            }
+        }
+        public static double Latitude
+        {
+            get { return m_Latitude; }
+            set
+            {
+                m_Latitude = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "Latitude", value.ToString());
+            }
+        }
+        public static double Longitude
+        {
+            get { return m_Longitude; }
+            set
+            {
+                m_Longitude = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "Longitude", value.ToString());
+            }
+        }
+        public static int MaximumSlewRate
+        {
+            get { return m_MaximumSlewRate; }
+            set
+            {
+                m_MaximumSlewRate = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "MaxSlewRate", value.ToString());
             }
         }
 
@@ -501,7 +607,34 @@ namespace ASCOM.TelescopeSimulator
         #endregion
 
         #region Telescope Implementation
-        
+        public static double Altitude
+        {
+            get { return m_Altitude; }
+            set {m_Altitude = value;}
+        }
+        public static double Azimuth
+        {
+            get { return m_Azimuth; }
+            set { m_Azimuth = value; }
+        }
+        public static double ParkAltitude
+        {
+            get { return m_ParkAltitude; }
+            set 
+            { 
+                m_ParkAltitude = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "ParkAltitude", value.ToString());
+            }
+        }
+        public static double ParkAzimuth
+        {
+            get { return m_ParkAzimuth; }
+            set 
+            { 
+                m_ParkAzimuth = value;
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "ParkAzimuth", value.ToString());
+            }
+        }
 
         public static bool Connected
         {
@@ -550,6 +683,20 @@ namespace ASCOM.TelescopeSimulator
                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "FocalLength", value.ToString());
            }
        }
+        #endregion
+
+        #region Astronomy Functions
+       //private void CalculateRaDec()
+       //{
+
+       //}
+       //private double LocalSiderialTime()
+       //{
+       //    TimeZone localZone = TimeZone.CurrentTimeZone;
+       //    DateTime gmt = localZone.ToUniversalTime(DateTime.Now);
+           
+
+       //}
         #endregion
     }
 }

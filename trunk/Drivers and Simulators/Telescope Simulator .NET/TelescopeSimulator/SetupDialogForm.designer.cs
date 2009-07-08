@@ -41,10 +41,10 @@ namespace ASCOM.TelescopeSimulator
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxElevation = new System.Windows.Forms.TextBox();
             this.comboBoxLongitude = new System.Windows.Forms.ComboBox();
-            this.textBoxLongitudeDegress = new System.Windows.Forms.TextBox();
+            this.textBoxLongitudeDegrees = new System.Windows.Forms.TextBox();
             this.picASCOM = new System.Windows.Forms.PictureBox();
             this.checkBoxAutoTrack = new System.Windows.Forms.CheckBox();
-            this.checkBoxCoordinatesOnPark = new System.Windows.Forms.CheckBox();
+            this.checkBoxNoCoordinatesAtPark = new System.Windows.Forms.CheckBox();
             this.checkBoxDisconnectOnPark = new System.Windows.Forms.CheckBox();
             this.buttonSetParkPosition = new System.Windows.Forms.Button();
             this.buttonResetParkPosition = new System.Windows.Forms.Button();
@@ -165,7 +165,7 @@ namespace ASCOM.TelescopeSimulator
             this.tableLayoutPanel1.Controls.Add(this.label3, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.textBoxElevation, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.comboBoxLongitude, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxLongitudeDegress, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxLongitudeDegrees, 2, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -254,12 +254,12 @@ namespace ASCOM.TelescopeSimulator
             this.comboBoxLongitude.Size = new System.Drawing.Size(38, 21);
             this.comboBoxLongitude.TabIndex = 8;
             // 
-            // textBoxLongitudeDegress
+            // textBoxLongitudeDegrees
             // 
-            this.textBoxLongitudeDegress.Location = new System.Drawing.Point(113, 31);
-            this.textBoxLongitudeDegress.Name = "textBoxLongitudeDegress";
-            this.textBoxLongitudeDegress.Size = new System.Drawing.Size(34, 20);
-            this.textBoxLongitudeDegress.TabIndex = 11;
+            this.textBoxLongitudeDegrees.Location = new System.Drawing.Point(113, 31);
+            this.textBoxLongitudeDegrees.Name = "textBoxLongitudeDegrees";
+            this.textBoxLongitudeDegrees.Size = new System.Drawing.Size(34, 20);
+            this.textBoxLongitudeDegrees.TabIndex = 11;
             // 
             // picASCOM
             // 
@@ -285,16 +285,16 @@ namespace ASCOM.TelescopeSimulator
             this.checkBoxAutoTrack.Text = "Auto Unpark/Track on Start";
             this.checkBoxAutoTrack.UseVisualStyleBackColor = true;
             // 
-            // checkBoxCoordinatesOnPark
+            // checkBoxNoCoordinatesAtPark
             // 
-            this.checkBoxCoordinatesOnPark.AutoSize = true;
-            this.checkBoxCoordinatesOnPark.ForeColor = System.Drawing.Color.White;
-            this.checkBoxCoordinatesOnPark.Location = new System.Drawing.Point(236, 52);
-            this.checkBoxCoordinatesOnPark.Name = "checkBoxCoordinatesOnPark";
-            this.checkBoxCoordinatesOnPark.Size = new System.Drawing.Size(165, 17);
-            this.checkBoxCoordinatesOnPark.TabIndex = 6;
-            this.checkBoxCoordinatesOnPark.Text = "No Coordinates when Parked";
-            this.checkBoxCoordinatesOnPark.UseVisualStyleBackColor = true;
+            this.checkBoxNoCoordinatesAtPark.AutoSize = true;
+            this.checkBoxNoCoordinatesAtPark.ForeColor = System.Drawing.Color.White;
+            this.checkBoxNoCoordinatesAtPark.Location = new System.Drawing.Point(236, 52);
+            this.checkBoxNoCoordinatesAtPark.Name = "checkBoxNoCoordinatesAtPark";
+            this.checkBoxNoCoordinatesAtPark.Size = new System.Drawing.Size(165, 17);
+            this.checkBoxNoCoordinatesAtPark.TabIndex = 6;
+            this.checkBoxNoCoordinatesAtPark.Text = "No Coordinates when Parked";
+            this.checkBoxNoCoordinatesAtPark.UseVisualStyleBackColor = true;
             // 
             // checkBoxDisconnectOnPark
             // 
@@ -315,6 +315,7 @@ namespace ASCOM.TelescopeSimulator
             this.buttonSetParkPosition.TabIndex = 8;
             this.buttonSetParkPosition.Text = "Set Park Position";
             this.buttonSetParkPosition.UseVisualStyleBackColor = true;
+            this.buttonSetParkPosition.Click += new System.EventHandler(this.buttonSetParkPosition_Click);
             // 
             // buttonResetParkPosition
             // 
@@ -866,12 +867,6 @@ namespace ASCOM.TelescopeSimulator
             // comboBoxEquatorialSystem
             // 
             this.comboBoxEquatorialSystem.FormattingEnabled = true;
-            this.comboBoxEquatorialSystem.Items.AddRange(new object[] {
-            "Local,1",
-            "B1950,4",
-            "J2000,2",
-            "J2050,3",
-            "Other,0"});
             this.comboBoxEquatorialSystem.Location = new System.Drawing.Point(64, 3);
             this.comboBoxEquatorialSystem.Name = "comboBoxEquatorialSystem";
             this.comboBoxEquatorialSystem.Size = new System.Drawing.Size(75, 21);
@@ -976,10 +971,9 @@ namespace ASCOM.TelescopeSimulator
             // 
             // labelTime
             // 
-            this.labelTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTime.AutoSize = true;
             this.labelTime.ForeColor = System.Drawing.Color.White;
-            this.labelTime.Location = new System.Drawing.Point(431, 473);
+            this.labelTime.Location = new System.Drawing.Point(377, 473);
             this.labelTime.Name = "labelTime";
             this.labelTime.Size = new System.Drawing.Size(185, 13);
             this.labelTime.TabIndex = 19;
@@ -1003,7 +997,7 @@ namespace ASCOM.TelescopeSimulator
             this.Controls.Add(this.buttonResetParkPosition);
             this.Controls.Add(this.buttonSetParkPosition);
             this.Controls.Add(this.checkBoxDisconnectOnPark);
-            this.Controls.Add(this.checkBoxCoordinatesOnPark);
+            this.Controls.Add(this.checkBoxNoCoordinatesAtPark);
             this.Controls.Add(this.checkBoxAutoTrack);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.picASCOM);
@@ -1055,9 +1049,9 @@ namespace ASCOM.TelescopeSimulator
         private System.Windows.Forms.TextBox textBoxLongitudeMinutes;
         private System.Windows.Forms.TextBox textBoxLatitudeMinutes;
         private System.Windows.Forms.TextBox textBoxLatitudeDegrees;
-        private System.Windows.Forms.TextBox textBoxLongitudeDegress;
+        private System.Windows.Forms.TextBox textBoxLongitudeDegrees;
         private System.Windows.Forms.CheckBox checkBoxAutoTrack;
-        private System.Windows.Forms.CheckBox checkBoxCoordinatesOnPark;
+        private System.Windows.Forms.CheckBox checkBoxNoCoordinatesAtPark;
         private System.Windows.Forms.CheckBox checkBoxDisconnectOnPark;
         private System.Windows.Forms.Button buttonSetParkPosition;
         private System.Windows.Forms.Button buttonResetParkPosition;
