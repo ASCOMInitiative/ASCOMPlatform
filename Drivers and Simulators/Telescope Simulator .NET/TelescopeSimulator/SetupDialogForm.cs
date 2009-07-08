@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -8,12 +9,61 @@ using System.Windows.Forms;
 
 namespace ASCOM.TelescopeSimulator
 {
+
     [ComVisible(false)]					// Form not registered for COM!
     public partial class SetupDialogForm : Form
     {
         public SetupDialogForm()
         {
             InitializeComponent();
+
+            Version version = new Version(Application.ProductVersion);
+            labelVersion.Text = "ASCOM Telescope Simulator .NET " + string.Format("Version {0}.{1}.{2}", version.Major, version.Minor, version.Build);
+            TimeZone localZone = TimeZone.CurrentTimeZone;
+            labelTime.Text = "Time zone is " + localZone.StandardName;
+            if (localZone.IsDaylightSavingTime(DateTime.Now))
+            {
+                labelTime.Text += " (currently DST)"; 
+            }
+
+            //This is a little silly, but you cant build a combobox with values without a datasource
+            //I would get confused trying to decifer the original logic if I didnt set the values the same
+            Collection<ComboBoxItem> items = new Collection<ComboBoxItem>();
+            ComboBoxItem item1 = new ComboBoxItem();
+            item1.Display = "Local";
+            item1.Value = "1";
+
+            ComboBoxItem item2 = new ComboBoxItem();
+            item2.Display = "B1950";
+            item2.Value = "4";
+
+            ComboBoxItem item3 = new ComboBoxItem();
+            item3.Display = "J2000";
+            item3.Value = "2";
+
+            ComboBoxItem item4 = new ComboBoxItem();
+            item4.Display = "J2050";
+            item4.Value = "3";
+
+            ComboBoxItem item5 = new ComboBoxItem();
+            item5.Display = "Other";
+            item5.Value = "0";
+
+
+            items.Add(item1);
+            items.Add(item2);
+            items.Add(item3);
+            items.Add(item4);
+            items.Add(item5);
+
+            comboBoxEquatorialSystem.DataSource = items;
+            comboBoxEquatorialSystem.DisplayMember = "Display";
+            comboBoxEquatorialSystem.ValueMember = "Value";
+               // Local,1
+               // B1950,4
+               // J2000,2
+               // J2050,3
+               // Other,0
         }
 
         private void cmdOK_Click(object sender, EventArgs e)
@@ -44,10 +94,93 @@ namespace ASCOM.TelescopeSimulator
         }
 
         #region Properties for Settings
+        public int EquatorialSystem
+        {
+            get { return int.Parse(comboBoxEquatorialSystem.SelectedValue.ToString()); }
+            set { comboBoxEquatorialSystem.SelectedValue = value.ToString(); }
+        }
+        public double Elevation
+        {
+            get 
+            {
+                double elevation;
+                double.TryParse(textBoxElevation.Text, out elevation);
+                return elevation;
+                
+            }
+            set { textBoxElevation.Text = value.ToString(); }
+        }
+        public double Latitude
+        {
+            get
+            {
+                double lat=0;
+                try
+                {
+                    lat = double.Parse(textBoxLatitudeDegrees.Text) + double.Parse(textBoxLatitudeMinutes.Text) / 60;
+                    if (comboBoxLatitude.SelectedItem.ToString() == "S") { lat = -lat; }
+                }
+                catch { }
+                return lat;
+            }
+            set
+            {
+                if (value < 0)
+                {
+                    comboBoxLatitude.SelectedIndex = 1;
+                    value = -value;
+                }
+                else
+                {
+                    comboBoxLatitude.SelectedIndex = 0;
+                }
+
+                textBoxLatitudeDegrees.Text = ((int)value).ToString("00");
+                textBoxLatitudeMinutes.Text = ((value - (int)value) * 60).ToString("00.00");
+            }
+        }
+        public double Longitude
+        {
+            get
+            {
+                double log = 0;
+                try
+                {
+                    log = double.Parse(textBoxLongitudeDegrees.Text) + double.Parse(textBoxLongitudeMinutes.Text) / 60;
+                    if (comboBoxLatitude.SelectedItem.ToString() == "W") { log = -log; }
+                }
+                catch { }
+                return log;
+            }
+            set
+            {
+                if (value < 0)
+                {
+                    value = -value;
+                    comboBoxLongitude.SelectedIndex = 1;
+                }else{
+                    comboBoxLongitude.SelectedIndex = 0;
+                }
+
+                textBoxLongitudeDegrees.Text = ((int)value).ToString("000");
+                textBoxLongitudeMinutes.Text = ((value - (int)value) * 60).ToString("00.00");
+            }
+        }
+
+        public int MaximumSlewRate
+        {
+            get { return (int)numericUpDownSlewRate.Value; }
+            set { numericUpDownSlewRate.Value = value; }
+        }
         public bool AutoTrack
         {
             get { return checkBoxAutoTrack.Checked; }
             set { checkBoxAutoTrack.Checked = value; }
+        }
+        public bool NoCoordinatesAtPark
+        {
+            get { return checkBoxNoCoordinatesAtPark.Checked; }
+            set { checkBoxNoCoordinatesAtPark.Checked = value; }
         }
         public bool DisconnectOnPark
         {
@@ -101,8 +234,8 @@ namespace ASCOM.TelescopeSimulator
         }
         public bool CanSetEquatorialRates
         {
-            get { return checkBoxCanTrackingRates.Checked; }
-            set { checkBoxCanTrackingRates.Checked = value; }
+            get { return checkBoxCanSetEquatorialRates.Checked; }
+            set { checkBoxCanSetEquatorialRates.Checked = value; }
         }
         public bool CanSetGuideRates
         {
@@ -295,5 +428,31 @@ namespace ASCOM.TelescopeSimulator
         }
         #endregion
 
+        private void buttonSetParkPosition_Click(object sender, EventArgs e)
+        {
+            TelescopeHardware.ParkAltitude = TelescopeHardware.Altitude;
+            TelescopeHardware.ParkAzimuth = TelescopeHardware.Azimuth;
+        }
+
+    }
+
+    [ComVisible(false)]
+    class ComboBoxItem
+    {
+        public ComboBoxItem()
+        { }
+        private string m_Display;
+        private string m_Value;
+
+        public string Display
+        {
+            get {return m_Display;}
+            set { m_Display = value; }
+        }
+        public string Value
+        {
+            get { return m_Value; }
+            set { m_Value = value; }
+        }
     }
 }

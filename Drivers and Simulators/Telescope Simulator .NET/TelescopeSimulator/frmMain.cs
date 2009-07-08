@@ -54,6 +54,14 @@ namespace ASCOM.TelescopeSimulator
             setupForm.AutoTrack = TelescopeHardware.AutoTrack;
             setupForm.DisconnectOnPark = TelescopeHardware.DisconnectOnPark;
             setupForm.Refraction = TelescopeHardware.Refraction;
+            setupForm.CanTrackingRates = TelescopeHardware.CanTrackingRates;
+            setupForm.CanSiderealTime = TelescopeHardware.CanSiderealTime;
+            setupForm.NoCoordinatesAtPark = TelescopeHardware.NoCoordinatesAtPark;
+            setupForm.EquatorialSystem = TelescopeHardware.EquatorialSystem;
+            setupForm.Elevation = TelescopeHardware.Elevation;
+            setupForm.Latitude = TelescopeHardware.Latitude;
+            setupForm.Longitude = TelescopeHardware.Longitude;
+            setupForm.MaximumSlewRate = TelescopeHardware.MaximumSlewRate;
 
             DialogResult ans = setupForm.ShowDialog(this);
 
@@ -88,8 +96,17 @@ namespace ASCOM.TelescopeSimulator
                 TelescopeHardware.CanLatLongElev = setupForm.CanLatLongElev;
                 TelescopeHardware.CanPierSide = setupForm.CanPierSide;
                 TelescopeHardware.CanDualAxisPulseGuide = setupForm.CanDualAxisPulseGuide;
+                TelescopeHardware.AutoTrack = setupForm.AutoTrack;
                 TelescopeHardware.DisconnectOnPark = setupForm.DisconnectOnPark;
                 TelescopeHardware.Refraction = setupForm.Refraction;
+                TelescopeHardware.CanTrackingRates = setupForm.CanTrackingRates;
+                TelescopeHardware.CanSiderealTime = setupForm.CanSiderealTime;
+                TelescopeHardware.NoCoordinatesAtPark = setupForm.NoCoordinatesAtPark;
+                TelescopeHardware.EquatorialSystem = setupForm.EquatorialSystem;
+                TelescopeHardware.Elevation = setupForm.Elevation;
+                TelescopeHardware.Latitude = setupForm.Latitude;
+                TelescopeHardware.Longitude = setupForm.Longitude;
+                TelescopeHardware.MaximumSlewRate = setupForm.MaximumSlewRate;
 
                 this.TopMost = setupForm.OnTop;
             }
