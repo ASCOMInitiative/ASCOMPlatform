@@ -38,9 +38,6 @@
     <Setting Name="sTempCompPeriod" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">30</Value>
     </Setting>
-    <Setting Name="LogTxt" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="sStepPerDeg" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">5</Value>
     </Setting>
