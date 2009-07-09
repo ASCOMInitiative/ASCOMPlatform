@@ -88,6 +88,12 @@ namespace ASCOM.TelescopeSimulator
 
         private static double m_DateDelta;
 
+        private static bool m_Tracking;
+        private static bool m_AtHome;
+        private static bool m_AtPark;
+
+        private static bool m_SouthernHemisphere = false;
+
 
         private static bool m_Connected = false; //Keep track of the connection status of the hardware
 
@@ -141,8 +147,8 @@ namespace ASCOM.TelescopeSimulator
                 }
                 else
                 {
-                    m_Profile.WriteValue(SharedResources.PROGRAM_ID, "StartAzimuth", "0");
-                    m_Profile.WriteValue(SharedResources.PROGRAM_ID, "ParkAzimuth", "0");
+                    m_Profile.WriteValue(SharedResources.PROGRAM_ID, "StartAzimuth", "90");
+                    m_Profile.WriteValue(SharedResources.PROGRAM_ID, "ParkAzimuth", "90");
                 }
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "StartAltitude", (90-Math.Abs(latitude)).ToString());
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "ParkAltitude", (90 - Math.Abs(latitude)).ToString());
@@ -235,20 +241,36 @@ namespace ASCOM.TelescopeSimulator
             m_CanTrackingRates = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanTrackingRates", "Capabilities"));
             m_CanDualAxisPulseGuide = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanDualAxisPulseGuide", "Capabilities"));
 
+            if (m_Latitude < 0) { m_SouthernHemisphere = true; }
+
             //Set the form setting for the Always On Top Value
             TelescopeSimulator.m_MainForm.TopMost = m_OnTop;
 
         }
         public static void Start() 
         {
-            //TelescopeSimulator.m_MainForm.SiderealTime = AstronomyFunctions.LocalSiderealTime(m_Longitude * SharedResources.DEG_RAD);
+            m_Connected = false;
+            m_Tracking = false;
+            m_AtHome = false;
+            m_AtPark = false;
+
+
             m_Timer.Start(); 
         }
 
         //Update the Telescope Based on Timed Events
         private static void TimerEvent(object source, ElapsedEventArgs e)
         {
+
+            m_Declination = AstronomyFunctions.CalculateDec(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD);
+            m_RightAscension = AstronomyFunctions.CalculateRa(m_Altitude* SharedResources.DEG_RAD, (360 - m_Azimuth)*SharedResources.DEG_RAD, m_Latitude, m_Longitude, m_Declination);
+            
+
             TelescopeSimulator.m_MainForm.SiderealTime = AstronomyFunctions.LocalSiderealTime(m_Longitude);
+            TelescopeSimulator.m_MainForm.Altitude = m_Altitude;
+            TelescopeSimulator.m_MainForm.Azimuth = m_Azimuth;
+            TelescopeSimulator.m_MainForm.RightAscension = m_RightAscension;
+            TelescopeSimulator.m_MainForm.Declination = m_Declination*SharedResources.RAD_DEG;
         }
 
         #region Properties For Settings
@@ -342,6 +364,7 @@ namespace ASCOM.TelescopeSimulator
             {
                 m_Latitude = value;
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "Latitude", value.ToString());
+                if (m_Latitude < 0) { m_SouthernHemisphere = true; }
             }
         }
         public static double Longitude
@@ -689,6 +712,13 @@ namespace ASCOM.TelescopeSimulator
                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "FocalLength", value.ToString());
            }
        }
+
+       public static bool SouthernHemisphere
+       { get { return m_SouthernHemisphere; } }
+        #endregion
+
+        #region Helper Functions
+
         #endregion
 
     }

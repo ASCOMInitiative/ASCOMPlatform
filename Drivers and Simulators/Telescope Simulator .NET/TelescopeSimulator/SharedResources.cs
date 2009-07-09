@@ -36,7 +36,8 @@ namespace ASCOM.TelescopeSimulator
         public static string PROGRAM_ID = "ASCOM.TelescopeSimulator.Telescope";  //Key used to store the settings
         public static string REGISTRATION_VERSION = "1";
 
-        public static double DEG_RAD = 0.0174532925;
+        //public static double DEG_RAD = 0.0174532925;
+        public static double DEG_RAD = Math.PI / 180;
         public static double RAD_DEG = 57.2957795;
         public static double HRS_RAD = 0.2617993881;
         public static double RAD_HRS = 3.81971863;

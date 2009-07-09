@@ -118,12 +118,39 @@ namespace ASCOM.TelescopeSimulator
         private void buttonSetup_Click(object sender, EventArgs e)
         {
             DoSetupDialog();
+            SetSlewButtons();
         }
 
         private void buttonTraffic_Click(object sender, EventArgs e)
         {
             SharedResources.TrafficForm.Show();
         }
+        private void SetSlewButtons()
+        {
+            if (TelescopeHardware.AlignmentMode == 0)
+            {
+                buttonSlew1.Text = "U";
+                buttonSlew2.Text = "D";
+                buttonSlew3.Text = "R";
+                buttonSlew4.Text = "L";
+            }
+            else if (TelescopeHardware.SouthernHemisphere)
+            {
+                buttonSlew1.Text = "S";
+                buttonSlew2.Text = "N";
+                buttonSlew3.Text = "E";
+                buttonSlew4.Text = "W";
+            }
+            else
+            {
+                buttonSlew1.Text = "N";
+                buttonSlew2.Text = "S";
+                buttonSlew3.Text = "E";
+                buttonSlew4.Text = "W";
+            }
+        }
+
+
         public double SiderealTime
         {
             set
@@ -136,13 +163,77 @@ namespace ASCOM.TelescopeSimulator
            
             }
         }
+        public double RightAscension
+        {
+            set
+            {
+                SetTextCallback setText = new SetTextCallback(SetRaText);
+                string text = AstronomyFunctions.ConvertDoubleToHMS(value);
+                try { this.Invoke(setText, text); }
+                catch { }
+            }
+        }
+        public double Declination
+        {
+            set
+            {
+                SetTextCallback setText = new SetTextCallback(SetDecText);
+                string text = AstronomyFunctions.ConvertDoubleToDMS(value);
+                if (value < 0)
+                { text = "+" + text; }
+                else { text = "-" + text; }
+                try { this.Invoke(setText, text); }
+                catch { }
+            }
+        }
+        public double Altitude
+        {
+            set
+            {
+                SetTextCallback setText = new SetTextCallback(SetAltitudeText);
+                string text = AstronomyFunctions.ConvertDoubleToDMS(value);
+                try { this.Invoke(setText, text); }
+                catch { }
+            }
+        }
+        public double Azimuth
+        {
+            set
+            {
+                SetTextCallback setText = new SetTextCallback(SetAzimuthText);
+                string text = AstronomyFunctions.ConvertDoubleToDMS(value);
+                try { this.Invoke(setText, text); }
+                catch { }
+            }
+        }
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            SetSlewButtons();
+            TelescopeHardware.Start();
+        }
+
+        #region Thread Safe Callback Functions
         private void SetLstText(string text)
         {
             labelLst.Text = text;
         }
-        private void frmMain_Load(object sender, EventArgs e)
+        private void SetRaText(string text)
         {
-            TelescopeHardware.Start();
+            labelRa.Text = text;
         }
+        private void SetDecText(string text)
+        {
+            labelDec.Text = text;
+        }
+        private void SetAltitudeText(string text)
+        {
+            labelAlt.Text = text;
+        }
+        private void SetAzimuthText(string text)
+        {
+            labelAz.Text = text;
+        }
+
+        #endregion
     }
 }
