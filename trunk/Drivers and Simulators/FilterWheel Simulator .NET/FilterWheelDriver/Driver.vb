@@ -31,68 +31,19 @@
     '	==========
     Inherits ReferenceCountedObjectBase
     Implements IFilterWheel ' Early-bind interface implemented by this driver
-    Implements IDisposable  ' Clean-up code
     '	==========
 
-    Private m_handBox As HandboxForm                     ' Hand box
-    Private disposed As Boolean = False
-
+    Private Const SCODE_NOT_CONNECTED As Integer = vbObjectError + &H402
+    Private Const MSG_NOT_CONNECTED As String = "The filter wheel is not connected"
 
     '
     ' Constructor - Must be public for COM registration!
     '
     Public Sub New()
 
-        m_handBox = New HandboxForm
-
-        ' Show the handbox now
-        m_handBox.Show()
-        m_handBox.Activate()
-        ' And start the Timer
-        m_handBox.Timer.Enabled = True
+        ' Plug in the hardware
 
     End Sub
-
-    ' Implement IDisposable.
-    ' Do not make this method virtual.
-    ' A derived class should not be able to override this method.
-    Public Overloads Sub Dispose() Implements IDisposable.Dispose
-        Dispose(True)
-        ' This object will be cleaned up by the Dispose method.
-        ' Therefore, you should call GC.SupressFinalize to
-        ' take this object off the finalization queue 
-        ' and prevent finalization code for this object
-        ' from executing a second time.
-        GC.SuppressFinalize(Me)
-    End Sub
-
-    ' Dispose(bool disposing) executes in two distinct scenarios.
-    ' If disposing equals true, the method has been called directly
-    ' or indirectly by a user's code. Managed and unmanaged resources
-    ' can be disposed.
-    ' If disposing equals false, the method has been called by the 
-    ' runtime from inside the finalizer and you should not reference 
-    ' other objects. Only unmanaged resources can be disposed.
-    Private Overloads Sub Dispose(ByVal disposing As Boolean)
-        ' Check to see if Dispose has already been called.
-        If Not Me.disposed Then
-            ' If disposing equals true, dispose all managed 
-            ' and unmanaged resources.
-            If disposing Then
-                ' Dispose managed resources.
-                m_handBox.Close()
-                m_handBox.Dispose()
-                m_handBox = Nothing
-            End If
-
-            ' Call the appropriate methods to clean up 
-            ' unmanaged resources here.
-            ' If disposing is false, 
-            ' only the following code is executed.
-        End If
-        disposed = True
-    End Sub
-
 
 
     '
@@ -104,12 +55,12 @@
     Public Property Connected() As Boolean Implements IFilterWheel.Connected
         Get
 
-            Connected = m_handBox.Connected
+            Connected = FilterWheelSim.m_MainForm.Connected
 
         End Get
         Set(ByVal value As Boolean)
 
-            m_handBox.Connected = value
+            FilterWheelSim.m_MainForm.Connected = value
 
         End Set
     End Property
@@ -119,14 +70,14 @@
 
             check_connected()
 
-            Position = m_handBox.Position
+            Position = FilterWheelSim.m_MainForm.Position
 
         End Get
         Set(ByVal value As Short)
 
             check_connected()
 
-            m_handBox.Position = value
+            FilterWheelSim.m_MainForm.Position = value
 
         End Set
     End Property
@@ -135,7 +86,7 @@
         Get
             check_connected()
 
-            FocusOffsets = m_handBox.FocusOffsets
+            FocusOffsets = FilterWheelSim.m_MainForm.FocusOffsets
 
         End Get
     End Property
@@ -144,14 +95,14 @@
         Get
             check_connected()
 
-            Names = m_handBox.FilterNames
+            Names = FilterWheelSim.m_MainForm.FilterNames
 
         End Get
     End Property
 
     Public Sub SetupDialog() Implements IFilterWheel.SetupDialog
 
-        m_handBox.DoSetup()
+        FilterWheelSim.m_MainForm.DoSetup()
 
     End Sub
 #End Region
@@ -164,7 +115,7 @@
     '---------------------------------------------------------------------
     Private Sub check_connected()
 
-        If Not m_handBox.Connected Then _
+        If Not FilterWheelSim.m_MainForm.Connected Then _
         Throw New DriverException(MSG_NOT_CONNECTED, SCODE_NOT_CONNECTED)
 
     End Sub

@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Import Include="ASCOM" />
+    <Import Include="ASCOM.FilterWheelSim" />
     <Import Include="ASCOM.Helper" />
     <Import Include="ASCOM.Interface" />
     <Import Include="Microsoft.VisualBasic" />
@@ -91,21 +92,6 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GlobalVariables.vb" />
-    <Compile Include="ShowTrafficForm.Designer.vb">
-      <DependentUpon>ShowTrafficForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="ShowTrafficForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PictureBoxArray.vb" />
-    <Compile Include="TextBoxArray.vb" />
-    <Compile Include="HandboxForm.Designer.vb">
-      <DependentUpon>HandboxForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="HandboxForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Driver.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -122,33 +108,16 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="SetupDialogForm.Designer.vb">
-      <DependentUpon>SetupDialogForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="SetupDialogForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="HandboxForm.resx">
-      <DependentUpon>HandboxForm.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SetupDialogForm.resx">
-      <DependentUpon>SetupDialogForm.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ShowTrafficForm.resx">
-      <DependentUpon>ShowTrafficForm.vb</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
