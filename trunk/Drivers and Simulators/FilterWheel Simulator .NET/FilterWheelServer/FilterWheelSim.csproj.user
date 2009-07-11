@@ -17,9 +17,10 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <StartAction>Project</StartAction>
-    <StartProgram>C:\Windows\SysWOW64\wscript.exe</StartProgram>
-    <StartArguments>test.js</StartArguments>
-    <StartWorkingDirectory>..\..\</StartWorkingDirectory>
+    <StartProgram>C:\Windows\system32\wscript.exe</StartProgram>
+    <StartArguments>
+    </StartArguments>
+    <StartWorkingDirectory>..\..\..\</StartWorkingDirectory>
     <RemoteDebugEnabled>false</RemoteDebugEnabled>
   </PropertyGroup>
 </Project>
