@@ -86,6 +86,15 @@ namespace ASCOM.FilterWheelSim
 
         public void ReadConfig() { UpdateSettings(); }
 
+        public void AbortMove()
+        {
+            // Stop the motor!
+            m_Timer.Enabled = false;
+            // Set the postion intermediate between start and end
+            m_sPosition = (short)Math.Floor(Math.Abs(m_sTargetPosition - m_sPosition) / 2.0);
+            m_bMoving = false;
+        }
+
 #endregion
 
 

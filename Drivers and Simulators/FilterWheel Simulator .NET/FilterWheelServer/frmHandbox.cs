@@ -24,7 +24,7 @@ namespace ASCOM.FilterWheelSim
         private static Color[] m_acFilterColours;       // Array of filter colours
         private static bool m_bImplementsNames;         // Return filter names?
         private static bool m_bImplementsOffsets;       // Return Offsets?
-        //private static int m_iTimeInterval;             // Time to move between filters
+        private static bool m_bPreemptMoves;            // Driver can interupt moves
         private static frmTraffic m_trafficDialog = null;   // API traffic display form
         private static SimulatedHardware m_Hardware;        // Simulated wire
         private const string m_sRegVer = "1";                // Used to track id registry entries exist or need updating
@@ -145,13 +145,23 @@ namespace ASCOM.FilterWheelSim
                 // check if we are already moving
                 if (m_bMoving)
                 {
-                    if (m_trafficDialog != null && m_trafficDialog.chkPosition.Checked)
-                        m_trafficDialog.TrafficEnd(" (aborting, moving)");
-                    try
+                    if (m_bPreemptMoves)
                     {
-                        throw new DriverException("Position: " + MSG_MOVING, SCODE_MOVING);
+                        // Stop the motor
+                        m_Hardware.AbortMove();
+                        // Find out where we are
+                        m_sPosition = m_Hardware.Position;
                     }
-                    catch { } // We don't want to abort the Handbox if it was started as an EXE
+                    else
+                    {
+                        if (m_trafficDialog != null && m_trafficDialog.chkPosition.Checked)
+                            m_trafficDialog.TrafficEnd(" (aborting, moving)");
+                        try
+                        {
+                            throw new DriverException("Position: " + MSG_MOVING, SCODE_MOVING);
+                        }
+                        catch { } // We don't want to abort the Handbox if it was started as an EXE
+                    }
                 }
 
                 // trigger the "motor"
@@ -182,6 +192,7 @@ namespace ASCOM.FilterWheelSim
             SetupDialog.Colours = m_acFilterColours;
             SetupDialog.ImplementsNames = m_bImplementsNames;
             SetupDialog.ImplementsOffsets = m_bImplementsOffsets;
+            SetupDialog.PreemptsMoves = m_bPreemptMoves;
 
 
             this.Visible = false;         // May float over setup
@@ -311,12 +322,14 @@ namespace ASCOM.FilterWheelSim
 
         private void btnPrev_Click(object sender, EventArgs e)
         {
-            if (!m_bMoving && m_bConnected) PrevNext(false);
+            if ((m_bConnected && !m_bMoving) || (m_bConnected && m_bPreemptMoves))
+                PrevNext(false);
         }
 
         private void btnNext_Click(object sender, EventArgs e)
         {
-            if (!m_bMoving && m_bConnected) PrevNext(true);
+            if ((m_bConnected && !m_bMoving) || (m_bConnected && m_bPreemptMoves))
+                PrevNext(true);
         }
 
         private void picASCOM_Click(object sender, EventArgs e)
@@ -507,6 +520,7 @@ namespace ASCOM.FilterWheelSim
                 g_Profile.WriteValue(g_csDriverID, "Time", "1000");
                 g_Profile.WriteValue(g_csDriverID, "ImplementsNames", "true");
                 g_Profile.WriteValue(g_csDriverID, "ImplementsOffsets", "true");
+                g_Profile.WriteValue(g_csDriverID, "PreemptMoves", "false");
                 for (i=0; i<8; i++)
                 {
                     g_Profile.WriteValue(g_csDriverID, Convert.ToString(i), names[i], "FilterNames");
@@ -520,6 +534,7 @@ namespace ASCOM.FilterWheelSim
             m_sPosition = m_Hardware.Position;
             m_bImplementsNames = Convert.ToBoolean(GetSetting("ImplementsNames", "true"));
             m_bImplementsOffsets = Convert.ToBoolean(GetSetting("ImplementsOffsets", "true"));
+            m_bPreemptMoves = Convert.ToBoolean(GetSetting("PreemptMoves", "false"));
             for (i = 0; i <= 7; i++)
             {
                 m_asFilterNames[i] = g_Profile.GetValue(g_csDriverID, Convert.ToString(i), "FilterNames");

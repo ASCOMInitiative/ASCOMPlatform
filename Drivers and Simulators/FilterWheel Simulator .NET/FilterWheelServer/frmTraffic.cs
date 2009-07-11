@@ -12,7 +12,6 @@ namespace ASCOM.FilterWheelSim
     {
       
         private const int LOGLENGTH = 2000;
-        private int m_iTextOffset;
         private bool m_bDisable;
         private bool m_bBOL;                    // tracks if we are at the beginning of a line
 
@@ -32,7 +31,7 @@ namespace ASCOM.FilterWheelSim
 
         }
 
-        #region Event Handlers
+#region Event Handlers
 
         private void btnDisable_Click(object sender, EventArgs e)
         {
@@ -64,9 +63,9 @@ namespace ASCOM.FilterWheelSim
             }
         }
 
-        #endregion
+#endregion
 
-        #region Properties
+#region Properties and Methods
 
         public void TrafficChar(string val)
         {
@@ -86,6 +85,7 @@ namespace ASCOM.FilterWheelSim
                 catch { }
             }
             txtTraffic.SelectionStart = txtTraffic.Text.Length;
+            txtTraffic.ScrollToCaret();
         }
 
         public void TrafficLine(string val)
@@ -103,6 +103,7 @@ namespace ASCOM.FilterWheelSim
             try { txtTraffic.Text.Substring(txtTraffic.Text.Length - LOGLENGTH); }
             catch { }
             txtTraffic.SelectionStart = txtTraffic.Text.Length;
+            txtTraffic.ScrollToCaret();
         }
 
         public void TrafficStart(string val)
@@ -117,8 +118,8 @@ namespace ASCOM.FilterWheelSim
             try { txtTraffic.Text.Substring(txtTraffic.Text.Length - LOGLENGTH); }
             catch { }
             txtTraffic.SelectionStart = txtTraffic.Text.Length;
+            txtTraffic.ScrollToCaret();
         }
-
 
         public void TrafficEnd(string val)
         {
@@ -132,9 +133,10 @@ namespace ASCOM.FilterWheelSim
             try { txtTraffic.Text.Substring(txtTraffic.Text.Length - LOGLENGTH); }
             catch { }
             txtTraffic.SelectionStart = txtTraffic.Text.Length;
+            txtTraffic.ScrollToCaret();
         }
 
-        #endregion
+#endregion
     }
 
 }
