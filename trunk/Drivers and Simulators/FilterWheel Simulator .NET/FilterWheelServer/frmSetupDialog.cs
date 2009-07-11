@@ -64,7 +64,7 @@ namespace ASCOM.FilterWheelSim
 
         }
 
-#region Properties
+#region Properties and Methods
 
         public int Slots { set { cmbSlots.Text = Convert.ToString(value); } }
 
@@ -108,6 +108,8 @@ namespace ASCOM.FilterWheelSim
 
         public bool ImplementsOffsets { set { chkImplementsOffsets.Checked = value; } }
 
+        public bool PreemptsMoves { set {chkPreemptMoves.Checked = value; } }
+
 #endregion
 
 
@@ -131,6 +133,7 @@ namespace ASCOM.FilterWheelSim
             }
             frmHandbox.g_Profile.WriteValue(frmHandbox.g_csDriverID, "ImplementsNames", Convert.ToString(chkImplementsNames.Checked));
             frmHandbox.g_Profile.WriteValue(frmHandbox.g_csDriverID, "ImplementsOffsets", Convert.ToString(chkImplementsOffsets.Checked));
+            frmHandbox.g_Profile.WriteValue(frmHandbox.g_csDriverID, "PreemptMoves", Convert.ToString(chkPreemptMoves.Checked));
 
             DialogResult = System.Windows.Forms.DialogResult.OK;
         }
@@ -215,7 +218,7 @@ namespace ASCOM.FilterWheelSim
             EnableDisableControls();
         }
 
-         private void frmSetupDialog_Shown(object sender, EventArgs e)
+        private void frmSetupDialog_Shown(object sender, EventArgs e)
         {
             EnableDisableControls();
         }

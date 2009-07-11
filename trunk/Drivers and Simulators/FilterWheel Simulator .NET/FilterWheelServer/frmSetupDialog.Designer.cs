@@ -47,27 +47,25 @@
             this.Label5 = new System.Windows.Forms.Label();
             this.Label4 = new System.Windows.Forms.Label();
             this.Label3 = new System.Windows.Forms.Label();
-            this.TableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.OK_Button = new System.Windows.Forms.Button();
-            this.Cancel_Button = new System.Windows.Forms.Button();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.chkImplementsOffsets = new System.Windows.Forms.CheckBox();
             this.chkImplementsNames = new System.Windows.Forms.CheckBox();
+            this.chkPreemptMoves = new System.Windows.Forms.CheckBox();
             this.lblDriverInfo = new System.Windows.Forms.Label();
-            this.GroupBox1.SuspendLayout();
+            this.OK_Button = new System.Windows.Forms.Button();
+            this.Cancel_Button = new System.Windows.Forms.Button();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.GroupBox2.SuspendLayout();
             this.TableLayoutPanel2.SuspendLayout();
-            this.TableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // GroupBox1
             // 
-            this.GroupBox1.Controls.Add(this.Label2);
-            this.GroupBox1.Controls.Add(this.Label1);
-            this.GroupBox1.Controls.Add(this.cmbTime);
-            this.GroupBox1.Controls.Add(this.cmbSlots);
             this.GroupBox1.ForeColor = System.Drawing.Color.White;
             this.GroupBox1.Location = new System.Drawing.Point(12, 12);
             this.GroupBox1.Name = "GroupBox1";
@@ -78,8 +76,9 @@
             // 
             // Label2
             // 
+            this.Label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.Label2.AutoSize = true;
-            this.Label2.Location = new System.Drawing.Point(6, 49);
+            this.Label2.Location = new System.Drawing.Point(3, 33);
             this.Label2.Name = "Label2";
             this.Label2.Size = new System.Drawing.Size(129, 13);
             this.Label2.TabIndex = 3;
@@ -87,8 +86,9 @@
             // 
             // Label1
             // 
+            this.Label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.Label1.AutoSize = true;
-            this.Label1.Location = new System.Drawing.Point(6, 22);
+            this.Label1.Location = new System.Drawing.Point(3, 6);
             this.Label1.Name = "Label1";
             this.Label1.Size = new System.Drawing.Size(102, 13);
             this.Label1.TabIndex = 2;
@@ -96,6 +96,8 @@
             // 
             // cmbTime
             // 
+            this.cmbTime.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.cmbTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.cmbTime.FormattingEnabled = true;
             this.cmbTime.Items.AddRange(new object[] {
             "0.5",
@@ -105,7 +107,7 @@
             "2.5",
             "3.0",
             "3.5"});
-            this.cmbTime.Location = new System.Drawing.Point(181, 46);
+            this.cmbTime.Location = new System.Drawing.Point(172, 29);
             this.cmbTime.Name = "cmbTime";
             this.cmbTime.Size = new System.Drawing.Size(43, 21);
             this.cmbTime.TabIndex = 1;
@@ -114,6 +116,8 @@
             // 
             // cmbSlots
             // 
+            this.cmbSlots.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.cmbSlots.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.cmbSlots.FormattingEnabled = true;
             this.cmbSlots.Items.AddRange(new object[] {
             "1",
@@ -124,7 +128,7 @@
             "6",
             "7",
             "8"});
-            this.cmbSlots.Location = new System.Drawing.Point(180, 19);
+            this.cmbSlots.Location = new System.Drawing.Point(171, 3);
             this.cmbSlots.Name = "cmbSlots";
             this.cmbSlots.Size = new System.Drawing.Size(44, 21);
             this.cmbSlots.TabIndex = 0;
@@ -294,67 +298,26 @@
             this.Label3.TabIndex = 3;
             this.Label3.Text = "Filter name";
             // 
-            // TableLayoutPanel1
-            // 
-            this.TableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.TableLayoutPanel1.ColumnCount = 1;
-            this.TableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.TableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.TableLayoutPanel1.Controls.Add(this.OK_Button, 0, 0);
-            this.TableLayoutPanel1.Controls.Add(this.Cancel_Button, 1, 0);
-            this.TableLayoutPanel1.Location = new System.Drawing.Point(209, 347);
-            this.TableLayoutPanel1.Name = "TableLayoutPanel1";
-            this.TableLayoutPanel1.RowCount = 2;
-            this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.TableLayoutPanel1.Size = new System.Drawing.Size(88, 61);
-            this.TableLayoutPanel1.TabIndex = 6;
-            // 
-            // OK_Button
-            // 
-            this.OK_Button.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.OK_Button.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.OK_Button.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.OK_Button.Location = new System.Drawing.Point(10, 3);
-            this.OK_Button.Name = "OK_Button";
-            this.OK_Button.Size = new System.Drawing.Size(67, 23);
-            this.OK_Button.TabIndex = 0;
-            this.OK_Button.Text = "OK";
-            this.OK_Button.UseVisualStyleBackColor = false;
-            this.OK_Button.Click += new System.EventHandler(this.OK_Button_Click);
-            // 
-            // Cancel_Button
-            // 
-            this.Cancel_Button.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.Cancel_Button.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.Cancel_Button.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.Cancel_Button.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Cancel_Button.Location = new System.Drawing.Point(10, 33);
-            this.Cancel_Button.Name = "Cancel_Button";
-            this.Cancel_Button.Size = new System.Drawing.Size(67, 23);
-            this.Cancel_Button.TabIndex = 1;
-            this.Cancel_Button.Text = "Cancel";
-            this.Cancel_Button.UseVisualStyleBackColor = false;
-            this.Cancel_Button.Click += new System.EventHandler(this.Cancel_Button_Click);
-            // 
             // tableLayoutPanel3
             // 
             this.tableLayoutPanel3.ColumnCount = 1;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 170F));
             this.tableLayoutPanel3.Controls.Add(this.chkImplementsOffsets, 0, 1);
             this.tableLayoutPanel3.Controls.Add(this.chkImplementsNames, 0, 0);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(13, 350);
+            this.tableLayoutPanel3.Controls.Add(this.chkPreemptMoves, 0, 2);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(12, 347);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 2;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(190, 53);
+            this.tableLayoutPanel3.RowCount = 3;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(170, 74);
             this.tableLayoutPanel3.TabIndex = 7;
             // 
             // chkImplementsOffsets
             // 
             this.chkImplementsOffsets.AutoSize = true;
-            this.chkImplementsOffsets.Location = new System.Drawing.Point(3, 29);
+            this.chkImplementsOffsets.Location = new System.Drawing.Point(3, 27);
             this.chkImplementsOffsets.Name = "chkImplementsOffsets";
             this.chkImplementsOffsets.Size = new System.Drawing.Size(147, 17);
             this.chkImplementsOffsets.TabIndex = 7;
@@ -373,14 +336,86 @@
             this.chkImplementsNames.UseVisualStyleBackColor = true;
             this.chkImplementsNames.CheckedChanged += new System.EventHandler(this.chkImplementsNames_CheckedChanged);
             // 
+            // chkPreemptMoves
+            // 
+            this.chkPreemptMoves.AutoSize = true;
+            this.chkPreemptMoves.Location = new System.Drawing.Point(3, 51);
+            this.chkPreemptMoves.Name = "chkPreemptMoves";
+            this.chkPreemptMoves.Size = new System.Drawing.Size(157, 17);
+            this.chkPreemptMoves.TabIndex = 10;
+            this.chkPreemptMoves.Text = "Allow Pre-emption of Moves";
+            this.chkPreemptMoves.UseVisualStyleBackColor = true;
+            // 
             // lblDriverInfo
             // 
+            this.lblDriverInfo.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblDriverInfo.AutoSize = true;
-            this.lblDriverInfo.Location = new System.Drawing.Point(10, 406);
+            this.lblDriverInfo.ForeColor = System.Drawing.Color.LemonChiffon;
+            this.lblDriverInfo.Location = new System.Drawing.Point(9, 427);
             this.lblDriverInfo.Name = "lblDriverInfo";
             this.lblDriverInfo.Size = new System.Drawing.Size(90, 13);
             this.lblDriverInfo.TabIndex = 9;
             this.lblDriverInfo.Text = "<runtime version>";
+            // 
+            // OK_Button
+            // 
+            this.OK_Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.OK_Button.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.OK_Button.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.OK_Button.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.OK_Button.Location = new System.Drawing.Point(38, 3);
+            this.OK_Button.Name = "OK_Button";
+            this.OK_Button.Size = new System.Drawing.Size(67, 31);
+            this.OK_Button.TabIndex = 0;
+            this.OK_Button.Text = "OK";
+            this.OK_Button.UseVisualStyleBackColor = false;
+            this.OK_Button.Click += new System.EventHandler(this.OK_Button_Click);
+            // 
+            // Cancel_Button
+            // 
+            this.Cancel_Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Cancel_Button.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.Cancel_Button.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.Cancel_Button.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.Cancel_Button.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Cancel_Button.Location = new System.Drawing.Point(38, 40);
+            this.Cancel_Button.Name = "Cancel_Button";
+            this.Cancel_Button.Size = new System.Drawing.Size(67, 31);
+            this.Cancel_Button.TabIndex = 1;
+            this.Cancel_Button.Text = "Cancel";
+            this.Cancel_Button.UseVisualStyleBackColor = false;
+            this.Cancel_Button.Click += new System.EventHandler(this.Cancel_Button_Click);
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.Cancel_Button, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.OK_Button, 0, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(188, 347);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(108, 74);
+            this.tableLayoutPanel1.TabIndex = 10;
+            // 
+            // tableLayoutPanel4
+            // 
+            this.tableLayoutPanel4.ColumnCount = 2;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 73F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27F));
+            this.tableLayoutPanel4.Controls.Add(this.cmbTime, 1, 1);
+            this.tableLayoutPanel4.Controls.Add(this.Label2, 0, 1);
+            this.tableLayoutPanel4.Controls.Add(this.cmbSlots, 1, 0);
+            this.tableLayoutPanel4.Controls.Add(this.Label1, 0, 0);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(18, 31);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 2;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(218, 53);
+            this.tableLayoutPanel4.TabIndex = 4;
             // 
             // frmSetupDialog
             // 
@@ -389,10 +424,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.CancelButton = this.Cancel_Button;
-            this.ClientSize = new System.Drawing.Size(309, 429);
+            this.ClientSize = new System.Drawing.Size(307, 446);
+            this.Controls.Add(this.tableLayoutPanel4);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.lblDriverInfo);
             this.Controls.Add(this.tableLayoutPanel3);
-            this.Controls.Add(this.TableLayoutPanel1);
             this.Controls.Add(this.GroupBox2);
             this.Controls.Add(this.picASCOM);
             this.Controls.Add(this.GroupBox1);
@@ -405,16 +441,16 @@
             this.ShowInTaskbar = false;
             this.Text = "frmSetupDialog";
             this.Shown += new System.EventHandler(this.frmSetupDialog_Shown);
-            this.GroupBox1.ResumeLayout(false);
-            this.GroupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.GroupBox2.ResumeLayout(false);
             this.GroupBox2.PerformLayout();
             this.TableLayoutPanel2.ResumeLayout(false);
             this.TableLayoutPanel2.PerformLayout();
-            this.TableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel4.ResumeLayout(false);
+            this.tableLayoutPanel4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -441,12 +477,14 @@
         internal System.Windows.Forms.Label Label5;
         internal System.Windows.Forms.Label Label4;
         internal System.Windows.Forms.Label Label3;
-        internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
-        internal System.Windows.Forms.Button OK_Button;
-        internal System.Windows.Forms.Button Cancel_Button;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         internal System.Windows.Forms.CheckBox chkImplementsNames;
         internal System.Windows.Forms.CheckBox chkImplementsOffsets;
+        private System.Windows.Forms.CheckBox chkPreemptMoves;
         internal System.Windows.Forms.Label lblDriverInfo;
+        internal System.Windows.Forms.Button OK_Button;
+        internal System.Windows.Forms.Button Cancel_Button;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
     }
 }
