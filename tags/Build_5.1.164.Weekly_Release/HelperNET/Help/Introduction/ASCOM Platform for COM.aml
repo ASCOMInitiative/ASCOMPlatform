@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="e7734c14-0562-4010-b0c9-ddb5055cd318" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--
+    <summary>
+      <para>Optional summary abstract</para>
+    </summary>
+    -->
+    <introduction>
+            <para>The COM components remain as they are in ASCOM Platform 5 although some functionality is replaced
+            with equivalent from the .NET components,</para>
+    </introduction>
+    
+    <section address="What hasn't changed">
+    <title>Notes</title>
+    <content>
+      	<para>The COM binary interface has not changed, so all clients and drivers should work without hitches.</para>
+      	<para>Please don't use the private COM interfaces as they will change without warning and are not supported. 
+      	There is no functionality available within these that is not available in the .NET components themselves.</para>
+      </content>
+      
+    </section>
+    
+    <relatedTopics>
+  
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

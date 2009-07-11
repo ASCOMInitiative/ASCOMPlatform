@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="2d5dac1c-84b4-478d-9236-ca340f0107cd" revisionNumber="1">
+   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<introduction>
+		<para>Examples of how to use the HelperNET.Profile capabilities.</para>
+	</introduction>
+    <section address="Profile Examples">
+		<title>Profile Examples</title>
+   		<content>
+      		<para>
+      		<code lang="vbnet" title="ASCOM Profile Examples" 
+      		source="..\..\HelperNET Samples\HelperNET Samples\ProfileExamples.vb" />
+      		</para>
+      	</content>
+    </section>
+  </developerConceptualDocument>
+
+</topic>

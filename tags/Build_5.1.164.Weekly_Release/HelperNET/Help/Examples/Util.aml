@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="0b546b03-9433-4bb8-bddc-adedcd4b751a" revisionNumber="1">
+   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<introduction>
+		<para>Examples of how to use the HelperNET.Util capabilities.</para>
+	</introduction>
+    <section address="Util Examples">
+		<title>Util Examples</title>
+   		<content>
+      		<para>
+      		<code lang="vbnet" title="ASCOM Util Examples" 
+      		source="..\..\HelperNET Samples\HelperNET Samples\UtilExamples.vb" />
+      		</para>
+      	</content>
+    </section>
+  </developerConceptualDocument>
+
+</topic>

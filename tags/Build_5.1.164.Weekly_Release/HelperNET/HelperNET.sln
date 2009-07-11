@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "HelperNET", "HelperNET\HelperNET.vbproj", "{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EraseProfile", "EraseProfile\EraseProfile.vbproj", "{7E1E693D-AEE1-418E-8E6C-256CE2B14984}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Redirect Policy", "Redirect Policy\Redirect Policy.vbproj", "{B72BC9E0-DB34-4207-B9A4-832381F58196}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C} = {D48EB9A3-AEBC-4EE0-A674-45EFD736926C}
+	EndProjectSection
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Profile Explorer", "Profile Explorer\Profile Explorer.vbproj", "{2CB726BB-E327-41C8-9AEC-5327E5187147}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "PreProcess404Files", "PreProcess404Files\PreProcess404Files.vbproj", "{6585A801-9A2A-4365-AE33-C6ADF8F26203}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E1E693D-AEE1-418E-8E6C-256CE2B14984}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E1E693D-AEE1-418E-8E6C-256CE2B14984}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E1E693D-AEE1-418E-8E6C-256CE2B14984}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E1E693D-AEE1-418E-8E6C-256CE2B14984}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B72BC9E0-DB34-4207-B9A4-832381F58196}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B72BC9E0-DB34-4207-B9A4-832381F58196}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B72BC9E0-DB34-4207-B9A4-832381F58196}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B72BC9E0-DB34-4207-B9A4-832381F58196}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CB726BB-E327-41C8-9AEC-5327E5187147}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CB726BB-E327-41C8-9AEC-5327E5187147}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CB726BB-E327-41C8-9AEC-5327E5187147}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CB726BB-E327-41C8-9AEC-5327E5187147}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6585A801-9A2A-4365-AE33-C6ADF8F26203}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6585A801-9A2A-4365-AE33-C6ADF8F26203}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6585A801-9A2A-4365-AE33-C6ADF8F26203}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6585A801-9A2A-4365-AE33-C6ADF8F26203}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		VisualSVNWorkingCopyRoot = .
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+EndGlobal
