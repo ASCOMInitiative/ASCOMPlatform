@@ -89,7 +89,9 @@ xcopy "$(SolutionDir)HelperNET\HelperNET\bin\Debug\*.*" "$(SolutionDir)Drivers a
 xcopy "$(SolutionDir)Interfaces\ASCOMExceptions\bin\Debug\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
 xcopy "$(SolutionDir)Interfaces\Master Interfaces\*.dll" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
 xcopy "$(SolutionDir)Interfaces\Master Interfaces\*.tlb" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
-
-</PostBuildEvent>
+xcopy "$(SolutionDir)HelperNET\NOVAS-C x86-x64\debug\NOVAS-C.dll" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
+xcopy "$(SolutionDir)HelperNET\NOVAS-C x86-x64\debug\NOVAS-C.pdb" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
+xcopy "$(SolutionDir)HelperNET\NOVAS-C x86-x64\x64\debug\NOVAS-C64.dll" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
+xcopy "$(SolutionDir)HelperNET\NOVAS-C x86-x64\x64\debug\NOVAS-C64.pdb" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>
