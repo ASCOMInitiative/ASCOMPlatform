@@ -121,19 +121,19 @@ namespace ASCOM.FilterWheelSim
 
             // Write all the settings to the registry
             m_iSlots = Convert.ToInt32(cmbSlots.Text);
-            frmHandbox.g_Profile.WriteValue(frmHandbox.g_csDriverID, "Slots", Convert.ToString(m_iSlots));
+            SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, "Slots", Convert.ToString(m_iSlots));
             // Convert secs to millisecs
             i = Convert.ToInt32(Convert.ToDouble(cmbTime.Text) * 1000);
-            frmHandbox.g_Profile.WriteValue(frmHandbox.g_csDriverID, "Time", Convert.ToString(i));
+            SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, "Time", Convert.ToString(i));
             for (i=0; i <= 7; i++)
             {
-                frmHandbox.g_Profile.WriteValue(frmHandbox.g_csDriverID, Convert.ToString(i), m_arrNameTextBox[i].Text, "FilterNames");
-                frmHandbox.g_Profile.WriteValue(frmHandbox.g_csDriverID, Convert.ToString(i), m_arrOffsetTextBox[i].Text, "FocusOffsets");
-                frmHandbox.g_Profile.WriteValue(frmHandbox.g_csDriverID, Convert.ToString(i), Convert.ToString(ColorTranslator.ToWin32(m_arrColourPicBox[i].BackColor)), "FilterColours");
+                SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, Convert.ToString(i), m_arrNameTextBox[i].Text, "FilterNames");
+                SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, Convert.ToString(i), m_arrOffsetTextBox[i].Text, "FocusOffsets");
+                SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, Convert.ToString(i), Convert.ToString(ColorTranslator.ToWin32(m_arrColourPicBox[i].BackColor)), "FilterColours");
             }
-            frmHandbox.g_Profile.WriteValue(frmHandbox.g_csDriverID, "ImplementsNames", Convert.ToString(chkImplementsNames.Checked));
-            frmHandbox.g_Profile.WriteValue(frmHandbox.g_csDriverID, "ImplementsOffsets", Convert.ToString(chkImplementsOffsets.Checked));
-            frmHandbox.g_Profile.WriteValue(frmHandbox.g_csDriverID, "PreemptMoves", Convert.ToString(chkPreemptMoves.Checked));
+            SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, "ImplementsNames", Convert.ToString(chkImplementsNames.Checked));
+            SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, "ImplementsOffsets", Convert.ToString(chkImplementsOffsets.Checked));
+            SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, "PreemptMoves", Convert.ToString(chkPreemptMoves.Checked));
 
             DialogResult = System.Windows.Forms.DialogResult.OK;
         }

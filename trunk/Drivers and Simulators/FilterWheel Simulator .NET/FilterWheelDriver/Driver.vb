@@ -54,56 +54,36 @@
 
     Public Property Connected() As Boolean Implements IFilterWheel.Connected
         Get
-
-            Connected = FilterWheelSim.m_MainForm.Connected
-
+            Connected = SimulatedHardware.Connected
         End Get
         Set(ByVal value As Boolean)
-
-            FilterWheelSim.m_MainForm.Connected = value
-
+            SimulatedHardware.Connected = value
         End Set
     End Property
 
     Public Property Position() As Short Implements IFilterWheel.Position
         Get
-
-            check_connected()
-
-            Position = FilterWheelSim.m_MainForm.Position
-
+            Position = SimulatedHardware.Position
         End Get
         Set(ByVal value As Short)
-
-            check_connected()
-
-            FilterWheelSim.m_MainForm.Position = value
-
+            SimulatedHardware.Position = value
         End Set
     End Property
 
     Public ReadOnly Property FocusOffsets() As Integer() Implements IFilterWheel.FocusOffsets
         Get
-            check_connected()
-
-            FocusOffsets = FilterWheelSim.m_MainForm.FocusOffsets
-
+            FocusOffsets = SimulatedHardware.FocusOffsets
         End Get
     End Property
 
     Public ReadOnly Property Names() As String() Implements IFilterWheel.Names
         Get
-            check_connected()
-
-            Names = FilterWheelSim.m_MainForm.FilterNames
-
+            Names = SimulatedHardware.FilterNames
         End Get
     End Property
 
     Public Sub SetupDialog() Implements IFilterWheel.SetupDialog
-
-        FilterWheelSim.m_MainForm.DoSetup()
-
+        SimulatedHardware.DoSetup()
     End Sub
 #End Region
 
@@ -115,7 +95,7 @@
     '---------------------------------------------------------------------
     Private Sub check_connected()
 
-        If Not FilterWheelSim.m_MainForm.Connected Then _
+        If Not SimulatedHardware.Connected Then _
         Throw New DriverException(MSG_NOT_CONNECTED, SCODE_NOT_CONNECTED)
 
     End Sub

@@ -59,33 +59,5 @@ Namespace My.Resources
                 resourceCulture = value
             End Set
         End Property
-        
-        Friend ReadOnly Property ASCOM() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("ASCOM", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        Friend ReadOnly Property Filter_Next() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("Filter_Next", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        Friend ReadOnly Property Filter_Prev() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("Filter_Prev", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        Friend ReadOnly Property Filter_Stop() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("Filter_Stop", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
     End Module
 End Namespace

@@ -31,9 +31,9 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmHandbox));
             this.TableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.btnConnect = new System.Windows.Forms.Button();
             this.btnPrev = new System.Windows.Forms.Button();
             this.btnNext = new System.Windows.Forms.Button();
+            this.chkConnected = new System.Windows.Forms.CheckBox();
             this.TableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.Label1 = new System.Windows.Forms.Label();
             this.Label2 = new System.Windows.Forms.Label();
@@ -43,11 +43,9 @@
             this.lblOffset = new System.Windows.Forms.Label();
             this.TableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.btnSetup = new System.Windows.Forms.Button();
-            this.btnTraffic = new System.Windows.Forms.Button();
-            this.TimerMove = new System.Windows.Forms.Timer(this.components);
+            this.Timer = new System.Windows.Forms.Timer(this.components);
             this.picASCOM = new System.Windows.Forms.PictureBox();
             this.picFilter = new System.Windows.Forms.PictureBox();
-            this.lblConnect = new System.Windows.Forms.Label();
             this.TableLayoutPanel1.SuspendLayout();
             this.TableLayoutPanel2.SuspendLayout();
             this.TableLayoutPanel4.SuspendLayout();
@@ -61,10 +59,9 @@
             this.TableLayoutPanel1.ColumnCount = 2;
             this.TableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.TableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.TableLayoutPanel1.Controls.Add(this.btnConnect, 0, 1);
             this.TableLayoutPanel1.Controls.Add(this.btnPrev, 0, 0);
             this.TableLayoutPanel1.Controls.Add(this.btnNext, 1, 0);
-            this.TableLayoutPanel1.Controls.Add(this.lblConnect, 1, 1);
+            this.TableLayoutPanel1.Controls.Add(this.chkConnected, 0, 1);
             this.TableLayoutPanel1.Location = new System.Drawing.Point(12, 88);
             this.TableLayoutPanel1.Name = "TableLayoutPanel1";
             this.TableLayoutPanel1.RowCount = 2;
@@ -73,19 +70,6 @@
             this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.TableLayoutPanel1.Size = new System.Drawing.Size(158, 53);
             this.TableLayoutPanel1.TabIndex = 7;
-            // 
-            // btnConnect
-            // 
-            this.btnConnect.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.btnConnect.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnConnect.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnConnect.Location = new System.Drawing.Point(3, 29);
-            this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(73, 21);
-            this.btnConnect.TabIndex = 5;
-            this.btnConnect.Text = "Connect";
-            this.btnConnect.UseVisualStyleBackColor = false;
-            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
             // 
             // btnPrev
             // 
@@ -116,6 +100,20 @@
             this.btnNext.Text = "Next";
             this.btnNext.UseVisualStyleBackColor = false;
             this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
+            // 
+            // chkConnected
+            // 
+            this.chkConnected.AutoSize = true;
+            this.TableLayoutPanel1.SetColumnSpan(this.chkConnected, 2);
+            this.chkConnected.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkConnected.ForeColor = System.Drawing.Color.Red;
+            this.chkConnected.Location = new System.Drawing.Point(3, 29);
+            this.chkConnected.Name = "chkConnected";
+            this.chkConnected.Size = new System.Drawing.Size(87, 17);
+            this.chkConnected.TabIndex = 2;
+            this.chkConnected.Text = "Connected";
+            this.chkConnected.UseVisualStyleBackColor = true;
+            this.chkConnected.CheckedChanged += new System.EventHandler(this.chkConnected_CheckedChanged);
             // 
             // TableLayoutPanel2
             // 
@@ -213,7 +211,6 @@
             this.TableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.TableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.TableLayoutPanel4.Controls.Add(this.btnSetup, 0, 0);
-            this.TableLayoutPanel4.Controls.Add(this.btnTraffic, 1, 0);
             this.TableLayoutPanel4.Location = new System.Drawing.Point(12, 200);
             this.TableLayoutPanel4.Name = "TableLayoutPanel4";
             this.TableLayoutPanel4.RowCount = 1;
@@ -225,9 +222,10 @@
             // 
             this.btnSetup.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnSetup.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.TableLayoutPanel4.SetColumnSpan(this.btnSetup, 2);
             this.btnSetup.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnSetup.ForeColor = System.Drawing.Color.Black;
-            this.btnSetup.Location = new System.Drawing.Point(6, 3);
+            this.btnSetup.Location = new System.Drawing.Point(45, 3);
             this.btnSetup.Name = "btnSetup";
             this.btnSetup.Size = new System.Drawing.Size(67, 23);
             this.btnSetup.TabIndex = 0;
@@ -235,23 +233,9 @@
             this.btnSetup.UseVisualStyleBackColor = false;
             this.btnSetup.Click += new System.EventHandler(this.btnSetup_Click);
             // 
-            // btnTraffic
+            // Timer
             // 
-            this.btnTraffic.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnTraffic.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.btnTraffic.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnTraffic.ForeColor = System.Drawing.Color.Black;
-            this.btnTraffic.Location = new System.Drawing.Point(85, 3);
-            this.btnTraffic.Name = "btnTraffic";
-            this.btnTraffic.Size = new System.Drawing.Size(67, 23);
-            this.btnTraffic.TabIndex = 1;
-            this.btnTraffic.Text = "Traffic";
-            this.btnTraffic.UseVisualStyleBackColor = false;
-            this.btnTraffic.Click += new System.EventHandler(this.btnTraffic_Click);
-            // 
-            // TimerMove
-            // 
-            this.TimerMove.Tick += new System.EventHandler(this.TimerMove_Tick);
+            this.Timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
             // picASCOM
             // 
@@ -267,7 +251,7 @@
             // 
             // picFilter
             // 
-            this.picFilter.BackColor = System.Drawing.Color.White;
+            this.picFilter.BackColor = System.Drawing.Color.DimGray;
             this.picFilter.Image = global::ASCOM.FilterWheelSim.Properties.Resources.FilterStop;
             this.picFilter.InitialImage = null;
             this.picFilter.Location = new System.Drawing.Point(20, 12);
@@ -276,19 +260,6 @@
             this.picFilter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.picFilter.TabIndex = 5;
             this.picFilter.TabStop = false;
-            // 
-            // lblConnect
-            // 
-            this.lblConnect.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lblConnect.AutoSize = true;
-            this.lblConnect.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblConnect.ForeColor = System.Drawing.Color.Red;
-            this.lblConnect.Location = new System.Drawing.Point(82, 33);
-            this.lblConnect.Name = "lblConnect";
-            this.lblConnect.Size = new System.Drawing.Size(71, 13);
-            this.lblConnect.TabIndex = 6;
-            this.lblConnect.Text = "Disconnected";
-            this.lblConnect.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // frmHandbox
             // 
@@ -326,7 +297,6 @@
         internal System.Windows.Forms.PictureBox picFilter;
         internal System.Windows.Forms.PictureBox picASCOM;
         internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
-        internal System.Windows.Forms.Button btnConnect;
         internal System.Windows.Forms.Button btnPrev;
         internal System.Windows.Forms.Button btnNext;
         internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel2;
@@ -338,8 +308,8 @@
         internal System.Windows.Forms.Label lblOffset;
         internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel4;
         internal System.Windows.Forms.Button btnSetup;
-        internal System.Windows.Forms.Button btnTraffic;
-        private System.Windows.Forms.Timer TimerMove;
-        private System.Windows.Forms.Label lblConnect;
+//        internal System.Windows.Forms.Button btnTraffic;
+        private System.Windows.Forms.Timer Timer;
+        private System.Windows.Forms.CheckBox chkConnected;
     }
 }
