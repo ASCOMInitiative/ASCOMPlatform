@@ -129,12 +129,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\ASCOM.png" />
-    <Content Include="Resources\FilterStop.gif" />
-    <Content Include="Resources\Filter-Prev.gif" />
-    <Content Include="Resources\Filter-Next.gif" />
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework Client Profile</ProductName>
