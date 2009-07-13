@@ -179,9 +179,6 @@ namespace ASCOM.TelescopeSimulator
             {
                 SetTextCallback setText = new SetTextCallback(SetDecText);
                 string text = AstronomyFunctions.ConvertDoubleToDMS(value);
-                if (value < 0)
-                { text = "+" + text; }
-                else { text = "-" + text; }
                 try { this.Invoke(setText, text); }
                 catch { }
             }
