@@ -263,14 +263,14 @@ namespace ASCOM.TelescopeSimulator
         {
 
             m_Declination = AstronomyFunctions.CalculateDec(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD);
-            m_RightAscension = AstronomyFunctions.CalculateRa(m_Altitude* SharedResources.DEG_RAD, (360 - m_Azimuth)*SharedResources.DEG_RAD, m_Latitude, m_Longitude, m_Declination);
+            m_RightAscension = AstronomyFunctions.CalculateRa(m_Altitude * SharedResources.DEG_RAD, (360-m_Azimuth) * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD);
             
 
             TelescopeSimulator.m_MainForm.SiderealTime = AstronomyFunctions.LocalSiderealTime(m_Longitude);
             TelescopeSimulator.m_MainForm.Altitude = m_Altitude;
             TelescopeSimulator.m_MainForm.Azimuth = m_Azimuth;
             TelescopeSimulator.m_MainForm.RightAscension = m_RightAscension;
-            TelescopeSimulator.m_MainForm.Declination = m_Declination*SharedResources.RAD_DEG;
+            TelescopeSimulator.m_MainForm.Declination = m_Declination;
         }
 
         #region Properties For Settings
