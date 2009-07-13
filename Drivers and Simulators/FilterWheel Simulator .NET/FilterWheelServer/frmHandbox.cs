@@ -14,11 +14,10 @@ namespace ASCOM.FilterWheelSim
 
 #region variables
 
-        public static frmTraffic m_trafficDialog = null;  // API traffic display form
-        //public static SimulatedHardware m_Hardware;     // Simulated wire
-
         private static int m_iTimerTickInterval = 100;    // How often we pump the hardware
         private static bool m_bMoveInProgress = false;    // Tracks if a move is in progress - used for animation
+        private static frmTraffic m_trafficDialog = null; // API traffic display form
+        private static short m_sTargetPosition;
       
 #endregion
 
@@ -28,7 +27,7 @@ namespace ASCOM.FilterWheelSim
             
             ToolTip aTooltip = new ToolTip();
             aTooltip.SetToolTip(picASCOM, "Visit the ASCOM website");
- //           aTooltip.SetToolTip(btnTraffic, "Monitor ASCOM API traffic");
+            aTooltip.SetToolTip(btnTraffic, "Monitor ASCOM API traffic");
             aTooltip.SetToolTip(chkConnected, "Connect/Disconnect filterwheel");
             aTooltip.SetToolTip(btnPrev, "Move position to previous filter");
             aTooltip.SetToolTip(btnNext, "Move position to next filter");
@@ -42,48 +41,6 @@ namespace ASCOM.FilterWheelSim
 
 #region Properties and Methods
 
-        public void DoSetup()
-        {
-            frmSetupDialog SetupDialog = new frmSetupDialog();
-
-            // Stop the timer
-            this.Timer.Enabled = false;
-
-            // Do we need to log this?
-            if (m_trafficDialog != null && m_trafficDialog.chkOther.Checked)
-                m_trafficDialog.TrafficStart("SetupDialog");
-
-            SetupDialog.Slots = SimulatedHardware.Slots;
-            SetupDialog.Time = SimulatedHardware.Interval;
-            SetupDialog.Names = SimulatedHardware.FullFilterNames;
-            SetupDialog.Offsets = SimulatedHardware.FullFocusOffsets;
-            SetupDialog.Colours = SimulatedHardware.FullFilterColours;
-            SetupDialog.ImplementsNames = SimulatedHardware.ImplementsNames;
-            SetupDialog.ImplementsOffsets = SimulatedHardware.ImplementsOffsets;
-            SetupDialog.PreemptsMoves = SimulatedHardware.PreemptMoves;
-
-
-            this.Visible = false;         // May float over setup
-            SetupDialog.TopMost = true;   // The ASCOM chooser dialog sits on top if we don't do this :(
-
-            if (SetupDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                // Update the hardware config
-                SimulatedHardware.Initialize();
-                // and the form
-                this.Timer_Tick(null,null);
-            }
-
-            this.Visible = true;
-            this.BringToFront();
-            this.Timer.Enabled = true;
-            SetupDialog = null;
-
-            // Do we need to log this?
-            if (m_trafficDialog != null && m_trafficDialog.chkOther.Checked)
-                m_trafficDialog.TrafficEnd(" (done)");
-
-        }
 
 #endregion
 
@@ -121,15 +78,18 @@ namespace ASCOM.FilterWheelSim
             }
         }
 
- /*       private void btnTraffic_Click(object sender, EventArgs e)
+        private void btnTraffic_Click(object sender, EventArgs e)
         {
-            if (m_trafficDialog == null)
+            SimulatedHardware.m_bLogTraffic = !SimulatedHardware.m_bLogTraffic;
+
+            if (SimulatedHardware.m_bLogTraffic && m_trafficDialog == null)
                 m_trafficDialog = new frmTraffic();
-
-            m_trafficDialog.Show();
-
+            if (SimulatedHardware.m_bLogTraffic)
+                m_trafficDialog.Show();
+            else
+                m_trafficDialog.Hide();
         }
-*/
+
         private void btnSetup_Click(object sender, EventArgs e)
         {
             SimulatedHardware.DoSetup();
@@ -150,12 +110,13 @@ namespace ASCOM.FilterWheelSim
 
             if (SimulatedHardware.m_bConnected && !SimulatedHardware.Moving)
             { // Connected, not Moving
-                this.lblPosition.Text = Convert.ToString(SimulatedHardware.m_sPosition);
-                this.lblName.Text = Convert.ToString(SimulatedHardware.CurrFilterName);
-                this.lblOffset.Text = Convert.ToString(SimulatedHardware.CurrFilterOffset);
+                this.lblPosition.Text = SimulatedHardware.m_sPosition.ToString();
+                this.lblName.Text = SimulatedHardware.CurrFilterName.ToString();
+                this.lblOffset.Text = SimulatedHardware.CurrFilterOffset.ToString();
                 this.picFilter.BackColor = SimulatedHardware.CurrFilterColour;
                 this.picFilter.Image = Properties.Resources.FilterStop;
                 m_bMoveInProgress = false;
+                m_sTargetPosition = SimulatedHardware.m_sPosition;
             }
             else if (SimulatedHardware.m_bConnected && SimulatedHardware.Moving)
             { // Conncted, Moving
@@ -181,19 +142,23 @@ namespace ASCOM.FilterWheelSim
 
         }
 
+        private void DoSetup()
+        {
+            // Stop the timer
+            this.Timer.Enabled = false;
+            // May float over setup
+            this.Visible = false;         
+            // Show the setup dialog
+            SimulatedHardware.DoSetup();
+            // Restart form updates
+            this.Timer.Enabled = true;
+            // Show ourself again
+            this.Visible = true;
+        }
+
+
         private void frmHandbox_FormClosing(object sender, FormClosingEventArgs e)
         {
-            try
-            {
-                // Close the traffic dialog if it is open
-                if (m_trafficDialog != null)
-                {
-                    m_trafficDialog.Close();
-                    m_trafficDialog = null;
-                }
-            }
-            catch { }
-
 
         }
 
@@ -203,20 +168,21 @@ namespace ASCOM.FilterWheelSim
 
         private void PrevNext(bool nxt)
         {
-            short newPosition = SimulatedHardware.m_sPosition;
+            short savePos = m_sTargetPosition;
+
             if (nxt)
-                newPosition++;
+                m_sTargetPosition++;
             else
-                newPosition--;
+                m_sTargetPosition--;
 
             // make sure position stays in range
-            if (newPosition >= SimulatedHardware.Slots)
-                newPosition = 0;
-            else if (newPosition < 0)
-                newPosition = (short)(SimulatedHardware.Slots - 1);
+            if (m_sTargetPosition >= SimulatedHardware.Slots)
+                m_sTargetPosition = 0;
+            else if (m_sTargetPosition < 0)
+                m_sTargetPosition = (short)(SimulatedHardware.Slots - 1);
 
-            try { SimulatedHardware.Position = newPosition; }
-            catch { }
+            try { SimulatedHardware.Position = m_sTargetPosition; }
+            catch { m_sTargetPosition = savePos;  }
         }
 
 #endregion

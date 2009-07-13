@@ -43,6 +43,7 @@
             this.lblOffset = new System.Windows.Forms.Label();
             this.TableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.btnSetup = new System.Windows.Forms.Button();
+            this.btnTraffic = new System.Windows.Forms.Button();
             this.Timer = new System.Windows.Forms.Timer(this.components);
             this.picASCOM = new System.Windows.Forms.PictureBox();
             this.picFilter = new System.Windows.Forms.PictureBox();
@@ -211,6 +212,7 @@
             this.TableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.TableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.TableLayoutPanel4.Controls.Add(this.btnSetup, 0, 0);
+            this.TableLayoutPanel4.Controls.Add(this.btnTraffic, 1, 0);
             this.TableLayoutPanel4.Location = new System.Drawing.Point(12, 200);
             this.TableLayoutPanel4.Name = "TableLayoutPanel4";
             this.TableLayoutPanel4.RowCount = 1;
@@ -222,16 +224,26 @@
             // 
             this.btnSetup.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnSetup.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.TableLayoutPanel4.SetColumnSpan(this.btnSetup, 2);
             this.btnSetup.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnSetup.ForeColor = System.Drawing.Color.Black;
-            this.btnSetup.Location = new System.Drawing.Point(45, 3);
+            this.btnSetup.Location = new System.Drawing.Point(6, 3);
             this.btnSetup.Name = "btnSetup";
             this.btnSetup.Size = new System.Drawing.Size(67, 23);
             this.btnSetup.TabIndex = 0;
             this.btnSetup.Text = "Setup";
             this.btnSetup.UseVisualStyleBackColor = false;
             this.btnSetup.Click += new System.EventHandler(this.btnSetup_Click);
+            // 
+            // btnTraffic
+            // 
+            this.btnTraffic.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.btnTraffic.Location = new System.Drawing.Point(82, 3);
+            this.btnTraffic.Name = "btnTraffic";
+            this.btnTraffic.Size = new System.Drawing.Size(73, 23);
+            this.btnTraffic.TabIndex = 1;
+            this.btnTraffic.Text = "Traffic";
+            this.btnTraffic.UseVisualStyleBackColor = true;
+            this.btnTraffic.Click += new System.EventHandler(this.btnTraffic_Click);
             // 
             // Timer
             // 
@@ -308,8 +320,8 @@
         internal System.Windows.Forms.Label lblOffset;
         internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel4;
         internal System.Windows.Forms.Button btnSetup;
-//        internal System.Windows.Forms.Button btnTraffic;
         private System.Windows.Forms.Timer Timer;
         private System.Windows.Forms.CheckBox chkConnected;
+        private System.Windows.Forms.Button btnTraffic;
     }
 }

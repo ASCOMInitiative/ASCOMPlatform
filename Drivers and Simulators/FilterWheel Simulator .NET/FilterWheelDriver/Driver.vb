@@ -85,6 +85,7 @@
     Public Sub SetupDialog() Implements IFilterWheel.SetupDialog
         SimulatedHardware.DoSetup()
     End Sub
+
 #End Region
 
 
