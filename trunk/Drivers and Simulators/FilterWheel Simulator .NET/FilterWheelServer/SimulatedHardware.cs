@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Timers;
+using System.Diagnostics;
 using System.Drawing;
 
 namespace ASCOM.FilterWheelSim
 {
     // 
     // Implements the simulated hardware
-    //
-    // There should not be any throwing of exceptions in here as that is the responsibility of the driver
-    // The hardware is at the end of a bit of wire, we just simulate what a likely eletro-mechanical device
-    // would do.
     //
     public class SimulatedHardware
     {
@@ -38,7 +34,9 @@ namespace ASCOM.FilterWheelSim
         private static bool m_bImplementsOffsets;       // Return Offsets?
         private static bool m_bPreemptMoves;            // Driver can interupt moves
 
-        private const string m_sRegVer = "1";                // Used to track id registry entries exist or need updating
+        private const string m_sRegVer = "1";             // Used to track id registry entries exist or need updating
+
+        public static bool m_bLogTraffic;                 // Do we log traffic?
 
         //
         // Sync object
@@ -110,21 +108,24 @@ namespace ASCOM.FilterWheelSim
         {
             get
             {
-                if (frmHandbox.m_trafficDialog != null && frmHandbox.m_trafficDialog.chkOther.Checked)
-                    frmHandbox.m_trafficDialog.TrafficLine("Get Connected = " + m_bConnected);
-                return m_bConnected;
+                lock (s_objSync)
+                {
+                    LogTraffic("Get Connected = " + m_bConnected);
+                    return m_bConnected;
+                }
             }
             set
             {
-                if (frmHandbox.m_trafficDialog != null && frmHandbox.m_trafficDialog.chkOther.Checked)
-                    frmHandbox.m_trafficDialog.TrafficStart("Set Connected = " + m_bConnected + " -> " + value);
+                lock (s_objSync)
+                {
+                    LogTraffic("Set Connected = " + m_bConnected + " -> " + value);
 
-                // We are always connected to the hardware in the simulator
-                // So just keep a record of the state change
-                m_bConnected = value;
+                    // We are always connected to the hardware in the simulator
+                    // So just keep a record of the state change
+                    m_bConnected = value;
 
-                if (frmHandbox.m_trafficDialog != null && frmHandbox.m_trafficDialog.chkOther.Checked)
-                    frmHandbox.m_trafficDialog.TrafficEnd(" (done)");
+                    LogTraffic("  (set connected, done)");
+                }
             }
         }
 
@@ -132,39 +133,34 @@ namespace ASCOM.FilterWheelSim
         {
             get
             {
-                short ret;
-
-                CheckConnected();
                 lock (s_objSync)
                 {
-                    if (frmHandbox.m_trafficDialog != null && frmHandbox.m_trafficDialog.chkPosition.Checked)
-                        frmHandbox.m_trafficDialog.TrafficStart("Get Position = ");
+                    short ret;
+
+                    CheckConnected();
 
                     if (m_bMoving)
                         ret = -1;                       // Spec. says we must return -1 if position not determined
                     else
                         ret = m_sPosition;      // Otherwise return position
 
-                    if (frmHandbox.m_trafficDialog != null && frmHandbox.m_trafficDialog.chkPosition.Checked)
-                        frmHandbox.m_trafficDialog.TrafficEnd(Convert.ToString(ret));
+                    LogTraffic("Get Position = " + ret.ToString());
 
                     return ret;
                 }
             }
             set
             {
-                int Jumps;      // number of slot positions we have to move
-
                 lock (s_objSync)
                 {
-                    if (frmHandbox.m_trafficDialog != null && frmHandbox.m_trafficDialog.chkPosition.Checked)
-                        frmHandbox.m_trafficDialog.TrafficStart("Set Position = " + value + " ...");
+                    int Jumps;      // number of slot positions we have to move
+
+                    LogTraffic("Set Position = " + value + " ...");
 
                     // position range check
                     if (value >= m_iSlots || value < 0)
                     {
-                        if (frmHandbox.m_trafficDialog != null && frmHandbox.m_trafficDialog.chkPosition.Checked)
-                            frmHandbox.m_trafficDialog.TrafficEnd(" (aborting, range)");
+                        LogTraffic("  (set postion failed, out of range)");
 
                         throw new DriverException("Position: " + MSG_VAL_OUTOFRANGE, SCODE_VAL_OUTOFRANGE);
                     }
@@ -174,8 +170,7 @@ namespace ASCOM.FilterWheelSim
                     // check if we are already there!
                     if (value == m_sPosition)
                     {
-                        if (frmHandbox.m_trafficDialog != null && frmHandbox.m_trafficDialog.chkPosition.Checked)
-                            frmHandbox.m_trafficDialog.TrafficEnd(" (no move required)");
+                        LogTraffic("  (set position, no move required)");
                         return;
                     }
 
@@ -186,8 +181,7 @@ namespace ASCOM.FilterWheelSim
                             AbortMove();   // Stop the motor
                         else
                         {
-                            if (frmHandbox.m_trafficDialog != null && frmHandbox.m_trafficDialog.chkPosition.Checked)
-                                frmHandbox.m_trafficDialog.TrafficEnd(" (aborting, moving)");
+                            LogTraffic("  (set position failed, already moving)");
 
                             throw new DriverException("Position: " + MSG_MOVING, SCODE_MOVING);
                         }
@@ -201,8 +195,7 @@ namespace ASCOM.FilterWheelSim
                     m_bMoving = true;
 
                     // log action
-                    if (frmHandbox.m_trafficDialog != null && frmHandbox.m_trafficDialog.chkPosition.Checked)
-                        frmHandbox.m_trafficDialog.TrafficEnd(" (started)");
+                    LogTraffic(" (set position in progress)...");
                 }
             }
         }
@@ -211,8 +204,13 @@ namespace ASCOM.FilterWheelSim
         {
             get
             {
+                LogTraffic("Get FilterNames...");
                 string[] temp = m_asFilterNames;
                 Array.Resize(ref temp, m_iSlots);
+                if (m_bLogTraffic)
+                    for (int i = 0; i < m_iSlots; i++)
+                        LogTraffic(" Filter " + i.ToString() + " = " + temp[i].ToString());
+                LogTraffic("  (filternames done)");
                 return temp;
             }
         }
@@ -221,8 +219,13 @@ namespace ASCOM.FilterWheelSim
         {
             get
             {
+                LogTraffic("Get FocusOffsets..." + Environment.NewLine);
                 int[] temp = m_aiFocusOffsets;
                 Array.Resize(ref temp, m_iSlots);
+                if (m_bLogTraffic)
+                    for (int i = 0; i < m_iSlots; i++)
+                        LogTraffic(" Filter " + i.ToString() + " = " + temp[i].ToString() + Environment.NewLine);
+                LogTraffic(" (focusoffsets done)" + Environment.NewLine);
                 return temp;
             }
         }
@@ -268,11 +271,14 @@ namespace ASCOM.FilterWheelSim
 
         public static void AbortMove()
         {
-            // Stop the motor!
-
+            LogTraffic("Abort move");
+            // Clear the elapsed time
+            m_iTimeElapsed = 0;
+            // Stop moving
+            m_bMoving = false;
             // Set the postion intermediate between start and end
             m_sPosition = (short)Math.Floor(Math.Abs(m_sTargetPosition - m_sPosition) / 2.0);
-            m_bMoving = false;
+            LogTraffic("  (abort done)");
         }
 
         public static void UpdateState()
@@ -294,8 +300,7 @@ namespace ASCOM.FilterWheelSim
                         // Set the new position
                         m_sPosition = m_sTargetPosition;
                         // log action
-                        if (frmHandbox.m_trafficDialog != null && frmHandbox.m_trafficDialog.chkPosition.Checked)
-                            frmHandbox.m_trafficDialog.TrafficEnd(" (done)");
+                        LogTraffic("  (position done)");
                     }
                 }
             }
@@ -303,11 +308,17 @@ namespace ASCOM.FilterWheelSim
 
         public static void DoSetup()
         {
-            if (m_bConnected)
-                throw new ASCOM.DriverException(MSG_SETUP_NOT_ALLOWED, SCODE_SETUP_NOT_ALLOWED);
-            else
-                FilterWheelSim.m_MainForm.DoSetup();
+            //lock (s_objSync)
+            {
+                LogTraffic("SetupDialog...");
+
+                if (m_bConnected)
+                    throw new ASCOM.DriverException(MSG_SETUP_NOT_ALLOWED, SCODE_SETUP_NOT_ALLOWED);
+                else
+                    ShowSetup();
+            }
         }
+
 
 #endregion
 
@@ -342,9 +353,9 @@ namespace ASCOM.FilterWheelSim
                 g_Profile.WriteValue(g_csDriverID, "PreemptMoves", "false");
                 for (i = 0; i < 8; i++)
                 {
-                    g_Profile.WriteValue(g_csDriverID, Convert.ToString(i), names[i], "FilterNames");
-                    g_Profile.WriteValue(g_csDriverID, Convert.ToString(i), Convert.ToString(rand.Next(10000)), "FocusOffsets");
-                    g_Profile.WriteValue(g_csDriverID, Convert.ToString(i), Convert.ToString(ColorTranslator.ToWin32(colours[i])), "FilterColours");
+                    g_Profile.WriteValue(g_csDriverID, i.ToString(), names[i], "FilterNames");
+                    g_Profile.WriteValue(g_csDriverID, i.ToString(), rand.Next(10000).ToString(), "FocusOffsets");
+                    g_Profile.WriteValue(g_csDriverID, i.ToString(), ColorTranslator.ToWin32(colours[i]).ToString(), "FilterColours");
                 }
             }
 
@@ -359,9 +370,9 @@ namespace ASCOM.FilterWheelSim
             m_bPreemptMoves = Convert.ToBoolean(GetSetting("PreemptMoves", "false"));
             for (i = 0; i <= 7; i++)
             {
-                m_asFilterNames[i] = g_Profile.GetValue(g_csDriverID, Convert.ToString(i), "FilterNames");
-                m_aiFocusOffsets[i] = Convert.ToInt32(g_Profile.GetValue(g_csDriverID, Convert.ToString(i), "FocusOffsets"));
-                m_acFilterColours[i] = ColorTranslator.FromWin32(Convert.ToInt32(g_Profile.GetValue(g_csDriverID, Convert.ToString(i), "FilterColours")));
+                m_asFilterNames[i] = g_Profile.GetValue(g_csDriverID, i.ToString(), "FilterNames");
+                m_aiFocusOffsets[i] = Convert.ToInt32(g_Profile.GetValue(g_csDriverID, i.ToString(), "FocusOffsets"));
+                m_acFilterColours[i] = ColorTranslator.FromWin32(Convert.ToInt32(g_Profile.GetValue(g_csDriverID, i.ToString(), "FilterColours")));
             }
 
         }
@@ -379,6 +390,39 @@ namespace ASCOM.FilterWheelSim
         private static void CheckConnected()
         {
             if (!m_bConnected) throw new ASCOM.DriverException(MSG_NOT_CONNECTED, SCODE_NOT_CONNECTED);
+        }
+
+
+        private static void ShowSetup()
+        {
+            frmSetupDialog SetupDialog = new frmSetupDialog();
+
+            SetupDialog.Slots = SimulatedHardware.Slots;
+            SetupDialog.Time = SimulatedHardware.Interval;
+            SetupDialog.Names = SimulatedHardware.FullFilterNames;
+            SetupDialog.Offsets = SimulatedHardware.FullFocusOffsets;
+            SetupDialog.Colours = SimulatedHardware.FullFilterColours;
+            SetupDialog.ImplementsNames = SimulatedHardware.ImplementsNames;
+            SetupDialog.ImplementsOffsets = SimulatedHardware.ImplementsOffsets;
+            SetupDialog.PreemptsMoves = SimulatedHardware.PreemptMoves;
+
+            SetupDialog.TopMost = true;   // The ASCOM chooser dialog sits on top if we don't do this :(
+
+            if (SetupDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                // Update the hardware config
+                UpdateSettings();
+                LogTraffic("  (setup OK)");
+            }
+            else
+                LogTraffic("  (setup Cancel)");
+
+        }
+            
+        private static void LogTraffic(string Text)
+        {
+            if (m_bLogTraffic)
+                Trace.WriteLine(Text);
         }
 
 #endregion

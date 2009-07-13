@@ -66,7 +66,7 @@ namespace ASCOM.FilterWheelSim
 
 #region Properties and Methods
 
-        public int Slots { set { cmbSlots.Text = Convert.ToString(value); } }
+        public int Slots { set { cmbSlots.Text = value.ToString(); } }
 
         public int Time
         {
@@ -121,19 +121,19 @@ namespace ASCOM.FilterWheelSim
 
             // Write all the settings to the registry
             m_iSlots = Convert.ToInt32(cmbSlots.Text);
-            SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, "Slots", Convert.ToString(m_iSlots));
+            SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, "Slots", m_iSlots.ToString());
             // Convert secs to millisecs
             i = Convert.ToInt32(Convert.ToDouble(cmbTime.Text) * 1000);
-            SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, "Time", Convert.ToString(i));
+            SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, "Time", i.ToString());
             for (i=0; i <= 7; i++)
             {
-                SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, Convert.ToString(i), m_arrNameTextBox[i].Text, "FilterNames");
-                SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, Convert.ToString(i), m_arrOffsetTextBox[i].Text, "FocusOffsets");
-                SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, Convert.ToString(i), Convert.ToString(ColorTranslator.ToWin32(m_arrColourPicBox[i].BackColor)), "FilterColours");
+                SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, i.ToString(), m_arrNameTextBox[i].Text, "FilterNames");
+                SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, i.ToString(), m_arrOffsetTextBox[i].Text, "FocusOffsets");
+                SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, i.ToString(), ColorTranslator.ToWin32(m_arrColourPicBox[i].BackColor).ToString(), "FilterColours");
             }
-            SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, "ImplementsNames", Convert.ToString(chkImplementsNames.Checked));
-            SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, "ImplementsOffsets", Convert.ToString(chkImplementsOffsets.Checked));
-            SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, "PreemptMoves", Convert.ToString(chkPreemptMoves.Checked));
+            SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, "ImplementsNames", chkImplementsNames.Checked.ToString());
+            SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, "ImplementsOffsets", chkImplementsOffsets.Checked.ToString());
+            SimulatedHardware.g_Profile.WriteValue(SimulatedHardware.g_csDriverID, "PreemptMoves", chkPreemptMoves.Checked.ToString());
 
             DialogResult = System.Windows.Forms.DialogResult.OK;
         }

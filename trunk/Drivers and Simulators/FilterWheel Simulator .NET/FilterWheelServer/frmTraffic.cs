@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace ASCOM.FilterWheelSim
 {
@@ -12,8 +13,8 @@ namespace ASCOM.FilterWheelSim
     {
       
         private const int LOGLENGTH = 2000;
-        private bool m_bDisable;
-        private bool m_bBOL;                    // tracks if we are at the beginning of a line
+        private static bool m_bDisable;
+        public TextBoxTraceListener TraceLogger;
 
         
         public frmTraffic()
@@ -27,7 +28,10 @@ namespace ASCOM.FilterWheelSim
 
             btnClear_Click(this, e);
             m_bDisable = false;
-            btnDisable.Text = "Disable";
+            btnDisable.Text = "Disable Logging";
+
+            TraceLogger = new TextBoxTraceListener(this.txtTraffic);
+            Trace.Listeners.Add(TraceLogger);
 
         }
 
@@ -36,13 +40,12 @@ namespace ASCOM.FilterWheelSim
         private void btnDisable_Click(object sender, EventArgs e)
         {
             m_bDisable = !m_bDisable;
-            btnDisable.Text = m_bDisable ? "Enable" : "Disable";
+            btnDisable.Text = m_bDisable ? "Enable Logging" : "Disable Logging";
 
         }
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            m_bBOL = true;
             txtTraffic.Text = "";
         }
 
@@ -63,80 +66,61 @@ namespace ASCOM.FilterWheelSim
             }
         }
 
-#endregion
-
-#region Properties and Methods
-
-        public void TrafficChar(string val)
+        private void txtTraffic_TextChanged(object sender, EventArgs e)
         {
-            if (m_bDisable) return;
-
-            if (m_bBOL)
-            {
-                m_bBOL = false;
-                txtTraffic.Text = txtTraffic.Text + val;
-                try { txtTraffic.Text.Substring(txtTraffic.Text.Length - LOGLENGTH); }
-                catch { }
-            }
-            else
-            {
-                txtTraffic.Text = txtTraffic.Text + " " + val;
-                try { txtTraffic.Text.Substring(txtTraffic.Text.Length - LOGLENGTH); }
-                catch { }
-            }
-            txtTraffic.SelectionStart = txtTraffic.Text.Length;
-            txtTraffic.ScrollToCaret();
-        }
-
-        public void TrafficLine(string val)
-        {
-            if (m_bDisable) return;
-
-            if (m_bBOL)
-                val = val + "\r\n";
-            else
-                val = "\r\n" + val + "\r\n";
-
-            m_bBOL = true;
-
-            txtTraffic.Text = txtTraffic.Text + val;
+            // Limit the length of the logged text
             try { txtTraffic.Text.Substring(txtTraffic.Text.Length - LOGLENGTH); }
             catch { }
-            txtTraffic.SelectionStart = txtTraffic.Text.Length;
-            txtTraffic.ScrollToCaret();
+                txtTraffic.SelectionStart = txtTraffic.Text.Length;
+                txtTraffic.ScrollToCaret();
         }
 
-        public void TrafficStart(string val)
+        private void frmTraffic_Shown(object sender, EventArgs e)
         {
-            if (m_bDisable) return;
-
-            if (!m_bBOL) val = "\r\n" + val;
-
-            m_bBOL = false;
-
-            txtTraffic.Text = txtTraffic.Text + val;
-            try { txtTraffic.Text.Substring(txtTraffic.Text.Length - LOGLENGTH); }
-            catch { }
-            txtTraffic.SelectionStart = txtTraffic.Text.Length;
-            txtTraffic.ScrollToCaret();
-        }
-
-        public void TrafficEnd(string val)
-        {
-            if (m_bDisable) return;
-
-            val = val + "\r\n";
-
-            m_bBOL = true;
-
-            txtTraffic.Text = txtTraffic.Text + val;
-            try { txtTraffic.Text.Substring(txtTraffic.Text.Length - LOGLENGTH); }
-            catch { }
-            txtTraffic.SelectionStart = txtTraffic.Text.Length;
-            txtTraffic.ScrollToCaret();
+            btnClear_Click(this, e);
         }
 
 #endregion
+
+
+#region TextBox TraceListener
+        // Code by Adam Crawford, MIT License
+
+        public class TextBoxTraceListener : TraceListener
+        {
+            private System.Windows.Forms.TextBox _target;
+
+            private StringSendDelegate _invokeWrite;
+
+            public TextBoxTraceListener(System.Windows.Forms.TextBox target)
+            {
+                _target = target;
+                _invokeWrite = new StringSendDelegate(SendString);
+            }
+
+            public override void Write(string message)
+            {
+                if (!m_bDisable)
+                    _target.Invoke(_invokeWrite, new object[] { message });
+            }
+
+            public override void WriteLine(string message)
+            {
+                if (!m_bDisable)
+                    _target.Invoke(_invokeWrite, new object[] { message + Environment.NewLine });
+            }
+
+            private delegate void StringSendDelegate(string message);
+
+            private void SendString(string message)
+            {
+                if (!m_bDisable)
+                    _target.Text += message;
+            }
+        }
+ #endregion
+
+ 
     }
 
 }

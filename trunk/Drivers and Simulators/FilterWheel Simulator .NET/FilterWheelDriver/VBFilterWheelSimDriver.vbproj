@@ -80,7 +80,6 @@
   <ItemGroup>
     <Import Include="ASCOM" />
     <Import Include="ASCOM.FilterWheelSim" />
-    <Import Include="ASCOM.Helper" />
     <Import Include="ASCOM.Interface" />
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="System" />
