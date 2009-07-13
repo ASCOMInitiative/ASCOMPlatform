@@ -28,9 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmTraffic));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.btnDisable = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
+            this.btnDisable = new System.Windows.Forms.Button();
             this.picASCOM = new System.Windows.Forms.PictureBox();
             this.txtTraffic = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
@@ -42,7 +43,7 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 43.68932F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 56.31068F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 57F));
             this.tableLayoutPanel1.Controls.Add(this.btnClear, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnDisable, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.picASCOM, 2, 0);
@@ -54,38 +55,38 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(347, 65);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
-            // btnDisable
-            // 
-            this.btnDisable.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnDisable.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.btnDisable.ForeColor = System.Drawing.Color.Black;
-            this.btnDisable.Location = new System.Drawing.Point(153, 5);
-            this.btnDisable.Name = "btnDisable";
-            this.btnDisable.Size = new System.Drawing.Size(114, 22);
-            this.btnDisable.TabIndex = 8;
-            this.btnDisable.Text = "Disable Logging";
-            this.btnDisable.UseVisualStyleBackColor = false;
-            this.btnDisable.Click += new System.EventHandler(this.btnDisable_Click);
-            // 
             // btnClear
             // 
             this.btnClear.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnClear.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.btnClear.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnClear.ForeColor = System.Drawing.Color.Black;
-            this.btnClear.Location = new System.Drawing.Point(4, 5);
+            this.btnClear.Location = new System.Drawing.Point(3, 3);
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(119, 22);
+            this.btnClear.Size = new System.Drawing.Size(120, 26);
             this.btnClear.TabIndex = 9;
             this.btnClear.Text = "Clear Log";
             this.btnClear.UseVisualStyleBackColor = false;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
+            // btnDisable
+            // 
+            this.btnDisable.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnDisable.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.btnDisable.ForeColor = System.Drawing.Color.Black;
+            this.btnDisable.Location = new System.Drawing.Point(147, 3);
+            this.btnDisable.Name = "btnDisable";
+            this.btnDisable.Size = new System.Drawing.Size(120, 26);
+            this.btnDisable.TabIndex = 8;
+            this.btnDisable.Text = "Disable Logging";
+            this.btnDisable.UseVisualStyleBackColor = false;
+            this.btnDisable.Click += new System.EventHandler(this.btnDisable_Click);
+            // 
             // picASCOM
             // 
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picASCOM.Image = global::ASCOM.FilterWheelSim.Properties.Resources.ASCOM;
-            this.picASCOM.Location = new System.Drawing.Point(295, 3);
+            this.picASCOM.Location = new System.Drawing.Point(292, 3);
             this.picASCOM.Name = "picASCOM";
             this.tableLayoutPanel1.SetRowSpan(this.picASCOM, 2);
             this.picASCOM.Size = new System.Drawing.Size(48, 56);
@@ -118,12 +119,13 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.ForeColor = System.Drawing.Color.White;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmTraffic";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "ASCOM API Calls";
+            this.Text = "Filter Wheel Simulator Traffic";
             this.Shown += new System.EventHandler(this.frmTraffic_Shown);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

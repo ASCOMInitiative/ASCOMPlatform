@@ -87,5 +87,12 @@ namespace ASCOM.FilterWheelSim.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        internal static System.Drawing.Icon Icon_ASCOM {
+            get {
+                object obj = ResourceManager.GetObject("Icon_ASCOM", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }
