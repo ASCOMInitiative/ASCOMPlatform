@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSetupDialog));
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
             this.Label2 = new System.Windows.Forms.Label();
             this.Label1 = new System.Windows.Forms.Label();
@@ -434,12 +435,13 @@
             this.Controls.Add(this.GroupBox1);
             this.ForeColor = System.Drawing.Color.White;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmSetupDialog";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "frmSetupDialog";
+            this.Text = "Filter Wheel Simulator Setup";
             this.Shown += new System.EventHandler(this.frmSetupDialog_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.GroupBox2.ResumeLayout(false);

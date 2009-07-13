@@ -121,8 +121,8 @@ namespace ASCOM.FilterWheelSim
             else if (SimulatedHardware.m_bConnected && SimulatedHardware.Moving)
             { // Conncted, Moving
                 this.lblPosition.Text = "Moving";
-                this.lblName.Text = "";
-                this.lblOffset.Text = "";
+                this.lblName.Text = "-";
+                this.lblOffset.Text = "-";
                 if (!m_bMoveInProgress)
                 {
                     this.picFilter.Image = Properties.Resources.Filter_Next;
@@ -131,9 +131,9 @@ namespace ASCOM.FilterWheelSim
             }
             else
             { // Not connected
-                this.lblPosition.Text = "?";
-                this.lblName.Text = "";
-                this.lblOffset.Text = "";
+                this.lblPosition.Text = "-";
+                this.lblName.Text = "-";
+                this.lblOffset.Text = "-";
                 this.picFilter.BackColor = Color.DimGray;
                 this.picFilter.Image = Properties.Resources.FilterStop;
                 m_bMoveInProgress = false;
