@@ -41,7 +41,6 @@ namespace ASCOM.FilterWheelSim
         {
             m_bDisable = !m_bDisable;
             btnDisable.Text = m_bDisable ? "Enable Logging" : "Disable Logging";
-
         }
 
         private void btnClear_Click(object sender, EventArgs e)

@@ -46,7 +46,7 @@ namespace ASCOM.FilterWheelSim
 
 #region EventHandlers
 
-        private void chkConnected_CheckedChanged(object sender, EventArgs e)
+        private void chkConnected_MouseClick(object sender, MouseEventArgs e)
         {
             SimulatedHardware.Connected = chkConnected.Checked;
         }
@@ -82,10 +82,16 @@ namespace ASCOM.FilterWheelSim
         {
             SimulatedHardware.m_bLogTraffic = !SimulatedHardware.m_bLogTraffic;
 
-            if (SimulatedHardware.m_bLogTraffic && m_trafficDialog == null)
-                m_trafficDialog = new frmTraffic();
             if (SimulatedHardware.m_bLogTraffic)
+            {
+                if (m_trafficDialog == null)
+                {
+                    m_trafficDialog = new frmTraffic();
+                    // Catch FormClosing Events, to Hide() form instead
+                    m_trafficDialog.Closing += new CancelEventHandler(frmTraffic_Closing);
+                }
                 m_trafficDialog.Show();
+            }
             else
                 m_trafficDialog.Hide();
         }
@@ -97,7 +103,7 @@ namespace ASCOM.FilterWheelSim
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            SimulatedHardware.UpdateState();						// Pump the machine
+            SimulatedHardware.UpdateState();			// Pump the machine
             //
             // Read the state of the Simulated hardware. No shortcuts, it's state
             // is also affected by ASCOM clients via the IFilterWheel interface!
@@ -144,22 +150,17 @@ namespace ASCOM.FilterWheelSim
 
         private void DoSetup()
         {
-            // Stop the timer
-            this.Timer.Enabled = false;
-            // May float over setup
-            this.Visible = false;         
-            // Show the setup dialog
-            SimulatedHardware.DoSetup();
-            // Restart form updates
-            this.Timer.Enabled = true;
-            // Show ourself again
-            this.Visible = true;
+            this.Timer.Enabled = false;     // Stop the timer
+            this.Visible = false;           // May float over setup
+            SimulatedHardware.DoSetup();    // Show the setup dialog
+            this.Timer.Enabled = true;      // Restart form updates
+            this.Visible = true;            // Show ourself again
         }
 
 
         private void frmHandbox_FormClosing(object sender, FormClosingEventArgs e)
         {
-
+            // TODO: Save form postion
         }
 
 #endregion
@@ -183,6 +184,18 @@ namespace ASCOM.FilterWheelSim
 
             try { SimulatedHardware.Position = m_sTargetPosition; }
             catch { m_sTargetPosition = savePos;  }
+        }
+
+        //
+        // Overrides the Traffic Dialog close event.
+        // Traps when the traffic form is closed, and hides the form instead.
+        //
+        private void frmTraffic_Closing(object sender, CancelEventArgs e)
+        {
+            SimulatedHardware.m_bLogTraffic = false;
+            m_trafficDialog.Hide();
+            // Cancel the Closing event from closing the form.
+            e.Cancel = true;
         }
 
 #endregion
