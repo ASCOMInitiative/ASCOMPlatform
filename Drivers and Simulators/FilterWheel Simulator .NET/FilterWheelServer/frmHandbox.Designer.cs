@@ -115,7 +115,6 @@
             this.chkConnected.Text = "Connected";
             this.chkConnected.UseVisualStyleBackColor = true;
             this.chkConnected.MouseClick += new System.Windows.Forms.MouseEventHandler(this.chkConnected_MouseClick);
-            this.chkConnected.CheckedChanged += new System.EventHandler(this.chkConnected_CheckedChanged);
             // 
             // TableLayoutPanel2
             // 
