@@ -209,7 +209,8 @@ namespace ASCOM.TelescopeSimulator
 
             //double hourAngle = Math.Acos((Math.Cos(Altitude) - Math.Sin(Declination) * Math.Sin(Latitude)) / Math.Cos(Declination) * Math.Cos(Latitude))*SharedResources.RAD_DEG;
             //double hourAngle = Math.Acos((Math.Cos(Altitude) * Math.Cos(Latitude) - Math.Sin(Latitude) * Math.Sin(Altitude) * Math.Cos(Azimuth)) / Math.Cos(Declination)) * SharedResources.RAD_DEG;
-            double hourAngle = Math.Atan(-Math.Sin(Azimuth) * Math.Cos(Altitude) - Math.Cos(Azimuth) * Math.Sin(Latitude) * Math.Cos(Altitude) + Math.Sin(Altitude) * Math.Cos(Latitude)) * SharedResources.RAD_DEG;
+            //double hourAngle = Math.Atan(-Math.Sin(Azimuth) * Math.Cos(Altitude) - Math.Cos(Azimuth) * Math.Sin(Latitude) * Math.Cos(Altitude) + Math.Sin(Altitude) * Math.Cos(Latitude)) * SharedResources.RAD_DEG;
+            double hourAngle = Math.Atan2(-Math.Sin(Azimuth) * Math.Cos(Altitude), - Math.Cos(Azimuth) * Math.Sin(Latitude) * Math.Cos(Altitude) + Math.Sin(Altitude) * Math.Cos(Latitude)) * SharedResources.RAD_DEG;
             if (hourAngle < 0)
             { hourAngle += 360; }
             else if (hourAngle >= 360)
@@ -224,6 +225,32 @@ namespace ASCOM.TelescopeSimulator
             
             //return Math.Asin(Math.Cos(Azimuth)*Math.Cos(Latitude)*Math.Cos(Altitude) + Math.Sin(Latitude)*Math.Sin(Altitude));
             return Math.Asin(Math.Cos(Azimuth) * Math.Cos(Latitude) * Math.Cos(Altitude) + Math.Sin(Latitude) * Math.Sin(Altitude)) * SharedResources.RAD_DEG;
+        }
+        //----------------------------------------------------------------------------------------
+        // Calculate Altitude and Azimuth From Ra/Dec and Site
+        //----------------------------------------------------------------------------------------
+        public static double CalculateAltitude(double RightAscension, double Declination, double Latitude, double Longitude)
+        {
+            double lst = LocalSiderealTime(Longitude * SharedResources.RAD_DEG);
+            double ha = lst * SharedResources.DEG_RAD - RightAscension;
+            return Math.Asin(Math.Sin(Declination) * Math.Sin(Latitude) + Math.Cos(Declination) * Math.Cos(ha) * Math.Cos(Latitude)) * SharedResources.RAD_DEG;
+
+        }
+        public static double CalculateAzimuth(double RightAscension, double Declination, double Latitude, double Longitude)
+        {
+            double lst = LocalSiderealTime(Longitude * SharedResources.RAD_DEG);
+            double ha = lst * SharedResources.DEG_RAD - RightAscension;
+
+            double A1 = -Math.Cos(Declination) * Math.Sin(ha) / Math.Cos(Math.Asin(Math.Sin(Declination) * Math.Sin(Latitude) + Math.Cos(Declination) * Math.Cos(ha) * Math.Cos(Latitude)));
+            double A2 = (Math.Sin(Declination) * Math.Cos(Latitude) - Math.Cos(Declination) * Math.Cos(ha) * Math.Sin(Latitude)) / Math.Cos(Math.Asin(Math.Sin(Declination) * Math.Sin(Latitude) + Math.Cos(Declination) * Math.Cos(ha) * Math.Cos(Latitude)));
+
+            double azimuth  = Math.Atan2(A1,A2);
+            if (azimuth<0)
+            {
+              azimuth = 2*Math.PI + azimuth;
+            }
+
+            return azimuth*SharedResources.RAD_DEG;
         }
     }
 }

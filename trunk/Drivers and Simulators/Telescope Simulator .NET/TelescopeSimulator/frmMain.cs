@@ -232,5 +232,10 @@ namespace ASCOM.TelescopeSimulator
         }
 
         #endregion
+
+        private void checkBoxTrack_CheckedChanged(object sender, EventArgs e)
+        {
+            TelescopeHardware.Tracking = checkBoxTrack.Checked;
+        }
     }
 }
