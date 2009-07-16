@@ -261,11 +261,17 @@ namespace ASCOM.TelescopeSimulator
         //Update the Telescope Based on Timed Events
         private static void TimerEvent(object source, ElapsedEventArgs e)
         {
+            if (m_Tracking)
+            {
+                m_Altitude = AstronomyFunctions.CalculateAltitude(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                m_Azimuth = AstronomyFunctions.CalculateAzimuth(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD); 
+            }
+            else
+            {
+                m_Declination = AstronomyFunctions.CalculateDec(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD);
+                m_RightAscension = AstronomyFunctions.CalculateRa(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
 
-            m_Declination = AstronomyFunctions.CalculateDec(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD);
-            m_RightAscension = AstronomyFunctions.CalculateRa(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
-            
-
+            }
             TelescopeSimulator.m_MainForm.SiderealTime = AstronomyFunctions.LocalSiderealTime(m_Longitude);
             TelescopeSimulator.m_MainForm.Altitude = m_Altitude;
             TelescopeSimulator.m_MainForm.Azimuth = m_Azimuth;
@@ -636,6 +642,13 @@ namespace ASCOM.TelescopeSimulator
         #endregion
 
         #region Telescope Implementation
+        public static bool Tracking
+        {
+            get
+            { return m_Tracking; }
+            set
+            { m_Tracking = value; }
+        }
         public static double Altitude
         {
             get { return m_Altitude; }
