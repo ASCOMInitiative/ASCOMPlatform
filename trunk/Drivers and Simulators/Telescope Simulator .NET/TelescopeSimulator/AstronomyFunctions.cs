@@ -47,9 +47,28 @@ namespace ASCOM.TelescopeSimulator
             return dt;
         }
 
+
+        //----------------------------------------------------------------------------------------
+        // Calculate Precession
+        //----------------------------------------------------------------------------------------
+        public static double Precess(DateTime datetime)
+        {
+            int y = datetime.Year + 1900;
+            if (y >= 3900) { y = y - 1900; }
+            int p = y - 1;
+            int r = p / 1000;
+            int s = 2 - r + r / 4;
+            int t = (int)Math.Truncate(365.25 * p);
+            double r1 = (s + t - 693597.5) / 36525;
+            double s1 = 6.646 + 2400.051 * r1;
+
+            return 24 - s1 + (24 * (y - 1900));
+            
+        }
         //----------------------------------------------------------------------------------------
         // Current Local Apparent Sidereal Time for Longitude
         //----------------------------------------------------------------------------------------
+
         public static double LocalSiderealTime(double longitude)
         {
             double days_since_j_2000 = DateUtcToJulian(DateTime.Now.ToUniversalTime()) - 2451545.0;
@@ -185,17 +204,19 @@ namespace ASCOM.TelescopeSimulator
         //----------------------------------------------------------------------------------------
         // Calculate RA and Dec From Altitude and Azimuth and Site
         //----------------------------------------------------------------------------------------
-        public static double CalculateRa(double Altitude, double Azimuth, double Latitude, double Longitude, double Declination)
+        public static double CalculateRa(double Altitude, double Azimuth, double Latitude, double Longitude)
         {
 
-            double hourAngle = Math.Acos((Math.Sin(Altitude) - Math.Sin(Declination) * Math.Sin(Latitude)) / Math.Cos(Declination) * Math.Cos(Latitude))*SharedResources.RAD_DEG;
+            //double hourAngle = Math.Acos((Math.Cos(Altitude) - Math.Sin(Declination) * Math.Sin(Latitude)) / Math.Cos(Declination) * Math.Cos(Latitude))*SharedResources.RAD_DEG;
+            //double hourAngle = Math.Acos((Math.Cos(Altitude) * Math.Cos(Latitude) - Math.Sin(Latitude) * Math.Sin(Altitude) * Math.Cos(Azimuth)) / Math.Cos(Declination)) * SharedResources.RAD_DEG;
+            double hourAngle = Math.Atan(-Math.Sin(Azimuth) * Math.Cos(Altitude) - Math.Cos(Azimuth) * Math.Sin(Latitude) * Math.Cos(Altitude) + Math.Sin(Altitude) * Math.Cos(Latitude)) * SharedResources.RAD_DEG;
+            if (hourAngle < 0)
+            { hourAngle += 360; }
+            else if (hourAngle >= 360)
+            { hourAngle -= 360; }
+            double lst = LocalSiderealTime(Longitude * SharedResources.RAD_DEG);
+            double ra =  lst - hourAngle;
             
-
-            double ra = LocalSiderealTime(Longitude*SharedResources.RAD_DEG) - hourAngle;
-            if (ra < 0)
-            { ra += 24; }
-            else if (ra >= 24)
-            { ra -= 24; }
             return ra;
         }
         public static double CalculateDec(double Altitude, double Azimuth, double Latitude)
