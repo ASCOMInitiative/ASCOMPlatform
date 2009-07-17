@@ -22,7 +22,7 @@ using System.Text;
 
 namespace ASCOM.TelescopeSimulator
 {
-    class AstronomyFunctions
+    public class AstronomyFunctions
     {
         static AstronomyFunctions()
         { }
