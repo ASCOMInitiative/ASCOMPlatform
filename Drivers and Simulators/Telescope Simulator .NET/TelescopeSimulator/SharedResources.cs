@@ -18,6 +18,16 @@ using System.Text;
 
 namespace ASCOM.TelescopeSimulator
 {
+    public enum SlewType
+    {
+        SlewNone,
+        SlewSetting,
+        SlewMoveAxis,
+        SlewRaDec,
+        SlewAltAz,
+        SlewPark,
+        SlewHome
+    }
     public class SharedResources
     {
         
@@ -54,6 +64,7 @@ namespace ASCOM.TelescopeSimulator
         public static string INSTRUMENT_NAME = "Simulator" ;       // Our name
         public static string INSTRUMENT_DESCRIPTION = "Software Telescope Simulator for ASCOM";
         public static double INVALID_COORDINATE = 100000;
+
 
         //
         // Public access to shared resources

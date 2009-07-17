@@ -85,12 +85,15 @@ namespace ASCOM.TelescopeSimulator
 
         private static double m_RightAscension;
         private static double m_Declination;
+        private static double m_SiderealTime;
 
         private static double m_DateDelta;
 
         private static bool m_Tracking;
         private static bool m_AtHome;
         private static bool m_AtPark;
+
+        private static SlewType m_SlewState = SlewType.SlewNone;
 
         private static bool m_SouthernHemisphere = false;
 
@@ -254,6 +257,18 @@ namespace ASCOM.TelescopeSimulator
             m_AtHome = false;
             m_AtPark = false;
 
+            if (m_Tracking)
+            {
+                m_Altitude = AstronomyFunctions.CalculateAltitude(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                m_Azimuth = AstronomyFunctions.CalculateAzimuth(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+            }
+            else
+            {
+                m_Declination = AstronomyFunctions.CalculateDec(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD);
+                m_RightAscension = AstronomyFunctions.CalculateRa(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+
+            }
+            m_SiderealTime = AstronomyFunctions.LocalSiderealTime(m_Longitude);
 
             m_Timer.Start(); 
         }
@@ -272,7 +287,8 @@ namespace ASCOM.TelescopeSimulator
                 m_RightAscension = AstronomyFunctions.CalculateRa(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
 
             }
-            TelescopeSimulator.m_MainForm.SiderealTime = AstronomyFunctions.LocalSiderealTime(m_Longitude);
+            m_SiderealTime = AstronomyFunctions.LocalSiderealTime(m_Longitude);
+            TelescopeSimulator.m_MainForm.SiderealTime = m_SiderealTime;
             TelescopeSimulator.m_MainForm.Altitude = m_Altitude;
             TelescopeSimulator.m_MainForm.Azimuth = m_Azimuth;
             TelescopeSimulator.m_MainForm.RightAscension = m_RightAscension;
@@ -728,11 +744,30 @@ namespace ASCOM.TelescopeSimulator
 
        public static bool SouthernHemisphere
        { get { return m_SouthernHemisphere; } }
+
+       public static double RightAscension
+       { get { return m_RightAscension; } }
+       public static double Declination
+       { get { return m_Declination; } }
+
+       public static bool AtPark
+       { get { return m_AtPark; } }
+       public static SlewType SlewState
+       { get { return m_SlewState; } }
+
+       public static bool AtHome
+       { get { return m_AtHome; } }
+      
+       public static double SiderealTime
+       { get { return m_SiderealTime; } }
         #endregion
 
         #region Helper Functions
 
         #endregion
 
+
+
     }
+    
 }

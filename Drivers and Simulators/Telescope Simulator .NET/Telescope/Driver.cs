@@ -20,6 +20,9 @@ using System;
 using System.Collections;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.ComponentModel;
+using System.Reflection;
+
 
 using ASCOM;
 using ASCOM.HelperNET;
@@ -142,8 +145,45 @@ namespace ASCOM.TelescopeSimulator
 
         public double Altitude
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Altitude", false); }
+            get
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("Altitude: ");
+
+                    }
+                }
+
+                if (!TelescopeHardware.CanAltAz)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+
+                        }
+                    }
+                    throw new PropertyNotImplementedException("Altitude", false);
+                }
+
+                if ((TelescopeHardware.AtPark || TelescopeHardware.SlewState == SlewType.SlewPark) && TelescopeHardware.NoCoordinatesAtPark)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("No coordinates at park!");
+
+                        }
+                    }
+                    throw new PropertyNotImplementedException("Altitude", false);
+                }
+                SharedResources.TrafficForm.TrafficEnd(AstronomyFunctions.ConvertDoubleToDMS(TelescopeHardware.Altitude));
+                return TelescopeHardware.Altitude;
+            }
         }
 
         public double ApertureArea
@@ -219,14 +259,54 @@ namespace ASCOM.TelescopeSimulator
 
         public bool AtHome
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("AtHome", false); }
+            get
+            {
+                if (TelescopeHardware.VersionOneOnly)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Capabilities)
+                        {
+                            SharedResources.TrafficForm.TrafficLine("AtHome: Not Implemented");
+                        }
+                    }
+                    throw new MethodNotImplementedException("AtHome");
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("AtHome: " + TelescopeHardware.AtHome);
+                    }
+                }
+                return TelescopeHardware.AtHome;
+            }
         }
 
         public bool AtPark
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("AtPark", false); }
+            get
+            {
+                if (TelescopeHardware.VersionOneOnly)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Capabilities)
+                        {
+                            SharedResources.TrafficForm.TrafficLine("AtPark: Not Implemented");
+                        }
+                    }
+                    throw new MethodNotImplementedException("AtPark");
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("AtPark: " + TelescopeHardware.AtPark);
+                    }
+                }
+                return TelescopeHardware.AtPark;
+            }
         }
 
         public IAxisRates AxisRates(TelescopeAxes Axis)
@@ -246,8 +326,45 @@ namespace ASCOM.TelescopeSimulator
 
         public double Azimuth
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Azimuth", false); }
+            get
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("Azimuth: ");
+
+                    }
+                }
+
+                if (!TelescopeHardware.CanAltAz)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+
+                        }
+                    }
+                    throw new PropertyNotImplementedException("Azimuth", false);
+                }
+
+                if ((TelescopeHardware.AtPark || TelescopeHardware.SlewState == SlewType.SlewPark) && TelescopeHardware.NoCoordinatesAtPark)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("No coordinates at park!");
+
+                        }
+                    }
+                    throw new PropertyNotImplementedException("Azimuth", false);
+                }
+                SharedResources.TrafficForm.TrafficEnd(AstronomyFunctions.ConvertDoubleToDMS(TelescopeHardware.Azimuth));
+                return TelescopeHardware.Azimuth;
+            }
         }
 
         public bool CanFindHome
@@ -638,8 +755,46 @@ namespace ASCOM.TelescopeSimulator
 
         public double Declination
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Declination", false); }
+            
+            get 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("Declination: ");
+
+                    }
+                }
+
+                if (!TelescopeHardware.CanEquatorial)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+
+                        }
+                    }
+                    throw new PropertyNotImplementedException("Declination", false);
+                }
+
+                if ((TelescopeHardware.AtPark || TelescopeHardware.SlewState == SlewType.SlewPark) && TelescopeHardware.NoCoordinatesAtPark)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("No coordinates at park!");
+
+                        }
+                    }
+                    throw new PropertyNotImplementedException("Declination", false);
+                }
+                SharedResources.TrafficForm.TrafficEnd(AstronomyFunctions.ConvertDoubleToHMS(TelescopeHardware.Declination));
+                return TelescopeHardware.Declination;
+            }
         }
 
         public double DeclinationRate
@@ -651,8 +806,18 @@ namespace ASCOM.TelescopeSimulator
 
         public string Description
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Description", false); }
+            
+            get
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("Description: " + SharedResources.INSTRUMENT_DESCRIPTION);
+                    }
+                }
+                return SharedResources.INSTRUMENT_DESCRIPTION;
+            }
         }
 
         public PierSide DestinationSideOfPier(double RightAscension, double Declination)
@@ -671,13 +836,41 @@ namespace ASCOM.TelescopeSimulator
         public string DriverInfo
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("DriverInfo", false); }
+            get 
+            {
+                Assembly asm = Assembly.GetExecutingAssembly();
+                
+                string driverinfo = asm.FullName;
+
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("DriverInfo: " + driverinfo);
+                    }
+                }
+                return driverinfo;
+            }
         }
 
         public string DriverVersion
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("DriverVersion", false); }
+            get 
+            {
+                Assembly asm = Assembly.GetExecutingAssembly();
+
+                string driverinfo = asm.GetName().Version.ToString();
+
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("DriverVersion: " + driverinfo);
+                    }
+                }
+                return driverinfo;
+            }
         }
 
         public EquatorialCoordinateType EquatorialSystem
@@ -762,8 +955,18 @@ namespace ASCOM.TelescopeSimulator
 
         public string Name
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Name", false); }
+
+            get
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("Description: " + SharedResources.INSTRUMENT_NAME);
+                    }
+                }
+                return SharedResources.INSTRUMENT_NAME;
+            }
         }
 
         public void Park()
@@ -780,8 +983,45 @@ namespace ASCOM.TelescopeSimulator
 
         public double RightAscension
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("RightAscension", false); }
+            get
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("Right Ascension: ");
+
+                    }
+                }
+
+                if (!TelescopeHardware.CanEquatorial)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+
+                        }
+                    }
+                    throw new PropertyNotImplementedException("RightAscension", false);
+                }
+
+                if ((TelescopeHardware.AtPark || TelescopeHardware.SlewState == SlewType.SlewPark) && TelescopeHardware.NoCoordinatesAtPark)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("No coordinates at park!");
+
+                        }
+                    }
+                    throw new PropertyNotImplementedException("RightAscension", false);
+                }
+                SharedResources.TrafficForm.TrafficEnd(AstronomyFunctions.ConvertDoubleToHMS(TelescopeHardware.RightAscension));
+                return TelescopeHardware.RightAscension;
+            }
         }
 
         public double RightAscensionRate
@@ -814,8 +1054,33 @@ namespace ASCOM.TelescopeSimulator
 
         public double SiderealTime
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("SiderealTime", false); }
+            
+            get {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("Sidereal Time: ");
+
+                    }
+                }
+
+                if (!TelescopeHardware.CanSiderealTime)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+
+                        }
+                    }
+                    throw new PropertyNotImplementedException("SiderealTime", false);
+                }
+
+                SharedResources.TrafficForm.TrafficEnd(AstronomyFunctions.ConvertDoubleToHMS(TelescopeHardware.SiderealTime));
+                return TelescopeHardware.SiderealTime;
+            }
         }
 
         public double SiteElevation
