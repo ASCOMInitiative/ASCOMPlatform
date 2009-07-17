@@ -264,7 +264,7 @@ namespace ASCOM.GeminiTelescope
         public double Declination
         {
             // TODO Replace this with your implementation
-            get { return TelescopeHardware.Declination; }
+            get { return GeminiHardware.Declination; }
         }
 
         public double DeclinationRate
@@ -376,7 +376,7 @@ namespace ASCOM.GeminiTelescope
         public double RightAscension
         {
             // TODO Replace this with your implementation
-            get { return TelescopeHardware.RightAscension; }
+            get { return GeminiHardware.RightAscension; }
         }
 
         public double RightAscensionRate
@@ -394,12 +394,12 @@ namespace ASCOM.GeminiTelescope
 
         public void SetupDialog()
         {
-            if (TelescopeHardware.Connected)
+            if (GeminiHardware.Connected)
             {
                 throw new DriverException("The hardware is connected, cannot do SetupDialog()",
                                     unchecked(ErrorCodes.DriverBase + 4));
             }
-            GeminiTelescope.m_MainForm.DoSetupDialog();
+            GeminiTelescope.m_MainForm.DoTelescopeSetupDialog();
         }
 
         public PierSide SideOfPier

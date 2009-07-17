@@ -17,26 +17,26 @@ namespace ASCOM.GeminiTelescope
             InitializeComponent();
 
         }
-        public void DoSetupDialog()
+        public void DoTelescopeSetupDialog()
         {
-            SetupDialogForm setupForm = new SetupDialogForm();
+            TelescopeSetupDialogForm setupForm = new TelescopeSetupDialogForm();
 
-            setupForm.ComPort = TelescopeHardware.ComPort;
+            setupForm.ComPort = GeminiHardware.ComPort;
 
-            setupForm.Elevation = TelescopeHardware.Elevation;
-            setupForm.Latitude = TelescopeHardware.Latitude;
-            setupForm.Longitude = TelescopeHardware.Longitude;
+            setupForm.Elevation = GeminiHardware.Elevation;
+            setupForm.Latitude = GeminiHardware.Latitude;
+            setupForm.Longitude = GeminiHardware.Longitude;
 
             DialogResult ans = setupForm.ShowDialog(this);
 
             if (ans == DialogResult.OK)
             {
 
-                TelescopeHardware.ComPort = setupForm.ComPort;
+                GeminiHardware.ComPort = setupForm.ComPort;
 
-                TelescopeHardware.Elevation = setupForm.Elevation;
-                TelescopeHardware.Latitude = setupForm.Latitude;
-                TelescopeHardware.Longitude = setupForm.Longitude;
+                GeminiHardware.Elevation = setupForm.Elevation;
+                GeminiHardware.Latitude = setupForm.Latitude;
+                GeminiHardware.Longitude = setupForm.Longitude;
                 
             }
 
@@ -45,13 +45,22 @@ namespace ASCOM.GeminiTelescope
 
         private void buttonSetup_Click(object sender, EventArgs e)
         {
-            DoSetupDialog();
+            DoTelescopeSetupDialog();
             SetSlewButtons();
         }
+        public void DoFocuserSetupDialog()
+        {
+            FocuserSetupDialogForm setupForm = new FocuserSetupDialogForm();
+            DialogResult ans = setupForm.ShowDialog(this);
 
+            if (ans == DialogResult.OK)
+            {
+            }
+            setupForm.Dispose();
+        }
         private void SetSlewButtons()
         {
-            if (TelescopeHardware.SouthernHemisphere)
+            if (GeminiHardware.SouthernHemisphere)
             {
                 buttonSlew1.Text = "S";
                 buttonSlew2.Text = "N";
@@ -103,7 +112,7 @@ namespace ASCOM.GeminiTelescope
         private void frmMain_Load(object sender, EventArgs e)
         {
             SetSlewButtons();
-            TelescopeHardware.Start();
+            GeminiHardware.Start();
         }
 
         #region Thread Safe Callback Functions
@@ -129,12 +138,12 @@ namespace ASCOM.GeminiTelescope
 
         private void setupDialogToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DoSetupDialog();
+            DoTelescopeSetupDialog();
         }
 
         private void mountParametersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (TelescopeHardware.Connected)
+            if (GeminiHardware.Connected)
             {
                 MountParameters parametersForm = new MountParameters();
 
