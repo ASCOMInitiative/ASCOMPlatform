@@ -104,8 +104,12 @@ namespace ASCOM.GeminiTelescope
 
         public void SetupDialog()
         {
-            SetupDialogForm F = new SetupDialogForm();
-            F.ShowDialog();
+            if (GeminiHardware.Connected)
+            {
+                throw new DriverException("The hardware is connected, cannot do SetupDialog()",
+                                    unchecked(ErrorCodes.DriverBase + 4));
+            }
+            GeminiTelescope.m_MainForm.DoTelescopeSetupDialog();
         }
 
         public double StepSize
