@@ -1,0 +1,128 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<title>ASCOM Platform 2007 (v5.0)</title>
+		<style type="text/css">
+			<!--
+			body { 
+				background: white;
+				font-size: 80%;
+				font-family: Tahoma, Arial, Helvetica, sans-serif; 
+				color: black;
+			} 
+			p {
+				margin-top: 6pt; 
+				margin-bottom: 6pt;
+			} 
+			h1 {
+				font-family: Arial, Helvetica, sans-serif; 
+			    font-size: 180%;
+				line-height: 125%;
+				color : #990000;
+				margin-top: 6pt;
+				margin-bottom: 6pt;
+			}
+			h2 {
+				font-family: Arial, Helvetica, sans-serif; 
+				font-size: 140%;
+				color : #990000;
+				margin-top: 6pt;
+				margin-bottom: 6pt;
+			} 
+
+			ul, ol {
+				margin-top: 6pt;
+				margin-bottom: 6pt;
+			} 
+			li {
+				margin-top: 4pt;
+				color : #000000;
+			} 
+			.underline {
+				text-decoration: underline;
+				}
+			.code {
+				font-family:"Lucida Console", "Courier New", Courier, monospace;
+				}
+.red {color: #FF0000}
+			-->
+		</style>
+	</head>
+	<body>
+	<h1>Creating Installers for your Drivers</h1>
+
+	<p>Starting with ASCOM Platform 2008 (Platform 5), drivers (apart from simulators and some 
+	hub-type tools) are not included with the Platform itself. This means that 
+	driver developers must now furnish their drivers as separately installable 
+	packages. We&#39;ve made this free and relatively easy. The Platform includes an optional 
+	tool that generates a first-cut of an installer script for the free
+	<a href="http://www.jrsoftware.org/isinfo.php" target="aux">Inno Setup</a> 
+	installer package. Also included are graphics that will give your driver&#39;s 
+	installer a consistent look and feel, important for end users&#39; comfort and 
+	confidence. Here&#39;s a brief step by step:</p>
+	<ol>
+	<li><a href="http://www.jrsoftware.org/download.php/is.exe">Download Inno 
+	Setup</a> and install it on your system.</li>
+	<li>Open the Inno Setup help file and get at least a bit of familiarity with 
+	the script layout and compilation process. Every minute spent here will save 
+	you far more than a minute later!</li>
+	<li>Run the &quot;Driver install script maker&quot; (Start menu, ASCOM Platform, 
+	Tools).</li>
+	<li>Fill in the form that appears (see tips below).</li>
+	<li>Click Save. The Inno Setup compiler will appear showing your driver&#39;s 
+	install script. <strong>Check it out</strong>!</li>
+	<li>Make any adjustments needed (<em>it&#39;s only a starting point!</em>).</li>
+	<li>Compile it and test the installer within Inno Setup. Here&#39;s a checklist:<ol type="a">
+		<li>Driver goes into correct Common Files\ASCOM subfolder</li>
+		<li>It is properly registered for COM (use 
+		<a href="http://www.microsoft.com/downloads/details.aspx?FamilyID=5233b70d-d9b2-4cb5-aeb6-45664be858b6&amp;DisplayLang=en" target="aux">OLEView</a>)</li>
+		<li>If it is a local server (EXE) type, it has correct AppID info (use 
+		<a href="http://www.microsoft.com/downloads/details.aspx?FamilyID=5233b70d-d9b2-4cb5-aeb6-45664be858b6&amp;DisplayLang=en" target="aux">OLEView</a>)</li>
+	</ol>
+	</li>
+	<li>The installer generator also creates a simple test script (JScript).</li>
+	<ol type="a">
+		<li>Look at the test script in Notepad. Make any adjustments needed (<em>it&#39;s 
+		a starting point!</em>).</li>
+		<li>Double-click it. You should see a popup with your driver&#39;s name.
+		</li>
+		<li>Next you should see your driver&#39;s setup dialog.</li>
+	</ol>
+	<li>Finally, use some ASCOM client to show a Chooser for your driver type 
+	and verify that your driver is listed.</li>
+</ol>
+<h2>Tips on Making Install Packages</h2>
+	<ul>
+		<li>Please do not change the installer graphic. It&#39;s important for end 
+		users to have a consistent experience when installing ASCOM drivers.</li>
+		<li><span class="underline">Use a unique name for your driver&#39;s Read Me file</span> (not just &quot;ReadMe.html&quot;). 
+		Failure to do this will probably cause your ReadMe to overwrite another 
+		or get overwritten by another ReadMe from someone else who failed to give theirs a unique name.</li>
+		<li>The Source path should point to the project folder for your driver. For .NET assembly/DLL drivers, the tool assumes that the driver DLL is located below this folder in ..\bin\Release.</li>
+		<li>The browse buttons for the main driver file and Read Me file will be 
+		enabled after you browse to the source location of your driver&#39;s files.</li>
+		<li>If your driver is a .NET assembly (in-proc DLL) type, you can browse 
+		down to bin\Release to locate the DLL file. Any other place will cause 
+		the script generator to fail.</li>
+		<li>If your driver is a .NET local server (exe), you will need to add a 
+		Source statement to the script for the driver DLLs that go into the xxxServedClasses folder.</li>
+		<li>If your driver is a VB6/C++ COM local server (exe) you will have to 
+			add the needed registry commands to create the AppID (DCOM) info if you 
+			want it to be usable from Software Bisque&#39;s TheSky. Details are in the 
+			developer section of the <a href="http://ascom-standards.org/" target="aux">ASCOM Web Site</a>.</li>
+		<li>The script generator is not a&nbsp; &quot;womb to tomb&quot; solution. You 
+		will almost certainly have to make adjustments to the resulting Inno 
+		Setup (.iss) script. </li>
+		<li>The script (.iss) file and the compiled installer package will be 
+		put into the Source folder you select.</li>
+	</ul>
+	<h2>How it works (advanced developers)</h2>
+	<p>The generator uses the info from its form fields to make substitutions 
+	into a <em>template</em> script file, then writes the result into your 
+	script (.iss) file. The template is located in the Resources subfolder below 
+	the script generator&#39;s folder (nominally Program Files\ASCOM\Install Script 
+	Gen). There is a document describing the substitution tokens in the script 
+	generator&#39;s installation folder. </p>
+	</body>
+</html>
