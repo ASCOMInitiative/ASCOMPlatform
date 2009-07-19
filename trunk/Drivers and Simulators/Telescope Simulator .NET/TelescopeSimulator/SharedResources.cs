@@ -26,7 +26,25 @@ namespace ASCOM.TelescopeSimulator
         SlewRaDec,
         SlewAltAz,
         SlewPark,
-        SlewHome
+        SlewHome,
+        SlewHandpad
+    }
+    public enum SlewSpeed
+    {
+        SlewSlow,
+        SlewMedium,
+        SlewFast
+    }
+    public enum SlewDirection
+    {
+        SlewNorth,
+        SlewSouth,
+        SlewEast,
+        SlewWest,
+        SlewUp,
+        SlewDown,
+        SlewLeft,
+        SlewRight
     }
     public class SharedResources
     {

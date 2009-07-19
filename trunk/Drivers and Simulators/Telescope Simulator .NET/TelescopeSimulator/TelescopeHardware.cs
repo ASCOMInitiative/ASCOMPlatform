@@ -94,6 +94,12 @@ namespace ASCOM.TelescopeSimulator
         private static bool m_AtPark;
 
         private static SlewType m_SlewState = SlewType.SlewNone;
+        private static SlewDirection m_SlewDirection;
+        private static SlewSpeed m_SlewSpeed;
+
+        private static double m_SlewSpeedFast;
+        private static double m_SlewSpeedMedium;
+        private static double m_SlewSpeedSlow;
 
         private static bool m_SouthernHemisphere = false;
 
@@ -249,6 +255,9 @@ namespace ASCOM.TelescopeSimulator
             //Set the form setting for the Always On Top Value
             TelescopeSimulator.m_MainForm.TopMost = m_OnTop;
 
+            m_SlewSpeedFast = m_MaximumSlewRate * SharedResources.TIMER_INTERVAL;
+            m_SlewSpeedMedium = m_SlewSpeedFast * 0.1;
+            m_SlewSpeedSlow = m_SlewSpeedFast * 0.02;
         }
         public static void Start() 
         {
@@ -276,16 +285,90 @@ namespace ASCOM.TelescopeSimulator
         //Update the Telescope Based on Timed Events
         private static void TimerEvent(object source, ElapsedEventArgs e)
         {
-            if (m_Tracking)
-            {
-                m_Altitude = AstronomyFunctions.CalculateAltitude(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
-                m_Azimuth = AstronomyFunctions.CalculateAzimuth(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD); 
-            }
-            else
-            {
-                m_Declination = AstronomyFunctions.CalculateDec(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD);
-                m_RightAscension = AstronomyFunctions.CalculateRa(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+            double step;
+            double z;
 
+            if (m_SlewState == SlewType.SlewNone) //Not slewing the scope 
+            {
+                if (m_Tracking)
+                {
+                    m_Altitude = AstronomyFunctions.CalculateAltitude(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                    m_Azimuth = AstronomyFunctions.CalculateAzimuth(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                }
+                else
+                {
+                    m_Declination = AstronomyFunctions.CalculateDec(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD);
+                    m_RightAscension = AstronomyFunctions.CalculateRa(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+
+                }
+            }
+            else //Process the movement
+            {
+                z = Math.Cos(m_Declination * SharedResources.DEG_RAD) * 15;
+                if (z < 0.001) {z = 0.001;}
+
+                if (m_SlewState == SlewType.SlewHandpad) //We are doing a slew with the handpad buttons
+                {
+                    if (m_SlewSpeed == SlewSpeed.SlewFast)
+                    {
+                        step = m_SlewSpeedFast;
+                    }
+                    else if (m_SlewSpeed == SlewSpeed.SlewMedium)
+                    {
+                        step = m_SlewSpeedMedium;
+                    }
+                    else
+                    {
+                        step = m_SlewSpeedSlow;
+                    }
+                    switch (m_SlewDirection)
+                    {
+                        case SlewDirection.SlewUp:
+                            m_Altitude += step;
+                            m_Declination = AstronomyFunctions.CalculateDec(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD);
+                            m_RightAscension = AstronomyFunctions.CalculateRa(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                            break;
+                        case SlewDirection.SlewDown:
+                            m_Altitude -= step;
+                            m_Declination = AstronomyFunctions.CalculateDec(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD);
+                            m_RightAscension = AstronomyFunctions.CalculateRa(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                            break;
+                        case SlewDirection.SlewRight:
+                            m_Azimuth += step;
+                            m_Declination = AstronomyFunctions.CalculateDec(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD);
+                            m_RightAscension = AstronomyFunctions.CalculateRa(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                            break;
+                        case SlewDirection.SlewLeft:
+                            m_Azimuth -= step;
+                            m_Declination = AstronomyFunctions.CalculateDec(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD);
+                            m_RightAscension = AstronomyFunctions.CalculateRa(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                            break;
+                        case SlewDirection.SlewNorth:
+                            m_Declination += step;
+                            m_Altitude = AstronomyFunctions.CalculateAltitude(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                            m_Azimuth = AstronomyFunctions.CalculateAzimuth(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                            break;
+                        case SlewDirection.SlewSouth:
+                            m_Declination -= step;
+                            m_Altitude = AstronomyFunctions.CalculateAltitude(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                            m_Azimuth = AstronomyFunctions.CalculateAzimuth(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                            break;
+                        case SlewDirection.SlewEast:
+                            m_RightAscension += step/z;
+                            m_Altitude = AstronomyFunctions.CalculateAltitude(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                            m_Azimuth = AstronomyFunctions.CalculateAzimuth(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                            break;
+                        case SlewDirection.SlewWest:
+                            m_RightAscension -= step/z;
+                            m_Altitude = AstronomyFunctions.CalculateAltitude(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                            m_Azimuth = AstronomyFunctions.CalculateAzimuth(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                            break;
+                    }
+                }
+                else
+                {
+
+                }
             }
             m_SiderealTime = AstronomyFunctions.LocalSiderealTime(m_Longitude);
             TelescopeSimulator.m_MainForm.SiderealTime = m_SiderealTime;
@@ -753,13 +836,28 @@ namespace ASCOM.TelescopeSimulator
        public static bool AtPark
        { get { return m_AtPark; } }
        public static SlewType SlewState
-       { get { return m_SlewState; } }
+       { 
+           get { return m_SlewState; }
+           set { m_SlewState = value; }
+       }
+       public static SlewSpeed SlewSpeed
+       {
+           get { return m_SlewSpeed; }
+           set { m_SlewSpeed = value; }
+       }
 
+       public static SlewDirection SlewDirection
+       {
+           get { return m_SlewDirection; }
+           set { m_SlewDirection = value; }
+       }
        public static bool AtHome
        { get { return m_AtHome; } }
       
        public static double SiderealTime
        { get { return m_SiderealTime; } }
+
+   
         #endregion
 
         #region Helper Functions

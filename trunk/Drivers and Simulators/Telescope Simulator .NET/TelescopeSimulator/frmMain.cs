@@ -237,5 +237,151 @@ namespace ASCOM.TelescopeSimulator
         {
             TelescopeHardware.Tracking = checkBoxTrack.Checked;
         }
+
+        private void buttonSlew1_MouseDown(object sender, MouseEventArgs e)
+        {
+            TelescopeHardware.SlewState = SlewType.SlewHandpad;
+            if (TelescopeHardware.AlignmentMode == 0)
+            {
+                
+                TelescopeHardware.SlewDirection = SlewDirection.SlewUp;
+            }
+            else
+            {
+                
+                if (TelescopeHardware.SouthernHemisphere)
+                {
+                    TelescopeHardware.SlewDirection = SlewDirection.SlewSouth;
+                }
+                else
+                {
+                    TelescopeHardware.SlewDirection = SlewDirection.SlewNorth;
+                }
+            }
+            if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
+            {
+                TelescopeHardware.SlewSpeed = SlewSpeed.SlewMedium;
+            }
+            else if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
+            {
+                TelescopeHardware.SlewSpeed = SlewSpeed.SlewSlow;
+            }
+            else
+            {
+                TelescopeHardware.SlewSpeed = SlewSpeed.SlewFast;
+            }
+
+        }
+
+        private void buttonSlew1_MouseUp(object sender, MouseEventArgs e)
+        {
+            TelescopeHardware.SlewState = SlewType.SlewNone;
+        }
+
+        private void buttonSlew2_MouseDown(object sender, MouseEventArgs e)
+        {
+            TelescopeHardware.SlewState = SlewType.SlewHandpad;
+            if (TelescopeHardware.AlignmentMode == 0)
+            {
+                TelescopeHardware.SlewDirection = SlewDirection.SlewDown;
+            }
+            else
+            {
+                if (TelescopeHardware.SouthernHemisphere)
+                {
+                    TelescopeHardware.SlewDirection = SlewDirection.SlewNorth;
+                }
+                else
+                {
+                    TelescopeHardware.SlewDirection = SlewDirection.SlewSouth;
+                }
+            }
+            if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
+            {
+                TelescopeHardware.SlewSpeed = SlewSpeed.SlewMedium;
+            }
+            else if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
+            {
+                TelescopeHardware.SlewSpeed = SlewSpeed.SlewSlow;
+            }
+            else
+            {
+                TelescopeHardware.SlewSpeed = SlewSpeed.SlewFast;
+            }
+        }
+
+        private void buttonSlew2_MouseUp(object sender, MouseEventArgs e)
+        {
+            TelescopeHardware.SlewState = SlewType.SlewNone;
+        }
+
+        private void buttonSlew3_MouseDown(object sender, MouseEventArgs e)
+        {
+            TelescopeHardware.SlewState = SlewType.SlewHandpad;
+            if (TelescopeHardware.AlignmentMode == 0)
+            {
+                TelescopeHardware.SlewDirection = SlewDirection.SlewRight;
+            }
+            else
+            {
+                
+                TelescopeHardware.SlewDirection = SlewDirection.SlewEast;
+                
+            }
+            if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
+            {
+                TelescopeHardware.SlewSpeed = SlewSpeed.SlewMedium;
+            }
+            else if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
+            {
+                TelescopeHardware.SlewSpeed = SlewSpeed.SlewSlow;
+            }
+            else
+            {
+                TelescopeHardware.SlewSpeed = SlewSpeed.SlewFast;
+            }
+        }
+
+        private void buttonSlew3_MouseUp(object sender, MouseEventArgs e)
+        {
+            TelescopeHardware.SlewState = SlewType.SlewNone;
+        }
+
+        private void buttonSlew4_MouseDown(object sender, MouseEventArgs e)
+        {
+            TelescopeHardware.SlewState = SlewType.SlewHandpad;
+            if (TelescopeHardware.AlignmentMode == 0)
+            {
+                TelescopeHardware.SlewDirection = SlewDirection.SlewRight;
+            }
+            else
+            {
+
+                TelescopeHardware.SlewDirection = SlewDirection.SlewWest;
+
+            }
+            if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
+            {
+                TelescopeHardware.SlewSpeed = SlewSpeed.SlewMedium;
+            }
+            else if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
+            {
+                TelescopeHardware.SlewSpeed = SlewSpeed.SlewSlow;
+            }
+            else
+            {
+                TelescopeHardware.SlewSpeed = SlewSpeed.SlewFast;
+            }
+        }
+
+        private void buttonSlew4_MouseUp(object sender, MouseEventArgs e)
+        {
+            TelescopeHardware.SlewState = SlewType.SlewNone;
+        }
+
+        private void buttonSlew0_Click(object sender, EventArgs e)
+        {
+            TelescopeHardware.SlewState = SlewType.SlewNone;
+        }
     }
 }
