@@ -83,7 +83,11 @@ namespace ASCOM.TelescopeSimulator
         public static string INSTRUMENT_DESCRIPTION = "Software Telescope Simulator for ASCOM";
         public static double INVALID_COORDINATE = 100000;
 
-
+        public static uint ERROR_BASE = 0x80040400;
+        public static uint SCODE_NO_TARGET_COORDS = ERROR_BASE + 0x404;
+        public static string MSG_NO_TARGET_COORDS = "Target coordinates have not yet been set";
+        public static uint SCODE_VAL_OUTOFRANGE = ERROR_BASE + 0x405;
+        public static string MSG_VAL_OUTOFRANGE = "The property value is out of range";
         //
         // Public access to shared resources
         //

@@ -840,10 +840,16 @@ namespace ASCOM.TelescopeSimulator
        public static double Declination
        { get { return m_Declination; } }
 
-       public static double TargerRightAscension
-       { get { return m_TargetRightAscension; } }
+       public static double TargetRightAscension
+       { 
+           get { return m_TargetRightAscension; }
+           set { m_TargetRightAscension = value; }
+         }
        public static double TargetDeclination
-       { get { return m_TargetDeclination; } }
+       { 
+           get { return m_TargetDeclination; }
+           set { m_TargetDeclination = value; }
+       }
 
        public static bool AtPark
        { get { return m_AtPark; } }
