@@ -252,5 +252,39 @@ namespace ASCOM.TelescopeSimulator
 
             return azimuth*SharedResources.RAD_DEG;
         }
+
+        //----------------------------------------------------------------------------------------
+        // Range RA and DEC
+        //----------------------------------------------------------------------------------------
+        public static double RangeHa(double RightAscension)
+        {
+            if (RightAscension < 0)
+            {
+                return 24 + RightAscension;
+            }
+            else if (RightAscension >= 24)
+            {
+                return RightAscension - 24;
+            }
+            else
+            {
+                return RightAscension;
+            }
+        }
+        public static double RangeDec(double Declination)
+        {
+            if (Declination > 90)
+            {
+                return 90;
+            }
+            else if (Declination < -90)
+            {
+                return -90;
+            }
+            else
+            {
+                return Declination;
+            }
+        }
     }
 }

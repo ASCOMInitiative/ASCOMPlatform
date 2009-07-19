@@ -21,7 +21,7 @@ namespace ASCOM.TelescopeSimulator
     public enum SlewType
     {
         SlewNone,
-        SlewSetting,
+        SlewSettle,
         SlewMoveAxis,
         SlewRaDec,
         SlewAltAz,

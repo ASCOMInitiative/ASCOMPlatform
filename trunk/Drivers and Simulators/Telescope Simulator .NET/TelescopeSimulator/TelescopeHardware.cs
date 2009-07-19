@@ -87,6 +87,9 @@ namespace ASCOM.TelescopeSimulator
         private static double m_Declination;
         private static double m_SiderealTime;
 
+        private static double m_TargetRightAscension = SharedResources.INVALID_COORDINATE;
+        private static double m_TargetDeclination = SharedResources.INVALID_COORDINATE;
+
         private static double m_DateDelta;
 
         private static bool m_Tracking;
@@ -345,21 +348,25 @@ namespace ASCOM.TelescopeSimulator
                             break;
                         case SlewDirection.SlewNorth:
                             m_Declination += step;
+                            m_Declination = AstronomyFunctions.RangeDec(m_Declination);
                             m_Altitude = AstronomyFunctions.CalculateAltitude(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
                             m_Azimuth = AstronomyFunctions.CalculateAzimuth(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
                             break;
                         case SlewDirection.SlewSouth:
                             m_Declination -= step;
+                            m_Declination = AstronomyFunctions.RangeDec(m_Declination);
                             m_Altitude = AstronomyFunctions.CalculateAltitude(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
                             m_Azimuth = AstronomyFunctions.CalculateAzimuth(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
                             break;
                         case SlewDirection.SlewEast:
-                            m_RightAscension += step/z;
+                            m_RightAscension += step*z;
+                            m_RightAscension = AstronomyFunctions.RangeHa(m_RightAscension);
                             m_Altitude = AstronomyFunctions.CalculateAltitude(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
                             m_Azimuth = AstronomyFunctions.CalculateAzimuth(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
                             break;
                         case SlewDirection.SlewWest:
-                            m_RightAscension -= step/z;
+                            m_RightAscension -= step*z;
+                            m_RightAscension = AstronomyFunctions.RangeHa(m_RightAscension);
                             m_Altitude = AstronomyFunctions.CalculateAltitude(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
                             m_Azimuth = AstronomyFunctions.CalculateAzimuth(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
                             break;
@@ -832,6 +839,11 @@ namespace ASCOM.TelescopeSimulator
        { get { return m_RightAscension; } }
        public static double Declination
        { get { return m_Declination; } }
+
+       public static double TargerRightAscension
+       { get { return m_TargetRightAscension; } }
+       public static double TargetDeclination
+       { get { return m_TargetDeclination; } }
 
        public static bool AtPark
        { get { return m_AtPark; } }
