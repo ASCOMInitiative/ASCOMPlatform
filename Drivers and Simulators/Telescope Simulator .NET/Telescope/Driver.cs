@@ -1137,8 +1137,22 @@ namespace ASCOM.TelescopeSimulator
 
         public void SlewToTarget()
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("SlewToTarget");
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Other)
+                {
+                    SharedResources.TrafficForm.TrafficStart("SlewToTarger: ");
+
+                }
+            }
+            if (!TelescopeHardware.CanSlew)
+            {
+                throw new MethodNotImplementedException("SlewToTarget");
+            }
+            if (TelescopeHardware.TargerRightAscension == SharedResources.INVALID_COORDINATE || TelescopeHardware.Declination == SharedResources.INVALID_COORDINATE)
+            {
+                
+            }
         }
 
         public void SlewToTargetAsync()
