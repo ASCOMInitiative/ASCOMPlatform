@@ -1125,23 +1125,11 @@ namespace ASCOM.TelescopeSimulator
 
         public void SlewToCoordinates(double RightAscension, double Declination)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("SlewToCoordinates");
-        }
-
-        public void SlewToCoordinatesAsync(double RightAscension, double Declination)
-        {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("SlewToCoordinatesAsync");
-        }
-
-        public void SlewToTarget()
-        {
             if (SharedResources.TrafficForm != null)
             {
-                if (SharedResources.TrafficForm.Other)
+                if (SharedResources.TrafficForm.Slew)
                 {
-                    SharedResources.TrafficForm.TrafficStart("SlewToTarger: ");
+                    SharedResources.TrafficForm.TrafficStart("SlewToCoordinates: ");
 
                 }
             }
@@ -1149,22 +1137,134 @@ namespace ASCOM.TelescopeSimulator
             {
                 throw new MethodNotImplementedException("SlewToTarget");
             }
-            if (TelescopeHardware.TargerRightAscension == SharedResources.INVALID_COORDINATE || TelescopeHardware.Declination == SharedResources.INVALID_COORDINATE)
+            if (RightAscension > 24 || RightAscension < 0 || Declination < -90 || Declination > 90)
             {
-                
+                throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+            }
+            TelescopeHardware.TargetRightAscension = RightAscension;
+            TelescopeHardware.TargetDeclination = Declination;
+            TelescopeHardware.SlewState = SlewType.SlewRaDec;
+            while (TelescopeHardware.SlewState == SlewType.SlewRaDec || TelescopeHardware.SlewState == SlewType.SlewSettle)
+            {
+                System.Windows.Forms.Application.DoEvents();
+            }
+        }
+
+        public void SlewToCoordinatesAsync(double RightAscension, double Declination)
+        {
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficStart("SlewToCoordinatesAsync: ");
+
+                }
+            }
+            if (!TelescopeHardware.CanSlew)
+            {
+                throw new MethodNotImplementedException("SlewToTarget");
+            }
+            if (RightAscension > 24 || RightAscension < 0 || Declination < -90 || Declination > 90)
+            {
+                throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+            }
+            TelescopeHardware.TargetRightAscension = RightAscension;
+            TelescopeHardware.TargetDeclination = Declination;
+            TelescopeHardware.SlewState = SlewType.SlewRaDec;
+        }
+
+        public void SlewToTarget()
+        {
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficStart("SlewToTarget: ");
+
+                }
+            }
+            if (!TelescopeHardware.CanSlew)
+            {
+                throw new MethodNotImplementedException("SlewToTarget");
+            }
+            if (TelescopeHardware.TargetRightAscension == SharedResources.INVALID_COORDINATE || TelescopeHardware.Declination == SharedResources.INVALID_COORDINATE)
+            {
+                throw new DriverException(SharedResources.MSG_NO_TARGET_COORDS, (int)SharedResources.SCODE_NO_TARGET_COORDS);
+            }
+            if (TelescopeHardware.RightAscension > 24 || TelescopeHardware.RightAscension < 0 || TelescopeHardware.Declination < -90 || TelescopeHardware.Declination > 90)
+            {
+                throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+            }
+            TelescopeHardware.SlewState = SlewType.SlewRaDec;
+            while (TelescopeHardware.SlewState == SlewType.SlewRaDec || TelescopeHardware.SlewState == SlewType.SlewSettle)
+            {
+                System.Windows.Forms.Application.DoEvents();
             }
         }
 
         public void SlewToTargetAsync()
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("SlewToTargetAsync");
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficStart("SlewToTargetAsync: ");
+
+                }
+            }
+            if (!TelescopeHardware.CanSlew)
+            {
+                throw new MethodNotImplementedException("SlewToTarget");
+            }
+            if (TelescopeHardware.TargetRightAscension == SharedResources.INVALID_COORDINATE || TelescopeHardware.Declination == SharedResources.INVALID_COORDINATE)
+            {
+                throw new DriverException(SharedResources.MSG_NO_TARGET_COORDS, (int)SharedResources.SCODE_NO_TARGET_COORDS);
+            }
+            if (TelescopeHardware.RightAscension > 24 || TelescopeHardware.RightAscension < 0 || TelescopeHardware.Declination < -90 || TelescopeHardware.Declination > 90)
+            {
+                throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+            }
+            TelescopeHardware.SlewState = SlewType.SlewRaDec;
         }
 
         public bool Slewing
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Slewing", false); }
+            get
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Slew)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("Slewing: ");
+
+                    }
+                }
+                if (TelescopeHardware.SlewState == SlewType.SlewNone)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Slew)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("False");
+
+                        }
+                    }
+                    return false; 
+                }
+                else
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Slew)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("False");
+
+                        }
+                    }
+                    return true; 
+                }
+            }
         }
 
         public void SyncToAltAz(double Azimuth, double Altitude)
