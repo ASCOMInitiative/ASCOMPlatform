@@ -1085,23 +1085,246 @@ namespace ASCOM.TelescopeSimulator
 
         public double SiteElevation
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("SiteElevation", false); }
-            set { throw new PropertyNotImplementedException("SiteElevation", true); }
+            get
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("SiteElevation: ");
+
+                    }
+                }
+
+                if (!TelescopeHardware.CanLatLongElev)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+
+                        }
+                    }
+                    throw new PropertyNotImplementedException("SiteElevation", false);
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.Elevation.ToString());
+
+                    }
+                }
+                return TelescopeHardware.Elevation;
+            }
+            set
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("SiteElevation: ->");
+
+                    }
+                }
+                if (!TelescopeHardware.CanLatLongElev)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+
+                        }
+                    }
+                    throw new PropertyNotImplementedException("SiteElevation", false);
+                }
+                if (value < -300 || value > 10000)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Out of Range");
+
+                        }
+                    }
+                    throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd(value.ToString());
+
+                    }
+                }
+                TelescopeHardware.Elevation = value;
+            }
         }
 
         public double SiteLatitude
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("SiteLatitude", false); }
-            set { throw new PropertyNotImplementedException("SiteLatitude", true); }
+            
+            get 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("SiteLatitude: ");
+
+                    }
+                }
+
+                if (!TelescopeHardware.CanLatLongElev)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+
+                        }
+                    }
+                    throw new PropertyNotImplementedException("SiteLatitude", false);
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.Latitude.ToString());
+
+                    }
+                }
+                return TelescopeHardware.Latitude;
+            }
+            set 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("SiteLatitude: ->");
+
+                    }
+                }
+                if (!TelescopeHardware.CanLatLongElev)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+
+                        }
+                    }
+                    throw new PropertyNotImplementedException("SiteLatitude", false);
+                }
+                if (value < -90 || value > 90)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Out of Range");
+
+                        }
+                    }
+                    throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd(value.ToString());
+
+                    }
+                }
+                TelescopeHardware.Latitude = value;
+            }
         }
 
         public double SiteLongitude
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("SiteLongitude", false); }
-            set { throw new PropertyNotImplementedException("SiteLongitude", true); }
+            get
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("SiteLongitude: ");
+
+                    }
+                }
+
+                if (!TelescopeHardware.CanLatLongElev)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+
+                        }
+                    }
+                    throw new PropertyNotImplementedException("SiteLongitude", false);
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.Longitude.ToString());
+
+                    }
+                }
+                return TelescopeHardware.Longitude;
+            }
+            set
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("SiteLongitude: ->");
+
+                    }
+                }
+                if (!TelescopeHardware.CanLatLongElev)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+
+                        }
+                    }
+                    throw new PropertyNotImplementedException("SiteLongitude", false);
+                }
+                if (value < -180 || value > 180)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Out of Range");
+
+                        }
+                    }
+                    throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd(value.ToString());
+
+                    }
+                }
+                TelescopeHardware.Longitude = value;
+            }
         }
 
         public short SlewSettleTime
@@ -1288,22 +1511,216 @@ namespace ASCOM.TelescopeSimulator
         public double TargetDeclination
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("TargetDeclination", false); }
-            set { throw new PropertyNotImplementedException("TargetDeclination", true); }
+            get 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Gets)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("TargetDeclination: ");
+
+                    }
+                }
+                if (!TelescopeHardware.CanSlew)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Gets)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+
+                        }
+                    }
+                    throw new MethodNotImplementedException("TargetDeclination");
+                }
+                if (TelescopeHardware.TargetDeclination == SharedResources.INVALID_COORDINATE)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Gets)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Set");
+
+                        }
+                    }
+                    throw new DriverException(SharedResources.MSG_PROP_NOT_SET, (int)SharedResources.SCOPE_PROP_NOT_SET);
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Gets)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd(AstronomyFunctions.ConvertDoubleToDMS(TelescopeHardware.TargetDeclination));
+
+                    }
+                }
+                return TelescopeHardware.TargetDeclination;
+            }
+            set 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Gets)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("TargetDeclination:-> ");
+
+                    }
+                }
+                if (!TelescopeHardware.CanSlew)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Gets)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+
+                        }
+                    }
+                    throw new MethodNotImplementedException("TargetDeclination");
+                }
+                if (value < -90 || value > 90)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Gets)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Out of Range");
+
+                        }
+                    }
+                    throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Gets)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd(AstronomyFunctions.ConvertDoubleToDMS(value));
+
+                    }
+                }
+                TelescopeHardware.TargetDeclination = value;
+            }
         }
 
         public double TargetRightAscension
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("TargetRightAscension", false); }
-            set { throw new PropertyNotImplementedException("TargetRightAscension", true); }
+            get
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Gets)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("TargetRightAscension: ");
+
+                    }
+                }
+                if (!TelescopeHardware.CanSlew)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Gets)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+
+                        }
+                    }
+                    throw new MethodNotImplementedException("TargetRightAscension");
+                }
+                if (TelescopeHardware.TargetDeclination == SharedResources.INVALID_COORDINATE)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Gets)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Set");
+
+                        }
+                    }
+                    throw new DriverException(SharedResources.MSG_PROP_NOT_SET, (int)SharedResources.SCOPE_PROP_NOT_SET);
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Gets)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd(AstronomyFunctions.ConvertDoubleToHMS(TelescopeHardware.TargetRightAscension));
+
+                    }
+                }
+                return TelescopeHardware.TargetRightAscension;
+            }
+            set
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Gets)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("TargetRightAscension:-> ");
+
+                    }
+                }
+                if (!TelescopeHardware.CanSlew)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Gets)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+
+                        }
+                    }
+                    throw new MethodNotImplementedException("TargetRightAscension");
+                }
+                if (value < 0 || value >= 24)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Gets)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Out of Range");
+
+                        }
+                    }
+                    throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Gets)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd(AstronomyFunctions.ConvertDoubleToHMS(value));
+
+                    }
+                }
+                TelescopeHardware.TargetRightAscension = value;
+            }
         }
 
         public bool Tracking
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Tracking", false); }
-            set { throw new PropertyNotImplementedException("Tracking", true); }
+            get
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Gets)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("Tracking: " + TelescopeHardware.Tracking.ToString());
+
+                    }
+                }
+                return TelescopeHardware.Tracking;
+            }
+            set
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Gets)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("Tracking:-> " + value.ToString());
+
+                    }
+                }
+                TelescopeHardware.Tracking = value;
+            }
         }
 
         public DriveRates TrackingRate
