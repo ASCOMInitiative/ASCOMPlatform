@@ -88,6 +88,8 @@ namespace ASCOM.TelescopeSimulator
         public static string MSG_NO_TARGET_COORDS = "Target coordinates have not yet been set";
         public static uint SCODE_VAL_OUTOFRANGE = ERROR_BASE + 0x405;
         public static string MSG_VAL_OUTOFRANGE = "The property value is out of range";
+        public static uint SCOPE_PROP_NOT_SET = ERROR_BASE + 0x403;
+        public static string MSG_PROP_NOT_SET = "The property has not yet been set";
         //
         // Public access to shared resources
         //
