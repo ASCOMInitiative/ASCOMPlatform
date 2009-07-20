@@ -67,6 +67,13 @@ namespace ASCOM.FilterWheelSim.Properties {
             }
         }
         
+        internal static System.Drawing.Icon ASCOM_Icon {
+            get {
+                object obj = ResourceManager.GetObject("ASCOM_Icon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Filter_Next {
             get {
                 object obj = ResourceManager.GetObject("Filter_Next", resourceCulture);
@@ -85,13 +92,6 @@ namespace ASCOM.FilterWheelSim.Properties {
             get {
                 object obj = ResourceManager.GetObject("FilterStop", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Icon Icon_ASCOM {
-            get {
-                object obj = ResourceManager.GetObject("Icon_ASCOM", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
     }

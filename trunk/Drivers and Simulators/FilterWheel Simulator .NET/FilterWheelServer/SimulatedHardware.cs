@@ -346,7 +346,7 @@ namespace ASCOM.FilterWheelSim
 
                 g_Profile.WriteValue(g_csDriverID, "RegVer", m_sRegVer);
                 g_Profile.WriteValue(g_csDriverID, "Position", "0");
-                g_Profile.WriteValue(g_csDriverID, "Slots", "4");
+                g_Profile.WriteValue(g_csDriverID, "Slots", "6");
                 g_Profile.WriteValue(g_csDriverID, "Time", "1000");
                 g_Profile.WriteValue(g_csDriverID, "ImplementsNames", "true");
                 g_Profile.WriteValue(g_csDriverID, "ImplementsOffsets", "true");
@@ -360,8 +360,8 @@ namespace ASCOM.FilterWheelSim
             }
 
             // Read the hardware & driver config
-            m_iSlots = Convert.ToInt32(GetSetting("Slots", "8"));
-            if (m_iSlots < 1 || m_iSlots > 8) m_iSlots = 4;
+            m_iSlots = Convert.ToInt32(GetSetting("Slots", "6"));
+            if (m_iSlots < 1 || m_iSlots > 8) m_iSlots = 6;
             m_sPosition = Convert.ToInt16(GetSetting("Position", "0"));
             if (m_sPosition < 0 || m_sPosition >= m_iSlots) m_sPosition = 0;
             m_iTimeInterval = Convert.ToInt32(GetSetting("Time", "1000"));

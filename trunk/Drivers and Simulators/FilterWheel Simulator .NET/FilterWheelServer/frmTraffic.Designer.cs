@@ -43,7 +43,7 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 43.68932F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 56.31068F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 57F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 58F));
             this.tableLayoutPanel1.Controls.Add(this.btnClear, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnDisable, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.picASCOM, 2, 0);
@@ -86,7 +86,7 @@
             // 
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picASCOM.Image = global::ASCOM.FilterWheelSim.Properties.Resources.ASCOM;
-            this.picASCOM.Location = new System.Drawing.Point(292, 3);
+            this.picASCOM.Location = new System.Drawing.Point(291, 3);
             this.picASCOM.Name = "picASCOM";
             this.tableLayoutPanel1.SetRowSpan(this.picASCOM, 2);
             this.picASCOM.Size = new System.Drawing.Size(48, 56);
