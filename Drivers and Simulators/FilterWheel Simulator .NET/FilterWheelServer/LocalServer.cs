@@ -556,7 +556,8 @@ namespace ASCOM.FilterWheelSim
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             m_MainForm = new frmHandbox();
-            if (m_bComStart) m_MainForm.WindowState = FormWindowState.Minimized;
+            // if (m_bComStart) m_MainForm.WindowState = FormWindowState.Minimized;
+            // if (m_bComStart) m_MainForm.Visible = false;
             
             // Initialize hardware layer
             SimulatedHardware.Initialize();

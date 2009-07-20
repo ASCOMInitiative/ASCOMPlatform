@@ -15,7 +15,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <ApplicationIcon>Resources\Icon_ASCOM.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\ASCOM.ico</ApplicationIcon>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -30,6 +30,7 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <StartupObject>ASCOM.FilterWheelSim.FilterWheelSim</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -118,12 +119,12 @@
     <Compile Include="TextBoxArray.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\ASCOM.ico" />
     <Content Include="Resources\ASCOM.png" />
     <None Include="Resources\Filter-Next.gif" />
     <None Include="Resources\Filter-Prev.gif" />
     <None Include="Resources\FilterStop.gif" />
     <Content Include="ReadMe.htm" />
-    <None Include="Resources\Icon_ASCOM.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
