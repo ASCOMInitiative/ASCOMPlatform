@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="5a679e99-87d5-4b72-a86e-88cbf10c52be" revisionNumber="1">
+  <developerHowToDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--
+    <summary>
+      <para>Optional summary abstract</para>
+    </summary>
+    -->
+    <introduction>
+      <para>This section outlines the serial tracing options available in HelperNET</para>
+    </introduction>
+    
+    <section address="Section1">
+      <title>Serial Tracing</title>
+      <content>
+         <para>Serial tracing is enabled and disabled through the Chooser dialogue and under normal circumstances
+         should be disabled. Tracing is not required for normal ASCOM operation, it is just there to help
+         when debugging a problem.</para>
+         <para>Serial Trace is Enabled by selecting one of two entries in the Chooser, Trace Options menu:</para>
+         
+		<list class="bullet">
+  			<listItem>Use Automatic Serial Trace Filenames</listItem>
+  			<listItem>Use a Manual Serial Trace Filename</listItem>
+		</list>
+
+		<para><legacyBold>Automatic Filenames</legacyBold> will create log files in the "My Documents\ASCOM" folder. 
+		Within this, folders will be created with names of format: "Logs yyyy-mm-dd" where yyyy, mm and dd are 
+		the current year, month and day numbers. Within this directory serial logs will accumulate each day with 
+		names of format "ASCOM.Serial.hhmm.ssffn" where hh, mm, ss and ff are the hour, minute, second and 
+		fractional second of the time the log is started and n is an arbitary integer that ensures that two 
+		logs created at the same time don't have the same filename.
+	  	</para>
+	  
+	  	<para>This option is recommended as it ensures that every serial session is captured and also supports
+	  	use of multiple concurrent serial ports.</para>
+	  
+	  	<para><legacyBold>Manual Filename</legacyBold> requires that a specific filename is chosen through a file 
+	  	picker dialogue. The serial port log will then be made directly to this file, which will be overwritten 
+	  	on every use. This mode is provided for compatibility with the original COM Serial helper trace feature.</para>
+	  
+	  	<para><legacyBold>Trace File Format</legacyBold> the following is an example of a (rather untypical!) 
+	  	trace file:</para>
+	  
+	  	<code language="None">
+20:28:35.139 Port                      Set to: 3
+20:28:35.139 Speed                     Set to: ps9600
+20:28:35.139 ReceiveTimeout            Set to: 10 seconds
+20:28:35.139 AvailableCOMPorts         COM1
+20:28:35.139 AvailableCOMPorts         COM3
+20:28:35.139 AvailableCOMPorts         COM10
+20:28:35.139 AvailableCOMPorts         COM11
+20:28:35.139 AvailableCOMPorts         COM12
+20:28:35.139 AvailableCOMPorts         COM13
+20:28:35.139 AvailableCOMPorts         COM26
+20:28:35.139 Set Connected             Using COM port: COM3 Baud rate: ps9600 Timeout: 10000 DTR: True Handshake: None Encoding: 1252
+20:28:35.139 Set Connected             Transmission format - Bits: 8 Parity: None Stop bits: One
+20:28:35.139 Set Connected             True OK
+20:28:35.139 ClearBuffers              
+20:28:35.139 Transmit                  &gt; # 
+20:28:35.139 ClearBuffers              
+20:28:35.139 Transmit                  &gt; [06] 
+20:28:35.139 ReceiveCounted 2          &lt; G#
+20:28:35.139 ClearBuffers              
+20:28:35.139 Transmit                  &gt; :GV# 
+20:28:35.139 ReceiveTerminated #       &lt; 410#
+20:28:35.155 ClearBuffers              
+20:28:35.155 Transmit                  &gt; :GVP# 
+20:28:35.155 ReceiveTerminated #       &lt; Losmandy Gemini#
+20:28:35.155 ClearBuffers              
+20:28:35.155 Transmit                  &gt; :GV# 
+20:28:35.155 ReceiveTerminated #       &lt; 410#
+20:28:35.155 ClearBuffers              
+20:28:35.155 Transmit                  &gt; :GVN# 
+20:28:35.155 ReceiveTerminated #       &lt; 4.10#
+20:28:35.155 ClearBuffers              
+20:28:35.155 Transmit                  &gt; :GVD# 
+20:28:35.155 ReceiveTerminated #       &lt; 30/12/1952#
+20:28:35.155 ClearBuffers              
+20:28:35.155 Transmit                  &gt; :GVT# 
+20:28:35.155 ReceiveTerminated #       &lt; 02:00:00#
+20:28:35.170 ClearBuffers              
+20:28:35.170 Transmit                  &gt; &lt;99:F# 
+20:28:35.170 ReceiveTerminated #       &lt; 1q#
+20:28:35.170 ClearBuffers              
+20:28:35.170 Transmit                  &gt; :p2# 
+	    </code>
+      </content>
+    </section>
+    
+  </developerHowToDocument>
+</topic>
