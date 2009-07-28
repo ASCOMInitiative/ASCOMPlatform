@@ -1,0 +1,32 @@
+D:\Documents and Settings\chris\Mes documents\Dev\c#\tests\FocuserVide\FocVide\FocVide\bin\Debug\ASCOM.FocVide.Focuser.dll
+D:\Documents and Settings\chris\Mes documents\Dev\c#\tests\FocuserVide\FocVide\FocVide\bin\Debug\ASCOM.FocVide.Focuser.pdb
+D:\Documents and Settings\chris\Mes documents\Dev\c#\tests\FocuserVide\FocVide\FocVide\bin\Debug\ASCOM.FocVide.Focuser.tlb
+D:\Documents and Settings\chris\Mes documents\Dev\c#\tests\FocuserVide\FocVide\FocVide\obj\Debug\ResolveAssemblyReference.cache
+D:\Documents and Settings\chris\Mes documents\Dev\c#\tests\FocuserVide\FocVide\FocVide\obj\Debug\FocuserSimulator.csproj.ResolveComReference.cache
+D:\Documents and Settings\chris\Mes documents\Dev\c#\tests\FocuserVide\FocVide\FocVide\obj\Debug\FocuserSimulator.csproj.GenerateResource.Cache
+D:\Documents and Settings\chris\Mes documents\Dev\c#\tests\FocuserVide\FocVide\FocVide\obj\Debug\ASCOM.FocVide.Focuser.dll
+D:\Documents and Settings\chris\Mes documents\Dev\c#\tests\FocuserVide\FocVide\FocVide\obj\Debug\ASCOM.FocVide.Focuser.pdb
+D:\Documents and Settings\chris\Mes documents\Dev\c#\tests\FocuserVide\FocVide\FocVide\obj\Debug\ASCOM.FocVide.frmMain.resources
+D:\Documents and Settings\chris\Mes documents\Dev\c#\tests\FocuserVide\FocVide\FocVide\obj\Debug\ASCOM.FocVide.SetupDialogForm.resources
+D:\Documents and Settings\chris\Mes documents\Dev\c#\tests\FocuserVide\FocVide\FocVide\obj\Debug\ASCOM.FocVide.Properties.Resources.resources
+D:\Documents and Settings\chris\Mes documents\Dev\c#\ASCOM\Focuser Simulator .NET\FocVide\obj\Debug\ResolveAssemblyReference.cache
+D:\Documents and Settings\chris\Mes documents\Dev\c#\ASCOM\Focuser Simulator .NET\FocVide\obj\Debug\ASCOM.FocVide.frmMain.resources
+D:\Documents and Settings\chris\Mes documents\Dev\c#\ASCOM\Focuser Simulator .NET\FocVide\obj\Debug\ASCOM.FocVide.Properties.Resources.resources
+D:\Documents and Settings\chris\Mes documents\Dev\c#\ASCOM\Focuser Simulator .NET\FocVide\obj\Debug\ASCOM.FocVide.SetupDialogForm.resources
+D:\Documents and Settings\chris\Mes documents\Dev\c#\ASCOM\Focuser Simulator .NET\FocVide\obj\Debug\FocuserSimulator.csproj.GenerateResource.Cache
+D:\Documents and Settings\chris\Mes documents\Dev\c#\ASCOM\Focuser Simulator .NET\FocVide\obj\Debug\ASCOM.FocVide.Focuser.dll
+D:\Documents and Settings\chris\Mes documents\Dev\c#\ASCOM\Focuser Simulator .NET\FocVide\obj\Debug\ASCOM.FocVide.Focuser.pdb
+D:\Documents and Settings\chris\Mes documents\Dev\c#\ASCOM\Focuser Simulator .NET\FocVide\bin\Debug\ASCOM.FocVide.Focuser.dll.config
+D:\Documents and Settings\chris\Mes documents\Dev\c#\ASCOM\Focuser Simulator .NET\FocVide\bin\Debug\ASCOM.FocVide.Focuser.dll
+D:\Documents and Settings\chris\Mes documents\Dev\c#\ASCOM\Focuser Simulator .NET\FocVide\bin\Debug\ASCOM.FocVide.Focuser.pdb
+D:\Documents and Settings\chris\Mes documents\Dev\c#\ASCOM\Focuser Simulator .NET\FocVide\bin\Debug\ASCOM.FocVide.Focuser.tlb
+D:\Documents and Settings\chris\Mes documents\Dev\c#\ASCOM\Focuser Simulator .NET\FocVide\bin\Debug\ASCOM.DriverAccess.dll
+D:\Documents and Settings\chris\Mes documents\Dev\c#\ASCOM\Focuser Simulator .NET\FocVide\bin\Debug\ASCOM.Exceptions.dll
+D:\Documents and Settings\chris\Mes documents\Dev\c#\ASCOM\Focuser Simulator .NET\FocVide\bin\Debug\ASCOM.HelperNET.dll
+D:\Documents and Settings\chris\Mes documents\Dev\c#\ASCOM\Focuser Simulator .NET\FocVide\bin\Debug\ASCOM.Interfaces.dll
+D:\Documents and Settings\chris\Mes documents\Dev\c#\ASCOM\Focuser Simulator .NET\FocVide\bin\Debug\ASCOM.HelperNET.pdb
+D:\Documents and Settings\chris\Mes documents\Dev\c#\ASCOM\Focuser Simulator .NET\FocVide\bin\Debug\ASCOM.HelperNET.xml
+D:\Documents and Settings\chris\Mes documents\Dev\c#\ASCOM\Focuser Simulator .NET\FocVide\bin\Debug\ASCOM.DriverAccess.pdb
+D:\Documents and Settings\chris\Mes documents\Dev\c#\ASCOM\Focuser Simulator .NET\FocVide\bin\Debug\ASCOM.DriverAccess.xml
+D:\Documents and Settings\chris\Mes documents\Dev\c#\ASCOM\Focuser Simulator .NET\FocVide\bin\Debug\ASCOM.Exceptions.pdb
+D:\Documents and Settings\chris\Mes documents\Dev\c#\ASCOM\Focuser Simulator .NET\FocVide\bin\Debug\ASCOM.Exceptions.xml
