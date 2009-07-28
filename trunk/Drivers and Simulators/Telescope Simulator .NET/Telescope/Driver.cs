@@ -48,6 +48,7 @@ namespace ASCOM.TelescopeSimulator
         //
         private AxisRates[] m_AxisRates;
         private TrackingRates m_TrackingRates;
+        private TrackingRatesSimple m_TrackingRatesSimple;
 
         //
         // Constructor - Must be public for COM registration!
@@ -59,6 +60,7 @@ namespace ASCOM.TelescopeSimulator
             m_AxisRates[1] = new AxisRates(TelescopeAxes.axisSecondary);
             m_AxisRates[2] = new AxisRates(TelescopeAxes.axisTertiary);
             m_TrackingRates = new TrackingRates();
+            m_TrackingRatesSimple = new TrackingRatesSimple();
             // TODO Implement your additional construction here
         }
 
@@ -876,7 +878,64 @@ namespace ASCOM.TelescopeSimulator
         public EquatorialCoordinateType EquatorialSystem
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("EquatorialCoordinateType", false); }
+            get 
+            {
+                if (TelescopeHardware.VersionOneOnly)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Capabilities)
+                        {
+                            SharedResources.TrafficForm.TrafficLine("EquatorialSystem: Unknown");
+                        }
+                    }
+                    throw new MethodNotImplementedException("EquatorialSystem");
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("EquatorialSystem: ");
+                    }
+                }
+
+                string output = "";
+                EquatorialCoordinateType eq = EquatorialCoordinateType.equOther;
+
+                switch (TelescopeHardware.EquatorialSystem)
+                {
+                    case 0:
+                        eq= EquatorialCoordinateType.equOther;
+                        output = "Other";
+                        break;
+
+                    case 1:
+                        eq = EquatorialCoordinateType.equLocalTopocentric;
+                        output = "Local";
+                        break;
+                    case 2:
+                        eq = EquatorialCoordinateType.equJ2000;
+                        output = "J2000";
+                        break;
+                    case 3:
+                        eq = EquatorialCoordinateType.equJ2050;
+                        output = "J2050";
+                        break;
+                    case 4:
+                        eq = EquatorialCoordinateType.equB1950;
+                        output = "B1950";
+                        break;
+                    
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd(output);
+                    }
+                }
+                return eq;
+            }
         }
 
         public void FindHome()
@@ -937,8 +996,29 @@ namespace ASCOM.TelescopeSimulator
 
         public short InterfaceVersion
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("InterfaceVersion", false); }
+            
+            get 
+            {
+                if (TelescopeHardware.VersionOneOnly)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Capabilities)
+                        {
+                            SharedResources.TrafficForm.TrafficLine("InterfaceVersion:");
+                        }
+                    }
+                    throw new MethodNotImplementedException("InterfaceVersion");
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("EquatorialSystem: 2");
+                    }
+                }
+                return 2;
+            }
         }
 
         public bool IsPulseGuiding
@@ -1364,9 +1444,20 @@ namespace ASCOM.TelescopeSimulator
             {
                 throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
             }
-            TelescopeHardware.TargetRightAscension = RightAscension;
-            TelescopeHardware.TargetDeclination = Declination;
-            TelescopeHardware.SlewState = SlewType.SlewRaDec;
+
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficStart(" RA " + AstronomyFunctions.ConvertDoubleToHMS(RightAscension) + " DEC " + AstronomyFunctions.ConvertDoubleToDMS(Declination));
+
+                }
+            }
+
+
+            TelescopeHardware.StartSlewRaDec(RightAscension, Declination, true);
+
+ 
             while (TelescopeHardware.SlewState == SlewType.SlewRaDec || TelescopeHardware.SlewState == SlewType.SlewSettle)
             {
                 System.Windows.Forms.Application.DoEvents();
@@ -1391,9 +1482,17 @@ namespace ASCOM.TelescopeSimulator
             {
                 throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
             }
-            TelescopeHardware.TargetRightAscension = RightAscension;
-            TelescopeHardware.TargetDeclination = Declination;
-            TelescopeHardware.SlewState = SlewType.SlewRaDec;
+
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficStart(" RA " + AstronomyFunctions.ConvertDoubleToHMS(RightAscension) + " DEC " + AstronomyFunctions.ConvertDoubleToDMS(Declination));
+
+                }
+            }
+
+            TelescopeHardware.StartSlewRaDec(RightAscension, Declination, true);
         }
 
         public void SlewToTarget()
@@ -1418,7 +1517,9 @@ namespace ASCOM.TelescopeSimulator
             {
                 throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
             }
-            TelescopeHardware.SlewState = SlewType.SlewRaDec;
+
+            TelescopeHardware.StartSlewRaDec(TelescopeHardware.TargetRightAscension, TelescopeHardware.Declination, true);
+
             while (TelescopeHardware.SlewState == SlewType.SlewRaDec || TelescopeHardware.SlewState == SlewType.SlewSettle)
             {
                 System.Windows.Forms.Application.DoEvents();
@@ -1447,7 +1548,7 @@ namespace ASCOM.TelescopeSimulator
             {
                 throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
             }
-            TelescopeHardware.SlewState = SlewType.SlewRaDec;
+            TelescopeHardware.StartSlewRaDec(TelescopeHardware.TargetRightAscension, TelescopeHardware.Declination, true);
         }
 
         public bool Slewing
@@ -1498,14 +1599,77 @@ namespace ASCOM.TelescopeSimulator
 
         public void SyncToCoordinates(double RightAscension, double Declination)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("SyncToCoordinates");
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficStart("SyncToCoordinates: ");
+
+                }
+            }
+            if (!TelescopeHardware.CanSync)
+            {
+                throw new MethodNotImplementedException("SyncToCoordinates");
+            }
+            if (RightAscension > 24 || RightAscension < 0 || Declination < -90 || Declination > 90)
+            {
+                throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+            }
+
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficStart(" RA " + AstronomyFunctions.ConvertDoubleToHMS(RightAscension) + " DEC " + AstronomyFunctions.ConvertDoubleToDMS(Declination));
+
+                }
+            }
+
+            TelescopeHardware.TargetDeclination = Declination;
+            TelescopeHardware.TargetRightAscension = RightAscension;
+
+            TelescopeHardware.ChangeHome(false);
+            TelescopeHardware.ChangePark(false);
+
+            TelescopeHardware.RightAscension = RightAscension;
+            TelescopeHardware.Declination = Declination;
+
+            TelescopeHardware.CalculateAltAz();
+
         }
 
         public void SyncToTarget()
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("SyncToTarget");
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficStart("SyncToTarget: ");
+
+                }
+            }
+            if (!TelescopeHardware.CanSync)
+            {
+                throw new MethodNotImplementedException("SyncToTarget");
+            }
+
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficEnd(" RA " + AstronomyFunctions.ConvertDoubleToHMS(TelescopeHardware.TargetRightAscension) + " DEC " + AstronomyFunctions.ConvertDoubleToDMS(TelescopeHardware.TargetDeclination));
+
+                }
+            }
+
+
+            TelescopeHardware.ChangeHome(false);
+            TelescopeHardware.ChangePark(false);
+
+            TelescopeHardware.RightAscension = TelescopeHardware.TargetRightAscension;
+            TelescopeHardware.Declination = TelescopeHardware.TargetDeclination;
+
+            TelescopeHardware.CalculateAltAz();
         }
 
         public double TargetDeclination
@@ -1732,7 +1896,26 @@ namespace ASCOM.TelescopeSimulator
 
         public ITrackingRates TrackingRates
         {
-            get { return m_TrackingRates; }
+            get
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Gets)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("TrackingRates: (done)");
+
+                    }
+                }
+                if (TelescopeHardware.CanTrackingRates)
+                {
+                    return m_TrackingRates; 
+                }
+                else
+                {
+                    return m_TrackingRatesSimple;
+                }
+                
+            }
         }
 
         public DateTime UTCDate
@@ -1885,6 +2068,46 @@ namespace ASCOM.TelescopeSimulator
         // of instances. Returned by Telescope.AxisRates.
         //
         internal TrackingRates()
+        {
+            //
+            // This array must hold ONE or more DriveRates values, indicating
+            // the tracking rates supported by your telescope. The one value
+            // (tracking rate) that MUST be supported is driveSidereal!
+            //
+            m_TrackingRates = new DriveRates[] { DriveRates.driveSidereal,DriveRates.driveKing,DriveRates.driveLunar,DriveRates.driveSolar };
+            // TODO Initialize this array with any additional tracking rates that your driver may provide
+        }
+
+        #region ITrackingRates Members
+
+        public int Count
+        {
+            get { return m_TrackingRates.Length; }
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return m_TrackingRates.GetEnumerator();
+        }
+
+        public DriveRates this[int Index]
+        {
+            get { return m_TrackingRates[Index - 1]; }	// 1-based
+        }
+
+        #endregion
+    }
+    [Guid("46753368-42d1-424a-85fa-26eee8f4c178")]
+    [ClassInterface(ClassInterfaceType.None)]
+    public class TrackingRatesSimple : ITrackingRates, IEnumerable
+    {
+        private DriveRates[] m_TrackingRates;
+
+        //
+        // Default constructor - Internal prevents public creation
+        // of instances. Returned by Telescope.AxisRates.
+        //
+        internal TrackingRatesSimple()
         {
             //
             // This array must hold ONE or more DriveRates values, indicating

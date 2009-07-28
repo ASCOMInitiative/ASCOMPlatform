@@ -90,8 +90,6 @@ namespace ASCOM.TelescopeSimulator
         private static double m_TargetRightAscension = SharedResources.INVALID_COORDINATE;
         private static double m_TargetDeclination = SharedResources.INVALID_COORDINATE;
 
-        private static double m_DateDelta;
-
         private static bool m_Tracking;
         private static bool m_AtHome;
         private static bool m_AtPark;
@@ -271,13 +269,11 @@ namespace ASCOM.TelescopeSimulator
 
             if (m_Tracking)
             {
-                m_Altitude = AstronomyFunctions.CalculateAltitude(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
-                m_Azimuth = AstronomyFunctions.CalculateAzimuth(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                CalculateAltAz();
             }
             else
             {
-                m_Declination = AstronomyFunctions.CalculateDec(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD);
-                m_RightAscension = AstronomyFunctions.CalculateRa(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                CalculateRaDec();
 
             }
             m_SiderealTime = AstronomyFunctions.LocalSiderealTime(m_Longitude);
@@ -295,13 +291,11 @@ namespace ASCOM.TelescopeSimulator
             {
                 if (m_Tracking)
                 {
-                    m_Altitude = AstronomyFunctions.CalculateAltitude(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
-                    m_Azimuth = AstronomyFunctions.CalculateAzimuth(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                    CalculateAltAz();
                 }
                 else
                 {
-                    m_Declination = AstronomyFunctions.CalculateDec(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD);
-                    m_RightAscension = AstronomyFunctions.CalculateRa(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                    CalculateRaDec();
 
                 }
             }
@@ -836,20 +830,16 @@ namespace ASCOM.TelescopeSimulator
        { get { return m_SouthernHemisphere; } }
 
        public static double RightAscension
-       { get { return m_RightAscension; } }
-       public static double Declination
-       { get { return m_Declination; } }
-
-       public static double TargetRightAscension
        { 
-           get { return m_TargetRightAscension; }
-           set { m_TargetRightAscension = value; }
-         }
-       public static double TargetDeclination
-       { 
-           get { return m_TargetDeclination; }
-           set { m_TargetDeclination = value; }
+           get { return m_RightAscension; }
+           set { m_RightAscension = value; }
        }
+       public static double Declination
+       { 
+           get { return m_Declination; }
+           set { m_Declination = value; }
+       }
+
 
        public static bool AtPark
        { get { return m_AtPark; } }
@@ -875,11 +865,44 @@ namespace ASCOM.TelescopeSimulator
        public static double SiderealTime
        { get { return m_SiderealTime; } }
 
-   
+
+       public static double TargetRightAscension
+       {
+           get { return m_TargetRightAscension; }
+           set { m_TargetRightAscension = value; }
+       }
+       public static double TargetDeclination
+       {
+           get { return m_TargetDeclination; }
+           set { m_TargetDeclination = value; }
+       }
         #endregion
 
         #region Helper Functions
-
+       public static void StartSlewRaDec(double RightAscension, double Declination, bool DoSideOfPier)
+       {
+       }
+       public static void StartSlewAltAz(double Altitude, double Azimuth, bool DoSideOfPier)
+       {
+       }
+       public static void ChangeHome(bool NewValue)
+       {
+           m_AtHome = NewValue;
+       }
+       public static void ChangePark(bool NewValue)
+       {
+           m_AtPark = NewValue;
+       }
+       public static void CalculateAltAz()
+       {
+           m_Altitude = AstronomyFunctions.CalculateAltitude(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+           m_Azimuth = AstronomyFunctions.CalculateAzimuth(m_RightAscension * SharedResources.DEG_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+       }
+       public static void CalculateRaDec()
+       {
+           m_Declination = AstronomyFunctions.CalculateDec(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD);
+           m_RightAscension = AstronomyFunctions.CalculateRa(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+       }
         #endregion
 
 
