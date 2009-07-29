@@ -97,7 +97,7 @@ namespace ASCOM.FocVide.Properties {
         
         internal static System.Drawing.Bitmap log_16x16 {
             get {
-                object obj = ResourceManager.GetObject("log-16x16", resourceCulture);
+                object obj = ResourceManager.GetObject("log_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
