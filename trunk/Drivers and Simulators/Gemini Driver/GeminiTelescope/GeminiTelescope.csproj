@@ -47,6 +47,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\ASCOM.GeminiTelescope.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ASCOM.HelperNET, Version=5.2.3.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
@@ -63,12 +64,6 @@
   <ItemGroup>
     <Compile Include="AstronomyFunctions.cs" />
     <Compile Include="ClassFactory.cs" />
-    <Compile Include="FocuserSetupDialogForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FocuserSetupDialogForm.Designer.cs">
-      <DependentUpon>FocuserSetupDialogForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,6 +71,7 @@
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="GarbageCollection.cs" />
+    <Compile Include="GeminiCommands.cs" />
     <Compile Include="LocalServer.cs" />
     <Compile Include="MountParameters.cs">
       <SubType>Form</SubType>
@@ -84,9 +80,6 @@
       <DependentUpon>MountParameters.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FocuserSetupDialogForm.resx">
-      <DependentUpon>FocuserSetupDialogForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -97,8 +90,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="TelescopeSetupDialogForm.resx">
-      <DependentUpon>TelescopeSetupDialogForm.cs</DependentUpon>
+    <EmbeddedResource Include="SetupDialogForm.resx">
+      <DependentUpon>SetupDialogForm.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -107,14 +100,14 @@
     </Compile>
     <Compile Include="ReferenceCountedObject.cs" />
     <Compile Include="ServedClassNameAttribute.cs" />
-    <Compile Include="TelescopeSetupDialogForm.cs">
+    <Compile Include="SetupDialogForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TelescopeSetupDialogForm.designer.cs">
-      <DependentUpon>TelescopeSetupDialogForm.cs</DependentUpon>
+    <Compile Include="SetupDialogForm.designer.cs">
+      <DependentUpon>SetupDialogForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SharedResources.cs" />
-    <Compile Include="GeminiHardware.cs" />
+    <Compile Include="TelescopeHardware.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ASCOM.png" />
