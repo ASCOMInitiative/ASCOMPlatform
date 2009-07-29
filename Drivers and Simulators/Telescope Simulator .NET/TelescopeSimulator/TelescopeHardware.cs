@@ -94,6 +94,13 @@ namespace ASCOM.TelescopeSimulator
         private static bool m_AtHome;
         private static bool m_AtPark;
 
+        public static double m_DeclinationRate;
+        public static double  m_RightAscensionRate;
+        public static double  m_GuideRateDeclination;
+        public static double m_GuideRateRightAscension;
+
+        private static int m_TrackingRate;
+
         private static SlewType m_SlewState = SlewType.SlewNone;
         private static SlewDirection m_SlewDirection;
         private static SlewSpeed m_SlewSpeed;
@@ -102,7 +109,11 @@ namespace ASCOM.TelescopeSimulator
         private static double m_SlewSpeedMedium;
         private static double m_SlewSpeedSlow;
 
+        private static double m_SlewSettleTime;
+
         private static bool m_SouthernHemisphere = false;
+
+        private static int m_DateDelta;
 
 
         private static bool m_Connected = false; //Keep track of the connection status of the hardware
@@ -251,6 +262,8 @@ namespace ASCOM.TelescopeSimulator
             m_CanTrackingRates = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanTrackingRates", "Capabilities"));
             m_CanDualAxisPulseGuide = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "CanDualAxisPulseGuide", "Capabilities"));
 
+            m_DateDelta = int.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "DateDelta"));
+
             if (m_Latitude < 0) { m_SouthernHemisphere = true; }
 
             //Set the form setting for the Always On Top Value
@@ -259,6 +272,21 @@ namespace ASCOM.TelescopeSimulator
             m_SlewSpeedFast = m_MaximumSlewRate * SharedResources.TIMER_INTERVAL;
             m_SlewSpeedMedium = m_SlewSpeedFast * 0.1;
             m_SlewSpeedSlow = m_SlewSpeedFast * 0.02;
+
+            m_GuideRateRightAscension = 15 * (1 / 3600) / SharedResources.SIDRATE;
+            m_GuideRateDeclination = m_GuideRateRightAscension;
+            m_DeclinationRate = 0;
+            m_RightAscensionRate = 0;
+
+            //King=0
+            //Lunar=1
+            //Sidereal=2
+            //Solar=3
+
+            m_TrackingRate = 2;
+
+            m_SlewSettleTime = 0;
+            
         }
         public static void Start() 
         {
@@ -875,6 +903,47 @@ namespace ASCOM.TelescopeSimulator
        {
            get { return m_TargetDeclination; }
            set { m_TargetDeclination = value; }
+       }
+       public static int DateDelta
+       {
+           get { return m_DateDelta; }
+           set 
+           { 
+               m_DateDelta = value;
+               m_Profile.WriteValue(SharedResources.PROGRAM_ID, "DateDelta", value.ToString());
+           }
+       }
+
+       public static double DeclinationRate
+       {
+           get { return m_DeclinationRate; }
+           set { m_DeclinationRate = value; }
+       }
+       public static double RightAscensionRate
+       {
+           get { return m_RightAscensionRate; }
+           set { m_RightAscensionRate = value; }
+       }
+
+       public static double GuideRateDeclination
+       {
+           get { return m_GuideRateDeclination; }
+           set { m_GuideRateDeclination = value; }
+       }
+       public static double GuideRateRightAscension
+       {
+           get { return m_GuideRateRightAscension; }
+           set { m_GuideRateRightAscension = value; }
+       }
+       public static int TrackingRate
+       {
+           get { return m_TrackingRate; }
+           set { m_TrackingRate = value; }
+       }
+       public static double SlewSettleTime
+       {
+           get { return m_SlewSettleTime; }
+           set { m_SlewSettleTime = value; }
        }
         #endregion
 

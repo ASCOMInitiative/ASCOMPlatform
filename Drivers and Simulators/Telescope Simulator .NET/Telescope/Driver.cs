@@ -73,10 +73,37 @@ namespace ASCOM.TelescopeSimulator
 
         public void AbortSlew()
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("AbortSlew");
-        }
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficStart("AbortSlew: ");
 
+                }
+            }
+            if (TelescopeHardware.AtPark)
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Slew)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd("At park!");
+
+                    }
+                }
+                throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            }
+            TelescopeHardware.SlewState = SlewType.SlewNone;
+
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficEnd("(done)");
+
+                }
+            }
+        }
         public AlignmentModes AlignmentMode
         {
             
@@ -1410,20 +1437,120 @@ namespace ASCOM.TelescopeSimulator
         public short SlewSettleTime
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("SlewSettleTime", false); }
-            set { throw new PropertyNotImplementedException("SlewSettleTime", true); }
+            get 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("SlewSettleTime: " + (TelescopeHardware.SlewSettleTime * 1000).ToString());
+
+                    }
+                }
+                return (short)(TelescopeHardware.SlewSettleTime * 1000);
+            }
+            set 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("SlewSettleTime:-> ");
+
+                    }
+                }
+                if (value > 100 || value < 0)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Out Of Range ");
+
+                        }
+                    }
+                    throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd(value + " (done)");
+
+                    }
+                }
+                TelescopeHardware.SlewSettleTime = value / 1000;
+            }
         }
 
         public void SlewToAltAz(double Azimuth, double Altitude)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("SlewToAltAz");
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficStart("SlewToAltAz: ");
+
+                }
+            }
+            if (!TelescopeHardware.CanSlew)
+            {
+                throw new MethodNotImplementedException("SlewToAltAz");
+            }
+            if (Azimuth > 360 || Azimuth < 0 || Altitude < -90 || Altitude > 90)
+            {
+                throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+            }
+
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficStart(" Alt " + AstronomyFunctions.ConvertDoubleToDMS(Altitude) + " Az " + AstronomyFunctions.ConvertDoubleToDMS(Azimuth));
+
+                }
+            }
+
+
+            TelescopeHardware.StartSlewAltAz(Altitude, Azimuth, true);
+
+
+            while (TelescopeHardware.SlewState == SlewType.SlewRaDec || TelescopeHardware.SlewState == SlewType.SlewSettle)
+            {
+                System.Windows.Forms.Application.DoEvents();
+            }
         }
 
         public void SlewToAltAzAsync(double Azimuth, double Altitude)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("SlewToAltAzAsync");
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficStart("SlewToAltAzAsync: ");
+
+                }
+            }
+            if (!TelescopeHardware.CanSlew)
+            {
+                throw new MethodNotImplementedException("SlewToAltAzAsync");
+            }
+            if (Azimuth > 360 || Azimuth < 0 || Altitude < -90 || Altitude > 90)
+            {
+                throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+            }
+
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficStart(" Alt " + AstronomyFunctions.ConvertDoubleToDMS(Altitude) + " Az " + AstronomyFunctions.ConvertDoubleToDMS(Azimuth));
+
+                }
+            }
+
+
+            TelescopeHardware.StartSlewAltAz(Altitude, Azimuth, true);
         }
 
         public void SlewToCoordinates(double RightAscension, double Declination)
@@ -1593,8 +1720,41 @@ namespace ASCOM.TelescopeSimulator
 
         public void SyncToAltAz(double Azimuth, double Altitude)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("SyncToAltAz");
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficStart("SyncToAltAz: ");
+
+                }
+            }
+            if (!TelescopeHardware.CanSync)
+            {
+                throw new MethodNotImplementedException("SyncToAltAz");
+            }
+            if (Azimuth > 360 || Azimuth < 0 || Altitude < -90 || Altitude > 90)
+            {
+                throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+            }
+
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficStart(" Alt " + AstronomyFunctions.ConvertDoubleToDMS(Altitude) + " Az " + AstronomyFunctions.ConvertDoubleToDMS(Azimuth));
+
+                }
+            }
+
+            
+            TelescopeHardware.ChangeHome(false);
+            TelescopeHardware.ChangePark(false);
+
+            TelescopeHardware.Altitude = Altitude;
+            TelescopeHardware.Azimuth = Azimuth;
+
+            TelescopeHardware.CalculateRaDec();
+
         }
 
         public void SyncToCoordinates(double RightAscension, double Declination)
@@ -1890,8 +2050,108 @@ namespace ASCOM.TelescopeSimulator
         public DriveRates TrackingRate
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("TrackingRate", false); }
-            set { throw new PropertyNotImplementedException("TrackingRate", true); }
+            get 
+            {
+                string output = "";
+                DriveRates rate = DriveRates.driveSidereal;
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("TrackingRate: ");
+
+                    }
+                }
+                if (TelescopeHardware.VersionOneOnly)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+                        }
+                    }
+                    throw new MethodNotImplementedException("TrackingRate");
+                }
+                switch (TelescopeHardware.TrackingRate)
+                {
+                    case 0:
+                        output = "King";
+                        rate= DriveRates.driveKing;
+                        break;
+                    case 1:
+                        output = "Lunar";
+                        rate = DriveRates.driveLunar;
+                        break;
+                    case 2:
+                        output = "Sidereal";
+                        rate= DriveRates.driveSidereal;
+                        break;
+                    case 3:
+                        output = "Solar";
+                        rate= DriveRates.driveSolar;
+                        break;
+                }
+
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd(output);
+                    }
+                }
+                return rate;
+            }
+            set 
+            {
+                string output = "";
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("TrackingRate: -> ");
+
+                    }
+                }
+                if (TelescopeHardware.VersionOneOnly)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+                        }
+                    }
+                    throw new MethodNotImplementedException("TrackingRate");
+                }
+                switch (value)
+                {
+                    case DriveRates.driveKing:
+                        output = "King";
+                        TelescopeHardware.TrackingRate = 0;
+                        break;
+                    case DriveRates.driveLunar:
+                        output = "Lunar";
+                        TelescopeHardware.TrackingRate = 1;
+                        break;
+                    case DriveRates.driveSidereal:
+                        TelescopeHardware.TrackingRate = 2;
+                        output = "Sidereal";
+                        break;
+                    case DriveRates.driveSolar:
+                        output = "Solar";
+                        TelescopeHardware.TrackingRate = 3;
+                        break;
+                }
+                
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd(output +  "(done)");
+                    }
+                }
+            }
         }
 
         public ITrackingRates TrackingRates
@@ -1921,14 +2181,65 @@ namespace ASCOM.TelescopeSimulator
         public DateTime UTCDate
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("UTCDate", false); }
-            set { throw new PropertyNotImplementedException("UTCDate", true); }
+            get 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Gets)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("UTCDate: " + DateTime.UtcNow.AddSeconds((double)TelescopeHardware.DateDelta).ToString());
+
+                    }
+                }
+                return DateTime.UtcNow.AddSeconds((double)TelescopeHardware.DateDelta);
+            }
+            set 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Gets)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("UTCDate-> " + value.ToString());
+
+                    }
+                }
+                TelescopeHardware.DateDelta = (int)value.Subtract(DateTime.UtcNow).TotalSeconds;
+            }
         }
 
         public void Unpark()
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("Unpark");
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficStart("UnPark: ");
+
+                }
+            }
+            if (!TelescopeHardware.CanUnpark)
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Slew)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+
+                    }
+                }
+                throw new MethodNotImplementedException("UnPark");
+            }
+
+            TelescopeHardware.Tracking = true;
+
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficEnd("(done)");
+
+                }
+            }
         }
 
         #endregion
