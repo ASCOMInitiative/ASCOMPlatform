@@ -10,6 +10,7 @@ namespace ASCOM.FocVide
         delegate void SetTextCallback(string text);
 
         public TextBoxTraceListener xLog;
+        int OldTemp = 999;
 
         public frmMain()
         {
@@ -37,6 +38,9 @@ namespace ASCOM.FocVide
             HaltButton.Enabled = Properties.Settings.Default.IsMoving;
             HaltButton.Visible = Properties.Settings.Default.sEnableHalt;
             SetupButton.Enabled = !Properties.Settings.Default.IsMoving;
+            TimerTempComp.Interval = (int)Properties.Settings.Default.sTempCompPeriod * 1000;
+            TimerTempComp.Enabled = Properties.Settings.Default.sTempComp;
+            TextTemp.Visible = Properties.Settings.Default.sIsTemperature;
             Application.DoEvents();
         }
 
@@ -63,8 +67,8 @@ namespace ASCOM.FocVide
 
         private void ButtonTraffic_Click(object sender, EventArgs e)
         {
-            if (frmMain.ActiveForm.Height == 207) { frmMain.ActiveForm.Height = 434; }
-            else { frmMain.ActiveForm.Height = 207; }
+            if (frmMain.ActiveForm.Height == 140) { frmMain.ActiveForm.Height = 370; }
+            else { frmMain.ActiveForm.Height = 140; }
             Application.DoEvents();
         }
 
@@ -73,10 +77,43 @@ namespace ASCOM.FocVide
             LogBox.Clear();
         }
 
+
+        #region Temperature compensation implementation
+        private void TimerTempComp_Tick(object sender, EventArgs e)
+        {
+            int Delta;
+            int xTemp = (int)FocuserHardware.Temperature;
+            TextTemp.Text = "T : "+xTemp.ToString() + "°";
+            if (OldTemp == 999 || OldTemp == xTemp)
+            {
+                OldTemp = xTemp;
+                FocuserHardware.MyLog(FocuserHardware.eLogKind.LogTemp, "First time or same t°. No move.");
+                return;
+            }   // First time or same t° : memorise temp & no move
+            if ((Properties.Settings.Default.sTempMin > xTemp) || // Probed t° not in the interval (see SetupDialog()) so don't move
+                (xTemp > Properties.Settings.Default.sTempMax))
+            {
+                FocuserHardware.MyLog(FocuserHardware.eLogKind.LogTemp, "Probed t° not in range. No move.");
+                return;
+            }
+            Delta = xTemp - OldTemp;
+            OldTemp = xTemp;
+            FocuserHardware.IsTempCompMove = true;
+            if (Properties.Settings.Default.sAbsolute) FocuserHardware.Move((int)Properties.Settings.Default.sPosition + Delta * (int)Properties.Settings.Default.sStepPerDeg);
+            else FocuserHardware.Move(Delta * (int)Properties.Settings.Default.sStepPerDeg);
+            FocuserHardware.IsTempCompMove = false;
+        }
+        #endregion
+
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Properties.Settings.Default.PropertyChanged -= new PropertyChangedEventHandler(Default_PropertyChanged);
+        }
+
     }
 
     #region TextBox TraceListener
-    // Code by Adam Crawford, MIT License
+    // Main code by Adam Crawford, MIT License
 
     public class TextBoxTraceListener : TraceListener
     {

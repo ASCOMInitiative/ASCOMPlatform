@@ -118,11 +118,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Test.js" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="ASCOM.png" />
-    <Content Include="ReadMe.htm" />
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

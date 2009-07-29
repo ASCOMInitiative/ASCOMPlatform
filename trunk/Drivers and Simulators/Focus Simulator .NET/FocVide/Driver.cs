@@ -1,60 +1,42 @@
 //tabs=4
 // --------------------------------------------------------------------------------
-// TODO fill in this information for your driver, then remove this line!
+// ASCOM Focuser driver for .NET
 //
-// ASCOM Focuser driver for FocVide
-//
-// Description:	Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam 
-//				nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam 
-//				erat, sed diam voluptua. At vero eos et accusam et justo duo 
-//				dolores et ea rebum. Stet clita kasd gubergren, no sea takimata 
-//				sanctus est Lorem ipsum dolor sit amet.
+// Description:	ASCOM Focuser driver for .NET
 //
 // Implements:	ASCOM Focuser interface version: 1.0
-// Author:		(XXX) Your N. Here <your@email.here>
+// Author:		Christophe Gerbier (ch.gerbier@strulik.fr)
 //
 // Edit Log:
 //
 // Date			Who	Vers	Description
 // -----------	---	-----	-------------------------------------------------------
-// dd-mmm-yyyy	XXX	1.0.0	Initial edit, from ASCOM Focuser Driver template
+// 12-07-2009	ChG	1.0.0	Initial beta 1release
+// 29-07-2009   ChG 1.1.0   Beta 2 release.
+//                          Removed all the server parts so that it is a single DLL now
+//                          Leave the driver.cs call implementations in FocuserHardware.cs
+//                          Reworked temperature compensation implementation
+//                          Corrected bug in log trace
+//                          Changes in the GUI
 // --------------------------------------------------------------------------------
 //
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 
-using ASCOM;
-using ASCOM.HelperNET;
 using ASCOM.Interface;
 
 namespace ASCOM.FocVide
 {
-    //
-    // Your driver's ID is ASCOM.FocVide.Focuser
-    //
-    // The Guid attribute sets the CLSID for ASCOM.FocVide.Focuser
-    // The ClassInterface/None addribute prevents an empty interface called
-    // _Focuser from being created and used as the [default] interface
-    //
     [Guid("2e21ae40-2f82-41f7-902a-45a48c7dce78")]
     [ClassInterface(ClassInterfaceType.None)]
     public class Focuser : IFocuser
     {
-        //
-        // Driver ID and descriptive string that shows in the Chooser
-        //
         private static string s_csDriverID = "ASCOM.FocVide.Focuser";
-        // TODO Change the descriptive string for your driver then remove this line
         private static string s_csDriverDescription = "ASCOM .NET Focuser Simulator";
 
-        //
-        // Constructor - Must be public for COM registration!
-        //
         public Focuser()
         {
-            // TODO Implement your additional construction here
+            FocuserHardware.Gui.Show();
         }
 
         #region ASCOM Registration
@@ -91,9 +73,6 @@ namespace ASCOM.FocVide
         }
         #endregion
 
-        //
-        // PUBLIC COM INTERFACE IFocuser IMPLEMENTATION
-        //
 
         #region IFocuser Members
 

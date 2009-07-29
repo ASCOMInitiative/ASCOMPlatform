@@ -9,6 +9,10 @@ namespace ASCOM.FocVide
         #region Public variables
         public enum eLogKind { LogMove, LogTemp, LogIsMoving, LogOther };
         public static bool HaltRequested;
+        public static frmMain Gui = new frmMain();
+        public static bool IsTempCompMove = false;
+        public static Random xRand;
+
         #endregion
 
         private static bool _Link;
@@ -17,11 +21,13 @@ namespace ASCOM.FocVide
 
         static FocuserHardware()
 		{
-            frmMain Gui = new frmMain();
+            
             Properties.Settings.Default.Reload();
             _Link = false;
             HaltRequested = false;
             Properties.Settings.Default.IsMoving = false;
+            xRand = new Random();
+
             Gui.Show();
         }
         #endregion
@@ -150,7 +156,8 @@ namespace ASCOM.FocVide
                 MyLog(eLogKind.LogTemp, "Temperature request");
                 if (Properties.Settings.Default.sIsTemperature) 
                 {
-                    return (double)17.5; 
+                    // Get a simulated t° near the user specified range
+                    return (double)((int)Properties.Settings.Default.sTempMin + 10 * xRand.NextDouble());
                 }
                 else throw new PropertyNotImplementedException("Temperature", false);
             }
@@ -170,14 +177,21 @@ namespace ASCOM.FocVide
             int DestPosition = 0;
 
             //Properties.Settings.Default.Reload();
-            if (Properties.Settings.Default.sTempComp) // No moves when in t° compensation mode
+            if (!IsTempCompMove)
             {
-                MyLog(eLogKind.LogOther, "No move because T° compensation is ON");
-                return;
+                if (Properties.Settings.Default.sTempComp) // No moves when in t° compensation mode
+                {
+                    MyLog(eLogKind.LogOther, "No move because T° compensation is ON");
+                    return;
+                }
+                else
+                {
+                    MyLog(eLogKind.LogMove, "Requested move from " + Properties.Settings.Default.sPosition.ToString() + " to " + val.ToString());
+                }
             }
             else
             {
-                MyLog(eLogKind.LogMove, "Requested move from " + Properties.Settings.Default.sPosition.ToString() + " to " + val.ToString());
+                MyLog(eLogKind.LogMove, "T° compensation move");
             }
             HaltRequested = false;
             if (Properties.Settings.Default.sAbsolute)
@@ -278,14 +292,10 @@ namespace ASCOM.FocVide
         /// <param name="Texte">Text describing the event.</param>
         public static void MyLog(eLogKind Kind, string Texte)
         {
-            if (((Properties.Settings.Default.LogHaltMove) && (Kind == eLogKind.LogMove)) ||
-               ((Properties.Settings.Default.LogIsMoving) && (Kind == eLogKind.LogIsMoving)) ||
-               ((Properties.Settings.Default.LogTempRelated) && (Kind == eLogKind.LogTemp)) ||
-               ((Properties.Settings.Default.LogOther) && (Kind == eLogKind.LogOther)))
-            {
-                //Trace.WriteLine(Texte, Kind.ToString());
-                Trace.WriteLine(Texte);
-            }
+            if ((Properties.Settings.Default.LogHaltMove) && (Kind == eLogKind.LogMove)) Trace.WriteLine(Texte);
+            if ((Properties.Settings.Default.LogIsMoving) && (Kind == eLogKind.LogIsMoving)) Trace.WriteLine(Texte);
+            if ((Properties.Settings.Default.LogTempRelated) && (Kind == eLogKind.LogTemp)) Trace.WriteLine(Texte);
+            if ((Properties.Settings.Default.LogOther) && (Kind == eLogKind.LogOther)) Trace.WriteLine(Texte);
         }
 
         #endregion
