@@ -427,9 +427,19 @@ namespace ASCOM.GeminiTelescope
 
                     m_CommandQueue.Clear();
                     m_BackgroundWorker.RunWorkerAsync();
+                    m_SerialPort.Transmit("\x6");
+                    CommandItem ci = new CommandItem("\x6", 3000, true);
+                    string sRes = GetCommandResult(ci); ;
+                    string sProperResponse = "B#b#S#G#";
+                    if (sRes != null && sProperResponse.Contains(sRes))
+                    {
+                        m_Connected = true;
+                        return;
+                    }
+                    else
+                        Disconnect();
                 }
 
-                m_Connected = true;
             }
         }
 
