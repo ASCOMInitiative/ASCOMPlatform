@@ -109,7 +109,7 @@ namespace ASCOM.GeminiTelescope
                 throw new DriverException("The hardware is connected, cannot do SetupDialog()",
                                     unchecked(ErrorCodes.DriverBase + 4));
             }
-            GeminiTelescope.m_MainForm.DoTelescopeSetupDialog();
+            GeminiTelescope.m_MainForm.DoSetupDialog();
         }
 
         public double StepSize

@@ -39,11 +39,13 @@ namespace ASCOM.GeminiTelescope
             this.labelRa = new System.Windows.Forms.Label();
             this.labelLst = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.pictureBoxPierSideWest = new System.Windows.Forms.PictureBox();
             this.buttonSlew1 = new System.Windows.Forms.Button();
             this.buttonSlew3 = new System.Windows.Forms.Button();
             this.buttonSlew4 = new System.Windows.Forms.Button();
             this.buttonSlew2 = new System.Windows.Forms.Button();
             this.buttonSlew0 = new System.Windows.Forms.Button();
+            this.pictureBoxPierSideEast = new System.Windows.Forms.PictureBox();
             this.checkBoxTrack = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.labelSlew = new System.Windows.Forms.Label();
@@ -52,6 +54,9 @@ namespace ASCOM.GeminiTelescope
             this.ButtonPark = new System.Windows.Forms.Button();
             this.ButtonConnect = new System.Windows.Forms.Button();
             this.ButtonSetup = new System.Windows.Forms.Button();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.setupDialogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mountParametersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ButtonFlip = new System.Windows.Forms.Button();
             this.CheckBoxFlipDeck = new System.Windows.Forms.CheckBox();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
@@ -59,20 +64,15 @@ namespace ASCOM.GeminiTelescope
             this.RadioButtonCenter = new System.Windows.Forms.RadioButton();
             this.RadioButtonGuide = new System.Windows.Forms.RadioButton();
             this.CheckBoxFlipRa = new System.Windows.Forms.CheckBox();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.setupDialogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mountParametersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pictureBoxPierSideWest = new System.Windows.Forms.PictureBox();
-            this.pictureBoxPierSideEast = new System.Windows.Forms.PictureBox();
             this.picASCOM = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
-            this.tableLayoutPanel4.SuspendLayout();
-            this.TableLayoutPanel3.SuspendLayout();
-            this.GroupBox1.SuspendLayout();
-            this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPierSideWest)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPierSideEast)).BeginInit();
+            this.tableLayoutPanel4.SuspendLayout();
+            this.TableLayoutPanel3.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
+            this.GroupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.SuspendLayout();
             // 
@@ -183,6 +183,14 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel2.Size = new System.Drawing.Size(115, 111);
             this.tableLayoutPanel2.TabIndex = 9;
             // 
+            // pictureBoxPierSideWest
+            // 
+            this.pictureBoxPierSideWest.Location = new System.Drawing.Point(3, 3);
+            this.pictureBoxPierSideWest.Name = "pictureBoxPierSideWest";
+            this.pictureBoxPierSideWest.Size = new System.Drawing.Size(32, 31);
+            this.pictureBoxPierSideWest.TabIndex = 6;
+            this.pictureBoxPierSideWest.TabStop = false;
+            // 
             // buttonSlew1
             // 
             this.buttonSlew1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -233,6 +241,14 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew0.TabIndex = 4;
             this.buttonSlew0.Text = "Ä";
             this.buttonSlew0.UseVisualStyleBackColor = true;
+            // 
+            // pictureBoxPierSideEast
+            // 
+            this.pictureBoxPierSideEast.Location = new System.Drawing.Point(79, 3);
+            this.pictureBoxPierSideEast.Name = "pictureBoxPierSideEast";
+            this.pictureBoxPierSideEast.Size = new System.Drawing.Size(33, 31);
+            this.pictureBoxPierSideEast.TabIndex = 5;
+            this.pictureBoxPierSideEast.TabStop = false;
             // 
             // checkBoxTrack
             // 
@@ -322,13 +338,13 @@ namespace ASCOM.GeminiTelescope
             // 
             this.TableLayoutPanel3.SetColumnSpan(this.ButtonConnect, 5);
             this.ButtonConnect.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ButtonConnect.Enabled = false;
             this.ButtonConnect.Location = new System.Drawing.Point(3, 30);
             this.ButtonConnect.Name = "ButtonConnect";
             this.ButtonConnect.Size = new System.Drawing.Size(111, 21);
             this.ButtonConnect.TabIndex = 5;
             this.ButtonConnect.Text = "Connect";
             this.ButtonConnect.UseVisualStyleBackColor = true;
+            this.ButtonConnect.Click += new System.EventHandler(this.ButtonConnect_Click);
             // 
             // ButtonSetup
             // 
@@ -341,6 +357,28 @@ namespace ASCOM.GeminiTelescope
             this.ButtonSetup.Text = "S";
             this.ButtonSetup.UseVisualStyleBackColor = true;
             this.ButtonSetup.Click += new System.EventHandler(this.ButtonSetup_Click_1);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.setupDialogToolStripMenuItem,
+            this.mountParametersToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(173, 48);
+            // 
+            // setupDialogToolStripMenuItem
+            // 
+            this.setupDialogToolStripMenuItem.Name = "setupDialogToolStripMenuItem";
+            this.setupDialogToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.setupDialogToolStripMenuItem.Text = "Setup Dialog";
+            this.setupDialogToolStripMenuItem.Click += new System.EventHandler(this.setupDialogToolStripMenuItem_Click);
+            // 
+            // mountParametersToolStripMenuItem
+            // 
+            this.mountParametersToolStripMenuItem.Name = "mountParametersToolStripMenuItem";
+            this.mountParametersToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.mountParametersToolStripMenuItem.Text = "Mount Parameters";
+            this.mountParametersToolStripMenuItem.Click += new System.EventHandler(this.mountParametersToolStripMenuItem_Click);
             // 
             // ButtonFlip
             // 
@@ -423,44 +461,6 @@ namespace ASCOM.GeminiTelescope
             this.CheckBoxFlipRa.Text = "Flip\r\nRa";
             this.CheckBoxFlipRa.UseVisualStyleBackColor = true;
             // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.setupDialogToolStripMenuItem,
-            this.mountParametersToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(174, 70);
-            // 
-            // setupDialogToolStripMenuItem
-            // 
-            this.setupDialogToolStripMenuItem.Name = "setupDialogToolStripMenuItem";
-            this.setupDialogToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.setupDialogToolStripMenuItem.Text = "Setup Dialog";
-            this.setupDialogToolStripMenuItem.Click += new System.EventHandler(this.setupDialogToolStripMenuItem_Click);
-            // 
-            // mountParametersToolStripMenuItem
-            // 
-            this.mountParametersToolStripMenuItem.Name = "mountParametersToolStripMenuItem";
-            this.mountParametersToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.mountParametersToolStripMenuItem.Text = "Mount Parameters";
-            this.mountParametersToolStripMenuItem.Click += new System.EventHandler(this.mountParametersToolStripMenuItem_Click);
-            // 
-            // pictureBoxPierSideWest
-            // 
-            this.pictureBoxPierSideWest.Location = new System.Drawing.Point(3, 3);
-            this.pictureBoxPierSideWest.Name = "pictureBoxPierSideWest";
-            this.pictureBoxPierSideWest.Size = new System.Drawing.Size(32, 31);
-            this.pictureBoxPierSideWest.TabIndex = 6;
-            this.pictureBoxPierSideWest.TabStop = false;
-            // 
-            // pictureBoxPierSideEast
-            // 
-            this.pictureBoxPierSideEast.Location = new System.Drawing.Point(79, 3);
-            this.pictureBoxPierSideEast.Name = "pictureBoxPierSideEast";
-            this.pictureBoxPierSideEast.Size = new System.Drawing.Size(33, 31);
-            this.pictureBoxPierSideEast.TabIndex = 5;
-            this.pictureBoxPierSideEast.TabStop = false;
-            // 
             // picASCOM
             // 
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -491,17 +491,18 @@ namespace ASCOM.GeminiTelescope
             this.Name = "frmMain";
             this.Text = "Gemini Telescope";
             this.Load += new System.EventHandler(this.frmMain_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPierSideWest)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPierSideEast)).EndInit();
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel4.PerformLayout();
             this.TableLayoutPanel3.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.GroupBox1.ResumeLayout(false);
             this.GroupBox1.PerformLayout();
-            this.contextMenuStrip1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPierSideWest)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPierSideEast)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

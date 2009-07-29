@@ -89,7 +89,7 @@ namespace ASCOM.GeminiTelescope
     /// <summary>
     /// Class encapsulating all serial communications with Gemini
     /// </summary>
-    public class TelescopeHardware
+    public class GeminiHardware
     {
         
         private static HelperNET.Profile m_Profile;
@@ -138,7 +138,7 @@ namespace ASCOM.GeminiTelescope
         ///     create serial port
         ///     start background worker thread
         /// </summary>
-        static TelescopeHardware()
+        static GeminiHardware()
         {
             m_Profile = new HelperNET.Profile();
             m_Util = new ASCOM.HelperNET.Util();
@@ -316,7 +316,7 @@ namespace ASCOM.GeminiTelescope
         /// // Get Altitude from Gemini with a 1 second timeout:
         /// double dAltitude = 0;
         /// 
-        /// string sAlt = TelescopeHardware.DoCommandResult(":GA", 1000);
+        /// string sAlt = GeminiHardware.DoCommandResult(":GA", 1000);
         ///
         /// if (!string.IsNullOrEmpty(sAlt))
         ///     dAltitude = NETHelper.DMSToDegrees(sAlt);
@@ -340,7 +340,7 @@ namespace ASCOM.GeminiTelescope
         /// <example>
         /// <code>
         /// // Move to Home Position
-        /// TelescopeHardware.DoCommand(":hP");
+        /// GeminiHardware.DoCommand(":hP");
         /// </code>
         /// </example>
         /// <param name="cmd">command string to send to Gemini</param>
@@ -359,7 +359,7 @@ namespace ASCOM.GeminiTelescope
         /// // Get Gemini Status with a 1 second timeout:
         /// double dAltitude = 0;
         /// 
-        /// string sStatus = TelescopeHardware.DoCommandResult("<99:", 1000);
+        /// string sStatus = GeminiHardware.DoCommandResult("<99:", 1000);
         /// ]]></code>
         /// </example>
         /// <param name="cmd">command string to send to Gemini</param>
@@ -379,7 +379,7 @@ namespace ASCOM.GeminiTelescope
         /// <example>
         /// <code><![CDATA[
         /// // Set mount type to G11:
-        /// TelescopeHardware.DoNativeCommand(">2:");
+        /// GeminiHardware.DoNativeCommand(">2:");
         /// ]]></code>
         /// </example>
         /// <param name="cmd">native command to send to Gemini</param>

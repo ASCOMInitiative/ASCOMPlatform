@@ -11,15 +11,25 @@ namespace ASCOM.GeminiTelescope
     {
         delegate void SetTextCallback(string text);
 
+        Timer tmrUpdate = new Timer();
 
         public frmMain()
         {
             InitializeComponent();
-
+            tmrUpdate.Interval = 2000;
+            tmrUpdate.Tick += new EventHandler(tmrUpdate_Tick);
+            tmrUpdate.Start();
         }
-        public void DoTelescopeSetupDialog()
+
+        void tmrUpdate_Tick(object sender, EventArgs e)
         {
-            TelescopeSetupDialogForm setupForm = new TelescopeSetupDialogForm();
+            RightAscension = GeminiHardware.RightAscension;
+            Declination = GeminiHardware.Declination;
+        }
+
+        public void DoSetupDialog()
+        {
+            SetupDialogForm setupForm = new SetupDialogForm();
 
             setupForm.ComPort = GeminiHardware.ComPort;
 
@@ -45,19 +55,10 @@ namespace ASCOM.GeminiTelescope
 
         private void buttonSetup_Click(object sender, EventArgs e)
         {
-            DoTelescopeSetupDialog();
+            DoSetupDialog();
             SetSlewButtons();
         }
-        public void DoFocuserSetupDialog()
-        {
-            FocuserSetupDialogForm setupForm = new FocuserSetupDialogForm();
-            DialogResult ans = setupForm.ShowDialog(this);
 
-            if (ans == DialogResult.OK)
-            {
-            }
-            setupForm.Dispose();
-        }
         private void SetSlewButtons()
         {
             if (GeminiHardware.SouthernHemisphere)
@@ -112,7 +113,7 @@ namespace ASCOM.GeminiTelescope
         private void frmMain_Load(object sender, EventArgs e)
         {
             SetSlewButtons();
-            GeminiHardware.Start();
+            //GeminiHardware.Start();
         }
 
         #region Thread Safe Callback Functions
@@ -138,7 +139,7 @@ namespace ASCOM.GeminiTelescope
 
         private void setupDialogToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DoTelescopeSetupDialog();
+            DoSetupDialog();
         }
 
         private void mountParametersToolStripMenuItem_Click(object sender, EventArgs e)
@@ -159,6 +160,32 @@ namespace ASCOM.GeminiTelescope
 
                 parametersForm.Dispose();
             }
+        }
+
+        private void ButtonConnect_Click(object sender, EventArgs e)
+        {
+            if (!GeminiHardware.Connected)
+            {
+                GeminiHardware.Connected = true;
+                if (!GeminiHardware.Connected)
+                    MessageBox.Show("Cannot connect to telescope");
+                else
+                    this.ButtonConnect.Text = "Disconnect";
+            }
+            else
+            {
+                GeminiHardware.Connected = false;
+                if (GeminiHardware.Connected != false)
+                    MessageBox.Show("Cannot disconnect from telescope");
+                else
+                    this.ButtonConnect.Text = "Connect";
+            }
+        }
+
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (GeminiHardware.Connected)
+                GeminiHardware.Connected = false;
         }
     }
 }
