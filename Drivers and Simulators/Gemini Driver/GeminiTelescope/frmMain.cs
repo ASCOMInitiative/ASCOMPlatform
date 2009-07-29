@@ -23,8 +23,11 @@ namespace ASCOM.GeminiTelescope
 
         void tmrUpdate_Tick(object sender, EventArgs e)
         {
-            RightAscension = GeminiHardware.RightAscension;
-            Declination = GeminiHardware.Declination;
+            if (GeminiHardware.Connected)
+            {
+                RightAscension = GeminiHardware.RightAscension;
+                Declination = GeminiHardware.Declination;
+            }
         }
 
         public void DoSetupDialog()
@@ -154,10 +157,7 @@ namespace ASCOM.GeminiTelescope
                 if (ans == DialogResult.OK)
                 {
 
-                    
-
                 }
-
                 parametersForm.Dispose();
             }
         }
