@@ -702,7 +702,7 @@ namespace ASCOM.GeminiTelescope
                     {
                         //Get RA and DEC etc
                         m_SerialPort.ClearBuffers(); //clear all received data
-                        m_SerialPort.Transmit(":GR#:GD#");
+                        m_SerialPort.Transmit(":GR#:GD#:GD#:GA#:GZ#:Gv#:GS#:Gm#:h?#");
 
                         command = new CommandItem(":GR", m_QueryInterval, true);
                         string RA = GetCommandResult(command);
