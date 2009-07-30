@@ -27,6 +27,7 @@ namespace ASCOM.GeminiTelescope
             {
                 RightAscension = GeminiHardware.RightAscension;
                 Declination = GeminiHardware.Declination;
+                SiderealTime = GeminiHardware.SiderealTime;
             }
         }
 

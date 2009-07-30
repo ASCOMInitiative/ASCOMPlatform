@@ -176,7 +176,7 @@ namespace ASCOM.GeminiTelescope
         private static DateTime m_LastUpdate;
         private static object m_ConnectLock = new object();
 
-        private static int m_QueryInterval = 2000;   // query mount for status this often, in msecs.
+        private static int m_QueryInterval = 1000;   // query mount for status this often, in msecs.
 
         /// <summary>
         ///  TelescopeHadrware constructor
@@ -591,6 +591,37 @@ namespace ASCOM.GeminiTelescope
                     }
                     else
                         Disconnect();
+
+
+                    //Get Values From Gemini
+                    m_RightAscension = m_Util.HMSToDegrees(DoCommandResult(":GR",1000));
+                    m_Declination = m_Util.DMSToDegrees(DoCommandResult(":GD", 1000));
+                    m_Altitude = m_Util.DMSToDegrees(DoCommandResult(":GA", 1000));
+                    m_Azimuth = m_Util.DMSToDegrees(DoCommandResult(":GZ", 1000));
+                    m_Velocity = DoCommandResult(":Gv", 1000);
+                    if (Velocity != "T")
+                    { m_Tracking = false; }
+                    else
+                    { m_Tracking = true; }
+                    m_SiderealTime = m_Util.HMSToDegrees(DoCommandResult(":GS", 1000));
+                    m_SideOfPier = DoCommandResult(":Gm", 1000);
+                    if (DoCommandResult(":h?", 1000) == "1")
+                    {
+                        m_AtHome = true;
+                        if (Velocity == "N")
+                        {
+                            m_AtPark = true;
+                        }
+                        else
+                        {
+                            m_AtPark = false;
+                        }
+                    }
+                    else
+                    {
+                        m_AtHome = false;
+                        m_AtPark = false;
+                    }
                 }
 
             }
@@ -679,20 +710,36 @@ namespace ASCOM.GeminiTelescope
                         command = new CommandItem(":GD", m_QueryInterval, true);
                         string DEC = GetCommandResult(command);
 
+                        //Get RA and DEC etc
+                        m_SerialPort.ClearBuffers(); //clear all received data
+                        m_SerialPort.Transmit(":GA#:GZ#");
+
                         command = new CommandItem(":GA", m_QueryInterval, true);
                         string ALT = GetCommandResult(command);
 
                         command = new CommandItem(":GZ", m_QueryInterval, true);
                         string AZ = GetCommandResult(command);
 
+                        m_SerialPort.ClearBuffers(); //clear all received data
+                        m_SerialPort.Transmit(":Gv#");
+
                         command = new CommandItem(":Gv", m_QueryInterval, true);
                         string V = GetCommandResult(command);
+
+                        m_SerialPort.ClearBuffers(); //clear all received data
+                        m_SerialPort.Transmit(":GS#");
 
                         command = new CommandItem(":GS", m_QueryInterval, true);
                         string ST = GetCommandResult(command);
 
+                        m_SerialPort.ClearBuffers(); //clear all received data
+                        m_SerialPort.Transmit(":Gm#");
+
                         command = new CommandItem(":Gm", m_QueryInterval, true);
                         string SOP = GetCommandResult(command);
+
+                        m_SerialPort.ClearBuffers(); //clear all received data
+                        m_SerialPort.Transmit(":h?#");
 
                         command = new CommandItem(":h?", m_QueryInterval, true);
                         string HOME = GetCommandResult(command);
