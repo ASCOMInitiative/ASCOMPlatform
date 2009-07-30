@@ -283,7 +283,7 @@ namespace ASCOM.GeminiTelescope
         public string DriverInfo
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("DriverInfo", false); }
+            get { return SharedResources.TELESCOPE_DRIVER_INFO; }
         }
 
         public string DriverVersion
@@ -398,28 +398,54 @@ namespace ASCOM.GeminiTelescope
         public double SiderealTime
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("SiderealTime", false); }
+            get { return GeminiHardware.SiderealTime; }
         }
 
         public double SiteElevation
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("SiteElevation", false); }
-            set { throw new PropertyNotImplementedException("SiteElevation", true); }
+            get { return GeminiHardware.Elevation; }
+            set 
+            {
+                if (value < -300 || value > 10000)
+                {
+                    throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+                }
+                GeminiHardware.Elevation = value; 
+
+            }
         }
 
         public double SiteLatitude
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("SiteLatitude", false); }
-            set { throw new PropertyNotImplementedException("SiteLatitude", true); }
+            get { return GeminiHardware.Latitude; }
+            set 
+            {
+                if (value < -90 || value > 90)
+                {
+              
+                    throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+                }
+                GeminiHardware.SetLatitude(value);
+
+            }
         }
 
         public double SiteLongitude
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("SiteLongitude", false); }
-            set { throw new PropertyNotImplementedException("SiteLongitude", true); }
+            get { return GeminiHardware.Longitude; }
+            set
+            {
+                if (value < -180 || value > 180)
+                {
+
+                    throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+                }
+                GeminiHardware.SetLongitude(value);
+
+            }
         }
 
         public short SlewSettleTime
@@ -467,8 +493,19 @@ namespace ASCOM.GeminiTelescope
 
         public bool Slewing
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Slewing", false); }
+            
+            get 
+            {
+                
+                if (GeminiHardware.Velocity == "S")
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
 
         public void SyncToAltAz(double Azimuth, double Altitude)

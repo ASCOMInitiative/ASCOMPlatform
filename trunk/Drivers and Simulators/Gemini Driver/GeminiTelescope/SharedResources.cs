@@ -31,6 +31,17 @@ namespace ASCOM.GeminiTelescope
 
         public static string TELESCOPE_DRIVER_DESCRIPTION = "Gemini Telescope ASCOM Driver .NET";
         public static string TELESCOPE_DRIVER_NAME = "Gemini Telescope";
+        public static string TELESCOPE_DRIVER_INFO = "Gemini Telescope Driver V1";
+
+        public static uint ERROR_BASE = 0x80040400;
+        public static uint SCODE_NO_TARGET_COORDS = ERROR_BASE + 0x404;
+        public static string MSG_NO_TARGET_COORDS = "Target coordinates have not yet been set";
+        public static uint SCODE_VAL_OUTOFRANGE = ERROR_BASE + 0x405;
+        public static string MSG_VAL_OUTOFRANGE = "The property value is out of range";
+        public static uint SCOPE_PROP_NOT_SET = ERROR_BASE + 0x403;
+        public static string MSG_PROP_NOT_SET = "The property has not yet been set";
+        public static uint INVALID_AT_PARK = ERROR_BASE + 0x404;
+        public static string MSG_INVALID_AT_PARK = "Invalid while parked";
 
         //Astronomy Releated Constants
         public static double DEG_RAD = Math.PI / 180;
