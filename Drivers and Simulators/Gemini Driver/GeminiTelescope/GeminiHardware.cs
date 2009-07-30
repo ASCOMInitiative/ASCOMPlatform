@@ -125,8 +125,8 @@ namespace ASCOM.GeminiTelescope
     public class GeminiHardware
     {
         
-        private static HelperNET.Profile m_Profile;
-        private static HelperNET.Util m_Util;
+        private static ASCOM.HelperNET.Profile m_Profile;
+        private static ASCOM.HelperNET.Util m_Util;
 
         private static Queue m_CommandQueue; //Queue used for messages to the gemini
         private static System.ComponentModel.BackgroundWorker m_BackgroundWorker; // Thread to run for communications
@@ -1045,7 +1045,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static void SyncEquatorial()
         {
-            string[] cmd = {":Sr" + m_Util.DegreesToHMS(TargetRightAscension,":",":",":"),":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ":"),""};
+            string[] cmd = {":Sr" + m_Util.DegreesToHMS(TargetRightAscension,":",":",""),":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ""),""};
             if (m_AdditionalAlign)
             {
                 cmd[2] = ":Cm";
@@ -1062,7 +1062,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static void SlewEquatorial()
         {
-            string[] cmd = { ":Sr" + m_Util.DegreesToHMS(TargetRightAscension, ":", ":", ":"), ":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ":"), ":MM" };
+            string[] cmd = { ":Sr" + m_Util.DegreesToHMS(TargetRightAscension, ":", ":", ""), ":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ""), ":MS" };
            
             DoCommandResult(cmd,2000);
         }
@@ -1071,7 +1071,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static void SlewEquatorialAsync()
         {
-            string[] cmd = { ":Sr" + m_Util.DegreesToHMS(TargetRightAscension, ":", ":", ":"), ":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ":"), ":MM" };
+            string[] cmd = { ":Sr" + m_Util.DegreesToHMS(TargetRightAscension, ":", ":", ""), ":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ""), ":MS" };
 
             DoCommand(cmd);
         }
@@ -1081,7 +1081,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static void SyncHorizon()
         {
-            string[] cmd = { ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ":"), ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ":"), "" };
+            string[] cmd = { ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ""), ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ""), "" };
             if (m_AdditionalAlign)
             {
                 cmd[2] = ":Cm";
@@ -1098,7 +1098,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static void SlewHorizon()
         {
-            string[] cmd = { ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ":"), ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ":"), ":MA" };
+            string[] cmd = { ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ""), ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ""), ":MA" };
             DoCommandResult(cmd, 2000);
         }
         /// <summary>
@@ -1106,7 +1106,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static void SlewHorizonAsync()
         {
-            string[] cmd = { ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ":"), ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ":"), ":MA" };
+            string[] cmd = { ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ""), ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ""), ":MA" };
             DoCommand(cmd);
         }
         #endregion
