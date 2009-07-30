@@ -102,12 +102,12 @@ namespace ASCOM.GeminiTelescope
         public bool AtHome
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("AtHome", false); }
+            get { return GeminiHardware.AtHome; }
         }
 
         public bool AtPark
         {
-            get { throw new PropertyNotImplementedException("AtPark", false); }
+            get { return GeminiHardware.AtPark; }
         }
 
         public IAxisRates AxisRates(TelescopeAxes Axis)
@@ -391,8 +391,28 @@ namespace ASCOM.GeminiTelescope
         public PierSide SideOfPier
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("SideOfPier", false); }
-            set { throw new PropertyNotImplementedException("SideOfPier", true); }
+            get 
+            {
+                if (GeminiHardware.SideOfPier == "E")
+                {
+                    return PierSide.pierEast;
+                }
+                else if (GeminiHardware.SideOfPier == "W")
+                {
+                    return PierSide.pierWest;
+                }
+                else
+                {
+                    return PierSide.pierUnknown;
+                }
+            }
+            set 
+            {
+                if ((value == PierSide.pierEast && GeminiHardware.SideOfPier == "W") || (value == PierSide.pierWest && GeminiHardware.SideOfPier == "E"))
+                {
+                    GeminiHardware.DoCommand(":Mf");
+                }
+            }
         }
 
         public double SiderealTime
@@ -457,38 +477,40 @@ namespace ASCOM.GeminiTelescope
 
         public void SlewToAltAz(double Azimuth, double Altitude)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("SlewToAltAz");
+            GeminiHardware.TargetAzimuth = Azimuth;
+            GeminiHardware.TargetAltitude = Altitude;
+            GeminiHardware.SlewHorizon();
         }
 
         public void SlewToAltAzAsync(double Azimuth, double Altitude)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("SlewToAltAzAsync");
+            GeminiHardware.TargetAzimuth = Azimuth;
+            GeminiHardware.TargetAltitude = Altitude;
+            GeminiHardware.SlewHorizonAsync();
         }
 
         public void SlewToCoordinates(double RightAscension, double Declination)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("SlewToCoordinates");
+            GeminiHardware.TargetRightAscension = RightAscension;
+            GeminiHardware.TargetDeclination = Declination;
+            GeminiHardware.SlewEquatorial();
         }
 
         public void SlewToCoordinatesAsync(double RightAscension, double Declination)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("SlewToCoordinatesAsync");
+            GeminiHardware.TargetRightAscension = RightAscension;
+            GeminiHardware.TargetDeclination = Declination;
+            GeminiHardware.SlewEquatorialAsync();
         }
 
         public void SlewToTarget()
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("SlewToTarget");
+            GeminiHardware.SlewEquatorial();
         }
 
         public void SlewToTargetAsync()
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("SlewToTargetAsync");
+            GeminiHardware.SlewEquatorialAsync();
         }
 
         public bool Slewing
@@ -529,29 +551,54 @@ namespace ASCOM.GeminiTelescope
         public double TargetDeclination
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("TargetDeclination", false); }
-            set { throw new PropertyNotImplementedException("TargetDeclination", true); }
+            get { return GeminiHardware.TargetDeclination; }
+            set
+            {
+                if (value < -90 || value > 90)
+                {
+
+                    throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+                }
+                GeminiHardware.TargetDeclination = value;
+            }
         }
 
         public double TargetRightAscension
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("TargetRightAscension", false); }
-            set { throw new PropertyNotImplementedException("TargetRightAscension", true); }
+            get { return GeminiHardware.TargetRightAscension; }
+            set 
+            {
+                if (value < 0 || value > 24)
+                {
+
+                    throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+                }
+                GeminiHardware.TargetRightAscension=value; 
+            }
         }
 
         public bool Tracking
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Tracking", false); }
-            set { throw new PropertyNotImplementedException("Tracking", true); }
+            get { return GeminiHardware.Tracking; }
+            set 
+            {
+                if (value && !GeminiHardware.Tracking)
+                {
+                    GeminiHardware.DoCommand(":hW");
+                }
+                if (!value && !GeminiHardware.Tracking)
+                {
+                    GeminiHardware.DoCommand(":hN");
+                }
+            }
         }
 
         public DriveRates TrackingRate
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("TrackingRate", false); }
-            set { throw new PropertyNotImplementedException("TrackingRate", true); }
+            get { return DriveRates.driveSidereal; }
+            set {  }
         }
 
         public ITrackingRates TrackingRates
@@ -562,14 +609,13 @@ namespace ASCOM.GeminiTelescope
         public DateTime UTCDate
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("UTCDate", false); }
-            set { throw new PropertyNotImplementedException("UTCDate", true); }
+            get { return DateTime.UtcNow; }
+            set {  }
         }
 
         public void Unpark()
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("Unpark");
+            GeminiHardware.DoCommand(":hW");
         }
 
         #endregion

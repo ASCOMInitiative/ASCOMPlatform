@@ -148,6 +148,10 @@ namespace ASCOM.GeminiTelescope
         private static double m_SiderealTime;
         private static string m_Velocity;
         private static string m_SideOfPier;
+        private static double m_TargetAltitude;
+        private static double m_TargetAzimuth;
+
+        private static bool m_AdditionalAlign;
 
 
         private static bool m_Tracking;
@@ -172,7 +176,7 @@ namespace ASCOM.GeminiTelescope
         private static DateTime m_LastUpdate;
         private static object m_ConnectLock = new object();
 
-        private static int m_QueryInterval = 1000;   // query mount for status this often, in msecs.
+        private static int m_QueryInterval = 2000;   // query mount for status this often, in msecs.
 
         /// <summary>
         ///  TelescopeHadrware constructor
@@ -207,9 +211,13 @@ namespace ASCOM.GeminiTelescope
                 //Main Driver Settings
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "RegVer", SharedResources.REGISTRATION_VERSION);
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "ComPort", "COM1");
+                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "AdditionalAlign", "false");
             }
 
             //Load up the values from saved
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "AdditionalAlign", ""), out m_AdditionalAlign))
+                m_AdditionalAlign = false;
+
             m_ComPort = m_Profile.GetValue(SharedResources.PROGRAM_ID, "ComPort", "");
             if (!int.TryParse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "BaudRate", ""), out m_BaudRate))
                 m_BaudRate = 9600;
@@ -686,14 +694,38 @@ namespace ASCOM.GeminiTelescope
                         command = new CommandItem(":Gm", m_QueryInterval, true);
                         string SOP = GetCommandResult(command);
 
-                        if (RA != null && DEC!=null && ALT!=null && AZ!=null && V!=null && ST!=null && SOP!=null) {
+                        command = new CommandItem(":h?", m_QueryInterval, true);
+                        string HOME = GetCommandResult(command);
+
+                        if (RA != null && DEC!=null && ALT!=null && AZ!=null && V!=null && ST!=null && SOP!=null && HOME!=null) {
                             m_RightAscension = m_Util.HMSToDegrees(RA);
                             m_Declination = m_Util.DMSToDegrees(DEC);
                             m_Altitude = m_Util.DMSToDegrees(ALT);
                             m_Azimuth = m_Util.DMSToDegrees(AZ);
                             m_Velocity = V;
+                            if (Velocity != "T")
+                            { m_Tracking = false; }
+                            else
+                            { m_Tracking = true; }
                             m_SiderealTime = m_Util.HMSToDegrees(ST);
                             m_SideOfPier = SOP;
+                            if (HOME == "1")
+                            {
+                                m_AtHome = true;
+                                if (Velocity == "N")
+                                {
+                                    m_AtPark = true;
+                                }
+                                else
+                                {
+                                    m_AtPark = false;
+                                }
+                            }
+                            else
+                            {
+                                m_AtHome = false;
+                                m_AtPark = false;
+                            }
                             m_LastUpdate = System.DateTime.Now;
                         }
                     }
@@ -908,6 +940,24 @@ namespace ASCOM.GeminiTelescope
         }
 
         /// <summary>
+        /// Get Set current TargetAltitude propery
+        /// </summary>
+        public static double TargetAltitude
+        {
+            get { return m_TargetAltitude; }
+            set { m_TargetAltitude = value; }
+        }
+
+        /// <summary>
+        /// Get Set current TargetAzimuth propery
+        /// </summary>
+        public static double TargetAzimuth
+        {
+            get { return m_TargetAzimuth; }
+            set { m_TargetAzimuth = value; }
+        }
+
+        /// <summary>
         /// Get current SiderealTime propery
         /// retrieved from the latest polled value from the mount, no actual command is executed
         /// </summary>
@@ -949,6 +999,85 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static string SideOfPier
         { get { return m_SideOfPier; } }
+
+        /// <summary>
+        /// Get current Tracking propery
+        /// returns whether the telescope is tracking
+        /// </summary>
+        public static bool Tracking
+        { 
+            get { return m_Tracking; }
+        }
+
+        /// <summary>
+        /// Syncs the mount using Ra and Dec
+        /// </summary>
+        public static void SyncEquatorial()
+        {
+            string[] cmd = {":Sr" + m_Util.DegreesToHMS(TargetRightAscension,":",":",":"),":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ":"),""};
+            if (m_AdditionalAlign)
+            {
+                cmd[2] = ":Cm";
+            }
+            else
+            {
+                cmd[2] = ":CM";
+            }
+            DoCommand(cmd);
+        }
+
+        /// <summary>
+        /// Slews the mount using Ra and Dec
+        /// </summary>
+        public static void SlewEquatorial()
+        {
+            string[] cmd = { ":Sr" + m_Util.DegreesToHMS(TargetRightAscension, ":", ":", ":"), ":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ":"), ":MM" };
+           
+            DoCommandResult(cmd,2000);
+        }
+        /// <summary>
+        /// Slews the mount using Ra and Dec
+        /// </summary>
+        public static void SlewEquatorialAsync()
+        {
+            string[] cmd = { ":Sr" + m_Util.DegreesToHMS(TargetRightAscension, ":", ":", ":"), ":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ":"), ":MM" };
+
+            DoCommand(cmd);
+        }
+
+        /// <summary>
+        /// Syncs the mount using Alt and Az
+        /// </summary>
+        public static void SyncHorizon()
+        {
+            string[] cmd = { ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ":"), ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ":"), "" };
+            if (m_AdditionalAlign)
+            {
+                cmd[2] = ":Cm";
+            }
+            else
+            {
+                cmd[2] = ":CM";
+            }
+            DoCommand(cmd);
+        }
+
+        /// <summary>
+        /// Slews the mount using Alt and Az
+        /// </summary>
+        public static void SlewHorizon()
+        {
+            string[] cmd = { ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ":"), ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ":"), ":MA" };
+            DoCommandResult(cmd, 2000);
+        }
+        /// <summary>
+        /// Slews the mount using Alt and Az
+        /// </summary>
+        public static void SlewHorizonAsync()
+        {
+            string[] cmd = { ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ":"), ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ":"), ":MA" };
+            DoCommand(cmd);
+        }
         #endregion
 
         /// <summary>

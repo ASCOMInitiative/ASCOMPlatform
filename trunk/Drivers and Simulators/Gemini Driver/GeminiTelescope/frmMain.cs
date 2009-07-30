@@ -76,7 +76,7 @@ namespace ASCOM.GeminiTelescope
 
         private void buttonSetup_Click(object sender, EventArgs e)
         {
-            //DoSetupDialog();
+            DoTelescopeSetupDialog();
             SetSlewButtons();
         }
 
@@ -160,7 +160,7 @@ namespace ASCOM.GeminiTelescope
 
         private void setupDialogToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //DoSetupDialog();
+            DoTelescopeSetupDialog();
         }
 
         private void mountParametersToolStripMenuItem_Click(object sender, EventArgs e)
