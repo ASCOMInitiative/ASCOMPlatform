@@ -30,9 +30,9 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        public void DoSetupDialog()
+        public void DoTelescopeSetupDialog()
         {
-            SetupDialogForm setupForm = new SetupDialogForm();
+            TelescopeSetupDialogForm setupForm = new TelescopeSetupDialogForm();
 
             setupForm.ComPort = GeminiHardware.ComPort;
 
@@ -56,9 +56,27 @@ namespace ASCOM.GeminiTelescope
             setupForm.Dispose();
         }
 
+        public void DoFocuserSetupDialog()
+        {
+            FocuserSetupDialogForm setupForm = new FocuserSetupDialogForm();
+
+           
+
+            DialogResult ans = setupForm.ShowDialog(this);
+
+            if (ans == DialogResult.OK)
+            {
+
+                
+
+            }
+
+            setupForm.Dispose();
+        }
+
         private void buttonSetup_Click(object sender, EventArgs e)
         {
-            DoSetupDialog();
+            //DoSetupDialog();
             SetSlewButtons();
         }
 
@@ -142,7 +160,7 @@ namespace ASCOM.GeminiTelescope
 
         private void setupDialogToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DoSetupDialog();
+            //DoSetupDialog();
         }
 
         private void mountParametersToolStripMenuItem_Click(object sender, EventArgs e)

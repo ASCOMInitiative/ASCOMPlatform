@@ -30,7 +30,7 @@ namespace ASCOM.GeminiTelescope
         public static int GEMINI_POLLING_INTERVAL = 1;             //Seconds to use for Polling Gemini status
 
         public static string TELESCOPE_DRIVER_DESCRIPTION = "Gemini Telescope ASCOM Driver .NET";
-
+        public static string TELESCOPE_DRIVER_NAME = "Gemini Telescope";
 
         //Astronomy Releated Constants
         public static double DEG_RAD = Math.PI / 180;

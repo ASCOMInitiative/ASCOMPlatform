@@ -64,6 +64,12 @@
   <ItemGroup>
     <Compile Include="AstronomyFunctions.cs" />
     <Compile Include="ClassFactory.cs" />
+    <Compile Include="FocuserSetupDialogForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FocuserSetupDialogForm.Designer.cs">
+      <DependentUpon>FocuserSetupDialogForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +86,9 @@
       <DependentUpon>MountParameters.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FocuserSetupDialogForm.resx">
+      <DependentUpon>FocuserSetupDialogForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -90,8 +99,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="SetupDialogForm.resx">
-      <DependentUpon>SetupDialogForm.cs</DependentUpon>
+    <EmbeddedResource Include="TelescopeSetupDialogForm.resx">
+      <DependentUpon>TelescopeSetupDialogForm.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -100,14 +109,14 @@
     </Compile>
     <Compile Include="ReferenceCountedObject.cs" />
     <Compile Include="ServedClassNameAttribute.cs" />
-    <Compile Include="SetupDialogForm.cs">
+    <Compile Include="SharedResources.cs" />
+    <Compile Include="GeminiHardware.cs" />
+    <Compile Include="TelescopeSetupDialogForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SetupDialogForm.designer.cs">
-      <DependentUpon>SetupDialogForm.cs</DependentUpon>
+    <Compile Include="TelescopeSetupDialogForm.designer.cs">
+      <DependentUpon>TelescopeSetupDialogForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SharedResources.cs" />
-    <Compile Include="TelescopeHardware.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ASCOM.png" />

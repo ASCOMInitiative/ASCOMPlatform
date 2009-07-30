@@ -73,8 +73,7 @@ namespace ASCOM.GeminiTelescope
 
         public void AbortSlew()
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("AbortSlew");
+            GeminiHardware.DoCommand(":Q");
         }
 
         public AlignmentModes AlignmentMode
@@ -85,8 +84,7 @@ namespace ASCOM.GeminiTelescope
 
         public double Altitude
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Altitude", false); }
+            get { return GeminiHardware.Altitude; }
         }
 
         public double ApertureArea
@@ -109,7 +107,6 @@ namespace ASCOM.GeminiTelescope
 
         public bool AtPark
         {
-            // TODO Replace this with your implementation
             get { throw new PropertyNotImplementedException("AtPark", false); }
         }
 
@@ -130,116 +127,110 @@ namespace ASCOM.GeminiTelescope
 
         public double Azimuth
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Azimuth", false); }
+            get { return GeminiHardware.Azimuth; }
         }
 
         public bool CanFindHome
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanFindHome", false); }
+            get { return true; }
         }
 
         public bool CanMoveAxis(TelescopeAxes Axis)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("CanMoveAxis");
+            switch (Axis)
+            {
+                case TelescopeAxes.axisPrimary:
+                    return true;
+                case TelescopeAxes.axisSecondary:
+                    return true;
+                case TelescopeAxes.axisTertiary:
+                    return false;
+                default:
+                    return false;
+            }
         }
 
         public bool CanPark
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanPark", false); }
+            get { return true; }
         }
 
         public bool CanPulseGuide
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanPulseGuide", false); }
+            get { return true; }
         }
 
         public bool CanSetDeclinationRate
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSetDeclinationRate", false); }
+            get { return true; }
         }
 
         public bool CanSetGuideRates
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSetGuideRates", false); }
+            get { return true; }
         }
 
         public bool CanSetPark
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSetPark", false); }
+            get { return true; }
         }
 
         public bool CanSetPierSide
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSetPierSide", false); }
+            get { return true; }
         }
 
         public bool CanSetRightAscensionRate
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSetRightAscensionRate", false); }
+            get { return true; }
         }
 
         public bool CanSetTracking
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSetTracking", false); }
+            get { return true; }
         }
 
         public bool CanSlew
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSlew", false); }
+            get { return true; }
         }
 
         public bool CanSlewAltAz
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSlewAltAz", false); }
+            get { return true; }
         }
 
         public bool CanSlewAltAzAsync
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSlewAltAzAsync", false); }
+            get { return true; }
         }
 
         public bool CanSlewAsync
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSlewAsync", false); }
+            get { return true; }
         }
 
         public bool CanSync
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSync", false); }
+            
+            get { return true; }
         }
 
         public bool CanSyncAltAz
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSyncAltAz", false); }
+            
+            get { return true; }
         }
 
         public bool CanUnpark
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanUnpark", false); }
+            
+            get { return true; }
         }
 
         public void CommandBlind(string Command, bool Raw)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("CommandBlind");
+            GeminiHardware.DoCommand(Command);
         }
 
         public bool CommandBool(string Command, bool Raw)
@@ -250,20 +241,17 @@ namespace ASCOM.GeminiTelescope
 
         public string CommandString(string Command, bool Raw)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("CommandString");
+            return GeminiHardware.DoCommandResult(Command, 2000);
         }
 
         public bool Connected
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Connected", false); }
-            set { throw new PropertyNotImplementedException("Connected", true); }
+            get { return GeminiHardware.Connected; }
+            set { GeminiHardware.Connected = value; }
         }
 
         public double Declination
         {
-            // TODO Replace this with your implementation
             get { return GeminiHardware.Declination; }
         }
 
@@ -276,8 +264,7 @@ namespace ASCOM.GeminiTelescope
 
         public string Description
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Description", false); }
+            get { return SharedResources.TELESCOPE_DRIVER_DESCRIPTION; }
         }
 
         public PierSide DestinationSideOfPier(double RightAscension, double Declination)
@@ -301,20 +288,19 @@ namespace ASCOM.GeminiTelescope
 
         public string DriverVersion
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("DriverVersion", false); }
+            get { return "1"; }
         }
 
         public EquatorialCoordinateType EquatorialSystem
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("EquatorialCoordinateType", false); }
+            
+            get { return EquatorialCoordinateType.equJ2000; }
         }
 
         public void FindHome()
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("FindHome");
+            
+            GeminiHardware.DoCommand(":hP");
         }
 
         public double FocalLength
@@ -339,8 +325,8 @@ namespace ASCOM.GeminiTelescope
 
         public short InterfaceVersion
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("InterfaceVersion", false); }
+            
+            get { return 2; }
         }
 
         public bool IsPulseGuiding
@@ -357,14 +343,14 @@ namespace ASCOM.GeminiTelescope
 
         public string Name
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Name", false); }
+            
+            get { return SharedResources.TELESCOPE_DRIVER_NAME; }
         }
 
         public void Park()
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("Park");
+            string[] cmd = { ":hP", ":hN" };
+            GeminiHardware.DoCommand(cmd);
         }
 
         public void PulseGuide(GuideDirections Direction, int Duration)
@@ -375,7 +361,7 @@ namespace ASCOM.GeminiTelescope
 
         public double RightAscension
         {
-            // TODO Replace this with your implementation
+            
             get { return GeminiHardware.RightAscension; }
         }
 
@@ -399,7 +385,7 @@ namespace ASCOM.GeminiTelescope
                 throw new DriverException("The hardware is connected, cannot do SetupDialog()",
                                     unchecked(ErrorCodes.DriverBase + 4));
             }
-            GeminiTelescope.m_MainForm.DoSetupDialog();
+            GeminiTelescope.m_MainForm.DoTelescopeSetupDialog();
         }
 
         public PierSide SideOfPier
@@ -692,7 +678,7 @@ namespace ASCOM.GeminiTelescope
             // the tracking rates supported by your telescope. The one value
             // (tracking rate) that MUST be supported is driveSidereal!
             //
-            m_TrackingRates = new DriveRates[] { DriveRates.driveSidereal };
+            m_TrackingRates = new DriveRates[] { DriveRates.driveSidereal, DriveRates.driveKing, DriveRates.driveLunar, DriveRates.driveSolar };
             // TODO Initialize this array with any additional tracking rates that your driver may provide
         }
 
