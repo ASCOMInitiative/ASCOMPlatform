@@ -143,6 +143,11 @@ namespace ASCOM.GeminiTelescope
         private static double m_Declination;
         private static double m_Altitude;
         private static double m_Azimuth;
+        private static double m_TargetRightAscension;
+        private static double m_TargetDeclination;
+        private static double m_SiderealTime;
+        private static string m_Velocity;
+        private static string m_SideOfPier;
 
 
         private static bool m_Tracking;
@@ -666,9 +671,29 @@ namespace ASCOM.GeminiTelescope
                         command = new CommandItem(":GD", m_QueryInterval, true);
                         string DEC = GetCommandResult(command);
 
-                        if (RA != null && DEC!=null) {
+                        command = new CommandItem(":GA", m_QueryInterval, true);
+                        string ALT = GetCommandResult(command);
+
+                        command = new CommandItem(":GZ", m_QueryInterval, true);
+                        string AZ = GetCommandResult(command);
+
+                        command = new CommandItem(":Gv", m_QueryInterval, true);
+                        string V = GetCommandResult(command);
+
+                        command = new CommandItem(":GS", m_QueryInterval, true);
+                        string ST = GetCommandResult(command);
+
+                        command = new CommandItem(":Gm", m_QueryInterval, true);
+                        string SOP = GetCommandResult(command);
+
+                        if (RA != null && DEC!=null && ALT!=null && AZ!=null && V!=null && ST!=null && SOP!=null) {
                             m_RightAscension = m_Util.HMSToDegrees(RA);
                             m_Declination = m_Util.DMSToDegrees(DEC);
+                            m_Altitude = m_Util.DMSToDegrees(ALT);
+                            m_Azimuth = m_Util.DMSToDegrees(AZ);
+                            m_Velocity = V;
+                            m_SiderealTime = m_Util.HMSToDegrees(ST);
+                            m_SideOfPier = SOP;
                             m_LastUpdate = System.DateTime.Now;
                         }
                     }
@@ -864,6 +889,66 @@ namespace ASCOM.GeminiTelescope
         public static bool AtPark
         { get { return m_AtPark; } }
 
+        /// <summary>
+        /// Get Set current TargetRightAscention propery
+        /// </summary>
+        public static double TargetRightAscension
+        { 
+            get { return m_TargetRightAscension; }
+            set { m_TargetRightAscension = value; }
+        }
+
+        /// <summary>
+        /// Get Set current TargetDeclination propery
+        /// </summary>
+        public static double TargetDeclination
+        { 
+            get { return m_TargetDeclination; }
+            set { m_TargetDeclination = value; }
+        }
+
+        /// <summary>
+        /// Get current SiderealTime propery
+        /// retrieved from the latest polled value from the mount, no actual command is executed
+        /// </summary>
+        public static double SiderealTime
+        { get { return m_SiderealTime; } }
+
+        /// <summary>
+        /// SetLatitude Method
+        /// Stores the Latitude in the Gemini Computer
+        /// </summary>
+        public static void SetLatitude(double Latitude)
+        {
+            m_Latitude = Latitude;
+            string latitudedddmm = m_Util.DegreesToDM(Latitude, "*");
+            DoCommand(":St" + latitudedddmm);
+        }
+
+        /// <summary>
+        /// SetLatitude Method
+        /// Stores the Latitude in the Gemini Computer
+        /// </summary>
+        public static void SetLongitude(double Longitude)
+        {
+            m_Longitude = Longitude;
+            string longitudedddmm = m_Util.DegreesToDM(Longitude, "*");
+            DoCommand(":Sg" + longitudedddmm);
+        }
+
+        /// <summary>
+        /// Get current SiderealTime propery
+        /// retrieved from the latest polled value from the mount, no actual command is executed
+        /// </summary>
+        public static string Velocity
+        { get { return m_Velocity; } }
+
+        /// <summary>
+        /// Get current SideOfPier propery
+        /// retrieved from the latest polled value from the mount, no actual command is executed
+        /// </summary>
+        public static string SideOfPier
+        { get { return m_SideOfPier; } }
         #endregion
 
         /// <summary>
