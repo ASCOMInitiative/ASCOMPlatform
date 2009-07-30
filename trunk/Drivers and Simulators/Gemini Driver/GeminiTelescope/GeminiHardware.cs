@@ -702,7 +702,7 @@ namespace ASCOM.GeminiTelescope
                     {
                         //Get RA and DEC etc
                         m_SerialPort.ClearBuffers(); //clear all received data
-                        m_SerialPort.Transmit(":GR#:GD#:GD#:GA#:GZ#:Gv#:GS#:Gm#:h?#");
+                        m_SerialPort.Transmit(":GR#:GD#:GA#:GZ#:Gv#:GS#:Gm#:h?#");
 
                         command = new CommandItem(":GR", m_QueryInterval, true);
                         string RA = GetCommandResult(command);
@@ -710,36 +710,20 @@ namespace ASCOM.GeminiTelescope
                         command = new CommandItem(":GD", m_QueryInterval, true);
                         string DEC = GetCommandResult(command);
 
-                        //Get RA and DEC etc
-                        m_SerialPort.ClearBuffers(); //clear all received data
-                        m_SerialPort.Transmit(":GA#:GZ#");
-
                         command = new CommandItem(":GA", m_QueryInterval, true);
                         string ALT = GetCommandResult(command);
 
                         command = new CommandItem(":GZ", m_QueryInterval, true);
                         string AZ = GetCommandResult(command);
 
-                        m_SerialPort.ClearBuffers(); //clear all received data
-                        m_SerialPort.Transmit(":Gv#");
-
                         command = new CommandItem(":Gv", m_QueryInterval, true);
                         string V = GetCommandResult(command);
-
-                        m_SerialPort.ClearBuffers(); //clear all received data
-                        m_SerialPort.Transmit(":GS#");
 
                         command = new CommandItem(":GS", m_QueryInterval, true);
                         string ST = GetCommandResult(command);
 
-                        m_SerialPort.ClearBuffers(); //clear all received data
-                        m_SerialPort.Transmit(":Gm#");
-
                         command = new CommandItem(":Gm", m_QueryInterval, true);
                         string SOP = GetCommandResult(command);
-
-                        m_SerialPort.ClearBuffers(); //clear all received data
-                        m_SerialPort.Transmit(":h?#");
 
                         command = new CommandItem(":h?", m_QueryInterval, true);
                         string HOME = GetCommandResult(command);
