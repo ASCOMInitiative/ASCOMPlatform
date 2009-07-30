@@ -15,6 +15,8 @@
 // -----------	---	-----	-------------------------------------------------------
 // 07-JUL-2009	rbt	1.0.0	Initial edit, from ASCOM Telescope Driver template
 // 28-JUL-2009  pk  1.0.1   Initial implementation of Gemini hardware layer and command processor
+// 29-JUL-2009  pk  1.0.1   Added DoCommandAsync asynchronous call-back version of the command processor
+//                          Added array versions of DoCommand functions for multiple command execution
 // --------------------------------------------------------------------------------
 //
 
@@ -27,21 +29,31 @@ using System.Timers;
 
 namespace ASCOM.GeminiTelescope
 {
+
+    /// <summary>
+    /// Async delegate callback for DoCommandAsync
+    /// </summary>
+    /// <param name="cmd">original command string passed to DoCommandAsync</param>
+    /// <param name="result">return result from Gemini, or null if timeout exceeded</param>
+    public delegate void HardwareAsyncDelegate(string cmd, string result);
+
+
     /// <summary>
     /// Single serial command to be delivered to Gemini Hardware through worker thread queue
     /// </summary>
-    public class CommandItem
+    internal class CommandItem
     {
+
         internal string m_Command;  //actual serial command to be sent, not including ending '#' or the native checksum
         int m_ThreadID;             //this will record thread id of the calling thread
         internal int m_Timeout;     //timeout value for this command in msec, -1 if no timeout wanted
 
-        internal System.Threading.ManualResetEvent m_WaitForResultHandle = null; // wait handle set by worker thread when result is received
-
+        private System.Threading.ManualResetEvent m_WaitForResultHandle = null; // wait handle set by worker thread when result is received
+        internal HardwareAsyncDelegate m_AsyncDelegate = null;  // call-back delegate for asynchronous operation
         /// <summary>
         /// result produced by Gemini, or null if no result. Ending '#' is always stripped off
         /// </summary>
-        public string m_Result { get; set; }    
+        internal string m_Result { get; set; }    
         
         /// <summary>
         /// 
@@ -49,7 +61,7 @@ namespace ASCOM.GeminiTelescope
         /// <param name="command">actual serial command to be sent, not including ending '#' or the native checksum</param>
         /// <param name="timeout">timeout value for this command in msec, -1 if no timeout wanted</param>
         /// <param name="wantResult">does the caller want the result returned by Gemini?</param>
-        public CommandItem(string command, int timeout, bool wantResult)
+        internal CommandItem(string command, int timeout, bool wantResult)
         {
             m_Command = command;
             m_ThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
@@ -62,11 +74,33 @@ namespace ASCOM.GeminiTelescope
         }
 
         /// <summary>
+        ///  Initialize with an asynchrounous call-back delegate and a timeout
+        /// </summary>
+        /// <param name="command">actual serial command to be sent, not including ending '#' or the native checksum</param>
+        /// <param name="timeout">timeout value for this command in msec, -1 if no timeout wanted</param>
+        /// <param name="callback">asynchronous callback delegate to call on completion
+        ///        public delegate void HardwareAsyncDelegate(string cmd, string result);
+        /// </param>
+        internal CommandItem(string command, int timeout, HardwareAsyncDelegate callback) 
+            : this(command, timeout, true)
+        {
+            m_AsyncDelegate = callback;
+        }
+
+        /// <summary>
+        /// Return WaitHandle object to be set on receipt of the result for this command
+        /// </summary>
+        internal System.Threading.ManualResetEvent WaitObject
+        {
+            get { return m_WaitForResultHandle; }
+        }
+
+        /// <summary>
         ///     Wait on the synchronization wait handle to signal that the result is now available
         ///     result is placed into m_sResult by the worker thread and the event is then signaled
         /// </summary>
         /// <returns>result produced by Gemini as after executing this command or null if timeout expired</returns>
-        public string WaitForResult()
+        internal string WaitForResult()
         {
             if (m_WaitForResultHandle != null)
             {
@@ -84,7 +118,6 @@ namespace ASCOM.GeminiTelescope
         }
     }
 
-    delegate void SystemMessageDelegate(string message);
 
     /// <summary>
     /// Class encapsulating all serial communications with Gemini
@@ -97,7 +130,9 @@ namespace ASCOM.GeminiTelescope
 
         private static Queue m_CommandQueue; //Queue used for messages to the gemini
         private static System.ComponentModel.BackgroundWorker m_BackgroundWorker; // Thread to run for communications
-      
+
+ 
+
         //Telescope Implementation
         
         private static double m_Latitude;
@@ -123,8 +158,6 @@ namespace ASCOM.GeminiTelescope
         private static ASCOM.HelperNET.Serial m_SerialPort;
 
         private static bool m_Connected = false; //Keep track of the connection status of the hardware
-
-        private static bool m_Started = false;  //need to know if profile variables have been read already
 
         private static int m_Clients;
 
@@ -198,7 +231,6 @@ namespace ASCOM.GeminiTelescope
             m_SerialPort.DataBits = m_DataBits;
             m_SerialPort.StopBits = m_StopBits;
 
-            m_Started = true;
         }
 
  
@@ -309,7 +341,7 @@ namespace ASCOM.GeminiTelescope
         }
 
         /// <summary>
-        /// Execute standard serial command, wait for response from the mount, return it 
+        /// Execute a single serial command, block and wait for the response from the mount, return it 
         /// </summary>
         /// <example>
         /// <code>
@@ -327,15 +359,12 @@ namespace ASCOM.GeminiTelescope
         /// <returns>result received from Gemini, or null if no result, timeout, or bad result received</returns>
         public static string DoCommandResult(string cmd, int timeout)
         {
-            if (!m_Connected) return null;
-            CommandItem ci = new CommandItem(cmd, timeout, true);
-            QueueCommand(ci);
-            return ci.WaitForResult();
+            return DoCommandResult(new string[] { cmd }, timeout);
         }
 
 
         /// <summary>
-        /// Execute standard command, no result
+        /// Execute standard command, no result, no blocking
         /// </summary>
         /// <example>
         /// <code>
@@ -346,50 +375,158 @@ namespace ASCOM.GeminiTelescope
         /// <param name="cmd">command string to send to Gemini</param>
         public static void DoCommand(string cmd)
         {
-            if (!m_Connected) return;
-            CommandItem ci = new CommandItem(cmd, -1, false);
-            QueueCommand(ci);
+            DoCommand(new string[] { cmd });
         }
 
         /// <summary>
-        /// Execute native Gemini serial command, wait for response from the mount, return it 
+        /// Execute an array of command in sequence, no return expected.  Commands guaranteed to be executed in the sequence specified, with no interruptions from other threads.
         /// </summary>
-        /// <example>
-        /// <code><![CDATA[
-        /// // Get Gemini Status with a 1 second timeout:
-        /// double dAltitude = 0;
+        /// <param name="cmd">array of commands to execute, element 0 will be executed first</param>
+        public static void DoCommand(string [] cmd)
+        {
+            if (!m_Connected) return;
+            CommandItem[] ci = new CommandItem[cmd.Length];
+
+            for (int i = 0; i < ci.Length; ++i)
+                ci[i] = new CommandItem(cmd[i], -1, false);
+
+            QueueCommands(ci);
+        }
+
+
+        /// <summary>
+        /// Executes a command and returns immediately. The callback function is called 
+        /// when Gemini returns a result, or when the timeout value expires.
         /// 
-        /// string sStatus = GeminiHardware.DoCommandResult("<99:", 1000);
-        /// ]]></code>
-        /// </example>
-        /// <param name="cmd">command string to send to Gemini</param>
-        /// <param name="timeout">in msecs, -1 if no timeout</param>
-        /// <returns>result received from Gemini, or null if no result, timeout, or bad result received</returns>
-        public static string DoNativeCommandResult(string cmd, int timeout)
+        /// Spawns a background thread that waits for the command execution result.
+        /// Callback delegate is defined as:
+        /// 
+        ///    public delegate void HardwareAsyncDelegate(string cmd, string result);
+        /// </summary>
+        /// <param name="cmd">command to send to Gemini</param>
+        /// <param name="timeout">timeout value in msec, or -1 for no timeout</param>
+        /// <param name="callback">callback delegate will be called with the result
+        ///     public delegate void HardwareAsyncDelegate(string cmd, string result);
+        /// </param>
+        public static void DoCommandAsync(string cmd, int timeout, HardwareAsyncDelegate callback)
+        {
+            CommandItem ci = new CommandItem(cmd, timeout, callback);
+            System.Threading.ThreadPool.QueueUserWorkItem(DoCommandAndWaitAsync, ci);
+        }
+
+        /// <summary>
+        /// Execute a sequence of commands guaranteed not to be interrupted by another ASCOM client or another thread
+        ///   
+        ///   
+        ///   The result in the case of successfull completion is the Gemini generated result for
+        ///   the last command
+        ///   
+        ///   In the case of a timeout, the result passed into the callback is 'null'.        
+        /// </summary>
+        /// <param name="cmd">an array of commands to execute</param>
+        /// <param name="timeout">total timeout for the whole sequence, in msec, or -1 for no timeout</param>
+        /// <returns>the result of the last command in the array if the sequence was successfully completed,
+        /// otherwise 'null'.
+        /// </returns>
+        public static string DoCommandResult(string [] cmd, int timeout)
         {
             if (!m_Connected) return null;
-            CommandItem ci = new CommandItem(cmd, timeout, true);
+
+            CommandItem[] ci = new CommandItem[cmd.Length];
+
+            for (int i = 0; i < ci.Length; ++i)
+                ci[i] = new CommandItem(cmd[i], timeout, true); //initialize all CommandItem objects
+
+            QueueCommands(ci);  // queue them all at once
+
+            // construct an array of all the wait handles
+            System.Threading.ManualResetEvent[] events = new System.Threading.ManualResetEvent[ci.Length];
+            for (int i = 0; i < ci.Length; ++i) events[i] = ci[i].WaitObject;
+
+            // success only if all wait handles are signalled by the worker thread. Return result from the last command:
+            if (System.Threading.ManualResetEvent.WaitAll(events, timeout)) 
+                return ci[ci.Length-1].m_Result;
+
+            return null;
+        }
+
+
+        /// <summary>
+        /// Execute a sequence of commands guaranteed not to be interrupted by another ASCOM client or another thread
+        ///   
+        ///   the callback is called if the sequence times out, or if all the commands are performed successfully
+        ///   the result passed back to the callback in the case of successfull completion is the command string for
+        ///   the last command, and the result received from Gemini after executing this command
+        ///   
+        ///   in the case of a timeout, the result passed into the callback is 'null'.
+        /// </summary>
+        /// <param name="cmd">an array of commands to execute</param>
+        /// <param name="timeout">total timeout for the whole sequence, in msec, or -1 for no timeout</param>
+        /// <param name="callback">asynchrnous callback delegate to call when the sequence completes
+        ///     public delegate void HardwareAsyncDelegate(string cmd, string result);
+        /// </param>
+        public static void DoCommandAsync(string[] cmd, int timeout, HardwareAsyncDelegate callback)
+        {
+            CommandItem[] ci = new CommandItem[cmd.Length];
+
+            for (int i = 0; i < ci.Length; ++i)
+                ci[i] = new CommandItem(cmd[i], timeout, callback);
+
+            System.Threading.ThreadPool.QueueUserWorkItem(DoCommandsAndWaitAsync, ci);
+        }
+
+
+        /// <summary>
+        /// executed by a worker thread for an asynchronous command call-back
+        /// </summary>
+        /// <param name="command_item">CommandItem type containing command to execute</param>
+        private static void DoCommandAndWaitAsync(object command_item)
+        {
+            CommandItem ci = (CommandItem)command_item;
             QueueCommand(ci);
-            return ci.WaitForResult();
+            if (ci.m_AsyncDelegate!=null)
+                try
+                {
+                    string result = ci.WaitForResult();
+                    ci.m_AsyncDelegate(ci.m_Command, result);
+                }
+                catch { }
         }
 
         /// <summary>
-        /// Execute native command, no result
+        /// Executed by a worker thread for an asynchronous command call-back
+        /// Executes and waits for multiple commands to complete, then fires a callback.
+        /// 
+        /// All commands are executed in sequence.
+        /// If timeout is exceeded, the callback receives the last command string, along with 'null' for result
+        /// if all commands successfully execute and all return proper values,
+        ///   the callback will receive the last command string and the result produced by the last command
         /// </summary>
-        /// <example>
-        /// <code><![CDATA[
-        /// // Set mount type to G11:
-        /// GeminiHardware.DoNativeCommand(">2:");
-        /// ]]></code>
-        /// </example>
-        /// <param name="cmd">native command to send to Gemini</param>
-        public static void DoNativeCommand(string cmd)
+        /// <param name="command_items">CommandItems array containing commands to execute</param>
+        private static void DoCommandsAndWaitAsync(object command_items)
         {
-            if (!m_Connected) return;
-            CommandItem ci = new CommandItem(cmd, -1, false);
-            QueueCommand(ci);
+            CommandItem [] ci = (CommandItem[])command_items;
+
+            QueueCommands(ci);
+
+            System.Threading.ManualResetEvent[] events = new System.Threading.ManualResetEvent[ci.Length];
+
+            for (int i = 0; i < ci.Length; ++i) events[i] = ci[i].WaitObject;
+
+            bool bAllDone = (System.Threading.ManualResetEvent.WaitAll(events, ci[0].m_Timeout));
+
+            try
+            {
+                CommandItem last_ci = ci[ci.Length - 1];
+                if (bAllDone)
+                    last_ci.m_AsyncDelegate(last_ci.m_Command, last_ci.m_Result);
+                else
+                    last_ci.m_AsyncDelegate(last_ci.m_Command, null);
+            }
+            catch { }
         }
-      
+
+ 
         #endregion
 
         #region Telescope Implementation
@@ -455,13 +592,11 @@ namespace ASCOM.GeminiTelescope
                 {
                     m_BackgroundWorker.CancelAsync();
 
-                    int cnt = 0;
                     // wait for background worker to finish current operation and process the cancel request
                     System.Threading.Thread.Sleep(500);
 
                     m_SerialPort.Connected = false;
                     m_Connected = false;
-                    m_Started = false;
                     m_CommandQueue.Clear();
                 }
             }
@@ -495,7 +630,7 @@ namespace ASCOM.GeminiTelescope
 
                     if (command != null)    // got a new command, send it to the mount
                     {
-                        ewh = command.m_WaitForResultHandle;
+                        ewh = command.WaitObject;
                         command.m_Result = null;
 
                         string serial_cmd = string.Empty;
@@ -509,10 +644,10 @@ namespace ASCOM.GeminiTelescope
                         m_SerialPort.ClearBuffers(); //clear all received data
                         m_SerialPort.Transmit(serial_cmd);
 
-                        if (command.m_WaitForResultHandle != null)    // receive result, if one is expected
+                        if (command.WaitObject != null)    // receive result, if one is expected
                         {
                             command.m_Result = GetCommandResult(command);
-                            command.m_WaitForResultHandle.Set();   //release the wait handle so the calling thread can continue
+                            command.WaitObject.Set();   //release the wait handle so the calling thread can continue
                             ewh = null;
                         }
                     }
@@ -560,7 +695,6 @@ namespace ASCOM.GeminiTelescope
 
             try
             {
-
                 //System.Windows.Forms.Application.DoEvents();
                 System.Threading.Thread.Sleep(100);
 
@@ -569,9 +703,10 @@ namespace ASCOM.GeminiTelescope
                 GeminiCommand.ResultType gemini_result = GeminiCommand.ResultType.HashChar;
                 int char_count = 0;
 
-                if (GeminiCommands.Commands.ContainsKey(command.m_Command))
+                gmc = FindGeminiCommand(command.m_Command);
+
+                if (gmc!=null)
                 {
-                    gmc = GeminiCommands.Commands[command.m_Command];
                     gemini_result = gmc.Type;
                     char_count = gmc.Chars;
                 }
@@ -613,7 +748,7 @@ namespace ASCOM.GeminiTelescope
             }
             catch (Exception e) //timeout or some other communication value
             {
-                System.Diagnostics.Trace.WriteLine("Command timed out: " + command.m_Command);
+                System.Diagnostics.Trace.WriteLine("Command timed out: " + command.m_Command + "\r\n" + e.Message);
                 return null;
             }
 
@@ -627,6 +762,35 @@ namespace ASCOM.GeminiTelescope
                     result = null;
             }
             return result;
+        }
+
+        /// <summary>
+        /// Find an entry in GeminiCommands collection for the full command
+        /// string. The full command string can include parameters as part of the string
+        /// </summary>
+        /// <param name="full_cmd">full command, possibly including parameters</param>
+        /// <returns>object describing return value for this Gemini command, or null if not found</returns>
+        private static GeminiCommand FindGeminiCommand(string full_cmd)
+        {
+
+            if (full_cmd.StartsWith("<"))       // native get command is always '#' terminated
+                return new GeminiCommand(GeminiCommand.ResultType.HashChar, 0);
+            else if (full_cmd.StartsWith(">"))  // native set command always no return value
+                return new GeminiCommand(GeminiCommand.ResultType.NoResult, 0);
+            else
+            {
+                // try to match the longest string first. Maximum length
+                // command is something like :GVD or four characters,
+                // minimum length command is 2 characters:
+                for (int i = Math.Min(4, full_cmd.Length); i >= 2; --i)
+                {
+                    string sub = full_cmd.Substring(0, i);
+                    if (GeminiCommands.Commands.ContainsKey(sub))
+                        return GeminiCommands.Commands[sub];
+                }
+            }
+
+            return null;            
         }
 
         /// <summary>
@@ -724,6 +888,20 @@ namespace ASCOM.GeminiTelescope
                 m_CommandQueue.Enqueue(ci);
             }
         }
+
+        /// <summary>
+        /// Add all the command items in 'ci' to the queue for execution
+        /// </summary>
+        /// <param name="ci">array of commands to be executed in sequence</param>
+        private static void QueueCommands(CommandItem[] ci)
+        {
+            lock (m_CommandQueue)
+            {
+                for(int i=0; i<ci.Length; ++i)
+                    m_CommandQueue.Enqueue(ci[i]);
+            }
+        }
+
 
 
         #endregion
