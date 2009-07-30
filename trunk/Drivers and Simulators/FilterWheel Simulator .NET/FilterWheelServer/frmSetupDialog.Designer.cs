@@ -100,14 +100,6 @@
             this.cmbTime.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.cmbTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.cmbTime.FormattingEnabled = true;
-            this.cmbTime.Items.AddRange(new object[] {
-            "0.5",
-            "1.0",
-            "1.5",
-            "2.0",
-            "2.5",
-            "3.0",
-            "3.5"});
             this.cmbTime.Location = new System.Drawing.Point(172, 29);
             this.cmbTime.Name = "cmbTime";
             this.cmbTime.Size = new System.Drawing.Size(43, 21);
