@@ -141,6 +141,8 @@ namespace ASCOM.GeminiTelescope
         
         private static double m_RightAscension;
         private static double m_Declination;
+        private static double m_Altitude;
+        private static double m_Azimuth;
 
 
         private static bool m_Tracking;
@@ -831,6 +833,23 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static double Declination
         { get { return m_Declination; } }
+
+
+        /// <summary>
+        /// Get current Altitude propery
+        /// retrieved from the latest polled value from the mount, no actual command is executed
+        /// </summary>
+        public static double Altitude
+        { get { return m_Altitude; } }
+
+        /// <summary>
+        /// Get current Azimuth propery
+        /// retrieved from the latest polled value from the mount, no actual command is executed
+        /// </summary>
+        public static double Azimuth
+        { get { return m_Azimuth; } }
+
+
         #endregion
 
         /// <summary>
