@@ -199,12 +199,10 @@ namespace ASCOM.GeminiTelescope
 
 
         /// <summary>
-        ///  resets the driver, disconnects from Gemini, reloads all the variables from the profile
+        ///  reloads all the variables from the profile
         /// </summary>
         private static void GetProfileSettings() 
         {
-            if (m_Connected) Disconnect();
-
             m_Profile.Register(SharedResources.PROGRAM_ID, "Gemini Telescope Driver .NET");
             if (m_Profile.GetValue(SharedResources.PROGRAM_ID, "RegVer", "") != SharedResources.REGISTRATION_VERSION)
             {
