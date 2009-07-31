@@ -36,6 +36,7 @@ namespace ASCOM.GeminiTelescope
             TelescopeSetupDialogForm setupForm = new TelescopeSetupDialogForm();
 
             setupForm.ComPort = GeminiHardware.ComPort;
+            setupForm.BaudRate = GeminiHardware.BaudRate.ToString();
 
             setupForm.Elevation = GeminiHardware.Elevation;
             setupForm.Latitude = GeminiHardware.Latitude;
@@ -47,6 +48,7 @@ namespace ASCOM.GeminiTelescope
             {
 
                 GeminiHardware.ComPort = setupForm.ComPort;
+                GeminiHardware.BaudRate = int.Parse(setupForm.BaudRate);
 
                 GeminiHardware.Elevation = setupForm.Elevation;
                 GeminiHardware.Latitude = setupForm.Latitude;
@@ -219,6 +221,11 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
                 GeminiHardware.Connected = false;
+        }
+
+        private void focuserSetupDialogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DoFocuserSetupDialog();
         }
     }
 }

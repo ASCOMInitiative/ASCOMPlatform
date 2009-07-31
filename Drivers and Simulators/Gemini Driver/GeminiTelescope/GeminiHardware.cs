@@ -153,6 +153,11 @@ namespace ASCOM.GeminiTelescope
         private static double m_TargetAzimuth;
 
         private static bool m_AdditionalAlign;
+        private static bool m_Precession;
+        private static bool m_Refraction;
+        private static bool m_GeminiTime;
+        private static bool m_GeminiSite;
+        private static bool m_AdvancedMode;
 
 
         private static bool m_Tracking;
@@ -217,17 +222,36 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         private static void GetProfileSettings() 
         {
+            //Telescope Settings
+            m_Profile.DeviceType = "Telescope";
             if (m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "RegVer", "") != SharedResources.REGISTRATION_VERSION)
             {
                 //Main Driver Settings
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "RegVer", SharedResources.REGISTRATION_VERSION);
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ComPort", "COM1");
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "BaudRate", "9600");
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AdditionalAlign", "false");
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Precession", "false");
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Refraction", "false");
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AdvancedMode", "false");
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiSite", "true");
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiTime", "true");
             }
 
             //Load up the values from saved
             if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "AdditionalAlign", ""), out m_AdditionalAlign))
                 m_AdditionalAlign = false;
+
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Precession", ""), out m_Precession))
+                m_Precession = false;
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Refraction", ""), out m_Refraction))
+                m_Refraction = false;
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "AdvancedMode", ""), out m_AdvancedMode))
+                m_AdvancedMode = false;
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiSite", ""), out m_GeminiSite))
+                m_GeminiSite= false;
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiTime", ""), out m_GeminiTime))
+                m_GeminiTime = false;
 
             m_ComPort = m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ComPort", "");
             if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "BaudRate", ""), out m_BaudRate))
@@ -253,11 +277,20 @@ namespace ASCOM.GeminiTelescope
                 m_SerialPort.PortName = m_ComPort;
             }
 
+            //Focuser Settings
+            m_Profile.DeviceType = "Focuser";
             
             if (m_Profile.GetValue(SharedResources.FOCUSER_PROGRAM_ID, "RegVer", "") != SharedResources.REGISTRATION_VERSION)
             {
                 //Main Driver Settings
                 m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "RegVer", SharedResources.REGISTRATION_VERSION);
+                m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "MaxIncrement", "5000");
+                m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "StepSize", "100");
+                m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "ReverseDirection", "false");
+                m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "BacklashDirection", "0");
+                m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "BacklashSize", "50");
+                m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "BrakeSize", "0");
+                m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "Speed", "1");
             }
 
             string s = m_Profile.GetValue(SharedResources.FOCUSER_PROGRAM_ID, "MaxIncrement");
@@ -310,6 +343,7 @@ namespace ASCOM.GeminiTelescope
             get { return m_ComPort; }
             set 
             {
+                m_Profile.DeviceType = "Telescope";
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ComPort", value.ToString());
                 m_ComPort = value; 
             }
@@ -322,6 +356,7 @@ namespace ASCOM.GeminiTelescope
             get { return m_BaudRate; }
             set
             {
+                m_Profile.DeviceType = "Telescope";
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "BaudRate", value.ToString());
                 m_BaudRate = value;
             }
@@ -335,6 +370,7 @@ namespace ASCOM.GeminiTelescope
             get { return m_Parity; }
             set
             {
+                m_Profile.DeviceType = "Telescope";
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Parity", value.ToString());
                 m_Parity = value;
             }
@@ -348,6 +384,7 @@ namespace ASCOM.GeminiTelescope
             get { return m_StopBits; }
             set
             {
+                m_Profile.DeviceType = "Telescope";
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "StopBits", value.ToString());
                 m_StopBits = value;
             }
@@ -361,6 +398,7 @@ namespace ASCOM.GeminiTelescope
             get { return m_DataBits; }
             set
             {
+                m_Profile.DeviceType = "Telescope";
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "DataBits", value.ToString());
                 m_DataBits = value;
             }
@@ -374,6 +412,7 @@ namespace ASCOM.GeminiTelescope
             get { return m_Elevation; }
             set
             {
+                m_Profile.DeviceType = "Telescope";
                 m_Elevation = value;
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Elevation", value.ToString());
             }
@@ -386,6 +425,7 @@ namespace ASCOM.GeminiTelescope
             get { return m_Latitude; }
             set
             {
+                m_Profile.DeviceType = "Telescope";
                 m_Latitude = value;
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Latitude", value.ToString());
                 if (m_Latitude < 0) { m_SouthernHemisphere = true; }
@@ -400,6 +440,7 @@ namespace ASCOM.GeminiTelescope
             get { return m_Longitude; }
             set
             {
+                m_Profile.DeviceType = "Telescope";
                 m_Longitude = value;
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Longitude", value.ToString());
             }
@@ -1169,6 +1210,7 @@ namespace ASCOM.GeminiTelescope
             get { return m_ReverseDirection; }
             set
             {
+                m_Profile.DeviceType = "Focuser";
                 m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "ReverseDirection", value.ToString());
                 m_ReverseDirection = value;
             }
@@ -1182,6 +1224,7 @@ namespace ASCOM.GeminiTelescope
             get { return m_StepSize; }
             set
             {
+                m_Profile.DeviceType = "Focuser";
                 m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "StepSize", value.ToString());
                 m_StepSize = value;
             }
@@ -1195,6 +1238,7 @@ namespace ASCOM.GeminiTelescope
             get { return m_BrakeSize; }
             set
             {
+                m_Profile.DeviceType = "Focuser";
                 m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "BrakeSize", value.ToString());
                 m_BrakeSize = value;
             }
@@ -1208,6 +1252,7 @@ namespace ASCOM.GeminiTelescope
             get { return m_Speed; }
             set
             {
+                m_Profile.DeviceType = "Focuser";
                 m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "Speed", value.ToString());
                 m_Speed = value;
             }
@@ -1221,6 +1266,7 @@ namespace ASCOM.GeminiTelescope
             get { return m_MaxIncrement; }
             set
             {
+                m_Profile.DeviceType = "Focuser";
                 m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "MaxIncrement", value.ToString());
                 m_MaxIncrement = value;
             }
@@ -1235,6 +1281,7 @@ namespace ASCOM.GeminiTelescope
             get { return m_MaxStep; }
             set
             {
+                m_Profile.DeviceType = "Focuser";
                 m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "MaxStep", value.ToString());
                 m_MaxStep = value;
             }
@@ -1249,6 +1296,7 @@ namespace ASCOM.GeminiTelescope
             get { return m_BacklashDirection; }
             set
             {
+                m_Profile.DeviceType = "Focuser";
                 m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "BacklashDirection", value.ToString());
                 m_BacklashDirection = value;
             }
@@ -1262,6 +1310,7 @@ namespace ASCOM.GeminiTelescope
             get { return m_BacklashSize; }
             set
             {
+                m_Profile.DeviceType = "Focuser";
                 m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "BacklashSize", value.ToString());
                 m_BacklashSize = value;
             }
