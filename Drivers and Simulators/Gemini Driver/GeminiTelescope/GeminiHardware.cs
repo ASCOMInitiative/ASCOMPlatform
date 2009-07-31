@@ -178,6 +178,17 @@ namespace ASCOM.GeminiTelescope
 
         private static int m_QueryInterval = 1000;   // query mount for status this often, in msecs.
 
+
+        //Focuser Private Data
+        private static int m_MaxIncrement = 0;
+        private static int m_MaxStep = 0;
+        private static int m_StepSize = 0;
+        private static bool m_ReverseDirection = false;
+        private static int m_BacklashDirection = 0;
+        private static int m_BacklashSize = 0;
+        private static int m_BrakeSize = 0;
+        private static int m_Speed = 1;
+
         /// <summary>
         ///  TelescopeHadrware constructor
         ///     create serial port
@@ -203,34 +214,33 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         private static void GetProfileSettings() 
         {
-            m_Profile.Register(SharedResources.PROGRAM_ID, "Gemini Telescope Driver .NET");
-            if (m_Profile.GetValue(SharedResources.PROGRAM_ID, "RegVer", "") != SharedResources.REGISTRATION_VERSION)
+            if (m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "RegVer", "") != SharedResources.REGISTRATION_VERSION)
             {
                 //Main Driver Settings
-                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "RegVer", SharedResources.REGISTRATION_VERSION);
-                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "ComPort", "COM1");
-                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "AdditionalAlign", "false");
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "RegVer", SharedResources.REGISTRATION_VERSION);
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ComPort", "COM1");
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AdditionalAlign", "false");
             }
 
             //Load up the values from saved
-            if (!bool.TryParse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "AdditionalAlign", ""), out m_AdditionalAlign))
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "AdditionalAlign", ""), out m_AdditionalAlign))
                 m_AdditionalAlign = false;
 
-            m_ComPort = m_Profile.GetValue(SharedResources.PROGRAM_ID, "ComPort", "");
-            if (!int.TryParse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "BaudRate", ""), out m_BaudRate))
+            m_ComPort = m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ComPort", "");
+            if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "BaudRate", ""), out m_BaudRate))
                 m_BaudRate = 9600;
 
-            if (!int.TryParse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "DataBits", ""), out m_DataBits))
+            if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "DataBits", ""), out m_DataBits))
                 m_DataBits = 8;
 
             int _parity = 0;
-            if (!int.TryParse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "Parity", ""), out _parity))
+            if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Parity", ""), out _parity))
                 _parity = 0;
 
             m_Parity = (System.IO.Ports.Parity)_parity;
 
             int _stopbits = 8;
-            if (!int.TryParse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "StopBits", ""), out _stopbits))
+            if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "StopBits", ""), out _stopbits))
                 _stopbits = 1;
 
             m_StopBits = (System.IO.Ports.StopBits)_stopbits;
@@ -239,6 +249,44 @@ namespace ASCOM.GeminiTelescope
             {
                 m_SerialPort.PortName = m_ComPort;
             }
+
+
+            if (m_Profile.GetValue(SharedResources.FOCUSER_PROGRAM_ID, "RegVer", "") != SharedResources.REGISTRATION_VERSION)
+            {
+                //Main Driver Settings
+                m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "RegVer", SharedResources.REGISTRATION_VERSION);
+            }
+
+            string s = m_Profile.GetValue(SharedResources.FOCUSER_PROGRAM_ID, "MaxIncrement");
+
+            s = m_Profile.GetValue(SharedResources.FOCUSER_PROGRAM_ID, "MaxStep");
+            if (!int.TryParse(s, out m_MaxStep) || m_MaxStep <= 0)
+                m_MaxStep = 5000;
+
+            s = m_Profile.GetValue(SharedResources.FOCUSER_PROGRAM_ID, "StepSize");
+            if (!int.TryParse(s, out m_StepSize) || m_StepSize <= 0)
+                m_StepSize = 100;
+
+            s = m_Profile.GetValue(SharedResources.FOCUSER_PROGRAM_ID, "ReverseDirection");
+            if (!bool.TryParse(s, out m_ReverseDirection))
+                m_ReverseDirection = false;
+
+            s = m_Profile.GetValue(SharedResources.FOCUSER_PROGRAM_ID, "BacklashDirection");
+            if (!int.TryParse(s, out m_BacklashDirection) || m_BacklashDirection < -1 || m_BacklashDirection > 1)
+                m_BacklashDirection = 0;
+
+            s = m_Profile.GetValue(SharedResources.FOCUSER_PROGRAM_ID, "BacklashSize");
+            if (!int.TryParse(s, out m_BacklashSize) || m_BacklashSize < 0)
+                m_BacklashSize = 0;
+
+            s = m_Profile.GetValue(SharedResources.FOCUSER_PROGRAM_ID, "BrakeSize");
+            if (!int.TryParse(s, out m_BrakeSize) || m_BrakeSize < 0)
+                m_BrakeSize = 0;
+
+            s = m_Profile.GetValue(SharedResources.FOCUSER_PROGRAM_ID, "Speed");
+            if (!int.TryParse(s, out m_Speed) || m_Speed < 1 || m_Speed > 3)
+                m_Speed = 1;
+
 
             m_SerialPort.Speed = (ASCOM.HelperNET.Serial.PortSpeed)m_BaudRate;
             m_SerialPort.Parity = (System.IO.Ports.Parity)m_Parity;
@@ -259,7 +307,7 @@ namespace ASCOM.GeminiTelescope
             get { return m_ComPort; }
             set 
             {
-                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "ComPort", value.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ComPort", value.ToString());
                 m_ComPort = value; 
             }
         }
@@ -271,7 +319,7 @@ namespace ASCOM.GeminiTelescope
             get { return m_BaudRate; }
             set
             {
-                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "BaudRate", value.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "BaudRate", value.ToString());
                 m_BaudRate = value;
             }
         }
@@ -284,7 +332,7 @@ namespace ASCOM.GeminiTelescope
             get { return m_Parity; }
             set
             {
-                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "Parity", value.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Parity", value.ToString());
                 m_Parity = value;
             }
         }
@@ -297,7 +345,7 @@ namespace ASCOM.GeminiTelescope
             get { return m_StopBits; }
             set
             {
-                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "StopBits", value.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "StopBits", value.ToString());
                 m_StopBits = value;
             }
         }
@@ -310,7 +358,7 @@ namespace ASCOM.GeminiTelescope
             get { return m_DataBits; }
             set
             {
-                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "DataBits", value.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "DataBits", value.ToString());
                 m_DataBits = value;
             }
         }
@@ -324,7 +372,7 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 m_Elevation = value;
-                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "Elevation", value.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Elevation", value.ToString());
             }
         }
         /// <summary>
@@ -336,7 +384,7 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 m_Latitude = value;
-                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "Latitude", value.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Latitude", value.ToString());
                 if (m_Latitude < 0) { m_SouthernHemisphere = true; }
             }
         }
@@ -350,7 +398,7 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 m_Longitude = value;
-                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "Longitude", value.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Longitude", value.ToString());
             }
         }
 
@@ -1107,6 +1155,115 @@ namespace ASCOM.GeminiTelescope
             string[] cmd = { ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ""), ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ""), ":MA" };
             DoCommand(cmd);
         }
+        #endregion
+
+        #region Focuser Implementation
+        /// <summary>
+        /// Focuser Reverse Directions
+        /// </summary>
+        public static bool ReverseDirection
+        { 
+            get { return m_ReverseDirection; }
+            set
+            {
+                m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "ReverseDirection", value.ToString());
+                m_ReverseDirection = value;
+            }
+        }
+
+        /// <summary>
+        /// Focuser Step Size
+        /// </summary>
+        public static int StepSize
+        { 
+            get { return m_StepSize; }
+            set
+            {
+                m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "StepSize", value.ToString());
+                m_StepSize = value;
+            }
+        }
+
+        /// <summary>
+        /// Focuser Brake Size
+        /// </summary>
+        public static int BrakeSize
+        { 
+            get { return m_BrakeSize; }
+            set
+            {
+                m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "BrakeSize", value.ToString());
+                m_BrakeSize = value;
+            }
+        }
+
+        /// <summary>
+        /// Focuser Speed
+        /// </summary>
+        public static int Speed
+        { 
+            get { return m_Speed; }
+            set
+            {
+                m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "Speed", value.ToString());
+                m_Speed = value;
+            }
+        }
+
+        /// <summary>
+        /// Focuser Maximum Increment
+        /// </summary>
+        public static int MaxIncrement
+        { 
+            get { return m_MaxIncrement; }
+            set
+            {
+                m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "MaxIncrement", value.ToString());
+                m_MaxIncrement = value;
+            }
+        }
+
+
+        /// <summary>
+        /// Focuser Maximum Step Size
+        /// </summary>
+        public static int MaxStep
+        { 
+            get { return m_MaxStep; }
+            set
+            {
+                m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "MaxStep", value.ToString());
+                m_MaxStep = value;
+            }
+        }
+
+
+        /// <summary>
+        /// Focuser Backlash Direction
+        /// </summary>
+        public static int BacklashDirection
+        { 
+            get { return m_BacklashDirection; }
+            set
+            {
+                m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "BacklashDirection", value.ToString());
+                m_BacklashDirection = value;
+            }
+        }
+
+        /// <summary>
+        /// Focuser Backlash Size
+        /// </summary>
+        public static int BacklashSize
+        { 
+            get { return m_BacklashSize; }
+            set
+            {
+                m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "BacklashSize", value.ToString());
+                m_BacklashSize = value;
+            }
+        }
+
         #endregion
 
         /// <summary>
