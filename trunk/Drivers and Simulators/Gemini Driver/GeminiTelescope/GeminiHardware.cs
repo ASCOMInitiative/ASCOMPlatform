@@ -17,6 +17,7 @@
 // 28-JUL-2009  pk  1.0.1   Initial implementation of Gemini hardware layer and command processor
 // 29-JUL-2009  pk  1.0.1   Added DoCommandAsync asynchronous call-back version of the command processor
 //                          Added array versions of DoCommand functions for multiple command execution
+// 31-JUL-2009  rbt 1.0.1   Added Focuser Implementations and Settings
 // --------------------------------------------------------------------------------
 //
 
