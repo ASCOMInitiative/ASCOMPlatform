@@ -7,8 +7,8 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 //
 // TODO - Add your authorship information here
-[assembly: AssemblyTitle("Telescope Telescope Driver")]
-[assembly: AssemblyDescription("ASCOM Telescope Driver for Telescope")]
+[assembly: AssemblyTitle("Gemini Telescope Driver")]
+[assembly: AssemblyDescription("ASCOM Telescope Driver forGemini")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
 [assembly: AssemblyProduct("")]

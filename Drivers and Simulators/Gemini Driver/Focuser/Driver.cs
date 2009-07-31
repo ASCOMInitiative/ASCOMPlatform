@@ -26,7 +26,7 @@ using ASCOM.HelperNET;
 using ASCOM.Interface;
 using ASCOM.GeminiTelescope;
 
-namespace ASCOM.GeminiFocuser
+namespace ASCOM.GeminiTelescope
 {
     //
     // Your driver's ID is ASCOM.Focuser.Focuser
@@ -266,12 +266,10 @@ namespace ASCOM.GeminiFocuser
         {
             if (GeminiHardware.Connected)
             {
-                try
-                {
-                    GeminiTelescope.GeminiTelescope.m_MainForm.DoFocuserSetupDialog();
-                }
-                catch { }
+                throw new DriverException("The hardware is connected, cannot do SetupDialog()",
+                                    unchecked(ErrorCodes.DriverBase + 4));
             }
+            GeminiTelescope.m_MainForm.DoFocuserSetupDialog();
         }
 
         /// <summary>
