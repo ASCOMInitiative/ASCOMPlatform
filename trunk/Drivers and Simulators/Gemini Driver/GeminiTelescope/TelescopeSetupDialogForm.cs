@@ -69,8 +69,12 @@ namespace ASCOM.GeminiTelescope
             get { return comboBoxComPort.SelectedItem.ToString(); }
             set { comboBoxComPort.SelectedItem = value; }
         }
-        
-       
+
+        public string BaudRate
+        {
+            get { return comboBoxBaudRate.SelectedItem.ToString(); }
+            set { comboBoxBaudRate.SelectedItem = value; }
+        }
         public double Elevation
         {
             get 

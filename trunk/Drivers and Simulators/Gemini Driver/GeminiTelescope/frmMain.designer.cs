@@ -65,6 +65,7 @@ namespace ASCOM.GeminiTelescope
             this.RadioButtonGuide = new System.Windows.Forms.RadioButton();
             this.CheckBoxFlipRa = new System.Windows.Forms.CheckBox();
             this.picASCOM = new System.Windows.Forms.PictureBox();
+            this.focuserSetupDialogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPierSideWest)).BeginInit();
@@ -362,21 +363,22 @@ namespace ASCOM.GeminiTelescope
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.setupDialogToolStripMenuItem,
+            this.focuserSetupDialogToolStripMenuItem,
             this.mountParametersToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(173, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(197, 92);
             // 
             // setupDialogToolStripMenuItem
             // 
             this.setupDialogToolStripMenuItem.Name = "setupDialogToolStripMenuItem";
-            this.setupDialogToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
-            this.setupDialogToolStripMenuItem.Text = "Setup Dialog";
+            this.setupDialogToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.setupDialogToolStripMenuItem.Text = "Telescope Setup Dialog";
             this.setupDialogToolStripMenuItem.Click += new System.EventHandler(this.setupDialogToolStripMenuItem_Click);
             // 
             // mountParametersToolStripMenuItem
             // 
             this.mountParametersToolStripMenuItem.Name = "mountParametersToolStripMenuItem";
-            this.mountParametersToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.mountParametersToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.mountParametersToolStripMenuItem.Text = "Mount Parameters";
             this.mountParametersToolStripMenuItem.Click += new System.EventHandler(this.mountParametersToolStripMenuItem_Click);
             // 
@@ -472,6 +474,13 @@ namespace ASCOM.GeminiTelescope
             this.picASCOM.TabIndex = 4;
             this.picASCOM.TabStop = false;
             // 
+            // focuserSetupDialogToolStripMenuItem
+            // 
+            this.focuserSetupDialogToolStripMenuItem.Name = "focuserSetupDialogToolStripMenuItem";
+            this.focuserSetupDialogToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.focuserSetupDialogToolStripMenuItem.Text = "Focuser Setup Dialog";
+            this.focuserSetupDialogToolStripMenuItem.Click += new System.EventHandler(this.focuserSetupDialogToolStripMenuItem_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -545,6 +554,7 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem setupDialogToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mountParametersToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem focuserSetupDialogToolStripMenuItem;
 
 
     }
