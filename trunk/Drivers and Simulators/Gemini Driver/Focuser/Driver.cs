@@ -41,20 +41,13 @@ namespace ASCOM.GeminiFocuser
     {
 
         bool m_Connected = false;
-        private static ASCOM.HelperNET.Profile m_Profile;
         private static ASCOM.HelperNET.Util m_Util;
 
-        int m_MaxIncrement = 0;
-        int m_MaxStep = 0;
-        int m_StepSize = 0;
-        bool m_ReverseDirection = false;
-        int m_BacklashDirection = 0;
-        int m_BacklashSize = 0;
-        int m_BrakeSize = 0;
+        
 
         int m_PreviousMove = 0;
 
-        int m_Speed = 1;
+        
 
         int m_Position = 0;
 
@@ -74,7 +67,6 @@ namespace ASCOM.GeminiFocuser
         //
         public Focuser()
         {
-            m_Profile = new HelperNET.Profile();
             m_Util = new ASCOM.HelperNET.Util();
             tmrFocus.Tick += new ASCOM.HelperNET.Interfaces.ITimer.TickEventHandler(tmrFocus_Tick);
         }
@@ -93,11 +85,11 @@ namespace ASCOM.GeminiFocuser
             {
                 m_State = FocuserState.Focusing;
 
-                if ((val > 0 && !m_ReverseDirection) || (val < 0 && m_ReverseDirection))
+                if ((val > 0 && !GeminiHardware.ReverseDirection) || (val < 0 && GeminiHardware.ReverseDirection))
                     GeminiHardware.DoCommand(":F+");
                 else
                     GeminiHardware.DoCommand(":F-");
-                tmrFocus.Interval = (m_StepSize * Math.Abs(val)) / 1000;
+                tmrFocus.Interval = (GeminiHardware.StepSize * Math.Abs(val)) / 1000;
                 tmrFocus.Enabled = true;
                 return;
             }
@@ -105,15 +97,15 @@ namespace ASCOM.GeminiFocuser
                 // and execute a break maneuver (move in the opposite direction for a bit)
             else if (m_State == FocuserState.Focusing)
             {
-                if (m_BrakeSize > 0)
+                if (GeminiHardware.BrakeSize > 0)
                 {
                     // move in the opposite direction for specified step*interval
-                    if ((val > 0 && !m_ReverseDirection) || (val < 0 && m_ReverseDirection))
+                    if ((val > 0 && !GeminiHardware.ReverseDirection) || (val < 0 && GeminiHardware.ReverseDirection))
                         GeminiHardware.DoCommand(":F-");
                     else
                         GeminiHardware.DoCommand(":F+");
 
-                    tmrFocus.Interval = (m_StepSize * m_BrakeSize) / 1000;
+                    tmrFocus.Interval = (GeminiHardware.StepSize * GeminiHardware.BrakeSize) / 1000;
                     tmrFocus.Enabled = true;
                     return;
                 }
@@ -121,7 +113,7 @@ namespace ASCOM.GeminiFocuser
 
             // at this point, we're done focusing!
             Halt();
-            m_Position += m_PreviousMove * m_StepSize;  // new position 
+            m_Position += m_PreviousMove * GeminiHardware.StepSize;  // new position 
         }
 
 
@@ -175,14 +167,13 @@ namespace ASCOM.GeminiFocuser
                         throw new DriverException("Cannot connect to Gemini Focuser", -1);
                     else
                     {
-                        GetProfileSettings();
                         m_State  = FocuserState.None;
 
                         // set the desired focuser speed:
                         string sCmd = ":FS";
-                        if (m_Speed == 2) sCmd = ":FM";
+                        if (GeminiHardware.Speed == 2) sCmd = ":FM";
                         else
-                            if (m_Speed == 3) sCmd = ":FF";
+                            if (GeminiHardware.Speed == 3) sCmd = ":FF";
                         GeminiHardware.DoCommand(sCmd);
 
                         m_Connected = true;
@@ -198,55 +189,14 @@ namespace ASCOM.GeminiFocuser
             }
         }
 
-        /// <summary>
-        ///  Reloads all the variables from the profile
-        /// </summary>
-        private void GetProfileSettings()
-        {
-            m_Profile.Register(FocuserResources.PROGRAM_ID, "Gemini Focuser Driver .NET");
-            if (m_Profile.GetValue(SharedResources.PROGRAM_ID, "RegVer", "") != SharedResources.REGISTRATION_VERSION)
-            {
-                //Main Driver Settings
-                m_Profile.WriteValue(FocuserResources.PROGRAM_ID, "RegVer", SharedResources.REGISTRATION_VERSION);
-            }
-
-            string s = m_Profile.GetValue(FocuserResources.PROGRAM_ID, "MaxIncrement");
-
-            s = m_Profile.GetValue(FocuserResources.PROGRAM_ID, "MaxStep");
-            if (!int.TryParse(s, out m_MaxStep) || m_MaxStep <= 0)
-                m_MaxStep = 5000;
-
-            s = m_Profile.GetValue(FocuserResources.PROGRAM_ID, "StepSize");
-            if (!int.TryParse(s, out m_StepSize) || m_StepSize <= 0)
-                m_StepSize = 100;
-
-            s = m_Profile.GetValue(FocuserResources.PROGRAM_ID, "ReverseDirection");
-            if (!bool.TryParse(s, out m_ReverseDirection))
-                m_ReverseDirection = false;
-
-            s = m_Profile.GetValue(FocuserResources.PROGRAM_ID, "BacklashDirection");
-            if (!int.TryParse(s, out m_BacklashDirection) || m_BacklashDirection<-1 || m_BacklashDirection > 1)
-                m_BacklashDirection = 0;
-
-            s = m_Profile.GetValue(FocuserResources.PROGRAM_ID, "BacklashSize");
-            if (!int.TryParse(s, out m_BacklashSize) || m_BacklashSize < 0)
-                m_BacklashSize = 0;
-
-            s = m_Profile.GetValue(FocuserResources.PROGRAM_ID, "BrakeSize");
-            if (!int.TryParse(s, out m_BrakeSize) || m_BrakeSize < 0)
-                m_BrakeSize = 0;
-
-            s = m_Profile.GetValue(FocuserResources.PROGRAM_ID, "FocuserSpeed");
-            if (!int.TryParse(s, out m_Speed) || m_Speed < 1 || m_Speed > 3)
-                m_Speed = 1;
-        }
+        
 
         /// <summary>
         /// Maximum focuser increment
         /// </summary>
         public int MaxIncrement
         {
-            get { return m_MaxIncrement; }
+            get { return GeminiHardware.MaxIncrement; }
         }
 
         /// <summary>
@@ -254,7 +204,7 @@ namespace ASCOM.GeminiFocuser
         /// </summary>
         public int MaxStep
         {
-            get { return m_MaxStep; }
+            get { return GeminiHardware.MaxStep; }
         }
 
         /// <summary>
@@ -266,36 +216,36 @@ namespace ASCOM.GeminiFocuser
             if (m_State != FocuserState.None) Halt();
 
 
-            val = val*m_StepSize - m_Position; // how far to move from current position
-            val /= m_StepSize;
+            val = val*GeminiHardware.StepSize - m_Position; // how far to move from current position
+            val /= GeminiHardware.StepSize;
 
             // limit the move to max increment setting
-            if (Math.Abs(val) > m_MaxIncrement)
-                val = m_MaxIncrement * Math.Sign(val);
+            if (Math.Abs(val) > GeminiHardware.MaxIncrement)
+                val = GeminiHardware.MaxIncrement * Math.Sign(val);
 
-            if (m_BacklashDirection != 0 && Math.Sign(m_BacklashDirection) == Math.Sign(val))
+            if (GeminiHardware.BacklashDirection != 0 && Math.Sign(GeminiHardware.BacklashDirection) == Math.Sign(val))
             {
                 m_State = FocuserState.Backlash;
                 m_PreviousMove = val;
 
-                if ((val > 0 && !m_ReverseDirection) || (val < 0 && m_ReverseDirection))
+                if ((val > 0 && !GeminiHardware.ReverseDirection) || (val < 0 && GeminiHardware.ReverseDirection))
                     GeminiHardware.DoCommand(":F+");
                 else
                     GeminiHardware.DoCommand(":F-");
 
-                tmrFocus.Interval = (m_StepSize * m_BacklashSize) / 1000;
+                tmrFocus.Interval = (GeminiHardware.StepSize * GeminiHardware.BacklashSize) / 1000;
                 tmrFocus.Enabled = true;
             }
             else
             {
                 m_State = FocuserState.Focusing;
                 m_PreviousMove = val;
-                if ((val > 0 && !m_ReverseDirection) || (val < 0 && m_ReverseDirection))
+                if ((val > 0 && !GeminiHardware.ReverseDirection) || (val < 0 && GeminiHardware.ReverseDirection))
                     GeminiHardware.DoCommand(":F+");
                 else
                     GeminiHardware.DoCommand(":F-");
 
-                tmrFocus.Interval = (m_StepSize * Math.Abs(val)) / 1000;
+                tmrFocus.Interval = (GeminiHardware.StepSize * Math.Abs(val)) / 1000;
                 tmrFocus.Enabled = true;               
             }
  
@@ -329,7 +279,7 @@ namespace ASCOM.GeminiFocuser
         /// </summary>
         public double StepSize
         {
-            get { return m_StepSize;  }
+            get { return GeminiHardware.StepSize;  }
         }
 
         /// <summary>
@@ -358,26 +308,6 @@ namespace ASCOM.GeminiFocuser
         }
 
         #endregion
-    }
-
-
-    /// <summary>
-    /// Private resources for the Focuser driver
-    /// </summary>
-    public class FocuserResources
-    {
-
-        //Constant Definitions
-        public static string PROGRAM_ID = "ASCOM.GeminiTelescope.Focuser";  //Key used to store the settings
-        public static string REGISTRATION_VERSION = "1";
-
-        public static int GEMINI_POLLING_INTERVAL = 1;             //Seconds to use for Polling Gemini status
-
-        public static string TELESCOPE_DRIVER_DESCRIPTION = "Gemini Focuser ASCOM Driver .NET";
-        public static string TELESCOPE_DRIVER_NAME = "Gemini Focuser";
-        public static string TELESCOPE_DRIVER_INFO = "Gemini Focuser Driver V1";
-
-        public static uint ERROR_BASE = 0x80040400;
     }
 
 
