@@ -7,8 +7,8 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 //
 // TODO - Add your authorship information here
-[assembly: AssemblyTitle("Focuser Focuser Driver")]
-[assembly: AssemblyDescription("ASCOM Focuser Driver for Focuser")]
+[assembly: AssemblyTitle("Gemini Focuser Driver")]
+[assembly: AssemblyDescription("ASCOM Focuser Driver for Gemini")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
 [assembly: AssemblyProduct("")]

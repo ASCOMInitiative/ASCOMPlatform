@@ -206,7 +206,9 @@ namespace ASCOM.GeminiTelescope
             m_BackgroundWorker.WorkerSupportsCancellation = true;
             m_BackgroundWorker.DoWork += new DoWorkEventHandler(BackgroundWorker_DoWork);
             m_CommandQueue = new Queue();
-            m_Clients = 0;            
+            m_Clients = 0;
+
+            GetProfileSettings();
         }
 
 
@@ -251,7 +253,7 @@ namespace ASCOM.GeminiTelescope
                 m_SerialPort.PortName = m_ComPort;
             }
 
-
+            
             if (m_Profile.GetValue(SharedResources.FOCUSER_PROGRAM_ID, "RegVer", "") != SharedResources.REGISTRATION_VERSION)
             {
                 //Main Driver Settings
