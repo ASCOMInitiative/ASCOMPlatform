@@ -48,6 +48,13 @@ namespace ASCOM.GeminiTelescope
         public static uint INVALID_AT_PARK = ERROR_BASE + 0x404;
         public static string MSG_INVALID_AT_PARK = "Invalid while parked";
 
+        public static uint SCODE_NOT_IMPLEMENTED = ERROR_BASE + 0x400;
+        public static string MSG_NOT_IMPLEMENTED = "Not implemented";
+
+        public static uint SCODE_INVALID_VALUE = ERROR_BASE + 0x401;
+        public static string MSG_INVALID_VALUE = "Invalid value";
+
+
         //Astronomy Releated Constants
         public static double DEG_RAD = Math.PI / 180;
         public static double RAD_DEG = 57.2957795;
