@@ -40,7 +40,7 @@
 using System;
 using System.Configuration;
 using System.Reflection;
-using ASCOM.HelperNET;
+using ASCOM.Utilities;
 using TiGra.ExtensionMethods;
 using TiGra;
 

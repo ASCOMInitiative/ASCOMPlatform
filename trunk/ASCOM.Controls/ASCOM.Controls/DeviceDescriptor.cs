@@ -24,7 +24,7 @@ namespace ASCOM.Controls
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DeviceDescriptor"/> class
 		/// from a generic <see cref="T:System.Collections.Generic.KeyValuePair{string,string}"/>.
-		/// These values are typically returned from methods in <see cref="ASCOM.HelperNET"/>.
+		/// These values are typically returned from methods in <see cref="ASCOM.Utilities"/>.
 		/// </summary>
 		/// <param name="deviceProfileKey">The device profile key.</param>
 		public DeviceDescriptor(KeyValuePair<string, string> deviceProfileKey)
