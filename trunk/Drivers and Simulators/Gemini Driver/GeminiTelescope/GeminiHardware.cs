@@ -146,7 +146,7 @@ namespace ASCOM.GeminiTelescope
         private static double m_Altitude;
         private static double m_Azimuth;
         private static double m_TargetRightAscension;
-        private static double m_TargetDeclination;
+        private static double m_TargetDeclination = SharedResources.INVALID_DOUBLE;
         private static double m_SiderealTime;
         private static string m_Velocity;
         private static string m_SideOfPier;
@@ -693,7 +693,9 @@ namespace ASCOM.GeminiTelescope
                     { m_Tracking = false; }
                     else
                     { m_Tracking = true; }
-                    m_SiderealTime = m_Util.HMSToDegrees(DoCommandResult(":GS", 1000));
+                    string siderial = DoCommandResult(":GS", 1000);
+                    if (siderial!=null)
+                        m_SiderealTime = m_Util.HMSToHours(siderial);
                     m_SideOfPier = DoCommandResult(":Gm", 1000);
                     if (DoCommandResult(":h?", 1000) == "1")
                     {
@@ -826,7 +828,7 @@ namespace ASCOM.GeminiTelescope
                             { m_Tracking = false; }
                             else
                             { m_Tracking = true; }
-                            m_SiderealTime = m_Util.HMSToDegrees(ST);
+                            m_SiderealTime = m_Util.HMSToHours(ST);
                             m_SideOfPier = SOP;
                             if (HOME == "1")
                             {
@@ -1146,6 +1148,25 @@ namespace ASCOM.GeminiTelescope
             }
             DoCommand(cmd);
         }
+
+
+        /// <summary>
+        /// Syncs the mount using Ra and Dec coordinates passed in
+        /// </summary>
+        public static void SyncToEquatorialCoords(double ra, double dec)
+        {
+            string[] cmd = { ":Sr" + m_Util.DegreesToHMS(ra, ":", ":", ""), ":Sd" + m_Util.DegreesToDMS(dec, ":", ":", ""), "" };
+            if (m_AdditionalAlign)
+            {
+                cmd[2] = ":Cm";
+            }
+            else
+            {
+                cmd[2] = ":CM";
+            }
+            DoCommand(cmd);
+        }
+
 
         /// <summary>
         /// Slews the mount using Ra and Dec
