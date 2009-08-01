@@ -235,5 +235,10 @@ namespace ASCOM.GeminiTelescope
         {
             DoFocuserSetupDialog();
         }
+
+        private void ButtonPark_Click(object sender, EventArgs e)
+        {
+            GeminiHardware.DoCommand(":hP");
+        }
     }
 }

@@ -165,6 +165,7 @@ namespace ASCOM.GeminiTelescope
 
         private static bool m_AtPark;
         private static bool m_AtHome;
+        private static string m_ParkState = "";
 
         private static bool m_SouthernHemisphere = false;
 
@@ -691,7 +692,8 @@ namespace ASCOM.GeminiTelescope
                     if (siderial!=null)
                         m_SiderealTime = m_Util.HMSToHours(siderial);
                     m_SideOfPier = DoCommandResult(":Gm", 1000);
-                    if (DoCommandResult(":h?", 1000) == "1")
+                    m_ParkState = DoCommandResult(":h?", 1000);
+                    if (m_ParkState == "1")
                     {
                         m_AtHome = true;
                         if (Velocity == "N")
@@ -845,6 +847,7 @@ namespace ASCOM.GeminiTelescope
                             { m_Tracking = true; }
                             m_SiderealTime = m_Util.HMSToHours(ST);
                             m_SideOfPier = SOP;
+                            m_ParkState = HOME;
                             if (HOME == "1")
                             {
                                 m_AtHome = true;
@@ -1130,6 +1133,13 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static string Velocity
         { get { return m_Velocity; } }
+
+        /// <summary>
+        /// Get current Status of Gemini Park
+        /// retrieved from the latest polled value from the mount, no actual command is executed
+        /// </summary>
+        public static string ParkState
+        { get { return m_ParkState; } }
 
         /// <summary>
         /// Get current SideOfPier propery
