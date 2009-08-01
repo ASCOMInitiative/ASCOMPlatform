@@ -681,42 +681,10 @@ namespace ASCOM.GeminiTelescope
                     if (StartGemini())
                     {
                         m_Connected = true;
+                        UpdatePolledVariables();
+
                         m_BackgroundWorker = new System.Threading.Thread(BackgroundWorker_DoWork);
                         m_BackgroundWorker.Start();
-
-                        //Get Values From Gemini
-                        m_RightAscension = m_Util.HMSToDegrees(DoCommandResult(":GR", 1000));
-                        m_Declination = m_Util.DMSToDegrees(DoCommandResult(":GD", 1000));
-                        m_Altitude = m_Util.DMSToDegrees(DoCommandResult(":GA", 1000));
-                        m_Azimuth = m_Util.DMSToDegrees(DoCommandResult(":GZ", 1000));
-                        m_Velocity = DoCommandResult(":Gv", 1000);
-                        if (Velocity != "T")
-                        { m_Tracking = false; }
-                        else
-                        { m_Tracking = true; }
-                        string siderial = DoCommandResult(":GS", 1000);
-                        if (siderial != null)
-                            m_SiderealTime = m_Util.HMSToHours(siderial);
-                        m_SideOfPier = DoCommandResult(":Gm", 1000);
-                        m_ParkState = DoCommandResult(":h?", 1000);
-                        if (m_ParkState == "1")
-                        {
-                            m_AtHome = true;
-                            if (Velocity == "N")
-                            {
-                                m_AtPark = true;
-                            }
-                            else
-                            {
-                                m_AtPark = false;
-                            }
-                        }
-                        else
-                        {
-                            m_AtHome = false;
-                            m_AtPark = false;
-                        }
-
                     }
                     else
                     {
@@ -880,69 +848,8 @@ namespace ASCOM.GeminiTelescope
                         System.Diagnostics.Trace.WriteLine("done!");
                     }
                     else
-                    {
-                        //Get RA and DEC etc
-                        m_SerialPort.ClearBuffers(); //clear all received data
-                        m_SerialPort.Transmit(":GR#:GD#:GA#:GZ#:Gv#:GS#:Gm#:h?#");
+                        UpdatePolledVariables();
 
-                        command = new CommandItem(":GR", m_QueryInterval, true);
-                        string RA = GetCommandResult(command);
-
-                        command = new CommandItem(":GD", m_QueryInterval, true);
-                        string DEC = GetCommandResult(command);
-
-                        command = new CommandItem(":GA", m_QueryInterval, true);
-                        string ALT = GetCommandResult(command);
-
-                        command = new CommandItem(":GZ", m_QueryInterval, true);
-                        string AZ = GetCommandResult(command);
-
-                        command = new CommandItem(":Gv", m_QueryInterval, true);
-                        string V = GetCommandResult(command);
-
-                        command = new CommandItem(":GS", m_QueryInterval, true);
-                        string ST = GetCommandResult(command);
-
-                        command = new CommandItem(":Gm", m_QueryInterval, true);
-                        string SOP = GetCommandResult(command);
-
-                        command = new CommandItem(":h?", m_QueryInterval, true);
-                        string HOME = GetCommandResult(command);
-
-                        if (RA != null && DEC != null && ALT != null && AZ != null && V != null && ST != null && SOP != null && HOME != null)
-                        {
-                            m_RightAscension = m_Util.HMSToDegrees(RA);
-                            m_Declination = m_Util.DMSToDegrees(DEC);
-                            m_Altitude = m_Util.DMSToDegrees(ALT);
-                            m_Azimuth = m_Util.DMSToDegrees(AZ);
-                            m_Velocity = V;
-                            if (Velocity != "T")
-                            { m_Tracking = false; }
-                            else
-                            { m_Tracking = true; }
-                            m_SiderealTime = m_Util.HMSToHours(ST);
-                            m_SideOfPier = SOP;
-                            m_ParkState = HOME;
-                            if (HOME == "1")
-                            {
-                                m_AtHome = true;
-                                if (Velocity == "N")
-                                {
-                                    m_AtPark = true;
-                                }
-                                else
-                                {
-                                    m_AtPark = false;
-                                }
-                            }
-                            else
-                            {
-                                m_AtHome = false;
-                                m_AtPark = false;
-                            }
-                            m_LastUpdate = System.DateTime.Now;
-                        }
-                    }
                 }
                 catch
                 {
@@ -957,6 +864,77 @@ namespace ASCOM.GeminiTelescope
             }
 
             m_CancelAsync = false;
+        }
+
+        /// <summary>
+        /// update all variable sthat are polled on an interval
+        /// </summary>
+        private static void UpdatePolledVariables()
+        {
+            CommandItem command;
+
+            //Get RA and DEC etc
+            m_SerialPort.ClearBuffers(); //clear all received data
+            m_SerialPort.Transmit(":GR#:GD#:GA#:GZ#:Gv#:GS#:Gm#:h?#");
+
+            command = new CommandItem(":GR", m_QueryInterval, true);
+            string RA = GetCommandResult(command);
+
+            command = new CommandItem(":GD", m_QueryInterval, true);
+            string DEC = GetCommandResult(command);
+
+            command = new CommandItem(":GA", m_QueryInterval, true);
+            string ALT = GetCommandResult(command);
+
+            command = new CommandItem(":GZ", m_QueryInterval, true);
+            string AZ = GetCommandResult(command);
+
+            command = new CommandItem(":Gv", m_QueryInterval, true);
+            string V = GetCommandResult(command);
+
+            command = new CommandItem(":GS", m_QueryInterval, true);
+            string ST = GetCommandResult(command);
+
+            command = new CommandItem(":Gm", m_QueryInterval, true);
+            string SOP = GetCommandResult(command);
+
+            command = new CommandItem(":h?", m_QueryInterval, true);
+            string HOME = GetCommandResult(command);
+
+            if (RA != null) m_RightAscension = m_Util.HMSToDegrees(RA);
+
+            if (DEC != null) m_Declination = m_Util.DMSToDegrees(DEC);
+
+            if (ALT != null) m_Altitude = m_Util.DMSToDegrees(ALT);
+
+            if (AZ != null) m_Azimuth = m_Util.DMSToDegrees(AZ);
+            if (V != null) m_Velocity = V;
+
+            if (Velocity != "T") m_Tracking = false;
+            else
+                m_Tracking = true;
+
+            if (ST != null) m_SiderealTime = m_Util.HMSToHours(ST);
+
+            if (SOP != null) m_SideOfPier = SOP;
+
+            if (HOME != null)
+            {
+                m_ParkState = HOME;
+                if (HOME == "1")
+                {
+                    m_AtHome = true;
+                    if (Velocity == "N") m_AtPark = true;
+                    else
+                        m_AtPark = false;
+                }
+                else
+                {
+                    m_AtHome = false;
+                    m_AtPark = false;
+                }
+            }
+            m_LastUpdate = System.DateTime.Now;
         }
 
         /// <summary>
