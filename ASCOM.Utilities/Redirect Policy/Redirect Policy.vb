@@ -2,7 +2,8 @@
 Module RedirectPolicy
     Private Const BATCH_FILE_NAME As String = "BuildPolicy1.Cmd"
     Private Const POLICY_FILE_NAME As String = "PublisherPolicy.xml"
-    Private Const Utilities_ASSEMBLY_NAME As String = "ASCOM.Utilities" ' Don't add .dll
+    Private Const UTILITIES_ASSEMBLY_NAME As String = "ASCOM.Utilities" ' Don't add .dll
+    Private Const UTILITIES_ASSEMBLY_DIRECTORY As String = "..\..\..\Utilities\Bin\Debug\"
 
     Private Const AL_LINK As String = POLICY_FILE_NAME
     'Private Const AL_OUT As String = "policy.5.0.ASCOM.Utilities.dll"
@@ -19,7 +20,7 @@ Module RedirectPolicy
 
         Console.WriteLine("Current Dir: " & My.Computer.FileSystem.CurrentDirectory & vbCrLf)
         Try
-            ProfAss = Assembly.ReflectionOnlyLoadFrom("..\..\..\Utilities\Bin\Release\" & Utilities_ASSEMBLY_NAME & ".dll")
+            ProfAss = Assembly.ReflectionOnlyLoadFrom(UTILITIES_ASSEMBLY_DIRECTORY & UTILITIES_ASSEMBLY_NAME & ".dll")
             Try
                 Ver = ProfAss.GetName.Version
                 Console.WriteLine("Found Major version " & Ver.Major)
@@ -31,7 +32,7 @@ Module RedirectPolicy
                 Console.WriteLine("Found Minor Revision version " & Ver.MinorRevision)
 
                 'Create the AL Out and Version strings
-                Al_Out = "policy." & Ver.Major.ToString & "." & Ver.Minor.ToString & "." & Utilities_ASSEMBLY_NAME & ".dll"
+                Al_Out = "policy." & Ver.Major.ToString & "." & Ver.Minor.ToString & "." & UTILITIES_ASSEMBLY_NAME & ".dll"
                 Al_Version = Ver.Major.ToString & "." & Ver.Minor.ToString & ".0.0"
                 Try
                     'Create the publisher policy file that will configure redirection
@@ -41,7 +42,7 @@ Module RedirectPolicy
                     My.Computer.FileSystem.WriteAllText(POLICY_FILE_NAME, "   <runtime>" & vbCrLf, True, System.Text.ASCIIEncoding.ASCII)
                     My.Computer.FileSystem.WriteAllText(POLICY_FILE_NAME, "      <assemblyBinding xmlns=""urn:schemas-microsoft-com:asm.v1"">" & vbCrLf, True, System.Text.ASCIIEncoding.ASCII)
                     My.Computer.FileSystem.WriteAllText(POLICY_FILE_NAME, "         <dependentAssembly>" & vbCrLf, True, System.Text.ASCIIEncoding.ASCII)
-                    My.Computer.FileSystem.WriteAllText(POLICY_FILE_NAME, "            <assemblyIdentity name=""" & Utilities_ASSEMBLY_NAME & """ publicKeyToken=""565de7938946fba7"" culture=""neutral"" />" & vbCrLf, True, System.Text.ASCIIEncoding.ASCII)
+                    My.Computer.FileSystem.WriteAllText(POLICY_FILE_NAME, "            <assemblyIdentity name=""" & UTILITIES_ASSEMBLY_NAME & """ publicKeyToken=""565de7938946fba7"" culture=""neutral"" />" & vbCrLf, True, System.Text.ASCIIEncoding.ASCII)
                     My.Computer.FileSystem.WriteAllText(POLICY_FILE_NAME, "            <bindingRedirect oldVersion=""5.0.0.0-" & Ver.Major.ToString & "." & Ver.Minor.ToString & "." & (Ver.Build - 1).ToString & ".65535"" " & vbCrLf, True, System.Text.ASCIIEncoding.ASCII)
                     My.Computer.FileSystem.WriteAllText(POLICY_FILE_NAME, "                             newVersion=""" & Ver.Major.ToString & "." & Ver.Minor.ToString & "." & Ver.Build.ToString & "." & Ver.Revision.ToString & """ />" & vbCrLf, True, System.Text.ASCIIEncoding.ASCII)
                     My.Computer.FileSystem.WriteAllText(POLICY_FILE_NAME, "         </dependentAssembly>" & vbCrLf, True, System.Text.ASCIIEncoding.ASCII)

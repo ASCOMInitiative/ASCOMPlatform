@@ -54,8 +54,7 @@
   <ItemGroup>
     <Reference Include="ASCOM.HelperNET, Version=5.2.3.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ASCOM Platform\Platform Dependencies\ASCOM.HelperNET.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\Platform Dependencies\ASCOM.HelperNET.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
