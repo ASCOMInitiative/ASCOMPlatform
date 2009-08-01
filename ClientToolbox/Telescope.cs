@@ -6,7 +6,7 @@ using System.Collections;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using ASCOM.Interface;
-using ASCOM.HelperNET;
+using ASCOM.Utilities;
 
 namespace ASCOM.DriverAccess
 {

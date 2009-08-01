@@ -31,6 +31,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ASCOM.Astrometry, Version=5.3.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ASCOM.Astrometry\Astrometry\bin\Debug\ASCOM.Astrometry.dll</HintPath>
+    </Reference>
+    <Reference Include="ASCOM.Utilities, Version=5.3.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ASCOM.Utilities\Utilities\bin\Debug\ASCOM.Utilities.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -64,10 +72,6 @@
       <Project>{35194767-5585-45C3-803F-1BCE74CEAAFC}</Project>
       <Name>ASCOM.DriverAccess</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HelperNET\HelperNET\HelperNET.vbproj">
-      <Project>{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}</Project>
-      <Name>HelperNET</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
       <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
       <Name>ASCOM.Exceptions</Name>
@@ -85,13 +89,14 @@
     <PostBuildEvent>xcopy "$(SolutionDir)ASCOM.Controls\ASCOM.Controls\bin\Debug\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
 xcopy "$(SolutionDir)ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Debug\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
 xcopy "$(SolutionDir)ClientToolbox\bin\Debug\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
-xcopy "$(SolutionDir)HelperNET\HelperNET\bin\Debug\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
+xcopy "$(SolutionDir)ASCOM.Utilities\Utilities\bin\Debug\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
+xcopy "$(SolutionDir)ASCOM.Astrometry\Astrometry\bin\Debug\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
 xcopy "$(SolutionDir)Interfaces\ASCOMExceptions\bin\Debug\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
 xcopy "$(SolutionDir)Interfaces\Master Interfaces\*.dll" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
 xcopy "$(SolutionDir)Interfaces\Master Interfaces\*.tlb" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
-xcopy "$(SolutionDir)HelperNET\NOVAS-C x86-x64\debug\NOVAS-C.dll" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
-xcopy "$(SolutionDir)HelperNET\NOVAS-C x86-x64\debug\NOVAS-C.pdb" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
-xcopy "$(SolutionDir)HelperNET\NOVAS-C x86-x64\x64\debug\NOVAS-C64.dll" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
-xcopy "$(SolutionDir)HelperNET\NOVAS-C x86-x64\x64\debug\NOVAS-C64.pdb" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y</PostBuildEvent>
+xcopy "$(SolutionDir)ASCOM.Utilities\NOVAS-C x86-x64\debug\NOVAS-C.dll" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
+xcopy "$(SolutionDir)ASCOM.Utilities\NOVAS-C x86-x64\debug\NOVAS-C.pdb" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
+xcopy "$(SolutionDir)ASCOM.Utilities\NOVAS-C x86-x64\x64\debug\NOVAS-C64.dll" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
+xcopy "$(SolutionDir)ASCOM.Utilities\NOVAS-C x86-x64\x64\debug\NOVAS-C64.pdb" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>

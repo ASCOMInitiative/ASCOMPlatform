@@ -57,6 +57,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Interfaces\Master Interfaces\ASCOM.Interfaces.dll</HintPath>
     </Reference>
+    <Reference Include="ASCOM.Utilities, Version=5.3.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -101,13 +105,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\HelperNET\HelperNET\HelperNET.vbproj">
-      <Project>{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}</Project>
-      <Name>HelperNET</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

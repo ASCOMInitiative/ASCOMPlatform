@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using Microsoft.Win32;
 using ASCOM.DriverAccess;
 using System.Collections.Generic;
-using ASCOM.HelperNET;
+using ASCOM.Utilities;
 using System.Diagnostics;
 
 namespace ASCOM.Controls

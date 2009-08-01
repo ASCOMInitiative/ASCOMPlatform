@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using ASCOM.HelperNET;
+using ASCOM.Utilities;
 
 namespace ASCOM.SettingsProvider.ReferenceApplication
 	{
