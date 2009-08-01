@@ -43,7 +43,10 @@
     <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ASCOM.Utilities, Version=5.3.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
+    <Reference Include="ASCOM.Utilities, Version=5.3.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
@@ -90,7 +93,7 @@
     <Compile Include="NOVASCOM\Deltat.vb" />
     <Compile Include="NOVASCOM\Ephemeris.vb" />
     <Compile Include="NOVASCOM\NOVASCOM.vb" />
-    <Compile Include="..\..\ASCOM.Utilities\Utilities\UtilitiesSupport\SharedConstantsAndCode.vb" />
+    <Compile Include="..\..\ASCOM.Utilities\Utilities\SharedConstantsAndCode.vb" />
     <Compile Include="Transform.vb" />
   </ItemGroup>
   <ItemGroup>

@@ -47,7 +47,6 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ASCOM.Utilities, Version=5.3.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -67,13 +66,18 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Utilities\UtilitiesSupport\AllUsersFileSystemProvider.vb" />
-    <Compile Include="..\Utilities\UtilitiesSupport\CommonConstants.vb" />
-    <Compile Include="..\Utilities\UtilitiesSupport\Interfaces.vb" />
-    <Compile Include="..\Utilities\UtilitiesSupport\UtilitiesSettings.vb" />
     <Compile Include="Profile Explorer.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="..\Utilities\UtilitiesSettings.vb" />
+    <Compile Include="..\Utilities\XMLAccess.vb" />
+    <Compile Include="..\Utilities\AllUsersFileSystemProvider.vb" />
+    <Compile Include="..\Utilities\Interfaces.vb" />
+    <Compile Include="..\Utilities\Exceptions.vb" />
+    <Compile Include="..\Utilities\Serial.vb" />
+    <Compile Include="..\Utilities\TraceLogger.vb" />
+    <Compile Include="..\Utilities\CommonConstants.vb" />
+    <Compile Include="..\Utilities\SharedConstantsAndCode.vb" />
     <Compile Include="Profile Explorer.Designer.vb">
       <DependentUpon>Profile Explorer.vb</DependentUpon>
       <SubType>Form</SubType>
@@ -93,8 +97,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="..\Utilities\UtilitiesSupport\SharedConstantsAndCode.vb" />
-    <Compile Include="..\Utilities\UtilitiesSupport\XMLAccess.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Profile Explorer.resx">

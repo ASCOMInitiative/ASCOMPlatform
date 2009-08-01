@@ -1,6 +1,7 @@
 ﻿'Public and private interfaces for the ASCOM.Utilities namesapce
 
 Imports System.Runtime.InteropServices
+Imports ASCOM.Utilities
 
 Namespace Interfaces
 

@@ -88,7 +88,7 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UtilitiesSupport\AllUsersFileSystemProvider.vb" />
+    <Compile Include="AllUsersFileSystemProvider.vb" />
     <Compile Include="AssemblyInfo.vb" />
     <Compile Include="Chooser.vb">
       <SubType>Code</SubType>
@@ -103,14 +103,14 @@
     <Compile Include="VB6Support\VB6COMErrors.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="UtilitiesSupport\Exceptions.vb" />
-    <Compile Include="UtilitiesSupport\Interfaces.vb" />
-    <Compile Include="UtilitiesSupport\UtilitiesSettings.vb" />
-    <Compile Include="UtilitiesSupport\SharedConstantsAndCode.vb" />
+    <Compile Include="Exceptions.vb" />
+    <Compile Include="Interfaces.vb" />
+    <Compile Include="UtilitiesSettings.vb" />
+    <Compile Include="SharedConstantsAndCode.vb" />
     <Compile Include="VB6Support\VB6HelperSupport.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="UtilitiesSupport\CommonConstants.vb" />
+    <Compile Include="CommonConstants.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -133,7 +133,7 @@
     <Compile Include="Util.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="UtilitiesSupport\XMLAccess.vb" />
+    <Compile Include="XMLAccess.vb" />
     <EmbeddedResource Include="ChooserForm.resX">
       <DependentUpon>ChooserForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -195,7 +195,7 @@
     <None Include="Resources\ASCOM.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="UtilitiesSupport\NamespaceDocumentation.xml" />
+    <Content Include="NamespaceDocumentation.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
