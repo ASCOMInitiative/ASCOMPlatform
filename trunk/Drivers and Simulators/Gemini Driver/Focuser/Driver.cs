@@ -37,11 +37,11 @@ namespace ASCOM.GeminiTelescope
     //
     [Guid("3a22c443-4e46-4504-8cef-731095e51e1f")]
     [ClassInterface(ClassInterfaceType.None)]
-    public class Focuser : ReferenceCountedObjectBase, IFocuser
+    public class Focuser : ReferenceCountedObjectBase, ASCOM.Interface.IFocuser
     {
 
         bool m_Connected = false;
-        private static ASCOM.HelperNET.Util m_Util;
+        private ASCOM.HelperNET.Util m_Util;
 
         
 
@@ -256,7 +256,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public int Position
         {
-            get { return m_Position; }
+            get { return m_Position / GeminiHardware.StepSize; }
         }
 
         /// <summary>
@@ -269,7 +269,7 @@ namespace ASCOM.GeminiTelescope
                 throw new DriverException("The hardware is connected, cannot do SetupDialog()",
                                     unchecked(ErrorCodes.DriverBase + 4));
             }
-            GeminiTelescope.m_MainForm.DoFocuserSetupDialog();
+            frmMain.DoFocuserSetupDialog();
         }
 
         /// <summary>
@@ -286,7 +286,7 @@ namespace ASCOM.GeminiTelescope
         public bool TempComp
         {
             get { return false; }
-            set { throw new DriverException("TempComp is not supported", -1); }
+            set { throw new PropertyNotImplementedException("TempComp", false); }
         }
 
         /// <summary>
@@ -302,7 +302,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public double Temperature
         {
-            get { throw new DriverException("Temperature is not supported", -1); }
+            get { throw new PropertyNotImplementedException("Temperature", false); }
         }
 
         #endregion
