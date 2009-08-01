@@ -7,9 +7,11 @@ using System.Windows.Forms;
 
 namespace ASCOM.GeminiTelescope
 {
+
     public partial class frmMain : Form
     {
         delegate void SetTextCallback(string text);
+        delegate void SetupDialogDelegate();
 
         Timer tmrUpdate = new Timer();
 
@@ -31,9 +33,10 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        public void DoTelescopeSetupDialog()
+
+        private void _DoSetupTelescopeDialog()
         {
-            TelescopeSetupDialogForm setupForm = new TelescopeSetupDialogForm();
+                    TelescopeSetupDialogForm setupForm = new TelescopeSetupDialogForm();
 
             setupForm.ComPort = GeminiHardware.ComPort;
             setupForm.BaudRate = GeminiHardware.BaudRate.ToString();
@@ -57,6 +60,11 @@ namespace ASCOM.GeminiTelescope
             }
 
             setupForm.Dispose();
+        }
+
+        public void DoTelescopeSetupDialog()
+        {
+            this.Invoke(new SetupDialogDelegate(_DoSetupTelescopeDialog));
         }
 
         public static void DoFocuserSetupDialog()
