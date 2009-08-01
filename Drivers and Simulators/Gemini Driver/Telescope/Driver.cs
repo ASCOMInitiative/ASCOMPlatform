@@ -73,6 +73,8 @@ namespace ASCOM.GeminiTelescope
 
         public void AbortSlew()
         {
+            if (GeminiHardware.AtHome || GeminiHardware.AtPark)              
+                throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
             GeminiHardware.DoCommand(":Q");
         }
 
@@ -255,11 +257,26 @@ namespace ASCOM.GeminiTelescope
             get { return GeminiHardware.Declination; }
         }
 
+        /// <summary>
+        /// Set comet-tracking declination rate. This is the Gemini divisor value, valid 
+        /// range is 0...65535
+        /// </summary>
         public double DeclinationRate
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("DeclinationRate", false); }
-            set { throw new PropertyNotImplementedException("DeclinationRate", true); }
+            get 
+            { 
+                string rate = GeminiHardware.DoCommandResult("<412:", 1000);
+                if (rate != null) return int.Parse(rate);
+                throw new TimeoutException("DeclinationRate");
+            }
+
+            set 
+            {
+                int val = (int)value;
+                if (val < 0 || val > 65535) throw new HelperNET.Exceptions.InvalidValueException("DeclinationRate");
+                string cmd = ">412:" + ((int)(value)).ToString();
+                GeminiHardware.DoCommand(cmd);
+            }
         }
 
         public string Description
@@ -309,18 +326,34 @@ namespace ASCOM.GeminiTelescope
             get { throw new PropertyNotImplementedException("FocalLength", false); }
         }
 
+        /// <summary>
+        /// Same guide rate as RightAscension;
+        /// </summary>
         public double GuideRateDeclination
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("GuideRateDeclination", false); }
-            set { throw new PropertyNotImplementedException("GuideRateDeclination", true); }
+            get { return GuideRateRightAscension; }
+            set { GuideRateRightAscension = value;  }
         }
 
+        /// <summary>
+        /// Get/Set guiding rate in degrees/second
+        /// Actual Gemini rates are 0.2 - 0.8x Sidereal
+        /// </summary>
         public double GuideRateRightAscension
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("GuideRateRightAscension", false); }
-            set { throw new PropertyNotImplementedException("GuideRateRightAscension", true); }
+            get {
+                string result = GeminiHardware.DoCommandResult("<150:", 1000);
+                if (result == null) throw new TimeoutException("GuideRateRightAscention");
+                return double.Parse(result) * SharedResources.EARTH_ANG_ROT_DEG_MIN/60.0;    //may need to process this differently if int'l settings have ',' as decimal point.!!!
+            }
+            set 
+            {
+                double val = (SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0) / value;
+
+                if (val < 0.2 || val > 0.8) throw new HelperNET.Exceptions.InvalidValueException("GuideRate out of range 0.2-0.8x Sidereal, value: " + val.ToString("0.0"));
+                string cmd = ">150:" + value.ToString("0.0");    //internationalization issues?
+                GeminiHardware.DoCommand(cmd);                
+            }
         }
 
         public short InterfaceVersion
@@ -417,7 +450,6 @@ namespace ASCOM.GeminiTelescope
 
         public double SiderealTime
         {
-            // TODO Replace this with your implementation
             get { return GeminiHardware.SiderealTime; }
         }
 
@@ -429,10 +461,9 @@ namespace ASCOM.GeminiTelescope
             {
                 if (value < -300 || value > 10000)
                 {
-                    throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+                    throw new HelperNET.Exceptions.InvalidValueException("SiteElevation out of range: " + value.ToString());
                 }
                 GeminiHardware.Elevation = value; 
-
             }
         }
 
@@ -444,8 +475,7 @@ namespace ASCOM.GeminiTelescope
             {
                 if (value < -90 || value > 90)
                 {
-              
-                    throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+                    throw new HelperNET.Exceptions.InvalidValueException("SiteLatitude out of range: "  + value.ToString());
                 }
                 GeminiHardware.SetLatitude(value);
 
@@ -460,8 +490,7 @@ namespace ASCOM.GeminiTelescope
             {
                 if (value < -180 || value > 180)
                 {
-
-                    throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+                    throw new HelperNET.Exceptions.InvalidValueException("SiteLongitude out of range: "+ value.ToString());
                 }
                 GeminiHardware.SetLongitude(value);
 
@@ -491,6 +520,9 @@ namespace ASCOM.GeminiTelescope
 
         public void SlewToCoordinates(double RightAscension, double Declination)
         {
+            if (GeminiHardware.AtHome || GeminiHardware.AtPark)
+                throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+
             GeminiHardware.TargetRightAscension = RightAscension;
             GeminiHardware.TargetDeclination = Declination;
             GeminiHardware.SlewEquatorial();
@@ -498,6 +530,9 @@ namespace ASCOM.GeminiTelescope
 
         public void SlewToCoordinatesAsync(double RightAscension, double Declination)
         {
+            if (GeminiHardware.AtHome || GeminiHardware.AtPark)
+                throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+
             GeminiHardware.TargetRightAscension = RightAscension;
             GeminiHardware.TargetDeclination = Declination;
             GeminiHardware.SlewEquatorialAsync();
@@ -505,11 +540,16 @@ namespace ASCOM.GeminiTelescope
 
         public void SlewToTarget()
         {
+            if (GeminiHardware.AtHome || GeminiHardware.AtPark)
+                throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+
             GeminiHardware.SlewEquatorial();
         }
 
         public void SlewToTargetAsync()
         {
+            if (GeminiHardware.AtHome || GeminiHardware.AtPark)
+                throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
             GeminiHardware.SlewEquatorialAsync();
         }
 
@@ -538,26 +578,29 @@ namespace ASCOM.GeminiTelescope
 
         public void SyncToCoordinates(double RightAscension, double Declination)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("SyncToCoordinates");
+            GeminiHardware.SyncToEquatorialCoords(RightAscension, Declination);
         }
 
         public void SyncToTarget()
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("SyncToTarget");
+            if (TargetDeclination == SharedResources.INVALID_DOUBLE || TargetRightAscension == SharedResources.INVALID_DOUBLE)
+                throw new DriverException(SharedResources.MSG_PROP_NOT_SET, (int)SharedResources.SCOPE_PROP_NOT_SET);
+            GeminiHardware.SyncEquatorial();
         }
 
         public double TargetDeclination
         {
-            // TODO Replace this with your implementation
-            get { return GeminiHardware.TargetDeclination; }
+            get { 
+                double val = GeminiHardware.TargetDeclination;
+                if (val == SharedResources.INVALID_DOUBLE)
+                    throw new HelperNET.Exceptions.ValueNotSetException("TargetDeclination is not set");
+                return val;
+            }
             set
             {
                 if (value < -90 || value > 90)
                 {
-
-                    throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+                    throw new HelperNET.Exceptions.InvalidValueException("TargetDeclination out of range: " + value.ToString());
                 }
                 GeminiHardware.TargetDeclination = value;
             }
@@ -566,13 +609,17 @@ namespace ASCOM.GeminiTelescope
         public double TargetRightAscension
         {
             // TODO Replace this with your implementation
-            get { return GeminiHardware.TargetRightAscension; }
+            get { 
+                double val = GeminiHardware.TargetRightAscension;
+                if (val == SharedResources.INVALID_DOUBLE)
+                    throw new HelperNET.Exceptions.ValueNotSetException("TargetRightAscension is not set");
+                return val;            
+            }
             set 
             {
                 if (value < 0 || value > 24)
                 {
-
-                    throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+                    throw new HelperNET.Exceptions.InvalidValueException("TargetRightAscension is not set");
                 }
                 GeminiHardware.TargetRightAscension=value; 
             }
