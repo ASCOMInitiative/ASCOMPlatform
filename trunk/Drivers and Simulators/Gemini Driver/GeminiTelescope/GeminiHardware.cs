@@ -123,15 +123,16 @@ namespace ASCOM.GeminiTelescope
     /// <summary>
     /// Class encapsulating all serial communications with Gemini
     /// </summary>
-    public class GeminiHardware
+    public static class GeminiHardware
     {
         
         private static ASCOM.HelperNET.Profile m_Profile;
         private static ASCOM.HelperNET.Util m_Util;
 
         private static Queue m_CommandQueue; //Queue used for messages to the gemini
-        private static System.ComponentModel.BackgroundWorker m_BackgroundWorker; // Thread to run for communications
+        private static System.Threading.Thread m_BackgroundWorker; // Thread to run for communications
 
+        private static bool m_CancelAsync = false; // when to stop the background thread
  
 
         //Telescope Implementation
@@ -198,7 +199,6 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         ///  TelescopeHadrware constructor
         ///     create serial port
-        ///     start background worker thread
         /// </summary>
         static GeminiHardware()
         {
@@ -207,9 +207,6 @@ namespace ASCOM.GeminiTelescope
 
             m_SerialPort = new ASCOM.HelperNET.Serial();
 
-            m_BackgroundWorker = new BackgroundWorker();
-            m_BackgroundWorker.WorkerSupportsCancellation = true;
-            m_BackgroundWorker.DoWork += new DoWorkEventHandler(BackgroundWorker_DoWork);
             m_CommandQueue = new Queue();
             m_Clients = 0;
 
@@ -678,7 +675,8 @@ namespace ASCOM.GeminiTelescope
                     if (sRes != null && sProperResponse.Contains(sRes))
                     {
                         m_Connected = true;
-                        m_BackgroundWorker.RunWorkerAsync();
+                        m_BackgroundWorker = new System.Threading.Thread(BackgroundWorker_DoWork);
+                        m_BackgroundWorker.Start();
                         return;
                     }
                     else
@@ -729,11 +727,13 @@ namespace ASCOM.GeminiTelescope
                 m_Clients -= 1;
                 if (m_Clients == 0)
                 {
-                    m_BackgroundWorker.CancelAsync();
+                    m_CancelAsync = true;
 
-                    // wait for background worker to finish current operation and process the cancel request
-                    System.Threading.Thread.Sleep(500);
-
+                    // wait for the thread to die for 2 seconds,
+                    // then kill it -- we don't want to tie up the serial comm
+                    if (!m_BackgroundWorker.Join(2000))
+                        m_BackgroundWorker.Abort();  
+                    m_BackgroundWorker = null;
                     m_SerialPort.Connected = false;
                     m_Connected = false;
                     m_CommandQueue.Clear();
@@ -746,13 +746,9 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         /// <param name="sender">sender - not used</param>
         /// <param name="e">work to perform - not used</param>
-        private static void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            // Get the BackgroundWorker that raised this event.
-            System.ComponentModel.BackgroundWorker worker = sender as System.ComponentModel.BackgroundWorker;
-            //SystemMessageDelegate message = new SystemMessageDelegate(ProcessMessage);
-
-            while (!worker.CancellationPending)
+        private static void BackgroundWorker_DoWork()
+        {           
+            while (!m_CancelAsync)
             {
                 System.Threading.EventWaitHandle ewh = null;
 
@@ -864,6 +860,8 @@ namespace ASCOM.GeminiTelescope
                 if (m_CommandQueue.Count==0)    // wait specified interval before querying the mount if no more commands...
                     System.Threading.Thread.Sleep(m_QueryInterval); // don't tie up the CPU and serial port, sleep a little
             }
+
+            m_CancelAsync = false;
         }
 
         /// <summary>
