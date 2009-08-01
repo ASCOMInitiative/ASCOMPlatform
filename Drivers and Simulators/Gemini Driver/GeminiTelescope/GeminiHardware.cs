@@ -294,10 +294,12 @@ namespace ASCOM.GeminiTelescope
             }
 
             string s = m_Profile.GetValue(SharedResources.FOCUSER_PROGRAM_ID, "MaxIncrement");
+            if (!int.TryParse(s, out m_MaxIncrement) || m_MaxIncrement <= 0)
+                m_MaxIncrement = 5000;
 
             s = m_Profile.GetValue(SharedResources.FOCUSER_PROGRAM_ID, "MaxStep");
-            if (!int.TryParse(s, out m_MaxStep) || m_MaxStep <= 0)
-                m_MaxStep = 5000;
+            //if (!int.TryParse(s, out m_MaxStep) || m_MaxStep <= 0)
+            m_MaxStep = 0x7fffffff;
 
             s = m_Profile.GetValue(SharedResources.FOCUSER_PROGRAM_ID, "StepSize");
             if (!int.TryParse(s, out m_StepSize) || m_StepSize <= 0)
@@ -669,7 +671,6 @@ namespace ASCOM.GeminiTelescope
                     }
 
                     m_CommandQueue.Clear();
-                    m_BackgroundWorker.RunWorkerAsync();
                     m_SerialPort.Transmit("\x6");
                     CommandItem ci = new CommandItem("\x6", 3000, true);
                     string sRes = GetCommandResult(ci); ;
@@ -677,6 +678,7 @@ namespace ASCOM.GeminiTelescope
                     if (sRes != null && sProperResponse.Contains(sRes))
                     {
                         m_Connected = true;
+                        m_BackgroundWorker.RunWorkerAsync();
                         return;
                     }
                     else
