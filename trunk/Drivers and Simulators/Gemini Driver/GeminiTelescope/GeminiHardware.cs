@@ -322,12 +322,6 @@ namespace ASCOM.GeminiTelescope
             if (!int.TryParse(s, out m_Speed) || m_Speed < 1 || m_Speed > 3)
                 m_Speed = 1;
 
-
-            m_SerialPort.Speed = (ASCOM.HelperNET.Serial.PortSpeed)m_BaudRate;
-            m_SerialPort.Parity = (System.IO.Ports.Parity)m_Parity;
-            m_SerialPort.DataBits = m_DataBits;
-            m_SerialPort.StopBits = m_StopBits;
-
         }
 
  
@@ -781,12 +775,32 @@ namespace ASCOM.GeminiTelescope
                         m_SerialPort.ClearBuffers(); //clear all received data
                         m_SerialPort.Transmit(serial_cmd);
 
+                        System.Diagnostics.Trace.Write("Command '" + serial_cmd + "' ");
+
+                        if (command.WaitObject != null)
+                            System.Diagnostics.Trace.Write("..result expected..");
+                        else
+                            System.Diagnostics.Trace.Write("..result not expected..");
+
+                        System.Diagnostics.Trace.Write("waiting... ");
+
+                        // wait for the result whether or not the caller wants it
+                        // otherwise delayed result from a previous command
+                        // can be falsely returned for a later request:
+
+                        if (command.m_Timeout <= 0) command.m_Timeout = 1000;    // default timeout of one second for requests where the user doesn't care
+                        string result = GetCommandResult(command);
+
+                        System.Diagnostics.Trace.Write("result='" + result + "'");
+
                         if (command.WaitObject != null)    // receive result, if one is expected
                         {
-                            command.m_Result = GetCommandResult(command);
+                            command.m_Result = result;
                             command.WaitObject.Set();   //release the wait handle so the calling thread can continue
-                            ewh = null;
                         }
+                        ewh = null;
+
+                        System.Diagnostics.Trace.WriteLine("done!");
                     }
                     else
                     {
@@ -818,7 +832,8 @@ namespace ASCOM.GeminiTelescope
                         command = new CommandItem(":h?", m_QueryInterval, true);
                         string HOME = GetCommandResult(command);
 
-                        if (RA != null && DEC!=null && ALT!=null && AZ!=null && V!=null && ST!=null && SOP!=null && HOME!=null) {
+                        if (RA != null && DEC != null && ALT != null && AZ != null && V != null && ST != null && SOP != null && HOME != null)
+                        {
                             m_RightAscension = m_Util.HMSToDegrees(RA);
                             m_Declination = m_Util.DMSToDegrees(DEC);
                             m_Altitude = m_Util.DMSToDegrees(ALT);
@@ -1092,7 +1107,7 @@ namespace ASCOM.GeminiTelescope
         /// Stores the Latitude in the Gemini Computer
         /// </summary>
         public static void SetLatitude(double Latitude)
-        {
+        {         
             m_Latitude = Latitude;
             string latitudedddmm = m_Util.DegreesToDM(Latitude, "*");
             DoCommand(":St" + latitudedddmm);
