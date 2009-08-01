@@ -56,6 +56,7 @@ namespace ASCOM.GeminiTelescope
             this.ButtonSetup = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.setupDialogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.focuserSetupDialogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mountParametersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ButtonFlip = new System.Windows.Forms.Button();
             this.CheckBoxFlipDeck = new System.Windows.Forms.CheckBox();
@@ -65,7 +66,6 @@ namespace ASCOM.GeminiTelescope
             this.RadioButtonGuide = new System.Windows.Forms.RadioButton();
             this.CheckBoxFlipRa = new System.Windows.Forms.CheckBox();
             this.picASCOM = new System.Windows.Forms.PictureBox();
-            this.focuserSetupDialogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPierSideWest)).BeginInit();
@@ -327,13 +327,13 @@ namespace ASCOM.GeminiTelescope
             // ButtonPark
             // 
             this.ButtonPark.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ButtonPark.Enabled = false;
             this.ButtonPark.Location = new System.Drawing.Point(25, 3);
             this.ButtonPark.Name = "ButtonPark";
             this.ButtonPark.Size = new System.Drawing.Size(16, 21);
             this.ButtonPark.TabIndex = 6;
             this.ButtonPark.Text = "P";
             this.ButtonPark.UseVisualStyleBackColor = true;
+            this.ButtonPark.Click += new System.EventHandler(this.ButtonPark_Click);
             // 
             // ButtonConnect
             // 
@@ -366,7 +366,7 @@ namespace ASCOM.GeminiTelescope
             this.focuserSetupDialogToolStripMenuItem,
             this.mountParametersToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(197, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(197, 70);
             // 
             // setupDialogToolStripMenuItem
             // 
@@ -374,6 +374,13 @@ namespace ASCOM.GeminiTelescope
             this.setupDialogToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.setupDialogToolStripMenuItem.Text = "Telescope Setup Dialog";
             this.setupDialogToolStripMenuItem.Click += new System.EventHandler(this.setupDialogToolStripMenuItem_Click);
+            // 
+            // focuserSetupDialogToolStripMenuItem
+            // 
+            this.focuserSetupDialogToolStripMenuItem.Name = "focuserSetupDialogToolStripMenuItem";
+            this.focuserSetupDialogToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.focuserSetupDialogToolStripMenuItem.Text = "Focuser Setup Dialog";
+            this.focuserSetupDialogToolStripMenuItem.Click += new System.EventHandler(this.focuserSetupDialogToolStripMenuItem_Click);
             // 
             // mountParametersToolStripMenuItem
             // 
@@ -385,7 +392,6 @@ namespace ASCOM.GeminiTelescope
             // ButtonFlip
             // 
             this.ButtonFlip.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ButtonFlip.Enabled = false;
             this.ButtonFlip.Location = new System.Drawing.Point(3, 3);
             this.ButtonFlip.Name = "ButtonFlip";
             this.ButtonFlip.Size = new System.Drawing.Size(16, 21);
@@ -473,13 +479,6 @@ namespace ASCOM.GeminiTelescope
             this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.picASCOM.TabIndex = 4;
             this.picASCOM.TabStop = false;
-            // 
-            // focuserSetupDialogToolStripMenuItem
-            // 
-            this.focuserSetupDialogToolStripMenuItem.Name = "focuserSetupDialogToolStripMenuItem";
-            this.focuserSetupDialogToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.focuserSetupDialogToolStripMenuItem.Text = "Focuser Setup Dialog";
-            this.focuserSetupDialogToolStripMenuItem.Click += new System.EventHandler(this.focuserSetupDialogToolStripMenuItem_Click);
             // 
             // frmMain
             // 

@@ -382,8 +382,10 @@ namespace ASCOM.GeminiTelescope
 
         public void Park()
         {
-            string[] cmd = { ":hP", ":hN" };
-            GeminiHardware.DoCommand(cmd);
+           // string[] cmd = { ":hP", ":hN" };
+           // GeminiHardware.DoCommand(cmd);
+            GeminiHardware.DoCommand(":hP");
+            while (GeminiHardware.ParkState == "2") { };
         }
 
         public void PulseGuide(GuideDirections Direction, int Duration)
