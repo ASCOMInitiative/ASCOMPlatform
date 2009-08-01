@@ -62,6 +62,7 @@ namespace ASCOM.GeminiTelescope
         public static double RAD_HRS = 3.81971863;
         public static double EARTH_ANG_ROT_DEG_MIN = 0.25068447733746215; //Angular rotation of earth in degrees/min
 
+        public static double INVALID_DOUBLE = -33333333;    // invalid number, or value not set
 
         private SharedResources() { }							// Prevent creation of instances
 
