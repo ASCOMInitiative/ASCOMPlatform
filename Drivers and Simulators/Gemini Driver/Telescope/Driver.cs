@@ -80,8 +80,7 @@ namespace ASCOM.GeminiTelescope
 
         public AlignmentModes AlignmentMode
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("AlignmentMode", false); }
+            get { return AlignmentModes.algGermanPolar; }
         }
 
         public double Altitude
@@ -91,7 +90,6 @@ namespace ASCOM.GeminiTelescope
 
         public double ApertureArea
         {
-            // TODO Replace this with your implementation
             get { throw new PropertyNotImplementedException("ApertureArea", false); }
         }
 
@@ -385,7 +383,18 @@ namespace ASCOM.GeminiTelescope
            // string[] cmd = { ":hP", ":hN" };
            // GeminiHardware.DoCommand(cmd);
             GeminiHardware.DoCommand(":hP");
-            while (GeminiHardware.ParkState == "2") { };
+
+            int count = 0;
+
+            // wait for parking move to begin, wait for a maximum of 16*250ms = 4 seconds
+            while (GeminiHardware.ParkState != "2" && count < 16) { System.Threading.Thread.Sleep(250); count++; }
+            if (count == 16) throw new TimeoutException("Park operation didn't start");
+
+            // now wait for it to end
+            while (GeminiHardware.ParkState == "2") { System.Threading.Thread.Sleep(1000);  };
+
+            // 0 => didn't park.
+            if (GeminiHardware.ParkState == "0") throw new DriverException("Failed to park", (int)SharedResources.ERROR_BASE);
         }
 
         public void PulseGuide(GuideDirections Direction, int Duration)
