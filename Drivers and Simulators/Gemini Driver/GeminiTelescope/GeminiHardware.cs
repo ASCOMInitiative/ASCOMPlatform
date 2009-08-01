@@ -175,6 +175,16 @@ namespace ASCOM.GeminiTelescope
         private static int m_DataBits;
         private static System.IO.Ports.StopBits m_StopBits;
 
+        public enum GeminiBootMode
+        {
+            Prompt = 0,
+            ColdStart = 1,
+            WarmStart = 2,
+            WarmRestart = 3,
+        }
+
+        private static GeminiBootMode m_BootMode = GeminiBootMode.Prompt; 
+
         private static ASCOM.HelperNET.Serial m_SerialPort;
 
         private static bool m_Connected = false; //Keep track of the connection status of the hardware
@@ -663,56 +673,121 @@ namespace ASCOM.GeminiTelescope
                     }
 
                     m_CommandQueue.Clear();
-                    m_SerialPort.Transmit("\x6");
-                    CommandItem ci = new CommandItem("\x6", 3000, true);
-                    string sRes = GetCommandResult(ci); ;
-                    string sProperResponse = "B#b#S#G#";
-                    if (sRes != null && sProperResponse.Contains(sRes))
+
+                    // process initial ping to Gemini
+                    // and take it through the boot process if it's not booted yet
+                    // it all succeeds, set connected state and start worker thread
+
+                    if (StartGemini())
                     {
                         m_Connected = true;
                         m_BackgroundWorker = new System.Threading.Thread(BackgroundWorker_DoWork);
                         m_BackgroundWorker.Start();
-                        return;
-                    }
-                    else
-                        Disconnect();
 
-
-                    //Get Values From Gemini
-                    m_RightAscension = m_Util.HMSToDegrees(DoCommandResult(":GR",1000));
-                    m_Declination = m_Util.DMSToDegrees(DoCommandResult(":GD", 1000));
-                    m_Altitude = m_Util.DMSToDegrees(DoCommandResult(":GA", 1000));
-                    m_Azimuth = m_Util.DMSToDegrees(DoCommandResult(":GZ", 1000));
-                    m_Velocity = DoCommandResult(":Gv", 1000);
-                    if (Velocity != "T")
-                    { m_Tracking = false; }
-                    else
-                    { m_Tracking = true; }
-                    string siderial = DoCommandResult(":GS", 1000);
-                    if (siderial!=null)
-                        m_SiderealTime = m_Util.HMSToHours(siderial);
-                    m_SideOfPier = DoCommandResult(":Gm", 1000);
-                    m_ParkState = DoCommandResult(":h?", 1000);
-                    if (m_ParkState == "1")
-                    {
-                        m_AtHome = true;
-                        if (Velocity == "N")
+                        //Get Values From Gemini
+                        m_RightAscension = m_Util.HMSToDegrees(DoCommandResult(":GR", 1000));
+                        m_Declination = m_Util.DMSToDegrees(DoCommandResult(":GD", 1000));
+                        m_Altitude = m_Util.DMSToDegrees(DoCommandResult(":GA", 1000));
+                        m_Azimuth = m_Util.DMSToDegrees(DoCommandResult(":GZ", 1000));
+                        m_Velocity = DoCommandResult(":Gv", 1000);
+                        if (Velocity != "T")
+                        { m_Tracking = false; }
+                        else
+                        { m_Tracking = true; }
+                        string siderial = DoCommandResult(":GS", 1000);
+                        if (siderial != null)
+                            m_SiderealTime = m_Util.HMSToHours(siderial);
+                        m_SideOfPier = DoCommandResult(":Gm", 1000);
+                        m_ParkState = DoCommandResult(":h?", 1000);
+                        if (m_ParkState == "1")
                         {
-                            m_AtPark = true;
+                            m_AtHome = true;
+                            if (Velocity == "N")
+                            {
+                                m_AtPark = true;
+                            }
+                            else
+                            {
+                                m_AtPark = false;
+                            }
                         }
                         else
                         {
+                            m_AtHome = false;
                             m_AtPark = false;
                         }
+
                     }
                     else
                     {
-                        m_AtHome = false;
-                        m_AtPark = false;
+                        Disconnect();
+                    }
+
+                    if (m_Connected)
+                    {
                     }
                 }
 
             }
+        }
+
+        /// <summary>
+        /// Check and process the initialization status of Gemini on initial connect:
+        ///   return true if already started and initialized,
+        ///   otherwise, perform initialization based on configured options
+        /// </summary>
+        /// <param name="sRes">value returned by Gemini to the ^G command</param>
+        /// <returns></returns>
+        private static bool StartGemini()
+        {
+            m_SerialPort.Transmit("\x6");
+            CommandItem ci = new CommandItem("\x6", 3000, true);
+            string sRes = GetCommandResult(ci);
+
+            // scrolling message? wait for it to end:
+            while (sRes == "B#" || sRes == null)
+            {
+                System.Threading.Thread.Sleep(500);
+                m_SerialPort.Transmit("\x6");
+                ci = new CommandItem("\x6", 3000, true);
+                sRes = GetCommandResult(ci); ;
+            }
+
+            if (sRes == "b#")    //Gemini waiting for user to select the boot mode
+            {
+
+                GeminiBootMode bootMode = m_BootMode;
+
+                //ask the user what mode to boot up in
+                if (bootMode == GeminiBootMode.Prompt)
+                {
+                    frmBootMode frmBoot = new frmBootMode();
+                    System.Windows.Forms.DialogResult res = frmBoot.ShowDialog();
+                    if (res == System.Windows.Forms.DialogResult.OK)
+                        bootMode = frmBoot.BootMode;
+                    else
+                        return false;   // not started, the user chose to cancel
+                }
+
+                switch (bootMode)
+                {
+                    case GeminiBootMode.ColdStart: m_SerialPort.Transmit("bC#"); break;
+                    case GeminiBootMode.WarmRestart: m_SerialPort.Transmit("bR#"); break;
+                    case GeminiBootMode.WarmStart: m_SerialPort.Transmit("bW#"); break;
+                }
+                sRes = "S#"; // put it into "starting" mode, so the next loop will wait for full initialization
+            }
+
+            // processing Cold start mode -- wait for this to end
+            while (sRes == "S#")
+            {
+                System.Threading.Thread.Sleep(500);
+                m_SerialPort.Transmit("\x6");
+                ci = new CommandItem("\x6", 3000, true);
+                sRes = GetCommandResult(ci); ;
+            }
+
+            return sRes == "G#"; // true if startup completed, otherwise false
         }
 
         /// <summary>
@@ -729,8 +804,8 @@ namespace ASCOM.GeminiTelescope
 
                     // wait for the thread to die for 2 seconds,
                     // then kill it -- we don't want to tie up the serial comm
-                    if (!m_BackgroundWorker.Join(2000))
-                        m_BackgroundWorker.Abort();  
+                    if (m_BackgroundWorker != null && !m_BackgroundWorker.Join(2000))
+                        m_BackgroundWorker.Abort();
                     m_BackgroundWorker = null;
                     m_SerialPort.Connected = false;
                     m_Connected = false;
