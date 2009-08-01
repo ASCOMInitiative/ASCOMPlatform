@@ -59,7 +59,7 @@ namespace ASCOM.GeminiTelescope
             setupForm.Dispose();
         }
 
-        public void DoFocuserSetupDialog()
+        public static void DoFocuserSetupDialog()
         {
             FocuserSetupDialogForm setupForm = new FocuserSetupDialogForm();
             setupForm.ComPort = GeminiHardware.ComPort;
@@ -72,7 +72,7 @@ namespace ASCOM.GeminiTelescope
             setupForm.BacklashDirection = GeminiHardware.BacklashDirection;
             setupForm.Speed = GeminiHardware.Speed;
 
-            DialogResult ans = setupForm.ShowDialog(this);
+            DialogResult ans = setupForm.ShowDialog();
 
             if (ans == DialogResult.OK)
             {
