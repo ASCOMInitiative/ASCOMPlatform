@@ -49,7 +49,7 @@ Friend Class XMLAccess
         FileStore = New AllUsersFileSystemProvider
         'FileStore = New IsolatedStorageFileStoreProvider
         Try
-            If Not FileStore.Exists("\" & VALUES_FILENAME) Then Throw New ProfileNotFoundException("Utilities Error Base key does not exist")
+            If Not FileStore.Exists("\" & VALUES_FILENAME) Then Throw New Exceptions.ProfileNotFoundException("Utilities Error Base key does not exist")
             PlatformVersion = GetProfile("\", "PlatformVersion")
             'OK, no exception so assume that we are initialised
         Catch ex As ProfileNotFoundException

@@ -6,6 +6,7 @@ Imports ASCOM.Utilities.Interfaces
 Imports System.Runtime.InteropServices
 Imports ASCOM.Astrometry.NOVAS.NOVAS2
 Imports ASCOM.Astrometry.Kepler
+Imports System.Reflection
 
 Namespace Transform
     ''' <summary>
@@ -53,7 +54,6 @@ Namespace Transform
             TL = New TraceLogger("", "Transform")
             TL.Enabled = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT) 'Get enabled / disabled state from the user registry
             TL.LogMessage("New", "Trace logger created OK")
-            RunningVersions(CType(TL, TraceLogger))
 
             Utl = New Util 'Get a Util component for Julian functions
             Sw = New Stopwatch
@@ -615,6 +615,32 @@ Namespace Transform
             TL.LogMessage("CheckGAC", "Started")
             strPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase)
             TL.LogMessage("CheckGAC", "Assembly path: " & strPath)
+        End Sub
+
+        Private Sub RunningVersions(ByVal TL As TraceLogger)
+            Dim AssemblyNames() As AssemblyName
+            TL.LogMessage("Versions", "Utilities version: " & Assembly.GetExecutingAssembly.GetName.Version.ToString)
+            TL.LogMessage("Versions", "CLR version: " & System.Environment.Version.ToString)
+            AssemblyNames = Assembly.GetExecutingAssembly.GetReferencedAssemblies
+
+            'Get Operating system information
+            Dim OS As System.OperatingSystem = System.Environment.OSVersion
+            TL.LogMessage("Versions", "OS Version " & OS.Platform & " Service Pack: " & OS.ServicePack & " Full: " & OS.VersionString)
+            'Get file system information
+            Dim MachineName As String = System.Environment.MachineName
+            Dim ProcCount As Integer = System.Environment.ProcessorCount
+            Dim SysDir As String = System.Environment.SystemDirectory
+            Dim WorkSet As Long = System.Environment.WorkingSet
+            TL.LogMessage("Versions", "Machine name: " & MachineName & " Number of processors: " & ProcCount & " System directory: " & SysDir & " Working set size: " & WorkSet & " bytes")
+
+            'Get fully qualified paths to particular directories in a non OS specific way
+            'There are many more options in the SpecialFolders Enum than are shown here!
+            TL.LogMessage("Versions", "Application Data: " & System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData))
+            TL.LogMessage("Versions", "Common Files: " & System.Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles))
+            TL.LogMessage("Versions", "My Documents: " & System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
+            TL.LogMessage("Versions", "Program Files: " & System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles))
+            TL.LogMessage("Versions", "System: " & System.Environment.GetFolderPath(Environment.SpecialFolder.System))
+            TL.LogMessage("Versions", "Current: " & System.Environment.CurrentDirectory)
         End Sub
 
 #End Region
