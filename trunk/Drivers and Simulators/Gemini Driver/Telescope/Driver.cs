@@ -265,7 +265,7 @@ namespace ASCOM.GeminiTelescope
         {
             get 
             { 
-                string rate = GeminiHardware.DoCommandResult("<412:", 1000);
+                string rate = GeminiHardware.DoCommandResult("<412:", 2000);
                 if (rate != null) return int.Parse(rate);
                 throw new TimeoutException("DeclinationRate");
             }
@@ -340,15 +340,15 @@ namespace ASCOM.GeminiTelescope
         /// Actual Gemini rates are 0.2 - 0.8x Sidereal
         /// </summary>
         public double GuideRateRightAscension
-        {
+        {         
             get {
-                string result = GeminiHardware.DoCommandResult("<150:", 1000);
+                string result = GeminiHardware.DoCommandResult("<150:", 2000);
                 if (result == null) throw new TimeoutException("GuideRateRightAscention");
                 return double.Parse(result) * SharedResources.EARTH_ANG_ROT_DEG_MIN/60.0;    //may need to process this differently if int'l settings have ',' as decimal point.!!!
             }
             set 
             {
-                double val = (SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0) / value;
+                double val = value/(SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0) ;
 
                 if (val < 0.2 || val > 0.8) throw new HelperNET.Exceptions.InvalidValueException("GuideRate out of range 0.2-0.8x Sidereal, value: " + val.ToString("0.0"));
                 string cmd = ">150:" + value.ToString("0.0");    //internationalization issues?
