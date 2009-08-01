@@ -745,7 +745,7 @@ namespace ASCOM.GeminiTelescope
             string sRes = GetCommandResult(ci);
 
             // scrolling message? wait for it to end:
-            while (sRes == "B#" || sRes == null)
+            while (sRes == "B#")
             {
                 System.Threading.Thread.Sleep(500);
                 m_SerialPort.Transmit("\x6");
