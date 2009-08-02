@@ -7,7 +7,7 @@ Namespace Exceptions
     ''' <remarks></remarks>
     <Serializable()> _
         Public Class HelperException
-        'Exception for Helper.NET component exceptions
+        'Exception for Utilities component exceptions
         Inherits System.Exception
 
         ''' <summary>
@@ -49,7 +49,7 @@ Namespace Exceptions
     ''' <remarks></remarks>
     <Serializable()> _
         Public Class ProfileNotFoundException
-        'Exception for Helper.NET component exceptions
+        'Exception for Utilities component exceptions
         Inherits HelperException
 
         ''' <summary>
@@ -90,7 +90,7 @@ Namespace Exceptions
     ''' <remarks></remarks>
     <Serializable()> _
         Public Class InvalidValueException
-        'Exception for Helper.NET component exceptions
+        'Exception for Utilities component exceptions
         Inherits HelperException
 
         ''' <summary>
@@ -134,7 +134,7 @@ Namespace Exceptions
     ''' one transaction at a time e.g. Serial.Receive or Serial.Transmit etc.</remarks>
     <Serializable()> _
         Public Class SerialPortInUseException
-        'Exception for Helper.NET component exceptions
+        'Exception for Utilities component exceptions
         Inherits HelperException
 
         ''' <summary>
@@ -177,7 +177,7 @@ Namespace Exceptions
     ''' </remarks>
     <Serializable()> _
         Public Class ProfilePersistenceException
-        'Exception for Helper.NET component exceptions
+        'Exception for Utilities component exceptions
         Inherits HelperException
 
         ''' <summary>
@@ -219,7 +219,7 @@ Namespace Exceptions
     ''' values.</remarks>
     <Serializable()> _
         Public Class DriverNotRegisteredException
-        'Exception for Helper.NET component exceptions
+        'Exception for Utilities component exceptions
         Inherits HelperException
 
         ''' <summary>
@@ -263,7 +263,49 @@ Namespace Exceptions
     ''' <remarks></remarks>
     <Serializable()> _
         Public Class RestrictedAccessException
-        'Exception for Helper.NET component exceptions
+        'Exception for Utilities component exceptions
+        Inherits HelperException
+
+        ''' <summary>
+        ''' Create a new exception with message 
+        ''' </summary>
+        ''' <param name="message">Message to be reported by the exception</param>
+        ''' <remarks></remarks>
+        Public Sub New(ByVal message As String)
+            MyBase.New(message)
+        End Sub
+
+        ''' <summary>
+        ''' Create a new exception with message 
+        ''' </summary>
+        ''' <param name="message">Message to be reported by the exception</param>
+        ''' <param name="inner">Exception to be reported as the inner exception</param>
+        ''' <remarks></remarks>
+        Public Sub New(ByVal message As String, ByVal inner As Exception)
+            MyBase.New(message, inner)
+        End Sub
+
+        ''' <summary>
+        ''' Serialise the exception
+        ''' </summary>
+        ''' <param name="info">Serialisation information</param>
+        ''' <param name="context">Serialisation context</param>
+        ''' <remarks></remarks>
+        Public Sub New( _
+                    ByVal info As System.Runtime.Serialization.SerializationInfo, _
+                    ByVal context As System.Runtime.Serialization.StreamingContext)
+            MyBase.New(info, context)
+        End Sub
+    End Class
+
+    ''' <summary>
+    ''' Exception thrown when an attempt is made to read a value that has not yet been set.
+    ''' </summary>
+    ''' <remarks></remarks>
+    ''' 
+    <Serializable()> _
+        Public Class ValueNotSetException
+        'Exception for Utilities component exceptions
         Inherits HelperException
 
         ''' <summary>

@@ -40,7 +40,7 @@ Public Class [Timer]
     '
     ' When      Who     What
     ' --------- ---     --------------------------------------------------
-    ' 03-Feb-09 pwgs    5.1.0 - refactored for Helper.NET
+    ' 03-Feb-09 pwgs    5.1.0 - refactored for Utilities
     '---------------------------------------------------------------------
 
     'Set up a timer to create the tick events. Use a FORMS timer so that it will fire on the current owner's thread

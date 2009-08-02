@@ -38,7 +38,7 @@ Public Class Util
     '
     ' When      Who     What
     ' --------- ---     --------------------------------------------------
-    ' 23-Feb-09 pwgs    5.1.0 - Refactored for Helper.NET
+    ' 23-Feb-09 pwgs    5.1.0 - Refactored for Utilities
     '---------------------------------------------------------------------
 
     Private m_StopWatch As Stopwatch = New Stopwatch 'Create a high resolution timing device
