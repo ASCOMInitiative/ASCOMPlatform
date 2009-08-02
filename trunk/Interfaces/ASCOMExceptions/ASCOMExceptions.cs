@@ -108,20 +108,23 @@ namespace ASCOM
     /// </summary>
     public class InvalidValueException : DriverException
     {
-        private const string csMessage = "{0} set - '{1}' is an invalid value.";
+        private const string csMessage = "{0} set - '{1}' is an invalid value. The valid range is: {2}.";
         private string m_strPropertyOrMethod = "Unknown";
         private string m_strValue = "Unknown";
+        private string m_strRange = "Unknown";
 
         /// <summary>
         /// Create a new exception object and identify the specified driver property or method as the source.
         /// </summary>
         /// <param name="strPropertyOrMethod">The name of the driver property/accessor or method that caused the exception</param>
         /// <param name="strValue">The invalid value that was supplied</param>
-        public InvalidValueException(string strPropertyOrMethod, string strValue)
-            : base(String.Format(csMessage, strPropertyOrMethod, strValue), ErrorCodes.InvalidValue)
+        /// <param name="strRange">The valid value range</param>
+        public InvalidValueException(string strPropertyOrMethod, string strValue, string strRange)
+            : base(String.Format(csMessage, strPropertyOrMethod, strValue, strRange), ErrorCodes.InvalidValue)
         {
             m_strPropertyOrMethod = strPropertyOrMethod;
             m_strValue = strValue;
+            m_strRange = strRange;
         }
         /// <summary>
         /// Create a new exception object and identify the specified driver property as the source,
@@ -130,11 +133,13 @@ namespace ASCOM
         /// <param name="strPropertyOrMethod">The name of the driver property/accessor or method that caused the exception</param>
         /// <param name="strValue">The invalid value that was supplied</param>
         /// <param name="inner">The caught exception</param>
-        public InvalidValueException(string strPropertyOrMethod, string strValue, System.Exception inner)
-            : base(String.Format(csMessage, strPropertyOrMethod, strValue), ErrorCodes.InvalidValue, inner)
+        /// <param name="strRange">The valid value range</param>
+        public InvalidValueException(string strPropertyOrMethod, string strValue, string strRange, System.Exception inner)
+            : base(String.Format(csMessage, strPropertyOrMethod, strValue, strRange), ErrorCodes.InvalidValue, inner)
         {
             m_strPropertyOrMethod = strPropertyOrMethod;
             m_strValue = strValue;
+            m_strRange = strRange;
         }
         /// <summary>
         /// The property/accessor or method that has an invalid value.
@@ -144,6 +149,10 @@ namespace ASCOM
         /// The invalid value.
         /// </summary>
         public string Value { get { return m_strValue; } }
+        /// <summary>
+        /// The valid range for this property.
+        /// </summary>
+        public string Range { get { return m_strRange; } }
     }
 
     /// <summary>
