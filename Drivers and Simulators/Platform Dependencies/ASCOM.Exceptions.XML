@@ -22,6 +22,22 @@
             See ASCOM.Exception.NotImplementedException.
             </remarks>
         </member>
+        <member name="F:ASCOM.ErrorCodes.InvalidValue">
+            <summary>
+            Reserved error number for reporting an invalid value.
+            </summary>
+            <remarks>
+            See ASCOM.Exception.InvalidValueException.
+            </remarks>
+        </member>
+        <member name="F:ASCOM.ErrorCodes.ValueNotSet">
+            <summary>
+            Reserved error number for reporting that a value has not been set.
+            </summary>
+            <remarks>
+            See ASCOM.Exception.ValueNotSetException.
+            </remarks>
+        </member>
         <member name="F:ASCOM.ErrorCodes.DriverBase">
             <summary>
             The starting value for driver-specific error numbers. 
@@ -70,6 +86,61 @@
         <member name="P:ASCOM.DriverException.Number">
             <summary>
             The error code for this exception (hex 80040400 - 800404FF)
+            </summary>
+        </member>
+        <member name="T:ASCOM.InvalidValueException">
+            <summary>
+            Exception to report an invalid value supplied to a driver.
+            </summary>
+        </member>
+        <member name="M:ASCOM.InvalidValueException.#ctor(System.String,System.String)">
+            <summary>
+            Create a new exception object and identify the specified driver property or method as the source.
+            </summary>
+            <param name="strPropertyOrMethod">The name of the driver property/accessor or method that caused the exception</param>
+            <param name="strValue">The invalid value that was supplied</param>
+        </member>
+        <member name="M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.Exception)">
+            <summary>
+            Create a new exception object and identify the specified driver property as the source,
+            and include an inner exception object containing a caught exception.
+            </summary>
+            <param name="strPropertyOrMethod">The name of the driver property/accessor or method that caused the exception</param>
+            <param name="strValue">The invalid value that was supplied</param>
+            <param name="inner">The caught exception</param>
+        </member>
+        <member name="P:ASCOM.InvalidValueException.PropertyOrMethod">
+            <summary>
+            The property/accessor or method that has an invalid value.
+            </summary>
+        </member>
+        <member name="P:ASCOM.InvalidValueException.Value">
+            <summary>
+            The invalid value.
+            </summary>
+        </member>
+        <member name="T:ASCOM.ValueNotSetException">
+            <summary>
+            Exception to report that no value has yet been set for this property.
+            </summary>
+        </member>
+        <member name="M:ASCOM.ValueNotSetException.#ctor(System.String)">
+            <summary>
+            Create a new exception object and identify the specified driver property or method as the source.
+            </summary>
+            <param name="strPropertyOrMethod">The name of the driver property/accessor or method that caused the exception</param>
+        </member>
+        <member name="M:ASCOM.ValueNotSetException.#ctor(System.String,System.Exception)">
+            <summary>
+            Create a new exception object and identify the specified driver property as the source,
+            and include an inner exception object containing a caught exception.
+            </summary>
+            <param name="strPropertyOrMethod">The name of the driver property/accessor or method that caused the exception</param>
+            <param name="inner">The caught exception</param>
+        </member>
+        <member name="P:ASCOM.ValueNotSetException.PropertyOrMethod">
+            <summary>
+            The property/accessor or method that has no value
             </summary>
         </member>
         <member name="T:ASCOM.NotImplementedException">
