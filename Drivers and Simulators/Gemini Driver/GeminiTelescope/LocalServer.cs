@@ -302,6 +302,7 @@ namespace ASCOM.GeminiTelescope
                 key.SetValue("AppID", m_sAppId);
                 key.Close();
                 key = null;
+
             }
             catch (Exception ex)
             {
@@ -313,6 +314,15 @@ namespace ASCOM.GeminiTelescope
             {
                 if (key != null) key.Close();
             }
+
+
+            HelperNET.Profile prof = new ASCOM.HelperNET.Profile();
+            prof.DeviceType = "Telescope";
+            prof.Register(SharedResources.TELESCOPE_PROGRAM_ID, SharedResources.TELESCOPE_DRIVER_NAME);
+            prof.DeviceType = "Focuser";
+            prof.Register(SharedResources.FOCUSER_PROGRAM_ID, SharedResources.FOCUSER_DRIVER_NAME);
+
+            MessageBox.Show("Done registering .NET driver");
 
             //
             // For each of the driver assemblies
