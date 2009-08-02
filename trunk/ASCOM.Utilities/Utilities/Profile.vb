@@ -39,7 +39,7 @@ Public Class Profile
     '
     ' When      Who     What
     ' --------- ---     --------------------------------------------------
-    ' 25-Feb-09 pwgs    5.1.0 - Refactor for Helper.NET
+    ' 25-Feb-09 pwgs    5.1.0 - Refactor for Utilities
     ' -----------------------------------------------------------------------------
 
     Private m_sDeviceType As String ' Device type specified by user

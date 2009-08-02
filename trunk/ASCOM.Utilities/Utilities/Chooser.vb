@@ -45,7 +45,7 @@ Public Class Chooser
     '
     ' When      Who     What
     ' --------- ---     --------------------------------------------------
-    ' 25-Feb-09 pwgs     5.1.0 - Refactored for Helper.NET
+    ' 25-Feb-09 pwgs     5.1.0 - Refactored for Utilities
     '---------------------------------------------------------------------
 
     Private m_frmChooser As ChooserForm

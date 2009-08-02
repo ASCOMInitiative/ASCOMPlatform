@@ -19,7 +19,7 @@ Friend Class ChooserForm
     ' WARRANTIES REGARDING THIS SOFTWARE, EXPRESS OR IMPLIED, AS TO ITS
     ' SUITABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
     '---------------------------------------------------------------------
-    ' 21-Feb-09 pwgs    5.1.0 - Refactored for Helper.NET
+    ' 21-Feb-09 pwgs    5.1.0 - Refactored for Utilities
     '---------------------------------------------------------------------
 
     Private Const ALERT_TITLE As String = "ASCOM Chooser"
