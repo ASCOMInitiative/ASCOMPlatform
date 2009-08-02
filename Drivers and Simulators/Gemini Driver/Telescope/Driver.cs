@@ -26,6 +26,170 @@ using ASCOM.Utilities;
 using ASCOM.Interface;
 using ASCOM.GeminiTelescope;
 
+/// <summary>
+/// Need to add CommandNative to standard ITelescope interface for backward compatibility with
+/// old Gemini ASCOM driver
+/// </summary>
+/// 
+[Guid("EF0C67AD-A9D3-4F7B-A635-CD2095517633")]
+[TypeLibType(4288)]
+public interface IGeminiTelescope
+{
+    [DispId(101)]
+    AlignmentModes AlignmentMode { get; }
+    [DispId(102)]
+    double Altitude { get; }
+    [DispId(103)]
+    double ApertureArea { get; }
+    [DispId(104)]
+    double ApertureDiameter { get; }
+    [DispId(105)]
+    bool AtHome { get; }
+    [DispId(106)]
+    bool AtPark { get; }
+    [DispId(107)]
+    double Azimuth { get; }
+    [DispId(108)]
+    bool CanFindHome { get; }
+    [DispId(109)]
+    bool CanPark { get; }
+    [DispId(110)]
+    bool CanPulseGuide { get; }
+    [DispId(111)]
+    bool CanSetDeclinationRate { get; }
+    [DispId(112)]
+    bool CanSetGuideRates { get; }
+    [DispId(113)]
+    bool CanSetPark { get; }
+    [DispId(115)]
+    bool CanSetPierSide { get; }
+    [DispId(114)]
+    bool CanSetRightAscensionRate { get; }
+    [DispId(116)]
+    bool CanSetTracking { get; }
+    [DispId(117)]
+    bool CanSlew { get; }
+    [DispId(118)]
+    bool CanSlewAltAz { get; }
+    [DispId(119)]
+    bool CanSlewAltAzAsync { get; }
+    [DispId(120)]
+    bool CanSlewAsync { get; }
+    [DispId(121)]
+    bool CanSync { get; }
+    [DispId(122)]
+    bool CanSyncAltAz { get; }
+    [DispId(123)]
+    bool CanUnpark { get; }
+    [DispId(124)]
+    bool Connected { get; set; }
+    [DispId(125)]
+    double Declination { get; }
+    [DispId(126)]
+    double DeclinationRate { get; set; }
+    [DispId(127)]
+    string Description { get; }
+    [DispId(128)]
+    bool DoesRefraction { get; set; }
+    [DispId(129)]
+    string DriverInfo { get; }
+    [DispId(130)]
+    string DriverVersion { get; }
+    [DispId(131)]
+    EquatorialCoordinateType EquatorialSystem { get; }
+    [DispId(132)]
+    double FocalLength { get; }
+    [DispId(133)]
+    double GuideRateDeclination { get; set; }
+    [DispId(134)]
+    double GuideRateRightAscension { get; set; }
+    [DispId(135)]
+    short InterfaceVersion { get; }
+    [DispId(136)]
+    bool IsPulseGuiding { get; }
+    [DispId(137)]
+    string Name { get; }
+    [DispId(138)]
+    double RightAscension { get; }
+    [DispId(139)]
+    double RightAscensionRate { get; set; }
+    [DispId(140)]
+    PierSide SideOfPier { get; set; }
+    [DispId(141)]
+    double SiderealTime { get; }
+    [DispId(142)]
+    double SiteElevation { get; set; }
+    [DispId(143)]
+    double SiteLatitude { get; set; }
+    [DispId(144)]
+    double SiteLongitude { get; set; }
+    [DispId(145)]
+    bool Slewing { get; }
+    [DispId(146)]
+    short SlewSettleTime { get; set; }
+    [DispId(147)]
+    double TargetDeclination { get; set; }
+    [DispId(148)]
+    double TargetRightAscension { get; set; }
+    [DispId(149)]
+    bool Tracking { get; set; }
+    [DispId(150)]
+    DriveRates TrackingRate { get; set; }
+    [DispId(151)]
+    ITrackingRates TrackingRates { get; }
+    [DispId(152)]
+    DateTime UTCDate { get; set; }
+
+    [DispId(401)]
+    void AbortSlew();
+    [DispId(402)]
+    IAxisRates AxisRates(TelescopeAxes Axis);
+    [DispId(403)]
+    bool CanMoveAxis(TelescopeAxes Axis);
+    [DispId(421)]
+    void CommandBlind(string Command, bool Raw);
+    [DispId(422)]
+    bool CommandBool(string Command, bool Raw);
+    [DispId(423)]
+    string CommandString(string Command, bool Raw);
+    [DispId(404)]
+    PierSide DestinationSideOfPier(double RightAscension, double Declination);
+    [DispId(405)]
+    void FindHome();
+    [DispId(406)]
+    void MoveAxis(TelescopeAxes Axis, double Rate);
+    [DispId(407)]
+    void Park();
+    [DispId(408)]
+    void PulseGuide(GuideDirections Direction, int Duration);
+    [DispId(409)]
+    void SetPark();
+    [DispId(410)]
+    void SetupDialog();
+    [DispId(411)]
+    void SlewToAltAz(double Azimuth, double Altitude);
+    [DispId(412)]
+    void SlewToAltAzAsync(double Azimuth, double Altitude);
+    [DispId(413)]
+    void SlewToCoordinates(double RightAscension, double Declination);
+    [DispId(414)]
+    void SlewToCoordinatesAsync(double RightAscension, double Declination);
+    [DispId(415)]
+    void SlewToTarget();
+    [DispId(416)]
+    void SlewToTargetAsync();
+    [DispId(417)]
+    void SyncToAltAz(double Azimuth, double Altitude);
+    [DispId(418)]
+    void SyncToCoordinates(double RightAscension, double Declination);
+    [DispId(419)]
+    void SyncToTarget();
+    [DispId(420)]
+    void Unpark();
+    [DispId(424)]
+    string CommandNative(string Command);
+}
+
 namespace ASCOM.GeminiTelescope
 {
     //
@@ -37,7 +201,7 @@ namespace ASCOM.GeminiTelescope
     //
     [Guid("7e30c546-1a9a-4ed4-98d7-03eb167e2c9a")]
     [ClassInterface(ClassInterfaceType.None)]
-    public class Telescope : ReferenceCountedObjectBase, ITelescope
+    public class Telescope : ReferenceCountedObjectBase, IGeminiTelescope
     {
         //
         // Driver ID and descriptive string that shows in the Chooser
@@ -228,6 +392,14 @@ namespace ASCOM.GeminiTelescope
             get { return true; }
         }
 
+        public string CommandNative(string Command)
+        {
+            string res = GeminiHardware.DoCommandResult(Command, 10000, false);
+            if (res == null) return "";
+            else
+                return res;
+        }
+
         public void CommandBlind(string Command, bool Raw)
         {
             GeminiHardware.DoCommand(Command, Raw);
@@ -241,7 +413,7 @@ namespace ASCOM.GeminiTelescope
 
         public string CommandString(string Command, bool Raw)
         {
-            return GeminiHardware.DoCommandResult(Command, 3000, Raw);
+            return GeminiHardware.DoCommandResult(Command, 10000, Raw);
         }
 
         public bool Connected
