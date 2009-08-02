@@ -54,7 +54,8 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// result produced by Gemini, or null if no result. Ending '#' is always stripped off
         /// </summary>
-        internal string m_Result { get; set; }    
+        internal string m_Result { get; set; }
+        internal bool m_Raw = false;
         
         /// <summary>
         /// 
@@ -62,7 +63,8 @@ namespace ASCOM.GeminiTelescope
         /// <param name="command">actual serial command to be sent, not including ending '#' or the native checksum</param>
         /// <param name="timeout">timeout value for this command in msec, -1 if no timeout wanted</param>
         /// <param name="wantResult">does the caller want the result returned by Gemini?</param>
-        internal CommandItem(string command, int timeout, bool wantResult)
+        /// <param name="bRaw">command is a raw string to be passed to the device unmodified</param>
+        internal CommandItem(string command, int timeout, bool wantResult, bool bRaw)
         {
             m_Command = command;
             m_ThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
@@ -72,6 +74,17 @@ namespace ASCOM.GeminiTelescope
             if (wantResult) 
                 m_WaitForResultHandle = new System.Threading.ManualResetEvent(false);
             m_Result = null;
+            m_Raw = bRaw;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command">actual serial command to be sent, not including ending '#' or the native checksum</param>
+        /// <param name="timeout">timeout value for this command in msec, -1 if no timeout wanted</param>
+        /// <param name="wantResult">does the caller want the result returned by Gemini?</param>
+        internal CommandItem(string command, int timeout, bool wantResult) : this(command,timeout,wantResult, false)
+        {
         }
 
         /// <summary>
@@ -82,8 +95,9 @@ namespace ASCOM.GeminiTelescope
         /// <param name="callback">asynchronous callback delegate to call on completion
         ///        public delegate void HardwareAsyncDelegate(string cmd, string result);
         /// </param>
-        internal CommandItem(string command, int timeout, HardwareAsyncDelegate callback) 
-            : this(command, timeout, true)
+        /// <param name="bRaw">command is a raw string to be passed to the device unmodified</param>
+        internal CommandItem(string command, int timeout, HardwareAsyncDelegate callback, bool bRaw) 
+            : this(command, timeout, true, bRaw)
         {
             m_AsyncDelegate = callback;
         }
@@ -128,7 +142,7 @@ namespace ASCOM.GeminiTelescope
         
         public static ASCOM.Utilities.Profile m_Profile;
         public static ASCOM.Utilities.Util m_Util;
-        public static ASCOM.Astrometry.Transform.Transform m_Transform;
+        public static ASCOM.Utilities.Transform m_Transform;
 
         private static Queue m_CommandQueue; //Queue used for messages to the gemini
         private static System.Threading.Thread m_BackgroundWorker; // Thread to run for communications
@@ -174,9 +188,9 @@ namespace ASCOM.GeminiTelescope
 
         private static string m_ComPort;
         private static int m_BaudRate;
-        private static ASCOM.Utilities.SerialParity m_Parity;
+        private static System.IO.Ports.Parity m_Parity;
         private static int m_DataBits;
-        private static ASCOM.Utilities.SerialStopBits m_StopBits;
+        private static System.IO.Ports.StopBits m_StopBits;
 
         public enum GeminiBootMode
         {
@@ -186,7 +200,7 @@ namespace ASCOM.GeminiTelescope
             WarmRestart = 3,
         }
 
-        private static GeminiBootMode m_BootMode = GeminiBootMode.Prompt;
+        private static GeminiBootMode m_BootMode = GeminiBootMode.Prompt; 
 
         private static ASCOM.Utilities.Serial m_SerialPort;
 
@@ -216,9 +230,9 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         static GeminiHardware()
         {
-            m_Profile = new Utilities.Profile();
+            m_Profile = new ASCOM.Utilities.Profile();
             m_Util = new ASCOM.Utilities.Util();
-            m_Transform = new ASCOM.Astrometry.Transform.Transform();
+            m_Transform = new ASCOM.Utilities.Transform();
 
             m_SerialPort = new ASCOM.Utilities.Serial();
 
@@ -276,13 +290,13 @@ namespace ASCOM.GeminiTelescope
             if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Parity", ""), out _parity))
                 _parity = 0;
 
-            m_Parity = (ASCOM.Utilities.SerialParity)_parity;
+            m_Parity = (System.IO.Ports.Parity)_parity;
 
             int _stopbits = 8;
             if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "StopBits", ""), out _stopbits))
                 _stopbits = 1;
 
-            m_StopBits = (ASCOM.Utilities.SerialStopBits)_stopbits;
+            m_StopBits = (System.IO.Ports.StopBits)_stopbits;
 
             if (m_ComPort != "")
             {
@@ -373,7 +387,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get/Set parity
         /// </summary>
-        public static ASCOM.Utilities.SerialParity Parity
+        public static System.IO.Ports.Parity Parity
         {
             get { return m_Parity; }
             set
@@ -387,7 +401,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get/Set # of stop bits
         /// </summary>
-        public static ASCOM.Utilities.SerialStopBits  StopBits
+        public static System.IO.Ports.StopBits  StopBits
         {
             get { return m_StopBits; }
             set
@@ -464,7 +478,7 @@ namespace ASCOM.GeminiTelescope
         /// // Get Altitude from Gemini with a 1 second timeout:
         /// double dAltitude = 0;
         /// 
-        /// string sAlt = GeminiHardware.DoCommandResult(":GA", 1000);
+        /// string sAlt = GeminiHardware.DoCommandResult(":GA", 1000, false);
         ///
         /// if (!string.IsNullOrEmpty(sAlt))
         ///     dAltitude = NETHelper.DMSToDegrees(sAlt);
@@ -472,10 +486,11 @@ namespace ASCOM.GeminiTelescope
         /// </example>
         /// <param name="cmd">command string to send to Gemini</param>
         /// <param name="timeout">in msecs, -1 if no timeout</param>
+        /// <param name="bRaw">command is a raw string to be passed to the device unmodified</param>
         /// <returns>result received from Gemini, or null if no result, timeout, or bad result received</returns>
-        public static string DoCommandResult(string cmd, int timeout)
+        public static string DoCommandResult(string cmd, int timeout, bool bRaw)
         {
-            return DoCommandResult(new string[] { cmd }, timeout);
+            return DoCommandResult(new string[] { cmd }, timeout, bRaw);
         }
 
 
@@ -485,26 +500,28 @@ namespace ASCOM.GeminiTelescope
         /// <example>
         /// <code>
         /// // Move to Home Position
-        /// GeminiHardware.DoCommand(":hP");
+        /// GeminiHardware.DoCommand(":hP", false);
         /// </code>
         /// </example>
         /// <param name="cmd">command string to send to Gemini</param>
-        public static void DoCommand(string cmd)
+        /// <param name="bRaw">command is a raw string to be passed to the device unmodified</param>
+        public static void DoCommand(string cmd, bool bRaw)
         {
-            DoCommand(new string[] { cmd });
+            DoCommand(new string[] { cmd }, bRaw);
         }
 
         /// <summary>
         /// Execute an array of command in sequence, no return expected.  Commands guaranteed to be executed in the sequence specified, with no interruptions from other threads.
         /// </summary>
         /// <param name="cmd">array of commands to execute, element 0 will be executed first</param>
-        public static void DoCommand(string [] cmd)
+        /// <param name="bRaw">command is a raw string to be passed to the device unmodified</param>
+        public static void DoCommand(string [] cmd, bool bRaw)
         {
             if (!m_Connected) return;
             CommandItem[] ci = new CommandItem[cmd.Length];
 
             for (int i = 0; i < ci.Length; ++i)
-                ci[i] = new CommandItem(cmd[i], -1, false);
+                ci[i] = new CommandItem(cmd[i], -1, false, bRaw);
 
             QueueCommands(ci);
         }
@@ -524,9 +541,10 @@ namespace ASCOM.GeminiTelescope
         /// <param name="callback">callback delegate will be called with the result
         ///     public delegate void HardwareAsyncDelegate(string cmd, string result);
         /// </param>
-        public static void DoCommandAsync(string cmd, int timeout, HardwareAsyncDelegate callback)
+        /// <param name="bRaw">command is a raw string to be passed to the device unmodified</param>
+        public static void DoCommandAsync(string cmd, int timeout, HardwareAsyncDelegate callback, bool bRaw)
         {
-            CommandItem ci = new CommandItem(cmd, timeout, callback);
+            CommandItem ci = new CommandItem(cmd, timeout, callback, bRaw);
             System.Threading.ThreadPool.QueueUserWorkItem(DoCommandAndWaitAsync, ci);
         }
 
@@ -544,14 +562,15 @@ namespace ASCOM.GeminiTelescope
         /// <returns>the result of the last command in the array if the sequence was successfully completed,
         /// otherwise 'null'.
         /// </returns>
-        public static string DoCommandResult(string [] cmd, int timeout)
+        /// <param name="bRaw">command is a raw string to be passed to the device unmodified</param>
+        public static string DoCommandResult(string [] cmd, int timeout, bool bRaw)
         {
             if (!m_Connected) return null;
 
             CommandItem[] ci = new CommandItem[cmd.Length];
 
             for (int i = 0; i < ci.Length; ++i)
-                ci[i] = new CommandItem(cmd[i], timeout, true); //initialize all CommandItem objects
+                ci[i] = new CommandItem(cmd[i], timeout, true, bRaw); //initialize all CommandItem objects
 
             QueueCommands(ci);  // queue them all at once
 
@@ -581,12 +600,13 @@ namespace ASCOM.GeminiTelescope
         /// <param name="callback">asynchrnous callback delegate to call when the sequence completes
         ///     public delegate void HardwareAsyncDelegate(string cmd, string result);
         /// </param>
-        public static void DoCommandAsync(string[] cmd, int timeout, HardwareAsyncDelegate callback)
+        /// <param name="bRaw">command is a raw string to be passed to the device unmodified</param>
+        public static void DoCommandAsync(string[] cmd, int timeout, HardwareAsyncDelegate callback, bool bRaw)
         {
             CommandItem[] ci = new CommandItem[cmd.Length];
 
             for (int i = 0; i < ci.Length; ++i)
-                ci[i] = new CommandItem(cmd[i], timeout, callback);
+                ci[i] = new CommandItem(cmd[i], timeout, callback, bRaw);
 
             System.Threading.ThreadPool.QueueUserWorkItem(DoCommandsAndWaitAsync, ci);
         }
@@ -659,13 +679,13 @@ namespace ASCOM.GeminiTelescope
                 {
                     GetProfileSettings();
                     m_SerialPort.PortName = m_ComPort;
-                    m_SerialPort.Speed = (ASCOM.Utilities.SerialSpeed)m_BaudRate;
+                    m_SerialPort.Speed = (ASCOM.Utilities.Serial.PortSpeed)m_BaudRate;
                     m_SerialPort.Parity = m_Parity;
                     m_SerialPort.DataBits = m_DataBits;
                     m_SerialPort.StopBits = m_StopBits;
 
                     m_SerialPort.DTREnable = true; //Set the DTR line high
-                    m_SerialPort.Handshake = ASCOM.Utilities.SerialHandshake.None; //Don't use hardware or software flow control on the serial line
+                    m_SerialPort.Handshake = System.IO.Ports.Handshake.None; //Don't use hardware or software flow control on the serial line
 
 
                     try
@@ -804,6 +824,12 @@ namespace ASCOM.GeminiTelescope
 
                     CommandItem command = null;
 
+                    // [pk:2009-08-03]
+                    // To do: can optimize serial comm when multiple items are in the queue
+                    // by generating a single string for transmission for all the commands. 
+                    // Requires proper handling and disposal of wait events after the
+                    // transmission..
+
                     lock (m_CommandQueue)
                     {
                         if (m_CommandQueue.Count > 0)
@@ -815,13 +841,17 @@ namespace ASCOM.GeminiTelescope
                         ewh = command.WaitObject;
                         command.m_Result = null;
 
-                        string serial_cmd = string.Empty;
+                        string serial_cmd = command.m_Command;
 
-                        // native Gemini command?
-                        if (command.m_Command.StartsWith("<") || command.m_Command.StartsWith(">"))
-                            serial_cmd = CompleteNativeCommand(command.m_Command);
-                        else
-                            serial_cmd = CompleteStandardCommand(command.m_Command);
+                        // raw commands are passed to hardware unmodified:
+                        if (!command.m_Raw)
+                        {
+                            // native Gemini command?
+                            if (command.m_Command.StartsWith("<") || command.m_Command.StartsWith(">"))
+                                serial_cmd = CompleteNativeCommand(command.m_Command);
+                            else
+                                serial_cmd = CompleteStandardCommand(command.m_Command);
+                        }
 
                         m_SerialPort.ClearBuffers(); //clear all received data
                         m_SerialPort.Transmit(serial_cmd);
@@ -1205,7 +1235,7 @@ namespace ASCOM.GeminiTelescope
         {         
             m_Latitude = Latitude;
             string latitudedddmm = m_Util.DegreesToDM(Latitude, "*");
-            DoCommand(":St" + latitudedddmm);
+            DoCommand(":St" + latitudedddmm, false);
         }
 
         /// <summary>
@@ -1216,7 +1246,7 @@ namespace ASCOM.GeminiTelescope
         {
             m_Longitude = Longitude;
             string longitudedddmm = m_Util.DegreesToDM(Longitude, "*");
-            DoCommand(":Sg" + longitudedddmm);
+            DoCommand(":Sg" + longitudedddmm, false);
         }
 
         /// <summary>
@@ -1263,7 +1293,7 @@ namespace ASCOM.GeminiTelescope
             {
                 cmd[2] = ":CM";
             }
-            DoCommand(cmd);
+            DoCommand(cmd, false);
         }
 
 
@@ -1281,7 +1311,7 @@ namespace ASCOM.GeminiTelescope
             {
                 cmd[2] = ":CM";
             }
-            DoCommand(cmd);
+            DoCommand(cmd, false);
         }
 
 
@@ -1292,7 +1322,7 @@ namespace ASCOM.GeminiTelescope
         {
             string[] cmd = { ":Sr" + m_Util.HoursToHMS(TargetRightAscension, ":", ":", ""), ":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ""), ":MS" };
            
-            DoCommandResult(cmd,2000);
+            DoCommandResult(cmd,2000, false);
         }
         /// <summary>
         /// Slews the mount using Ra and Dec
@@ -1301,7 +1331,7 @@ namespace ASCOM.GeminiTelescope
         {
             string[] cmd = { ":Sr" + m_Util.HoursToHMS(TargetRightAscension, ":", ":", ""), ":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ""), ":MS" };
 
-            DoCommand(cmd);
+            DoCommand(cmd, false);
         }
 
         /// <summary>
@@ -1318,7 +1348,7 @@ namespace ASCOM.GeminiTelescope
             {
                 cmd[2] = ":CM";
             }
-            DoCommand(cmd);
+            DoCommand(cmd, false);
         }
 
         /// <summary>
@@ -1327,7 +1357,7 @@ namespace ASCOM.GeminiTelescope
         public static void SlewHorizon()
         {
             string[] cmd = { ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ""), ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ""), ":MA" };
-            DoCommandResult(cmd, 2000);
+            DoCommandResult(cmd, 2000, false);
         }
         /// <summary>
         /// Slews the mount using Alt and Az
@@ -1335,7 +1365,7 @@ namespace ASCOM.GeminiTelescope
         public static void SlewHorizonAsync()
         {
             string[] cmd = { ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ""), ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ""), ":MA" };
-            DoCommand(cmd);
+            DoCommand(cmd, false);
         }
         #endregion
 
