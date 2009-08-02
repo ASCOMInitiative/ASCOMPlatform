@@ -31,7 +31,21 @@ namespace ASCOM
 		/// See ASCOM.Exception.NotImplementedException.
 		/// </remarks>
 		public static int NotImplemented = unchecked((int)0x80040400);
-		/// <summary>
+        /// <summary>
+        /// Reserved error number for reporting an invalid value.
+        /// </summary>
+        /// <remarks>
+        /// See ASCOM.Exception.InvalidValueException.
+        /// </remarks>
+        public static int InvalidValue = unchecked((int)0x80040401);
+        /// <summary>
+        /// Reserved error number for reporting that a value has not been set.
+        /// </summary>
+        /// <remarks>
+        /// See ASCOM.Exception.ValueNotSetException.
+        /// </remarks>
+        public static int ValueNotSet = unchecked((int)0x80040402);
+        /// <summary>
 		/// The starting value for driver-specific error numbers. 
 		/// </summary>
 		/// <remarks>
@@ -89,7 +103,82 @@ namespace ASCOM
 		public int Number { get { return this.HResult; } }
 
 	}
+    /// <summary>
+    /// Exception to report an invalid value supplied to a driver.
+    /// </summary>
+    public class InvalidValueException : DriverException
+    {
+        private const string csMessage = "{0} set - '{1}' is an invalid value.";
+        private string m_strPropertyOrMethod = "Unknown";
+        private string m_strValue = "Unknown";
 
+        /// <summary>
+        /// Create a new exception object and identify the specified driver property or method as the source.
+        /// </summary>
+        /// <param name="strPropertyOrMethod">The name of the driver property/accessor or method that caused the exception</param>
+        /// <param name="strValue">The invalid value that was supplied</param>
+        public InvalidValueException(string strPropertyOrMethod, string strValue)
+            : base(String.Format(csMessage, strPropertyOrMethod, strValue), ErrorCodes.InvalidValue)
+        {
+            m_strPropertyOrMethod = strPropertyOrMethod;
+            m_strValue = strValue;
+        }
+        /// <summary>
+        /// Create a new exception object and identify the specified driver property as the source,
+        /// and include an inner exception object containing a caught exception.
+        /// </summary>
+        /// <param name="strPropertyOrMethod">The name of the driver property/accessor or method that caused the exception</param>
+        /// <param name="strValue">The invalid value that was supplied</param>
+        /// <param name="inner">The caught exception</param>
+        public InvalidValueException(string strPropertyOrMethod, string strValue, System.Exception inner)
+            : base(String.Format(csMessage, strPropertyOrMethod, strValue), ErrorCodes.InvalidValue, inner)
+        {
+            m_strPropertyOrMethod = strPropertyOrMethod;
+            m_strValue = strValue;
+        }
+        /// <summary>
+        /// The property/accessor or method that has an invalid value.
+        /// </summary>
+        public string PropertyOrMethod { get { return m_strPropertyOrMethod; } }
+        /// <summary>
+        /// The invalid value.
+        /// </summary>
+        public string Value { get { return m_strValue; } }
+    }
+
+    /// <summary>
+    /// Exception to report that no value has yet been set for this property.
+    /// </summary>
+    public class ValueNotSetException : DriverException
+    {
+        private const string csMessage = "{0} get - no value has been set.";
+        private string m_strPropertyOrMethod = "Unknown";
+
+        /// <summary>
+        /// Create a new exception object and identify the specified driver property or method as the source.
+        /// </summary>
+        /// <param name="strPropertyOrMethod">The name of the driver property/accessor or method that caused the exception</param>
+        public ValueNotSetException(string strPropertyOrMethod)
+            : base(String.Format(csMessage, strPropertyOrMethod), ErrorCodes.ValueNotSet)
+        {
+            m_strPropertyOrMethod = strPropertyOrMethod;
+        }
+        /// <summary>
+        /// Create a new exception object and identify the specified driver property as the source,
+        /// and include an inner exception object containing a caught exception.
+        /// </summary>
+        /// <param name="strPropertyOrMethod">The name of the driver property/accessor or method that caused the exception</param>
+        /// <param name="inner">The caught exception</param>
+        public ValueNotSetException(string strPropertyOrMethod, System.Exception inner)
+            : base(String.Format(csMessage, strPropertyOrMethod), ErrorCodes.ValueNotSet, inner)
+        {
+            m_strPropertyOrMethod = strPropertyOrMethod;
+        }
+        /// <summary>
+        /// The property/accessor or method that has no value
+        /// </summary>
+        public string PropertyOrMethod { get { return m_strPropertyOrMethod; } }
+    }
 	/// <summary>
 	/// All properties and methods defined by the relevant ASCOM standard interface must exist in each driver. However,
 	/// those properties and methods do not all have to be <i>implemented</i>. This exception is a base class for
