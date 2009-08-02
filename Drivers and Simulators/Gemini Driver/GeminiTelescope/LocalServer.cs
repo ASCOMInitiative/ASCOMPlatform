@@ -322,8 +322,6 @@ namespace ASCOM.GeminiTelescope
             prof.DeviceType = "Focuser";
             prof.Register(SharedResources.FOCUSER_PROGRAM_ID, SharedResources.FOCUSER_DRIVER_NAME);
 
-            MessageBox.Show("Done registering .NET driver");
-
             //
             // For each of the driver assemblies
             //
