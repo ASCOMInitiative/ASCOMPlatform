@@ -49,7 +49,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <NoWarn>42017,42018,42019,42032,42036</NoWarn>
     <DebugType>full</DebugType>
-    <RegisterForComInterop>true</RegisterForComInterop>
+    <RegisterForComInterop>false</RegisterForComInterop>
     <WarningsAsErrors>41999,42016,42020,42021,42022</WarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -63,7 +63,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <NoWarn>42017,42018,42019,42032,42036</NoWarn>
     <DebugType>Full</DebugType>
-    <RegisterForComInterop>true</RegisterForComInterop>
+    <RegisterForComInterop>false</RegisterForComInterop>
     <Optimize>true</Optimize>
     <WarningsAsErrors>41999,42016,42020,42021,42022</WarningsAsErrors>
   </PropertyGroup>
