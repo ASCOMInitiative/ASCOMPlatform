@@ -100,10 +100,9 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ASCOM.Utilities, Version=5.3.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+    <Reference Include="ASCOM.Interfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\Interfaces\Master Interfaces\ASCOM.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -182,22 +181,15 @@
     <ProjectReference Include="..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\ASCOM.SettingsProvider.csproj">
       <Project>{4FFFD202-81D4-4549-880B-09B640D72C1D}</Project>
       <Name>ASCOM.SettingsProvider</Name>
-      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ASCOM.Utilities\Utilities\Utilities.vbproj">
+      <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
+      <Name>Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ClientToolbox\ASCOM.DriverAccess.csproj">
       <Project>{35194767-5585-45C3-803F-1BCE74CEAAFC}</Project>
       <Name>ASCOM.DriverAccess</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="ASCOM.Interface">
-      <Guid>{76618F90-032F-4424-A680-802467A55742}</Guid>
-      <VersionMajor>5</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
