@@ -22,7 +22,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 
 using ASCOM;
-using ASCOM.HelperNET;
+using ASCOM.Utilities;
 using ASCOM.Interface;
 using ASCOM.GeminiTelescope;
 
@@ -41,7 +41,7 @@ namespace ASCOM.GeminiTelescope
     {
 
         bool m_Connected = false;
-        private ASCOM.HelperNET.Util m_Util;
+        private ASCOM.Utilities.Util m_Util;
 
         
 
@@ -67,8 +67,8 @@ namespace ASCOM.GeminiTelescope
         //
         public Focuser()
         {
-            m_Util = new ASCOM.HelperNET.Util();
-            tmrFocus.Tick += new ASCOM.HelperNET.Interfaces.ITimer.TickEventHandler(tmrFocus_Tick);
+            m_Util = new ASCOM.Utilities.Util();
+            tmrFocus.Tick += new ASCOM.Utilities.Interfaces.ITimer.TickEventHandler(tmrFocus_Tick);
         }
 
         /// <summary>

@@ -316,7 +316,7 @@ namespace ASCOM.GeminiTelescope
             }
 
 
-            HelperNET.Profile prof = new ASCOM.HelperNET.Profile();
+            Utilities.Profile prof = new ASCOM.Utilities.Profile();
             prof.DeviceType = "Telescope";
             prof.Register(SharedResources.TELESCOPE_PROGRAM_ID, SharedResources.TELESCOPE_DRIVER_NAME);
             prof.DeviceType = "Focuser";
@@ -377,7 +377,7 @@ namespace ASCOM.GeminiTelescope
                     attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyProductAttribute));
                     attr = Attribute.GetCustomAttribute(assy, typeof(ServedClassNameAttribute));
                     string chooserName = ((ServedClassNameAttribute)attr).ServedClassName;
-                    ASCOM.HelperNET.Profile P = new ASCOM.HelperNET.Profile();
+                    ASCOM.Utilities.Profile P = new ASCOM.Utilities.Profile();
                     P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
                     P.Register(progid, chooserName);
                     try										// In case Helper becomes native .NET
@@ -447,7 +447,7 @@ namespace ASCOM.GeminiTelescope
                     //
                     // ASCOM
                     //
-                    ASCOM.HelperNET.Profile P = new ASCOM.HelperNET.Profile();
+                    ASCOM.Utilities.Profile P = new ASCOM.Utilities.Profile();
                     P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
                     P.Unregister(progid);
                     try										// In case Helper becomes native .NET
