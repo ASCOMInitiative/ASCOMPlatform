@@ -22,7 +22,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 
 using ASCOM;
-using ASCOM.HelperNET;
+using ASCOM.Utilities;
 using ASCOM.Interface;
 using ASCOM.GeminiTelescope;
 
@@ -271,7 +271,7 @@ namespace ASCOM.GeminiTelescope
             set 
             {
                 int val = (int)value;
-                if (val < 0 || val > 65535) throw new HelperNET.Exceptions.InvalidValueException("DeclinationRate");
+                if (val < 0 || val > 65535) throw new Utilities.Exceptions.InvalidValueException("DeclinationRate");
                 string cmd = ">412:" + ((int)(value)).ToString();
                 GeminiHardware.DoCommand(cmd);
             }
@@ -371,7 +371,7 @@ namespace ASCOM.GeminiTelescope
             {
                 double val = value/(SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0) ;
 
-                if (val < 0.2 || val > 0.8) throw new HelperNET.Exceptions.InvalidValueException("GuideRate out of range 0.2-0.8x Sidereal, value: " + val.ToString("0.0"));
+                if (val < 0.2 || val > 0.8) throw new Utilities.Exceptions.InvalidValueException("GuideRate out of range 0.2-0.8x Sidereal, value: " + val.ToString("0.0"));
                 string cmd = ">150:" + val.ToString("0.0");    //internationalization issues?
                 GeminiHardware.DoCommand(cmd);                
             }
@@ -488,7 +488,7 @@ namespace ASCOM.GeminiTelescope
             {
                 if (value < -300 || value > 10000)
                 {
-                    throw new HelperNET.Exceptions.InvalidValueException("SiteElevation out of range: " + value.ToString());
+                    throw new Utilities.Exceptions.InvalidValueException("SiteElevation out of range: " + value.ToString());
                 }
                 GeminiHardware.Elevation = value; 
             }
@@ -502,7 +502,7 @@ namespace ASCOM.GeminiTelescope
             {
                 if (value < -90 || value > 90)
                 {
-                    throw new HelperNET.Exceptions.InvalidValueException("SiteLatitude out of range: "  + value.ToString());
+                    throw new Utilities.Exceptions.InvalidValueException("SiteLatitude out of range: "  + value.ToString());
                 }
                 GeminiHardware.SetLatitude(value);
 
@@ -517,7 +517,7 @@ namespace ASCOM.GeminiTelescope
             {
                 if (value < -180 || value > 180)
                 {
-                    throw new HelperNET.Exceptions.InvalidValueException("SiteLongitude out of range: "+ value.ToString());
+                    throw new Utilities.Exceptions.InvalidValueException("SiteLongitude out of range: "+ value.ToString());
                 }
                 GeminiHardware.SetLongitude(value);
 
@@ -623,14 +623,14 @@ namespace ASCOM.GeminiTelescope
             get { 
                 double val = GeminiHardware.TargetDeclination;
                 if (val == SharedResources.INVALID_DOUBLE)
-                    throw new HelperNET.Exceptions.ValueNotSetException("TargetDeclination is not set");
+                    throw new Utilities.Exceptions.ValueNotSetException("TargetDeclination is not set");
                 return val;
             }
             set
             {
                 if (value < -90 || value > 90)
                 {
-                    throw new HelperNET.Exceptions.InvalidValueException("TargetDeclination out of range: " + value.ToString());
+                    throw new Utilities.Exceptions.InvalidValueException("TargetDeclination out of range: " + value.ToString());
                 }
                 GeminiHardware.TargetDeclination = value;
             }
@@ -642,14 +642,14 @@ namespace ASCOM.GeminiTelescope
             get { 
                 double val = GeminiHardware.TargetRightAscension;
                 if (val == SharedResources.INVALID_DOUBLE)
-                    throw new HelperNET.Exceptions.ValueNotSetException("TargetRightAscension is not set");
+                    throw new Utilities.Exceptions.ValueNotSetException("TargetRightAscension is not set");
                 return val;            
             }
             set 
             {
                 if (value < 0 || value > 24)
                 {
-                    throw new HelperNET.Exceptions.InvalidValueException("TargetRightAscension is not set");
+                    throw new Utilities.Exceptions.InvalidValueException("TargetRightAscension is not set");
                 }
                 GeminiHardware.TargetRightAscension=value; 
             }

@@ -126,9 +126,9 @@ namespace ASCOM.GeminiTelescope
     public static class GeminiHardware
     {
         
-        public static ASCOM.HelperNET.Profile m_Profile;
-        public static ASCOM.HelperNET.Util m_Util;
-        public static ASCOM.HelperNET.Transform m_Transform;
+        public static ASCOM.Utilities.Profile m_Profile;
+        public static ASCOM.Utilities.Util m_Util;
+        public static ASCOM.Astrometry.Transform.Transform m_Transform;
 
         private static Queue m_CommandQueue; //Queue used for messages to the gemini
         private static System.Threading.Thread m_BackgroundWorker; // Thread to run for communications
@@ -174,9 +174,9 @@ namespace ASCOM.GeminiTelescope
 
         private static string m_ComPort;
         private static int m_BaudRate;
-        private static System.IO.Ports.Parity m_Parity;
+        private static ASCOM.Utilities.SerialParity m_Parity;
         private static int m_DataBits;
-        private static System.IO.Ports.StopBits m_StopBits;
+        private static ASCOM.Utilities.SerialStopBits m_StopBits;
 
         public enum GeminiBootMode
         {
@@ -186,9 +186,9 @@ namespace ASCOM.GeminiTelescope
             WarmRestart = 3,
         }
 
-        private static GeminiBootMode m_BootMode = GeminiBootMode.Prompt; 
+        private static GeminiBootMode m_BootMode = GeminiBootMode.Prompt;
 
-        private static ASCOM.HelperNET.Serial m_SerialPort;
+        private static ASCOM.Utilities.Serial m_SerialPort;
 
         private static bool m_Connected = false; //Keep track of the connection status of the hardware
 
@@ -216,11 +216,11 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         static GeminiHardware()
         {
-            m_Profile = new HelperNET.Profile();
-            m_Util = new ASCOM.HelperNET.Util();
-            m_Transform = new ASCOM.HelperNET.Transform();
+            m_Profile = new Utilities.Profile();
+            m_Util = new ASCOM.Utilities.Util();
+            m_Transform = new ASCOM.Astrometry.Transform.Transform();
 
-            m_SerialPort = new ASCOM.HelperNET.Serial();
+            m_SerialPort = new ASCOM.Utilities.Serial();
 
             m_CommandQueue = new Queue();
             m_Clients = 0;
@@ -276,13 +276,13 @@ namespace ASCOM.GeminiTelescope
             if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Parity", ""), out _parity))
                 _parity = 0;
 
-            m_Parity = (System.IO.Ports.Parity)_parity;
+            m_Parity = (ASCOM.Utilities.SerialParity)_parity;
 
             int _stopbits = 8;
             if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "StopBits", ""), out _stopbits))
                 _stopbits = 1;
 
-            m_StopBits = (System.IO.Ports.StopBits)_stopbits;
+            m_StopBits = (ASCOM.Utilities.SerialStopBits)_stopbits;
 
             if (m_ComPort != "")
             {
@@ -373,7 +373,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get/Set parity
         /// </summary>
-        public static System.IO.Ports.Parity Parity
+        public static ASCOM.Utilities.SerialParity Parity
         {
             get { return m_Parity; }
             set
@@ -387,7 +387,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get/Set # of stop bits
         /// </summary>
-        public static System.IO.Ports.StopBits  StopBits
+        public static ASCOM.Utilities.SerialStopBits  StopBits
         {
             get { return m_StopBits; }
             set
@@ -659,13 +659,13 @@ namespace ASCOM.GeminiTelescope
                 {
                     GetProfileSettings();
                     m_SerialPort.PortName = m_ComPort;
-                    m_SerialPort.Speed = (ASCOM.HelperNET.Serial.PortSpeed)m_BaudRate;
+                    m_SerialPort.Speed = (ASCOM.Utilities.SerialSpeed)m_BaudRate;
                     m_SerialPort.Parity = m_Parity;
                     m_SerialPort.DataBits = m_DataBits;
                     m_SerialPort.StopBits = m_StopBits;
 
                     m_SerialPort.DTREnable = true; //Set the DTR line high
-                    m_SerialPort.Handshake = System.IO.Ports.Handshake.None; //Don't use hardware or software flow control on the serial line
+                    m_SerialPort.Handshake = ASCOM.Utilities.SerialHandshake.None; //Don't use hardware or software flow control on the serial line
 
 
                     try
