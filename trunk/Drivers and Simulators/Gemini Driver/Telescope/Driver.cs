@@ -75,7 +75,7 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.AtHome || GeminiHardware.AtPark)              
                 throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
-            GeminiHardware.DoCommand(":Q");
+            GeminiHardware.DoCommand(":Q", false);
         }
 
         public AlignmentModes AlignmentMode
@@ -230,7 +230,7 @@ namespace ASCOM.GeminiTelescope
 
         public void CommandBlind(string Command, bool Raw)
         {
-            GeminiHardware.DoCommand(Command);
+            GeminiHardware.DoCommand(Command, Raw);
         }
 
         public bool CommandBool(string Command, bool Raw)
@@ -241,7 +241,7 @@ namespace ASCOM.GeminiTelescope
 
         public string CommandString(string Command, bool Raw)
         {
-            return GeminiHardware.DoCommandResult(Command, 2000);
+            return GeminiHardware.DoCommandResult(Command, 3000, Raw);
         }
 
         public bool Connected
@@ -263,7 +263,7 @@ namespace ASCOM.GeminiTelescope
         {
             get 
             { 
-                string rate = GeminiHardware.DoCommandResult("<412:", 2000);
+                string rate = GeminiHardware.DoCommandResult("<412:", 2000, false);
                 if (rate != null) return int.Parse(rate);
                 throw new TimeoutException("DeclinationRate");
             }
@@ -273,7 +273,7 @@ namespace ASCOM.GeminiTelescope
                 int val = (int)value;
                 if (val < 0 || val > 65535) throw new Utilities.Exceptions.InvalidValueException("DeclinationRate");
                 string cmd = ">412:" + ((int)(value)).ToString();
-                GeminiHardware.DoCommand(cmd);
+                GeminiHardware.DoCommand(cmd, false);
             }
         }
 
@@ -326,7 +326,7 @@ namespace ASCOM.GeminiTelescope
 
             // 0 => didn't park.
             if (GeminiHardware.ParkState == "0") throw new DriverException("Failed to " + where, (int)SharedResources.ERROR_BASE);
-            GeminiHardware.DoCommand(":hN");
+            GeminiHardware.DoCommand(":hN", false);
         }
 
         public void FindHome()
@@ -336,7 +336,7 @@ namespace ASCOM.GeminiTelescope
             if (GeminiHardware.AtPark)
                 throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
-            GeminiHardware.DoCommand(":hP");
+            GeminiHardware.DoCommand(":hP", false);
             WaitForHomeOrPark("Home");
 
         }
@@ -363,7 +363,7 @@ namespace ASCOM.GeminiTelescope
         public double GuideRateRightAscension
         {         
             get {
-                string result = GeminiHardware.DoCommandResult("<150:", 2000);
+                string result = GeminiHardware.DoCommandResult("<150:", 2000, false);
                 if (result == null) throw new TimeoutException("GuideRateRightAscention");
                 return double.Parse(result) * SharedResources.EARTH_ANG_ROT_DEG_MIN/60.0;    //may need to process this differently if int'l settings have ',' as decimal point.!!!
             }
@@ -373,7 +373,7 @@ namespace ASCOM.GeminiTelescope
 
                 if (val < 0.2 || val > 0.8) throw new Utilities.Exceptions.InvalidValueException("GuideRate out of range 0.2-0.8x Sidereal, value: " + val.ToString("0.0"));
                 string cmd = ">150:" + val.ToString("0.0");    //internationalization issues?
-                GeminiHardware.DoCommand(cmd);                
+                GeminiHardware.DoCommand(cmd, false);                
             }
         }
 
@@ -407,7 +407,7 @@ namespace ASCOM.GeminiTelescope
 
            // string[] cmd = { ":hP", ":hN" };
            // GeminiHardware.DoCommand(cmd);
-            GeminiHardware.DoCommand(":hC");
+            GeminiHardware.DoCommand(":hC", false);
 
             WaitForHomeOrPark("Park");
 
@@ -470,7 +470,7 @@ namespace ASCOM.GeminiTelescope
             {
                 if ((value == PierSide.pierEast && GeminiHardware.SideOfPier == "W") || (value == PierSide.pierWest && GeminiHardware.SideOfPier == "E"))
                 {
-                    GeminiHardware.DoCommand(":Mf");
+                    GeminiHardware.DoCommand(":Mf", false);
                 }
             }
         }
@@ -662,11 +662,11 @@ namespace ASCOM.GeminiTelescope
             {
                 if (value && !GeminiHardware.Tracking)
                 {
-                    GeminiHardware.DoCommand(":hW");
+                    GeminiHardware.DoCommand(":hW", false);
                 }
                 if (!value && !GeminiHardware.Tracking)
                 {
-                    GeminiHardware.DoCommand(":hN");
+                    GeminiHardware.DoCommand(":hN", false);
                 }
             }
         }
@@ -692,7 +692,7 @@ namespace ASCOM.GeminiTelescope
 
         public void Unpark()
         {
-            GeminiHardware.DoCommand(":hW");
+            GeminiHardware.DoCommand(":hW", false);
         }
 
         #endregion
