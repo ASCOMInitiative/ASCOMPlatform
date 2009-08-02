@@ -126,8 +126,9 @@ namespace ASCOM.GeminiTelescope
     public static class GeminiHardware
     {
         
-        private static ASCOM.HelperNET.Profile m_Profile;
-        private static ASCOM.HelperNET.Util m_Util;
+        public static ASCOM.HelperNET.Profile m_Profile;
+        public static ASCOM.HelperNET.Util m_Util;
+        public static ASCOM.HelperNET.Transform m_Transform;
 
         private static Queue m_CommandQueue; //Queue used for messages to the gemini
         private static System.Threading.Thread m_BackgroundWorker; // Thread to run for communications
@@ -140,7 +141,9 @@ namespace ASCOM.GeminiTelescope
         private static double m_Latitude;
         private static double m_Longitude;
         private static double m_Elevation;
-        
+
+        private static int m_UTCOffset;
+
         private static double m_RightAscension;
         private static double m_Declination;
         private static double m_Altitude;
@@ -215,6 +218,7 @@ namespace ASCOM.GeminiTelescope
         {
             m_Profile = new HelperNET.Profile();
             m_Util = new ASCOM.HelperNET.Util();
+            m_Transform = new ASCOM.HelperNET.Transform();
 
             m_SerialPort = new ASCOM.HelperNET.Serial();
 
@@ -433,6 +437,7 @@ namespace ASCOM.GeminiTelescope
                 m_Latitude = value;
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Latitude", value.ToString());
                 if (m_Latitude < 0) { m_SouthernHemisphere = true; }
+                m_Transform.SiteLatitude = m_Latitude;
             }
         }
 
@@ -447,6 +452,7 @@ namespace ASCOM.GeminiTelescope
                 m_Profile.DeviceType = "Telescope";
                 m_Longitude = value;
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Longitude", value.ToString());
+                m_Transform.SiteLongitude = m_Longitude;
             }
         }
 
@@ -681,7 +687,7 @@ namespace ASCOM.GeminiTelescope
                     if (StartGemini())
                     {
                         m_Connected = true;
-                        UpdatePolledVariables();
+                        UpdateInitialVariables();
 
                         m_BackgroundWorker = new System.Threading.Thread(BackgroundWorker_DoWork);
                         m_BackgroundWorker.Start();
@@ -869,6 +875,39 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// update all variable sthat are polled on an interval
         /// </summary>
+        private static void UpdateInitialVariables()
+        {
+            UpdatePolledVariables();
+            CommandItem command;
+
+            //Get RA and DEC etc
+            m_SerialPort.ClearBuffers(); //clear all received data
+            //longitude, latitude, UTC offset
+            m_SerialPort.Transmit(":Gg#:Gt#:GG#");
+
+            command = new CommandItem(":Gg", 2000, true);
+            string longitude = GetCommandResult(command);
+
+            command = new CommandItem(":Gt", 2000, true);
+            string latitude = GetCommandResult(command);
+
+            command = new CommandItem(":GG", 2000, true);
+            string UTC_Offset = GetCommandResult(command);
+
+
+            if (longitude != null) Longitude = m_Util.DMSToDegrees(longitude);
+            if (latitude != null) Latitude = m_Util.DMSToDegrees(latitude);
+            if (UTC_Offset != null) int.TryParse(UTC_Offset, out m_UTCOffset);
+           
+
+            m_LastUpdate = System.DateTime.Now;
+        }
+
+
+
+        /// <summary>
+        /// update all variable sthat are polled on an interval
+        /// </summary>
         private static void UpdatePolledVariables()
         {
             CommandItem command;
@@ -901,7 +940,7 @@ namespace ASCOM.GeminiTelescope
             command = new CommandItem(":h?", m_QueryInterval, true);
             string HOME = GetCommandResult(command);
 
-            if (RA != null) m_RightAscension = m_Util.HMSToDegrees(RA);
+            if (RA != null) m_RightAscension = m_Util.HMSToHours(RA);
 
             if (DEC != null) m_Declination = m_Util.DMSToDegrees(DEC);
 
@@ -914,7 +953,7 @@ namespace ASCOM.GeminiTelescope
             else
                 m_Tracking = true;
 
-            if (ST != null) m_SiderealTime = m_Util.HMSToHours(ST);
+            if (ST != null) m_SiderealTime = m_Util.HMSToDegrees(ST);
 
             if (SOP != null) m_SideOfPier = SOP;
 
@@ -1215,7 +1254,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static void SyncEquatorial()
         {
-            string[] cmd = {":Sr" + m_Util.DegreesToHMS(TargetRightAscension,":",":",""),":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ""),""};
+            string[] cmd = {":Sr" + m_Util.HoursToHMS(TargetRightAscension,":",":",""),":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ""),""};
             if (m_AdditionalAlign)
             {
                 cmd[2] = ":Cm";
@@ -1251,7 +1290,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static void SlewEquatorial()
         {
-            string[] cmd = { ":Sr" + m_Util.DegreesToHMS(TargetRightAscension, ":", ":", ""), ":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ""), ":MS" };
+            string[] cmd = { ":Sr" + m_Util.HoursToHMS(TargetRightAscension, ":", ":", ""), ":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ""), ":MS" };
            
             DoCommandResult(cmd,2000);
         }
@@ -1260,7 +1299,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static void SlewEquatorialAsync()
         {
-            string[] cmd = { ":Sr" + m_Util.DegreesToHMS(TargetRightAscension, ":", ":", ""), ":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ""), ":MS" };
+            string[] cmd = { ":Sr" + m_Util.HoursToHMS(TargetRightAscension, ":", ":", ""), ":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ""), ":MS" };
 
             DoCommand(cmd);
         }
@@ -1295,7 +1334,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static void SlewHorizonAsync()
         {
-            string[] cmd = { ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ""), ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ""), ":MA" };
+            string[] cmd = { ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ""), ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ""), ":MA" };
             DoCommand(cmd);
         }
         #endregion

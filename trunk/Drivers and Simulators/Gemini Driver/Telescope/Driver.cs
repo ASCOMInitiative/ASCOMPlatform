@@ -312,10 +312,33 @@ namespace ASCOM.GeminiTelescope
             get { return EquatorialCoordinateType.equJ2000; }
         }
 
+
+        private void WaitForHomeOrPark(string where)
+        {
+            int count = 0;
+
+            // wait for parking move to begin, wait for a maximum of 16*250ms = 4 seconds
+            while (GeminiHardware.ParkState != "2" && count < 16) { System.Threading.Thread.Sleep(250); count++; }
+            if (count == 16) throw new TimeoutException(where + " operation didn't start");
+
+            // now wait for it to end
+            while (GeminiHardware.ParkState == "2") { System.Threading.Thread.Sleep(1000); };
+
+            // 0 => didn't park.
+            if (GeminiHardware.ParkState == "0") throw new DriverException("Failed to " + where, (int)SharedResources.ERROR_BASE);
+            GeminiHardware.DoCommand(":hN");
+        }
+
         public void FindHome()
         {
-            
+            if (GeminiHardware.AtHome) return;
+
+            if (GeminiHardware.AtPark)
+                throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+
             GeminiHardware.DoCommand(":hP");
+            WaitForHomeOrPark("Home");
+
         }
 
         public double FocalLength
@@ -349,7 +372,7 @@ namespace ASCOM.GeminiTelescope
                 double val = value/(SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0) ;
 
                 if (val < 0.2 || val > 0.8) throw new HelperNET.Exceptions.InvalidValueException("GuideRate out of range 0.2-0.8x Sidereal, value: " + val.ToString("0.0"));
-                string cmd = ">150:" + value.ToString("0.0");    //internationalization issues?
+                string cmd = ">150:" + val.ToString("0.0");    //internationalization issues?
                 GeminiHardware.DoCommand(cmd);                
             }
         }
@@ -380,21 +403,14 @@ namespace ASCOM.GeminiTelescope
 
         public void Park()
         {
+            if (GeminiHardware.AtPark) return;  // already there
+
            // string[] cmd = { ":hP", ":hN" };
            // GeminiHardware.DoCommand(cmd);
-            GeminiHardware.DoCommand(":hP");
+            GeminiHardware.DoCommand(":hC");
 
-            int count = 0;
+            WaitForHomeOrPark("Park");
 
-            // wait for parking move to begin, wait for a maximum of 16*250ms = 4 seconds
-            while (GeminiHardware.ParkState != "2" && count < 16) { System.Threading.Thread.Sleep(250); count++; }
-            if (count == 16) throw new TimeoutException("Park operation didn't start");
-
-            // now wait for it to end
-            while (GeminiHardware.ParkState == "2") { System.Threading.Thread.Sleep(1000);  };
-
-            // 0 => didn't park.
-            if (GeminiHardware.ParkState == "0") throw new DriverException("Failed to park", (int)SharedResources.ERROR_BASE);
         }
 
         public void PulseGuide(GuideDirections Direction, int Duration)
@@ -589,6 +605,9 @@ namespace ASCOM.GeminiTelescope
 
         public void SyncToCoordinates(double RightAscension, double Declination)
         {
+            if (GeminiHardware.AtHome || GeminiHardware.AtPark || !GeminiHardware.Tracking)
+                    throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+
             GeminiHardware.SyncToEquatorialCoords(RightAscension, Declination);
         }
 

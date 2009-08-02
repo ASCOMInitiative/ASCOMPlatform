@@ -129,7 +129,7 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 SetTextCallback setText = new SetTextCallback(SetLstText);
-                string text = AstronomyFunctions.ConvertDoubleToHMS(value);
+                string text = GeminiHardware.m_Util.DegreesToHMS(value,":",":",""); // .ConvertDoubleToHMS(value);
                 try{this.Invoke(setText, text);}
                 catch { }
                 
@@ -141,7 +141,7 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 SetTextCallback setText = new SetTextCallback(SetRaText);
-                string text = AstronomyFunctions.ConvertDoubleToHMS(value);
+                string text = GeminiHardware.m_Util.HoursToHMS(value, ":", ":", ""); 
                 try { this.Invoke(setText, text); }
                 catch { }
             }
@@ -151,7 +151,7 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 SetTextCallback setText = new SetTextCallback(SetDecText);
-                string text = AstronomyFunctions.ConvertDoubleToDMS(value);
+                string text = GeminiHardware.m_Util.DegreesToDMS(value, ":", ":", ""); 
                 try { this.Invoke(setText, text); }
                 catch { }
             }
@@ -238,7 +238,7 @@ namespace ASCOM.GeminiTelescope
 
         private void ButtonPark_Click(object sender, EventArgs e)
         {
-            GeminiHardware.DoCommand(":hP");
+            GeminiHardware.DoCommand(":hC");
         }
     }
 }
