@@ -86,9 +86,9 @@ namespace ASCOM.GeminiTelescope
                 m_State = FocuserState.Focusing;
 
                 if ((val > 0 && !GeminiHardware.ReverseDirection) || (val < 0 && GeminiHardware.ReverseDirection))
-                    GeminiHardware.DoCommand(":F+");
+                    GeminiHardware.DoCommand(":F+", false);
                 else
-                    GeminiHardware.DoCommand(":F-");
+                    GeminiHardware.DoCommand(":F-", false);
                 tmrFocus.Interval = (GeminiHardware.StepSize * Math.Abs(val)) / 1000;
                 tmrFocus.Enabled = true;
                 return;
@@ -101,9 +101,9 @@ namespace ASCOM.GeminiTelescope
                 {
                     // move in the opposite direction for specified step*interval
                     if ((val > 0 && !GeminiHardware.ReverseDirection) || (val < 0 && GeminiHardware.ReverseDirection))
-                        GeminiHardware.DoCommand(":F-");
+                        GeminiHardware.DoCommand(":F-", false);
                     else
-                        GeminiHardware.DoCommand(":F+");
+                        GeminiHardware.DoCommand(":F+", false);
 
                     tmrFocus.Interval = (GeminiHardware.StepSize * GeminiHardware.BrakeSize) / 1000;
                     tmrFocus.Enabled = true;
@@ -140,7 +140,7 @@ namespace ASCOM.GeminiTelescope
             tmrFocus.Enabled = false;
             m_State = FocuserState.None;
 
-            GeminiHardware.DoCommand(":FQ");
+            GeminiHardware.DoCommand(":FQ", false);
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace ASCOM.GeminiTelescope
                         if (GeminiHardware.Speed == 2) sCmd = ":FM";
                         else
                             if (GeminiHardware.Speed == 3) sCmd = ":FF";
-                        GeminiHardware.DoCommand(sCmd);
+                        GeminiHardware.DoCommand(sCmd, false);
 
                         m_Connected = true;
                     }
@@ -229,9 +229,9 @@ namespace ASCOM.GeminiTelescope
                 m_PreviousMove = val;
 
                 if ((val > 0 && !GeminiHardware.ReverseDirection) || (val < 0 && GeminiHardware.ReverseDirection))
-                    GeminiHardware.DoCommand(":F+");
+                    GeminiHardware.DoCommand(":F+",false);
                 else
-                    GeminiHardware.DoCommand(":F-");
+                    GeminiHardware.DoCommand(":F-", false);
 
                 tmrFocus.Interval = (GeminiHardware.StepSize * GeminiHardware.BacklashSize) / 1000;
                 tmrFocus.Enabled = true;
@@ -241,9 +241,9 @@ namespace ASCOM.GeminiTelescope
                 m_State = FocuserState.Focusing;
                 m_PreviousMove = val;
                 if ((val > 0 && !GeminiHardware.ReverseDirection) || (val < 0 && GeminiHardware.ReverseDirection))
-                    GeminiHardware.DoCommand(":F+");
+                    GeminiHardware.DoCommand(":F+", false);
                 else
-                    GeminiHardware.DoCommand(":F-");
+                    GeminiHardware.DoCommand(":F-", false);
 
                 tmrFocus.Interval = (GeminiHardware.StepSize * Math.Abs(val)) / 1000;
                 tmrFocus.Enabled = true;               
