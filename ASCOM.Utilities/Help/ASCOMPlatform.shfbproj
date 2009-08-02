@@ -17,8 +17,9 @@
     <OutputPath>.\Help\</OutputPath>
     <HtmlHelpName>PlatformHelp</HtmlHelpName>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\..\ASCOM.Astrometry\Astrometry\AstrometryNamespaceDocs.xml" />
+      <DocumentationSource sourceFile="..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj" />
 <DocumentationSource sourceFile="..\..\ASCOM.Astrometry\Astrometry\Astrometry.vbproj" />
+<DocumentationSource sourceFile="..\..\ASCOM.Astrometry\Astrometry\AstrometryNamespaceDocs.xml" />
 <DocumentationSource sourceFile="..\Utilities\UtilitiesSupport\NamespaceDocumentation.xml" />
 <DocumentationSource sourceFile="..\Utilities\Utilities.vbproj" /></DocumentationSources>
     <HelpTitle>ASCOM Platform Help</HelpTitle>
