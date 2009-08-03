@@ -199,10 +199,13 @@ namespace ASCOM.FilterWheelSim
         private void cmbTime_KeyPress(object sender, KeyPressEventArgs e)
         {
             // Only allow one occurrence of the period
-            if (e.KeyChar == '.' && cmbTime.Text.Contains("."))
-                e.Handled = true;
+            // Oh-oh, decimal could be a comma!
+            //if (e.KeyChar == '.' && cmbTime.Text.Contains("."))
+            //    e.Handled = true;
             // Now carry out numerals and period check
-            else if (e.KeyChar < '.' || e.KeyChar > '9' || e.KeyChar == '/')
+            // Oh-oh, decimal could be a comma!
+            //else if (e.KeyChar < '.' || e.KeyChar > '9' || e.KeyChar == '/')
+            if (e.KeyChar < ',' || e.KeyChar > '9' || e.KeyChar == '-' || e.KeyChar == '/')
                 if (e.KeyChar != '\b') e.Handled = true;
         }
 
@@ -217,7 +220,7 @@ namespace ASCOM.FilterWheelSim
             catch { }
             if (i < 0.1 || i >= 9)
             {
-                MessageBox.Show("Range time values is 0.1-8.0");
+                MessageBox.Show("Range of time values is 0.1-8.0");
                 e.Cancel = true;
             }
         }

@@ -95,6 +95,9 @@
     <Compile Include="LocalServer.cs" />
     <Compile Include="PictureBoxArray.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="frmHandbox.en.resx">
+      <DependentUpon>frmHandbox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmHandbox.resx">
       <DependentUpon>frmHandbox.cs</DependentUpon>
     </EmbeddedResource>
