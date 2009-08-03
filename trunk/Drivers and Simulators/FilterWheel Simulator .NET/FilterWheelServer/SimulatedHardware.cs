@@ -224,7 +224,7 @@ namespace ASCOM.FilterWheelSim
                 Array.Resize(ref temp, m_iSlots);
                 if (m_bLogTraffic)
                     for (int i = 0; i < m_iSlots; i++)
-                        LogTraffic(" Filter " + i.ToString() + " = " + temp[i].ToString() + Environment.NewLine);
+                        LogTraffic(" Offset " + i.ToString() + " = " + temp[i].ToString() + Environment.NewLine);
                 LogTraffic(" (focusoffsets done)" + Environment.NewLine);
                 return temp;
             }
