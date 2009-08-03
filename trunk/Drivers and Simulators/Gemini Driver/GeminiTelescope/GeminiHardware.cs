@@ -1035,7 +1035,7 @@ namespace ASCOM.GeminiTelescope
             else
                 m_Tracking = true;
 
-            if (ST != null) m_SiderealTime = m_Util.HMSToDegrees(ST);
+            if (ST != null) m_SiderealTime = m_Util.HMSToHours(ST);
 
             if (SOP != null) m_SideOfPier = SOP;
 
