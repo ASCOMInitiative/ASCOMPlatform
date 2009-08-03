@@ -238,7 +238,7 @@ namespace ASCOM.GeminiTelescope
 
         private void ButtonPark_Click(object sender, EventArgs e)
         {
-            GeminiHardware.DoCommand(":hC", false);
+            GeminiHardware.DoCommandResult(":hC", 1000, false);
         }
     }
 }
