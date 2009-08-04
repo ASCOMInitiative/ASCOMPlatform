@@ -1,0 +1,106 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=Windows-1252">
+	<title>Telescope.Park() Method</title>
+
+	<style type="text/css">
+		@import url(dc3_hh.css);
+	</style>
+</head>
+<body>
+
+<div class="req">Optional</div>
+
+<h1><a name="TelescopeTelescopeMETHPark"></a>Telescope.Park() Method</h1>
+
+<p>
+<!-- See Also -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:See Also">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="TelescopeTelescopeMETHParkC">
+</object>&nbsp;&nbsp;&nbsp;
+<!-- Example
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:Example">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="TelescopeTelescopeMETHParkX">
+</object>&nbsp;&nbsp;&nbsp; -->
+<!-- parent class -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink">
+<param name="Text" value="Text:Telescope object">
+<param name="Flags" value=",,1">
+<param name="Item1" value="">
+<param name="Item2" value="TelescopeCLASSTelescopeO">
+</object>
+</p>
+
+<p class=desc>
+Move the telescope to its park position, stop <span style="v2new">all</span> motion (or restrict to a small safe range)<span style="v2new">,  and set AtPark to True.</span></p>
+
+<h2>Syntax</h2>
+
+<p class=indent><code>
+<b>Telescope.Park(</b><b>)</b></code></p>
+
+<p>
+The method syntax has these parts:</p>
+
+<div class=indent>
+<table border=1 cellpadding=3 cellspacing=0>
+ <tr>
+  <th>Part</th>
+  <th>Description</th>
+ </tr>
+
+ <tr>
+  <td>Return&nbsp;(Nothing)</td>
+  <td>Does not return a value.</td>
+ </tr>
+</table></div><br>
+
+<h2>Remarks</h2>
+
+Raises an error if there is a problem communicating with the telescope or if parking fails.
+
+<p class="v2new">Parking should put the telescope into a state where its pointing accuracy will not be lost if it is power-cycled (without moving it). Some telescopes <I>must</i> be power-cycled before unparking. Others may be unparked by simply calling the <a href="TelescopeTelescopeMETHUnpark.htm">Unpark()</a> method.</p>
+
+<span style="v2new">Calling this with AtPark = True does nothing (harmless)</span>
+
+
+
+<hr color="silver" size=2>
+<div class=copyright>Copyright &copy; 2001-2008, The ASCOM Initiative</div>
+
+<Object type="application/x-oleobject"classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+    <param name="ALink Name" value="TelescopeTelescopeMETHSetParkC">
+</OBJECT>
+<Object type="application/x-oleobject"classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+    <param name="ALink Name" value="TelescopeTelescopeMETHUnparkC">
+</OBJECT>
+<Object type="application/x-oleobject"classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+    <param name="ALink Name" value="TelescopeTelescopePROPCanParkC">
+</OBJECT>
+<Object type="application/x-oleobject"classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+    <param name="ALink Name" value="TelescopeTelescopePROPAtParkC">
+</OBJECT>
+
+
+<object type="application/x-oleobject" 
+	classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+	<param name="ALink Name" value="TelescopeCLASSTelescopeM">
+</object>
+
+</body>
+</html>
+

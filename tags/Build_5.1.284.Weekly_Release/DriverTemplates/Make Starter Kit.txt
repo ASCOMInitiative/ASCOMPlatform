@@ -1,0 +1,12 @@
+To make a starter kit:
+
+(1) Create a template and export it. It will end up in My Exported Templates
+
+(2) Unzip it to some temp folder, preserving folders
+
+(3) Edit the .vstemplate file and add to the ProjectItem tag for readme.htm OpenInWebBrowser="true"
+
+(4) Edit the .vstemplate file and change the DefaultProjectName to "YourNameHere" and MOST IMPORTANTLY ProvideDefaultName to false!
+
+(5) Re-zip and replace the template zips IN BOTH PLACES (exported and VS templates!)
+
