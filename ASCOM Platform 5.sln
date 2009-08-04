@@ -67,12 +67,35 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platform Dependencies", "Platform Dependencies", "{F1D8A6F0-1A98-4430-8DCD-6D1432449765}"
 	ProjectSection(SolutionItems) = preProject
 		Drivers and Simulators\Platform Dependencies\ASCOM-Controls.xml = Drivers and Simulators\Platform Dependencies\ASCOM-Controls.xml
+		Drivers and Simulators\Platform Dependencies\ASCOM.Astrometry.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Astrometry.dll
+		Drivers and Simulators\Platform Dependencies\ASCOM.Astrometry.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.Astrometry.pdb
+		Drivers and Simulators\Platform Dependencies\ASCOM.Astrometry.xml = Drivers and Simulators\Platform Dependencies\ASCOM.Astrometry.xml
+		Drivers and Simulators\Platform Dependencies\ASCOM.Controls.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Controls.dll
+		Drivers and Simulators\Platform Dependencies\ASCOM.Controls.dll.config = Drivers and Simulators\Platform Dependencies\ASCOM.Controls.dll.config
+		Drivers and Simulators\Platform Dependencies\ASCOM.Controls.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.Controls.pdb
+		Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.dll = Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.dll
+		Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.pdb
 		Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.XML = Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.XML
+		Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.dll
+		Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.pdb
 		Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.XML = Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.XML
+		Drivers and Simulators\Platform Dependencies\ASCOM.HelperNET.dll = Drivers and Simulators\Platform Dependencies\ASCOM.HelperNET.dll
+		Drivers and Simulators\Platform Dependencies\ASCOM.HelperNET.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.HelperNET.pdb
 		Drivers and Simulators\Platform Dependencies\ASCOM.HelperNET.xml = Drivers and Simulators\Platform Dependencies\ASCOM.HelperNET.xml
 		Drivers and Simulators\Platform Dependencies\ASCOM.Interfaces.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Interfaces.dll
+		Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.dll = Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.dll
+		Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.dll.config = Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.dll.config
+		Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.pdb
 		Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.XML = Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.XML
+		Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.dll
+		Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.pdb
+		Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.xml = Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.xml
 		Drivers and Simulators\Platform Dependencies\AscomMasterInterfaces.tlb = Drivers and Simulators\Platform Dependencies\AscomMasterInterfaces.tlb
+		Drivers and Simulators\Platform Dependencies\Interop.Scripting.dll = Drivers and Simulators\Platform Dependencies\Interop.Scripting.dll
+		Drivers and Simulators\Platform Dependencies\NOVAS-C.dll = Drivers and Simulators\Platform Dependencies\NOVAS-C.dll
+		Drivers and Simulators\Platform Dependencies\NOVAS-C.pdb = Drivers and Simulators\Platform Dependencies\NOVAS-C.pdb
+		Drivers and Simulators\Platform Dependencies\NOVAS-C64.dll = Drivers and Simulators\Platform Dependencies\NOVAS-C64.dll
+		Drivers and Simulators\Platform Dependencies\NOVAS-C64.pdb = Drivers and Simulators\Platform Dependencies\NOVAS-C64.pdb
 	EndProjectSection
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "VBFilterWheelSimDriver", "Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\VBFilterWheelSimDriver.vbproj", "{F0654070-4450-461F-A484-58D356E1740E}"
@@ -101,6 +124,10 @@ EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Profile Explorer", "ASCOM.Utilities\Profile Explorer\Profile Explorer.vbproj", "{2CB726BB-E327-41C8-9AEC-5327E5187147}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Utilities", "ASCOM.Utilities\Utilities\Utilities.vbproj", "{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SettingsProvider", "SettingsProvider", "{6BEFC49D-C3F3-4119-9ACD-B8133E14E2D6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WinForms Controls", "WinForms Controls", "{3EDC5136-4922-4F53-92FB-ADB89CCFBF26}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -247,18 +274,16 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F1D8A6F0-1A98-4430-8DCD-6D1432449765} = {9A54CA39-AB72-45B4-B09F-63679076D040}
+		{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9} = {9A54CA39-AB72-45B4-B09F-63679076D040}
 		{C9BD6FCB-97C7-4096-B917-6E59B6E2C684} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
 		{D58C0488-CD98-4ACA-B1E2-E8F8429DB2D4} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
 		{78EEC039-93C9-4027-B2B7-2DD0CF6A9993} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
-		{63AD32E8-98FF-44BB-AA29-ED2E5A5CF026} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
-		{D1A5A486-8C9C-4421-91AB-508F63B684C2} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
-		{4FFFD202-81D4-4549-880B-09B640D72C1D} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
-		{13913A60-F183-4956-8B25-B7641163176A} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{35194767-5585-45C3-803F-1BCE74CEAAFC} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{0B492F73-66F9-460E-BD84-A6CB1FC588C6} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{5F6CF410-7B16-4A32-99D2-0D92196C4490} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
-		{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{E100639A-B65F-4B34-A733-D6344AF2EF46} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
+		{6BEFC49D-C3F3-4119-9ACD-B8133E14E2D6} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
+		{3EDC5136-4922-4F53-92FB-ADB89CCFBF26} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{7E1E693D-AEE1-418E-8E6C-256CE2B14984} = {0B492F73-66F9-460E-BD84-A6CB1FC588C6}
 		{AE1B820F-AB93-4BA9-B3DC-DF55EB333835} = {0B492F73-66F9-460E-BD84-A6CB1FC588C6}
 		{2CB726BB-E327-41C8-9AEC-5327E5187147} = {0B492F73-66F9-460E-BD84-A6CB1FC588C6}
@@ -276,5 +301,9 @@ Global
 		{AB4FE9A1-B71D-4710-AA18-2F9DE496F43B} = {2F656A36-ED02-4FE2-AA49-C212A92908AA}
 		{A4006FB9-7B26-44C6-B66A-E3A1EFA85D16} = {2F656A36-ED02-4FE2-AA49-C212A92908AA}
 		{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3} = {E100639A-B65F-4B34-A733-D6344AF2EF46}
+		{13913A60-F183-4956-8B25-B7641163176A} = {6BEFC49D-C3F3-4119-9ACD-B8133E14E2D6}
+		{4FFFD202-81D4-4549-880B-09B640D72C1D} = {6BEFC49D-C3F3-4119-9ACD-B8133E14E2D6}
+		{63AD32E8-98FF-44BB-AA29-ED2E5A5CF026} = {3EDC5136-4922-4F53-92FB-ADB89CCFBF26}
+		{D1A5A486-8C9C-4421-91AB-508F63B684C2} = {3EDC5136-4922-4F53-92FB-ADB89CCFBF26}
 	EndGlobalSection
 EndGlobal
