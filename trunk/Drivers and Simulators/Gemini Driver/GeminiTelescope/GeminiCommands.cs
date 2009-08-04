@@ -23,14 +23,21 @@ namespace ASCOM.GeminiTelescope
             NumberofChars   // specific number of characters
         }
 
-        internal GeminiCommand(ResultType type, int chars)
+        internal GeminiCommand(ResultType type, int chars) : this(type, chars, false)
+        {
+        }
+
+        internal GeminiCommand(ResultType type, int chars, bool bUpdateStatus)
         {
             Type = type;
             Chars = chars;
+            UpdateStatus = bUpdateStatus;
         }
+
 
         public ResultType Type; // expected return type
         public int Chars;   // expected number of characters if Type=NumberofChars
+        public bool UpdateStatus; // this command changes mount status, and an update to polled variables should follow immediately
     }
 
     /// <summary>
@@ -91,22 +98,22 @@ namespace ASCOM.GeminiTelescope
             Commands.Add(":GZ", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
             Commands.Add(":hP", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
             Commands.Add(":hC", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
-            Commands.Add(":hN", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
-            Commands.Add(":hW", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
+            Commands.Add(":hN", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0, true));
+            Commands.Add(":hW", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0, true));
             Commands.Add(":h?", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1)); //0/1/2
 
-            Commands.Add(":MA", new GeminiCommand(GeminiCommand.ResultType.ZeroOrHash, 0)); //0 or # terminated string
+            Commands.Add(":MA", new GeminiCommand(GeminiCommand.ResultType.ZeroOrHash, 0, true)); //0 or # terminated string
 
-            Commands.Add(":MF", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
+            Commands.Add(":MF", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0, true));
             Commands.Add(":ML", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
             Commands.Add(":Ml", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
-            Commands.Add(":Mf", new GeminiCommand(GeminiCommand.ResultType.ZeroOrHash, 0));
-            Commands.Add(":MM", new GeminiCommand(GeminiCommand.ResultType.ZeroOrHash, 0));
-            Commands.Add(":MS", new GeminiCommand(GeminiCommand.ResultType.ZeroOrHash, 0));
-            Commands.Add(":Me", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
-            Commands.Add(":Mw", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
-            Commands.Add(":Mn", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
-            Commands.Add(":Ms", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
+            Commands.Add(":Mf", new GeminiCommand(GeminiCommand.ResultType.ZeroOrHash, 0, true));
+            Commands.Add(":MM", new GeminiCommand(GeminiCommand.ResultType.ZeroOrHash, 0, true));
+            Commands.Add(":MS", new GeminiCommand(GeminiCommand.ResultType.ZeroOrHash, 0, true));
+            Commands.Add(":Me", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0, true));
+            Commands.Add(":Mw", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0, true));
+            Commands.Add(":Mn", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0, true));
+            Commands.Add(":Ms", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0, true));
 
             Commands.Add(":mi", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
             Commands.Add(":mm", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
@@ -136,11 +143,11 @@ namespace ASCOM.GeminiTelescope
 
             Commands.Add(":U", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
 
-            Commands.Add(":Q", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
-            Commands.Add(":Qe", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
-            Commands.Add(":Qw", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
-            Commands.Add(":Qn", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
-            Commands.Add(":Qs", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
+            Commands.Add(":Q", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0, true));
+            Commands.Add(":Qe", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0, true));
+            Commands.Add(":Qw", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0, true));
+            Commands.Add(":Qn", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0, true));
+            Commands.Add(":Qs", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0, true));
 
             Commands.Add(":RC", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
             Commands.Add(":RG", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
@@ -150,19 +157,19 @@ namespace ASCOM.GeminiTelescope
             Commands.Add(":Sa", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));                        
   
             Commands.Add(":SB", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
-            Commands.Add(":SC", new GeminiCommand(GeminiCommand.ResultType.ZeroOrHash, 0));
+            Commands.Add(":SC", new GeminiCommand(GeminiCommand.ResultType.ZeroOrHash, 0, true));
             Commands.Add(":SE", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
-            Commands.Add(":SG", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
-            Commands.Add(":SL", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
+            Commands.Add(":SG", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1, true));
+            Commands.Add(":SL", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1, true));
             Commands.Add(":Sd", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
             Commands.Add(":SM", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
             Commands.Add(":SN", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
             Commands.Add(":SO", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
-            Commands.Add(":SP", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
+            Commands.Add(":SP", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1, true));
             Commands.Add(":Sg", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
             Commands.Add(":Sp", new GeminiCommand(GeminiCommand.ResultType.OneOrHash, 1));
             Commands.Add(":Sr", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
-            Commands.Add(":St", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
+            Commands.Add(":St", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1, true));
             Commands.Add(":Sw", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
             Commands.Add(":Sz", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
 

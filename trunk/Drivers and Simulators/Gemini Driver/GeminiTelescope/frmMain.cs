@@ -129,7 +129,8 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 SetTextCallback setText = new SetTextCallback(SetLstText);
-                string text = GeminiHardware.m_Util.DegreesToHMS(value,":",":",""); // .ConvertDoubleToHMS(value);
+                string text = GeminiHardware.m_Util.HoursToHMS(value,":",":",""); // .ConvertDoubleToHMS(value);
+               
                 try{this.Invoke(setText, text);}
                 catch { }
                 
