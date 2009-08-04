@@ -26,7 +26,7 @@ using System.Collections;
 using System.Text;
 using System.ComponentModel;
 using System.Timers;
-
+using System.IO.Ports;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -56,6 +56,8 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         internal string m_Result { get; set; }
         internal bool m_Raw = false;
+
+        internal bool m_UpdateRequired { get; set; } //true if this command updates a polled status variable, and an update is needed ASAP
         
         /// <summary>
         /// 
@@ -184,6 +186,8 @@ namespace ASCOM.GeminiTelescope
         private static bool m_AtHome;
         private static string m_ParkState = "";
 
+        private static bool m_IsPulseGuiding = false;
+     
         private static bool m_SouthernHemisphere = false;
 
         private static string m_ComPort;
@@ -192,9 +196,13 @@ namespace ASCOM.GeminiTelescope
         private static int m_DataBits;
         private static ASCOM.Utilities.SerialStopBits m_StopBits;
 
-        private static int m_SerialDelay = 50;  //in msecs
+        private static System.Threading.AutoResetEvent m_WaitForCommand;
 
-        private static System.Threading.AutoResetEvent m_WaitForCommand; 
+        private static string m_PolledVariablesString = ":GR#:GD#:GA#:GZ#:Gv#:GS#:Gm#:h?#";
+        
+        static Timer tmrReadTimeout = new Timer();
+        static System.Threading.AutoResetEvent m_SerialTimeoutExpired = new System.Threading.AutoResetEvent(false);
+        static System.Threading.AutoResetEvent m_SerialErrorOccurred = new System.Threading.AutoResetEvent(false);
 
         public enum GeminiBootMode
         {
@@ -203,10 +211,10 @@ namespace ASCOM.GeminiTelescope
             WarmStart = 2,
             WarmRestart = 3,
         }
-
+        ;
         private static GeminiBootMode m_BootMode = GeminiBootMode.Prompt; 
 
-        private static ASCOM.Utilities.Serial m_SerialPort;
+        private static SerialPort m_SerialPort;
 
         private static bool m_Connected = false; //Keep track of the connection status of the hardware
 
@@ -238,12 +246,15 @@ namespace ASCOM.GeminiTelescope
             m_Util = new ASCOM.Utilities.Util();
             m_Transform = new ASCOM.Astrometry.Transform.Transform();
 
-            m_SerialPort = new ASCOM.Utilities.Serial();
-
+            m_SerialPort = new SerialPort();
             m_CommandQueue = new Queue();
             m_Clients = 0;
 
-             m_WaitForCommand = new System.Threading.AutoResetEvent(false);
+
+            m_WaitForCommand = new System.Threading.AutoResetEvent(false);
+
+            tmrReadTimeout.AutoReset = false;            
+            tmrReadTimeout.Elapsed += new ElapsedEventHandler(tmrReadTimeout_Elapsed);
 
             GetProfileSettings();
         }
@@ -268,7 +279,6 @@ namespace ASCOM.GeminiTelescope
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AdvancedMode", "false");
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiSite", "true");
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiTime", "true");
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "SerialDelay", "50");
             }
 
             //Load up the values from saved
@@ -304,13 +314,6 @@ namespace ASCOM.GeminiTelescope
                 _stopbits = 1;
 
             m_StopBits = (ASCOM.Utilities.SerialStopBits)_stopbits;
-
-
-            int _delay = 50;
-            if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "SerialDelay", ""), out _delay))
-                _delay = 50;
-
-            m_SerialDelay = _delay;
 
 
             if (m_ComPort != "")
@@ -677,7 +680,16 @@ namespace ASCOM.GeminiTelescope
             catch { }
         }
 
- 
+
+        public static bool IsPulseGuiding
+        {
+            get { return m_IsPulseGuiding; }
+            set
+            {
+                m_IsPulseGuiding = value;
+            }
+        }
+
         #endregion
 
         #region Telescope Implementation
@@ -690,21 +702,24 @@ namespace ASCOM.GeminiTelescope
             lock (m_ConnectLock)   // make sure only one connection goes through at a time
             {
                 m_Clients += 1;
-                if (!m_SerialPort.Connected)
-                {
+                if (!m_SerialPort.IsOpen)
+                {                   
                     GetProfileSettings();
                     m_SerialPort.PortName = m_ComPort;
-                    m_SerialPort.Speed = (ASCOM.Utilities.SerialSpeed)m_BaudRate;
-                    m_SerialPort.Parity = (ASCOM.Utilities.SerialParity)m_Parity;
+                    m_SerialPort.BaudRate = m_BaudRate;
+                    m_SerialPort.Parity = (System.IO.Ports.Parity)m_Parity;
                     m_SerialPort.DataBits = m_DataBits;
-                    m_SerialPort.StopBits = (ASCOM.Utilities.SerialStopBits)m_StopBits;              
+                    m_SerialPort.StopBits = (System.IO.Ports.StopBits)m_StopBits;              
+                    m_SerialPort.Handshake = System.IO.Ports.Handshake.None;
+                    m_SerialPort.ReadBufferSize = 256;
+                    //m_SerialPort.WriteBufferSize = 256;
 
-                    m_SerialPort.Handshake = ASCOM.Utilities.SerialHandshake.None; 
+                    m_SerialPort.ErrorReceived += new SerialErrorReceivedEventHandler(m_SerialPort_ErrorReceived);
 
                     try
                     {
-                        m_SerialPort.Connected = true;
-                        m_SerialPort.DTREnable = true;
+                        m_SerialPort.Open();
+                        m_SerialPort.DtrEnable = true;
                     }
                     catch
                     {
@@ -741,12 +756,23 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        static void m_SerialPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
+        {
+            m_SerialErrorOccurred.Set();    //signal that an error has occurred
+        }
+
         public static void Transmit(string s)
         {
-            if (m_SerialPort.Connected)
-                lock (m_SerialPort)
-                    m_SerialPort.Transmit(s);
+            m_SerialErrorOccurred.Reset();
+
+            if (m_SerialPort.IsOpen)
+            {
+                m_SerialPort.Write(s);
+                //m_SerialPort.BaseStream.Flush();
+            }
+            if (m_SerialErrorOccurred.WaitOne(0)) throw new TimeoutException("Serial port transmission error");
         }
+
 
         /// <summary>
         /// Check and process the initialization status of Gemini on initial connect:
@@ -762,7 +788,7 @@ namespace ASCOM.GeminiTelescope
             string sRes = GetCommandResult(ci);
 
             // scrolling message? wait for it to end:
-            while (sRes == "B#")
+            while (sRes == "B")
             {
                 System.Threading.Thread.Sleep(500);
                 Transmit("\x6");
@@ -770,7 +796,7 @@ namespace ASCOM.GeminiTelescope
                 sRes = GetCommandResult(ci); ;
             }
 
-            if (sRes == "b#")    //Gemini waiting for user to select the boot mode
+            if (sRes == "b")    //Gemini waiting for user to select the boot mode
             {
 
                 GeminiBootMode bootMode = m_BootMode;
@@ -793,11 +819,11 @@ namespace ASCOM.GeminiTelescope
                     case GeminiBootMode.WarmRestart: Transmit("bR#"); break;
                     case GeminiBootMode.WarmStart: Transmit("bW#"); break;
                 }
-                sRes = "S#"; // put it into "starting" mode, so the next loop will wait for full initialization
+                sRes = "S"; // put it into "starting" mode, so the next loop will wait for full initialization
             }
 
             // processing Cold start mode -- wait for this to end
-            while (sRes == "S#")
+            while (sRes == "S")
             {
                 System.Threading.Thread.Sleep(500);
                 Transmit("\x6");
@@ -805,7 +831,7 @@ namespace ASCOM.GeminiTelescope
                 sRes = GetCommandResult(ci); ;
             }
 
-            return sRes == "G#"; // true if startup completed, otherwise false
+            return sRes == "G"; // true if startup completed, otherwise false
         }
 
         /// <summary>
@@ -821,7 +847,7 @@ namespace ASCOM.GeminiTelescope
                     m_CancelAsync = true;
 
                     m_BackgroundWorker = null;
-                    m_SerialPort.Connected = false;
+                    m_SerialPort.Close();
                     m_Connected = false;
 
                     lock (m_CommandQueue)
@@ -852,87 +878,91 @@ namespace ASCOM.GeminiTelescope
             while (!m_CancelAsync)
             {
                 System.Threading.EventWaitHandle ewh = null;
+                object [] commands = null;
+
+                lock (m_CommandQueue)
+                {
+                    if (m_CommandQueue.Count > 0)
+                    {
+                        // gemini doesn't like too many long commands (buffer size problem?)
+                        // remove up to x commands at a time
+                        int cnt = Math.Min(1, m_CommandQueue.Count);
+
+                        commands = new object[cnt]; // m_CommandQueue.ToArray();
+                        for (int i = 0; i < cnt; ++i) commands[i] = m_CommandQueue.Dequeue();
+                    }
+                }
 
                 try
                 {
-
-                    CommandItem command = null;
-
-                    // [pk:2009-08-03]
-                    // To do: can optimize serial comm when multiple items are in the queue
-                    // by generating a single string for transmission for all the commands. 
-                    // Requires proper handling and disposal of wait events after the
-                    // transmission..
-
-                    lock (m_CommandQueue)
+                    if (commands != null)    // got a new command, send it to the mount
                     {
-                        if (m_CommandQueue.Count > 0)
-                            command = (CommandItem)m_CommandQueue.Dequeue();
-                    }
+                        string all_commands = String.Empty;
 
-                    if (command != null)    // got a new command, send it to the mount
-                    {
-                        ewh = command.WaitObject;
-                        command.m_Result = null;
+                        bool bNeedStatusUpdate = false;
 
-                        string serial_cmd = command.m_Command;
-
-                        // raw commands are passed to hardware unmodified:
-                        if (!command.m_Raw)
+                        foreach (CommandItem ci in commands)
                         {
-                            // native Gemini command?
-                            if (command.m_Command[0]=='<' || command.m_Command[0]=='>')
-                                serial_cmd = CompleteNativeCommand(command.m_Command);
-                            else
-                                serial_cmd = CompleteStandardCommand(command.m_Command);
+                            ci.m_Result = null;
+                            string serial_cmd = ci.m_Command;
+
+                            // raw commands are passed to hardware unmodified:
+                            if (!ci.m_Raw)
+                            {
+                                // native Gemini command?
+                                if (ci.m_Command[0] == '<' || ci.m_Command[0] == '>')
+                                    serial_cmd = CompleteNativeCommand(ci.m_Command);
+                                else
+                                    serial_cmd = CompleteStandardCommand(ci.m_Command);
+                            }                            
+                            all_commands += serial_cmd;
+                            if (ci.WaitObject == null) ci.m_Timeout = 1000;    // default timeout of one second for requests where the user doesn't care
                         }
 
-                        m_SerialPort.ClearBuffers(); //clear all received data
+                        m_SerialPort.DiscardInBuffer(); //clear all received data
 
-                        if (command.WaitObject==null) command.m_Timeout = 1000;    // default timeout of one second for requests where the user doesn't care
-                        else
-                        if (command.m_Timeout > 0)
-                            lock (m_SerialPort)
-                                m_SerialPort.ReceiveTimeoutMs = command.m_Timeout;
-                        else
-                            lock (m_SerialPort)
-                                m_SerialPort.ReceiveTimeoutMs = System.IO.Ports.SerialPort.InfiniteTimeout;
-
-                        System.Diagnostics.Trace.Write("Command '" + serial_cmd + "' ");
+                        System.Diagnostics.Trace.Write("Command '" + all_commands + "' ");
 
 #if DEBUG
                         int startTime = System.Environment.TickCount;
 #endif
 
-                        Transmit(serial_cmd);
+                        Transmit(all_commands);
 
-                        if (command.WaitObject != null)
-                            System.Diagnostics.Trace.Write("..result expected..");
-                        else
-                            System.Diagnostics.Trace.Write("..result not expected..");
-
-                        System.Diagnostics.Trace.Write("waiting... ");
-
-                        // wait for the result whether or not the caller wants it
-                        // otherwise delayed result from a previous command
-                        // can be falsely returned for a later request:
-
-                        string result = GetCommandResult(command);
-
-                        System.Diagnostics.Trace.Write("result='" + (result??"null") + "'");
-
-                        if (command.WaitObject != null)    // receive result, if one is expected
+                        foreach (CommandItem ci in commands)
                         {
-                            command.m_Result = result;
-                            command.WaitObject.Set();   //release the wait handle so the calling thread can continue
+                            if (ci.WaitObject != null)
+                                System.Diagnostics.Trace.Write("..result expected..");
+                            else
+                                System.Diagnostics.Trace.Write("..result not expected..");
+
+                            System.Diagnostics.Trace.Write("waiting... ");
+
+                            // wait for the result whether or not the caller wants it
+                            // otherwise delayed result from a previous command
+                            // can be falsely returned for a later request:
+
+                            string result = GetCommandResult(ci);
+                            
+                            System.Diagnostics.Trace.Write("result='" + (result ?? "null") + "'");
+
+                            if (ci.WaitObject != null)    // receive result, if one is expected
+                            {
+                                ci.m_Result = result;
+                                ci.WaitObject.Set();   //release the wait handle so the calling thread can continue
+                            }
+
+                            // if this command is one of the status variables to be polled, make a note to update 
+                            // status ASAP!
+                            if (ci.m_UpdateRequired) bNeedStatusUpdate = true;
                         }
-                        ewh = null;
 
 #if DEBUG
-                        System.Diagnostics.Trace.WriteLine("done in " + (System.Environment.TickCount - startTime).ToString() + " msecs");
+                        System.Diagnostics.Trace.WriteLine(" done in " + (System.Environment.TickCount - startTime).ToString() + " msecs");
 #else
-                        System.Diagnostics.Trace.WriteLine("done!");
+                        System.Diagnostics.Trace.WriteLine(" done!");
 #endif
+                        if (bNeedStatusUpdate) UpdatePolledVariables(); //update variables if one of them was altered by a processed command
                     }
                     else
                         UpdatePolledVariables();
@@ -943,7 +973,11 @@ namespace ASCOM.GeminiTelescope
                 }
                 finally
                 {
-                    if (ewh!=null) ewh.Set();   //release the wait handle so the calling thread can continue
+                    // release all pending commands
+                    if (commands != null)
+                        foreach (CommandItem ci in commands)
+                            if (ci.WaitObject != null)
+                                ci.WaitObject.Set();
                 }
 
                 // wait specified interval before querying the mount if no more commands, but
@@ -963,7 +997,7 @@ namespace ASCOM.GeminiTelescope
             CommandItem command;
 
             //Get RA and DEC etc
-            m_SerialPort.ClearBuffers(); //clear all received data
+            m_SerialPort.DiscardInBuffer(); //clear all received data
             //longitude, latitude, UTC offset
             Transmit(":Gg#:Gt#:GG#");
 
@@ -995,8 +1029,8 @@ namespace ASCOM.GeminiTelescope
             CommandItem command;
 
             //Get RA and DEC etc
-            m_SerialPort.ClearBuffers(); //clear all received data
-            Transmit(":GR#:GD#:GA#:GZ#:Gv#:GS#:Gm#:h?#");
+            m_SerialPort.DiscardInBuffer(); //clear all received data
+            Transmit(m_PolledVariablesString);
 
             command = new CommandItem(":GR", m_QueryInterval, true);
             string RA = GetCommandResult(command);
@@ -1035,8 +1069,10 @@ namespace ASCOM.GeminiTelescope
             else
                 m_Tracking = true;
 
-            if (ST != null) m_SiderealTime = m_Util.HMSToHours(ST);
-
+            if (ST != null)
+            {
+                m_SiderealTime = m_Util.HMSToHours(ST);              
+            }
             if (SOP != null) m_SideOfPier = SOP;
 
             if (HOME != null)
@@ -1047,7 +1083,9 @@ namespace ASCOM.GeminiTelescope
                     m_AtHome = true;
                     if (Velocity == "N") m_AtPark = true;
                     else
+                    {
                         m_AtPark = false;
+                    }
                 }
                 else
                 {
@@ -1057,6 +1095,8 @@ namespace ASCOM.GeminiTelescope
             }
             m_LastUpdate = System.DateTime.Now;
         }
+
+
 
         /// <summary>
         /// Wait for a proper response from Gemini for a given command. Command has already been sent.
@@ -1068,78 +1108,134 @@ namespace ASCOM.GeminiTelescope
         {
             string result = null;
 
-            if (!m_SerialPort.Connected) return null;
+            if (!m_SerialPort.IsOpen) return null;
+
+            GeminiCommand.ResultType gemini_result = GeminiCommand.ResultType.HashChar;
+            int char_count = 0;
+            GeminiCommand gmc = FindGeminiCommand(command.m_Command);
+
+            if (gmc != null)
+            {
+                gemini_result = gmc.Type;
+                char_count = gmc.Chars;
+                command.m_UpdateRequired = gmc.UpdateStatus;
+            }
+
+            // no result expected by this command, just return;
+            if (gemini_result == GeminiCommand.ResultType.NoResult) return null;
+
+            m_SerialTimeoutExpired.Reset();
+            m_SerialErrorOccurred.Reset();
+
+            if (command.m_Timeout > 0)
+            {
+                tmrReadTimeout.Interval = command.m_Timeout;
+                tmrReadTimeout.Start();
+            }
 
             try
             {
-                lock (m_SerialPort)
+                switch (gemini_result)
                 {
-                    GeminiCommand gmc = null;
+                    // a specific number of characters expected as the return value
+                    case GeminiCommand.ResultType.NumberofChars:
+                        result = ReadNumber(char_count);
+                        break;
 
-                    GeminiCommand.ResultType gemini_result = GeminiCommand.ResultType.HashChar;
-                    int char_count = 0;
+                    // value '1' or a string terminated by '#'
+                    case GeminiCommand.ResultType.OneOrHash:
+                        result = ReadNumber(1); ;  // check if first character is 1, and return if it is, no hash expected
+                        if (result != "1")
+                            result += ReadTo('#');
+                        break;
 
-                    gmc = FindGeminiCommand(command.m_Command);
+                    // value '0' or a string terminated by '#'
+                    case GeminiCommand.ResultType.ZeroOrHash:
+                        result = ReadNumber(1);
+                        if (result != "0")
+                            result += ReadTo('#');
+                        break;
 
-                    if (gmc != null)
-                    {
-                        gemini_result = gmc.Type;
-                        char_count = gmc.Chars;
-                    }
-
-                    switch (gemini_result)
-                    {
-                        // no result expected by this command
-                        case GeminiCommand.ResultType.NoResult:
-                            System.Threading.Thread.Sleep(0);
-                            return null;
-
-                        // a specific number of characters expected as the return value
-                        case GeminiCommand.ResultType.NumberofChars:
-                            System.Threading.Thread.Sleep(m_SerialDelay);
-                            result = m_SerialPort.ReceiveCounted(char_count);
-                            break;
-
-                        // value '1' or a string terminated by '#'
-                        case GeminiCommand.ResultType.OneOrHash:
-                            System.Threading.Thread.Sleep(m_SerialDelay);
-                            result = m_SerialPort.ReceiveCounted(1);  // check if first character is 1, and return if it is, no hash expected
-                            if (result != "1")
-                                result += m_SerialPort.ReceiveTerminated("#");
-                            break;
-
-                        // value '0' or a string terminated by '#'
-                        case GeminiCommand.ResultType.ZeroOrHash:
-                            System.Threading.Thread.Sleep(m_SerialDelay);
-                            result = m_SerialPort.ReceiveCounted(1);
-                            if (result != "0")
-                                result += m_SerialPort.ReceiveTerminated("#");
-                            break;
-
-                        // value '0' or a string terminated by '#'
-                        case GeminiCommand.ResultType.HashChar:
-                            System.Threading.Thread.Sleep(m_SerialDelay);
-                            result = m_SerialPort.ReceiveTerminated("#");
-                            break;
-                    }
+                    // value '0' or a string terminated by '#'
+                    case GeminiCommand.ResultType.HashChar:
+                        result = ReadTo('#');
+                        break;
                 }
+
             }
-            catch (Exception e) //timeout or some other communication value
+            catch
             {
-                System.Diagnostics.Trace.WriteLine("Command timed out: " + command.m_Command + "\r\n" + e.Message);
                 return null;
             }
+            finally
+            {
+                tmrReadTimeout.Stop();
+            }
+
+            if (m_SerialErrorOccurred.WaitOne(0)) return null;  // error occurred!
 
             // return value for native commands has a checksum appended: validate it and remove it from the return string:
-            if (command.m_Command[0] == '<' && !string.IsNullOrEmpty(result))
+            if (!string.IsNullOrEmpty(result) && command.m_Command[0] == '<')
             {
-                char chksum = result[result.Length - 2];
-                result = result.Substring(0, result.Length - 2); //remove checksum character
+                char chksum = result[result.Length - 1];
+                result = result.Substring(0, result.Length - 1); //remove checksum character
 
                 if (chksum != ComputeChecksum(result))  // bad checksum -- ignore the return value!
                     result = null;
             }
+
             return result;
+        }
+
+        static void tmrReadTimeout_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            m_SerialTimeoutExpired.Set();
+        }
+
+        /// <summary>
+        /// Read serial port until the terminating character is encoutered. Don't include 
+        /// terminating character in the result, honor readtimeout specified on the port.
+        /// </summary>
+        /// <param name="terminate"></param>
+        /// <returns></returns>
+        private static string ReadTo(char terminate)
+        {
+            string res = "";
+
+            for (; ; )
+            {
+                if (m_SerialPort.BytesToRead > 0)
+                {
+                    char c = (char)m_SerialPort.ReadChar();
+                    if (c != terminate)
+                        res += c;
+                    else
+                        return res;
+                }
+                else
+                    if (m_SerialTimeoutExpired.WaitOne(0)) return null;
+            }
+        }
+
+        /// <summary>
+        /// Read exact number of characters from the serial port, honoring the read timeout
+        /// </summary>
+        /// <param name="chars"></param>
+        /// <returns></returns>
+        private static string ReadNumber(int chars)
+        {
+            string res = "";
+            for (; ; )
+            {
+                if (m_SerialPort.BytesToRead > 0)
+                {
+                    char c = (char)m_SerialPort.ReadChar();
+                    res += c;
+                    if (res.Length == chars) return res;
+                }
+                else
+                    if (m_SerialTimeoutExpired.WaitOne(0)) return null;
+            }
         }
 
         /// <summary>
@@ -1389,10 +1485,8 @@ namespace ASCOM.GeminiTelescope
             DoCommandResult(cmd,1000, false);
         }
 
-        /// <summary>
-        /// Syncs the mount using Alt and Az
-        /// </summary>
-        public static void SyncHorizon()
+
+        public static void SyncHorizonCoordinates(double azimuth, double altitude)
         {
             string[] cmd = { ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ""), ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ""), "" };
             if (m_AdditionalAlign)
@@ -1404,6 +1498,15 @@ namespace ASCOM.GeminiTelescope
                 cmd[2] = ":CM";
             }
             DoCommandResult(cmd, 1000, false);
+
+        }
+        
+        /// <summary>
+        /// Syncs the mount using Alt and Az
+        /// </summary>
+        public static void SyncHorizon()
+        {
+            SyncHorizonCoordinates(TargetAzimuth, TargetAltitude);
         }
 
         /// <summary>
@@ -1411,7 +1514,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static void SlewHorizon()
         {
-            string[] cmd = { ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ""), ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ""), ":MA" };
+            string[] cmd = { ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ""), ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ""), ":MA" };
             DoCommandResult(cmd, 2000, false);
         }
         /// <summary>
