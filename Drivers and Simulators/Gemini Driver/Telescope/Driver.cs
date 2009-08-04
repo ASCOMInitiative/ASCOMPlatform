@@ -347,7 +347,7 @@ namespace ASCOM.GeminiTelescope
 
         public bool CanSetRightAscensionRate
         {
-            get { return true; }
+            get { return false; }
         }
 
         public bool CanSetTracking
@@ -411,6 +411,7 @@ namespace ASCOM.GeminiTelescope
 
         public bool CommandBool(string Command, bool Raw)
         {
+            if (Command == "") throw new InvalidValueException("CommandBool", "", "");
             string result = GeminiHardware.DoCommandResult(Command, 1000, Raw);
             if (result!=null && result.StartsWith("1")) return true;
             return false;
@@ -427,10 +428,10 @@ namespace ASCOM.GeminiTelescope
         public bool Connected
         {
             get { return GeminiHardware.Connected; }
-            set {
+            set { 
                 GeminiHardware.Connected = value;
-                if (!GeminiHardware.Connected) throw new ASCOM.Utilities.Exceptions.SerialPortInUseException("Connect");
-                }
+                if (value && !GeminiHardware.Connected) throw new ASCOM.Utilities.Exceptions.SerialPortInUseException("Connect");
+            }
         }
 
         public double Declination
@@ -454,7 +455,7 @@ namespace ASCOM.GeminiTelescope
             set 
             {
                 int val = (int)value;
-                if (val < 0 || val > 65535) throw new InvalidValueException("DeclinationRate", val.ToString() , "0 to 65535");
+                if (val < 0 || val > 65535) throw new InvalidValueException("DeclinationRate", value.ToString(), "0..65535");
                 string cmd = ">412:" + ((int)(value)).ToString();
                 GeminiHardware.DoCommandResult(cmd, 1000, false);
             }
@@ -509,7 +510,6 @@ namespace ASCOM.GeminiTelescope
 
             // 0 => didn't park.
             if (GeminiHardware.ParkState == "0") throw new DriverException("Failed to " + where, (int)SharedResources.ERROR_BASE);
-            GeminiHardware.DoCommandResult(":hN", 1000, false);
         }
 
         public void FindHome()
@@ -521,7 +521,7 @@ namespace ASCOM.GeminiTelescope
 
             GeminiHardware.DoCommandResult(":hP", 1000, false);
             WaitForHomeOrPark("Home");
-
+            GeminiHardware.DoCommandResult(":hN", 1000, false); //resume tracking, as FindHome isn't supposed to stop the mount
         }
 
         public double FocalLength
@@ -529,6 +529,7 @@ namespace ASCOM.GeminiTelescope
             // TODO Replace this with your implementation
             get { throw new PropertyNotImplementedException("FocalLength", false); }
         }
+
 
         /// <summary>
         /// Same guide rate as RightAscension;
@@ -548,13 +549,12 @@ namespace ASCOM.GeminiTelescope
             get {
                 string result = GeminiHardware.DoCommandResult("<150:", 2000, false);
                 if (result == null) throw new TimeoutException("GuideRateRightAscention");
-                return double.Parse(result) * SharedResources.EARTH_ANG_ROT_DEG_MIN/60.0;    //may need to process this differently if int'l settings have ',' as decimal point.!!!
+                return double.Parse(result) * SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0;
             }
             set 
             {
                 double val = value/(SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0) ;
-
-                if (val < 0.2 || val > 0.8) throw new InvalidValueException("GuideRateRightAscension",val.ToString("0.0"), "0.2x - 0.8x sidereal");
+                if (val < 0.2 || val > 0.8) throw new InvalidValueException("GuideRate", value.ToString(),"");
                 string cmd = ">150:" + val.ToString("0.0");    //internationalization issues?
                 GeminiHardware.DoCommandResult(cmd, 1000, false);                
             }
@@ -568,8 +568,7 @@ namespace ASCOM.GeminiTelescope
 
         public bool IsPulseGuiding
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("IsPulseGuiding", false); }
+            get { return GeminiHardware.IsPulseGuiding; }
         }
 
         public void MoveAxis(TelescopeAxes Axis, double Rate)
@@ -593,13 +592,53 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.DoCommandResult(":hC", 1000, false);
 
             WaitForHomeOrPark("Park");
-
+            GeminiHardware.DoCommandResult(":hN", 1000, false);
         }
 
+        /// <summary>
+        /// Send pulse-guide commands to the mount in the required direction, for the required duration
+        /// </summary>
+        /// <param name="Direction"></param>
+        /// <param name="Duration"></param>
         public void PulseGuide(GuideDirections Direction, int Duration)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("PulseGuide");
+
+            if (GeminiHardware.AtPark)
+                throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+
+            string cmd = String.Empty;
+
+            switch (Direction)
+            {
+                case GuideDirections.guideEast:
+                    cmd = ":Mge";
+                    break;
+                case GuideDirections.guideNorth:
+                    cmd = ":Mgn";
+                    break;
+                case GuideDirections.guideSouth:
+                    cmd = ":Mgs";
+                    break;
+                case GuideDirections.guideWest:
+                    cmd = ":Mgw";
+                    break;
+            }
+
+            if (Duration > 10000 || Duration < 0)  // too large or negative...
+                throw new InvalidValueException("PulseGuide" , Duration.ToString(), "0..10000");
+
+            string[] cmds = new string[1 + Duration / 256];
+
+            int count = Duration;
+            for (int idx = 0; count > 0; ++idx, count -= 255)
+            {
+                int d = (count > 255 ? 255 : count);
+                cmds[idx] = cmd + d.ToString();
+                count -= d;
+            }
+            GeminiHardware.IsPulseGuiding = true;
+            GeminiHardware.DoCommandResult(cmds, Duration + 1000, false);
+            GeminiHardware.IsPulseGuiding = false;
         }
 
         public double RightAscension
@@ -611,7 +650,7 @@ namespace ASCOM.GeminiTelescope
         public double RightAscensionRate
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("RightAscensionRate", false); }
+            get { return 0;  }
             set { throw new PropertyNotImplementedException("RightAscensionRate", true); }
         }
 
@@ -671,7 +710,7 @@ namespace ASCOM.GeminiTelescope
             {
                 if (value < -300 || value > 10000)
                 {
-                    throw new InvalidValueException("SiteElevation", value.ToString(),"-300 to 10,000ft");
+                    throw new InvalidValueException("SiteElevation", value.ToString(), "-300...10000");
                 }
                 GeminiHardware.Elevation = value; 
             }
@@ -685,7 +724,7 @@ namespace ASCOM.GeminiTelescope
             {
                 if (value < -90 || value > 90)
                 {
-                    throw new InvalidValueException("SiteLatitude",value.ToString(),"-90 to +90 degrees");
+                    throw new InvalidValueException("SiteLatitude", value.ToString(), "-90..90");
                 }
                 GeminiHardware.SetLatitude(value);
 
@@ -700,7 +739,7 @@ namespace ASCOM.GeminiTelescope
             {
                 if (value < -180 || value > 180)
                 {
-                    throw new InvalidValueException("SiteLongitude", value.ToString(),"-180 to +180 degrees");
+                    throw new InvalidValueException("SiteLongitude",value.ToString(), "-180..180");
                 }
                 GeminiHardware.SetLongitude(value);
 
@@ -781,14 +820,13 @@ namespace ASCOM.GeminiTelescope
         }
 
         public void SyncToAltAz(double Azimuth, double Altitude)
-        {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("SyncToAltAz");
+        {           
+            GeminiHardware.SyncHorizonCoordinates(Azimuth, Altitude);
         }
 
         public void SyncToCoordinates(double RightAscension, double Declination)
         {
-            if (GeminiHardware.AtHome || GeminiHardware.AtPark || !GeminiHardware.Tracking)
+            if (GeminiHardware.AtPark)
                     throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             GeminiHardware.SyncToEquatorialCoords(RightAscension, Declination);
@@ -813,7 +851,7 @@ namespace ASCOM.GeminiTelescope
             {
                 if (value < -90 || value > 90)
                 {
-                    throw new InvalidValueException("TargetDeclination", value.ToString(),"-90 to +90 degrees");
+                    throw new InvalidValueException("TargetDeclination", value.ToString(), "-90..90");
                 }
                 GeminiHardware.TargetDeclination = value;
             }
@@ -825,14 +863,14 @@ namespace ASCOM.GeminiTelescope
             get { 
                 double val = GeminiHardware.TargetRightAscension;
                 if (val == SharedResources.INVALID_DOUBLE)
-                    throw new ValueNotSetException("TargetRightAscension");
+                    throw new ValueNotSetException("TargetRightAscension is not set");
                 return val;            
             }
             set 
             {
                 if (value < 0 || value > 24)
                 {
-                    throw new InvalidValueException("TargetRightAscension", value.ToString(),"0 to 24 hours");
+                    throw new InvalidValueException("TargetRightAscension", value.ToString(), "0..24");
                 }
                 GeminiHardware.TargetRightAscension=value; 
             }
