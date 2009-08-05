@@ -885,7 +885,7 @@ namespace ASCOM.GeminiTelescope
                 {
                     GeminiHardware.DoCommandResult(":hW", 1000, false);
                 }
-                if (!value && !GeminiHardware.Tracking)
+                if (!value && GeminiHardware.Tracking) //Removed unwanted ! was: (!value && !GeminiHardware.Tracking)
                 {
                     GeminiHardware.DoCommandResult(":hN", 1000, false);
                 }
