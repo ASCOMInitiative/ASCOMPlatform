@@ -126,7 +126,10 @@ namespace ASCOM.GeminiTelescope
                     if (m_WaitForResultHandle.WaitOne(m_Timeout))
                         return m_Result;
                     else
+                    {
+                        GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Time out occurred after " + m_Timeout.ToString() + "msec processing command '" + m_Command + "'");
                         return null;
+                    }
                 }
                 else
                     m_WaitForResultHandle.WaitOne();  // no timeout specified, wait indefinitely
@@ -141,7 +144,8 @@ namespace ASCOM.GeminiTelescope
     /// </summary>
     public static class GeminiHardware
     {
-        
+#region Member Variables
+
         public static ASCOM.Utilities.Profile m_Profile;
         public static ASCOM.Utilities.Util m_Util;
         public static ASCOM.Astrometry.Transform.Transform  m_Transform;
@@ -169,8 +173,8 @@ namespace ASCOM.GeminiTelescope
         private static double m_SiderealTime;
         private static string m_Velocity;
         private static string m_SideOfPier;
-        private static double m_TargetAltitude;
-        private static double m_TargetAzimuth;
+        private static double m_TargetAltitude = SharedResources.INVALID_DOUBLE;
+        private static double m_TargetAzimuth= SharedResources.INVALID_DOUBLE;
 
         private static bool m_AdditionalAlign;
         private static bool m_Precession;
@@ -199,7 +203,9 @@ namespace ASCOM.GeminiTelescope
         private static System.Threading.AutoResetEvent m_WaitForCommand;
 
         private static string m_PolledVariablesString = ":GR#:GD#:GA#:GZ#:Gv#:GS#:Gm#:h?#";
-        
+
+        public static int MAX_TIMEOUT = 10000; //max default timeout for all commands
+
         static Timer tmrReadTimeout = new Timer();
         static System.Threading.AutoResetEvent m_SerialTimeoutExpired = new System.Threading.AutoResetEvent(false);
         static System.Threading.AutoResetEvent m_SerialErrorOccurred = new System.Threading.AutoResetEvent(false);
@@ -235,7 +241,10 @@ namespace ASCOM.GeminiTelescope
         private static int m_BacklashSize = 0;
         private static int m_BrakeSize = 0;
         private static int m_Speed = 1;
+#endregion
 
+
+#region Initializers
         /// <summary>
         ///  TelescopeHadrware constructor
         ///     create serial port
@@ -315,6 +324,12 @@ namespace ASCOM.GeminiTelescope
 
             m_StopBits = (ASCOM.Utilities.SerialStopBits)_stopbits;
 
+            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Latitude", ""), out m_Latitude))
+                m_Latitude = 0.0;
+
+            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Longitude", ""), out m_Longitude))
+                m_Longitude = 0.0;
+
 
             if (m_ComPort != "")
             {
@@ -381,9 +396,10 @@ namespace ASCOM.GeminiTelescope
 
         }
 
- 
+#endregion
 
-        #region Properties For Settings
+
+#region Properties For Settings
 
         /// <summary>
         /// Get/Set serial comm port 
@@ -586,7 +602,7 @@ namespace ASCOM.GeminiTelescope
         ///   In the case of a timeout, the result passed into the callback is 'null'.        
         /// </summary>
         /// <param name="cmd">an array of commands to execute</param>
-        /// <param name="timeout">total timeout for the whole sequence, in msec, or -1 for no timeout</param>
+        /// <param name="timeout">timeout per command in the whole sequence, in msec, or -1 for no timeout</param>
         /// <returns>the result of the last command in the array if the sequence was successfully completed,
         /// otherwise 'null'.
         /// </returns>
@@ -594,6 +610,8 @@ namespace ASCOM.GeminiTelescope
         public static string DoCommandResult(string [] cmd, int timeout, bool bRaw)
         {
             if (!m_Connected) return null;
+
+            int total_timeout = 0;
 
             CommandItem[] ci = new CommandItem[cmd.Length];
 
@@ -604,15 +622,62 @@ namespace ASCOM.GeminiTelescope
 
             // construct an array of all the wait handles
             System.Threading.ManualResetEvent[] events = new System.Threading.ManualResetEvent[ci.Length];
-            for (int i = 0; i < ci.Length; ++i) events[i] = ci[i].WaitObject;
+            for (int i = 0; i < ci.Length; ++i)
+            {
+                events[i] = ci[i].WaitObject;
+                total_timeout += timeout;
+            }
 
             // success only if all wait handles are signalled by the worker thread. Return result from the last command:
-            if (System.Threading.ManualResetEvent.WaitAll(events, timeout)) 
+            if (System.Threading.ManualResetEvent.WaitAll(events, timeout < 0? -1 : total_timeout)) 
                 return ci[ci.Length-1].m_Result;
 
             return null;
         }
 
+        /// <summary>
+        /// Execute a sequence of commands guaranteed not to be interrupted by another ASCOM client or another thread
+        ///   
+        ///   
+        ///   The result in the case of successfull completion is an array  of Gemini generated results for
+        ///   each of the commands. For commands that don't produce a result or timed out, the corresponding result 
+        ///   value will be null.
+        /// 
+        /// </summary>
+        /// <param name="cmd">an array of commands to execute</param>
+        /// <param name="timeout">total timeout for the whole sequence, in msec, or -1 for no timeout</param>
+        /// <param name="bRaw">command is a raw string to be passed to the device unmodified</param>
+        /// <param name="result">out parameter, contains array of results for all the commands</param>
+        public static void DoCommandResult(string[] cmd, int timeout, bool bRaw, out string [] result)
+        {
+            result = null;
+
+            if (!m_Connected) return;
+
+            CommandItem[] ci = new CommandItem[cmd.Length];
+
+            for (int i = 0; i < ci.Length; ++i)
+                ci[i] = new CommandItem(cmd[i], timeout, true, bRaw); //initialize all CommandItem objects
+
+            QueueCommands(ci);  // queue them all at once
+
+            int total_timeout = 0;
+            // construct an array of all the wait handles
+            System.Threading.ManualResetEvent[] events = new System.Threading.ManualResetEvent[ci.Length];
+            for (int i = 0; i < ci.Length; ++i)
+            {
+                total_timeout += timeout;
+                events[i] = ci[i].WaitObject;
+            }
+
+            // success only if all wait handles are signalled by the worker thread. Return result from the last command:
+            if (System.Threading.ManualResetEvent.WaitAll(events, timeout<0? -1 :  total_timeout))
+            {
+                result = new string [ci.Length];
+                for (int i = 0; i < ci.Length; ++i)
+                    result[i] = ci[i].m_Result;
+            }
+        }
 
         /// <summary>
         /// Execute a sequence of commands guaranteed not to be interrupted by another ASCOM client or another thread
@@ -700,9 +765,9 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        #endregion
+#endregion
 
-        #region Telescope Implementation
+#region Telescope Implementation
 
         /// <summary>
         /// Establish connection with the mount, open serial port
@@ -712,6 +777,7 @@ namespace ASCOM.GeminiTelescope
             lock (m_ConnectLock)   // make sure only one connection goes through at a time
             {
                 m_Clients += 1;
+
                 if (!m_SerialPort.IsOpen)
                 {                   
                     GetProfileSettings();
@@ -731,8 +797,9 @@ namespace ASCOM.GeminiTelescope
                         m_SerialPort.Open();
                         m_SerialPort.DtrEnable = true;
                     }
-                    catch
+                    catch (Exception e)
                     {
+                        GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial comm error connecting to port " + m_ComPort + ":" + e.Message);
                         m_Connected = false;
                         return;
                     }
@@ -887,7 +954,6 @@ namespace ASCOM.GeminiTelescope
         {           
             while (!m_CancelAsync)
             {
-                System.Threading.EventWaitHandle ewh = null;
                 object [] commands = null;
 
                 lock (m_CommandQueue)
@@ -926,12 +992,17 @@ namespace ASCOM.GeminiTelescope
                                     serial_cmd = CompleteStandardCommand(ci.m_Command);
                             }                            
                             all_commands += serial_cmd;
-                            if (ci.WaitObject == null) ci.m_Timeout = 1000;    // default timeout of one second for requests where the user doesn't care
+                            if (ci.WaitObject == null) ci.m_Timeout = 2000;    // default timeout for requests where the user doesn't care
                         }
 
                         m_SerialPort.DiscardInBuffer(); //clear all received data
 
-                        System.Diagnostics.Trace.Write("Command '" + all_commands + "' ");
+                        System.Diagnostics.Trace.Write(
+                            DateTime.Now.Hour.ToString("0") + ":" +
+                            DateTime.Now.Minute.ToString("00") + ":" +
+                            DateTime.Now.Second.ToString("00") +"."+  System.DateTime.Now.Millisecond.ToString("000"))
+                            ;
+                        System.Diagnostics.Trace.Write("  Command '" + all_commands + "' ");
 
 #if DEBUG
                         int startTime = System.Environment.TickCount;
@@ -1021,7 +1092,7 @@ namespace ASCOM.GeminiTelescope
             string UTC_Offset = GetCommandResult(command);
 
 
-            if (longitude != null) Longitude = m_Util.DMSToDegrees(longitude);
+            if (longitude != null) Longitude = -m_Util.DMSToDegrees(longitude);  // Gemini has the reverse notion of longitude sign: + for West, - for East
             if (latitude != null) Latitude = m_Util.DMSToDegrees(latitude);
             if (UTC_Offset != null) int.TryParse(UTC_Offset, out m_UTCOffset);
            
@@ -1175,6 +1246,7 @@ namespace ASCOM.GeminiTelescope
             }
             catch
             {
+                GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Timeout error occurred after " + command.m_Timeout + "msec while processing command '" + command.m_Command + "'");
                 return null;
             }
             finally
@@ -1182,20 +1254,28 @@ namespace ASCOM.GeminiTelescope
                 tmrReadTimeout.Stop();
             }
 
-            if (m_SerialErrorOccurred.WaitOne(0)) return null;  // error occurred!
-
+            if (m_SerialErrorOccurred.WaitOne(0))
+            {
+                GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial comm error reported while processing command '" + command.m_Command + "'");
+                return null;  // error occurred!
+            }
             // return value for native commands has a checksum appended: validate it and remove it from the return string:
             if (!string.IsNullOrEmpty(result) && command.m_Command[0] == '<')
             {
                 char chksum = result[result.Length - 1];
                 result = result.Substring(0, result.Length - 1); //remove checksum character
 
-                if (chksum != ComputeChecksum(result))  // bad checksum -- ignore the return value!
+                if (chksum != ComputeChecksum(result))  // bad checksum -- ignore the return value! 
+                {
+                    GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial comm error (bad checksum) while processing command '" + command.m_Command + "'");
                     result = null;
+                }
             }
 
             return result;
         }
+
+
 
         static void tmrReadTimeout_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -1223,7 +1303,7 @@ namespace ASCOM.GeminiTelescope
                         return res;
                 }
                 else
-                    if (m_SerialTimeoutExpired.WaitOne(0)) return null;
+                    if (m_SerialTimeoutExpired.WaitOne(0)) throw new TimeoutException("ReadTo");
             }
         }
 
@@ -1244,7 +1324,7 @@ namespace ASCOM.GeminiTelescope
                     if (res.Length == chars) return res;
                 }
                 else
-                    if (m_SerialTimeoutExpired.WaitOne(0)) return null;
+                    if (m_SerialTimeoutExpired.WaitOne(0)) throw new TimeoutException("ReadNumber");
             }
         }
 
@@ -1395,8 +1475,8 @@ namespace ASCOM.GeminiTelescope
         public static void SetLatitude(double Latitude)
         {         
             m_Latitude = Latitude;
-            string latitudedddmm = m_Util.DegreesToDM(Latitude, "*");
-            DoCommandResult(":St" + latitudedddmm, 1000, false);
+            string latitudedddmm = m_Util.DegreesToDM(Latitude, "*", "");
+            DoCommandResult(":St" + latitudedddmm, MAX_TIMEOUT, false);
         }
 
         /// <summary>
@@ -1406,8 +1486,8 @@ namespace ASCOM.GeminiTelescope
         public static void SetLongitude(double Longitude)
         {
             m_Longitude = Longitude;
-            string longitudedddmm = m_Util.DegreesToDM(Longitude, "*");
-            DoCommandResult(":Sg" + longitudedddmm, 1000, false);
+            string longitudedddmm = m_Util.DegreesToDM(-Longitude, "*", "");  // Gemini has the reverse notion of longitude sign: + for West, - for East
+            DoCommandResult(":Sg" + longitudedddmm, MAX_TIMEOUT, false);
         }
 
         /// <summary>
@@ -1415,8 +1495,23 @@ namespace ASCOM.GeminiTelescope
         /// retrieved from the latest polled value from the mount, no actual command is executed
         /// </summary>
         public static string Velocity
-        { get { return m_Velocity; } }
+        {
+            get { return m_Velocity; }
+            set { m_Velocity = value; }
+        }
 
+
+        public static bool Slewing
+        {
+            get
+            {
+                string res = DoCommandResult("<99:", MAX_TIMEOUT, false);
+                int status;
+                if (int.TryParse(res, out status))
+                    if ((status & 8) != 0) return true;
+                return false;
+            }
+        }
         /// <summary>
         /// Get current Status of Gemini Park
         /// retrieved from the latest polled value from the mount, no actual command is executed
@@ -1454,7 +1549,7 @@ namespace ASCOM.GeminiTelescope
             {
                 cmd[2] = ":CM";
             }
-            DoCommandResult(cmd,5000, false);
+            DoCommandResult(cmd, MAX_TIMEOUT/2, false);
         }
 
 
@@ -1472,7 +1567,7 @@ namespace ASCOM.GeminiTelescope
             {
                 cmd[2] = ":CM";
             }
-            DoCommandResult(cmd, 5000, false);
+            DoCommandResult(cmd, MAX_TIMEOUT/2, false);
         }
 
 
@@ -1483,7 +1578,7 @@ namespace ASCOM.GeminiTelescope
         {
             string[] cmd = { ":Sr" + m_Util.HoursToHMS(TargetRightAscension, ":", ":", ""), ":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ""), ":MS" };
            
-            DoCommandResult(cmd,2000, false);
+            DoCommandResult(cmd, MAX_TIMEOUT/2, false);
         }
         /// <summary>
         /// Slews the mount using Ra and Dec
@@ -1492,7 +1587,8 @@ namespace ASCOM.GeminiTelescope
         {
             string[] cmd = { ":Sr" + m_Util.HoursToHMS(TargetRightAscension, ":", ":", ""), ":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ""), ":MS" };
 
-            DoCommandResult(cmd,1000, false);
+            
+            DoCommandResult(cmd, MAX_TIMEOUT/2, false);
         }
 
 
@@ -1507,7 +1603,7 @@ namespace ASCOM.GeminiTelescope
             {
                 cmd[2] = ":CM";
             }
-            DoCommandResult(cmd, 1000, false);
+            DoCommandResult(cmd, MAX_TIMEOUT/2, false);
 
         }
         
@@ -1533,7 +1629,7 @@ namespace ASCOM.GeminiTelescope
         public static void SlewHorizonAsync()
         {
             string[] cmd = { ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ""), ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ""), ":MA" };
-            DoCommandResult(cmd, 1000, false);
+            DoCommandResult(cmd, MAX_TIMEOUT/2, false);
         }
         #endregion
 
