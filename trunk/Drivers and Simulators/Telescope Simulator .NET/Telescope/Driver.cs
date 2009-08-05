@@ -18,14 +18,8 @@
 //
 using System;
 using System.Collections;
-using System.Text;
-using System.Runtime.InteropServices;
-using System.ComponentModel;
 using System.Reflection;
-
-
-using ASCOM;
-using ASCOM.HelperNET;
+using System.Runtime.InteropServices;
 using ASCOM.Interface;
 
 

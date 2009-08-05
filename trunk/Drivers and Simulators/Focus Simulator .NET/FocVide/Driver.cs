@@ -46,7 +46,7 @@ namespace ASCOM.FocVide
         //
         private static void RegUnregASCOM(bool bRegister)
         {
-            HelperNET.Profile P = new HelperNET.Profile();
+			var P = new Utilities.Profile();
             P.DeviceType = "Focuser";					//  Requires Helper 5.0.3 or later
             if (bRegister)
                 P.Register(s_csDriverID, s_csDriverDescription);

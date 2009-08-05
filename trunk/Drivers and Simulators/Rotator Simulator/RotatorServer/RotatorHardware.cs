@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using ASCOM;
-using ASCOM.Helper;
+using Helper = ASCOM.Utilities;
 
 namespace ASCOM.Simulator
 {
@@ -43,7 +43,7 @@ namespace ASCOM.Simulator
 		static RotatorHardware()
 		{
 			Profile = new Helper.Profile();
-			Profile.DeviceTypeV = "Rotator";
+			Profile.DeviceType = "Rotator";
 			s_fPosition = 0.0F;
 			s_bConnected = false;
 			s_bMoving = false;

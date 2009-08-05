@@ -1,4 +1,4 @@
-Imports ASCOM.HelperNET
+Imports ASCOM.Utilities
 Imports System.Reflection
 Imports ASCOM.Interface
 'tabs=4
@@ -121,7 +121,7 @@ Public Class SafetyMonitor
 #Region "New and Dispose"
     ' Constructor - Must be public for COM registration!
     Public Sub New()
-        Dim Prof As Interfaces.IProfile = New ASCOM.HelperNET.Profile
+        Dim Prof As Interfaces.IProfile = New Profile
         Try 'Read the CanEmergencyShutdown state from the profile
             Prof.DeviceType = SAFETY_MONITOR
             g_CanEmergencyShutdown = CBool(Prof.GetValue(s_csDriverID, CAN_EMERGENCY_SHUTDOWN))
@@ -148,10 +148,7 @@ Public Class SafetyMonitor
 
 #Region "ASCOM Registration"
     Private Shared Sub RegUnregASCOM(ByVal bRegister As Boolean)
-        Dim P As ASCOM.HelperNET.Interfaces.IProfile
-        P = New ASCOM.HelperNET.Profile
-
-        P.DeviceType = "SafetyMonitor"
+        Dim P As ASCOM.Utilities.Interfaces.IProfile = New Profile() With {.DeviceType = "SafetyMonitor"}
         If bRegister Then
             P.Register(s_csDriverID, s_csDriverDescription)
         Else

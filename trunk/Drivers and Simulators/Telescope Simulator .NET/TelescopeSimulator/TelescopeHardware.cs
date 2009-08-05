@@ -27,10 +27,7 @@ namespace ASCOM.TelescopeSimulator
     public class TelescopeHardware
     {
         private static Timer m_Timer = new Timer(); //Simulated Hardware by running a Timer
-        private static HelperNET.Profile m_Profile;
-
-        
-
+        private static Utilities.Profile m_Profile;
         private static bool m_OnTop;
 
         //Capabilities
@@ -121,7 +118,7 @@ namespace ASCOM.TelescopeSimulator
 
         static TelescopeHardware()
         {
-            m_Profile = new HelperNET.Profile();
+            m_Profile = new Utilities.Profile();
             m_Timer.Elapsed += new ElapsedEventHandler(TimerEvent);
             m_Timer.Interval = SharedResources.TIMER_INTERVAL * 1000;
             
