@@ -164,7 +164,7 @@ namespace ASCOM.GeminiTelescope
         private static double m_Declination;
         private static double m_Altitude;
         private static double m_Azimuth;
-        private static double m_TargetRightAscension;
+        private static double m_TargetRightAscension = SharedResources.INVALID_DOUBLE;
         private static double m_TargetDeclination = SharedResources.INVALID_DOUBLE;
         private static double m_SiderealTime;
         private static string m_Velocity;
@@ -320,6 +320,16 @@ namespace ASCOM.GeminiTelescope
             {
                 m_SerialPort.PortName = m_ComPort;
             }
+
+            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Latitude", ""), out m_Latitude))
+                m_Latitude = 0.0;
+
+            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Longitude", ""), out m_Longitude))
+                m_Longitude = 0.0;
+
+
+
+
 
             //Focuser Settings
             m_Profile.DeviceType = "Focuser";
