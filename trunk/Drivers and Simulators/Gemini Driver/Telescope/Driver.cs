@@ -21,7 +21,7 @@ using System.Collections;
 using System.Text;
 using System.Runtime.InteropServices;
 
-//using ASCOM;
+using ASCOM;
 using ASCOM.Utilities;
 using ASCOM.Interface;
 using ASCOM.GeminiTelescope;
@@ -214,18 +214,21 @@ namespace ASCOM.GeminiTelescope
         //
         // Driver private data (rate collections)
         //
-        private AxisRates[] m_AxisRates;
+        private AxisRates[] m_AxisRates = null;
         private TrackingRates m_TrackingRates;
+
+        private bool m_FoundHome = false;
 
         //
         // Constructor - Must be public for COM registration!
         //
         public Telescope()
-        {
+        {/*
             m_AxisRates = new AxisRates[3];
             m_AxisRates[0] = new AxisRates(TelescopeAxes.axisPrimary);
             m_AxisRates[1] = new AxisRates(TelescopeAxes.axisSecondary);
             m_AxisRates[2] = new AxisRates(TelescopeAxes.axisTertiary);
+          */
             m_TrackingRates = new TrackingRates();
             // TODO Implement your additional construction here
         }
@@ -240,7 +243,7 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.AtHome || GeminiHardware.AtPark)              
                 throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
-            GeminiHardware.DoCommandResult(":Q", 1000, false);
+            GeminiHardware.DoCommandResult(":Q", GeminiHardware.MAX_TIMEOUT, false);
         }
 
         public AlignmentModes AlignmentMode
@@ -267,7 +270,7 @@ namespace ASCOM.GeminiTelescope
         public bool AtHome
         {
             // TODO Replace this with your implementation
-            get { return GeminiHardware.AtHome; }
+            get { return m_FoundHome; }
         }
 
         public bool AtPark
@@ -277,9 +280,18 @@ namespace ASCOM.GeminiTelescope
 
         public IAxisRates AxisRates(TelescopeAxes Axis)
         {
+            if (m_AxisRates == null && GeminiHardware.Connected)
+            {
+                m_AxisRates = new AxisRates[3];
+                m_AxisRates[0] = new AxisRates(TelescopeAxes.axisPrimary);
+                m_AxisRates[1] = new AxisRates(TelescopeAxes.axisSecondary);
+                m_AxisRates[2] = new AxisRates(TelescopeAxes.axisTertiary);
+            }
+            else return null;
+
             switch (Axis)
             {
-                case TelescopeAxes.axisPrimary:
+                case TelescopeAxes.axisPrimary:                
                     return m_AxisRates[0];
                 case TelescopeAxes.axisSecondary:
                     return m_AxisRates[1];
@@ -395,7 +407,7 @@ namespace ASCOM.GeminiTelescope
 
         public string CommandNative(string Command)
         {
-            string result = GeminiHardware.DoCommandResult(Command, 1000, false);
+            string result = GeminiHardware.DoCommandResult(Command, GeminiHardware.MAX_TIMEOUT, false);
 
             if (result == null) return "";
             else            
@@ -406,20 +418,20 @@ namespace ASCOM.GeminiTelescope
 
         public void CommandBlind(string Command, bool Raw)
         {
-            GeminiHardware.DoCommandResult(Command, 10000, Raw);
+            GeminiHardware.DoCommandResult(Command, GeminiHardware.MAX_TIMEOUT, Raw);
         }
 
         public bool CommandBool(string Command, bool Raw)
         {
             if (Command == "") throw new InvalidValueException("CommandBool", "", "");
-            string result = GeminiHardware.DoCommandResult(Command, 1000, Raw);
+            string result = GeminiHardware.DoCommandResult(Command, GeminiHardware.MAX_TIMEOUT, Raw);
             if (result!=null && result.StartsWith("1")) return true;
             return false;
         }
 
         public string CommandString(string Command, bool Raw)
         {
-            string result = GeminiHardware.DoCommandResult(Command, 1000, Raw);
+            string result = GeminiHardware.DoCommandResult(Command, GeminiHardware.MAX_TIMEOUT, Raw);
             if (result == null) return null;
             if (result.EndsWith("#")) return result.Substring(result.Length - 1);
             return result;
@@ -447,7 +459,7 @@ namespace ASCOM.GeminiTelescope
         {
             get 
             { 
-                string rate = GeminiHardware.DoCommandResult("<412:", 2000, false);
+                string rate = GeminiHardware.DoCommandResult("<412:", GeminiHardware.MAX_TIMEOUT, false);
                 if (rate != null) return int.Parse(rate);
                 throw new TimeoutException("DeclinationRate");
             }
@@ -457,7 +469,7 @@ namespace ASCOM.GeminiTelescope
                 int val = (int)value;
                 if (val < 0 || val > 65535) throw new InvalidValueException("DeclinationRate", value.ToString(), "0..65535");
                 string cmd = ">412:" + ((int)(value)).ToString();
-                GeminiHardware.DoCommandResult(cmd, 1000, false);
+                GeminiHardware.DoCommandResult(cmd, GeminiHardware.MAX_TIMEOUT, false);
             }
         }
 
@@ -469,14 +481,14 @@ namespace ASCOM.GeminiTelescope
         public PierSide DestinationSideOfPier(double RightAscension, double Declination)
         {
             // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("DestinationSideOfPier");
+            throw new ASCOM.NotImplementedException("DestinationSideOfPier");
         }
 
         public bool DoesRefraction
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("DoesRefraction", false); }
-            set { throw new PropertyNotImplementedException("DoesRefraction", true); }
+            get { throw new ASCOM.PropertyNotImplementedException("DoesRefraction", false); }
+            set { throw new ASCOM.PropertyNotImplementedException("DoesRefraction", true); }
         }
 
         public string DriverInfo
@@ -519,9 +531,10 @@ namespace ASCOM.GeminiTelescope
             if (GeminiHardware.AtPark)
                 throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
-            GeminiHardware.DoCommandResult(":hP", 1000, false);
+            GeminiHardware.DoCommandResult(":hP", GeminiHardware.MAX_TIMEOUT, false);
             WaitForHomeOrPark("Home");
-            GeminiHardware.DoCommandResult(":hN", 1000, false); //resume tracking, as FindHome isn't supposed to stop the mount
+            GeminiHardware.DoCommandResult(":hW", GeminiHardware.MAX_TIMEOUT, false); //resume tracking, as FindHome isn't supposed to stop the mount
+            m_FoundHome = true;        
         }
 
         public double FocalLength
@@ -547,7 +560,7 @@ namespace ASCOM.GeminiTelescope
         public double GuideRateRightAscension
         {         
             get {
-                string result = GeminiHardware.DoCommandResult("<150:", 2000, false);
+                string result = GeminiHardware.DoCommandResult("<150:", GeminiHardware.MAX_TIMEOUT, false);
                 if (result == null) throw new TimeoutException("GuideRateRightAscention");
                 return double.Parse(result) * SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0;
             }
@@ -556,7 +569,7 @@ namespace ASCOM.GeminiTelescope
                 double val = value/(SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0) ;
                 if (val < 0.2 || val > 0.8) throw new InvalidValueException("GuideRate", value.ToString(),"");
                 string cmd = ">150:" + val.ToString("0.0");    //internationalization issues?
-                GeminiHardware.DoCommandResult(cmd, 1000, false);                
+                GeminiHardware.DoCommandResult(cmd, GeminiHardware.MAX_TIMEOUT, false);                
             }
         }
 
@@ -573,8 +586,56 @@ namespace ASCOM.GeminiTelescope
 
         public void MoveAxis(TelescopeAxes Axis, double Rate)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("MoveAxis");
+            if (GeminiHardware.AtPark)
+                throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+
+            string[] cmds = { null, null };
+
+            switch (Axis)
+            {
+                case TelescopeAxes.axisPrimary: //RA
+                    if (Rate < 0) cmds[1] = ":Me";
+                    else if (Rate > 0)
+                        cmds[1] = ":Mw";
+                    else
+                    {
+                        GeminiHardware.DoCommandResult(new string[] { ":Qe", ":Qw" }, GeminiHardware.MAX_TIMEOUT/2, false); //stop motion in RA
+                        return;
+                    }
+                    break;
+                case TelescopeAxes.axisSecondary: //DEC
+                    if (Rate < 0) cmds[1] = ":Ms";
+                    else if (Rate > 0)
+                        cmds[1] = ":Mn";
+                    else
+                    {
+                        GeminiHardware.DoCommandResult(new string[] { ":Qe", ":Qw" }, GeminiHardware.MAX_TIMEOUT/2, false); //stop motion in RA
+                        return;
+                    }
+                    break;
+            }
+
+            // find the rate in the list of rates. The position will determine if it's
+            // guiding, slewing, or centering rate:
+            int cnt = 0;
+            foreach (Rate r in AxisRates(Axis))
+            {
+                if (r.Minimum >= Rate && r.Minimum <= Rate)
+                    break;
+                cnt++;
+            }
+
+            switch (cnt)
+            {
+                case 0: // slew rate
+                    cmds[0] = ":RS"; break;
+                case 1: // center rate
+                    cmds[0] = ":RC"; break;
+                default: // guide rate
+                    cmds[0] = ":RG"; break;
+            }
+
+            GeminiHardware.DoCommandResult(cmds, GeminiHardware.MAX_TIMEOUT/2, false);  
         }
 
         public string Name
@@ -589,10 +650,10 @@ namespace ASCOM.GeminiTelescope
 
            // string[] cmd = { ":hP", ":hN" };
            // GeminiHardware.DoCommand(cmd);
-            GeminiHardware.DoCommandResult(":hC", 1000, false);
+            GeminiHardware.DoCommandResult(":hC", GeminiHardware.MAX_TIMEOUT, false);
 
             WaitForHomeOrPark("Park");
-            GeminiHardware.DoCommandResult(":hN", 1000, false);
+            GeminiHardware.DoCommandResult(":hN", GeminiHardware.MAX_TIMEOUT, false);
         }
 
         /// <summary>
@@ -637,7 +698,7 @@ namespace ASCOM.GeminiTelescope
                 count -= d;
             }
             GeminiHardware.IsPulseGuiding = true;
-            GeminiHardware.DoCommandResult(cmds, Duration + 1000, false);
+            GeminiHardware.DoCommandResult(cmds, Duration + GeminiHardware.MAX_TIMEOUT, false);
             GeminiHardware.IsPulseGuiding = false;
         }
 
@@ -692,7 +753,8 @@ namespace ASCOM.GeminiTelescope
             {
                 if ((value == PierSide.pierEast && GeminiHardware.SideOfPier == "W") || (value == PierSide.pierWest && GeminiHardware.SideOfPier == "E"))
                 {
-                    GeminiHardware.DoCommandResult(":Mf", 1000, false);
+                    GeminiHardware.DoCommandResult(":Mf", -1 , false);
+                    WaitForSlewToEnd();
                 }
             }
         }
@@ -724,7 +786,7 @@ namespace ASCOM.GeminiTelescope
             {
                 if (value < -90 || value > 90)
                 {
-                    throw new InvalidValueException("SiteLatitude", value.ToString(), "-90..90");
+                    throw new ASCOM.InvalidValueException("SiteLatitude", value.ToString(), "-90..90");
                 }
                 GeminiHardware.SetLatitude(value);
 
@@ -739,7 +801,7 @@ namespace ASCOM.GeminiTelescope
             {
                 if (value < -180 || value > 180)
                 {
-                    throw new InvalidValueException("SiteLongitude",value.ToString(), "-180..180");
+                    throw new ASCOM.InvalidValueException("SiteLongitude",value.ToString(), "-180..180");
                 }
                 GeminiHardware.SetLongitude(value);
 
@@ -749,8 +811,8 @@ namespace ASCOM.GeminiTelescope
         public short SlewSettleTime
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("SlewSettleTime", false); }
-            set { throw new PropertyNotImplementedException("SlewSettleTime", true); }
+            get { throw new ASCOM.PropertyNotImplementedException("SlewSettleTime", false); }
+            set { throw new ASCOM.PropertyNotImplementedException("SlewSettleTime", true); }
         }
 
         public void SlewToAltAz(double Azimuth, double Altitude)
@@ -758,12 +820,15 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.TargetAzimuth = Azimuth;
             GeminiHardware.TargetAltitude = Altitude;
             GeminiHardware.SlewHorizon();
+            WaitForSlewToEnd();
+
         }
 
         public void SlewToAltAzAsync(double Azimuth, double Altitude)
         {
             GeminiHardware.TargetAzimuth = Azimuth;
             GeminiHardware.TargetAltitude = Altitude;
+            if (Slewing) AbortSlew();
             GeminiHardware.SlewHorizonAsync();
         }
 
@@ -774,31 +839,51 @@ namespace ASCOM.GeminiTelescope
 
             GeminiHardware.TargetRightAscension = RightAscension;
             GeminiHardware.TargetDeclination = Declination;
+            if (Slewing) AbortSlew();
             GeminiHardware.SlewEquatorial();
+
+            WaitForSlewToEnd();
         }
 
         public void SlewToCoordinatesAsync(double RightAscension, double Declination)
         {
             if (GeminiHardware.AtHome || GeminiHardware.AtPark)
-                throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+                throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             GeminiHardware.TargetRightAscension = RightAscension;
             GeminiHardware.TargetDeclination = Declination;
+            if (Slewing) AbortSlew();
             GeminiHardware.SlewEquatorialAsync();
+        }
+
+        private void WaitForSlewToEnd()
+        {
+            GeminiHardware.Velocity = "";
+
+            int when = System.Environment.TickCount + 5000;
+            while (System.Environment.TickCount < when && !(GeminiHardware.Velocity=="S"  || GeminiHardware.Velocity=="C"))
+                System.Threading.Thread.Sleep(500);
+
+            while (GeminiHardware.Velocity=="S"  || GeminiHardware.Velocity=="C") System.Threading.Thread.Sleep(500);
+
         }
 
         public void SlewToTarget()
         {
             if (GeminiHardware.AtHome || GeminiHardware.AtPark)
-                throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+                throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
+            if (Slewing) AbortSlew();
             GeminiHardware.SlewEquatorial();
+            WaitForSlewToEnd();
         }
 
         public void SlewToTargetAsync()
         {
             if (GeminiHardware.AtHome || GeminiHardware.AtPark)
-                throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+                throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+
+            if (Slewing) AbortSlew();
             GeminiHardware.SlewEquatorialAsync();
         }
 
@@ -827,15 +912,18 @@ namespace ASCOM.GeminiTelescope
         public void SyncToCoordinates(double RightAscension, double Declination)
         {
             if (GeminiHardware.AtPark)
-                    throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+                    throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             GeminiHardware.SyncToEquatorialCoords(RightAscension, Declination);
         }
 
         public void SyncToTarget()
         {
+            if (GeminiHardware.AtPark)
+                throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+
             if (TargetDeclination == SharedResources.INVALID_DOUBLE || TargetRightAscension == SharedResources.INVALID_DOUBLE)
-                throw new DriverException(SharedResources.MSG_PROP_NOT_SET, (int)SharedResources.SCOPE_PROP_NOT_SET);
+                throw new ASCOM.DriverException(SharedResources.MSG_PROP_NOT_SET, (int)SharedResources.SCOPE_PROP_NOT_SET);
             GeminiHardware.SyncEquatorial();
         }
 
@@ -844,14 +932,14 @@ namespace ASCOM.GeminiTelescope
             get { 
                 double val = GeminiHardware.TargetDeclination;
                 if (val == SharedResources.INVALID_DOUBLE)
-                    throw new ValueNotSetException("TargetDeclination");
+                    throw new ASCOM.ValueNotSetException("TargetDeclination");
                 return val;
             }
             set
             {
                 if (value < -90 || value > 90)
                 {
-                    throw new InvalidValueException("TargetDeclination", value.ToString(), "-90..90");
+                    throw new ASCOM.InvalidValueException("TargetDeclination", value.ToString(), "-90..90");
                 }
                 GeminiHardware.TargetDeclination = value;
             }
@@ -883,11 +971,11 @@ namespace ASCOM.GeminiTelescope
             {
                 if (value && !GeminiHardware.Tracking)
                 {
-                    GeminiHardware.DoCommandResult(":hW", 1000, false);
+                    GeminiHardware.DoCommandResult(":hW", GeminiHardware.MAX_TIMEOUT, false);
                 }
-                if (!value && GeminiHardware.Tracking) //Removed unwanted ! was: (!value && !GeminiHardware.Tracking)
+                if (!value && GeminiHardware.Tracking)
                 {
-                    GeminiHardware.DoCommandResult(":hN", 1000, false);
+                    GeminiHardware.DoCommandResult(":hN", GeminiHardware.MAX_TIMEOUT, false);
                 }
             }
         }
@@ -913,7 +1001,7 @@ namespace ASCOM.GeminiTelescope
 
         public void Unpark()
         {
-            GeminiHardware.DoCommandResult(":hW", 5000, false);
+            GeminiHardware.DoCommandResult(":hW", GeminiHardware.MAX_TIMEOUT, false);
         }
 
         #endregion
@@ -994,19 +1082,31 @@ namespace ASCOM.GeminiTelescope
             // to the constructor. Thus we switch() below, and each case should 
             // initialize the array for the rate for the selected axis.
             //
+
+            // goto slew, centering, and guiding speeds from the mount
+            string[] get_rates = { "<140:", "<170:", "<150:"  };
+            string[] result = null;
+
+            GeminiHardware.DoCommandResult(get_rates, 3000, false, out result);
+
+            // if didn't get a result or one of the results timed out, throw an error:
+            if (result == null) throw new TimeoutException("AxisRates");
+            foreach (string s in result)
+                if (s == null) throw new TimeoutException("AxisRates");
+
             switch (Axis)
             {
                 case TelescopeAxes.axisPrimary:
-                    // TODO Initialize this array with any Primary axis rates that your driver may provide
-                    // Example: m_Rates = new Rate[] { new Rate(10.5, 30.2), new Rate(54.0, 43.6) }
-                    m_Rates = new Rate[0];
-                    break;
                 case TelescopeAxes.axisSecondary:
-                    // TODO Initialize this array with any Secondary axis rates that your driver may provide
-                    m_Rates = new Rate[0];
+                    m_Rates = new Rate[result.Length];
+                    for(int idx=0; idx<result.Length; ++idx)
+                    {
+                        double rate = 0;
+                        if (!double.TryParse(result[idx], out rate)) throw new TimeoutException("AxisRates");
+                        m_Rates[idx].Maximum = m_Rates[idx].Maximum = rate * SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0;  // convert to rate in deg/sec
+                    }
                     break;
                 case TelescopeAxes.axisTertiary:
-                    // TODO Initialize this array with any Tertiary axis rates that your driver may provide
                     m_Rates = new Rate[0];
                     break;
             }
