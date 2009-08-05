@@ -21,7 +21,7 @@ using System.Collections;
 using System.Text;
 using System.Runtime.InteropServices;
 
-using ASCOM;
+//using ASCOM;
 using ASCOM.Utilities;
 using ASCOM.Interface;
 using ASCOM.GeminiTelescope;

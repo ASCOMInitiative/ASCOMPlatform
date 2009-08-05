@@ -155,10 +155,10 @@ Module GlobalVariables
     ' ---------
     ' Variables
     ' ---------
-    Public g_Profile As HelperNET.Profile
+    Public g_Profile As Utilities.Profile
     Public g_trafficDialog As ShowTrafficForm           ' Traffic window
 
-    Public WithEvents g_timer As New HelperNET.Timer
+    Public WithEvents g_timer As New Utilities.Timer
     ' ----------------------------------------------------------
     ' Driver ID and descriptive string that shows in the Chooser
     ' ----------------------------------------------------------

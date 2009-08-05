@@ -13,15 +13,14 @@
 // 28-May-07 rbd	Unregister missing Programmable subkey, was raising error.
 //
 using System;
-using System.IO;
-using System.Windows.Forms;
-using System.Drawing;
 using System.Collections;
-using System.Runtime.InteropServices;
+using System.IO;
 using System.Reflection;
-using Microsoft.Win32;
-using System.Text;
+using System.Runtime.InteropServices;
 using System.Threading;
+using System.Windows.Forms;
+using Microsoft.Win32;
+using Helper = ASCOM.Utilities;
 
 namespace ASCOM.Simulator
 {
@@ -362,7 +361,7 @@ namespace ASCOM.Simulator
 					attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyProductAttribute));
 					string chooserName = ((AssemblyProductAttribute)attr).Product;
 					Helper.Profile P = new Helper.Profile();
-					P.DeviceTypeV = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
+					P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
 					P.Register(progid, chooserName);
 					try										// In case Helper becomes native .NET
 					{
@@ -436,7 +435,7 @@ namespace ASCOM.Simulator
 					// ASCOM
 					//
 					Helper.Profile P = new Helper.Profile();
-					P.DeviceTypeV = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
+					P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
 					P.Unregister(progid);
 					try										// In case Helper becomes native .NET
 					{

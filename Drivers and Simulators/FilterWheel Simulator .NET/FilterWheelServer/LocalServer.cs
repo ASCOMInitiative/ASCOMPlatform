@@ -21,7 +21,7 @@ using System.Reflection;
 using Microsoft.Win32;
 using System.Text;
 using System.Threading;
-using Helper = ASCOM.HelperNET;
+using Helper = ASCOM.Utilities;
 
 namespace ASCOM.FilterWheelSim
 {
