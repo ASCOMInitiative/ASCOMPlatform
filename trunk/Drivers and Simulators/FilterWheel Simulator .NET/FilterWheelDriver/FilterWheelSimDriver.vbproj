@@ -155,9 +155,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FilterWheelServer\FilterWheelSim.csproj">
+    <ProjectReference Include="..\FilterWheelServer\FilterWheelSimServer.csproj">
       <Project>{D659379E-3131-4AD4-8D62-5C8BAC2C9A82}</Project>
-      <Name>FilterWheelSim</Name>
+      <Name>FilterWheelSimServer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
