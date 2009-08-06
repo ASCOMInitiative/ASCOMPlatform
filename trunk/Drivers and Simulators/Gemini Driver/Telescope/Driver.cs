@@ -280,14 +280,18 @@ namespace ASCOM.GeminiTelescope
 
         public IAxisRates AxisRates(TelescopeAxes Axis)
         {
-            if (m_AxisRates == null && GeminiHardware.Connected)
+            if (m_AxisRates == null)
             {
-                m_AxisRates = new AxisRates[3];
-                m_AxisRates[0] = new AxisRates(TelescopeAxes.axisPrimary);
-                m_AxisRates[1] = new AxisRates(TelescopeAxes.axisSecondary);
-                m_AxisRates[2] = new AxisRates(TelescopeAxes.axisTertiary);
+                if (GeminiHardware.Connected)
+                {
+                    m_AxisRates = new AxisRates[3];
+                    m_AxisRates[0] = new AxisRates(TelescopeAxes.axisPrimary);
+                    m_AxisRates[1] = new AxisRates(TelescopeAxes.axisSecondary);
+                    m_AxisRates[2] = new AxisRates(TelescopeAxes.axisTertiary);
+                }
+                else
+                    return null;
             }
-            else return null;
 
             switch (Axis)
             {
@@ -407,6 +411,7 @@ namespace ASCOM.GeminiTelescope
 
         public string CommandNative(string Command)
         {
+            if (Command == String.Empty) throw new ASCOM.InvalidValueException("CommandNative", Command, "valid Gemini command");
             string result = GeminiHardware.DoCommandResult(Command, GeminiHardware.MAX_TIMEOUT, false);
 
             if (result == null) return "";
@@ -418,12 +423,13 @@ namespace ASCOM.GeminiTelescope
 
         public void CommandBlind(string Command, bool Raw)
         {
+            if (Command == String.Empty) throw new ASCOM.InvalidValueException("CommandBlind", Command, "valid Gemini command");
             GeminiHardware.DoCommandResult(Command, GeminiHardware.MAX_TIMEOUT, Raw);
         }
 
         public bool CommandBool(string Command, bool Raw)
         {
-            if (Command == "") throw new InvalidValueException("CommandBool", "", "");
+            if (Command == "") throw new InvalidValueException("CommandBool", "", "valid Gemini command");
             string result = GeminiHardware.DoCommandResult(Command, GeminiHardware.MAX_TIMEOUT, Raw);
             if (result!=null && result.StartsWith("1")) return true;
             return false;
@@ -431,6 +437,8 @@ namespace ASCOM.GeminiTelescope
 
         public string CommandString(string Command, bool Raw)
         {
+            if (Command == String.Empty) throw new ASCOM.InvalidValueException("CommandString", Command, "valid Gemini command");
+
             string result = GeminiHardware.DoCommandResult(Command, GeminiHardware.MAX_TIMEOUT, Raw);
             if (result == null) return null;
             if (result.EndsWith("#")) return result.Substring(result.Length - 1);
@@ -481,7 +489,7 @@ namespace ASCOM.GeminiTelescope
         public PierSide DestinationSideOfPier(double RightAscension, double Declination)
         {
             // TODO Replace this with your implementation
-            throw new ASCOM.NotImplementedException("DestinationSideOfPier");
+            throw new ASCOM.PropertyNotImplementedException("DestinationSideOfPier",false);
         }
 
         public bool DoesRefraction
@@ -586,8 +594,8 @@ namespace ASCOM.GeminiTelescope
 
         public void MoveAxis(TelescopeAxes Axis, double Rate)
         {
-            if (GeminiHardware.AtPark)
-                throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+//            if (GeminiHardware.AtPark)
+//                throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             string[] cmds = { null, null };
 
@@ -613,14 +621,20 @@ namespace ASCOM.GeminiTelescope
                         return;
                     }
                     break;
+                default:
+                    throw new ASCOM.InvalidValueException("MoveAxis", Axis.ToString(), "Primary,Secondary");
             }
+
+            Rate = Math.Abs(Rate);
+
+            const double RateTolerance = 1e-5;  // 1e-6 is 0.036 arcseconds/second
 
             // find the rate in the list of rates. The position will determine if it's
             // guiding, slewing, or centering rate:
             int cnt = 0;
             foreach (Rate r in AxisRates(Axis))
             {
-                if (r.Minimum >= Rate && r.Minimum <= Rate)
+                if (r.Minimum >= Rate-RateTolerance && r.Minimum <= Rate+RateTolerance) // use tolerance to ensure doubles compare properly
                     break;
                 cnt++;
             }
@@ -631,8 +645,11 @@ namespace ASCOM.GeminiTelescope
                     cmds[0] = ":RS"; break;
                 case 1: // center rate
                     cmds[0] = ":RC"; break;
-                default: // guide rate
+                case 2: // guide rate
                     cmds[0] = ":RG"; break;
+
+                default:
+                    throw new ASCOM.InvalidValueException("MoveAxis", Axis.ToString(), "guiding, centering, or slewing speeds");
             }
 
             GeminiHardware.DoCommandResult(cmds, GeminiHardware.MAX_TIMEOUT/2, false);  
@@ -695,7 +712,6 @@ namespace ASCOM.GeminiTelescope
             {
                 int d = (count > 255 ? 255 : count);
                 cmds[idx] = cmd + d.ToString();
-                count -= d;
             }
             GeminiHardware.IsPulseGuiding = true;
             GeminiHardware.DoCommandResult(cmds, Duration + GeminiHardware.MAX_TIMEOUT, false);
@@ -951,7 +967,7 @@ namespace ASCOM.GeminiTelescope
             get { 
                 double val = GeminiHardware.TargetRightAscension;
                 if (val == SharedResources.INVALID_DOUBLE)
-                    throw new ValueNotSetException("TargetRightAscension is not set");
+                    throw new ValueNotSetException("TargetRightAscension");
                 return val;            
             }
             set 
@@ -982,9 +998,30 @@ namespace ASCOM.GeminiTelescope
 
         public DriveRates TrackingRate
         {
-            // TODO Replace this with your implementation
-            get { return DriveRates.driveSidereal; }
-            set {  }
+            get {
+                string res = GeminiHardware.DoCommandResult("<130:", GeminiHardware.MAX_TIMEOUT, false);
+                switch (res) 
+                {
+                    case "131": return DriveRates.driveSidereal;
+                    case "132": return DriveRates.driveKing;
+                    case "133": return DriveRates.driveLunar;
+                    case "134": return DriveRates.driveSolar;
+                    case null: throw new TimeoutException("Get TrackingRate");
+                    default: throw new ASCOM.PropertyNotImplementedException("TrackingRate for custom rate", false);
+                }
+            }
+            set {
+                string cmd = "";
+
+                switch (value)
+                {
+                    case DriveRates.driveSidereal : cmd = ">131:"; break;
+                    case DriveRates.driveKing : cmd = ">132:"; break;
+                    case DriveRates.driveLunar: cmd = ">133:"; break;
+                    case DriveRates.driveSolar: cmd = ">134:"; break;
+                }
+                GeminiHardware.DoCommandResult(cmd, GeminiHardware.MAX_TIMEOUT, false);
+            }
         }
 
         public ITrackingRates TrackingRates
@@ -1083,10 +1120,16 @@ namespace ASCOM.GeminiTelescope
             // initialize the array for the rate for the selected axis.
             //
 
+            if (Axis == TelescopeAxes.axisTertiary)
+            {
+                m_Rates = new Rate[0];
+                return;
+            }
+
             // goto slew, centering, and guiding speeds from the mount
             string[] get_rates = { "<140:", "<170:", "<150:"  };
             string[] result = null;
-
+          
             GeminiHardware.DoCommandResult(get_rates, 3000, false, out result);
 
             // if didn't get a result or one of the results timed out, throw an error:
@@ -1103,11 +1146,9 @@ namespace ASCOM.GeminiTelescope
                     {
                         double rate = 0;
                         if (!double.TryParse(result[idx], out rate)) throw new TimeoutException("AxisRates");
-                        m_Rates[idx].Maximum = m_Rates[idx].Maximum = rate * SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0;  // convert to rate in deg/sec
+                        rate = rate * SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0;  // convert to rate in deg/sec
+                        m_Rates[idx] = new Rate(rate,rate);
                     }
-                    break;
-                case TelescopeAxes.axisTertiary:
-                    m_Rates = new Rate[0];
                     break;
             }
         }
