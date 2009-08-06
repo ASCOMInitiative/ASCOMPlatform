@@ -90,6 +90,7 @@
     </Compile>
     <Compile Include="GarbageCollection.cs" />
     <Compile Include="GeminiCommands.cs" />
+    <Compile Include="GeminiError.cs" />
     <Compile Include="LocalServer.cs" />
     <Compile Include="MountParameters.cs">
       <SubType>Form</SubType>
