@@ -38,7 +38,11 @@ namespace ASCOM.GeminiTelescope
     /// <param name="result">return result from Gemini, or null if timeout exceeded</param>
     public delegate void HardwareAsyncDelegate(string cmd, string result);
 
+    public delegate void ConnectDelegate(bool Connected, int Clients);
 
+    public delegate void ErrorDelegate(string from, string msg);
+
+    
     /// <summary>
     /// Single serial command to be delivered to Gemini Hardware through worker thread queue
     /// </summary>
@@ -243,8 +247,24 @@ namespace ASCOM.GeminiTelescope
         private static int m_Speed = 1;
 #endregion
 
+#region Public Events
+        /// <summary>
+        /// OnConnect is fired when a new client is connected or disconnected
+        ///   OnConnect(Connected, Clients) - Connected is true if a client conects, false if disconnects
+        ///   Clients is the total number of remaining attached clients after the connect/disconnect
+        ///   if Connected is false, and Clients is 0, then the driver is disconnected from the serial port/gemini
+        /// </summary>
+        public static ConnectDelegate OnConnect;
 
-#region Initializers
+        /// <summary>
+        /// OnError is fired when a serious serial error occurs, such as a command timeout
+        ///  checksum error, or other failure to complete a request
+        /// </summary>
+        public static ErrorDelegate OnError;
+
+#endregion
+
+        #region Initializers
         /// <summary>
         ///  TelescopeHadrware constructor
         ///     create serial port
@@ -755,7 +775,9 @@ namespace ASCOM.GeminiTelescope
             catch { }
         }
 
-
+        /// <summary>
+        /// True while PulseGuiding command is in progress, since Gemini doesn't have a status flag for this kind of a move
+        /// </summary>
         public static bool IsPulseGuiding
         {
             get { return m_IsPulseGuiding; }
@@ -763,6 +785,11 @@ namespace ASCOM.GeminiTelescope
             {
                 m_IsPulseGuiding = value;
             }
+        }
+
+        public static int Clients
+        {
+            get { return m_Clients; }
         }
 
 #endregion
@@ -800,6 +827,7 @@ namespace ASCOM.GeminiTelescope
                     catch (Exception e)
                     {
                         GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial comm error connecting to port " + m_ComPort + ":" + e.Message);
+                        if (OnError != null) OnError("Gemini ASCOM Driver", "Couldn't connect: " + e.Message);
                         m_Connected = false;
                         return;
                     }
@@ -819,14 +847,14 @@ namespace ASCOM.GeminiTelescope
                         m_WaitForCommand.Reset();
                         m_BackgroundWorker = new System.Threading.Thread(BackgroundWorker_DoWork);
                         m_BackgroundWorker.Start();
+
+                        if (OnConnect != null) OnConnect(true, m_Clients);
                     }
                     else
                     {
-                        Disconnect();
-                    }
+                        if (OnError != null) OnError("Gemini ASCOM Driver", "Gemini is not responding. Is it connected and turned on?");
 
-                    if (m_Connected)
-                    {
+                        Disconnect();
                     }
                 }
 
@@ -920,13 +948,13 @@ namespace ASCOM.GeminiTelescope
         {
             lock (m_ConnectLock)
             {
+                bool bMessage = m_Connected;    // if currently connected, fire the disconnect message at the end
+
                 m_Clients -= 1;
                 if (m_Clients == 0)
                 {
                     m_CancelAsync = true;
 
-                    m_BackgroundWorker = null;
-                    m_SerialPort.Close();
                     m_Connected = false;
 
                     lock (m_CommandQueue)
@@ -943,7 +971,12 @@ namespace ASCOM.GeminiTelescope
 
                     lock (m_CommandQueue)
                         m_CommandQueue.Clear();
+
+                    m_SerialPort.Close();
+                    m_BackgroundWorker = null;
+
                 }
+                if (OnConnect != null && bMessage) OnConnect(false, m_Clients);
             }
         }
 
@@ -1115,28 +1148,28 @@ namespace ASCOM.GeminiTelescope
             m_SerialPort.DiscardInBuffer(); //clear all received data
             Transmit(m_PolledVariablesString);
 
-            command = new CommandItem(":GR", m_QueryInterval, true);
+            command = new CommandItem(":GR", 2000, true);
             string RA = GetCommandResult(command);
 
-            command = new CommandItem(":GD", m_QueryInterval, true);
+            command = new CommandItem(":GD", 2000, true);
             string DEC = GetCommandResult(command);
 
-            command = new CommandItem(":GA", m_QueryInterval, true);
+            command = new CommandItem(":GA", 2000, true);
             string ALT = GetCommandResult(command);
 
-            command = new CommandItem(":GZ", m_QueryInterval, true);
+            command = new CommandItem(":GZ", 2000, true);
             string AZ = GetCommandResult(command);
 
-            command = new CommandItem(":Gv", m_QueryInterval, true);
+            command = new CommandItem(":Gv", 2000, true);
             string V = GetCommandResult(command);
 
-            command = new CommandItem(":GS", m_QueryInterval, true);
+            command = new CommandItem(":GS", 2000, true);
             string ST = GetCommandResult(command);
 
-            command = new CommandItem(":Gm", m_QueryInterval, true);
+            command = new CommandItem(":Gm", 2000, true);
             string SOP = GetCommandResult(command);
 
-            command = new CommandItem(":h?", m_QueryInterval, true);
+            command = new CommandItem(":h?", 2000, true);
             string HOME = GetCommandResult(command);
 
             if (RA != null) m_RightAscension = m_Util.HMSToHours(RA);
@@ -1249,6 +1282,7 @@ namespace ASCOM.GeminiTelescope
             catch
             {
                 GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Timeout error occurred after " + command.m_Timeout + "msec while processing command '" + command.m_Command + "'");
+                if (OnError != null && m_Connected) OnError("Gemini ASCOM Driver", "Command timed out");
                 return null;
             }
             finally
@@ -1259,6 +1293,7 @@ namespace ASCOM.GeminiTelescope
             if (m_SerialErrorOccurred.WaitOne(0))
             {
                 GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial comm error reported while processing command '" + command.m_Command + "'");
+                if (OnError != null && m_Connected) OnError("Gemini ASCOM Driver", "Serial port communication error");
                 return null;  // error occurred!
             }
             // return value for native commands has a checksum appended: validate it and remove it from the return string:
@@ -1270,6 +1305,7 @@ namespace ASCOM.GeminiTelescope
                 if (chksum != ComputeChecksum(result))  // bad checksum -- ignore the return value! 
                 {
                     GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial comm error (bad checksum) while processing command '" + command.m_Command + "'");
+                    if (OnError != null && m_Connected) OnError("Gemini ASCOM Driver", "Serial port communication error");
                     result = null;
                 }
             }
