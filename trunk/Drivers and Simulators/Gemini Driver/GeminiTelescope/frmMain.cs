@@ -12,6 +12,9 @@ namespace ASCOM.GeminiTelescope
     {
         delegate void SetTextCallback(string text);
         delegate void SetupDialogDelegate();
+        delegate void InfoBaloonDelegate(string title, string text, ToolTipIcon icon);
+
+        delegate void OnConnectDelegate(bool Connected, int Client);
 
         Timer tmrUpdate = new Timer();
 
@@ -21,6 +24,42 @@ namespace ASCOM.GeminiTelescope
             tmrUpdate.Interval = 2000;
             tmrUpdate.Tick += new EventHandler(tmrUpdate_Tick);
             tmrUpdate.Start();
+            GeminiHardware.OnConnect += new ConnectDelegate(OnConnectEvent);
+            GeminiHardware.OnError += new ErrorDelegate(OnError);
+            BaloonIcon.Visible = true;
+        }
+
+        void OnError(string from, string msg)
+        {
+             this.Invoke(new InfoBaloonDelegate(SetBaloonText), new object[] {from, msg, ToolTipIcon.Error});
+        }
+
+        void SetBaloonText(string title, string text, ToolTipIcon icon)
+        {
+            BaloonIcon.ShowBalloonTip(3000, text, title, icon);
+        }
+
+        void ConnectStateChanged(bool Connected, int Clients)
+        {
+            if (Connected && Clients == 1)  // first client to connect, change UI to show the connected status
+            {
+                ButtonConnect.Text = "Disconnect";
+
+                SetBaloonText("ASCOM Gemini Driver", "Mount is connected", ToolTipIcon.Info);
+            }
+            if (!Connected && Clients == 0) // last client to disconnect
+            {
+                ButtonConnect.Text = "Connect";
+                labelLst.Text = "00:00:00";
+                labelRa.Text = "00:00:00";
+                labelDec.Text = "+00:00:00";
+                SetBaloonText("ASCOM Gemini Driver", "Mount is disconnected", ToolTipIcon.Info);
+            }        
+        }
+
+        void OnConnectEvent(bool Connected, int Clients)
+        {
+            this.Invoke(new ConnectDelegate(ConnectStateChanged), new object[] {Connected, Clients});
         }
 
         void tmrUpdate_Tick(object sender, EventArgs e)
@@ -212,15 +251,22 @@ namespace ASCOM.GeminiTelescope
             {
                 GeminiHardware.Connected = true;
                 if (!GeminiHardware.Connected)
-                    MessageBox.Show("Cannot connect to telescope");
+                    MessageBox.Show("Cannot connect to telescope", SharedResources.TELESCOPE_DRIVER_NAME);
                 else
                     this.ButtonConnect.Text = "Disconnect";
             }
             else
             {
+                if (GeminiHardware.Clients > 1)
+                {
+                    DialogResult res = MessageBox.Show("Other programs are still connected. Are you sure you want to disconnect from the mount?",
+                        SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
+                    if (res != DialogResult.Yes)
+                        return;
+                }
                 GeminiHardware.Connected = false;
                 if (GeminiHardware.Connected != false)
-                    MessageBox.Show("Cannot disconnect from telescope");
+                    MessageBox.Show("Cannot disconnect from telescope", SharedResources.TELESCOPE_DRIVER_NAME);
                 else
                     this.ButtonConnect.Text = "Connect";
             }
