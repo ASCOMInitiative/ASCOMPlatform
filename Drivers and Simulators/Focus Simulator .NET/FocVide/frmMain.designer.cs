@@ -259,6 +259,7 @@ namespace ASCOM.FocVide
             // 
             // pictureBox1
             // 
+            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox1.Image = global::ASCOM.FocVide.Properties.Resources.ASCOM;
             this.pictureBox1.Location = new System.Drawing.Point(10, 14);
             this.pictureBox1.Name = "pictureBox1";
@@ -266,6 +267,7 @@ namespace ASCOM.FocVide
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox1.TabIndex = 20;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click_1);
             // 
             // frmMain
             // 
@@ -288,6 +290,7 @@ namespace ASCOM.FocVide
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmMain";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "ASCOM Focuser Simulator View";
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);

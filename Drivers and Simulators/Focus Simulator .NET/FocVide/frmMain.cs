@@ -110,6 +110,23 @@ namespace ASCOM.FocVide
             Properties.Settings.Default.PropertyChanged -= new PropertyChangedEventHandler(Default_PropertyChanged);
         }
 
+        private void pictureBox1_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start("http://ascom-standards.org/");
+            }
+            catch (System.ComponentModel.Win32Exception noBrowser)
+            {
+                if (noBrowser.ErrorCode == -2147467259)
+                    MessageBox.Show(noBrowser.Message);
+            }
+            catch (System.Exception other)
+            {
+                MessageBox.Show(other.Message);
+            }
+        }
+
     }
 
     #region TextBox TraceListener
