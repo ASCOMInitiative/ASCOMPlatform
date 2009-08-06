@@ -840,6 +840,8 @@ namespace ASCOM.GeminiTelescope
 
         public static void Transmit(string s)
         {
+            if (s == String.Empty) return;
+
             m_SerialErrorOccurred.Reset();
 
             if (m_SerialPort.IsOpen)
@@ -986,7 +988,7 @@ namespace ASCOM.GeminiTelescope
                             if (!ci.m_Raw)
                             {
                                 // native Gemini command?
-                                if (ci.m_Command[0] == '<' || ci.m_Command[0] == '>')
+                                if (ci.m_Command.Length > 0 && (ci.m_Command[0] == '<' || ci.m_Command[0] == '>'))
                                     serial_cmd = CompleteNativeCommand(ci.m_Command);
                                 else
                                     serial_cmd = CompleteStandardCommand(ci.m_Command);
