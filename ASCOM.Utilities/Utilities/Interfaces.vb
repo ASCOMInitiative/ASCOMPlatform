@@ -8,7 +8,7 @@ Namespace Interfaces
 #Region "Utilities Public Interfaces"
 
     ''' <summary>
-    ''' Interface to the .NET TraceLogger component
+    ''' Interface to the TraceLogger component
     ''' </summary>
     ''' <remarks></remarks>
     Public Interface ITraceLogger
