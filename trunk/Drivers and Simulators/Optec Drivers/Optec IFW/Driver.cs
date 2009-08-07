@@ -31,6 +31,7 @@ using ASCOM.Helper2;
 using ASCOM.Interface;
 using System.IO.Ports;
 
+
 namespace ASCOM.Optec_IFW
 {
     //
