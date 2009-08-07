@@ -52,7 +52,8 @@ namespace ASCOM.Optec_IFW
         //
         // Constructor - Must be public for COM registration!
         //
-        //DeviceComm DriverInstance = new DeviceComm();
+        private static object CommLock = new object();
+
         public FilterWheel()
         {
             // TODO Implement your additional construction here
@@ -102,27 +103,33 @@ namespace ASCOM.Optec_IFW
             // TODO Replace this with your implementation
             get
             {
-                return DeviceComm.CheckForConnection();
+                lock(CommLock)
+                {
+                    return DeviceComm.CheckForConnection();
+                }
             }
             set 
             {
-                if (value)
+                lock (CommLock)
                 {
-                    DeviceComm.ConnectToDevice();
-                    if (DeviceComm.CheckForConnection())
+                    if (value)
                     {
-                        Connected = true;
+                        DeviceComm.ConnectToDevice();
+                        if (DeviceComm.CheckForConnection())
+                        {
+                            Connected = true;
+                        }
+                        else
+                        {
+                            Connected = false;
+                            throw new Exception("Connection to the device has failed");
+                        }
                     }
                     else
                     {
-                        Connected = false;
-                        throw new Exception("Connection to the device has failed");
-                    }
-                }
-                else
-                {
-                    DeviceComm.DisconnectDevice();
+                        DeviceComm.DisconnectDevice();
 
+                    }
                 }
             }
         }
@@ -143,7 +150,11 @@ namespace ASCOM.Optec_IFW
         public string[] Names
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("FocusOfsets", false); }
+            get
+            {
+                return DeviceComm.ReadAllNames();
+
+            }
         }
 
         public void SetupDialog()

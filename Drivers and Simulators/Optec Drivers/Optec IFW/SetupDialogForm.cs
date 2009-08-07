@@ -11,6 +11,7 @@ namespace ASCOM.Optec_IFW
     [ComVisible(false)]					// Form not registered for COM!
     public partial class SetupDialogForm : Form
     {
+        private static object CommLock = new object();
         public SetupDialogForm()
         {
             InitializeComponent();
@@ -45,8 +46,57 @@ namespace ASCOM.Optec_IFW
 
         private void ConnectButton_Click(object sender, EventArgs e)
         {
-            DeviceComm.ConnectToDevice();
+            lock (CommLock)
+            {
+                DeviceComm.ConnectToDevice();
+            }
+        }
+
+        private void DissConnBtn_Click(object sender, EventArgs e)
+        {
+            lock (CommLock)
+            {
+                DeviceComm.DisconnectDevice();
+            }
+        }
+
+        private void HomeBtn_Click(object sender, EventArgs e)
+        {
+            lock (CommLock)
+            {
+                DeviceComm.HomeDevice();
+            }
+            this.WheelId_TB.Text = DeviceComm.WheelID.ToString();
+        }
+
+        private void ReadNames_Btn_Click(object sender, EventArgs e)
+        {
+            lock (CommLock)
+            {
+               // this.FilterNames_TB.Text = DeviceComm.ReadAllNames();
+            }
             
         }
+
+        private void CheckConn_Btn_Click(object sender, EventArgs e)
+        {
+            lock (CommLock)
+            {
+                if (DeviceComm.CheckForConnection()) this.ConnStatus_TB.Text = "Yes";
+                else this.ConnStatus_TB.Text = "NO";
+            }
+
+        }
+
+        private void GoTo_Btn_Click(object sender, EventArgs e)
+        {
+            lock (CommLock)
+            {
+                DeviceComm.GoToPosition(Int32.Parse(this.GoToPos_CB.Text));
+            }
+        }
+
+      
+
     }
 }
