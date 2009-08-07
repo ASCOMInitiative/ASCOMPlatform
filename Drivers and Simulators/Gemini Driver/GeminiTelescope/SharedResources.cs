@@ -64,6 +64,10 @@ namespace ASCOM.GeminiTelescope
 
         public static double INVALID_DOUBLE = -33333333;    // invalid number, or value not set
 
+        public static int MAXIMUM_ERRORS = 5   ;      // max communication errors tolerated within specified interval
+        public static int MAXIMUM_ERROR_INTERVAL = 20000;   // in msecs. 
+        public static int RECOVER_SLEEP = 3000;         // how long to sleep while waiting to recover from errors
+
         private SharedResources() { }							// Prevent creation of instances
 
         static SharedResources()								// Static initialization

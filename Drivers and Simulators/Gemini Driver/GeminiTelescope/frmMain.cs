@@ -18,6 +18,8 @@ namespace ASCOM.GeminiTelescope
 
         Timer tmrUpdate = new Timer();
 
+        string m_LastError = "";
+
         public frmMain()
         {
             InitializeComponent();
@@ -31,6 +33,7 @@ namespace ASCOM.GeminiTelescope
 
         void OnError(string from, string msg)
         {
+            m_LastError = msg;
              this.Invoke(new InfoBaloonDelegate(SetBaloonText), new object[] {from, msg, ToolTipIcon.Error});
         }
 
@@ -45,7 +48,7 @@ namespace ASCOM.GeminiTelescope
             {
                 ButtonConnect.Text = "Disconnect";
 
-                SetBaloonText("ASCOM Gemini Driver", "Mount is connected", ToolTipIcon.Info);
+                SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME, "Mount is connected", ToolTipIcon.Info);
             }
             if (!Connected && Clients == 0) // last client to disconnect
             {
@@ -53,7 +56,7 @@ namespace ASCOM.GeminiTelescope
                 labelLst.Text = "00:00:00";
                 labelRa.Text = "00:00:00";
                 labelDec.Text = "+00:00:00";
-                SetBaloonText("ASCOM Gemini Driver", "Mount is disconnected", ToolTipIcon.Info);
+                SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME, "Mount is disconnected", ToolTipIcon.Info);
             }        
         }
 
@@ -251,7 +254,7 @@ namespace ASCOM.GeminiTelescope
             {
                 GeminiHardware.Connected = true;
                 if (!GeminiHardware.Connected)
-                    MessageBox.Show("Cannot connect to telescope", SharedResources.TELESCOPE_DRIVER_NAME);
+                    MessageBox.Show("Cannot connect to Gemini!\r\n"+m_LastError, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK,   MessageBoxIcon.Hand);
                 else
                     this.ButtonConnect.Text = "Disconnect";
             }
