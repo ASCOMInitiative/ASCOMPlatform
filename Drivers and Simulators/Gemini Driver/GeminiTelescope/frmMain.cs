@@ -20,6 +20,8 @@ namespace ASCOM.GeminiTelescope
 
         string m_LastError = "";
 
+        ContextMenu m_BaloonMenu = null;
+
         public frmMain()
         {
             InitializeComponent();
@@ -28,6 +30,12 @@ namespace ASCOM.GeminiTelescope
             tmrUpdate.Start();
             GeminiHardware.OnConnect += new ConnectDelegate(OnConnectEvent);
             GeminiHardware.OnError += new ErrorDelegate(OnError);
+            m_BaloonMenu = new ContextMenu();
+            m_BaloonMenu.MenuItems.Add("Configure Telescope...");
+            m_BaloonMenu.MenuItems.Add("Configure Focuser...");
+            m_BaloonMenu.MenuItems.Add("Hand Controller...");
+            BaloonIcon.ContextMenu = m_BaloonMenu;
+
             BaloonIcon.Visible = true;
         }
 
@@ -44,6 +52,7 @@ namespace ASCOM.GeminiTelescope
 
         void ConnectStateChanged(bool Connected, int Clients)
         {
+            BaloonIcon.Text = "Gemini is " + (GeminiHardware.Connected ? ("connected\r\n" + (GeminiHardware.BaudRate.ToString()) + "b/s on "+ GeminiHardware.ComPort) : "not connected");
             if (Connected && Clients == 1)  // first client to connect, change UI to show the connected status
             {
                 ButtonConnect.Text = "Disconnect";

@@ -1152,28 +1152,28 @@ namespace ASCOM.GeminiTelescope
             m_SerialPort.DiscardInBuffer(); //clear all received data
             Transmit(m_PolledVariablesString);
 
-            command = new CommandItem(":GR", 2000, true);
+            command = new CommandItem(":GR", 5000, true);
             string RA = GetCommandResult(command);
 
-            command = new CommandItem(":GD", 2000, true);
+            command = new CommandItem(":GD", 5000, true);
             string DEC = GetCommandResult(command);
 
-            command = new CommandItem(":GA", 2000, true);
+            command = new CommandItem(":GA", 5000, true);
             string ALT = GetCommandResult(command);
 
-            command = new CommandItem(":GZ", 2000, true);
+            command = new CommandItem(":GZ", 5000, true);
             string AZ = GetCommandResult(command);
 
-            command = new CommandItem(":Gv", 2000, true);
+            command = new CommandItem(":Gv", 5000, true);
             string V = GetCommandResult(command);
 
-            command = new CommandItem(":GS", 2000, true);
+            command = new CommandItem(":GS", 5000, true);
             string ST = GetCommandResult(command);
 
-            command = new CommandItem(":Gm", 2000, true);
+            command = new CommandItem(":Gm", 5000, true);
             string SOP = GetCommandResult(command);
 
-            command = new CommandItem(":h?", 2000, true);
+            command = new CommandItem(":h?", 5000, true);
             string HOME = GetCommandResult(command);
 
             if (RA != null) m_RightAscension = m_Util.HMSToHours(RA);
