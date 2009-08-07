@@ -1185,9 +1185,10 @@ namespace ASCOM.GeminiTelescope
     //
     [Guid("e1108c19-e0bb-472e-8bb2-29263f331971")]
     [ClassInterface(ClassInterfaceType.None)]
-    public class TrackingRates : ITrackingRates, IEnumerable
+    public class TrackingRates : ITrackingRates, IEnumerable, IEnumerator
     {
-        private DriveRates[] m_TrackingRates;
+        public object [] m_TrackingRates;
+        private static int _pos = -1;
 
         //
         // Default constructor - Internal prevents public creation
@@ -1200,8 +1201,7 @@ namespace ASCOM.GeminiTelescope
             // the tracking rates supported by your telescope. The one value
             // (tracking rate) that MUST be supported is driveSidereal!
             //
-            m_TrackingRates = new DriveRates[] { DriveRates.driveSidereal, DriveRates.driveKing, DriveRates.driveLunar, DriveRates.driveSolar };
-            // TODO Initialize this array with any additional tracking rates that your driver may provide
+            m_TrackingRates = (object[])(new object[] { DriveRates.driveSidereal, DriveRates.driveKing, DriveRates.driveLunar, DriveRates.driveSolar });
         }
 
         #region ITrackingRates Members
@@ -1213,12 +1213,36 @@ namespace ASCOM.GeminiTelescope
 
         public IEnumerator GetEnumerator()
         {
-            return m_TrackingRates.GetEnumerator();
+            return this as IEnumerator;
         }
 
+        
         public DriveRates this[int Index]
         {
-            get { return m_TrackingRates[Index - 1]; }	// 1-based
+            get { return (DriveRates)m_TrackingRates[Index - 1]; }	// 1-based
+        }
+        #endregion
+
+        #region IEnumerator implementation
+
+        public bool MoveNext()
+        {
+            if (++_pos >= m_TrackingRates.Length) return false;
+            return true;
+        }
+
+        public void Reset()
+        {
+            _pos = -1;
+        }
+
+        public object Current
+        {
+            get
+            {
+                if (_pos < 0 || _pos >= m_TrackingRates.Length) throw new System.InvalidOperationException();
+                return m_TrackingRates[_pos];
+            }
         }
 
         #endregion

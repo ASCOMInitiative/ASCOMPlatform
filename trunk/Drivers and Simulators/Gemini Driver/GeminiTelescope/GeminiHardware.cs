@@ -233,7 +233,10 @@ namespace ASCOM.GeminiTelescope
         private static DateTime m_LastUpdate;
         private static object m_ConnectLock = new object();
 
-        private static int m_QueryInterval = 1000;   // query mount for status this often, in msecs.
+        private static int m_QueryInterval = SharedResources.GEMINI_POLLING_INTERVAL;     // query mount for status this often, in msecs.
+
+        private static int m_TotalErrors = 0;              //total number of errors encountered since m_FirstErrorTick count
+        private static int m_FirstErrorTick = 0;           //
 
 
         //Focuser Private Data
@@ -827,7 +830,7 @@ namespace ASCOM.GeminiTelescope
                     catch (Exception e)
                     {
                         GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial comm error connecting to port " + m_ComPort + ":" + e.Message);
-                        if (OnError != null) OnError("Gemini ASCOM Driver", "Couldn't connect: " + e.Message);
+                        if (OnError != null) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Connection Failed: " + e.Message);
                         m_Connected = false;
                         return;
                     }
@@ -875,7 +878,7 @@ namespace ASCOM.GeminiTelescope
             if (m_SerialPort.IsOpen)
             {
                 m_SerialPort.Write(s);
-                //m_SerialPort.BaseStream.Flush();
+                m_SerialPort.BaseStream.Flush();
             }
             if (m_SerialErrorOccurred.WaitOne(0)) throw new TimeoutException("Serial port transmission error");
         }
@@ -986,7 +989,8 @@ namespace ASCOM.GeminiTelescope
         /// <param name="sender">sender - not used</param>
         /// <param name="e">work to perform - not used</param>
         private static void BackgroundWorker_DoWork()
-        {           
+        {
+
             while (!m_CancelAsync)
             {
                 object [] commands = null;
@@ -1117,13 +1121,13 @@ namespace ASCOM.GeminiTelescope
             //longitude, latitude, UTC offset
             Transmit(":Gg#:Gt#:GG#");
 
-            command = new CommandItem(":Gg", 2000, true);
+            command = new CommandItem(":Gg", MAX_TIMEOUT, true);
             string longitude = GetCommandResult(command);
 
-            command = new CommandItem(":Gt", 2000, true);
+            command = new CommandItem(":Gt", MAX_TIMEOUT, true);
             string latitude = GetCommandResult(command);
 
-            command = new CommandItem(":GG", 2000, true);
+            command = new CommandItem(":GG", MAX_TIMEOUT, true);
             string UTC_Offset = GetCommandResult(command);
 
 
@@ -1282,7 +1286,8 @@ namespace ASCOM.GeminiTelescope
             catch
             {
                 GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Timeout error occurred after " + command.m_Timeout + "msec while processing command '" + command.m_Command + "'");
-                if (OnError != null && m_Connected) OnError("Gemini ASCOM Driver", "Command timed out");
+                if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial port timed out!");
+                AddOneMoreError();
                 return null;
             }
             finally
@@ -1293,7 +1298,8 @@ namespace ASCOM.GeminiTelescope
             if (m_SerialErrorOccurred.WaitOne(0))
             {
                 GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial comm error reported while processing command '" + command.m_Command + "'");
-                if (OnError != null && m_Connected) OnError("Gemini ASCOM Driver", "Serial port communication error");
+                if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial port communication error");
+                AddOneMoreError();
                 return null;  // error occurred!
             }
             // return value for native commands has a checksum appended: validate it and remove it from the return string:
@@ -1305,12 +1311,60 @@ namespace ASCOM.GeminiTelescope
                 if (chksum != ComputeChecksum(result))  // bad checksum -- ignore the return value! 
                 {
                     GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial comm error (bad checksum) while processing command '" + command.m_Command + "'");
-                    if (OnError != null && m_Connected) OnError("Gemini ASCOM Driver", "Serial port communication error");
+                    if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial port communication error");
+                    AddOneMoreError();
                     result = null;
                 }
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Add one more error to the total error tally
+        /// if number of errors in the defined interval (MAXIMUM_ERROR_INTERVAL) exceeds specified number (MAXIMUM_ERRORS)
+        ///   assume that Gemini is off-line or some other catastrophic failure has occurred.
+        ///   Send a message to the user through OnError event to fix the problem,
+        ///   reset pending communication queues, and wait a defined "cool-down" interval of (RECOVER_SLEEP)
+        ///   then, resume processing.
+        /// </summary>
+        private static void AddOneMoreError()
+        {
+            // if this is the first error, or if it's been longer than maximum interval since the last error, start from scratch
+            if (m_TotalErrors == 0)
+                m_FirstErrorTick = System.Environment.TickCount;
+
+            if (m_FirstErrorTick + SharedResources.MAXIMUM_ERROR_INTERVAL < System.Environment.TickCount)
+            {
+                m_FirstErrorTick = System.Environment.TickCount;
+                m_TotalErrors = 0;
+            }
+
+            if (++m_TotalErrors > SharedResources.MAXIMUM_ERRORS)
+            {
+
+                if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Too many serial port errors! Please check Gemini.");
+                GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Too many serial port errors in the last " + SharedResources.MAXIMUM_ERROR_INTERVAL / 1000 + " seconds. Resetting serial port.");
+
+                lock (m_CommandQueue) // remove all pending commands, keep the queue locked so that the worker thread can't process during port reset
+                {
+                    m_CommandQueue.Clear();
+                    m_SerialPort.DiscardInBuffer();
+                    m_SerialPort.DiscardOutBuffer();
+                    try
+                    {
+                        m_SerialPort.Close();
+                        System.Threading.Thread.Sleep(SharedResources.RECOVER_SLEEP);
+                        m_SerialPort.Open();
+                    }
+                    catch (Exception ex)
+                    {
+                        GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Cannot reset serial port after errors: " + ex.Message);
+                    }
+                }
+                m_TotalErrors = 0;
+                m_FirstErrorTick = 0;
+            }
         }
 
 
