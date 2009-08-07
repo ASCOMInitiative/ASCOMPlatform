@@ -1187,7 +1187,7 @@ namespace ASCOM.GeminiTelescope
     [ClassInterface(ClassInterfaceType.None)]
     public class TrackingRates : ITrackingRates, IEnumerable, IEnumerator
     {
-        public object [] m_TrackingRates;
+        public DriveRates [] m_TrackingRates;
         private static int _pos = -1;
 
         //
@@ -1201,7 +1201,7 @@ namespace ASCOM.GeminiTelescope
             // the tracking rates supported by your telescope. The one value
             // (tracking rate) that MUST be supported is driveSidereal!
             //
-            m_TrackingRates = (object[])(new object[] { DriveRates.driveSidereal, DriveRates.driveKing, DriveRates.driveLunar, DriveRates.driveSolar });
+            m_TrackingRates =  new DriveRates[] { DriveRates.driveSidereal, DriveRates.driveKing, DriveRates.driveLunar, DriveRates.driveSolar };
         }
 
         #region ITrackingRates Members
@@ -1219,7 +1219,7 @@ namespace ASCOM.GeminiTelescope
         
         public DriveRates this[int Index]
         {
-            get { return (DriveRates)m_TrackingRates[Index - 1]; }	// 1-based
+            get { return m_TrackingRates[Index - 1]; }	// 1-based
         }
         #endregion
 
