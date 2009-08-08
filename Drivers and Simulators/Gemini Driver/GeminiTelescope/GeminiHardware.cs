@@ -1396,6 +1396,8 @@ namespace ASCOM.GeminiTelescope
                         result = ReadNumber(1); ;  // check if first character is 1, and return if it is, no hash expected
                         if (result != "1")
                             result += ReadTo('#');
+                        if (command.m_Raw) //Raw should return the full string including #
+                            result += "#";
                         break;
 
                     // value '0' or a string terminated by '#'
@@ -1403,11 +1405,15 @@ namespace ASCOM.GeminiTelescope
                         result = ReadNumber(1);
                         if (result != "0")
                             result += ReadTo('#');
+                        if (command.m_Raw) //Raw should return the full string including #
+                            result += "#";
                         break;
 
-                    // value '0' or a string terminated by '#'
+                    // string terminated by '#'
                     case GeminiCommand.ResultType.HashChar:
                         result = ReadTo('#');
+                        if (command.m_Raw) //Raw should return the full string including #
+                            result += "#";
                         break;
                 }
 

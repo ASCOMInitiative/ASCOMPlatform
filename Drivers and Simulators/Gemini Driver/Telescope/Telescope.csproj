@@ -127,7 +127,6 @@
     <ProjectReference Include="..\GeminiTelescope\GeminiTelescope.csproj">
       <Project>{6DD9248B-EB0E-4076-9F50-1B206B695AFB}</Project>
       <Name>GeminiTelescope</Name>
-      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
