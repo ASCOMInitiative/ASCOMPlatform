@@ -78,11 +78,6 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
-  <!-- Commits the Platform Dependencies folder to SVN -->
-  <Target Name="Commit">
-    <SvnCommit LocalPath="..\Drivers and Simulators\Platform Dependencies" Message="Committed by MSBuild" Username="TimLong" Password="pugwash"/>
-  </Target>
 
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
