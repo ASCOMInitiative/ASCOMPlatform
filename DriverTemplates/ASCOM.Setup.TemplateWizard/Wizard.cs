@@ -9,7 +9,6 @@ namespace ASCOM.Setup
 	public class Wizard : IWizard
 	{
 		private UserInputForm inputForm;
-		private string customMessage;
 
 		// This method is called before opening any item that 
 		// has the OpenInEditor attribute.
@@ -56,8 +55,11 @@ namespace ASCOM.Setup
 				replacementsDictionary.Add("$deviceid$", inputForm.DeviceId);
 				replacementsDictionary.Add("$deviceclass$", inputForm.DeviceClass);
 				replacementsDictionary.Add("$devicename$", inputForm.DeviceName);
+				replacementsDictionary.Add("$namespace$", inputForm.Namespace);
 				replacementsDictionary["$projectname$"] = inputForm.DeviceId;
 				replacementsDictionary["$safeprojectname$"] = inputForm.DeviceId;
+				inputForm.Dispose();
+				inputForm = null;
 			}
 			catch (Exception ex)
 			{

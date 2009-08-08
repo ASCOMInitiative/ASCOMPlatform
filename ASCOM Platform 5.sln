@@ -147,6 +147,7 @@ Global
 		Platform Dependencies|Any CPU = Platform Dependencies|Any CPU
 		Release|Any CPU = Release|Any CPU
 		TeamCity|Any CPU = TeamCity|Any CPU
+		Description = Astronomy Common Object Model, Platform Components
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C9BD6FCB-97C7-4096-B917-6E59B6E2C684}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

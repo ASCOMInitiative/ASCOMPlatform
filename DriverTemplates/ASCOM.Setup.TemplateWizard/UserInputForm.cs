@@ -17,13 +17,17 @@ namespace ASCOM.Setup
 		/// </summary>
 		private const string csDeviceIdFormat = "ASCOM.{0}.{1}";
 		/// <summary>
+		/// Format string for driver namespace.
+		/// </summary>
+		private const string csNamespaceFormat = "ASCOM.{0}";
+		/// <summary>
 		/// Placeholder text used for null or invalid DeviceName.
 		/// </summary>
-		private const string STR_DeviceName = "<DeviceName>";
+		private const string csDeviceNamePlaceholder = "<DeviceName>";
 		/// <summary>
 		/// Placeholder text used for null or invalid DeviceClass.
 		/// </summary>
-		private const string STR_DeviceClass = "<DeviceClass>";
+		private const string csDeviceClassPlaceholder = "<DeviceClass>";
 		public UserInputForm()
 		{
 			InitializeComponent();
@@ -76,7 +80,7 @@ namespace ASCOM.Setup
 		{
 			get
 			{
-				return (string)this.cbDeviceClass.SelectedItem ?? STR_DeviceClass;
+				return (string)this.cbDeviceClass.SelectedItem ?? csDeviceClassPlaceholder;
 			}
 		}
 		/// <summary>
@@ -89,13 +93,20 @@ namespace ASCOM.Setup
 			{
 				if (String.IsNullOrEmpty(this.txtDeviceName.Text))
 				{
-					return STR_DeviceName;
+					return csDeviceNamePlaceholder;
 				}
 				return this.txtDeviceName.Text;
 			}
 		}
 
-		private void cbDeviceClass_SelectedIndexChanged(object sender, EventArgs e)
+		public string Namespace
+		{
+			get
+			{
+				return String.Format(csNamespaceFormat, this.DeviceName);
+			}
+		}
+        private void cbDeviceClass_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			this.lblDeviceId.Text = this.DeviceId;
 		}
