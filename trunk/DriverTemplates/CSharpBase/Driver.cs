@@ -30,7 +30,7 @@ using ASCOM.Controls;
 using ASCOM.Interface;
 using ASCOM.Utilities;
 
-namespace ASCOM.$devicename$
+namespace $namespace$
 {
 	//
 	// Your driver's ID is ASCOM.DeviceName.$safeprojectname$
