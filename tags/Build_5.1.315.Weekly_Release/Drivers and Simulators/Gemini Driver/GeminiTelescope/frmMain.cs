@@ -1,0 +1,480 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+
+namespace ASCOM.GeminiTelescope
+{
+
+    public partial class frmMain : Form
+    {
+        delegate void SetTextCallback(string text);
+        delegate void SetupDialogDelegate();
+        delegate void InfoBaloonDelegate(string title, string text, ToolTipIcon icon);
+
+        delegate void OnConnectDelegate(bool Connected, int Client);
+
+        Timer tmrUpdate = new Timer();
+        Timer tmrBaloon = new Timer();
+
+        string m_LastError = "";
+
+        ContextMenu m_BaloonMenu = null;
+
+        Color m_ActiveBkColor = Color.FromArgb(255, 0, 0);
+        Color m_InactiveBkColor = Color.FromArgb(64,0,0);
+        Color m_ActiveForeColor = Color.FromArgb(0, 255, 255);
+        Color m_InactiveForeColor = Color.FromArgb(128, 64, 64);
+
+        int m_UpdateCount = 0;
+        bool m_ShowNotifications = true;
+
+        public frmMain()
+        {
+            InitializeComponent();
+            tmrUpdate.Interval = 2000;
+            tmrUpdate.Tick += new EventHandler(tmrUpdate_Tick);
+            tmrUpdate.Start();
+            GeminiHardware.OnConnect += new ConnectDelegate(OnConnectEvent);
+            GeminiHardware.OnError += new ErrorDelegate(OnError);
+            m_BaloonMenu = new ContextMenu();
+
+            MenuItem notifyMenu = new MenuItem("Show Notifications", new EventHandler(ShowNotificationsMenu));
+            notifyMenu.Name = "Notifications";
+            notifyMenu.Checked = m_ShowNotifications;
+
+            MenuItem controlMenu = new MenuItem("Control Panel...", new EventHandler(ControlPanelMenu));
+            controlMenu.Name = "Control";
+            controlMenu.Checked = this.Visible;
+
+            m_BaloonMenu.MenuItems.AddRange(new MenuItem[] { 
+                controlMenu,
+                new MenuItem("Configure Telescope...", new EventHandler(ConfigureTelescopeMenu)),
+
+                new MenuItem("Configure Focuser...", new EventHandler(ConfigureFocuserMenu)),
+            new MenuItem("Hand Controller...", new EventHandler(AdvancedControllerMenu)),
+            new MenuItem("-"),
+            notifyMenu,
+            new MenuItem("-"),
+            new MenuItem("Exit", new EventHandler(ExitMenu))
+            });
+
+            BaloonIcon.ContextMenu = m_BaloonMenu;
+            BaloonIcon.MouseClick += new MouseEventHandler(BaloonIcon_MouseClick);
+            BaloonIcon.Visible = true;
+            tmrBaloon.Tick += new EventHandler(tmrBaloon_Tick);
+
+            GeminiHardware.OnSafetyLimit += new SafetyDelegate(OnSafetyLimit);
+        }
+
+        void BaloonIcon_MouseClick(object sender, MouseEventArgs e)
+        {/*
+            if (BaloonIcon.ContextMenuStrip != null) return;           
+            BaloonIcon.ContextMenu.Show(this, this.PointToClient(Cursor.Position));
+          */
+        }
+
+        void ExitMenu(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        void ControlPanelMenu(object sender, EventArgs e)
+        {
+            if (this.Visible) this.Hide();
+            else this.Show();
+
+            m_BaloonMenu.MenuItems["Control"].Checked = this.Visible;
+        }
+
+        void ConfigureTelescopeMenu(object sender, EventArgs e)
+        {
+            _DoSetupTelescopeDialog();
+        }
+
+        void ConfigureFocuserMenu(object sender, EventArgs e)
+        {
+            //hmmm..???
+        }
+
+        void AdvancedControllerMenu(object sender, EventArgs e)
+        {
+ 
+        }
+
+        void ShowNotificationsMenu(object sender, EventArgs e)
+        {
+            m_ShowNotifications = !m_ShowNotifications;
+            m_BaloonMenu.MenuItems["Notifications"].Checked = m_ShowNotifications;
+        }
+
+        /// <summary>
+        /// hide the baloon text
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void tmrBaloon_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                tmrBaloon.Stop();
+                BaloonIcon.Visible = false;
+                BaloonIcon.Visible = true;
+            }
+            catch { }
+        }
+
+        /// <summary>
+        /// GeminiHardware error event
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="msg"></param>
+        void OnError(string from, string msg)
+        {
+            m_LastError = msg;
+             this.Invoke(new InfoBaloonDelegate(SetBaloonText), new object[] {from, msg, ToolTipIcon.Error});
+        }
+
+        void SetBaloonText(string title, string text, ToolTipIcon icon)
+        {
+            if (m_ShowNotifications)
+            {
+                BaloonIcon.ShowBalloonTip(4000, text, title, icon);
+                // time to turn off the baloon text, since Windows has a minimum of about 20-30 seconds before
+                // the message turns off on its own while the task bar is visible:
+                tmrBaloon.Interval = 4000;
+                tmrBaloon.Start();
+            }
+        }
+
+        /// <summary>
+        /// Client connected or disconnected event
+        /// </summary>
+        /// <param name="Connected"></param>
+        /// <param name="Clients"></param>
+        void ConnectStateChanged(bool Connected, int Clients)
+        {
+            if (Connected && Clients == 1)  // first client to connect, change UI to show the connected status
+            {
+                ButtonConnect.Text = "Disconnect";
+
+                SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME, "Mount is connected", ToolTipIcon.Info);
+            }
+            if (!Connected && Clients == 0) // last client to disconnect
+            {
+                ButtonConnect.Text = "Connect";
+                labelLst.Text = "00:00:00";
+                labelRa.Text = "00:00:00";
+                labelDec.Text = "+00:00:00";
+                SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME, "Mount is disconnected", ToolTipIcon.Info);
+            }        
+        }
+
+        /// <summary>
+        /// Connect/Disconnect event from GeminiHardware, usually called on the background worker thread
+        /// </summary>
+        /// <param name="Connected"></param>
+        /// <param name="Clients"></param>
+        void OnConnectEvent(bool Connected, int Clients)
+        {
+            this.Invoke(new ConnectDelegate(ConnectStateChanged), new object[] {Connected, Clients});
+        }
+
+        /// <summary>
+        /// Safety limit reached event
+        /// </summary>
+        void OnSafetyLimit()
+        {
+            if (GeminiHardware.Connected)
+                SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME, "SAFETY LIMIT IS REACHED! Mount stopped.", ToolTipIcon.Warning);
+            // may want to add some optional sound/alert here to notify the user!
+        }
+
+        void OnSafetyLimitEvent()
+        {
+            this.Invoke(new SafetyDelegate(OnSafetyLimit));
+        }
+
+        void tmrUpdate_Tick(object sender, EventArgs e)
+        {
+
+            if (GeminiHardware.Connected)
+            {
+                m_UpdateCount++;
+
+                RightAscension = GeminiHardware.RightAscension;
+                Declination = GeminiHardware.Declination;
+                SiderealTime = GeminiHardware.SiderealTime;
+
+                labelSlew.BackColor = (GeminiHardware.Velocity == "S"? m_ActiveBkColor : m_InactiveBkColor);
+
+                // blink the text while slewing is active:
+                Color active = ((m_UpdateCount & 1 )==0? m_ActiveForeColor : m_InactiveForeColor );
+
+                labelSlew.ForeColor = (GeminiHardware.Velocity == "S" ? active : m_InactiveForeColor);
+                labelPARK.BackColor = (GeminiHardware.AtPark ? m_ActiveBkColor : m_InactiveBkColor);
+                labelPARK.ForeColor = (GeminiHardware.AtPark? m_ActiveForeColor : m_InactiveForeColor);
+
+                switch (GeminiHardware.Velocity)
+                {
+                    case "S": labelSlew.Text = "SLEW"; break;
+                    case "C": labelSlew.Text = "CENTER"; break;
+                    case "N": labelSlew.Text = "STOP"; break;
+                    default : labelSlew.Text = "TRACK"; break;
+                }
+                //add an indicator for a "safety limit alert".
+                if (GeminiHardware.AtSafetyLimit)
+                {
+                    labelSlew.Text = "LIMIT!";
+                    labelSlew.ForeColor = m_ActiveForeColor;
+                    labelSlew.BackColor = m_ActiveBkColor;
+                }
+
+            }
+
+            m_BaloonMenu.MenuItems["Control"].Checked = this.Visible;
+
+            string tooltip = "Gemini is ";
+            if (GeminiHardware.Connected)
+            {
+                tooltip += "connected\r\n" + (GeminiHardware.BaudRate.ToString()) + "b/s on " + GeminiHardware.ComPort;
+                tooltip += "\r\nStatus: " + labelSlew.Text;
+
+            }
+            else
+                tooltip+="not connected";
+
+
+            BaloonIcon.Text = tooltip;    
+        }
+
+
+        private void _DoSetupTelescopeDialog()
+        {
+                    
+            TelescopeSetupDialogForm setupForm = new TelescopeSetupDialogForm();
+
+            setupForm.ComPort = GeminiHardware.ComPort;
+            setupForm.BaudRate = GeminiHardware.BaudRate.ToString();
+
+            setupForm.Elevation = GeminiHardware.Elevation;
+            setupForm.Latitude = GeminiHardware.Latitude;
+            setupForm.Longitude = GeminiHardware.Longitude;
+
+            DialogResult ans = setupForm.ShowDialog(this);
+
+            if (ans == DialogResult.OK)
+            {
+
+                GeminiHardware.ComPort = setupForm.ComPort;
+                GeminiHardware.BaudRate = int.Parse(setupForm.BaudRate);
+
+                GeminiHardware.Elevation = setupForm.Elevation;
+                GeminiHardware.Latitude = setupForm.Latitude;
+                GeminiHardware.Longitude = setupForm.Longitude;
+                
+            }
+
+            setupForm.Dispose();
+        }
+
+        public void DoTelescopeSetupDialog()
+        {
+            this.Invoke(new SetupDialogDelegate(_DoSetupTelescopeDialog));
+        }
+
+        public static void DoFocuserSetupDialog()
+        {
+            FocuserSetupDialogForm setupForm = new FocuserSetupDialogForm();
+            setupForm.ComPort = GeminiHardware.ComPort;
+            setupForm.BaudRate = GeminiHardware.BaudRate.ToString();
+            setupForm.ReverseDirection = GeminiHardware.ReverseDirection;
+            setupForm.MaxIncrement = GeminiHardware.MaxIncrement;
+            setupForm.StepSize = GeminiHardware.StepSize;
+            setupForm.BrakeSize = GeminiHardware.BrakeSize;
+            setupForm.BacklashSize = GeminiHardware.BacklashSize;
+            setupForm.BacklashDirection = GeminiHardware.BacklashDirection;
+            setupForm.Speed = GeminiHardware.Speed;
+
+            DialogResult ans = setupForm.ShowDialog();
+
+            if (ans == DialogResult.OK)
+            {
+
+                GeminiHardware.ComPort = setupForm.ComPort;
+                GeminiHardware.BaudRate = int.Parse(setupForm.BaudRate);
+                GeminiHardware.ReverseDirection = setupForm.ReverseDirection;
+                GeminiHardware.MaxIncrement = setupForm.MaxIncrement;
+                GeminiHardware.StepSize = setupForm.StepSize;
+                GeminiHardware.BrakeSize = setupForm.BrakeSize;
+                GeminiHardware.BacklashSize = setupForm.BacklashSize;
+                GeminiHardware.BacklashDirection = setupForm.BacklashDirection;
+                GeminiHardware.Speed = setupForm.Speed;
+            }
+
+            setupForm.Dispose();
+        }
+
+        private void buttonSetup_Click(object sender, EventArgs e)
+        {
+            DoTelescopeSetupDialog();
+            SetSlewButtons();
+        }
+
+        private void SetSlewButtons()
+        {
+            if (GeminiHardware.SouthernHemisphere)
+            {
+                buttonSlew1.Text = "S";
+                buttonSlew2.Text = "N";
+                buttonSlew3.Text = "E";
+                buttonSlew4.Text = "W";
+            }
+            else
+            {
+                buttonSlew1.Text = "N";
+                buttonSlew2.Text = "S";
+                buttonSlew3.Text = "E";
+                buttonSlew4.Text = "W";
+            }
+        }
+
+
+        public double SiderealTime
+        {
+            set
+            {
+                SetTextCallback setText = new SetTextCallback(SetLstText);
+                string text = GeminiHardware.m_Util.HoursToHMS(value,":",":",""); // .ConvertDoubleToHMS(value);
+               
+                try{this.Invoke(setText, text);}
+                catch { }
+                
+           
+            }
+        }
+        public double RightAscension
+        {
+            set
+            {
+                SetTextCallback setText = new SetTextCallback(SetRaText);
+                string text = GeminiHardware.m_Util.HoursToHMS(value, ":", ":", ""); 
+                try { this.Invoke(setText, text); }
+                catch { }
+            }
+        }
+        public double Declination
+        {
+            set
+            {
+                SetTextCallback setText = new SetTextCallback(SetDecText);
+                string text = GeminiHardware.m_Util.DegreesToDMS(value, ":", ":", ""); 
+                try { this.Invoke(setText, text); }
+                catch { }
+            }
+        }
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            SetSlewButtons();
+            //GeminiHardware.Start();
+        }
+
+        #region Thread Safe Callback Functions
+        private void SetLstText(string text)
+        {
+            labelLst.Text = text;
+        }
+        private void SetRaText(string text)
+        {
+            labelRa.Text = text;
+        }
+        private void SetDecText(string text)
+        {
+            labelDec.Text = text;
+        }
+
+        #endregion
+
+        private void ButtonSetup_Click_1(object sender, EventArgs e)
+        {
+            ButtonSetup.ContextMenuStrip.Show(Cursor.Position);
+        }
+
+        private void setupDialogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DoTelescopeSetupDialog();
+        }
+
+        private void mountParametersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (GeminiHardware.Connected)
+            {
+                MountParameters parametersForm = new MountParameters();
+
+
+                DialogResult ans = parametersForm.ShowDialog(this);
+
+                if (ans == DialogResult.OK)
+                {
+
+                }
+                parametersForm.Dispose();
+            }
+        }
+
+        private void ButtonConnect_Click(object sender, EventArgs e)
+        {
+            if (!GeminiHardware.Connected)
+            {
+                GeminiHardware.Connected = true;
+                if (!GeminiHardware.Connected)
+                    MessageBox.Show("Cannot connect to Gemini!\r\n"+m_LastError, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK,   MessageBoxIcon.Hand);
+                else
+                    this.ButtonConnect.Text = "Disconnect";
+            }
+            else
+            {
+                if (GeminiHardware.Clients > 1)
+                {
+                    DialogResult res = MessageBox.Show("Other programs are still connected. Are you sure you want to disconnect from the mount?",
+                        SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
+                    if (res != DialogResult.Yes)
+                        return;
+                }
+                GeminiHardware.Connected = false;
+                if (GeminiHardware.Connected != false)
+                    MessageBox.Show("Cannot disconnect from telescope", SharedResources.TELESCOPE_DRIVER_NAME);
+                else
+                    this.ButtonConnect.Text = "Connect";
+            }
+        }
+
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (GeminiHardware.Connected && GeminiHardware.Clients > 0)
+            {
+                DialogResult res = MessageBox.Show("Gemini connection"+(GeminiHardware.Clients>1? "s are": " is") +" still active. Are you sure you want to disconnect and exit?",
+                    SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (res != DialogResult.Yes)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
+
+            GeminiHardware.Connected = false;
+        }
+
+        private void focuserSetupDialogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+           DoFocuserSetupDialog();
+        }
+
+        private void ButtonPark_Click(object sender, EventArgs e)
+        {
+            GeminiHardware.DoCommandResult(":hC", 5000, false);
+        }
+    }
+}

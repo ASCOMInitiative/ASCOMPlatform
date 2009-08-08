@@ -1,0 +1,1 @@
+Before zipping Final templates, look at all of the .xxproj files in Notepad and change the HintPath from the ..\..\.. whatever to C:\Program Files\Common Files... etc. Make sure the <PlatformTarget> is x86 for Debug and Release.
