@@ -523,25 +523,27 @@ namespace ASCOM.GeminiTelescope
 
             // wait for parking move to begin, wait for a maximum of 16*250ms = 4 seconds
             while (GeminiHardware.ParkState != "2" && count < 16) { System.Threading.Thread.Sleep(250); count++; }
-            if (count == 16) throw new TimeoutException(where + " operation didn't start");
+//            if (count == 16) throw new TimeoutException(where + " operation didn't start");
 
             // now wait for it to end
             while (GeminiHardware.ParkState == "2") { System.Threading.Thread.Sleep(1000); };
 
             // 0 => didn't park.
-            if (GeminiHardware.ParkState == "0") throw new DriverException("Failed to " + where, (int)SharedResources.ERROR_BASE);
+            //if (GeminiHardware.ParkState == "0") throw new DriverException("Failed to " + where, (int)SharedResources.ERROR_BASE);
         }
 
         public void FindHome()
         {
-            if (GeminiHardware.AtHome) return;
 
             if (GeminiHardware.AtPark)
                 throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
+            if (GeminiHardware.AtHome) return;
+
             GeminiHardware.DoCommandResult(":hP", GeminiHardware.MAX_TIMEOUT, false);
             WaitForHomeOrPark("Home");
             GeminiHardware.DoCommandResult(":hW", GeminiHardware.MAX_TIMEOUT, false); //resume tracking, as FindHome isn't supposed to stop the mount
+            WaitForVelocity("TG");
             m_FoundHome = true;        
         }
 
@@ -594,8 +596,8 @@ namespace ASCOM.GeminiTelescope
 
         public void MoveAxis(TelescopeAxes Axis, double Rate)
         {
-//            if (GeminiHardware.AtPark)
-//                throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+
 
             string[] cmds = { null, null };
 
@@ -608,6 +610,7 @@ namespace ASCOM.GeminiTelescope
                     else
                     {
                         GeminiHardware.DoCommandResult(new string[] { ":Qe", ":Qw" }, GeminiHardware.MAX_TIMEOUT/2, false); //stop motion in RA
+                        WaitForVelocity("T");
                         return;
                     }
                     break;
@@ -617,7 +620,8 @@ namespace ASCOM.GeminiTelescope
                         cmds[1] = ":Mn";
                     else
                     {
-                        GeminiHardware.DoCommandResult(new string[] { ":Qe", ":Qw" }, GeminiHardware.MAX_TIMEOUT/2, false); //stop motion in RA
+                        GeminiHardware.DoCommandResult(new string[] { ":Qn", ":Qs" }, GeminiHardware.MAX_TIMEOUT/2, false); //stop motion in DEC
+                        WaitForVelocity("T");
                         return;
                     }
                     break;
@@ -652,7 +656,8 @@ namespace ASCOM.GeminiTelescope
                     throw new ASCOM.InvalidValueException("MoveAxis", Axis.ToString(), "guiding, centering, or slewing speeds");
             }
 
-            GeminiHardware.DoCommandResult(cmds, GeminiHardware.MAX_TIMEOUT/2, false);  
+            GeminiHardware.DoCommandResult(cmds, GeminiHardware.MAX_TIMEOUT/2, false);
+            WaitForVelocity("GCS");
         }
 
         public string Name
@@ -670,7 +675,6 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.DoCommandResult(":hC", GeminiHardware.MAX_TIMEOUT, false);
 
             WaitForHomeOrPark("Park");
-            GeminiHardware.DoCommandResult(":hN", GeminiHardware.MAX_TIMEOUT, false);
         }
 
         /// <summary>
@@ -770,7 +774,8 @@ namespace ASCOM.GeminiTelescope
                 if ((value == PierSide.pierEast && GeminiHardware.SideOfPier == "W") || (value == PierSide.pierWest && GeminiHardware.SideOfPier == "E"))
                 {
                     GeminiHardware.DoCommandResult(":Mf", -1 , false);
-                    WaitForSlewToEnd();
+                    WaitForVelocity("S");
+                    WaitForVelocity("TN");
                 }
             }
         }
@@ -846,6 +851,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.TargetAltitude = Altitude;
             if (Slewing) AbortSlew();
             GeminiHardware.SlewHorizonAsync();
+            WaitForVelocity("SC");
         }
 
         public void SlewToCoordinates(double RightAscension, double Declination)
@@ -870,6 +876,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.TargetDeclination = Declination;
             if (Slewing) AbortSlew();
             GeminiHardware.SlewEquatorialAsync();
+            WaitForVelocity("SC");
         }
 
         private void WaitForSlewToEnd()
@@ -901,6 +908,7 @@ namespace ASCOM.GeminiTelescope
 
             if (Slewing) AbortSlew();
             GeminiHardware.SlewEquatorialAsync();
+            WaitForVelocity("SC");
         }
 
         public bool Slewing
@@ -909,7 +917,7 @@ namespace ASCOM.GeminiTelescope
             get 
             {
                 
-                if (GeminiHardware.Velocity == "S")
+                if (GeminiHardware.Velocity == "S" || GeminiHardware.Velocity == "C")
                 {
                     return true;
                 }
@@ -988,12 +996,20 @@ namespace ASCOM.GeminiTelescope
                 if (value && !GeminiHardware.Tracking)
                 {
                     GeminiHardware.DoCommandResult(":hW", GeminiHardware.MAX_TIMEOUT, false);
+                    WaitForVelocity("TG");
                 }
                 if (!value && GeminiHardware.Tracking)
                 {
                     GeminiHardware.DoCommandResult(":hN", GeminiHardware.MAX_TIMEOUT, false);
+                    WaitForVelocity("N");
                 }
             }
+        }
+
+        private void WaitForVelocity(string p)
+        {
+            int timeout = System.Environment.TickCount + GeminiHardware.MAX_TIMEOUT*1000;
+            while (System.Environment.TickCount < timeout && !p.Contains(GeminiHardware.Velocity)) System.Threading.Thread.Sleep(500);
         }
 
         public DriveRates TrackingRate
@@ -1039,6 +1055,7 @@ namespace ASCOM.GeminiTelescope
         public void Unpark()
         {
             GeminiHardware.DoCommandResult(":hW", GeminiHardware.MAX_TIMEOUT, false);
+            WaitForVelocity("T");
         }
 
         #endregion

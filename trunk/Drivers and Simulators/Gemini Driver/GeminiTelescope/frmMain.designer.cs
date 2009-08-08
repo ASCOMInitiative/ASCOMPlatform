@@ -50,7 +50,7 @@ namespace ASCOM.GeminiTelescope
             this.checkBoxTrack = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.labelSlew = new System.Windows.Forms.Label();
-            this.lblPARK = new System.Windows.Forms.Label();
+            this.labelPARK = new System.Windows.Forms.Label();
             this.TableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.ButtonPark = new System.Windows.Forms.Button();
             this.ButtonConnect = new System.Windows.Forms.Button();
@@ -271,7 +271,7 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel4.Controls.Add(this.labelSlew, 0, 0);
-            this.tableLayoutPanel4.Controls.Add(this.lblPARK, 1, 0);
+            this.tableLayoutPanel4.Controls.Add(this.labelPARK, 1, 0);
             this.tableLayoutPanel4.Location = new System.Drawing.Point(12, 74);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
@@ -292,18 +292,18 @@ namespace ASCOM.GeminiTelescope
             this.labelSlew.TabIndex = 3;
             this.labelSlew.Text = "SLEW";
             // 
-            // lblPARK
+            // labelPARK
             // 
-            this.lblPARK.AutoSize = true;
-            this.lblPARK.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblPARK.Dock = System.Windows.Forms.DockStyle.Right;
-            this.lblPARK.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblPARK.Location = new System.Drawing.Point(74, 0);
-            this.lblPARK.Name = "lblPARK";
-            this.lblPARK.Padding = new System.Windows.Forms.Padding(1, 2, 1, 1);
-            this.lblPARK.Size = new System.Drawing.Size(38, 20);
-            this.lblPARK.TabIndex = 2;
-            this.lblPARK.Text = "PARK";
+            this.labelPARK.AutoSize = true;
+            this.labelPARK.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.labelPARK.Dock = System.Windows.Forms.DockStyle.Right;
+            this.labelPARK.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.labelPARK.Location = new System.Drawing.Point(74, 0);
+            this.labelPARK.Name = "labelPARK";
+            this.labelPARK.Padding = new System.Windows.Forms.Padding(1, 2, 1, 1);
+            this.labelPARK.Size = new System.Drawing.Size(38, 20);
+            this.labelPARK.TabIndex = 2;
+            this.labelPARK.Text = "PARK";
             // 
             // TableLayoutPanel3
             // 
@@ -543,7 +543,7 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.Button buttonSlew0;
         private System.Windows.Forms.CheckBox checkBoxTrack;
         internal System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
-        internal System.Windows.Forms.Label lblPARK;
+        internal System.Windows.Forms.Label labelPARK;
         private System.Windows.Forms.PictureBox pictureBoxPierSideWest;
         private System.Windows.Forms.PictureBox pictureBoxPierSideEast;
         internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel3;
