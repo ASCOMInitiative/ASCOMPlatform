@@ -1152,7 +1152,7 @@ ASCOM.Utilities
 	</remarks>
 </member><member name="T:ASCOM.Utilities.Interfaces.ITraceLogger">
 	<summary>
- Interface to the .NET TraceLogger component
+ Interface to the TraceLogger component
  </summary>
 	<remarks></remarks>
 </member><member name="P:ASCOM.Utilities.Interfaces.IChooser.DeviceType">

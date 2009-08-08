@@ -25,6 +25,7 @@ using ASCOM;
 using ASCOM.Utilities;
 using ASCOM.Interface;
 using ASCOM.GeminiTelescope;
+using ASCOM.Utilities.Conform;
 
 /// <summary>
 /// Need to add CommandNative to standard ITelescope interface for backward compatibility with
@@ -189,6 +190,13 @@ public interface IGeminiTelescope
     void Unpark();
     [DispId(424)]
     string CommandNative(string Command);
+    [DispId(425)]
+    IConformCommandStrings ConformCommands{ get; }
+    [DispId(426)]
+    IConformCommandStrings ConformCommandsRaw{ get; }
+    [DispId(427)]
+    IConformErrorNumbers ConformErrors{ get; }
+
 }
 
 namespace ASCOM.GeminiTelescope
@@ -441,7 +449,7 @@ namespace ASCOM.GeminiTelescope
 
             string result = GeminiHardware.DoCommandResult(Command, GeminiHardware.MAX_TIMEOUT, Raw);
             if (result == null) return null;
-            if (result.EndsWith("#")) return result.Substring(result.Length - 1);
+            if (!Raw & result.EndsWith("#")) return result.Substring(1,result.Length - 1);//Added Start value substring parameter and handling of Raw values
             return result;
         }
 
@@ -1059,6 +1067,37 @@ namespace ASCOM.GeminiTelescope
         }
 
         #endregion
+
+        #region IConform Members
+
+        public IConformCommandStrings ConformCommands
+        {
+            get 
+            { 
+                return new ConformCommandStrings("Gc", "(24)", "Q", "Sz045:00:00", false);
+            }
+        }
+
+        public IConformCommandStrings ConformCommandsRaw
+        {
+            get 
+            {
+                return new ConformCommandStrings(":Gc#", "(24)#", ":Q#", ":Sz045:00:00#", true);
+            }
+        }
+
+        public IConformErrorNumbers ConformErrors
+        {
+            get 
+            { 
+                return new ConformErrorNumbers(new int[] {ErrorCodes.NotImplemented}, 
+                                               new int[] {ErrorCodes.InvalidValue}, 
+                                               new int[] {ErrorCodes.ValueNotSet});
+            }
+        }
+
+        #endregion
+
     }
 
     //
