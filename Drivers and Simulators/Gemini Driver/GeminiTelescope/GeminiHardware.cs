@@ -1785,7 +1785,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static void SyncToEquatorialCoords(double ra, double dec)
         {
-            string[] cmd = { ":Sr" + m_Util.DegreesToHMS(ra, ":", ":", ""), ":Sd" + m_Util.DegreesToDMS(dec, ":", ":", ""), "" };
+            string[] cmd = { ":Sr" + m_Util.HoursToHMS(ra, ":", ":", ""), ":Sd" + m_Util.DegreesToDMS(dec, ":", ":", ""), "" };
             if (m_AdditionalAlign)
             {
                 cmd[2] = ":Cm";
