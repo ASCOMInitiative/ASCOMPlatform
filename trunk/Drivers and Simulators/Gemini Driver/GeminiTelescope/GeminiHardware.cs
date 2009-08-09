@@ -565,8 +565,10 @@ namespace ASCOM.GeminiTelescope
 
                 if (value == false) //JNOW 
                 {
-                    DoCommandResult(":p0", MAX_TIMEOUT, false);
-                    m_Refraction = false;
+                    if (m_Refraction)
+                        DoCommandResult(":p1", MAX_TIMEOUT, false);
+                    else
+                        DoCommandResult(":p0", MAX_TIMEOUT, false);
                 }
                 else
                 {
@@ -595,7 +597,6 @@ namespace ASCOM.GeminiTelescope
             {
                 if (!Precession) //JNOW
                 {
-                    if (value) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Refraction cannot be calculated by Gemini when JNOW is in effect");
                     m_Refraction = false;
                     Precession = false;   //JNOW: this updates the mount with refraction and precession settings
                 }
