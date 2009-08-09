@@ -518,6 +518,10 @@ namespace ASCOM.GeminiTelescope
 
         public EquatorialCoordinateType EquatorialSystem
         {
+            
+            
+            //get { return EquatorialCoordinateType.equLocalTopocentric; }
+
             get { return GeminiHardware.Precession ? EquatorialCoordinateType.equJ2000 : EquatorialCoordinateType.equLocalTopocentric; }
             set
             {
@@ -529,6 +533,7 @@ namespace ASCOM.GeminiTelescope
                     else
                         throw new InvalidValueException("EquatorialSystem", value.ToString(), "equLocalTopocentric (1), or equJ2000 (2)");
             }
+
         }
 
         private void WaitForHomeOrPark(string where)
