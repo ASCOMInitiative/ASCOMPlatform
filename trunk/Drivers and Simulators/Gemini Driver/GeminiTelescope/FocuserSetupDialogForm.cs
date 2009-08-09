@@ -132,5 +132,10 @@ namespace ASCOM.GeminiTelescope
             }
         }
         #endregion
+
+        private void FocuserSetupDialogForm_Load(object sender, EventArgs e)
+        {
+            SharedResources.SetTopWindow(this);
+        }
     }
 }
