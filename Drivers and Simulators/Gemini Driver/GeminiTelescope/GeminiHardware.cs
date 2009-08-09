@@ -244,6 +244,7 @@ namespace ASCOM.GeminiTelescope
         private static int m_GeminiStatusByte;              // result of <99: native command, polled on an interval
         private static bool m_SafetyNotified;               // true if safety limit notification was already sent
 
+
         //Focuser Private Data
         private static int m_MaxIncrement = 0;
         private static int m_MaxStep = 0;
@@ -317,12 +318,12 @@ namespace ASCOM.GeminiTelescope
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "RegVer", SharedResources.REGISTRATION_VERSION);
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ComPort", "COM1");
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "BaudRate", "9600");
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AdditionalAlign", "false");
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Precession", "false");
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Refraction", "false");
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AdvancedMode", "false");
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiSite", "true");
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiTime", "true");
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AdditionalAlign", false.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Precession", false.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Refraction", false.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AdvancedMode", false.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiSite", true.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiTime", true.ToString());
             }
 
             //Load up the values from saved
@@ -390,7 +391,7 @@ namespace ASCOM.GeminiTelescope
                 m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "RegVer", SharedResources.REGISTRATION_VERSION);
                 m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "MaxIncrement", "5000");
                 m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "StepSize", "100");
-                m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "ReverseDirection", "false");
+                m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "ReverseDirection", false.ToString());
                 m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "BacklashDirection", "0");
                 m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "BacklashSize", "50");
                 m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "BrakeSize", "0");
@@ -549,6 +550,63 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        /// <summary>
+        /// Get/Set Equatorial system type: JNOW = 1, or J2000  = 2
+        ///   current Refraction setting is also updated to the mount, as that's the only way Gemini takes
+        ///   these settings: together.
+        /// </summary>
+        public static bool Precession
+        {
+            get
+            {
+                return (m_GeminiStatusByte & 32) == 0 ?  false : true;  //1==JNOW, 2=J2000
+            }
+            set {
+
+                if (value == false) //JNOW 
+                {
+                    DoCommandResult(":p0", MAX_TIMEOUT, false);
+                    m_Refraction = false;
+                }
+                else
+                {
+                    if (value == true) //J2000
+                        if (m_Refraction)
+                            DoCommandResult(":p3", MAX_TIMEOUT, false);
+                        else
+                            DoCommandResult(":p2", MAX_TIMEOUT, false);
+                }
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Precession", m_Precession.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Get/Set whether Gemini should apply refraction correction: true = Gemini calculates refraction, false = it doesn't
+        ///   current precession setting is also updated to the mount, as that's the only way Gemini takes
+        ///   these settings: together.
+        /// </summary>
+        public static bool Refraction
+        {
+            get
+            {
+                return (m_Refraction);
+            }
+            set
+            {
+                if (!Precession) //JNOW
+                {
+                    if (value) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Refraction cannot be calculated by Gemini when JNOW is in effect");
+                    m_Refraction = false;
+                    Precession = false;   //JNOW: this updates the mount with refraction and precession settings
+                }
+                else //J2000
+                {
+                    m_Refraction = value;
+                    Precession = true;  //J2000: this updates the mount with refraction and precession settings
+                }
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Refraction", m_Refraction.ToString());
+            }
+        }
 
         public static bool AtSafetyLimit
         {
@@ -878,6 +936,9 @@ namespace ASCOM.GeminiTelescope
                         m_BackgroundWorker.Start();
 
                         if (OnConnect != null) OnConnect(true, m_Clients);
+
+                        SendStartUpCommands();
+
                     }
                     else
                     {
@@ -889,6 +950,17 @@ namespace ASCOM.GeminiTelescope
 
             }
         }
+
+        private static void SendStartUpCommands()
+        {
+            // check that the precision is set to high, if not, set it:
+            string precision = DoCommandResult(":P", MAX_TIMEOUT, false);
+            if (precision != "HIGH PRECISION")
+                DoCommandResult(":U", MAX_TIMEOUT, false);
+
+            Refraction = m_Refraction;  // update this setting to the mount 
+        }
+
 
         static void m_SerialPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
         {
@@ -1150,6 +1222,7 @@ namespace ASCOM.GeminiTelescope
             UpdatePolledVariables();
             CommandItem command;
 
+
             //Get RA and DEC etc
             m_SerialPort.DiscardInBuffer(); //clear all received data
             //longitude, latitude, UTC offset
@@ -1168,7 +1241,10 @@ namespace ASCOM.GeminiTelescope
             if (longitude != null) Longitude = -m_Util.DMSToDegrees(longitude);  // Gemini has the reverse notion of longitude sign: + for West, - for East
             if (latitude != null) Latitude = m_Util.DMSToDegrees(latitude);
             if (UTC_Offset != null) int.TryParse(UTC_Offset, out m_UTCOffset);
+
            
+
+
 
             m_LastUpdate = System.DateTime.Now;
         }

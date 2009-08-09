@@ -496,15 +496,13 @@ namespace ASCOM.GeminiTelescope
 
         public PierSide DestinationSideOfPier(double RightAscension, double Declination)
         {
-            // TODO Replace this with your implementation
             throw new ASCOM.PropertyNotImplementedException("DestinationSideOfPier",false);
         }
 
         public bool DoesRefraction
         {
-            // TODO Replace this with your implementation
-            get { throw new ASCOM.PropertyNotImplementedException("DoesRefraction", false); }
-            set { throw new ASCOM.PropertyNotImplementedException("DoesRefraction", true); }
+            get { return GeminiHardware.Refraction; }
+            set { GeminiHardware.Refraction = value; }
         }
 
         public string DriverInfo
@@ -520,10 +518,18 @@ namespace ASCOM.GeminiTelescope
 
         public EquatorialCoordinateType EquatorialSystem
         {
-            
-            get { return EquatorialCoordinateType.equJ2000; }
+            get { return GeminiHardware.Precession ? EquatorialCoordinateType.equJ2000 : EquatorialCoordinateType.equLocalTopocentric; }
+            set
+            {
+                if (value == EquatorialCoordinateType.equLocalTopocentric)
+                    GeminiHardware.Precession = false;
+                else
+                    if (value == EquatorialCoordinateType.equJ2000)
+                        GeminiHardware.Precession = true;
+                    else
+                        throw new InvalidValueException("EquatorialSystem", value.ToString(), "equLocalTopocentric (1), or equJ2000 (2)");
+            }
         }
-
 
         private void WaitForHomeOrPark(string where)
         {
