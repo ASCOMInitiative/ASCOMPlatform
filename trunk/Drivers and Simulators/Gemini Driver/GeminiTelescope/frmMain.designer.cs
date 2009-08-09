@@ -60,7 +60,7 @@ namespace ASCOM.GeminiTelescope
             this.focuserSetupDialogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mountParametersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ButtonFlip = new System.Windows.Forms.Button();
-            this.CheckBoxFlipDeck = new System.Windows.Forms.CheckBox();
+            this.CheckBoxFlipDec = new System.Windows.Forms.CheckBox();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
             this.RadioButtonSlew = new System.Windows.Forms.RadioButton();
             this.RadioButtonCenter = new System.Windows.Forms.RadioButton();
@@ -203,6 +203,8 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew1.TabIndex = 0;
             this.buttonSlew1.Text = "N";
             this.buttonSlew1.UseVisualStyleBackColor = true;
+            this.buttonSlew1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseDown);
+            this.buttonSlew1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseUp);
             // 
             // buttonSlew3
             // 
@@ -213,6 +215,8 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew3.TabIndex = 1;
             this.buttonSlew3.Text = "E";
             this.buttonSlew3.UseVisualStyleBackColor = true;
+            this.buttonSlew3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew3_MouseDown);
+            this.buttonSlew3.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew3_MouseUp);
             // 
             // buttonSlew4
             // 
@@ -223,6 +227,8 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew4.TabIndex = 2;
             this.buttonSlew4.Text = "W";
             this.buttonSlew4.UseVisualStyleBackColor = true;
+            this.buttonSlew4.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew4_MouseDown);
+            this.buttonSlew4.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew4_MouseUp);
             // 
             // buttonSlew2
             // 
@@ -233,6 +239,8 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew2.TabIndex = 3;
             this.buttonSlew2.Text = "S";
             this.buttonSlew2.UseVisualStyleBackColor = true;
+            this.buttonSlew2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew2_MouseDown);
+            this.buttonSlew2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew2_MouseUp);
             // 
             // buttonSlew0
             // 
@@ -244,6 +252,7 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew0.TabIndex = 4;
             this.buttonSlew0.Text = "Ä";
             this.buttonSlew0.UseVisualStyleBackColor = true;
+            this.buttonSlew0.MouseClick += new System.Windows.Forms.MouseEventHandler(this.buttonSlew0_MouseClick);
             // 
             // pictureBoxPierSideEast
             // 
@@ -368,26 +377,26 @@ namespace ASCOM.GeminiTelescope
             this.focuserSetupDialogToolStripMenuItem,
             this.mountParametersToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(198, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(197, 70);
             // 
             // setupDialogToolStripMenuItem
             // 
             this.setupDialogToolStripMenuItem.Name = "setupDialogToolStripMenuItem";
-            this.setupDialogToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.setupDialogToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.setupDialogToolStripMenuItem.Text = "Telescope Setup Dialog";
             this.setupDialogToolStripMenuItem.Click += new System.EventHandler(this.setupDialogToolStripMenuItem_Click);
             // 
             // focuserSetupDialogToolStripMenuItem
             // 
             this.focuserSetupDialogToolStripMenuItem.Name = "focuserSetupDialogToolStripMenuItem";
-            this.focuserSetupDialogToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.focuserSetupDialogToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.focuserSetupDialogToolStripMenuItem.Text = "Focuser Setup Dialog";
             this.focuserSetupDialogToolStripMenuItem.Click += new System.EventHandler(this.focuserSetupDialogToolStripMenuItem_Click);
             // 
             // mountParametersToolStripMenuItem
             // 
             this.mountParametersToolStripMenuItem.Name = "mountParametersToolStripMenuItem";
-            this.mountParametersToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.mountParametersToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.mountParametersToolStripMenuItem.Text = "Mount Parameters";
             this.mountParametersToolStripMenuItem.Click += new System.EventHandler(this.mountParametersToolStripMenuItem_Click);
             // 
@@ -400,18 +409,19 @@ namespace ASCOM.GeminiTelescope
             this.ButtonFlip.TabIndex = 3;
             this.ButtonFlip.Text = "F";
             this.ButtonFlip.UseVisualStyleBackColor = true;
+            this.ButtonFlip.Click += new System.EventHandler(this.ButtonFlip_Click);
             // 
-            // CheckBoxFlipDeck
+            // CheckBoxFlipDec
             // 
-            this.CheckBoxFlipDeck.AutoSize = true;
-            this.CheckBoxFlipDeck.ForeColor = System.Drawing.Color.White;
-            this.CheckBoxFlipDeck.Location = new System.Drawing.Point(81, 278);
-            this.CheckBoxFlipDeck.Name = "CheckBoxFlipDeck";
-            this.CheckBoxFlipDeck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.CheckBoxFlipDeck.Size = new System.Drawing.Size(46, 30);
-            this.CheckBoxFlipDeck.TabIndex = 17;
-            this.CheckBoxFlipDeck.Text = "Flip\r\nDec";
-            this.CheckBoxFlipDeck.UseVisualStyleBackColor = true;
+            this.CheckBoxFlipDec.AutoSize = true;
+            this.CheckBoxFlipDec.ForeColor = System.Drawing.Color.White;
+            this.CheckBoxFlipDec.Location = new System.Drawing.Point(81, 278);
+            this.CheckBoxFlipDec.Name = "CheckBoxFlipDec";
+            this.CheckBoxFlipDec.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.CheckBoxFlipDec.Size = new System.Drawing.Size(46, 30);
+            this.CheckBoxFlipDec.TabIndex = 17;
+            this.CheckBoxFlipDec.Text = "Flip\r\nDec";
+            this.CheckBoxFlipDec.UseVisualStyleBackColor = true;
             // 
             // GroupBox1
             // 
@@ -435,6 +445,7 @@ namespace ASCOM.GeminiTelescope
             this.RadioButtonSlew.TabIndex = 2;
             this.RadioButtonSlew.Text = "S";
             this.RadioButtonSlew.UseVisualStyleBackColor = true;
+            this.RadioButtonSlew.CheckedChanged += new System.EventHandler(this.RadioButtonSlew_CheckedChanged);
             // 
             // RadioButtonCenter
             // 
@@ -446,6 +457,7 @@ namespace ASCOM.GeminiTelescope
             this.RadioButtonCenter.TabIndex = 1;
             this.RadioButtonCenter.Text = "C";
             this.RadioButtonCenter.UseVisualStyleBackColor = true;
+            this.RadioButtonCenter.CheckedChanged += new System.EventHandler(this.RadioButtonCenter_CheckedChanged);
             // 
             // RadioButtonGuide
             // 
@@ -459,6 +471,7 @@ namespace ASCOM.GeminiTelescope
             this.RadioButtonGuide.TabStop = true;
             this.RadioButtonGuide.Text = "G";
             this.RadioButtonGuide.UseVisualStyleBackColor = true;
+            this.RadioButtonGuide.CheckedChanged += new System.EventHandler(this.RadioButtonGuide_CheckedChanged);
             // 
             // CheckBoxFlipRa
             // 
@@ -494,7 +507,7 @@ namespace ASCOM.GeminiTelescope
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(139, 450);
-            this.Controls.Add(this.CheckBoxFlipDeck);
+            this.Controls.Add(this.CheckBoxFlipDec);
             this.Controls.Add(this.GroupBox1);
             this.Controls.Add(this.CheckBoxFlipRa);
             this.Controls.Add(this.TableLayoutPanel3);
@@ -551,7 +564,7 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.Button ButtonConnect;
         private System.Windows.Forms.Button ButtonFlip;
         private System.Windows.Forms.Button ButtonSetup;
-        internal System.Windows.Forms.CheckBox CheckBoxFlipDeck;
+        internal System.Windows.Forms.CheckBox CheckBoxFlipDec;
         internal System.Windows.Forms.GroupBox GroupBox1;
         internal System.Windows.Forms.RadioButton RadioButtonSlew;
         internal System.Windows.Forms.RadioButton RadioButtonCenter;

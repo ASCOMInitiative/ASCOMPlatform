@@ -480,5 +480,178 @@ namespace ASCOM.GeminiTelescope
         {
             GeminiHardware.DoCommandResult(":hC", 5000, false);
         }
+
+        private void buttonSlew0_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (GeminiHardware.Connected)
+            {
+                GeminiHardware.DoCommand(":Q",false);
+            }
+        }
+
+        private void ButtonFlip_Click(object sender, EventArgs e)
+        {
+            if (GeminiHardware.Connected)
+            {
+                GeminiHardware.DoCommand(":Mf", false);
+            }
+        }
+
+        private void buttonSlew1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (GeminiHardware.Connected)
+            {
+                if (CheckBoxFlipDec.Checked)
+                {
+                    GeminiHardware.DoCommand(":Ms", false);
+                }
+                else
+                {
+                    GeminiHardware.DoCommand(":Mn", false);
+                }
+                
+            }
+        }
+
+        private void buttonSlew1_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (GeminiHardware.Connected)
+            {
+                if (CheckBoxFlipDec.Checked)
+                {
+                    GeminiHardware.DoCommand(":Qs", false);
+                }
+                else
+                {
+                    GeminiHardware.DoCommand(":Qn", false);
+                }
+            }
+        }
+
+        private void buttonSlew2_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (GeminiHardware.Connected)
+            {
+                if (CheckBoxFlipDec.Checked)
+                {
+                    GeminiHardware.DoCommand(":Mn", false);
+                }
+                else
+                {
+                    GeminiHardware.DoCommand(":Ms", false);
+                }
+
+            }
+        }
+
+        private void buttonSlew2_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (GeminiHardware.Connected)
+            {
+                if (CheckBoxFlipDec.Checked)
+                {
+                    GeminiHardware.DoCommand(":Qn", false);
+                }
+                else
+                {
+                    GeminiHardware.DoCommand(":Qs", false);
+                }
+            }
+        }
+
+        private void buttonSlew4_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (GeminiHardware.Connected)
+            {
+                if (CheckBoxFlipRa.Checked)
+                {
+                    GeminiHardware.DoCommand(":Me", false);
+                }
+                else
+                {
+                    GeminiHardware.DoCommand(":Mw", false);
+                }
+
+            }
+        }
+
+        private void buttonSlew4_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (GeminiHardware.Connected)
+            {
+                if (CheckBoxFlipRa.Checked)
+                {
+                    GeminiHardware.DoCommand(":Qe", false);
+                }
+                else
+                {
+                    GeminiHardware.DoCommand(":Qw", false);
+                }
+            }
+        }
+
+        private void buttonSlew3_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (GeminiHardware.Connected)
+            {
+                if (CheckBoxFlipRa.Checked)
+                {
+                    GeminiHardware.DoCommand(":Mw", false);
+                }
+                else
+                {
+                    GeminiHardware.DoCommand(":Me", false);
+                }
+
+            }
+        }
+
+        private void buttonSlew3_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (GeminiHardware.Connected)
+            {
+                if (CheckBoxFlipRa.Checked)
+                {
+                    GeminiHardware.DoCommand(":Qw", false);
+                }
+                else
+                {
+                    GeminiHardware.DoCommand(":Qe", false);
+                }
+            }
+        }
+
+        private void RadioButtonGuide_CheckedChanged(object sender, EventArgs e)
+        {
+            if (GeminiHardware.Connected)
+            {
+                if (RadioButtonGuide.Checked)
+                {
+                    GeminiHardware.DoCommand(":RG", false);
+                }
+            }
+        }
+
+        private void RadioButtonCenter_CheckedChanged(object sender, EventArgs e)
+        {
+            if (GeminiHardware.Connected)
+            {
+                if (RadioButtonCenter.Checked)
+                {
+                    GeminiHardware.DoCommand(":RC", false);
+                }
+            }
+        }
+
+        private void RadioButtonSlew_CheckedChanged(object sender, EventArgs e)
+        {
+            if (GeminiHardware.Connected)
+            {
+                if (RadioButtonSlew.Checked)
+                {
+                    GeminiHardware.DoCommand(":RS", false);
+                }
+            }
+        }
     }
 }
