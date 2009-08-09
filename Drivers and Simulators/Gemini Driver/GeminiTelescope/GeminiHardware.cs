@@ -559,10 +559,9 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                return (m_GeminiStatusByte & 32) == 0 ?  false : true;  //1==JNOW, 2=J2000
+                return (m_GeminiStatusByte & 32) == 0 ?  false : true; 
             }
             set {
-
                 if (value == false) //JNOW 
                 {
                     if (m_Refraction)
@@ -570,13 +569,12 @@ namespace ASCOM.GeminiTelescope
                     else
                         DoCommandResult(":p0", MAX_TIMEOUT, false);
                 }
-                else
+                else //J2000
                 {
-                    if (value == true) //J2000
-                        if (m_Refraction)
-                            DoCommandResult(":p3", MAX_TIMEOUT, false);
-                        else
-                            DoCommandResult(":p2", MAX_TIMEOUT, false);
+                    if (m_Refraction)
+                        DoCommandResult(":p3", MAX_TIMEOUT, false);
+                    else
+                        DoCommandResult(":p2", MAX_TIMEOUT, false);
                 }
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Precession", m_Precession.ToString());
             }
@@ -595,16 +593,8 @@ namespace ASCOM.GeminiTelescope
             }
             set
             {
-                if (!Precession) //JNOW
-                {
-                    m_Refraction = false;
-                    Precession = false;   //JNOW: this updates the mount with refraction and precession settings
-                }
-                else //J2000
-                {
-                    m_Refraction = value;
-                    Precession = true;  //J2000: this updates the mount with refraction and precession settings
-                }
+                m_Refraction = value;
+                Precession = Precession; // this updates the mount with refraction and precession settings
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Refraction", m_Refraction.ToString());
             }
         }
