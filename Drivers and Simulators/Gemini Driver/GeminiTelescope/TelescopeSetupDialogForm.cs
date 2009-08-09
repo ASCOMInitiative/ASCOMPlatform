@@ -144,6 +144,11 @@ namespace ASCOM.GeminiTelescope
         }
 
         #endregion
+
+        private void TelescopeSetupDialogForm_Load(object sender, EventArgs e)
+        {
+            SharedResources.SetTopWindow(this);
+        }
             
     }
 }

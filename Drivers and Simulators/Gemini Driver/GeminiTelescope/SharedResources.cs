@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -76,11 +77,50 @@ namespace ASCOM.GeminiTelescope
             s_z = 0;
         }
 
+
+
+
         //
         // Public access to shared resources
         //
 
         // Shared serial port 
         public static int z { get { return s_z++; } }
+
+
+        ///////WIN32 functions//////////
+        [DllImport("user32.dll", EntryPoint = "SetWindowPos")]
+        public static extern bool SetWindowPos(
+           IntPtr hWnd,               // window handle
+           IntPtr hWndInsertAfter,    // placement-order handle
+           int X,                  // horizontal position
+           int Y,                  // vertical position
+           int cx,                 // width
+           int cy,                 // height
+           uint uFlags);           // window positioning flags
+
+        public static IntPtr HWND_TOP = (IntPtr)(-1);
+        public static IntPtr HWND_BOTTOM = (IntPtr)1;
+        public static IntPtr HWND_TOPMOST = (IntPtr)(-2);
+        public const UInt32 SWP_NOSIZE = 0x0001;
+        public const UInt32 SWP_NOMOVE = 0x0002;
+        public const UInt32 SWP_NOZORDER = 0x0004;
+        public const UInt32 SWP_NOREDRAW = 0x0008;
+        public const UInt32 SWP_NOACTIVATE = 0x0010;
+        public const UInt32 SWP_FRAMECHANGED = 0x0020;  /* The frame changed: send WM_NCCALCSIZE */
+        public const UInt32 SWP_SHOWWINDOW = 0x0040;
+        public const UInt32 SWP_HIDEWINDOW = 0x0080;
+        public const UInt32 SWP_NOCOPYBITS = 0x0100;
+        public const UInt32 SWP_NOOWNERZORDER = 0x0200;  /* Don't do owner Z ordering */
+        public const UInt32 SWP_NOSENDCHANGING = 0x0400;  /* Don't send WM_WINDOWPOSCHANGING */
+
+        /// <summary>
+        /// bring window on top of others in the z-order, without making it top-most.
+        /// </summary>
+        /// <param name="window"></param>
+        public static void SetTopWindow(System.Windows.Forms.Control window)
+        {
+            SetWindowPos(window.Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+        }
     }
 }

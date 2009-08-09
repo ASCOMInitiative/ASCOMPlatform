@@ -529,6 +529,7 @@
             this.MinimizeBox = false;
             this.Name = "FocuserSetupDialogForm";
             this.Text = "Gemini Focuser Setup";
+            this.Load += new System.EventHandler(this.FocuserSetupDialogForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);

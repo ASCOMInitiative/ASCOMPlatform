@@ -563,6 +563,7 @@ namespace ASCOM.GeminiTelescope
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Gemini Telescope Setup";
+            this.Load += new System.EventHandler(this.TelescopeSetupDialogForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

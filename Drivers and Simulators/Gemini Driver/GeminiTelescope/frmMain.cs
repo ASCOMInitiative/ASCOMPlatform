@@ -263,6 +263,7 @@ namespace ASCOM.GeminiTelescope
             setupForm.Latitude = GeminiHardware.Latitude;
             setupForm.Longitude = GeminiHardware.Longitude;
 
+
             DialogResult ans = setupForm.ShowDialog(this);
 
             if (ans == DialogResult.OK)
@@ -297,6 +298,7 @@ namespace ASCOM.GeminiTelescope
             setupForm.BacklashSize = GeminiHardware.BacklashSize;
             setupForm.BacklashDirection = GeminiHardware.BacklashDirection;
             setupForm.Speed = GeminiHardware.Speed;
+
 
             DialogResult ans = setupForm.ShowDialog();
 
@@ -377,6 +379,8 @@ namespace ASCOM.GeminiTelescope
         }
         private void frmMain_Load(object sender, EventArgs e)
         {
+            SharedResources.SetTopWindow(this);
+
             SetSlewButtons();
             //GeminiHardware.Start();
         }
