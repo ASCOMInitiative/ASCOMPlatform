@@ -48,7 +48,7 @@ namespace ASCOM.Optec_IFW
         //
         // Driver ID and descriptive string that shows in the Chooser
         //
-        private static string s_csDriverID = "ASCOM.Optec_IFW.FilterWheel";
+        internal static string s_csDriverID = "ASCOM.Optec_IFW.FilterWheel";
         private static string s_csDriverDescription = "Driver for Optec IFW";
         //
         // Constructor - Must be public for COM registration!
@@ -118,11 +118,10 @@ namespace ASCOM.Optec_IFW
                         DeviceComm.ConnectToDevice();
                         if (DeviceComm.CheckForConnection())
                         {
-                            Connected = true;
+                            //do nothing
                         }
                         else
                         {
-                            Connected = false;
                             throw new Exception("Connection to the device has failed");
                         }
                     }
@@ -153,8 +152,8 @@ namespace ASCOM.Optec_IFW
             // TODO Replace this with your implementation
             get
             {
-                return DeviceComm.ReadAllNames();
-
+                ///return DeviceComm.ReadAllNames(DeviceComm.GetNumOfPos());
+                throw new PropertyNotImplementedException("FocusOfsets", false);
             }
         }
 
