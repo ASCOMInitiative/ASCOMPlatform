@@ -501,15 +501,23 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
+                string[] cmds = { null, null };
+
+                if (RadioButtonGuide.Checked) cmds[0] = ":RG";
+                if (RadioButtonCenter.Checked) cmds[0] = ":RC";
+                if (RadioButtonSlew.Checked) cmds[0] = ":RS";
+
                 if (CheckBoxFlipDec.Checked)
                 {
-                    GeminiHardware.DoCommand(":Ms", false);
+                    cmds[1] = ":Ms";
                 }
                 else
                 {
-                    GeminiHardware.DoCommand(":Mn", false);
+                    cmds[1] = ":Mn";
                 }
-                
+
+                GeminiHardware.DoCommand(cmds, false);
+
             }
         }
 
@@ -517,6 +525,7 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
+
                 if (CheckBoxFlipDec.Checked)
                 {
                     GeminiHardware.DoCommand(":Qs", false);
@@ -532,15 +541,22 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
-                if (CheckBoxFlipDec.Checked)
-                {
-                    GeminiHardware.DoCommand(":Mn", false);
-                }
-                else
-                {
-                    GeminiHardware.DoCommand(":Ms", false);
-                }
+                string[] cmds = { null, null };
 
+                if (RadioButtonGuide.Checked) cmds[0] = ":RG";
+                if (RadioButtonCenter.Checked) cmds[0] = ":RC";
+                if (RadioButtonSlew.Checked) cmds[0] = ":RS";
+                if (CheckBoxFlipDec.Checked)
+                    if (CheckBoxFlipDec.Checked)
+                    {
+                        cmds[1] = ":Mn";
+                    }
+                    else
+                    {
+                        cmds[1] = ":Ms";
+                    }
+
+                GeminiHardware.DoCommand(cmds, false);
             }
         }
 
@@ -563,15 +579,20 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
+                string[] cmds = { null, null };
+
+                if (RadioButtonGuide.Checked) cmds[0] = ":RG";
+                if (RadioButtonCenter.Checked) cmds[0] = ":RC";
+                if (RadioButtonSlew.Checked) cmds[0] = ":RS";
                 if (CheckBoxFlipRa.Checked)
                 {
-                    GeminiHardware.DoCommand(":Me", false);
+                    cmds[1] = ":Me";
                 }
                 else
                 {
-                    GeminiHardware.DoCommand(":Mw", false);
+                    cmds[1] = ":Mw";
                 }
-
+                GeminiHardware.DoCommand(cmds, false);
             }
         }
 
@@ -594,14 +615,20 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
+                string[] cmds = { null, null };
+
+                if (RadioButtonGuide.Checked) cmds[0] = ":RG";
+                if (RadioButtonCenter.Checked) cmds[0] = ":RC";
+                if (RadioButtonSlew.Checked) cmds[0] = ":RS";
                 if (CheckBoxFlipRa.Checked)
                 {
-                    GeminiHardware.DoCommand(":Mw", false);
+                    cmds[1] = ":Mw";
                 }
                 else
                 {
-                    GeminiHardware.DoCommand(":Me", false);
+                    cmds[1] = ":Me";
                 }
+                GeminiHardware.DoCommand(cmds, false);
 
             }
         }
@@ -617,39 +644,6 @@ namespace ASCOM.GeminiTelescope
                 else
                 {
                     GeminiHardware.DoCommand(":Qe", false);
-                }
-            }
-        }
-
-        private void RadioButtonGuide_CheckedChanged(object sender, EventArgs e)
-        {
-            if (GeminiHardware.Connected)
-            {
-                if (RadioButtonGuide.Checked)
-                {
-                    GeminiHardware.DoCommand(":RG", false);
-                }
-            }
-        }
-
-        private void RadioButtonCenter_CheckedChanged(object sender, EventArgs e)
-        {
-            if (GeminiHardware.Connected)
-            {
-                if (RadioButtonCenter.Checked)
-                {
-                    GeminiHardware.DoCommand(":RC", false);
-                }
-            }
-        }
-
-        private void RadioButtonSlew_CheckedChanged(object sender, EventArgs e)
-        {
-            if (GeminiHardware.Connected)
-            {
-                if (RadioButtonSlew.Checked)
-                {
-                    GeminiHardware.DoCommand(":RS", false);
                 }
             }
         }
