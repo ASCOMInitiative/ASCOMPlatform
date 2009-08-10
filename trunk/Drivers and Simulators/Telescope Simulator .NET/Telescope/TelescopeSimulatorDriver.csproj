@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ASCOM.TelescopeSimulator</RootNamespace>
-    <AssemblyName>ASCOM.TelescopeSimulator.Telescope</AssemblyName>
+    <AssemblyName>ASCOM.Simulator.Telescope</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -93,9 +93,9 @@
     <Content Include="ReadMe.htm" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TelescopeSimulator\TelescopeSimulator.csproj">
+    <ProjectReference Include="..\TelescopeSimulator\TelescopeSimulatorServer.csproj">
       <Project>{8D28213E-D3D5-482C-A35F-E0BB6A4265BC}</Project>
-      <Name>TelescopeSimulator</Name>
+      <Name>TelescopeSimulatorServer</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

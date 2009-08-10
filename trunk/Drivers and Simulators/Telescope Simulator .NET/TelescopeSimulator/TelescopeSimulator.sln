@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual C# Express 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelescopeSimulator", "TelescopeSimulator.csproj", "{8D28213E-D3D5-482C-A35F-E0BB6A4265BC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelescopeSimulatorServer", "TelescopeSimulatorServer.csproj", "{8D28213E-D3D5-482C-A35F-E0BB6A4265BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telescope", "..\Telescope\Telescope.csproj", "{20CD9164-D5BF-4DA5-A248-EC6B81830610}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelescopeSimulatorDriver", "..\Telescope\TelescopeSimulatorDriver.csproj", "{20CD9164-D5BF-4DA5-A248-EC6B81830610}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
