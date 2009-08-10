@@ -12,7 +12,13 @@ namespace ASCOM.Optec_IFW
         public static int NumOfFilters;
         public static char WheelID;
 
-        private static SerialPort Port;
+        //private static SerialPort Port;
+        private static ASCOM.Helper.Serial SerialTools;
+        private static ASCOM.Helper.Profile ProfileTools;
+        private static string DriverID = "ASCOM.Optec_IFW.FilterWheel";
+        private static string DriverDesc = "Driver for Optec IFW";
+
+        
      
         #region   //Filter Configuration Variables        
         
@@ -51,23 +57,32 @@ namespace ASCOM.Optec_IFW
         {
             IsAtHome = false;
             NumOfFilters = 0;
-            // FilterNames = "";
-            //TODO: change this so that it uses a variable property of COM3
-            Port = new SerialPort("COM3", 19200, Parity.None, 8, StopBits.One);
+            
+            SerialTools = new ASCOM.Helper.Serial();
+            ProfileTools = new ASCOM.Helper.Profile();
+            if (ProfileTools.IsRegistered(DriverID))
+            {
+                int PortNum = Int32.Parse(ProfileTools.GetValue(DriverID, "PortNum", ""));
+            }
+            else
+            {
+                throw new Exception("You must run setup and select a COM port");
+            }
+
+
         }
 
         public static void ConnectToDevice()
         {
-            if (!Port.IsOpen) Port.Open();
-            sendCmd("WSMODE", 1000);
-            
+            if (SerialTools.Connected) SerialTools.Connected = true;
+            sendCmd("WSMODE", 500);    
         }
         public static bool CheckForConnection()
         {
-            if (!Port.IsOpen) return false;
+            if (!SerialTools.Connected) return false;
             sendCmd("WSMODE", 500);
             string inputbuff;
-            try { inputbuff = Port.ReadLine(); }
+            try { inputbuff = SerialTools.Receive(); }
             catch (TimeoutException)
             {
                 throw new Exception("Connecting to device failed. No Response Received");
@@ -81,21 +96,21 @@ namespace ASCOM.Optec_IFW
         }
         public static void DisconnectDevice()
         {
-            if (Port.IsOpen) Port.Close();
+            if (SerialTools.Connected) SerialTools.Connected = false;   //dissconnect the port
         }
 
         private static void sendCmd(string CmdToSend, int ResponseTime)
         {
-            if (!Port.IsOpen) throw new Exception("Tried to send command while port is closed");
-            Port.ReadTimeout = ResponseTime;
-            Port.DiscardInBuffer();
-            Port.Write(CmdToSend);
+            if (!SerialTools.Connected) throw new Exception("Tried to send command while port is closed");
+            SerialTools.ReceiveTimeoutMs = ResponseTime;
+            SerialTools.ClearBuffers();
+            SerialTools.Transmit(CmdToSend);
         }
         public static bool HomeDevice()
         {
             sendCmd("WHOMEZ", 30000);
             string inputbuff;
-            try { inputbuff = Port.ReadLine(); }
+            try { inputbuff = SerialTools.Receive(); }
             catch (TimeoutException)
             {
                 throw new Exception("Homing Failed. Response Timeout.");
@@ -115,7 +130,7 @@ namespace ASCOM.Optec_IFW
         {
             sendCmd("WIDENT", 1000);
             string inputbuff;
-            try { inputbuff = Port.ReadLine(); }
+            try { inputbuff = SerialTools.Receive(); }
             catch (TimeoutException)
             {
                 throw new Exception("Failed to get wheel identity. Response Timeout Occured");
@@ -127,7 +142,7 @@ namespace ASCOM.Optec_IFW
         {
             sendCmd("WFILTR", 1000);
             string inputbuff;
-            try { inputbuff = Port.ReadLine(); }
+            try { inputbuff = SerialTools.Receive(); }
             catch (TimeoutException)
             {
                 throw new Exception("Failed to get current position. Response Timeout Occured");
@@ -140,7 +155,7 @@ namespace ASCOM.Optec_IFW
             if ((Pos > 8) || (Pos < 0)) throw new Exception("Position value is out of reach. Can not go to position " + Pos);
             sendCmd("WGOTO" + Pos, 180000);
             string inputbuff;
-            try { inputbuff = Port.ReadLine(); }
+            try { inputbuff = SerialTools.Receive(); }
             catch (TimeoutException)
             {
                 throw new Exception("Failed to get current position. Response Timeout Occured");
@@ -155,7 +170,7 @@ namespace ASCOM.Optec_IFW
             sendCmd("WREADZ", 1000);
             string inputbuff;
             string[] NamesToOutput = new string[0];
-            try { inputbuff = Port.ReadLine(); }
+            try { inputbuff = SerialTools.Receive(); }
             catch (TimeoutException)
             {
                 throw new Exception("Failed to get current position. Response Timeout Occured");
@@ -176,7 +191,7 @@ namespace ASCOM.Optec_IFW
         {
             sendCmd("WEXITS", 1000);
             string inputbuff;
-            try { inputbuff = Port.ReadLine(); }
+            try { inputbuff = SerialTools.Receive(); }
             catch (TimeoutException)
             {
                 throw new Exception("Failed to execute EXIT command. Response Timeout Occured");

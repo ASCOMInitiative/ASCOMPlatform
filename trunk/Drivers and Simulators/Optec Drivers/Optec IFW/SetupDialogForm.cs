@@ -12,14 +12,17 @@ namespace ASCOM.Optec_IFW
     public partial class SetupDialogForm : Form
     {
         private static object CommLock = new object();
+        FilterWheel DriverInstance = new FilterWheel();
+
         public SetupDialogForm()
         {
-            InitializeComponent();
+            InitializeComponent();    
         }
 
         private void cmdOK_Click(object sender, EventArgs e)
         {
             Dispose();
+           
         }
 
         private void cmdCancel_Click(object sender, EventArgs e)
@@ -48,7 +51,7 @@ namespace ASCOM.Optec_IFW
         {
             lock (CommLock)
             {
-                DeviceComm.ConnectToDevice();
+                DriverInstance.Connected = true;
             }
         }
 
@@ -96,6 +99,16 @@ namespace ASCOM.Optec_IFW
             }
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            SaveSettings();
+        }
+        ASCOM.Helper.Profile TestProfile = new ASCOM.Helper.Profile();
+        private void SaveSettings()
+        {
+            int PortNumber = (int)this.ComPort_Picker.Value;
+            TestProfile.WriteValue("ASCOM.Optec_IFW.FilterWheel", "PortNum", PortNumber.ToString(), "");
+        }
       
 
     }
