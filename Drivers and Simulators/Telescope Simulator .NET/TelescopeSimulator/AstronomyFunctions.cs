@@ -24,29 +24,9 @@ namespace ASCOM.TelescopeSimulator
 {
     public class AstronomyFunctions
     {
+        private static Utilities.Util m_Util = new ASCOM.Utilities.Util();
         static AstronomyFunctions()
         { }
-
-        //----------------------------------------------------------------------------------------
-        // UTC DateTime to UTC Julian date
-        //----------------------------------------------------------------------------------------
-        public static double DateUtcToJulian(DateTime dt)
-        {
-            double tNow = (double)dt.Ticks - 6.30822816E+17;	// .NET ticks at 01-Jan-2000T00:00:00
-            double j = 2451544.5 + (tNow / 8.64E+11);		// Tick difference to days difference
-            return j;
-        }
-
-        //----------------------------------------------------------------------------------------
-        // UTC Julian date to UTC DateTime
-        //----------------------------------------------------------------------------------------
-        public static DateTime JulianToDateUtc(double j)
-        {
-            long tix = (long)(6.30822816E+17 + (8.64E+11 * (j - 2451544.5)));
-            DateTime dt = new DateTime(tix);
-            return dt;
-        }
-
 
         //----------------------------------------------------------------------------------------
         // Calculate Precession
@@ -71,7 +51,8 @@ namespace ASCOM.TelescopeSimulator
 
         public static double LocalSiderealTime(double longitude)
         {
-            double days_since_j_2000 = DateUtcToJulian(DateTime.Now.ToUniversalTime()) - 2451545.0;
+            //double days_since_j_2000 = DateUtcToJulian(DateTime.Now.ToUniversalTime()) - 2451545.0;
+            double days_since_j_2000 = m_Util.DateUTCToJulian(DateTime.Now.ToUniversalTime()) - 2451545.0;
             double t = days_since_j_2000 / 36525;
             double l1mst = 280.46061837 + 360.98564736629 * days_since_j_2000 + longitude;
             if (l1mst < 0)
@@ -164,52 +145,14 @@ namespace ASCOM.TelescopeSimulator
 
         }
 
-        //----------------------------------------------------------------------------------------
-        // Convert Double Angle to Hour Minute Second Display 
-        //----------------------------------------------------------------------------------------
-        public static string ConvertDoubleToHMS(double d)
-        {
-            double totalseconds = d / 15 * 3600;
-            int hours = (int)Math.Truncate(totalseconds / 3600);
-            int minutes = (int)Math.Truncate((totalseconds - hours * 3600) / 60);
-            int seconds = (int)Math.Truncate(totalseconds - (hours * 3600) - (minutes * 60));
-            return hours.ToString().PadLeft(2, '0') + ":" + minutes.ToString().PadLeft(2, '0') + ":" + seconds.ToString().PadLeft(2, '0');
-        }
-        //----------------------------------------------------------------------------------------
-        // Convert Double Angle to Degrees Minute Second Display 
-        //----------------------------------------------------------------------------------------
-        public static string ConvertDoubleToDMS(double d)
-        {
-            
-            int degrees = (int)Math.Truncate(d);
-
-            int minutes = (int)Math.Truncate((d-(double)degrees) * 60);
-            int seconds = (int)Math.Round((d - (double)degrees - (double)minutes/60) * 3600,0);
-            
-            if (seconds == 60)
-            {
-                minutes += 1;
-                seconds = 0;
-            }
-
-            
-
-            string output = degrees.ToString() + ":" + minutes.ToString().PadLeft(2, '0') + ":" + seconds.ToString().PadLeft(2, '0');
-            if (d >= 0)
-            {
-                output = "+" + output;
-            }
-            return output;
-        }
+       
+        
         //----------------------------------------------------------------------------------------
         // Calculate RA and Dec From Altitude and Azimuth and Site
         //----------------------------------------------------------------------------------------
         public static double CalculateRa(double Altitude, double Azimuth, double Latitude, double Longitude)
         {
 
-            //double hourAngle = Math.Acos((Math.Cos(Altitude) - Math.Sin(Declination) * Math.Sin(Latitude)) / Math.Cos(Declination) * Math.Cos(Latitude))*SharedResources.RAD_DEG;
-            //double hourAngle = Math.Acos((Math.Cos(Altitude) * Math.Cos(Latitude) - Math.Sin(Latitude) * Math.Sin(Altitude) * Math.Cos(Azimuth)) / Math.Cos(Declination)) * SharedResources.RAD_DEG;
-            //double hourAngle = Math.Atan(-Math.Sin(Azimuth) * Math.Cos(Altitude) - Math.Cos(Azimuth) * Math.Sin(Latitude) * Math.Cos(Altitude) + Math.Sin(Altitude) * Math.Cos(Latitude)) * SharedResources.RAD_DEG;
             double hourAngle = Math.Atan2(-Math.Sin(Azimuth) * Math.Cos(Altitude), - Math.Cos(Azimuth) * Math.Sin(Latitude) * Math.Cos(Altitude) + Math.Sin(Altitude) * Math.Cos(Latitude)) * SharedResources.RAD_DEG;
             if (hourAngle < 0)
             { hourAngle += 360; }
@@ -223,7 +166,6 @@ namespace ASCOM.TelescopeSimulator
         public static double CalculateDec(double Altitude, double Azimuth, double Latitude)
         {
             
-            //return Math.Asin(Math.Cos(Azimuth)*Math.Cos(Latitude)*Math.Cos(Altitude) + Math.Sin(Latitude)*Math.Sin(Altitude));
             return Math.Asin(Math.Cos(Azimuth) * Math.Cos(Latitude) * Math.Cos(Altitude) + Math.Sin(Latitude) * Math.Sin(Altitude)) * SharedResources.RAD_DEG;
         }
         //----------------------------------------------------------------------------------------

@@ -43,6 +43,7 @@ namespace ASCOM.TelescopeSimulator
         private AxisRates[] m_AxisRates;
         private TrackingRates m_TrackingRates;
         private TrackingRatesSimple m_TrackingRatesSimple;
+        private ASCOM.Utilities.Util m_Util;
 
         //
         // Constructor - Must be public for COM registration!
@@ -55,7 +56,8 @@ namespace ASCOM.TelescopeSimulator
             m_AxisRates[2] = new AxisRates(TelescopeAxes.axisTertiary);
             m_TrackingRates = new TrackingRates();
             m_TrackingRatesSimple = new TrackingRatesSimple();
-            // TODO Implement your additional construction here
+
+            m_Util = new ASCOM.Utilities.Util();
         }
 
 
@@ -204,7 +206,7 @@ namespace ASCOM.TelescopeSimulator
                     }
                     throw new PropertyNotImplementedException("Altitude", false);
                 }
-                SharedResources.TrafficForm.TrafficEnd(AstronomyFunctions.ConvertDoubleToDMS(TelescopeHardware.Altitude));
+                SharedResources.TrafficForm.TrafficEnd(m_Util.DegreesToDMS(TelescopeHardware.Altitude));
                 return TelescopeHardware.Altitude;
             }
         }
@@ -385,7 +387,7 @@ namespace ASCOM.TelescopeSimulator
                     }
                     throw new PropertyNotImplementedException("Azimuth", false);
                 }
-                SharedResources.TrafficForm.TrafficEnd(AstronomyFunctions.ConvertDoubleToDMS(TelescopeHardware.Azimuth));
+                SharedResources.TrafficForm.TrafficEnd(m_Util.DegreesToDMS(TelescopeHardware.Azimuth));
                 return TelescopeHardware.Azimuth;
             }
         }
@@ -815,7 +817,7 @@ namespace ASCOM.TelescopeSimulator
                     }
                     throw new PropertyNotImplementedException("Declination", false);
                 }
-                SharedResources.TrafficForm.TrafficEnd(AstronomyFunctions.ConvertDoubleToHMS(TelescopeHardware.Declination));
+                SharedResources.TrafficForm.TrafficEnd(m_Util.DegreesToHMS(TelescopeHardware.Declination));
                 return TelescopeHardware.Declination;
             }
         }
@@ -1120,7 +1122,7 @@ namespace ASCOM.TelescopeSimulator
                     }
                     throw new PropertyNotImplementedException("RightAscension", false);
                 }
-                SharedResources.TrafficForm.TrafficEnd(AstronomyFunctions.ConvertDoubleToHMS(TelescopeHardware.RightAscension));
+                SharedResources.TrafficForm.TrafficEnd(m_Util.DegreesToHMS(TelescopeHardware.RightAscension));
                 return TelescopeHardware.RightAscension;
             }
         }
@@ -1179,7 +1181,7 @@ namespace ASCOM.TelescopeSimulator
                     throw new PropertyNotImplementedException("SiderealTime", false);
                 }
 
-                SharedResources.TrafficForm.TrafficEnd(AstronomyFunctions.ConvertDoubleToHMS(TelescopeHardware.SiderealTime));
+                SharedResources.TrafficForm.TrafficEnd(m_Util.DegreesToHMS(TelescopeHardware.SiderealTime));
                 return TelescopeHardware.SiderealTime;
             }
         }
@@ -1500,7 +1502,7 @@ namespace ASCOM.TelescopeSimulator
             {
                 if (SharedResources.TrafficForm.Slew)
                 {
-                    SharedResources.TrafficForm.TrafficStart(" Alt " + AstronomyFunctions.ConvertDoubleToDMS(Altitude) + " Az " + AstronomyFunctions.ConvertDoubleToDMS(Azimuth));
+                    SharedResources.TrafficForm.TrafficStart(" Alt " + m_Util.DegreesToDMS(Altitude) + " Az " + m_Util.DegreesToDMS(Azimuth));
 
                 }
             }
@@ -1538,7 +1540,7 @@ namespace ASCOM.TelescopeSimulator
             {
                 if (SharedResources.TrafficForm.Slew)
                 {
-                    SharedResources.TrafficForm.TrafficStart(" Alt " + AstronomyFunctions.ConvertDoubleToDMS(Altitude) + " Az " + AstronomyFunctions.ConvertDoubleToDMS(Azimuth));
+                    SharedResources.TrafficForm.TrafficStart(" Alt " + m_Util.DegreesToDMS(Altitude) + " Az " + m_Util.DegreesToDMS(Azimuth));
 
                 }
             }
@@ -1570,7 +1572,7 @@ namespace ASCOM.TelescopeSimulator
             {
                 if (SharedResources.TrafficForm.Slew)
                 {
-                    SharedResources.TrafficForm.TrafficStart(" RA " + AstronomyFunctions.ConvertDoubleToHMS(RightAscension) + " DEC " + AstronomyFunctions.ConvertDoubleToDMS(Declination));
+                    SharedResources.TrafficForm.TrafficStart(" RA " + m_Util.DegreesToHMS(RightAscension) + " DEC " + m_Util.DegreesToDMS(Declination));
 
                 }
             }
@@ -1608,7 +1610,7 @@ namespace ASCOM.TelescopeSimulator
             {
                 if (SharedResources.TrafficForm.Slew)
                 {
-                    SharedResources.TrafficForm.TrafficStart(" RA " + AstronomyFunctions.ConvertDoubleToHMS(RightAscension) + " DEC " + AstronomyFunctions.ConvertDoubleToDMS(Declination));
+                    SharedResources.TrafficForm.TrafficStart(" RA " + m_Util.DegreesToHMS(RightAscension) + " DEC " + m_Util.DegreesToDMS(Declination));
 
                 }
             }
@@ -1735,7 +1737,7 @@ namespace ASCOM.TelescopeSimulator
             {
                 if (SharedResources.TrafficForm.Slew)
                 {
-                    SharedResources.TrafficForm.TrafficStart(" Alt " + AstronomyFunctions.ConvertDoubleToDMS(Altitude) + " Az " + AstronomyFunctions.ConvertDoubleToDMS(Azimuth));
+                    SharedResources.TrafficForm.TrafficStart(" Alt " + m_Util.DegreesToDMS(Altitude) + " Az " + m_Util.DegreesToDMS(Azimuth));
 
                 }
             }
@@ -1774,7 +1776,7 @@ namespace ASCOM.TelescopeSimulator
             {
                 if (SharedResources.TrafficForm.Slew)
                 {
-                    SharedResources.TrafficForm.TrafficStart(" RA " + AstronomyFunctions.ConvertDoubleToHMS(RightAscension) + " DEC " + AstronomyFunctions.ConvertDoubleToDMS(Declination));
+                    SharedResources.TrafficForm.TrafficStart(" RA " + m_Util.DegreesToHMS(RightAscension) + " DEC " + m_Util.DegreesToDMS(Declination));
 
                 }
             }
@@ -1811,7 +1813,7 @@ namespace ASCOM.TelescopeSimulator
             {
                 if (SharedResources.TrafficForm.Slew)
                 {
-                    SharedResources.TrafficForm.TrafficEnd(" RA " + AstronomyFunctions.ConvertDoubleToHMS(TelescopeHardware.TargetRightAscension) + " DEC " + AstronomyFunctions.ConvertDoubleToDMS(TelescopeHardware.TargetDeclination));
+                    SharedResources.TrafficForm.TrafficEnd(" RA " + m_Util.DegreesToHMS(TelescopeHardware.TargetRightAscension) + " DEC " + m_Util.DegreesToDMS(TelescopeHardware.TargetDeclination));
 
                 }
             }
@@ -1867,7 +1869,7 @@ namespace ASCOM.TelescopeSimulator
                 {
                     if (SharedResources.TrafficForm.Gets)
                     {
-                        SharedResources.TrafficForm.TrafficEnd(AstronomyFunctions.ConvertDoubleToDMS(TelescopeHardware.TargetDeclination));
+                        SharedResources.TrafficForm.TrafficEnd(m_Util.DegreesToDMS(TelescopeHardware.TargetDeclination));
 
                     }
                 }
@@ -1911,7 +1913,7 @@ namespace ASCOM.TelescopeSimulator
                 {
                     if (SharedResources.TrafficForm.Gets)
                     {
-                        SharedResources.TrafficForm.TrafficEnd(AstronomyFunctions.ConvertDoubleToDMS(value));
+                        SharedResources.TrafficForm.TrafficEnd(m_Util.DegreesToDMS(value));
 
                     }
                 }
@@ -1960,7 +1962,7 @@ namespace ASCOM.TelescopeSimulator
                 {
                     if (SharedResources.TrafficForm.Gets)
                     {
-                        SharedResources.TrafficForm.TrafficEnd(AstronomyFunctions.ConvertDoubleToHMS(TelescopeHardware.TargetRightAscension));
+                        SharedResources.TrafficForm.TrafficEnd(m_Util.DegreesToHMS(TelescopeHardware.TargetRightAscension));
 
                     }
                 }
@@ -2004,7 +2006,7 @@ namespace ASCOM.TelescopeSimulator
                 {
                     if (SharedResources.TrafficForm.Gets)
                     {
-                        SharedResources.TrafficForm.TrafficEnd(AstronomyFunctions.ConvertDoubleToHMS(value));
+                        SharedResources.TrafficForm.TrafficEnd(m_Util.DegreesToHMS(value));
 
                     }
                 }
