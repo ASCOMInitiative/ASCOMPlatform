@@ -443,7 +443,6 @@ namespace ASCOM.GeminiTelescope
             this.RadioButtonSlew.TabIndex = 2;
             this.RadioButtonSlew.Text = "S";
             this.RadioButtonSlew.UseVisualStyleBackColor = true;
-            this.RadioButtonSlew.CheckedChanged += new System.EventHandler(this.RadioButtonSlew_CheckedChanged);
             // 
             // RadioButtonCenter
             // 
@@ -455,7 +454,6 @@ namespace ASCOM.GeminiTelescope
             this.RadioButtonCenter.TabIndex = 1;
             this.RadioButtonCenter.Text = "C";
             this.RadioButtonCenter.UseVisualStyleBackColor = true;
-            this.RadioButtonCenter.CheckedChanged += new System.EventHandler(this.RadioButtonCenter_CheckedChanged);
             // 
             // RadioButtonGuide
             // 
@@ -469,7 +467,6 @@ namespace ASCOM.GeminiTelescope
             this.RadioButtonGuide.TabStop = true;
             this.RadioButtonGuide.Text = "G";
             this.RadioButtonGuide.UseVisualStyleBackColor = true;
-            this.RadioButtonGuide.CheckedChanged += new System.EventHandler(this.RadioButtonGuide_CheckedChanged);
             // 
             // CheckBoxFlipRa
             // 
