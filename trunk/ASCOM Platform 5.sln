@@ -72,10 +72,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platform Dependencies", "Pl
 		Drivers and Simulators\Platform Dependencies\NOVAS-C64.pdb = Drivers and Simulators\Platform Dependencies\NOVAS-C64.pdb
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telescope", "Drivers and Simulators\Telescope Simulator .NET\Telescope\Telescope.csproj", "{20CD9164-D5BF-4DA5-A248-EC6B81830610}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelescopeSimulator", "Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\TelescopeSimulator.csproj", "{8D28213E-D3D5-482C-A35F-E0BB6A4265BC}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installers", "Installers", "{999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ASCOM Platform 5.1 x86", "ASCOM Platform 5.1 x86\ASCOM Platform 5.1 x86.vdproj", "{D58C0488-CD98-4ACA-B1E2-E8F8429DB2D4}"
@@ -125,6 +121,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilterWheelSimServer", "Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\FilterWheelSimServer.csproj", "{D659379E-3131-4AD4-8D62-5C8BAC2C9A82}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Setup.TemplateWizard", "DriverTemplates\ASCOM.Setup.TemplateWizard\ASCOM.Setup.TemplateWizard.csproj", "{6E5A18A3-EA09-4D55-ABC8-A7AEAC3DDA2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelescopeSimulatorServer", "Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\TelescopeSimulatorServer.csproj", "{8D28213E-D3D5-482C-A35F-E0BB6A4265BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelescopeSimulatorDriver", "Drivers and Simulators\Telescope Simulator .NET\Telescope\TelescopeSimulatorDriver.csproj", "{20CD9164-D5BF-4DA5-A248-EC6B81830610}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -223,20 +223,6 @@ Global
 		{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
 		{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9}.TeamCity|Any CPU.Build.0 = Release|Any CPU
-		{20CD9164-D5BF-4DA5-A248-EC6B81830610}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{20CD9164-D5BF-4DA5-A248-EC6B81830610}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{20CD9164-D5BF-4DA5-A248-EC6B81830610}.Platform Dependencies|Any CPU.ActiveCfg = Debug|Any CPU
-		{20CD9164-D5BF-4DA5-A248-EC6B81830610}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{20CD9164-D5BF-4DA5-A248-EC6B81830610}.Release|Any CPU.Build.0 = Release|Any CPU
-		{20CD9164-D5BF-4DA5-A248-EC6B81830610}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
-		{20CD9164-D5BF-4DA5-A248-EC6B81830610}.TeamCity|Any CPU.Build.0 = Release|Any CPU
-		{8D28213E-D3D5-482C-A35F-E0BB6A4265BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8D28213E-D3D5-482C-A35F-E0BB6A4265BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8D28213E-D3D5-482C-A35F-E0BB6A4265BC}.Platform Dependencies|Any CPU.ActiveCfg = Debug|Any CPU
-		{8D28213E-D3D5-482C-A35F-E0BB6A4265BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8D28213E-D3D5-482C-A35F-E0BB6A4265BC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8D28213E-D3D5-482C-A35F-E0BB6A4265BC}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
-		{8D28213E-D3D5-482C-A35F-E0BB6A4265BC}.TeamCity|Any CPU.Build.0 = Release|Any CPU
 		{D58C0488-CD98-4ACA-B1E2-E8F8429DB2D4}.Debug|Any CPU.ActiveCfg = Debug
 		{D58C0488-CD98-4ACA-B1E2-E8F8429DB2D4}.Platform Dependencies|Any CPU.ActiveCfg = Debug
 		{D58C0488-CD98-4ACA-B1E2-E8F8429DB2D4}.Release|Any CPU.ActiveCfg = Release
@@ -334,6 +320,22 @@ Global
 		{6E5A18A3-EA09-4D55-ABC8-A7AEAC3DDA2D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6E5A18A3-EA09-4D55-ABC8-A7AEAC3DDA2D}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
 		{6E5A18A3-EA09-4D55-ABC8-A7AEAC3DDA2D}.TeamCity|Any CPU.Build.0 = Release|Any CPU
+		{8D28213E-D3D5-482C-A35F-E0BB6A4265BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D28213E-D3D5-482C-A35F-E0BB6A4265BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D28213E-D3D5-482C-A35F-E0BB6A4265BC}.Platform Dependencies|Any CPU.ActiveCfg = Release|Any CPU
+		{8D28213E-D3D5-482C-A35F-E0BB6A4265BC}.Platform Dependencies|Any CPU.Build.0 = Release|Any CPU
+		{8D28213E-D3D5-482C-A35F-E0BB6A4265BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D28213E-D3D5-482C-A35F-E0BB6A4265BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D28213E-D3D5-482C-A35F-E0BB6A4265BC}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
+		{8D28213E-D3D5-482C-A35F-E0BB6A4265BC}.TeamCity|Any CPU.Build.0 = Release|Any CPU
+		{20CD9164-D5BF-4DA5-A248-EC6B81830610}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20CD9164-D5BF-4DA5-A248-EC6B81830610}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20CD9164-D5BF-4DA5-A248-EC6B81830610}.Platform Dependencies|Any CPU.ActiveCfg = Release|Any CPU
+		{20CD9164-D5BF-4DA5-A248-EC6B81830610}.Platform Dependencies|Any CPU.Build.0 = Release|Any CPU
+		{20CD9164-D5BF-4DA5-A248-EC6B81830610}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20CD9164-D5BF-4DA5-A248-EC6B81830610}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20CD9164-D5BF-4DA5-A248-EC6B81830610}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
+		{20CD9164-D5BF-4DA5-A248-EC6B81830610}.TeamCity|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
