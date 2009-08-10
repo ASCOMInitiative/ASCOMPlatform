@@ -51,7 +51,14 @@ namespace ASCOM.Optec_IFW
         {
             lock (CommLock)
             {
-                DriverInstance.Connected = true;
+                ASCOM.Helper.Serial test = new ASCOM.Helper.Serial();
+                test.Port = 3;
+                test.Speed = ASCOM.Helper.PortSpeed.ps19200;
+                test.ReceiveTimeoutMs = 500;
+                test.Connected = true;
+                test.ClearBuffers();
+                test.Transmit("WSMODE");
+                MessageBox.Show(test.Receive());
             }
         }
 
@@ -98,18 +105,133 @@ namespace ASCOM.Optec_IFW
                 DeviceComm.GoToPosition(Int32.Parse(this.GoToPos_CB.Text));
             }
         }
-
-        private void button1_Click(object sender, EventArgs e)
+        private void SaveData_Btn_Click(object sender, EventArgs e)
         {
             SaveSettings();
         }
-        ASCOM.Helper.Profile TestProfile = new ASCOM.Helper.Profile();
+    
         private void SaveSettings()
         {
             int PortNumber = (int)this.ComPort_Picker.Value;
-            TestProfile.WriteValue("ASCOM.Optec_IFW.FilterWheel", "PortNum", PortNumber.ToString(), "");
+            DeviceComm.SavePortNumber(PortNumber.ToString());
+
+            //Store the filter offsets in the registry
+            float[] filteroffsets = new float[9];
+            //filteroffsets[0] = .00122;
+            //filteroffsets[1] = .0235;
+            //filteroffsets[2] = 
+            //filteroffsets[3] = 
+            //filteroffsets[4] =
+            //filteroffsets[5] = 
+            //filteroffsets[6] = 
+            //filteroffsets[7] = 
+            //filteroffsets[8] = 
+            DeviceComm.StoreFilterOffsets(filteroffsets);
+
+            //Store Centering Values
+
         }
-      
+
+        private void SetupDialogForm_Load(object sender, EventArgs e)
+        {
+            if( Int32.Parse(DeviceComm.TryGetCOMPort())> 0)
+            {
+                this.ComPort_Picker.Value = Int32.Parse(DeviceComm.TryGetCOMPort());
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (this.ComPort_Picker.Value < 1 )
+            {
+                MessageBox.Show("You must select a COM port first");
+            }
+            else if (!(IFW_RB.Checked || IFW3_RB.Checked))
+            {
+                MessageBox.Show("Please select which IFW model you have");
+            }
+            else
+            {
+                DriverInstance.Connected = true;
+                DeviceComm.HomeDevice();
+                char WheelID = DeviceComm.GetWheelIdentity();
+
+                //Setup the form for the number of positions the wheel has
+                int Pos;
+                Pos = DeviceComm.GetNumOfPos(this.IFW_RB.Checked);
+                #region Enable/Disable textbox's
+                switch (Pos)
+                {
+                    case 9:
+                        //9 positions wheels
+                        Filter7Name_TB.Enabled = true;
+                        Filter8Name_TB.Enabled = true;
+                        Filter9Name_TB.Enabled = true;
+                        F7Offset_TB.Enabled = true;
+                        F8Offset_TB.Enabled = true;
+                        F9Offset_TB.Enabled = true;
+                        goto case 6;
+                    case 6:
+                        //6 position wheels
+                        Filter6Name_TB.Enabled = true;
+                        F6Offset_TB.Enabled = true;
+                        goto case 5;
+                    case 5:
+                        // 5 position wheels
+                        Filter1Name_TB.Enabled = true;
+                        Filter2Name_TB.Enabled = true;
+                        Filter3Name_TB.Enabled = true;
+                        Filter4Name_TB.Enabled = true;
+                        Filter5Name_TB.Enabled = true;
+                        F1Offset_TB.Enabled = true;
+                        F2Offset_TB.Enabled = true;
+                        F3Offset_TB.Enabled = true;
+                        F4Offset_TB.Enabled = true;
+                        F5Offset_TB.Enabled = true;
+                        break;
+                    default:
+                        throw new Exception("Incorrect number of positions returned");
+                }
+                #endregion
+
+                //Get the filter names from the Device
+                string[] names = new string[Pos];
+
+                DeviceComm.ReadAllNames(Pos);
+                foreach (Control c in panel1.Controls)
+                {
+                    MessageBox.Show("Control= " + c.Name);
+                    for (int i = 0; i < Pos; i++)
+		            {
+                        MessageBox.Show(i.ToString());
+                        if (c.Name.Contains((i+1).ToString()) && c.Name.Contains("Filter") && c.Enabled == true)
+                        {
+                            c.Text = names[i];
+                            
+                           // break;
+                        }
+		            }
+                }
+            }
+        }
+
+        private void ComPort_Picker_ValueChanged(object sender, EventArgs e)
+        {
+            SaveSettings();
+        }
+
+
+
+
+
+
+
+        
+
+
+
+
+ 
 
     }
 }
