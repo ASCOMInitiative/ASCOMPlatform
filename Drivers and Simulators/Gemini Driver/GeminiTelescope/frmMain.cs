@@ -45,7 +45,7 @@ namespace ASCOM.GeminiTelescope
             notifyMenu.Name = "Notifications";
             notifyMenu.Checked = m_ShowNotifications;
 
-            MenuItem controlMenu = new MenuItem("Control Panel...", new EventHandler(ControlPanelMenu));
+            MenuItem controlMenu = new MenuItem("Hand Controller...", new EventHandler(ControlPanelMenu));
             controlMenu.Name = "Control";
             controlMenu.Checked = this.Visible;
 
@@ -54,7 +54,6 @@ namespace ASCOM.GeminiTelescope
                 new MenuItem("Configure Telescope...", new EventHandler(ConfigureTelescopeMenu)),
 
                 new MenuItem("Configure Focuser...", new EventHandler(ConfigureFocuserMenu)),
-            new MenuItem("Hand Controller...", new EventHandler(AdvancedControllerMenu)),
             new MenuItem("-"),
             notifyMenu,
             new MenuItem("-"),
@@ -83,8 +82,13 @@ namespace ASCOM.GeminiTelescope
 
         void ControlPanelMenu(object sender, EventArgs e)
         {
-            if (this.Visible) this.Hide();
-            else this.Show();
+            if (this.Visible)
+            { this.Hide(); }
+            else
+            { 
+                this.Show();
+                this.WindowState = FormWindowState.Normal;
+            }
 
             m_BaloonMenu.MenuItems["Control"].Checked = this.Visible;
         }
@@ -96,12 +100,7 @@ namespace ASCOM.GeminiTelescope
 
         void ConfigureFocuserMenu(object sender, EventArgs e)
         {
-            //hmmm..???
-        }
-
-        void AdvancedControllerMenu(object sender, EventArgs e)
-        {
- 
+            DoFocuserSetupDialog();
         }
 
         void ShowNotificationsMenu(object sender, EventArgs e)
@@ -382,6 +381,7 @@ namespace ASCOM.GeminiTelescope
             SharedResources.SetTopWindow(this);
 
             SetSlewButtons();
+            this.Hide();
             //GeminiHardware.Start();
         }
 
