@@ -25,8 +25,6 @@ namespace ASCOM.Optec_IFW
         private static ASCOM.Helper.Serial SerialTools;
         private static ASCOM.Helper.Profile ProfileTools; 
 
-        //public string[] FilterNames = new string[9];
-        //private static float[] FilterOffsets = new float[9];
 
         #endregion
 
@@ -113,7 +111,7 @@ namespace ASCOM.Optec_IFW
         //    return inputbuff[0];
         //}
 
-        public static string GetCurrentPos()
+        public static short GetCurrentPos()
         {
             sendCmd("WFILTR", 1000);
             string inputbuff;
@@ -122,11 +120,13 @@ namespace ASCOM.Optec_IFW
             {
                 throw new Exception("Failed to get current position. Response Timeout Occured");
             }
-            if (!inputbuff.Contains("x")) throw new Exception("Failed to get current position. Incorrect Response: " + inputbuff);
-            return inputbuff;
+            short Pos = short.Parse(inputbuff[0].ToString());
+            if ((Pos == 0) || (Pos > NumOfFilters)) throw new Exception("Failed to get current position. Incorrect Response: " + inputbuff);
+            
+            return Pos;
         }
 
-        public static void GoToPosition(int Pos)    //Go to a certain filter
+        public static void GoToPosition(short Pos)    //Go to a certain filter
         {
             if ((Pos > 8) || (Pos < 0)) throw new Exception("Position value is out of reach. Can not go to position " + Pos);
             sendCmd("WGOTO" + Pos, 180000);
@@ -206,7 +206,7 @@ namespace ASCOM.Optec_IFW
         
         }
         
-        public static void StoreFilterOffsets(float[] filteroffsets)
+        public static void StoreFilterOffsets(int[] filteroffsets)
         {
             string OffsetsToWrite = "";
             for (int i = 0; i < NumOfFilters; i++)
@@ -334,6 +334,24 @@ namespace ASCOM.Optec_IFW
                 #endregion
             }
             NumOfFilters = Pos;
+        }
+
+        public static int[] GetOffsets()
+        {
+            string OffsetString = ProfileTools.GetValue(FilterWheel.s_csDriverID, OffsetsRegString, "");
+            int[] Offsets = new int[NumOfFilters];
+            if (OffsetString != "")
+            {
+                for (int i = 0; i < NumOfFilters; i++)
+                {
+                    string j = OffsetString.Substring(i * 8, 8);
+                    int k = int.Parse(j);
+                    Offsets[i] = k;
+                }
+                return Offsets;
+            }
+            else throw new Exception("Failed to retrieve Offsets from Registry. Data Received = " + OffsetString);
+            
         }
     }
 
