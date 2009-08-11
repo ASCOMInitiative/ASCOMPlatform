@@ -500,8 +500,11 @@ namespace ASCOM.GeminiTelescope
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.tableLayoutPanel2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.MaximizeBox = false;
             this.Name = "frmMain";
-            this.Text = "Gemini Telescope";
+            this.ShowInTaskbar = false;
+            this.Text = "Gemini";
+            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.tableLayoutPanel1.ResumeLayout(false);
