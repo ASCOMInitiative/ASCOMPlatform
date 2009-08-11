@@ -66,5 +66,26 @@ namespace ASCOM.Optec_IFW.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        internal static System.Drawing.Bitmap Optec_Logo_medium {
+            get {
+                object obj = ResourceManager.GetObject("Optec_Logo_medium", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap optec_web_card {
+            get {
+                object obj = ResourceManager.GetObject("optec_web_card", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap OptecLogo5 {
+            get {
+                object obj = ResourceManager.GetObject("OptecLogo5", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

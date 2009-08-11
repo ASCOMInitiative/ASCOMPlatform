@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="optec_web_card" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\optec_web_card.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="ASCOM" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -155,5 +159,11 @@
         LqKAoGqKoqkCAhJR8WoCMm4YFhAGKcG5RJwqHIe7C0Kc42QsPCGlP8xfUbZK0k/pOeT+hfsPpHshrDyr
         815YdSGsKdwre+Ff7n8cQI4gUBMAAAAASUVORK5CYII=
 </value>
+  </data>
+  <data name="Optec_Logo_medium" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Optec Logo-medium.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="OptecLogo5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OptecLogo5.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

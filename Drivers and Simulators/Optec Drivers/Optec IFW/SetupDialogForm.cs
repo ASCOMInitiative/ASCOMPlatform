@@ -21,8 +21,8 @@ namespace ASCOM.Optec_IFW
 
         private void cmdOK_Click(object sender, EventArgs e)
         {
-            Dispose();
-           
+            DriverInstance.Connected = false;   //dissconnect the device to free it up for manual control
+            Dispose();   
         }
 
         private void cmdCancel_Click(object sender, EventArgs e)
@@ -47,78 +47,23 @@ namespace ASCOM.Optec_IFW
             }
         }
 
-        private void TestConnect_Btn_Click(object sender, EventArgs e)
-        {
-            lock (CommLock)
-            {
-                ASCOM.Helper.Serial test = new ASCOM.Helper.Serial();
-                test.Port = 3;
-                test.Speed = ASCOM.Helper.PortSpeed.ps19200;
-                test.ReceiveTimeoutMs = 500;
-                test.Connected = true;
-                test.ClearBuffers();
-                test.Transmit("WSMODE");
-                MessageBox.Show(test.Receive());
-            }
-        }
-
-        private void DissConnBtn_Click(object sender, EventArgs e)
-        {
-            lock (CommLock)
-            {
-                DeviceComm.DisconnectDevice();
-            }
-        }
-
-        private void HomeBtn_Click(object sender, EventArgs e)
-        {
-            lock (CommLock)
-            {
-                DeviceComm.HomeDevice();
-            }
-            this.WheelId_TB.Text = DeviceComm.WheelID.ToString();
-        }
-
-        private void ReadNames_Btn_Click(object sender, EventArgs e)
-        {
-            lock (CommLock)
-            {
-               // this.FilterNames_TB.Text = DeviceComm.ReadAllNames();
-            }
-            
-        }
-
-        private void CheckConn_Btn_Click(object sender, EventArgs e)
-        {
-            lock (CommLock)
-            {
-                if (DeviceComm.CheckForConnection()) this.ConnStatus_TB.Text = "Yes";
-                else this.ConnStatus_TB.Text = "NO";
-            }
-
-        }
-
-        private void GoTo_Btn_Click(object sender, EventArgs e)
-        {
-            lock (CommLock)
-            {
-                DeviceComm.GoToPosition(short.Parse(this.GoToPos_CB.Text));
-            }
-        }
-
         private void SaveData_Btn_Click(object sender, EventArgs e)
         {
             SaveSettings();
             MessageBox.Show("Save Data Completed Successfully");
+            cmdOK.Enabled = true;
         }
 
         private void SetupDialogForm_Load(object sender, EventArgs e)
         {
+            cmdOK.Enabled = false;
+
             //load the com port if one has been saved
             if( Int32.Parse(DeviceComm.TryGetCOMPort())> 0)
             {
                 this.ComPort_Picker.Value = Int32.Parse(DeviceComm.TryGetCOMPort());
             }
+
             //load the filter wheel type if one has been saved
             string FW_Type = DeviceComm.TryGetFilterWheelType();
             if ( FW_Type == DeviceComm.TypesOfFWs.IFW.ToString())
@@ -129,6 +74,7 @@ namespace ASCOM.Optec_IFW
             {
                 this.IFW3_RB.Checked = true;
             }   
+
         }
 
         private void Connect_BTN_Click(object sender, EventArgs e)
@@ -223,7 +169,6 @@ namespace ASCOM.Optec_IFW
                 } 
                 #endregion
 
-
             }
         }
 
@@ -312,6 +257,57 @@ namespace ASCOM.Optec_IFW
  
 
         }
+
+        private void Filter1Name_TB_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Filter2Name_TB_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Filter3Name_TB_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Filter4Name_TB_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Filter5Name_TB_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Filter6Name_TB_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Filter7Name_TB_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Filter8Name_TB_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Filter9Name_TB_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
 
 
 
