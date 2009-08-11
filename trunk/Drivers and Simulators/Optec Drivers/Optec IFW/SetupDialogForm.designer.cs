@@ -31,7 +31,7 @@ namespace ASCOM.Optec_IFW
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.picASCOM = new System.Windows.Forms.PictureBox();
-            this.ConnectButton = new System.Windows.Forms.Button();
+            this.TestConnect_Btn = new System.Windows.Forms.Button();
             this.DissConnBtn = new System.Windows.Forms.Button();
             this.HomeBtn = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
@@ -46,32 +46,17 @@ namespace ASCOM.Optec_IFW
             this.GoToPos_CB = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.BackOffset_TB = new System.Windows.Forms.TextBox();
+            this.NextOffset_TB = new System.Windows.Forms.TextBox();
+            this.label20 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.IFW3_RB = new System.Windows.Forms.RadioButton();
             this.IFW_RB = new System.Windows.Forms.RadioButton();
             this.label17 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.Connect_BTN = new System.Windows.Forms.Button();
             this.label16 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
-            this.F9Offset_TB = new System.Windows.Forms.TextBox();
-            this.F8Offset_TB = new System.Windows.Forms.TextBox();
-            this.F7Offset_TB = new System.Windows.Forms.TextBox();
-            this.F6Offset_TB = new System.Windows.Forms.TextBox();
-            this.F5Offset_TB = new System.Windows.Forms.TextBox();
-            this.F4Offset_TB = new System.Windows.Forms.TextBox();
-            this.F3Offset_TB = new System.Windows.Forms.TextBox();
-            this.F2Offset_TB = new System.Windows.Forms.TextBox();
-            this.F1Offset_TB = new System.Windows.Forms.TextBox();
-            this.Filter9Name_TB = new System.Windows.Forms.TextBox();
-            this.Filter8Name_TB = new System.Windows.Forms.TextBox();
-            this.Filter7Name_TB = new System.Windows.Forms.TextBox();
-            this.Filter6Name_TB = new System.Windows.Forms.TextBox();
-            this.Filter5Name_TB = new System.Windows.Forms.TextBox();
-            this.Filter4Name_TB = new System.Windows.Forms.TextBox();
-            this.Filter3Name_TB = new System.Windows.Forms.TextBox();
-            this.Filter2Name_TB = new System.Windows.Forms.TextBox();
-            this.Filter1Name_TB = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
@@ -85,17 +70,32 @@ namespace ASCOM.Optec_IFW
             this.SaveData_Btn = new System.Windows.Forms.Button();
             this.ComPort_Picker = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.label20 = new System.Windows.Forms.Label();
-            this.NextOffset_TB = new System.Windows.Forms.TextBox();
-            this.BackOffset_TB = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.Filter1Name_TB = new System.Windows.Forms.TextBox();
+            this.Filter2Name_TB = new System.Windows.Forms.TextBox();
+            this.Filter3Name_TB = new System.Windows.Forms.TextBox();
+            this.Filter4Name_TB = new System.Windows.Forms.TextBox();
+            this.Filter5Name_TB = new System.Windows.Forms.TextBox();
+            this.Filter6Name_TB = new System.Windows.Forms.TextBox();
+            this.Filter7Name_TB = new System.Windows.Forms.TextBox();
+            this.Filter8Name_TB = new System.Windows.Forms.TextBox();
+            this.Filter9Name_TB = new System.Windows.Forms.TextBox();
+            this.F1Offset_TB = new System.Windows.Forms.TextBox();
+            this.F2Offset_TB = new System.Windows.Forms.TextBox();
+            this.F9Offset_TB = new System.Windows.Forms.TextBox();
+            this.F3Offset_TB = new System.Windows.Forms.TextBox();
+            this.F8Offset_TB = new System.Windows.Forms.TextBox();
+            this.F4Offset_TB = new System.Windows.Forms.TextBox();
+            this.F7Offset_TB = new System.Windows.Forms.TextBox();
+            this.F5Offset_TB = new System.Windows.Forms.TextBox();
+            this.F6Offset_TB = new System.Windows.Forms.TextBox();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ComPort_Picker)).BeginInit();
-            this.tabPage2.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmdOK
@@ -133,15 +133,15 @@ namespace ASCOM.Optec_IFW
             this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
             this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
             // 
-            // ConnectButton
+            // TestConnect_Btn
             // 
-            this.ConnectButton.Location = new System.Drawing.Point(16, 86);
-            this.ConnectButton.Name = "ConnectButton";
-            this.ConnectButton.Size = new System.Drawing.Size(100, 23);
-            this.ConnectButton.TabIndex = 4;
-            this.ConnectButton.Text = "Connect";
-            this.ConnectButton.UseVisualStyleBackColor = true;
-            this.ConnectButton.Click += new System.EventHandler(this.ConnectButton_Click);
+            this.TestConnect_Btn.Location = new System.Drawing.Point(16, 86);
+            this.TestConnect_Btn.Name = "TestConnect_Btn";
+            this.TestConnect_Btn.Size = new System.Drawing.Size(100, 23);
+            this.TestConnect_Btn.TabIndex = 4;
+            this.TestConnect_Btn.Text = "Connect";
+            this.TestConnect_Btn.UseVisualStyleBackColor = true;
+            this.TestConnect_Btn.Click += new System.EventHandler(this.TestConnect_Btn_Click);
             // 
             // DissConnBtn
             // 
@@ -281,7 +281,7 @@ namespace ASCOM.Optec_IFW
             this.tabPage1.Controls.Add(this.IFW3_RB);
             this.tabPage1.Controls.Add(this.IFW_RB);
             this.tabPage1.Controls.Add(this.label17);
-            this.tabPage1.Controls.Add(this.button1);
+            this.tabPage1.Controls.Add(this.Connect_BTN);
             this.tabPage1.Controls.Add(this.label16);
             this.tabPage1.Controls.Add(this.label15);
             this.tabPage1.Controls.Add(this.label14);
@@ -305,6 +305,29 @@ namespace ASCOM.Optec_IFW
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Device Settings";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // BackOffset_TB
+            // 
+            this.BackOffset_TB.Location = new System.Drawing.Point(298, 415);
+            this.BackOffset_TB.Name = "BackOffset_TB";
+            this.BackOffset_TB.Size = new System.Drawing.Size(65, 20);
+            this.BackOffset_TB.TabIndex = 41;
+            // 
+            // NextOffset_TB
+            // 
+            this.NextOffset_TB.Location = new System.Drawing.Point(120, 415);
+            this.NextOffset_TB.Name = "NextOffset_TB";
+            this.NextOffset_TB.Size = new System.Drawing.Size(65, 20);
+            this.NextOffset_TB.TabIndex = 40;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(216, 418);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(76, 13);
+            this.label20.TabIndex = 39;
+            this.label20.Text = "\"Back\" Offset:";
             // 
             // label19
             // 
@@ -334,6 +357,7 @@ namespace ASCOM.Optec_IFW
             this.IFW3_RB.TabIndex = 36;
             this.IFW3_RB.Text = "IFW3";
             this.IFW3_RB.UseVisualStyleBackColor = true;
+            this.IFW3_RB.CheckedChanged += new System.EventHandler(this.IFW3_RB_CheckedChanged);
             // 
             // IFW_RB
             // 
@@ -344,6 +368,7 @@ namespace ASCOM.Optec_IFW
             this.IFW_RB.TabIndex = 35;
             this.IFW_RB.Text = "IFW";
             this.IFW_RB.UseVisualStyleBackColor = true;
+            this.IFW_RB.CheckedChanged += new System.EventHandler(this.IFW_RB_CheckedChanged);
             // 
             // label17
             // 
@@ -355,15 +380,16 @@ namespace ASCOM.Optec_IFW
             this.label17.TabIndex = 34;
             this.label17.Text = "Select which filter wheel you are using:";
             // 
-            // button1
+            // Connect_BTN
             // 
-            this.button1.Location = new System.Drawing.Point(369, 161);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(93, 93);
-            this.button1.TabIndex = 33;
-            this.button1.Text = "Connect";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.Connect_BTN.AllowDrop = true;
+            this.Connect_BTN.Location = new System.Drawing.Point(369, 161);
+            this.Connect_BTN.Name = "Connect_BTN";
+            this.Connect_BTN.Size = new System.Drawing.Size(93, 93);
+            this.Connect_BTN.TabIndex = 33;
+            this.Connect_BTN.Text = "Connect";
+            this.Connect_BTN.UseVisualStyleBackColor = true;
+            this.Connect_BTN.Click += new System.EventHandler(this.Connect_BTN_Click);
             // 
             // label16
             // 
@@ -382,169 +408,6 @@ namespace ASCOM.Optec_IFW
             this.label15.Size = new System.Drawing.Size(35, 13);
             this.label15.TabIndex = 31;
             this.label15.Text = "Name";
-            // 
-            // F9Offset_TB
-            // 
-            this.F9Offset_TB.Enabled = false;
-            this.F9Offset_TB.Location = new System.Drawing.Point(84, 215);
-            this.F9Offset_TB.MaxLength = 8;
-            this.F9Offset_TB.Name = "F9Offset_TB";
-            this.F9Offset_TB.Size = new System.Drawing.Size(54, 20);
-            this.F9Offset_TB.TabIndex = 30;
-            // 
-            // F8Offset_TB
-            // 
-            this.F8Offset_TB.Enabled = false;
-            this.F8Offset_TB.Location = new System.Drawing.Point(84, 189);
-            this.F8Offset_TB.MaxLength = 8;
-            this.F8Offset_TB.Name = "F8Offset_TB";
-            this.F8Offset_TB.Size = new System.Drawing.Size(54, 20);
-            this.F8Offset_TB.TabIndex = 29;
-            // 
-            // F7Offset_TB
-            // 
-            this.F7Offset_TB.Enabled = false;
-            this.F7Offset_TB.Location = new System.Drawing.Point(84, 163);
-            this.F7Offset_TB.MaxLength = 8;
-            this.F7Offset_TB.Name = "F7Offset_TB";
-            this.F7Offset_TB.Size = new System.Drawing.Size(54, 20);
-            this.F7Offset_TB.TabIndex = 28;
-            // 
-            // F6Offset_TB
-            // 
-            this.F6Offset_TB.Enabled = false;
-            this.F6Offset_TB.Location = new System.Drawing.Point(84, 137);
-            this.F6Offset_TB.MaxLength = 8;
-            this.F6Offset_TB.Name = "F6Offset_TB";
-            this.F6Offset_TB.Size = new System.Drawing.Size(54, 20);
-            this.F6Offset_TB.TabIndex = 27;
-            // 
-            // F5Offset_TB
-            // 
-            this.F5Offset_TB.Enabled = false;
-            this.F5Offset_TB.Location = new System.Drawing.Point(84, 111);
-            this.F5Offset_TB.MaxLength = 8;
-            this.F5Offset_TB.Name = "F5Offset_TB";
-            this.F5Offset_TB.Size = new System.Drawing.Size(54, 20);
-            this.F5Offset_TB.TabIndex = 26;
-            // 
-            // F4Offset_TB
-            // 
-            this.F4Offset_TB.Enabled = false;
-            this.F4Offset_TB.Location = new System.Drawing.Point(84, 85);
-            this.F4Offset_TB.MaxLength = 8;
-            this.F4Offset_TB.Name = "F4Offset_TB";
-            this.F4Offset_TB.Size = new System.Drawing.Size(54, 20);
-            this.F4Offset_TB.TabIndex = 25;
-            // 
-            // F3Offset_TB
-            // 
-            this.F3Offset_TB.Enabled = false;
-            this.F3Offset_TB.Location = new System.Drawing.Point(84, 59);
-            this.F3Offset_TB.MaxLength = 8;
-            this.F3Offset_TB.Name = "F3Offset_TB";
-            this.F3Offset_TB.Size = new System.Drawing.Size(54, 20);
-            this.F3Offset_TB.TabIndex = 24;
-            // 
-            // F2Offset_TB
-            // 
-            this.F2Offset_TB.Enabled = false;
-            this.F2Offset_TB.Location = new System.Drawing.Point(84, 33);
-            this.F2Offset_TB.MaxLength = 8;
-            this.F2Offset_TB.Name = "F2Offset_TB";
-            this.F2Offset_TB.Size = new System.Drawing.Size(54, 20);
-            this.F2Offset_TB.TabIndex = 23;
-            // 
-            // F1Offset_TB
-            // 
-            this.F1Offset_TB.Enabled = false;
-            this.F1Offset_TB.Location = new System.Drawing.Point(84, 7);
-            this.F1Offset_TB.MaxLength = 8;
-            this.F1Offset_TB.Name = "F1Offset_TB";
-            this.F1Offset_TB.Size = new System.Drawing.Size(54, 20);
-            this.F1Offset_TB.TabIndex = 22;
-            // 
-            // Filter9Name_TB
-            // 
-            this.Filter9Name_TB.Enabled = false;
-            this.Filter9Name_TB.Location = new System.Drawing.Point(3, 215);
-            this.Filter9Name_TB.MaxLength = 8;
-            this.Filter9Name_TB.Name = "Filter9Name_TB";
-            this.Filter9Name_TB.Size = new System.Drawing.Size(54, 20);
-            this.Filter9Name_TB.TabIndex = 21;
-            // 
-            // Filter8Name_TB
-            // 
-            this.Filter8Name_TB.Enabled = false;
-            this.Filter8Name_TB.Location = new System.Drawing.Point(3, 189);
-            this.Filter8Name_TB.MaxLength = 8;
-            this.Filter8Name_TB.Name = "Filter8Name_TB";
-            this.Filter8Name_TB.Size = new System.Drawing.Size(54, 20);
-            this.Filter8Name_TB.TabIndex = 20;
-            // 
-            // Filter7Name_TB
-            // 
-            this.Filter7Name_TB.Enabled = false;
-            this.Filter7Name_TB.Location = new System.Drawing.Point(3, 163);
-            this.Filter7Name_TB.MaxLength = 8;
-            this.Filter7Name_TB.Name = "Filter7Name_TB";
-            this.Filter7Name_TB.Size = new System.Drawing.Size(54, 20);
-            this.Filter7Name_TB.TabIndex = 19;
-            // 
-            // Filter6Name_TB
-            // 
-            this.Filter6Name_TB.Enabled = false;
-            this.Filter6Name_TB.Location = new System.Drawing.Point(3, 137);
-            this.Filter6Name_TB.MaxLength = 8;
-            this.Filter6Name_TB.Name = "Filter6Name_TB";
-            this.Filter6Name_TB.Size = new System.Drawing.Size(54, 20);
-            this.Filter6Name_TB.TabIndex = 18;
-            // 
-            // Filter5Name_TB
-            // 
-            this.Filter5Name_TB.Enabled = false;
-            this.Filter5Name_TB.Location = new System.Drawing.Point(3, 111);
-            this.Filter5Name_TB.MaxLength = 8;
-            this.Filter5Name_TB.Name = "Filter5Name_TB";
-            this.Filter5Name_TB.Size = new System.Drawing.Size(54, 20);
-            this.Filter5Name_TB.TabIndex = 17;
-            // 
-            // Filter4Name_TB
-            // 
-            this.Filter4Name_TB.AcceptsReturn = true;
-            this.Filter4Name_TB.Enabled = false;
-            this.Filter4Name_TB.Location = new System.Drawing.Point(3, 85);
-            this.Filter4Name_TB.MaxLength = 8;
-            this.Filter4Name_TB.Name = "Filter4Name_TB";
-            this.Filter4Name_TB.Size = new System.Drawing.Size(54, 20);
-            this.Filter4Name_TB.TabIndex = 16;
-            // 
-            // Filter3Name_TB
-            // 
-            this.Filter3Name_TB.Enabled = false;
-            this.Filter3Name_TB.Location = new System.Drawing.Point(3, 59);
-            this.Filter3Name_TB.MaxLength = 8;
-            this.Filter3Name_TB.Name = "Filter3Name_TB";
-            this.Filter3Name_TB.Size = new System.Drawing.Size(54, 20);
-            this.Filter3Name_TB.TabIndex = 15;
-            // 
-            // Filter2Name_TB
-            // 
-            this.Filter2Name_TB.Enabled = false;
-            this.Filter2Name_TB.Location = new System.Drawing.Point(3, 33);
-            this.Filter2Name_TB.MaxLength = 8;
-            this.Filter2Name_TB.Name = "Filter2Name_TB";
-            this.Filter2Name_TB.Size = new System.Drawing.Size(54, 20);
-            this.Filter2Name_TB.TabIndex = 14;
-            // 
-            // Filter1Name_TB
-            // 
-            this.Filter1Name_TB.Enabled = false;
-            this.Filter1Name_TB.Location = new System.Drawing.Point(3, 7);
-            this.Filter1Name_TB.MaxLength = 8;
-            this.Filter1Name_TB.Name = "Filter1Name_TB";
-            this.Filter1Name_TB.Size = new System.Drawing.Size(54, 20);
-            this.Filter1Name_TB.TabIndex = 13;
             // 
             // label14
             // 
@@ -665,53 +528,6 @@ namespace ASCOM.Optec_IFW
             this.label1.TabIndex = 0;
             this.label1.Text = "Select a COM port to use for this device:";
             // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.ConnectButton);
-            this.tabPage2.Controls.Add(this.GoToPos_CB);
-            this.tabPage2.Controls.Add(this.GoTo_Btn);
-            this.tabPage2.Controls.Add(this.label4);
-            this.tabPage2.Controls.Add(this.picASCOM);
-            this.tabPage2.Controls.Add(this.ConnStatus_TB);
-            this.tabPage2.Controls.Add(this.DissConnBtn);
-            this.tabPage2.Controls.Add(this.CheckConn_Btn);
-            this.tabPage2.Controls.Add(this.HomeBtn);
-            this.tabPage2.Controls.Add(this.label3);
-            this.tabPage2.Controls.Add(this.label2);
-            this.tabPage2.Controls.Add(this.FilterNames_TB);
-            this.tabPage2.Controls.Add(this.WheelId_TB);
-            this.tabPage2.Controls.Add(this.ReadNames_Btn);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(558, 455);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Device Trouble Shooting";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(216, 418);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(76, 13);
-            this.label20.TabIndex = 39;
-            this.label20.Text = "\"Back\" Offset:";
-            // 
-            // NextOffset_TB
-            // 
-            this.NextOffset_TB.Location = new System.Drawing.Point(120, 415);
-            this.NextOffset_TB.Name = "NextOffset_TB";
-            this.NextOffset_TB.Size = new System.Drawing.Size(65, 20);
-            this.NextOffset_TB.TabIndex = 40;
-            // 
-            // BackOffset_TB
-            // 
-            this.BackOffset_TB.Location = new System.Drawing.Point(298, 415);
-            this.BackOffset_TB.Name = "BackOffset_TB";
-            this.BackOffset_TB.Size = new System.Drawing.Size(65, 20);
-            this.BackOffset_TB.TabIndex = 41;
-            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.Filter1Name_TB);
@@ -734,8 +550,195 @@ namespace ASCOM.Optec_IFW
             this.panel1.Controls.Add(this.F6Offset_TB);
             this.panel1.Location = new System.Drawing.Point(174, 127);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(239, 250);
+            this.panel1.Size = new System.Drawing.Size(162, 250);
             this.panel1.TabIndex = 42;
+            // 
+            // Filter1Name_TB
+            // 
+            this.Filter1Name_TB.Enabled = false;
+            this.Filter1Name_TB.Location = new System.Drawing.Point(3, 7);
+            this.Filter1Name_TB.MaxLength = 8;
+            this.Filter1Name_TB.Name = "Filter1Name_TB";
+            this.Filter1Name_TB.Size = new System.Drawing.Size(54, 20);
+            this.Filter1Name_TB.TabIndex = 13;
+            // 
+            // Filter2Name_TB
+            // 
+            this.Filter2Name_TB.Enabled = false;
+            this.Filter2Name_TB.Location = new System.Drawing.Point(3, 33);
+            this.Filter2Name_TB.MaxLength = 8;
+            this.Filter2Name_TB.Name = "Filter2Name_TB";
+            this.Filter2Name_TB.Size = new System.Drawing.Size(54, 20);
+            this.Filter2Name_TB.TabIndex = 14;
+            // 
+            // Filter3Name_TB
+            // 
+            this.Filter3Name_TB.Enabled = false;
+            this.Filter3Name_TB.Location = new System.Drawing.Point(3, 59);
+            this.Filter3Name_TB.MaxLength = 8;
+            this.Filter3Name_TB.Name = "Filter3Name_TB";
+            this.Filter3Name_TB.Size = new System.Drawing.Size(54, 20);
+            this.Filter3Name_TB.TabIndex = 15;
+            // 
+            // Filter4Name_TB
+            // 
+            this.Filter4Name_TB.AcceptsReturn = true;
+            this.Filter4Name_TB.Enabled = false;
+            this.Filter4Name_TB.Location = new System.Drawing.Point(3, 85);
+            this.Filter4Name_TB.MaxLength = 8;
+            this.Filter4Name_TB.Name = "Filter4Name_TB";
+            this.Filter4Name_TB.Size = new System.Drawing.Size(54, 20);
+            this.Filter4Name_TB.TabIndex = 16;
+            // 
+            // Filter5Name_TB
+            // 
+            this.Filter5Name_TB.Enabled = false;
+            this.Filter5Name_TB.Location = new System.Drawing.Point(3, 111);
+            this.Filter5Name_TB.MaxLength = 8;
+            this.Filter5Name_TB.Name = "Filter5Name_TB";
+            this.Filter5Name_TB.Size = new System.Drawing.Size(54, 20);
+            this.Filter5Name_TB.TabIndex = 17;
+            // 
+            // Filter6Name_TB
+            // 
+            this.Filter6Name_TB.Enabled = false;
+            this.Filter6Name_TB.Location = new System.Drawing.Point(3, 137);
+            this.Filter6Name_TB.MaxLength = 8;
+            this.Filter6Name_TB.Name = "Filter6Name_TB";
+            this.Filter6Name_TB.Size = new System.Drawing.Size(54, 20);
+            this.Filter6Name_TB.TabIndex = 18;
+            // 
+            // Filter7Name_TB
+            // 
+            this.Filter7Name_TB.Enabled = false;
+            this.Filter7Name_TB.Location = new System.Drawing.Point(3, 163);
+            this.Filter7Name_TB.MaxLength = 8;
+            this.Filter7Name_TB.Name = "Filter7Name_TB";
+            this.Filter7Name_TB.Size = new System.Drawing.Size(54, 20);
+            this.Filter7Name_TB.TabIndex = 19;
+            // 
+            // Filter8Name_TB
+            // 
+            this.Filter8Name_TB.Enabled = false;
+            this.Filter8Name_TB.Location = new System.Drawing.Point(3, 189);
+            this.Filter8Name_TB.MaxLength = 8;
+            this.Filter8Name_TB.Name = "Filter8Name_TB";
+            this.Filter8Name_TB.Size = new System.Drawing.Size(54, 20);
+            this.Filter8Name_TB.TabIndex = 20;
+            // 
+            // Filter9Name_TB
+            // 
+            this.Filter9Name_TB.Enabled = false;
+            this.Filter9Name_TB.Location = new System.Drawing.Point(3, 215);
+            this.Filter9Name_TB.MaxLength = 8;
+            this.Filter9Name_TB.Name = "Filter9Name_TB";
+            this.Filter9Name_TB.Size = new System.Drawing.Size(54, 20);
+            this.Filter9Name_TB.TabIndex = 21;
+            // 
+            // F1Offset_TB
+            // 
+            this.F1Offset_TB.Enabled = false;
+            this.F1Offset_TB.Location = new System.Drawing.Point(84, 7);
+            this.F1Offset_TB.MaxLength = 8;
+            this.F1Offset_TB.Name = "F1Offset_TB";
+            this.F1Offset_TB.Size = new System.Drawing.Size(54, 20);
+            this.F1Offset_TB.TabIndex = 22;
+            // 
+            // F2Offset_TB
+            // 
+            this.F2Offset_TB.Enabled = false;
+            this.F2Offset_TB.Location = new System.Drawing.Point(84, 33);
+            this.F2Offset_TB.MaxLength = 8;
+            this.F2Offset_TB.Name = "F2Offset_TB";
+            this.F2Offset_TB.Size = new System.Drawing.Size(54, 20);
+            this.F2Offset_TB.TabIndex = 23;
+            // 
+            // F9Offset_TB
+            // 
+            this.F9Offset_TB.Enabled = false;
+            this.F9Offset_TB.Location = new System.Drawing.Point(84, 215);
+            this.F9Offset_TB.MaxLength = 8;
+            this.F9Offset_TB.Name = "F9Offset_TB";
+            this.F9Offset_TB.Size = new System.Drawing.Size(54, 20);
+            this.F9Offset_TB.TabIndex = 30;
+            // 
+            // F3Offset_TB
+            // 
+            this.F3Offset_TB.Enabled = false;
+            this.F3Offset_TB.Location = new System.Drawing.Point(84, 59);
+            this.F3Offset_TB.MaxLength = 8;
+            this.F3Offset_TB.Name = "F3Offset_TB";
+            this.F3Offset_TB.Size = new System.Drawing.Size(54, 20);
+            this.F3Offset_TB.TabIndex = 24;
+            // 
+            // F8Offset_TB
+            // 
+            this.F8Offset_TB.Enabled = false;
+            this.F8Offset_TB.Location = new System.Drawing.Point(84, 189);
+            this.F8Offset_TB.MaxLength = 8;
+            this.F8Offset_TB.Name = "F8Offset_TB";
+            this.F8Offset_TB.Size = new System.Drawing.Size(54, 20);
+            this.F8Offset_TB.TabIndex = 29;
+            // 
+            // F4Offset_TB
+            // 
+            this.F4Offset_TB.Enabled = false;
+            this.F4Offset_TB.Location = new System.Drawing.Point(84, 85);
+            this.F4Offset_TB.MaxLength = 8;
+            this.F4Offset_TB.Name = "F4Offset_TB";
+            this.F4Offset_TB.Size = new System.Drawing.Size(54, 20);
+            this.F4Offset_TB.TabIndex = 25;
+            // 
+            // F7Offset_TB
+            // 
+            this.F7Offset_TB.Enabled = false;
+            this.F7Offset_TB.Location = new System.Drawing.Point(84, 163);
+            this.F7Offset_TB.MaxLength = 8;
+            this.F7Offset_TB.Name = "F7Offset_TB";
+            this.F7Offset_TB.Size = new System.Drawing.Size(54, 20);
+            this.F7Offset_TB.TabIndex = 28;
+            // 
+            // F5Offset_TB
+            // 
+            this.F5Offset_TB.Enabled = false;
+            this.F5Offset_TB.Location = new System.Drawing.Point(84, 111);
+            this.F5Offset_TB.MaxLength = 8;
+            this.F5Offset_TB.Name = "F5Offset_TB";
+            this.F5Offset_TB.Size = new System.Drawing.Size(54, 20);
+            this.F5Offset_TB.TabIndex = 26;
+            // 
+            // F6Offset_TB
+            // 
+            this.F6Offset_TB.Enabled = false;
+            this.F6Offset_TB.Location = new System.Drawing.Point(84, 137);
+            this.F6Offset_TB.MaxLength = 8;
+            this.F6Offset_TB.Name = "F6Offset_TB";
+            this.F6Offset_TB.Size = new System.Drawing.Size(54, 20);
+            this.F6Offset_TB.TabIndex = 27;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.TestConnect_Btn);
+            this.tabPage2.Controls.Add(this.GoToPos_CB);
+            this.tabPage2.Controls.Add(this.GoTo_Btn);
+            this.tabPage2.Controls.Add(this.label4);
+            this.tabPage2.Controls.Add(this.picASCOM);
+            this.tabPage2.Controls.Add(this.ConnStatus_TB);
+            this.tabPage2.Controls.Add(this.DissConnBtn);
+            this.tabPage2.Controls.Add(this.CheckConn_Btn);
+            this.tabPage2.Controls.Add(this.HomeBtn);
+            this.tabPage2.Controls.Add(this.label3);
+            this.tabPage2.Controls.Add(this.label2);
+            this.tabPage2.Controls.Add(this.FilterNames_TB);
+            this.tabPage2.Controls.Add(this.WheelId_TB);
+            this.tabPage2.Controls.Add(this.ReadNames_Btn);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(558, 455);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Device Trouble Shooting";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // SetupDialogForm
             // 
@@ -758,10 +761,10 @@ namespace ASCOM.Optec_IFW
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ComPort_Picker)).EndInit();
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -771,7 +774,7 @@ namespace ASCOM.Optec_IFW
         private System.Windows.Forms.Button cmdOK;
         private System.Windows.Forms.Button cmdCancel;
         private System.Windows.Forms.PictureBox picASCOM;
-        private System.Windows.Forms.Button ConnectButton;
+        private System.Windows.Forms.Button TestConnect_Btn;
         private System.Windows.Forms.Button DissConnBtn;
         private System.Windows.Forms.Button HomeBtn;
         private System.Windows.Forms.Label label2;
@@ -820,7 +823,7 @@ namespace ASCOM.Optec_IFW
         private System.Windows.Forms.TextBox F4Offset_TB;
         private System.Windows.Forms.TextBox F3Offset_TB;
         private System.Windows.Forms.TextBox F2Offset_TB;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button Connect_BTN;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.RadioButton IFW3_RB;
         private System.Windows.Forms.RadioButton IFW_RB;
