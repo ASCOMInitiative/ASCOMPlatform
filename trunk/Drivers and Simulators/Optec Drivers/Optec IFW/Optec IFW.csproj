@@ -123,6 +123,10 @@
   <ItemGroup>
     <Content Include="ASCOM.png" />
     <Content Include="ReadMe.htm" />
+    <None Include="Resources\OptecLogo5.jpg" />
+    <None Include="Resources\optec_web_card.jpg" />
+    <None Include="Resources\Optec Logo-medium.jpg" />
+    <None Include="Resources\Optec.bmp" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

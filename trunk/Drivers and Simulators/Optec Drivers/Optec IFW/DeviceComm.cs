@@ -121,15 +121,19 @@ namespace ASCOM.Optec_IFW
                 throw new Exception("Failed to get current position. Response Timeout Occured");
             }
             short Pos = short.Parse(inputbuff[0].ToString());
-            if ((Pos == 0) || (Pos > NumOfFilters)) throw new Exception("Failed to get current position. Incorrect Response: " + inputbuff);
             
+            if ((Pos < 1) || (Pos > NumOfFilters)) throw new Exception("ERROR in GetCurrentPos. Failed to get current position. Incorrect Response: " + inputbuff);
+            Pos--;  //Because Standard says first pos is 0, device says first pos is 1
             return Pos;
         }
 
         public static void GoToPosition(short Pos)    //Go to a certain filter
         {
-            if ((Pos > 8) || (Pos < 0)) throw new Exception("Position value is out of reach. Can not go to position " + Pos);
-            sendCmd("WGOTO" + Pos, 180000);
+            //if (Pos < 0) throw new Exception();
+
+            Pos += 1;   //Documentation starts at pos 0, Device firmware starts at pos 1.
+            if ((Pos > NumOfFilters) || (Pos < 0)) throw new Exception("Position value is out of reach. Can not go to position " + Pos);
+            sendCmd("WGOTO" + Pos, 120000);
             string inputbuff;
             try { inputbuff = SerialTools.Receive(); }
             catch (TimeoutException)
