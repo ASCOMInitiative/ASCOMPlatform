@@ -394,7 +394,7 @@ namespace ASCOM.Optec_IFW
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(266, 119);
+            this.label16.Location = new System.Drawing.Point(266, 117);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(35, 13);
             this.label16.TabIndex = 32;
@@ -403,7 +403,7 @@ namespace ASCOM.Optec_IFW
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(185, 119);
+            this.label15.Location = new System.Drawing.Point(185, 117);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(35, 13);
             this.label15.TabIndex = 31;
@@ -502,9 +502,10 @@ namespace ASCOM.Optec_IFW
             // 
             // SaveData_Btn
             // 
-            this.SaveData_Btn.Location = new System.Drawing.Point(472, 387);
+            this.SaveData_Btn.Enabled = false;
+            this.SaveData_Btn.Location = new System.Drawing.Point(414, 379);
             this.SaveData_Btn.Name = "SaveData_Btn";
-            this.SaveData_Btn.Size = new System.Drawing.Size(80, 28);
+            this.SaveData_Btn.Size = new System.Drawing.Size(120, 56);
             this.SaveData_Btn.TabIndex = 2;
             this.SaveData_Btn.Text = "Save Data";
             this.SaveData_Btn.UseVisualStyleBackColor = true;
@@ -555,84 +556,93 @@ namespace ASCOM.Optec_IFW
             // 
             // Filter1Name_TB
             // 
+            this.Filter1Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.Filter1Name_TB.Enabled = false;
             this.Filter1Name_TB.Location = new System.Drawing.Point(3, 7);
             this.Filter1Name_TB.MaxLength = 8;
             this.Filter1Name_TB.Name = "Filter1Name_TB";
-            this.Filter1Name_TB.Size = new System.Drawing.Size(54, 20);
+            this.Filter1Name_TB.Size = new System.Drawing.Size(65, 20);
             this.Filter1Name_TB.TabIndex = 13;
             // 
             // Filter2Name_TB
             // 
+            this.Filter2Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.Filter2Name_TB.Enabled = false;
             this.Filter2Name_TB.Location = new System.Drawing.Point(3, 33);
             this.Filter2Name_TB.MaxLength = 8;
             this.Filter2Name_TB.Name = "Filter2Name_TB";
-            this.Filter2Name_TB.Size = new System.Drawing.Size(54, 20);
+            this.Filter2Name_TB.Size = new System.Drawing.Size(65, 20);
             this.Filter2Name_TB.TabIndex = 14;
             // 
             // Filter3Name_TB
             // 
+            this.Filter3Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.Filter3Name_TB.Enabled = false;
             this.Filter3Name_TB.Location = new System.Drawing.Point(3, 59);
             this.Filter3Name_TB.MaxLength = 8;
             this.Filter3Name_TB.Name = "Filter3Name_TB";
-            this.Filter3Name_TB.Size = new System.Drawing.Size(54, 20);
+            this.Filter3Name_TB.Size = new System.Drawing.Size(65, 20);
             this.Filter3Name_TB.TabIndex = 15;
             // 
             // Filter4Name_TB
             // 
             this.Filter4Name_TB.AcceptsReturn = true;
+            this.Filter4Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.Filter4Name_TB.Enabled = false;
             this.Filter4Name_TB.Location = new System.Drawing.Point(3, 85);
             this.Filter4Name_TB.MaxLength = 8;
             this.Filter4Name_TB.Name = "Filter4Name_TB";
-            this.Filter4Name_TB.Size = new System.Drawing.Size(54, 20);
+            this.Filter4Name_TB.Size = new System.Drawing.Size(65, 20);
             this.Filter4Name_TB.TabIndex = 16;
             // 
             // Filter5Name_TB
             // 
+            this.Filter5Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.Filter5Name_TB.Enabled = false;
             this.Filter5Name_TB.Location = new System.Drawing.Point(3, 111);
             this.Filter5Name_TB.MaxLength = 8;
             this.Filter5Name_TB.Name = "Filter5Name_TB";
-            this.Filter5Name_TB.Size = new System.Drawing.Size(54, 20);
+            this.Filter5Name_TB.Size = new System.Drawing.Size(65, 20);
             this.Filter5Name_TB.TabIndex = 17;
             // 
             // Filter6Name_TB
             // 
+            this.Filter6Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.Filter6Name_TB.Enabled = false;
             this.Filter6Name_TB.Location = new System.Drawing.Point(3, 137);
             this.Filter6Name_TB.MaxLength = 8;
             this.Filter6Name_TB.Name = "Filter6Name_TB";
-            this.Filter6Name_TB.Size = new System.Drawing.Size(54, 20);
+            this.Filter6Name_TB.Size = new System.Drawing.Size(65, 20);
             this.Filter6Name_TB.TabIndex = 18;
             // 
             // Filter7Name_TB
             // 
+            this.Filter7Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.Filter7Name_TB.Enabled = false;
             this.Filter7Name_TB.Location = new System.Drawing.Point(3, 163);
             this.Filter7Name_TB.MaxLength = 8;
             this.Filter7Name_TB.Name = "Filter7Name_TB";
-            this.Filter7Name_TB.Size = new System.Drawing.Size(54, 20);
+            this.Filter7Name_TB.Size = new System.Drawing.Size(65, 20);
             this.Filter7Name_TB.TabIndex = 19;
             // 
             // Filter8Name_TB
             // 
+            this.Filter8Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.Filter8Name_TB.Enabled = false;
             this.Filter8Name_TB.Location = new System.Drawing.Point(3, 189);
             this.Filter8Name_TB.MaxLength = 8;
             this.Filter8Name_TB.Name = "Filter8Name_TB";
-            this.Filter8Name_TB.Size = new System.Drawing.Size(54, 20);
+            this.Filter8Name_TB.Size = new System.Drawing.Size(65, 20);
             this.Filter8Name_TB.TabIndex = 20;
             // 
             // Filter9Name_TB
             // 
+            this.Filter9Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.Filter9Name_TB.Enabled = false;
             this.Filter9Name_TB.Location = new System.Drawing.Point(3, 215);
             this.Filter9Name_TB.MaxLength = 8;
             this.Filter9Name_TB.Name = "Filter9Name_TB";
-            this.Filter9Name_TB.Size = new System.Drawing.Size(54, 20);
+            this.Filter9Name_TB.Size = new System.Drawing.Size(65, 20);
             this.Filter9Name_TB.TabIndex = 21;
             // 
             // F1Offset_TB
@@ -641,7 +651,7 @@ namespace ASCOM.Optec_IFW
             this.F1Offset_TB.Location = new System.Drawing.Point(84, 7);
             this.F1Offset_TB.MaxLength = 8;
             this.F1Offset_TB.Name = "F1Offset_TB";
-            this.F1Offset_TB.Size = new System.Drawing.Size(54, 20);
+            this.F1Offset_TB.Size = new System.Drawing.Size(63, 20);
             this.F1Offset_TB.TabIndex = 22;
             // 
             // F2Offset_TB
@@ -650,7 +660,7 @@ namespace ASCOM.Optec_IFW
             this.F2Offset_TB.Location = new System.Drawing.Point(84, 33);
             this.F2Offset_TB.MaxLength = 8;
             this.F2Offset_TB.Name = "F2Offset_TB";
-            this.F2Offset_TB.Size = new System.Drawing.Size(54, 20);
+            this.F2Offset_TB.Size = new System.Drawing.Size(63, 20);
             this.F2Offset_TB.TabIndex = 23;
             // 
             // F9Offset_TB
@@ -659,7 +669,7 @@ namespace ASCOM.Optec_IFW
             this.F9Offset_TB.Location = new System.Drawing.Point(84, 215);
             this.F9Offset_TB.MaxLength = 8;
             this.F9Offset_TB.Name = "F9Offset_TB";
-            this.F9Offset_TB.Size = new System.Drawing.Size(54, 20);
+            this.F9Offset_TB.Size = new System.Drawing.Size(63, 20);
             this.F9Offset_TB.TabIndex = 30;
             // 
             // F3Offset_TB
@@ -668,7 +678,7 @@ namespace ASCOM.Optec_IFW
             this.F3Offset_TB.Location = new System.Drawing.Point(84, 59);
             this.F3Offset_TB.MaxLength = 8;
             this.F3Offset_TB.Name = "F3Offset_TB";
-            this.F3Offset_TB.Size = new System.Drawing.Size(54, 20);
+            this.F3Offset_TB.Size = new System.Drawing.Size(63, 20);
             this.F3Offset_TB.TabIndex = 24;
             // 
             // F8Offset_TB
@@ -677,7 +687,7 @@ namespace ASCOM.Optec_IFW
             this.F8Offset_TB.Location = new System.Drawing.Point(84, 189);
             this.F8Offset_TB.MaxLength = 8;
             this.F8Offset_TB.Name = "F8Offset_TB";
-            this.F8Offset_TB.Size = new System.Drawing.Size(54, 20);
+            this.F8Offset_TB.Size = new System.Drawing.Size(63, 20);
             this.F8Offset_TB.TabIndex = 29;
             // 
             // F4Offset_TB
@@ -686,7 +696,7 @@ namespace ASCOM.Optec_IFW
             this.F4Offset_TB.Location = new System.Drawing.Point(84, 85);
             this.F4Offset_TB.MaxLength = 8;
             this.F4Offset_TB.Name = "F4Offset_TB";
-            this.F4Offset_TB.Size = new System.Drawing.Size(54, 20);
+            this.F4Offset_TB.Size = new System.Drawing.Size(63, 20);
             this.F4Offset_TB.TabIndex = 25;
             // 
             // F7Offset_TB
@@ -695,7 +705,7 @@ namespace ASCOM.Optec_IFW
             this.F7Offset_TB.Location = new System.Drawing.Point(84, 163);
             this.F7Offset_TB.MaxLength = 8;
             this.F7Offset_TB.Name = "F7Offset_TB";
-            this.F7Offset_TB.Size = new System.Drawing.Size(54, 20);
+            this.F7Offset_TB.Size = new System.Drawing.Size(63, 20);
             this.F7Offset_TB.TabIndex = 28;
             // 
             // F5Offset_TB
@@ -704,7 +714,7 @@ namespace ASCOM.Optec_IFW
             this.F5Offset_TB.Location = new System.Drawing.Point(84, 111);
             this.F5Offset_TB.MaxLength = 8;
             this.F5Offset_TB.Name = "F5Offset_TB";
-            this.F5Offset_TB.Size = new System.Drawing.Size(54, 20);
+            this.F5Offset_TB.Size = new System.Drawing.Size(63, 20);
             this.F5Offset_TB.TabIndex = 26;
             // 
             // F6Offset_TB
@@ -713,7 +723,7 @@ namespace ASCOM.Optec_IFW
             this.F6Offset_TB.Location = new System.Drawing.Point(84, 137);
             this.F6Offset_TB.MaxLength = 8;
             this.F6Offset_TB.Name = "F6Offset_TB";
-            this.F6Offset_TB.Size = new System.Drawing.Size(54, 20);
+            this.F6Offset_TB.Size = new System.Drawing.Size(63, 20);
             this.F6Offset_TB.TabIndex = 27;
             // 
             // tabPage2
