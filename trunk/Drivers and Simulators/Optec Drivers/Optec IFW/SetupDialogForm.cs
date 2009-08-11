@@ -102,13 +102,14 @@ namespace ASCOM.Optec_IFW
         {
             lock (CommLock)
             {
-                DeviceComm.GoToPosition(Int32.Parse(this.GoToPos_CB.Text));
+                DeviceComm.GoToPosition(short.Parse(this.GoToPos_CB.Text));
             }
         }
 
         private void SaveData_Btn_Click(object sender, EventArgs e)
         {
             SaveSettings();
+            MessageBox.Show("Save Data Completed Successfully");
         }
 
         private void SetupDialogForm_Load(object sender, EventArgs e)
@@ -198,10 +199,11 @@ namespace ASCOM.Optec_IFW
 
                 this.SaveData_Btn.Enabled = true;
 
+                #region Get the Offset Values From Registry
                 string[] OffsetValues = new string[DeviceComm.NumOfFilters];
                 OffsetValues = DeviceComm.TryGetOffsets();
 
-                #region Get the Offset Values From Registry
+
                 try
                 {
                     this.F1Offset_TB.Text = OffsetValues[0];
@@ -214,7 +216,7 @@ namespace ASCOM.Optec_IFW
                     this.F8Offset_TB.Text = OffsetValues[7];
                     this.F9Offset_TB.Text = OffsetValues[8];
                 }
-                catch (Exception Ex)
+                catch (Exception)
                 {
 
                     //do nothing, this is where the program flows if you are using less than 9 filters
@@ -248,54 +250,54 @@ namespace ASCOM.Optec_IFW
 
         private void SaveSettings()
         {
-
-
-            //store the filter names to the device memory
+           
+            #region //store the filter names to the device memory
             string[] Names = new string[DeviceComm.NumOfFilters];
 
 
             for (int i = 0; i < DeviceComm.NumOfFilters; i++)
             {
-                foreach(Control c in this.panel1.Controls)
+                foreach (Control c in this.panel1.Controls)
                 {
-                    if (c.Name.Contains("Filter") && c.Name.Contains((i+1).ToString()))
+                    if (c.Name.Contains("Filter") && c.Name.Contains((i + 1).ToString()))
                     {
                         Names[i] = c.Text;
                     }
-                }   
+                }
             }
-            DeviceComm.StoreNames(Names);
+            DeviceComm.StoreNames(Names); 
+            #endregion
 
             #region Store the filter offsets in the registry
-            float[] filteroffsets = new float[9];
+            int[] filteroffsets = new int[9];
             try
             {
                 if (this.F1Offset_TB.Text == "") filteroffsets[0] = 0000;
-                else filteroffsets[0] = float.Parse(this.F1Offset_TB.Text);
+                else filteroffsets[0] = int.Parse(this.F1Offset_TB.Text);
 
                 if (this.F2Offset_TB.Text == "") filteroffsets[1] = 0000;
-                else filteroffsets[1] = float.Parse(this.F2Offset_TB.Text);
+                else filteroffsets[1] = int.Parse(this.F2Offset_TB.Text);
 
                 if (this.F3Offset_TB.Text == "") filteroffsets[2] = 0000;
-                else filteroffsets[2] = float.Parse(this.F3Offset_TB.Text);
+                else filteroffsets[2] = int.Parse(this.F3Offset_TB.Text);
 
                 if (this.F4Offset_TB.Text == "") filteroffsets[3] = 0000;
-                else filteroffsets[3] = float.Parse(this.F4Offset_TB.Text);
+                else filteroffsets[3] = int.Parse(this.F4Offset_TB.Text);
 
                 if (this.F5Offset_TB.Text == "") filteroffsets[4] = 0000;
-                else filteroffsets[4] = float.Parse(this.F5Offset_TB.Text);
+                else filteroffsets[4] = int.Parse(this.F5Offset_TB.Text);
 
                 if (this.F6Offset_TB.Text == "") filteroffsets[5] = 0000;
-                else filteroffsets[5] = float.Parse(this.F6Offset_TB.Text);
+                else filteroffsets[5] = int.Parse(this.F6Offset_TB.Text);
 
                 if (this.F7Offset_TB.Text == "") filteroffsets[6] = 0000;
-                else filteroffsets[6] = float.Parse(this.F7Offset_TB.Text);
+                else filteroffsets[6] = int.Parse(this.F7Offset_TB.Text);
 
                 if (this.F8Offset_TB.Text == "") filteroffsets[7] = 0000;
-                else filteroffsets[7] = float.Parse(this.F8Offset_TB.Text);
+                else filteroffsets[7] = int.Parse(this.F8Offset_TB.Text);
 
                 if (this.F9Offset_TB.Text == "") filteroffsets[8] = 0000;
-                else filteroffsets[8] = float.Parse(this.F9Offset_TB.Text);
+                else filteroffsets[8] = int.Parse(this.F9Offset_TB.Text);
             }
             catch (Exception Ex)
             {
@@ -304,9 +306,10 @@ namespace ASCOM.Optec_IFW
             DeviceComm.StoreFilterOffsets(filteroffsets);
             #endregion
 
-
-            
-            //Store Centering Values 
+            #region Store the Centering Values
+            //TODO: Implement methods for storing the centering values
+            #endregion
+ 
 
         }
 

@@ -136,24 +136,35 @@ namespace ASCOM.Optec_IFW
 
         public short Position
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Position", false); }
-            set { throw new PropertyNotImplementedException("Position", true); }
+            get { lock (CommLock) { return DeviceComm.GetCurrentPos(); } }
+            set 
+            {
+                lock (CommLock)
+                {
+                    DeviceComm.GoToPosition(value);
+                }
+            }
         }
 
         public int[] FocusOffsets
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("FocusOfsets", false); }
+            get 
+            {
+                lock (CommLock)
+                {
+                    return DeviceComm.GetOffsets();
+                }
+            }
         }
 
         public string[] Names
         {
-            // TODO Replace this with your implementation
             get
             {
-                ///return DeviceComm.ReadAllNames(DeviceComm.GetNumOfPos());
-                throw new PropertyNotImplementedException("FocusOfsets", false);
+                lock (CommLock)
+                {
+                    return DeviceComm.ReadAllNames();
+                }
             }
         }
 
