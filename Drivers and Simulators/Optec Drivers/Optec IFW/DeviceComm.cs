@@ -8,60 +8,36 @@ namespace ASCOM.Optec_IFW
 {
     class DeviceComm
     {
-        
-        public static bool IsAtHome;
-        public static int NumOfFilters;
-        public static char WheelID;
+        #region Declaratoins
 
-        //private static SerialPort Port;
+        //Device Variables
+        internal static bool IsAtHome;
+        internal static int NumOfFilters;
+        internal static char WheelID;
+
+        //Registry Read and Write Enums
+        internal enum TypesOfFWs : short { IFW, IFW3 }
+        internal enum RegistryStrings : short { PortNumber, FW_Type }
+
+        //define ASCOM tools;
         private static ASCOM.Helper.Serial SerialTools;
-        private static ASCOM.Helper.Profile ProfileTools;
+        private static ASCOM.Helper.Profile ProfileTools; 
 
-        
-     
-        #region   //Filter Configuration Variables        
-        
-        public string[] FilterNames = new string[9];
-        private static float[] FilterOffsets = new float[9];
+        //public string[] FilterNames = new string[9];
+        //private static float[] FilterOffsets = new float[9];
 
-        private static string FilterName1;
-        private static float FilterOffset1;
-
-        private static string FilterName2;
-        private static float FilterOffset2;
-
-        private static string FilterName3;
-        private static float FilterOffset3;
-
-        private static string FilterName4;
-        private static float FilterOffset4;
-
-        private static string FilterName5;
-        private static float FilterOffset5;
-
-        private static string FilterName6;
-        private static float FilterOffset6;
-
-        private static string FilterName7;
-        private static float FilterOffset7;
-
-        private static string FilterName8;
-        private static float FilterOffset8;
-
-        private static string FilterName9;
-        private static float FilterOffset9;
         #endregion
 
         static DeviceComm()                //Default Constructor
         {
             IsAtHome = false;
             NumOfFilters = 0;
+
             
             SerialTools = new ASCOM.Helper.Serial();
             SerialTools.Speed = ASCOM.Helper.PortSpeed.ps19200;
             ProfileTools = new ASCOM.Helper.Profile();
             ProfileTools.DeviceTypeV = "FilterWheel";
-
         }
 
         public static void ConnectToDevice()
@@ -71,15 +47,22 @@ namespace ASCOM.Optec_IFW
             SerialTools.Connected = true;
             sendCmd("WSMODE", 500);
             if (!SerialTools.Receive().Contains("!")) throw new Exception("Did not connect");
-
+            HomeDevice();
+            GetNumOfPos();
         }
+
         public static bool CheckForConnection()
         {
             return SerialTools.Connected;
         }
+
         public static void DisconnectDevice()
         {
-            if (SerialTools.Connected) SerialTools.Connected = false;   //dissconnect the port
+            if (SerialTools.Connected)
+            {
+                ExitProgramLoop();  //free up control back to the hand control box
+                SerialTools.Connected = false;   //dissconnect the port
+            } 
         }
 
         private static void sendCmd(string CmdToSend, int ResponseTime)
@@ -88,6 +71,7 @@ namespace ASCOM.Optec_IFW
             SerialTools.ClearBuffers();
             SerialTools.Transmit(CmdToSend);
         }
+
         public static bool HomeDevice()
         {
             sendCmd("WHOMEZ", 20000);
@@ -104,23 +88,27 @@ namespace ASCOM.Optec_IFW
 
             else
             {
+                IsAtHome = true;
                 WheelID = inputbuff[0];
                 return true;
             }
 
         }
-        public static char GetWheelIdentity()
-        {
-            sendCmd("WIDENT", 1000);
-            string inputbuff;
-            try { inputbuff = SerialTools.Receive(); }
-            catch (TimeoutException)
-            {
-                throw new Exception("Failed to get wheel identity. Response Timeout Occured");
-            }
-            if ((inputbuff.Length < 1)) throw new Exception("Failed to get wheel identity. Incorrect Response: " + inputbuff);
-            return inputbuff[0];
-        }
+
+        // !!!!!!!Do not need because this is done in the homing procedure!!!!!!!!!!!!!!
+        //public static char GetWheelIdentity()
+        //{
+        //    sendCmd("WIDENT", 1000);
+        //    string inputbuff;
+        //    try { inputbuff = SerialTools.Receive(); }
+        //    catch (TimeoutException)
+        //    {
+        //        throw new Exception("Failed to get wheel identity. Response Timeout Occured");
+        //    }
+        //    if ((inputbuff.Length < 1)) throw new Exception("Failed to get wheel identity. Incorrect Response: " + inputbuff);
+        //    return inputbuff[0];
+        //}
+
         public static string GetCurrentPos()
         {
             sendCmd("WFILTR", 1000);
@@ -133,7 +121,8 @@ namespace ASCOM.Optec_IFW
             if (!inputbuff.Contains("x")) throw new Exception("Failed to get current position. Incorrect Response: " + inputbuff);
             return inputbuff;
         }
-        public static void GoToPosition(int Pos)
+
+        public static void GoToPosition(int Pos)    //Go to a certain filter
         {
             if ((Pos > 8) || (Pos < 0)) throw new Exception("Position value is out of reach. Can not go to position " + Pos);
             sendCmd("WGOTO" + Pos, 180000);
@@ -147,37 +136,30 @@ namespace ASCOM.Optec_IFW
             //return inputbuff;
             if (inputbuff.Contains("ER=4")) throw new Exception("Failed to move to new position. Input Buffer: " + inputbuff);
 
-        }
-        public static string[] ReadAllNames(int Pos)      //this returns a string of 40 characters that are the stored names for the filters
+        }     
+
+        public static string[] ReadAllNames()      //Rreturns a string of 40 characters that are the stored names for the filters
         {
             sendCmd("WREADZ", 1000);
             string inputbuff;
-            string[] NamesToOutput = new string[Pos];
+            string[] NamesToOutput = new string[NumOfFilters];
             try { inputbuff = SerialTools.ReceiveCounted(40); }
-            catch (TimeoutException)
+            #region Handle Errors
+		            catch (TimeoutException)
             {
                 throw new Exception("Failed to get current position. Response Timeout Occured");
             }
-            //TODO: add the correct length for the string containing all of the names
             if (inputbuff.Length < 10) throw new Exception("Failed to get current position. Incorrect Response: " + inputbuff);
-            
-            if (inputbuff.Contains("ER=4")) throw new Exception("Failed to Read Names from EEPROM. Input Buffer: " + inputbuff);
-            MessageBox.Show(inputbuff);
-            for (int i = 0; i < Pos; i++)
+             
+	        if (inputbuff.Contains("ER=4")) throw new Exception("Failed to Read Names from EEPROM. Input Buffer: " + inputbuff);
+           #endregion
+            for (int i = 0; i < NumOfFilters; i++)
             {
                 NamesToOutput[i] = inputbuff.Substring(i * 8, 8);
-            }
-            
-            
+            } 
             return NamesToOutput;
-
         }
-
-        public static void LoadNames(string Names)            //
-        {
-
-        }
-
+       
         public static void ExitProgramLoop()        //Exit the serial loop and return to normal manual operation
         {
             sendCmd("WEXITS", 1000);
@@ -189,41 +171,68 @@ namespace ASCOM.Optec_IFW
             }
             if (!inputbuff.Contains("END")) throw new Exception("Failed execute EXIT command. Incorrect Response: " + inputbuff);
         }
-
-        public static void SavePortNumber(string pn)
+        
+        public static void SavePortNumber(string pn)    //this method saves the port number that has been selected to the registry
         {
-            //this method saves the port number that has been selected to the registry
-            ProfileTools.WriteValue(FilterWheel.s_csDriverID, "PortNumber", pn, "");
-        }
+            
+            ProfileTools.WriteValue(FilterWheel.s_csDriverID, RegistryStrings.PortNumber.ToString(), pn, "");
+        } 
+        
+        public static void SaveFilterWheelType(string ft)
+        {
+            ProfileTools.WriteValue(FilterWheel.s_csDriverID, RegistryStrings.FW_Type.ToString(), ft, "");
+        }    
+        
+        public static void StoreNames(string Names)            //Stores the filter names on the device memory
+        {
 
+        }
+        
         public static void StoreFilterOffsets(float[] filteroffsets)
         {
-            //throw new System.NotImplementedException();
+            string NamesToWrite = "";
+            foreach (float n in filteroffsets)
+            {
+                NamesToWrite += n.ToString().PadRight(8, char.Parse(" "));
+            }
+            MessageBox.Show("NamesToStore");
         }
-
-        public static string GetCOMPort()
-        {
-                string cp = ProfileTools.GetValue(FilterWheel.s_csDriverID, "PortNumber", "");
-                if (cp != "")
-                {
-                    return cp;
-                }
-                else throw new Exception("You must open up the driver settings and select a COM port first");    
-        }
+        
         public static string TryGetCOMPort()
         {
-            string cp = ProfileTools.GetValue(FilterWheel.s_csDriverID, "PortNumber", "");
-            if (cp != "")
+            string cp = ProfileTools.GetValue(FilterWheel.s_csDriverID, RegistryStrings.PortNumber.ToString(), "");
+            if (cp == "")
             {
-                return cp;
+                return "000";
             }
-            else return "000";
+            else return cp;
         }
-
-        public static int GetNumOfPos(bool IFW_RB_State)
+        
+        public static string GetCOMPort()
+        {    
+                string cp = ProfileTools.GetValue(FilterWheel.s_csDriverID, RegistryStrings.PortNumber.ToString(), "");
+                if (cp == "")
+                {
+                    throw new Exception("You must open up the driver settings and select a COM port first");
+                }
+                else return cp;    
+        }
+        
+        public static string TryGetFilterWheelType()    //"Try" because if it may not be stored in registry yet
         {
+            string ft = ProfileTools.GetValue(FilterWheel.s_csDriverID, RegistryStrings.FW_Type.ToString(), "");
+            return ft;
+        }
+        
+        public static void GetNumOfPos()
+        {
+            string FilterWheelType = ProfileTools.GetValue(FilterWheel.s_csDriverID, RegistryStrings.FW_Type.ToString(), "");
+            if ((FilterWheelType != "IFW") && (FilterWheelType != "IFW3"))
+            {
+                throw new Exception("You must run the driver setup before attempting to use the Filter Wheel");
+            }
             int Pos;
-            if (IFW_RB_State)
+            if (FilterWheelType == TypesOfFWs.IFW.ToString())
             {
                 #region Wheel ID and Focuser Model Switch Statement
                 switch (WheelID)
@@ -290,7 +299,8 @@ namespace ASCOM.Optec_IFW
                 } 
                 #endregion
             }
-            return Pos;
+            NumOfFilters = Pos;
         }
     }
+
 }

@@ -47,7 +47,7 @@ namespace ASCOM.Optec_IFW
             }
         }
 
-        private void ConnectButton_Click(object sender, EventArgs e)
+        private void TestConnect_Btn_Click(object sender, EventArgs e)
         {
             lock (CommLock)
             {
@@ -105,42 +105,32 @@ namespace ASCOM.Optec_IFW
                 DeviceComm.GoToPosition(Int32.Parse(this.GoToPos_CB.Text));
             }
         }
+
         private void SaveData_Btn_Click(object sender, EventArgs e)
         {
             SaveSettings();
         }
-    
-        private void SaveSettings()
-        {
-            int PortNumber = (int)this.ComPort_Picker.Value;
-            DeviceComm.SavePortNumber(PortNumber.ToString());
-
-            //Store the filter offsets in the registry
-            float[] filteroffsets = new float[9];
-            //filteroffsets[0] = .00122;
-            //filteroffsets[1] = .0235;
-            //filteroffsets[2] = 
-            //filteroffsets[3] = 
-            //filteroffsets[4] =
-            //filteroffsets[5] = 
-            //filteroffsets[6] = 
-            //filteroffsets[7] = 
-            //filteroffsets[8] = 
-            DeviceComm.StoreFilterOffsets(filteroffsets);
-
-            //Store Centering Values
-
-        }
 
         private void SetupDialogForm_Load(object sender, EventArgs e)
         {
+            //load the com port if one has been saved
             if( Int32.Parse(DeviceComm.TryGetCOMPort())> 0)
             {
                 this.ComPort_Picker.Value = Int32.Parse(DeviceComm.TryGetCOMPort());
             }
+            //load the filter wheel type if one has been saved
+            string FW_Type = DeviceComm.TryGetFilterWheelType();
+            if ( FW_Type == DeviceComm.TypesOfFWs.IFW.ToString())
+            {
+                this.IFW_RB.Checked = true;
+            }  
+            else if (FW_Type == DeviceComm.TypesOfFWs.IFW3.ToString())
+            {
+                this.IFW3_RB.Checked = true;
+            }   
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Connect_BTN_Click(object sender, EventArgs e)
         {
             if (this.ComPort_Picker.Value < 1 )
             {
@@ -153,14 +143,13 @@ namespace ASCOM.Optec_IFW
             else
             {
                 DriverInstance.Connected = true;
-                DeviceComm.HomeDevice();
-                char WheelID = DeviceComm.GetWheelIdentity();
+                //DeviceComm.HomeDevice();  //the device is homed immediatly after connection
+                //char WheelID = DeviceComm.GetWheelIdentity();
 
                 //Setup the form for the number of positions the wheel has
-                int Pos;
-                Pos = DeviceComm.GetNumOfPos(this.IFW_RB.Checked);
+
                 #region Enable/Disable textbox's
-                switch (Pos)
+                switch (DeviceComm.NumOfFilters)
                 {
                     case 9:
                         //9 positions wheels
@@ -195,20 +184,17 @@ namespace ASCOM.Optec_IFW
                 #endregion
 
                 //Get the filter names from the Device
-                string[] names = new string[Pos];
+                string[] names = new string[DeviceComm.NumOfFilters];
 
-                DeviceComm.ReadAllNames(Pos);
+                names = DeviceComm.ReadAllNames();
                 foreach (Control c in panel1.Controls)
                 {
-                    MessageBox.Show("Control= " + c.Name);
-                    for (int i = 0; i < Pos; i++)
+                    for (int i = 0; i < DeviceComm.NumOfFilters; i++)
 		            {
-                        MessageBox.Show(i.ToString());
-                        if (c.Name.Contains((i+1).ToString()) && c.Name.Contains("Filter") && c.Enabled == true)
+                        if (c.Name.Contains((i+1).ToString()) && c.Name.Contains("Filter"))
                         {
                             c.Text = names[i];
-                            
-                           // break;
+                            break;
                         }
 		            }
                 }
@@ -220,7 +206,43 @@ namespace ASCOM.Optec_IFW
             SaveSettings();
         }
 
+        private void IFW_RB_CheckedChanged(object sender, EventArgs e)
+        {
+            
+            if (IFW_RB.Checked == true) DeviceComm.SaveFilterWheelType(DeviceComm.TypesOfFWs.IFW.ToString());
+            else if (IFW3_RB.Checked == true) DeviceComm.SaveFilterWheelType(DeviceComm.TypesOfFWs.IFW3.ToString());   
+        }
 
+        private void IFW3_RB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (IFW_RB.Checked == true) DeviceComm.SaveFilterWheelType(DeviceComm.TypesOfFWs.IFW.ToString());
+            else if (IFW3_RB.Checked == true) DeviceComm.SaveFilterWheelType(DeviceComm.TypesOfFWs.IFW3.ToString());   
+        }
+
+        private void SaveSettings()
+        {
+            int PortNumber = (int)this.ComPort_Picker.Value;
+            DeviceComm.SavePortNumber(PortNumber.ToString());
+
+            //store the filter names to the device memory
+
+
+            //Store the filter offsets in the registry
+            //float[] filteroffsets = new float[9];
+            //filteroffsets[0] = float.Parse(this.F1Offset_TB.Text);
+            //filteroffsets[1] = float.Parse(this.F1Offset_TB.Text);
+            //filteroffsets[2] = float.Parse(this.F2Offset_TB.Text);
+            //filteroffsets[3] = float.Parse(this.F3Offset_TB.Text);
+            //filteroffsets[4] = float.Parse(this.F4Offset_TB.Text);
+            //filteroffsets[5] = float.Parse(this.F5Offset_TB.Text);
+            //filteroffsets[6] = float.Parse(this.F6Offset_TB.Text);
+            //filteroffsets[7] = float.Parse(this.F7Offset_TB.Text);
+            //filteroffsets[8] = float.Parse(this.F8Offset_TB.Text);
+            //DeviceComm.StoreFilterOffsets(filteroffsets, this.IFW_RB.Checked);
+            
+            //Store Centering Values
+
+        }
 
 
 
