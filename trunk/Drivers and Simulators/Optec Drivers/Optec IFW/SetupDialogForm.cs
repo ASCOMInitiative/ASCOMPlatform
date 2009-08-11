@@ -143,10 +143,6 @@ namespace ASCOM.Optec_IFW
             else
             {
                 DriverInstance.Connected = true;
-                //DeviceComm.HomeDevice();  //the device is homed immediatly after connection
-                //char WheelID = DeviceComm.GetWheelIdentity();
-
-                //Setup the form for the number of positions the wheel has
 
                 #region Enable/Disable textbox's
                 switch (DeviceComm.NumOfFilters)
@@ -183,27 +179,57 @@ namespace ASCOM.Optec_IFW
                 }
                 #endregion
 
-                //Get the filter names from the Device
+                #region Get Filter Names from the Device
                 string[] names = new string[DeviceComm.NumOfFilters];
 
                 names = DeviceComm.ReadAllNames();
                 foreach (Control c in panel1.Controls)
                 {
                     for (int i = 0; i < DeviceComm.NumOfFilters; i++)
-		            {
-                        if (c.Name.Contains((i+1).ToString()) && c.Name.Contains("Filter"))
+                    {
+                        if (c.Name.Contains((i + 1).ToString()) && c.Name.Contains("Filter"))
                         {
                             c.Text = names[i];
                             break;
                         }
-		            }
+                    }
+                } 
+                #endregion
+
+                this.SaveData_Btn.Enabled = true;
+
+                string[] OffsetValues = new string[DeviceComm.NumOfFilters];
+                OffsetValues = DeviceComm.TryGetOffsets();
+
+                #region Get the Offset Values From Registry
+                try
+                {
+                    this.F1Offset_TB.Text = OffsetValues[0];
+                    this.F2Offset_TB.Text = OffsetValues[1];
+                    this.F3Offset_TB.Text = OffsetValues[2];
+                    this.F4Offset_TB.Text = OffsetValues[3];
+                    this.F5Offset_TB.Text = OffsetValues[4];
+                    this.F6Offset_TB.Text = OffsetValues[5];
+                    this.F7Offset_TB.Text = OffsetValues[6];
+                    this.F8Offset_TB.Text = OffsetValues[7];
+                    this.F9Offset_TB.Text = OffsetValues[8];
                 }
+                catch (Exception Ex)
+                {
+
+                    //do nothing, this is where the program flows if you are using less than 9 filters
+                } 
+                #endregion
+
+
             }
         }
 
         private void ComPort_Picker_ValueChanged(object sender, EventArgs e)
         {
-            SaveSettings();
+            int PortNumber = (int)this.ComPort_Picker.Value;
+            DeviceComm.SavePortNumber(PortNumber.ToString());
+            DeviceComm.FilterWheelType = DeviceComm.TypesOfFWs.IFW;
         }
 
         private void IFW_RB_CheckedChanged(object sender, EventArgs e)
@@ -216,31 +242,71 @@ namespace ASCOM.Optec_IFW
         private void IFW3_RB_CheckedChanged(object sender, EventArgs e)
         {
             if (IFW_RB.Checked == true) DeviceComm.SaveFilterWheelType(DeviceComm.TypesOfFWs.IFW.ToString());
-            else if (IFW3_RB.Checked == true) DeviceComm.SaveFilterWheelType(DeviceComm.TypesOfFWs.IFW3.ToString());   
+            else if (IFW3_RB.Checked == true) DeviceComm.SaveFilterWheelType(DeviceComm.TypesOfFWs.IFW3.ToString());
+            DeviceComm.FilterWheelType = DeviceComm.TypesOfFWs.IFW3;
         }
 
         private void SaveSettings()
         {
-            int PortNumber = (int)this.ComPort_Picker.Value;
-            DeviceComm.SavePortNumber(PortNumber.ToString());
+
 
             //store the filter names to the device memory
+            string[] Names = new string[DeviceComm.NumOfFilters];
 
 
-            //Store the filter offsets in the registry
-            //float[] filteroffsets = new float[9];
-            //filteroffsets[0] = float.Parse(this.F1Offset_TB.Text);
-            //filteroffsets[1] = float.Parse(this.F1Offset_TB.Text);
-            //filteroffsets[2] = float.Parse(this.F2Offset_TB.Text);
-            //filteroffsets[3] = float.Parse(this.F3Offset_TB.Text);
-            //filteroffsets[4] = float.Parse(this.F4Offset_TB.Text);
-            //filteroffsets[5] = float.Parse(this.F5Offset_TB.Text);
-            //filteroffsets[6] = float.Parse(this.F6Offset_TB.Text);
-            //filteroffsets[7] = float.Parse(this.F7Offset_TB.Text);
-            //filteroffsets[8] = float.Parse(this.F8Offset_TB.Text);
-            //DeviceComm.StoreFilterOffsets(filteroffsets, this.IFW_RB.Checked);
+            for (int i = 0; i < DeviceComm.NumOfFilters; i++)
+            {
+                foreach(Control c in this.panel1.Controls)
+                {
+                    if (c.Name.Contains("Filter") && c.Name.Contains((i+1).ToString()))
+                    {
+                        Names[i] = c.Text;
+                    }
+                }   
+            }
+            DeviceComm.StoreNames(Names);
+
+            #region Store the filter offsets in the registry
+            float[] filteroffsets = new float[9];
+            try
+            {
+                if (this.F1Offset_TB.Text == "") filteroffsets[0] = 0000;
+                else filteroffsets[0] = float.Parse(this.F1Offset_TB.Text);
+
+                if (this.F2Offset_TB.Text == "") filteroffsets[1] = 0000;
+                else filteroffsets[1] = float.Parse(this.F2Offset_TB.Text);
+
+                if (this.F3Offset_TB.Text == "") filteroffsets[2] = 0000;
+                else filteroffsets[2] = float.Parse(this.F3Offset_TB.Text);
+
+                if (this.F4Offset_TB.Text == "") filteroffsets[3] = 0000;
+                else filteroffsets[3] = float.Parse(this.F4Offset_TB.Text);
+
+                if (this.F5Offset_TB.Text == "") filteroffsets[4] = 0000;
+                else filteroffsets[4] = float.Parse(this.F5Offset_TB.Text);
+
+                if (this.F6Offset_TB.Text == "") filteroffsets[5] = 0000;
+                else filteroffsets[5] = float.Parse(this.F6Offset_TB.Text);
+
+                if (this.F7Offset_TB.Text == "") filteroffsets[6] = 0000;
+                else filteroffsets[6] = float.Parse(this.F7Offset_TB.Text);
+
+                if (this.F8Offset_TB.Text == "") filteroffsets[7] = 0000;
+                else filteroffsets[7] = float.Parse(this.F8Offset_TB.Text);
+
+                if (this.F9Offset_TB.Text == "") filteroffsets[8] = 0000;
+                else filteroffsets[8] = float.Parse(this.F9Offset_TB.Text);
+            }
+            catch (Exception Ex)
+            {
+                MessageBox.Show("An illegal offset value has been entered. Make sure numbers only - " + Ex.Data + Ex.Message);
+            }
+            DeviceComm.StoreFilterOffsets(filteroffsets);
+            #endregion
+
+
             
-            //Store Centering Values
+            //Store Centering Values 
 
         }
 

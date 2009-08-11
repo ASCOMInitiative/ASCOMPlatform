@@ -14,6 +14,8 @@ namespace ASCOM.Optec_IFW
         internal static bool IsAtHome;
         internal static int NumOfFilters;
         internal static char WheelID;
+        internal static TypesOfFWs FilterWheelType;
+        private static string OffsetsRegString;
 
         //Registry Read and Write Enums
         internal enum TypesOfFWs : short { IFW, IFW3 }
@@ -32,6 +34,7 @@ namespace ASCOM.Optec_IFW
         {
             IsAtHome = false;
             NumOfFilters = 0;
+            
 
             
             SerialTools = new ASCOM.Helper.Serial();
@@ -49,6 +52,7 @@ namespace ASCOM.Optec_IFW
             if (!SerialTools.Receive().Contains("!")) throw new Exception("Did not connect");
             HomeDevice();
             GetNumOfPos();
+            OffsetsRegString = FilterWheelType.ToString() + "-WID:" + WheelID + "Offsets";
         }
 
         public static bool CheckForConnection()
@@ -155,7 +159,9 @@ namespace ASCOM.Optec_IFW
            #endregion
             for (int i = 0; i < NumOfFilters; i++)
             {
-                NamesToOutput[i] = inputbuff.Substring(i * 8, 8);
+                string SingleName = inputbuff.Substring(i * 8, 8);
+                SingleName = SingleName.Trim();
+                NamesToOutput[i] = SingleName;
             } 
             return NamesToOutput;
         }
@@ -183,19 +189,47 @@ namespace ASCOM.Optec_IFW
             ProfileTools.WriteValue(FilterWheel.s_csDriverID, RegistryStrings.FW_Type.ToString(), ft, "");
         }    
         
-        public static void StoreNames(string Names)            //Stores the filter names on the device memory
+        public static void StoreNames(string[] Names)            //Stores the filter names on the device memory
         {
+            string StringToWrite = "";
+            foreach (string i in Names)
+            {
+                StringToWrite += i.PadLeft(8, char.Parse(" "));
+            }
+            if (StringToWrite.Length != NumOfFilters * 8) throw new Exception("Error Storing names to Device. Incorrect String Length");
+            StringToWrite = "WLOAD" + WheelID.ToString() + "*" + StringToWrite;
+            sendCmd(StringToWrite, 1000);
+            string inputbuffer = SerialTools.Receive();
+            if (!inputbuffer.Contains("!")) throw new Exception("Error writing names to EEPROM. Input Buffer read: " + inputbuffer);
 
+
+        
         }
         
         public static void StoreFilterOffsets(float[] filteroffsets)
         {
-            string NamesToWrite = "";
-            foreach (float n in filteroffsets)
+            string OffsetsToWrite = "";
+            for (int i = 0; i < NumOfFilters; i++)
             {
-                NamesToWrite += n.ToString().PadRight(8, char.Parse(" "));
+                OffsetsToWrite += filteroffsets[i].ToString().PadLeft(8, char.Parse(" "));
             }
-            MessageBox.Show("NamesToStore");
+            ProfileTools.WriteValue(FilterWheel.s_csDriverID, OffsetsRegString, OffsetsToWrite,"");         
+        }
+
+        public static string[] TryGetOffsets()    //Try to get offsets from the registry
+        {  
+            string OffsetString = ProfileTools.GetValue(FilterWheel.s_csDriverID,OffsetsRegString, "");
+            string[] Offsets = new string[NumOfFilters];
+            if (OffsetString != "")
+            {   
+                for (int i = 0; i < NumOfFilters; i++)
+                {
+                    string j = OffsetString.Substring(i * 8, 8);
+                    j = j.Trim();    //get rid of the spaces
+                    Offsets[i] = j;
+                } 
+            }
+             return Offsets;
         }
         
         public static string TryGetCOMPort()
