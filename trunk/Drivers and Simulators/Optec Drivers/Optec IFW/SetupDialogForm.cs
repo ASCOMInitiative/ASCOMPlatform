@@ -254,58 +254,25 @@ namespace ASCOM.Optec_IFW
             #region Store the Centering Values
             //TODO: Implement methods for storing the centering values
             #endregion
- 
 
+            DeviceComm.HomeDevice();
         }
 
-        private void Filter1Name_TB_TextChanged(object sender, EventArgs e)
+
+        private void AdvancedButton_Click(object sender, EventArgs e)
         {
+            if (DriverInstance.Connected) DriverInstance.Connected = false;
 
-        }
-
-        private void Filter2Name_TB_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Filter3Name_TB_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Filter4Name_TB_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Filter5Name_TB_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Filter6Name_TB_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Filter7Name_TB_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Filter8Name_TB_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Filter9Name_TB_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
+            AdvancedForm AForm = new AdvancedForm();
+            AForm.COMPortString = "Note: Using COM Port: " + this.ComPort_Picker.Value.ToString()+ ". Selected on previous page.";
+            AForm.CP = this.ComPort_Picker.Value.ToString();
+            AForm.ShowDialog();
+            foreach (Control C in this.panel1.Controls)
+            {
+                C.Enabled = false;
+            }
+            this.SaveData_Btn.Enabled = false;
+            this.cmdOK.Enabled = true;
         }
 
 

@@ -40,42 +40,38 @@ namespace ASCOM.Optec_IFW
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.BackOffset_TB = new System.Windows.Forms.TextBox();
-            this.label20 = new System.Windows.Forms.Label();
-            this.NextOffset_TB = new System.Windows.Forms.TextBox();
-            this.label19 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.F6Offset_TB = new System.Windows.Forms.TextBox();
-            this.F5Offset_TB = new System.Windows.Forms.TextBox();
-            this.F7Offset_TB = new System.Windows.Forms.TextBox();
-            this.F4Offset_TB = new System.Windows.Forms.TextBox();
-            this.F8Offset_TB = new System.Windows.Forms.TextBox();
-            this.F3Offset_TB = new System.Windows.Forms.TextBox();
-            this.F9Offset_TB = new System.Windows.Forms.TextBox();
-            this.F2Offset_TB = new System.Windows.Forms.TextBox();
-            this.F1Offset_TB = new System.Windows.Forms.TextBox();
-            this.Filter9Name_TB = new System.Windows.Forms.TextBox();
-            this.label16 = new System.Windows.Forms.Label();
-            this.Filter8Name_TB = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.Filter7Name_TB = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.Filter6Name_TB = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.Filter5Name_TB = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.Filter4Name_TB = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.Filter3Name_TB = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.Filter2Name_TB = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.Filter1Name_TB = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.Filter1Name_TB = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.Filter2Name_TB = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.Filter3Name_TB = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.Filter4Name_TB = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.Filter5Name_TB = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.Filter6Name_TB = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.Filter7Name_TB = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.Filter8Name_TB = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.Filter9Name_TB = new System.Windows.Forms.TextBox();
+            this.F1Offset_TB = new System.Windows.Forms.TextBox();
+            this.F2Offset_TB = new System.Windows.Forms.TextBox();
+            this.F9Offset_TB = new System.Windows.Forms.TextBox();
+            this.F3Offset_TB = new System.Windows.Forms.TextBox();
+            this.F8Offset_TB = new System.Windows.Forms.TextBox();
+            this.F4Offset_TB = new System.Windows.Forms.TextBox();
+            this.F7Offset_TB = new System.Windows.Forms.TextBox();
+            this.F5Offset_TB = new System.Windows.Forms.TextBox();
+            this.F6Offset_TB = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.AdvancedButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ComPort_Picker)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -84,8 +80,9 @@ namespace ASCOM.Optec_IFW
             // 
             // cmdOK
             // 
+            this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdOK.Location = new System.Drawing.Point(444, 434);
+            this.cmdOK.Location = new System.Drawing.Point(395, 359);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 0;
@@ -95,8 +92,9 @@ namespace ASCOM.Optec_IFW
             // 
             // cmdCancel
             // 
+            this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(444, 475);
+            this.cmdCancel.Location = new System.Drawing.Point(395, 400);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
@@ -150,7 +148,7 @@ namespace ASCOM.Optec_IFW
             // SaveData_Btn
             // 
             this.SaveData_Btn.Enabled = false;
-            this.SaveData_Btn.Location = new System.Drawing.Point(294, 365);
+            this.SaveData_Btn.Location = new System.Drawing.Point(259, 254);
             this.SaveData_Btn.Name = "SaveData_Btn";
             this.SaveData_Btn.Size = new System.Drawing.Size(93, 56);
             this.SaveData_Btn.TabIndex = 2;
@@ -178,7 +176,8 @@ namespace ASCOM.Optec_IFW
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(419, 342);
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox1.Location = new System.Drawing.Point(365, 266);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
@@ -189,7 +188,7 @@ namespace ASCOM.Optec_IFW
             // pictureBox1
             // 
             this.pictureBox1.Image = global::ASCOM.Optec_IFW.Properties.Resources.Optec_Logo_medium;
-            this.pictureBox1.Location = new System.Drawing.Point(300, 176);
+            this.pictureBox1.Location = new System.Drawing.Point(244, 150);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(117, 56);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -200,44 +199,12 @@ namespace ASCOM.Optec_IFW
             // 
             this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox2.Image = global::ASCOM.Optec_IFW.Properties.Resources.ASCOM;
-            this.pictureBox2.Location = new System.Drawing.Point(455, 176);
+            this.pictureBox2.Location = new System.Drawing.Point(382, 150);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(48, 56);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox2.TabIndex = 20;
             this.pictureBox2.TabStop = false;
-            // 
-            // BackOffset_TB
-            // 
-            this.BackOffset_TB.Location = new System.Drawing.Point(128, 471);
-            this.BackOffset_TB.Name = "BackOffset_TB";
-            this.BackOffset_TB.Size = new System.Drawing.Size(65, 20);
-            this.BackOffset_TB.TabIndex = 41;
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(46, 474);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(76, 13);
-            this.label20.TabIndex = 39;
-            this.label20.Text = "\"Back\" Offset:";
-            // 
-            // NextOffset_TB
-            // 
-            this.NextOffset_TB.Location = new System.Drawing.Point(128, 435);
-            this.NextOffset_TB.Name = "NextOffset_TB";
-            this.NextOffset_TB.Size = new System.Drawing.Size(65, 20);
-            this.NextOffset_TB.TabIndex = 40;
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(46, 438);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(73, 13);
-            this.label19.TabIndex = 38;
-            this.label19.Text = "\"Next\" Offset:";
             // 
             // panel1
             // 
@@ -270,192 +237,94 @@ namespace ASCOM.Optec_IFW
             this.panel1.Controls.Add(this.F7Offset_TB);
             this.panel1.Controls.Add(this.F5Offset_TB);
             this.panel1.Controls.Add(this.F6Offset_TB);
-            this.panel1.Location = new System.Drawing.Point(9, 126);
+            this.panel1.Location = new System.Drawing.Point(12, 126);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(214, 282);
+            this.panel1.Size = new System.Drawing.Size(211, 282);
             this.panel1.TabIndex = 42;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
-            // F6Offset_TB
+            // label11
             // 
-            this.F6Offset_TB.Enabled = false;
-            this.F6Offset_TB.Location = new System.Drawing.Point(139, 168);
-            this.F6Offset_TB.MaxLength = 8;
-            this.F6Offset_TB.Name = "F6Offset_TB";
-            this.F6Offset_TB.Size = new System.Drawing.Size(63, 20);
-            this.F6Offset_TB.TabIndex = 27;
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(11, 171);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(41, 13);
+            this.label11.TabIndex = 9;
+            this.label11.Text = "Filter 6:";
             // 
-            // F5Offset_TB
+            // label15
             // 
-            this.F5Offset_TB.Enabled = false;
-            this.F5Offset_TB.Location = new System.Drawing.Point(139, 142);
-            this.F5Offset_TB.MaxLength = 8;
-            this.F5Offset_TB.Name = "F5Offset_TB";
-            this.F5Offset_TB.Size = new System.Drawing.Size(63, 20);
-            this.F5Offset_TB.TabIndex = 26;
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(75, 10);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(35, 13);
+            this.label15.TabIndex = 31;
+            this.label15.Text = "Name";
             // 
-            // F7Offset_TB
+            // label10
             // 
-            this.F7Offset_TB.Enabled = false;
-            this.F7Offset_TB.Location = new System.Drawing.Point(139, 194);
-            this.F7Offset_TB.MaxLength = 8;
-            this.F7Offset_TB.Name = "F7Offset_TB";
-            this.F7Offset_TB.Size = new System.Drawing.Size(63, 20);
-            this.F7Offset_TB.TabIndex = 28;
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(11, 145);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(41, 13);
+            this.label10.TabIndex = 8;
+            this.label10.Text = "Filter 5:";
             // 
-            // F4Offset_TB
+            // Filter1Name_TB
             // 
-            this.F4Offset_TB.Enabled = false;
-            this.F4Offset_TB.Location = new System.Drawing.Point(139, 116);
-            this.F4Offset_TB.MaxLength = 8;
-            this.F4Offset_TB.Name = "F4Offset_TB";
-            this.F4Offset_TB.Size = new System.Drawing.Size(63, 20);
-            this.F4Offset_TB.TabIndex = 25;
+            this.Filter1Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.Filter1Name_TB.Enabled = false;
+            this.Filter1Name_TB.Location = new System.Drawing.Point(58, 38);
+            this.Filter1Name_TB.MaxLength = 8;
+            this.Filter1Name_TB.Name = "Filter1Name_TB";
+            this.Filter1Name_TB.Size = new System.Drawing.Size(65, 20);
+            this.Filter1Name_TB.TabIndex = 13;
             // 
-            // F8Offset_TB
+            // label12
             // 
-            this.F8Offset_TB.Enabled = false;
-            this.F8Offset_TB.Location = new System.Drawing.Point(139, 220);
-            this.F8Offset_TB.MaxLength = 8;
-            this.F8Offset_TB.Name = "F8Offset_TB";
-            this.F8Offset_TB.Size = new System.Drawing.Size(63, 20);
-            this.F8Offset_TB.TabIndex = 29;
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(11, 197);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(41, 13);
+            this.label12.TabIndex = 10;
+            this.label12.Text = "Filter 7:";
             // 
-            // F3Offset_TB
+            // Filter2Name_TB
             // 
-            this.F3Offset_TB.Enabled = false;
-            this.F3Offset_TB.Location = new System.Drawing.Point(139, 90);
-            this.F3Offset_TB.MaxLength = 8;
-            this.F3Offset_TB.Name = "F3Offset_TB";
-            this.F3Offset_TB.Size = new System.Drawing.Size(63, 20);
-            this.F3Offset_TB.TabIndex = 24;
+            this.Filter2Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.Filter2Name_TB.Enabled = false;
+            this.Filter2Name_TB.Location = new System.Drawing.Point(58, 64);
+            this.Filter2Name_TB.MaxLength = 8;
+            this.Filter2Name_TB.Name = "Filter2Name_TB";
+            this.Filter2Name_TB.Size = new System.Drawing.Size(65, 20);
+            this.Filter2Name_TB.TabIndex = 14;
             // 
-            // F9Offset_TB
+            // label9
             // 
-            this.F9Offset_TB.Enabled = false;
-            this.F9Offset_TB.Location = new System.Drawing.Point(139, 246);
-            this.F9Offset_TB.MaxLength = 8;
-            this.F9Offset_TB.Name = "F9Offset_TB";
-            this.F9Offset_TB.Size = new System.Drawing.Size(63, 20);
-            this.F9Offset_TB.TabIndex = 30;
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(11, 119);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(41, 13);
+            this.label9.TabIndex = 7;
+            this.label9.Text = "Filter 4:";
             // 
-            // F2Offset_TB
+            // Filter3Name_TB
             // 
-            this.F2Offset_TB.Enabled = false;
-            this.F2Offset_TB.Location = new System.Drawing.Point(139, 64);
-            this.F2Offset_TB.MaxLength = 8;
-            this.F2Offset_TB.Name = "F2Offset_TB";
-            this.F2Offset_TB.Size = new System.Drawing.Size(63, 20);
-            this.F2Offset_TB.TabIndex = 23;
+            this.Filter3Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.Filter3Name_TB.Enabled = false;
+            this.Filter3Name_TB.Location = new System.Drawing.Point(58, 90);
+            this.Filter3Name_TB.MaxLength = 8;
+            this.Filter3Name_TB.Name = "Filter3Name_TB";
+            this.Filter3Name_TB.Size = new System.Drawing.Size(65, 20);
+            this.Filter3Name_TB.TabIndex = 15;
             // 
-            // F1Offset_TB
+            // label13
             // 
-            this.F1Offset_TB.Enabled = false;
-            this.F1Offset_TB.Location = new System.Drawing.Point(139, 38);
-            this.F1Offset_TB.MaxLength = 8;
-            this.F1Offset_TB.Name = "F1Offset_TB";
-            this.F1Offset_TB.Size = new System.Drawing.Size(63, 20);
-            this.F1Offset_TB.TabIndex = 22;
-            // 
-            // Filter9Name_TB
-            // 
-            this.Filter9Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.Filter9Name_TB.Enabled = false;
-            this.Filter9Name_TB.Location = new System.Drawing.Point(58, 246);
-            this.Filter9Name_TB.MaxLength = 8;
-            this.Filter9Name_TB.Name = "Filter9Name_TB";
-            this.Filter9Name_TB.Size = new System.Drawing.Size(65, 20);
-            this.Filter9Name_TB.TabIndex = 21;
-            this.Filter9Name_TB.TextChanged += new System.EventHandler(this.Filter9Name_TB_TextChanged);
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(154, 10);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(35, 13);
-            this.label16.TabIndex = 32;
-            this.label16.Text = "Offset";
-            // 
-            // Filter8Name_TB
-            // 
-            this.Filter8Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.Filter8Name_TB.Enabled = false;
-            this.Filter8Name_TB.Location = new System.Drawing.Point(58, 220);
-            this.Filter8Name_TB.MaxLength = 8;
-            this.Filter8Name_TB.Name = "Filter8Name_TB";
-            this.Filter8Name_TB.Size = new System.Drawing.Size(65, 20);
-            this.Filter8Name_TB.TabIndex = 20;
-            this.Filter8Name_TB.TextChanged += new System.EventHandler(this.Filter8Name_TB_TextChanged);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(11, 41);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(41, 13);
-            this.label6.TabIndex = 4;
-            this.label6.Text = "Filter 1:";
-            // 
-            // Filter7Name_TB
-            // 
-            this.Filter7Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.Filter7Name_TB.Enabled = false;
-            this.Filter7Name_TB.Location = new System.Drawing.Point(58, 194);
-            this.Filter7Name_TB.MaxLength = 8;
-            this.Filter7Name_TB.Name = "Filter7Name_TB";
-            this.Filter7Name_TB.Size = new System.Drawing.Size(65, 20);
-            this.Filter7Name_TB.TabIndex = 19;
-            this.Filter7Name_TB.TextChanged += new System.EventHandler(this.Filter7Name_TB_TextChanged);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(11, 67);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(41, 13);
-            this.label7.TabIndex = 5;
-            this.label7.Text = "Filter 2:";
-            // 
-            // Filter6Name_TB
-            // 
-            this.Filter6Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.Filter6Name_TB.Enabled = false;
-            this.Filter6Name_TB.Location = new System.Drawing.Point(58, 168);
-            this.Filter6Name_TB.MaxLength = 8;
-            this.Filter6Name_TB.Name = "Filter6Name_TB";
-            this.Filter6Name_TB.Size = new System.Drawing.Size(65, 20);
-            this.Filter6Name_TB.TabIndex = 18;
-            this.Filter6Name_TB.TextChanged += new System.EventHandler(this.Filter6Name_TB_TextChanged);
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(11, 249);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(41, 13);
-            this.label14.TabIndex = 12;
-            this.label14.Text = "Filter 9:";
-            // 
-            // Filter5Name_TB
-            // 
-            this.Filter5Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.Filter5Name_TB.Enabled = false;
-            this.Filter5Name_TB.Location = new System.Drawing.Point(58, 142);
-            this.Filter5Name_TB.MaxLength = 8;
-            this.Filter5Name_TB.Name = "Filter5Name_TB";
-            this.Filter5Name_TB.Size = new System.Drawing.Size(65, 20);
-            this.Filter5Name_TB.TabIndex = 17;
-            this.Filter5Name_TB.TextChanged += new System.EventHandler(this.Filter5Name_TB_TextChanged);
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(11, 93);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(41, 13);
-            this.label8.TabIndex = 6;
-            this.label8.Text = "Filter 3:";
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(11, 223);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(41, 13);
+            this.label13.TabIndex = 11;
+            this.label13.Text = "Filter 8:";
             // 
             // Filter4Name_TB
             // 
@@ -467,94 +336,182 @@ namespace ASCOM.Optec_IFW
             this.Filter4Name_TB.Name = "Filter4Name_TB";
             this.Filter4Name_TB.Size = new System.Drawing.Size(65, 20);
             this.Filter4Name_TB.TabIndex = 16;
-            this.Filter4Name_TB.TextChanged += new System.EventHandler(this.Filter4Name_TB_TextChanged);
             // 
-            // label13
+            // label8
             // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(11, 223);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(41, 13);
-            this.label13.TabIndex = 11;
-            this.label13.Text = "Filter 8:";
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(11, 93);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(41, 13);
+            this.label8.TabIndex = 6;
+            this.label8.Text = "Filter 3:";
             // 
-            // Filter3Name_TB
+            // Filter5Name_TB
             // 
-            this.Filter3Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.Filter3Name_TB.Enabled = false;
-            this.Filter3Name_TB.Location = new System.Drawing.Point(58, 90);
-            this.Filter3Name_TB.MaxLength = 8;
-            this.Filter3Name_TB.Name = "Filter3Name_TB";
-            this.Filter3Name_TB.Size = new System.Drawing.Size(65, 20);
-            this.Filter3Name_TB.TabIndex = 15;
-            this.Filter3Name_TB.TextChanged += new System.EventHandler(this.Filter3Name_TB_TextChanged);
+            this.Filter5Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.Filter5Name_TB.Enabled = false;
+            this.Filter5Name_TB.Location = new System.Drawing.Point(58, 142);
+            this.Filter5Name_TB.MaxLength = 8;
+            this.Filter5Name_TB.Name = "Filter5Name_TB";
+            this.Filter5Name_TB.Size = new System.Drawing.Size(65, 20);
+            this.Filter5Name_TB.TabIndex = 17;
             // 
-            // label9
+            // label14
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(11, 119);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(41, 13);
-            this.label9.TabIndex = 7;
-            this.label9.Text = "Filter 4:";
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(11, 249);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(41, 13);
+            this.label14.TabIndex = 12;
+            this.label14.Text = "Filter 9:";
             // 
-            // Filter2Name_TB
+            // Filter6Name_TB
             // 
-            this.Filter2Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.Filter2Name_TB.Enabled = false;
-            this.Filter2Name_TB.Location = new System.Drawing.Point(58, 64);
-            this.Filter2Name_TB.MaxLength = 8;
-            this.Filter2Name_TB.Name = "Filter2Name_TB";
-            this.Filter2Name_TB.Size = new System.Drawing.Size(65, 20);
-            this.Filter2Name_TB.TabIndex = 14;
-            this.Filter2Name_TB.TextChanged += new System.EventHandler(this.Filter2Name_TB_TextChanged);
+            this.Filter6Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.Filter6Name_TB.Enabled = false;
+            this.Filter6Name_TB.Location = new System.Drawing.Point(58, 168);
+            this.Filter6Name_TB.MaxLength = 8;
+            this.Filter6Name_TB.Name = "Filter6Name_TB";
+            this.Filter6Name_TB.Size = new System.Drawing.Size(65, 20);
+            this.Filter6Name_TB.TabIndex = 18;
             // 
-            // label12
+            // label7
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(11, 197);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(41, 13);
-            this.label12.TabIndex = 10;
-            this.label12.Text = "Filter 7:";
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(11, 67);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(41, 13);
+            this.label7.TabIndex = 5;
+            this.label7.Text = "Filter 2:";
             // 
-            // Filter1Name_TB
+            // Filter7Name_TB
             // 
-            this.Filter1Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.Filter1Name_TB.Enabled = false;
-            this.Filter1Name_TB.Location = new System.Drawing.Point(58, 38);
-            this.Filter1Name_TB.MaxLength = 8;
-            this.Filter1Name_TB.Name = "Filter1Name_TB";
-            this.Filter1Name_TB.Size = new System.Drawing.Size(65, 20);
-            this.Filter1Name_TB.TabIndex = 13;
-            this.Filter1Name_TB.TextChanged += new System.EventHandler(this.Filter1Name_TB_TextChanged);
+            this.Filter7Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.Filter7Name_TB.Enabled = false;
+            this.Filter7Name_TB.Location = new System.Drawing.Point(58, 194);
+            this.Filter7Name_TB.MaxLength = 8;
+            this.Filter7Name_TB.Name = "Filter7Name_TB";
+            this.Filter7Name_TB.Size = new System.Drawing.Size(65, 20);
+            this.Filter7Name_TB.TabIndex = 19;
             // 
-            // label10
+            // label6
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(11, 145);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(41, 13);
-            this.label10.TabIndex = 8;
-            this.label10.Text = "Filter 5:";
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(11, 41);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(41, 13);
+            this.label6.TabIndex = 4;
+            this.label6.Text = "Filter 1:";
             // 
-            // label15
+            // Filter8Name_TB
             // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(75, 10);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(35, 13);
-            this.label15.TabIndex = 31;
-            this.label15.Text = "Name";
+            this.Filter8Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.Filter8Name_TB.Enabled = false;
+            this.Filter8Name_TB.Location = new System.Drawing.Point(58, 220);
+            this.Filter8Name_TB.MaxLength = 8;
+            this.Filter8Name_TB.Name = "Filter8Name_TB";
+            this.Filter8Name_TB.Size = new System.Drawing.Size(65, 20);
+            this.Filter8Name_TB.TabIndex = 20;
             // 
-            // label11
+            // label16
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(11, 171);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(41, 13);
-            this.label11.TabIndex = 9;
-            this.label11.Text = "Filter 6:";
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(154, 10);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(35, 13);
+            this.label16.TabIndex = 32;
+            this.label16.Text = "Offset";
+            // 
+            // Filter9Name_TB
+            // 
+            this.Filter9Name_TB.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.Filter9Name_TB.Enabled = false;
+            this.Filter9Name_TB.Location = new System.Drawing.Point(58, 246);
+            this.Filter9Name_TB.MaxLength = 8;
+            this.Filter9Name_TB.Name = "Filter9Name_TB";
+            this.Filter9Name_TB.Size = new System.Drawing.Size(65, 20);
+            this.Filter9Name_TB.TabIndex = 21;
+            // 
+            // F1Offset_TB
+            // 
+            this.F1Offset_TB.Enabled = false;
+            this.F1Offset_TB.Location = new System.Drawing.Point(139, 38);
+            this.F1Offset_TB.MaxLength = 8;
+            this.F1Offset_TB.Name = "F1Offset_TB";
+            this.F1Offset_TB.Size = new System.Drawing.Size(63, 20);
+            this.F1Offset_TB.TabIndex = 22;
+            // 
+            // F2Offset_TB
+            // 
+            this.F2Offset_TB.Enabled = false;
+            this.F2Offset_TB.Location = new System.Drawing.Point(139, 64);
+            this.F2Offset_TB.MaxLength = 8;
+            this.F2Offset_TB.Name = "F2Offset_TB";
+            this.F2Offset_TB.Size = new System.Drawing.Size(63, 20);
+            this.F2Offset_TB.TabIndex = 23;
+            // 
+            // F9Offset_TB
+            // 
+            this.F9Offset_TB.Enabled = false;
+            this.F9Offset_TB.Location = new System.Drawing.Point(139, 246);
+            this.F9Offset_TB.MaxLength = 8;
+            this.F9Offset_TB.Name = "F9Offset_TB";
+            this.F9Offset_TB.Size = new System.Drawing.Size(63, 20);
+            this.F9Offset_TB.TabIndex = 30;
+            // 
+            // F3Offset_TB
+            // 
+            this.F3Offset_TB.Enabled = false;
+            this.F3Offset_TB.Location = new System.Drawing.Point(139, 90);
+            this.F3Offset_TB.MaxLength = 8;
+            this.F3Offset_TB.Name = "F3Offset_TB";
+            this.F3Offset_TB.Size = new System.Drawing.Size(63, 20);
+            this.F3Offset_TB.TabIndex = 24;
+            // 
+            // F8Offset_TB
+            // 
+            this.F8Offset_TB.Enabled = false;
+            this.F8Offset_TB.Location = new System.Drawing.Point(139, 220);
+            this.F8Offset_TB.MaxLength = 8;
+            this.F8Offset_TB.Name = "F8Offset_TB";
+            this.F8Offset_TB.Size = new System.Drawing.Size(63, 20);
+            this.F8Offset_TB.TabIndex = 29;
+            // 
+            // F4Offset_TB
+            // 
+            this.F4Offset_TB.Enabled = false;
+            this.F4Offset_TB.Location = new System.Drawing.Point(139, 116);
+            this.F4Offset_TB.MaxLength = 8;
+            this.F4Offset_TB.Name = "F4Offset_TB";
+            this.F4Offset_TB.Size = new System.Drawing.Size(63, 20);
+            this.F4Offset_TB.TabIndex = 25;
+            // 
+            // F7Offset_TB
+            // 
+            this.F7Offset_TB.Enabled = false;
+            this.F7Offset_TB.Location = new System.Drawing.Point(139, 194);
+            this.F7Offset_TB.MaxLength = 8;
+            this.F7Offset_TB.Name = "F7Offset_TB";
+            this.F7Offset_TB.Size = new System.Drawing.Size(63, 20);
+            this.F7Offset_TB.TabIndex = 28;
+            // 
+            // F5Offset_TB
+            // 
+            this.F5Offset_TB.Enabled = false;
+            this.F5Offset_TB.Location = new System.Drawing.Point(139, 142);
+            this.F5Offset_TB.MaxLength = 8;
+            this.F5Offset_TB.Name = "F5Offset_TB";
+            this.F5Offset_TB.Size = new System.Drawing.Size(63, 20);
+            this.F5Offset_TB.TabIndex = 26;
+            // 
+            // F6Offset_TB
+            // 
+            this.F6Offset_TB.Enabled = false;
+            this.F6Offset_TB.Location = new System.Drawing.Point(139, 168);
+            this.F6Offset_TB.MaxLength = 8;
+            this.F6Offset_TB.Name = "F6Offset_TB";
+            this.F6Offset_TB.Size = new System.Drawing.Size(63, 20);
+            this.F6Offset_TB.TabIndex = 27;
             // 
             // label2
             // 
@@ -566,29 +523,26 @@ namespace ASCOM.Optec_IFW
             this.label2.TabIndex = 43;
             this.label2.Text = "Filter Names and Offsets:";
             // 
-            // label3
+            // AdvancedButton
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(19, 411);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(228, 20);
-            this.label3.TabIndex = 44;
-            this.label3.Text = "Enter Centering Constants:";
+            this.AdvancedButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.AdvancedButton.Location = new System.Drawing.Point(293, 400);
+            this.AdvancedButton.Name = "AdvancedButton";
+            this.AdvancedButton.Size = new System.Drawing.Size(75, 25);
+            this.AdvancedButton.TabIndex = 45;
+            this.AdvancedButton.Text = "Advanced";
+            this.AdvancedButton.UseVisualStyleBackColor = true;
+            this.AdvancedButton.Click += new System.EventHandler(this.AdvancedButton_Click);
             // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.ClientSize = new System.Drawing.Size(525, 518);
-            this.Controls.Add(this.label3);
+            this.ClientSize = new System.Drawing.Size(471, 442);
+            this.Controls.Add(this.AdvancedButton);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.label19);
-            this.Controls.Add(this.NextOffset_TB);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.label20);
-            this.Controls.Add(this.BackOffset_TB);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.textBox1);
@@ -633,10 +587,6 @@ namespace ASCOM.Optec_IFW
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.TextBox BackOffset_TB;
-        private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.TextBox NextOffset_TB;
-        private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label15;
@@ -668,6 +618,6 @@ namespace ASCOM.Optec_IFW
         private System.Windows.Forms.TextBox F5Offset_TB;
         private System.Windows.Forms.TextBox F6Offset_TB;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button AdvancedButton;
     }
 }

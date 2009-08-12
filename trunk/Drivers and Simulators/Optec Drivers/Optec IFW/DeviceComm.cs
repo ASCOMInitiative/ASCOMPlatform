@@ -63,7 +63,14 @@ namespace ASCOM.Optec_IFW
             if (SerialTools.Connected)
             {
                 ExitProgramLoop();  //free up control back to the hand control box
-                SerialTools.Connected = false;   //dissconnect the port
+                try
+                {
+                    SerialTools.Connected = false;   //dissconnect the port
+                }
+                catch(Exception)
+                {
+                    MessageBox.Show("Dissconnecting Failed");
+                }
             } 
         }
 
@@ -72,6 +79,33 @@ namespace ASCOM.Optec_IFW
             SerialTools.ReceiveTimeoutMs = ResponseTime;
             SerialTools.ClearBuffers();
             SerialTools.Transmit(CmdToSend);
+        }
+
+        public static string DebugSendCmd(string CmdToSend, int ComPort, int ResponseTime)
+        {
+            System.IO.Ports.SerialPort Port = new SerialPort();
+            try
+            {
+                
+                Port.BaudRate = 19200;
+                Port.DataBits = 8;
+                Port.Parity = Parity.None;
+                Port.StopBits = StopBits.One;
+                Port.PortName = "COM" + ComPort;
+                Port.Open();
+                Port.DiscardInBuffer();
+                Port.Write(CmdToSend);
+                Port.ReadTimeout = ResponseTime;
+                String Received = Port.ReadLine();
+
+                Port.Close();
+                return Received;
+            }
+            catch (TimeoutException)
+            {
+                Port.Close();
+                return "Error: Response Timeout. Is the Receive Timeout set too short?";     
+            }
         }
 
         public static bool HomeDevice()
@@ -92,8 +126,10 @@ namespace ASCOM.Optec_IFW
             {
                 IsAtHome = true;
                 WheelID = inputbuff[0];
+                
                 return true;
             }
+            
 
         }
 
@@ -172,12 +208,16 @@ namespace ASCOM.Optec_IFW
        
         public static void ExitProgramLoop()        //Exit the serial loop and return to normal manual operation
         {
-            sendCmd("WEXITS", 1000);
+            sendCmd("WEXITS", 2000);
             string inputbuff;
             try { inputbuff = SerialTools.Receive(); }
             catch (TimeoutException)
             {
                 throw new Exception("Failed to execute EXIT command. Response Timeout Occured");
+            }
+            catch (Exception)
+            {
+                throw new Exception("Program Exit Failure: SerialTools.Received threw an exception");
             }
             if (!inputbuff.Contains("END")) throw new Exception("Failed execute EXIT command. Incorrect Response: " + inputbuff);
         }
@@ -205,9 +245,48 @@ namespace ASCOM.Optec_IFW
             sendCmd(StringToWrite, 1000);
             string inputbuffer = SerialTools.Receive();
             if (!inputbuffer.Contains("!")) throw new Exception("Error writing names to EEPROM. Input Buffer read: " + inputbuffer);
+            System.Threading.Thread.Sleep(2000);
+        }
 
+        public static void StoreCenteringData(int ComPort, int NextValue, int BackValue)
+        {
+            string NextString = NextValue.ToString().PadLeft(2, char.Parse("0"));
+            string BackString = BackValue.ToString().PadLeft(2, char.Parse("0"));
+            string CmdToSend = "WC" + BackString + NextString;
 
-        
+            System.IO.Ports.SerialPort Port = new SerialPort();
+            try
+            {
+                Port.BaudRate = 19200;
+                Port.DataBits = 8;
+                Port.Parity = Parity.None;
+                Port.StopBits = StopBits.One;
+                Port.PortName = "COM" + ComPort;
+                Port.Open();
+                Port.DiscardInBuffer();
+                Port.Write("WSMODE");
+                Port.ReadTimeout = 500;
+                String Received = Port.ReadLine();
+                if (!Received.Contains("!")) MessageBox.Show
+                    ("Could not communicate with device. Is the COM port number set right?" + Received);
+                Port.DiscardInBuffer();
+                Port.Write(CmdToSend);
+                Port.ReadTimeout = 2000;
+                Received = "";
+                Received = Port.ReadLine();
+                if (!Received.Contains("CW")) MessageBox.Show
+                    ("Centering Values not saved. Incorrect response from Device. Response = " + Received);
+                Port.Close();
+                MessageBox.Show("Saved Successfully!");
+            }
+            
+            catch (Exception Ex)
+            {
+
+                MessageBox.Show("Could not connect to device to store Centering Values. Did you select the right COM port?");
+                MessageBox.Show(Ex.Data + "&&&" + Ex.Message + "&&&" + Ex.Source + "&&&" + Ex.TargetSite);
+            }
+
         }
         
         public static void StoreFilterOffsets(int[] filteroffsets)
