@@ -33,6 +33,7 @@ using System.IO.Ports;
 using System.Windows.Forms;
 
 
+
 namespace ASCOM.Optec_IFW
 {
     //
@@ -54,10 +55,7 @@ namespace ASCOM.Optec_IFW
 
         // Exception codes/messages
 
-
-        public static int SCODE_VAL_OUTOFRANGE = ErrorCodes.DriverBase + 0x404;
         public const string MSG_VAL_OUTOFRANGE = "The value is out of range";
-
 
         //
         // Constructor - Must be public for COM registration!
@@ -151,8 +149,10 @@ namespace ASCOM.Optec_IFW
             {
                 lock (CommLock)
                 {
-                    if (value < 0 || value > DeviceComm.NumOfFilters - 1) throw new DriverException("Position: " + MSG_VAL_OUTOFRANGE, SCODE_VAL_OUTOFRANGE);
+                    if (value < 0 || value > DeviceComm.NumOfFilters - 1) throw new DriverException("Position: " + MSG_VAL_OUTOFRANGE,
+                        unchecked((int)0x80040404));
                     DeviceComm.GoToPosition(value);
+                    
                 }
             }
         }
