@@ -11,9 +11,13 @@ namespace ASCOM.Optec_IFW
 {
     public partial class AdvancedForm : Form
     {
+
+        #region Declarations
         public string COMPortString;
         public string CP;
-        private bool CenteringValueChanged;
+        private bool CenteringValueChanged; 
+        #endregion
+
         public AdvancedForm()
         {
             InitializeComponent();
@@ -75,6 +79,7 @@ namespace ASCOM.Optec_IFW
         {
             this.Close();
         }
+
         private void StoreCentering()
         {
             try

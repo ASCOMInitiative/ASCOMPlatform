@@ -32,8 +32,6 @@ using ASCOM.Interface;
 using System.IO.Ports;
 using System.Windows.Forms;
 
-
-
 namespace ASCOM.Optec_IFW
 {
     //
@@ -47,24 +45,16 @@ namespace ASCOM.Optec_IFW
     [ClassInterface(ClassInterfaceType.None)]
     public class FilterWheel : IFilterWheel
     {
-        //
+
         // Driver ID and descriptive string that shows in the Chooser
-        //
         internal static string s_csDriverID = "ASCOM.Optec_IFW.FilterWheel";
         private static string s_csDriverDescription = "Driver for Optec IFW";
-
-        // Exception codes/messages
-
-        public const string MSG_VAL_OUTOFRANGE = "The value is out of range";
-
-        //
-        // Constructor - Must be public for COM registration!
-        //
         private static object CommLock = new object();
 
+        // Constructor - Must be public for COM registration!
         public FilterWheel()
         {
-            // TODO Implement your additional construction here
+            //  Implement your additional construction here
         }
 
         #region ASCOM Registration
@@ -100,16 +90,13 @@ namespace ASCOM.Optec_IFW
             RegUnregASCOM(false);
         }
         #endregion
-
-        //
+     
         // PUBLIC COM INTERFACE IFilterWheel IMPLEMENTATION
-        //
 
         #region IFilterWheel Members
         public bool Connected
         {
-            // TODO Replace this with your implementation
-            get
+            get 
             {
                 lock(CommLock)
                 {
@@ -125,7 +112,7 @@ namespace ASCOM.Optec_IFW
                         DeviceComm.ConnectToDevice();
                         if (DeviceComm.CheckForConnection())
                         {
-                            //do nothing
+                            //do nothing, already connected
                         }
                         else
                         {
@@ -135,7 +122,15 @@ namespace ASCOM.Optec_IFW
                     }
                     else
                     {
-                        DeviceComm.DisconnectDevice();
+                        if (DeviceComm.CheckForConnection())
+                        {
+                            throw new Exception("Connection to the device has failed");
+                        }
+                        else
+                        {  
+                            //do nothing, already connected
+                        }
+                        
 
                     }
                 }
@@ -186,5 +181,8 @@ namespace ASCOM.Optec_IFW
         }
 
         #endregion
+
+        // Exception codes/messages
+        public const string MSG_VAL_OUTOFRANGE = "The value is out of range";
     }
 }
