@@ -60,6 +60,7 @@ namespace ASCOM.Optec_IFW
 
         private void v_Click(object sender, EventArgs e)
         {
+
             if (CenteringValueChanged)
             {
                 DialogResult YesOrNo = new DialogResult();

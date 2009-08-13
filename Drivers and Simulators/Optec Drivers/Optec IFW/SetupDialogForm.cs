@@ -5,14 +5,18 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using System.Timers;
 
 namespace ASCOM.Optec_IFW
 {
     [ComVisible(false)]					// Form not registered for COM!
     public partial class SetupDialogForm : Form
     {
+        #region //Declarations
         private static object CommLock = new object();
+
         FilterWheel DriverInstance = new FilterWheel();
+        #endregion
 
         public SetupDialogForm()
         {
@@ -50,13 +54,16 @@ namespace ASCOM.Optec_IFW
         private void SaveData_Btn_Click(object sender, EventArgs e)
         {
             SaveSettings();
-            MessageBox.Show("Save Data Completed Successfully");
+            MessageBox.Show("Filter Names & Offsets Saved!\r\n\r\nNOTE: New names will not be displayed on the handbox until the device is homed.",
+                "Data Saved",MessageBoxButtons.OK,MessageBoxIcon.Information);
             cmdOK.Enabled = true;
         }
 
         private void SetupDialogForm_Load(object sender, EventArgs e)
         {
             cmdOK.Enabled = false;
+            this.Home_Btn.Enabled = false;
+
 
             //load the com port if one has been saved
             if( Int32.Parse(DeviceComm.TryGetCOMPort())> 0)
@@ -143,8 +150,6 @@ namespace ASCOM.Optec_IFW
                 } 
                 #endregion
 
-                this.SaveData_Btn.Enabled = true;
-
                 #region Get the Offset Values From Registry
                 string[] OffsetValues = new string[DeviceComm.NumOfFilters];
                 OffsetValues = DeviceComm.TryGetOffsets();
@@ -168,6 +173,10 @@ namespace ASCOM.Optec_IFW
                     //do nothing, this is where the program flows if you are using less than 9 filters
                 } 
                 #endregion
+
+                this.Connect_BTN.Enabled = false;
+                this.SaveData_Btn.Enabled = true;
+                this.Home_Btn.Enabled = true;
 
             }
         }
@@ -251,13 +260,7 @@ namespace ASCOM.Optec_IFW
             DeviceComm.StoreFilterOffsets(filteroffsets);
             #endregion
 
-            #region Store the Centering Values
-            //TODO: Implement methods for storing the centering values
-            #endregion
-
-            DeviceComm.HomeDevice();
         }
-
 
         private void AdvancedButton_Click(object sender, EventArgs e)
         {
@@ -272,7 +275,16 @@ namespace ASCOM.Optec_IFW
                 C.Enabled = false;
             }
             this.SaveData_Btn.Enabled = false;
+            this.Home_Btn.Enabled = false;
+            this.Connect_BTN.Enabled = true;
             this.cmdOK.Enabled = true;
+
+           
+        }
+
+        private void Home_Btn_Click(object sender, EventArgs e)
+        {
+            DeviceComm.HomeDevice();
         }
 
 

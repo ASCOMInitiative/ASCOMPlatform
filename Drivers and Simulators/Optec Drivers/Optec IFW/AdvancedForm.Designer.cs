@@ -46,6 +46,7 @@
             this.ReadTimeout_Picker = new System.Windows.Forms.NumericUpDown();
             this.NextValue_Picker = new System.Windows.Forms.NumericUpDown();
             this.BackValue_Picker = new System.Windows.Forms.NumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.ReadTimeout_Picker)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NextValue_Picker)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BackValue_Picker)).BeginInit();
@@ -54,20 +55,20 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(44, 57);
+            this.label19.Location = new System.Drawing.Point(41, 57);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(73, 13);
+            this.label19.Size = new System.Drawing.Size(80, 13);
             this.label19.TabIndex = 42;
-            this.label19.Text = "\"Next\" Offset:";
+            this.label19.Text = "\"NEXT\" Offset:";
             // 
             // label20
             // 
             this.label20.AutoSize = true;
             this.label20.Location = new System.Drawing.Point(194, 57);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(76, 13);
+            this.label20.Size = new System.Drawing.Size(79, 13);
             this.label20.TabIndex = 43;
-            this.label20.Text = "\"Back\" Offset:";
+            this.label20.Text = "\"BACK\" Offset:";
             // 
             // v
             // 
@@ -269,12 +270,22 @@
             0});
             this.BackValue_Picker.ValueChanged += new System.EventHandler(this.BackValue_Picker_ValueChanged);
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(13, 281);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(311, 13);
+            this.label6.TabIndex = 62;
+            this.label6.Text = "Note: You MUST send WSMODE first to establish a connection.";
+            // 
             // AdvancedForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(549, 332);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.BackValue_Picker);
             this.Controls.Add(this.NextValue_Picker);
             this.Controls.Add(this.ReadTimeout_Picker);
@@ -323,5 +334,6 @@
         private System.Windows.Forms.NumericUpDown ReadTimeout_Picker;
         private System.Windows.Forms.NumericUpDown NextValue_Picker;
         private System.Windows.Forms.NumericUpDown BackValue_Picker;
+        private System.Windows.Forms.Label label6;
     }
 }
