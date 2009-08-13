@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" >
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -56,6 +56,10 @@
       <Project>{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3}</Project>
       <Name>Astrometry</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ASCOM.Attributes\ASCOM.Attributes.csproj">
+      <Project>{2C40FAD9-DE75-4360-A0AD-911C4D24D98C}</Project>
+      <Name>ASCOM.Attributes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ASCOM.Controls\ASCOM.Controls\ASCOM.Controls.csproj">
       <Project>{63AD32E8-98FF-44BB-AA29-ED2E5A5CF026}</Project>
       <Name>ASCOM.Controls</Name>
@@ -78,7 +82,6 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -93,6 +96,7 @@ xcopy "$(SolutionDir)ClientToolbox\bin\Debug\*.*" "$(SolutionDir)Drivers and Sim
 xcopy "$(SolutionDir)ASCOM.Utilities\Utilities\bin\Debug\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
 xcopy "$(SolutionDir)ASCOM.Astrometry\Astrometry\bin\Debug\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
 xcopy "$(SolutionDir)Interfaces\ASCOMExceptions\bin\Debug\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
+xcopy "$(SolutionDir)ASCOM.Attributes\bin\Debug\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
 xcopy "$(SolutionDir)Interfaces\Master Interfaces\*.dll" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
 xcopy "$(SolutionDir)Interfaces\Master Interfaces\*.tlb" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
 xcopy "$(SolutionDir)ASCOM.Utilities\NOVAS-C x86-x64\debug\NOVAS-C.dll" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
