@@ -138,7 +138,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y "$(TargetDir)ASCOM.GeminiTelescope.Telescope.dll" "$(SolutionDir)GeminiTelescopeServedClasses"
-xcopy /y "$(TargetDir)ASCOM.GeminiTelescope.Telescope.pdb" "$(SolutionDir)GeminiTelescopeServedClasses"</PostBuildEvent>
+    <PostBuildEvent>xcopy /y "$(SolutionDir)Telescope\bin\$(ConfigurationName)\ASCOM.GeminiTelescope.Telescope.dll" "$(SolutionDir)GeminiTelescopeServedClasses"
+xcopy /y "$(SolutionDir)Telescope\bin\$(ConfigurationName)\ASCOM.GeminiTelescope.Telescope.pdb" "$(SolutionDir)GeminiTelescopeServedClasses"</PostBuildEvent>
   </PropertyGroup>
 </Project>
