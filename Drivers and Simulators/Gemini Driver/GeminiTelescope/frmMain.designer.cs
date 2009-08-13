@@ -194,54 +194,59 @@ namespace ASCOM.GeminiTelescope
             // 
             // buttonSlew1
             // 
+            this.buttonSlew1.BackColor = System.Drawing.SystemColors.Control;
             this.buttonSlew1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonSlew1.Location = new System.Drawing.Point(45, 3);
             this.buttonSlew1.Name = "buttonSlew1";
             this.buttonSlew1.Size = new System.Drawing.Size(36, 36);
             this.buttonSlew1.TabIndex = 0;
             this.buttonSlew1.Text = "N";
-            this.buttonSlew1.UseVisualStyleBackColor = true;
+            this.buttonSlew1.UseVisualStyleBackColor = false;
             this.buttonSlew1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseDown);
             this.buttonSlew1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseUp);
             // 
             // buttonSlew3
             // 
+            this.buttonSlew3.BackColor = System.Drawing.SystemColors.Control;
             this.buttonSlew3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonSlew3.Location = new System.Drawing.Point(87, 45);
             this.buttonSlew3.Name = "buttonSlew3";
             this.buttonSlew3.Size = new System.Drawing.Size(36, 36);
             this.buttonSlew3.TabIndex = 1;
             this.buttonSlew3.Text = "E";
-            this.buttonSlew3.UseVisualStyleBackColor = true;
+            this.buttonSlew3.UseVisualStyleBackColor = false;
             this.buttonSlew3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew3_MouseDown);
             this.buttonSlew3.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew3_MouseUp);
             // 
             // buttonSlew4
             // 
+            this.buttonSlew4.BackColor = System.Drawing.SystemColors.Control;
             this.buttonSlew4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonSlew4.Location = new System.Drawing.Point(3, 45);
             this.buttonSlew4.Name = "buttonSlew4";
             this.buttonSlew4.Size = new System.Drawing.Size(36, 36);
             this.buttonSlew4.TabIndex = 2;
             this.buttonSlew4.Text = "W";
-            this.buttonSlew4.UseVisualStyleBackColor = true;
+            this.buttonSlew4.UseVisualStyleBackColor = false;
             this.buttonSlew4.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew4_MouseDown);
             this.buttonSlew4.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew4_MouseUp);
             // 
             // buttonSlew2
             // 
+            this.buttonSlew2.BackColor = System.Drawing.SystemColors.Control;
             this.buttonSlew2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonSlew2.Location = new System.Drawing.Point(45, 87);
             this.buttonSlew2.Name = "buttonSlew2";
             this.buttonSlew2.Size = new System.Drawing.Size(36, 36);
             this.buttonSlew2.TabIndex = 3;
             this.buttonSlew2.Text = "S";
-            this.buttonSlew2.UseVisualStyleBackColor = true;
+            this.buttonSlew2.UseVisualStyleBackColor = false;
             this.buttonSlew2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew2_MouseDown);
             this.buttonSlew2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew2_MouseUp);
             // 
             // buttonSlew0
             // 
+            this.buttonSlew0.BackColor = System.Drawing.SystemColors.Control;
             this.buttonSlew0.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonSlew0.Font = new System.Drawing.Font("Wingdings 2", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
             this.buttonSlew0.Location = new System.Drawing.Point(45, 45);
@@ -249,7 +254,7 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew0.Size = new System.Drawing.Size(36, 36);
             this.buttonSlew0.TabIndex = 4;
             this.buttonSlew0.Text = "Ä";
-            this.buttonSlew0.UseVisualStyleBackColor = true;
+            this.buttonSlew0.UseVisualStyleBackColor = false;
             this.buttonSlew0.MouseClick += new System.Windows.Forms.MouseEventHandler(this.buttonSlew0_MouseClick);
             // 
             // pictureBoxPierSideEast
@@ -335,17 +340,19 @@ namespace ASCOM.GeminiTelescope
             // 
             // ButtonPark
             // 
+            this.ButtonPark.BackColor = System.Drawing.SystemColors.Control;
             this.ButtonPark.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ButtonPark.Location = new System.Drawing.Point(30, 3);
             this.ButtonPark.Name = "ButtonPark";
             this.ButtonPark.Size = new System.Drawing.Size(21, 21);
             this.ButtonPark.TabIndex = 6;
             this.ButtonPark.Text = "P";
-            this.ButtonPark.UseVisualStyleBackColor = true;
+            this.ButtonPark.UseVisualStyleBackColor = false;
             this.ButtonPark.Click += new System.EventHandler(this.ButtonPark_Click);
             // 
             // ButtonConnect
             // 
+            this.ButtonConnect.BackColor = System.Drawing.SystemColors.Control;
             this.TableLayoutPanel3.SetColumnSpan(this.ButtonConnect, 5);
             this.ButtonConnect.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ButtonConnect.Location = new System.Drawing.Point(3, 30);
@@ -353,11 +360,12 @@ namespace ASCOM.GeminiTelescope
             this.ButtonConnect.Size = new System.Drawing.Size(121, 21);
             this.ButtonConnect.TabIndex = 5;
             this.ButtonConnect.Text = "Connect";
-            this.ButtonConnect.UseVisualStyleBackColor = true;
+            this.ButtonConnect.UseVisualStyleBackColor = false;
             this.ButtonConnect.Click += new System.EventHandler(this.ButtonConnect_Click);
             // 
             // ButtonSetup
             // 
+            this.ButtonSetup.BackColor = System.Drawing.SystemColors.Control;
             this.ButtonSetup.ContextMenuStrip = this.contextMenuStrip1;
             this.ButtonSetup.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ButtonSetup.Location = new System.Drawing.Point(107, 3);
@@ -365,7 +373,7 @@ namespace ASCOM.GeminiTelescope
             this.ButtonSetup.Size = new System.Drawing.Size(17, 21);
             this.ButtonSetup.TabIndex = 4;
             this.ButtonSetup.Text = "S";
-            this.ButtonSetup.UseVisualStyleBackColor = true;
+            this.ButtonSetup.UseVisualStyleBackColor = false;
             this.ButtonSetup.Click += new System.EventHandler(this.ButtonSetup_Click_1);
             // 
             // contextMenuStrip1
@@ -400,13 +408,14 @@ namespace ASCOM.GeminiTelescope
             // 
             // ButtonFlip
             // 
+            this.ButtonFlip.BackColor = System.Drawing.SystemColors.Control;
             this.ButtonFlip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ButtonFlip.Location = new System.Drawing.Point(3, 3);
             this.ButtonFlip.Name = "ButtonFlip";
             this.ButtonFlip.Size = new System.Drawing.Size(21, 21);
             this.ButtonFlip.TabIndex = 3;
             this.ButtonFlip.Text = "F";
-            this.ButtonFlip.UseVisualStyleBackColor = true;
+            this.ButtonFlip.UseVisualStyleBackColor = false;
             this.ButtonFlip.Click += new System.EventHandler(this.ButtonFlip_Click);
             // 
             // CheckBoxFlipDec
@@ -426,6 +435,7 @@ namespace ASCOM.GeminiTelescope
             this.GroupBox1.Controls.Add(this.RadioButtonSlew);
             this.GroupBox1.Controls.Add(this.RadioButtonCenter);
             this.GroupBox1.Controls.Add(this.RadioButtonGuide);
+            this.GroupBox1.ForeColor = System.Drawing.Color.Blue;
             this.GroupBox1.Location = new System.Drawing.Point(10, 267);
             this.GroupBox1.Name = "GroupBox1";
             this.GroupBox1.Size = new System.Drawing.Size(128, 38);
