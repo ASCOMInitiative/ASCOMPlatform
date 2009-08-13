@@ -241,6 +241,32 @@ namespace ASCOM.GeminiTelescope
             // TODO Implement your additional construction here
         }
 
+        #region Private Code
+
+        /// <summary>
+        /// Processes a command string that comes from outside the driver and may have its leading 
+        /// colon missing. It appends one if necessary which ensures correct processing elsewhere 
+        /// in the driver
+        /// </summary>
+        /// <param name="cmd">The command string to be checked for leading colon</param>
+        /// <returns>A command string with leading colon where required.</returns>
+        internal string PrepareCommand(string cmd)
+        {
+            switch (cmd.Substring(0, 1))
+            {
+                case "<": //Do nothing
+                    break;
+                case ">": //Do nothing
+                    break;
+                case ":": //Do nothing
+                    break;
+                default: //Prepend :
+                    cmd = ":" + cmd;
+                    break;
+            }
+            return cmd;
+        }
+        #endregion
         //
         // PUBLIC COM INTERFACE ITelescope IMPLEMENTATION
         //
@@ -420,7 +446,7 @@ namespace ASCOM.GeminiTelescope
         public string CommandNative(string Command)
         {
             if (Command == String.Empty) throw new ASCOM.InvalidValueException("CommandNative", Command, "valid Gemini command");
-            string result = GeminiHardware.DoCommandResult(Command, GeminiHardware.MAX_TIMEOUT, false);
+            string result = GeminiHardware.DoCommandResult(Command, 1000, false);
 
             if (result == null) return "";
             else            
@@ -432,12 +458,14 @@ namespace ASCOM.GeminiTelescope
         public void CommandBlind(string Command, bool Raw)
         {
             if (Command == String.Empty) throw new ASCOM.InvalidValueException("CommandBlind", Command, "valid Gemini command");
+            Command = PrepareCommand(Command); // Add leading colon if required
             GeminiHardware.DoCommandResult(Command, GeminiHardware.MAX_TIMEOUT, Raw);
         }
 
         public bool CommandBool(string Command, bool Raw)
         {
             if (Command == "") throw new InvalidValueException("CommandBool", "", "valid Gemini command");
+            Command = PrepareCommand(Command); // Add leading colon if required
             string result = GeminiHardware.DoCommandResult(Command, GeminiHardware.MAX_TIMEOUT, Raw);
             if (result!=null && result.StartsWith("1")) return true;
             return false;
@@ -446,7 +474,7 @@ namespace ASCOM.GeminiTelescope
         public string CommandString(string Command, bool Raw)
         {
             if (Command == String.Empty) throw new ASCOM.InvalidValueException("CommandString", Command, "valid Gemini command");
-
+            Command = PrepareCommand(Command); // Add leading colon if required
             string result = GeminiHardware.DoCommandResult(Command, GeminiHardware.MAX_TIMEOUT, Raw);
             if (result == null) return null;
             if (!Raw & result.EndsWith("#")) return result.Substring(1,result.Length - 1);//Added Start value substring parameter and handling of Raw values
@@ -1093,7 +1121,7 @@ namespace ASCOM.GeminiTelescope
         {
             get 
             { 
-                return new ConformCommandStrings("Gc", "(24)", "Q", "Sz045:00:00", false);
+                return new ConformCommandStrings("Gc", "(24)", "Q", "Sz045:00:00", true);
             }
         }
 

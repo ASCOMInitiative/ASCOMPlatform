@@ -137,4 +137,8 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y "$(TargetDir)ASCOM.GeminiTelescope.Focuser.dll" "$(SolutionDir)GeminiTelescopeServedClasses"
+xcopy /y "$(TargetDir)ASCOM.GeminiTelescope.Focuser.pdb" "$(SolutionDir)GeminiTelescopeServedClasses"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
