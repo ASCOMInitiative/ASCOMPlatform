@@ -38,8 +38,6 @@ namespace ASCOM.Optec_IFW
             this.ComPort_Picker = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label11 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
@@ -72,17 +70,20 @@ namespace ASCOM.Optec_IFW
             this.F6Offset_TB = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.AdvancedButton = new System.Windows.Forms.Button();
+            this.Home_Btn = new System.Windows.Forms.Button();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.ComPort_Picker)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // cmdOK
             // 
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdOK.Location = new System.Drawing.Point(395, 359);
+            this.cmdOK.Location = new System.Drawing.Point(405, 332);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 0;
@@ -94,7 +95,7 @@ namespace ASCOM.Optec_IFW
             // 
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(395, 400);
+            this.cmdCancel.Location = new System.Drawing.Point(405, 373);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
@@ -105,7 +106,7 @@ namespace ASCOM.Optec_IFW
             // IFW3_RB
             // 
             this.IFW3_RB.AutoSize = true;
-            this.IFW3_RB.Location = new System.Drawing.Point(419, 53);
+            this.IFW3_RB.Location = new System.Drawing.Point(423, 62);
             this.IFW3_RB.Name = "IFW3_RB";
             this.IFW3_RB.Size = new System.Drawing.Size(51, 17);
             this.IFW3_RB.TabIndex = 36;
@@ -116,7 +117,7 @@ namespace ASCOM.Optec_IFW
             // IFW_RB
             // 
             this.IFW_RB.AutoSize = true;
-            this.IFW_RB.Location = new System.Drawing.Point(355, 53);
+            this.IFW_RB.Location = new System.Drawing.Point(359, 62);
             this.IFW_RB.Name = "IFW_RB";
             this.IFW_RB.Size = new System.Drawing.Size(45, 17);
             this.IFW_RB.TabIndex = 35;
@@ -128,7 +129,7 @@ namespace ASCOM.Optec_IFW
             // 
             this.label17.AutoSize = true;
             this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label17.Location = new System.Drawing.Point(8, 51);
+            this.label17.Location = new System.Drawing.Point(12, 60);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(319, 20);
             this.label17.TabIndex = 34;
@@ -137,7 +138,7 @@ namespace ASCOM.Optec_IFW
             // Connect_BTN
             // 
             this.Connect_BTN.AllowDrop = true;
-            this.Connect_BTN.Location = new System.Drawing.Point(324, 91);
+            this.Connect_BTN.Location = new System.Drawing.Point(328, 100);
             this.Connect_BTN.Name = "Connect_BTN";
             this.Connect_BTN.Size = new System.Drawing.Size(93, 32);
             this.Connect_BTN.TabIndex = 33;
@@ -148,9 +149,9 @@ namespace ASCOM.Optec_IFW
             // SaveData_Btn
             // 
             this.SaveData_Btn.Enabled = false;
-            this.SaveData_Btn.Location = new System.Drawing.Point(259, 254);
+            this.SaveData_Btn.Location = new System.Drawing.Point(233, 280);
             this.SaveData_Btn.Name = "SaveData_Btn";
-            this.SaveData_Btn.Size = new System.Drawing.Size(93, 56);
+            this.SaveData_Btn.Size = new System.Drawing.Size(93, 26);
             this.SaveData_Btn.TabIndex = 2;
             this.SaveData_Btn.Text = "Save Data";
             this.SaveData_Btn.UseVisualStyleBackColor = true;
@@ -158,7 +159,7 @@ namespace ASCOM.Optec_IFW
             // 
             // ComPort_Picker
             // 
-            this.ComPort_Picker.Location = new System.Drawing.Point(355, 15);
+            this.ComPort_Picker.Location = new System.Drawing.Point(359, 24);
             this.ComPort_Picker.Name = "ComPort_Picker";
             this.ComPort_Picker.Size = new System.Drawing.Size(42, 20);
             this.ComPort_Picker.TabIndex = 1;
@@ -168,7 +169,7 @@ namespace ASCOM.Optec_IFW
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(8, 12);
+            this.label1.Location = new System.Drawing.Point(12, 21);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(333, 20);
             this.label1.TabIndex = 0;
@@ -177,34 +178,13 @@ namespace ASCOM.Optec_IFW
             // textBox1
             // 
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(365, 266);
+            this.textBox1.Location = new System.Drawing.Point(375, 239);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(93, 79);
             this.textBox1.TabIndex = 18;
             this.textBox1.Text = "Note: You must connect the device and press Save Data before continuing.";
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::ASCOM.Optec_IFW.Properties.Resources.Optec_Logo_medium;
-            this.pictureBox1.Location = new System.Drawing.Point(244, 150);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(117, 56);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 19;
-            this.pictureBox1.TabStop = false;
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox2.Image = global::ASCOM.Optec_IFW.Properties.Resources.ASCOM;
-            this.pictureBox2.Location = new System.Drawing.Point(382, 150);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(48, 56);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBox2.TabIndex = 20;
-            this.pictureBox2.TabStop = false;
             // 
             // panel1
             // 
@@ -237,7 +217,7 @@ namespace ASCOM.Optec_IFW
             this.panel1.Controls.Add(this.F7Offset_TB);
             this.panel1.Controls.Add(this.F5Offset_TB);
             this.panel1.Controls.Add(this.F6Offset_TB);
-            this.panel1.Location = new System.Drawing.Point(12, 126);
+            this.panel1.Location = new System.Drawing.Point(16, 135);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(211, 282);
             this.panel1.TabIndex = 42;
@@ -517,7 +497,7 @@ namespace ASCOM.Optec_IFW
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(8, 96);
+            this.label2.Location = new System.Drawing.Point(12, 105);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(214, 20);
             this.label2.TabIndex = 43;
@@ -526,7 +506,7 @@ namespace ASCOM.Optec_IFW
             // AdvancedButton
             // 
             this.AdvancedButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.AdvancedButton.Location = new System.Drawing.Point(293, 400);
+            this.AdvancedButton.Location = new System.Drawing.Point(303, 373);
             this.AdvancedButton.Name = "AdvancedButton";
             this.AdvancedButton.Size = new System.Drawing.Size(75, 25);
             this.AdvancedButton.TabIndex = 45;
@@ -534,17 +514,49 @@ namespace ASCOM.Optec_IFW
             this.AdvancedButton.UseVisualStyleBackColor = true;
             this.AdvancedButton.Click += new System.EventHandler(this.AdvancedButton_Click);
             // 
+            // Home_Btn
+            // 
+            this.Home_Btn.Enabled = false;
+            this.Home_Btn.Location = new System.Drawing.Point(233, 321);
+            this.Home_Btn.Name = "Home_Btn";
+            this.Home_Btn.Size = new System.Drawing.Size(93, 26);
+            this.Home_Btn.TabIndex = 46;
+            this.Home_Btn.Text = "Home Device";
+            this.Home_Btn.UseVisualStyleBackColor = true;
+            this.Home_Btn.Click += new System.EventHandler(this.Home_Btn_Click);
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox2.Image = global::ASCOM.Optec_IFW.Properties.Resources.ASCOM;
+            this.pictureBox2.Location = new System.Drawing.Point(427, 1);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(48, 56);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox2.TabIndex = 20;
+            this.pictureBox2.TabStop = false;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::ASCOM.Optec_IFW.Properties.Resources.Optec_Logo_medium_png;
+            this.pictureBox1.Location = new System.Drawing.Point(242, 135);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(198, 99);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 47;
+            this.pictureBox1.TabStop = false;
+            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.ClientSize = new System.Drawing.Size(471, 442);
+            this.ClientSize = new System.Drawing.Size(476, 407);
+            this.Controls.Add(this.Home_Btn);
             this.Controls.Add(this.AdvancedButton);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.cmdCancel);
             this.Controls.Add(this.cmdOK);
@@ -555,6 +567,7 @@ namespace ASCOM.Optec_IFW
             this.Controls.Add(this.label17);
             this.Controls.Add(this.SaveData_Btn);
             this.Controls.Add(this.Connect_BTN);
+            this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -564,10 +577,10 @@ namespace ASCOM.Optec_IFW
             this.Text = "Optec_IFW Setup";
             this.Load += new System.EventHandler(this.SetupDialogForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ComPort_Picker)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -585,7 +598,6 @@ namespace ASCOM.Optec_IFW
         private System.Windows.Forms.RadioButton IFW3_RB;
         private System.Windows.Forms.RadioButton IFW_RB;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label11;
@@ -619,5 +631,7 @@ namespace ASCOM.Optec_IFW
         private System.Windows.Forms.TextBox F6Offset_TB;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button AdvancedButton;
+        private System.Windows.Forms.Button Home_Btn;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

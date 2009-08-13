@@ -133,6 +133,8 @@
   <ItemGroup>
     <Content Include="ASCOM.png" />
     <Content Include="ReadMe.htm" />
+    <None Include="Resources\Optec Logo-medium png.png" />
+    <None Include="Resources\Optec Logo.png" />
     <None Include="Resources\OptecLogo5.jpg" />
     <None Include="Resources\optec_web_card.jpg" />
     <None Include="Resources\Optec Logo-medium.jpg" />

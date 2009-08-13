@@ -32,25 +32,39 @@ namespace ASCOM.Optec_IFW
         {
             IsAtHome = false;
             NumOfFilters = 0;
-            
-
-            
             SerialTools = new ASCOM.Helper.Serial();
             SerialTools.Speed = ASCOM.Helper.PortSpeed.ps19200;
             ProfileTools = new ASCOM.Helper.Profile();
             ProfileTools.DeviceTypeV = "FilterWheel";
+
         }
 
         public static void ConnectToDevice()
         {
+            Cursor.Current = Cursors.WaitCursor;
             SerialTools.Port = short.Parse(GetCOMPort());           //Get the Com Port number from the registry 
             //MessageBox.Show("Connecting");
             SerialTools.Connected = true;
             sendCmd("WSMODE", 500);
-            if (!SerialTools.Receive().Contains("!")) throw new Exception("Did not connect");
-            HomeDevice();
+            if (!SerialTools.Receive().Contains("!"))
+            {
+                Cursor.Current = Cursors.Default;
+                throw new Exception("Did not connect");    
+            }
+            GetWheelIdentity();
             GetNumOfPos();
+            string ReceivedFWType = ProfileTools.GetValue(FilterWheel.s_csDriverID, RegistryStrings.FW_Type.ToString(), "");
+            if (ReceivedFWType.ToString() == "IFW3")
+            {
+                FilterWheelType = TypesOfFWs.IFW3;
+            }
+            else if (ReceivedFWType.ToString() == "IFW")
+            {
+                FilterWheelType = TypesOfFWs.IFW;
+            }
+            else throw new Exception("You must open up the driver settings before connecting");
             OffsetsRegString = FilterWheelType.ToString() + "-WID:" + WheelID + "Offsets";
+            Cursor.Current = Cursors.Default;
         }
 
         public static bool CheckForConnection()
@@ -86,7 +100,7 @@ namespace ASCOM.Optec_IFW
             System.IO.Ports.SerialPort Port = new SerialPort();
             try
             {
-                
+                Cursor.Current = Cursors.WaitCursor;
                 Port.BaudRate = 19200;
                 Port.DataBits = 8;
                 Port.Parity = Parity.None;
@@ -99,10 +113,12 @@ namespace ASCOM.Optec_IFW
                 String Received = Port.ReadLine();
 
                 Port.Close();
+                Cursor.Current = Cursors.Default;
                 return Received;
             }
             catch (TimeoutException)
             {
+                Cursor.Current = Cursors.Default;
                 Port.Close();
                 return "Error: Response Timeout. Is the Receive Timeout set too short?";     
             }
@@ -110,6 +126,7 @@ namespace ASCOM.Optec_IFW
 
         public static bool HomeDevice()
         {
+            Cursor.Current = Cursors.WaitCursor;
             sendCmd("WHOMEZ", 20000);
             string inputbuff;
             try { inputbuff = SerialTools.Receive(); }
@@ -117,6 +134,7 @@ namespace ASCOM.Optec_IFW
             {
                 throw new Exception("Homing Failed. Response Timeout.");
             }
+            finally { Cursor.Current = Cursors.Default; }
             if (inputbuff.Contains("ER="))
             {
                 throw new Exception("Home procedure failed. Error = " + inputbuff);
@@ -126,26 +144,30 @@ namespace ASCOM.Optec_IFW
             {
                 IsAtHome = true;
                 WheelID = inputbuff[0];
-                
+                Cursor.Current = Cursors.Default;
                 return true;
             }
             
 
         }
 
-        // !!!!!!!Do not need because this is done in the homing procedure!!!!!!!!!!!!!!
-        //public static char GetWheelIdentity()
-        //{
-        //    sendCmd("WIDENT", 1000);
-        //    string inputbuff;
-        //    try { inputbuff = SerialTools.Receive(); }
-        //    catch (TimeoutException)
-        //    {
-        //        throw new Exception("Failed to get wheel identity. Response Timeout Occured");
-        //    }
-        //    if ((inputbuff.Length < 1)) throw new Exception("Failed to get wheel identity. Incorrect Response: " + inputbuff);
-        //    return inputbuff[0];
-        //}
+        public static void GetWheelIdentity()
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            sendCmd("WIDENT", 1000);
+            string inputbuff;
+
+            try { inputbuff = SerialTools.Receive(); }
+            catch (TimeoutException)
+            {
+                throw new Exception("Failed to get wheel identity. Response Timeout Occured");
+            }
+            finally { Cursor.Current = Cursors.Default; }
+
+            if ((inputbuff.Length < 1)) throw new Exception("Failed to get wheel identity. Incorrect Response: " + inputbuff);
+            WheelID = inputbuff[0];
+            Cursor.Current = Cursors.Default;
+        }
 
         public static short GetCurrentPos()
         {
@@ -176,10 +198,11 @@ namespace ASCOM.Optec_IFW
             {
                 throw new Exception("Failed to get current position. Response Timeout Occured");
             }
+            finally { Cursor.Current = Cursors.Default; }
             if (!inputbuff.Contains("*")) throw new Exception("Failed to get current position. Incorrect Response: " + inputbuff);
             //return inputbuff;
             if (inputbuff.Contains("ER=4")) throw new Exception("Failed to move to new position. Input Buffer: " + inputbuff);
-
+            Cursor.Current = Cursors.Default;
         }     
 
         public static string[] ReadAllNames()      //Rreturns a string of 40 characters that are the stored names for the filters
@@ -187,7 +210,9 @@ namespace ASCOM.Optec_IFW
             sendCmd("WREADZ", 1000);
             string inputbuff;
             string[] NamesToOutput = new string[NumOfFilters];
-            try { inputbuff = SerialTools.ReceiveCounted(40); }
+            int stringsize = 8 * NumOfFilters;
+            short ShortStringSize = short.Parse(stringsize.ToString());
+            try { inputbuff = SerialTools.ReceiveCounted(ShortStringSize); }
             #region Handle Errors
 		            catch (TimeoutException)
             {
@@ -208,18 +233,21 @@ namespace ASCOM.Optec_IFW
        
         public static void ExitProgramLoop()        //Exit the serial loop and return to normal manual operation
         {
-            sendCmd("WEXITS", 2000);
+            sendCmd("WEXITS", 3000);
             string inputbuff;
-            try { inputbuff = SerialTools.Receive(); }
-            catch (TimeoutException)
+            try { 
+                    inputbuff = SerialTools.Receive(); 
+                    if (!inputbuff.Contains("EN") )
+                    {
+
+                    }  
+                }
+            catch (Exception)    
             {
-                throw new Exception("Failed to execute EXIT command. Response Timeout Occured");
+                //go here if no message received, happens when already disconnected
             }
-            catch (Exception)
-            {
-                throw new Exception("Program Exit Failure: SerialTools.Received threw an exception");
-            }
-            if (!inputbuff.Contains("END")) throw new Exception("Failed execute EXIT command. Incorrect Response: " + inputbuff);
+  
+   
         }
         
         public static void SavePortNumber(string pn)    //this method saves the port number that has been selected to the registry
@@ -235,6 +263,7 @@ namespace ASCOM.Optec_IFW
         
         public static void StoreNames(string[] Names)            //Stores the filter names on the device memory
         {
+            Cursor.Current = Cursors.WaitCursor;
             string StringToWrite = "";
             foreach (string i in Names)
             {
@@ -245,7 +274,8 @@ namespace ASCOM.Optec_IFW
             sendCmd(StringToWrite, 1000);
             string inputbuffer = SerialTools.Receive();
             if (!inputbuffer.Contains("!")) throw new Exception("Error writing names to EEPROM. Input Buffer read: " + inputbuffer);
-            System.Threading.Thread.Sleep(2000);
+            System.Threading.Thread.Sleep(2500);    //wait for three seconds
+            Cursor.Current = Cursors.Default;
         }
 
         public static void StoreCenteringData(int ComPort, int NextValue, int BackValue)
@@ -424,7 +454,7 @@ namespace ASCOM.Optec_IFW
             string OffsetString = ProfileTools.GetValue(FilterWheel.s_csDriverID, OffsetsRegString, "");
             int[] Offsets = new int[NumOfFilters];
             if (OffsetString != "")
-            {
+            {   
                 for (int i = 0; i < NumOfFilters; i++)
                 {
                     string j = OffsetString.Substring(i * 8, 8);
