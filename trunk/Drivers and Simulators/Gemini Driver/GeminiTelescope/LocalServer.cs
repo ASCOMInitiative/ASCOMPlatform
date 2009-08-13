@@ -237,7 +237,7 @@ namespace ASCOM.GeminiTelescope
                     Assembly so = Assembly.LoadFrom(aPath);
 
                     //Added check to see if the dll has the ServedClassNameAttribute
-                    object[] attributes = so.GetCustomAttributes(typeof(ServedClassNameAttribute), false);
+                    object[] attributes = so.GetCustomAttributes(typeof(ASCOM.ServedClassNameAttribute), false);
                     if (attributes.Length > 0)
                     {
                         m_ComObjectTypes.Add(so.GetType(fqClassName, true));
@@ -373,8 +373,8 @@ namespace ASCOM.GeminiTelescope
                     //
                     assy = type.Assembly;
                     attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyProductAttribute));
-                    attr = Attribute.GetCustomAttribute(assy, typeof(ServedClassNameAttribute));
-                    string chooserName = ((ServedClassNameAttribute)attr).ServedClassName;
+                    attr = Attribute.GetCustomAttribute(assy, typeof(ASCOM.ServedClassNameAttribute));
+                    string chooserName = ((ASCOM.ServedClassNameAttribute)attr).DisplayName;
                     ASCOM.Utilities.Profile P = new ASCOM.Utilities.Profile();
                     P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
                     P.Register(progid, chooserName);
