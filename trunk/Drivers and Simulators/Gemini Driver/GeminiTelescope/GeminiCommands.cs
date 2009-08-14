@@ -173,7 +173,17 @@ namespace ASCOM.GeminiTelescope
             Commands.Add(":Sw", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
             Commands.Add(":Sz", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
 
-            Commands.Add(":W", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));                         
+            Commands.Add(":W", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
+
+            Commands.Add(":HC0", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
+            Commands.Add(":HC1", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
+            Commands.Add(":kD", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
+            Commands.Add(":kA", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
+            Commands.Add(":kH", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
+            Commands.Add(":kB", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
+            Commands.Add(":k@", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
+            Commands.Add(":kP", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
+            Commands.Add(":kI", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
         }
 
     }
