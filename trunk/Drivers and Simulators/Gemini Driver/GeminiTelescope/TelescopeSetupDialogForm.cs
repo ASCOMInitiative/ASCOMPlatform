@@ -149,6 +149,26 @@ namespace ASCOM.GeminiTelescope
         {
             SharedResources.SetTopWindow(this);
         }
+
+        private void buttonVirtualPort_Click(object sender, EventArgs e)
+        {
+            frmPassThroughPortSetup frm = new frmPassThroughPortSetup();
+            DialogResult res = frm.ShowDialog();
+            if (res == DialogResult.OK)
+            {
+                try
+                {
+                    GeminiHardware.PassThroughPortEnabled = frm.VirtualPortEnabled;
+                    GeminiHardware.PassThroughComPort = frm.ComPort;
+                    GeminiHardware.PassThroughBaudRate = int.Parse(frm.BaudRate);
+                }
+                catch 
+                {
+                    MessageBox.Show("Settings are invalid", SharedResources.TELESCOPE_DRIVER_NAME);
+                }
+            }
+        }
+
             
     }
 }
