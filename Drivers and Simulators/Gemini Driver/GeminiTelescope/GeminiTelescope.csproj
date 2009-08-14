@@ -74,6 +74,13 @@
   <ItemGroup>
     <Compile Include="AstronomyFunctions.cs" />
     <Compile Include="ClassFactory.cs" />
+    <Compile Include="frmPassThroughPortSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPassThroughPortSetup.Designer.cs">
+      <DependentUpon>frmPassThroughPortSetup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PassThroughPort.cs" />
     <Compile Include="FocuserSetupDialogForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -111,6 +118,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPassThroughPortSetup.resx">
+      <DependentUpon>frmPassThroughPortSetup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MountParameters.resx">
       <DependentUpon>MountParameters.cs</DependentUpon>
