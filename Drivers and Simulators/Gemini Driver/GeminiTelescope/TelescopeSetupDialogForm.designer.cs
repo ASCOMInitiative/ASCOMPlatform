@@ -43,7 +43,6 @@ namespace ASCOM.GeminiTelescope
             this.textBoxElevation = new System.Windows.Forms.TextBox();
             this.comboBoxLongitude = new System.Windows.Forms.ComboBox();
             this.textBoxLongitudeDegrees = new System.Windows.Forms.TextBox();
-            this.picASCOM = new System.Windows.Forms.PictureBox();
             this.labelVersion = new System.Windows.Forms.Label();
             this.labelTime = new System.Windows.Forms.Label();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -70,20 +69,22 @@ namespace ASCOM.GeminiTelescope
             this.comboBoxComPort = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
             this.comboBoxBaudRate = new System.Windows.Forms.ComboBox();
+            this.buttonVirtualPort = new System.Windows.Forms.Button();
+            this.picASCOM = new System.Windows.Forms.PictureBox();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.tableLayoutPanel3.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.SuspendLayout();
             // 
             // cmdOK
             // 
-            this.cmdOK.BackColor = System.Drawing.SystemColors.Control;
+            this.cmdOK.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.cmdOK.Location = new System.Drawing.Point(491, 169);
             this.cmdOK.Name = "cmdOK";
@@ -95,7 +96,7 @@ namespace ASCOM.GeminiTelescope
             // 
             // cmdCancel
             // 
-            this.cmdCancel.BackColor = System.Drawing.SystemColors.Control;
+            this.cmdCancel.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cmdCancel.Location = new System.Drawing.Point(491, 202);
             this.cmdCancel.Name = "cmdCancel";
@@ -109,7 +110,7 @@ namespace ASCOM.GeminiTelescope
             // 
             this.groupBox1.Controls.Add(this.tableLayoutPanel1);
             this.groupBox1.ForeColor = System.Drawing.Color.White;
-            this.groupBox1.Location = new System.Drawing.Point(12, 96);
+            this.groupBox1.Location = new System.Drawing.Point(12, 119);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(205, 128);
             this.groupBox1.TabIndex = 4;
@@ -155,7 +156,7 @@ namespace ASCOM.GeminiTelescope
             this.checkBoxUseGeminiSite.Size = new System.Drawing.Size(122, 16);
             this.checkBoxUseGeminiSite.TabIndex = 22;
             this.checkBoxUseGeminiSite.Text = "Use Gemini Site Info";
-            this.checkBoxUseGeminiSite.UseVisualStyleBackColor = true;
+            this.checkBoxUseGeminiSite.UseVisualStyleBackColor = false;
             // 
             // textBoxLongitudeMinutes
             // 
@@ -242,25 +243,12 @@ namespace ASCOM.GeminiTelescope
             this.textBoxLongitudeDegrees.Size = new System.Drawing.Size(34, 20);
             this.textBoxLongitudeDegrees.TabIndex = 11;
             // 
-            // picASCOM
-            // 
-            this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picASCOM.Image = global::ASCOM.GeminiTelescope.Properties.Resources.ASCOM;
-            this.picASCOM.Location = new System.Drawing.Point(502, 18);
-            this.picASCOM.Name = "picASCOM";
-            this.picASCOM.Size = new System.Drawing.Size(48, 56);
-            this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.picASCOM.TabIndex = 3;
-            this.picASCOM.TabStop = false;
-            this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
-            this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
-            // 
             // labelVersion
             // 
             this.labelVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelVersion.AutoSize = true;
             this.labelVersion.ForeColor = System.Drawing.Color.White;
-            this.labelVersion.Location = new System.Drawing.Point(9, 242);
+            this.labelVersion.Location = new System.Drawing.Point(9, 265);
             this.labelVersion.Name = "labelVersion";
             this.labelVersion.Size = new System.Drawing.Size(120, 13);
             this.labelVersion.TabIndex = 18;
@@ -271,7 +259,7 @@ namespace ASCOM.GeminiTelescope
             this.labelTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTime.AutoSize = true;
             this.labelTime.ForeColor = System.Drawing.Color.White;
-            this.labelTime.Location = new System.Drawing.Point(365, 242);
+            this.labelTime.Location = new System.Drawing.Point(360, 265);
             this.labelTime.Name = "labelTime";
             this.labelTime.Size = new System.Drawing.Size(185, 13);
             this.labelTime.TabIndex = 19;
@@ -357,7 +345,7 @@ namespace ASCOM.GeminiTelescope
             this.checkBox1.Size = new System.Drawing.Size(106, 17);
             this.checkBox1.TabIndex = 23;
             this.checkBox1.Text = "Use Gemini Time";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.UseVisualStyleBackColor = false;
             // 
             // labelLst
             // 
@@ -418,7 +406,7 @@ namespace ASCOM.GeminiTelescope
             // 
             // button1
             // 
-            this.button1.BackColor = System.Drawing.SystemColors.Control;
+            this.button1.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.button1.Location = new System.Drawing.Point(238, 198);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
@@ -435,7 +423,7 @@ namespace ASCOM.GeminiTelescope
             this.checkBoxAdvancedMode.Size = new System.Drawing.Size(125, 17);
             this.checkBoxAdvancedMode.TabIndex = 24;
             this.checkBoxAdvancedMode.Text = "Show Handbox Form";
-            this.checkBoxAdvancedMode.UseVisualStyleBackColor = true;
+            this.checkBoxAdvancedMode.UseVisualStyleBackColor = false;
             // 
             // checkBoxPrecession
             // 
@@ -446,7 +434,7 @@ namespace ASCOM.GeminiTelescope
             this.checkBoxPrecession.Size = new System.Drawing.Size(165, 17);
             this.checkBoxPrecession.TabIndex = 25;
             this.checkBoxPrecession.Text = "Gemini Calculates Precession";
-            this.checkBoxPrecession.UseVisualStyleBackColor = true;
+            this.checkBoxPrecession.UseVisualStyleBackColor = false;
             // 
             // checkBoxRefraction
             // 
@@ -458,7 +446,7 @@ namespace ASCOM.GeminiTelescope
             this.checkBoxRefraction.Size = new System.Drawing.Size(162, 17);
             this.checkBoxRefraction.TabIndex = 26;
             this.checkBoxRefraction.Text = "Gemini Calculates Refraction";
-            this.checkBoxRefraction.UseVisualStyleBackColor = true;
+            this.checkBoxRefraction.UseVisualStyleBackColor = false;
             // 
             // checkBoxAdditionalAlign
             // 
@@ -469,7 +457,7 @@ namespace ASCOM.GeminiTelescope
             this.checkBoxAdditionalAlign.Size = new System.Drawing.Size(234, 17);
             this.checkBoxAdditionalAlign.TabIndex = 27;
             this.checkBoxAdditionalAlign.Text = "Sync Does Additional Align (Updates Model)";
-            this.checkBoxAdditionalAlign.UseVisualStyleBackColor = true;
+            this.checkBoxAdditionalAlign.UseVisualStyleBackColor = false;
             // 
             // groupBox2
             // 
@@ -477,7 +465,7 @@ namespace ASCOM.GeminiTelescope
             this.groupBox2.ForeColor = System.Drawing.Color.White;
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(205, 78);
+            this.groupBox2.Size = new System.Drawing.Size(205, 101);
             this.groupBox2.TabIndex = 28;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Communications";
@@ -491,20 +479,21 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel2.Controls.Add(this.comboBoxComPort, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.label9, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.comboBoxBaudRate, 1, 1);
+            this.tableLayoutPanel2.Controls.Add(this.buttonVirtualPort, 1, 2);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 2;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 58.49057F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 41.50943F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(199, 59);
+            this.tableLayoutPanel2.RowCount = 3;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 31.69399F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 34.97268F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(199, 82);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 34);
+            this.label4.Location = new System.Drawing.Point(3, 25);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(61, 13);
             this.label4.TabIndex = 23;
@@ -515,7 +504,7 @@ namespace ASCOM.GeminiTelescope
             this.comboBoxComPort.FormattingEnabled = true;
             this.comboBoxComPort.Location = new System.Drawing.Point(102, 3);
             this.comboBoxComPort.Name = "comboBoxComPort";
-            this.comboBoxComPort.Size = new System.Drawing.Size(73, 21);
+            this.comboBoxComPort.Size = new System.Drawing.Size(89, 21);
             this.comboBoxComPort.TabIndex = 22;
             // 
             // label9
@@ -535,17 +524,41 @@ namespace ASCOM.GeminiTelescope
             "9600",
             "19200",
             "38400"});
-            this.comboBoxBaudRate.Location = new System.Drawing.Point(102, 37);
+            this.comboBoxBaudRate.Location = new System.Drawing.Point(102, 28);
             this.comboBoxBaudRate.Name = "comboBoxBaudRate";
-            this.comboBoxBaudRate.Size = new System.Drawing.Size(73, 21);
+            this.comboBoxBaudRate.Size = new System.Drawing.Size(89, 21);
             this.comboBoxBaudRate.TabIndex = 24;
+            // 
+            // buttonVirtualPort
+            // 
+            this.buttonVirtualPort.BackColor = System.Drawing.Color.Black;
+            this.buttonVirtualPort.Location = new System.Drawing.Point(102, 56);
+            this.buttonVirtualPort.Name = "buttonVirtualPort";
+            this.buttonVirtualPort.Size = new System.Drawing.Size(94, 23);
+            this.buttonVirtualPort.TabIndex = 25;
+            this.buttonVirtualPort.Text = "Pass-Through...";
+            this.buttonVirtualPort.UseVisualStyleBackColor = false;
+            this.buttonVirtualPort.Click += new System.EventHandler(this.buttonVirtualPort_Click);
+            // 
+            // picASCOM
+            // 
+            this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.picASCOM.Image = global::ASCOM.GeminiTelescope.Properties.Resources.ASCOM;
+            this.picASCOM.Location = new System.Drawing.Point(502, 18);
+            this.picASCOM.Name = "picASCOM";
+            this.picASCOM.Size = new System.Drawing.Size(48, 56);
+            this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.picASCOM.TabIndex = 3;
+            this.picASCOM.TabStop = false;
+            this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
+            this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
             // 
             // TelescopeSetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(562, 264);
+            this.ClientSize = new System.Drawing.Size(562, 287);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.checkBoxAdditionalAlign);
             this.Controls.Add(this.checkBoxRefraction);
@@ -570,7 +583,6 @@ namespace ASCOM.GeminiTelescope
             this.groupBox1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
             this.groupBox3.ResumeLayout(false);
@@ -580,6 +592,7 @@ namespace ASCOM.GeminiTelescope
             this.groupBox2.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -629,5 +642,6 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.ComboBox comboBoxComPort;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox comboBoxBaudRate;
+        private System.Windows.Forms.Button buttonVirtualPort;
     }
 }
