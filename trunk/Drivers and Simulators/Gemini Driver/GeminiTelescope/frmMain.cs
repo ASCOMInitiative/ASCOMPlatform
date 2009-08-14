@@ -64,8 +64,13 @@ namespace ASCOM.GeminiTelescope
             BaloonIcon.MouseClick += new MouseEventHandler(BaloonIcon_MouseClick);
             BaloonIcon.Visible = true;
             tmrBaloon.Tick += new EventHandler(tmrBaloon_Tick);
-
+            BaloonIcon.MouseDoubleClick += new MouseEventHandler(BaloonIcon_MouseDoubleClick);
             GeminiHardware.OnSafetyLimit += new SafetyDelegate(OnSafetyLimit);
+        }
+
+        void BaloonIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            ControlPanelMenu(sender, e);
         }
 
         void BaloonIcon_MouseClick(object sender, MouseEventArgs e)
@@ -267,14 +272,19 @@ namespace ASCOM.GeminiTelescope
 
             if (ans == DialogResult.OK)
             {
+                try
+                {
+                    GeminiHardware.ComPort = setupForm.ComPort;
+                    GeminiHardware.BaudRate = int.Parse(setupForm.BaudRate);
 
-                GeminiHardware.ComPort = setupForm.ComPort;
-                GeminiHardware.BaudRate = int.Parse(setupForm.BaudRate);
-
-                GeminiHardware.Elevation = setupForm.Elevation;
-                GeminiHardware.Latitude = setupForm.Latitude;
-                GeminiHardware.Longitude = setupForm.Longitude;
-                
+                    GeminiHardware.Elevation = setupForm.Elevation;
+                    GeminiHardware.Latitude = setupForm.Latitude;
+                    GeminiHardware.Longitude = setupForm.Longitude;
+                }
+                catch
+                {
+                    MessageBox.Show("Settings are invalid", SharedResources.TELESCOPE_DRIVER_NAME);
+                }
             }
 
             setupForm.Dispose();
