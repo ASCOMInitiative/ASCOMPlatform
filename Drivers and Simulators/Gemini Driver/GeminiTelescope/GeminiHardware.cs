@@ -206,6 +206,38 @@ namespace ASCOM.GeminiTelescope
         private static int m_DataBits;
         private static ASCOM.Utilities.SerialStopBits m_StopBits;
 
+        private static string m_PassThroughComPort;
+
+        public static string PassThroughComPort
+        {
+            get { return GeminiHardware.m_PassThroughComPort; }
+            set { 
+                GeminiHardware.m_PassThroughComPort = value;
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughComPort", value);
+            }
+        }
+
+        private static int m_PassThroughBaudRate;
+
+        public static int PassThroughBaudRate
+        {
+            get { return GeminiHardware.m_PassThroughBaudRate; }
+            set {
+                GeminiHardware.m_PassThroughBaudRate = value; 
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughBaudRate", value.ToString());
+            }
+        }
+        private static bool m_PassThroughPortEnabled;
+
+        public static bool PassThroughPortEnabled
+        {
+            get { return GeminiHardware.m_PassThroughPortEnabled; }
+            set { 
+                GeminiHardware.m_PassThroughPortEnabled = value;
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughPortEnabled", value.ToString());
+            }
+        }
+
         private static System.Threading.AutoResetEvent m_WaitForCommand;
 
         private static string m_PolledVariablesString = ":GR#:GD#:GA#:GZ#:Gv#:GS#:Gm#:h?#<99:F#";
@@ -226,7 +258,9 @@ namespace ASCOM.GeminiTelescope
         ;
         private static GeminiBootMode m_BootMode = GeminiBootMode.Prompt; 
 
-        private static SerialPort m_SerialPort;
+        private static SerialPort m_SerialPort; // main physical port
+
+        private static PassThroughPort m_PassThroughPort = new PassThroughPort();    // a secondary port (virtual) for connecting non-ASCOM compliant Gemini applications
 
         private static bool m_Connected = false; //Keep track of the connection status of the hardware
 
@@ -295,7 +329,6 @@ namespace ASCOM.GeminiTelescope
             m_CommandQueue = new Queue();
             m_Clients = 0;
 
-
             m_WaitForCommand = new System.Threading.AutoResetEvent(false);
 
             tmrReadTimeout.AutoReset = false;            
@@ -317,13 +350,20 @@ namespace ASCOM.GeminiTelescope
                 //Main Driver Settings
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "RegVer", SharedResources.REGISTRATION_VERSION);
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ComPort", "COM1");
+
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "BaudRate", "9600");
+
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AdditionalAlign", false.ToString());
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Precession", false.ToString());
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Refraction", false.ToString());
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AdvancedMode", false.ToString());
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiSite", true.ToString());
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiTime", true.ToString());
+
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughPortEnabled", false.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughComPort", "COM10");
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughBaudRate", "9600");
+
             }
 
             //Load up the values from saved
@@ -345,6 +385,11 @@ namespace ASCOM.GeminiTelescope
             if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "BaudRate", ""), out m_BaudRate))
                 m_BaudRate = 9600;
 
+
+            if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "BaudRate", ""), out m_BaudRate))
+                m_BaudRate = 9600;
+
+
             if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "DataBits", ""), out m_DataBits))
                 m_DataBits = 8;
 
@@ -365,6 +410,13 @@ namespace ASCOM.GeminiTelescope
 
             if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Longitude", ""), out m_Longitude))
                 m_Longitude = 0.0;
+
+            m_PassThroughComPort = m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughComPort", "");
+            if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughBaudRate", ""), out m_PassThroughBaudRate))
+                m_PassThroughBaudRate = 9600;
+
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughPortEnabled", ""), out m_PassThroughPortEnabled))
+                m_PassThroughPortEnabled = false;
 
 
             if (m_ComPort != "")
@@ -429,6 +481,8 @@ namespace ASCOM.GeminiTelescope
             s = m_Profile.GetValue(SharedResources.FOCUSER_PROGRAM_ID, "Speed");
             if (!int.TryParse(s, out m_Speed) || m_Speed < 1 || m_Speed > 3)
                 m_Speed = 1;
+
+            m_Profile.DeviceType = "Telescope";
 
         }
 
@@ -890,6 +944,8 @@ namespace ASCOM.GeminiTelescope
                     m_SerialPort.ReadBufferSize = 256;
                     //m_SerialPort.WriteBufferSize = 256;
 
+                    //m_SerialPort.Encoding = Encoding;
+
                     m_SerialPort.ErrorReceived += new SerialErrorReceivedEventHandler(m_SerialPort_ErrorReceived);
 
                     try
@@ -930,10 +986,19 @@ namespace ASCOM.GeminiTelescope
 
                         SendStartUpCommands();
 
+                        if (m_PassThroughPortEnabled)
+                            try {
+                                m_PassThroughPort.Initialize(m_PassThroughComPort, m_PassThroughBaudRate);   
+                            } 
+                            catch (Exception ptp_e)
+                            {
+                                GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Cannot open pass-through port: " +ptp_e.Message);
+                                if (OnError != null) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Cannot open pass-through port: " + ptp_e.Message);
+                            }
                     }
                     else
                     {
-                        if (OnError != null) OnError("Gemini Driver", "Gemini is not responding. Please check that it's connected.");
+                        if (OnError != null) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Gemini is not responding. Please check that it's connected.");
 
                         Disconnect();
                     }
@@ -1067,6 +1132,8 @@ namespace ASCOM.GeminiTelescope
                     m_SerialPort.Close();
                     m_BackgroundWorker = null;
 
+                    m_PassThroughPort.Stop();
+
                 }
                 if (OnConnect != null && bMessage) OnConnect(false, m_Clients);
             }
@@ -1090,7 +1157,7 @@ namespace ASCOM.GeminiTelescope
                     {
                         // gemini doesn't like too many long commands (buffer size problem?)
                         // remove up to x commands at a time
-                        int cnt = Math.Min(1, m_CommandQueue.Count);
+                        int cnt = Math.Min(10, m_CommandQueue.Count);
 
                         commands = new object[cnt]; // m_CommandQueue.ToArray();
                         for (int i = 0; i < cnt; ++i) commands[i] = m_CommandQueue.Dequeue();
@@ -1123,7 +1190,9 @@ namespace ASCOM.GeminiTelescope
                             if (ci.WaitObject == null) ci.m_Timeout = 2000;    // default timeout for requests where the user doesn't care
                         }
 
-                        m_SerialPort.DiscardInBuffer(); //clear all received data
+                        DiscardInBuffer();
+
+//                        m_SerialPort.DiscardInBuffer(); //clear all received data
 
                         System.Diagnostics.Trace.Write(
                             DateTime.Now.Hour.ToString("0") + ":" +
@@ -1205,6 +1274,22 @@ namespace ASCOM.GeminiTelescope
             m_CancelAsync = false;
         }
 
+        private static void DiscardInBuffer()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (m_PassThroughPort.PortActive)
+            {
+                while (m_SerialPort.BytesToRead > 0)
+                {
+                    int c = m_SerialPort.ReadByte();
+                    if (c>0x80) sb.Append(Convert.ToChar(c));
+                }
+                if (sb.Length > 0 && m_PassThroughPort.PortActive) m_PassThroughPort.PassStringToPort(sb);
+            }
+            else m_SerialPort.DiscardInBuffer();
+        }
+
         /// <summary>
         /// update all variable sthat are polled on an interval
         /// </summary>
@@ -1248,13 +1333,13 @@ namespace ASCOM.GeminiTelescope
         private static void UpdatePolledVariables()
         {
             CommandItem command;
-            
+
             // Gemini gets slow to respond when slewing, so increase timeout if we're in the middle of it:
             int timeout = (m_Velocity=="S" ? MAX_TIMEOUT : MAX_TIMEOUT/2);
 
             System.Diagnostics.Trace.Write("Poll commands: " + m_PolledVariablesString + "\r\n");
             //Get RA and DEC etc
-            m_SerialPort.DiscardInBuffer(); //clear all received data
+            DiscardInBuffer(); //clear all received data
             Transmit(m_PolledVariablesString);
 
             command = new CommandItem(":GR", timeout, true);
@@ -1497,6 +1582,7 @@ namespace ASCOM.GeminiTelescope
                 tmrReadTimeout.Stop();
             }
 
+                        
             if (m_SerialErrorOccurred.WaitOne(0))
             {
                 GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial comm error reported while processing command '" + command.m_Command + "'");
@@ -1505,7 +1591,7 @@ namespace ASCOM.GeminiTelescope
                 return null;  // error occurred!
             }
             // return value for native commands has a checksum appended: validate it and remove it from the return string:
-            if (!string.IsNullOrEmpty(result) && command.m_Command[0] == '<')
+            if (!string.IsNullOrEmpty(result) && command.m_Command[0] == '<' && !command.m_Raw)
             {
                 char chksum = result[result.Length - 1];
                 result = result.Substring(0, result.Length - 1); //remove checksum character
@@ -1584,20 +1670,33 @@ namespace ASCOM.GeminiTelescope
         /// <returns></returns>
         private static string ReadTo(char terminate)
         {
-            string res = "";
+            StringBuilder res = new StringBuilder();
+
+            StringBuilder outp = new StringBuilder();
 
             for (; ; )
             {
                 if (m_SerialPort.BytesToRead > 0)
                 {
-                    char c = (char)m_SerialPort.ReadChar();
+                    char c = Convert.ToChar(m_SerialPort.ReadByte());
+
                     if (c != terminate)
-                        res += c;
+                    {
+                        if ((int)c >= 0x80) outp.Append(c);
+                        else
+                            res.Append(c);
+                    }
                     else
-                        return res;
+                    {
+                        if (outp.Length > 0 && m_PassThroughPort.PortActive) m_PassThroughPort.PassStringToPort(outp);
+                        return res.ToString();
+                    }
                 }
                 else
+                {
+                    if (outp.Length > 0 && m_PassThroughPort.PortActive) m_PassThroughPort.PassStringToPort(outp);
                     if (m_SerialTimeoutExpired.WaitOne(0)) throw new TimeoutException("ReadTo");
+                }
             }
         }
 
@@ -1608,17 +1707,30 @@ namespace ASCOM.GeminiTelescope
         /// <returns></returns>
         private static string ReadNumber(int chars)
         {
-            string res = "";
+            StringBuilder res = new StringBuilder();
+            StringBuilder outp = new StringBuilder();
+
             for (; ; )
             {
                 if (m_SerialPort.BytesToRead > 0)
                 {
-                    char c = (char)m_SerialPort.ReadChar();
-                    res += c;
-                    if (res.Length == chars) return res;
+                    byte c = (byte)m_SerialPort.ReadByte();
+                    if ((int)c >= 0x80)
+                        outp.Append(Convert.ToChar(c));
+                    else
+                        res.Append(Convert.ToChar(c));
+
+                    if (res.Length == chars)
+                    {
+                        if (outp.Length > 0 && m_PassThroughPort.PortActive) m_PassThroughPort.PassStringToPort(outp);
+                        return res.ToString();
+                    }
                 }
                 else
+                {
+                    if (outp.Length > 0 && m_PassThroughPort.PortActive) m_PassThroughPort.PassStringToPort(outp);
                     if (m_SerialTimeoutExpired.WaitOne(0)) throw new TimeoutException("ReadNumber");
+                }
             }
         }
 
