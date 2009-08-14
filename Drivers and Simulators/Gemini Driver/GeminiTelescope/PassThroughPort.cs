@@ -41,7 +41,7 @@ namespace ASCOM.GeminiTelescope
         System.Threading.ManualResetEvent m_CancelAsync = new System.Threading.ManualResetEvent(false);
         System.Threading.ManualResetEvent m_DisplayDataAvailable = new System.Threading.ManualResetEvent(false);
         System.Threading.ManualResetEvent m_SerialDataAvailable = new System.Threading.ManualResetEvent(false);
-        StringBuilder m_DisplayString = new StringBuilder();
+        string m_DisplayString;
         object m_LockDisplayData = new object();
         bool m_PortActive = false;
 
@@ -72,13 +72,17 @@ namespace ASCOM.GeminiTelescope
 
             m_SerialPort.DtrEnable = true;
             m_SerialPort.ReceivedBytesThreshold = 1;
-            m_DisplayString = new StringBuilder();
+            m_DisplayString = String.Empty;
             m_DisplayDataAvailable.Reset();
             m_SerialDataAvailable.Reset();
+
+            m_SerialPort.DataReceived += new SerialDataReceivedEventHandler(SerialPort_DataReceived);
 
             m_CancelAsync.Reset();
             m_ListenerThread = new System.Threading.Thread(ListenUp);
             m_ListenerThread.Start();
+
+        
         }
 
         /// <summary>
@@ -110,16 +114,15 @@ namespace ASCOM.GeminiTelescope
             lock (m_LockDisplayData)
             {
                 if (s[0] == 0x8c)
-                    m_DisplayString = s;
+                    m_DisplayString = s.ToString();
                 else
-                    if (!m_DisplayString.ToString().Contains("\x99"))
-                        m_DisplayString.Append(s);
+                    if (!m_DisplayString.Contains("\x99"))
+                        m_DisplayString += s.ToString();
                     else
-                        m_DisplayString = s;
+                        m_DisplayString = s.ToString();
 
-                if (!m_DisplayString.ToString().Contains("\x99") && m_DisplayString[0] != 0x8c) return;
+                if (!m_DisplayString.Contains("\x99") && m_DisplayString[0] != 0x8c) return;
                 m_DisplayDataAvailable.Set();
-                m_SerialPort.DataReceived += new SerialDataReceivedEventHandler(SerialPort_DataReceived);
             }
         }
 
@@ -232,8 +235,7 @@ namespace ASCOM.GeminiTelescope
                             {
                                 lock (m_SerialPort)
                                 {
-                                    m_SerialPort.Write(Encoding.GetEncoding("Latin1").GetBytes(m_DisplayString.ToString()), 0, m_DisplayString.Length);
-//                                    m_SerialPort.Write(m_DisplayString.ToString());
+                                    m_SerialPort.Write(Encoding.GetEncoding("Latin1").GetBytes(m_DisplayString), 0, m_DisplayString.Length);
                                     m_SerialPort.BaseStream.Flush();
                                 }
 #if DEBUG
@@ -247,13 +249,13 @@ namespace ASCOM.GeminiTelescope
                                 }
                                 System.Diagnostics.Trace.WriteLine(" " + txt_out + " " + hx_out);
 #endif
-                                m_DisplayString.Length = 0;
+                                m_DisplayString = "";
                             }
                         }
                     }
 
                 }
-                System.Threading.WaitHandle.WaitAny(evts, 50); //wait for display or serial command data to become available, or just sleep for a while
+                System.Threading.WaitHandle.WaitAny(evts, 100); //wait for display or serial command data to become available, or just sleep for a while
             }
         }
     }
