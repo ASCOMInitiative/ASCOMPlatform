@@ -194,7 +194,7 @@ namespace ASCOM.GeminiTelescope
             // 
             // buttonSlew1
             // 
-            this.buttonSlew1.BackColor = System.Drawing.SystemColors.Control;
+            this.buttonSlew1.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.buttonSlew1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonSlew1.Location = new System.Drawing.Point(45, 3);
             this.buttonSlew1.Name = "buttonSlew1";
@@ -207,7 +207,7 @@ namespace ASCOM.GeminiTelescope
             // 
             // buttonSlew3
             // 
-            this.buttonSlew3.BackColor = System.Drawing.SystemColors.Control;
+            this.buttonSlew3.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.buttonSlew3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonSlew3.Location = new System.Drawing.Point(87, 45);
             this.buttonSlew3.Name = "buttonSlew3";
@@ -220,7 +220,7 @@ namespace ASCOM.GeminiTelescope
             // 
             // buttonSlew4
             // 
-            this.buttonSlew4.BackColor = System.Drawing.SystemColors.Control;
+            this.buttonSlew4.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.buttonSlew4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonSlew4.Location = new System.Drawing.Point(3, 45);
             this.buttonSlew4.Name = "buttonSlew4";
@@ -233,7 +233,7 @@ namespace ASCOM.GeminiTelescope
             // 
             // buttonSlew2
             // 
-            this.buttonSlew2.BackColor = System.Drawing.SystemColors.Control;
+            this.buttonSlew2.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.buttonSlew2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonSlew2.Location = new System.Drawing.Point(45, 87);
             this.buttonSlew2.Name = "buttonSlew2";
@@ -246,7 +246,7 @@ namespace ASCOM.GeminiTelescope
             // 
             // buttonSlew0
             // 
-            this.buttonSlew0.BackColor = System.Drawing.SystemColors.Control;
+            this.buttonSlew0.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.buttonSlew0.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonSlew0.Font = new System.Drawing.Font("Wingdings 2", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
             this.buttonSlew0.Location = new System.Drawing.Point(45, 45);
@@ -274,7 +274,7 @@ namespace ASCOM.GeminiTelescope
             this.checkBoxTrack.Size = new System.Drawing.Size(54, 17);
             this.checkBoxTrack.TabIndex = 10;
             this.checkBoxTrack.Text = "Track";
-            this.checkBoxTrack.UseVisualStyleBackColor = true;
+            this.checkBoxTrack.UseVisualStyleBackColor = false;
             // 
             // tableLayoutPanel4
             // 
@@ -340,7 +340,7 @@ namespace ASCOM.GeminiTelescope
             // 
             // ButtonPark
             // 
-            this.ButtonPark.BackColor = System.Drawing.SystemColors.Control;
+            this.ButtonPark.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ButtonPark.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ButtonPark.Location = new System.Drawing.Point(30, 3);
             this.ButtonPark.Name = "ButtonPark";
@@ -352,7 +352,7 @@ namespace ASCOM.GeminiTelescope
             // 
             // ButtonConnect
             // 
-            this.ButtonConnect.BackColor = System.Drawing.SystemColors.Control;
+            this.ButtonConnect.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.TableLayoutPanel3.SetColumnSpan(this.ButtonConnect, 5);
             this.ButtonConnect.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ButtonConnect.Location = new System.Drawing.Point(3, 30);
@@ -365,7 +365,7 @@ namespace ASCOM.GeminiTelescope
             // 
             // ButtonSetup
             // 
-            this.ButtonSetup.BackColor = System.Drawing.SystemColors.Control;
+            this.ButtonSetup.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ButtonSetup.ContextMenuStrip = this.contextMenuStrip1;
             this.ButtonSetup.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ButtonSetup.Location = new System.Drawing.Point(107, 3);
@@ -383,32 +383,32 @@ namespace ASCOM.GeminiTelescope
             this.focuserSetupDialogToolStripMenuItem,
             this.mountParametersToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(197, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(198, 70);
             // 
             // setupDialogToolStripMenuItem
             // 
             this.setupDialogToolStripMenuItem.Name = "setupDialogToolStripMenuItem";
-            this.setupDialogToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.setupDialogToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.setupDialogToolStripMenuItem.Text = "Telescope Setup Dialog";
             this.setupDialogToolStripMenuItem.Click += new System.EventHandler(this.setupDialogToolStripMenuItem_Click);
             // 
             // focuserSetupDialogToolStripMenuItem
             // 
             this.focuserSetupDialogToolStripMenuItem.Name = "focuserSetupDialogToolStripMenuItem";
-            this.focuserSetupDialogToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.focuserSetupDialogToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.focuserSetupDialogToolStripMenuItem.Text = "Focuser Setup Dialog";
             this.focuserSetupDialogToolStripMenuItem.Click += new System.EventHandler(this.focuserSetupDialogToolStripMenuItem_Click);
             // 
             // mountParametersToolStripMenuItem
             // 
             this.mountParametersToolStripMenuItem.Name = "mountParametersToolStripMenuItem";
-            this.mountParametersToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.mountParametersToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.mountParametersToolStripMenuItem.Text = "Mount Parameters";
             this.mountParametersToolStripMenuItem.Click += new System.EventHandler(this.mountParametersToolStripMenuItem_Click);
             // 
             // ButtonFlip
             // 
-            this.ButtonFlip.BackColor = System.Drawing.SystemColors.Control;
+            this.ButtonFlip.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ButtonFlip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ButtonFlip.Location = new System.Drawing.Point(3, 3);
             this.ButtonFlip.Name = "ButtonFlip";
@@ -428,14 +428,13 @@ namespace ASCOM.GeminiTelescope
             this.CheckBoxFlipDec.Size = new System.Drawing.Size(46, 30);
             this.CheckBoxFlipDec.TabIndex = 17;
             this.CheckBoxFlipDec.Text = "Flip\r\nDec";
-            this.CheckBoxFlipDec.UseVisualStyleBackColor = true;
+            this.CheckBoxFlipDec.UseVisualStyleBackColor = false;
             // 
             // GroupBox1
             // 
             this.GroupBox1.Controls.Add(this.RadioButtonSlew);
             this.GroupBox1.Controls.Add(this.RadioButtonCenter);
             this.GroupBox1.Controls.Add(this.RadioButtonGuide);
-            this.GroupBox1.ForeColor = System.Drawing.Color.Blue;
             this.GroupBox1.Location = new System.Drawing.Point(10, 267);
             this.GroupBox1.Name = "GroupBox1";
             this.GroupBox1.Size = new System.Drawing.Size(128, 38);
@@ -452,7 +451,7 @@ namespace ASCOM.GeminiTelescope
             this.RadioButtonSlew.Size = new System.Drawing.Size(32, 17);
             this.RadioButtonSlew.TabIndex = 2;
             this.RadioButtonSlew.Text = "S";
-            this.RadioButtonSlew.UseVisualStyleBackColor = true;
+            this.RadioButtonSlew.UseVisualStyleBackColor = false;
             // 
             // RadioButtonCenter
             // 
@@ -463,7 +462,7 @@ namespace ASCOM.GeminiTelescope
             this.RadioButtonCenter.Size = new System.Drawing.Size(32, 17);
             this.RadioButtonCenter.TabIndex = 1;
             this.RadioButtonCenter.Text = "C";
-            this.RadioButtonCenter.UseVisualStyleBackColor = true;
+            this.RadioButtonCenter.UseVisualStyleBackColor = false;
             // 
             // RadioButtonGuide
             // 
@@ -476,7 +475,7 @@ namespace ASCOM.GeminiTelescope
             this.RadioButtonGuide.TabIndex = 0;
             this.RadioButtonGuide.TabStop = true;
             this.RadioButtonGuide.Text = "G";
-            this.RadioButtonGuide.UseVisualStyleBackColor = true;
+            this.RadioButtonGuide.UseVisualStyleBackColor = false;
             // 
             // CheckBoxFlipRa
             // 
@@ -487,7 +486,7 @@ namespace ASCOM.GeminiTelescope
             this.CheckBoxFlipRa.Size = new System.Drawing.Size(42, 30);
             this.CheckBoxFlipRa.TabIndex = 15;
             this.CheckBoxFlipRa.Text = "Flip\r\nRa";
-            this.CheckBoxFlipRa.UseVisualStyleBackColor = true;
+            this.CheckBoxFlipRa.UseVisualStyleBackColor = false;
             // 
             // BaloonIcon
             // 
