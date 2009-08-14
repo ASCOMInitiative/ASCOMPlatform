@@ -6,354 +6,1093 @@ ASCOM.Astrometry
 </name>
 </assembly>
 <members>
-<member name="F:ASCOM.Astrometry.BodyType.Moon">
+<member name="M:ASCOM.Astrometry.Kepler.Ephemeris.#ctor">
 	<summary>
- Luna
+ Create a new Ephemeris component and initialise it
  </summary>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.BodyType.Sun">
+</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.a">
 	<summary>
- The Sun
+ Semi-major axis (AU)
  </summary>
+	<value>Semi-major axis in AU</value>
+	<returns>Semi-major axis in AU</returns>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.BodyType.MajorPlanet">
+</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.BodyType">
 	<summary>
- Major planet
+ The type of solar system body represented by this instance of the ephemeris engine (enum)
  </summary>
+	<value>The type of solar system body represented by this instance of the ephemeris engine (enum)</value>
+	<returns>0 for major planet, 1 for minot planet and 2 for comet</returns>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.BodyType.MinorPlanet">
+</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.e">
 	<summary>
- Minor planet
+ Orbital eccentricity
  </summary>
+	<value>Orbital eccentricity </value>
+	<returns>Orbital eccentricity </returns>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.BodyType.Comet">
+</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.Epoch">
 	<summary>
- Comet
+ Epoch of osculation of the orbital elements (terrestrial Julian date)
  </summary>
+	<value>Epoch of osculation of the orbital elements</value>
+	<returns>Terrestrial Julian date</returns>
 	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.BodyType">
+</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.G">
 	<summary>
- Type of body, Major Planet, Moon, Sun or Minor Planet
+ Slope parameter for magnitude
  </summary>
+	<value>Slope parameter for magnitude</value>
+	<returns>Slope parameter for magnitude</returns>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.Origin.Barycentric">
+</member><member name="M:ASCOM.Astrometry.Kepler.Ephemeris.GetPositionAndVelocity(System.Double)">
 	<summary>
- Centre of mass of the solar system
+ Compute rectangular (x/y/z) heliocentric J2000 equatorial coordinates of position (AU) and 
+ velocity (KM/sec.).
  </summary>
-	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.Origin.Heliocentric">
+	<param name="tjd">Terrestrial Julian date/time for which position and velocity is to be computed</param>
+	<returns>Array of 6 values containing rectangular (x/y/z) heliocentric J2000 equatorial 
+ coordinates of position (AU) and velocity (KM/sec.) for the body.</returns>
+	<remarks>The TJD parameter is the date/time as a Terrestrial Time Julian date. See below for 
+ more info. If you are using ACP, there are functions available to convert between UTC and 
+ Terrestrial time, and for estimating the current value of delta-T. See the Overview page for 
+ the Kepler.Ephemeris class for more information on time keeping systems.</remarks>
+</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.H">
 	<summary>
- Centre of mass of the Sun
+ Absolute visual magnitude
  </summary>
+	<value>Absolute visual magnitude</value>
+	<returns>Absolute visual magnitude</returns>
 	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.Origin">
+</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.Incl">
 	<summary>
- Co-ordinate origin: centre of Sun or solar system barycentre
+ The J2000.0 inclination (deg.)
  </summary>
+	<value>The J2000.0 inclination</value>
+	<returns>Degrees</returns>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.Body.Mercury">
+</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.M">
 	<summary>
- Mercury
+ Mean anomaly at the epoch
  </summary>
+	<value>Mean anomaly at the epoch</value>
+	<returns>Mean anomaly at the epoch</returns>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.Body.Venus">
+</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.n">
 	<summary>
- Venus
+ Mean daily motion (deg/day)
  </summary>
+	<value>Mean daily motion</value>
+	<returns>Degrees per day</returns>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.Body.Earth">
+</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.Name">
 	<summary>
- Earth
+ The name of the body.
  </summary>
-	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.Body.Mars">
+	<value>The name of the body or packed MPC designation</value>
+	<returns>The name of the body or packed MPC designation</returns>
+	<remarks>If this instance represents an unnumbered minor planet, Ephemeris.Name must be the 
+ packed MPC designation. For other types, this is for display only.</remarks>
+</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.Node">
 	<summary>
- Mars
+ The J2000.0 longitude of the ascending node (deg.)
  </summary>
+	<value>The J2000.0 longitude of the ascending node</value>
+	<returns>Degrees</returns>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.Body.Jupiter">
+</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.Number">
 	<summary>
- Jupiter
+ The major or minor planet number
  </summary>
+	<value>The major or minor planet number</value>
+	<returns>Number or zero if not numbered</returns>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.Body.Saturn">
+</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.P">
 	<summary>
- Saturn
+ Orbital period (years)
  </summary>
+	<value>Orbital period</value>
+	<returns>Years</returns>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.Body.Uranus">
+</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.Peri">
 	<summary>
- Uranus
+ The J2000.0 argument of perihelion (deg.)
  </summary>
+	<value>The J2000.0 argument of perihelion</value>
+	<returns>Degrees</returns>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.Body.Neptune">
+</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.q">
 	<summary>
- Neptune
+ Perihelion distance (AU)
  </summary>
+	<value>Perihelion distance</value>
+	<returns>AU</returns>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.Body.Pluto">
+</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.z">
 	<summary>
- Pluto
+ Reciprocal semi-major axis (1/AU)
  </summary>
+	<value>Reciprocal semi-major axis</value>
+	<returns>1/AU</returns>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.Body.Sun">
+</member><member name="T:ASCOM.Astrometry.Kepler.Ephemeris">
 	<summary>
- Sun
- </summary>
-	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.Body.Moon">
-	<summary>
- Moon
- </summary>
-	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.Body">
-	<summary>
- Body number starting with Mercury = 1
- </summary>
-	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.RefractionOption.NoRefraction">
-	<summary>
- No refraction correction will be applied
- </summary>
-	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.RefractionOption.StandardRefraction">
-	<summary>
- Refraction will be applied based on "standard" weather values of temperature = 10.0C and sea level pressure = 1010 millibar
- </summary>
-	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.RefractionOption.LocationRefraction">
-	<summary>
- Refraction will be applied based on the temperature and pressure supplied in the site location structure
- </summary>
-	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.RefractionOption">
-	<summary>
- Type of refraction correction
- </summary>
-	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.TransformationOption.ChangeEpoch">
-	<summary>
- Change epoch only
- </summary>
-	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.TransformationOption.ChangeEquatorAndEquinox">
-	<summary>
- Change equator and equinox
- </summary>
-	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.TransformationOption.ChangeEquatorAndEquinoxAndEpoch">
-	<summary>
- Change equator, equinox and epoch
- </summary>
-	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.TransformationOption">
-	<summary>
- Type of transformation: Epoch, Equator and Equinox or all three
- </summary>
-	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.NutationDirection.MeanToTrue">
-	<summary>
- Convert mean equator and equinox to true equator and equinox
- </summary>
-	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.NutationDirection.TrueToMean">
-	<summary>
- Convert true equator and equinox to mean equator and equinox
- </summary>
-	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.NutationDirection">
-	<summary>
- Direction of nutation correction
- </summary>
-	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.BodyDescription.Type">
-	<summary>
- Type of body
+ KEPLER: Ephemeris Object
  </summary>
 	<remarks>
- 0 = Major planet, Sun, or Moon
- 1 = Minor planet
+ The Kepler Ephemeris object contains an orbit engine which takes the orbital parameters of a solar system 
+ body, plus a a terrestrial date/time, and produces the heliocentric equatorial position and 
+ velocity vectors of the body in Cartesian coordinates. Orbital parameters are not required for 
+ the major planets, Kepler contains an ephemeris generator for these bodies that is within 0.05 
+ arc seconds of the JPL DE404 over a wide range of times, Perturbations from major planets are applied 
+ to ephemerides for minor planets. 
+ <para>The results are passed back as an array containing the two vectors. 
+ Note that this is the format expected for the ephemeris generator used by the NOVAS-COM vector 
+ astrometry engine. For more information see the description of Ephemeris.GetPositionAndVelocity().</para>
+		<para>
+			<b>Ephemeris Calculations</b><br/>
+ The ephemeris calculations in Kepler draw heavily from the work of 
+ Stephen Moshier moshier@world.std.com. kepler is released as a free software package, further 
+ extending the work of Mr. Moshier.</para>
+		<para>Kepler does not integrate orbits to the current epoch. If you want the accuracy resulting from 
+ an integrated orbit, you must integrate separately and supply Kepler with elements of the current 
+ epoch. Orbit integration is on the list of things for the next major version.</para>
+		<para>Kepler uses polynomial approximations for the major planet ephemerides. The tables 
+ of coefficients were derived by a least squares fit of periodic terms to JPL's DE404 ephemerides. 
+ The periodic frequencies used were determined by spectral analysis and comparison with VSOP87 and 
+ other analytical planetary theories. The least squares fit to DE404 covers the interval from -3000 
+ to +3000 for the outer planets, and -1350 to +3000 for the inner planets. For details on the 
+ accuracy of the major planet ephemerides, see the Accuracy Tables page. </para>
+		<para>
+			<b>Date and Time Systems</b><br/><br/>
+ For a detailed explanation of astronomical timekeeping systems, see A Time Tutorial on the NASA 
+ Goddard Spaceflight Center site, and the USNO Systems of Time site. 
+ <br/><br/><i>ActiveX Date values </i><br/>
+ These are the Windows standard "date serial" numbers, and are expressed in local time or 
+ UTC (see below). The fractional part of these numbers represents time within a day. 
+ They are used throughout applications such as Excel, Visual Basic, VBScript, and other 
+ ActiveX capable environments. 
+ <br/><br/><i>Julian dates </i><br/>
+ These are standard Julian "date serial" numbers, and are expressed in UTC time or Terrestrial 
+ time. The fractional part of these numbers represents time within a day. The standard ActiveX 
+ "Double" precision of 15 digits gives a resolution of about one millisecond in a full Julian date. 
+ This is sufficient for the purposes of this program. 
+ <br/><br/><i>Hourly Time Values </i><br/>
+ These are typically used to represent sidereal time and right ascension. They are simple real 
+ numbers in units of hours. 
+ <br/><br/><i>UTC Time Scale </i><br/>
+ Most of the ASCOM methods and properties that accept date/time values (either Date or Julian) 
+ assume that the date/time is in Coordinated Universal Time (UTC). Where necessary, this time 
+ is converted internally to other scales. Note that UTC seconds are based on the Cesium atom, 
+ not planetary motions. In order to keep UTC in sync with planetary motion, leap seconds are 
+ inserted periodically. The error is at most 900 milliseconds.
+ <br/><br/><i>UT1 Time Scale </i><br/>
+ The UT1 time scale is the planetary equivalent of UTC. It it runs smoothly and varies a bit 
+ with time, but it is never more than 900 milliseconds different from UTC. 
+ <br/><br/><i>TT Time Scale </i><br/>
+ The Terrestrial Dynamical Time (TT) scale is used in solar system orbital calculations. 
+ It is based completely on planetary motions; you can think of the solar system as a giant 
+ TT clock. It differs from UT1 by an amount called "delta-t", which slowly increases with time, 
+ and is about 60 seconds right now (2001). </para>
+	</remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.Earth.#ctor">
+	<summary>
+ Create a new instance of the Earth object
+ </summary>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Earth.BarycentricPosition">
+	<summary>
+ Earth barycentric position
+ </summary>
+	<value>Barycentric position vector</value>
+	<returns>AU (Ref J2000)</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Earth.BarycentricTime">
+	<summary>
+ Earth barycentric time 
+ </summary>
+	<value>Barycentric dynamical time for given Terrestrial Julian Date</value>
+	<returns>Julian date</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Earth.BarycentricVelocity">
+	<summary>
+ Earth barycentric velocity 
+ </summary>
+	<value>Barycentric velocity vector</value>
+	<returns>AU/day (ref J2000)</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Earth.EarthEphemeris">
+	<summary>
+ Ephemeris object used to provide the position of the Earth.
+ </summary>
+	<value>Earth ephemeris object </value>
+	<returns>Earth ephemeris object</returns>
+	<remarks>
+ Setting this is optional, if not set, the internal Kepler engine will be used.</remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Earth.EquationOfEquinoxes">
+	<summary>
+ Earth equation of equinoxes 
+ </summary>
+	<value>Equation of the equinoxes</value>
+	<returns>Seconds</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Earth.HeliocentricPosition">
+	<summary>
+ Earth heliocentric position
+ </summary>
+	<value>Heliocentric position vector</value>
+	<returns>AU (ref J2000)</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Earth.HeliocentricVelocity">
+	<summary>
+ Earth heliocentric velocity 
+ </summary>
+	<value>Heliocentric velocity</value>
+	<returns>Velocity vector, AU/day (ref J2000)</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Earth.MeanObliquity">
+	<summary>
+ Earth mean objiquity
+ </summary>
+	<value>Mean obliquity of the ecliptic</value>
+	<returns>Degrees</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Earth.NutationInLongitude">
+	<summary>
+ Earth nutation in longitude 
+ </summary>
+	<value>Nutation in longitude</value>
+	<returns>Degrees</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Earth.NutationInObliquity">
+	<summary>
+ Earth nutation in obliquity 
+ </summary>
+	<value>Nutation in obliquity</value>
+	<returns>Degrees</returns>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.Earth.SetForTime(System.Double)">
+	<summary>
+ Initialize the Earth object for given terrestrial Julian date
+ </summary>
+	<param name="tjd">Terrestrial Julian date</param>
+	<returns>True if successful, else throws an exception</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Earth.TrueObliquity">
+	<summary>
+ Earth true obliquity 
+ </summary>
+	<value>True obliquity of the ecliptic</value>
+	<returns>Degrees</returns>
+	<remarks></remarks>
+</member><member name="T:ASCOM.Astrometry.NOVASCOM.Earth">
+	<summary>
+ NOVAS-COM: Represents the "state" of the Earth at a given Terrestrial Julian date
+ </summary>
+	<remarks>NOVAS-COM objects of class Earth represent the "state" of the Earth at a given Terrestrial Julian date. 
+ The state includes barycentric and heliocentric position vectors for the earth, plus obliquity, 
+ nutation and the equation of the equinoxes. Unless set by the client, the Earth ephemeris used is 
+ computed using an internal approximation. The client may optionally attach an ephemeris object for 
+ increased accuracy. 
+ <para><b>Ephemeris Generator</b><br/>
+ The ephemeris generator object used with NOVAS-COM must support a single 
+ method GetPositionAndVelocity(tjd). This method must take a terrestrial Julian date (like the 
+ NOVAS-COM methods) as its single parameter, and return an array of Double 
+ containing the rectangular (x/y/z) heliocentric J2000 equatorial coordinates of position (AU) and velocity 
+ (KM/sec.). In addition, it must support three read/write properties BodyType, Name, and Number, 
+ which correspond to the Type, Name, and Number properties of Novas.Planet. 
+ </para></remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.Planet.#ctor">
+	<summary>
+ Create a new instance of the Plant class
+ </summary>
+	<remarks>This assigns default Kepler instances for the Earth and Planet objects so it is
+ not necessary to create and attach Kepler objects in order to get Kepler accuracy from this
+ component</remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Planet.DeltaT">
+	<summary>
+ Planet delta-T
+ </summary>
+	<value>The value of delta-T (TT - UT1) to use for reductions</value>
+	<returns>Seconds</returns>
+	<remarks>Setting this value is optional. If no value is set, an internal delta-T generator is used.</remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Planet.EarthEphemeris">
+	<summary>
+ Ephemeris object used to provide the position of the Earth.
+ </summary>
+	<value>Earth ephemeris object</value>
+	<returns>Earth ephemeris object</returns>
+	<remarks>
+ Setting this is optional, if not set, the internal Kepler engine will be used.</remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Planet.Ephemeris">
+	<summary>
+ The Ephemeris object used to provide positions of solar system bodies.
+ </summary>
+	<value>Body ephemeris object</value>
+	<returns>Body ephemeris object</returns>
+	<remarks>
+ Setting this is optional, if not set, the internal Kepler engine will be used.
  </remarks>
-</member><member name="F:ASCOM.Astrometry.BodyDescription.Number">
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.Planet.GetApparentPosition(System.Double)">
 	<summary>
- body number
+ Get an apparent position for given time
  </summary>
-	<remarks><pre>
- For 'type' = 0: Mercury = 1, ..., Pluto = 9, Sun = 10, Moon = 11
- For 'type' = 1: minor planet number
- </pre></remarks>
-</member><member name="F:ASCOM.Astrometry.BodyDescription.Name">
+	<param name="tjd">Terrestrial Julian Date for the position</param>
+	<returns>PositionVector for the apparent place.</returns>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.Planet.GetAstrometricPosition(System.Double)">
 	<summary>
- Name of the body (limited to 99 characters)
+ Get an astrometric position for given time
+ </summary>
+	<param name="tjd">Terrestrial Julian Date for the position</param>
+	<returns>PositionVector for the astrometric place.</returns>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.Planet.GetLocalPosition(System.Double,ASCOM.Astrometry.NOVASCOM.Site)">
+	<summary>
+ Get an local position for given time
+ </summary>
+	<param name="tjd">Terrestrial Julian Date for the position</param>
+	<param name="site">The observing site</param>
+	<returns>PositionVector for the local place.</returns>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.Planet.GetTopocentricPosition(System.Double,ASCOM.Astrometry.NOVASCOM.Site,System.Boolean)">
+	<summary>
+ Get a topocentric position for given time
+ </summary>
+	<param name="tjd">Terrestrial Julian Date for the position</param>
+	<param name="site">The observing site</param>
+	<param name="Refract">Apply refraction correction</param>
+	<returns>PositionVector for the topocentric place.</returns>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.Planet.GetVirtualPosition(System.Double)">
+	<summary>
+ Get a virtual position for given time
+ </summary>
+	<param name="tjd">Terrestrial Julian Date for the position</param>
+	<returns>PositionVector for the virtual place.</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Planet.Name">
+	<summary>
+ Planet name
+ </summary>
+	<value>For unnumbered minor planets, (Type=nvMinorPlanet and Number=0), the packed designation 
+ for the minor planet. For other types, this is not significant, but may be used to store 
+ a name.</value>
+	<returns>Name of planet</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Planet.Number">
+	<summary>
+ Planet number
+ </summary>
+	<value>For major planets (Type=nvMajorPlanet), a PlanetNumber value. For minor planets 
+ (Type=nvMinorPlanet), the number of the minor planet or 0 for unnumbered minor planet.</value>
+	<returns>Planet number</returns>
+	<remarks>The major planet number is its number out from the sun starting with Mercury = 1</remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Planet.Type">
+	<summary>
+ The type of solar system body
+ </summary>
+	<value>The type of solar system body</value>
+	<returns>Value from the BodyType enum</returns>
+	<remarks></remarks>
+</member><member name="T:ASCOM.Astrometry.NOVASCOM.Planet">
+	<summary>
+ NOVAS-COM: Provide characteristics of a solar system body
+ </summary>
+	<remarks>NOVAS-COM objects of class Planet hold the characteristics of a solar system body. Properties are 
+ type (major or minor planet), number (for major and numbered minor planets), name (for unnumbered 
+ minor planets and comets), the ephemeris object to be used for orbital calculations, an optional 
+ ephemeris object to use for barycenter calculations, and an optional value for delta-T. 
+ <para>The high-level NOVAS astrometric functions are implemented as methods of Planet: 
+ GetTopocentricPosition(), GetLocalPosition(), GetApparentPosition(), GetVirtualPosition(), 
+ and GetAstrometricPosition(). These methods operate on the properties of the Planet, and produce 
+ a PositionVector object. For example, to get the topocentric coordinates of a planet, create and 
+ initialize a planet, create initialize and attach an ephemeris object, then call 
+ Planet.GetTopocentricPosition(). The resulting PositionVector's right ascension and declination 
+ properties are the topocentric equatorial coordinates, at the same time, the (optionally 
+ refracted) alt-az coordinates are calculated, and are also contained within the returned 
+ PositionVector. <b>Note that Alt/Az is available in PositionVectors returned from calling 
+ GetTopocentricPosition().</b> The accuracy of these calculations is typically dominated by the accuracy 
+ of the attached ephemeris generator. </para>
+		<para><b>Ephemeris Generator</b><br/>
+ By default, Kepler instances are attached for both Earth and Planet objects so it is
+ not necessary to create and attach these in order to get Kepler accuracy from this
+ component</para>
+		<para>The ephemeris generator object used with NOVAS-COM must support a single 
+ method GetPositionAndVelocity(tjd). This method must take a terrestrial Julian date (like the 
+ NOVAS-COM methods) as its single parameter, and return an array of Double 
+ containing the rectangular (x/y/z) heliocentric J2000 equatorial coordinates of position (AU) and velocity 
+ (KM/sec.). In addition, it must support three read/write properties BodyType, Name, and Number, 
+ which correspond to the Type, Name, and Number properties of Novas.Planet. 
+ </para>
+	</remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.PositionVector.#ctor">
+	<summary>
+ Create a new, uninitialised position vector
  </summary>
 	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.BodyDescription">
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.PositionVector.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
 	<summary>
- Structure to hold body type, number and name
+  Create a new position vector with supplied initial values
  </summary>
-	<remarks>Designates a celestial object.
+	<param name="x">Position vector x co-ordinate</param>
+	<param name="y">Position vector y co-ordinate</param>
+	<param name="z">Position vector z co-ordinate</param>
+	<param name="RA">Right ascension (hours)</param>
+	<param name="DEC">Declination (degrees)</param>
+	<param name="Distance">Distance to object</param>
+	<param name="Light">Light-time to object</param>
+	<param name="Azimuth">Object azimuth</param>
+	<param name="Altitude">Object altitude</param>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.PositionVector.Aberration(ASCOM.Astrometry.NOVASCOM.VelocityVector)">
+	<summary>
+ Adjust the position vector of an object for aberration of light
+ </summary>
+	<param name="vel">The velocity vector of the observer</param>
+	<remarks>The algorithm includes relativistic terms</remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.PositionVector.Azimuth">
+	<summary>
+ The azimuth coordinate (degrees, + east)
+ </summary>
+	<value>The azimuth coordinate</value>
+	<returns>Degrees, + East</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.PositionVector.Declination">
+	<summary>
+ Declination coordinate
+ </summary>
+	<value>Declination coordinate</value>
+	<returns>Degrees</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.PositionVector.Distance">
+	<summary>
+ Distance/Radius coordinate
+ </summary>
+	<value>Distance/Radius coordinate</value>
+	<returns>AU</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.PositionVector.Elevation">
+	<summary>
+ The elevation (altitude) coordinate (degrees, + up)
+ </summary>
+	<value>The elevation (altitude) coordinate (degrees, + up)</value>
+	<returns>(Degrees, + up</returns>
+	<remarks>Elevation is available only in PositionVectors returned from calls to 
+ Star.GetTopocentricPosition() and/or Planet.GetTopocentricPosition(). </remarks>
+	<exception cref="T:ASCOM.Astrometry.Exceptions.ValueNotAvailableException">When the position vector has not been 
+ initialised from Star.GetTopoCentricPosition and Planet.GetTopocentricPosition</exception>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.PositionVector.LightTime">
+	<summary>
+ Light time from body to origin, days.
+ </summary>
+	<value>Light time from body to origin</value>
+	<returns>Days</returns>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.PositionVector.Precess(System.Double,System.Double)">
+	<summary>
+ Adjust the position vector for precession of equinoxes between two given epochs
+ </summary>
+	<param name="tjd">The first epoch (Terrestrial Julian Date)</param>
+	<param name="tjd2">The second epoch (Terrestrial Julian Date)</param>
+	<remarks>The coordinates are referred to the mean equator and equinox of the two respective epochs.</remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.PositionVector.ProperMotion(ASCOM.Astrometry.NOVASCOM.VelocityVector,System.Double,System.Double)">
+	<summary>
+ Adjust the position vector for proper motion (including foreshortening effects)
+ </summary>
+	<param name="vel">The velocity vector of the object</param>
+	<param name="tjd1">The first epoch (Terrestrial Julian Date)</param>
+	<param name="tjd2">The second epoch (Terrestrial Julian Date)</param>
+	<returns>True if successful or throws an exception.</returns>
+	<remarks></remarks>
+	<exception cref="T:ASCOM.Astrometry.Exceptions.ValueNotSetException">If the position vector x, y or z values has not been set</exception>
+	<exception cref="T:ASCOM.Astrometry.Exceptions.ValueNotAvailableException">If the supplied velocity vector does not have valid x, y and z components</exception>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.PositionVector.RightAscension">
+	<summary>
+ RightAscension coordinate, hours
+ </summary>
+	<value>RightAscension coordinate</value>
+	<returns>Hours</returns>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.PositionVector.SetFromSite(ASCOM.Astrometry.NOVASCOM.Site,System.Double)">
+	<summary>
+ Initialize the PositionVector from a Site object and Greenwich apparent sidereal time.
+ </summary>
+	<param name="site">The Site object from which to initialize</param>
+	<param name="gast">Greenwich Apparent Sidereal Time</param>
+	<returns>True if successful or throws an exception</returns>
+	<remarks>The GAST parameter must be for Greenwich, not local. The time is rotated through the 
+ site longitude. See SetFromSiteJD() for an equivalent method that takes UTC Julian Date and 
+ Delta-T (eliminating the need for calculating hyper-accurate GAST yourself).</remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.PositionVector.SetFromSiteJD(ASCOM.Astrometry.NOVASCOM.Site,System.Double)">
+	<summary>
+ Initialize the PositionVector from a Site object using UTC Julian date
+ </summary>
+	<param name="site">The Site object from which to initialize</param>
+	<param name="ujd">UTC Julian Date</param>
+	<returns>True if successful or throws an exception</returns>
+	<remarks>The Julian date must be UTC Julian date, not terrestrial. Calculations will use the internal delta-T tables and estimator to get 
+ delta-T. 
+ This overload is not available through COM, please use 
+ "SetFromSiteJD(ByVal site As Site, ByVal ujd As Double, ByVal delta_t As Double)"
+ with delta_t set to 0.0 to achieve this effect.
  </remarks>
-</member><member name="F:ASCOM.Astrometry.CatEntry.Catalog">
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.PositionVector.SetFromSiteJD(ASCOM.Astrometry.NOVASCOM.Site,System.Double,System.Double)">
 	<summary>
- 3-character catalog designator. 
+ Initialize the PositionVector from a Site object using UTC Julian date and Delta-T
+ </summary>
+	<param name="site">The Site object from which to initialize</param>
+	<param name="ujd">UTC Julian Date</param>
+	<param name="delta_t">The value of Delta-T (TT - UT1) to use for reductions (seconds)</param>
+	<returns>True if successful or throws an exception</returns>
+	<remarks>The Julian date must be UTC Julian date, not terrestrial.</remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.PositionVector.SetFromStar(ASCOM.Astrometry.NOVASCOM.Star)">
+	<summary>
+ Initialize the PositionVector from a Star object.
+ </summary>
+	<param name="star">The Star object from which to initialize</param>
+	<returns>True if successful or throws an exception</returns>
+	<remarks></remarks>
+	<exception cref="T:ASCOM.Astrometry.Exceptions.ValueNotAvailableException">If Parallax, RightAScension or Declination is not available in the supplied star object.</exception>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.PositionVector.x">
+	<summary>
+ Position cartesian x component
+ </summary>
+	<value>Cartesian x component</value>
+	<returns>Cartesian x component</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.PositionVector.y">
+	<summary>
+ Position cartesian y component
+ </summary>
+	<value>Cartesian y component</value>
+	<returns>Cartesian y component</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.PositionVector.z">
+	<summary>
+ Position cartesian z component
+ </summary>
+	<value>Cartesian z component</value>
+	<returns>Cartesian z component</returns>
+	<remarks></remarks>
+</member><member name="T:ASCOM.Astrometry.NOVASCOM.PositionVector">
+	<summary>
+ NOVAS-COM: PositionVector Class
+ </summary>
+	<remarks>NOVAS-COM objects of class PositionVector contain vectors used for positions (earth, sites, 
+ stars and planets) throughout NOVAS-COM. Of course, its properties include the x, y, and z 
+ components of the position. Additional properties are right ascension and declination, distance, 
+ and light time (applicable to star positions), and Alt/Az (available only in PositionVectors 
+ returned by Star or Planet methods GetTopocentricPosition()). You can initialize a PositionVector 
+ from a Star object (essentially an FK5 or HIP catalog entry) or a Site (lat/long/height). 
+ PositionVector has methods that can adjust the coordinates for precession, aberration and 
+ proper motion. Thus, a PositionVector object gives access to some of the lower-level NOVAS functions. 
+ <para><b>Note:</b> The equatorial coordinate properties of this object are dependent variables, and thus are read-only. Changing any cartesian coordinate will cause the equatorial coordinates to be recalculated. 
+ </para></remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.Site.#ctor">
+	<summary>
+ Initialises a new site object
  </summary>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.CatEntry.StarName">
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Site.Height">
 	<summary>
- Name of star.
+ Height above mean sea level
+ </summary>
+	<value>Height above mean sea level</value>
+	<returns>Meters</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Site.Latitude">
+	<summary>
+ Geodetic latitude (degrees, + north)
+ </summary>
+	<value>Geodetic latitude</value>
+	<returns>Degrees, + north</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Site.Longitude">
+	<summary>
+ Geodetic longitude (degrees, + east)
+ </summary>
+	<value>Geodetic longitude</value>
+	<returns>Degrees, + east</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Site.Pressure">
+	<summary>
+ Barometric pressure (millibars)
+ </summary>
+	<value>Barometric pressure</value>
+	<returns>Millibars</returns>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.Site.Set(System.Double,System.Double,System.Double)">
+	<summary>
+ Set all site properties in one method call
+ </summary>
+	<param name="Latitude">The geodetic latitude (degrees, + north)</param>
+	<param name="Longitude">The geodetic longitude (degrees, +east)</param>
+	<param name="Height">Height above sea level (meters)</param>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Site.Temperature">
+	<summary>
+ Ambient temperature (deg. Celsius)
+ </summary>
+	<value>Ambient temperature</value>
+	<returns>Degrees Celsius)</returns>
+	<remarks></remarks>
+</member><member name="T:ASCOM.Astrometry.NOVASCOM.Site">
+	<summary>
+ NOVAS-COM: Site Class
+ </summary>
+	<remarks>NOVAS-COM objects of class Site contain the specifications for an observer's location on the Earth 
+ ellipsoid. Properties are latitude, longitude, height above mean sea level, the ambient temperature 
+ and the sea-level barmetric pressure. The latter two are used only for optional refraction corrections. 
+ Latitude and longitude are (common) geodetic, not geocentric. </remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.Star.#ctor">
+	<summary>
+ Initialise a new instance of the star class
  </summary>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.CatEntry.StarNumber">
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Star.Catalog">
 	<summary>
- Integer identifier assigned to star.
+ Three character catalog code for the star's data
  </summary>
-	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.CatEntry.RA">
+	<value>Three character catalog code for the star's data</value>
+	<returns>Three character catalog code for the star's data</returns>
+	<remarks>Typically "FK5" but may be "HIP". For information only.</remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Star.Declination">
 	<summary>
- Mean right ascension [hours].
+ Mean catalog J2000 declination coordinate (degrees)
  </summary>
+	<value>Mean catalog J2000 declination coordinate</value>
+	<returns>Degrees</returns>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.CatEntry.Dec">
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Star.DeltaT">
 	<summary>
- Mean declination [degrees].
+ The value of delta-T (TT - UT1) to use for reductions.
  </summary>
-	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.CatEntry.ProMoRA">
+	<value>The value of delta-T (TT - UT1) to use for reductions.</value>
+	<returns>Seconds</returns>
+	<remarks>If this property is not set, calculations will use an internal function to estimate delta-T.</remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Star.EarthEphemeris">
 	<summary>
- Proper motion in RA [seconds of time per century].
+ Ephemeris object used to provide the position of the Earth.
  </summary>
-	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.CatEntry.ProMoDec">
+	<value>Ephemeris object used to provide the position of the Earth.</value>
+	<returns>Ephemeris object</returns>
+	<remarks>If this value is not set, an internal Kepler object will be used to determine 
+ Earth ephemeris</remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.Star.GetApparentPosition(System.Double)">
 	<summary>
- Proper motion in declination [arcseconds per century].
+ Get an apparent position for a given time
  </summary>
+	<param name="tjd">Terrestrial Julian Date for the position</param>
+	<returns>PositionVector for the apparent place.</returns>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.CatEntry.Parallax">
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.Star.GetAstrometricPosition(System.Double)">
 	<summary>
- Parallax [arcseconds].
+ Get an astrometric position for a given time
  </summary>
+	<param name="tjd">Terrestrial Julian Date for the position</param>
+	<returns>PositionVector for the astrometric place.</returns>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.CatEntry.RadialVelocity">
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.Star.GetLocalPosition(System.Double,ASCOM.Astrometry.NOVASCOM.Site)">
 	<summary>
- Radial velocity [kilometers per second]
+ Get a local position for a given site and time
  </summary>
+	<param name="tjd">Terrestrial Julian Date for the position</param>
+	<param name="site">A Site object representing the observing site</param>
+	<returns>PositionVector for the local place.</returns>
 	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.CatEntry">
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.Star.GetTopocentricPosition(System.Double,ASCOM.Astrometry.NOVASCOM.Site,System.Boolean)">
 	<summary>
- Structure to hold astrometric catalogue data
+ Get a topocentric position for a given site and time
+ </summary>
+	<param name="tjd">Terrestrial Julian Date for the position</param>
+	<param name="site">A Site object representing the observing site</param>
+	<param name="Refract">True to apply atmospheric refraction corrections</param>
+	<returns>PositionVector for the topocentric place.</returns>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.Star.GetVirtualPosition(System.Double)">
+	<summary>
+ Get a virtual position at a given time
+ </summary>
+	<param name="tjd">Terrestrial Julian Date for the position</param>
+	<returns>PositionVector for the virtual place.</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Star.Name">
+	<summary>
+ The catalog name of the star (50 char max)
+ </summary>
+	<value>The catalog name of the star</value>
+	<returns>Name (50 char max)</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Star.Number">
+	<summary>
+ The catalog number of the star
+ </summary>
+	<value>The catalog number of the star</value>
+	<returns>The catalog number of the star</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Star.Parallax">
+	<summary>
+ Catalog mean J2000 parallax (arcsec)
+ </summary>
+	<value>Catalog mean J2000 parallax</value>
+	<returns>Arc seconds</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Star.ProperMotionDec">
+	<summary>
+ Catalog mean J2000 proper motion in declination (arcsec/century)
+ </summary>
+	<value>Catalog mean J2000 proper motion in declination</value>
+	<returns>Arc seconds per century</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Star.ProperMotionRA">
+	<summary>
+ Catalog mean J2000 proper motion in right ascension (sec/century)
+ </summary>
+	<value>Catalog mean J2000 proper motion in right ascension</value>
+	<returns>Seconds per century</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Star.RadialVelocity">
+	<summary>
+ Catalog mean J2000 radial velocity (km/sec)
+ </summary>
+	<value>Catalog mean J2000 radial velocity</value>
+	<returns>Kilometers per second</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.Star.RightAscension">
+	<summary>
+ Catalog mean J2000 right ascension coordinate (hours)
+ </summary>
+	<value>Catalog mean J2000 right ascension coordinate</value>
+	<returns>Hours</returns>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.Star.Set(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+	<summary>
+ Initialize all star properties with one call
+ </summary>
+	<param name="RA">Catalog mean right ascension (hours)</param>
+	<param name="Dec">Catalog mean declination (degrees)</param>
+	<param name="ProMoRA">Catalog mean J2000 proper motion in right ascension (sec/century)</param>
+	<param name="ProMoDec">Catalog mean J2000 proper motion in declination (arcsec/century)</param>
+	<param name="Parallax">Catalog mean J2000 parallax (arcsec)</param>
+	<param name="RadVel">Catalog mean J2000 radial velocity (km/sec)</param>
+	<remarks>Assumes positions are FK5. If Parallax is set to zero, NOVAS-COM assumes the object 
+ is on the "celestial sphere", which has a distance of 10 megaparsecs. </remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.Star.SetHipparcos(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+	<summary>
+ Initialise all star properties in one call using Hipparcos data. Transforms to FK5 standard used by NOVAS.
+ </summary>
+	<param name="RA">Catalog mean right ascension (hours)</param>
+	<param name="Dec">Catalog mean declination (degrees)</param>
+	<param name="ProMoRA">Catalog mean J2000 proper motion in right ascension (sec/century)</param>
+	<param name="ProMoDec">Catalog mean J2000 proper motion in declination (arcsec/century)</param>
+	<param name="Parallax">Catalog mean J2000 parallax (arcsec)</param>
+	<param name="RadVel">Catalog mean J2000 radial velocity (km/sec)</param>
+	<remarks>Assumes positions are Hipparcos standard and transforms to FK5 standard used by NOVAS. 
+ <para>If Parallax is set to zero, NOVAS-COM assumes the object is on the "celestial sphere", 
+ which has a distance of 10 megaparsecs.</para>
+	</remarks>
+</member><member name="T:ASCOM.Astrometry.NOVASCOM.Star">
+	<summary>
+ NOVAS-COM: Star Class
+ </summary>
+	<remarks>NOVAS-COM objects of class Star contain the specifications for a star's catalog position in either FK5 or Hipparcos units (both must be J2000). Properties are right ascension and declination, proper motions, parallax, radial velocity, catalog type (FK5 or HIP), catalog number, optional ephemeris engine to use for barycenter calculations, and an optional value for delta-T. Unless you specifically set the DeltaT property, calculations performed by this class which require the value of delta-T (TT - UT1) rely on an internal function to estimate delta-T. 
+<para>The high-level NOVAS astrometric functions are implemented as methods of Star: 
+ GetTopocentricPosition(), GetLocalPosition(), GetApparentPosition(), GetVirtualPosition(), 
+ and GetAstrometricPosition(). These methods operate on the properties of the Star, and produce 
+ a PositionVector object. For example, to get the topocentric coordinates of a star, simply create 
+ and initialize a Star, then call Star.GetTopocentricPosition(). The resulting vaPositionVector's 
+ right ascension and declination properties are the topocentric equatorial coordinates, at the same 
+ time, the (optionally refracted) alt-az coordinates are calculated, and are also contained within 
+ the returned PositionVector. <b>Note that Alt/Az is available in PositionVectors returned from calling 
+ GetTopocentricPosition().</b></para></remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.VelocityVector.#ctor">
+	<summary>
+ Creates a new velocity vector object
  </summary>
 	<remarks>
- The astrometric catalog data for a star; equator and equinox and units will depend on the catalog. 
- While this structure can be used as a generic container for catalog data, all high-level 
- NOVAS-C functions require J2000.0 catalog data with FK5-type units (shown in square brackets below).
+	</remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.VelocityVector.DecVelocity">
+	<summary>
+  Linear velocity along the declination direction (AU/day)
+ </summary>
+	<value>Linear velocity along the declination direction</value>
+	<returns>AU/day</returns>
+	<remarks>This is not the proper motion (which is an angular rate and is dependent on the distance to the object).</remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.VelocityVector.RadialVelocity">
+	<summary>
+ Linear velocity along the radial direction (AU/day)
+ </summary>
+	<value>Linear velocity along the radial direction</value>
+	<returns>AU/day</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.VelocityVector.RAVelocity">
+	<summary>
+ Linear velocity along the right ascension direction (AU/day)
+ </summary>
+	<value>Linear velocity along the right ascension direction</value>
+	<returns>AU/day</returns>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.VelocityVector.SetFromSite(ASCOM.Astrometry.NOVASCOM.Site,System.Double)">
+	<summary>
+ Initialize the VelocityVector from a Site object and Greenwich Apparent Sdereal Time.
+ </summary>
+	<param name="site">The Site object from which to initialize</param>
+	<param name="gast">Greenwich Apparent Sidereal Time</param>
+	<returns>True if OK or throws an exception</returns>
+	<remarks>The velocity vector is that of the observer with respect to the Earth's center 
+ of mass. The GAST parameter must be for Greenwich, not local. The time is rotated through 
+ the site longitude. See SetFromSiteJD() for an equivalent method that takes UTC Julian 
+ Date and optionally Delta-T (eliminating the need for calculating hyper-accurate GAST yourself). </remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.VelocityVector.SetFromSiteJD(ASCOM.Astrometry.NOVASCOM.Site,System.Double)">
+	<summary>
+ Initialize the VelocityVector from a Site object using UTC Julian Date
+ </summary>
+	<param name="site">The Site object from which to initialize</param>
+	<param name="ujd">UTC Julian Date</param>
+	<returns>True if OK otherwise throws an exception</returns>
+	<remarks>The velocity vector is that of the observer with respect to the Earth's center 
+ of mass. The Julian date must be UTC Julian date, not terrestrial. This call will use 
+ the internal tables and estimator to get delta-T.
+ This overload is not available through COM, please use 
+ "SetFromSiteJD(ByVal site As Site, ByVal ujd As Double, ByVal delta_t As Double)"
+ with delta_t set to 0.0 to achieve this effect.
  </remarks>
-</member><member name="F:ASCOM.Astrometry.SiteInfo.Latitude">
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.VelocityVector.SetFromSiteJD(ASCOM.Astrometry.NOVASCOM.Site,System.Double,System.Double)">
 	<summary>
- Geodetic latitude in degrees; north positive.
+ Initialize the VelocityVector from a Site object using UTC Julian Date and Delta-T
+ </summary>
+	<param name="site">The Site object from which to initialize</param>
+	<param name="ujd">UTC Julian Date</param>
+	<param name="delta_t">The optional value of Delta-T (TT - UT1) to use for reductions (seconds)</param>
+	<returns>True if OK otherwise throws an exception</returns>
+	<remarks>The velocity vector is that of the observer with respect to the Earth's center 
+ of mass. The Julian date must be UTC Julian date, not terrestrial.</remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.VelocityVector.SetFromStar(ASCOM.Astrometry.NOVASCOM.Star)">
+	<summary>
+ Initialize the VelocityVector from a Star object.
+ </summary>
+	<param name="star">The Star object from which to initialize</param>
+	<returns>True if OK otherwise throws an exception</returns>
+	<remarks>The proper motions, distance and radial velocity are used in the velocity calculation. </remarks>
+	<exception cref="T:ASCOM.Astrometry.Exceptions.ValueNotAvailableException">If any of: Parallax, RightAscension, Declination, 
+ ProperMotionRA, ProperMotionDec or RadialVelocity are not available in the star object</exception>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.VelocityVector.x">
+	<summary>
+ Cartesian x component of velocity (AU/day)
+ </summary>
+	<value>Cartesian x component of velocity</value>
+	<returns>AU/day</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.VelocityVector.y">
+	<summary>
+ Cartesian y component of velocity (AU/day)
+ </summary>
+	<value>Cartesian y component of velocity</value>
+	<returns>AU/day</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Astrometry.NOVASCOM.VelocityVector.z">
+	<summary>
+ Cartesian z component of velocity (AU/day)
+ </summary>
+	<value>Cartesian z component of velocity</value>
+	<returns>AU/day</returns>
+	<remarks></remarks>
+</member><member name="T:ASCOM.Astrometry.NOVASCOM.VelocityVector">
+	<summary>
+ NOVAS-COM: VelocityVector Class
+ </summary>
+	<remarks>NOVAS-COM objects of class VelocityVector contain vectors used for velocities (earth, sites, 
+ planets, and stars) throughout NOVAS-COM. Of course, its properties include the x, y, and z 
+ components of the velocity. Additional properties are the velocity in equatorial coordinates of 
+ right ascension dot, declination dot and radial velocity. You can initialize a PositionVector from 
+ a Star object (essentially an FK5 or HIP catalog entry) or a Site (lat/long/height). For the star 
+ object the proper motions, distance and radial velocity are used, for a site, the velocity is that 
+ of the observer with respect to the Earth's center of mass. </remarks>
+</member><member name="P:ASCOM.Astrometry.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:ASCOM.Astrometry.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:ASCOM.Astrometry.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:ASCOM.Astrometry.Transform.Transform.Dispose">
+	<summary>
+ Cleans up resources used by the Transform component
  </summary>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.SiteInfo.Longitude">
+</member><member name="P:ASCOM.Astrometry.Transform.Transform.SiteLatitude">
 	<summary>
- Geodetic longitude in degrees; east positive.
+ Gets or sets the site latitude
  </summary>
+	<value>Site latitude</value>
+	<returns>Latitude in degrees</returns>
+	<remarks>Positive numbers north of the equator, negative numbers south.</remarks>
+</member><member name="P:ASCOM.Astrometry.Transform.Transform.SiteLongitude">
+	<summary>
+ Gets or sets the site longitude
+ </summary>
+	<value>Site longitude</value>
+	<returns>Longitude in degrees</returns>
+	<remarks>Positive numbers east of the Greenwich meridian, negative numbes west of the Greenwich meridian.</remarks>
+</member><member name="P:ASCOM.Astrometry.Transform.Transform.SiteElevation">
+	<summary>
+ Gets or sets the site elevation above sea level
+ </summary>
+	<value>Site elevation</value>
+	<returns>Elevation in metres</returns>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.SiteInfo.Height">
+</member><member name="P:ASCOM.Astrometry.Transform.Transform.SiteTemperature">
 	<summary>
- Height of the observer in meters.
+ Gets or sets the site ambient temperature
  </summary>
+	<value>Site ambient temperature</value>
+	<returns>Temperature in degrees Celsius</returns>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.SiteInfo.Temperature">
+</member><member name="P:ASCOM.Astrometry.Transform.Transform.Refraction">
 	<summary>
- Temperature (degrees Celsius).
+ Gets or sets a flag indicating whether refraction is calculated for topocentric co-ordinates
  </summary>
+	<value>True / false flag indicating refaction is included / omitted from topocentric co-ordinates</value>
+	<returns>Boolean flag</returns>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.SiteInfo.Pressure">
+</member><member name="M:ASCOM.Astrometry.Transform.Transform.Refresh">
 	<summary>
- Atmospheric pressure (millibars)
+ Causes the transform component to recalculate values derrived from the last Set command
  </summary>
+	<remarks>Use this when you have set J2000 co-ordinates and wish to ensure that the mount points to the same 
+ co-ordinates allowing for local effects that change with time such as refraction.</remarks>
+</member><member name="M:ASCOM.Astrometry.Transform.Transform.SetJ2000(System.Double,System.Double)">
+	<summary>
+ Sets the known J2000 Right Ascension and Declination coordinates that are to be transformed
+ </summary>
+	<param name="RA">RA in J2000 co-ordinates</param>
+	<param name="DEC">DEC in J2000 co-ordinates</param>
 	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.SiteInfo">
+</member><member name="M:ASCOM.Astrometry.Transform.Transform.SetApparent(System.Double,System.Double)">
 	<summary>
- Structure to hold site information
+ Sets the known apparent Right Ascension and Declination coordinates that are to be transformed
  </summary>
-	<remarks>
- Data for the observer's location.  The atmospheric parameters are used only by the refraction 
- function called from function 'equ_to_hor'. Additional parameters can be added to this 
- structure if a more sophisticated refraction model is employed.
- </remarks>
-</member><member name="F:ASCOM.Astrometry.PosVector.x">
-	<summary>
- x co-ordinate
- </summary>
+	<param name="RA">RA in apparent co-ordinates</param>
+	<param name="DEC">DEC in apparent co-ordinates</param>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.PosVector.y">
+</member><member name="M:ASCOM.Astrometry.Transform.Transform.SetTopocentric(System.Double,System.Double)">
 	<summary>
- y co-ordinate
+ Sets the known local topocentric Right Ascension and Declination coordinates that are to be transformed
  </summary>
+	<param name="RA">RA in local topocentric co-ordinates</param>
+	<param name="DEC">DEC in local topocentric co-ordinates</param>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.PosVector.z">
+</member><member name="P:ASCOM.Astrometry.Transform.Transform.RAJ2000">
 	<summary>
- z co-ordinate
+ Returns the Right Ascension in J2000 co-ordinates
  </summary>
+	<value>J2000 Right Ascension</value>
+	<returns>Right Ascension in hours</returns>
+	<exception cref="T:ASCOM.Astrometry.Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
+ to read a value before any of the Set methods has been used or if the value can not be derived from the
+ information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
+ a SetApparent and one of the Site properties has not been set.</exception>
 	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.PosVector">
+</member><member name="P:ASCOM.Astrometry.Transform.Transform.DecJ2000">
 	<summary>
- Structure to hold a position vector
+ Returns the Declination in J2000 co-ordinates
  </summary>
-	<remarks>Object position vector
- </remarks>
-</member><member name="F:ASCOM.Astrometry.VelVector.x">
-	<summary>
- x velocity component 
- </summary>
+	<value>J2000 Declination</value>
+	<returns>Declination in degrees</returns>
+	<exception cref="T:ASCOM.Astrometry.Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
+ to read a value before any of the Set methods has been used or if the value can not be derived from the
+ information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
+ a SetApparent and one of the Site properties has not been set.</exception>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.VelVector.y">
+</member><member name="P:ASCOM.Astrometry.Transform.Transform.RATopocentric">
 	<summary>
- y velocity component
+ Returns the Right Ascension in local topocentric co-ordinates
  </summary>
+	<value>Local topocentric Right Ascension</value>
+	<returns>Right Ascension in hours</returns>
+	<exception cref="T:ASCOM.Astrometry.Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
+ to read a value before any of the Set methods has been used or if the value can not be derived from the
+ information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
+ a SetApparent and one of the Site properties has not been set.</exception>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.VelVector.z">
+</member><member name="P:ASCOM.Astrometry.Transform.Transform.DECTopocentric">
 	<summary>
- z velocity component
+ Returns the Declination in local topocentric co-ordinates
  </summary>
+	<value>Local topocentric Declination</value>
+	<returns>Declination in degrees</returns>
+	<exception cref="T:ASCOM.Astrometry.Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
+ to read a value before any of the Set methods has been used or if the value can not be derived from the
+ information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
+ a SetApparent and one of the Site properties has not been set.</exception>
 	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.VelVector">
+</member><member name="P:ASCOM.Astrometry.Transform.Transform.RAApparent">
 	<summary>
- Structure to hold a velocity vector
+ Returns the Right Ascension in apparent co-ordinates
  </summary>
-	<remarks>Object velocity vector
- </remarks>
-</member><member name="F:ASCOM.Astrometry.FundamentalArgs.l">
-	<summary>
- l (mean anomaly of the Moon)
- </summary>
+	<value>Apparent Right Ascension</value>
+	<returns>Right Ascension in hours</returns>
+	<exception cref="T:ASCOM.Astrometry.Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
+ to read a value before any of the Set methods has been used or if the value can not be derived from the
+ information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
+ a SetApparent and one of the Site properties has not been set.</exception>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.FundamentalArgs.ldash">
+</member><member name="P:ASCOM.Astrometry.Transform.Transform.DECApparent">
 	<summary>
- l' (mean anomaly of the Sun)
+ Returns the Declination in apparent co-ordinates
  </summary>
+	<value>Apparent Declination</value>
+	<returns>Declination in degrees</returns>
+	<exception cref="T:ASCOM.Astrometry.Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
+ to read a value before any of the Set methods has been used or if the value can not be derived from the
+ information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
+ a SetApparent and one of the Site properties has not been set.</exception>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.FundamentalArgs.F">
+</member><member name="P:ASCOM.Astrometry.Transform.Transform.AzimuthTopocentric">
 	<summary>
- F (L - omega; L = mean longitude of the Moon)
+ Returns the topocentric azimth angle of the target
  </summary>
+	<value>Topocentric azimuth angle</value>
+	<returns>Azimuth angle in degrees</returns>
+	<exception cref="T:ASCOM.Astrometry.Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
+ to read a value before any of the Set methods has been used or if the value can not be derived from the
+ information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
+ a SetApparent and one of the Site properties has not been set.</exception>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.FundamentalArgs.D">
+</member><member name="P:ASCOM.Astrometry.Transform.Transform.ElevationTopocentric">
 	<summary>
- D (mean elongation of the Moon from the Sun)
+ Returns the topocentric elevation of the target
  </summary>
+	<value>Topocentric elevation angle</value>
+	<returns>Elevation angle in degrees</returns>
+	<exception cref="T:ASCOM.Astrometry.Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
+ to read a value before any of the Set methods has been used or if the value can not be derived from the
+ information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
+ a SetApparent and one of the Site properties has not been set.</exception>
 	<remarks></remarks>
-</member><member name="F:ASCOM.Astrometry.FundamentalArgs.Omega">
+</member><member name="T:ASCOM.Astrometry.Transform.Transform">
 	<summary>
- Omega (mean longitude of the Moon's ascending node)
+ Coordinate transform component; J2000 - apparent - local topocentric
  </summary>
-	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.FundamentalArgs">
-	<summary>
- Structure to hold Sun and Moon fundamental arguments
- </summary>
-	<remarks>Fundamental arguments, in radians
-</remarks>
+	<remarks>Use this component to transform between J2000, apparent and local topocentric (JNow) coordinates or 
+ vice versa. To use the component, instantiate it, then use one of SetJ2000 or SetJNow or SetApparent to 
+ initialise with known values. Now use the RAJ2000, DECJ200, RAJNow, DECJNow, RAApparent and DECApparent 
+ properties to read off the required transformed values.
+<para>The component can be reused simply by setting new co-ordinates with a Set command, there
+ is no need to create a new component each time a transform is required.</para>
+		<para>Transforms are effected through the ASCOM NOVAS.Net engine that encapsulates the USNO NOVAS2 library. 
+ The USNO NOVAS reference web page is: 
+ http://www.usno.navy.mil/USNO/astronomical-applications/software-products/novas/novas-fortran/novas-fortran 
+ </para>
+	</remarks>
 </member><member name="P:ASCOM.Astrometry.Transform.ITransform.SiteLatitude">
 	<summary>
  Gets or sets the site latitude
@@ -1930,910 +2669,481 @@ ASCOM.Astrometry
 	<param name="dec">OUT: Declination referred to mean equator and equinox of date  (degrees).</param>
 	<param name="dis">OUT: Geocentric distance (AU).</param>
 	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.Earth.#ctor">
+</member><member name="M:ASCOM.Astrometry.Exceptions.TransformUninitialisedException.#ctor(System.String)">
 	<summary>
- Create a new instance of the Earth object
+ Create a new exception with message 
+ </summary>
+	<param name="message">Message to be reported by the exception</param>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Astrometry.Exceptions.TransformUninitialisedException.#ctor(System.String,System.Exception)">
+	<summary>
+ Create a new exception with message 
+ </summary>
+	<param name="message">Message to be reported by the exception</param>
+	<param name="inner">Exception to be reported as the inner exception</param>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Astrometry.Exceptions.TransformUninitialisedException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+	<summary>
+ Serialise the exception
+ </summary>
+	<param name="info">Serialisation information</param>
+	<param name="context">Serialisation context</param>
+	<remarks></remarks>
+</member><member name="T:ASCOM.Astrometry.Exceptions.TransformUninitialisedException">
+	<summary>
+ Exception thrown when an attempt is made to read from the transform component before it has had co-ordinates
+ set once by SetJ2000 or SetJNow.
  </summary>
 	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Earth.BarycentricPosition">
+</member><member name="M:ASCOM.Astrometry.Exceptions.CompatibilityException.#ctor(System.String)">
 	<summary>
- Earth barycentric position
+ Create a new exception with message 
  </summary>
-	<value>Barycentric position vector</value>
-	<returns>AU (Ref J2000)</returns>
+	<param name="message">Message to be reported by the exception</param>
 	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Earth.BarycentricTime">
+</member><member name="M:ASCOM.Astrometry.Exceptions.CompatibilityException.#ctor(System.String,System.Exception)">
 	<summary>
- Earth barycentric time 
+ Create a new exception with message 
  </summary>
-	<value>Barycentric dynamical time for given Terrestrial Julian Date</value>
-	<returns>Julian date</returns>
+	<param name="message">Message to be reported by the exception</param>
+	<param name="inner">Exception to be reported as the inner exception</param>
 	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Earth.BarycentricVelocity">
+</member><member name="M:ASCOM.Astrometry.Exceptions.CompatibilityException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
 	<summary>
- Earth barycentric velocity 
+ Serialise the exception
  </summary>
-	<value>Barycentric velocity vector</value>
-	<returns>AU/day (ref J2000)</returns>
+	<param name="info">Serialisation information</param>
+	<param name="context">Serialisation context</param>
 	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Earth.EarthEphemeris">
+</member><member name="T:ASCOM.Astrometry.Exceptions.CompatibilityException">
 	<summary>
- Ephemeris object used to provide the position of the Earth.
+ Exception thrown when an incompatible component is encountered that prevents Utilities from funcitoning
+ correctly.
  </summary>
-	<value>Earth ephemeris object </value>
-	<returns>Earth ephemeris object</returns>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Astrometry.Exceptions.ValueNotSetException.#ctor(System.String)">
+	<summary>
+ Create a new exception with message 
+ </summary>
+	<param name="message">Message to be reported by the exception</param>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Astrometry.Exceptions.ValueNotSetException.#ctor(System.String,System.Exception)">
+	<summary>
+ Create a new exception with message 
+ </summary>
+	<param name="message">Message to be reported by the exception</param>
+	<param name="inner">Exception to be reported as the inner exception</param>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Astrometry.Exceptions.ValueNotSetException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+	<summary>
+ Serialise the exception
+ </summary>
+	<param name="info">Serialisation information</param>
+	<param name="context">Serialisation context</param>
+	<remarks></remarks>
+</member><member name="T:ASCOM.Astrometry.Exceptions.ValueNotSetException">
+	<summary>
+ Exception thrown when an attempt is made to read a value that has not yet been set.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Astrometry.Exceptions.ValueNotAvailableException.#ctor(System.String)">
+	<summary>
+ Create a new exception with message 
+ </summary>
+	<param name="message">Message to be reported by the exception</param>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Astrometry.Exceptions.ValueNotAvailableException.#ctor(System.String,System.Exception)">
+	<summary>
+ Create a new exception with message 
+ </summary>
+	<param name="message">Message to be reported by the exception</param>
+	<param name="inner">Exception to be reported as the inner exception</param>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Astrometry.Exceptions.ValueNotAvailableException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+	<summary>
+ Serialise the exception
+ </summary>
+	<param name="info">Serialisation information</param>
+	<param name="context">Serialisation context</param>
+	<remarks></remarks>
+</member><member name="T:ASCOM.Astrometry.Exceptions.ValueNotAvailableException">
+	<summary>
+ Exception thrown when an attempt is made to read a value that has not yet been calculated.
+ </summary>
+	<remarks>This probably occurs because another variable has not been set or a required method has not been called.</remarks>
+</member><member name="M:ASCOM.Astrometry.Exceptions.NOVASFunctionException.#ctor(System.String,System.String,System.Int16)">
+	<summary>
+ Create a new exception with message 
+ </summary>
+	<param name="message">Message to be reported by the exception</param>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Astrometry.Exceptions.NOVASFunctionException.#ctor(System.String,System.Exception)">
+	<summary>
+ Create a new exception with message 
+ </summary>
+	<param name="message">Message to be reported by the exception</param>
+	<param name="inner">Exception to be reported as the inner exception</param>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Astrometry.Exceptions.NOVASFunctionException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+	<summary>
+ Serialise the exception
+ </summary>
+	<param name="info">Serialisation information</param>
+	<param name="context">Serialisation context</param>
+	<remarks></remarks>
+</member><member name="T:ASCOM.Astrometry.Exceptions.NOVASFunctionException">
+	<summary>
+ Exception thrown when a NOVAS function returns a non-zero, error completion code.
+ </summary>
+	<remarks>This probably occurs because another variable has not been set or a required method has not been called.</remarks>
+</member><member name="F:ASCOM.Astrometry.BodyType.Moon">
+	<summary>
+ Luna
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.BodyType.Sun">
+	<summary>
+ The Sun
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.BodyType.MajorPlanet">
+	<summary>
+ Major planet
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.BodyType.MinorPlanet">
+	<summary>
+ Minor planet
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.BodyType.Comet">
+	<summary>
+ Comet
+ </summary>
+	<remarks></remarks>
+</member><member name="T:ASCOM.Astrometry.BodyType">
+	<summary>
+ Type of body, Major Planet, Moon, Sun or Minor Planet
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.Origin.Barycentric">
+	<summary>
+ Centre of mass of the solar system
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.Origin.Heliocentric">
+	<summary>
+ Centre of mass of the Sun
+ </summary>
+	<remarks></remarks>
+</member><member name="T:ASCOM.Astrometry.Origin">
+	<summary>
+ Co-ordinate origin: centre of Sun or solar system barycentre
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.Body.Mercury">
+	<summary>
+ Mercury
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.Body.Venus">
+	<summary>
+ Venus
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.Body.Earth">
+	<summary>
+ Earth
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.Body.Mars">
+	<summary>
+ Mars
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.Body.Jupiter">
+	<summary>
+ Jupiter
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.Body.Saturn">
+	<summary>
+ Saturn
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.Body.Uranus">
+	<summary>
+ Uranus
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.Body.Neptune">
+	<summary>
+ Neptune
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.Body.Pluto">
+	<summary>
+ Pluto
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.Body.Sun">
+	<summary>
+ Sun
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.Body.Moon">
+	<summary>
+ Moon
+ </summary>
+	<remarks></remarks>
+</member><member name="T:ASCOM.Astrometry.Body">
+	<summary>
+ Body number starting with Mercury = 1
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.RefractionOption.NoRefraction">
+	<summary>
+ No refraction correction will be applied
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.RefractionOption.StandardRefraction">
+	<summary>
+ Refraction will be applied based on "standard" weather values of temperature = 10.0C and sea level pressure = 1010 millibar
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.RefractionOption.LocationRefraction">
+	<summary>
+ Refraction will be applied based on the temperature and pressure supplied in the site location structure
+ </summary>
+	<remarks></remarks>
+</member><member name="T:ASCOM.Astrometry.RefractionOption">
+	<summary>
+ Type of refraction correction
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.TransformationOption.ChangeEpoch">
+	<summary>
+ Change epoch only
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.TransformationOption.ChangeEquatorAndEquinox">
+	<summary>
+ Change equator and equinox
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.TransformationOption.ChangeEquatorAndEquinoxAndEpoch">
+	<summary>
+ Change equator, equinox and epoch
+ </summary>
+	<remarks></remarks>
+</member><member name="T:ASCOM.Astrometry.TransformationOption">
+	<summary>
+ Type of transformation: Epoch, Equator and Equinox or all three
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.NutationDirection.MeanToTrue">
+	<summary>
+ Convert mean equator and equinox to true equator and equinox
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.NutationDirection.TrueToMean">
+	<summary>
+ Convert true equator and equinox to mean equator and equinox
+ </summary>
+	<remarks></remarks>
+</member><member name="T:ASCOM.Astrometry.NutationDirection">
+	<summary>
+ Direction of nutation correction
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.BodyDescription.Type">
+	<summary>
+ Type of body
+ </summary>
 	<remarks>
- Setting this is optional, if not set, the internal Kepler engine will be used.</remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Earth.EquationOfEquinoxes">
-	<summary>
- Earth equation of equinoxes 
- </summary>
-	<value>Equation of the equinoxes</value>
-	<returns>Seconds</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Earth.HeliocentricPosition">
-	<summary>
- Earth heliocentric position
- </summary>
-	<value>Heliocentric position vector</value>
-	<returns>AU (ref J2000)</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Earth.HeliocentricVelocity">
-	<summary>
- Earth heliocentric velocity 
- </summary>
-	<value>Heliocentric velocity</value>
-	<returns>Velocity vector, AU/day (ref J2000)</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Earth.MeanObliquity">
-	<summary>
- Earth mean objiquity
- </summary>
-	<value>Mean obliquity of the ecliptic</value>
-	<returns>Degrees</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Earth.NutationInLongitude">
-	<summary>
- Earth nutation in longitude 
- </summary>
-	<value>Nutation in longitude</value>
-	<returns>Degrees</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Earth.NutationInObliquity">
-	<summary>
- Earth nutation in obliquity 
- </summary>
-	<value>Nutation in obliquity</value>
-	<returns>Degrees</returns>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.Earth.SetForTime(System.Double)">
-	<summary>
- Initialize the Earth object for given terrestrial Julian date
- </summary>
-	<param name="tjd">Terrestrial Julian date</param>
-	<returns>True if successful, else throws an exception</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Earth.TrueObliquity">
-	<summary>
- Earth true obliquity 
- </summary>
-	<value>True obliquity of the ecliptic</value>
-	<returns>Degrees</returns>
-	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.NOVASCOM.Earth">
-	<summary>
- NOVAS-COM: Represents the "state" of the Earth at a given Terrestrial Julian date
- </summary>
-	<remarks>NOVAS-COM objects of class Earth represent the "state" of the Earth at a given Terrestrial Julian date. 
- The state includes barycentric and heliocentric position vectors for the earth, plus obliquity, 
- nutation and the equation of the equinoxes. Unless set by the client, the Earth ephemeris used is 
- computed using an internal approximation. The client may optionally attach an ephemeris object for 
- increased accuracy. 
- <para><b>Ephemeris Generator</b><br/>
- The ephemeris generator object used with NOVAS-COM must support a single 
- method GetPositionAndVelocity(tjd). This method must take a terrestrial Julian date (like the 
- NOVAS-COM methods) as its single parameter, and return an array of Double 
- containing the rectangular (x/y/z) heliocentric J2000 equatorial coordinates of position (AU) and velocity 
- (KM/sec.). In addition, it must support three read/write properties BodyType, Name, and Number, 
- which correspond to the Type, Name, and Number properties of Novas.Planet. 
- </para></remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.Planet.#ctor">
-	<summary>
- Create a new instance of the Plant class
- </summary>
-	<remarks>This assigns default Kepler instances for the Earth and Planet objects so it is
- not necessary to create and attach Kepler objects in order to get Kepler accuracy from this
- component</remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Planet.DeltaT">
-	<summary>
- Planet delta-T
- </summary>
-	<value>The value of delta-T (TT - UT1) to use for reductions</value>
-	<returns>Seconds</returns>
-	<remarks>Setting this value is optional. If no value is set, an internal delta-T generator is used.</remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Planet.EarthEphemeris">
-	<summary>
- Ephemeris object used to provide the position of the Earth.
- </summary>
-	<value>Earth ephemeris object</value>
-	<returns>Earth ephemeris object</returns>
-	<remarks>
- Setting this is optional, if not set, the internal Kepler engine will be used.</remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Planet.Ephemeris">
-	<summary>
- The Ephemeris object used to provide positions of solar system bodies.
- </summary>
-	<value>Body ephemeris object</value>
-	<returns>Body ephemeris object</returns>
-	<remarks>
- Setting this is optional, if not set, the internal Kepler engine will be used.
+ 0 = Major planet, Sun, or Moon
+ 1 = Minor planet
  </remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.Planet.GetApparentPosition(System.Double)">
+</member><member name="F:ASCOM.Astrometry.BodyDescription.Number">
 	<summary>
- Get an apparent position for given time
+ body number
  </summary>
-	<param name="tjd">Terrestrial Julian Date for the position</param>
-	<returns>PositionVector for the apparent place.</returns>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.Planet.GetAstrometricPosition(System.Double)">
+	<remarks><pre>
+ For 'type' = 0: Mercury = 1, ..., Pluto = 9, Sun = 10, Moon = 11
+ For 'type' = 1: minor planet number
+ </pre></remarks>
+</member><member name="F:ASCOM.Astrometry.BodyDescription.Name">
 	<summary>
- Get an astrometric position for given time
- </summary>
-	<param name="tjd">Terrestrial Julian Date for the position</param>
-	<returns>PositionVector for the astrometric place.</returns>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.Planet.GetLocalPosition(System.Double,ASCOM.Astrometry.NOVASCOM.Site)">
-	<summary>
- Get an local position for given time
- </summary>
-	<param name="tjd">Terrestrial Julian Date for the position</param>
-	<param name="site">The observing site</param>
-	<returns>PositionVector for the local place.</returns>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.Planet.GetTopocentricPosition(System.Double,ASCOM.Astrometry.NOVASCOM.Site,System.Boolean)">
-	<summary>
- Get a topocentric position for given time
- </summary>
-	<param name="tjd">Terrestrial Julian Date for the position</param>
-	<param name="site">The observing site</param>
-	<param name="Refract">Apply refraction correction</param>
-	<returns>PositionVector for the topocentric place.</returns>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.Planet.GetVirtualPosition(System.Double)">
-	<summary>
- Get a virtual position for given time
- </summary>
-	<param name="tjd">Terrestrial Julian Date for the position</param>
-	<returns>PositionVector for the virtual place.</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Planet.Name">
-	<summary>
- Planet name
- </summary>
-	<value>For unnumbered minor planets, (Type=nvMinorPlanet and Number=0), the packed designation 
- for the minor planet. For other types, this is not significant, but may be used to store 
- a name.</value>
-	<returns>Name of planet</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Planet.Number">
-	<summary>
- Planet number
- </summary>
-	<value>For major planets (Type=nvMajorPlanet), a PlanetNumber value. For minor planets 
- (Type=nvMinorPlanet), the number of the minor planet or 0 for unnumbered minor planet.</value>
-	<returns>Planet number</returns>
-	<remarks>The major planet number is its number out from the sun starting with Mercury = 1</remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Planet.Type">
-	<summary>
- The type of solar system body
- </summary>
-	<value>The type of solar system body</value>
-	<returns>Value from the BodyType enum</returns>
-	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.NOVASCOM.Planet">
-	<summary>
- NOVAS-COM: Provide characteristics of a solar system body
- </summary>
-	<remarks>NOVAS-COM objects of class Planet hold the characteristics of a solar system body. Properties are 
- type (major or minor planet), number (for major and numbered minor planets), name (for unnumbered 
- minor planets and comets), the ephemeris object to be used for orbital calculations, an optional 
- ephemeris object to use for barycenter calculations, and an optional value for delta-T. 
- <para>The high-level NOVAS astrometric functions are implemented as methods of Planet: 
- GetTopocentricPosition(), GetLocalPosition(), GetApparentPosition(), GetVirtualPosition(), 
- and GetAstrometricPosition(). These methods operate on the properties of the Planet, and produce 
- a PositionVector object. For example, to get the topocentric coordinates of a planet, create and 
- initialize a planet, create initialize and attach an ephemeris object, then call 
- Planet.GetTopocentricPosition(). The resulting PositionVector's right ascension and declination 
- properties are the topocentric equatorial coordinates, at the same time, the (optionally 
- refracted) alt-az coordinates are calculated, and are also contained within the returned 
- PositionVector. <b>Note that Alt/Az is available in PositionVectors returned from calling 
- GetTopocentricPosition().</b> The accuracy of these calculations is typically dominated by the accuracy 
- of the attached ephemeris generator. </para>
-		<para><b>Ephemeris Generator</b><br/>
- By default, Kepler instances are attached for both Earth and Planet objects so it is
- not necessary to create and attach these in order to get Kepler accuracy from this
- component</para>
-		<para>The ephemeris generator object used with NOVAS-COM must support a single 
- method GetPositionAndVelocity(tjd). This method must take a terrestrial Julian date (like the 
- NOVAS-COM methods) as its single parameter, and return an array of Double 
- containing the rectangular (x/y/z) heliocentric J2000 equatorial coordinates of position (AU) and velocity 
- (KM/sec.). In addition, it must support three read/write properties BodyType, Name, and Number, 
- which correspond to the Type, Name, and Number properties of Novas.Planet. 
- </para>
-	</remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.PositionVector.#ctor">
-	<summary>
- Create a new, uninitialised position vector
+ Name of the body (limited to 99 characters)
  </summary>
 	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.PositionVector.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+</member><member name="T:ASCOM.Astrometry.BodyDescription">
 	<summary>
-  Create a new position vector with supplied initial values
+ Structure to hold body type, number and name
  </summary>
-	<param name="x">Position vector x co-ordinate</param>
-	<param name="y">Position vector y co-ordinate</param>
-	<param name="z">Position vector z co-ordinate</param>
-	<param name="RA">Right ascension (hours)</param>
-	<param name="DEC">Declination (degrees)</param>
-	<param name="Distance">Distance to object</param>
-	<param name="Light">Light-time to object</param>
-	<param name="Azimuth">Object azimuth</param>
-	<param name="Altitude">Object altitude</param>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.PositionVector.Aberration(ASCOM.Astrometry.NOVASCOM.VelocityVector)">
-	<summary>
- Adjust the position vector of an object for aberration of light
- </summary>
-	<param name="vel">The velocity vector of the observer</param>
-	<remarks>The algorithm includes relativistic terms</remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.PositionVector.Azimuth">
-	<summary>
- The azimuth coordinate (degrees, + east)
- </summary>
-	<value>The azimuth coordinate</value>
-	<returns>Degrees, + East</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.PositionVector.Declination">
-	<summary>
- Declination coordinate
- </summary>
-	<value>Declination coordinate</value>
-	<returns>Degrees</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.PositionVector.Distance">
-	<summary>
- Distance/Radius coordinate
- </summary>
-	<value>Distance/Radius coordinate</value>
-	<returns>AU</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.PositionVector.Elevation">
-	<summary>
- The elevation (altitude) coordinate (degrees, + up)
- </summary>
-	<value>The elevation (altitude) coordinate (degrees, + up)</value>
-	<returns>(Degrees, + up</returns>
-	<remarks>Elevation is available only in PositionVectors returned from calls to 
- Star.GetTopocentricPosition() and/or Planet.GetTopocentricPosition(). </remarks>
-	<exception cref="T:ASCOM.Astrometry.Exceptions.ValueNotAvailableException">When the position vector has not been 
- initialised from Star.GetTopoCentricPosition and Planet.GetTopocentricPosition</exception>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.PositionVector.LightTime">
-	<summary>
- Light time from body to origin, days.
- </summary>
-	<value>Light time from body to origin</value>
-	<returns>Days</returns>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.PositionVector.Precess(System.Double,System.Double)">
-	<summary>
- Adjust the position vector for precession of equinoxes between two given epochs
- </summary>
-	<param name="tjd">The first epoch (Terrestrial Julian Date)</param>
-	<param name="tjd2">The second epoch (Terrestrial Julian Date)</param>
-	<remarks>The coordinates are referred to the mean equator and equinox of the two respective epochs.</remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.PositionVector.ProperMotion(ASCOM.Astrometry.NOVASCOM.VelocityVector,System.Double,System.Double)">
-	<summary>
- Adjust the position vector for proper motion (including foreshortening effects)
- </summary>
-	<param name="vel">The velocity vector of the object</param>
-	<param name="tjd1">The first epoch (Terrestrial Julian Date)</param>
-	<param name="tjd2">The second epoch (Terrestrial Julian Date)</param>
-	<returns>True if successful or throws an exception.</returns>
-	<remarks></remarks>
-	<exception cref="T:ASCOM.Astrometry.Exceptions.ValueNotSetException">If the position vector x, y or z values has not been set</exception>
-	<exception cref="T:ASCOM.Astrometry.Exceptions.ValueNotAvailableException">If the supplied velocity vector does not have valid x, y and z components</exception>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.PositionVector.RightAscension">
-	<summary>
- RightAscension coordinate, hours
- </summary>
-	<value>RightAscension coordinate</value>
-	<returns>Hours</returns>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.PositionVector.SetFromSite(ASCOM.Astrometry.NOVASCOM.Site,System.Double)">
-	<summary>
- Initialize the PositionVector from a Site object and Greenwich apparent sidereal time.
- </summary>
-	<param name="site">The Site object from which to initialize</param>
-	<param name="gast">Greenwich Apparent Sidereal Time</param>
-	<returns>True if successful or throws an exception</returns>
-	<remarks>The GAST parameter must be for Greenwich, not local. The time is rotated through the 
- site longitude. See SetFromSiteJD() for an equivalent method that takes UTC Julian Date and 
- Delta-T (eliminating the need for calculating hyper-accurate GAST yourself).</remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.PositionVector.SetFromSiteJD(ASCOM.Astrometry.NOVASCOM.Site,System.Double)">
-	<summary>
- Initialize the PositionVector from a Site object using UTC Julian date
- </summary>
-	<param name="site">The Site object from which to initialize</param>
-	<param name="ujd">UTC Julian Date</param>
-	<returns>True if successful or throws an exception</returns>
-	<remarks>The Julian date must be UTC Julian date, not terrestrial. Calculations will use the internal delta-T tables and estimator to get 
- delta-T. 
- This overload is not available through COM, please use 
- "SetFromSiteJD(ByVal site As Site, ByVal ujd As Double, ByVal delta_t As Double)"
- with delta_t set to 0.0 to achieve this effect.
+	<remarks>Designates a celestial object.
  </remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.PositionVector.SetFromSiteJD(ASCOM.Astrometry.NOVASCOM.Site,System.Double,System.Double)">
+</member><member name="F:ASCOM.Astrometry.CatEntry.Catalog">
 	<summary>
- Initialize the PositionVector from a Site object using UTC Julian date and Delta-T
- </summary>
-	<param name="site">The Site object from which to initialize</param>
-	<param name="ujd">UTC Julian Date</param>
-	<param name="delta_t">The value of Delta-T (TT - UT1) to use for reductions (seconds)</param>
-	<returns>True if successful or throws an exception</returns>
-	<remarks>The Julian date must be UTC Julian date, not terrestrial.</remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.PositionVector.SetFromStar(ASCOM.Astrometry.NOVASCOM.Star)">
-	<summary>
- Initialize the PositionVector from a Star object.
- </summary>
-	<param name="star">The Star object from which to initialize</param>
-	<returns>True if successful or throws an exception</returns>
-	<remarks></remarks>
-	<exception cref="T:ASCOM.Astrometry.Exceptions.ValueNotAvailableException">If Parallax, RightAScension or Declination is not available in the supplied star object.</exception>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.PositionVector.x">
-	<summary>
- Position cartesian x component
- </summary>
-	<value>Cartesian x component</value>
-	<returns>Cartesian x component</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.PositionVector.y">
-	<summary>
- Position cartesian y component
- </summary>
-	<value>Cartesian y component</value>
-	<returns>Cartesian y component</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.PositionVector.z">
-	<summary>
- Position cartesian z component
- </summary>
-	<value>Cartesian z component</value>
-	<returns>Cartesian z component</returns>
-	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.NOVASCOM.PositionVector">
-	<summary>
- NOVAS-COM: PositionVector Class
- </summary>
-	<remarks>NOVAS-COM objects of class PositionVector contain vectors used for positions (earth, sites, 
- stars and planets) throughout NOVAS-COM. Of course, its properties include the x, y, and z 
- components of the position. Additional properties are right ascension and declination, distance, 
- and light time (applicable to star positions), and Alt/Az (available only in PositionVectors 
- returned by Star or Planet methods GetTopocentricPosition()). You can initialize a PositionVector 
- from a Star object (essentially an FK5 or HIP catalog entry) or a Site (lat/long/height). 
- PositionVector has methods that can adjust the coordinates for precession, aberration and 
- proper motion. Thus, a PositionVector object gives access to some of the lower-level NOVAS functions. 
- <para><b>Note:</b> The equatorial coordinate properties of this object are dependent variables, and thus are read-only. Changing any cartesian coordinate will cause the equatorial coordinates to be recalculated. 
- </para></remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.Site.#ctor">
-	<summary>
- Initialises a new site object
+ 3-character catalog designator. 
  </summary>
 	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Site.Height">
+</member><member name="F:ASCOM.Astrometry.CatEntry.StarName">
 	<summary>
- Height above mean sea level
- </summary>
-	<value>Height above mean sea level</value>
-	<returns>Meters</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Site.Latitude">
-	<summary>
- Geodetic latitude (degrees, + north)
- </summary>
-	<value>Geodetic latitude</value>
-	<returns>Degrees, + north</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Site.Longitude">
-	<summary>
- Geodetic longitude (degrees, + east)
- </summary>
-	<value>Geodetic longitude</value>
-	<returns>Degrees, + east</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Site.Pressure">
-	<summary>
- Barometric pressure (millibars)
- </summary>
-	<value>Barometric pressure</value>
-	<returns>Millibars</returns>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.Site.Set(System.Double,System.Double,System.Double)">
-	<summary>
- Set all site properties in one method call
- </summary>
-	<param name="Latitude">The geodetic latitude (degrees, + north)</param>
-	<param name="Longitude">The geodetic longitude (degrees, +east)</param>
-	<param name="Height">Height above sea level (meters)</param>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Site.Temperature">
-	<summary>
- Ambient temperature (deg. Celsius)
- </summary>
-	<value>Ambient temperature</value>
-	<returns>Degrees Celsius)</returns>
-	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.NOVASCOM.Site">
-	<summary>
- NOVAS-COM: Site Class
- </summary>
-	<remarks>NOVAS-COM objects of class Site contain the specifications for an observer's location on the Earth 
- ellipsoid. Properties are latitude, longitude, height above mean sea level, the ambient temperature 
- and the sea-level barmetric pressure. The latter two are used only for optional refraction corrections. 
- Latitude and longitude are (common) geodetic, not geocentric. </remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.Star.#ctor">
-	<summary>
- Initialise a new instance of the star class
+ Name of star.
  </summary>
 	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Star.Catalog">
+</member><member name="F:ASCOM.Astrometry.CatEntry.StarNumber">
 	<summary>
- Three character catalog code for the star's data
+ Integer identifier assigned to star.
  </summary>
-	<value>Three character catalog code for the star's data</value>
-	<returns>Three character catalog code for the star's data</returns>
-	<remarks>Typically "FK5" but may be "HIP". For information only.</remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Star.Declination">
-	<summary>
- Mean catalog J2000 declination coordinate (degrees)
- </summary>
-	<value>Mean catalog J2000 declination coordinate</value>
-	<returns>Degrees</returns>
 	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Star.DeltaT">
+</member><member name="F:ASCOM.Astrometry.CatEntry.RA">
 	<summary>
- The value of delta-T (TT - UT1) to use for reductions.
+ Mean right ascension [hours].
  </summary>
-	<value>The value of delta-T (TT - UT1) to use for reductions.</value>
-	<returns>Seconds</returns>
-	<remarks>If this property is not set, calculations will use an internal function to estimate delta-T.</remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Star.EarthEphemeris">
-	<summary>
- Ephemeris object used to provide the position of the Earth.
- </summary>
-	<value>Ephemeris object used to provide the position of the Earth.</value>
-	<returns>Ephemeris object</returns>
-	<remarks>If this value is not set, an internal Kepler object will be used to determine 
- Earth ephemeris</remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.Star.GetApparentPosition(System.Double)">
-	<summary>
- Get an apparent position for a given time
- </summary>
-	<param name="tjd">Terrestrial Julian Date for the position</param>
-	<returns>PositionVector for the apparent place.</returns>
 	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.Star.GetAstrometricPosition(System.Double)">
+</member><member name="F:ASCOM.Astrometry.CatEntry.Dec">
 	<summary>
- Get an astrometric position for a given time
+ Mean declination [degrees].
  </summary>
-	<param name="tjd">Terrestrial Julian Date for the position</param>
-	<returns>PositionVector for the astrometric place.</returns>
 	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.Star.GetLocalPosition(System.Double,ASCOM.Astrometry.NOVASCOM.Site)">
+</member><member name="F:ASCOM.Astrometry.CatEntry.ProMoRA">
 	<summary>
- Get a local position for a given site and time
+ Proper motion in RA [seconds of time per century].
  </summary>
-	<param name="tjd">Terrestrial Julian Date for the position</param>
-	<param name="site">A Site object representing the observing site</param>
-	<returns>PositionVector for the local place.</returns>
 	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.Star.GetTopocentricPosition(System.Double,ASCOM.Astrometry.NOVASCOM.Site,System.Boolean)">
+</member><member name="F:ASCOM.Astrometry.CatEntry.ProMoDec">
 	<summary>
- Get a topocentric position for a given site and time
+ Proper motion in declination [arcseconds per century].
  </summary>
-	<param name="tjd">Terrestrial Julian Date for the position</param>
-	<param name="site">A Site object representing the observing site</param>
-	<param name="Refract">True to apply atmospheric refraction corrections</param>
-	<returns>PositionVector for the topocentric place.</returns>
 	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.Star.GetVirtualPosition(System.Double)">
+</member><member name="F:ASCOM.Astrometry.CatEntry.Parallax">
 	<summary>
- Get a virtual position at a given time
+ Parallax [arcseconds].
  </summary>
-	<param name="tjd">Terrestrial Julian Date for the position</param>
-	<returns>PositionVector for the virtual place.</returns>
 	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Star.Name">
+</member><member name="F:ASCOM.Astrometry.CatEntry.RadialVelocity">
 	<summary>
- The catalog name of the star (50 char max)
+ Radial velocity [kilometers per second]
  </summary>
-	<value>The catalog name of the star</value>
-	<returns>Name (50 char max)</returns>
 	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Star.Number">
+</member><member name="T:ASCOM.Astrometry.CatEntry">
 	<summary>
- The catalog number of the star
- </summary>
-	<value>The catalog number of the star</value>
-	<returns>The catalog number of the star</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Star.Parallax">
-	<summary>
- Catalog mean J2000 parallax (arcsec)
- </summary>
-	<value>Catalog mean J2000 parallax</value>
-	<returns>Arc seconds</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Star.ProperMotionDec">
-	<summary>
- Catalog mean J2000 proper motion in declination (arcsec/century)
- </summary>
-	<value>Catalog mean J2000 proper motion in declination</value>
-	<returns>Arc seconds per century</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Star.ProperMotionRA">
-	<summary>
- Catalog mean J2000 proper motion in right ascension (sec/century)
- </summary>
-	<value>Catalog mean J2000 proper motion in right ascension</value>
-	<returns>Seconds per century</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Star.RadialVelocity">
-	<summary>
- Catalog mean J2000 radial velocity (km/sec)
- </summary>
-	<value>Catalog mean J2000 radial velocity</value>
-	<returns>Kilometers per second</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.Star.RightAscension">
-	<summary>
- Catalog mean J2000 right ascension coordinate (hours)
- </summary>
-	<value>Catalog mean J2000 right ascension coordinate</value>
-	<returns>Hours</returns>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.Star.Set(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
-	<summary>
- Initialize all star properties with one call
- </summary>
-	<param name="RA">Catalog mean right ascension (hours)</param>
-	<param name="Dec">Catalog mean declination (degrees)</param>
-	<param name="ProMoRA">Catalog mean J2000 proper motion in right ascension (sec/century)</param>
-	<param name="ProMoDec">Catalog mean J2000 proper motion in declination (arcsec/century)</param>
-	<param name="Parallax">Catalog mean J2000 parallax (arcsec)</param>
-	<param name="RadVel">Catalog mean J2000 radial velocity (km/sec)</param>
-	<remarks>Assumes positions are FK5. If Parallax is set to zero, NOVAS-COM assumes the object 
- is on the "celestial sphere", which has a distance of 10 megaparsecs. </remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.Star.SetHipparcos(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
-	<summary>
- Initialise all star properties in one call using Hipparcos data. Transforms to FK5 standard used by NOVAS.
- </summary>
-	<param name="RA">Catalog mean right ascension (hours)</param>
-	<param name="Dec">Catalog mean declination (degrees)</param>
-	<param name="ProMoRA">Catalog mean J2000 proper motion in right ascension (sec/century)</param>
-	<param name="ProMoDec">Catalog mean J2000 proper motion in declination (arcsec/century)</param>
-	<param name="Parallax">Catalog mean J2000 parallax (arcsec)</param>
-	<param name="RadVel">Catalog mean J2000 radial velocity (km/sec)</param>
-	<remarks>Assumes positions are Hipparcos standard and transforms to FK5 standard used by NOVAS. 
- <para>If Parallax is set to zero, NOVAS-COM assumes the object is on the "celestial sphere", 
- which has a distance of 10 megaparsecs.</para>
-	</remarks>
-</member><member name="T:ASCOM.Astrometry.NOVASCOM.Star">
-	<summary>
- NOVAS-COM: Star Class
- </summary>
-	<remarks>NOVAS-COM objects of class Star contain the specifications for a star's catalog position in either FK5 or Hipparcos units (both must be J2000). Properties are right ascension and declination, proper motions, parallax, radial velocity, catalog type (FK5 or HIP), catalog number, optional ephemeris engine to use for barycenter calculations, and an optional value for delta-T. Unless you specifically set the DeltaT property, calculations performed by this class which require the value of delta-T (TT - UT1) rely on an internal function to estimate delta-T. 
-<para>The high-level NOVAS astrometric functions are implemented as methods of Star: 
- GetTopocentricPosition(), GetLocalPosition(), GetApparentPosition(), GetVirtualPosition(), 
- and GetAstrometricPosition(). These methods operate on the properties of the Star, and produce 
- a PositionVector object. For example, to get the topocentric coordinates of a star, simply create 
- and initialize a Star, then call Star.GetTopocentricPosition(). The resulting vaPositionVector's 
- right ascension and declination properties are the topocentric equatorial coordinates, at the same 
- time, the (optionally refracted) alt-az coordinates are calculated, and are also contained within 
- the returned PositionVector. <b>Note that Alt/Az is available in PositionVectors returned from calling 
- GetTopocentricPosition().</b></para></remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.VelocityVector.#ctor">
-	<summary>
- Creates a new velocity vector object
+ Structure to hold astrometric catalogue data
  </summary>
 	<remarks>
-	</remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.VelocityVector.DecVelocity">
-	<summary>
-  Linear velocity along the declination direction (AU/day)
- </summary>
-	<value>Linear velocity along the declination direction</value>
-	<returns>AU/day</returns>
-	<remarks>This is not the proper motion (which is an angular rate and is dependent on the distance to the object).</remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.VelocityVector.RadialVelocity">
-	<summary>
- Linear velocity along the radial direction (AU/day)
- </summary>
-	<value>Linear velocity along the radial direction</value>
-	<returns>AU/day</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.VelocityVector.RAVelocity">
-	<summary>
- Linear velocity along the right ascension direction (AU/day)
- </summary>
-	<value>Linear velocity along the right ascension direction</value>
-	<returns>AU/day</returns>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.VelocityVector.SetFromSite(ASCOM.Astrometry.NOVASCOM.Site,System.Double)">
-	<summary>
- Initialize the VelocityVector from a Site object and Greenwich Apparent Sdereal Time.
- </summary>
-	<param name="site">The Site object from which to initialize</param>
-	<param name="gast">Greenwich Apparent Sidereal Time</param>
-	<returns>True if OK or throws an exception</returns>
-	<remarks>The velocity vector is that of the observer with respect to the Earth's center 
- of mass. The GAST parameter must be for Greenwich, not local. The time is rotated through 
- the site longitude. See SetFromSiteJD() for an equivalent method that takes UTC Julian 
- Date and optionally Delta-T (eliminating the need for calculating hyper-accurate GAST yourself). </remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.VelocityVector.SetFromSiteJD(ASCOM.Astrometry.NOVASCOM.Site,System.Double)">
-	<summary>
- Initialize the VelocityVector from a Site object using UTC Julian Date
- </summary>
-	<param name="site">The Site object from which to initialize</param>
-	<param name="ujd">UTC Julian Date</param>
-	<returns>True if OK otherwise throws an exception</returns>
-	<remarks>The velocity vector is that of the observer with respect to the Earth's center 
- of mass. The Julian date must be UTC Julian date, not terrestrial. This call will use 
- the internal tables and estimator to get delta-T.
- This overload is not available through COM, please use 
- "SetFromSiteJD(ByVal site As Site, ByVal ujd As Double, ByVal delta_t As Double)"
- with delta_t set to 0.0 to achieve this effect.
+ The astrometric catalog data for a star; equator and equinox and units will depend on the catalog. 
+ While this structure can be used as a generic container for catalog data, all high-level 
+ NOVAS-C functions require J2000.0 catalog data with FK5-type units (shown in square brackets below).
  </remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.VelocityVector.SetFromSiteJD(ASCOM.Astrometry.NOVASCOM.Site,System.Double,System.Double)">
+</member><member name="F:ASCOM.Astrometry.SiteInfo.Latitude">
 	<summary>
- Initialize the VelocityVector from a Site object using UTC Julian Date and Delta-T
- </summary>
-	<param name="site">The Site object from which to initialize</param>
-	<param name="ujd">UTC Julian Date</param>
-	<param name="delta_t">The optional value of Delta-T (TT - UT1) to use for reductions (seconds)</param>
-	<returns>True if OK otherwise throws an exception</returns>
-	<remarks>The velocity vector is that of the observer with respect to the Earth's center 
- of mass. The Julian date must be UTC Julian date, not terrestrial.</remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.VelocityVector.SetFromStar(ASCOM.Astrometry.NOVASCOM.Star)">
-	<summary>
- Initialize the VelocityVector from a Star object.
- </summary>
-	<param name="star">The Star object from which to initialize</param>
-	<returns>True if OK otherwise throws an exception</returns>
-	<remarks>The proper motions, distance and radial velocity are used in the velocity calculation. </remarks>
-	<exception cref="T:ASCOM.Astrometry.Exceptions.ValueNotAvailableException">If any of: Parallax, RightAscension, Declination, 
- ProperMotionRA, ProperMotionDec or RadialVelocity are not available in the star object</exception>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.VelocityVector.x">
-	<summary>
- Cartesian x component of velocity (AU/day)
- </summary>
-	<value>Cartesian x component of velocity</value>
-	<returns>AU/day</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.VelocityVector.y">
-	<summary>
- Cartesian y component of velocity (AU/day)
- </summary>
-	<value>Cartesian y component of velocity</value>
-	<returns>AU/day</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.NOVASCOM.VelocityVector.z">
-	<summary>
- Cartesian z component of velocity (AU/day)
- </summary>
-	<value>Cartesian z component of velocity</value>
-	<returns>AU/day</returns>
-	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.NOVASCOM.VelocityVector">
-	<summary>
- NOVAS-COM: VelocityVector Class
- </summary>
-	<remarks>NOVAS-COM objects of class VelocityVector contain vectors used for velocities (earth, sites, 
- planets, and stars) throughout NOVAS-COM. Of course, its properties include the x, y, and z 
- components of the velocity. Additional properties are the velocity in equatorial coordinates of 
- right ascension dot, declination dot and radial velocity. You can initialize a PositionVector from 
- a Star object (essentially an FK5 or HIP catalog entry) or a Site (lat/long/height). For the star 
- object the proper motions, distance and radial velocity are used, for a site, the velocity is that 
- of the observer with respect to the Earth's center of mass. </remarks>
-</member><member name="M:ASCOM.Astrometry.Kepler.Ephemeris.#ctor">
-	<summary>
- Create a new Ephemeris component and initialise it
+ Geodetic latitude in degrees; north positive.
  </summary>
 	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.a">
+</member><member name="F:ASCOM.Astrometry.SiteInfo.Longitude">
 	<summary>
- Semi-major axis (AU)
+ Geodetic longitude in degrees; east positive.
  </summary>
-	<value>Semi-major axis in AU</value>
-	<returns>Semi-major axis in AU</returns>
 	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.BodyType">
+</member><member name="F:ASCOM.Astrometry.SiteInfo.Height">
 	<summary>
- The type of solar system body represented by this instance of the ephemeris engine (enum)
+ Height of the observer in meters.
  </summary>
-	<value>The type of solar system body represented by this instance of the ephemeris engine (enum)</value>
-	<returns>0 for major planet, 1 for minot planet and 2 for comet</returns>
 	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.e">
+</member><member name="F:ASCOM.Astrometry.SiteInfo.Temperature">
 	<summary>
- Orbital eccentricity
+ Temperature (degrees Celsius).
  </summary>
-	<value>Orbital eccentricity </value>
-	<returns>Orbital eccentricity </returns>
 	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.Epoch">
+</member><member name="F:ASCOM.Astrometry.SiteInfo.Pressure">
 	<summary>
- Epoch of osculation of the orbital elements (terrestrial Julian date)
+ Atmospheric pressure (millibars)
  </summary>
-	<value>Epoch of osculation of the orbital elements</value>
-	<returns>Terrestrial Julian date</returns>
 	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.G">
+</member><member name="T:ASCOM.Astrometry.SiteInfo">
 	<summary>
- Slope parameter for magnitude
- </summary>
-	<value>Slope parameter for magnitude</value>
-	<returns>Slope parameter for magnitude</returns>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.Kepler.Ephemeris.GetPositionAndVelocity(System.Double)">
-	<summary>
- Compute rectangular (x/y/z) heliocentric J2000 equatorial coordinates of position (AU) and 
- velocity (KM/sec.).
- </summary>
-	<param name="tjd">Terrestrial Julian date/time for which position and velocity is to be computed</param>
-	<returns>Array of 6 values containing rectangular (x/y/z) heliocentric J2000 equatorial 
- coordinates of position (AU) and velocity (KM/sec.) for the body.</returns>
-	<remarks>The TJD parameter is the date/time as a Terrestrial Time Julian date. See below for 
- more info. If you are using ACP, there are functions available to convert between UTC and 
- Terrestrial time, and for estimating the current value of delta-T. See the Overview page for 
- the Kepler.Ephemeris class for more information on time keeping systems.</remarks>
-</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.H">
-	<summary>
- Absolute visual magnitude
- </summary>
-	<value>Absolute visual magnitude</value>
-	<returns>Absolute visual magnitude</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.Incl">
-	<summary>
- The J2000.0 inclination (deg.)
- </summary>
-	<value>The J2000.0 inclination</value>
-	<returns>Degrees</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.M">
-	<summary>
- Mean anomaly at the epoch
- </summary>
-	<value>Mean anomaly at the epoch</value>
-	<returns>Mean anomaly at the epoch</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.n">
-	<summary>
- Mean daily motion (deg/day)
- </summary>
-	<value>Mean daily motion</value>
-	<returns>Degrees per day</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.Name">
-	<summary>
- The name of the body.
- </summary>
-	<value>The name of the body or packed MPC designation</value>
-	<returns>The name of the body or packed MPC designation</returns>
-	<remarks>If this instance represents an unnumbered minor planet, Ephemeris.Name must be the 
- packed MPC designation. For other types, this is for display only.</remarks>
-</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.Node">
-	<summary>
- The J2000.0 longitude of the ascending node (deg.)
- </summary>
-	<value>The J2000.0 longitude of the ascending node</value>
-	<returns>Degrees</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.Number">
-	<summary>
- The major or minor planet number
- </summary>
-	<value>The major or minor planet number</value>
-	<returns>Number or zero if not numbered</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.P">
-	<summary>
- Orbital period (years)
- </summary>
-	<value>Orbital period</value>
-	<returns>Years</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.Peri">
-	<summary>
- The J2000.0 argument of perihelion (deg.)
- </summary>
-	<value>The J2000.0 argument of perihelion</value>
-	<returns>Degrees</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.q">
-	<summary>
- Perihelion distance (AU)
- </summary>
-	<value>Perihelion distance</value>
-	<returns>AU</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Kepler.Ephemeris.z">
-	<summary>
- Reciprocal semi-major axis (1/AU)
- </summary>
-	<value>Reciprocal semi-major axis</value>
-	<returns>1/AU</returns>
-	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.Kepler.Ephemeris">
-	<summary>
- KEPLER: Ephemeris Object
+ Structure to hold site information
  </summary>
 	<remarks>
- The Kepler Ephemeris object contains an orbit engine which takes the orbital parameters of a solar system 
- body, plus a a terrestrial date/time, and produces the heliocentric equatorial position and 
- velocity vectors of the body in Cartesian coordinates. Orbital parameters are not required for 
- the major planets, Kepler contains an ephemeris generator for these bodies that is within 0.05 
- arc seconds of the JPL DE404 over a wide range of times, Perturbations from major planets are applied 
- to ephemerides for minor planets. 
- <para>The results are passed back as an array containing the two vectors. 
- Note that this is the format expected for the ephemeris generator used by the NOVAS-COM vector 
- astrometry engine. For more information see the description of Ephemeris.GetPositionAndVelocity().</para>
-		<para>
-			<b>Ephemeris Calculations</b><br/>
- The ephemeris calculations in Kepler draw heavily from the work of 
- Stephen Moshier moshier@world.std.com. kepler is released as a free software package, further 
- extending the work of Mr. Moshier.</para>
-		<para>Kepler does not integrate orbits to the current epoch. If you want the accuracy resulting from 
- an integrated orbit, you must integrate separately and supply Kepler with elements of the current 
- epoch. Orbit integration is on the list of things for the next major version.</para>
-		<para>Kepler uses polynomial approximations for the major planet ephemerides. The tables 
- of coefficients were derived by a least squares fit of periodic terms to JPL's DE404 ephemerides. 
- The periodic frequencies used were determined by spectral analysis and comparison with VSOP87 and 
- other analytical planetary theories. The least squares fit to DE404 covers the interval from -3000 
- to +3000 for the outer planets, and -1350 to +3000 for the inner planets. For details on the 
- accuracy of the major planet ephemerides, see the Accuracy Tables page. </para>
-		<para>
-			<b>Date and Time Systems</b><br/><br/>
- For a detailed explanation of astronomical timekeeping systems, see A Time Tutorial on the NASA 
- Goddard Spaceflight Center site, and the USNO Systems of Time site. 
- <br/><br/><i>ActiveX Date values </i><br/>
- These are the Windows standard "date serial" numbers, and are expressed in local time or 
- UTC (see below). The fractional part of these numbers represents time within a day. 
- They are used throughout applications such as Excel, Visual Basic, VBScript, and other 
- ActiveX capable environments. 
- <br/><br/><i>Julian dates </i><br/>
- These are standard Julian "date serial" numbers, and are expressed in UTC time or Terrestrial 
- time. The fractional part of these numbers represents time within a day. The standard ActiveX 
- "Double" precision of 15 digits gives a resolution of about one millisecond in a full Julian date. 
- This is sufficient for the purposes of this program. 
- <br/><br/><i>Hourly Time Values </i><br/>
- These are typically used to represent sidereal time and right ascension. They are simple real 
- numbers in units of hours. 
- <br/><br/><i>UTC Time Scale </i><br/>
- Most of the ASCOM methods and properties that accept date/time values (either Date or Julian) 
- assume that the date/time is in Coordinated Universal Time (UTC). Where necessary, this time 
- is converted internally to other scales. Note that UTC seconds are based on the Cesium atom, 
- not planetary motions. In order to keep UTC in sync with planetary motion, leap seconds are 
- inserted periodically. The error is at most 900 milliseconds.
- <br/><br/><i>UT1 Time Scale </i><br/>
- The UT1 time scale is the planetary equivalent of UTC. It it runs smoothly and varies a bit 
- with time, but it is never more than 900 milliseconds different from UTC. 
- <br/><br/><i>TT Time Scale </i><br/>
- The Terrestrial Dynamical Time (TT) scale is used in solar system orbital calculations. 
- It is based completely on planetary motions; you can think of the solar system as a giant 
- TT clock. It differs from UT1 by an amount called "delta-t", which slowly increases with time, 
- and is about 60 seconds right now (2001). </para>
-	</remarks>
+ Data for the observer's location.  The atmospheric parameters are used only by the refraction 
+ function called from function 'equ_to_hor'. Additional parameters can be added to this 
+ structure if a more sophisticated refraction model is employed.
+ </remarks>
+</member><member name="F:ASCOM.Astrometry.PosVector.x">
+	<summary>
+ x co-ordinate
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.PosVector.y">
+	<summary>
+ y co-ordinate
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.PosVector.z">
+	<summary>
+ z co-ordinate
+ </summary>
+	<remarks></remarks>
+</member><member name="T:ASCOM.Astrometry.PosVector">
+	<summary>
+ Structure to hold a position vector
+ </summary>
+	<remarks>Object position vector
+ </remarks>
+</member><member name="F:ASCOM.Astrometry.VelVector.x">
+	<summary>
+ x velocity component 
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.VelVector.y">
+	<summary>
+ y velocity component
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.VelVector.z">
+	<summary>
+ z velocity component
+ </summary>
+	<remarks></remarks>
+</member><member name="T:ASCOM.Astrometry.VelVector">
+	<summary>
+ Structure to hold a velocity vector
+ </summary>
+	<remarks>Object velocity vector
+ </remarks>
+</member><member name="F:ASCOM.Astrometry.FundamentalArgs.l">
+	<summary>
+ l (mean anomaly of the Moon)
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.FundamentalArgs.ldash">
+	<summary>
+ l' (mean anomaly of the Sun)
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.FundamentalArgs.F">
+	<summary>
+ F (L - omega; L = mean longitude of the Moon)
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.FundamentalArgs.D">
+	<summary>
+ D (mean elongation of the Moon from the Sun)
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ASCOM.Astrometry.FundamentalArgs.Omega">
+	<summary>
+ Omega (mean longitude of the Moon's ascending node)
+ </summary>
+	<remarks></remarks>
+</member><member name="T:ASCOM.Astrometry.FundamentalArgs">
+	<summary>
+ Structure to hold Sun and Moon fundamental arguments
+ </summary>
+	<remarks>Fundamental arguments, in radians
+</remarks>
 </member><member name="M:ASCOM.Astrometry.NOVAS.NOVAS2.AppStar(System.Double,ASCOM.Astrometry.BodyDescription@,ASCOM.Astrometry.CatEntry@,System.Double@,System.Double@)">
 	<summary>
  Computes the apparent place of a star 
@@ -3419,316 +3729,6 @@ ASCOM.Astrometry
  does not carry out calculations itself, it simply handles any interface presentation differences
  and calls the relevant 32 or 64bit code according to its environment.</para>
 	</remarks>
-</member><member name="M:ASCOM.Astrometry.Transform.Transform.Dispose">
-	<summary>
- Cleans up resources used by the Transform component
- </summary>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Transform.Transform.SiteLatitude">
-	<summary>
- Gets or sets the site latitude
- </summary>
-	<value>Site latitude</value>
-	<returns>Latitude in degrees</returns>
-	<remarks>Positive numbers north of the equator, negative numbers south.</remarks>
-</member><member name="P:ASCOM.Astrometry.Transform.Transform.SiteLongitude">
-	<summary>
- Gets or sets the site longitude
- </summary>
-	<value>Site longitude</value>
-	<returns>Longitude in degrees</returns>
-	<remarks>Positive numbers east of the Greenwich meridian, negative numbes west of the Greenwich meridian.</remarks>
-</member><member name="P:ASCOM.Astrometry.Transform.Transform.SiteElevation">
-	<summary>
- Gets or sets the site elevation above sea level
- </summary>
-	<value>Site elevation</value>
-	<returns>Elevation in metres</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Transform.Transform.SiteTemperature">
-	<summary>
- Gets or sets the site ambient temperature
- </summary>
-	<value>Site ambient temperature</value>
-	<returns>Temperature in degrees Celsius</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Transform.Transform.Refraction">
-	<summary>
- Gets or sets a flag indicating whether refraction is calculated for topocentric co-ordinates
- </summary>
-	<value>True / false flag indicating refaction is included / omitted from topocentric co-ordinates</value>
-	<returns>Boolean flag</returns>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.Transform.Transform.Refresh">
-	<summary>
- Causes the transform component to recalculate values derrived from the last Set command
- </summary>
-	<remarks>Use this when you have set J2000 co-ordinates and wish to ensure that the mount points to the same 
- co-ordinates allowing for local effects that change with time such as refraction.</remarks>
-</member><member name="M:ASCOM.Astrometry.Transform.Transform.SetJ2000(System.Double,System.Double)">
-	<summary>
- Sets the known J2000 Right Ascension and Declination coordinates that are to be transformed
- </summary>
-	<param name="RA">RA in J2000 co-ordinates</param>
-	<param name="DEC">DEC in J2000 co-ordinates</param>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.Transform.Transform.SetApparent(System.Double,System.Double)">
-	<summary>
- Sets the known apparent Right Ascension and Declination coordinates that are to be transformed
- </summary>
-	<param name="RA">RA in apparent co-ordinates</param>
-	<param name="DEC">DEC in apparent co-ordinates</param>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.Transform.Transform.SetTopocentric(System.Double,System.Double)">
-	<summary>
- Sets the known local topocentric Right Ascension and Declination coordinates that are to be transformed
- </summary>
-	<param name="RA">RA in local topocentric co-ordinates</param>
-	<param name="DEC">DEC in local topocentric co-ordinates</param>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Transform.Transform.RAJ2000">
-	<summary>
- Returns the Right Ascension in J2000 co-ordinates
- </summary>
-	<value>J2000 Right Ascension</value>
-	<returns>Right Ascension in hours</returns>
-	<exception cref="T:ASCOM.Astrometry.Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
- to read a value before any of the Set methods has been used or if the value can not be derived from the
- information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
- a SetApparent and one of the Site properties has not been set.</exception>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Transform.Transform.DecJ2000">
-	<summary>
- Returns the Declination in J2000 co-ordinates
- </summary>
-	<value>J2000 Declination</value>
-	<returns>Declination in degrees</returns>
-	<exception cref="T:ASCOM.Astrometry.Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
- to read a value before any of the Set methods has been used or if the value can not be derived from the
- information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
- a SetApparent and one of the Site properties has not been set.</exception>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Transform.Transform.RATopocentric">
-	<summary>
- Returns the Right Ascension in local topocentric co-ordinates
- </summary>
-	<value>Local topocentric Right Ascension</value>
-	<returns>Right Ascension in hours</returns>
-	<exception cref="T:ASCOM.Astrometry.Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
- to read a value before any of the Set methods has been used or if the value can not be derived from the
- information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
- a SetApparent and one of the Site properties has not been set.</exception>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Transform.Transform.DECTopocentric">
-	<summary>
- Returns the Declination in local topocentric co-ordinates
- </summary>
-	<value>Local topocentric Declination</value>
-	<returns>Declination in degrees</returns>
-	<exception cref="T:ASCOM.Astrometry.Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
- to read a value before any of the Set methods has been used or if the value can not be derived from the
- information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
- a SetApparent and one of the Site properties has not been set.</exception>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Transform.Transform.RAApparent">
-	<summary>
- Returns the Right Ascension in apparent co-ordinates
- </summary>
-	<value>Apparent Right Ascension</value>
-	<returns>Right Ascension in hours</returns>
-	<exception cref="T:ASCOM.Astrometry.Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
- to read a value before any of the Set methods has been used or if the value can not be derived from the
- information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
- a SetApparent and one of the Site properties has not been set.</exception>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Transform.Transform.DECApparent">
-	<summary>
- Returns the Declination in apparent co-ordinates
- </summary>
-	<value>Apparent Declination</value>
-	<returns>Declination in degrees</returns>
-	<exception cref="T:ASCOM.Astrometry.Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
- to read a value before any of the Set methods has been used or if the value can not be derived from the
- information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
- a SetApparent and one of the Site properties has not been set.</exception>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Transform.Transform.AzimuthTopocentric">
-	<summary>
- Returns the topocentric azimth angle of the target
- </summary>
-	<value>Topocentric azimuth angle</value>
-	<returns>Azimuth angle in degrees</returns>
-	<exception cref="T:ASCOM.Astrometry.Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
- to read a value before any of the Set methods has been used or if the value can not be derived from the
- information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
- a SetApparent and one of the Site properties has not been set.</exception>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Astrometry.Transform.Transform.ElevationTopocentric">
-	<summary>
- Returns the topocentric elevation of the target
- </summary>
-	<value>Topocentric elevation angle</value>
-	<returns>Elevation angle in degrees</returns>
-	<exception cref="T:ASCOM.Astrometry.Exceptions.TransformUninitialisedException">Exception thrown if an attempt is made
- to read a value before any of the Set methods has been used or if the value can not be derived from the
- information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
- a SetApparent and one of the Site properties has not been set.</exception>
-	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.Transform.Transform">
-	<summary>
- Coordinate transform component; J2000 - apparent - local topocentric
- </summary>
-	<remarks>Use this component to transform between J2000, apparent and local topocentric (JNow) coordinates or 
- vice versa. To use the component, instantiate it, then use one of SetJ2000 or SetJNow or SetApparent to 
- initialise with known values. Now use the RAJ2000, DECJ200, RAJNow, DECJNow, RAApparent and DECApparent 
- properties to read off the required transformed values.
-<para>The component can be reused simply by setting new co-ordinates with a Set command, there
- is no need to create a new component each time a transform is required.</para>
-		<para>Transforms are effected through the ASCOM NOVAS.Net engine that encapsulates the USNO NOVAS2 library. 
- The USNO NOVAS reference web page is: 
- http://www.usno.navy.mil/USNO/astronomical-applications/software-products/novas/novas-fortran/novas-fortran 
- </para>
-	</remarks>
-</member><member name="M:ASCOM.Astrometry.Exceptions.TransformUninitialisedException.#ctor(System.String)">
-	<summary>
- Create a new exception with message 
- </summary>
-	<param name="message">Message to be reported by the exception</param>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.Exceptions.TransformUninitialisedException.#ctor(System.String,System.Exception)">
-	<summary>
- Create a new exception with message 
- </summary>
-	<param name="message">Message to be reported by the exception</param>
-	<param name="inner">Exception to be reported as the inner exception</param>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.Exceptions.TransformUninitialisedException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-	<summary>
- Serialise the exception
- </summary>
-	<param name="info">Serialisation information</param>
-	<param name="context">Serialisation context</param>
-	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.Exceptions.TransformUninitialisedException">
-	<summary>
- Exception thrown when an attempt is made to read from the transform component before it has had co-ordinates
- set once by SetJ2000 or SetJNow.
- </summary>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.Exceptions.CompatibilityException.#ctor(System.String)">
-	<summary>
- Create a new exception with message 
- </summary>
-	<param name="message">Message to be reported by the exception</param>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.Exceptions.CompatibilityException.#ctor(System.String,System.Exception)">
-	<summary>
- Create a new exception with message 
- </summary>
-	<param name="message">Message to be reported by the exception</param>
-	<param name="inner">Exception to be reported as the inner exception</param>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.Exceptions.CompatibilityException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-	<summary>
- Serialise the exception
- </summary>
-	<param name="info">Serialisation information</param>
-	<param name="context">Serialisation context</param>
-	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.Exceptions.CompatibilityException">
-	<summary>
- Exception thrown when an incompatible component is encountered that prevents Utilities from funcitoning
- correctly.
- </summary>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.Exceptions.ValueNotSetException.#ctor(System.String)">
-	<summary>
- Create a new exception with message 
- </summary>
-	<param name="message">Message to be reported by the exception</param>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.Exceptions.ValueNotSetException.#ctor(System.String,System.Exception)">
-	<summary>
- Create a new exception with message 
- </summary>
-	<param name="message">Message to be reported by the exception</param>
-	<param name="inner">Exception to be reported as the inner exception</param>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.Exceptions.ValueNotSetException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-	<summary>
- Serialise the exception
- </summary>
-	<param name="info">Serialisation information</param>
-	<param name="context">Serialisation context</param>
-	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.Exceptions.ValueNotSetException">
-	<summary>
- Exception thrown when an attempt is made to read a value that has not yet been set.
- </summary>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.Exceptions.ValueNotAvailableException.#ctor(System.String)">
-	<summary>
- Create a new exception with message 
- </summary>
-	<param name="message">Message to be reported by the exception</param>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.Exceptions.ValueNotAvailableException.#ctor(System.String,System.Exception)">
-	<summary>
- Create a new exception with message 
- </summary>
-	<param name="message">Message to be reported by the exception</param>
-	<param name="inner">Exception to be reported as the inner exception</param>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.Exceptions.ValueNotAvailableException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-	<summary>
- Serialise the exception
- </summary>
-	<param name="info">Serialisation information</param>
-	<param name="context">Serialisation context</param>
-	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.Exceptions.ValueNotAvailableException">
-	<summary>
- Exception thrown when an attempt is made to read a value that has not yet been calculated.
- </summary>
-	<remarks>This probably occurs because another variable has not been set or a required method has not been called.</remarks>
-</member><member name="M:ASCOM.Astrometry.Exceptions.NOVASFunctionException.#ctor(System.String,System.String,System.Int16)">
-	<summary>
- Create a new exception with message 
- </summary>
-	<param name="message">Message to be reported by the exception</param>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.Exceptions.NOVASFunctionException.#ctor(System.String,System.Exception)">
-	<summary>
- Create a new exception with message 
- </summary>
-	<param name="message">Message to be reported by the exception</param>
-	<param name="inner">Exception to be reported as the inner exception</param>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Astrometry.Exceptions.NOVASFunctionException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-	<summary>
- Serialise the exception
- </summary>
-	<param name="info">Serialisation information</param>
-	<param name="context">Serialisation context</param>
-	<remarks></remarks>
-</member><member name="T:ASCOM.Astrometry.Exceptions.NOVASFunctionException">
-	<summary>
- Exception thrown when a NOVAS function returns a non-zero, error completion code.
- </summary>
-	<remarks>This probably occurs because another variable has not been set or a required method has not been called.</remarks>
-</member><member name="P:ASCOM.Astrometry.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:ASCOM.Astrometry.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:ASCOM.Astrometry.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
 </member>
 </members>
 </doc>
