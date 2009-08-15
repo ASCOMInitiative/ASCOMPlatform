@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM Device Driver", "CSharpBase\ASCOM Device Driver.csproj", "{64308775-BD4A-469C-BCAB-3ED830B811AF}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "VBBase", "VBBase\VBBase.vbproj", "{71BB4DA7-4092-416D-89FE-97CD15207371}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Setup.TemplateWizard", "ASCOM.Setup.TemplateWizard\ASCOM.Setup.TemplateWizard.csproj", "{6E5A18A3-EA09-4D55-ABC8-A7AEAC3DDA2D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{DBE9A8E9-271D-4A04-882C-EF866D54128F}"
+	ProjectSection(SolutionItems) = preProject
+		TemplateProjectsReadMe.txt = TemplateProjectsReadMe.txt
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71BB4DA7-4092-416D-89FE-97CD15207371}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71BB4DA7-4092-416D-89FE-97CD15207371}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71BB4DA7-4092-416D-89FE-97CD15207371}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E5A18A3-EA09-4D55-ABC8-A7AEAC3DDA2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E5A18A3-EA09-4D55-ABC8-A7AEAC3DDA2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E5A18A3-EA09-4D55-ABC8-A7AEAC3DDA2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E5A18A3-EA09-4D55-ABC8-A7AEAC3DDA2D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

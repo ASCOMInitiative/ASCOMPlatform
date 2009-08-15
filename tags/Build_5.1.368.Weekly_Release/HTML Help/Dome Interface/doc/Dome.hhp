@@ -1,0 +1,58 @@
+[OPTIONS]
+Auto Index=Yes
+Compatibility=1.1 or later
+Compiled file=Dome.chm
+Contents file=Dome.hhc
+Default Window=main
+Default topic=DomeHOME.htm
+Display compile progress=No
+Full text search stop list file=Dome.stp
+Full-text search=Yes
+Index file=Dome.hhk
+Language=0x409 English (United States)
+Title=ASCOM Dome Interface Standard 1.0
+
+[WINDOWS]
+main="ASCOM Dome Interface Standard 1.0","Dome.hhc","Dome.hhk","DomeHOME.htm","DomeHOME.htm",,,,,0x23520,,0x384e,[10,10,630,470],0xb0000,,,,,,0
+
+
+[FILES]
+images\important2.gif
+images\ro.gif
+images\rw.gif
+dc3_hh.css
+DomeRELNOTES.htm
+DomeDomeMETHAbortSlew.htm
+DomeDomeMETHCloseShutter.htm
+DomeDomeMETHFindHome.htm
+DomeDomeMETHOpenShutter.htm
+DomeDomeMETHPark.htm
+DomeDomeMETHSetPark.htm
+DomeDomeMETHSetupDialog.htm
+DomeDomeMETHSlewToAltitude.htm
+DomeDomeMETHSlewToAzimuth.htm
+DomeDomeMETHSyncToAzimuth.htm
+DomeDomePROPAltitude.htm
+DomeDomePROPAtHome.htm
+DomeDomePROPAtPark.htm
+DomeDomePROPAzimuth.htm
+DomeDomePROPCanFindHome.htm
+DomeDomePROPCanPark.htm
+DomeDomePROPCanSetAltitude.htm
+DomeDomePROPCanSetAzimuth.htm
+DomeDomePROPCanSetPark.htm
+DomeDomePROPCanSetShutter.htm
+DomeDomePROPCanSyncAzimuth.htm
+DomeDomePROPConnected.htm
+DomeDomePROPDescription.htm
+DomeDomePROPDriverInfo.htm
+DomeDomePROPInterfaceVersion.htm
+DomeDomePROPName.htm
+DomeDomePROPShutterStatus.htm
+DomeDomePROPSlewing.htm
+DomeERRORS.htm
+DomeHOME.htm
+DomeCLASSDome.htm
+
+[INFOTYPES]
+
