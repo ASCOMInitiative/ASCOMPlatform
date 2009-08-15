@@ -184,6 +184,8 @@ namespace ASCOM.GeminiTelescope
             Commands.Add(":k@", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
             Commands.Add(":kP", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
             Commands.Add(":kI", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
+            Commands.Add(":HI", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
+            Commands.Add(":T", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
         }
 
     }

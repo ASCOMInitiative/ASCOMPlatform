@@ -113,15 +113,7 @@ namespace ASCOM.GeminiTelescope
         {
             lock (m_LockDisplayData)
             {
-                if (s[0] == 0x8c)
-                    m_DisplayString = s.ToString();
-                else
-                    if (!m_DisplayString.Contains("\x99"))
-                        m_DisplayString += s.ToString();
-                    else
-                        m_DisplayString = s.ToString();
-
-                if (!m_DisplayString.Contains("\x99") && m_DisplayString[0] != 0x8c) return;
+                m_DisplayString += s.ToString();
                 m_DisplayDataAvailable.Set();
             }
         }
@@ -164,6 +156,8 @@ namespace ASCOM.GeminiTelescope
             {
                 if (incoming.Length > 0 || m_SerialPort.BytesToRead > 0)
                 {
+                    m_SerialDataAvailable.Reset();
+
                     m_PortActive = true;    // if at some data has been received over this port, consider it active
 
                     while (m_SerialPort.BytesToRead > 0)
@@ -193,33 +187,49 @@ namespace ASCOM.GeminiTelescope
                     for (int i = 0; i < cmds.Length; ++i)
                         cmds[i] += "#";
 
-                    if (cmds.Length == 0) continue;
+                    //if (cmds.Length == 0) continue;
 
-                    string[] res = null;
-                    GeminiHardware.DoCommandResult(cmds, GeminiHardware.MAX_TIMEOUT, true, out res);
+                    while (cmds.Length > 0) // process all commands in batches, max batch size of 16
+                    {
+                        string[] res = null;
 
-                    if (res != null)
-                        foreach (string r in res)
+                        if (cmds.Length > 16)   // SEND A MAX OF 16 COMMANDS AT A TIME
                         {
-                            if (r != null)
-                            {
-                                //writing too quick, or nobody's listening?
-                                while (m_SerialPort.BytesToWrite + r.Length >= m_SerialPort.WriteBufferSize)
-                                    System.Threading.Thread.Sleep(500);
+                            string[] cmds16 = new string[16];
+                            Array.Copy(cmds, 0, cmds16, 0, 16);
+                            GeminiHardware.DoCommandResult(cmds16, GeminiHardware.MAX_TIMEOUT, true, out res);
+                            cmds16 = new string[cmds.Length - 16];
+                            Array.Copy(cmds, 16, cmds16, 0, cmds.Length - 16);  // remove first 16
+                            cmds = cmds16;
+                        }
+                        else
+                        {
+                            GeminiHardware.DoCommandResult(cmds, GeminiHardware.MAX_TIMEOUT, true, out res);
+                            cmds = new string[0];
+                        }
 
-                                lock (m_SerialPort)
+                        if (res != null)
+                            foreach (string r in res)
+                            {
+                                if (r != null)
                                 {
-                                    m_SerialPort.Write(Encoding.GetEncoding("Latin1").GetBytes(r), 0, r.Length);
-                                    m_SerialPort.BaseStream.Flush();
-                                    System.Threading.Thread.Sleep(0);
+                                    //writing too quick, or nobody's listening?
+                                    while (m_SerialPort.BytesToWrite + r.Length >= m_SerialPort.WriteBufferSize)
+                                        System.Threading.Thread.Sleep(500);
+
+                                    lock (m_SerialPort)
+                                    {
+                                        m_SerialPort.Write(Encoding.GetEncoding("Latin1").GetBytes(r), 0, r.Length);
+                                        m_SerialPort.BaseStream.Flush();
+                                        System.Threading.Thread.Sleep(0);
+                                    }
                                 }
                             }
-                        }
+                    }
 
                 } 
                 else // all is quiet. no pending commands to execute, check if a new display stream is ready
                 {
-                    m_SerialDataAvailable.Reset();
 
                     if (m_DisplayDataAvailable.WaitOne(0))
                     {
@@ -227,16 +237,13 @@ namespace ASCOM.GeminiTelescope
 
                         if (m_SerialPort.IsOpen)
                         {
-                            // port is backed up, wait a while...
-                            while (m_SerialPort.BytesToWrite + m_DisplayString.Length >= m_SerialPort.WriteBufferSize)
-                                System.Threading.Thread.Sleep(100);
-
                             lock (m_LockDisplayData)
                             {
                                 lock (m_SerialPort)
                                 {
                                     m_SerialPort.Write(Encoding.GetEncoding("Latin1").GetBytes(m_DisplayString), 0, m_DisplayString.Length);
                                     m_SerialPort.BaseStream.Flush();
+                                    System.Threading.Thread.Sleep(0);
                                 }
 #if DEBUG
                                 System.Diagnostics.Trace.Write("PassStringToVirtualPort: ");
@@ -249,13 +256,14 @@ namespace ASCOM.GeminiTelescope
                                 }
                                 System.Diagnostics.Trace.WriteLine(" " + txt_out + " " + hx_out);
 #endif
+
                                 m_DisplayString = "";
                             }
                         }
                     }
 
                 }
-                System.Threading.WaitHandle.WaitAny(evts, 100); //wait for display or serial command data to become available, or just sleep for a while
+                System.Threading.WaitHandle.WaitAny(evts, 500); //wait for display or serial command data to become available, or just sleep for a while
             }
         }
     }
