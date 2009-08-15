@@ -1192,8 +1192,6 @@ namespace ASCOM.GeminiTelescope
 
                         DiscardInBuffer();
 
-//                        m_SerialPort.DiscardInBuffer(); //clear all received data
-
                         System.Diagnostics.Trace.Write(
                             DateTime.Now.Hour.ToString("0") + ":" +
                             DateTime.Now.Minute.ToString("00") + ":" +
@@ -1242,14 +1240,14 @@ namespace ASCOM.GeminiTelescope
 #endif
                         if (bNeedStatusUpdate)
                         {
-                            m_AllowErrorNotify = false;
+                            m_AllowErrorNotify = false; //don't bother the user with timeout errors during polling  -- these are not very important
                             UpdatePolledVariables(); //update variables if one of them was altered by a processed command
                             m_AllowErrorNotify = false;
                         }
                     }
                     else
                     {
-                        m_AllowErrorNotify = false;
+                        m_AllowErrorNotify = false; //don't bother the user with timeout errors during polling  -- these are not very important
                         UpdatePolledVariables();
                         m_AllowErrorNotify = true;
                     }
@@ -1274,6 +1272,12 @@ namespace ASCOM.GeminiTelescope
             m_CancelAsync = false;
         }
 
+        /// <summary>
+        /// Discard anything in the in-buffer, but keep all the binary 
+        /// data, as it may be needed by the software on the other side of the
+        /// pass-through port
+        /// </summary>
+        /// 
         private static void DiscardInBuffer()
         {
             StringBuilder sb = new StringBuilder();
@@ -1283,7 +1287,7 @@ namespace ASCOM.GeminiTelescope
                 while (m_SerialPort.BytesToRead > 0)
                 {
                     int c = m_SerialPort.ReadByte();
-                    if (c>0x80) sb.Append(Convert.ToChar(c));
+                    if (c>=0x80) sb.Append(Convert.ToChar(c));
                 }
                 if (sb.Length > 0 && m_PassThroughPort.PortActive) m_PassThroughPort.PassStringToPort(sb);
             }
@@ -1300,7 +1304,8 @@ namespace ASCOM.GeminiTelescope
 
 
             //Get RA and DEC etc
-            m_SerialPort.DiscardInBuffer(); //clear all received data
+            DiscardInBuffer(); //clear all received data
+            
             //longitude, latitude, UTC offset
             Transmit(":Gg#:Gt#:GG#");
 
@@ -1486,7 +1491,7 @@ namespace ASCOM.GeminiTelescope
                     do
                     {
                         m_SerialPort.DiscardOutBuffer();
-                        m_SerialPort.DiscardInBuffer();
+                        DiscardInBuffer();
 
                         Transmit("\x6");
                         CommandItem ci = new CommandItem("\x6", 2000, true);
@@ -1637,7 +1642,7 @@ namespace ASCOM.GeminiTelescope
                 lock (m_CommandQueue) // remove all pending commands, keep the queue locked so that the worker thread can't process during port reset
                 {
                     m_CommandQueue.Clear();
-                    m_SerialPort.DiscardInBuffer();
+                    DiscardInBuffer();
                     m_SerialPort.DiscardOutBuffer();
                     try
                     {
@@ -1694,8 +1699,11 @@ namespace ASCOM.GeminiTelescope
                 }
                 else
                 {
-                    if (outp.Length > 0 && m_PassThroughPort.PortActive) m_PassThroughPort.PassStringToPort(outp);
-                    if (m_SerialTimeoutExpired.WaitOne(0)) throw new TimeoutException("ReadTo");
+                    if (m_SerialTimeoutExpired.WaitOne(0))
+                    {
+                        if (outp.Length > 0 && m_PassThroughPort.PortActive) m_PassThroughPort.PassStringToPort(outp);
+                        throw new TimeoutException("ReadTo");
+                    }
                 }
             }
         }
@@ -1728,8 +1736,11 @@ namespace ASCOM.GeminiTelescope
                 }
                 else
                 {
-                    if (outp.Length > 0 && m_PassThroughPort.PortActive) m_PassThroughPort.PassStringToPort(outp);
-                    if (m_SerialTimeoutExpired.WaitOne(0)) throw new TimeoutException("ReadNumber");
+                    if (m_SerialTimeoutExpired.WaitOne(0))
+                    {
+                        if (outp.Length > 0 && m_PassThroughPort.PortActive) m_PassThroughPort.PassStringToPort(outp);
+                        throw new TimeoutException("ReadNumber");
+                    }
                 }
             }
         }
