@@ -25,7 +25,7 @@ using ASCOM;
 using ASCOM.Utilities;
 using ASCOM.Interface;
 using ASCOM.GeminiTelescope;
-using ASCOM.Utilities.Conform;
+using ASCOM.Conform;
 
 /// <summary>
 /// Need to add CommandNative to standard ITelescope interface for backward compatibility with

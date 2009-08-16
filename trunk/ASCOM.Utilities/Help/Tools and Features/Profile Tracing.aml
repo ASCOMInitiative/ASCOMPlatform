@@ -17,16 +17,16 @@
          <para><legacyBold>Automatic Filenames</legacyBold> are always used and log files will appear in the 
          "My Documents\ASCOM" folder. Within this, folders will be created with names of format: "Logs yyyy-mm-dd" 
          where yyyy, mm and dd are the current year, month and day numbers. Within this directory profile logs will 
-         accumulate each day with names of format "ASCOM.ProfileNET.hhmm.ssffn" and "ASCOM.XMLAccess.hhmm.ssffn" 
+         accumulate each day with names of format "ASCOM.Profile.hhmm.ssffn" and "ASCOM.XMLAccess.hhmm.ssffn" 
          where hh, mm, ss and ff are the hour, minute, second and fractional second of the time the log is started 
          and n is an arbitary integer that ensures that two logs created at the same time don't have the same 
          filename. </para>
-         <para>The ASCOM.ProfileNET file logs calls made to the public Profile component only while 
+         <para>The ASCOM.Profile file logs calls made to the public Profile component only while 
          the ASCOM.XMLAccess file logs lower level infrastructural calls concerned with retrieving and storing
          profile information from the file system.</para>
          
          <para>The ASCOM.XMLAccess logs are mainly aimed at debugging the platform component itself
-         while the ASCOM.ProfileNET logs may help in debugging driver and client issues as well. </para>
+         while the ASCOM.Profile logs may help in debugging driver and client issues as well. </para>
                   
           <para>The following is an example of an ASCOM.Profile log:</para>
           

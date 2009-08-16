@@ -54,7 +54,7 @@ Public Class Profile
         MyBase.New()
         ProfileStore = New XMLAccess(ERR_SOURCE_PROFILE) 'Get access to the profile store
         m_sDeviceType = "Telescope"
-        Tl = New TraceLogger("", "ProfileNET")
+        Tl = New TraceLogger("", "Profile")
         Tl.Enabled = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT) 'Get enabled / disabled state from the user registry
         Tl.LogMessage("New", "Trace logger created OK")
     End Sub
