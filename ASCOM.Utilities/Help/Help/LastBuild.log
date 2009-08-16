@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shfbBuild product="Sandcastle Help File Builder Utilities" version="1.8.0.1" projectFile="C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\ASCOMPlatform.shfbproj" started="02/08/2009 21:53:08">
+<shfbBuild product="Sandcastle Help File Builder Utilities" version="1.8.0.1" projectFile="C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\ASCOMPlatform.shfbproj" started="16/08/2009 10:41:12">
 <buildStep step="Initializing">
 Loading and initializing plug-ins...
 Hierarchical Table of Contents Version 1.8.0.1
 Copyright &#169; 2007-2009, Eric Woodruff, All Rights Reserved
-</buildStep>
-<buildStep step="ClearWorkFolder">
-Clearing working folder...
 </buildStep>
 <buildStep step="FindingTools">
 Finding tools...
@@ -17,23 +14,24 @@ Found HTML 1.x help compiler in 'C:\Program Files\HTML Help Workshop\'
 Validating and copying documentation source information
 Source: C:\Documents and Settings\Peter\My Documents\ASCOM Source\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj
     Found project 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj'
+Source: C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.IConform\ASCOM.IConform\ASCOM.IConform.vbproj
+    Found project 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.IConform\ASCOM.IConform\ASCOM.IConform.vbproj'
 Source: C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Astrometry\Astrometry\Astrometry.vbproj
     Found project 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Astrometry\Astrometry\Astrometry.vbproj'
 Source: C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Astrometry\Astrometry\AstrometryNamespaceDocs.xml
-Source: C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Utilities\UtilitiesSupport\NamespaceDocumentation.xml
-SHFB: Warning BE0006: Unable to location any documentation sources for 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Utilities\UtilitiesSupport\NamespaceDocumentation.xml'
+Source: C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Utilities\NamespaceDocumentation.xml
 Source: C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Utilities\Utilities.vbproj
     Found project 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Utilities\Utilities.vbproj'
 
 Parsing project files
     Found assembly 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\Interfaces\ASCOMExceptions\bin\Debug\ASCOM.Exceptions.dll'
+    Found assembly 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.IConform\ASCOM.IConform\bin\Debug\ASCOM.IConform.dll'
     Found assembly 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Astrometry\Astrometry\bin\Debug\ASCOM.Astrometry.dll'
     Found assembly 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Utilities\bin\Debug\ASCOM.Utilities.dll'
 
 References to use:
     ASCOM.Astrometry
     ASCOM.Utilities
-    ASCOM.Utilities, Version=5.3.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL
     Scripting
     System
     System.Drawing
@@ -42,13 +40,15 @@ References to use:
 
 Copying XML comments files
     C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Astrometry\Astrometry\AstrometryNamespaceDocs.xml -&gt; C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\AstrometryNamespaceDocs.xml
+    C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Utilities\NamespaceDocumentation.xml -&gt; C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\NamespaceDocumentation.xml
     C:\Documents and Settings\Peter\My Documents\ASCOM Source\Interfaces\ASCOMExceptions\bin\Debug\ASCOM.Exceptions.XML -&gt; C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\ASCOM.Exceptions.XML
+    C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.IConform\ASCOM.IConform\bin\Debug\ASCOM.IConform.xml -&gt; C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\ASCOM.IConform.xml
     C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Astrometry\Astrometry\bin\Debug\ASCOM.Astrometry.xml -&gt; C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\ASCOM.Astrometry.xml
     C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Utilities\bin\Debug\ASCOM.Utilities.xml -&gt; C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\ASCOM.Utilities.xml
 </buildStep>
 <buildStep step="GenerateSharedContent">
 Generating shared content files (en-US, English (United States))...
-    Last step completed in 00:00:00.0469
+    Last step completed in 00:00:00.0000
 </buildStep>
 <buildStep step="GenerateApiFilter">
 Generating API filter for MRefBuilder...
@@ -60,12 +60,12 @@ Generating reflection information...
 GenerateRefInfo:
   MrefBuilder (v2.4.10520.1)
   Copyright &#184; Microsoft 2006
-  Info: Loaded 3 assemblies for reflection and 7 dependency assemblies.
-  Info: Wrote information on 10 namespaces, 68 types, and 730 members
+  Info: Loaded 4 assemblies for reflection and 7 dependency assemblies.
+  Info: Wrote information on 11 namespaces, 73 types, and 754 members
   XslTransform (v2.4.10520.1)
   Copyright &#184; Microsoft 2005-2006
   Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\MergeDuplicates.xsl'.
-    Last step completed in 00:00:02.8282
+    Last step completed in 00:00:02.7032
 </buildStep>
 <buildStep step="GenerateNamespaceSummaries">
 Generating namespace summary information...
@@ -92,7 +92,7 @@ TransformManifest:
   XslTransform (v2.4.10520.1)
   Copyright &#184; Microsoft 2005-2006
   Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\ReflectionToManifest.xsl'.
-    Last step completed in 00:00:03.1876
+    Last step completed in 00:00:03.1564
 </buildStep>
 <buildStep step="ModifyHelpTopicFilenames">
 Modifying help topic filenames in reflection information file
@@ -117,6 +117,9 @@ Modifying help topic filenames in reflection information file
     Unique name M_ASCOM_Astrometry_NOVASCOM_PositionVector__ctor_1 generated for M:ASCOM.Astrometry.NOVASCOM.PositionVector.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)
     Unique name M_ASCOM_Astrometry_NOVASCOM_PositionVector_SetFromSiteJD_1 generated for M:ASCOM.Astrometry.NOVASCOM.PositionVector.SetFromSiteJD(ASCOM.Astrometry.NOVASCOM.Site,System.Double,System.Double)
     Unique name M_ASCOM_Astrometry_NOVASCOM_VelocityVector_SetFromSiteJD_1 generated for M:ASCOM.Astrometry.NOVASCOM.VelocityVector.SetFromSiteJD(ASCOM.Astrometry.NOVASCOM.Site,System.Double,System.Double)
+    Unique name M_ASCOM_Conform_ConformCommandStrings__ctor_1 generated for M:ASCOM.Conform.ConformCommandStrings.#ctor(System.String,System.String,System.String,System.String,System.Boolean)
+    Unique name M_ASCOM_Conform_ConformErrorNumbers__ctor_1 generated for M:ASCOM.Conform.ConformErrorNumbers.#ctor(System.Int32,System.Int32,System.Int32,System.Int32)
+    Unique name M_ASCOM_Conform_ConformErrorNumbers__ctor_2 generated for M:ASCOM.Conform.ConformErrorNumbers.#ctor(System.Int32[],System.Int32[],System.Int32[])
     Unique name M_ASCOM_Utilities_Chooser_Choose_1 generated for M:ASCOM.Utilities.Chooser.Choose(System.String)
     Unique name M_ASCOM_Utilities_Profile_DeleteValue_1 generated for M:ASCOM.Utilities.Profile.DeleteValue(System.String,System.String,System.String)
     Unique name M_ASCOM_Utilities_Profile_GetValue_1 generated for M:ASCOM.Utilities.Profile.GetValue(System.String,System.String,System.String)
@@ -194,7 +197,7 @@ Modifying help topic filenames in reflection information file
     Unique name M_ASCOM_Utilities_Interfaces_IUtil_HoursToHMS_2 generated for M:ASCOM.Utilities.Interfaces.IUtil.HoursToHMS(System.Double,System.String,System.String)
     Unique name M_ASCOM_Utilities_Interfaces_IUtil_HoursToHMS_3 generated for M:ASCOM.Utilities.Interfaces.IUtil.HoursToHMS(System.Double,System.String,System.String,System.String)
     Unique name M_ASCOM_Utilities_Interfaces_IUtil_HoursToHMS_4 generated for M:ASCOM.Utilities.Interfaces.IUtil.HoursToHMS(System.Double,System.String,System.String,System.String,System.Int32)
-    Last step completed in 00:00:00.1406
+    Last step completed in 00:00:00.2500
 </buildStep>
 <buildStep step="CopyStandardContent">
 Copying standard help content...
@@ -304,7 +307,7 @@ C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\scripts\script_manifold.js
 C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\scripts\SplitScreen.js -&gt; C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\Output\scripts\SplitScreen.js
 C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\styles\Presentation.css -&gt; C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\Output\styles\Presentation.css
 C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\styles\Whidbey\presentation.css -&gt; C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\Output\styles\Whidbey\presentation.css
-    Last step completed in 00:00:00.9688
+    Last step completed in 00:00:01.1563
 </buildStep>
 <buildStep step="CopyConceptualContent">
 Copying conceptual content...
@@ -357,29 +360,29 @@ Generating conceptual topic files
     C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Tools and Features\Profile Explorer.aml -&gt; C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\ddueXml\62da8408-c4ed-45d8-9398-9990dcbe8cbd.xml
     Parsing topic file 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Tools and Features\Profile Tracing.aml'
     C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Tools and Features\Profile Tracing.aml -&gt; C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\ddueXml\f2211b59-6f8c-46fb-b47e-2afb569f3133.xml
-    Last step completed in 00:00:00.4219
+    Last step completed in 00:00:00.2500
 </buildStep>
 <buildStep step="CreateConceptualTopicConfigs">
 Creating conceptual topic configuration files...
     Companion files
     _ContentMetadata_.xml
     ConceptualManifest.xml
-    Last step completed in 00:00:00.2344
+    Last step completed in 00:00:00.0781
 </buildStep>
 <buildStep step="CopyAdditionalContent">
 Copying additional content files...
 No additional content to copy
-    Last step completed in 00:00:00.0156
+    Last step completed in 00:00:00.0000
 </buildStep>
 <buildStep step="MergeTablesOfContents">
 Merging conceptual and additional tables of contents...
-    Last step completed in 00:00:00.0781
+    Last step completed in 00:00:00.0938
 </buildStep>
 <buildStep step="CreateBuildAssemblerConfigs">
 Creating Sandcastle configuration files...
     sandcastle.config
     conceptual.config
-    Last step completed in 00:00:00.0156
+    Last step completed in 00:00:00.0625
 </buildStep>
 <buildStep step="MergeCustomConfigs">
 Merging custom build component configurations
@@ -395,7 +398,7 @@ C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\H
     Skipping component 'Cached Reflection Index Data', not used in conceptual build
     Replacing default configuration for 'Code Block Component' with the custom configuration
     Removing unused ExampleComponent.
-    Last step completed in 00:00:00.0781
+    Last step completed in 00:00:00.1250
 </buildStep>
 <buildStep step="BuildConceptualTopics">
 Building conceptual help topics...
@@ -468,7 +471,7 @@ BuildConceptualTopics:
   Info: CachedResolveReferenceLinksComponent: Creating MSDN URL resolver.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Program Files\Sandcastle\Data\Reflection' for targets files of the form '*.xml'.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working' for targets files of the form 'reflection.xml'.
-  Info: CachedResolveReferenceLinksComponent: Loaded 171110 reference targets.
+  Info: CachedResolveReferenceLinksComponent: Loaded 171154 reference targets.
   Info: CachedResolveReferenceLinksComponent: 
       [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.1]
       Cached Resolve Reference  Links 2 Component.  Copyright &#184; 2006-2009, Eric Woodruff, All Rights Reserved
@@ -498,7 +501,7 @@ BuildConceptualTopics:
   Info: BuildAssembler: Building topic 62da8408-c4ed-45d8-9398-9990dcbe8cbd
   Info: BuildAssembler: Building topic f2211b59-6f8c-46fb-b47e-2afb569f3133
   Info: Processed 22 topics
-    Last step completed in 00:00:24.3914
+    Last step completed in 00:00:24.5477
 </buildStep>
 <buildStep step="BuildReferenceTopics">
 Building reference help topics...
@@ -510,7 +513,7 @@ BuildReferenceTopics:
   Info: CopyFromFileComponent: Loading data file 'C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\Transforms\skeleton.xml'.
   Info: CachedCopyFromIndexComponent: Instantiating component.
   Info: CachedCopyFromIndexComponent: Searching for files that match 'reflection.xml'.
-  Info: CachedCopyFromIndexComponent: Indexed 1019 elements in 1 files.
+  Info: CachedCopyFromIndexComponent: Indexed 1063 elements in 1 files.
   Info: CachedCopyFromIndexComponent: Loaded 0 copy components.
   Info: CachedCopyFromIndexComponent: 
       [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.1]
@@ -1127,10 +1130,13 @@ BuildReferenceTopics:
   Warn: CopyFromIndexComponent: Entries for the key 'M:Microsoft.Build.Framework.RequiredRuntimeAttribute.#ctor(System.String)' occur in both 'C:\windows\Microsoft.NET\Framework\v2.0.50727\en\Microsoft.Build.Framework.xml' and 'C:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\Microsoft.Build.Framework.xml'. The last entry will be used.
   Warn: CopyFromIndexComponent: Entries for the key 'P:Microsoft.Build.Framework.RequiredRuntimeAttribute.RuntimeVersion' occur in both 'C:\windows\Microsoft.NET\Framework\v2.0.50727\en\Microsoft.Build.Framework.xml' and 'C:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\Microsoft.Build.Framework.xml'. The last entry will be used.
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\AstrometryNamespaceDocs.xml'.
+  Info: CopyFromIndexComponent: Searching for files that match 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\NamespaceDocumentation.xml'.
+  Warn: CopyFromIndexComponent: Entries for the key 'R:Project' occur in both 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\AstrometryNamespaceDocs.xml' and 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\NamespaceDocumentation.xml'. The last entry will be used.
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\ASCOM.Exceptions.XML'.
+  Info: CopyFromIndexComponent: Searching for files that match 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\ASCOM.IConform.xml'.
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\ASCOM.Astrometry.xml'.
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\ASCOM.Utilities.xml'.
-  Info: CopyFromIndexComponent: Indexed 132077 elements in 121 files.
+  Info: CopyFromIndexComponent: Indexed 132102 elements in 123 files.
   Info: CopyFromIndexComponent: Loaded 0 copy components.
   Info: ForEachComponent: Instantiating component.
   Info: ForEachComponent: Loading subcomponents.
@@ -1205,7 +1211,7 @@ BuildReferenceTopics:
   Info: CachedResolveReferenceLinksComponent: Creating MSDN URL resolver.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Program Files\Sandcastle\Data\Reflection' for targets files of the form '*.xml'.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working' for targets files of the form 'reflection.xml'.
-  Info: CachedResolveReferenceLinksComponent: Loaded 171110 reference targets.
+  Info: CachedResolveReferenceLinksComponent: Loaded 171154 reference targets.
   Info: CachedResolveReferenceLinksComponent: 
       [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.1]
       Cached Resolve Reference  Links 2 Component.  Copyright &#184; 2006-2009, Eric Woodruff, All Rights Reserved
@@ -2088,8 +2094,65 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic P:ASCOM.Astrometry.Transform.Transform.SiteLatitude
   Info: BuildAssembler: Building topic P:ASCOM.Astrometry.Transform.Transform.SiteLongitude
   Info: BuildAssembler: Building topic P:ASCOM.Astrometry.Transform.Transform.SiteTemperature
+  Info: BuildAssembler: Building topic N:ASCOM.Conform
+  Info: BuildAssembler: Building topic T:ASCOM.Conform.ConformCommandStrings
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Conform.ConformCommandStrings
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Conform.ConformCommandStrings
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Conform.ConformCommandStrings
+  Info: BuildAssembler: Building topic Overload:ASCOM.Conform.ConformCommandStrings.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.Conform.ConformCommandStrings.#ctor
+  Info: BuildAssembler: Building topic M:ASCOM.Conform.ConformCommandStrings.#ctor
+  Info: BuildAssembler: Building topic M:ASCOM.Conform.ConformCommandStrings.#ctor(System.String,System.String,System.String,System.String,System.Boolean)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.Conform.ConformCommandStrings.#ctor(System.String,System.String,System.String,System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;CommandString&quot;/&gt; documentation for M:ASCOM.Conform.ConformCommandStrings.#ctor(System.String,System.String,System.String,System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;ReturnString&quot;/&gt; documentation for M:ASCOM.Conform.ConformCommandStrings.#ctor(System.String,System.String,System.String,System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;CommandBlind&quot;/&gt; documentation for M:ASCOM.Conform.ConformCommandStrings.#ctor(System.String,System.String,System.String,System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;CommandBool&quot;/&gt; documentation for M:ASCOM.Conform.ConformCommandStrings.#ctor(System.String,System.String,System.String,System.String,System.Boolean)
+  Info: BuildAssembler: Building topic P:ASCOM.Conform.ConformCommandStrings.CommandBlind
+  Info: BuildAssembler: Building topic P:ASCOM.Conform.ConformCommandStrings.CommandBool
+  Info: BuildAssembler: Building topic P:ASCOM.Conform.ConformCommandStrings.CommandString
+  Info: BuildAssembler: Building topic P:ASCOM.Conform.ConformCommandStrings.ReturnBool
+  Info: BuildAssembler: Building topic P:ASCOM.Conform.ConformCommandStrings.ReturnString
+  Info: BuildAssembler: Building topic T:ASCOM.Conform.ConformErrorNumbers
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Conform.ConformErrorNumbers
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Conform.ConformErrorNumbers
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Conform.ConformErrorNumbers
+  Info: BuildAssembler: Building topic Overload:ASCOM.Conform.ConformErrorNumbers.#ctor
+  Info: BuildAssembler: Building topic M:ASCOM.Conform.ConformErrorNumbers.#ctor
+  Info: BuildAssembler: Building topic M:ASCOM.Conform.ConformErrorNumbers.#ctor(System.Int32,System.Int32,System.Int32,System.Int32)
+  Info: BuildAssembler: Building topic M:ASCOM.Conform.ConformErrorNumbers.#ctor(System.Int32[],System.Int32[],System.Int32[])
+  Info: BuildAssembler: Building topic P:ASCOM.Conform.ConformErrorNumbers.InvalidValue
+  Info: BuildAssembler: Building topic P:ASCOM.Conform.ConformErrorNumbers.NotImplemented
+  Info: BuildAssembler: Building topic P:ASCOM.Conform.ConformErrorNumbers.ValueNotSet
+  Info: BuildAssembler: Building topic T:ASCOM.Conform.IConform
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Conform.IConform
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Conform.IConform
+  Info: BuildAssembler: Building topic P:ASCOM.Conform.IConform.ConformCommands
+  Info: BuildAssembler: Building topic P:ASCOM.Conform.IConform.ConformCommandsRaw
+  Info: BuildAssembler: Building topic P:ASCOM.Conform.IConform.ConformErrors
+  Info: BuildAssembler: Building topic T:ASCOM.Conform.IConformCommandStrings
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Conform.IConformCommandStrings
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Conform.IConformCommandStrings
+  Info: BuildAssembler: Building topic P:ASCOM.Conform.IConformCommandStrings.CommandBlind
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Conform.IConformCommandStrings.CommandBlind
+  Info: BuildAssembler: Building topic P:ASCOM.Conform.IConformCommandStrings.CommandBool
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Conform.IConformCommandStrings.CommandBool
+  Info: BuildAssembler: Building topic P:ASCOM.Conform.IConformCommandStrings.CommandString
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Conform.IConformCommandStrings.CommandString
+  Info: BuildAssembler: Building topic P:ASCOM.Conform.IConformCommandStrings.ReturnBool
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Conform.IConformCommandStrings.ReturnBool
+  Info: BuildAssembler: Building topic P:ASCOM.Conform.IConformCommandStrings.ReturnString
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Conform.IConformCommandStrings.ReturnString
+  Info: BuildAssembler: Building topic T:ASCOM.Conform.IConformErrorNumbers
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Conform.IConformErrorNumbers
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Conform.IConformErrorNumbers
+  Info: BuildAssembler: Building topic P:ASCOM.Conform.IConformErrorNumbers.InvalidValue
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Conform.IConformErrorNumbers.InvalidValue
+  Info: BuildAssembler: Building topic P:ASCOM.Conform.IConformErrorNumbers.NotImplemented
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Conform.IConformErrorNumbers.NotImplemented
+  Info: BuildAssembler: Building topic P:ASCOM.Conform.IConformErrorNumbers.ValueNotSet
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Conform.IConformErrorNumbers.ValueNotSet
   Info: BuildAssembler: Building topic N:ASCOM.Utilities
-  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for N:ASCOM.Utilities
   Info: BuildAssembler: Building topic T:ASCOM.Utilities.Chooser
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Utilities.Chooser
   Info: BuildAssembler: Building topic Methods.T:ASCOM.Utilities.Chooser
@@ -2261,7 +2324,6 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic P:ASCOM.Utilities.Util.UTCDate
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Util.WaitForMilliseconds(System.Int32)
   Info: BuildAssembler: Building topic N:ASCOM.Utilities.Exceptions
-  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for N:ASCOM.Utilities.Exceptions
   Info: BuildAssembler: Building topic T:ASCOM.Utilities.Exceptions.DriverNotRegisteredException
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Utilities.Exceptions.DriverNotRegisteredException
   Info: BuildAssembler: Building topic Methods.T:ASCOM.Utilities.Exceptions.DriverNotRegisteredException
@@ -2327,7 +2389,6 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Exceptions.ValueNotSetException.#ctor(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Exceptions.ValueNotSetException.#ctor(System.String,System.Exception)
   Info: BuildAssembler: Building topic N:ASCOM.Utilities.Interfaces
-  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for N:ASCOM.Utilities.Interfaces
   Info: BuildAssembler: Building topic T:ASCOM.Utilities.Interfaces.IChooser
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Utilities.Interfaces.IChooser
   Info: BuildAssembler: Building topic Methods.T:ASCOM.Utilities.Interfaces.IChooser
@@ -2475,9 +2536,9 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic P:ASCOM.Utilities.Interfaces.IUtil.TimeZoneOffset
   Info: BuildAssembler: Building topic P:ASCOM.Utilities.Interfaces.IUtil.UTCDate
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.WaitForMilliseconds(System.Int32)
-  Info: Processed 968 topics
+  Info: Processed 1012 topics
   Info: CachedCopyFromIndexComponent: Used &quot;reflection&quot; cache entries: 2
-    Last step completed in 00:00:48.3921
+    Last step completed in 00:00:48.3922
 </buildStep>
 <buildStep step="GenerateIntermediateTableOfContents">
 Generating intermediate table of contents file...
@@ -2489,7 +2550,7 @@ GenerateIntermediateTOC:
 <plugIn name="Hierarchical Table of Contents" behavior="After" priority="1000">
 Retrieving namespace topic title from shared content...
 Creating namespace hierarchy...
-</plugIn>    Last step completed in 00:00:01.1875
+</plugIn>    Last step completed in 00:00:01.1719
 </buildStep>
 <buildStep step="ExtractingHtmlInfo">
 Extracting HTML info for Help 1.x and/or website...
@@ -2499,11 +2560,11 @@ Copyright &#184; 2008-2009, Eric Woodruff, All Rights Reserved
 E-Mail: Eric@EWoodruff.us
 
 Using LCID '1033', code page '65001', encoding charset 'UTF-8'.
-Processed 990 HTML files
+Processed 1034 HTML files
 Sorting keywords and generating See Also indices
 Saving Help 1.x keyword index to C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\PlatformHelp.hhk
 Saving Help 1.x table of contents to C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\PlatformHelp.hhc
-    Last step completed in 00:00:06.5471
+    Last step completed in 00:00:07.5159
 </buildStep>
 <buildStep step="GenerateHelpFormatTableOfContents">
 Generating HTML Help 1.x table of contents file...
@@ -2537,11 +2598,11 @@ Build1xHelpFile:
   
   Compile time: 0 minutes, 12 seconds
   
-  992	Topics
+  1,036	Topics
   
-  11,974	Local links
+  12,477	Local links
   
-  7,444	Internet links
+  7,626	Internet links
   
   0	Graphics
   
@@ -2549,19 +2610,19 @@ Build1xHelpFile:
   
   
   
-  Created c:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\Output\PlatformHelp.chm, 1,352,638 bytes
+  Created c:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\Output\PlatformHelp.chm, 1,391,312 bytes
   
-  Compression decreased file by 12,589,993 bytes.
+  Compression decreased file by 13,109,354 bytes.
   
-    Last step completed in 00:00:13.0785
+    Last step completed in 00:00:13.5473
 </buildStep>
 <buildStep step="CleanIntermediates">
 Removing intermediate files...
-    Last step completed in 00:00:00.4688
+    Last step completed in 00:00:00.5469
 </buildStep>
 <buildStep step="Completed">
 
-Build completed successfully at 08/02/2009 09:54 PM.  Total time: 00:01:42.6593
+Build completed successfully at 08/16/2009 10:42 AM.  Total time: 00:01:44.3159
 
 </buildStep>
 </shfbBuild>
