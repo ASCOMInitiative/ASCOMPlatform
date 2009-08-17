@@ -15,7 +15,7 @@ namespace ASCOM.Optec_IFW
         #region //Declarations
         private static object CommLock = new object();
 
-        FilterWheel DriverInstance = new FilterWheel();
+        //FilterWheel DriverInstance = new FilterWheel();
         #endregion
 
         public SetupDialogForm()
@@ -25,12 +25,13 @@ namespace ASCOM.Optec_IFW
 
         private void cmdOK_Click(object sender, EventArgs e)
         {
-            DriverInstance.Connected = false;   //dissconnect the device to free it up for manual control
+            DeviceComm.DisconnectDevice();
             Dispose();   
         }
 
         private void cmdCancel_Click(object sender, EventArgs e)
         {
+            DeviceComm.DisconnectDevice();
             Dispose();
         }
 
@@ -96,7 +97,8 @@ namespace ASCOM.Optec_IFW
             }
             else
             {
-                DriverInstance.Connected = true;
+                //DriverInstance.Connected = true;
+                if (!DeviceComm.ConnectToDevice()) return;
 
                 #region Enable/Disable textbox's
                 switch (DeviceComm.NumOfFilters)
@@ -185,7 +187,7 @@ namespace ASCOM.Optec_IFW
         {
             int PortNumber = (int)this.ComPort_Picker.Value;
             DeviceComm.SavePortNumber(PortNumber.ToString());
-            DeviceComm.FilterWheelType = DeviceComm.TypesOfFWs.IFW;
+            //DeviceComm.FilterWheelType = DeviceComm.TypesOfFWs.IFW;
         }
 
         private void IFW_RB_CheckedChanged(object sender, EventArgs e)
@@ -264,7 +266,7 @@ namespace ASCOM.Optec_IFW
 
         private void AdvancedButton_Click(object sender, EventArgs e)
         {
-            if (DriverInstance.Connected) DriverInstance.Connected = false;
+            DeviceComm.DisconnectDevice();
 
             AdvancedForm AForm = new AdvancedForm();
             AForm.COMPortString = "Note: Using COM Port: " + this.ComPort_Picker.Value.ToString()+ ". Selected on previous page.";
