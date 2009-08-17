@@ -55,6 +55,9 @@ namespace ASCOM.GeminiTelescope
         public static uint SCODE_INVALID_VALUE = ERROR_BASE + 0x401;
         public static string MSG_INVALID_VALUE = "Invalid value";
 
+        public static uint SCODE_NOT_CONNECTED = ERROR_BASE + 0x406;
+        public static string MSG_NOT_CONNECTED = "Gemini is not responding. Is it connected?";
+
 
         //Astronomy Releated Constants
         public static double DEG_RAD = Math.PI / 180;
