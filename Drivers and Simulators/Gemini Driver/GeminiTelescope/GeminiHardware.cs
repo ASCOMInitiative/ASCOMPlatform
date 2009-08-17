@@ -997,7 +997,7 @@ namespace ASCOM.GeminiTelescope
 
                         Disconnect();
 
-                        throw new DriverException(SharedResources.MSG_NOT_CONNECTED, (int)SharedResources.SCODE_NOT_CONNECTED);
+                        throw new ASCOM.DriverException(SharedResources.MSG_NOT_CONNECTED, (int)SharedResources.SCODE_NOT_CONNECTED);
                     }
                 }
 
