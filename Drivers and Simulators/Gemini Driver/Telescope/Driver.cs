@@ -8,12 +8,14 @@
 //
 // Implements:	ASCOM Telescope interface version: 2.0
 // Author:		(rbt) Robert Turner <robert@robertturnerastro.com>
+//              (pk)  Paul Kanevsky <paul@pk.darkhorizons.org>
 //
 // Edit Log:
 //
 // Date			Who	Vers	Description
 // -----------	---	-----	-------------------------------------------------------
 // 15-JUL-2009	rbt	1.0.0	Initial edit, from ASCOM Telescope Driver template
+// 08-JUL-2009  pk  1.0.1   Full implementation of ITelescope interface, passing Conform test.
 // --------------------------------------------------------------------------------
 //
 using System;
@@ -848,7 +850,6 @@ namespace ASCOM.GeminiTelescope
 
         public double SiteLatitude
         {
-            // TODO Replace this with your implementation
             get { return GeminiHardware.Latitude; }
             set 
             {
@@ -863,7 +864,6 @@ namespace ASCOM.GeminiTelescope
 
         public double SiteLongitude
         {
-            // TODO Replace this with your implementation
             get { return GeminiHardware.Longitude; }
             set
             {
