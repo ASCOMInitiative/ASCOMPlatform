@@ -29,7 +29,6 @@ namespace ASCOM.Optec_IFW
         private void InitializeComponent()
         {
             this.cmdOK = new System.Windows.Forms.Button();
-            this.cmdCancel = new System.Windows.Forms.Button();
             this.IFW3_RB = new System.Windows.Forms.RadioButton();
             this.IFW_RB = new System.Windows.Forms.RadioButton();
             this.label17 = new System.Windows.Forms.Label();
@@ -73,6 +72,7 @@ namespace ASCOM.Optec_IFW
             this.Home_Btn = new System.Windows.Forms.Button();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.cmdCancel = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ComPort_Picker)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -90,18 +90,6 @@ namespace ASCOM.Optec_IFW
             this.cmdOK.Text = "OK";
             this.cmdOK.UseVisualStyleBackColor = true;
             this.cmdOK.Click += new System.EventHandler(this.cmdOK_Click);
-            // 
-            // cmdCancel
-            // 
-            this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(405, 373);
-            this.cmdCancel.Name = "cmdCancel";
-            this.cmdCancel.Size = new System.Drawing.Size(59, 25);
-            this.cmdCancel.TabIndex = 1;
-            this.cmdCancel.Text = "Cancel";
-            this.cmdCancel.UseVisualStyleBackColor = true;
-            this.cmdCancel.Click += new System.EventHandler(this.cmdCancel_Click);
             // 
             // IFW3_RB
             // 
@@ -546,6 +534,18 @@ namespace ASCOM.Optec_IFW
             this.pictureBox1.TabIndex = 47;
             this.pictureBox1.TabStop = false;
             // 
+            // cmdCancel
+            // 
+            this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cmdCancel.Location = new System.Drawing.Point(405, 373);
+            this.cmdCancel.Name = "cmdCancel";
+            this.cmdCancel.Size = new System.Drawing.Size(59, 25);
+            this.cmdCancel.TabIndex = 1;
+            this.cmdCancel.Text = "Cancel";
+            this.cmdCancel.UseVisualStyleBackColor = true;
+            this.cmdCancel.Click += new System.EventHandler(this.cmdCancel_Click);
+            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -589,7 +589,6 @@ namespace ASCOM.Optec_IFW
         #endregion
 
         private System.Windows.Forms.Button cmdOK;
-        private System.Windows.Forms.Button cmdCancel;
         private System.Windows.Forms.Button SaveData_Btn;
         private System.Windows.Forms.NumericUpDown ComPort_Picker;
         private System.Windows.Forms.Label label1;
@@ -633,5 +632,6 @@ namespace ASCOM.Optec_IFW
         private System.Windows.Forms.Button AdvancedButton;
         private System.Windows.Forms.Button Home_Btn;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button cmdCancel;
     }
 }
