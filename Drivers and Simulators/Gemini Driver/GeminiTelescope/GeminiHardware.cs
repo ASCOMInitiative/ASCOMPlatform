@@ -200,6 +200,8 @@ namespace ASCOM.GeminiTelescope
      
         private static bool m_SouthernHemisphere = false;
 
+        private static string m_GeminiVersion = "";
+
         private static string m_ComPort;
         private static int m_BaudRate;
         private static ASCOM.Utilities.SerialParity m_Parity;
@@ -1296,15 +1298,34 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         private static void UpdateInitialVariables()
         {
-            UpdatePolledVariables();
             CommandItem command;
 
-
-            //Get RA and DEC etc
             DiscardInBuffer(); //clear all received data
             
             //longitude, latitude, UTC offset
-            Transmit(":Gg#:Gt#:GG#");
+            Transmit(":GV#:Gg#:Gt#:GG#");
+
+            //verify that Gemini is at least Level 4
+            command = new CommandItem(":GV", MAX_TIMEOUT, true);
+            string ver = GetCommandResult(command);
+            if (ver != null)
+            {
+                if (ver.EndsWith("#")) ver = ver.Substring(0, ver.Length - 1);
+                int v;
+                if (int.TryParse(ver, out v))
+                {
+                    if (v / 100 < 4)   //level below 4!
+                    {
+//                        GeminiError.UserErrorReport(SharedResources.TELESCOPE_DRIVER_NAME, SharedResources.MSG_GEMINI_VERSION, true);
+                        Disconnect();
+
+                        if (OnError != null) OnError(SharedResources.TELESCOPE_DRIVER_NAME, SharedResources.MSG_GEMINI_VERSION);
+                        throw new DriverException(SharedResources.MSG_GEMINI_VERSION, (int)SharedResources.SCODE_GEMINI_VERSION);
+                    }
+                    m_GeminiVersion = ver;
+                }
+            }
+
 
             command = new CommandItem(":Gg", MAX_TIMEOUT, true);
             string longitude = GetCommandResult(command);
@@ -1320,6 +1341,8 @@ namespace ASCOM.GeminiTelescope
             if (latitude != null) Latitude = m_Util.DMSToDegrees(latitude);
             if (UTC_Offset != null) int.TryParse(UTC_Offset, out m_UTCOffset);
 
+            //Get RA and DEC etc
+            UpdatePolledVariables();
 
             m_LastUpdate = System.DateTime.Now;
         }

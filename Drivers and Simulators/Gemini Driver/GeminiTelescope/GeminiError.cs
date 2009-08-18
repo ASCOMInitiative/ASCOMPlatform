@@ -31,7 +31,12 @@ namespace ASCOM.GeminiTelescope
         public static void UserErrorReport(string from, string s, bool ResponseRequired)
         {
             string sF = string.Format("{0:00}:{1:00}:{2:00}.{3:000}", DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second, DateTime.Now.Millisecond);
+            m_Ser.LogMessage(from, s);
             System.Diagnostics.Trace.TraceError(sF + "\t" + from + "\t" + s);
+            if (ResponseRequired)
+            {
+                System.Windows.Forms.MessageBox.Show(s, from, System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Hand);
+            }
         }
 
         public  static void UserWarningReport(string from, string s)

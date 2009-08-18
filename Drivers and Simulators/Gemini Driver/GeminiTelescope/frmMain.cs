@@ -442,7 +442,11 @@ namespace ASCOM.GeminiTelescope
         {
             if (!GeminiHardware.Connected)
             {
-                GeminiHardware.Connected = true;
+                try
+                {
+                    GeminiHardware.Connected = true;
+                }
+                catch { }
                 if (!GeminiHardware.Connected)
                     MessageBox.Show("Cannot connect to Gemini!\r\n"+m_LastError, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK,   MessageBoxIcon.Hand);
                 else
@@ -457,7 +461,11 @@ namespace ASCOM.GeminiTelescope
                     if (res != DialogResult.Yes)
                         return;
                 }
-                GeminiHardware.Connected = false;
+                try
+                {
+                    GeminiHardware.Connected = false;
+                }
+                catch { }
                 if (GeminiHardware.Connected != false)
                     MessageBox.Show("Cannot disconnect from telescope", SharedResources.TELESCOPE_DRIVER_NAME);
                 else

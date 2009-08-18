@@ -44,10 +44,13 @@ namespace ASCOM.GeminiTelescope
         public static string MSG_NO_TARGET_COORDS = "Target coordinates have not yet been set";
         public static uint SCODE_VAL_OUTOFRANGE = ERROR_BASE + 0x405;
         public static string MSG_VAL_OUTOFRANGE = "The property value is out of range";
-        public static uint SCOPE_PROP_NOT_SET = ERROR_BASE + 0x403;
+        public static uint SCODE_PROP_NOT_SET = ERROR_BASE + 0x403;
         public static string MSG_PROP_NOT_SET = "The property has not yet been set";
         public static uint INVALID_AT_PARK = ERROR_BASE + 0x404;
         public static string MSG_INVALID_AT_PARK = "Invalid while parked";
+
+        public static string MSG_GEMINI_VERSION = "Gemini level 4 or greater is required";
+        public static uint SCODE_GEMINI_VERSION = ERROR_BASE + 0x407;
 
         public static uint SCODE_NOT_IMPLEMENTED = ERROR_BASE + 0x400;
         public static string MSG_NOT_IMPLEMENTED = "Not implemented";

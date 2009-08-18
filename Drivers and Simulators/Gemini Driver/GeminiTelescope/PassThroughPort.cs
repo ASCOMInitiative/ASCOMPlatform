@@ -93,7 +93,7 @@ namespace ASCOM.GeminiTelescope
             try
             {
                 m_CancelAsync.Set();
-                lock (m_SerialPort) m_SerialPort.Close();
+                lock (m_SerialPort) if (m_SerialPort.IsOpen) m_SerialPort.Close();
 
                 if (m_ListenerThread != null && !m_ListenerThread.Join(5000))
                     m_ListenerThread.Abort();
