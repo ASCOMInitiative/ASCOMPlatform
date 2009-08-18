@@ -994,7 +994,7 @@ namespace ASCOM.GeminiTelescope
                 throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             if (TargetDeclination == SharedResources.INVALID_DOUBLE || TargetRightAscension == SharedResources.INVALID_DOUBLE)
-                throw new ASCOM.DriverException(SharedResources.MSG_PROP_NOT_SET, (int)SharedResources.SCOPE_PROP_NOT_SET);
+                throw new ASCOM.DriverException(SharedResources.MSG_PROP_NOT_SET, (int)SharedResources.SCODE_PROP_NOT_SET);
             GeminiHardware.SyncEquatorial();
         }
 
