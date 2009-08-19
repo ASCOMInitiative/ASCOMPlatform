@@ -316,11 +316,12 @@ namespace ASCOM.GeminiTelescope
             }
 
 
-            Utilities.Profile prof = new ASCOM.Utilities.Profile();
-            prof.DeviceType = "Telescope";
-            prof.Register(SharedResources.TELESCOPE_PROGRAM_ID, SharedResources.TELESCOPE_DRIVER_NAME);
-            prof.DeviceType = "Focuser";
-            prof.Register(SharedResources.FOCUSER_PROGRAM_ID, SharedResources.FOCUSER_DRIVER_NAME);
+            //Registration happens below not here.
+            //Utilities.Profile prof = new ASCOM.Utilities.Profile();
+            //prof.DeviceType = "Telescope";
+            //prof.Register(SharedResources.TELESCOPE_PROGRAM_ID, SharedResources.TELESCOPE_DRIVER_NAME);
+            //prof.DeviceType = "Focuser";
+            //prof.Register(SharedResources.FOCUSER_PROGRAM_ID, SharedResources.FOCUSER_DRIVER_NAME);
 
             //
             // For each of the driver assemblies

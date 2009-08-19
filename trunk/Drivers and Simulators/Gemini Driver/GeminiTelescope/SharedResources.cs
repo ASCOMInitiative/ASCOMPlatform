@@ -32,11 +32,11 @@ namespace ASCOM.GeminiTelescope
         public static int GEMINI_POLLING_INTERVAL = 1000;             //Seconds to use for Polling Gemini status
 
         public static string TELESCOPE_DRIVER_DESCRIPTION = "Gemini Telescope ASCOM Driver .NET";
-        public static string TELESCOPE_DRIVER_NAME = "Gemini Telescope";
+        public static string TELESCOPE_DRIVER_NAME = "Gemini Telescope .NET";
         public static string TELESCOPE_DRIVER_INFO = "Gemini Telescope Driver";
 
         public static string FOCUSER_DRIVER_DESCRIPTION = "Gemini Focuser ASCOM Driver .NET";
-        public static string FOCUSER_DRIVER_NAME = "Gemini Focuser";
+        public static string FOCUSER_DRIVER_NAME = "Gemini Focuser .NET";
         public static string FOCUSER_DRIVER_INFO = "Gemini Focuser Driver V1";
 
         public static uint ERROR_BASE = 0x80040400;
