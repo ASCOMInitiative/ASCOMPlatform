@@ -33,7 +33,7 @@ namespace ASCOM.GeminiTelescope
 
         public static string TELESCOPE_DRIVER_DESCRIPTION = "Gemini Telescope ASCOM Driver .NET";
         public static string TELESCOPE_DRIVER_NAME = "Gemini Telescope";
-        public static string TELESCOPE_DRIVER_INFO = "Gemini Telescope Driver V1";
+        public static string TELESCOPE_DRIVER_INFO = "Gemini Telescope Driver";
 
         public static string FOCUSER_DRIVER_DESCRIPTION = "Gemini Focuser ASCOM Driver .NET";
         public static string FOCUSER_DRIVER_NAME = "Gemini Focuser";
