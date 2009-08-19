@@ -29,6 +29,7 @@ using ASCOM.Utilities;
 using ASCOM.Interface;
 using ASCOM.GeminiTelescope;
 using ASCOM.Conform;
+using System.IO;
 
 /// <summary>
 /// Need to add CommandNative to standard ITelescope interface for backward compatibility with
@@ -542,7 +543,10 @@ namespace ASCOM.GeminiTelescope
             get 
             {
                 Version GeminiVersion = Assembly.GetExecutingAssembly().GetName().Version;
-                return SharedResources.TELESCOPE_DRIVER_INFO + " Version " + GeminiVersion.ToString() ; 
+
+                FileInfo oMyFile = new FileInfo(Assembly.GetExecutingAssembly().Location);
+                DateTime oBuildDate = oMyFile.LastWriteTime;
+                return SharedResources.TELESCOPE_DRIVER_INFO + " Version " + GeminiVersion.ToString() + " dated " +oBuildDate.ToLongDateString() + " " + oBuildDate.ToLongTimeString(); 
             }
         }
 
