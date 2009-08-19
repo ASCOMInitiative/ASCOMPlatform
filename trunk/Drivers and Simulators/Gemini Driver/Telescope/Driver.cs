@@ -22,6 +22,7 @@ using System;
 using System.Collections;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.Reflection;
 
 using ASCOM;
 using ASCOM.Utilities;
@@ -538,12 +539,19 @@ namespace ASCOM.GeminiTelescope
         public string DriverInfo
         {
             // TODO Replace this with your implementation
-            get { return SharedResources.TELESCOPE_DRIVER_INFO; }
+            get 
+            {
+                Version GeminiVersion = Assembly.GetExecutingAssembly().GetName().Version;
+                return SharedResources.TELESCOPE_DRIVER_INFO + " Version " + GeminiVersion.ToString() ; 
+            }
         }
 
         public string DriverVersion
         {
-            get { return "1"; }
+            get {
+                Version GeminiVersion = Assembly.GetExecutingAssembly().GetName().Version;
+                return GeminiVersion.ToString(2); //Return just the major and minor version numbers
+            }
         }
 
         public EquatorialCoordinateType EquatorialSystem
