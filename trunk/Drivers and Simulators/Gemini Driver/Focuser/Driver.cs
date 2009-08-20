@@ -269,7 +269,7 @@ namespace ASCOM.GeminiTelescope
                 throw new DriverException("The hardware is connected, cannot do SetupDialog()",
                                     unchecked(ErrorCodes.DriverBase + 4));
             }
-            frmMain.DoFocuserSetupDialog();
+            GeminiTelescope.m_MainForm.DoFocuserSetupDialog(); ;
         }
 
         /// <summary>
