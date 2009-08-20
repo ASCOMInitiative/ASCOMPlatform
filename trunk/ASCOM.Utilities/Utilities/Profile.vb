@@ -185,7 +185,7 @@ Public Class Profile
     ''' </summary>
     ''' <param name="DeviceType">Type of devices to list</param>
     ''' <value>List of registered devices</value>
-    ''' <returns>An object which is a scripting dictionary of installed devices and associated device descriptions</returns>
+    ''' <returns>An ArrayList of installed devices and associated device descriptions</returns>
     ''' <exception cref="Exceptions.InvalidValueException">Throw if the supplied DeviceType is empty string or 
     ''' null value.</exception>
     ''' <remarks>
@@ -197,13 +197,16 @@ Public Class Profile
     ''' than as a generic keyed list. 
     ''' This is done because it is not possible to expose generics through COM. .NET programmers should
     ''' use RegisteredDevices rather than RegisteredDevicesCOM.</para> 
+    ''' <para>The KeyValuePair objects are instances of the <see cref="KeyValuePair">KeyValuePair class</see> where 
+    ''' the Key is the device name and the Value is the device description.</para>
     ''' </remarks>
-    ReadOnly Property RegisteredDevicesCOM(ByVal DeviceType As String) As Object Implements IProfile.RegisteredDevicesCOM
+    ReadOnly Property RegisteredDevicesCOM(ByVal DeviceType As String) As ArrayList Implements IProfile.RegisteredDevicesCOM
         Get
-            Dim RegDev As Generic.SortedList(Of String, String), RetVal As New Scripting.Dictionary
+            Dim RegDev As Generic.SortedList(Of String, String), RetVal As New ArrayList 'Scripting.Dictionary
             RegDev = RegisteredDevices(DeviceType)
-            For Each kvp As Generic.KeyValuePair(Of String, String) In RegDev
-                RetVal.Add(kvp.Key.ToString, kvp.Value.ToString)
+            For Each kvpg As Generic.KeyValuePair(Of String, String) In RegDev
+                Dim kvpa As New KeyValuePair(kvpg.Key.ToString, kvpg.Value.ToString)
+                RetVal.Add(kvpa)
             Next
             Return RetVal
         End Get
@@ -409,7 +412,7 @@ Public Overloads Sub WriteValue(ByVal DriverID As String, ByVal Name As String, 
     ''' </summary>
     ''' <param name="DriverID">ProgID of the device to read from</param>
     ''' <param name="SubKey">Subkey from the profile root in which to write the value</param>
-    ''' <returns>Generic Sorted List of KeyValuePairs</returns>
+    ''' <returns>An ArrayList of KeyValuePairs</returns>
     ''' <remarks>The returned object contains entries for each value. For each entry, 
     ''' the Key property is the value's name, and the Value property is the string value itself. Note that the unnamed (default) 
     ''' value will be included if it has a value, even if the value is a blank string. The unnamed value will have its entry's 
@@ -419,12 +422,14 @@ Public Overloads Sub WriteValue(ByVal DriverID As String, ByVal Name As String, 
     ''' than as a generic keyed list. 
     ''' This is done because it is not possible to expose generics through COM. .NET programmers should
     ''' use Values rather than ValuesCOM.</para> 
+    ''' <para>The KeyValuePair objects are instances of the <see cref="KeyValuePair">KeyValuePair class</see></para>
     '''  </remarks>
-    Function ValuesCOM(ByVal DriverID As String, ByVal SubKey As String) As Object Implements IProfile.ValuesCOM
-        Dim RetVal As New Scripting.Dictionary, Vals As Generic.SortedList(Of String, String)
+    Function ValuesCOM(ByVal DriverID As String, ByVal SubKey As String) As ArrayList Implements IProfile.ValuesCOM
+        Dim RetVal As New ArrayList, Vals As Generic.SortedList(Of String, String)
         Vals = Values(DriverID, SubKey)
-        For Each kvp As Generic.KeyValuePair(Of String, String) In Vals
-            RetVal.Add(kvp.Key.ToString, kvp.Value.ToString)
+        For Each kvpg As Generic.KeyValuePair(Of String, String) In Vals
+            Dim kvpa As New KeyValuePair(kvpg.Key.ToString, kvpg.Value.ToString)
+            RetVal.Add(kvpa)
         Next
         Return RetVal
     End Function
@@ -521,7 +526,7 @@ Public Overloads Sub DeleteValue(ByVal DriverID As String, ByVal Name As String)
     ''' </summary>
     ''' <param name="DriverID">ProgID of the device to read from</param>
     ''' <param name="SubKey">Subkey from the profile root in which to write the value</param>
-    ''' <returns>Generic Sorted List of key-value pairs</returns>
+    ''' <returns>An ArrayList of key-value pairs</returns>
     ''' <remarks>The returned object (scripting.dictionary) contains entries for each sub-key. For each KeyValuePair in the list, 
     ''' the Key property is the sub-key name, and the Value property is the value. The unnamed ("default") value for that key is also returned.
     ''' <para><b>Note: </b> This call functions identically to Values 
@@ -529,12 +534,14 @@ Public Overloads Sub DeleteValue(ByVal DriverID As String, ByVal Name As String)
     ''' than as a generic keyed list. 
     ''' This is done because it is not possible to expose generics through COM. .NET programmers should
     ''' use Values rather than ValuesCOM.</para> 
+    ''' <para>The KeyValuePair objects are instances of the <see cref="KeyValuePair">KeyValuePair class</see></para>
     ''' </remarks>
-    Function SubKeysCOM(ByVal DriverID As String, ByVal SubKey As String) As Object Implements IProfile.SubKeysCOM
-        Dim RetVal As New Scripting.Dictionary, SubKs As Generic.SortedList(Of String, String)
+    Function SubKeysCOM(ByVal DriverID As String, ByVal SubKey As String) As ArrayList Implements IProfile.SubKeysCOM
+        Dim RetVal As New ArrayList, SubKs As Generic.SortedList(Of String, String)
         SubKs = SubKeys(DriverID, SubKey)
-        For Each kvp As Generic.KeyValuePair(Of String, String) In SubKs
-            RetVal.Add(kvp.Key.ToString, kvp.Value.ToString)
+        For Each kvpg As Generic.KeyValuePair(Of String, String) In SubKs
+            Dim kvpa As New KeyValuePair(kvpg.Key.ToString, kvpg.Value.ToString)
+            RetVal.Add(kvpa)
         Next
         Return RetVal
     End Function
@@ -627,4 +634,71 @@ Public Overloads Sub DeleteValue(ByVal DriverID As String, ByVal Name As String)
     End Sub
 #End Region
 
+End Class
+
+''' <summary>
+''' Class that can return an associated key and value to a COM client
+''' </summary>
+''' <remarks>This class is only used by some Profile.XXXCOM properties and methods and
+''' compensates for the inabiliy of .NET to return Generic classes to COM clients.
+''' <para>The properties and methods are: 
+''' <see cref="Profile.RegisteredDevicesCOM">Profile.RegisteredDevices</see>, 
+''' <see cref="Profile.SubKeysCOM">Profile.SubKeysCOM</see> and 
+''' <see cref="Profile.ValuesCOM">Profile.ValuesCOM</see>.</para></remarks>
+Public Class KeyValuePair
+    Implements IKeyValuePair
+
+    Private m_Key As String
+    Private m_Value As String
+
+#Region "New"
+    ''' <summary>
+    ''' COM visible default constructor
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Sub New()
+        m_Key = ""
+        m_Value = ""
+    End Sub
+    ''' <summary>
+    ''' Constructor that can set the key and value simultaneously.
+    ''' </summary>
+    ''' <param name="Key">The Key element of a key value pair</param>
+    ''' <param name="Value">The Value element of a key value pair</param>
+    ''' <remarks></remarks>
+    Public Sub New(ByVal Key As String, ByVal Value As String)
+        m_Key = Key
+        m_Value = Value
+    End Sub
+#End Region
+
+    ''' <summary>
+    ''' The Key element of a key value pair
+    ''' </summary>
+    ''' <value>Key</value>
+    ''' <returns>Key as a string</returns>
+    ''' <remarks></remarks>
+    Public Property Key() As String Implements IKeyValuePair.Key
+        Get
+            Return m_Key
+        End Get
+        Set(ByVal value As String)
+            m_Key = value
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' The Value element of a key value pair.
+    ''' </summary>
+    ''' <value>Value</value>
+    ''' <returns>Value as a string</returns>
+    ''' <remarks></remarks>
+    Public Property Value() As String Implements IKeyValuePair.Value
+        Get
+            Return m_Value
+        End Get
+        Set(ByVal value As String)
+            m_Value = value
+        End Set
+    End Property
 End Class

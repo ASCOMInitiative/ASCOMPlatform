@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shfbBuild product="Sandcastle Help File Builder Utilities" version="1.8.0.1" projectFile="C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\ASCOMPlatform.shfbproj" started="16/08/2009 10:41:12">
+<shfbBuild product="Sandcastle Help File Builder Utilities" version="1.8.0.1" projectFile="C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\ASCOMPlatform.shfbproj" started="20/08/2009 21:09:15">
 <buildStep step="Initializing">
 Loading and initializing plug-ins...
 Hierarchical Table of Contents Version 1.8.0.1
@@ -32,7 +32,6 @@ Parsing project files
 References to use:
     ASCOM.Astrometry
     ASCOM.Utilities
-    Scripting
     System
     System.Drawing
     System.Windows.Forms
@@ -48,11 +47,11 @@ Copying XML comments files
 </buildStep>
 <buildStep step="GenerateSharedContent">
 Generating shared content files (en-US, English (United States))...
-    Last step completed in 00:00:00.0000
+    Last step completed in 00:00:00.0156
 </buildStep>
 <buildStep step="GenerateApiFilter">
 Generating API filter for MRefBuilder...
-    Last step completed in 00:00:00.0625
+    Last step completed in 00:00:00.0156
 </buildStep>
 <buildStep step="GenerateReflectionInfo">
 Generating reflection information...
@@ -60,12 +59,12 @@ Generating reflection information...
 GenerateRefInfo:
   MrefBuilder (v2.4.10520.1)
   Copyright &#184; Microsoft 2006
-  Info: Loaded 4 assemblies for reflection and 7 dependency assemblies.
-  Info: Wrote information on 11 namespaces, 73 types, and 754 members
+  Info: Loaded 4 assemblies for reflection and 6 dependency assemblies.
+  Info: Wrote information on 11 namespaces, 75 types, and 760 members
   XslTransform (v2.4.10520.1)
   Copyright &#184; Microsoft 2005-2006
   Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\MergeDuplicates.xsl'.
-    Last step completed in 00:00:02.7032
+    Last step completed in 00:00:02.4376
 </buildStep>
 <buildStep step="GenerateNamespaceSummaries">
 Generating namespace summary information...
@@ -92,7 +91,7 @@ TransformManifest:
   XslTransform (v2.4.10520.1)
   Copyright &#184; Microsoft 2005-2006
   Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\ReflectionToManifest.xsl'.
-    Last step completed in 00:00:03.1564
+    Last step completed in 00:00:03.1563
 </buildStep>
 <buildStep step="ModifyHelpTopicFilenames">
 Modifying help topic filenames in reflection information file
@@ -121,6 +120,7 @@ Modifying help topic filenames in reflection information file
     Unique name M_ASCOM_Conform_ConformErrorNumbers__ctor_1 generated for M:ASCOM.Conform.ConformErrorNumbers.#ctor(System.Int32,System.Int32,System.Int32,System.Int32)
     Unique name M_ASCOM_Conform_ConformErrorNumbers__ctor_2 generated for M:ASCOM.Conform.ConformErrorNumbers.#ctor(System.Int32[],System.Int32[],System.Int32[])
     Unique name M_ASCOM_Utilities_Chooser_Choose_1 generated for M:ASCOM.Utilities.Chooser.Choose(System.String)
+    Unique name M_ASCOM_Utilities_KeyValuePair__ctor_1 generated for M:ASCOM.Utilities.KeyValuePair.#ctor(System.String,System.String)
     Unique name M_ASCOM_Utilities_Profile_DeleteValue_1 generated for M:ASCOM.Utilities.Profile.DeleteValue(System.String,System.String,System.String)
     Unique name M_ASCOM_Utilities_Profile_GetValue_1 generated for M:ASCOM.Utilities.Profile.GetValue(System.String,System.String,System.String)
     Unique name M_ASCOM_Utilities_Profile_SubKeys_1 generated for M:ASCOM.Utilities.Profile.SubKeys(System.String,System.String)
@@ -197,7 +197,7 @@ Modifying help topic filenames in reflection information file
     Unique name M_ASCOM_Utilities_Interfaces_IUtil_HoursToHMS_2 generated for M:ASCOM.Utilities.Interfaces.IUtil.HoursToHMS(System.Double,System.String,System.String)
     Unique name M_ASCOM_Utilities_Interfaces_IUtil_HoursToHMS_3 generated for M:ASCOM.Utilities.Interfaces.IUtil.HoursToHMS(System.Double,System.String,System.String,System.String)
     Unique name M_ASCOM_Utilities_Interfaces_IUtil_HoursToHMS_4 generated for M:ASCOM.Utilities.Interfaces.IUtil.HoursToHMS(System.Double,System.String,System.String,System.String,System.Int32)
-    Last step completed in 00:00:00.2500
+    Last step completed in 00:00:00.1563
 </buildStep>
 <buildStep step="CopyStandardContent">
 Copying standard help content...
@@ -307,7 +307,7 @@ C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\scripts\script_manifold.js
 C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\scripts\SplitScreen.js -&gt; C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\Output\scripts\SplitScreen.js
 C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\styles\Presentation.css -&gt; C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\Output\styles\Presentation.css
 C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\styles\Whidbey\presentation.css -&gt; C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\Output\styles\Whidbey\presentation.css
-    Last step completed in 00:00:01.1563
+    Last step completed in 00:00:00.7500
 </buildStep>
 <buildStep step="CopyConceptualContent">
 Copying conceptual content...
@@ -360,14 +360,14 @@ Generating conceptual topic files
     C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Tools and Features\Profile Explorer.aml -&gt; C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\ddueXml\62da8408-c4ed-45d8-9398-9990dcbe8cbd.xml
     Parsing topic file 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Tools and Features\Profile Tracing.aml'
     C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Tools and Features\Profile Tracing.aml -&gt; C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\ddueXml\f2211b59-6f8c-46fb-b47e-2afb569f3133.xml
-    Last step completed in 00:00:00.2500
+    Last step completed in 00:00:00.1563
 </buildStep>
 <buildStep step="CreateConceptualTopicConfigs">
 Creating conceptual topic configuration files...
     Companion files
     _ContentMetadata_.xml
     ConceptualManifest.xml
-    Last step completed in 00:00:00.0781
+    Last step completed in 00:00:00.0469
 </buildStep>
 <buildStep step="CopyAdditionalContent">
 Copying additional content files...
@@ -376,13 +376,13 @@ No additional content to copy
 </buildStep>
 <buildStep step="MergeTablesOfContents">
 Merging conceptual and additional tables of contents...
-    Last step completed in 00:00:00.0938
+    Last step completed in 00:00:00.0625
 </buildStep>
 <buildStep step="CreateBuildAssemblerConfigs">
 Creating Sandcastle configuration files...
     sandcastle.config
     conceptual.config
-    Last step completed in 00:00:00.0625
+    Last step completed in 00:00:00.0156
 </buildStep>
 <buildStep step="MergeCustomConfigs">
 Merging custom build component configurations
@@ -398,7 +398,7 @@ C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\H
     Skipping component 'Cached Reflection Index Data', not used in conceptual build
     Replacing default configuration for 'Code Block Component' with the custom configuration
     Removing unused ExampleComponent.
-    Last step completed in 00:00:00.1250
+    Last step completed in 00:00:00.0625
 </buildStep>
 <buildStep step="BuildConceptualTopics">
 Building conceptual help topics...
@@ -471,12 +471,12 @@ BuildConceptualTopics:
   Info: CachedResolveReferenceLinksComponent: Creating MSDN URL resolver.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Program Files\Sandcastle\Data\Reflection' for targets files of the form '*.xml'.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working' for targets files of the form 'reflection.xml'.
-  Info: CachedResolveReferenceLinksComponent: Loaded 171154 reference targets.
+  Info: CachedResolveReferenceLinksComponent: Loaded 171168 reference targets.
   Info: CachedResolveReferenceLinksComponent: 
       [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.1]
       Cached Resolve Reference  Links 2 Component.  Copyright &#184; 2006-2009, Eric Woodruff, All Rights Reserved
       http://SHFB.CodePlex.com
-  Info: CachedResolveReferenceLinksComponent: Loaded 44 cached MSDN URL entries
+  Info: CachedResolveReferenceLinksComponent: Loaded 45 cached MSDN URL entries
   Info: SaveComponent: Instantiating component.
   Info: BuildAssembler: Building topic 7d9253c2-fdfd-4c0d-8225-a96bddb49731
   Info: BuildAssembler: Building topic 3d17234a-c873-4f65-af0f-52f182081a44
@@ -501,7 +501,7 @@ BuildConceptualTopics:
   Info: BuildAssembler: Building topic 62da8408-c4ed-45d8-9398-9990dcbe8cbd
   Info: BuildAssembler: Building topic f2211b59-6f8c-46fb-b47e-2afb569f3133
   Info: Processed 22 topics
-    Last step completed in 00:00:24.5477
+    Last step completed in 00:00:24.5008
 </buildStep>
 <buildStep step="BuildReferenceTopics">
 Building reference help topics...
@@ -513,7 +513,7 @@ BuildReferenceTopics:
   Info: CopyFromFileComponent: Loading data file 'C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\Transforms\skeleton.xml'.
   Info: CachedCopyFromIndexComponent: Instantiating component.
   Info: CachedCopyFromIndexComponent: Searching for files that match 'reflection.xml'.
-  Info: CachedCopyFromIndexComponent: Indexed 1063 elements in 1 files.
+  Info: CachedCopyFromIndexComponent: Indexed 1077 elements in 1 files.
   Info: CachedCopyFromIndexComponent: Loaded 0 copy components.
   Info: CachedCopyFromIndexComponent: 
       [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.1]
@@ -1136,7 +1136,7 @@ BuildReferenceTopics:
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\ASCOM.IConform.xml'.
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\ASCOM.Astrometry.xml'.
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\ASCOM.Utilities.xml'.
-  Info: CopyFromIndexComponent: Indexed 132102 elements in 123 files.
+  Info: CopyFromIndexComponent: Indexed 132110 elements in 123 files.
   Info: CopyFromIndexComponent: Loaded 0 copy components.
   Info: ForEachComponent: Instantiating component.
   Info: ForEachComponent: Loading subcomponents.
@@ -1211,12 +1211,12 @@ BuildReferenceTopics:
   Info: CachedResolveReferenceLinksComponent: Creating MSDN URL resolver.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Program Files\Sandcastle\Data\Reflection' for targets files of the form '*.xml'.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working' for targets files of the form 'reflection.xml'.
-  Info: CachedResolveReferenceLinksComponent: Loaded 171154 reference targets.
+  Info: CachedResolveReferenceLinksComponent: Loaded 171168 reference targets.
   Info: CachedResolveReferenceLinksComponent: 
       [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.1]
       Cached Resolve Reference  Links 2 Component.  Copyright &#184; 2006-2009, Eric Woodruff, All Rights Reserved
       http://SHFB.CodePlex.com
-  Info: CachedResolveReferenceLinksComponent: Loaded 44 cached MSDN URL entries
+  Info: CachedResolveReferenceLinksComponent: Loaded 45 cached MSDN URL entries
   Info: SaveComponent: Instantiating component.
   Info: BuildAssembler: Building topic N:ASCOM
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for N:ASCOM
@@ -2163,6 +2163,15 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Chooser.Choose(System.String)
   Info: BuildAssembler: Building topic P:ASCOM.Utilities.Chooser.DeviceType
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Chooser.Dispose
+  Info: BuildAssembler: Building topic T:ASCOM.Utilities.KeyValuePair
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Utilities.KeyValuePair
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Utilities.KeyValuePair
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Utilities.KeyValuePair
+  Info: BuildAssembler: Building topic Overload:ASCOM.Utilities.KeyValuePair.#ctor
+  Info: BuildAssembler: Building topic M:ASCOM.Utilities.KeyValuePair.#ctor
+  Info: BuildAssembler: Building topic M:ASCOM.Utilities.KeyValuePair.#ctor(System.String,System.String)
+  Info: BuildAssembler: Building topic P:ASCOM.Utilities.KeyValuePair.Key
+  Info: BuildAssembler: Building topic P:ASCOM.Utilities.KeyValuePair.Value
   Info: BuildAssembler: Building topic T:ASCOM.Utilities.Profile
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Utilities.Profile
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.Utilities.Profile.#ctor
@@ -2397,6 +2406,11 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IChooser.Choose
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IChooser.Choose(System.String)
   Info: BuildAssembler: Building topic P:ASCOM.Utilities.Interfaces.IChooser.DeviceType
+  Info: BuildAssembler: Building topic T:ASCOM.Utilities.Interfaces.IKeyValuePair
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Utilities.Interfaces.IKeyValuePair
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Utilities.Interfaces.IKeyValuePair
+  Info: BuildAssembler: Building topic P:ASCOM.Utilities.Interfaces.IKeyValuePair.Key
+  Info: BuildAssembler: Building topic P:ASCOM.Utilities.Interfaces.IKeyValuePair.Value
   Info: BuildAssembler: Building topic T:ASCOM.Utilities.Interfaces.IProfile
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Utilities.Interfaces.IProfile
   Info: BuildAssembler: Building topic Methods.T:ASCOM.Utilities.Interfaces.IProfile
@@ -2536,9 +2550,9 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic P:ASCOM.Utilities.Interfaces.IUtil.TimeZoneOffset
   Info: BuildAssembler: Building topic P:ASCOM.Utilities.Interfaces.IUtil.UTCDate
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.WaitForMilliseconds(System.Int32)
-  Info: Processed 1012 topics
+  Info: Processed 1026 topics
   Info: CachedCopyFromIndexComponent: Used &quot;reflection&quot; cache entries: 2
-    Last step completed in 00:00:48.3922
+    Last step completed in 00:00:47.5952
 </buildStep>
 <buildStep step="GenerateIntermediateTableOfContents">
 Generating intermediate table of contents file...
@@ -2560,11 +2574,11 @@ Copyright &#184; 2008-2009, Eric Woodruff, All Rights Reserved
 E-Mail: Eric@EWoodruff.us
 
 Using LCID '1033', code page '65001', encoding charset 'UTF-8'.
-Processed 1034 HTML files
+Processed 1048 HTML files
 Sorting keywords and generating See Also indices
 Saving Help 1.x keyword index to C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\PlatformHelp.hhk
 Saving Help 1.x table of contents to C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\PlatformHelp.hhc
-    Last step completed in 00:00:07.5159
+    Last step completed in 00:00:02.4845
 </buildStep>
 <buildStep step="GenerateHelpFormatTableOfContents">
 Generating HTML Help 1.x table of contents file...
@@ -2598,11 +2612,11 @@ Build1xHelpFile:
   
   Compile time: 0 minutes, 12 seconds
   
-  1,036	Topics
+  1,050	Topics
   
-  12,477	Local links
+  12,643	Local links
   
-  7,626	Internet links
+  7,681	Internet links
   
   0	Graphics
   
@@ -2610,19 +2624,19 @@ Build1xHelpFile:
   
   
   
-  Created c:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\Output\PlatformHelp.chm, 1,391,312 bytes
+  Created c:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\Output\PlatformHelp.chm, 1,402,424 bytes
   
-  Compression decreased file by 13,109,354 bytes.
+  Compression decreased file by 13,272,175 bytes.
   
-    Last step completed in 00:00:13.5473
+    Last step completed in 00:00:13.6879
 </buildStep>
 <buildStep step="CleanIntermediates">
 Removing intermediate files...
-    Last step completed in 00:00:00.5469
+    Last step completed in 00:00:00.5938
 </buildStep>
 <buildStep step="Completed">
 
-Build completed successfully at 08/16/2009 10:42 AM.  Total time: 00:01:44.3159
+Build completed successfully at 08/20/2009 09:10 PM.  Total time: 00:01:37.4874
 
 </buildStep>
 </shfbBuild>
