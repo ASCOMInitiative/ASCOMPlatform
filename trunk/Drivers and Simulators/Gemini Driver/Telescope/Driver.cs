@@ -1114,8 +1114,8 @@ namespace ASCOM.GeminiTelescope
 
         public DateTime UTCDate
         {
-            // TODO Replace this with your implementation
-            get { return GeminiHardware.UTCDate; }
+            
+            get { return GeminiHardware.UTCDate;}
             set { GeminiHardware.UTCDate = value; }
         }
 
