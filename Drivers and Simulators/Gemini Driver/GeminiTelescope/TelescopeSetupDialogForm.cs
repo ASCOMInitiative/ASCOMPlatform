@@ -142,7 +142,38 @@ namespace ASCOM.GeminiTelescope
                 textBoxLongitudeMinutes.Text = ((value - (int)value) * 60).ToString("00.00");
             }
         }
-
+        public bool UseGeminiSite
+        {
+            get { return checkBoxUseGeminiSite.Checked; }
+            set 
+            { 
+                checkBoxUseGeminiSite.Checked = value;
+                if (value)
+                {
+                    comboBoxLatitude.Enabled = false;
+                    textBoxLatitudeDegrees.Enabled = false;
+                    textBoxLatitudeMinutes.Enabled = false;
+                    comboBoxLongitude.Enabled = false;
+                    textBoxLongitudeDegrees.Enabled = false;
+                    textBoxLongitudeMinutes.Enabled = false;
+                }
+                else
+                {
+                    comboBoxLatitude.Enabled = true;
+                    textBoxLatitudeDegrees.Enabled = true;
+                    textBoxLatitudeMinutes.Enabled = true;
+                    comboBoxLongitude.Enabled = true;
+                    textBoxLongitudeDegrees.Enabled = true;
+                    textBoxLongitudeMinutes.Enabled = true;
+                }
+            }
+        }
+        public bool UseGeminiTime
+        {
+            get { return checkBoxUseGeminiTime.Checked; }
+            set { checkBoxUseGeminiTime.Checked = value; }
+        }
+        
         #endregion
 
         private void TelescopeSetupDialogForm_Load(object sender, EventArgs e)
@@ -167,6 +198,11 @@ namespace ASCOM.GeminiTelescope
                     MessageBox.Show("Settings are invalid", SharedResources.TELESCOPE_DRIVER_NAME);
                 }
             }
+        }
+
+        private void timerUpdate_Tick(object sender, EventArgs e)
+        {
+            labelUtc.Text = DateTime.UtcNow.ToLongTimeString();
         }
 
             

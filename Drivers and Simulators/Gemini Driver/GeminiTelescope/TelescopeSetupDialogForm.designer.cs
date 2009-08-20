@@ -28,6 +28,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -51,8 +52,8 @@ namespace ASCOM.GeminiTelescope
             this.label8 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.labelLst = new System.Windows.Forms.Label();
+            this.checkBoxUseGeminiTime = new System.Windows.Forms.CheckBox();
+            this.labelUtc = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
@@ -71,6 +72,7 @@ namespace ASCOM.GeminiTelescope
             this.comboBoxBaudRate = new System.Windows.Forms.ComboBox();
             this.buttonVirtualPort = new System.Windows.Forms.Button();
             this.picASCOM = new System.Windows.Forms.PictureBox();
+            this.timerUpdate = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -84,9 +86,10 @@ namespace ASCOM.GeminiTelescope
             // 
             // cmdOK
             // 
-            this.cmdOK.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.cmdOK.BackColor = System.Drawing.Color.Black;
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdOK.Location = new System.Drawing.Point(491, 169);
+            this.cmdOK.ForeColor = System.Drawing.Color.White;
+            this.cmdOK.Location = new System.Drawing.Point(491, 189);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 0;
@@ -96,9 +99,10 @@ namespace ASCOM.GeminiTelescope
             // 
             // cmdCancel
             // 
-            this.cmdCancel.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.cmdCancel.BackColor = System.Drawing.Color.Black;
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(491, 202);
+            this.cmdCancel.ForeColor = System.Drawing.Color.White;
+            this.cmdCancel.Location = new System.Drawing.Point(491, 219);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
@@ -259,8 +263,9 @@ namespace ASCOM.GeminiTelescope
             this.labelTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTime.AutoSize = true;
             this.labelTime.ForeColor = System.Drawing.Color.White;
-            this.labelTime.Location = new System.Drawing.Point(360, 265);
+            this.labelTime.Location = new System.Drawing.Point(365, 265);
             this.labelTime.Name = "labelTime";
+            this.labelTime.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.labelTime.Size = new System.Drawing.Size(185, 13);
             this.labelTime.TabIndex = 19;
             this.labelTime.Text = "<run time - time zone and UTC offset>";
@@ -322,8 +327,8 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel4.ColumnCount = 2;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 57.78894F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 42.21106F));
-            this.tableLayoutPanel4.Controls.Add(this.checkBox1, 0, 1);
-            this.tableLayoutPanel4.Controls.Add(this.labelLst, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.checkBoxUseGeminiTime, 0, 1);
+            this.tableLayoutPanel4.Controls.Add(this.labelUtc, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.label5, 0, 0);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 16);
@@ -335,35 +340,35 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel4.Size = new System.Drawing.Size(199, 46);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
-            // checkBox1
+            // checkBoxUseGeminiTime
             // 
-            this.checkBox1.AutoSize = true;
-            this.tableLayoutPanel4.SetColumnSpan(this.checkBox1, 4);
-            this.checkBox1.ForeColor = System.Drawing.Color.White;
-            this.checkBox1.Location = new System.Drawing.Point(3, 22);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(106, 17);
-            this.checkBox1.TabIndex = 23;
-            this.checkBox1.Text = "Use Gemini Time";
-            this.checkBox1.UseVisualStyleBackColor = false;
+            this.checkBoxUseGeminiTime.AutoSize = true;
+            this.tableLayoutPanel4.SetColumnSpan(this.checkBoxUseGeminiTime, 4);
+            this.checkBoxUseGeminiTime.ForeColor = System.Drawing.Color.White;
+            this.checkBoxUseGeminiTime.Location = new System.Drawing.Point(3, 22);
+            this.checkBoxUseGeminiTime.Name = "checkBoxUseGeminiTime";
+            this.checkBoxUseGeminiTime.Size = new System.Drawing.Size(106, 17);
+            this.checkBoxUseGeminiTime.TabIndex = 23;
+            this.checkBoxUseGeminiTime.Text = "Use Gemini Time";
+            this.checkBoxUseGeminiTime.UseVisualStyleBackColor = false;
             // 
-            // labelLst
+            // labelUtc
             // 
-            this.labelLst.AutoSize = true;
-            this.labelLst.Location = new System.Drawing.Point(117, 0);
-            this.labelLst.Name = "labelLst";
-            this.labelLst.Size = new System.Drawing.Size(49, 13);
-            this.labelLst.TabIndex = 7;
-            this.labelLst.Text = "00:00:00";
+            this.labelUtc.AutoSize = true;
+            this.labelUtc.Location = new System.Drawing.Point(117, 0);
+            this.labelUtc.Name = "labelUtc";
+            this.labelUtc.Size = new System.Drawing.Size(49, 13);
+            this.labelUtc.TabIndex = 7;
+            this.labelUtc.Text = "00:00:00";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(3, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(103, 13);
+            this.label5.Size = new System.Drawing.Size(80, 13);
             this.label5.TabIndex = 6;
-            this.label5.Text = "Local Sidereal Time:";
+            this.label5.Text = "Universal Time:";
             // 
             // groupBox4
             // 
@@ -406,8 +411,9 @@ namespace ASCOM.GeminiTelescope
             // 
             // button1
             // 
-            this.button1.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.button1.Location = new System.Drawing.Point(238, 198);
+            this.button1.BackColor = System.Drawing.Color.Black;
+            this.button1.ForeColor = System.Drawing.Color.White;
+            this.button1.Location = new System.Drawing.Point(238, 221);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 23;
@@ -553,6 +559,11 @@ namespace ASCOM.GeminiTelescope
             this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
             this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
             // 
+            // timerUpdate
+            // 
+            this.timerUpdate.Interval = 1000;
+            this.timerUpdate.Tick += new System.EventHandler(this.timerUpdate_Tick);
+            // 
             // TelescopeSetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -625,12 +636,12 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label labelLst;
+        private System.Windows.Forms.Label labelUtc;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox checkBoxUseGeminiTime;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox checkBoxAdvancedMode;
         private System.Windows.Forms.CheckBox checkBoxPrecession;
@@ -643,5 +654,6 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox comboBoxBaudRate;
         private System.Windows.Forms.Button buttonVirtualPort;
+        private System.Windows.Forms.Timer timerUpdate;
     }
 }

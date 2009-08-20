@@ -177,6 +177,7 @@ namespace ASCOM.GeminiTelescope
         private static double m_TargetRightAscension = SharedResources.INVALID_DOUBLE;
         private static double m_TargetDeclination = SharedResources.INVALID_DOUBLE;
         private static double m_SiderealTime;
+        private static long m_GeminiPCClockDeviation = 0;
         private static string m_Velocity;
         private static string m_SideOfPier;
         private static double m_TargetAltitude = SharedResources.INVALID_DOUBLE;
@@ -185,9 +186,9 @@ namespace ASCOM.GeminiTelescope
         private static bool m_AdditionalAlign;
         private static bool m_Precession;
         private static bool m_Refraction;
-        private static bool m_GeminiTime;
-        private static bool m_GeminiSite;
         private static bool m_AdvancedMode;
+        private static bool m_UseGeminiSite;
+        private static bool m_UseGeminiTime;
 
 
         private static bool m_Tracking;
@@ -359,8 +360,8 @@ namespace ASCOM.GeminiTelescope
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Precession", false.ToString());
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Refraction", false.ToString());
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AdvancedMode", false.ToString());
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiSite", true.ToString());
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiTime", true.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseGeminiSite", true.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseGeminiTime", true.ToString());
 
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughPortEnabled", false.ToString());
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughComPort", "COM10");
@@ -378,10 +379,10 @@ namespace ASCOM.GeminiTelescope
                 m_Refraction = false;
             if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "AdvancedMode", ""), out m_AdvancedMode))
                 m_AdvancedMode = false;
-            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiSite", ""), out m_GeminiSite))
-                m_GeminiSite= false;
-            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiTime", ""), out m_GeminiTime))
-                m_GeminiTime = false;
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseGeminiSite", ""), out m_UseGeminiSite))
+                m_UseGeminiSite= false;
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseGeminiTime", ""), out m_UseGeminiTime))
+                m_UseGeminiTime = false;
 
             m_ComPort = m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ComPort", "");
             if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "BaudRate", ""), out m_BaudRate))
@@ -492,7 +493,32 @@ namespace ASCOM.GeminiTelescope
 
 
 #region Properties For Settings
-
+        /// <summary>
+        /// Get/Set Use Gemini Site 
+        /// </summary>
+        public static bool UseGeminiSite
+        {
+            get { return m_UseGeminiSite; }
+            set
+            {
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseGeminiSite", value.ToString());
+                m_UseGeminiSite = value;
+            }
+        }
+        /// <summary>
+        /// Get/Set Use Gemini Time 
+        /// </summary>
+        public static bool UseGeminiTime
+        {
+            get { return m_UseGeminiTime; }
+            set
+            {
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseGeminiTime", value.ToString());
+                m_UseGeminiTime = value;
+            }
+        }
         /// <summary>
         /// Get/Set serial comm port 
         /// </summary>
@@ -1014,6 +1040,36 @@ namespace ASCOM.GeminiTelescope
                 DoCommandResult(":U", MAX_TIMEOUT, false);
 
             Refraction = m_Refraction;  // update this setting to the mount 
+
+            //Set the site and time if required
+            if (!m_UseGeminiSite)
+            {
+                SetLatitude(m_Latitude);
+                SetLongitude(m_Longitude);
+            }
+            if (!m_UseGeminiTime)
+            {
+                UTCDate = DateTime.UtcNow;
+            }
+            else
+            {
+                string result = DoCommandResult(":GL", MAX_TIMEOUT, false);
+                string[] localTime = result.Substring(8).Split(':');
+                result = DoCommandResult(":GC", MAX_TIMEOUT, false);
+                string[] localDate = result.Substring(8).Split('/');
+                try
+                {
+                    int hours = int.Parse(localTime[0]);
+                    int minutes = int.Parse(localTime[1]);
+                    int seconds = int.Parse(localTime[2]);
+                    int month = int.Parse(localDate[0]);
+                    int day = int.Parse(localDate[1]);
+                    int year = int.Parse(localDate[2]);
+                    DateTime geminiDateTime = new DateTime(year, month, day, hours, minutes, seconds);
+                    m_GeminiPCClockDeviation = geminiDateTime.Ticks - DateTime.Now.Ticks;
+                }
+                catch { }
+            }
         }
 
 
@@ -1901,6 +1957,22 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static double SiderealTime
         { get { return m_SiderealTime; } }
+
+        /// <summary>
+        /// Get/Set current UTC propery
+        /// Value is calculated from PC Clock and Deviation of the Gemini Clock
+        /// </summary>
+        public static DateTime UTCDate
+        { 
+            get { return new DateTime(DateTime.UtcNow.Ticks + m_GeminiPCClockDeviation); }
+            set 
+            {
+                m_GeminiPCClockDeviation = value.Ticks - DateTime.UtcNow.Ticks;
+                string result = DoCommandResult(":SG" + TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours, MAX_TIMEOUT, false);
+                string localTime = m_Util.HoursToHMS(m_Util.HMSToHours(value.ToLongTimeString()) + TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours);
+                result = DoCommandResult(":SL" + localTime, MAX_TIMEOUT, false);
+            }
+        }
 
         /// <summary>
         /// SetLatitude Method

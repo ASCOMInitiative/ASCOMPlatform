@@ -105,7 +105,7 @@ namespace ASCOM.GeminiTelescope
 
         void ConfigureFocuserMenu(object sender, EventArgs e)
         {
-            DoFocuserSetupDialog();
+            _DoFocuserSetupDialog();
         }
 
         void ShowNotificationsMenu(object sender, EventArgs e)
@@ -267,6 +267,8 @@ namespace ASCOM.GeminiTelescope
             setupForm.Latitude = GeminiHardware.Latitude;
             setupForm.Longitude = GeminiHardware.Longitude;
 
+            setupForm.UseGeminiSite = GeminiHardware.UseGeminiSite;
+            setupForm.UseGeminiTime = GeminiHardware.UseGeminiTime;
 
             DialogResult ans = setupForm.ShowDialog(this);
 
@@ -280,6 +282,9 @@ namespace ASCOM.GeminiTelescope
                     GeminiHardware.Elevation = setupForm.Elevation;
                     GeminiHardware.Latitude = setupForm.Latitude;
                     GeminiHardware.Longitude = setupForm.Longitude;
+
+                    GeminiHardware.UseGeminiTime = setupForm.UseGeminiTime;
+                    GeminiHardware.UseGeminiSite = setupForm.UseGeminiSite;
                 }
                 catch
                 {
@@ -289,13 +294,7 @@ namespace ASCOM.GeminiTelescope
 
             setupForm.Dispose();
         }
-
-        public void DoTelescopeSetupDialog()
-        {
-            this.Invoke(new SetupDialogDelegate(_DoSetupTelescopeDialog));
-        }
-
-        public static void DoFocuserSetupDialog()
+        private void _DoFocuserSetupDialog()
         {
             FocuserSetupDialogForm setupForm = new FocuserSetupDialogForm();
             setupForm.ComPort = GeminiHardware.ComPort;
@@ -309,25 +308,42 @@ namespace ASCOM.GeminiTelescope
             setupForm.Speed = GeminiHardware.Speed;
 
 
+
             DialogResult ans = setupForm.ShowDialog();
 
             if (ans == DialogResult.OK)
             {
-
-                GeminiHardware.ComPort = setupForm.ComPort;
-                GeminiHardware.BaudRate = int.Parse(setupForm.BaudRate);
-                GeminiHardware.ReverseDirection = setupForm.ReverseDirection;
-                GeminiHardware.MaxIncrement = setupForm.MaxIncrement;
-                GeminiHardware.StepSize = setupForm.StepSize;
-                GeminiHardware.BrakeSize = setupForm.BrakeSize;
-                GeminiHardware.BacklashSize = setupForm.BacklashSize;
-                GeminiHardware.BacklashDirection = setupForm.BacklashDirection;
-                GeminiHardware.Speed = setupForm.Speed;
+                try
+                {
+                    GeminiHardware.ComPort = setupForm.ComPort;
+                    GeminiHardware.BaudRate = int.Parse(setupForm.BaudRate);
+                    GeminiHardware.ReverseDirection = setupForm.ReverseDirection;
+                    GeminiHardware.MaxIncrement = setupForm.MaxIncrement;
+                    GeminiHardware.StepSize = setupForm.StepSize;
+                    GeminiHardware.BrakeSize = setupForm.BrakeSize;
+                    GeminiHardware.BacklashSize = setupForm.BacklashSize;
+                    GeminiHardware.BacklashDirection = setupForm.BacklashDirection;
+                    GeminiHardware.Speed = setupForm.Speed;
+                }
+                catch
+                {
+                    MessageBox.Show("Settings are invalid", SharedResources.TELESCOPE_DRIVER_NAME);
+                }
             }
 
             setupForm.Dispose();
         }
 
+
+        public void DoTelescopeSetupDialog()
+        {
+            this.Invoke(new SetupDialogDelegate(_DoSetupTelescopeDialog));
+        }
+        public void DoFocuserSetupDialog()
+        {
+            this.Invoke(new SetupDialogDelegate(_DoFocuserSetupDialog));
+        }
+        
         private void buttonSetup_Click(object sender, EventArgs e)
         {
             DoTelescopeSetupDialog();
