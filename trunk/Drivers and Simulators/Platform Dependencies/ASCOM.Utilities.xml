@@ -795,7 +795,7 @@ ASCOM.Utilities
  </summary>
 	<param name="DeviceType">Type of devices to list</param>
 	<value>List of registered devices</value>
-	<returns>An object which is a scripting dictionary of installed devices and associated device descriptions</returns>
+	<returns>An ArrayList of installed devices and associated device descriptions</returns>
 	<exception cref="T:ASCOM.Utilities.Exceptions.InvalidValueException">Throw if the supplied DeviceType is empty string or 
  null value.</exception>
 	<remarks>
@@ -807,6 +807,8 @@ ASCOM.Utilities
  than as a generic keyed list. 
  This is done because it is not possible to expose generics through COM. .NET programmers should
  use RegisteredDevices rather than RegisteredDevicesCOM.</para>
+		<para>The KeyValuePair objects are instances of the <see cref="T:ASCOM.Utilities.KeyValuePair">KeyValuePair class</see> where 
+ the Key is the device name and the Value is the device description.</para>
 	</remarks>
 </member><member name="P:ASCOM.Utilities.Profile.RegisteredDevices(System.String)">
 	<summary>
@@ -910,7 +912,7 @@ ASCOM.Utilities
  </summary>
 	<param name="DriverID">ProgID of the device to read from</param>
 	<param name="SubKey">Subkey from the profile root in which to write the value</param>
-	<returns>Generic Sorted List of KeyValuePairs</returns>
+	<returns>An ArrayList of KeyValuePairs</returns>
 	<remarks>The returned object contains entries for each value. For each entry, 
  the Key property is the value's name, and the Value property is the string value itself. Note that the unnamed (default) 
  value will be included if it has a value, even if the value is a blank string. The unnamed value will have its entry's 
@@ -920,6 +922,7 @@ ASCOM.Utilities
  than as a generic keyed list. 
  This is done because it is not possible to expose generics through COM. .NET programmers should
  use Values rather than ValuesCOM.</para>
+		<para>The KeyValuePair objects are instances of the <see cref="T:ASCOM.Utilities.KeyValuePair">KeyValuePair class</see></para>
 	</remarks>
 </member><member name="M:ASCOM.Utilities.Profile.Values(System.String)">
 	<summary>
@@ -980,7 +983,7 @@ ASCOM.Utilities
  </summary>
 	<param name="DriverID">ProgID of the device to read from</param>
 	<param name="SubKey">Subkey from the profile root in which to write the value</param>
-	<returns>Generic Sorted List of key-value pairs</returns>
+	<returns>An ArrayList of key-value pairs</returns>
 	<remarks>The returned object (scripting.dictionary) contains entries for each sub-key. For each KeyValuePair in the list, 
  the Key property is the sub-key name, and the Value property is the value. The unnamed ("default") value for that key is also returned.
  <para><b>Note: </b> This call functions identically to Values 
@@ -988,6 +991,7 @@ ASCOM.Utilities
  than as a generic keyed list. 
  This is done because it is not possible to expose generics through COM. .NET programmers should
  use Values rather than ValuesCOM.</para>
+		<para>The KeyValuePair objects are instances of the <see cref="T:ASCOM.Utilities.KeyValuePair">KeyValuePair class</see></para>
 	</remarks>
 </member><member name="M:ASCOM.Utilities.Profile.SubKeys(System.String)">
 	<summary>
@@ -1030,6 +1034,64 @@ ASCOM.Utilities
  persistence information in a shared area of the file system.</para>
 		<para>Please code to the IProfile interface</para>
 	</remarks>
+</member><member name="M:ASCOM.Utilities.KeyValuePair.#ctor">
+	<summary>
+ COM visible default constructor
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Utilities.KeyValuePair.#ctor(System.String,System.String)">
+	<summary>
+ Constructor that can set the key and value simultaneously.
+ </summary>
+	<param name="Key">The Key element of a key value pair</param>
+	<param name="Value">The Value element of a key value pair</param>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Utilities.KeyValuePair.Key">
+	<summary>
+ The Key element of a key value pair
+ </summary>
+	<value>Key</value>
+	<returns>Key as a string</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Utilities.KeyValuePair.Value">
+	<summary>
+ The Value element of a key value pair.
+ </summary>
+	<value>Value</value>
+	<returns>Value as a string</returns>
+	<remarks></remarks>
+</member><member name="T:ASCOM.Utilities.KeyValuePair">
+	<summary>
+ Class that can return an associated key and value to a COM client
+ </summary>
+	<remarks>This class is only used by some Profile.XXXCOM properties and methods and
+ compensates for the inabiliy of .NET to return Generic classes to COM clients.
+ <para>The properties and methods are: 
+ <see cref="P:ASCOM.Utilities.Profile.RegisteredDevicesCOM(System.String)">Profile.RegisteredDevices</see>, 
+ <see cref="M:ASCOM.Utilities.Profile.SubKeysCOM(System.String,System.String)">Profile.SubKeysCOM</see> and 
+ <see cref="M:ASCOM.Utilities.Profile.ValuesCOM(System.String,System.String)">Profile.ValuesCOM</see>.</para></remarks>
+</member><member name="P:ASCOM.Utilities.Interfaces.IKeyValuePair.Key">
+	<summary>
+ Key member of a key value pair
+ </summary>
+	<value>Key</value>
+	<returns>Ky as string</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Utilities.Interfaces.IKeyValuePair.Value">
+	<summary>
+ Value memeber of a key value pair
+ </summary>
+	<value>Value</value>
+	<returns>Value as string</returns>
+	<remarks></remarks>
+</member><member name="T:ASCOM.Utilities.Interfaces.IKeyValuePair">
+	<summary>
+ Interface for KeyValuePair class
+ </summary>
+	<remarks>This is a return type only used by a small number of the Profile.XXXCOM commands. Including
+ <see cref="P:ASCOM.Utilities.Interfaces.IProfile.RegisteredDevicesCOM(System.String)">IProfile.RegisteredDevices</see>, 
+ <see cref="M:ASCOM.Utilities.Interfaces.IProfile.SubKeysCOM(System.String,System.String)">IProfile.SubKeysCOM</see> and 
+ <see cref="M:ASCOM.Utilities.Interfaces.IProfile.ValuesCOM(System.String,System.String)">IProfile.ValuesCOM</see>.</remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.ITraceLogger.LogStart(System.String,System.String)">
 	<summary>
  Writes the time and identifier to the log, leaving the line ready for further content through LogContinue and LogFinish
@@ -1768,7 +1830,7 @@ ASCOM.Utilities
  </summary>
 	<param name="DeviceType">Type of devices to list</param>
 	<value>List of registered devices</value>
-	<returns>An object which is a scripting dictionary of installed devices and associated device descriptions</returns>
+	<returns>An ArrayList of KeyValuePair objects of installed devices and associated device descriptions</returns>
 	<exception cref="T:ASCOM.Utilities.Exceptions.InvalidValueException">Throw if the supplied DeviceType is empty string or 
  null value.</exception>
 	<remarks>
@@ -1776,10 +1838,11 @@ ASCOM.Utilities
  <para>If a DeviceType is supplied, where no device of that type has been registered before on this system,
  an empty list will be returned</para>
 		<para><b>Note: </b> This call functions identically to RegisteredDevices 
- except that it returns results as an object, actually its a scripting dictionary, rather 
- than as a generic keyed list. 
+ except that it returns results as an ArrayList object, rather than as a generic keyed list. 
  This is done because it is not possible to expose generics through COM. .NET programmers should
  use RegisteredDevices rather than RegisteredDevicesCOM.</para>
+		<para>The KeyValuePair objects are instances of the <see cref="T:ASCOM.Utilities.KeyValuePair">KeyValuePair class</see> where 
+ the Key is the device name and the Value is the device description.</para>
 	</remarks>
 </member><member name="P:ASCOM.Utilities.Interfaces.IProfile.RegisteredDevices(System.String)">
 	<summary>
@@ -1868,7 +1931,7 @@ ASCOM.Utilities
  </summary>
 	<param name="DriverID">ProgID of the device to read from</param>
 	<param name="SubKey">Subkey from the profile root in which to write the value</param>
-	<returns>Generic Sorted List of KeyValuePairs</returns>
+	<returns>An ArrayList of KeyValuePair objects.</returns>
 	<remarks>The returned object contains entries for each value. For each entry, 
  the Key property is the value's name, and the Value property is the string value itself. Note that the unnamed (default) 
  value will be included if it has a value, even if the value is a blank string. The unnamed value will have its entry's 
@@ -1878,6 +1941,7 @@ ASCOM.Utilities
  than as a generic keyed list. 
  This is done because it is not possible to expose generics through COM. .NET programmers should
  use Values rather than ValuesCOM.</para>
+		<para>The KeyValuePair objects are instances of the <see cref="T:ASCOM.Utilities.KeyValuePair">KeyValuePair class</see></para>
 	</remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.IProfile.Values(System.String)">
 	<summary>
@@ -1932,7 +1996,7 @@ ASCOM.Utilities
  </summary>
 	<param name="DriverID">ProgID of the device to read from</param>
 	<param name="SubKey">Subkey from the profile root in which to search for subkeys</param>
-	<returns>Generic Sorted List of key-value pairs</returns>
+	<returns>An ArrayList of key-value pairs</returns>
 	<remarks>The returned object (scripting.dictionary) contains entries for each sub-key. For each KeyValuePair in the list, 
  the Key property is the sub-key name, and the Value property is the value. The unnamed ("default") value for that key is also returned.
  <para><b>Note: </b> This call functions identically to Values 
@@ -1940,6 +2004,7 @@ ASCOM.Utilities
  than as a generic keyed list. 
  This is done because it is not possible to expose generics through COM. .NET programmers should
  use Values rather than ValuesCOM.</para>
+		<para>The KeyValuePair objects are instances of the <see cref="T:ASCOM.Utilities.KeyValuePair">KeyValuePair class</see></para>
 	</remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.IProfile.SubKeys(System.String)">
 	<summary>
