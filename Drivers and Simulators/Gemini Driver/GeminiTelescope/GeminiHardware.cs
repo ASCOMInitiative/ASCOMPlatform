@@ -177,7 +177,6 @@ namespace ASCOM.GeminiTelescope
         private static double m_TargetRightAscension = SharedResources.INVALID_DOUBLE;
         private static double m_TargetDeclination = SharedResources.INVALID_DOUBLE;
         private static double m_SiderealTime;
-        private static long m_GeminiPCClockDeviation = 0;
         private static string m_Velocity;
         private static string m_SideOfPier;
         private static double m_TargetAltitude = SharedResources.INVALID_DOUBLE;
@@ -1050,25 +1049,6 @@ namespace ASCOM.GeminiTelescope
             if (!m_UseGeminiTime)
             {
                 UTCDate = DateTime.UtcNow;
-            }
-            else
-            {
-                string result = DoCommandResult(":GL", MAX_TIMEOUT, false);
-                string[] localTime = result.Substring(8).Split(':');
-                result = DoCommandResult(":GC", MAX_TIMEOUT, false);
-                string[] localDate = result.Substring(8).Split('/');
-                try
-                {
-                    int hours = int.Parse(localTime[0]);
-                    int minutes = int.Parse(localTime[1]);
-                    int seconds = int.Parse(localTime[2]);
-                    int month = int.Parse(localDate[0]);
-                    int day = int.Parse(localDate[1]);
-                    int year = int.Parse(localDate[2]);
-                    DateTime geminiDateTime = new DateTime(year, month, day, hours, minutes, seconds);
-                    m_GeminiPCClockDeviation = geminiDateTime.Ticks - DateTime.Now.Ticks;
-                }
-                catch { }
             }
         }
 
@@ -1960,14 +1940,33 @@ namespace ASCOM.GeminiTelescope
 
         /// <summary>
         /// Get/Set current UTC propery
-        /// Value is calculated from PC Clock and Deviation of the Gemini Clock
         /// </summary>
         public static DateTime UTCDate
         { 
-            get { return new DateTime(DateTime.UtcNow.Ticks + m_GeminiPCClockDeviation); }
+            get 
+            {
+                DateTime geminiDateTime;
+                string result = GeminiHardware.DoCommandResult(":GL", GeminiHardware.MAX_TIMEOUT, false);
+                string[] localTime = result.Substring(8).Split(':');
+                result = GeminiHardware.DoCommandResult(":GC", GeminiHardware.MAX_TIMEOUT, false);
+                string[] localDate = result.Substring(8).Split('/');
+                try
+                {
+                    int hours = int.Parse(localTime[0]);
+                    int minutes = int.Parse(localTime[1]);
+                    int seconds = int.Parse(localTime[2]);
+                    int month = int.Parse(localDate[0]);
+                    int day = int.Parse(localDate[1]);
+                    int year = int.Parse(localDate[2]);
+                    geminiDateTime = new DateTime(year, month, day, hours, minutes, seconds);
+                    return geminiDateTime;
+                }
+                catch
+                { throw new ASCOM.DriverException("Error reading UTCDate", (int)SharedResources.SCODE_INVALID_VALUE); }; 
+            }
             set 
             {
-                m_GeminiPCClockDeviation = value.Ticks - DateTime.UtcNow.Ticks;
+                
                 string result = DoCommandResult(":SG" + TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours, MAX_TIMEOUT, false);
                 string localTime = m_Util.HoursToHMS(m_Util.HMSToHours(value.ToLongTimeString()) + TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours);
                 result = DoCommandResult(":SL" + localTime, MAX_TIMEOUT, false);
