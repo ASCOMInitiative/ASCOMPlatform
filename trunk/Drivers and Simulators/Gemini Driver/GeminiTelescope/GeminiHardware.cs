@@ -413,6 +413,10 @@ namespace ASCOM.GeminiTelescope
             if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Longitude", ""), out m_Longitude))
                 m_Longitude = 0.0;
 
+            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Elevation", ""), out m_Elevation))
+                m_Elevation = 0.0;
+
+            
             m_PassThroughComPort = m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughComPort", "");
             if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughBaudRate", ""), out m_PassThroughBaudRate))
                 m_PassThroughBaudRate = 9600;
