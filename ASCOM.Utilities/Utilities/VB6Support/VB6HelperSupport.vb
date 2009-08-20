@@ -120,16 +120,17 @@ Namespace VB6HelperSupport 'Tuck this out of the way of the main ASCOM.Utilities
             Profile.WriteProfile(p_SubKeyName, p_ValueName, p_ValueData)
         End Sub
 
-        Public Function EnumProfile(ByVal p_SubKeyName As String, ByVal CName As String) As Scripting.Dictionary 'Hashtable
+        Public Function EnumProfile(ByVal p_SubKeyName As String, ByVal CName As String) As ArrayList 'Scripting.Dictionary 'Hashtable
             'Enumerate values within a given profile key
             'Return these as a Scripting.Dictionary object
 
-            Dim RetVal As Scripting.Dictionary = New Scripting.Dictionary
+            Dim RetVal As ArrayList = New ArrayList
             Dim ReturnedProfile As Generic.SortedList(Of String, String)
             ReturnedProfile = Profile.EnumProfile(p_SubKeyName) 'Get the requested values as a hashtable
             TL.LogMessage("EnumProfile", "SubKey: """ & p_SubKeyName & """ found " & ReturnedProfile.Count & " values")
             For Each de As Generic.KeyValuePair(Of String, String) In ReturnedProfile 'Copy the hashtable entries to the scripting.dictionary
-                RetVal.Add(de.Key, de.Value)
+                Dim kvp As New KeyValuePair(de.Key, de.Value)
+                RetVal.Add(kvp)
                 TL.LogMessage("  EnumProfile", "  Key: """ & de.Key & """ Value: """ & de.Value & """")
             Next
             Return RetVal
@@ -149,17 +150,18 @@ Namespace VB6HelperSupport 'Tuck this out of the way of the main ASCOM.Utilities
             Profile.CreateKey(p_SubKeyName)
         End Sub
 
-        Public Function EnumKeys(ByVal p_SubKeyName As String, ByVal CName As String) As Scripting.Dictionary 'Hashtable
+        Public Function EnumKeys(ByVal p_SubKeyName As String, ByVal CName As String) As ArrayList 'Scripting.Dictionary 'Hashtable
             'Enuerate the subkeys in a specified key
             'Return these as a Scripting.Dictionary object
 
-            Dim RetVal As Scripting.Dictionary = New Scripting.Dictionary
+            Dim RetVal As ArrayList = New ArrayList
             Dim Keys As Generic.SortedList(Of String, String)
             Keys = Profile.EnumKeys(p_SubKeyName) 'Get the list of subkeys
             TL.LogMessage("EnumKeys", "SubKey: """ & p_SubKeyName & """ found " & Keys.Count & " values")
 
             For Each de As Generic.KeyValuePair(Of String, String) In Keys 'Copy into the scripting.dictionary
-                RetVal.Add(de.Key, de.Value)
+                Dim kvp As New KeyValuePair(de.Key, de.Value)
+                RetVal.Add(kvp)
                 TL.LogMessage("  EnumKeys", "  Key: """ & de.Key & """ Value: """ & de.Value & """")
             Next
             Return RetVal
@@ -174,6 +176,62 @@ Namespace VB6HelperSupport 'Tuck this out of the way of the main ASCOM.Utilities
 #End Region
 
     End Class
+
+#Region "Interface IKeyValuePair"
+    Public Interface IKeyValuePair
+        Property Key() As String
+        Property Value() As String
+    End Interface
+#End Region
+
+    <ProgId("DriverHelper.KeyValuePair"), _
+    ComVisible(True), _
+    ComClass(KeyValuePair.ClassId, KeyValuePair.InterfaceId, KeyValuePair.EventsId), _
+    System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)> _
+    Public Class KeyValuePair
+        Implements IKeyValuePair
+#Region "COM GUIDs"
+        ' These  GUIDs provide the COM identity for this class 
+        ' and its COM interfaces. If you change them, existing 
+        ' clients will no longer be able to access the class.
+        Public Const ClassId As String = "06F3E6FF-5355-4463-B31A-1FB03773AB71"
+        Public Const InterfaceId As String = "DA4B972F-0C46-4ec1-8DE0-C769BFA72775"
+        Public Const EventsId As String = "ED1CE85D-7A6B-4864-A6AA-416758EA7B9E"
+#End Region
+
+        Private m_Key As String
+        Private m_Value As String
+
+#Region "New"
+        Public Sub New()
+            m_Key = ""
+            m_Value = ""
+        End Sub
+        Public Sub New(ByVal Key As String, ByVal Value As String)
+            m_Key = Key
+            m_Value = Value
+        End Sub
+#End Region
+
+        Public Property Key() As String Implements IKeyValuePair.Key
+            Get
+                Return m_Key
+            End Get
+            Set(ByVal value As String)
+                m_Key = value
+            End Set
+        End Property
+
+        Public Property Value() As String Implements IKeyValuePair.Value
+            Get
+                Return m_Value
+            End Get
+            Set(ByVal value As String)
+                m_Value = value
+            End Set
+        End Property
+    End Class
+
 #End Region
 
 #Region "SerialSupport"

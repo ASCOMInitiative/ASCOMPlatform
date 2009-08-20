@@ -156,9 +156,14 @@ End Sub
 Public Function Values(ByVal DriverID As String, _
                             Optional ByVal SubKey As String = "") As Dictionary
 Attribute Values.VB_Description = "Return a list of the (unnamed and named) under the given DriverID. Optional path to starting subkey for given Driver ID may be supplied."
-
-    Set Values = Reg.EnumProfile(MakeKey(DriverID, SubKey), ERR_SOURCE_PROFILE)
-
+    Dim l_Dict As New Dictionary
+    Dim RetVals, kvp As Object
+    
+    Set RetVals = Reg.EnumProfile(MakeKey(DriverID, SubKey), ERR_SOURCE_PROFILE)
+    For Each kvp In RetVals
+        Call l_Dict.Add(kvp.Key, kvp.Value)
+    Next
+    Set Values = l_Dict
 End Function
 
 Public Sub DeleteValue(ByVal DriverID As String, ByVal Name As String, _
@@ -180,10 +185,15 @@ End Sub
 Public Function SubKeys(ByVal DriverID As String, _
                             Optional ByVal SubKey As String = "") As Dictionary
 Attribute SubKeys.VB_Description = "Return a list of the subkeys under the  given DriverID. Optional path to starting subkey for given Driver ID may be given."
-                            
+    Dim l_Dict As New Dictionary
+    Dim RetVals, kvp As Object
+                       
     If DriverID <> "" Then CheckRegistered DriverID
-    Set SubKeys = Reg.EnumKeys(MakeKey(DriverID, SubKey), ERR_SOURCE_PROFILE)
-
+    Set RetVals = Reg.EnumKeys(MakeKey(DriverID, SubKey), ERR_SOURCE_PROFILE)
+    For Each kvp In RetVals
+        Call l_Dict.Add(kvp.Key, kvp.Value)
+    Next
+    Set SubKeys = l_Dict
 End Function
 
 Public Sub DeleteSubKey(ByVal DriverID As String, ByVal SubKey As String)

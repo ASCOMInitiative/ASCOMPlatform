@@ -6,6 +6,7 @@
 ; 5.3.0.0 Adapted for use in the ASCOM SVN repository where everything is built in debug mode
 ; Added ASCOM.Exceptions install
 ; Moved IConform from Utiities to own assembly
+; Removed Introp Scripting
 
 [Setup]
 #define AppVer GetFileVersion("..\Utilities\bin\Debug\ASCOM.Utilities.dll") ; define version variable
@@ -66,14 +67,14 @@ Name: cleanprofile; Description: "Erase Utilities profile store (leaves registry
 Source: "..\Utilities\bin\Debug\ASCOM.Utilities.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Utilities\bin\Debug\ASCOM.Utilities.pdb"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Utilities\bin\Debug\ASCOM.Utilities.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\Utilities\bin\Debug\Interop.Scripting.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "..\Utilities\bin\Debug\Interop.Scripting.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Debug symbols to the symbols directory
 Source: "..\Utilities\bin\Debug\ASCOM.Utilities.pdb"; DestDir: "{win}\Symbols\dll"; Flags: ignoreversion
 ;Install to 32bit directory as well on 64bit systems so that 32bit apps will find Utilities in the place they expect on a 64bit system
 Source: "..\Utilities\bin\Debug\ASCOM.Utilities.dll"; DestDir: "{cf32}\ASCOM\.net"; Flags: ignoreversion
 Source: "..\Utilities\bin\Debug\ASCOM.Utilities.pdb"; DestDir: "{{cf32}\ASCOM\.net}"; Flags: ignoreversion
 Source: "..\Utilities\bin\Debug\ASCOM.Utilities.xml"; DestDir: "{{cf32}\ASCOM\.net}"; Flags: ignoreversion
-Source: "..\Utilities\bin\Debug\Interop.Scripting.dll"; DestDir: "{{cf32}\ASCOM\.net}"; Flags: ignoreversion
+;Source: "..\Utilities\bin\Debug\Interop.Scripting.dll"; DestDir: "{{cf32}\ASCOM\.net}"; Flags: ignoreversion
 
 ;Install the Astrometry code
 Source: "..\..\ASCOM.Astrometry\Astrometry\bin\Debug\ASCOM.Astrometry.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -167,7 +168,7 @@ Name: "{commonprograms}\ASCOM Platform\Tools\Profile Explorer"; Filename: {pf}\A
 ; Install to the GAC and register COM types
 Filename: "{app}\GACInstall.exe"; Parameters: ASCOM.Utilities.dll; Flags: runhidden; StatusMsg: Installing Utilities to the assembly cache
 Filename: "{app}\GACInstall.exe"; Parameters: ASCOM.Astrometry.dll; Flags: runhidden; StatusMsg: Installing ASCOM.Astrometry to the assembly cache
-Filename: "{app}\GACInstall.exe"; Parameters: Interop.Scripting.dll; Flags: runhidden; StatusMsg: Installing Interop.Scripting to the assembly cache
+;Filename: "{app}\GACInstall.exe"; Parameters: Interop.Scripting.dll; Flags: runhidden; StatusMsg: Installing Interop.Scripting to the assembly cache
 Filename: "{app}\GACInstall.exe"; Parameters: ASCOM.IConform.dll; Flags: runhidden; StatusMsg: Installing ASCOM.IConform to the assembly cache
 Filename: "{win}\Microsoft.NET\Framework\v2.0.50727\regasm.exe"; Parameters: "/TLB ""{app}\ASCOM.Utilities.dll"""; Flags: runhidden; StatusMsg: Registering Utilities for COM
 Filename: "{win}\Microsoft.NET\Framework\v2.0.50727\regasm.exe"; Parameters: "/TLB ""{app}\ASCOM.Astrometry.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.Astrometry for COM
@@ -192,7 +193,7 @@ Filename: "{app}\GACInstall.exe"; Parameters: ASCOM.Exceptions.dll; Flags: runhi
 ;Filename: "{app}\GACInstall.exe"; Parameters: "/U ""policy.5.3.ASCOM.Utilities"""; Flags: runhidden; StatusMsg: Uninstalling Utilities redirection policy from the assembly cache
 Filename: "{app}\GACInstall.exe"; Parameters: "/U ""ASCOM.Astrometry"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Astrometry from the assembly cache
 Filename: "{app}\GACInstall.exe"; Parameters: "/U ""ASCOM.Utilities"""; Flags: runhidden; StatusMsg: Uninstalling Utilities from the assembly cache
-Filename: "{app}\GACInstall.exe"; Parameters: "/U ""Interop.Scripting"""; Flags: runhidden; StatusMsg: Uninstalling Interop.Scripting from the assembly cache
+;Filename: "{app}\GACInstall.exe"; Parameters: "/U ""Interop.Scripting"""; Flags: runhidden; StatusMsg: Uninstalling Interop.Scripting from the assembly cache
 Filename: "{app}\GACInstall.exe"; Parameters: "/U ""ASCOM.IConform"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.IConform from the assembly cache
 Filename: "{win}\Microsoft.NET\Framework\v2.0.50727\regasm.exe"; Parameters: "/Unregister /TLB ""{app}\ASCOM.Astrometry.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.Astrometry for COM
 Filename: "{win}\Microsoft.NET\Framework\v2.0.50727\regasm.exe"; Parameters: "/Unregister /TLB ""{app}\ASCOM.Utilities.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.Utilities for COM

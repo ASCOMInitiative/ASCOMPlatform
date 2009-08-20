@@ -8,6 +8,30 @@ Namespace Interfaces
 #Region "Utilities Public Interfaces"
 
     ''' <summary>
+    ''' Interface for KeyValuePair class
+    ''' </summary>
+    ''' <remarks>This is a return type only used by a small number of the Profile.XXXCOM commands. Including
+    ''' <see cref="IProfile.RegisteredDevicesCOM">IProfile.RegisteredDevices</see>, 
+    ''' <see cref="IProfile.SubKeysCOM">IProfile.SubKeysCOM</see> and 
+    ''' <see cref="IProfile.ValuesCOM">IProfile.ValuesCOM</see>.</remarks>
+    Public Interface IKeyValuePair
+        ''' <summary>
+        ''' Key member of a key value pair
+        ''' </summary>
+        ''' <value>Key</value>
+        ''' <returns>Ky as string</returns>
+        ''' <remarks></remarks>
+        Property Key() As String
+        ''' <summary>
+        ''' Value memeber of a key value pair
+        ''' </summary>
+        ''' <value>Value</value>
+        ''' <returns>Value as string</returns>
+        ''' <remarks></remarks>
+        Property Value() As String
+    End Interface
+
+    ''' <summary>
     ''' Interface to the TraceLogger component
     ''' </summary>
     ''' <remarks></remarks>
@@ -819,7 +843,7 @@ Namespace Interfaces
         ''' </summary>
         ''' <param name="DeviceType">Type of devices to list</param>
         ''' <value>List of registered devices</value>
-        ''' <returns>An object which is a scripting dictionary of installed devices and associated device descriptions</returns>
+        ''' <returns>An ArrayList of KeyValuePair objects of installed devices and associated device descriptions</returns>
         ''' <exception cref="Exceptions.InvalidValueException">Throw if the supplied DeviceType is empty string or 
         ''' null value.</exception>
         ''' <remarks>
@@ -827,12 +851,13 @@ Namespace Interfaces
         ''' <para>If a DeviceType is supplied, where no device of that type has been registered before on this system,
         ''' an empty list will be returned</para>
         ''' <para><b>Note: </b> This call functions identically to RegisteredDevices 
-        ''' except that it returns results as an object, actually its a scripting dictionary, rather 
-        ''' than as a generic keyed list. 
+        ''' except that it returns results as an ArrayList object, rather than as a generic keyed list. 
         ''' This is done because it is not possible to expose generics through COM. .NET programmers should
         ''' use RegisteredDevices rather than RegisteredDevicesCOM.</para> 
+        ''' <para>The KeyValuePair objects are instances of the <see cref="KeyValuePair">KeyValuePair class</see> where 
+        ''' the Key is the device name and the Value is the device description.</para>
         ''' </remarks>
-        ReadOnly Property RegisteredDevicesCOM(ByVal DeviceType As String) As Object
+        ReadOnly Property RegisteredDevicesCOM(ByVal DeviceType As String) As ArrayList
 
         ''' <summary>
         ''' List the devices of a given device type that are registered in the Profile store
@@ -929,7 +954,7 @@ Namespace Interfaces
         ''' </summary>
         ''' <param name="DriverID">ProgID of the device to read from</param>
         ''' <param name="SubKey">Subkey from the profile root in which to write the value</param>
-        ''' <returns>Generic Sorted List of KeyValuePairs</returns>
+        ''' <returns>An ArrayList of KeyValuePair objects.</returns>
         ''' <remarks>The returned object contains entries for each value. For each entry, 
         ''' the Key property is the value's name, and the Value property is the string value itself. Note that the unnamed (default) 
         ''' value will be included if it has a value, even if the value is a blank string. The unnamed value will have its entry's 
@@ -939,8 +964,9 @@ Namespace Interfaces
         ''' than as a generic keyed list. 
         ''' This is done because it is not possible to expose generics through COM. .NET programmers should
         ''' use Values rather than ValuesCOM.</para> 
+        ''' <para>The KeyValuePair objects are instances of the <see cref="KeyValuePair">KeyValuePair class</see></para>
         '''  </remarks>
-        Function ValuesCOM(ByVal DriverID As String, ByVal SubKey As String) As Object
+        Function ValuesCOM(ByVal DriverID As String, ByVal SubKey As String) As ArrayList
 
         ''' <summary>
         ''' Return a list of the (unnamed and named variables) under the given DriverID.
@@ -1002,7 +1028,7 @@ Namespace Interfaces
         ''' </summary>
         ''' <param name="DriverID">ProgID of the device to read from</param>
         ''' <param name="SubKey">Subkey from the profile root in which to search for subkeys</param>
-        ''' <returns>Generic Sorted List of key-value pairs</returns>
+        ''' <returns>An ArrayList of key-value pairs</returns>
         ''' <remarks>The returned object (scripting.dictionary) contains entries for each sub-key. For each KeyValuePair in the list, 
         ''' the Key property is the sub-key name, and the Value property is the value. The unnamed ("default") value for that key is also returned.
         ''' <para><b>Note: </b> This call functions identically to Values 
@@ -1010,8 +1036,9 @@ Namespace Interfaces
         ''' than as a generic keyed list. 
         ''' This is done because it is not possible to expose generics through COM. .NET programmers should
         ''' use Values rather than ValuesCOM.</para> 
+        ''' <para>The KeyValuePair objects are instances of the <see cref="KeyValuePair">KeyValuePair class</see></para>
         ''' </remarks>
-        Function SubKeysCOM(ByVal DriverID As String, ByVal SubKey As String) As Object
+        Function SubKeysCOM(ByVal DriverID As String, ByVal SubKey As String) As ArrayList
 
         ''' <summary>
         ''' Return a list of the sub-keys under the given DriverID.

@@ -56,7 +56,11 @@ MsgBox "After x.getvalue"
 110        Call LogMsg("ASCOM Root", "*" & Key & "*" & sd.Item(Key) & "*")
 120    Next
 
- 
+122    Set sd = x.SubKeys("ScopeSim.Telescope")
+124     For Each Key In sd
+126        Call LogMsg("ScopeSim SubKeys", "*" & Key & "*" & sd.Item(Key) & "*")
+128    Next
+
 130    Set sd = Nothing
 140    MsgBox msg
 150    Call x.Unregister(MyName)
