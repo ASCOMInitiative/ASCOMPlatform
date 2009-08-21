@@ -1356,7 +1356,6 @@ namespace ASCOM.GeminiTelescope
                 {
                     if (v / 100 < 4)   //level below 4!
                     {
-//                        GeminiError.UserErrorReport(SharedResources.TELESCOPE_DRIVER_NAME, SharedResources.MSG_GEMINI_VERSION, true);
                         Disconnect();
 
                         if (OnError != null) OnError(SharedResources.TELESCOPE_DRIVER_NAME, SharedResources.MSG_GEMINI_VERSION);
@@ -1609,18 +1608,22 @@ namespace ASCOM.GeminiTelescope
                     case GeminiCommand.ResultType.OneOrHash:
                         result = ReadNumber(1); ;  // check if first character is 1, and return if it is, no hash expected
                         if (result != "1")
+                        {
                             result += ReadTo('#');
-                        if (command.m_Raw) //Raw should return the full string including #
-                            result += "#";
+                            if (command.m_Raw) //Raw should return the full string including #
+                                result += "#";
+                        }
                         break;
 
                     // value '0' or a string terminated by '#'
                     case GeminiCommand.ResultType.ZeroOrHash:
                         result = ReadNumber(1);
                         if (result != "0")
+                        {
                             result += ReadTo('#');
-                        if (command.m_Raw) //Raw should return the full string including #
-                            result += "#";
+                            if (command.m_Raw) //Raw should return the full string including #
+                                result += "#";
+                        }
                         break;
 
                     // string terminated by '#'
