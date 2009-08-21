@@ -1,0 +1,258 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=Windows-1252">
+	<title>Util.MessageBox() Method</title>
+
+	<style type="text/css">
+		@import url(dc3_hh.css);
+	</style>
+</head>
+<body>
+
+<h1><a name="DriverHelperUtilMETHMessageBox"></a>Util.MessageBox() Method</h1>
+
+<p>
+<!-- See Also -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:See Also">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="DriverHelperUtilMETHMessageBoxC">
+</object>&nbsp;&nbsp;&nbsp;
+<!-- Example
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:Example">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="DriverHelperUtilMETHMessageBoxX">
+</object>&nbsp;&nbsp;&nbsp; -->
+<!-- parent class -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink">
+<param name="Text" value="Text:Util object">
+<param name="Flags" value=",,1">
+<param name="Item1" value="">
+<param name="Item2" value="DriverHelperCLASSUtilO">
+</object>
+</p>
+
+<p class=desc>
+Display an alert box with configurable icon, text, caption, and button set. Return an answer appropriate to selected button set.</p>
+
+<h2>Syntax</h2>
+
+<p class=indent><code>
+<b>Util.MessageBox(</b><i>Message</i>, <i>[Options]</i>, <i>[title]</i><b>)</b></code></p>
+
+<p>
+The method syntax has these parts:</p>
+
+<div class=indent>
+<table border=1 cellpadding=3 cellspacing=0>
+ <tr>
+  <th>Part</th>
+  <th>Description</th>
+ </tr>
+ <tr>
+  <td><i>Message</i>&nbsp;(String)</td>
+  <td>The text of the message to display in the alert box.</td>
+ </tr>
+ <tr>
+  <td><i>Options</i>&nbsp;(<a href="#MessageBoxOptions">MessageBoxOptions</a>)</td>
+  <td>One or more options (added together) to control icon, button set, and modality. See table below. (optional)</td>
+ </tr>
+ <tr>
+  <td><i>title</i>&nbsp;(String)</td>
+  <td>Text to appear in the title bar of the alert box (optional, default = "DriverHelper.Util Object")</td>
+ </tr>
+
+ <tr>
+  <td>Return&nbsp;(<a href="#MessageBoxAnswers">MessageBoxAnswers</a>)</td>
+  <td>Indication of button pressed to close the alert box. See table below.</td>
+ </tr>
+</table></div><br>
+
+<h2>Remarks</h2>
+
+Provides Win32 MessageBox() functionality for scripting languages that do not have this capability (e.g., JScript). The Options parameter consists of one or more MessageBoxOption values added together. For example, to display a Yes/No confirmation alert with a question mark icon
+
+<pre><code>ans = Util.MessageBox("Are you happy?", _
+    (mbQuestion + mbYesNo), "Answer Truthfully"</code></pre>
+
+<b>ans</b> will contain vbYes or vbNo (one of the MessageBoxAnswer constants).
+
+<h2>Symbolic Constants</h2>
+
+<p>
+<a name="MessageBoxAnswers"></a>The (symbolic) values for <b>MessageBoxAnswers</b> are:</p>
+
+<div class=indent>
+<table border=1 cellpadding=3 cellspacing=0>
+ <tr>
+  <th>Constant</th>
+  <th>Value</th>
+  <th>Description</th>
+ </tr>
+ <tr>
+  <td><b>mbOK</b></td>
+  <td>1</td>
+  <td>mbOK</td>
+ </tr>
+ <tr>
+  <td><b>mbCancel</b></td>
+  <td>2</td>
+  <td>mbCancel</td>
+ </tr>
+ <tr>
+  <td><b>mbAbort</b></td>
+  <td>3</td>
+  <td>mbAbort</td>
+ </tr>
+ <tr>
+  <td><b>mbRetry</b></td>
+  <td>4</td>
+  <td>mbRetry</td>
+ </tr>
+ <tr>
+  <td><b>mbIgnore</b></td>
+  <td>5</td>
+  <td>mbIgnore</td>
+ </tr>
+ <tr>
+  <td><b>mbYes</b></td>
+  <td>6</td>
+  <td>mbYes</td>
+ </tr>
+ <tr>
+  <td><b>mbNo</b></td>
+  <td>7</td>
+  <td>mbNo</td>
+ </tr>
+
+</table></div>
+
+<p>
+<a name="MessageBoxOptions"></a>The (symbolic) values for <b>MessageBoxOptions</b> are:</p>
+
+<div class=indent>
+<table border=1 cellpadding=3 cellspacing=0>
+ <tr>
+  <th>Constant</th>
+  <th>Value</th>
+  <th>Description</th>
+ </tr>
+ <tr>
+  <td><b>mbOKOnly</b></td>
+  <td>0</td>
+  <td>mbOKOnly</td>
+ </tr>
+ <tr>
+  <td><b>mbOKCancel</b></td>
+  <td>1</td>
+  <td>mbOKCancel</td>
+ </tr>
+ <tr>
+  <td><b>mbAbortRetryIgnore</b></td>
+  <td>2</td>
+  <td>mbAbortRetryIgnore</td>
+ </tr>
+ <tr>
+  <td><b>mbYesNoCancel</b></td>
+  <td>3</td>
+  <td>mbYesNoCancel</td>
+ </tr>
+ <tr>
+  <td><b>mbYesNo</b></td>
+  <td>4</td>
+  <td>mbYesNo</td>
+ </tr>
+ <tr>
+  <td><b>mbRetryCancel</b></td>
+  <td>5</td>
+  <td>mbRetryCancel</td>
+ </tr>
+ <tr>
+  <td><b>mbIconStop</b></td>
+  <td>16</td>
+  <td>mbIconStop</td>
+ </tr>
+ <tr>
+  <td><b>mbIconQuestion</b></td>
+  <td>32</td>
+  <td>mbIconQuestion</td>
+ </tr>
+ <tr>
+  <td><b>mbIconExclamation</b></td>
+  <td>48</td>
+  <td>mbIconExclamation</td>
+ </tr>
+ <tr>
+  <td><b>mbIconInformation</b></td>
+  <td>64</td>
+  <td>mbIconInformation</td>
+ </tr>
+ <tr>
+  <td><b>mbDefButton1</b></td>
+  <td>0</td>
+  <td>mbDefButton1</td>
+ </tr>
+ <tr>
+  <td><b>mbDefButton2</b></td>
+  <td>256</td>
+  <td>mbDefButton2</td>
+ </tr>
+ <tr>
+  <td><b>mbDefButton3</b></td>
+  <td>512</td>
+  <td>mbDefButton3</td>
+ </tr>
+ <tr>
+  <td><b>mbAbblicationModal</b></td>
+  <td>0</td>
+  <td>mbAbblicationModal</td>
+ </tr>
+ <tr>
+  <td><b>mbSystemModal</b></td>
+  <td>4096</td>
+  <td>mbSystemModal</td>
+ </tr>
+ <tr>
+  <td><b>mbNoFocus</b></td>
+  <td>32768</td>
+  <td>mbNoFocus</td>
+ </tr>
+ <tr>
+  <td><b>mbSetForeground</b></td>
+  <td>65536</td>
+  <td>mbSetForeground</td>
+ </tr>
+ <tr>
+  <td><b>mbDefaultDesktopOnly</b></td>
+  <td>131072</td>
+  <td>mbDefaultDesktopOnly</td>
+ </tr>
+
+</table></div>
+
+
+
+<hr color="silver" size=2>
+<div class=copyright>Copyright &copy; 2001-2007, The ASCOM Initiative</div>
+
+
+
+<object type="application/x-oleobject" 
+	classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+	<param name="ALink Name" value="DriverHelperCLASSUtilM">
+</object>
+
+</body>
+</html>
+
