@@ -1,0 +1,9 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <StartAction>Program</StartAction>
+    <StartProgram>C:\WINDOWS\system32\cscript.exe</StartProgram>
+    <StartArguments>//D test1.js</StartArguments>
+    <StartWorkingDirectory>C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM Samples &amp; Tests\CollectionTest\</StartWorkingDirectory>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+</Project>

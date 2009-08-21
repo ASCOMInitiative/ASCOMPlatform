@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollectionTest", "CollectionTest.csproj", "{FDB56DC7-5DB0-4520-9E63-4AFEC7C4645F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test Scripts", "Test Scripts", "{99CB3295-6DC7-40CC-979D-6B5314FBFB55}"
+	ProjectSection(SolutionItems) = preProject
+		Test1.js = Test1.js
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.csproj", "{3D417598-B453-4484-B96F-1A9019FED730}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FDB56DC7-5DB0-4520-9E63-4AFEC7C4645F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDB56DC7-5DB0-4520-9E63-4AFEC7C4645F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDB56DC7-5DB0-4520-9E63-4AFEC7C4645F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDB56DC7-5DB0-4520-9E63-4AFEC7C4645F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D417598-B453-4484-B96F-1A9019FED730}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D417598-B453-4484-B96F-1A9019FED730}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D417598-B453-4484-B96F-1A9019FED730}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D417598-B453-4484-B96F-1A9019FED730}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
