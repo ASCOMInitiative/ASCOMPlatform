@@ -73,6 +73,12 @@ namespace ASCOM.GeminiTelescope
             this.buttonVirtualPort = new System.Windows.Forms.Button();
             this.picASCOM = new System.Windows.Forms.PictureBox();
             this.timerUpdate = new System.Windows.Forms.Timer(this.components);
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.radioButtonPrompt = new System.Windows.Forms.RadioButton();
+            this.radioButtonWarmRestart = new System.Windows.Forms.RadioButton();
+            this.radioButtonColdStart = new System.Windows.Forms.RadioButton();
+            this.radioButtonWarmStart = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -82,6 +88,8 @@ namespace ASCOM.GeminiTelescope
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
+            this.groupBox5.SuspendLayout();
+            this.tableLayoutPanel6.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmdOK
@@ -89,7 +97,7 @@ namespace ASCOM.GeminiTelescope
             this.cmdOK.BackColor = System.Drawing.Color.Black;
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.cmdOK.ForeColor = System.Drawing.Color.White;
-            this.cmdOK.Location = new System.Drawing.Point(491, 189);
+            this.cmdOK.Location = new System.Drawing.Point(488, 277);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 0;
@@ -102,7 +110,7 @@ namespace ASCOM.GeminiTelescope
             this.cmdCancel.BackColor = System.Drawing.Color.Black;
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cmdCancel.ForeColor = System.Drawing.Color.White;
-            this.cmdCancel.Location = new System.Drawing.Point(491, 219);
+            this.cmdCancel.Location = new System.Drawing.Point(488, 303);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
@@ -252,7 +260,7 @@ namespace ASCOM.GeminiTelescope
             this.labelVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelVersion.AutoSize = true;
             this.labelVersion.ForeColor = System.Drawing.Color.White;
-            this.labelVersion.Location = new System.Drawing.Point(9, 265);
+            this.labelVersion.Location = new System.Drawing.Point(9, 338);
             this.labelVersion.Name = "labelVersion";
             this.labelVersion.Size = new System.Drawing.Size(120, 13);
             this.labelVersion.TabIndex = 18;
@@ -263,7 +271,7 @@ namespace ASCOM.GeminiTelescope
             this.labelTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTime.AutoSize = true;
             this.labelTime.ForeColor = System.Drawing.Color.White;
-            this.labelTime.Location = new System.Drawing.Point(365, 265);
+            this.labelTime.Location = new System.Drawing.Point(363, 337);
             this.labelTime.Name = "labelTime";
             this.labelTime.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.labelTime.Size = new System.Drawing.Size(185, 13);
@@ -315,7 +323,7 @@ namespace ASCOM.GeminiTelescope
             // 
             this.groupBox3.Controls.Add(this.tableLayoutPanel4);
             this.groupBox3.ForeColor = System.Drawing.Color.White;
-            this.groupBox3.Location = new System.Drawing.Point(235, 12);
+            this.groupBox3.Location = new System.Drawing.Point(12, 261);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(205, 65);
             this.groupBox3.TabIndex = 22;
@@ -413,7 +421,7 @@ namespace ASCOM.GeminiTelescope
             // 
             this.button1.BackColor = System.Drawing.Color.Black;
             this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(238, 221);
+            this.button1.Location = new System.Drawing.Point(238, 303);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 23;
@@ -424,7 +432,7 @@ namespace ASCOM.GeminiTelescope
             // 
             this.checkBoxAdvancedMode.AutoSize = true;
             this.checkBoxAdvancedMode.ForeColor = System.Drawing.Color.White;
-            this.checkBoxAdvancedMode.Location = new System.Drawing.Point(241, 96);
+            this.checkBoxAdvancedMode.Location = new System.Drawing.Point(238, 153);
             this.checkBoxAdvancedMode.Name = "checkBoxAdvancedMode";
             this.checkBoxAdvancedMode.Size = new System.Drawing.Size(125, 17);
             this.checkBoxAdvancedMode.TabIndex = 24;
@@ -435,7 +443,7 @@ namespace ASCOM.GeminiTelescope
             // 
             this.checkBoxPrecession.AutoSize = true;
             this.checkBoxPrecession.ForeColor = System.Drawing.Color.White;
-            this.checkBoxPrecession.Location = new System.Drawing.Point(241, 119);
+            this.checkBoxPrecession.Location = new System.Drawing.Point(238, 176);
             this.checkBoxPrecession.Name = "checkBoxPrecession";
             this.checkBoxPrecession.Size = new System.Drawing.Size(165, 17);
             this.checkBoxPrecession.TabIndex = 25;
@@ -446,7 +454,7 @@ namespace ASCOM.GeminiTelescope
             // 
             this.checkBoxRefraction.AutoSize = true;
             this.checkBoxRefraction.ForeColor = System.Drawing.Color.White;
-            this.checkBoxRefraction.Location = new System.Drawing.Point(241, 142);
+            this.checkBoxRefraction.Location = new System.Drawing.Point(238, 199);
             this.checkBoxRefraction.Name = "checkBoxRefraction";
             this.checkBoxRefraction.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.checkBoxRefraction.Size = new System.Drawing.Size(162, 17);
@@ -458,7 +466,7 @@ namespace ASCOM.GeminiTelescope
             // 
             this.checkBoxAdditionalAlign.AutoSize = true;
             this.checkBoxAdditionalAlign.ForeColor = System.Drawing.Color.White;
-            this.checkBoxAdditionalAlign.Location = new System.Drawing.Point(241, 165);
+            this.checkBoxAdditionalAlign.Location = new System.Drawing.Point(238, 222);
             this.checkBoxAdditionalAlign.Name = "checkBoxAdditionalAlign";
             this.checkBoxAdditionalAlign.Size = new System.Drawing.Size(234, 17);
             this.checkBoxAdditionalAlign.TabIndex = 27;
@@ -550,7 +558,7 @@ namespace ASCOM.GeminiTelescope
             // 
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picASCOM.Image = global::ASCOM.GeminiTelescope.Properties.Resources.ASCOM;
-            this.picASCOM.Location = new System.Drawing.Point(502, 18);
+            this.picASCOM.Location = new System.Drawing.Point(499, 21);
             this.picASCOM.Name = "picASCOM";
             this.picASCOM.Size = new System.Drawing.Size(48, 56);
             this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -564,12 +572,88 @@ namespace ASCOM.GeminiTelescope
             this.timerUpdate.Interval = 1000;
             this.timerUpdate.Tick += new System.EventHandler(this.timerUpdate_Tick);
             // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.tableLayoutPanel6);
+            this.groupBox5.ForeColor = System.Drawing.Color.White;
+            this.groupBox5.Location = new System.Drawing.Point(238, 12);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(205, 127);
+            this.groupBox5.TabIndex = 29;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Boot Mode";
+            // 
+            // tableLayoutPanel6
+            // 
+            this.tableLayoutPanel6.ColumnCount = 1;
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel6.Controls.Add(this.radioButtonPrompt, 0, 3);
+            this.tableLayoutPanel6.Controls.Add(this.radioButtonWarmRestart, 0, 0);
+            this.tableLayoutPanel6.Controls.Add(this.radioButtonColdStart, 0, 2);
+            this.tableLayoutPanel6.Controls.Add(this.radioButtonWarmStart, 0, 1);
+            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 16);
+            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+            this.tableLayoutPanel6.RowCount = 4;
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(199, 108);
+            this.tableLayoutPanel6.TabIndex = 4;
+            // 
+            // radioButtonPrompt
+            // 
+            this.radioButtonPrompt.AutoSize = true;
+            this.radioButtonPrompt.ForeColor = System.Drawing.Color.White;
+            this.radioButtonPrompt.Location = new System.Drawing.Point(3, 84);
+            this.radioButtonPrompt.Name = "radioButtonPrompt";
+            this.radioButtonPrompt.Size = new System.Drawing.Size(119, 17);
+            this.radioButtonPrompt.TabIndex = 3;
+            this.radioButtonPrompt.Text = "Prompt if not started";
+            this.radioButtonPrompt.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonWarmRestart
+            // 
+            this.radioButtonWarmRestart.AutoSize = true;
+            this.radioButtonWarmRestart.ForeColor = System.Drawing.Color.White;
+            this.radioButtonWarmRestart.Location = new System.Drawing.Point(3, 3);
+            this.radioButtonWarmRestart.Name = "radioButtonWarmRestart";
+            this.radioButtonWarmRestart.Size = new System.Drawing.Size(90, 17);
+            this.radioButtonWarmRestart.TabIndex = 0;
+            this.radioButtonWarmRestart.TabStop = true;
+            this.radioButtonWarmRestart.Text = "Warm Restart";
+            this.radioButtonWarmRestart.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonColdStart
+            // 
+            this.radioButtonColdStart.AutoSize = true;
+            this.radioButtonColdStart.ForeColor = System.Drawing.Color.White;
+            this.radioButtonColdStart.Location = new System.Drawing.Point(3, 57);
+            this.radioButtonColdStart.Name = "radioButtonColdStart";
+            this.radioButtonColdStart.Size = new System.Drawing.Size(168, 17);
+            this.radioButtonColdStart.TabIndex = 2;
+            this.radioButtonColdStart.Text = "Cold Start (from CWD position)";
+            this.radioButtonColdStart.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonWarmStart
+            // 
+            this.radioButtonWarmStart.AutoSize = true;
+            this.radioButtonWarmStart.ForeColor = System.Drawing.Color.White;
+            this.radioButtonWarmStart.Location = new System.Drawing.Point(3, 30);
+            this.radioButtonWarmStart.Name = "radioButtonWarmStart";
+            this.radioButtonWarmStart.Size = new System.Drawing.Size(175, 17);
+            this.radioButtonWarmStart.TabIndex = 1;
+            this.radioButtonWarmStart.Text = "Warm Start (from CWD position)";
+            this.radioButtonWarmStart.UseVisualStyleBackColor = true;
+            // 
             // TelescopeSetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(562, 287);
+            this.ClientSize = new System.Drawing.Size(560, 360);
+            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.checkBoxAdditionalAlign);
             this.Controls.Add(this.checkBoxRefraction);
@@ -604,6 +688,9 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
+            this.groupBox5.ResumeLayout(false);
+            this.tableLayoutPanel6.ResumeLayout(false);
+            this.tableLayoutPanel6.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -655,5 +742,11 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.ComboBox comboBoxBaudRate;
         private System.Windows.Forms.Button buttonVirtualPort;
         private System.Windows.Forms.Timer timerUpdate;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
+        private System.Windows.Forms.RadioButton radioButtonPrompt;
+        private System.Windows.Forms.RadioButton radioButtonWarmRestart;
+        private System.Windows.Forms.RadioButton radioButtonColdStart;
+        private System.Windows.Forms.RadioButton radioButtonWarmStart;
     }
 }
