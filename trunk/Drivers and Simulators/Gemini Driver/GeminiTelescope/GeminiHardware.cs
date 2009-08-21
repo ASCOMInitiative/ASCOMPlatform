@@ -1764,6 +1764,7 @@ namespace ASCOM.GeminiTelescope
                         if (outp.Length > 0 && m_PassThroughPort.PortActive) m_PassThroughPort.PassStringToPort(outp);
                         throw new TimeoutException("ReadTo");
                     }
+                    System.Threading.Thread.Sleep(0);  //[pk] should instead wait on a waithandle set by serialdatareceived event...
                 }
             }
         }
@@ -1801,6 +1802,7 @@ namespace ASCOM.GeminiTelescope
                         if (outp.Length > 0 && m_PassThroughPort.PortActive) m_PassThroughPort.PassStringToPort(outp);
                         throw new TimeoutException("ReadNumber");
                     }
+                    System.Threading.Thread.Sleep(0);   //[pk] should instead wait on a waithandle set by serialdatareceived event...
                 }
             }
         }
