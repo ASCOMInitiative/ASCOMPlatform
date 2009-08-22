@@ -75,10 +75,10 @@ namespace ASCOM.GeminiTelescope
             this.timerUpdate = new System.Windows.Forms.Timer(this.components);
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-            this.radioButtonPrompt = new System.Windows.Forms.RadioButton();
             this.radioButtonWarmRestart = new System.Windows.Forms.RadioButton();
-            this.radioButtonColdStart = new System.Windows.Forms.RadioButton();
             this.radioButtonWarmStart = new System.Windows.Forms.RadioButton();
+            this.radioButtonColdStart = new System.Windows.Forms.RadioButton();
+            this.radioButtonPrompt = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -588,9 +588,9 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel6.ColumnCount = 1;
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel6.Controls.Add(this.radioButtonPrompt, 0, 3);
-            this.tableLayoutPanel6.Controls.Add(this.radioButtonWarmRestart, 0, 0);
             this.tableLayoutPanel6.Controls.Add(this.radioButtonColdStart, 0, 2);
             this.tableLayoutPanel6.Controls.Add(this.radioButtonWarmStart, 0, 1);
+            this.tableLayoutPanel6.Controls.Add(this.radioButtonWarmRestart, 0, 0);
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
@@ -602,21 +602,9 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel6.Size = new System.Drawing.Size(199, 108);
             this.tableLayoutPanel6.TabIndex = 4;
             // 
-            // radioButtonPrompt
-            // 
-            this.radioButtonPrompt.AutoSize = true;
-            this.radioButtonPrompt.ForeColor = System.Drawing.Color.White;
-            this.radioButtonPrompt.Location = new System.Drawing.Point(3, 84);
-            this.radioButtonPrompt.Name = "radioButtonPrompt";
-            this.radioButtonPrompt.Size = new System.Drawing.Size(119, 17);
-            this.radioButtonPrompt.TabIndex = 3;
-            this.radioButtonPrompt.Text = "Prompt if not started";
-            this.radioButtonPrompt.UseVisualStyleBackColor = true;
-            // 
             // radioButtonWarmRestart
             // 
             this.radioButtonWarmRestart.AutoSize = true;
-            this.radioButtonWarmRestart.ForeColor = System.Drawing.Color.White;
             this.radioButtonWarmRestart.Location = new System.Drawing.Point(3, 3);
             this.radioButtonWarmRestart.Name = "radioButtonWarmRestart";
             this.radioButtonWarmRestart.Size = new System.Drawing.Size(90, 17);
@@ -625,27 +613,38 @@ namespace ASCOM.GeminiTelescope
             this.radioButtonWarmRestart.Text = "Warm Restart";
             this.radioButtonWarmRestart.UseVisualStyleBackColor = true;
             // 
-            // radioButtonColdStart
-            // 
-            this.radioButtonColdStart.AutoSize = true;
-            this.radioButtonColdStart.ForeColor = System.Drawing.Color.White;
-            this.radioButtonColdStart.Location = new System.Drawing.Point(3, 57);
-            this.radioButtonColdStart.Name = "radioButtonColdStart";
-            this.radioButtonColdStart.Size = new System.Drawing.Size(168, 17);
-            this.radioButtonColdStart.TabIndex = 2;
-            this.radioButtonColdStart.Text = "Cold Start (from CWD position)";
-            this.radioButtonColdStart.UseVisualStyleBackColor = true;
-            // 
             // radioButtonWarmStart
             // 
             this.radioButtonWarmStart.AutoSize = true;
-            this.radioButtonWarmStart.ForeColor = System.Drawing.Color.White;
             this.radioButtonWarmStart.Location = new System.Drawing.Point(3, 30);
             this.radioButtonWarmStart.Name = "radioButtonWarmStart";
-            this.radioButtonWarmStart.Size = new System.Drawing.Size(175, 17);
+            this.radioButtonWarmStart.Size = new System.Drawing.Size(78, 17);
             this.radioButtonWarmStart.TabIndex = 1;
-            this.radioButtonWarmStart.Text = "Warm Start (from CWD position)";
+            this.radioButtonWarmStart.TabStop = true;
+            this.radioButtonWarmStart.Text = "Warm Start";
             this.radioButtonWarmStart.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonColdStart
+            // 
+            this.radioButtonColdStart.AutoSize = true;
+            this.radioButtonColdStart.Location = new System.Drawing.Point(3, 57);
+            this.radioButtonColdStart.Name = "radioButtonColdStart";
+            this.radioButtonColdStart.Size = new System.Drawing.Size(71, 17);
+            this.radioButtonColdStart.TabIndex = 2;
+            this.radioButtonColdStart.TabStop = true;
+            this.radioButtonColdStart.Text = "Cold Start";
+            this.radioButtonColdStart.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonPrompt
+            // 
+            this.radioButtonPrompt.AutoSize = true;
+            this.radioButtonPrompt.Location = new System.Drawing.Point(3, 84);
+            this.radioButtonPrompt.Name = "radioButtonPrompt";
+            this.radioButtonPrompt.Size = new System.Drawing.Size(121, 17);
+            this.radioButtonPrompt.TabIndex = 3;
+            this.radioButtonPrompt.TabStop = true;
+            this.radioButtonPrompt.Text = "Prompt if not Started";
+            this.radioButtonPrompt.UseVisualStyleBackColor = true;
             // 
             // TelescopeSetupDialogForm
             // 
@@ -744,9 +743,9 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.Timer timerUpdate;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
-        private System.Windows.Forms.RadioButton radioButtonPrompt;
         private System.Windows.Forms.RadioButton radioButtonWarmRestart;
-        private System.Windows.Forms.RadioButton radioButtonColdStart;
         private System.Windows.Forms.RadioButton radioButtonWarmStart;
+        private System.Windows.Forms.RadioButton radioButtonPrompt;
+        private System.Windows.Forms.RadioButton radioButtonColdStart;
     }
 }

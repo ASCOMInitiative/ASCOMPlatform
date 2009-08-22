@@ -366,6 +366,8 @@ namespace ASCOM.GeminiTelescope
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughComPort", "COM10");
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughBaudRate", "9600");
 
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "BootMode", "0");
+
             }
 
             //Load up the values from saved
@@ -437,7 +439,32 @@ namespace ASCOM.GeminiTelescope
                 m_Longitude = 0.0;
 
 
-
+            //Get the Boot Mode from settings
+            try
+            {
+                switch (m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "BootMode", ""))
+                {
+                    case "0":
+                        m_BootMode = GeminiBootMode.Prompt;
+                        break;
+                    case "1":
+                        m_BootMode = GeminiBootMode.ColdStart;
+                        break;
+                    case "2":
+                        m_BootMode = GeminiBootMode.WarmStart;
+                        break;
+                    case "3":
+                        m_BootMode = GeminiBootMode.WarmRestart;
+                        break;
+                    default:
+                        m_BootMode = GeminiBootMode.Prompt;
+                        break;
+                }
+            }
+            catch
+            {
+                m_BootMode = GeminiBootMode.Prompt;
+            }
 
 
             //Focuser Settings
@@ -496,6 +523,36 @@ namespace ASCOM.GeminiTelescope
 
 
 #region Properties For Settings
+        /// <summary>
+        /// Get/Set Boot Mode 
+        /// </summary>
+        public static GeminiBootMode BootMode
+        {
+            get { return m_BootMode; }
+            set 
+            { 
+                m_BootMode = value;
+                string bootMode = "0";
+                switch (value)
+                {
+                    case GeminiBootMode.Prompt:
+                        bootMode = "0";
+                        break;
+                    case GeminiBootMode.ColdStart:
+                        bootMode = "1";
+                        break;
+                    case GeminiBootMode.WarmStart:
+                        bootMode = "2";
+                        break;
+                    case GeminiBootMode.WarmRestart:
+                        bootMode = "3";
+                        break;
+                }
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "BootMode", bootMode);
+            }
+
+        }
+
         /// <summary>
         /// Get/Set Use Gemini Site 
         /// </summary>

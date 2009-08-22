@@ -64,6 +64,53 @@ namespace ASCOM.GeminiTelescope
         }
 
         #region Properties for Settings
+        public GeminiHardware.GeminiBootMode BootMode
+        {
+            get
+            {
+                if (radioButtonPrompt.Checked)
+                {
+                    return GeminiHardware.GeminiBootMode.Prompt;
+                }
+                else if (radioButtonColdStart.Checked)
+                {
+                    return GeminiHardware.GeminiBootMode.ColdStart;
+                }
+                else if (radioButtonWarmStart.Checked)
+                {
+                    return GeminiHardware.GeminiBootMode.WarmStart;
+                }
+                else if (radioButtonWarmRestart.Checked)
+                {
+                    return GeminiHardware.GeminiBootMode.WarmRestart;
+                }
+                else
+                {
+                    return GeminiHardware.GeminiBootMode.Prompt;
+                }
+            }
+            set
+            {
+                switch (value)
+                {
+                    case GeminiHardware.GeminiBootMode.Prompt:
+                        radioButtonPrompt.Checked = true;
+                        break;
+                    case GeminiHardware.GeminiBootMode.ColdStart:
+                        radioButtonColdStart.Checked = true;
+                        break;
+                    case GeminiHardware.GeminiBootMode.WarmStart:
+                        radioButtonWarmStart.Checked = true;
+                        break;
+                    case GeminiHardware.GeminiBootMode.WarmRestart:
+                        radioButtonWarmRestart.Checked = true;
+                        break;
+                    default:
+                        radioButtonPrompt.Checked = true;
+                        break;
+                }
+            }
+        }
         public string ComPort
         {
             get { return comboBoxComPort.SelectedItem.ToString(); }
