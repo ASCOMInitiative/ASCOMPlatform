@@ -270,6 +270,9 @@ namespace ASCOM.GeminiTelescope
             setupForm.UseGeminiSite = GeminiHardware.UseGeminiSite;
             setupForm.UseGeminiTime = GeminiHardware.UseGeminiTime;
 
+            setupForm.BootMode = GeminiHardware.BootMode;
+
+
             DialogResult ans = setupForm.ShowDialog(this);
 
             if (ans == DialogResult.OK)
@@ -285,6 +288,8 @@ namespace ASCOM.GeminiTelescope
 
                     GeminiHardware.UseGeminiTime = setupForm.UseGeminiTime;
                     GeminiHardware.UseGeminiSite = setupForm.UseGeminiSite;
+
+                    GeminiHardware.BootMode = setupForm.BootMode;
                 }
                 catch
                 {
