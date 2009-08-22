@@ -1638,12 +1638,15 @@ namespace ASCOM.GeminiTelescope
                             DiscardInBuffer();
 
                             Transmit("\x6");
-                            CommandItem ci = new CommandItem("\x6", 2000, true);
+                            CommandItem ci = new CommandItem("\x6", 1000, true);
                             sRes = GetCommandResult(ci);
                         }
                         catch { }
 
                     } while (sRes != "G");
+                    System.Threading.Thread.Sleep(1000);
+                    m_SerialPort.DiscardOutBuffer();
+                    DiscardInBuffer();
                 }
             }
         }
