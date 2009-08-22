@@ -1,4 +1,7 @@
-; Installer for HelperNet
+; Installer for Utilities
+
+; ***** REQUIRES INNO 5.3.4 OR LATER *****
+
 ; 5.0.1.0 Removed register from the VB6 helper dlls
 ; 5.0.2.0 Added version 5 redirection policy install and XML intellisense file
 ; 5.1.3.0 Added profile Explorer
@@ -7,6 +10,9 @@
 ; Added ASCOM.Exceptions install
 ; Moved IConform from Utiities to own assembly
 ; Removed Introp Scripting
+; Migrated to Inno 5.3.4
+; Switched to using {dotnet} constants
+; Added 32bit registration on 64bit systems
 
 [Setup]
 #define AppVer GetFileVersion("..\Utilities\bin\Debug\ASCOM.Utilities.dll") ; define version variable
@@ -36,7 +42,7 @@ SolidCompression=yes
 SetupIconFile=..\Utilities\Resources\ASCOM.ico
 ShowLanguageDialog=auto
 ; Put there by Platform if Driver Installer Support selected
-WizardImageFile="C:\Program Files\ASCOM\InstallGen\Resources\WizardImage.bmp"
+;WizardImageFile="C:\Program Files\ASCOM\InstallGen\Resources\WizardImage.bmp"
 WizardSmallImageFile=ASCOMLogo.bmp
 Uninstallable=yes
 DirExistsWarning=no
@@ -170,9 +176,15 @@ Filename: "{app}\GACInstall.exe"; Parameters: ASCOM.Utilities.dll; Flags: runhid
 Filename: "{app}\GACInstall.exe"; Parameters: ASCOM.Astrometry.dll; Flags: runhidden; StatusMsg: Installing ASCOM.Astrometry to the assembly cache
 ;Filename: "{app}\GACInstall.exe"; Parameters: Interop.Scripting.dll; Flags: runhidden; StatusMsg: Installing Interop.Scripting to the assembly cache
 Filename: "{app}\GACInstall.exe"; Parameters: ASCOM.IConform.dll; Flags: runhidden; StatusMsg: Installing ASCOM.IConform to the assembly cache
-Filename: "{win}\Microsoft.NET\Framework\v2.0.50727\regasm.exe"; Parameters: "/TLB ""{app}\ASCOM.Utilities.dll"""; Flags: runhidden; StatusMsg: Registering Utilities for COM
-Filename: "{win}\Microsoft.NET\Framework\v2.0.50727\regasm.exe"; Parameters: "/TLB ""{app}\ASCOM.Astrometry.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.Astrometry for COM
-Filename: "{win}\Microsoft.NET\Framework\v2.0.50727\regasm.exe"; Parameters: "/TLB ""{app}\ASCOM.IConform.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.IConform for COM
+Filename: "{dotnet20}\regasm.exe"; Parameters: "/TLB ""{app}\ASCOM.Utilities.dll"""; Flags: runhidden; StatusMsg: Registering Utilities for COM
+Filename: "{dotnet20}\regasm.exe"; Parameters: "/TLB ""{app}\ASCOM.Astrometry.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.Astrometry for COM
+Filename: "{dotnet20}\regasm.exe"; Parameters: "/TLB ""{app}\ASCOM.IConform.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.IConform for COM
+
+;Register 32bit versions on 64bit system
+Filename: "{dotnet2032}\regasm.exe"; Parameters: "/TLB ""{cf32}\ASCOM\.net\ASCOM.Utilities.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering Utilities for COM
+Filename: "{dotnet2032}\regasm.exe"; Parameters: "/TLB ""{cf32}\ASCOM\.net\ASCOM.Astrometry.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering ASCOM.Astrometry for COM
+Filename: "{dotnet2032}\regasm.exe"; Parameters: "/TLB ""{cf32}\ASCOM\.net\ASCOM.IConform.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering ASCOM.IConform for COM
+
 ;Filename: "{app}\GACInstall.exe"; Parameters: policy.5.3.ASCOM.Utilities.dll; Flags: runhidden; StatusMsg: Installing Utilities redirection policy to the assembly cache
 Filename: "{cf32}\ASCOM\Utilities\EraseProfile.exe"; Tasks: cleanprofile
 ;#emit 'Filename: "XCopy"; Parameters: """{app}\ASCOM.HelperNET.pdb"" ""{win}\assembly\GAC_MSIL\ASCOM.HelperNET\' + AppVer + '__565de7938946fba7""";StatusMsg: Installing HelperNET debug symbols into the GAC;Flags: runhidden waituntilterminated'
