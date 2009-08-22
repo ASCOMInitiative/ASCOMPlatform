@@ -31,6 +31,8 @@ namespace ASCOM.GeminiTelescope
         int m_UpdateCount = 0;
         bool m_ShowNotifications = true;
 
+        frmStatus m_StatusForm  = null;
+
         public frmMain()
         {
             InitializeComponent();
@@ -62,10 +64,21 @@ namespace ASCOM.GeminiTelescope
 
             BaloonIcon.ContextMenu = m_BaloonMenu;
             BaloonIcon.MouseClick += new MouseEventHandler(BaloonIcon_MouseClick);
+
             BaloonIcon.Visible = true;
             tmrBaloon.Tick += new EventHandler(tmrBaloon_Tick);
             BaloonIcon.MouseDoubleClick += new MouseEventHandler(BaloonIcon_MouseDoubleClick);
+            BaloonIcon.MouseMove += new MouseEventHandler(BaloonIcon_MouseMove);
             GeminiHardware.OnSafetyLimit += new SafetyDelegate(OnSafetyLimit);
+        }
+
+        void BaloonIcon_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (m_StatusForm == null || !m_StatusForm.Visible)
+            {
+                Screen scr = Screen.FromPoint(Cursor.Position);
+                ShowStatus(new Point(scr.WorkingArea.Right, scr.WorkingArea.Bottom), true);
+            }
         }
 
         void BaloonIcon_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -73,11 +86,35 @@ namespace ASCOM.GeminiTelescope
             ControlPanelMenu(sender, e);
         }
 
-        void BaloonIcon_MouseClick(object sender, MouseEventArgs e)
-        {/*
+        private void ShowStatus(Point pt, bool autoHide)
+        {
+            if (m_StatusForm != null) m_StatusForm.Close();
+            m_StatusForm = new frmStatus();
+
+            Screen scr = Screen.FromPoint(pt);
+
+            Point top = (pt);
+            top.Y -= m_StatusForm.Bounds.Height + 32;
+            top.X -= 32;
+
+            top.Y = Math.Min(top.Y, scr.WorkingArea.Height - m_StatusForm.Bounds.Height - 32);
+            top.X = Math.Min(top.X, scr.WorkingArea.Width - m_StatusForm.Bounds.Width - 32);
+
+            m_StatusForm.Location = top;
+
+            m_StatusForm.Visible = true;
+            m_StatusForm.AutoHide = autoHide;
+            m_StatusForm.Show();
+
+            /*
             if (BaloonIcon.ContextMenuStrip != null) return;           
             BaloonIcon.ContextMenu.Show(this, this.PointToClient(Cursor.Position));
           */
+        }
+
+        void BaloonIcon_MouseClick(object sender, MouseEventArgs e)
+        {
+            //ShowStatus(Cursor.Position);
         }
 
         void ExitMenu(object sender, EventArgs e)
@@ -251,7 +288,7 @@ namespace ASCOM.GeminiTelescope
                 tooltip+="not connected";
 
 
-            BaloonIcon.Text = tooltip;    
+            BaloonIcon.Text = ""; // tooltip;    
         }
 
 

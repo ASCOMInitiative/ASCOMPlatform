@@ -84,6 +84,15 @@
     <Compile Include="frmPassThroughPortSetup.Designer.cs">
       <DependentUpon>frmPassThroughPortSetup.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmStatus.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmStatus.Designer.cs">
+      <DependentUpon>frmStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GeminiProperties.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="PassThroughPort.cs" />
     <Compile Include="FocuserSetupDialogForm.cs">
       <SubType>Form</SubType>
@@ -126,6 +135,9 @@
     <EmbeddedResource Include="frmPassThroughPortSetup.resx">
       <DependentUpon>frmPassThroughPortSetup.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmStatus.resx">
+      <DependentUpon>frmStatus.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MountParameters.resx">
       <DependentUpon>MountParameters.cs</DependentUpon>
     </EmbeddedResource>
@@ -150,6 +162,7 @@
     <Compile Include="TelescopeSetupDialogForm.designer.cs">
       <DependentUpon>TelescopeSetupDialogForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Win32API.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ASCOM.png" />

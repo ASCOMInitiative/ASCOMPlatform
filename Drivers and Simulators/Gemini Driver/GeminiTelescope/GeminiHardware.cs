@@ -554,6 +554,24 @@ namespace ASCOM.GeminiTelescope
         }
 
         /// <summary>
+        /// Returns Gemini version, level number digit, followed by two version digits
+        /// </summary>
+        public static string Version
+        {
+            get { return m_GeminiVersion; }
+
+        }
+
+        /// <summary>
+        /// Gemini-defined UTC offset (timezone)
+        /// </summary>
+        public static int UTCOffset
+        {
+            get { return GeminiHardware.m_UTCOffset; }
+            set { GeminiHardware.m_UTCOffset = value; }
+        }
+
+        /// <summary>
         /// Get/Set Use Gemini Site 
         /// </summary>
         public static bool UseGeminiSite
@@ -1130,7 +1148,10 @@ namespace ASCOM.GeminiTelescope
                 m_SerialPort.Write(s);
                 m_SerialPort.BaseStream.Flush();
             }
-            if (m_SerialErrorOccurred.WaitOne(0)) throw new TimeoutException("Serial port transmission error");
+            if (m_SerialErrorOccurred.WaitOne(0))
+            {
+                throw new TimeoutException("Serial port transmission error: "+s);
+            }
         }
 
 
@@ -1450,141 +1471,149 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         private static void UpdatePolledVariables()
         {
-            CommandItem command;
-
-            // Gemini gets slow to respond when slewing, so increase timeout if we're in the middle of it:
-            int timeout = (m_Velocity=="S" ? MAX_TIMEOUT : MAX_TIMEOUT/2);
-
-            System.Diagnostics.Trace.Write("Poll commands: " + m_PolledVariablesString + "\r\n");
-            //Get RA and DEC etc
-            DiscardInBuffer(); //clear all received data
-            Transmit(m_PolledVariablesString);
-
-            command = new CommandItem(":GR", timeout, true);
-            string RA = GetCommandResult(command);
-            if (RA == null)
+            try
             {
-                Resync();
-                return;
-            }
+                CommandItem command;
 
-            command = new CommandItem(":GD", timeout, true);
-            string DEC = GetCommandResult(command);
-            if (DEC == null)
-            {
-                Resync();
-                return;
-            }
+                // Gemini gets slow to respond when slewing, so increase timeout if we're in the middle of it:
+                int timeout = (m_Velocity == "S" ? MAX_TIMEOUT : 1000);
 
-            command = new CommandItem(":GA", timeout, true);
-            string ALT = GetCommandResult(command);
-            if (ALT == null)
-            {
-                Resync();
-                return;
-            }
+                System.Diagnostics.Trace.Write("Poll commands: " + m_PolledVariablesString + "\r\n");
+                //Get RA and DEC etc
+                DiscardInBuffer(); //clear all received data
+                Transmit(m_PolledVariablesString);
 
-           
-            command = new CommandItem(":GZ", timeout, true);          
-            string AZ = GetCommandResult(command);
-
-            if (AZ == null)
-            {
-                Resync();
-                return;
-            }
-
-            command = new CommandItem(":Gv", timeout, true);
-            string V = GetCommandResult(command);
-            if (V == null)
-            {
-                Resync();
-                return;
-            }
-
-            command = new CommandItem(":GS", timeout, true);
-            string ST = GetCommandResult(command);
-            if (ST == null)
-            {
-                Resync();
-                return;
-            }
-            command = new CommandItem(":Gm", timeout, true);
-            string SOP = GetCommandResult(command);
-            if (SOP == null)
-            {
-                Resync();
-                return;
-            }
-            command = new CommandItem(":h?", timeout, true);
-            string HOME = GetCommandResult(command);
-            if (HOME == null)
-            {
-                Resync();
-                return;
-            }
-
-            command = new CommandItem("<99:", timeout, true);
-            string STATUS = GetCommandResult(command);
-            if (STATUS == null)
-            {
-                Resync();
-                return;
-            }
-
-            if (RA != null) m_RightAscension = m_Util.HMSToHours(RA);
-
-            if (DEC != null) m_Declination = m_Util.DMSToDegrees(DEC);
-
-            if (ALT != null) m_Altitude = m_Util.DMSToDegrees(ALT);
-
-            if (AZ != null) m_Azimuth = m_Util.DMSToDegrees(AZ);
-            if (V != null) m_Velocity = V;
-
-            if (Velocity == "N") m_Tracking = false;
-            else
-                m_Tracking = true;
-
-            if (ST != null)
-            {
-                m_SiderealTime = m_Util.HMSToHours(ST);              
-            }
-            if (SOP != null) m_SideOfPier = SOP;
-
-            if (HOME != null)
-            {
-                m_ParkState = HOME;
-                if (HOME == "1")
+                command = new CommandItem(":GR", timeout, true);
+                string RA = GetCommandResult(command);
+                if (RA == null)
                 {
-                    m_AtHome = true;
-                    if (Velocity == "N") m_AtPark = true;
+                    Resync();
+                    return;
+                }
+
+                command = new CommandItem(":GD", timeout, true);
+                string DEC = GetCommandResult(command);
+                if (DEC == null)
+                {
+                    Resync();
+                    return;
+                }
+
+                command = new CommandItem(":GA", timeout, true);
+                string ALT = GetCommandResult(command);
+                if (ALT == null)
+                {
+                    Resync();
+                    return;
+                }
+
+
+                command = new CommandItem(":GZ", timeout, true);
+                string AZ = GetCommandResult(command);
+
+                if (AZ == null)
+                {
+                    Resync();
+                    return;
+                }
+
+                command = new CommandItem(":Gv", timeout, true);
+                string V = GetCommandResult(command);
+                if (V == null)
+                {
+                    Resync();
+                    return;
+                }
+
+                command = new CommandItem(":GS", timeout, true);
+                string ST = GetCommandResult(command);
+                if (ST == null)
+                {
+                    Resync();
+                    return;
+                }
+                command = new CommandItem(":Gm", timeout, true);
+                string SOP = GetCommandResult(command);
+                if (SOP == null)
+                {
+                    Resync();
+                    return;
+                }
+                command = new CommandItem(":h?", timeout, true);
+                string HOME = GetCommandResult(command);
+                if (HOME == null)
+                {
+                    Resync();
+                    return;
+                }
+
+                command = new CommandItem("<99:", timeout, true);
+                string STATUS = GetCommandResult(command);
+                if (STATUS == null)
+                {
+                    Resync();
+                    return;
+                }
+
+                if (RA != null) m_RightAscension = m_Util.HMSToHours(RA);
+
+                if (DEC != null) m_Declination = m_Util.DMSToDegrees(DEC);
+
+                if (ALT != null) m_Altitude = m_Util.DMSToDegrees(ALT);
+
+                if (AZ != null) m_Azimuth = m_Util.DMSToDegrees(AZ);
+                if (V != null) m_Velocity = V;
+
+                if (Velocity == "N") m_Tracking = false;
+                else
+                    m_Tracking = true;
+
+                if (ST != null)
+                {
+                    m_SiderealTime = m_Util.HMSToHours(ST);
+                }
+                if (SOP != null) m_SideOfPier = SOP;
+
+                if (HOME != null)
+                {
+                    m_ParkState = HOME;
+                    if (HOME == "1")
+                    {
+                        m_AtHome = true;
+                        if (Velocity == "N") m_AtPark = true;
+                        else
+                        {
+                            m_AtPark = false;
+                        }
+                    }
                     else
                     {
+                        m_AtHome = false;
                         m_AtPark = false;
                     }
                 }
-                else
-                {
-                    m_AtHome = false;
-                    m_AtPark = false;
-                }
-            }
 
-            if (STATUS != null)
+                if (STATUS != null)
+                {
+                    int.TryParse(STATUS, out m_GeminiStatusByte);
+
+                    // if reached safety limit, send out one notification 
+                    if ((m_GeminiStatusByte & 16) != 0 && !m_SafetyNotified)
+                    {
+                        if (OnSafetyLimit != null) OnSafetyLimit();
+                        m_SafetyNotified = true;
+                    }
+                    else if ((m_GeminiStatusByte & 16) == 0) m_SafetyNotified = false;
+                }
+
+                System.Diagnostics.Trace.Write("Done polling: RA=" + RA + ", DEC=" + DEC + "ALT=" + ALT + " AZ=" + AZ + " SOP=" + SOP + " HOME=" + HOME + " Velocity=" + Velocity + " Status=" + m_GeminiStatusByte.ToString() + "\r\n");
+                m_LastUpdate = System.DateTime.Now;
+            }
+            catch
             {
-                int.TryParse(STATUS, out m_GeminiStatusByte);
-
-                // if reached safety limit, send out one notification 
-                if ((m_GeminiStatusByte & 16) != 0 && !m_SafetyNotified)
-                {
-                    if (OnSafetyLimit != null) OnSafetyLimit();
-                    m_SafetyNotified = true;
-                }
-                else if ((m_GeminiStatusByte & 16) == 0) m_SafetyNotified = false;
+                m_SerialPort.DiscardOutBuffer();
+                DiscardInBuffer();
             }
-
-            System.Diagnostics.Trace.Write("Done polling: RA=" + RA + ", DEC=" + DEC + "ALT=" + ALT + " AZ=" + AZ + " SOP=" + SOP + " HOME=" + HOME + " Velocity=" + Velocity + "Status=" + m_GeminiStatusByte.ToString() + "\r\n");
-            m_LastUpdate = System.DateTime.Now;
         }
 
         /// <summary>
@@ -1603,12 +1632,16 @@ namespace ASCOM.GeminiTelescope
                     string sRes = null;
                     do
                     {
-                        m_SerialPort.DiscardOutBuffer();
-                        DiscardInBuffer();
+                        try
+                        {
+                            m_SerialPort.DiscardOutBuffer();
+                            DiscardInBuffer();
 
-                        Transmit("\x6");
-                        CommandItem ci = new CommandItem("\x6", 2000, true);
-                        sRes = GetCommandResult(ci);
+                            Transmit("\x6");
+                            CommandItem ci = new CommandItem("\x6", 2000, true);
+                            sRes = GetCommandResult(ci);
+                        }
+                        catch { }
 
                     } while (sRes != "G");
                 }
