@@ -40,7 +40,7 @@ namespace ASCOM.GeminiTelescope
             string res;
             try
             {
-                res = GeminiHardware.DoCommandResult(s, GeminiHardware.MAX_TIMEOUT, false);
+                res = GeminiHardware.DoCommandResult(s, 1000, false);
             }
             catch
             {
