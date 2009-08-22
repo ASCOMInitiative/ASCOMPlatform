@@ -30,6 +30,7 @@ namespace ASCOM.GeminiTelescope
             tmrUpdate.Interval = 1500;
             tmrUpdate.Tick += new EventHandler(tmrUpdate_Tick);
             tmrUpdate.Start();
+            SharedResources.SetTopWindow(this);
         }
 
         void tmrUpdate_Tick(object sender, EventArgs e)
