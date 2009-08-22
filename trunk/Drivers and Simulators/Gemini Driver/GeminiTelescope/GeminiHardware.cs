@@ -2045,23 +2045,29 @@ namespace ASCOM.GeminiTelescope
             get 
             {
                 DateTime geminiDateTime;
-                string result = GeminiHardware.DoCommandResult(":GL", GeminiHardware.MAX_TIMEOUT, false);
-                string[] localTime = result.Substring(8).Split(':');
-                result = GeminiHardware.DoCommandResult(":GC", GeminiHardware.MAX_TIMEOUT, false);
-                string[] localDate = result.Substring(8).Split('/');
+                //string result = GeminiHardware.DoCommandResult(":GL", GeminiHardware.MAX_TIMEOUT, false);
+                //string[] localTime = result.Substring(8).Split(':');
+                //result = GeminiHardware.DoCommandResult(":GC", GeminiHardware.MAX_TIMEOUT, false);
+                //string[] localDate = result.Substring(8).Split('/');
+                string l_Time = GeminiHardware.DoCommandResult(":GL", GeminiHardware.MAX_TIMEOUT, false);
+                string l_Date = GeminiHardware.DoCommandResult(":GC", GeminiHardware.MAX_TIMEOUT, false);
+                double l_TZOffset = double.Parse(GeminiHardware.DoCommandResult(":GG", GeminiHardware.MAX_TIMEOUT, false));
+
                 try
                 {
-                    int hours = int.Parse(localTime[0]);
-                    int minutes = int.Parse(localTime[1]);
-                    int seconds = int.Parse(localTime[2]);
-                    int month = int.Parse(localDate[0]);
-                    int day = int.Parse(localDate[1]);
-                    int year = int.Parse(localDate[2]);
-                    geminiDateTime = new DateTime(year, month, day, hours, minutes, seconds);
+                    //int hours = int.Parse(localTime[0]);
+                    //int minutes = int.Parse(localTime[1]);
+                    //int seconds = int.Parse(localTime[2]);
+                    //int month = int.Parse(localDate[0]);
+                    //int day = int.Parse(localDate[1]);
+                    //int year = int.Parse(localDate[2]);
+                    //geminiDateTime = new DateTime(year, month, day, hours, minutes, seconds);
+                    geminiDateTime = DateTime.ParseExact(l_Date + " " + l_Time, "MM/dd/yy HH:mm:ss", new System.Globalization.DateTimeFormatInfo()); // Parse to a local datetime using the given format
+                    geminiDateTime = geminiDateTime.AddHours(l_TZOffset); // Add this to the local time to get a UTC date time
                     return geminiDateTime;
                 }
-                catch
-                { throw new ASCOM.DriverException("Error reading UTCDate", (int)SharedResources.SCODE_INVALID_VALUE); }; 
+                catch (Exception ex)
+                { throw new ASCOM.DriverException("Error reading UTCDate: " + ex.ToString(), (int)SharedResources.SCODE_INVALID_VALUE); }; 
             }
             set 
             {
