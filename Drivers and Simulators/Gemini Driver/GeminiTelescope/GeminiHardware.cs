@@ -2069,7 +2069,7 @@ namespace ASCOM.GeminiTelescope
             }
             set 
             {
-                int utc_offset_hours = TimeZone.CurrentTimeZone.GetUtcOffset(value).Hours;
+                int utc_offset_hours = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours;
 
                 // set timezone from PC (gemini seems to want a '+' or a '-' in front of the hours, so make sure positive
                 // number gets a '+' in front:
