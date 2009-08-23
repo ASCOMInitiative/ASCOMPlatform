@@ -528,7 +528,7 @@ namespace ASCOM.GeminiTelescope
 
         public PierSide DestinationSideOfPier(double RightAscension, double Declination)
         {
-            throw new ASCOM.PropertyNotImplementedException("DestinationSideOfPier",false);
+            throw new ASCOM.MethodNotImplementedException("DestinationSideOfPier"); // Was PropertyNotImplementedException
         }
 
         public bool DoesRefraction
@@ -778,9 +778,9 @@ namespace ASCOM.GeminiTelescope
                 int d = (count > 255 ? 255 : count);
                 cmds[idx] = cmd + d.ToString();
             }
-            GeminiHardware.IsPulseGuiding = true;
+            //GeminiHardware.IsPulseGuiding = true;
             GeminiHardware.DoCommandResult(cmds, Duration + GeminiHardware.MAX_TIMEOUT, false);
-            GeminiHardware.IsPulseGuiding = false;
+            // GeminiHardware.IsPulseGuiding = false;
         }
 
         public double RightAscension
