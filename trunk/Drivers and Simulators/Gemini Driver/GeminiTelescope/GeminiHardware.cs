@@ -2071,13 +2071,14 @@ namespace ASCOM.GeminiTelescope
             {
                 int utc_offset_hours = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours;
 
-                // set timezone from PC:
-                string result = DoCommandResult(":SG" + (-utc_offset_hours), MAX_TIMEOUT, false);
+                // set timezone from PC (gemini seems to want a '+' or a '-' in front of the hours, so make sure positive
+                // number gets a '+' in front:
+                string result = DoCommandResult(":SG" + (utc_offset_hours < 0? "+":"") + (-utc_offset_hours).ToString("0"), MAX_TIMEOUT, false);
 
                 // compute civil time using whole hours only, since Gemini doesn't take fractions:
                 DateTime civil = DateTime.UtcNow + TimeSpan.FromHours(utc_offset_hours);
 
-                string localTime = m_Util.HoursToHMS(m_Util.HMSToHours(civil.ToString("HH:mm:ss:")));
+                string localTime = m_Util.HoursToHMS(m_Util.HMSToHours(civil.ToString("HH:mm:ss")));
                 string localDate = civil.ToString("MM/dd/yy");
                 result = DoCommandResult(":SC" + localDate, MAX_TIMEOUT, false);
                 result = DoCommandResult(":SL" + localTime, MAX_TIMEOUT, false);
