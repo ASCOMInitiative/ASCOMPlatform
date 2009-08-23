@@ -1840,11 +1840,11 @@ namespace ASCOM.GeminiTelescope
 
                     if (c != terminate)
                     {
-                        // 0xb0 = degree character, the only char > 0x80 that's used in normal
+                        // 223 = degree character, the only char > 0x80 that's used in normal
                         // response to commands (longitude, latitude, etc.) 
                         // it must occur inside the string to be a legitimate response,
                         // otherwise consider it part of a binary stream meant for the passthrough port
-                        if ((int)c >= 0x80 && (c!=0xb0 || res.Length==0)) outp.Append(c);
+                        if ((int)c >= 0x80 && (c!=223 || res.Length==0)) outp.Append(c);
                         else
                             res.Append(c);
                     }
