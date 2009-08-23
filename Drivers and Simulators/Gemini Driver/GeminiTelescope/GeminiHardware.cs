@@ -2053,13 +2053,13 @@ namespace ASCOM.GeminiTelescope
         { 
             get 
             {
-                DateTime geminiDateTime;
-                string l_Time = GeminiHardware.DoCommandResult(":GL", GeminiHardware.MAX_TIMEOUT, false);
-                string l_Date = GeminiHardware.DoCommandResult(":GC", GeminiHardware.MAX_TIMEOUT, false);
-                double l_TZOffset = double.Parse(GeminiHardware.DoCommandResult(":GG", GeminiHardware.MAX_TIMEOUT, false));
-
                 try
                 {
+                    DateTime geminiDateTime;
+                    string l_Time = GeminiHardware.DoCommandResult(":GL", GeminiHardware.MAX_TIMEOUT, false);
+                    string l_Date = GeminiHardware.DoCommandResult(":GC", GeminiHardware.MAX_TIMEOUT, false);
+                    double l_TZOffset = double.Parse(GeminiHardware.DoCommandResult(":GG", GeminiHardware.MAX_TIMEOUT, false));
+
                     geminiDateTime = DateTime.ParseExact(l_Date + " " + l_Time, "MM/dd/yy HH:mm:ss", new System.Globalization.DateTimeFormatInfo()); // Parse to a local datetime using the given format
                     geminiDateTime = geminiDateTime.AddHours(l_TZOffset); // Add this to the local time to get a UTC date time
                     return geminiDateTime;
@@ -2191,6 +2191,10 @@ namespace ASCOM.GeminiTelescope
             if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("RA value is invalid");
             if (result[1] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("DEC value is invalid");
             if (result[2] == "No object!") throw new ASCOM.Utilities.Exceptions.InvalidValueException((m_AdditionalAlign ? "Align to" : "Sync to ") + "RA/DEC");
+            
+            m_RightAscension = ra;// Update state machine variables with new RA and DEC.
+            m_Declination = dec;
+        
         }
 
 
@@ -2236,7 +2240,7 @@ namespace ASCOM.GeminiTelescope
 
         public static void SyncHorizonCoordinates(double azimuth, double altitude)
         {
-            string[] cmd = { ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ""), ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ""), "" };
+            string[] cmd = { ":Sz" + m_Util.DegreesToDMS(azimuth, ":", ":", ""), ":Sa" + m_Util.DegreesToDMS(altitude, ":", ":", ""), "" };
             if (m_AdditionalAlign)
             {
                 cmd[2] = ":Cm";
@@ -2253,6 +2257,8 @@ namespace ASCOM.GeminiTelescope
             if (result[1] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Az value is invalid");
             if (result[2] == "No object!") throw new ASCOM.Utilities.Exceptions.InvalidValueException((m_AdditionalAlign ? "Align to" : "Sync to ") + "Alt/Az");
 
+            m_Azimuth = azimuth; // Update state machine variables
+            m_Altitude = altitude;
         }
         
         /// <summary>
