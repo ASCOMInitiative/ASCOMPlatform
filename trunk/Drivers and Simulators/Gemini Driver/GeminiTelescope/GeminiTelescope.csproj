@@ -93,6 +93,7 @@
     <Compile Include="GeminiProperties.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="NmeaInterpretor.cs" />
     <Compile Include="PassThroughPort.cs" />
     <Compile Include="FocuserSetupDialogForm.cs">
       <SubType>Form</SubType>
