@@ -75,10 +75,10 @@ namespace ASCOM.GeminiTelescope
             this.timerUpdate = new System.Windows.Forms.Timer(this.components);
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-            this.radioButtonWarmRestart = new System.Windows.Forms.RadioButton();
-            this.radioButtonWarmStart = new System.Windows.Forms.RadioButton();
-            this.radioButtonColdStart = new System.Windows.Forms.RadioButton();
             this.radioButtonPrompt = new System.Windows.Forms.RadioButton();
+            this.radioButtonColdStart = new System.Windows.Forms.RadioButton();
+            this.radioButtonWarmStart = new System.Windows.Forms.RadioButton();
+            this.radioButtonWarmRestart = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -169,6 +169,7 @@ namespace ASCOM.GeminiTelescope
             this.checkBoxUseGeminiSite.TabIndex = 22;
             this.checkBoxUseGeminiSite.Text = "Use Gemini Site Info";
             this.checkBoxUseGeminiSite.UseVisualStyleBackColor = false;
+            this.checkBoxUseGeminiSite.CheckedChanged += new System.EventHandler(this.checkBoxUseGeminiSite_CheckedChanged);
             // 
             // textBoxLongitudeMinutes
             // 
@@ -602,27 +603,16 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel6.Size = new System.Drawing.Size(199, 108);
             this.tableLayoutPanel6.TabIndex = 4;
             // 
-            // radioButtonWarmRestart
+            // radioButtonPrompt
             // 
-            this.radioButtonWarmRestart.AutoSize = true;
-            this.radioButtonWarmRestart.Location = new System.Drawing.Point(3, 3);
-            this.radioButtonWarmRestart.Name = "radioButtonWarmRestart";
-            this.radioButtonWarmRestart.Size = new System.Drawing.Size(90, 17);
-            this.radioButtonWarmRestart.TabIndex = 0;
-            this.radioButtonWarmRestart.TabStop = true;
-            this.radioButtonWarmRestart.Text = "Warm Restart";
-            this.radioButtonWarmRestart.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonWarmStart
-            // 
-            this.radioButtonWarmStart.AutoSize = true;
-            this.radioButtonWarmStart.Location = new System.Drawing.Point(3, 30);
-            this.radioButtonWarmStart.Name = "radioButtonWarmStart";
-            this.radioButtonWarmStart.Size = new System.Drawing.Size(78, 17);
-            this.radioButtonWarmStart.TabIndex = 1;
-            this.radioButtonWarmStart.TabStop = true;
-            this.radioButtonWarmStart.Text = "Warm Start";
-            this.radioButtonWarmStart.UseVisualStyleBackColor = true;
+            this.radioButtonPrompt.AutoSize = true;
+            this.radioButtonPrompt.Location = new System.Drawing.Point(3, 84);
+            this.radioButtonPrompt.Name = "radioButtonPrompt";
+            this.radioButtonPrompt.Size = new System.Drawing.Size(121, 17);
+            this.radioButtonPrompt.TabIndex = 3;
+            this.radioButtonPrompt.TabStop = true;
+            this.radioButtonPrompt.Text = "Prompt if not Started";
+            this.radioButtonPrompt.UseVisualStyleBackColor = true;
             // 
             // radioButtonColdStart
             // 
@@ -635,16 +625,27 @@ namespace ASCOM.GeminiTelescope
             this.radioButtonColdStart.Text = "Cold Start";
             this.radioButtonColdStart.UseVisualStyleBackColor = true;
             // 
-            // radioButtonPrompt
+            // radioButtonWarmStart
             // 
-            this.radioButtonPrompt.AutoSize = true;
-            this.radioButtonPrompt.Location = new System.Drawing.Point(3, 84);
-            this.radioButtonPrompt.Name = "radioButtonPrompt";
-            this.radioButtonPrompt.Size = new System.Drawing.Size(121, 17);
-            this.radioButtonPrompt.TabIndex = 3;
-            this.radioButtonPrompt.TabStop = true;
-            this.radioButtonPrompt.Text = "Prompt if not Started";
-            this.radioButtonPrompt.UseVisualStyleBackColor = true;
+            this.radioButtonWarmStart.AutoSize = true;
+            this.radioButtonWarmStart.Location = new System.Drawing.Point(3, 30);
+            this.radioButtonWarmStart.Name = "radioButtonWarmStart";
+            this.radioButtonWarmStart.Size = new System.Drawing.Size(78, 17);
+            this.radioButtonWarmStart.TabIndex = 1;
+            this.radioButtonWarmStart.TabStop = true;
+            this.radioButtonWarmStart.Text = "Warm Start";
+            this.radioButtonWarmStart.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonWarmRestart
+            // 
+            this.radioButtonWarmRestart.AutoSize = true;
+            this.radioButtonWarmRestart.Location = new System.Drawing.Point(3, 3);
+            this.radioButtonWarmRestart.Name = "radioButtonWarmRestart";
+            this.radioButtonWarmRestart.Size = new System.Drawing.Size(90, 17);
+            this.radioButtonWarmRestart.TabIndex = 0;
+            this.radioButtonWarmRestart.TabStop = true;
+            this.radioButtonWarmRestart.Text = "Warm Restart";
+            this.radioButtonWarmRestart.UseVisualStyleBackColor = true;
             // 
             // TelescopeSetupDialogForm
             // 

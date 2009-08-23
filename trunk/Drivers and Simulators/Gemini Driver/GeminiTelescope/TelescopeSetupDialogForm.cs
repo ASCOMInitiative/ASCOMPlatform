@@ -250,6 +250,11 @@ namespace ASCOM.GeminiTelescope
         private void timerUpdate_Tick(object sender, EventArgs e)
         {
             labelUtc.Text = DateTime.UtcNow.ToLongTimeString();
+        }
+
+        private void checkBoxUseGeminiSite_CheckedChanged(object sender, EventArgs e)
+        {
+            UseGeminiSite = checkBoxUseGeminiSite.Checked;
         }   
     }
 }
