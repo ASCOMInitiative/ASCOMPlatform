@@ -432,12 +432,6 @@ namespace ASCOM.GeminiTelescope
                 m_SerialPort.PortName = m_ComPort;
             }
 
-            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Latitude", ""), out m_Latitude))
-                m_Latitude = 0.0;
-
-            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Longitude", ""), out m_Longitude))
-                m_Longitude = 0.0;
-
 
             //Get the Boot Mode from settings
             try
@@ -690,7 +684,7 @@ namespace ASCOM.GeminiTelescope
                 m_Profile.DeviceType = "Telescope";
                 m_Latitude = value;
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Latitude", value.ToString());
-                if (m_Latitude < 0) { m_SouthernHemisphere = true; }
+                m_SouthernHemisphere = (m_Latitude < 0);
                 m_Transform.SiteLatitude = m_Latitude;
             }
         }
@@ -1085,7 +1079,11 @@ namespace ASCOM.GeminiTelescope
 
                         if (OnConnect != null) OnConnect(true, m_Clients);
 
-                        SendStartUpCommands();
+                        try
+                        {
+                            SendStartUpCommands();
+                        }
+                        catch { }
 
                         if (m_PassThroughPortEnabled)
                             try {
@@ -1355,7 +1353,7 @@ namespace ASCOM.GeminiTelescope
 #else
                         System.Diagnostics.Trace.WriteLine(" done!");
 #endif
-                        if (bNeedStatusUpdate)
+                        if (bNeedStatusUpdate || (DateTime.Now - m_LastUpdate).TotalMilliseconds > SharedResources.GEMINI_POLLING_INTERVAL)
                         {
                             m_AllowErrorNotify = false; //don't bother the user with timeout errors during polling  -- these are not very important
                             UpdatePolledVariables(); //update variables if one of them was altered by a processed command
@@ -1382,8 +1380,10 @@ namespace ASCOM.GeminiTelescope
                 }
 
                 // wait specified interval before querying the mount if no more commands, but
-                // wake up immediately if a new command has been posted                    
-                m_WaitForCommand.WaitOne(m_QueryInterval);
+                // wake up immediately if a new command has been posted
+                int waitfor =  SharedResources.GEMINI_POLLING_INTERVAL - (int)(DateTime.Now - m_LastUpdate).TotalMilliseconds;
+                if (waitfor > 0)
+                    m_WaitForCommand.WaitOne(waitfor);
             }
 
             m_CancelAsync = false;
@@ -1454,8 +1454,8 @@ namespace ASCOM.GeminiTelescope
             string UTC_Offset = GetCommandResult(command);
 
 
-            if (longitude != null) Longitude = -m_Util.DMSToDegrees(longitude);  // Gemini has the reverse notion of longitude sign: + for West, - for East
-            if (latitude != null) Latitude = m_Util.DMSToDegrees(latitude);
+            if (longitude != null && UseGeminiSite) Longitude = -m_Util.DMSToDegrees(longitude);  // Gemini has the reverse notion of longitude sign: + for West, - for East
+            if (latitude != null && UseGeminiSite) Latitude = m_Util.DMSToDegrees(latitude);
             if (UTC_Offset != null) int.TryParse(UTC_Offset, out m_UTCOffset);
 
             //Get RA and DEC etc
@@ -1840,7 +1840,11 @@ namespace ASCOM.GeminiTelescope
 
                     if (c != terminate)
                     {
-                        if ((int)c >= 0x80) outp.Append(c);
+                        // 0xb0 = degree character, the only char > 0x80 that's used in normal
+                        // response to commands (longitude, latitude, etc.) 
+                        // it must occur inside the string to be a legitimate response,
+                        // otherwise consider it part of a binary stream meant for the passthrough port
+                        if ((int)c >= 0x80 && (c!=0xb0 || res.Length==0)) outp.Append(c);
                         else
                             res.Append(c);
                     }
