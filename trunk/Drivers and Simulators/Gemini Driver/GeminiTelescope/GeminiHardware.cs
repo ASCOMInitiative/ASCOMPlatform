@@ -1005,14 +1005,15 @@ namespace ASCOM.GeminiTelescope
         }
 
         /// <summary>
-        /// True while PulseGuiding command is in progress, since Gemini doesn't have a status flag for this kind of a move
+        /// True while PulseGuiding command is in progress
         /// </summary>
         public static bool IsPulseGuiding
         {
-            get { return m_IsPulseGuiding; }
-            set
+            get 
             {
-                m_IsPulseGuiding = value;
+                string l_Velocity = DoCommandResult(":Gv", MAX_TIMEOUT, false); //Get current velocity
+                if (l_Velocity.ToUpper() == "G") return true; // If G then we are pulse guiding 
+                else return false; // Some other rate so we are not pulse guiding
             }
         }
 
