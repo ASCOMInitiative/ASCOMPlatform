@@ -123,6 +123,14 @@
   <metadata name="errorProvider.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="txtOrganizationName.ToolTip" xml:space="preserve">
+    <value>This field is optional, but if it is present
+it should contain the name of the vendor
+or organization responsible for creating the
+device hardware. It may contain only uppercase
+and lowercase letters (no spaces or puctuation).
+Example: Meade</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
