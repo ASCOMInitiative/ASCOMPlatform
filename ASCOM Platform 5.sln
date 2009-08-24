@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9A54CA39-AB72-45B4-B09F-63679076D040}"
 	ProjectSection(SolutionItems) = preProject
+		ASCOM Platform 5.vsmdi = ASCOM Platform 5.vsmdi
 		BUILD NOTES.txt = BUILD NOTES.txt
+		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomActions", "CustomActions\CustomActions.csproj", "{C9BD6FCB-97C7-4096-B917-6E59B6E2C684}"
@@ -130,7 +132,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Attributes", "ASCOM.A
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ASCOM.IConform", "ASCOM.IConform\ASCOM.IConform\ASCOM.IConform.vbproj", "{44999847-A7B6-462D-B663-FE988D98E317}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Driver Templates", "Driver Templates", "{02FC4179-0ADE-45D2-9C78-52F74FF6156C}"
+	ProjectSection(SolutionItems) = preProject
+		DriverTemplateDeveloperNotes.htm = DriverTemplateDeveloperNotes.htm
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM Device Driver CSharp", "DriverTemplates\Driver Template CSharp\ASCOM Device Driver CSharp.csproj", "{64308775-BD4A-469C-BCAB-3ED830B811AF}"
+EndProject
 Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = ASCOM Platform 5.vsmdi
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Platform Dependencies|Any CPU = Platform Dependencies|Any CPU
@@ -353,6 +365,10 @@ Global
 		{44999847-A7B6-462D-B663-FE988D98E317}.Release|Any CPU.Build.0 = Release|Any CPU
 		{44999847-A7B6-462D-B663-FE988D98E317}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
 		{44999847-A7B6-462D-B663-FE988D98E317}.TeamCity|Any CPU.Build.0 = Release|Any CPU
+		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Platform Dependencies|Any CPU.ActiveCfg = Release|Any CPU
+		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64308775-BD4A-469C-BCAB-3ED830B811AF}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -369,7 +385,7 @@ Global
 		{0B492F73-66F9-460E-BD84-A6CB1FC588C6} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{5F6CF410-7B16-4A32-99D2-0D92196C4490} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{E100639A-B65F-4B34-A733-D6344AF2EF46} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
-		{6E5A18A3-EA09-4D55-ABC8-A7AEAC3DDA2D} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
+		{02FC4179-0ADE-45D2-9C78-52F74FF6156C} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{2C40FAD9-DE75-4360-A0AD-911C4D24D98C} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{44999847-A7B6-462D-B663-FE988D98E317} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{D1A5A486-8C9C-4421-91AB-508F63B684C2} = {3EDC5136-4922-4F53-92FB-ADB89CCFBF26}
@@ -398,5 +414,7 @@ Global
 		{634E1731-3DFE-46CB-A21C-C98F09CE4644} = {9EE4BA96-FE1D-463E-A59F-2AC547581B6B}
 		{8D28213E-D3D5-482C-A35F-E0BB6A4265BC} = {F319D614-A93C-4952-9D75-4230DB9896B8}
 		{20CD9164-D5BF-4DA5-A248-EC6B81830610} = {F319D614-A93C-4952-9D75-4230DB9896B8}
+		{6E5A18A3-EA09-4D55-ABC8-A7AEAC3DDA2D} = {02FC4179-0ADE-45D2-9C78-52F74FF6156C}
+		{64308775-BD4A-469C-BCAB-3ED830B811AF} = {02FC4179-0ADE-45D2-9C78-52F74FF6156C}
 	EndGlobalSection
 EndGlobal

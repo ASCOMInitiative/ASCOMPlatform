@@ -13,7 +13,7 @@ namespace ASCOM.Setup
 	public partial class UserInputForm : Form
 	{
 		/// <summary>
-		/// Format string for ASCOM DeviceID.
+		/// Format string for ASCOM DeviceId.
 		/// </summary>
 		private const string csDeviceIdFormat = "ASCOM.{0}.{1}";
 		/// <summary>
@@ -44,7 +44,7 @@ namespace ASCOM.Setup
 			Regex rxValidateDeviceName = new Regex(@"^[a-zA-Z]\w*$");
 			if (!rxValidateDeviceName.IsMatch(this.txtDeviceName.Text))
 			{
-				errorProvider.SetError(this.txtDeviceName, "Invalid DeviceID. Must begin with a letter and contain only alphanumeric characters");
+				errorProvider.SetError(this.txtDeviceName, "Invalid DeviceId. Must begin with a letter and contain only alphanumeric characters");
 				e.Cancel = true;
 			}
 
@@ -95,7 +95,7 @@ namespace ASCOM.Setup
 				{
 					return csDeviceNamePlaceholder;
 				}
-				return this.txtDeviceName.Text;
+				return (this.txtOrganizationName.Text ?? String.Empty) + this.txtDeviceName.Text;
 			}
 		}
 
@@ -111,14 +111,56 @@ namespace ASCOM.Setup
 			this.lblDeviceId.Text = this.DeviceId;
 		}
 
+		/// <summary>
+		/// Handles the TextChanged event of the txtDeviceName and txtOrganizationName controls.
+		/// Sets the value of lblDeviceId based on user input.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
 		private void txtDeviceName_TextChanged(object sender, EventArgs e)
 		{
 			this.lblDeviceId.Text = this.DeviceId;
 		}
 
+		/// <summary>
+		/// Handles the Click event of the btnCreate control.
+		/// Closes the form.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
 		private void btnCreate_Click(object sender, EventArgs e)
 		{
 			this.Close();
+		}
+
+
+		/// <summary>
+		/// Handles the Validating event of the txtOrganizationName control.
+		/// The value of this control must either be empty, or must contain only alphabetics.
+		/// </summary>
+		/// <param name="sender">The source of the event, not used.</param>
+		/// <param name="e">The <see cref="System.ComponentModel.CancelEventArgs"/> instance containing the event data.</param>
+		private void txtOrganizationName_Validating(object sender, CancelEventArgs e)
+		{
+			if (String.IsNullOrEmpty(txtOrganizationName.Text))
+				return;
+			Regex rxValidateDeviceName = new Regex(@"^[a-zA-Z]*$");
+			if (!rxValidateDeviceName.IsMatch(this.txtDeviceName.Text))
+			{
+				errorProvider.SetError(this.txtDeviceName, "Invalid organization name. Must either be empty, or contain only alphabetic characters.\nBy convention, the first character should be upper case.");
+				e.Cancel = true;
+			}
+		}
+
+		/// <summary>
+		/// Handles the Validated event of the txtOrganizationName control.
+		/// Clears any error messages after successful validation.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+		private void txtOrganizationName_Validated(object sender, EventArgs e)
+		{
+			errorProvider.Clear();
 		}
 	}
 }
