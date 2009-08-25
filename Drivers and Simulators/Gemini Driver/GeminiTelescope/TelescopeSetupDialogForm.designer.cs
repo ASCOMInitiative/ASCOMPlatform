@@ -29,6 +29,7 @@ namespace ASCOM.GeminiTelescope
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.Button buttonGps;
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -59,7 +60,6 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             this.checkBoxAdvancedMode = new System.Windows.Forms.CheckBox();
             this.checkBoxPrecession = new System.Windows.Forms.CheckBox();
             this.checkBoxRefraction = new System.Windows.Forms.CheckBox();
@@ -79,6 +79,7 @@ namespace ASCOM.GeminiTelescope
             this.radioButtonColdStart = new System.Windows.Forms.RadioButton();
             this.radioButtonWarmStart = new System.Windows.Forms.RadioButton();
             this.radioButtonWarmRestart = new System.Windows.Forms.RadioButton();
+            buttonGps = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -418,16 +419,17 @@ namespace ASCOM.GeminiTelescope
             this.label6.TabIndex = 6;
             this.label6.Text = "Com Port:";
             // 
-            // button1
+            // buttonGps
             // 
-            this.button1.BackColor = System.Drawing.Color.Black;
-            this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(238, 303);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 23;
-            this.button1.Text = "Query GPS";
-            this.button1.UseVisualStyleBackColor = false;
+            buttonGps.BackColor = System.Drawing.Color.Black;
+            buttonGps.ForeColor = System.Drawing.Color.White;
+            buttonGps.Location = new System.Drawing.Point(238, 303);
+            buttonGps.Name = "buttonGps";
+            buttonGps.Size = new System.Drawing.Size(75, 23);
+            buttonGps.TabIndex = 23;
+            buttonGps.Text = "Query GPS";
+            buttonGps.UseVisualStyleBackColor = false;
+            buttonGps.Click += new System.EventHandler(this.buttonGps_Click);
             // 
             // checkBoxAdvancedMode
             // 
@@ -659,7 +661,7 @@ namespace ASCOM.GeminiTelescope
             this.Controls.Add(this.checkBoxRefraction);
             this.Controls.Add(this.checkBoxPrecession);
             this.Controls.Add(this.checkBoxAdvancedMode);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(buttonGps);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.labelTime);
             this.Controls.Add(this.labelVersion);
@@ -729,7 +731,6 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.CheckBox checkBoxUseGeminiTime;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox checkBoxAdvancedMode;
         private System.Windows.Forms.CheckBox checkBoxPrecession;
         private System.Windows.Forms.CheckBox checkBoxRefraction;
