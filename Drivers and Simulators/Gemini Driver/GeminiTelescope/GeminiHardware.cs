@@ -1170,7 +1170,7 @@ namespace ASCOM.GeminiTelescope
             string sRes = GetCommandResult(ci);
 
             // scrolling message? wait for it to end:
-            while (sRes == "B")
+            while (sRes == "B#")
             {
                 System.Threading.Thread.Sleep(500);
                 Transmit("\x6");
@@ -1178,7 +1178,7 @@ namespace ASCOM.GeminiTelescope
                 sRes = GetCommandResult(ci); ;
             }
 
-            if (sRes == "b")    //Gemini waiting for user to select the boot mode
+            if (sRes == "b#")    //Gemini waiting for user to select the boot mode
             {
 
                 GeminiBootMode bootMode = m_BootMode;
@@ -1201,11 +1201,11 @@ namespace ASCOM.GeminiTelescope
                     case GeminiBootMode.WarmRestart: Transmit("bR#"); break;
                     case GeminiBootMode.WarmStart: Transmit("bW#"); break;
                 }
-                sRes = "S"; // put it into "starting" mode, so the next loop will wait for full initialization
+                sRes = "S#"; // put it into "starting" mode, so the next loop will wait for full initialization
             }
 
             // processing Cold start mode -- wait for this to end
-            while (sRes == "S")
+            while (sRes == "S#")
             {
                 System.Threading.Thread.Sleep(500);
                 Transmit("\x6");
@@ -1213,7 +1213,7 @@ namespace ASCOM.GeminiTelescope
                 sRes = GetCommandResult(ci); ;
             }
 
-            return sRes == "G"; // true if startup completed, otherwise false
+            return sRes == "G#"; // true if startup completed, otherwise false
         }
 
         /// <summary>
@@ -1646,7 +1646,7 @@ namespace ASCOM.GeminiTelescope
                         }
                         catch { }
 
-                    } while (sRes != "G");
+                    } while (sRes != "G#");
                     System.Threading.Thread.Sleep(1000);
                     m_SerialPort.DiscardOutBuffer();
                     DiscardInBuffer();
@@ -1922,6 +1922,9 @@ namespace ASCOM.GeminiTelescope
                 return new GeminiCommand(GeminiCommand.ResultType.NoResult, 0);
             else
             {
+                if (GeminiCommands.Commands.ContainsKey(full_cmd))
+                    return GeminiCommands.Commands[full_cmd];
+
                 // try to match the longest string first. Maximum length
                 // command is something like :GVD or four characters,
                 // minimum length command is 2 characters:
