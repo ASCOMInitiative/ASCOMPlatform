@@ -255,6 +255,24 @@ namespace ASCOM.GeminiTelescope
         private void checkBoxUseGeminiSite_CheckedChanged(object sender, EventArgs e)
         {
             UseGeminiSite = checkBoxUseGeminiSite.Checked;
-        }   
+        }
+
+        private void buttonGps_Click(object sender, EventArgs e)
+        {
+            frmGps gpsForm = new frmGps();
+            DialogResult ans = gpsForm.ShowDialog(this);
+            if (ans == DialogResult.OK)
+            {
+                try
+                {
+
+                }
+                catch
+                {
+                }
+            }
+        }
+
+        
     }
 }
