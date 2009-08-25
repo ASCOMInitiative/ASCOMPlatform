@@ -68,12 +68,12 @@ namespace ASCOM.GeminiTelescope
         {
 
             SystemTime updatedTime = new SystemTime();
-            updatedTime.Year = (ushort)dateTime.Year;
-            updatedTime.Month = (ushort)dateTime.Month;
-            updatedTime.Day = (ushort)dateTime.Day;
-            updatedTime.Hour = (ushort)dateTime.Hour;
-            updatedTime.Minute = (ushort)dateTime.Minute;
-            updatedTime.Second = (ushort)dateTime.Second;
+            updatedTime.Year = (ushort)dateTime.ToUniversalTime().Year;
+            updatedTime.Month = (ushort)dateTime.ToUniversalTime().Month;
+            updatedTime.Day = (ushort)dateTime.ToUniversalTime().Day;
+            updatedTime.Hour = (ushort)dateTime.ToUniversalTime().Hour;
+            updatedTime.Minute = (ushort)dateTime.ToUniversalTime().Minute;
+            updatedTime.Second = (ushort)dateTime.ToUniversalTime().Second;
             Win32SetSystemTime(ref updatedTime);
         }
         public double Latitude

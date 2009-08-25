@@ -93,6 +93,18 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel6.SuspendLayout();
             this.SuspendLayout();
             // 
+            // buttonGps
+            // 
+            buttonGps.BackColor = System.Drawing.Color.Black;
+            buttonGps.ForeColor = System.Drawing.Color.White;
+            buttonGps.Location = new System.Drawing.Point(238, 303);
+            buttonGps.Name = "buttonGps";
+            buttonGps.Size = new System.Drawing.Size(75, 23);
+            buttonGps.TabIndex = 23;
+            buttonGps.Text = "Query GPS";
+            buttonGps.UseVisualStyleBackColor = false;
+            buttonGps.Click += new System.EventHandler(this.buttonGps_Click);
+            // 
             // cmdOK
             // 
             this.cmdOK.BackColor = System.Drawing.Color.Black;
@@ -419,18 +431,6 @@ namespace ASCOM.GeminiTelescope
             this.label6.TabIndex = 6;
             this.label6.Text = "Com Port:";
             // 
-            // buttonGps
-            // 
-            buttonGps.BackColor = System.Drawing.Color.Black;
-            buttonGps.ForeColor = System.Drawing.Color.White;
-            buttonGps.Location = new System.Drawing.Point(238, 303);
-            buttonGps.Name = "buttonGps";
-            buttonGps.Size = new System.Drawing.Size(75, 23);
-            buttonGps.TabIndex = 23;
-            buttonGps.Text = "Query GPS";
-            buttonGps.UseVisualStyleBackColor = false;
-            buttonGps.Click += new System.EventHandler(this.buttonGps_Click);
-            // 
             // checkBoxAdvancedMode
             // 
             this.checkBoxAdvancedMode.AutoSize = true;
@@ -572,6 +572,7 @@ namespace ASCOM.GeminiTelescope
             // 
             // timerUpdate
             // 
+            this.timerUpdate.Enabled = true;
             this.timerUpdate.Interval = 1000;
             this.timerUpdate.Tick += new System.EventHandler(this.timerUpdate_Tick);
             // 
