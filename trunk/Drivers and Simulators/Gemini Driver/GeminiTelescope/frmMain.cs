@@ -130,6 +130,7 @@ namespace ASCOM.GeminiTelescope
             { 
                 this.Show();
                 this.WindowState = FormWindowState.Normal;
+                SharedResources.SetTopWindow(this);
             }
 
             m_BaloonMenu.MenuItems["Control"].Checked = this.Visible;
