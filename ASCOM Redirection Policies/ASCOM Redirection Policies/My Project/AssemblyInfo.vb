@@ -8,17 +8,17 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("Redirect Policy")> 
-<Assembly: AssemblyDescription("Creates a redirection policy for the Utilities namespace")> 
-<Assembly: AssemblyCompany("ASCOM Initiative")> 
-<Assembly: AssemblyProduct("Redirect Policy")> 
-<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2009")> 
+<Assembly: AssemblyTitle("ASCOM Redirection Policies")> 
+<Assembly: AssemblyDescription("")> 
+<Assembly: AssemblyCompany("Simpson Household")> 
+<Assembly: AssemblyProduct("ASCOM Redirection Policies")> 
+<Assembly: AssemblyCopyright("Copyright © Simpson Household 2009")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("9030b69f-618d-4131-99af-4938242deaea")> 
+<Assembly: Guid("093dbafa-609b-4dbe-8080-5fb857efa903")> 
 
 ' Version information for an assembly consists of the following four values:
 '

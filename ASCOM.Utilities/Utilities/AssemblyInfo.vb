@@ -30,4 +30,4 @@ Imports System.Runtime.InteropServices
 
 <Assembly: ComVisibleAttribute(True)> 
 <Assembly: GuidAttribute("EC785106-0F00-4e7f-90BA-7CCC9E9740E1")> 
-<Assembly: AssemblyFileVersionAttribute("5.3.0.0")> 
+<Assembly: AssemblyFileVersionAttribute("5.3.1.0")> 
