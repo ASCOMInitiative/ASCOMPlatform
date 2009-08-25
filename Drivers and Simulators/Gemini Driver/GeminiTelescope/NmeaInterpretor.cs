@@ -57,7 +57,7 @@ namespace ASCOM.GeminiTelescope
             // Discard the sentence if its checksum 
             //     does not match our 
             // calculated checksum
-            if (!IsValid(sentence)) return false;
+ //           if (!IsValid(sentence)) return false;
             // Look at the first word to decide wher
             //     e to go next
             switch (GetWords(sentence)[0])
