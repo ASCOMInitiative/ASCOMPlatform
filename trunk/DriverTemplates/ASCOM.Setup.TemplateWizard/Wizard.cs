@@ -12,6 +12,10 @@ namespace ASCOM.Setup
 		private UserInputForm inputForm;
 		private const string csAscom = "ASCOM.";
 		private const string csDeviceIdFormat = "{0}.{1}.{2}";
+		// These Guids are placeholder Guids. Wherever they are used in the template project, they'll be replaced with new
+		// values when the template is expanded. THE TEMPLATE PROJECTS MUST USE THESE GUIDS.
+		private const string csTemplateGuid1 = "28D679BA-2AF1-4557-AE15-C528C5BF91E0";
+		private const string csTemplateGuid2 = "3A02C211-FA08-4747-B0BD-4B00EB159297";
 		private string DeviceClass { get; set; }
 		private string DeviceName { get; set; }
 		private string DeviceId { get; set; }
@@ -28,7 +32,9 @@ namespace ASCOM.Setup
 		public void ProjectFinishedGenerating(Project project)
 		{
 			Diagnostics.Enter();
-			//DumpCodeModel(project);
+#if false
+			DumpCodeModel(project);	// Write environment information to trace output.
+#endif
 
 			//if (projectItem.Name == "Driver.cs")
 			//{
@@ -87,8 +93,8 @@ namespace ASCOM.Setup
 				replacementsDictionary["$safeprojectname$"] = DeviceId;
 				replacementsDictionary.Add("TEMPLATEDEVICENAME", DeviceName);
 				replacementsDictionary.Add("TEMPLATEDEVICECLASS", DeviceClass);
-				replacementsDictionary.Add("TEMPLATEDRIVERGUID", Guid.NewGuid().ToString());
-				replacementsDictionary.Add("GUIDSUBST2", Guid.NewGuid().ToString());
+				replacementsDictionary.Add(csTemplateGuid1, Guid.NewGuid().ToString());
+				replacementsDictionary.Add(csTemplateGuid2, Guid.NewGuid().ToString());
 			}
 			catch (Exception ex)
 			{

@@ -19,6 +19,7 @@
       <ProjectItem ReplaceParameters="false" TargetFileName="ASCOM.ico">ASCOM.ico</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="ASCOM.png">ASCOM.png</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Driver.cs">Driver.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="PlaceholderInterface.cs">PlaceholderInterface.cs</ProjectItem>
       <Folder Name="Properties" TargetFolderName="Properties">
         <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
         <ProjectItem ReplaceParameters="true" TargetFileName="Resources.resx">Resources.resx</ProjectItem>

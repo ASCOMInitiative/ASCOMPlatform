@@ -39,25 +39,30 @@ namespace ASCOM.Setup
 		/// </summary>
 		/// <param name="sender">The source of the event.</param>
 		/// <param name="e">The <see cref="System.ComponentModel.CancelEventArgs"/> instance containing the event data.</param>
+		/// <remarks>
+		/// The device name must start with an alphabetic character and may be followed by any number of alphanumeric
+		/// characters. There may be no whitespace or punctuation.
+		/// </remarks>
 		private void txtDeviceName_Validating(object sender, CancelEventArgs e)
 		{
-			Regex rxValidateDeviceName = new Regex(@"^[a-zA-Z]\w*$");
+			Regex rxValidateDeviceName = new Regex(@"^[a-zA-Z]([a-zA-Z0-9]*)$");
 			if (!rxValidateDeviceName.IsMatch(this.txtDeviceName.Text))
 			{
-				errorProvider.SetError(this.txtDeviceName, "Invalid DeviceId. Must begin with a letter and contain only alphanumeric characters");
 				e.Cancel = true;
+				errorProvider.SetError(this.txtDeviceName, "Invalid DeviceId. Must begin with a letter and contain only alphanumeric characters");
 			}
 
 		}
 
 		/// <summary>
-		/// Handles the Validated event of the txtDeviceName control.
+		/// Handles the Validated event of the <see cref="txtDeviceName"/> control
+		/// and clears the control's error state.
 		/// </summary>
 		/// <param name="sender">The source of the event.</param>
 		/// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
 		private void txtDeviceName_Validated(object sender, EventArgs e)
 		{
-			errorProvider.Clear();
+			errorProvider.SetError(this.txtDeviceName, String.Empty);
 		}
 
 		/// <summary>
@@ -112,7 +117,7 @@ namespace ASCOM.Setup
 		}
 
 		/// <summary>
-		/// Handles the TextChanged event of the txtDeviceName and txtOrganizationName controls.
+		/// Handles the TextChanged event of the txtDeviceName and txtDeviceName controls.
 		/// Sets the value of lblDeviceId based on user input.
 		/// </summary>
 		/// <param name="sender">The source of the event.</param>
@@ -130,6 +135,14 @@ namespace ASCOM.Setup
 		/// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
 		private void btnCreate_Click(object sender, EventArgs e)
 		{
+			// Before dismissing the dialog, run one final validation pass.
+			if (!this.ValidateChildren(ValidationConstraints.Enabled))
+				return;	// without closing the form.
+			if (cbDeviceClass.SelectedIndex < 0 || !cbDeviceClass.Items.Contains(cbDeviceClass.Text) || String.IsNullOrEmpty(cbDeviceClass.Text))
+			{
+				errorProvider.SetError(this.cbDeviceClass, "Please select a device type from the list.");
+				return; // without closing the form.
+			}
 			this.Close();
 		}
 
@@ -140,27 +153,31 @@ namespace ASCOM.Setup
 		/// </summary>
 		/// <param name="sender">The source of the event, not used.</param>
 		/// <param name="e">The <see cref="System.ComponentModel.CancelEventArgs"/> instance containing the event data.</param>
+		/// <remarks>
+		/// The organization name must either be blank, or contain a sequence of alphabetic characters.
+		/// No white space or punctuation is allowed.
+		/// </remarks>
 		private void txtOrganizationName_Validating(object sender, CancelEventArgs e)
 		{
 			if (String.IsNullOrEmpty(txtOrganizationName.Text))
 				return;
-			Regex rxValidateDeviceName = new Regex(@"^[a-zA-Z]*$");
-			if (!rxValidateDeviceName.IsMatch(this.txtDeviceName.Text))
+			Regex rxValidateOrgName = new Regex(@"^[a-zA-Z]+$");
+			if (!rxValidateOrgName.IsMatch(this.txtOrganizationName.Text))
 			{
-				errorProvider.SetError(this.txtDeviceName, "Invalid organization name. Must either be empty, or contain only alphabetic characters.\nBy convention, the first character should be upper case.");
 				e.Cancel = true;
+				errorProvider.SetError(this.txtOrganizationName, "Invalid organization name. Must either be empty, or contain only alphabetic characters.\nBy convention, the first character should be upper case.");
 			}
 		}
 
 		/// <summary>
-		/// Handles the Validated event of the txtOrganizationName control.
-		/// Clears any error messages after successful validation.
+		/// Handles the Validated event of the <see cref="txtOrganizationName"/> control
+		/// and clears the control's error state.
 		/// </summary>
 		/// <param name="sender">The source of the event.</param>
 		/// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
 		private void txtOrganizationName_Validated(object sender, EventArgs e)
 		{
-			errorProvider.Clear();
+			errorProvider.SetError(this.txtOrganizationName, String.Empty);
 		}
 	}
 }

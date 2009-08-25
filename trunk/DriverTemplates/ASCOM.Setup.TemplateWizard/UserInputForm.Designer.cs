@@ -39,9 +39,9 @@
 			this.label3 = new System.Windows.Forms.Label();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.lblDeviceId = new System.Windows.Forms.Label();
+			this.txtOrganizationName = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.btnCreate = new System.Windows.Forms.Button();
-			this.txtOrganizationName = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
 			this.SuspendLayout();
@@ -78,6 +78,7 @@
 			// 
 			// txtDeviceName
 			// 
+			this.txtDeviceName.CausesValidation = false;
 			this.txtDeviceName.Location = new System.Drawing.Point(181, 89);
 			this.txtDeviceName.Name = "txtDeviceName";
 			this.txtDeviceName.Size = new System.Drawing.Size(174, 20);
@@ -143,6 +144,17 @@
 			this.lblDeviceId.Text = "ASCOM.<DeviceName>.<DeviceClass>";
 			this.toolTip.SetToolTip(this.lblDeviceId, "This is the fully qualified ASCOM DeviceId\r\n(COM ProgID) of your new driver.");
 			// 
+			// txtOrganizationName
+			// 
+			this.txtOrganizationName.Location = new System.Drawing.Point(181, 63);
+			this.txtOrganizationName.Name = "txtOrganizationName";
+			this.txtOrganizationName.Size = new System.Drawing.Size(174, 20);
+			this.txtOrganizationName.TabIndex = 4;
+			this.toolTip.SetToolTip(this.txtOrganizationName, resources.GetString("txtOrganizationName.ToolTip"));
+			this.txtOrganizationName.TextChanged += new System.EventHandler(this.txtDeviceName_TextChanged);
+			this.txtOrganizationName.Validated += new System.EventHandler(this.txtOrganizationName_Validated);
+			this.txtOrganizationName.Validating += new System.ComponentModel.CancelEventHandler(this.txtOrganizationName_Validating);
+			// 
 			// label5
 			// 
 			this.label5.AutoSize = true;
@@ -155,24 +167,13 @@
 			// btnCreate
 			// 
 			this.btnCreate.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btnCreate.Location = new System.Drawing.Point(216, 200);
+			this.btnCreate.Location = new System.Drawing.Point(181, 188);
 			this.btnCreate.Name = "btnCreate";
 			this.btnCreate.Size = new System.Drawing.Size(75, 23);
 			this.btnCreate.TabIndex = 8;
 			this.btnCreate.Text = "Create";
 			this.btnCreate.UseVisualStyleBackColor = true;
 			this.btnCreate.Click += new System.EventHandler(this.btnCreate_Click);
-			// 
-			// txtOrganizationName
-			// 
-			this.txtOrganizationName.Location = new System.Drawing.Point(181, 63);
-			this.txtOrganizationName.Name = "txtOrganizationName";
-			this.txtOrganizationName.Size = new System.Drawing.Size(174, 20);
-			this.txtOrganizationName.TabIndex = 4;
-			this.toolTip.SetToolTip(this.txtOrganizationName, resources.GetString("txtOrganizationName.ToolTip"));
-			this.txtOrganizationName.TextChanged += new System.EventHandler(this.txtDeviceName_TextChanged);
-			this.txtOrganizationName.Validated += new System.EventHandler(this.txtOrganizationName_Validated);
-			this.txtOrganizationName.Validating += new System.ComponentModel.CancelEventHandler(this.txtOrganizationName_Validating);
 			// 
 			// label4
 			// 
@@ -188,7 +189,7 @@
 			this.AcceptButton = this.btnCreate;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(506, 247);
+			this.ClientSize = new System.Drawing.Size(434, 247);
 			this.Controls.Add(this.btnCreate);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.lblDeviceId);

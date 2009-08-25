@@ -50,7 +50,7 @@ li {
     <td colspan="2" bgcolor="#CCFFCC">
       <table width="100%" border="0" cellspacing="0" cellpadding="4">
         <tr>
-          <td><h2 class="titletext">ASCOM Template Driver (C#) Platform Developer Notes</h2></td>
+          <td><h2 class="titletext">ASCOM Template Drivers - Platform Developer Notes</h2></td>
         </tr>
       </table></td>
   </tr>
@@ -71,28 +71,39 @@ li {
       	<li>C# LocalServer out-of-process (singleton) Composite Driver Template</li>
       	</ul>
       	</li>
-      	<li>The in-process driver templates have one master template for each supported 
-            language (currently C Sharp and Visual Basic). The remplate code uses a number 
+      	<li>The in-process driveThe in-process driver templates have one master template for each supported 
+            language (currently C Sharp and Visual Basic). The template code uses a number 
             of placeholder identifiers, which must be replaced using replace-in-files, prior 
             to exporting the template package. THe placeholder identifiers are:<br />
             <table class="style1">
                 <tr>
                     <td>
-                        TEMPLATEDEVICECLASS</td>
-                    <td>
-                        &nbsp;</td>
+                        TEMPLATEDEVICECLASS       <td>
+                        Placeholder for the ASCOM Device Class (eg. &quot;Focuser&quot;, &quot;Dome&quot;).</td>
                 </tr>
                 <tr>
                     <td>
                         TEMPLATEDEVICENAME</td>
                     <td>
-                        &nbsp;</td>
+                        Placeholder for the ASCOM Device Name (eg. &quot;LX200&quot;).</td>
                 </tr>
                 <tr>
                     <td>
                         TEMPLATENAMESPACE</td>
                     <td>
-                        &nbsp;</td>
+                        Placeholder for the project namespace.</td>
+                </tr>
+                <tr>
+                    <td>
+                        28D679BA-2AF1-4557-AE15-C528C5BF91E0</td>
+                    <td>
+                        Placeholder Guid 1, used for the COM Interface ID, replaced with a new Guid.</td>
+                </tr>
+                <tr>
+                    <td>
+                        3A02C211-FA08-4747-B0BD-4B00EB159297</td>
+                    <td>
+                        Placeholder Guid 2, used as the assembly Guid, replaced with a new Guid.</td>
                 </tr>
                 <tr>
                     <td>
@@ -111,26 +122,19 @@ li {
                         &nbsp;</td>
                     <td>
                         &nbsp;</td>
-                </tr>
-                <tr>
-                    <td>
-                        &nbsp;</td>
-                    <td>
-                        &nbsp;</td>
-                </tr>
-                <tr>
-                    <td>
-                        &nbsp;</td>
-                    <td>
-                        &nbsp;</td>
+       &nbsp;</td>
                 </tr>
             </table>
+            <p>The template source code may be edited in Visual Studio, and it should build with 
+                no errors. However, it may fail to register for COM Interop, as some of the 
+                dependencies may be unavailable during Platform development. This is not 
+                necessarily a problem. Building the template source is useful to check that no 
+                syntax errors exist in the template code.</p>
           </li>
-          <li></li>
       	<li>A Wizard, implemented in ASCOM.Setup.TemplateWizard, collects user input about 
             the device being implemented and customizes the generated code during project 
             creation. THe wizard ensures that the correct interface is implemented. The 
-            wizard assembly must reside in the Global Assembly Cache on the end-user system.</li>
+            wizard assembly must reside in the Global Assembly Cache on the end-user system.></li>
       	</ol>
         <p>
             &nbsp;</p>
