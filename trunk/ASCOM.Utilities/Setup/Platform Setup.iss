@@ -18,6 +18,7 @@
 ; Deleted unwanted commented out items
 ; Added ASCOM WizardImage file
 ; Fixed PlatformHelp name incorrect in Help link
+; Added ASCOM.Interfaces 5.0.0.0 and ASCOM.Attributes for Gemini drivers
 
 [Setup]
 #define Public Major 0
@@ -110,13 +111,23 @@ Source: ..\..\ASCOM.IConform\ASCOM.IConform\bin\Debug\ASCOM.IConform.dll; DestDi
 Source: ..\..\ASCOM.IConform\ASCOM.IConform\bin\Debug\ASCOM.IConform.pdb; DestDir: {{cf32}\ASCOM\.net}; Flags: ignoreversion
 Source: ..\..\ASCOM.IConform\ASCOM.IConform\bin\Debug\ASCOM.IConform.xml; DestDir: {{cf32}\ASCOM\.net}; Flags: ignoreversion
 
+;ASCOM Attributes
+Source: ..\..\ASCOM.Attributes\bin\Debug\ASCOM.Attributes.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\ASCOM.Attributes\bin\Debug\ASCOM.Attributes.pdb; DestDir: {app}; Flags: ignoreversion
+;Debug symbols to the symbols directory
+Source: ..\..\ASCOM.Attributes\bin\Debug\ASCOM.Attributes.pdb; DestDir: {win}\Symbols\dll; Flags: ignoreversion
+;Install to 32bit directory as well on 64bit systems so that 32bit apps will find Utilities in the place they expect on a 64bit system
+Source: ..\..\ASCOM.Attributes\bin\Debug\ASCOM.Attributes.dll; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
+Source: ..\..\ASCOM.Attributes\bin\Debug\ASCOM.Attributes.pdb; DestDir: {{cf32}\ASCOM\.net}; Flags: ignoreversion
+
 ;VB6 Helpers
 Source: ..\VB6Helper\Helper.dll; DestDir: {cf32}\ASCOM; Flags: ignoreversion uninsneveruninstall 32bit
 Source: ..\VB6Helper2\Helper2.dll; DestDir: {cf32}\ASCOM; Flags: ignoreversion uninsneveruninstall 32bit
 
 ;Copy the policy files
-;Source: "..\Redirect Policy\bin\release\PublisherPolicy.xml"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "..\Redirect Policy\bin\release\policy.5.3.ASCOM.Utilities.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: PublisherPolicy.xml; DestDir: {app}; Flags: ignoreversion
+#emit "Source: ""policy." + str(Major) + "." + str(Minor) + ".ASCOM.Utilities.dll""; DestDir: ""{app}""; Flags: ignoreversion"
+#emit "Source: ""policy." + str(Major) + "." + str(Minor) + ".ASCOM.Astrometry.dll""; DestDir: ""{app}""; Flags: ignoreversion"
 
 ;Make sure we have backout copies of the original helpers
 Source: ..\OriginalHelpers\Helper.dll; DestDir: {cf32}\ASCOM\Utilities; Flags: ignoreversion
@@ -147,7 +158,9 @@ Source: ..\..\Interfaces\Kepler PIAs\ASCOM.Kepler.DLL; DestDir: {app}; Flags: ig
 Source: ..\..\Interfaces\NOVAS PIAs\NOVAS.tlb; DestDir: {app}; Flags: ignoreversion regtypelib 32bit
 Source: ..\..\Interfaces\Kepler PIAs\Kepler.tlb; DestDir: {app}; Flags: ignoreversion regtypelib 32bit
 
-;ASCOM Exceptions
+;ASCOM Interfaces and Exceptions
+Source: ..\..\Interfaces\Master Interfaces\ASCOM.Interfaces.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\Interfaces\Master Interfaces\AscomMasterInterfaces.tlb; DestDir: {app}; Flags: ignoreversion regtypelib
 Source: ..\..\Interfaces\ASCOMExceptions\bin\Debug\ASCOM.Exceptions.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\Interfaces\ASCOMExceptions\bin\Debug\ASCOM.Exceptions.XML; DestDir: {app}; Flags: ignoreversion
 ;...and for 32bit directories on a 64bit system
@@ -179,6 +192,7 @@ Name: {commonprograms}\ASCOM Platform\Tools\Profile Explorer; Filename: {pf}\ASC
 Filename: {app}\GACInstall.exe; Parameters: ASCOM.Utilities.dll; Flags: runhidden; StatusMsg: Installing Utilities to the assembly cache
 Filename: {app}\GACInstall.exe; Parameters: ASCOM.Astrometry.dll; Flags: runhidden; StatusMsg: Installing ASCOM.Astrometry to the assembly cache
 Filename: {app}\GACInstall.exe; Parameters: ASCOM.IConform.dll; Flags: runhidden; StatusMsg: Installing ASCOM.IConform to the assembly cache
+Filename: {app}\GACInstall.exe; Parameters: ASCOM.Attributes.dll; Flags: runhidden; StatusMsg: Installing ASCOM.Attributes to the assembly cache
 Filename: {dotnet20}\regasm.exe; Parameters: "/TLB ""{app}\ASCOM.Utilities.dll"""; Flags: runhidden; StatusMsg: Registering Utilities for COM
 Filename: {dotnet20}\regasm.exe; Parameters: "/TLB ""{app}\ASCOM.Astrometry.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.Astrometry for COM
 Filename: {dotnet20}\regasm.exe; Parameters: "/TLB ""{app}\ASCOM.IConform.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.IConform for COM
@@ -194,14 +208,20 @@ Filename: {app}\GACInstall.exe; Parameters: ASCOM.Kepler.dll; Flags: runhidden; 
 Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.NOVAS.dll"""; Flags: runhidden; StatusMsg: Registering NOVAS for COM
 Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.Kepler.dll"""; Flags: runhidden; StatusMsg: Registering Kepler for COM
 
-;ASCOM Exceptions
+;ASCOM Interfaces and Exceptions
+Filename: {app}\GACInstall.exe; Parameters: ASCOM.Interfaces.dll; Flags: runhidden; StatusMsg: Installing ASCOM.Interfaces to the assembly cache
 Filename: {app}\GACInstall.exe; Parameters: ASCOM.Exceptions.dll; Flags: runhidden; StatusMsg: Installing ASCOM.Exceptions to the assembly cache
+
+;Publisher policy
+#emit "Filename: {app}\GACInstall.exe; Parameters: policy." + str(Major) + "." + str(Minor) + ".ASCOM.Utilities.dll; Flags: runhidden; StatusMsg: Installing ASCOM Utilities policy to the assembly cache"
+#emit "Filename: {app}\GACInstall.exe; Parameters: policy." + str(Major) + "." + str(Minor) + ".ASCOM.Astrometry.dll; Flags: runhidden; StatusMsg: Installing ASCOM Astrometry policy to the assembly cache"
 
 [UninstallRun]
 ; uninstall Utilties, Astrometry and IConform from the GAC and unregister COM types for 32and 64bit COM
 Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Astrometry"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Astrometry from the assembly cache
 Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Utilities"""; Flags: runhidden; StatusMsg: Uninstalling Utilities from the assembly cache
 Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.IConform"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.IConform from the assembly cache
+Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Attributes"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Attributes from the assembly cache
 Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister /TLB ""{app}\ASCOM.Astrometry.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.Astrometry for COM
 Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister /TLB ""{app}\ASCOM.Utilities.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.Utilities for COM
 Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister /TLB ""{app}\ASCOM.IConform.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.IConform for COM
@@ -217,8 +237,13 @@ Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Kepler"""; Flags: runhid
 Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.NOVAS.dll"""; Flags: runhidden; StatusMsg: Unregistering NOVAS for COM
 Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.Kepler.dll"""; Flags: runhidden; StatusMsg: Unregistering Kepler for COM
 
-;ASCOM.Exceptions
+;ASCOM Interfaces and Exceptions
+Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Interfaces"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Interfaces from the assembly cache
 Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Exceptions"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Exceptions from the assembly cache
+
+;Publisher policy
+#emit "Filename: {app}\GACInstall.exe; Parameters: ""/U """"policy." + str(Major) + "." + str(Minor) + ".ASCOM.Utilities.dll""""""; Flags: runhidden; StatusMsg: Uninstalling ASCOM Utilities policy from the assembly cache"
+#emit "Filename: {app}\GACInstall.exe; Parameters: ""/U """"policy." + str(Major) + "." + str(Minor) + ".ASCOM.Astrometry.dll""""""; Flags: runhidden; StatusMsg: Uninstalling ASCOM Astrometry policy from the assembly cache"
 
 [UninstallDelete]
 Type: files; Name: {cf32}\ASCOM\Utilities\*.*
@@ -244,3 +269,5 @@ end;
 [Messages]
 WelcomeLabel1=%n%n[name]%n
 #emit "WelcomeLabel2=This will update your computer to version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
+[_ISToolPreCompile]
+Name: ASCOM Redirection Policies.exe; Parameters: ; Flags: runminimized abortonerror
