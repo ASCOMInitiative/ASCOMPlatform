@@ -24,10 +24,10 @@ Imports System.Runtime.InteropServices
 ' You can specify all the values or you can default the Build and Revision Numbers
 ' by using the '*' as shown below:
 
-<Assembly: AssemblyVersion("5.3.0.0")> 
+<Assembly: AssemblyVersion("5.3.1.0")> 
 
 
 
 <Assembly: ComVisibleAttribute(False)> 
 <Assembly: GuidAttribute("EC785106-0F00-4e7f-90BA-7CCC9E9740E1")> 
-<Assembly: AssemblyFileVersionAttribute("5.3.3.0")> 
+<Assembly: AssemblyFileVersionAttribute("5.3.4.0")> 
