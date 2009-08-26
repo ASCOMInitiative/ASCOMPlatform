@@ -21,7 +21,7 @@ Imports System.Runtime.InteropServices
 ComVisible(True), _
 ClassInterface(ClassInterfaceType.None)> _
 Public Class Chooser
-    Implements IChooser, IDisposable
+    Implements IChooser, IChooserExtra, IDisposable
 
     '---------------------------------------------------------------------
     ' Copyright © 2000-2002 SPACE.com Inc., New York, NY
@@ -147,7 +147,7 @@ Public Class Chooser
     ''' with an empty string parameter to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Overloads Function Choose() As String Implements IChooser.Choose
+    Public Overloads Function Choose() As String Implements IChooserExtra.Choose
         Return Me.Choose("")
     End Function
 

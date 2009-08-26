@@ -36,7 +36,7 @@ Namespace Transform
         Private CatEntry As CatEntry
         Private Site As SiteInfo
 
-        Private TL As ITraceLogger
+        Private TL As TraceLogger
         Private Sw As Stopwatch
 
         Private Const J2000 As Double = 2451545.0

@@ -17,7 +17,7 @@ Imports System.Runtime.InteropServices
 Guid("880840E2-76E6-4036-AD8F-60A326D7F9DA"), _
 ComVisible(True)> _
 Public Class Profile
-    Implements IProfile, IDisposable
+    Implements IProfile, IProfileExtra, IDisposable
     '---------------------------------------------------------------------
     ' Copyright © 2000-2002 SPACE.com Inc., New York, NY
     '
@@ -105,7 +105,7 @@ Public Class Profile
 
 #End Region
 
-#Region "Profile Implementation"
+#Region "IProfile Implementation"
     ''' <summary>
     ''' The type of ASCOM device for which profile data and registration services are provided 
     ''' (String, default = "Telescope")
@@ -205,31 +205,7 @@ Public Class Profile
     Public Function IsRegistered(ByVal DriverID As String) As Boolean Implements IProfile.IsRegistered
         Return Me.IsRegisteredPrv(DriverID, False)
     End Function
-    Private Function IsRegisteredPrv(ByVal DriverID As String, ByVal Indent As Boolean) As Boolean
-        'Confirm that the specified driver is registered
-        Dim keys As Generic.SortedList(Of String, String)
-        Dim IndStr As String = ""
-        If Indent Then IndStr = "  "
-        IsRegisteredPrv = False ' Assume failure
-        TL.LogStart(IndStr & "IsRegistered", IndStr & DriverID.ToString & " ")
-        If DriverID = "" Then
-            TL.LogFinish("Null string so exiting False")
-            Exit Function ' Nothing is a failure
-        End If
 
-        Try
-            keys = ProfileStore.EnumKeys(MakeKey("", ""))
-            If keys.ContainsKey(DriverID) Then
-                TL.LogFinish("Key " & DriverID & " found")
-                IsRegisteredPrv = True ' Found it
-            Else
-                TL.LogFinish("Key " & DriverID & " not found")
-            End If
-        Catch ex As Exception
-            TL.LogFinish("Exception: " & ex.ToString)
-        End Try
-        Return IsRegisteredPrv
-    End Function
 
     ''' <summary>
     ''' Registers a supplied DriverID and associates a descriptive name with the device
@@ -269,26 +245,6 @@ Public Class Profile
     End Sub
 
     ''' <summary>
-    ''' Retrieve a string value from the profile for the given Driver ID and variable name
-    ''' </summary>
-    ''' <param name="DriverID">ProgID of the device to read from</param>
-    ''' <param name="Name">Name of the variable whose value is retrieved</param>
-    ''' <returns>Retrieved variable value</returns>
-    ''' <exception cref="Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
-    ''' <exception cref="Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
-    ''' <remarks>
-    ''' <para>Name may be an empty string for the unnamed value. The unnamed value is also known as the "default" value for a registry key.</para>
-    ''' <para>Does not provide access to other registry data types such as binary and doubleword. </para>
-    ''' <para>This overload is not available through COM, please use 
-    ''' "GetValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
-    ''' with SubKey set to empty string achieve this effect.</para>
-    ''' </remarks>
-    <ComVisible(False)> _
-    Public Overloads Function GetValue(ByVal DriverID As String, ByVal Name As String) As String Implements IProfile.GetValue
-        Return Me.GetValue(DriverID, Name, "")
-    End Function
-
-    ''' <summary>
     ''' Retrieve a string value from the profile using the supplied subkey for the given Driver ID and variable name.
     ''' </summary>
     ''' <param name="DriverID">ProgID of the device to read from</param>
@@ -312,24 +268,6 @@ Public Class Profile
 
         Return Rtn
     End Function
-
-    ''' <summary>
-    ''' Writes a string value to the profile using the given Driver ID and variable name.
-    ''' </summary>
-    ''' <param name="DriverID">ProgID of the device to read from</param>
-    ''' <param name="Name">Name of the variable whose value is retrieved</param>
-    ''' <param name="Value">The string value to be written</param>
-    ''' <exception cref="Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
-    ''' <exception cref="Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
-    ''' <remarks>
-    ''' This overload is not available through COM, please use 
-    ''' "WriteValue(ByVal DriverID As String, ByVal Name As String, ByVal Value As String, ByVal SubKey As String)"
-    ''' with SubKey set to empty string achieve this effect.
-    ''' </remarks>
-    <ComVisible(False)> _
-    Public Overloads Sub WriteValue(ByVal DriverID As String, ByVal Name As String, ByVal Value As String) Implements IProfile.WriteValue
-        Me.WriteValue(DriverID, Name, Value, "")
-    End Sub
 
     ''' <summary>
     ''' Writes a string value to the profile using the supplied subkey for the given Driver ID and variable name.
@@ -382,23 +320,6 @@ Public Class Profile
         Next
         Return RetVal
     End Function
-
-    ''' <summary>
-    ''' Delete the value from the registry. Name may be an empty string for the unnamed value. 
-    ''' </summary>
-    ''' <param name="DriverID">ProgID of the device to read from</param>
-    ''' <param name="Name">Name of the variable whose value is retrieved</param>
-    ''' <exception cref="Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
-    ''' <exception cref="Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
-    ''' <remarks>Specify "" to delete the unnamed value which is also known as the "default" value for a registry key.
-    ''' <para>This overload is not available through COM, please use 
-    ''' "DeleteValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
-    ''' with SubKey set to empty string achieve this effect.</para>
-    ''' </remarks>
-    <ComVisible(False)> _
-    Public Overloads Sub DeleteValue(ByVal DriverID As String, ByVal Name As String) Implements IProfile.DeleteValue
-        Me.DeleteValue(DriverID, Name, "")
-    End Sub
 
     ''' <summary>
     ''' Delete the value from the registry. Name may be an empty string for the unnamed value. Value will be deleted from the subkey supplied.
@@ -471,7 +392,91 @@ Public Class Profile
     End Sub
 #End Region
 
+#Region "IProfileExtra Implementation"
+    ''' <summary>
+    ''' Retrieve a string value from the profile for the given Driver ID and variable name
+    ''' </summary>
+    ''' <param name="DriverID">ProgID of the device to read from</param>
+    ''' <param name="Name">Name of the variable whose value is retrieved</param>
+    ''' <returns>Retrieved variable value</returns>
+    ''' <exception cref="Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
+    ''' <exception cref="Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
+    ''' <remarks>
+    ''' <para>Name may be an empty string for the unnamed value. The unnamed value is also known as the "default" value for a registry key.</para>
+    ''' <para>Does not provide access to other registry data types such as binary and doubleword. </para>
+    ''' <para>This overload is not available through COM, please use 
+    ''' "GetValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
+    ''' with SubKey set to empty string achieve this effect.</para>
+    ''' </remarks>
+    <ComVisible(False)> _
+    Public Overloads Function GetValue(ByVal DriverID As String, ByVal Name As String) As String Implements IProfileExtra.GetValue
+        Return Me.GetValue(DriverID, Name, "")
+    End Function
+
+    ''' <summary>
+    ''' Writes a string value to the profile using the given Driver ID and variable name.
+    ''' </summary>
+    ''' <param name="DriverID">ProgID of the device to read from</param>
+    ''' <param name="Name">Name of the variable whose value is retrieved</param>
+    ''' <param name="Value">The string value to be written</param>
+    ''' <exception cref="Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
+    ''' <exception cref="Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
+    ''' <remarks>
+    ''' This overload is not available through COM, please use 
+    ''' "WriteValue(ByVal DriverID As String, ByVal Name As String, ByVal Value As String, ByVal SubKey As String)"
+    ''' with SubKey set to empty string achieve this effect.
+    ''' </remarks>
+    <ComVisible(False)> _
+    Public Overloads Sub WriteValue(ByVal DriverID As String, ByVal Name As String, ByVal Value As String) Implements IProfileExtra.WriteValue
+        Me.WriteValue(DriverID, Name, Value, "")
+    End Sub
+
+    ''' <summary>
+    ''' Delete the value from the registry. Name may be an empty string for the unnamed value. 
+    ''' </summary>
+    ''' <param name="DriverID">ProgID of the device to read from</param>
+    ''' <param name="Name">Name of the variable whose value is retrieved</param>
+    ''' <exception cref="Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
+    ''' <exception cref="Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
+    ''' <remarks>Specify "" to delete the unnamed value which is also known as the "default" value for a registry key.
+    ''' <para>This overload is not available through COM, please use 
+    ''' "DeleteValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
+    ''' with SubKey set to empty string achieve this effect.</para>
+    ''' </remarks>
+    <ComVisible(False)> _
+    Public Overloads Sub DeleteValue(ByVal DriverID As String, ByVal Name As String) Implements IProfileExtra.DeleteValue
+        Me.DeleteValue(DriverID, Name, "")
+    End Sub
+#End Region
+
 #Region "Support code"
+    Private Function IsRegisteredPrv(ByVal DriverID As String, ByVal Indent As Boolean) As Boolean
+        'Confirm that the specified driver is registered
+        Dim keys As Generic.SortedList(Of String, String)
+        Dim IndStr As String = ""
+        If Indent Then IndStr = "  "
+        IsRegisteredPrv = False ' Assume failure
+        TL.LogStart(IndStr & "IsRegistered", IndStr & DriverID.ToString & " ")
+        If DriverID = "" Then
+            TL.LogFinish("Null string so exiting False")
+            Exit Function ' Nothing is a failure
+        End If
+
+        Try
+            keys = ProfileStore.EnumKeys(MakeKey("", ""))
+            If keys.ContainsKey(DriverID) Then
+                TL.LogFinish("Key " & DriverID & " found")
+                IsRegisteredPrv = True ' Found it
+            Else
+                TL.LogFinish("Key " & DriverID & " not found")
+            End If
+        Catch ex As Exception
+            TL.LogFinish("Exception: " & ex.ToString)
+        End Try
+        Return IsRegisteredPrv
+    End Function
+
+
     Private Function MakeKey(ByVal BaseKey As String, ByVal SubKey As String) As String
         'Create a full path to a subkey given the driver name and type 
         MakeKey = m_sDeviceType & " Drivers"

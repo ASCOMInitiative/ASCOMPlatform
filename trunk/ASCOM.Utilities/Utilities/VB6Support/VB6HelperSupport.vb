@@ -16,41 +16,41 @@ Namespace VB6HelperSupport 'Tuck this out of the way of the main ASCOM.Utilities
     System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never), _
     ComVisible(True)> _
     Public Interface IProfileAccess
-        Function GetProfile(ByVal p_SubKeyName As String, ByVal p_ValueName As String, ByVal CName As String) As String
-        Sub WriteProfile(ByVal p_SubKeyName As String, ByVal p_ValueName As String, ByVal p_ValueData As String, ByRef CName As String)
-        Function EnumProfile(ByVal p_SubKeyName As String, ByVal CName As String) As ArrayList 'Scripting.Dictionary 'Hashtable
-        Sub DeleteProfile(ByVal p_SubKeyName As String, ByVal p_ValueName As String, ByVal CName As String)
-        Sub CreateKey(ByVal p_SubKeyName As String, ByVal CName As String)
-        Function EnumKeys(ByVal p_SubKeyName As String, ByVal CName As String) As ArrayList 'Scripting.Dictionary 'Hashtable
-        Sub DeleteKey(ByVal p_SubKeyName As String, ByVal CName As String)
+        <DispId(1)> Function GetProfile(ByVal p_SubKeyName As String, ByVal p_ValueName As String, ByVal CName As String) As String
+        <DispId(2)> Sub WriteProfile(ByVal p_SubKeyName As String, ByVal p_ValueName As String, ByVal p_ValueData As String, ByRef CName As String)
+        <DispId(3)> Function EnumProfile(ByVal p_SubKeyName As String, ByVal CName As String) As ArrayList 'Scripting.Dictionary 'Hashtable
+        <DispId(4)> Sub DeleteProfile(ByVal p_SubKeyName As String, ByVal p_ValueName As String, ByVal CName As String)
+        <DispId(5)> Sub CreateKey(ByVal p_SubKeyName As String, ByVal CName As String)
+        <DispId(6)> Function EnumKeys(ByVal p_SubKeyName As String, ByVal CName As String) As ArrayList 'Scripting.Dictionary 'Hashtable
+        <DispId(7)> Sub DeleteKey(ByVal p_SubKeyName As String, ByVal CName As String)
     End Interface
 
     <Guid("ABE720E6-9C2C-47e9-8476-6CE5A3F994E2"), _
     System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never), _
     ComVisible(True)> _
     Public Interface ISerialSupport
-        Sub ClearBuffers()
-        Property Connected() As Boolean
-        Property Port() As Short
-        Property PortSpeed() As Integer
-        Function Receive() As String
-        Function ReceiveByte() As Byte
-        Function ReceiveCounted(ByVal p_Count As Short) As String
-        Function ReceiveCountedBinary(ByVal p_Count As Short) As Byte()
-        Function ReceiveTerminated(ByVal p_Terminator As String) As String
-        Function ReceiveTerminatedBinary(ByRef p_Terminator() As Byte) As Byte()
-        Property ReceiveTimeout() As Short
-        Property ReceiveTimeoutMs() As Integer
-        Sub Transmit(ByVal p_Data As String)
-        Sub TransmitBinary(ByVal p_Data() As Byte)
+        <DispId(1)> Sub ClearBuffers()
+        <DispId(2)> Property Connected() As Boolean
+        <DispId(3)> Property Port() As Short
+        <DispId(4)> Property PortSpeed() As Integer
+        <DispId(5)> Function Receive() As String
+        <DispId(6)> Function ReceiveByte() As Byte
+        <DispId(7)> Function ReceiveCounted(ByVal p_Count As Short) As String
+        <DispId(8)> Function ReceiveCountedBinary(ByVal p_Count As Short) As Byte()
+        <DispId(9)> Function ReceiveTerminated(ByVal p_Terminator As String) As String
+        <DispId(10)> Function ReceiveTerminatedBinary(ByRef p_Terminator() As Byte) As Byte()
+        <DispId(11)> Property ReceiveTimeout() As Short
+        <DispId(12)> Property ReceiveTimeoutMs() As Integer
+        <DispId(13)> Sub Transmit(ByVal p_Data As String)
+        <DispId(14)> Sub TransmitBinary(ByVal p_Data() As Byte)
     End Interface
 
     <Guid("5E3A9439-A1A4-4d8d-8658-53E2470C69F6"), _
     System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never), _
     ComVisible(True)> _
     Public Interface IChooserSupport
-        Property DeviceType() As String
-        Function [Choose](Optional ByVal CurrentDriverID As String = "") As String
+        <DispId(1)> Property DeviceType() As String
+        <DispId(2)> Function [Choose](Optional ByVal CurrentDriverID As String = "") As String
     End Interface
 #End Region
 
