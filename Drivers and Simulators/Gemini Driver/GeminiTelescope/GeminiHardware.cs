@@ -210,6 +210,9 @@ namespace ASCOM.GeminiTelescope
         private static int m_DataBits;
         private static ASCOM.Utilities.SerialStopBits m_StopBits;
 
+        private static string m_GpsComPort;
+        private static int m_GpsBaudRate;
+
         private static string m_PassThroughComPort;
 
         public static string PassThroughComPort
@@ -353,9 +356,12 @@ namespace ASCOM.GeminiTelescope
             {
                 //Main Driver Settings
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "RegVer", SharedResources.REGISTRATION_VERSION);
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ComPort", "COM1");
 
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ComPort", "COM1");
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "BaudRate", "9600");
+
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsComPort", "COM1");
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsBaudRate", "9600");
 
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AdditionalAlign", false.ToString());
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Precession", false.ToString());
@@ -392,9 +398,9 @@ namespace ASCOM.GeminiTelescope
                 m_BaudRate = 9600;
 
 
-            if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "BaudRate", ""), out m_BaudRate))
-                m_BaudRate = 9600;
-
+            m_GpsComPort = m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsComPort", "");
+            if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsBaudRate", ""), out m_GpsBaudRate))
+                m_GpsBaudRate = 9600;
 
             if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "DataBits", ""), out m_DataBits))
                 m_DataBits = 8;
@@ -619,7 +625,32 @@ namespace ASCOM.GeminiTelescope
                 m_BaudRate = value;
             }
         }
-
+        /// <summary>
+        /// Get/Set serial comm port 
+        /// </summary>
+        public static string GpsComPort
+        {
+            get { return m_GpsComPort; }
+            set
+            {
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsComPort", value.ToString());
+                m_GpsComPort = value;
+            }
+        }
+        /// <summary>
+        /// Get/Set baud rate
+        /// </summary>
+        public static int GpsBaudRate
+        {
+            get { return m_GpsBaudRate; }
+            set
+            {
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsBaudRate", value.ToString());
+                m_GpsBaudRate = value;
+            }
+        }
         /// <summary>
         /// Get/Set parity
         /// </summary>
