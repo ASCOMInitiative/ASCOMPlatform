@@ -816,22 +816,6 @@ ASCOM.Utilities
 		<para>Unregister must only be called if the driver has already been registered. If you are not sure 
  use the IsRegistered function to check the status and only unregister if the driver is registered.</para>
 	</remarks>
-</member><member name="M:ASCOM.Utilities.Profile.GetValue(System.String,System.String)">
-	<summary>
- Retrieve a string value from the profile for the given Driver ID and variable name
- </summary>
-	<param name="DriverID">ProgID of the device to read from</param>
-	<param name="Name">Name of the variable whose value is retrieved</param>
-	<returns>Retrieved variable value</returns>
-	<exception cref="T:ASCOM.Utilities.Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
-	<exception cref="T:ASCOM.Utilities.Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
-	<remarks>
-		<para>Name may be an empty string for the unnamed value. The unnamed value is also known as the "default" value for a registry key.</para>
-		<para>Does not provide access to other registry data types such as binary and doubleword. </para>
-		<para>This overload is not available through COM, please use 
- "GetValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
- with SubKey set to empty string achieve this effect.</para>
-	</remarks>
 </member><member name="M:ASCOM.Utilities.Profile.GetValue(System.String,System.String,System.String)">
 	<summary>
  Retrieve a string value from the profile using the supplied subkey for the given Driver ID and variable name.
@@ -846,20 +830,6 @@ ASCOM.Utilities
 		<para>Name may be an empty string for the unnamed value. The unnamed value is also known as the "default" value for a registry key.</para>
 		<para>Does not provide access to other registry data types such as binary and doubleword. </para>
 	</remarks>
-</member><member name="M:ASCOM.Utilities.Profile.WriteValue(System.String,System.String,System.String)">
-	<summary>
- Writes a string value to the profile using the given Driver ID and variable name.
- </summary>
-	<param name="DriverID">ProgID of the device to read from</param>
-	<param name="Name">Name of the variable whose value is retrieved</param>
-	<param name="Value">The string value to be written</param>
-	<exception cref="T:ASCOM.Utilities.Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
-	<exception cref="T:ASCOM.Utilities.Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
-	<remarks>
- This overload is not available through COM, please use 
- "WriteValue(ByVal DriverID As String, ByVal Name As String, ByVal Value As String, ByVal SubKey As String)"
- with SubKey set to empty string achieve this effect.
- </remarks>
 </member><member name="M:ASCOM.Utilities.Profile.WriteValue(System.String,System.String,System.String,System.String)">
 	<summary>
  Writes a string value to the profile using the supplied subkey for the given Driver ID and variable name.
@@ -885,19 +855,6 @@ ASCOM.Utilities
  value will be included if it has a value, even if the value is a blank string. The unnamed value will have its entry's 
  Key property set to an empty string.
  <para>The KeyValuePair objects are instances of the <see cref="T:ASCOM.Utilities.KeyValuePair">KeyValuePair class</see></para>
-	</remarks>
-</member><member name="M:ASCOM.Utilities.Profile.DeleteValue(System.String,System.String)">
-	<summary>
- Delete the value from the registry. Name may be an empty string for the unnamed value. 
- </summary>
-	<param name="DriverID">ProgID of the device to read from</param>
-	<param name="Name">Name of the variable whose value is retrieved</param>
-	<exception cref="T:ASCOM.Utilities.Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
-	<exception cref="T:ASCOM.Utilities.Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
-	<remarks>Specify "" to delete the unnamed value which is also known as the "default" value for a registry key.
- <para>This overload is not available through COM, please use 
- "DeleteValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
- with SubKey set to empty string achieve this effect.</para>
 	</remarks>
 </member><member name="M:ASCOM.Utilities.Profile.DeleteValue(System.String,System.String,System.String)">
 	<summary>
@@ -938,6 +895,49 @@ ASCOM.Utilities
 	<exception cref="T:ASCOM.Utilities.Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
 	<exception cref="T:ASCOM.Utilities.Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
 	<remarks>The sub-key and all data and keys beneath it are deleted.</remarks>
+</member><member name="M:ASCOM.Utilities.Profile.GetValue(System.String,System.String)">
+	<summary>
+ Retrieve a string value from the profile for the given Driver ID and variable name
+ </summary>
+	<param name="DriverID">ProgID of the device to read from</param>
+	<param name="Name">Name of the variable whose value is retrieved</param>
+	<returns>Retrieved variable value</returns>
+	<exception cref="T:ASCOM.Utilities.Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
+	<exception cref="T:ASCOM.Utilities.Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
+	<remarks>
+		<para>Name may be an empty string for the unnamed value. The unnamed value is also known as the "default" value for a registry key.</para>
+		<para>Does not provide access to other registry data types such as binary and doubleword. </para>
+		<para>This overload is not available through COM, please use 
+ "GetValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
+ with SubKey set to empty string achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Profile.WriteValue(System.String,System.String,System.String)">
+	<summary>
+ Writes a string value to the profile using the given Driver ID and variable name.
+ </summary>
+	<param name="DriverID">ProgID of the device to read from</param>
+	<param name="Name">Name of the variable whose value is retrieved</param>
+	<param name="Value">The string value to be written</param>
+	<exception cref="T:ASCOM.Utilities.Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
+	<exception cref="T:ASCOM.Utilities.Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
+	<remarks>
+ This overload is not available through COM, please use 
+ "WriteValue(ByVal DriverID As String, ByVal Name As String, ByVal Value As String, ByVal SubKey As String)"
+ with SubKey set to empty string achieve this effect.
+ </remarks>
+</member><member name="M:ASCOM.Utilities.Profile.DeleteValue(System.String,System.String)">
+	<summary>
+ Delete the value from the registry. Name may be an empty string for the unnamed value. 
+ </summary>
+	<param name="DriverID">ProgID of the device to read from</param>
+	<param name="Name">Name of the variable whose value is retrieved</param>
+	<exception cref="T:ASCOM.Utilities.Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
+	<exception cref="T:ASCOM.Utilities.Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
+	<remarks>Specify "" to delete the unnamed value which is also known as the "default" value for a registry key.
+ <para>This overload is not available through COM, please use 
+ "DeleteValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
+ with SubKey set to empty string achieve this effect.</para>
+	</remarks>
 </member><member name="T:ASCOM.Utilities.Profile">
 	<summary>
  ASCOM Scope Driver Helper Registry Profile Object
@@ -1019,19 +1019,6 @@ ASCOM.Utilities
 		<para>Will create a LOGISSUE message in the log if called before a line started by LogStart has been closed with LogFinish. 
  Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
 	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.ITraceLogger.LogContinue(System.String)">
-	<summary>
- Appends further message to a line started by LogStart, does not terminate the line.
- </summary>
-	<param name="Message">The additional message to appear in the line</param>
-	<remarks>
-		<para>This can be called multiple times to build up a complex log line if required.</para>
-		<para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart. 
- Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
-		<para>This overload is not available through COM, please use 
- "LogContinue(ByVal Message As String, ByVal HexDump As Boolean)"
- with HexDump set False to achieve this effect.</para>
-	</remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.ITraceLogger.LogContinue(System.String,System.Boolean)">
 	<summary>
  Appends further message to a line started by LogStart, appends a hex translation of the message to the line, does not terminate the line.
@@ -1043,19 +1030,6 @@ ASCOM.Utilities
 		<para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart. 
  Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
 	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.ITraceLogger.LogFinish(System.String)">
-	<summary>
- Closes a line started by LogStart with the supplied message
- </summary>
-	<param name="Message">The final message to terminate the line</param>
-	<remarks>
-		<para>Can only be called once for each line started by LogStart.</para>
-		<para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart.  
- Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
-		<para>This overload is not available through COM, please use 
- "LogFinish(ByVal Message As String, ByVal HexDump As Boolean)"
- with HexDump set False to achieve this effect.</para>
-	</remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.ITraceLogger.LogFinish(System.String,System.Boolean)">
 	<summary>
  Closes a line started by LogStart with option to append a translation of the supplied message into HEX
@@ -1063,20 +1037,6 @@ ASCOM.Utilities
 	<param name="Message">The final message to appear in the line</param>
 	<param name="HexDump">True to append a hex translation of the message at the end of the message</param>
 	<remarks></remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.ITraceLogger.LogMessage(System.String,System.String)">
-	<summary>
- Logs a complete message in one call
- </summary>
-	<param name="Identifier">Identifies the meaning of the the message e.g. name of modeule or method logging the message.</param>
-	<param name="Message">Message to log</param>
-	<remarks>
-		<para>Use this for straightforward logging requrements. Writes all information in one command.</para>
-		<para>Will create a LOGISSUE message in the log if called before a line started by LogStart has been closed with LogFinish. 
- Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
-		<para>This overload is not available through COM, please use 
- "LogMessage(ByVal Identifier As String, ByVal Message As String, ByVal HexDump As Boolean)"
- with HexDump set False to achieve this effect.</para>
-	</remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.ITraceLogger.LogMessage(System.String,System.String,System.Boolean)">
 	<summary>
  Closes a line started by LogStart with the supplied message and a hex translation of the message
@@ -1130,6 +1090,46 @@ ASCOM.Utilities
  Interface to the TraceLogger component
  </summary>
 	<remarks></remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.ITraceLoggerExtra.LogContinue(System.String)">
+	<summary>
+ Appends further message to a line started by LogStart, does not terminate the line.
+ </summary>
+	<param name="Message">The additional message to appear in the line</param>
+	<remarks>
+		<para>This can be called multiple times to build up a complex log line if required.</para>
+		<para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart. 
+ Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+		<para>This overload is not available through COM, please use 
+ "LogContinue(ByVal Message As String, ByVal HexDump As Boolean)"
+ with HexDump set False to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.ITraceLoggerExtra.LogFinish(System.String)">
+	<summary>
+ Closes a line started by LogStart with the supplied message
+ </summary>
+	<param name="Message">The final message to terminate the line</param>
+	<remarks>
+		<para>Can only be called once for each line started by LogStart.</para>
+		<para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart.  
+ Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+		<para>This overload is not available through COM, please use 
+ "LogFinish(ByVal Message As String, ByVal HexDump As Boolean)"
+ with HexDump set False to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.ITraceLoggerExtra.LogMessage(System.String,System.String)">
+	<summary>
+ Logs a complete message in one call
+ </summary>
+	<param name="Identifier">Identifies the meaning of the the message e.g. name of modeule or method logging the message.</param>
+	<param name="Message">Message to log</param>
+	<remarks>
+		<para>Use this for straightforward logging requrements. Writes all information in one command.</para>
+		<para>Will create a LOGISSUE message in the log if called before a line started by LogStart has been closed with LogFinish. 
+ Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+		<para>This overload is not available through COM, please use 
+ "LogMessage(ByVal Identifier As String, ByVal Message As String, ByVal HexDump As Boolean)"
+ with HexDump set False to achieve this effect.</para>
+	</remarks>
 </member><member name="P:ASCOM.Utilities.Interfaces.IChooser.DeviceType">
 	<summary>
  The type of device for which the Chooser will select a driver. (String, default = "Telescope")
@@ -1141,15 +1141,6 @@ ASCOM.Utilities
  ASCOM device type. The default value for this is "Telescope", but it could be "Focuser", "Camera", etc. 
  <para>This property is independent of the Profile object's DeviceType property. Setting Chooser's DeviceType 
  property doesn't set the DeviceType property in Profile, you must set that also when needed.</para>
-	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IChooser.Choose">
-	<summary>
- Select ASCOM driver to use without pre-selecting in the dropdown list
- </summary>
-	<returns>Driver ID of chosen driver</returns>
-	<remarks>No driver will be pre-selected in the Chooser's list when the chooser window is first opened. 
- <para>This overload is not available through COM, please use "Choose(ByVal DriverProgID As String)"
- with an empty string parameter to achieve this effect.</para>
 	</remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.IChooser.Choose(System.String)">
 	<summary>
@@ -1164,6 +1155,15 @@ ASCOM.Utilities
  Interface to the .NET Chooser component
  </summary>
 	<remarks></remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IChooserExtra.Choose">
+	<summary>
+ Select ASCOM driver to use without pre-selecting in the dropdown list
+ </summary>
+	<returns>Driver ID of chosen driver</returns>
+	<remarks>No driver will be pre-selected in the Chooser's list when the chooser window is first opened. 
+ <para>This overload is not available through COM, please use "Choose(ByVal DriverProgID As String)"
+ with an empty string parameter to achieve this effect.</para>
+	</remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.IUtil.WaitForMilliseconds(System.Int32)">
 	<summary>
  Pauses for a given interval in milliseconds.
@@ -1233,63 +1233,6 @@ ASCOM.Utilities
  fractional parts, but it would be legal. So 00:30.5:30 would convert to 1.0 unit. Note that plain units, 
  for example 23.128734523 are acceptable to the method. </para>
 	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDMS(System.Double)">
-	<summary>
- Convert degrees to sexagesimal degrees, minutes and seconds with default delimiters DD° MM' SS" 
- </summary>
-	<param name="Degrees">The degrees value to convert</param>
-	<returns>Sexagesimal representation of degrees input value, degrees, minutes, and seconds</returns>
-	<remarks>
-		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single 
- characters.</para>
-		<para>This overload is not available through COM, please use "Choose(ByVal DriverProgID As String)"
- with an empty string parameter to achieve this effect.</para>
-	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDMS(System.Double,System.String)">
-	<summary>
-  Convert degrees to sexagesimal degrees, minutes and seconds with with default minute and second delimiters MM' SS" 
- </summary>
-	<param name="Degrees">The degrees value to convert</param>
-	<param name="DegDelim">The delimiter string separating degrees and minutes </param>
-	<returns>Sexagesimal representation of degrees input value, degrees, minutes, and seconds</returns>
-	<remarks>
-		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single 
- characters.</para>
-		<para>This overload is not available through COM, please use 
- "DegreesToDMS(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal SecDelim As String)"
- with suitable parameters to achieve this effect.</para>
-	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDMS(System.Double,System.String,System.String)">
-	<summary>
-  Convert degrees to sexagesimal degrees, minutes and seconds with default second delimiter SS" 
- </summary>
-	<param name="Degrees">The degrees value to convert</param>
-	<param name="DegDelim">The delimiter string separating degrees and minutes </param>
-	<param name="MinDelim">The delimiter string to append to the minutes part </param>
-	<returns>Sexagesimal representation of degrees input value, degrees, minutes, and seconds</returns>
-	<remarks>
-		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single 
- characters.</para>
-		<para>This overload is not available through COM, please use 
- "DegreesToDMS(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal SecDelim As String)"
- with suitable parameters to achieve this effect.</para>
-	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDMS(System.Double,System.String,System.String,System.String)">
-	<summary>
-  Convert degrees to sexagesimal degrees, minutes and seconds
- </summary>
-	<param name="Degrees">The degrees value to convert</param>
-	<param name="DegDelim">The delimiter string separating degrees and minutes </param>
-	<param name="MinDelim">The delimiter string to append to the minutes part </param>
-	<param name="SecDelim">The delimiter string to append to the seconds part</param>
-	<returns>Sexagesimal representation of degrees input value, degrees, minutes, and seconds</returns>
-	<remarks>
-		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single 
- characters.</para>
-		<para>This overload is not available through COM, please use 
- "DegreesToDMS(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal SecDelim As String)"
- with suitable parameters to achieve this effect.</para>
-	</remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDMS(System.Double,System.String,System.String,System.String,System.Int32)">
 	<summary>
   Convert degrees to sexagesimal degrees, minutes and seconds with specified second decimal places
@@ -1305,60 +1248,6 @@ ASCOM.Utilities
  "DegreesToDMS(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal SecDelim As String)"
  with suitable parameters to achieve this effect.</para>
 	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IUtil.HoursToHMS(System.Double)">
-	<summary>
- Convert hours to sexagesimal hours, minutes, and seconds with default delimiters HH:MM:SS
- </summary>
-	<param name="Hours">The hours value to convert</param>
-	<returns>Sexagesimal representation of hours input value, hours, minutes and seconds</returns>
-	<remarks>
-		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
-		<para>This overload is not available through COM, please use 
- "HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
- with suitable parameters to achieve this effect.</para>
-	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IUtil.HoursToHMS(System.Double,System.String)">
-	<summary>
- Convert hours to sexagesimal hours, minutes, and seconds with default minutes and seconds delimters MM:SS
- </summary>
-	<param name="Hours">The hours value to convert</param>
-	<param name="HrsDelim">The delimiter string separating hours and minutes </param>
-	<returns>Sexagesimal representation of hours input value, hours, minutes and seconds</returns>
-	<remarks>
-		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
-		<para>This overload is not available through COM, please use 
- "HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
- with suitable parameters to achieve this effect.</para>
-	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IUtil.HoursToHMS(System.Double,System.String,System.String)">
-	<summary>
- Convert hours to sexagesimal hours, minutes, and seconds with default second delimiter of null string
- </summary>
-	<param name="Hours">The hours value to convert</param>
-	<param name="HrsDelim">The delimiter string separating hours and minutes </param>
-	<param name="MinDelim">The delimiter string separating minutes and seconds </param>
-	<returns>Sexagesimal representation of hours input value, hours, minutes and seconds</returns>
-	<remarks>
-		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
-		<para>This overload is not available through COM, please use 
- "HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
- with suitable parameters to achieve this effect.</para>
-	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IUtil.HoursToHMS(System.Double,System.String,System.String,System.String)">
-	<summary>
- Convert hours to sexagesimal hours, minutes, and seconds
- </summary>
-	<param name="Hours">The hours value to convert</param>
-	<param name="HrsDelim">The delimiter string separating hours and minutes </param>
-	<param name="MinDelim">The delimiter string separating minutes and seconds </param>
-	<param name="SecDelim">The delimiter string to append to the seconds part </param>
-	<returns>Sexagesimal representation of hours input value, hours, minutes and seconds</returns>
-	<remarks>
-		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
-		<para>This overload is not available through COM, please use 
- "HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
- with suitable parameters to achieve this effect.</para>
-	</remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.IUtil.HoursToHMS(System.Double,System.String,System.String,System.String,System.Int32)">
 	<summary>
  Convert hours to sexagesimal hours, minutes, and seconds with specified number of second decimal places
@@ -1372,45 +1261,6 @@ ASCOM.Utilities
 	<remarks>
 		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
 	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDM(System.Double)">
-	<summary>
- Convert degrees to sexagesimal degrees and minutes with default delimiters DD° MM'
- </summary>
-	<param name="Degrees">The degrees value to convert</param>
-	<returns>Sexagesimal representation of degrees input value, as degrees and minutes</returns>
-	<remarks>
-		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
-		<para>This overload is not available through COM, please use 
- "DegreesToDM(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
- with suitable parameters to achieve this effect.</para>
-	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDM(System.Double,System.String)">
-	<summary>
- Convert degrees to sexagesimal degrees and minutes with the default minutes delimeter MM'
- </summary>
-	<param name="Degrees">The degrees value to convert</param>
-	<param name="DegDelim">The delimiter string separating degrees </param>
-	<returns>Sexagesimal representation of degrees input value, as degrees and minutes</returns>
-	<remarks>
-		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
-		<para>This overload is not available through COM, please use 
- "DegreesToDM(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
- with suitable parameters to achieve this effect.</para>
-	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDM(System.Double,System.String,System.String)">
-	<summary>
- Convert degrees to sexagesimal degrees and minutes
- </summary>
-	<param name="Degrees">The degrees value to convert</param>
-	<param name="DegDelim">The delimiter string separating degrees </param>
-	<param name="MinDelim">The delimiter string to append to the minutes </param>
-	<returns>Sexagesimal representation of degrees input value, as degrees and minutes</returns>
-	<remarks>
-		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
-		<para>This overload is not available through COM, please use 
- "DegreesToDM(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
- with suitable parameters to achieve this effect.</para>
-	</remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDM(System.Double,System.String,System.String,System.Int32)">
 	<summary>
  Convert degrees to sexagesimal degrees and minutes with the specified number of minute decimal places
@@ -1422,45 +1272,6 @@ ASCOM.Utilities
 	<returns>Sexagesimal representation of degrees input value, as degrees and minutes</returns>
 	<remarks>
 		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
-	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IUtil.HoursToHM(System.Double)">
-	<summary>
- Convert hours to sexagesimal hours and minutes with default delimiters HH:MM
- </summary>
-	<param name="Hours">The hours value to convert</param>
-	<returns>Sexagesimal representation of hours input value as hours and minutes</returns>
-	<remarks>
-		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
-		<para>This overload is not available through COM, please use 
- "HoursToHM(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
- with an suitable parameters to achieve this effect.</para>
-	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IUtil.HoursToHM(System.Double,System.String)">
-	<summary>
- Convert hours to sexagesimal hours and minutes with default minutes delimiter MM (null string)
- </summary>
-	<param name="Hours">The hours value to convert</param>
-	<param name="HrsDelim">The delimiter string separating hours and minutes</param>
-	<returns>Sexagesimal representation of hours input value as hours and minutes</returns>
-	<remarks>
-		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
-		<para>This overload is not available through COM, please use 
- "HoursToHM(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
- with an suitable parameters to achieve this effect.</para>
-	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IUtil.HoursToHM(System.Double,System.String,System.String)">
-	<summary>
- Convert hours to sexagesimal hours and minutes
- </summary>
-	<param name="Hours">The hours value to convert</param>
-	<param name="HrsDelim">The delimiter string separating hours and minutes</param>
-	<param name="MinDelim">The delimiter string to append to the minutes part </param>
-	<returns>Sexagesimal representation of hours input value as hours and minutes</returns>
-	<remarks>
-		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
-		<para>This overload is not available through COM, please use 
- "HoursToHM(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
- with an suitable parameters to achieve this effect.</para>
 	</remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.IUtil.HoursToHM(System.Double,System.String,System.String,System.Int32)">
 	<summary>
@@ -1474,60 +1285,6 @@ ASCOM.Utilities
 	<remarks>
 		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
 	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHMS(System.Double)">
-	<summary>
- Convert degrees to sexagesimal hours, minutes, and seconds with default delimters of HH:MM:SS
- </summary>
-	<param name="Degrees">The degrees value to convert</param>
-	<returns>Sexagesimal representation of degrees input value, as hours, minutes, and seconds</returns>
-	<remarks>
-		<para>If you need a leading plus sign, you must prepend it yourself.</para>
-		<para>This overload is not available through COM, please use 
- "DegreesToHMS(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
- with suitable parameters to achieve this effect.</para>
-	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHMS(System.Double,System.String)">
-	<summary>
- Convert degrees to sexagesimal hours, minutes, and seconds with the default second and minute delimiters of MM:SS
- </summary>
-	<param name="Degrees">The degrees value to convert</param>
-	<param name="HrsDelim">The delimiter string separating hours and minutes</param>
-	<returns>Sexagesimal representation of degrees input value, as hours, minutes, and seconds</returns>
-	<remarks>
-		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters. </para>
-		<para>This overload is not available through COM, please use 
- "DegreesToHMS(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
- with suitable parameters to achieve this effect.</para>
-	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHMS(System.Double,System.String,System.String)">
-	<summary>
- Convert degrees to sexagesimal hours, minutes, and seconds with the default second delimiter SS (null string)
- </summary>
-	<param name="Degrees">The degrees value to convert</param>
-	<param name="HrsDelim">The delimiter string separating hours and minutes</param>
-	<param name="MinDelim">The delimiter string separating minutes and seconds</param>
-	<returns>Sexagesimal representation of degrees input value, as hours, minutes, and seconds</returns>
-	<remarks>
-		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters. </para>
-		<para>This overload is not available through COM, please use 
- "DegreesToHMS(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
- with suitable parameters to achieve this effect.</para>
-	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHMS(System.Double,System.String,System.String,System.String)">
-	<summary>
- Convert degrees to sexagesimal hours, minutes, and seconds
- </summary>
-	<param name="Degrees">The degrees value to convert</param>
-	<param name="HrsDelim">The delimiter string separating hours and minutes</param>
-	<param name="MinDelim">The delimiter string separating minutes and seconds</param>
-	<param name="SecDelim">The delimiter string to append to the seconds part </param>
-	<returns>Sexagesimal representation of degrees input value, as hours, minutes, and seconds</returns>
-	<remarks>
-		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters. </para>
-		<para>This overload is not available through COM, please use 
- "DegreesToHMS(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
- with suitable parameters to achieve this effect.</para>
-	</remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHMS(System.Double,System.String,System.String,System.String,System.Int32)">
 	<summary>
  Convert degrees to sexagesimal hours, minutes, and seconds with the specified number of second decimal places
@@ -1540,45 +1297,6 @@ ASCOM.Utilities
 	<returns>Sexagesimal representation of degrees input value, as hours, minutes, and seconds</returns>
 	<remarks>
 		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters. </para>
-	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHM(System.Double)">
-	<summary>
- Convert degrees to sexagesimal hours and minutes with default delimiters HH:MM
- </summary>
-	<param name="Degrees">The degrees value to convert</param>
-	<returns>Sexagesimal representation of degrees input value as hours and minutes</returns>
-	<remarks>
-		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters</para>
-		<para>This overload is not available through COM, please use 
- "DegreesToHM(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
- with suitable parameters to achieve this effect.</para>
-	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHM(System.Double,System.String)">
-	<summary>
- Convert degrees to sexagesimal hours and minutes with default minute delimiter MM (null string)
- </summary>
-	<param name="Degrees">The degrees value to convert</param>
-	<param name="HrsDelim">The delimiter string separating hours and minutes </param>
-	<returns>Sexagesimal representation of degrees input value as hours and minutes</returns>
-	<remarks>
-		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters</para>
-		<para>This overload is not available through COM, please use 
- "DegreesToHM(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
- with suitable parameters to achieve this effect.</para>
-	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHM(System.Double,System.String,System.String)">
-	<summary>
- Convert degrees to sexagesimal hours and minutes
- </summary>
-	<param name="Degrees">The degrees value to convert</param>
-	<param name="HrsDelim">The delimiter string separating hours and minutes </param>
-	<param name="MinDelim">The delimiter string to append to the minutes part </param>
-	<returns>Sexagesimal representation of degrees input value as hours and minutes</returns>
-	<remarks>
-		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters</para>
-		<para>This overload is not available through COM, please use 
- "DegreesToHM(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
- with suitable parameters to achieve this effect.</para>
 	</remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHM(System.Double,System.String,System.String,System.Int32)">
 	<summary>
@@ -1686,6 +1404,288 @@ ASCOM.Utilities
  Interface to the .NET Util component
  </summary>
 	<remarks></remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IUtilExtra.DegreesToDMS(System.Double)">
+	<summary>
+ Convert degrees to sexagesimal degrees, minutes and seconds with default delimiters DD° MM' SS" 
+ </summary>
+	<param name="Degrees">The degrees value to convert</param>
+	<returns>Sexagesimal representation of degrees input value, degrees, minutes, and seconds</returns>
+	<remarks>
+		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single 
+ characters.</para>
+		<para>This overload is not available through COM, please use "Choose(ByVal DriverProgID As String)"
+ with an empty string parameter to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IUtilExtra.DegreesToDMS(System.Double,System.String)">
+	<summary>
+  Convert degrees to sexagesimal degrees, minutes and seconds with with default minute and second delimiters MM' SS" 
+ </summary>
+	<param name="Degrees">The degrees value to convert</param>
+	<param name="DegDelim">The delimiter string separating degrees and minutes </param>
+	<returns>Sexagesimal representation of degrees input value, degrees, minutes, and seconds</returns>
+	<remarks>
+		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single 
+ characters.</para>
+		<para>This overload is not available through COM, please use 
+ "DegreesToDMS(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal SecDelim As String)"
+ with suitable parameters to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IUtilExtra.DegreesToDMS(System.Double,System.String,System.String)">
+	<summary>
+  Convert degrees to sexagesimal degrees, minutes and seconds with default second delimiter SS" 
+ </summary>
+	<param name="Degrees">The degrees value to convert</param>
+	<param name="DegDelim">The delimiter string separating degrees and minutes </param>
+	<param name="MinDelim">The delimiter string to append to the minutes part </param>
+	<returns>Sexagesimal representation of degrees input value, degrees, minutes, and seconds</returns>
+	<remarks>
+		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single 
+ characters.</para>
+		<para>This overload is not available through COM, please use 
+ "DegreesToDMS(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal SecDelim As String)"
+ with suitable parameters to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IUtilExtra.DegreesToDMS(System.Double,System.String,System.String,System.String)">
+	<summary>
+  Convert degrees to sexagesimal degrees, minutes and seconds
+ </summary>
+	<param name="Degrees">The degrees value to convert</param>
+	<param name="DegDelim">The delimiter string separating degrees and minutes </param>
+	<param name="MinDelim">The delimiter string to append to the minutes part </param>
+	<param name="SecDelim">The delimiter string to append to the seconds part</param>
+	<returns>Sexagesimal representation of degrees input value, degrees, minutes, and seconds</returns>
+	<remarks>
+		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single 
+ characters.</para>
+		<para>This overload is not available through COM, please use 
+ "DegreesToDMS(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal SecDelim As String)"
+ with suitable parameters to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IUtilExtra.HoursToHMS(System.Double)">
+	<summary>
+ Convert hours to sexagesimal hours, minutes, and seconds with default delimiters HH:MM:SS
+ </summary>
+	<param name="Hours">The hours value to convert</param>
+	<returns>Sexagesimal representation of hours input value, hours, minutes and seconds</returns>
+	<remarks>
+		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
+		<para>This overload is not available through COM, please use 
+ "HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
+ with suitable parameters to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IUtilExtra.HoursToHMS(System.Double,System.String)">
+	<summary>
+ Convert hours to sexagesimal hours, minutes, and seconds with default minutes and seconds delimters MM:SS
+ </summary>
+	<param name="Hours">The hours value to convert</param>
+	<param name="HrsDelim">The delimiter string separating hours and minutes </param>
+	<returns>Sexagesimal representation of hours input value, hours, minutes and seconds</returns>
+	<remarks>
+		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
+		<para>This overload is not available through COM, please use 
+ "HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
+ with suitable parameters to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IUtilExtra.HoursToHMS(System.Double,System.String,System.String)">
+	<summary>
+ Convert hours to sexagesimal hours, minutes, and seconds with default second delimiter of null string
+ </summary>
+	<param name="Hours">The hours value to convert</param>
+	<param name="HrsDelim">The delimiter string separating hours and minutes </param>
+	<param name="MinDelim">The delimiter string separating minutes and seconds </param>
+	<returns>Sexagesimal representation of hours input value, hours, minutes and seconds</returns>
+	<remarks>
+		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
+		<para>This overload is not available through COM, please use 
+ "HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
+ with suitable parameters to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IUtilExtra.HoursToHMS(System.Double,System.String,System.String,System.String)">
+	<summary>
+ Convert hours to sexagesimal hours, minutes, and seconds
+ </summary>
+	<param name="Hours">The hours value to convert</param>
+	<param name="HrsDelim">The delimiter string separating hours and minutes </param>
+	<param name="MinDelim">The delimiter string separating minutes and seconds </param>
+	<param name="SecDelim">The delimiter string to append to the seconds part </param>
+	<returns>Sexagesimal representation of hours input value, hours, minutes and seconds</returns>
+	<remarks>
+		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
+		<para>This overload is not available through COM, please use 
+ "HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
+ with suitable parameters to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IUtilExtra.DegreesToDM(System.Double)">
+	<summary>
+ Convert degrees to sexagesimal degrees and minutes with default delimiters DD° MM'
+ </summary>
+	<param name="Degrees">The degrees value to convert</param>
+	<returns>Sexagesimal representation of degrees input value, as degrees and minutes</returns>
+	<remarks>
+		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
+		<para>This overload is not available through COM, please use 
+ "DegreesToDM(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
+ with suitable parameters to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IUtilExtra.DegreesToDM(System.Double,System.String)">
+	<summary>
+ Convert degrees to sexagesimal degrees and minutes with the default minutes delimeter MM'
+ </summary>
+	<param name="Degrees">The degrees value to convert</param>
+	<param name="DegDelim">The delimiter string separating degrees </param>
+	<returns>Sexagesimal representation of degrees input value, as degrees and minutes</returns>
+	<remarks>
+		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
+		<para>This overload is not available through COM, please use 
+ "DegreesToDM(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
+ with suitable parameters to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IUtilExtra.DegreesToDM(System.Double,System.String,System.String)">
+	<summary>
+ Convert degrees to sexagesimal degrees and minutes
+ </summary>
+	<param name="Degrees">The degrees value to convert</param>
+	<param name="DegDelim">The delimiter string separating degrees </param>
+	<param name="MinDelim">The delimiter string to append to the minutes </param>
+	<returns>Sexagesimal representation of degrees input value, as degrees and minutes</returns>
+	<remarks>
+		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
+		<para>This overload is not available through COM, please use 
+ "DegreesToDM(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
+ with suitable parameters to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IUtilExtra.HoursToHM(System.Double)">
+	<summary>
+ Convert hours to sexagesimal hours and minutes with default delimiters HH:MM
+ </summary>
+	<param name="Hours">The hours value to convert</param>
+	<returns>Sexagesimal representation of hours input value as hours and minutes</returns>
+	<remarks>
+		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
+		<para>This overload is not available through COM, please use 
+ "HoursToHM(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
+ with an suitable parameters to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IUtilExtra.HoursToHM(System.Double,System.String)">
+	<summary>
+ Convert hours to sexagesimal hours and minutes with default minutes delimiter MM (null string)
+ </summary>
+	<param name="Hours">The hours value to convert</param>
+	<param name="HrsDelim">The delimiter string separating hours and minutes</param>
+	<returns>Sexagesimal representation of hours input value as hours and minutes</returns>
+	<remarks>
+		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
+		<para>This overload is not available through COM, please use 
+ "HoursToHM(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
+ with an suitable parameters to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IUtilExtra.HoursToHM(System.Double,System.String,System.String)">
+	<summary>
+ Convert hours to sexagesimal hours and minutes
+ </summary>
+	<param name="Hours">The hours value to convert</param>
+	<param name="HrsDelim">The delimiter string separating hours and minutes</param>
+	<param name="MinDelim">The delimiter string to append to the minutes part </param>
+	<returns>Sexagesimal representation of hours input value as hours and minutes</returns>
+	<remarks>
+		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters.</para>
+		<para>This overload is not available through COM, please use 
+ "HoursToHM(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
+ with an suitable parameters to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IUtilExtra.DegreesToHMS(System.Double)">
+	<summary>
+ Convert degrees to sexagesimal hours, minutes, and seconds with default delimters of HH:MM:SS
+ </summary>
+	<param name="Degrees">The degrees value to convert</param>
+	<returns>Sexagesimal representation of degrees input value, as hours, minutes, and seconds</returns>
+	<remarks>
+		<para>If you need a leading plus sign, you must prepend it yourself.</para>
+		<para>This overload is not available through COM, please use 
+ "DegreesToHMS(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
+ with suitable parameters to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IUtilExtra.DegreesToHMS(System.Double,System.String)">
+	<summary>
+ Convert degrees to sexagesimal hours, minutes, and seconds with the default second and minute delimiters of MM:SS
+ </summary>
+	<param name="Degrees">The degrees value to convert</param>
+	<param name="HrsDelim">The delimiter string separating hours and minutes</param>
+	<returns>Sexagesimal representation of degrees input value, as hours, minutes, and seconds</returns>
+	<remarks>
+		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters. </para>
+		<para>This overload is not available through COM, please use 
+ "DegreesToHMS(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
+ with suitable parameters to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IUtilExtra.DegreesToHMS(System.Double,System.String,System.String)">
+	<summary>
+ Convert degrees to sexagesimal hours, minutes, and seconds with the default second delimiter SS (null string)
+ </summary>
+	<param name="Degrees">The degrees value to convert</param>
+	<param name="HrsDelim">The delimiter string separating hours and minutes</param>
+	<param name="MinDelim">The delimiter string separating minutes and seconds</param>
+	<returns>Sexagesimal representation of degrees input value, as hours, minutes, and seconds</returns>
+	<remarks>
+		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters. </para>
+		<para>This overload is not available through COM, please use 
+ "DegreesToHMS(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
+ with suitable parameters to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IUtilExtra.DegreesToHMS(System.Double,System.String,System.String,System.String)">
+	<summary>
+ Convert degrees to sexagesimal hours, minutes, and seconds
+ </summary>
+	<param name="Degrees">The degrees value to convert</param>
+	<param name="HrsDelim">The delimiter string separating hours and minutes</param>
+	<param name="MinDelim">The delimiter string separating minutes and seconds</param>
+	<param name="SecDelim">The delimiter string to append to the seconds part </param>
+	<returns>Sexagesimal representation of degrees input value, as hours, minutes, and seconds</returns>
+	<remarks>
+		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters. </para>
+		<para>This overload is not available through COM, please use 
+ "DegreesToHMS(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
+ with suitable parameters to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IUtilExtra.DegreesToHM(System.Double)">
+	<summary>
+ Convert degrees to sexagesimal hours and minutes with default delimiters HH:MM
+ </summary>
+	<param name="Degrees">The degrees value to convert</param>
+	<returns>Sexagesimal representation of degrees input value as hours and minutes</returns>
+	<remarks>
+		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters</para>
+		<para>This overload is not available through COM, please use 
+ "DegreesToHM(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
+ with suitable parameters to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IUtilExtra.DegreesToHM(System.Double,System.String)">
+	<summary>
+ Convert degrees to sexagesimal hours and minutes with default minute delimiter MM (null string)
+ </summary>
+	<param name="Degrees">The degrees value to convert</param>
+	<param name="HrsDelim">The delimiter string separating hours and minutes </param>
+	<returns>Sexagesimal representation of degrees input value as hours and minutes</returns>
+	<remarks>
+		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters</para>
+		<para>This overload is not available through COM, please use 
+ "DegreesToHM(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
+ with suitable parameters to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IUtilExtra.DegreesToHM(System.Double,System.String,System.String)">
+	<summary>
+ Convert degrees to sexagesimal hours and minutes
+ </summary>
+	<param name="Degrees">The degrees value to convert</param>
+	<param name="HrsDelim">The delimiter string separating hours and minutes </param>
+	<param name="MinDelim">The delimiter string to append to the minutes part </param>
+	<returns>Sexagesimal representation of degrees input value as hours and minutes</returns>
+	<remarks>
+		<para>If you need a leading plus sign, you must prepend it yourself. The delimiters are not restricted to single characters</para>
+		<para>This overload is not available through COM, please use 
+ "DegreesToHM(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
+ with suitable parameters to achieve this effect.</para>
+	</remarks>
 </member><member name="P:ASCOM.Utilities.Interfaces.ITimer.Interval">
 	<summary>
  The interval between Tick events when the timer is Enabled in milliseconds, (default = 1000)
@@ -1705,6 +1705,11 @@ ASCOM.Utilities
  Interface to the .NET Timer component
  </summary>
 	<remarks></remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.ITimerEvent.Tick">
+	<summary>
+ Fired once per Interval when timer is Enabled.
+ </summary>
+	<remarks>To sink this event in Visual Basic, declare the object variable using the WithEvents keyword.</remarks>
 </member><member name="P:ASCOM.Utilities.Interfaces.IProfile.DeviceType">
 	<summary>
  The type of ASCOM device for which profile data and registration services are provided 
@@ -1754,20 +1759,6 @@ ASCOM.Utilities
  </summary>
 	<param name="DriverID">ProgID of the device to unregister</param>
 	<remarks>This deletes the entire device profile tree, including the DriverID root key.</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IProfile.GetValue(System.String,System.String)">
-	<summary>
- Retrieve a string value from the profile for the given Driver ID and variable name
- </summary>
-	<param name="DriverID">ProgID of the device to read from</param>
-	<param name="Name">Name of the variable whose value is retrieved</param>
-	<returns>Retrieved variable value</returns>
-	<remarks>
-		<para>Name may be an empty string for the unnamed value. The unnamed value is also known as the "default" value for a registry key.</para>
-		<para>Does not provide access to other registry data types such as binary and doubleword. </para>
-		<para>This overload is not available through COM, please use 
- "GetValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
- with SubKey set to empty string achieve this effect.</para>
-	</remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.IProfile.GetValue(System.String,System.String,System.String)">
 	<summary>
  Retrieve a string value from the profile using the supplied subkey for the given Driver ID and variable name.
@@ -1780,18 +1771,6 @@ ASCOM.Utilities
 		<para>Name may be an empty string for the unnamed value. The unnamed value is also known as the "default" value for a registry key.</para>
 		<para>Does not provide access to other registry data types such as binary and doubleword. </para>
 	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IProfile.WriteValue(System.String,System.String,System.String)">
-	<summary>
- Writes a string value to the profile using the given Driver ID and variable name.
- </summary>
-	<param name="DriverID">ProgID of the device to read from</param>
-	<param name="Name">Name of the variable whose value is retrieved</param>
-	<param name="Value">The string value to be written</param>
-	<remarks>
- This overload is not available through COM, please use 
- "WriteValue(ByVal DriverID As String, ByVal Name As String, ByVal Value As String, ByVal SubKey As String)"
- with SubKey set to empty string achieve this effect.
- </remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.IProfile.WriteValue(System.String,System.String,System.String,System.String)">
 	<summary>
  Writes a string value to the profile using the supplied subkey for the given Driver ID and variable name.
@@ -1813,17 +1792,6 @@ ASCOM.Utilities
  value will be included if it has a value, even if the value is a blank string. The unnamed value will have its entry's 
  Key property set to an empty string.
  <para>The KeyValuePair objects are instances of the <see cref="T:ASCOM.Utilities.KeyValuePair">KeyValuePair class</see></para>
-	</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IProfile.DeleteValue(System.String,System.String)">
-	<summary>
- Delete the value from the registry. Name may be an empty string for the unnamed value. 
- </summary>
-	<param name="DriverID">ProgID of the device to read from</param>
-	<param name="Name">Name of the variable whose value is retrieved</param>
-	<remarks>Specify "" to delete the unnamed value which is also known as the "default" value for a registry key.
- <para>This overload is not available through COM, please use 
- "DeleteValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
- with SubKey set to empty string achieve this effect.</para>
 	</remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.IProfile.DeleteValue(System.String,System.String,System.String)">
 	<summary>
@@ -1863,6 +1831,43 @@ ASCOM.Utilities
  Interface to the .NET Profile component
  </summary>
 	<remarks></remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IProfileExtra.GetValue(System.String,System.String)">
+	<summary>
+ Retrieve a string value from the profile for the given Driver ID and variable name
+ </summary>
+	<param name="DriverID">ProgID of the device to read from</param>
+	<param name="Name">Name of the variable whose value is retrieved</param>
+	<returns>Retrieved variable value</returns>
+	<remarks>
+		<para>Name may be an empty string for the unnamed value. The unnamed value is also known as the "default" value for a registry key.</para>
+		<para>Does not provide access to other registry data types such as binary and doubleword. </para>
+		<para>This overload is not available through COM, please use 
+ "GetValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
+ with SubKey set to empty string achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IProfileExtra.WriteValue(System.String,System.String,System.String)">
+	<summary>
+ Writes a string value to the profile using the given Driver ID and variable name.
+ </summary>
+	<param name="DriverID">ProgID of the device to read from</param>
+	<param name="Name">Name of the variable whose value is retrieved</param>
+	<param name="Value">The string value to be written</param>
+	<remarks>
+ This overload is not available through COM, please use 
+ "WriteValue(ByVal DriverID As String, ByVal Name As String, ByVal Value As String, ByVal SubKey As String)"
+ with SubKey set to empty string achieve this effect.
+ </remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IProfileExtra.DeleteValue(System.String,System.String)">
+	<summary>
+ Delete the value from the registry. Name may be an empty string for the unnamed value. 
+ </summary>
+	<param name="DriverID">ProgID of the device to read from</param>
+	<param name="Name">Name of the variable whose value is retrieved</param>
+	<remarks>Specify "" to delete the unnamed value which is also known as the "default" value for a registry key.
+ <para>This overload is not available through COM, please use 
+ "DeleteValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
+ with SubKey set to empty string achieve this effect.</para>
+	</remarks>
 </member><member name="P:ASCOM.Utilities.Interfaces.ISerial.AvailableComPorts">
 	<summary>
  Returns a list of all available ASCOM serial ports with COMnnn ports sorted into ascending port number order

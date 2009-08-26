@@ -23,7 +23,7 @@ Imports System.Runtime.InteropServices
 ComVisible(True), _
 ClassInterface(ClassInterfaceType.None)> _
 Public Class TraceLogger
-    Implements ITraceLogger, IDisposable
+    Implements ITraceLogger, ITraceLoggerExtra, IDisposable
 
     Private g_LogFileName, g_LogFileType As String
     Private g_LogFile As System.IO.StreamWriter
@@ -150,7 +150,7 @@ Public Class TraceLogger
     ''' with HexDump set False to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Overloads Sub LogMessage(ByVal Identifier As String, ByVal Message As String) Implements ITraceLogger.LogMessage
+    Public Overloads Sub LogMessage(ByVal Identifier As String, ByVal Message As String) Implements ITraceLoggerExtra.LogMessage
         Try
             mut.WaitOne()
             If g_LineStarted Then
@@ -236,7 +236,7 @@ Public Class TraceLogger
     ''' with HexDump set False to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Overloads Sub LogContinue(ByVal Message As String) Implements ITraceLogger.LogContinue
+    Public Overloads Sub LogContinue(ByVal Message As String) Implements ITraceLoggerExtra.LogContinue
         Try
             mut.WaitOne()
             If Not g_LineStarted Then
@@ -280,7 +280,7 @@ Public Class TraceLogger
     ''' with HexDump set False to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Overloads Sub LogFinish(ByVal Message As String) Implements ITraceLogger.LogFinish
+    Public Overloads Sub LogFinish(ByVal Message As String) Implements ITraceLoggerExtra.LogFinish
         Try
             mut.WaitOne()
             If Not g_LineStarted Then

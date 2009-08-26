@@ -15,7 +15,7 @@ Imports System.Runtime.InteropServices
 ComVisible(True), _
 ClassInterface(ClassInterfaceType.None)> _
 Public Class Util
-    Implements IUtil, IDisposable
+    Implements IUtil, IUtilExtra, IDisposable
     '---------------------------------------------------------------------
     ' Copyright © 2000-2002 SPACE.com Inc., New York, NY
     '
@@ -257,7 +257,7 @@ Public Class Util
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Overloads Function DegreesToDMS(ByVal Degrees As Double) As String Implements IUtil.DegreesToDMS
+    Public Overloads Function DegreesToDMS(ByVal Degrees As Double) As String Implements IUtilExtra.DegreesToDMS
         Return DegreesToDMS(Degrees, "° ", "' ", """", 0)
     End Function
 
@@ -275,7 +275,7 @@ Public Class Util
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Overloads Function DegreesToDMS(ByVal Degrees As Double, ByVal DegDelim As String) As String Implements IUtil.DegreesToDMS
+    Public Overloads Function DegreesToDMS(ByVal Degrees As Double, ByVal DegDelim As String) As String Implements IUtilExtra.DegreesToDMS
         Return DegreesToDMS(Degrees, DegDelim, "' ", """", 0)
     End Function
 
@@ -294,7 +294,7 @@ Public Class Util
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Overloads Function DegreesToDMS(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String) As String Implements IUtil.DegreesToDMS
+    Public Overloads Function DegreesToDMS(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String) As String Implements IUtilExtra.DegreesToDMS
         Return DegreesToDMS(Degrees, DegDelim, MinDelim, """", 0)
     End Function
 
@@ -314,7 +314,7 @@ Public Class Util
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-        Public Overloads Function DegreesToDMS(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal SecDelim As String) As String Implements IUtil.DegreesToDMS
+        Public Overloads Function DegreesToDMS(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal SecDelim As String) As String Implements IUtilExtra.DegreesToDMS
         Return DegreesToDMS(Degrees, DegDelim, MinDelim, SecDelim, 0)
     End Function
 
@@ -384,7 +384,7 @@ Public Class Util
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Overloads Function HoursToHMS(ByVal Hours As Double) As String Implements IUtil.HoursToHMS
+    Public Overloads Function HoursToHMS(ByVal Hours As Double) As String Implements IUtilExtra.HoursToHMS
         Return DegreesToDMS(Hours, ":", ":", "", 0)
     End Function
 
@@ -401,7 +401,7 @@ Public Class Util
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Overloads Function HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String) As String Implements IUtil.HoursToHMS
+    Public Overloads Function HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String) As String Implements IUtilExtra.HoursToHMS
         Return DegreesToDMS(Hours, HrsDelim, ":", "", 0)
     End Function
 
@@ -419,7 +419,7 @@ Public Class Util
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Overloads Function HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String) As String Implements IUtil.HoursToHMS
+    Public Overloads Function HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String) As String Implements IUtilExtra.HoursToHMS
         Return DegreesToDMS(Hours, HrsDelim, MinDelim, "", 0)
     End Function
 
@@ -438,7 +438,7 @@ Public Class Util
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Overloads Function HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String) As String Implements IUtil.HoursToHMS
+    Public Overloads Function HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String) As String Implements IUtilExtra.HoursToHMS
         Return DegreesToDMS(Hours, HrsDelim, MinDelim, SecDelim, 0)
     End Function
 
@@ -473,7 +473,7 @@ Public Class Util
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Overloads Function DegreesToHMS(ByVal Degrees As Double) As String Implements IUtil.DegreesToHMS
+    Public Overloads Function DegreesToHMS(ByVal Degrees As Double) As String Implements IUtilExtra.DegreesToHMS
         Return DegreesToHMS(Degrees, ":", ":", "", 0)
     End Function
 
@@ -490,7 +490,7 @@ Public Class Util
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Overloads Function DegreesToHMS(ByVal Degrees As Double, ByVal HrsDelim As String) As String Implements IUtil.DegreesToHMS
+    Public Overloads Function DegreesToHMS(ByVal Degrees As Double, ByVal HrsDelim As String) As String Implements IUtilExtra.DegreesToHMS
         Return DegreesToHMS(Degrees, HrsDelim, ":", "", 0)
     End Function
 
@@ -508,7 +508,7 @@ Public Class Util
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Overloads Function DegreesToHMS(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String) As String Implements IUtil.DegreesToHMS
+    Public Overloads Function DegreesToHMS(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String) As String Implements IUtilExtra.DegreesToHMS
         Return DegreesToHMS(Degrees, HrsDelim, MinDelim, "", 0)
     End Function
 
@@ -527,7 +527,7 @@ Public Class Util
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Overloads Function DegreesToHMS(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String) As String Implements IUtil.DegreesToHMS
+    Public Overloads Function DegreesToHMS(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String) As String Implements IUtilExtra.DegreesToHMS
         Return DegreesToHMS(Degrees, HrsDelim, MinDelim, SecDelim, 0)
     End Function
 
@@ -566,7 +566,7 @@ Public Class Util
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Overloads Function DegreesToDM(ByVal Degrees As Double) As String Implements IUtil.DegreesToDM
+    Public Overloads Function DegreesToDM(ByVal Degrees As Double) As String Implements IUtilExtra.DegreesToDM
         Return DegreesToDM(Degrees, "° ", "'", 0)
     End Function
 
@@ -583,7 +583,7 @@ Public Class Util
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Overloads Function DegreesToDM(ByVal Degrees As Double, ByVal DegDelim As String) As String Implements IUtil.DegreesToDM
+    Public Overloads Function DegreesToDM(ByVal Degrees As Double, ByVal DegDelim As String) As String Implements IUtilExtra.DegreesToDM
         Return DegreesToDM(Degrees, DegDelim, "'", 0)
     End Function
 
@@ -601,7 +601,7 @@ Public Class Util
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Overloads Function DegreesToDM(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String) As String Implements IUtil.DegreesToDM
+    Public Overloads Function DegreesToDM(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String) As String Implements IUtilExtra.DegreesToDM
         Return DegreesToDM(Degrees, DegDelim, MinDelim, 0)
     End Function
 
@@ -663,7 +663,7 @@ Public Class Util
     ''' with an suitable parameters to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Function HoursToHM(ByVal Hours As Double) As String Implements IUtil.HoursToHM
+    Public Function HoursToHM(ByVal Hours As Double) As String Implements IUtilExtra.HoursToHM
         Return DegreesToDM(Hours, ":", "", 0)
     End Function
 
@@ -680,7 +680,7 @@ Public Class Util
     ''' with an suitable parameters to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Function HoursToHM(ByVal Hours As Double, ByVal HrsDelim As String) As String Implements IUtil.HoursToHM
+    Public Function HoursToHM(ByVal Hours As Double, ByVal HrsDelim As String) As String Implements IUtilExtra.HoursToHM
         Return DegreesToDM(Hours, HrsDelim, "", 0)
     End Function
 
@@ -698,7 +698,7 @@ Public Class Util
     ''' with an suitable parameters to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Function HoursToHM(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String) As String Implements IUtil.HoursToHM
+    Public Function HoursToHM(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String) As String Implements IUtilExtra.HoursToHM
         Return DegreesToDM(Hours, HrsDelim, MinDelim, 0)
     End Function
 
@@ -733,7 +733,7 @@ Public Class Util
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Function DegreesToHM(ByVal Degrees As Double) As String Implements IUtil.DegreesToHM
+    Public Function DegreesToHM(ByVal Degrees As Double) As String Implements IUtilExtra.DegreesToHM
         Return DegreesToHM(Degrees, ":", "", 0)
     End Function
 
@@ -750,7 +750,7 @@ Public Class Util
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Function DegreesToHM(ByVal Degrees As Double, ByVal HrsDelim As String) As String Implements IUtil.DegreesToHM
+    Public Function DegreesToHM(ByVal Degrees As Double, ByVal HrsDelim As String) As String Implements IUtilExtra.DegreesToHM
         Return DegreesToHM(Degrees, HrsDelim, "", 0)
     End Function
 
@@ -768,7 +768,7 @@ Public Class Util
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-    Public Function DegreesToHM(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String) As String Implements IUtil.DegreesToHM
+    Public Function DegreesToHM(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String) As String Implements IUtilExtra.DegreesToHM
         Return DegreesToHM(Degrees, HrsDelim, MinDelim, 0)
     End Function
 
