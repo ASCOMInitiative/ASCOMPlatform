@@ -52,5 +52,12 @@ namespace ASCOM.GeminiTelescope
             AutoHide = false;   //once the user moves this, it will no longer go away automatically
         }
 
+        private void frmStatus_VisibleChanged(object sender, EventArgs e)
+        {
+            if (!this.Visible) tmrUpdate.Stop();
+            else
+                tmrUpdate.Start();
+        }
+
     }
 }
