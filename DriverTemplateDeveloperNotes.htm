@@ -39,6 +39,12 @@ li {
     }
 	
 
+    .style2
+    {
+        width: 314px;
+    }
+	
+
 </style>
 <title>Untitled Document</title>
 
@@ -71,54 +77,54 @@ li {
       	<li>C# LocalServer out-of-process (singleton) Composite Driver Template</li>
       	</ul>
       	</li>
-      	<li>The in-process driveThe in-process driver templates have one master template for each supported 
+      	<li>The in-process driver templates have one master template for each supported 
             language (currently C Sharp and Visual Basic). The template code uses a number 
             of placeholder identifiers, which must be replaced using replace-in-files, prior 
             to exporting the template package. THe placeholder identifiers are:<br />
             <table class="style1">
                 <tr>
-                    <td>
+                    <td class="style2">
                         TEMPLATEDEVICECLASS       <td>
                         Placeholder for the ASCOM Device Class (eg. &quot;Focuser&quot;, &quot;Dome&quot;).</td>
                 </tr>
                 <tr>
-                    <td>
+                    <td class="style2">
                         TEMPLATEDEVICENAME</td>
                     <td>
                         Placeholder for the ASCOM Device Name (eg. &quot;LX200&quot;).</td>
                 </tr>
                 <tr>
-                    <td>
+                    <td class="style2">
                         TEMPLATENAMESPACE</td>
                     <td>
                         Placeholder for the project namespace.</td>
                 </tr>
                 <tr>
-                    <td>
+                    <td class="style2">
                         28D679BA-2AF1-4557-AE15-C528C5BF91E0</td>
                     <td>
                         Placeholder Guid 1, used for the COM Interface ID, replaced with a new Guid.</td>
                 </tr>
                 <tr>
-                    <td>
+                    <td class="style2">
                         3A02C211-FA08-4747-B0BD-4B00EB159297</td>
                     <td>
                         Placeholder Guid 2, used as the assembly Guid, replaced with a new Guid.</td>
                 </tr>
                 <tr>
-                    <td>
+                    <td class="style2">
                         &nbsp;</td>
                     <td>
                         &nbsp;</td>
                 </tr>
                 <tr>
-                    <td>
+                    <td class="style2">
                         &nbsp;</td>
                     <td>
                         &nbsp;</td>
                 </tr>
                 <tr>
-                    <td>
+                    <td class="style2">
                         &nbsp;</td>
                     <td>
                         &nbsp;</td>
@@ -133,8 +139,14 @@ li {
           </li>
       	<li>A Wizard, implemented in ASCOM.Setup.TemplateWizard, collects user input about 
             the device being implemented and customizes the generated code during project 
-            creation. THe wizard ensures that the correct interface is implemented. The 
-            wizard assembly must reside in the Global Assembly Cache on the end-user system.></li>
+            creation. The wizard ensures that the correct interface is implemented. The 
+            wizard assembly must reside in the Global Assembly Cache on the end-user system.</li>
+          <li>The template wizard deletes any files beginning with the word &quot;Placeholder&quot;. 
+              Placeholder files can be used to create stubs and mock items that ensure the 
+              template project will compile, but which should not be present in the final 
+              generated project. Specifically, a PlaceholderInterface file is used to hold a 
+              stub interface definition which will be replaced with one of the ASCOM 
+              Interfaces in the generated project.</li>
       	</ol>
         <p>
             &nbsp;</p>
