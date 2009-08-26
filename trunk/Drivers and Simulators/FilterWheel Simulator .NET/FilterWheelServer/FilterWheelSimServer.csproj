@@ -15,7 +15,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <ApplicationIcon>Properties\Resources\ASCOM.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\ASCOM.ico</ApplicationIcon>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -119,11 +119,11 @@
     <Compile Include="TextBoxArray.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Properties\Resources\ASCOM.ico" />
-    <Content Include="Properties\Resources\ASCOM.png" />
-    <None Include="Properties\Resources\Filter-Next.gif" />
-    <None Include="Properties\Resources\Filter-Prev.gif" />
-    <None Include="Properties\Resources\FilterStop.gif" />
+    <Content Include="Resources\ASCOM.ico" />
+    <Content Include="Resources\ASCOM.png" />
+    <None Include="Resources\Filter-Next.gif" />
+    <None Include="Resources\Filter-Prev.gif" />
+    <None Include="Resources\FilterStop.gif" />
     <Content Include="ReadMe.htm" />
   </ItemGroup>
   <ItemGroup>
