@@ -470,7 +470,7 @@ namespace ASCOM.TelescopeSimulator
 
         public bool CanPulseGuide
         {
-            // TODO Replace this with your implementation
+            
             get 
             {
                 if (SharedResources.TrafficForm != null)
@@ -513,7 +513,7 @@ namespace ASCOM.TelescopeSimulator
 
         public bool CanSetGuideRates
         {
-            // TODO Replace this with your implementation
+            
             get 
             {
                 if (SharedResources.TrafficForm != null)
@@ -773,7 +773,7 @@ namespace ASCOM.TelescopeSimulator
 
         public bool Connected
         {
-            // TODO Replace this with your implementation
+            
             get { return TelescopeHardware.Connected; }
             set { TelescopeHardware.Connected = value; }
         }
@@ -824,9 +824,31 @@ namespace ASCOM.TelescopeSimulator
 
         public double DeclinationRate
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("DeclinationRate", false); }
-            set { throw new PropertyNotImplementedException("DeclinationRate", true); }
+            
+            get 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("DeclinationRate: " + TelescopeHardware.DeclinationRate);
+
+                    }
+                }
+                return TelescopeHardware.DeclinationRate;
+            }
+            set 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("DeclinationRate:-> " + value);
+
+                    }
+                }
+                TelescopeHardware.DeclinationRate = value;
+            }
         }
 
         public string Description
@@ -853,14 +875,56 @@ namespace ASCOM.TelescopeSimulator
 
         public bool DoesRefraction
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("DoesRefraction", false); }
-            set { throw new PropertyNotImplementedException("DoesRefraction", true); }
+            
+            get 
+            {
+                if (TelescopeHardware.VersionOneOnly)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Capabilities)
+                        {
+                            SharedResources.TrafficForm.TrafficLine("DoesRefraction: false");
+                        }
+                    }
+                    throw new MethodNotImplementedException("DoesRefraction");
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("DoesRefraction: " + TelescopeHardware.Refraction.ToString());
+                    }
+                }
+                return TelescopeHardware.Refraction;
+            }
+            set 
+            {
+                if (TelescopeHardware.VersionOneOnly)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Capabilities)
+                        {
+                            SharedResources.TrafficForm.TrafficLine("DoesRefraction: ->");
+                        }
+                    }
+                    throw new MethodNotImplementedException("DoesRefraction");
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("DoesRefraction:-> " + value.ToString());
+                    }
+                }
+                TelescopeHardware.Refraction = value;
+            }
         }
 
         public string DriverInfo
         {
-            // TODO Replace this with your implementation
+            
             get 
             {
                 Assembly asm = Assembly.GetExecutingAssembly();
@@ -880,7 +944,7 @@ namespace ASCOM.TelescopeSimulator
 
         public string DriverVersion
         {
-            // TODO Replace this with your implementation
+            
             get 
             {
                 Assembly asm = Assembly.GetExecutingAssembly();
@@ -900,7 +964,7 @@ namespace ASCOM.TelescopeSimulator
 
         public EquatorialCoordinateType EquatorialSystem
         {
-            // TODO Replace this with your implementation
+            
             get 
             {
                 if (TelescopeHardware.VersionOneOnly)
@@ -963,8 +1027,33 @@ namespace ASCOM.TelescopeSimulator
 
         public void FindHome()
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("FindHome");
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficStart("FindHome: ");
+                }
+            }
+            if (!TelescopeHardware.CanFindHome)
+            {
+                throw new MethodNotImplementedException("FindHome");
+            }
+
+            TelescopeHardware.FindHome();
+
+            while (TelescopeHardware.SlewState == SlewType.SlewHome || TelescopeHardware.SlewState == SlewType.SlewSettle)
+            {
+                System.Windows.Forms.Application.DoEvents();
+            }
+
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficStart("(done)");
+                }
+            }
+
         }
 
         public double FocalLength
@@ -1005,16 +1094,141 @@ namespace ASCOM.TelescopeSimulator
 
         public double GuideRateDeclination
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("GuideRateDeclination", false); }
-            set { throw new PropertyNotImplementedException("GuideRateDeclination", true); }
+            
+            get
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("GuideRateDeclination: ");
+
+                    }
+                }
+                if (TelescopeHardware.VersionOneOnly)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Capabilities)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+                        }
+                    }
+                    throw new MethodNotImplementedException("GuideRateDeclination");
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.GuideRateDeclination.ToString());
+
+                    }
+                }
+                return TelescopeHardware.GuideRateDeclination;
+
+                
+
+            }
+            set
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("GuideRateDeclination->: ");
+
+                    }
+                }
+                if (TelescopeHardware.VersionOneOnly)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Capabilities)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+                        }
+                    }
+                    throw new MethodNotImplementedException("GuideRateDeclination");
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd(value.ToString());
+
+                    }
+                }
+                TelescopeHardware.GuideRateDeclination = value;
+            }
         }
 
         public double GuideRateRightAscension
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("GuideRateRightAscension", false); }
-            set { throw new PropertyNotImplementedException("GuideRateRightAscension", true); }
+            get
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("GuideRateRightAscension: ");
+
+                    }
+                }
+                if (TelescopeHardware.VersionOneOnly)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Capabilities)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+                        }
+                    }
+                    throw new MethodNotImplementedException("GuideRateRightAscension");
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.GuideRateRightAscension.ToString());
+
+                    }
+                }
+                return TelescopeHardware.GuideRateRightAscension;
+
+
+
+            }
+            set
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("GuideRateRightAscension->: ");
+
+                    }
+                }
+                if (TelescopeHardware.VersionOneOnly)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Capabilities)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+                        }
+                    }
+                    throw new MethodNotImplementedException("GuideRateRightAscension");
+                }
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd(value.ToString());
+
+                    }
+                }
+                TelescopeHardware.GuideRateRightAscension = value;
+            }
         }
 
         public short InterfaceVersion
@@ -1046,14 +1260,135 @@ namespace ASCOM.TelescopeSimulator
 
         public bool IsPulseGuiding
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("IsPulseGuiding", false); }
+            
+            get 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Gets)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("IsPulseGuiding: ");
+
+                    }
+                }
+                if (!TelescopeHardware.CanPulseGuide)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Gets)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("false");
+                        }
+                    }
+                    throw new MethodNotImplementedException("IsPulseGuiding");
+                }
+
+                
+
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Gets)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.IsPulseGuiding.ToString());
+
+                    }
+                }
+
+                return TelescopeHardware.IsPulseGuiding;
+            }
         }
 
         public void MoveAxis(TelescopeAxes Axis, double Rate)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("MoveAxis");
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    switch (Axis)
+                    {
+                        case ASCOM.Interface.TelescopeAxes.axisPrimary:
+                            SharedResources.TrafficForm.TrafficStart("MoveAxis Primary " + Rate + ": ");
+                            break;
+                        case ASCOM.Interface.TelescopeAxes.axisSecondary:
+                            SharedResources.TrafficForm.TrafficStart("MoveAxis Secondary " + Rate + ": ");
+                            break;
+                        case ASCOM.Interface.TelescopeAxes.axisTertiary:
+                            SharedResources.TrafficForm.TrafficStart("MoveAxis Tertiary " + Rate + ": ");
+                            break;
+                    }
+
+                }
+            }
+            if (TelescopeHardware.VersionOneOnly)
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd("false");
+                    }
+                }
+                throw new MethodNotImplementedException("MoveAxis");
+            }
+
+            if (!CanMoveAxis(Axis)) throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+
+            if (TelescopeHardware.SlewState == SlewType.SlewMoveAxis || Rate != 0)
+            {
+                if (TelescopeHardware.SlewState != SlewType.SlewMoveAxis)
+                {
+                    TelescopeHardware.SlewState = SlewType.SlewNone;
+                    TelescopeHardware.ChangeHome(false);
+                    TelescopeHardware.ChangePark(false);
+                    TelescopeHardware.m_DeltaAlt = 0;
+                    TelescopeHardware.m_DeltaAz = 0;
+                    TelescopeHardware.m_DeltaDec = 0;
+                    TelescopeHardware.m_DeltaRa = 0;
+                }
+
+                switch (Axis)
+                {
+                    case ASCOM.Interface.TelescopeAxes.axisPrimary:
+                        TelescopeHardware.m_DeltaAz = Rate;
+                        break;
+                    case ASCOM.Interface.TelescopeAxes.axisSecondary:
+                        TelescopeHardware.m_DeltaAlt = Rate;
+                        break;
+                    case ASCOM.Interface.TelescopeAxes.axisTertiary:
+                        TelescopeHardware.m_DeltaDec = Rate;
+                        break;
+                }
+                if (TelescopeHardware.m_DeltaAz == 0 && TelescopeHardware.m_DeltaAlt == 0 && TelescopeHardware.m_DeltaDec == 0)
+                {
+                    if (TelescopeHardware.SlewState == SlewType.SlewMoveAxis)
+                    {
+                        TelescopeHardware.SlewState = SlewType.SlewNone;
+                        if (SharedResources.TrafficForm != null)
+                        {
+                            if (SharedResources.TrafficForm.Slew)
+                            {
+                                SharedResources.TrafficForm.TrafficEnd("(stopped)");
+
+                            }
+                        }
+                        return;
+                    }
+                    else
+                    {
+                        TelescopeHardware.SlewState = SlewType.SlewMoveAxis;
+                    }
+                }
+
+            }
+
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficEnd("(done)");
+
+                }
+            }
         }
 
         public string Name
@@ -1432,7 +1767,7 @@ namespace ASCOM.TelescopeSimulator
 
         public short SlewSettleTime
         {
-            // TODO Replace this with your implementation
+            
             get 
             {
                 if (SharedResources.TrafficForm != null)
@@ -1676,7 +2011,7 @@ namespace ASCOM.TelescopeSimulator
 
         public bool Slewing
         {
-            // TODO Replace this with your implementation
+            
             get
             {
                 if (SharedResources.TrafficForm != null)
@@ -1830,7 +2165,7 @@ namespace ASCOM.TelescopeSimulator
 
         public double TargetDeclination
         {
-            // TODO Replace this with your implementation
+            
             get 
             {
                 if (SharedResources.TrafficForm != null)
@@ -1923,7 +2258,7 @@ namespace ASCOM.TelescopeSimulator
 
         public double TargetRightAscension
         {
-            // TODO Replace this with your implementation
+            
             get
             {
                 if (SharedResources.TrafficForm != null)
@@ -2016,7 +2351,7 @@ namespace ASCOM.TelescopeSimulator
 
         public bool Tracking
         {
-            // TODO Replace this with your implementation
+            
             get
             {
                 if (SharedResources.TrafficForm != null)
@@ -2045,7 +2380,7 @@ namespace ASCOM.TelescopeSimulator
 
         public DriveRates TrackingRate
         {
-            // TODO Replace this with your implementation
+            
             get 
             {
                 string output = "";
@@ -2176,7 +2511,7 @@ namespace ASCOM.TelescopeSimulator
 
         public DateTime UTCDate
         {
-            // TODO Replace this with your implementation
+            
             get 
             {
                 if (SharedResources.TrafficForm != null)
@@ -2382,7 +2717,7 @@ namespace ASCOM.TelescopeSimulator
             // (tracking rate) that MUST be supported is driveSidereal!
             //
             m_TrackingRates = new DriveRates[] { DriveRates.driveSidereal,DriveRates.driveKing,DriveRates.driveLunar,DriveRates.driveSolar };
-            // TODO Initialize this array with any additional tracking rates that your driver may provide
+            
         }
 
         #region ITrackingRates Members
@@ -2422,7 +2757,7 @@ namespace ASCOM.TelescopeSimulator
             // (tracking rate) that MUST be supported is driveSidereal!
             //
             m_TrackingRates = new DriveRates[] { DriveRates.driveSidereal };
-            // TODO Initialize this array with any additional tracking rates that your driver may provide
+            
         }
 
         #region ITrackingRates Members
