@@ -1,8 +1,8 @@
 ﻿Public Class ProfileExamples
     Sub Example()
         'Define variables for ASCOM Profile, Subkeys and values
-        Dim Prof As ASCOM.Utilities.Interfaces.IProfile
-        Dim SubKeys, Values As Generic.SortedList(Of String, String)
+        Dim Prof As ASCOM.Utilities.Profile
+        Dim SubKeys, Values As ArrayList
 
         Const MOUNT_PROGID As String = "MyTestMount.Telescope"
         Const TELESCOPE_1 As String = "Telescope 1"
@@ -30,20 +30,20 @@
 
         'Get a list of subkeys
         SubKeys = Prof.SubKeys(MOUNT_PROGID, TELESCOPE_1)
-        For Each kvp As KeyValuePair(Of String, String) In SubKeys
+        For Each kvp As ASCOM.Utilities.KeyValuePair In SubKeys
             MsgBox("SubKey: " & kvp.Key & " default value: " & kvp.Value)
         Next
 
         'Get a list of values held in the "Telescope 1" subkey
         Values = Prof.Values(MOUNT_PROGID, TELESCOPE_1)
-        For Each kvp As KeyValuePair(Of String, String) In Values
+        For Each kvp As ASCOM.Utilities.KeyValuePair In Values
             MsgBox("Name: " & kvp.Key & " value: " & kvp.Value)
         Next
 
         'Enumerate the installed Device Types and devices installed
         For Each DeviceType As String In Prof.RegisteredDeviceTypes 'Get each device type in turn
             MsgBox("Listing " & DeviceType & " devices")
-            For Each Device As System.Collections.Generic.KeyValuePair(Of String, String) In Prof.RegisteredDevices(DeviceType) 'List devices
+            For Each Device As ASCOM.Utilities.KeyValuePair In Prof.RegisteredDevices(DeviceType) 'List devices
                 MsgBox("Found ProgID: " & Device.Key & ", Device: " & Device.Value)
             Next
         Next

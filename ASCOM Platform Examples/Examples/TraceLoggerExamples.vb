@@ -4,7 +4,7 @@
         '   HH:MM:SS.fff Test Log          Whole message in one go
         '   HH:MM:SS.fff Test Log          Start of line, continue 1, continue 2, continue 3, end of line
 
-        Dim TrLog As ASCOM.Utilities.Interfaces.ITraceLogger 'Define cariable as type ILogger
+        Dim TrLog As ASCOM.Utilities.TraceLogger 'Define cariable as type ILogger
         Const TL As String = "Test Log"
 
         'Create a new trace logger and enable it

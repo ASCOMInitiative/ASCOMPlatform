@@ -1,12 +1,16 @@
 ﻿'Exceptions for the Utilities namesapce
+Imports System.Runtime.InteropServices
 
 Namespace Exceptions
     ''' <summary>
     ''' Base exception for the Utilities components
     ''' </summary>
     ''' <remarks></remarks>
-    <Serializable()> _
-        Public Class HelperException
+    <Serializable(), _
+    Guid("A29FB43E-28C5-4ed0-8C8A-889DC7170A82"), _
+    ComVisible(True), _
+    ClassInterface(ClassInterfaceType.None)> _
+    Public Class HelperException
         'Exception for Utilities component exceptions
         Inherits System.Exception
 
@@ -47,7 +51,10 @@ Namespace Exceptions
     ''' Exception thrown when the profile is not found. This is internally trapped and should not appear externally to an application.
     ''' </summary>
     ''' <remarks></remarks>
-    <Serializable()> _
+    <Serializable(), _
+        Guid("21AEDC6B-CC7F-4101-BC33-532DFEDEB7B5"), _
+        ComVisible(True), _
+        ClassInterface(ClassInterfaceType.None)> _
         Public Class ProfileNotFoundException
         'Exception for Utilities component exceptions
         Inherits HelperException
@@ -88,8 +95,11 @@ Namespace Exceptions
     ''' Exception thrown when an invalid value is passed to a Utilities component
     ''' </summary>
     ''' <remarks></remarks>
-    <Serializable()> _
-        Public Class InvalidValueException
+    <Serializable(), _
+       Guid("A9C2CF73-C139-4fae-B47B-36F18C49B527"), _
+       ComVisible(True), _
+       ClassInterface(ClassInterfaceType.None)> _
+           Public Class InvalidValueException
         'Exception for Utilities component exceptions
         Inherits HelperException
 
@@ -132,8 +142,11 @@ Namespace Exceptions
     ''' acquire the serial port. It may indicate that you have more than one thread attempting to access the serial 
     ''' port and that you have not synchronised these within your application. The serial port can only handle 
     ''' one transaction at a time e.g. Serial.Receive or Serial.Transmit etc.</remarks>
-    <Serializable()> _
-        Public Class SerialPortInUseException
+    <Serializable(), _
+       Guid("7A3CFD64-D7E3-48b0-BEB6-5696CF7599B3"), _
+       ComVisible(True), _
+       ClassInterface(ClassInterfaceType.None)> _
+           Public Class SerialPortInUseException
         'Exception for Utilities component exceptions
         Inherits HelperException
 
@@ -175,7 +188,10 @@ Namespace Exceptions
     ''' <remarks>This is an ifrastructural exception indicatig that there is a problem at the file access layer
     ''' in the profile code. Possible underlying reasons are security access permissions, file system full and hardware failure.
     ''' </remarks>
-    <Serializable()> _
+    <Serializable(), _
+        Guid("A38ABA4D-F872-4c2a-A19D-62DBBC761DD5"), _
+        ComVisible(True), _
+        ClassInterface(ClassInterfaceType.None)> _
         Public Class ProfilePersistenceException
         'Exception for Utilities component exceptions
         Inherits HelperException
@@ -217,7 +233,10 @@ Namespace Exceptions
     ''' </summary>
     ''' <remarks>Drivers must be registered before other profile commands are used to manipulate their 
     ''' values.</remarks>
-    <Serializable()> _
+    <Serializable(), _
+        Guid("0D2B7199-622D-4244-88C3-2577308F82E2"), _
+        ComVisible(True), _
+        ClassInterface(ClassInterfaceType.None)> _
         Public Class DriverNotRegisteredException
         'Exception for Utilities component exceptions
         Inherits HelperException
@@ -261,7 +280,10 @@ Namespace Exceptions
     ''' Profile.Register method.
     ''' </summary>
     ''' <remarks></remarks>
-    <Serializable()> _
+    <Serializable(), _
+        Guid("00BC6F08-4277-47c3-9DBA-F80E02C5A448"), _
+        ComVisible(True), _
+        ClassInterface(ClassInterfaceType.None)> _
         Public Class RestrictedAccessException
         'Exception for Utilities component exceptions
         Inherits HelperException
@@ -303,7 +325,10 @@ Namespace Exceptions
     ''' </summary>
     ''' <remarks></remarks>
     ''' 
-    <Serializable()> _
+    <Serializable(), _
+        Guid("C893C94C-3D48-4068-8BCE-6CED6AEF2512"), _
+        ComVisible(True), _
+        ClassInterface(ClassInterfaceType.None)> _
         Public Class ValueNotSetException
         'Exception for Utilities component exceptions
         Inherits HelperException

@@ -11,16 +11,19 @@ Namespace Interfaces
     ''' Interface for KeyValuePair class
     ''' </summary>
     ''' <remarks>This is a return type only used by a small number of the Profile.XXXCOM commands. Including
-    ''' <see cref="IProfile.RegisteredDevicesCOM">IProfile.RegisteredDevices</see>, 
-    ''' <see cref="IProfile.SubKeysCOM">IProfile.SubKeysCOM</see> and 
-    ''' <see cref="IProfile.ValuesCOM">IProfile.ValuesCOM</see>.</remarks>
-    Public Interface IKeyValuePair
+    ''' <see cref="IProfile.RegisteredDevices">IProfile.RegisteredDevices</see>, 
+    ''' <see cref="IProfile.SubKeys">IProfile.SubKeys</see> and 
+    ''' <see cref="IProfile.Values">IProfile.Values</see>.</remarks>
+    <Guid("CA653783-E47D-4e9d-9759-3B91BE0F4340"), _
+    ComVisible(True)> _
+        Public Interface IKeyValuePair
         ''' <summary>
         ''' Key member of a key value pair
         ''' </summary>
         ''' <value>Key</value>
         ''' <returns>Ky as string</returns>
         ''' <remarks></remarks>
+        <DispId(1)> _
         Property Key() As String
         ''' <summary>
         ''' Value memeber of a key value pair
@@ -28,6 +31,7 @@ Namespace Interfaces
         ''' <value>Value</value>
         ''' <returns>Value as string</returns>
         ''' <remarks></remarks>
+        <DispId(0)> _
         Property Value() As String
     End Interface
 
@@ -35,8 +39,9 @@ Namespace Interfaces
     ''' Interface to the TraceLogger component
     ''' </summary>
     ''' <remarks></remarks>
+    <Guid("1C7ABC95-8B63-475e-B5DB-D0CE7ADC436B"), _
+    ComVisible(True)> _
     Public Interface ITraceLogger
-        Inherits IDisposable
         ''' <summary>
         ''' Writes the time and identifier to the log, leaving the line ready for further content through LogContinue and LogFinish
         ''' </summary>
@@ -50,7 +55,7 @@ Namespace Interfaces
         ''' <para>Will create a LOGISSUE message in the log if called before a line started by LogStart has been closed with LogFinish. 
         ''' Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
         ''' </remarks>
-        Sub LogStart(ByVal Identifier As String, ByVal Message As String)
+        <DispId(1)> Sub LogStart(ByVal Identifier As String, ByVal Message As String)
 
         ''' <summary>
         ''' Appends further message to a line started by LogStart, does not terminate the line.
@@ -77,7 +82,7 @@ Namespace Interfaces
         ''' <para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart. 
         ''' Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
         ''' </remarks>
-        Overloads Sub LogContinue(ByVal Message As String, ByVal HexDump As Boolean) ' Append a full hex dump of the supplied string without a new line
+        <DispId(2)> Overloads Sub LogContinue(ByVal Message As String, ByVal HexDump As Boolean) ' Append a full hex dump of the supplied string without a new line
 
         ''' <summary>
         ''' Closes a line started by LogStart with the supplied message
@@ -99,7 +104,7 @@ Namespace Interfaces
         ''' <param name="Message">The final message to appear in the line</param>
         ''' <param name="HexDump">True to append a hex translation of the message at the end of the message</param>
         ''' <remarks></remarks>
-        Overloads Sub LogFinish(ByVal Message As String, ByVal HexDump As Boolean) ' Append a full hex dump of the supplied string with a new line
+        <DispId(3)> Overloads Sub LogFinish(ByVal Message As String, ByVal HexDump As Boolean) ' Append a full hex dump of the supplied string with a new line
 
         ''' <summary>
         ''' Logs a complete message in one call
@@ -127,7 +132,8 @@ Namespace Interfaces
         ''' <para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart.  
         ''' Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
         ''' </remarks>
-        Overloads Sub LogMessage(ByVal Identifier As String, ByVal Message As String, ByVal HexDump As Boolean) ' Append a full hex dump of the supplied string with a new line
+        <DispId(4)> Overloads Sub LogMessage(ByVal Identifier As String, ByVal Message As String, ByVal HexDump As Boolean) ' Append a full hex dump of the supplied string with a new line
+
         ''' <summary>
         ''' Enables or disables logging to the file.
         ''' </summary>
@@ -135,7 +141,8 @@ Namespace Interfaces
         ''' <returns>Boolean, current logging status (enabled/disabled).</returns>
         ''' <remarks>If this property is false then calls to LogMsg, LogStart, LogContinue and LogFinish do nothing. If True, 
         ''' supplied messages are written to the log file.</remarks>
-        Property Enabled() As Boolean
+        <DispId(5)> Property Enabled() As Boolean
+
         ''' <summary>
         ''' Logs an issue, closing any open line and opening a continuation line if necessary after the 
         ''' issue message.
@@ -144,7 +151,7 @@ Namespace Interfaces
         ''' <param name="Message">Message to log</param>
         ''' <remarks>Use this for reporting issues that you don't want to appear on a line already opened 
         ''' with StartLine</remarks>
-        Sub LogIssue(ByVal Identifier As String, ByVal Message As String)
+        <DispId(6)> Sub LogIssue(ByVal Identifier As String, ByVal Message As String)
 
         ''' <summary>
         ''' Sets the log filename and type if the constructor is called without parameters
@@ -165,7 +172,7 @@ Namespace Interfaces
         ''' TL = New TraceLogger("",TraceName")
         ''' </code>
         ''' </remarks>
-        Sub SetLogFile(ByVal LogFileName As String, ByVal LogFileType As String)
+        <DispId(7)> Sub SetLogFile(ByVal LogFileName As String, ByVal LogFileType As String)
 
     End Interface ' Interface to Utilities.TraceLogger
 
@@ -173,8 +180,9 @@ Namespace Interfaces
     ''' Interface to the .NET Chooser component
     ''' </summary>
     ''' <remarks></remarks>
+    <Guid("D398FD76-F4B8-48a2-9CA3-2EF0DD8B98E1"), _
+    ComVisible(True)> _
     Public Interface IChooser
-        Inherits IDisposable
         ''' <summary>
         ''' The type of device for which the Chooser will select a driver. (String, default = "Telescope")
         ''' </summary>
@@ -213,9 +221,10 @@ Namespace Interfaces
     ''' Interface to the .NET Util component
     ''' </summary>
     ''' <remarks></remarks>
+    <Guid("DF41946E-EE14-40f7-AA66-DD8A92E36EF2"), _
+    ComVisible(True)> _
     Public Interface IUtil
         'Interface for the new larger Util class including overloads to replace optional parameters
-        Inherits IDisposable
         ''' <summary>
         ''' Pauses for a given interval in milliseconds.
         ''' </summary>
@@ -775,15 +784,16 @@ Namespace Interfaces
     ''' Interface to the .NET Timer component
     ''' </summary>
     ''' <remarks></remarks>
+    <Guid("23A8A279-FB8E-4b3c-8F2E-010AC0F98588"), _
+    ComVisible(True)> _
     Public Interface ITimer
         'Interface for the Timer class
-        Inherits IDisposable
 
-        ''' <summary>
-        ''' Fired once per Interval when timer is Enabled.
-        ''' </summary>
-        ''' <remarks>To sink this event in Visual Basic, declare the object variable using the WithEvents keyword.</remarks>
-        Event Tick()
+        '''' <summary>
+        '''' Fired once per Interval when timer is Enabled.
+        '''' </summary>
+        '''' <remarks>To sink this event in Visual Basic, declare the object variable using the WithEvents keyword.</remarks>
+        'Event Tick()
         ''' <summary>
         ''' The interval between Tick events when the timer is Enabled in milliseconds, (default = 1000)
         ''' </summary>
@@ -800,12 +810,21 @@ Namespace Interfaces
         Property Enabled() As Boolean
     End Interface 'Interface to Utilities.Timer
 
+    <Guid("BDDA4DFD-77F8-4bd2-ACC0-AF32B4F8B9C2"), _
+    InterfaceType(ComInterfaceType.InterfaceIsIDispatch), _
+    ComVisible(True)> _
+    Public Interface ITimerEvent
+        Sub Tick()
+    End Interface
+
+
     ''' <summary>
     ''' Interface to the .NET Profile component
     ''' </summary>
     ''' <remarks></remarks>
+    <Guid("3503C303-B268-4da8-A0AA-CD6530B802AA"), _
+    ComVisible(True)> _
     Public Interface IProfile
-        Inherits IDisposable
         'Interface for the Profile class
         ''' <summary>
         ''' The type of ASCOM device for which profile data and registration services are provided 
@@ -817,29 +836,15 @@ Namespace Interfaces
         Property DeviceType() As String
 
         ''' <summary>
-        ''' List the device types registered in the Profile store (for COM clients)
-        ''' </summary>
-        ''' <value>List of registered device types</value>
-        ''' <returns>A sorted string array of device types</returns>
-        ''' <remarks>Use this to find which types of device are registered in the Profile store.
-        ''' <para><b>Note: </b> This call functions identically to RegisteredDeviceTypes 
-        ''' except that it returns results as a string array rather than as a generic list. 
-        ''' This is done because it is not possible to expose generics through COM. .NET programmers should
-        ''' use RegisteredDeviceTypes rather than RegisteredDeviceTypesCOM.</para> 
-        '''</remarks>
-        ReadOnly Property RegisteredDeviceTypesCOM() As String()
-
-        ''' <summary>
         ''' List the device types registered in the Profile store
         ''' </summary>
         ''' <value>List of registered device types</value>
-        ''' <returns>A sorted string list of device types</returns>
+        ''' <returns>A sorted string array of device types</returns>
         ''' <remarks>Use this to find which types of device are registered in the Profile store.</remarks>
-        <ComVisible(False)> _
-        ReadOnly Property RegisteredDeviceTypes() As Generic.List(Of String)
+        ReadOnly Property RegisteredDeviceTypes() As String()
 
         ''' <summary>
-        ''' List the devices of a given device type that are registered in the Profile store (for COM clients)
+        ''' List the devices of a given device type that are registered in the Profile store
         ''' </summary>
         ''' <param name="DeviceType">Type of devices to list</param>
         ''' <value>List of registered devices</value>
@@ -850,30 +855,8 @@ Namespace Interfaces
         ''' Use this to find all the registerd devices of a given type that are in the Profile store.
         ''' <para>If a DeviceType is supplied, where no device of that type has been registered before on this system,
         ''' an empty list will be returned</para>
-        ''' <para><b>Note: </b> This call functions identically to RegisteredDevices 
-        ''' except that it returns results as an ArrayList object, rather than as a generic keyed list. 
-        ''' This is done because it is not possible to expose generics through COM. .NET programmers should
-        ''' use RegisteredDevices rather than RegisteredDevicesCOM.</para> 
-        ''' <para>The KeyValuePair objects are instances of the <see cref="KeyValuePair">KeyValuePair class</see> where 
-        ''' the Key is the device name and the Value is the device description.</para>
         ''' </remarks>
-        ReadOnly Property RegisteredDevicesCOM(ByVal DeviceType As String) As ArrayList
-
-        ''' <summary>
-        ''' List the devices of a given device type that are registered in the Profile store
-        ''' </summary>
-        ''' <param name="DeviceType">Type of devices to list</param>
-        ''' <value>List of registered devices</value>
-        ''' <returns>A sorted list of installed devices and associated device descriptions</returns>
-        ''' <exception cref="Exceptions.InvalidValueException">Throw if the supplied DeviceType is empty string or 
-        ''' null value.</exception>
-        ''' <remarks>
-        ''' Use this to find all the registerd devices of a given type that are in the Profile store.
-        ''' <para>If a DeviceType is supplied, where no device of that type has been registered before on this system,
-        ''' an empty list will be returned</para>
-        ''' </remarks>
-        <ComVisible(False)> _
-        ReadOnly Property RegisteredDevices(ByVal DeviceType As String) As Generic.SortedList(Of String, String)
+        ReadOnly Property RegisteredDevices(ByVal DeviceType As String) As ArrayList
 
         ''' <summary>
         ''' Confirms whether a specific driver is registered ort unregistered in the profile store
@@ -959,39 +942,9 @@ Namespace Interfaces
         ''' the Key property is the value's name, and the Value property is the string value itself. Note that the unnamed (default) 
         ''' value will be included if it has a value, even if the value is a blank string. The unnamed value will have its entry's 
         ''' Key property set to an empty string.
-        ''' <para><b>Note: </b> This call functions identically to Values 
-        ''' except that it returns results as an object, actually its a scripting dictionary, rather 
-        ''' than as a generic keyed list. 
-        ''' This is done because it is not possible to expose generics through COM. .NET programmers should
-        ''' use Values rather than ValuesCOM.</para> 
         ''' <para>The KeyValuePair objects are instances of the <see cref="KeyValuePair">KeyValuePair class</see></para>
         '''  </remarks>
-        Function ValuesCOM(ByVal DriverID As String, ByVal SubKey As String) As ArrayList
-
-        ''' <summary>
-        ''' Return a list of the (unnamed and named variables) under the given DriverID.
-        ''' </summary>
-        ''' <param name="DriverID">ProgID of the device to read from</param>
-        ''' <returns>Generic Sorted List of KeyValuePairs</returns>
-        ''' <remarks>The returned object contains entries for each value. For each entry, 
-        ''' the Key property is the value's name, and the Value property is the string value itself. Note that the unnamed (default) 
-        ''' value will be included if it has a value, even if the value is a blank string. The unnamed value will have its entry's 
-        ''' Key property set to an empty string. </remarks>
-        <ComVisible(False)> _
-        Overloads Function Values(ByVal DriverID As String) As Generic.SortedList(Of String, String)
-
-        ''' <summary>
-        ''' Return a list of the (unnamed and named variables) under the given DriverID subkey
-        ''' </summary>
-        ''' <param name="DriverID">ProgID of the device to read from</param>
-        ''' <param name="SubKey">Subkey from the profile root in which to write the value</param>
-        ''' <returns>Generic Sorted List of KeyValuePairs</returns>
-        ''' <remarks>The returned object contains entries for each value. For each entry, 
-        ''' the Key property is the value's name, and the Value property is the string value itself. Note that the unnamed (default) 
-        ''' value will be included if it has a value, even if the value is a blank string. The unnamed value will have its entry's 
-        ''' Key property set to an empty string. </remarks>
-        <ComVisible(False)> _
-        Overloads Function Values(ByVal DriverID As String, ByVal SubKey As String) As Generic.SortedList(Of String, String)
+        Function Values(ByVal DriverID As String, ByVal SubKey As String) As ArrayList
 
         ''' <summary>
         ''' Delete the value from the registry. Name may be an empty string for the unnamed value. 
@@ -1031,33 +984,9 @@ Namespace Interfaces
         ''' <returns>An ArrayList of key-value pairs</returns>
         ''' <remarks>The returned object (scripting.dictionary) contains entries for each sub-key. For each KeyValuePair in the list, 
         ''' the Key property is the sub-key name, and the Value property is the value. The unnamed ("default") value for that key is also returned.
-        ''' <para><b>Note: </b> This call functions identically to Values 
-        ''' except that it returns results as an object, actually its a scripting dictionary, rather 
-        ''' than as a generic keyed list. 
-        ''' This is done because it is not possible to expose generics through COM. .NET programmers should
-        ''' use Values rather than ValuesCOM.</para> 
         ''' <para>The KeyValuePair objects are instances of the <see cref="KeyValuePair">KeyValuePair class</see></para>
         ''' </remarks>
-        Function SubKeysCOM(ByVal DriverID As String, ByVal SubKey As String) As ArrayList
-
-        ''' <summary>
-        ''' Return a list of the sub-keys under the given DriverID.
-        ''' </summary>
-        ''' <param name="DriverID">ProgID of the device to read from</param>
-        ''' <returns>Generic Sorted List of key-value pairs</returns>
-        ''' <remarks>The returned Generic.SortedList object contains entries for each sub-key. For each KeyValuePair in the list, 
-        ''' the Key property is the sub-key name, and the Value property is the value. The unnamed ("default") value for that key is also returned.</remarks>
-        <ComVisible(False)> _
-        Overloads Function SubKeys(ByVal DriverID As String) As Generic.SortedList(Of String, String)
-
-        ''' <summary>
-        ''' Return a list of the sub-keys under the given DriverID and sub-key
-        ''' </summary>
-        ''' <param name="DriverID">ProgID of the driver</param>
-        ''' <returns>Generic Sorted List of key-value pairs</returns>
-        ''' <remarks>The return type uses generics in order to specify the types of the key and value which are both string.</remarks>
-        <ComVisible(False)> _
-        Overloads Function SubKeys(ByVal DriverID As String, ByVal SubKey As String) As Generic.SortedList(Of String, String)
+        Function SubKeys(ByVal DriverID As String, ByVal SubKey As String) As ArrayList
 
         ''' <summary>
         ''' Delete a registry key for the given DriverID. SubKey may contain \ separated path to key to be deleted.
@@ -1072,8 +1001,9 @@ Namespace Interfaces
     ''' Interface to the .NET Serial component
     ''' </summary>
     ''' <remarks></remarks>
+    <Guid("8828511A-05C1-43c7-8970-00D23595930A"), _
+    ComVisible(True)> _
     Public Interface ISerial
-        Inherits IDisposable
 
         'Interface for the standard ASCOM serial functionality
         ''' <summary>

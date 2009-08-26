@@ -1,6 +1,6 @@
 ﻿Public Class UtilExamples
     Sub Example()
-        Dim Utl As ASCOM.Utilities.Interfaces.IUtil
+        Dim Utl As ASCOM.Utilities.Util
         Dim PrmString, RspString As String, PrmDouble, RspDouble As Double, RspDate As Date
 
         Utl = New ASCOM.Utilities.Util

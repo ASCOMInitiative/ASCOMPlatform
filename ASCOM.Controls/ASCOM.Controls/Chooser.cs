@@ -213,7 +213,7 @@ namespace ASCOM.Controls
 
 			using (Profile P = new Profile())
 				{
-				SortedList<string, string> installedDrivers = P.get_RegisteredDevices(this.DeviceClass);
+				ArrayList installedDrivers = P.get_RegisteredDevices(this.DeviceClass);// Changed from Generic.SortedList for COM compatibility
 
 				if (installedDrivers.Count == 0)
 					{	// There is no registry key and therefore no drivers of this type are registered.

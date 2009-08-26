@@ -1,6 +1,6 @@
 ﻿Public Class ChooserExamples
     Sub Example()
-        Dim Ch As ASCOM.Utilities.Interfaces.IChooser
+        Dim Ch As ASCOM.Utilities.Chooser
         Dim SelectedDevice As String
 
         'Create a new chooser and set the required device type

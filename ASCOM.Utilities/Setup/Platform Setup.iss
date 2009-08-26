@@ -137,7 +137,7 @@ Source: ..\OriginalHelpers\RestoreOriginalHelpers.cmd; DestDir: {cf32}\ASCOM\Uti
 ;ASCOM Platform .NET Help files
 Source: ..\Help\Help\PlatformHelp.chm; DestDir: {cf}\ASCOM\Doc; Flags: ignoreversion
 Source: ..\Help\Help\HelperNET.pdf; DestDir: {cf}\ASCOM\Doc; Flags: ignoreversion
-Source: ReadMe55.txt; DestDir: {app}\Readme55.txt; Flags: isreadme
+Source: ReadMe55.txt; DestDir: {app}\Readme55.txt; Flags: ignoreversion
 
 ;Profile Explorer
 Source: ..\Profile Explorer\bin\Debug\ProfileExplorer.exe; DestDir: {pf}\ASCOM\Profile Explorer; Flags: ignoreversion
@@ -215,6 +215,7 @@ Filename: {app}\GACInstall.exe; Parameters: ASCOM.Exceptions.dll; Flags: runhidd
 ;Publisher policy
 #emit "Filename: {app}\GACInstall.exe; Parameters: policy." + str(Major) + "." + str(Minor) + ".ASCOM.Utilities.dll; Flags: runhidden; StatusMsg: Installing ASCOM Utilities policy to the assembly cache"
 #emit "Filename: {app}\GACInstall.exe; Parameters: policy." + str(Major) + "." + str(Minor) + ".ASCOM.Astrometry.dll; Flags: runhidden; StatusMsg: Installing ASCOM Astrometry policy to the assembly cache"
+Filename: {app}\Readme55.txt\ReadMe55.txt; Description: ReadMe file; StatusMsg: Displaying ReadMe file; Flags: shellexec skipifdoesntexist postinstall skipifsilent unchecked
 
 [UninstallRun]
 ; uninstall Utilties, Astrometry and IConform from the GAC and unregister COM types for 32and 64bit COM
@@ -271,3 +272,6 @@ WelcomeLabel1=%n%n[name]%n
 #emit "WelcomeLabel2=This will update your computer to version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
 [_ISToolPreCompile]
 Name: ASCOM Redirection Policies.exe; Parameters: ; Flags: runminimized abortonerror
+[_ISTool]
+LogFile=C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Setup\Setup
+LogFileAppend=false
