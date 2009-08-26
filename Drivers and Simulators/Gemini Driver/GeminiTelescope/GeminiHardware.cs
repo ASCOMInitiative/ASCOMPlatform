@@ -1097,6 +1097,7 @@ namespace ASCOM.GeminiTelescope
                                 GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Cannot open pass-through port: " +ptp_e.Message);
                                 if (OnError != null) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Cannot open pass-through port: " + ptp_e.Message);
                             }
+                        System.Threading.Thread.Sleep(1000);
                     }
                     else
                     {
@@ -1166,11 +1167,11 @@ namespace ASCOM.GeminiTelescope
         private static bool StartGemini()
         {
             Transmit("\x6");
-            CommandItem ci = new CommandItem("\x6", 5000, true);
+            CommandItem ci = new CommandItem("\x6", 10000, true);
             string sRes = GetCommandResult(ci);
 
             // scrolling message? wait for it to end:
-            while (sRes == "B#")
+            while (sRes == "B")
             {
                 System.Threading.Thread.Sleep(500);
                 Transmit("\x6");
@@ -1178,7 +1179,7 @@ namespace ASCOM.GeminiTelescope
                 sRes = GetCommandResult(ci); ;
             }
 
-            if (sRes == "b#")    //Gemini waiting for user to select the boot mode
+            if (sRes == "b")    //Gemini waiting for user to select the boot mode
             {
 
                 GeminiBootMode bootMode = m_BootMode;
@@ -1201,11 +1202,11 @@ namespace ASCOM.GeminiTelescope
                     case GeminiBootMode.WarmRestart: Transmit("bR#"); break;
                     case GeminiBootMode.WarmStart: Transmit("bW#"); break;
                 }
-                sRes = "S#"; // put it into "starting" mode, so the next loop will wait for full initialization
+                sRes = "S"; // put it into "starting" mode, so the next loop will wait for full initialization
             }
 
             // processing Cold start mode -- wait for this to end
-            while (sRes == "S#")
+            while (sRes == "S")
             {
                 System.Threading.Thread.Sleep(500);
                 Transmit("\x6");
@@ -1213,7 +1214,7 @@ namespace ASCOM.GeminiTelescope
                 sRes = GetCommandResult(ci); ;
             }
 
-            return sRes == "G#"; // true if startup completed, otherwise false
+            return sRes == "G"; // true if startup completed, otherwise false
         }
 
         /// <summary>
@@ -1479,7 +1480,7 @@ namespace ASCOM.GeminiTelescope
                 CommandItem command;
 
                 // Gemini gets slow to respond when slewing, so increase timeout if we're in the middle of it:
-                int timeout = (m_Velocity == "S" ? MAX_TIMEOUT : 1000);
+                int timeout = (m_Velocity == "S" ? MAX_TIMEOUT : 5000);
 
                 System.Diagnostics.Trace.Write("Poll commands: " + m_PolledVariablesString + "\r\n");
                 //Get RA and DEC etc
@@ -1646,7 +1647,7 @@ namespace ASCOM.GeminiTelescope
                         }
                         catch { }
 
-                    } while (sRes != "G#");
+                    } while (sRes != "G");
                     System.Threading.Thread.Sleep(1000);
                     m_SerialPort.DiscardOutBuffer();
                     DiscardInBuffer();
@@ -1951,7 +1952,9 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 if (value)
+                {                    
                     Connect();
+                }
                 else
                     Disconnect();
             }
@@ -2479,6 +2482,7 @@ namespace ASCOM.GeminiTelescope
         /// <param name="ci">actual command to queue</param>
         private static void QueueCommand(CommandItem ci)
         {
+            System.Diagnostics.Trace.WriteLine("Queue command..."+ci.m_Command);
             lock (m_CommandQueue)
             {
                 m_CommandQueue.Enqueue(ci);
@@ -2492,6 +2496,7 @@ namespace ASCOM.GeminiTelescope
         /// <param name="ci">array of commands to be executed in sequence</param>
         private static void QueueCommands(CommandItem[] ci)
         {
+            System.Diagnostics.Trace.WriteLine("Queue commands..." + ci[0].m_Command);
             lock (m_CommandQueue)
             {
                 for(int i=0; i<ci.Length; ++i)
