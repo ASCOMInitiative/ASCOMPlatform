@@ -1947,7 +1947,10 @@ namespace ASCOM.GeminiTelescope
         {
             get
             { 
-                return m_Connected; 
+                // make sure we are fully connected/disconnected before returning a status,
+                // so that another worker thread doesn't come in with a request while a connect is 
+                // still in progress [pk]
+                lock (m_ConnectLock) { return m_Connected; }
             }
             set
             {
