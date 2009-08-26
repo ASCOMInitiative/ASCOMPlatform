@@ -68,7 +68,7 @@ namespace ASCOM.GeminiTelescope
         public Focuser()
         {
             m_Util = new ASCOM.Utilities.Util();
-            tmrFocus.Tick += new ASCOM.Utilities.Interfaces.ITimer.TickEventHandler(tmrFocus_Tick);
+            tmrFocus.Tick += new ASCOM.Utilities.Timer.TickEventHandler(tmrFocus_Tick);// Changed to work with new timer interface
         }
 
         /// <summary>
