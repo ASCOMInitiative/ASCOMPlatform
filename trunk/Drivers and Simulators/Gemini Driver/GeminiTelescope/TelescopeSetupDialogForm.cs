@@ -13,7 +13,9 @@ namespace ASCOM.GeminiTelescope
     [ComVisible(false)]					// Form not registered for COM!
     public partial class TelescopeSetupDialogForm : Form
     {
-        
+        private string m_GpsComPort;
+        private string m_GpsBaudRate;
+
         public TelescopeSetupDialogForm()
         {
             InitializeComponent();
@@ -121,6 +123,18 @@ namespace ASCOM.GeminiTelescope
         {
             get { return comboBoxBaudRate.SelectedItem.ToString(); }
             set { comboBoxBaudRate.SelectedItem = value; }
+        }
+
+        public string GpsComPort
+        {
+            get { return m_GpsComPort; }
+            set { m_GpsComPort = value; }
+        }
+
+        public string GpsBaudRate
+        {
+            get { return m_GpsBaudRate; }
+            set { m_GpsBaudRate = value; }
         }
         public double Elevation
         {
@@ -260,12 +274,24 @@ namespace ASCOM.GeminiTelescope
         private void buttonGps_Click(object sender, EventArgs e)
         {
             frmGps gpsForm = new frmGps();
+
+            gpsForm.ComPort = m_GpsComPort;
+            gpsForm.BaudRate = m_GpsBaudRate;
+
             DialogResult ans = gpsForm.ShowDialog(this);
             if (ans == DialogResult.OK)
             {
                 try
                 {
-
+                    m_GpsBaudRate = gpsForm.BaudRate;
+                    m_GpsComPort = gpsForm.ComPort;
+                    if (gpsForm.Latitude != 0 && gpsForm.Longitude != 0)
+                    {
+                        Latitude = gpsForm.Latitude;
+                        Longitude = gpsForm.Longitude;
+                        checkBoxUseGeminiSite.Checked = false;
+                        checkBoxUseGeminiTime.Checked = false;
+                    }
                 }
                 catch
                 {
