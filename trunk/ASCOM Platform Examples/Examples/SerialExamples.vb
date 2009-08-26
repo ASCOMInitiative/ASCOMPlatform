@@ -1,6 +1,6 @@
 ﻿Public Class SerialExamples
     'Define the serial port variable
-    Private SerPort As ASCOM.Utilities.Interfaces.ISerial
+    Private SerPort As ASCOM.Utilities.Serial
 
     Sub BasicExample() 'This example shows a simple use of the ASCOM serial port
         'Define variables for strings to be transmitted and received

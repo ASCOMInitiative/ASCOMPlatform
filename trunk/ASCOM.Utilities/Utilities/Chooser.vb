@@ -17,6 +17,9 @@ Imports System.Runtime.InteropServices
 ''' driver (you probably save this in the registry), and the corresponding telescope type is pre-selected in the Chooser's list. In this case, 
 ''' the OK button starts out enabled (lit-up); the assumption is that the pre-selected driver has already been configured. </para>
 '''</remarks>
+<Guid("B7A1F5A0-71B4-44f9-91E9-468697957D6B"), _
+ComVisible(True), _
+ClassInterface(ClassInterfaceType.None)> _
 Public Class Chooser
     Implements IChooser, IDisposable
 

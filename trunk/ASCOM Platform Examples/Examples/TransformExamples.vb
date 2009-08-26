@@ -1,6 +1,6 @@
 ﻿Public Class TransformExamples
     Private T As ASCOM.Astrometry.Transform.ITransform
-    Private U As ASCOM.Utilities.Interfaces.IUtil
+    Private U As ASCOM.Utilities.Util
 
     Sub Example()
         T = New ASCOM.Astrometry.Transform.Transform 'Create transform and util components

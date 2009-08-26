@@ -1,6 +1,6 @@
 ﻿Public Class TimerExamples
     'Set variable type to ITimer
-    Private WithEvents ASCOMTimer As ASCOM.Utilities.Interfaces.ITimer
+    Private WithEvents ASCOMTimer As ASCOM.Utilities.Timer
 
     Sub Example()
         Dim StartTime As Date

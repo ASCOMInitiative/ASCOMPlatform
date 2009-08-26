@@ -6,6 +6,7 @@ Option Explicit On
 Imports System.IO.Ports
 Imports ASCOM.Utilities.Interfaces
 Imports ASCOM.Utilities.Exceptions
+Imports System.Runtime.InteropServices
 
 #Region "Enums"
 'PortSpeed enum
@@ -13,6 +14,8 @@ Imports ASCOM.Utilities.Exceptions
 ''' Enumeration of serial port speeds for use with the Serial port
 ''' </summary>
 ''' <remarks>This contains an additional speed 230,400 baud that the COM component doesn't support.</remarks>
+<Guid("06BB25BA-6E75-4d1b-8BB4-BA629454AE38"), _
+ComVisible(True)> _
 Public Enum SerialSpeed As Integer 'Defined at ACOM.Utilities level
     ps300 = 300
     ps1200 = 1200
@@ -37,6 +40,8 @@ End Enum
 ''' The None option is not supported. Setting the StopBits property to None raises an 
 ''' ArgumentOutOfRangeException. 
 ''' </remarks>
+<Guid("17D30DAA-C767-43fd-8AF4-5E149D5C771F"), _
+ComVisible(True)> _
 Public Enum SerialStopBits
     ''' <summary>
     ''' No stop bits are used. This value is not supported. Setting the StopBits property to None raises an ArgumentOutOfRangeException. 
@@ -69,6 +74,8 @@ End Enum
 ''' Parity is one of the parameters that must be 
 ''' agreed upon by both sending and receiving parties before transmission can take place. 
 ''' </remarks>
+<Guid("92B19711-B44F-4642-9F96-5A20397B8FD1"), _
+ComVisible(True)> _
 Public Enum SerialParity
     ''' <summary>
     ''' Sets the parity bit so that the count of bits set is an even number. 
@@ -101,6 +108,8 @@ End Enum
 ''' The control protocol used by the serial port
 ''' </summary>
 ''' <remarks></remarks>
+<Guid("55A24A18-02C8-47df-A048-2E0982E1E4FE"), _
+ComVisible(True)> _
 Public Enum SerialHandshake
     ''' <summary>
     ''' No control is used for the handshake. 
@@ -142,6 +151,9 @@ End Enum
 ''' source="..\..\ASCOM Platform Examples\Examples\SerialExamples.vb"
 ''' />
 '''</example>
+<ClassInterface(ClassInterfaceType.None), _
+Guid("0B8E6DC4-7451-4484-BE15-0D0727569FB8"), _
+ComVisible(True)> _
 Public Class Serial
     Implements ISerial, IDisposable
 

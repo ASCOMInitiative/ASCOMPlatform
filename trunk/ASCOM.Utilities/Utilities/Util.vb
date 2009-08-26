@@ -11,6 +11,9 @@ Imports System.Runtime.InteropServices
 ''' Provides a set of utility functions for ASCOM clients and drivers
 ''' </summary>
 ''' <remarks></remarks>
+<Guid("E861C6D8-B55B-494a-BC59-0F27F981CA98"), _
+ComVisible(True), _
+ClassInterface(ClassInterfaceType.None)> _
 Public Class Util
     Implements IUtil, IDisposable
     '---------------------------------------------------------------------

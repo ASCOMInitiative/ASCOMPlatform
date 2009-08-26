@@ -19,6 +19,9 @@ Imports System.Runtime.InteropServices
 ''' and fractional second at the time that the message was logged, Identifier is the supplied identifier (usually the subroutine, 
 ''' function, property or method from which the message is sent) and Message is the message to be logged.</para>
 '''</remarks>
+<Guid("A088DB9B-E081-4339-996E-191EB9A80844"), _
+ComVisible(True), _
+ClassInterface(ClassInterfaceType.None)> _
 Public Class TraceLogger
     Implements ITraceLogger, IDisposable
 
@@ -108,7 +111,7 @@ Public Class TraceLogger
 
 #End Region
 
-#Region "TraceLogger"
+#Region "TraceLogger Implementation"
 
     ''' <summary>
     ''' Logs an issue, closing any open line and opening a continuation line if necessary after the 

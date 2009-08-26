@@ -9,7 +9,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTitle("ASCOM Utilities")> 
 <Assembly: AssemblyDescription("ASCOM Utilities")> 
 <Assembly: AssemblyCompany("ASCOM Initiative")>
-<Assembly: AssemblyProduct("Utilities")> 
+<Assembly: AssemblyProduct("ASCOM Utilities")> 
 <Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2009")> 
 <Assembly: AssemblyTrademark("")>
 <Assembly: AssemblyCulture("")>
@@ -28,6 +28,6 @@ Imports System.Runtime.InteropServices
 
 
 
-<Assembly: ComVisibleAttribute(True)> 
+<Assembly: ComVisibleAttribute(False)> 
 <Assembly: GuidAttribute("EC785106-0F00-4e7f-90BA-7CCC9E9740E1")> 
-<Assembly: AssemblyFileVersionAttribute("5.3.1.0")> 
+<Assembly: AssemblyFileVersionAttribute("5.3.3.0")> 
