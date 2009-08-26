@@ -175,6 +175,7 @@
     <Compile Include="TelescopeSetupDialogForm.designer.cs">
       <DependentUpon>TelescopeSetupDialogForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tracer.cs" />
     <Compile Include="Win32API.cs" />
   </ItemGroup>
   <ItemGroup>

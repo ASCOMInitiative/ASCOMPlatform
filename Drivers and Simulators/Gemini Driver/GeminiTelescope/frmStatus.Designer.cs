@@ -505,6 +505,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Gemini Status";
             this.Load += new System.EventHandler(this.frmStatus_Load);
+            this.VisibleChanged += new System.EventHandler(this.frmStatus_VisibleChanged);
             this.Move += new System.EventHandler(this.frmStatus_Move);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
