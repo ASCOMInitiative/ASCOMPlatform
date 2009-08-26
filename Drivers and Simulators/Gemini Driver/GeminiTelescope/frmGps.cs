@@ -5,19 +5,20 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using System.IO.Ports;
+
 using System.Runtime.InteropServices;
 
 namespace ASCOM.GeminiTelescope
 {
-    public delegate void MessageDelegate(string message);
+    
     public delegate void FormDelegate(string latitude, string longitude);
 
     public partial class frmGps : Form
     {
-        private SerialPort comPort = new SerialPort();
+        
         private NmeaInterpreter interpreter = new NmeaInterpreter();
-
+        private string m_Latitude;
+        private string m_Longitude;
         
         public struct SystemTime
 
@@ -39,7 +40,7 @@ namespace ASCOM.GeminiTelescope
         {
             InitializeComponent();
 
-            comPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(comPort_DataReceived);
+            
 
             comboBoxComPort.Items.Add("");
             foreach (string s in System.IO.Ports.SerialPort.GetPortNames())
@@ -57,6 +58,12 @@ namespace ASCOM.GeminiTelescope
         {
             labelLatitude.Text = "Latitude: " + latitude;
             labelLongitude.Text = "Longitude: " + longitude;
+
+            m_Latitude = latitude.Substring(1);
+            m_Longitude = longitude.Substring(1);
+
+            if (latitude.Substring(0, 1) == "S") m_Latitude = "-" + m_Latitude;
+            if (longitude.Substring(0, 1) == "W") m_Longitude = "-" + m_Longitude;
         }
         private void interpreter_PositionReceived(string latitude, string longitude)
         {
@@ -83,7 +90,7 @@ namespace ASCOM.GeminiTelescope
                 double lat = 0;
                 try
                 {
-                    
+                    lat = GeminiHardware.m_Util.DMSToDegrees(m_Latitude);
                 }
                 catch { }
                 return lat;
@@ -96,36 +103,24 @@ namespace ASCOM.GeminiTelescope
                 double log = 0;
                 try
                 {
-
+                    log = GeminiHardware.m_Util.DMSToDegrees(m_Longitude);
                 }
                 catch { }
                 return log;
             }
         }
+        public string ComPort
+        {
+            get { return comboBoxComPort.SelectedItem.ToString(); }
+            set { comboBoxComPort.SelectedItem = value; }
+        }
 
-        void comPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        public string BaudRate
         {
-            try
-            {
-                MessageDelegate message = new MessageDelegate(ProcessMessage);
-                //read data waiting in the buffer
-                if (comPort.IsOpen)
-                {
-                    string str = comPort.ReadLine();
-                    message.Invoke(str);
-                }
-            }
-            catch { }
-            
+            get { return comboBoxBaudRate.SelectedItem.ToString(); }
+            set { comboBoxBaudRate.SelectedItem = value; }
         }
-        private void ProcessMessage(string message)
-        {
-            try
-            {
-                interpreter.Parse(message.Substring(0, message.Length - 2));
-            }
-            catch { }
-        }
+        
         private void buttonQuery_Click(object sender, EventArgs e)
         {
             if (buttonQuery.Text == "Query")
@@ -134,22 +129,9 @@ namespace ASCOM.GeminiTelescope
                 {
                     if (comboBoxComPort.SelectedItem.ToString() != "")
                     {
-                        if (comPort.IsOpen == false)
-                        {
-                            comPort.PortName = comboBoxComPort.SelectedItem.ToString();
-                            comPort.BaudRate = int.Parse(comboBoxBaudRate.SelectedItem.ToString());
-                            comPort.DataBits = 8;
-                            comPort.Parity = Parity.None;
-                            comPort.StopBits = StopBits.One;
-                            comPort.Handshake = Handshake.None;
-
-                            
-
-                            comPort.Open();
-
-                            comPort.DtrEnable = true;
-                            comPort.RtsEnable = true;
-                        }
+                        interpreter.ComPort = comboBoxComPort.SelectedItem.ToString();
+                        interpreter.BaudRate = int.Parse(comboBoxBaudRate.SelectedItem.ToString());
+                        interpreter.Conneced = true;
                         buttonQuery.Text = "Stop";
                     }
                     else { MessageBox.Show("Select Com Port"); }
@@ -163,7 +145,7 @@ namespace ASCOM.GeminiTelescope
                 try
                 {
                     buttonQuery.Text = "Query";
-                    if (comPort.IsOpen == true) comPort.Close();
+                    interpreter.Conneced = false;
                     
                 }
                 catch { }
@@ -174,8 +156,8 @@ namespace ASCOM.GeminiTelescope
         {
             try
             {
-                
-                if (comPort.IsOpen == true) comPort.Close();
+
+                interpreter.Conneced = false;
 
             }
             catch { }
@@ -186,7 +168,7 @@ namespace ASCOM.GeminiTelescope
             try
             {
 
-                if (comPort.IsOpen == true) comPort.Close();
+                interpreter.Conneced = false;
 
             }
             catch { }

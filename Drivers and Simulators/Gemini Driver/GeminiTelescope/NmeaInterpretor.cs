@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO.Ports;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -21,6 +22,7 @@ namespace ASCOM.GeminiTelescope
         //     hour
         public static double MPHPerKnot = double.Parse("1.150779", NmeaCultureInfo);
         #region Delegates
+        public delegate void MessageDelegate(string message);
         public delegate void PositionReceivedEventHandler(string latitude,
         string longitude);
         public delegate void DateTimeChangedEventHandler(System.DateTime dateTime);
@@ -49,6 +51,19 @@ namespace ASCOM.GeminiTelescope
         public event VDOPReceivedEventHandler VDOPReceived;
         public event PDOPReceivedEventHandler PDOPReceived;
         #endregion
+
+        #region Member Variables
+
+        private string m_ComPort;
+        private int m_BaudRate;
+
+        private SerialPort comPort = new SerialPort();
+        #endregion
+
+        public NmeaInterpreter()
+        {
+            comPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(comPort_DataReceived);
+        }
 
         // Processes information from the GPS re
         //     ceiver
@@ -96,16 +111,16 @@ namespace ASCOM.GeminiTelescope
             {
                 // Yes. Extract latitude and longitude
                 // Append hours
-                string Latitude = Words[3].Substring(0, 2) + "°";
+                string Latitude = Words[3].Substring(0, 2) + ":";
                 // Append minutes
-                Latitude = Latitude + Words[3].Substring(2) + "\"";
+                Latitude = Latitude + Words[3].Substring(2);
                 // Append hours 
-                Latitude = Latitude + Words[4]; // Append the hemisphere
-                string Longitude = Words[5].Substring(0, 3) + "°";
+                Latitude = Words[4] + Latitude; // Append the hemisphere
+                string Longitude = Words[5].Substring(0, 3) + ":";
                 // Append minutes
-                Longitude = Longitude + Words[5].Substring(3) + "\"";
+                Longitude = Longitude + Words[5].Substring(3);
                 // Append the hemisphere
-                Longitude = Longitude + Words[6];
+                Longitude = Words[6] + Longitude;
                 // Notify the calling application of the
                 //     change
                 if (PositionReceived != null)
@@ -301,6 +316,75 @@ namespace ASCOM.GeminiTelescope
             // Return the checksum formatted as a tw
             //     o-character hexadecimal
             return Checksum.ToString("X2");
+        }
+        public string ComPort
+        {
+            get { return m_ComPort; }
+            set { m_ComPort = value; }
+        }
+
+        public int BaudRate
+        {
+            get { return m_BaudRate; }
+            set { m_BaudRate = value; }
+        }
+        void comPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            try
+            {
+                MessageDelegate message = new MessageDelegate(ProcessMessage);
+                //read data waiting in the buffer
+                if (comPort.IsOpen)
+                {
+                    string str = comPort.ReadLine();
+                    message.Invoke(str);
+                }
+            }
+            catch { }
+
+        }
+        private void ProcessMessage(string message)
+        {
+            try
+            {
+                Parse(message.Substring(0, message.Length - 2));
+            }
+            catch { }
+        }
+        public bool Conneced
+        {
+            get
+            {
+                return comPort.IsOpen;
+            }
+            set
+            {
+                if (value)
+                {
+                    if (comPort.IsOpen == false)
+                    {
+                       
+                            comPort.PortName = m_ComPort;
+                            comPort.BaudRate = m_BaudRate;
+                            comPort.DataBits = 8;
+                            comPort.Parity = Parity.None;
+                            comPort.StopBits = StopBits.One;
+                            comPort.Handshake = Handshake.None;
+
+
+
+                            comPort.Open();
+
+                            comPort.DtrEnable = true;
+                            comPort.RtsEnable = true;
+                        
+                    }
+                }
+                else
+                {
+                    if (comPort.IsOpen == true) comPort.Close();
+                }
+            }
         }
     }
 }

@@ -99,9 +99,9 @@ namespace ASCOM.GeminiTelescope
             buttonGps.ForeColor = System.Drawing.Color.White;
             buttonGps.Location = new System.Drawing.Point(238, 303);
             buttonGps.Name = "buttonGps";
-            buttonGps.Size = new System.Drawing.Size(75, 23);
+            buttonGps.Size = new System.Drawing.Size(84, 23);
             buttonGps.TabIndex = 23;
-            buttonGps.Text = "Query GPS";
+            buttonGps.Text = "GPS Settings";
             buttonGps.UseVisualStyleBackColor = false;
             buttonGps.Click += new System.EventHandler(this.buttonGps_Click);
             // 
@@ -282,12 +282,10 @@ namespace ASCOM.GeminiTelescope
             // 
             // labelTime
             // 
-            this.labelTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTime.AutoSize = true;
             this.labelTime.ForeColor = System.Drawing.Color.White;
-            this.labelTime.Location = new System.Drawing.Point(363, 337);
+            this.labelTime.Location = new System.Drawing.Point(363, 338);
             this.labelTime.Name = "labelTime";
-            this.labelTime.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.labelTime.Size = new System.Drawing.Size(185, 13);
             this.labelTime.TabIndex = 19;
             this.labelTime.Text = "<run time - time zone and UTC offset>";
