@@ -139,10 +139,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Driver Templates", "Driver 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM Device Driver CSharp", "DriverTemplates\Driver Template CSharp\ASCOM Device Driver CSharp.csproj", "{64308775-BD4A-469C-BCAB-3ED830B811AF}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ASCOM Device Driver VB", "DriverTemplates\Driver Template VB\ASCOM Device Driver VB.vbproj", "{71BB4DA7-4092-416D-89FE-97CD15207371}"
+EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = ASCOM Platform 5.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Platform Dependencies|Any CPU = Platform Dependencies|Any CPU
@@ -369,6 +368,10 @@ Global
 		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Platform Dependencies|Any CPU.ActiveCfg = Release|Any CPU
 		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64308775-BD4A-469C-BCAB-3ED830B811AF}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
+		{71BB4DA7-4092-416D-89FE-97CD15207371}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71BB4DA7-4092-416D-89FE-97CD15207371}.Platform Dependencies|Any CPU.ActiveCfg = Release|Any CPU
+		{71BB4DA7-4092-416D-89FE-97CD15207371}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71BB4DA7-4092-416D-89FE-97CD15207371}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -416,5 +419,6 @@ Global
 		{20CD9164-D5BF-4DA5-A248-EC6B81830610} = {F319D614-A93C-4952-9D75-4230DB9896B8}
 		{6E5A18A3-EA09-4D55-ABC8-A7AEAC3DDA2D} = {02FC4179-0ADE-45D2-9C78-52F74FF6156C}
 		{64308775-BD4A-469C-BCAB-3ED830B811AF} = {02FC4179-0ADE-45D2-9C78-52F74FF6156C}
+		{71BB4DA7-4092-416D-89FE-97CD15207371} = {02FC4179-0ADE-45D2-9C78-52F74FF6156C}
 	EndGlobalSection
 EndGlobal

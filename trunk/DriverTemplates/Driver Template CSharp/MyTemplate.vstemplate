@@ -7,7 +7,7 @@
     </ProjectSubType>
     <SortOrder>1000</SortOrder>
     <CreateNewFolder>true</CreateNewFolder>
-    <DefaultName>ASCOM Device Driver CSharp</DefaultName>
+    <DefaultName>ASCOM Device Driver</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
@@ -27,7 +27,7 @@
         <ProjectItem ReplaceParameters="true" TargetFileName="Settings.settings">Settings.settings</ProjectItem>
         <ProjectItem ReplaceParameters="true" TargetFileName="Settings.Designer.cs">Settings.Designer.cs</ProjectItem>
       </Folder>
-      <ProjectItem ReplaceParameters="true" TargetFileName="ReadMe.htm">ReadMe.htm</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ReadMe.htm" OpenInWebBrowser="true">ReadMe.htm</ProjectItem>
       <Folder Name="Resources" TargetFolderName="Resources">
         <ProjectItem ReplaceParameters="false" TargetFileName="ASCOM.bmp">ASCOM.bmp</ProjectItem>
       </Folder>

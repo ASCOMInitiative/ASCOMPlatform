@@ -11,11 +11,14 @@ namespace ASCOM.Setup
 	{
 		private UserInputForm inputForm;
 		private const string csAscom = "ASCOM.";
-		private const string csDeviceIdFormat = "{0}.{1}.{2}";
+		private const string csDeviceIdFormat = "ASCOM.{0}.{1}";
+
 		// These Guids are placeholder Guids. Wherever they are used in the template project, they'll be replaced with new
 		// values when the template is expanded. THE TEMPLATE PROJECTS MUST USE THESE GUIDS.
 		private const string csTemplateGuid1 = "28D679BA-2AF1-4557-AE15-C528C5BF91E0";
 		private const string csTemplateGuid2 = "3A02C211-FA08-4747-B0BD-4B00EB159297";
+
+		// Private properties
 		private string DeviceClass { get; set; }
 		private string DeviceName { get; set; }
 		private string DeviceId { get; set; }
@@ -32,20 +35,17 @@ namespace ASCOM.Setup
 		public void ProjectFinishedGenerating(Project project)
 		{
 			Diagnostics.Enter();
-#if false
-			DumpCodeModel(project);	// Write environment information to trace output.
-#endif
-
-			//if (projectItem.Name == "Driver.cs")
-			//{
-			//    Diagnostics.TraceInfo("Detected Driver.cs");
-			//    // Handle C# interface implementation
-			//}
-			//else if (projectItem.Name == "Driver.vb")
-			//{
-			//    Diagnostics.TraceInfo("Detected Driver.vb");
-			//    // Handle VB interface implementation
-			//}
+			// Iterate through the project items and 
+			// remove any files that begin with the word "Placeholder".
+			ProjectItems items = project.ProjectItems;
+			foreach (ProjectItem item in items)
+			{
+				if (item.Name.StartsWith("Placeholder"))
+				{
+					item.Delete();
+				}
+			}
+			project.Name = String.Format(csDeviceIdFormat, DeviceId);
 			Diagnostics.Exit();
 		}
 
