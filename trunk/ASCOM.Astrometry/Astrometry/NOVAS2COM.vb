@@ -7,6 +7,8 @@ Imports System.Runtime.InteropServices
 Imports ASCOM.Astrometry.NOVASCOM
 
 Namespace NOVAS
+    <Guid("C3F04186-CD53-40fb-8B2A-B52BE955956D"), _
+    ClassInterface(ClassInterfaceType.None)> _
     Public Class NOVAS2COM
         Implements INOVAS2
 

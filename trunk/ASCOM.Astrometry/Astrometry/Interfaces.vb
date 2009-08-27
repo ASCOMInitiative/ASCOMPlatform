@@ -21,6 +21,8 @@ Namespace Transform
     ''' http://www.usno.navy.mil/USNO/astronomical-applications/software-products/novas/novas-fortran/novas-fortran 
     ''' </para>
     ''' </remarks>
+    <Guid("6F38768E-C52D-41c7-9E0F-B8E4AFE341A7"), _
+    ComVisible(True)> _
     Public Interface ITransform
         Inherits IDisposable
         ''' <summary>
@@ -239,6 +241,8 @@ Namespace Kepler
     ''' TT clock. It differs from UT1 by an amount called "delta-t", which slowly increases with time, 
     ''' and is about 60 seconds right now (2001). </para>
     ''' </remarks>
+    <Guid("54A8F586-C7B7-4899-8AA1-6044BDE4ABFA"), _
+    ComVisible(True)> _
     Public Interface IEphemeris
         ''' <summary>
         ''' Compute rectangular (x/y/z) heliocentric J2000 equatorial coordinates of position (AU) and 
@@ -387,6 +391,8 @@ Namespace NOVASCOM
     ''' (KM/sec.). In addition, it must support three read/write properties BodyType, Name, and Number, 
     ''' which correspond to the Type, Name, and Number properties of Novas.Planet. 
     ''' </para></remarks>
+    <Guid("FF6DA248-BA2A-4a62-BA0A-AAD433EAAC85"), _
+    ComVisible(True)> _
     Public Interface IEarth
         ''' <summary>
         ''' Initialize the Earth object for given terrestrial Julian date
@@ -505,6 +511,8 @@ Namespace NOVASCOM
     ''' which correspond to the Type, Name, and Number properties of Novas.Planet. 
     ''' </para>
     '''</remarks>
+    <Guid("CAE65556-EA7A-4252-BF28-D0E967AEF04D"), _
+    ComVisible(True)> _
     Public Interface IPlanet
         ''' <summary>
         ''' Get an apparent position for given time
@@ -607,6 +615,8 @@ Namespace NOVASCOM
     ''' proper motion. Thus, a PositionVector object gives access to some of the lower-level NOVAS functions. 
     ''' <para><b>Note:</b> The equatorial coordinate properties of this object are dependent variables, and thus are read-only. Changing any cartesian coordinate will cause the equatorial coordinates to be recalculated. 
     ''' </para></remarks>
+    <Guid("A3B6F9AA-B331-47c7-B8F0-4FBECF0638AA"), _
+    ComVisible(True)> _
     Public Interface IPositionVector
         ''' <summary>
         ''' Adjust the position vector of an object for aberration of light
@@ -752,6 +762,8 @@ Namespace NOVASCOM
     ''' ellipsoid. Properties are latitude, longitude, height above mean sea level, the ambient temperature 
     ''' and the sea-level barmetric pressure. The latter two are used only for optional refraction corrections. 
     ''' Latitude and longitude are (common) geodetic, not geocentric. </remarks>
+    <Guid("2414C071-8A5B-4d53-89BC-CAF30BA7123B"), _
+    ComVisible(True)> _
     Public Interface ISite
         ''' <summary>
         ''' Set all site properties in one method call
@@ -811,6 +823,8 @@ Namespace NOVASCOM
     ''' time, the (optionally refracted) alt-az coordinates are calculated, and are also contained within 
     ''' the returned PositionVector. <b>Note that Alt/Az is available in PositionVectors returned from calling 
     ''' GetTopocentricPosition().</b></para></remarks>
+    <Guid("89145C95-9B78-494e-99FE-BD2EF4386096"), _
+    ComVisible(True)> _
     Public Interface IStar
         ''' <summary>
         ''' Initialize all star properties with one call
@@ -966,6 +980,8 @@ Namespace NOVASCOM
     ''' a Star object (essentially an FK5 or HIP catalog entry) or a Site (lat/long/height). For the star 
     ''' object the proper motions, distance and radial velocity are used, for a site, the velocity is that 
     ''' of the observer with respect to the Earth's center of mass. </remarks>
+    <Guid("8DD80835-29C6-49d6-8E4D-8887B20E707E"), _
+    ComVisible(True)> _
     Public Interface IVelocityVector
         ''' <summary>
         ''' Initialize the VelocityVector from a Site object and Greenwich Apparent Sdereal Time.
@@ -1064,6 +1080,8 @@ End Namespace
 #Region "NOVAS2 Interface"
 Namespace NOVAS
 
+    <Guid("3D201554-007C-47e6-805D-F66D1CA35543"), _
+    ComVisible(True)> _
     Public Interface INOVAS2
         ''' <summary>
         ''' Computes the apparent place of a star 
