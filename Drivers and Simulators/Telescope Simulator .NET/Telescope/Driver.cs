@@ -869,8 +869,68 @@ namespace ASCOM.TelescopeSimulator
 
         public PierSide DestinationSideOfPier(double RightAscension, double Declination)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("DestinationSideOfPier");
+            if (TelescopeHardware.VersionOneOnly)
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Capabilities)
+                    {
+                        SharedResources.TrafficForm.TrafficLine("DestinationSideOfPier: Not Implemented");
+                    }
+                }
+                throw new MethodNotImplementedException("DestinationSideOfPier");
+            }
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Other)
+                {
+                    SharedResources.TrafficForm.TrafficStart("DestinationSideOfPier RA " + RightAscension + " DEC " + Declination);
+                }
+            }
+
+            switch (TelescopeHardware.SideOfPierRaDec(RightAscension,Declination))
+            {
+                case 0:
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Unknown");
+                        }
+                    }
+                    return PierSide.pierUnknown;
+                    
+                case 1:
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("East");
+                        }
+                    }
+                    return PierSide.pierEast;
+                    
+                case 2:
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("West");
+                        }
+                    }
+                    return PierSide.pierWest;
+                    
+                default:
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Unknown");
+                        }
+                    }
+                    return PierSide.pierUnknown;
+                    
+            }
         }
 
         public bool DoesRefraction
@@ -1409,8 +1469,54 @@ namespace ASCOM.TelescopeSimulator
 
         public void Park()
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("Park");
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficStart("Park: ");
+
+                }
+            }
+            if (!TelescopeHardware.CanPark)
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Gets)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd("Can't Park");
+                    }
+                }
+                throw new MethodNotImplementedException("Park");
+            }
+
+            if (TelescopeHardware.IsParked)
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Slew)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd("(done)");
+
+                    }
+                }
+                return;
+            }
+
+            TelescopeHardware.Park();
+
+            while (TelescopeHardware.SlewState == SlewType.SlewPark)
+            {
+                System.Windows.Forms.Application.DoEvents();
+            }
+
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficEnd("(done)");
+
+                }
+            }
         }
 
         public void PulseGuide(GuideDirections Direction, int Duration)
