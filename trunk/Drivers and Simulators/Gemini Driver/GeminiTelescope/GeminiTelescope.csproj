@@ -68,7 +68,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="ASCOM.Utilities, Version=5.3.1.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Platform Dependencies\ASCOM.Utilities.dll</HintPath>
       <Private>True</Private>
     </Reference>
