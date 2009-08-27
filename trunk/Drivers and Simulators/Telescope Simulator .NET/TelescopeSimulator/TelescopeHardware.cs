@@ -959,16 +959,26 @@ namespace ASCOM.TelescopeSimulator
            }
 
        }
+       public static bool IsParked
+       {
+           get { return m_AtPark; }
+       }
         #endregion
 
         #region Helper Functions
+       public static int SideOfPierRaDec(double RightAscension, double Declination)
+       {
+           return 0;
+       }
        public static void StartSlewRaDec(double RightAscension, double Declination, bool DoSideOfPier)
        {
        }
        public static void StartSlewAltAz(double Altitude, double Azimuth, bool DoSideOfPier)
        {
        }
-
+       public static void Park()
+       {
+       }
        public static void FindHome()
        {
        }
