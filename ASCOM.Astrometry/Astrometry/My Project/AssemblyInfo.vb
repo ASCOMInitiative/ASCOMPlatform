@@ -9,9 +9,9 @@ Imports System.Runtime.InteropServices
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("ASCOM Astrometry")> 
-<Assembly: AssemblyDescription("ASCOM Astrometric Support")> 
+<Assembly: AssemblyDescription("ASCOM Astrometry")> 
 <Assembly: AssemblyCompany("ASCOM Initiative")> 
-<Assembly: AssemblyProduct("ASCOM.Astrometrics")> 
+<Assembly: AssemblyProduct("ASCOM.Astrometry")> 
 <Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2009")> 
 <Assembly: AssemblyTrademark("")> 
 

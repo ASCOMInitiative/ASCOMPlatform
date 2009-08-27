@@ -2,6 +2,7 @@
 
 Imports ASCOM.Utilities
 Imports ASCOM.Astrometry.NOVASCOM
+Imports System.Runtime.InteropServices
 
 Namespace Kepler
 
@@ -64,7 +65,9 @@ Namespace Kepler
     ''' TT clock. It differs from UT1 by an amount called "delta-t", which slowly increases with time, 
     ''' and is about 60 seconds right now (2001). </para>
     ''' </remarks>
-    Public Class Ephemeris
+    <Guid("2F2B0413-1F83-4777-B3B4-38DE3C32DC6B"), _
+    ClassInterface(ClassInterfaceType.None)> _
+    Class Ephemeris
         Implements IEphemeris
 
         Private Const DTVEL As Double = 0.01

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shfbBuild product="Sandcastle Help File Builder Utilities" version="1.8.0.1" projectFile="C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\ASCOMPlatform.shfbproj" started="20/08/2009 21:09:15">
+<shfbBuild product="Sandcastle Help File Builder Utilities" version="1.8.0.1" projectFile="C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\ASCOMPlatform.shfbproj" started="26/08/2009 23:09:03">
 <buildStep step="Initializing">
 Loading and initializing plug-ins...
 Hierarchical Table of Contents Version 1.8.0.1
@@ -47,11 +47,11 @@ Copying XML comments files
 </buildStep>
 <buildStep step="GenerateSharedContent">
 Generating shared content files (en-US, English (United States))...
-    Last step completed in 00:00:00.0156
+    Last step completed in 00:00:00.1406
 </buildStep>
 <buildStep step="GenerateApiFilter">
 Generating API filter for MRefBuilder...
-    Last step completed in 00:00:00.0156
+    Last step completed in 00:00:00.0781
 </buildStep>
 <buildStep step="GenerateReflectionInfo">
 Generating reflection information...
@@ -60,11 +60,11 @@ GenerateRefInfo:
   MrefBuilder (v2.4.10520.1)
   Copyright &#184; Microsoft 2006
   Info: Loaded 4 assemblies for reflection and 6 dependency assemblies.
-  Info: Wrote information on 11 namespaces, 75 types, and 760 members
+  Info: Wrote information on 11 namespaces, 77 types, and 708 members
   XslTransform (v2.4.10520.1)
   Copyright &#184; Microsoft 2005-2006
   Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\MergeDuplicates.xsl'.
-    Last step completed in 00:00:02.4376
+    Last step completed in 00:00:03.3282
 </buildStep>
 <buildStep step="GenerateNamespaceSummaries">
 Generating namespace summary information...
@@ -72,13 +72,13 @@ Generating namespace summary information...
 </buildStep>
 <buildStep step="ApplyVisibilityProperties">
 Applying visibility properties to reflection information file
-    73 attribute nodes removed
+    165 attribute nodes removed
     0 explicit interface implementations removed
     0 local and base class EII elements removed
     13 protected members noted for removal
     3 protected inherited framework members noted for removal
     Removing previously noted unwanted APIs and elements
-    Last step completed in 00:00:00.2813
+    Last step completed in 00:00:00.2969
 </buildStep>
 <buildStep step="TransformReflectionInfo">
 Transforming reflection output...
@@ -91,7 +91,7 @@ TransformManifest:
   XslTransform (v2.4.10520.1)
   Copyright &#184; Microsoft 2005-2006
   Info: Applying XSL transformation 'C:\Program Files\Sandcastle\ProductionTransforms\ReflectionToManifest.xsl'.
-    Last step completed in 00:00:03.1563
+    Last step completed in 00:00:03.3751
 </buildStep>
 <buildStep step="ModifyHelpTopicFilenames">
 Modifying help topic filenames in reflection information file
@@ -123,8 +123,6 @@ Modifying help topic filenames in reflection information file
     Unique name M_ASCOM_Utilities_KeyValuePair__ctor_1 generated for M:ASCOM.Utilities.KeyValuePair.#ctor(System.String,System.String)
     Unique name M_ASCOM_Utilities_Profile_DeleteValue_1 generated for M:ASCOM.Utilities.Profile.DeleteValue(System.String,System.String,System.String)
     Unique name M_ASCOM_Utilities_Profile_GetValue_1 generated for M:ASCOM.Utilities.Profile.GetValue(System.String,System.String,System.String)
-    Unique name M_ASCOM_Utilities_Profile_SubKeys_1 generated for M:ASCOM.Utilities.Profile.SubKeys(System.String,System.String)
-    Unique name M_ASCOM_Utilities_Profile_Values_1 generated for M:ASCOM.Utilities.Profile.Values(System.String,System.String)
     Unique name M_ASCOM_Utilities_Profile_WriteValue_1 generated for M:ASCOM.Utilities.Profile.WriteValue(System.String,System.String,System.String,System.String)
     Unique name M_ASCOM_Utilities_TraceLogger__ctor_1 generated for M:ASCOM.Utilities.TraceLogger.#ctor(System.String,System.String)
     Unique name M_ASCOM_Utilities_TraceLogger_LogContinue_1 generated for M:ASCOM.Utilities.TraceLogger.LogContinue(System.String,System.Boolean)
@@ -167,37 +165,7 @@ Modifying help topic filenames in reflection information file
     Unique name M_ASCOM_Utilities_Exceptions_SerialPortInUseException__ctor_2 generated for M:ASCOM.Utilities.Exceptions.SerialPortInUseException.#ctor(System.String,System.Exception)
     Unique name M_ASCOM_Utilities_Exceptions_ValueNotSetException__ctor_1 generated for M:ASCOM.Utilities.Exceptions.ValueNotSetException.#ctor(System.String)
     Unique name M_ASCOM_Utilities_Exceptions_ValueNotSetException__ctor_2 generated for M:ASCOM.Utilities.Exceptions.ValueNotSetException.#ctor(System.String,System.Exception)
-    Unique name M_ASCOM_Utilities_Interfaces_IChooser_Choose_1 generated for M:ASCOM.Utilities.Interfaces.IChooser.Choose(System.String)
-    Unique name M_ASCOM_Utilities_Interfaces_IProfile_DeleteValue_1 generated for M:ASCOM.Utilities.Interfaces.IProfile.DeleteValue(System.String,System.String,System.String)
-    Unique name M_ASCOM_Utilities_Interfaces_IProfile_GetValue_1 generated for M:ASCOM.Utilities.Interfaces.IProfile.GetValue(System.String,System.String,System.String)
-    Unique name M_ASCOM_Utilities_Interfaces_IProfile_SubKeys_1 generated for M:ASCOM.Utilities.Interfaces.IProfile.SubKeys(System.String,System.String)
-    Unique name M_ASCOM_Utilities_Interfaces_IProfile_Values_1 generated for M:ASCOM.Utilities.Interfaces.IProfile.Values(System.String,System.String)
-    Unique name M_ASCOM_Utilities_Interfaces_IProfile_WriteValue_1 generated for M:ASCOM.Utilities.Interfaces.IProfile.WriteValue(System.String,System.String,System.String,System.String)
-    Unique name M_ASCOM_Utilities_Interfaces_ITraceLogger_LogContinue_1 generated for M:ASCOM.Utilities.Interfaces.ITraceLogger.LogContinue(System.String,System.Boolean)
-    Unique name M_ASCOM_Utilities_Interfaces_ITraceLogger_LogFinish_1 generated for M:ASCOM.Utilities.Interfaces.ITraceLogger.LogFinish(System.String,System.Boolean)
-    Unique name M_ASCOM_Utilities_Interfaces_ITraceLogger_LogMessage_1 generated for M:ASCOM.Utilities.Interfaces.ITraceLogger.LogMessage(System.String,System.String,System.Boolean)
-    Unique name M_ASCOM_Utilities_Interfaces_IUtil_DegreesToDM_1 generated for M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDM(System.Double,System.String)
-    Unique name M_ASCOM_Utilities_Interfaces_IUtil_DegreesToDM_2 generated for M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDM(System.Double,System.String,System.String)
-    Unique name M_ASCOM_Utilities_Interfaces_IUtil_DegreesToDM_3 generated for M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDM(System.Double,System.String,System.String,System.Int32)
-    Unique name M_ASCOM_Utilities_Interfaces_IUtil_DegreesToDMS_1 generated for M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDMS(System.Double,System.String)
-    Unique name M_ASCOM_Utilities_Interfaces_IUtil_DegreesToDMS_2 generated for M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDMS(System.Double,System.String,System.String)
-    Unique name M_ASCOM_Utilities_Interfaces_IUtil_DegreesToDMS_3 generated for M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDMS(System.Double,System.String,System.String,System.String)
-    Unique name M_ASCOM_Utilities_Interfaces_IUtil_DegreesToDMS_4 generated for M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDMS(System.Double,System.String,System.String,System.String,System.Int32)
-    Unique name M_ASCOM_Utilities_Interfaces_IUtil_DegreesToHM_1 generated for M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHM(System.Double,System.String)
-    Unique name M_ASCOM_Utilities_Interfaces_IUtil_DegreesToHM_2 generated for M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHM(System.Double,System.String,System.String)
-    Unique name M_ASCOM_Utilities_Interfaces_IUtil_DegreesToHM_3 generated for M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHM(System.Double,System.String,System.String,System.Int32)
-    Unique name M_ASCOM_Utilities_Interfaces_IUtil_DegreesToHMS_1 generated for M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHMS(System.Double,System.String)
-    Unique name M_ASCOM_Utilities_Interfaces_IUtil_DegreesToHMS_2 generated for M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHMS(System.Double,System.String,System.String)
-    Unique name M_ASCOM_Utilities_Interfaces_IUtil_DegreesToHMS_3 generated for M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHMS(System.Double,System.String,System.String,System.String)
-    Unique name M_ASCOM_Utilities_Interfaces_IUtil_DegreesToHMS_4 generated for M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHMS(System.Double,System.String,System.String,System.String,System.Int32)
-    Unique name M_ASCOM_Utilities_Interfaces_IUtil_HoursToHM_1 generated for M:ASCOM.Utilities.Interfaces.IUtil.HoursToHM(System.Double,System.String)
-    Unique name M_ASCOM_Utilities_Interfaces_IUtil_HoursToHM_2 generated for M:ASCOM.Utilities.Interfaces.IUtil.HoursToHM(System.Double,System.String,System.String)
-    Unique name M_ASCOM_Utilities_Interfaces_IUtil_HoursToHM_3 generated for M:ASCOM.Utilities.Interfaces.IUtil.HoursToHM(System.Double,System.String,System.String,System.Int32)
-    Unique name M_ASCOM_Utilities_Interfaces_IUtil_HoursToHMS_1 generated for M:ASCOM.Utilities.Interfaces.IUtil.HoursToHMS(System.Double,System.String)
-    Unique name M_ASCOM_Utilities_Interfaces_IUtil_HoursToHMS_2 generated for M:ASCOM.Utilities.Interfaces.IUtil.HoursToHMS(System.Double,System.String,System.String)
-    Unique name M_ASCOM_Utilities_Interfaces_IUtil_HoursToHMS_3 generated for M:ASCOM.Utilities.Interfaces.IUtil.HoursToHMS(System.Double,System.String,System.String,System.String)
-    Unique name M_ASCOM_Utilities_Interfaces_IUtil_HoursToHMS_4 generated for M:ASCOM.Utilities.Interfaces.IUtil.HoursToHMS(System.Double,System.String,System.String,System.String,System.Int32)
-    Last step completed in 00:00:00.1563
+    Last step completed in 00:00:00.1094
 </buildStep>
 <buildStep step="CopyStandardContent">
 Copying standard help content...
@@ -307,7 +275,7 @@ C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\scripts\script_manifold.js
 C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\scripts\SplitScreen.js -&gt; C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\Output\scripts\SplitScreen.js
 C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\styles\Presentation.css -&gt; C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\Output\styles\Presentation.css
 C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\styles\Whidbey\presentation.css -&gt; C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\Output\styles\Whidbey\presentation.css
-    Last step completed in 00:00:00.7500
+    Last step completed in 00:00:02.9845
 </buildStep>
 <buildStep step="CopyConceptualContent">
 Copying conceptual content...
@@ -360,29 +328,29 @@ Generating conceptual topic files
     C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Tools and Features\Profile Explorer.aml -&gt; C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\ddueXml\62da8408-c4ed-45d8-9398-9990dcbe8cbd.xml
     Parsing topic file 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Tools and Features\Profile Tracing.aml'
     C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Tools and Features\Profile Tracing.aml -&gt; C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\ddueXml\f2211b59-6f8c-46fb-b47e-2afb569f3133.xml
-    Last step completed in 00:00:00.1563
+    Last step completed in 00:00:00.1719
 </buildStep>
 <buildStep step="CreateConceptualTopicConfigs">
 Creating conceptual topic configuration files...
     Companion files
     _ContentMetadata_.xml
     ConceptualManifest.xml
-    Last step completed in 00:00:00.0469
+    Last step completed in 00:00:00.1094
 </buildStep>
 <buildStep step="CopyAdditionalContent">
 Copying additional content files...
 No additional content to copy
-    Last step completed in 00:00:00.0000
+    Last step completed in 00:00:00.0156
 </buildStep>
 <buildStep step="MergeTablesOfContents">
 Merging conceptual and additional tables of contents...
-    Last step completed in 00:00:00.0625
+    Last step completed in 00:00:00.0781
 </buildStep>
 <buildStep step="CreateBuildAssemblerConfigs">
 Creating Sandcastle configuration files...
     sandcastle.config
     conceptual.config
-    Last step completed in 00:00:00.0156
+    Last step completed in 00:00:00.0625
 </buildStep>
 <buildStep step="MergeCustomConfigs">
 Merging custom build component configurations
@@ -398,7 +366,7 @@ C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\H
     Skipping component 'Cached Reflection Index Data', not used in conceptual build
     Replacing default configuration for 'Code Block Component' with the custom configuration
     Removing unused ExampleComponent.
-    Last step completed in 00:00:00.0625
+    Last step completed in 00:00:00.2344
 </buildStep>
 <buildStep step="BuildConceptualTopics">
 Building conceptual help topics...
@@ -471,7 +439,7 @@ BuildConceptualTopics:
   Info: CachedResolveReferenceLinksComponent: Creating MSDN URL resolver.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Program Files\Sandcastle\Data\Reflection' for targets files of the form '*.xml'.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working' for targets files of the form 'reflection.xml'.
-  Info: CachedResolveReferenceLinksComponent: Loaded 171168 reference targets.
+  Info: CachedResolveReferenceLinksComponent: Loaded 171102 reference targets.
   Info: CachedResolveReferenceLinksComponent: 
       [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.1]
       Cached Resolve Reference  Links 2 Component.  Copyright &#184; 2006-2009, Eric Woodruff, All Rights Reserved
@@ -501,7 +469,7 @@ BuildConceptualTopics:
   Info: BuildAssembler: Building topic 62da8408-c4ed-45d8-9398-9990dcbe8cbd
   Info: BuildAssembler: Building topic f2211b59-6f8c-46fb-b47e-2afb569f3133
   Info: Processed 22 topics
-    Last step completed in 00:00:24.5008
+    Last step completed in 00:00:28.7665
 </buildStep>
 <buildStep step="BuildReferenceTopics">
 Building reference help topics...
@@ -513,7 +481,7 @@ BuildReferenceTopics:
   Info: CopyFromFileComponent: Loading data file 'C:\Program Files\Sandcastle\Presentation\vs2005 ASCOM\Transforms\skeleton.xml'.
   Info: CachedCopyFromIndexComponent: Instantiating component.
   Info: CachedCopyFromIndexComponent: Searching for files that match 'reflection.xml'.
-  Info: CachedCopyFromIndexComponent: Indexed 1077 elements in 1 files.
+  Info: CachedCopyFromIndexComponent: Indexed 1011 elements in 1 files.
   Info: CachedCopyFromIndexComponent: Loaded 0 copy components.
   Info: CachedCopyFromIndexComponent: 
       [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.1]
@@ -1136,7 +1104,7 @@ BuildReferenceTopics:
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\ASCOM.IConform.xml'.
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\ASCOM.Astrometry.xml'.
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\ASCOM.Utilities.xml'.
-  Info: CopyFromIndexComponent: Indexed 132110 elements in 123 files.
+  Info: CopyFromIndexComponent: Indexed 132098 elements in 123 files.
   Info: CopyFromIndexComponent: Loaded 0 copy components.
   Info: ForEachComponent: Instantiating component.
   Info: ForEachComponent: Loading subcomponents.
@@ -1211,7 +1179,7 @@ BuildReferenceTopics:
   Info: CachedResolveReferenceLinksComponent: Creating MSDN URL resolver.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Program Files\Sandcastle\Data\Reflection' for targets files of the form '*.xml'.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working' for targets files of the form 'reflection.xml'.
-  Info: CachedResolveReferenceLinksComponent: Loaded 171168 reference targets.
+  Info: CachedResolveReferenceLinksComponent: Loaded 171102 reference targets.
   Info: CachedResolveReferenceLinksComponent: 
       [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.1]
       Cached Resolve Reference  Links 2 Component.  Copyright &#184; 2006-2009, Eric Woodruff, All Rights Reserved
@@ -1382,28 +1350,6 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic M:ASCOM.Astrometry.Exceptions.ValueNotSetException.#ctor(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Astrometry.Exceptions.ValueNotSetException.#ctor(System.String,System.Exception)
   Info: BuildAssembler: Building topic N:ASCOM.Astrometry.Kepler
-  Info: BuildAssembler: Building topic T:ASCOM.Astrometry.Kepler.Ephemeris
-  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Astrometry.Kepler.Ephemeris
-  Info: BuildAssembler: Building topic Methods.T:ASCOM.Astrometry.Kepler.Ephemeris
-  Info: BuildAssembler: Building topic Properties.T:ASCOM.Astrometry.Kepler.Ephemeris
-  Info: BuildAssembler: Building topic M:ASCOM.Astrometry.Kepler.Ephemeris.#ctor
-  Info: BuildAssembler: Building topic P:ASCOM.Astrometry.Kepler.Ephemeris.a
-  Info: BuildAssembler: Building topic P:ASCOM.Astrometry.Kepler.Ephemeris.BodyType
-  Info: BuildAssembler: Building topic P:ASCOM.Astrometry.Kepler.Ephemeris.e
-  Info: BuildAssembler: Building topic P:ASCOM.Astrometry.Kepler.Ephemeris.Epoch
-  Info: BuildAssembler: Building topic P:ASCOM.Astrometry.Kepler.Ephemeris.G
-  Info: BuildAssembler: Building topic M:ASCOM.Astrometry.Kepler.Ephemeris.GetPositionAndVelocity(System.Double)
-  Info: BuildAssembler: Building topic P:ASCOM.Astrometry.Kepler.Ephemeris.H
-  Info: BuildAssembler: Building topic P:ASCOM.Astrometry.Kepler.Ephemeris.Incl
-  Info: BuildAssembler: Building topic P:ASCOM.Astrometry.Kepler.Ephemeris.M
-  Info: BuildAssembler: Building topic P:ASCOM.Astrometry.Kepler.Ephemeris.n
-  Info: BuildAssembler: Building topic P:ASCOM.Astrometry.Kepler.Ephemeris.Name
-  Info: BuildAssembler: Building topic P:ASCOM.Astrometry.Kepler.Ephemeris.Node
-  Info: BuildAssembler: Building topic P:ASCOM.Astrometry.Kepler.Ephemeris.Number
-  Info: BuildAssembler: Building topic P:ASCOM.Astrometry.Kepler.Ephemeris.P
-  Info: BuildAssembler: Building topic P:ASCOM.Astrometry.Kepler.Ephemeris.Peri
-  Info: BuildAssembler: Building topic P:ASCOM.Astrometry.Kepler.Ephemeris.q
-  Info: BuildAssembler: Building topic P:ASCOM.Astrometry.Kepler.Ephemeris.z
   Info: BuildAssembler: Building topic T:ASCOM.Astrometry.Kepler.IEphemeris
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Astrometry.Kepler.IEphemeris
   Info: BuildAssembler: Building topic Methods.T:ASCOM.Astrometry.Kepler.IEphemeris
@@ -2179,8 +2125,6 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic Properties.T:ASCOM.Utilities.Profile
   Info: BuildAssembler: Building topic Overload:ASCOM.Utilities.Profile.DeleteValue
   Info: BuildAssembler: Building topic Overload:ASCOM.Utilities.Profile.GetValue
-  Info: BuildAssembler: Building topic Overload:ASCOM.Utilities.Profile.SubKeys
-  Info: BuildAssembler: Building topic Overload:ASCOM.Utilities.Profile.Values
   Info: BuildAssembler: Building topic Overload:ASCOM.Utilities.Profile.WriteValue
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Profile.#ctor
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.Utilities.Profile.#ctor
@@ -2195,16 +2139,10 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Profile.IsRegistered(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Profile.Register(System.String,System.String)
   Info: BuildAssembler: Building topic P:ASCOM.Utilities.Profile.RegisteredDevices(System.String)
-  Info: BuildAssembler: Building topic P:ASCOM.Utilities.Profile.RegisteredDevicesCOM(System.String)
   Info: BuildAssembler: Building topic P:ASCOM.Utilities.Profile.RegisteredDeviceTypes
-  Info: BuildAssembler: Building topic P:ASCOM.Utilities.Profile.RegisteredDeviceTypesCOM
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Profile.SubKeys(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Profile.SubKeys(System.String,System.String)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Profile.SubKeysCOM(System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Profile.Unregister(System.String)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Profile.Values(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Profile.Values(System.String,System.String)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Profile.ValuesCOM(System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Profile.WriteValue(System.String,System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Profile.WriteValue(System.String,System.String,System.String,System.String)
   Info: BuildAssembler: Building topic T:ASCOM.Utilities.Serial
@@ -2253,6 +2191,8 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic P:ASCOM.Utilities.Timer.Enabled
   Info: BuildAssembler: Building topic P:ASCOM.Utilities.Timer.Interval
   Info: BuildAssembler: Building topic E:ASCOM.Utilities.Timer.Tick
+  Info: BuildAssembler: Building topic T:ASCOM.Utilities.Timer.TickEventHandler
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Utilities.Timer.TickEventHandler
   Info: BuildAssembler: Building topic T:ASCOM.Utilities.TraceLogger
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Utilities.TraceLogger
   Info: BuildAssembler: Building topic Methods.T:ASCOM.Utilities.TraceLogger
@@ -2402,8 +2342,6 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Utilities.Interfaces.IChooser
   Info: BuildAssembler: Building topic Methods.T:ASCOM.Utilities.Interfaces.IChooser
   Info: BuildAssembler: Building topic Properties.T:ASCOM.Utilities.Interfaces.IChooser
-  Info: BuildAssembler: Building topic Overload:ASCOM.Utilities.Interfaces.IChooser.Choose
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IChooser.Choose
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IChooser.Choose(System.String)
   Info: BuildAssembler: Building topic P:ASCOM.Utilities.Interfaces.IChooser.DeviceType
   Info: BuildAssembler: Building topic T:ASCOM.Utilities.Interfaces.IKeyValuePair
@@ -2415,34 +2353,26 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Utilities.Interfaces.IProfile
   Info: BuildAssembler: Building topic Methods.T:ASCOM.Utilities.Interfaces.IProfile
   Info: BuildAssembler: Building topic Properties.T:ASCOM.Utilities.Interfaces.IProfile
-  Info: BuildAssembler: Building topic Overload:ASCOM.Utilities.Interfaces.IProfile.DeleteValue
-  Info: BuildAssembler: Building topic Overload:ASCOM.Utilities.Interfaces.IProfile.GetValue
-  Info: BuildAssembler: Building topic Overload:ASCOM.Utilities.Interfaces.IProfile.SubKeys
-  Info: BuildAssembler: Building topic Overload:ASCOM.Utilities.Interfaces.IProfile.Values
-  Info: BuildAssembler: Building topic Overload:ASCOM.Utilities.Interfaces.IProfile.WriteValue
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IProfile.CreateSubKey(System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IProfile.DeleteSubKey(System.String,System.String)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IProfile.DeleteValue(System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IProfile.DeleteValue(System.String,System.String,System.String)
   Info: BuildAssembler: Building topic P:ASCOM.Utilities.Interfaces.IProfile.DeviceType
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IProfile.GetValue(System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IProfile.GetValue(System.String,System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IProfile.IsRegistered(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IProfile.Register(System.String,System.String)
   Info: BuildAssembler: Building topic P:ASCOM.Utilities.Interfaces.IProfile.RegisteredDevices(System.String)
-  Info: BuildAssembler: Building topic P:ASCOM.Utilities.Interfaces.IProfile.RegisteredDevicesCOM(System.String)
   Info: BuildAssembler: Building topic P:ASCOM.Utilities.Interfaces.IProfile.RegisteredDeviceTypes
-  Info: BuildAssembler: Building topic P:ASCOM.Utilities.Interfaces.IProfile.RegisteredDeviceTypesCOM
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IProfile.SubKeys(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IProfile.SubKeys(System.String,System.String)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;SubKey&quot;/&gt; documentation for M:ASCOM.Utilities.Interfaces.IProfile.SubKeys(System.String,System.String)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IProfile.SubKeysCOM(System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IProfile.Unregister(System.String)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IProfile.Values(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IProfile.Values(System.String,System.String)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IProfile.ValuesCOM(System.String,System.String)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IProfile.WriteValue(System.String,System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IProfile.WriteValue(System.String,System.String,System.String,System.String)
+  Info: BuildAssembler: Building topic T:ASCOM.Utilities.Interfaces.IProfileExtra
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Utilities.Interfaces.IProfileExtra
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Utilities.Interfaces.IProfileExtra
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Utilities.Interfaces.IProfileExtra
+  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IProfileExtra.DeleteValue(System.String,System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IProfileExtra.GetValue(System.String,System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IProfileExtra.WriteValue(System.String,System.String,System.String)
   Info: BuildAssembler: Building topic T:ASCOM.Utilities.Interfaces.ISerial
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Utilities.Interfaces.ISerial
   Info: BuildAssembler: Building topic Methods.T:ASCOM.Utilities.Interfaces.ISerial
@@ -2471,76 +2401,50 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.ISerial.TransmitBinary(System.Byte[])
   Info: BuildAssembler: Building topic T:ASCOM.Utilities.Interfaces.ITimer
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Utilities.Interfaces.ITimer
-  Info: BuildAssembler: Building topic Methods.T:ASCOM.Utilities.Interfaces.ITimer
   Info: BuildAssembler: Building topic Properties.T:ASCOM.Utilities.Interfaces.ITimer
-  Info: BuildAssembler: Building topic Events.T:ASCOM.Utilities.Interfaces.ITimer
   Info: BuildAssembler: Building topic P:ASCOM.Utilities.Interfaces.ITimer.Enabled
   Info: BuildAssembler: Building topic P:ASCOM.Utilities.Interfaces.ITimer.Interval
-  Info: BuildAssembler: Building topic E:ASCOM.Utilities.Interfaces.ITimer.Tick
-  Info: BuildAssembler: Building topic T:ASCOM.Utilities.Interfaces.ITimer.TickEventHandler
-  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Utilities.Interfaces.ITimer.TickEventHandler
+  Info: BuildAssembler: Building topic T:ASCOM.Utilities.Interfaces.ITimerEvent
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Utilities.Interfaces.ITimerEvent
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Utilities.Interfaces.ITimerEvent
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Utilities.Interfaces.ITimerEvent
+  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.ITimerEvent.Tick
   Info: BuildAssembler: Building topic T:ASCOM.Utilities.Interfaces.ITraceLogger
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Utilities.Interfaces.ITraceLogger
   Info: BuildAssembler: Building topic Methods.T:ASCOM.Utilities.Interfaces.ITraceLogger
   Info: BuildAssembler: Building topic Properties.T:ASCOM.Utilities.Interfaces.ITraceLogger
-  Info: BuildAssembler: Building topic Overload:ASCOM.Utilities.Interfaces.ITraceLogger.LogContinue
-  Info: BuildAssembler: Building topic Overload:ASCOM.Utilities.Interfaces.ITraceLogger.LogFinish
-  Info: BuildAssembler: Building topic Overload:ASCOM.Utilities.Interfaces.ITraceLogger.LogMessage
   Info: BuildAssembler: Building topic P:ASCOM.Utilities.Interfaces.ITraceLogger.Enabled
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.ITraceLogger.LogContinue(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.ITraceLogger.LogContinue(System.String,System.Boolean)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.ITraceLogger.LogFinish(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.ITraceLogger.LogFinish(System.String,System.Boolean)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.ITraceLogger.LogIssue(System.String,System.String)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.ITraceLogger.LogMessage(System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.ITraceLogger.LogMessage(System.String,System.String,System.Boolean)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.ITraceLogger.LogStart(System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.ITraceLogger.SetLogFile(System.String,System.String)
+  Info: BuildAssembler: Building topic T:ASCOM.Utilities.Interfaces.ITraceLoggerExtra
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Utilities.Interfaces.ITraceLoggerExtra
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Utilities.Interfaces.ITraceLoggerExtra
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Utilities.Interfaces.ITraceLoggerExtra
+  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.ITraceLoggerExtra.LogContinue(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.ITraceLoggerExtra.LogFinish(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.ITraceLoggerExtra.LogMessage(System.String,System.String)
   Info: BuildAssembler: Building topic T:ASCOM.Utilities.Interfaces.IUtil
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Utilities.Interfaces.IUtil
   Info: BuildAssembler: Building topic Methods.T:ASCOM.Utilities.Interfaces.IUtil
   Info: BuildAssembler: Building topic Properties.T:ASCOM.Utilities.Interfaces.IUtil
-  Info: BuildAssembler: Building topic Overload:ASCOM.Utilities.Interfaces.IUtil.DegreesToDM
-  Info: BuildAssembler: Building topic Overload:ASCOM.Utilities.Interfaces.IUtil.DegreesToDMS
-  Info: BuildAssembler: Building topic Overload:ASCOM.Utilities.Interfaces.IUtil.DegreesToHM
-  Info: BuildAssembler: Building topic Overload:ASCOM.Utilities.Interfaces.IUtil.DegreesToHMS
-  Info: BuildAssembler: Building topic Overload:ASCOM.Utilities.Interfaces.IUtil.HoursToHM
-  Info: BuildAssembler: Building topic Overload:ASCOM.Utilities.Interfaces.IUtil.HoursToHMS
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DateJulianToLocal(System.Double)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DateJulianToUTC(System.Double)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DateLocalToJulian(System.DateTime)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DateLocalToUTC(System.DateTime)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DateUTCToJulian(System.DateTime)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DateUTCToLocal(System.DateTime)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDM(System.Double)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDM(System.Double,System.String)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDM(System.Double,System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDM(System.Double,System.String,System.String,System.Int32)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDMS(System.Double)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDMS(System.Double,System.String)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDMS(System.Double,System.String,System.String)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDMS(System.Double,System.String,System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DegreesToDMS(System.Double,System.String,System.String,System.String,System.Int32)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHM(System.Double)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHM(System.Double,System.String)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHM(System.Double,System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHM(System.Double,System.String,System.String,System.Int32)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHMS(System.Double)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHMS(System.Double,System.String)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHMS(System.Double,System.String,System.String)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHMS(System.Double,System.String,System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DegreesToHMS(System.Double,System.String,System.String,System.String,System.Int32)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.DMSToDegrees(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.HMSToDegrees(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.HMSToHours(System.String)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.HoursToHM(System.Double)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.HoursToHM(System.Double,System.String)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.HoursToHM(System.Double,System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.HoursToHM(System.Double,System.String,System.String,System.Int32)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.HoursToHMS(System.Double)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.HoursToHMS(System.Double,System.String)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.HoursToHMS(System.Double,System.String,System.String)
-  Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.HoursToHMS(System.Double,System.String,System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.HoursToHMS(System.Double,System.String,System.String,System.String,System.Int32)
   Info: BuildAssembler: Building topic P:ASCOM.Utilities.Interfaces.IUtil.JulianDate
   Info: BuildAssembler: Building topic P:ASCOM.Utilities.Interfaces.IUtil.PlatformVersion
@@ -2550,9 +2454,9 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic P:ASCOM.Utilities.Interfaces.IUtil.TimeZoneOffset
   Info: BuildAssembler: Building topic P:ASCOM.Utilities.Interfaces.IUtil.UTCDate
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtil.WaitForMilliseconds(System.Int32)
-  Info: Processed 1026 topics
+  Info: Processed 960 topics
   Info: CachedCopyFromIndexComponent: Used &quot;reflection&quot; cache entries: 2
-    Last step completed in 00:00:47.5952
+    Last step completed in 00:00:51.1890
 </buildStep>
 <buildStep step="GenerateIntermediateTableOfContents">
 Generating intermediate table of contents file...
@@ -2564,7 +2468,7 @@ GenerateIntermediateTOC:
 <plugIn name="Hierarchical Table of Contents" behavior="After" priority="1000">
 Retrieving namespace topic title from shared content...
 Creating namespace hierarchy...
-</plugIn>    Last step completed in 00:00:01.1719
+</plugIn>    Last step completed in 00:00:01.3125
 </buildStep>
 <buildStep step="ExtractingHtmlInfo">
 Extracting HTML info for Help 1.x and/or website...
@@ -2574,11 +2478,11 @@ Copyright &#184; 2008-2009, Eric Woodruff, All Rights Reserved
 E-Mail: Eric@EWoodruff.us
 
 Using LCID '1033', code page '65001', encoding charset 'UTF-8'.
-Processed 1048 HTML files
+Processed 982 HTML files
 Sorting keywords and generating See Also indices
 Saving Help 1.x keyword index to C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\PlatformHelp.hhk
 Saving Help 1.x table of contents to C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\PlatformHelp.hhc
-    Last step completed in 00:00:02.4845
+    Last step completed in 00:00:07.2658
 </buildStep>
 <buildStep step="GenerateHelpFormatTableOfContents">
 Generating HTML Help 1.x table of contents file...
@@ -2586,7 +2490,7 @@ Generating HTML Help 1.x table of contents file...
 </buildStep>
 <buildStep step="UpdateTableOfContents">
 Updating table of contents with additional content items and determining default topic...
-    Last step completed in 00:00:00.0156
+    Last step completed in 00:00:00.0313
 </buildStep>
 <buildStep step="GenerateHelpFileIndex">
 Generating HTML Help 1.x index file...
@@ -2594,7 +2498,7 @@ Generating HTML Help 1.x index file...
 </buildStep>
 <buildStep step="GenerateHelpProject">
 Generating HTML Help 1.x project file...
-    Last step completed in 00:00:00.0156
+    Last step completed in 00:00:00.0313
 </buildStep>
 <buildStep step="CompilingHelpFile">
 Compiling HTML Help 1.x file...
@@ -2612,11 +2516,11 @@ Build1xHelpFile:
   
   Compile time: 0 minutes, 12 seconds
   
-  1,050	Topics
+  984	Topics
   
-  12,643	Local links
+  11,988	Local links
   
-  7,681	Internet links
+  7,107	Internet links
   
   0	Graphics
   
@@ -2624,19 +2528,19 @@ Build1xHelpFile:
   
   
   
-  Created c:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\Output\PlatformHelp.chm, 1,402,424 bytes
+  Created c:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Help\Help\Working\Output\PlatformHelp.chm, 1,337,254 bytes
   
-  Compression decreased file by 13,272,175 bytes.
+  Compression decreased file by 12,460,076 bytes.
   
-    Last step completed in 00:00:13.6879
+    Last step completed in 00:00:13.2191
 </buildStep>
 <buildStep step="CleanIntermediates">
 Removing intermediate files...
-    Last step completed in 00:00:00.5938
+    Last step completed in 00:00:00.4219
 </buildStep>
 <buildStep step="Completed">
 
-Build completed successfully at 08/20/2009 09:10 PM.  Total time: 00:01:37.4874
+Build completed successfully at 08/26/2009 11:10 PM.  Total time: 00:01:53.7690
 
 </buildStep>
 </shfbBuild>

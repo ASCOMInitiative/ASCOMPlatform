@@ -23,6 +23,8 @@ Namespace Transform
     ''' http://www.usno.navy.mil/USNO/astronomical-applications/software-products/novas/novas-fortran/novas-fortran 
     ''' </para>
     ''' </remarks>
+    <Guid("779CD957-5502-4939-A661-EBEE9E1F485E"), _
+    ClassInterface(ClassInterfaceType.None)> _
     Public Class Transform
         Implements ITransform, IDisposable
         Private disposedValue As Boolean = False        ' To detect redundant calls

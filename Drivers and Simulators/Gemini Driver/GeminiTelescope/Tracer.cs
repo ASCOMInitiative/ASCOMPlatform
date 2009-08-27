@@ -7,7 +7,7 @@ namespace ASCOM.GeminiTelescope
     class Tracer
     {
         private int m_Level = 0;
-        private ASCOM.Utilities.Interfaces.ITraceLogger m_Log;
+        private ASCOM.Utilities.TraceLogger m_Log;
         public void Start(string name, int level)
         {
             try
