@@ -4,121 +4,6 @@
         <name>ASCOM.Controls</name>
     </assembly>
     <members>
-        <member name="P:ASCOM.Controls.Properties.Settings.ASCOMStandardsURL">
-            <summary>
-            The URL of the ASCOM Standards web site.
-            </summary>
-        </member>
-        <member name="T:ASCOM.Controls.Chooser">
-            <summary>
-            Summary description for Chooser.
-            </summary>
-        </member>
-        <member name="F:ASCOM.Controls.Chooser.cstrPromptLabel">
-            <summary>
-            Format string used to construct the on-screen prompt,
-            which reflects the currently selected device class.
-            </summary>
-        </member>
-        <member name="M:ASCOM.Controls.Chooser.#ctor">
-            <summary>
-            Default public constructor; create a new chooser object and populate the device selection combo box.
-            </summary>
-        </member>
-        <member name="M:ASCOM.Controls.Chooser.Dispose(System.Boolean)">
-            <summary> 
-            Clean up any resources being used.
-            </summary>
-        </member>
-        <member name="M:ASCOM.Controls.Chooser.InitializeComponent">
-            <summary> 
-            Required method for Designer support - do not modify 
-            the contents of this method with the code editor.
-            </summary>
-        </member>
-        <member name="F:ASCOM.Controls.Chooser.m_eDriverClass">
-            <summary>
-            The class of device being chosen. Defaults to "Telescope".
-            </summary>
-        </member>
-        <member name="M:ASCOM.Controls.Chooser.pictureASCOMLogo_Click(System.Object,System.EventArgs)">
-            <summary>
-            Handles a click event on the ASCOM logo image.
-            Starts a web browser and navigates to <see cref="P:ASCOM.Controls.Chooser.URL"/>.
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:ASCOM.Controls.Chooser.PopulateDeviceList">
-            <summary>
-            Populates the device list by enumerating the entries for devices in the given DriverClass.
-            The DriverClass comes from the DeviceClass property.
-            </summary>
-        </member>
-        <member name="F:ASCOM.Controls.Chooser.m_strDeviceID">
-            <summary>
-            The value of the most-recently-used DeviceID. Set by the user and used to set the default selection.
-            </summary>
-        </member>
-        <member name="M:ASCOM.Controls.Chooser.comboSelectDriver_SelectionChangeCommitted(System.Object,System.EventArgs)">
-            <summary>
-            Handles the SelectionChangeCommitted event from the device selector drop-down.
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:ASCOM.Controls.Chooser.OnSelectionChanged">
-            <summary>
-            Raise the <see cref="E:ASCOM.Controls.Chooser.SelectionChanged"/> event.
-            </summary>
-        </member>
-        <member name="F:ASCOM.Controls.Chooser.m_MRU">
-            <summary>
-            The most-recently-used devices
-            </summary>
-        </member>
-        <member name="P:ASCOM.Controls.Chooser.DeviceClass">
-            <summary>
-            Get or set the Driver Class (or device type) being chosen, as a string.
-            When this property is changed, the ComboBox is refreshed to reflect the new device type.
-            The selection list is positioned at the most recently used DeviceID, if possible.
-            </summary>
-        </member>
-        <member name="P:ASCOM.Controls.Chooser.URL">
-            <summary>
-            Returns the full URL of the ASCOM-Standards web site, as a string.
-            </summary>
-            <value>The full URL of the ASCOM-Standards web site, as a string.</value>
-        </member>
-        <member name="P:ASCOM.Controls.Chooser.RegistryRoot">
-            <summary>
-            Gets the root key in the registry beneath which ASCOM device profiles are stored,
-            as a RegistryKey object.
-            </summary>
-        </member>
-        <member name="E:ASCOM.Controls.Chooser.SelectionChanged">
-            <summary>
-            This event occurs when the device selection changes.
-            </summary>
-        </member>
-        <member name="P:ASCOM.Controls.Chooser.DeviceID">
-            <summary>
-            Get or Set the DeviceID.
-            Set this property prior to suggest a default selection. The chooser will then attempt
-            to match one of the installed drivers and will preselect it in the combo box if a match is found.
-            If the supplied DeviceID does not match any installed device, it is ignored.
-            Read this property to retrieve the user's device selection. A null reference is returned if
-            there has been no selection, or if there are no installed drivers.
-            This property is reset when the DeviceClass property is set.
-            </summary>
-        </member>
-        <member name="P:ASCOM.Controls.Chooser.SelectedDevice">
-            <summary>
-            Gets the currently selected ASCOM device as a <see cref="T:ASCOM.Controls.DeviceDescriptor"/>.
-            If there is no currently selected device, or if the selected item is not a valid ASCOM
-            device, then the value <c>null</c> is returned.
-            </summary>
-        </member>
         <member name="T:ASCOM.Controls.DeviceDescriptor">
             <summary>
             This class defines a Device Descriptor for ASCOM devices and is convenient
@@ -390,6 +275,121 @@
             This is used to update the control in a thread-safe manner.
             </summary>
             <param name="ledColour">The desired LED colour.</param>
+        </member>
+        <member name="P:ASCOM.Controls.Properties.Settings.ASCOMStandardsURL">
+            <summary>
+            The URL of the ASCOM Standards web site.
+            </summary>
+        </member>
+        <member name="T:ASCOM.Controls.Chooser">
+            <summary>
+            Summary description for Chooser.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.Chooser.cstrPromptLabel">
+            <summary>
+            Format string used to construct the on-screen prompt,
+            which reflects the currently selected device class.
+            </summary>
+        </member>
+        <member name="M:ASCOM.Controls.Chooser.#ctor">
+            <summary>
+            Default public constructor; create a new chooser object and populate the device selection combo box.
+            </summary>
+        </member>
+        <member name="M:ASCOM.Controls.Chooser.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:ASCOM.Controls.Chooser.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.Chooser.m_eDriverClass">
+            <summary>
+            The class of device being chosen. Defaults to "Telescope".
+            </summary>
+        </member>
+        <member name="M:ASCOM.Controls.Chooser.pictureASCOMLogo_Click(System.Object,System.EventArgs)">
+            <summary>
+            Handles a click event on the ASCOM logo image.
+            Starts a web browser and navigates to <see cref="P:ASCOM.Controls.Chooser.URL"/>.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ASCOM.Controls.Chooser.PopulateDeviceList">
+            <summary>
+            Populates the device list by enumerating the entries for devices in the given DriverClass.
+            The DriverClass comes from the DeviceClass property.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.Chooser.m_strDeviceID">
+            <summary>
+            The value of the most-recently-used DeviceID. Set by the user and used to set the default selection.
+            </summary>
+        </member>
+        <member name="M:ASCOM.Controls.Chooser.comboSelectDriver_SelectionChangeCommitted(System.Object,System.EventArgs)">
+            <summary>
+            Handles the SelectionChangeCommitted event from the device selector drop-down.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ASCOM.Controls.Chooser.OnSelectionChanged">
+            <summary>
+            Raise the <see cref="E:ASCOM.Controls.Chooser.SelectionChanged"/> event.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.Chooser.m_MRU">
+            <summary>
+            The most-recently-used devices
+            </summary>
+        </member>
+        <member name="P:ASCOM.Controls.Chooser.DeviceClass">
+            <summary>
+            Get or set the Driver Class (or device type) being chosen, as a string.
+            When this property is changed, the ComboBox is refreshed to reflect the new device type.
+            The selection list is positioned at the most recently used DeviceID, if possible.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Controls.Chooser.URL">
+            <summary>
+            Returns the full URL of the ASCOM-Standards web site, as a string.
+            </summary>
+            <value>The full URL of the ASCOM-Standards web site, as a string.</value>
+        </member>
+        <member name="P:ASCOM.Controls.Chooser.RegistryRoot">
+            <summary>
+            Gets the root key in the registry beneath which ASCOM device profiles are stored,
+            as a RegistryKey object.
+            </summary>
+        </member>
+        <member name="E:ASCOM.Controls.Chooser.SelectionChanged">
+            <summary>
+            This event occurs when the device selection changes.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Controls.Chooser.DeviceID">
+            <summary>
+            Get or Set the DeviceID.
+            Set this property prior to suggest a default selection. The chooser will then attempt
+            to match one of the installed drivers and will preselect it in the combo box if a match is found.
+            If the supplied DeviceID does not match any installed device, it is ignored.
+            Read this property to retrieve the user's device selection. A null reference is returned if
+            there has been no selection, or if there are no installed drivers.
+            This property is reset when the DeviceClass property is set.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Controls.Chooser.SelectedDevice">
+            <summary>
+            Gets the currently selected ASCOM device as a <see cref="T:ASCOM.Controls.DeviceDescriptor"/>.
+            If there is no currently selected device, or if the selected item is not a valid ASCOM
+            device, then the value <c>null</c> is returned.
+            </summary>
         </member>
         <member name="T:ASCOM.Controls.ChooserMRU">
             <summary>
