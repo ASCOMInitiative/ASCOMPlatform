@@ -73,17 +73,29 @@ namespace ASCOM.Optec_IFW
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.cmdCancel = new System.Windows.Forms.Button();
+            this.WheelID_Label = new System.Windows.Forms.Label();
+            this.WheelID_Value = new System.Windows.Forms.Label();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.connectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.driverHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.homeDeviceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.ComPort_Picker)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmdOK
             // 
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdOK.Location = new System.Drawing.Point(405, 332);
+            this.cmdOK.Location = new System.Drawing.Point(403, 344);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 0;
@@ -126,7 +138,7 @@ namespace ASCOM.Optec_IFW
             // Connect_BTN
             // 
             this.Connect_BTN.AllowDrop = true;
-            this.Connect_BTN.Location = new System.Drawing.Point(328, 100);
+            this.Connect_BTN.Location = new System.Drawing.Point(347, 100);
             this.Connect_BTN.Name = "Connect_BTN";
             this.Connect_BTN.Size = new System.Drawing.Size(93, 32);
             this.Connect_BTN.TabIndex = 33;
@@ -147,7 +159,7 @@ namespace ASCOM.Optec_IFW
             // 
             // ComPort_Picker
             // 
-            this.ComPort_Picker.Location = new System.Drawing.Point(359, 24);
+            this.ComPort_Picker.Location = new System.Drawing.Point(359, 31);
             this.ComPort_Picker.Name = "ComPort_Picker";
             this.ComPort_Picker.Size = new System.Drawing.Size(42, 20);
             this.ComPort_Picker.TabIndex = 1;
@@ -157,7 +169,7 @@ namespace ASCOM.Optec_IFW
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 21);
+            this.label1.Location = new System.Drawing.Point(12, 28);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(333, 20);
             this.label1.TabIndex = 0;
@@ -166,7 +178,7 @@ namespace ASCOM.Optec_IFW
             // textBox1
             // 
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(375, 239);
+            this.textBox1.Location = new System.Drawing.Point(373, 251);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
@@ -494,7 +506,7 @@ namespace ASCOM.Optec_IFW
             // AdvancedButton
             // 
             this.AdvancedButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.AdvancedButton.Location = new System.Drawing.Point(303, 373);
+            this.AdvancedButton.Location = new System.Drawing.Point(301, 385);
             this.AdvancedButton.Name = "AdvancedButton";
             this.AdvancedButton.Size = new System.Drawing.Size(75, 25);
             this.AdvancedButton.TabIndex = 45;
@@ -527,7 +539,7 @@ namespace ASCOM.Optec_IFW
             // pictureBox1
             // 
             this.pictureBox1.Image = global::ASCOM.Optec_IFW.Properties.Resources.Optec_Logo_medium_png;
-            this.pictureBox1.Location = new System.Drawing.Point(242, 135);
+            this.pictureBox1.Location = new System.Drawing.Point(242, 122);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(198, 99);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -538,7 +550,7 @@ namespace ASCOM.Optec_IFW
             // 
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(405, 373);
+            this.cmdCancel.Location = new System.Drawing.Point(403, 385);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
@@ -546,12 +558,108 @@ namespace ASCOM.Optec_IFW
             this.cmdCancel.UseVisualStyleBackColor = true;
             this.cmdCancel.Click += new System.EventHandler(this.cmdCancel_Click);
             // 
+            // WheelID_Label
+            // 
+            this.WheelID_Label.AutoSize = true;
+            this.WheelID_Label.Enabled = false;
+            this.WheelID_Label.Location = new System.Drawing.Point(239, 244);
+            this.WheelID_Label.Name = "WheelID_Label";
+            this.WheelID_Label.Size = new System.Drawing.Size(55, 13);
+            this.WheelID_Label.TabIndex = 48;
+            this.WheelID_Label.Text = "Wheel ID:";
+            // 
+            // WheelID_Value
+            // 
+            this.WheelID_Value.AutoSize = true;
+            this.WheelID_Value.Enabled = false;
+            this.WheelID_Value.Font = new System.Drawing.Font("Bookman Old Style", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.WheelID_Value.Location = new System.Drawing.Point(293, 229);
+            this.WheelID_Value.Name = "WheelID_Value";
+            this.WheelID_Value.Size = new System.Drawing.Size(34, 32);
+            this.WheelID_Value.TabIndex = 49;
+            this.WheelID_Value.Text = "X";
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.settingsToolStripMenuItem,
+            this.helpToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(474, 24);
+            this.menuStrip1.TabIndex = 50;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.connectToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // connectToolStripMenuItem
+            // 
+            this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
+            this.connectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.connectToolStripMenuItem.Text = "Connect";
+            this.connectToolStripMenuItem.Click += new System.EventHandler(this.Connect_BTN_Click);
+            // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.advancedToolStripMenuItem,
+            this.saveDataToolStripMenuItem,
+            this.homeDeviceToolStripMenuItem});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            // 
+            // advancedToolStripMenuItem
+            // 
+            this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
+            this.advancedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.advancedToolStripMenuItem.Text = "Advanced";
+            this.advancedToolStripMenuItem.Click += new System.EventHandler(this.AdvancedButton_Click);
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.driverHelpToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // driverHelpToolStripMenuItem
+            // 
+            this.driverHelpToolStripMenuItem.Name = "driverHelpToolStripMenuItem";
+            this.driverHelpToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.driverHelpToolStripMenuItem.Text = "Driver Help";
+            this.driverHelpToolStripMenuItem.Click += new System.EventHandler(this.driverHelpToolStripMenuItem_Click);
+            // 
+            // saveDataToolStripMenuItem
+            // 
+            this.saveDataToolStripMenuItem.Name = "saveDataToolStripMenuItem";
+            this.saveDataToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveDataToolStripMenuItem.Text = "Save Data";
+            this.saveDataToolStripMenuItem.Click += new System.EventHandler(this.SaveData_Btn_Click);
+            // 
+            // homeDeviceToolStripMenuItem
+            // 
+            this.homeDeviceToolStripMenuItem.Name = "homeDeviceToolStripMenuItem";
+            this.homeDeviceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.homeDeviceToolStripMenuItem.Text = "Home Device";
+            this.homeDeviceToolStripMenuItem.Click += new System.EventHandler(this.Home_Btn_Click);
+            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.ClientSize = new System.Drawing.Size(476, 407);
+            this.ClientSize = new System.Drawing.Size(474, 419);
+            this.Controls.Add(this.WheelID_Value);
+            this.Controls.Add(this.WheelID_Label);
             this.Controls.Add(this.Home_Btn);
             this.Controls.Add(this.AdvancedButton);
             this.Controls.Add(this.label2);
@@ -568,7 +676,9 @@ namespace ASCOM.Optec_IFW
             this.Controls.Add(this.SaveData_Btn);
             this.Controls.Add(this.Connect_BTN);
             this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SetupDialogForm";
@@ -581,6 +691,8 @@ namespace ASCOM.Optec_IFW
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -633,5 +745,16 @@ namespace ASCOM.Optec_IFW
         private System.Windows.Forms.Button Home_Btn;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button cmdCancel;
+        private System.Windows.Forms.Label WheelID_Label;
+        private System.Windows.Forms.Label WheelID_Value;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem connectToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem advancedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem driverHelpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveDataToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem homeDeviceToolStripMenuItem;
     }
 }

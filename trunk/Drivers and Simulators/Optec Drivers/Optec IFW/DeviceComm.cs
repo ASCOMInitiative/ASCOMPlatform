@@ -293,7 +293,7 @@ namespace ASCOM.Optec_IFW
             string StringToWrite = "";
             foreach (string i in Names)
             {
-                StringToWrite += i.PadLeft(8, char.Parse(" "));
+                StringToWrite += i.PadRight(8, char.Parse(" "));
             }
             if (StringToWrite.Length != NumOfFilters * 8) throw new Exception("Error Storing names to Device. Incorrect String Length");
             StringToWrite = "WLOAD" + WheelID.ToString() + "*" + StringToWrite;
