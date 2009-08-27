@@ -94,14 +94,14 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(SolutionDir)ASCOM.Controls\ASCOM.Controls\bin\Debug\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
-xcopy "$(SolutionDir)ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Debug\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
-xcopy "$(SolutionDir)ClientToolbox\bin\Debug\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
-xcopy "$(SolutionDir)ASCOM.Utilities\Utilities\bin\Debug\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
-xcopy "$(SolutionDir)ASCOM.Astrometry\Astrometry\bin\Debug\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
-xcopy "$(SolutionDir)ASCOM.IConform\ASCOM.IConform\bin\Debug\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
-xcopy "$(SolutionDir)Interfaces\ASCOMExceptions\bin\Debug\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
-xcopy "$(SolutionDir)ASCOM.Attributes\bin\Debug\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
+    <PostBuildEvent>xcopy "$(SolutionDir)ASCOM.Controls\ASCOM.Controls\bin\$(ConfigurationName)\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
+xcopy "$(SolutionDir)ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\$(ConfigurationName)\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
+xcopy "$(SolutionDir)ClientToolbox\bin\$(ConfigurationName)\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
+xcopy "$(SolutionDir)ASCOM.Utilities\Utilities\bin\$(ConfigurationName)\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
+xcopy "$(SolutionDir)ASCOM.Astrometry\Astrometry\bin\$(ConfigurationName)\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
+xcopy "$(SolutionDir)ASCOM.IConform\ASCOM.IConform\bin\$(ConfigurationName)\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
+xcopy "$(SolutionDir)Interfaces\ASCOMExceptions\bin\$(ConfigurationName)\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
+xcopy "$(SolutionDir)ASCOM.Attributes\bin\$(ConfigurationName)\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
 xcopy "$(SolutionDir)Interfaces\Master Interfaces\*.dll" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
 xcopy "$(SolutionDir)Interfaces\Master Interfaces\*.tlb" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
 xcopy "$(SolutionDir)ASCOM.Utilities\NOVAS-C x86-x64\debug\NOVAS-C.dll" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
