@@ -133,36 +133,36 @@ namespace ASCOM.Optec
 
             short NumberOfPorts = 4;
 
-            Port P0 = new Port();   //
-            Port P1 = new Port();     //    One for each physical  
-            Port P2 = new Port();     //    port on the device.
-            Port P3 = new Port();   //
+            //Port P0 = new Port();   //
+            //Port P1 = new Port();     //    One for each physical  
+            //Port P2 = new Port();     //    port on the device.
+            //Port P3 = new Port();   //
 
-            _ports.Add(P0);
-            _ports.Add(P1);
-            _ports.Add(P2);
-            _ports.Add(P3);
+            //_ports.Add(P0);
+            //_ports.Add(P1);
+            //_ports.Add(P2);
+            //_ports.Add(P3);
 
-            string[] PNames = new string[NumberOfPorts];					
-		    double[] RAOffsets = new double[NumberOfPorts]; 
-		    double[] DecOffsets = new double[NumberOfPorts];	
-		    short[] FocusOffsets = new short[NumberOfPorts];
-            double[] RotationOffsets = new double[NumberOfPorts];
+            //string[] PNames = new string[NumberOfPorts];					
+            //double[] RAOffsets = new double[NumberOfPorts]; 
+            //double[] DecOffsets = new double[NumberOfPorts];	
+            //short[] FocusOffsets = new short[NumberOfPorts];
+            //double[] RotationOffsets = new double[NumberOfPorts];
 
-            PNames = DeviceSettings.RetrievePNames(NumberOfPorts);
-            RAOffsets = DeviceSettings.RetrieveRAOffsets(NumberOfPorts);
-            DecOffsets = DeviceSettings.RetrieveDecOffsets(NumberOfPorts);
-            FocusOffsets = DeviceSettings.RetrieveFocusOffsets(NumberOfPorts);
-            RotationOffsets = DeviceSettings.RetrieveRotationOffsets(NumberOfPorts);
+            //PNames = DeviceSettings.RetrievePNames(NumberOfPorts);
+            //RAOffsets = DeviceSettings.RetrieveRAOffsets(NumberOfPorts);
+            //DecOffsets = DeviceSettings.RetrieveDecOffsets(NumberOfPorts);
+            //FocusOffsets = DeviceSettings.RetrieveFocusOffsets(NumberOfPorts);
+            //RotationOffsets = DeviceSettings.RetrieveRotationOffsets(NumberOfPorts);
 
-            foreach (Port i in _ports)
-            {
-                i.Name = PNames[i];
-                i.RightAscensionOffset = RAOffsets[i];
-                i.DeclinationOffset = DecOffsets[i];
-                i.FocusOffset = FocusOffsets[i];
-                i.RotationOffset = RotationOffsets[i];
-            }
+            //foreach (Port i in _ports)
+            //{
+            //    i.Name = PNames[i];
+            //    i.RightAscensionOffset = RAOffsets[i];
+            //    i.DeclinationOffset = DecOffsets[i];
+            //    i.FocusOffset = FocusOffsets[i];
+            //    i.RotationOffset = RotationOffsets[i];
+            //}
 
 		}
 
