@@ -323,6 +323,9 @@ namespace ASCOM.GeminiTelescope
             //prof.DeviceType = "Focuser";
             //prof.Register(SharedResources.FOCUSER_PROGRAM_ID, SharedResources.FOCUSER_DRIVER_NAME);
 
+            //Initialise registered classes counter
+            int ClassCount = 0;
+            
             //
             // For each of the driver assemblies
             //
@@ -379,6 +382,9 @@ namespace ASCOM.GeminiTelescope
                     ASCOM.Utilities.Profile P = new ASCOM.Utilities.Profile();
                     P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
                     P.Register(progid, chooserName);
+
+                    ClassCount += 1; //Increment class counter
+
                     try										// In case Helper becomes native .NET
                     {
                         Marshal.ReleaseComObject(P);
@@ -400,6 +406,9 @@ namespace ASCOM.GeminiTelescope
                 }
                 if (bFail) break;
             }
+
+            if (ClassCount == 0) MessageBox.Show("No registerable drivers were found");
+
         }
 
         //
