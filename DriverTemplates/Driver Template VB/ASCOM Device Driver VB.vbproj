@@ -66,7 +66,7 @@
       <HintPath>..\..\Drivers and Simulators\Platform Dependencies\ASCOM.IConform.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="ASCOM.Interfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+    <Reference Include="ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Drivers and Simulators\Platform Dependencies\ASCOM.Interfaces.dll</HintPath>
       <Private>False</Private>
