@@ -53,22 +53,22 @@
     <Reference Include="ASCOM.Attributes, Version=5.1.3512.40293, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Platform Dependencies\ASCOM.Attributes.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="ASCOM.Exceptions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Platform Dependencies\ASCOM.Exceptions.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="ASCOM.Interfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Platform Dependencies\ASCOM.Interfaces.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="ASCOM.Utilities, Version=5.3.1.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <HintPath>..\..\Platform Dependencies\ASCOM.Utilities.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
