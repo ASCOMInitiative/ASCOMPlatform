@@ -19,6 +19,7 @@
 ; Added ASCOM WizardImage file
 ; Fixed PlatformHelp name incorrect in Help link
 ; Added ASCOM.Interfaces 5.0.0.0 and ASCOM.Attributes for Gemini drivers
+; Removed ASCOM Interfaces 5.0.0.0 as we will now use the version 1.000 installed by platform 5a
 
 [Setup]
 #define Public Major 0
@@ -137,7 +138,7 @@ Source: ..\OriginalHelpers\RestoreOriginalHelpers.cmd; DestDir: {cf32}\ASCOM\Uti
 ;ASCOM Platform .NET Help files
 Source: ..\Help\Help\PlatformHelp.chm; DestDir: {cf}\ASCOM\Doc; Flags: ignoreversion
 Source: ..\Help\Help\HelperNET.pdf; DestDir: {cf}\ASCOM\Doc; Flags: ignoreversion
-Source: ReadMe55.txt; DestDir: {app}\Readme55.txt; Flags: ignoreversion
+Source: ReadMe55.txt; DestDir: {app}; Flags: ignoreversion
 
 ;Profile Explorer
 Source: ..\Profile Explorer\bin\Debug\ProfileExplorer.exe; DestDir: {pf}\ASCOM\Profile Explorer; Flags: ignoreversion
@@ -152,15 +153,15 @@ Source: ..\..\GACInstall\bin\Debug\GACInstall.exe; DestDir: {app}; Flags: ignore
 ;ASCOM Icon
 Source: ..\Utilities\Resources\ASCOM.ico; DestDir: {app}; Flags: ignoreversion
 
-;NOVAS and Kepler PIAs and TLBs
-Source: ..\..\Interfaces\NOVAS PIAs\ASCOM.NOVAS.DLL; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\Interfaces\Kepler PIAs\ASCOM.Kepler.DLL; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\Interfaces\NOVAS PIAs\NOVAS.tlb; DestDir: {app}; Flags: ignoreversion regtypelib 32bit
-Source: ..\..\Interfaces\Kepler PIAs\Kepler.tlb; DestDir: {app}; Flags: ignoreversion regtypelib 32bit
+;NOVAS and Kepler PIAs and TLBs - Removed these as we now have .NET versions of Transform / NOVAS2 Kepler etc.
+;Source: ..\..\Interfaces\NOVAS PIAs\ASCOM.NOVAS.DLL; DestDir: {app}; Flags: ignoreversion
+;Source: ..\..\Interfaces\Kepler PIAs\ASCOM.Kepler.DLL; DestDir: {app}; Flags: ignoreversion
+;Source: ..\..\Interfaces\NOVAS PIAs\NOVAS.tlb; DestDir: {app}; Flags: ignoreversion regtypelib 32bit
+;Source: ..\..\Interfaces\Kepler PIAs\Kepler.tlb; DestDir: {app}; Flags: ignoreversion regtypelib 32bit
 
-;ASCOM Interfaces and Exceptions
-Source: ..\..\Interfaces\Master Interfaces\ASCOM.Interfaces.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\Interfaces\Master Interfaces\AscomMasterInterfaces.tlb; DestDir: {app}; Flags: ignoreversion regtypelib
+;ASCOM Interfaces and Exceptions - Removed Interfaces as we will use the platform 5a version already installed
+;Source: ..\..\Interfaces\Master Interfaces\ASCOM.Interfaces.dll; DestDir: {app}; Flags: ignoreversion
+;Source: ..\..\Interfaces\Master Interfaces\AscomMasterInterfaces.tlb; DestDir: {app}; Flags: ignoreversion regtypelib
 Source: ..\..\Interfaces\ASCOMExceptions\bin\Debug\ASCOM.Exceptions.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\Interfaces\ASCOMExceptions\bin\Debug\ASCOM.Exceptions.XML; DestDir: {app}; Flags: ignoreversion
 ;...and for 32bit directories on a 64bit system
@@ -203,19 +204,19 @@ Filename: {dotnet2032}\regasm.exe; Parameters: "/TLB ""{cf32}\ASCOM\.net\ASCOM.I
 Filename: {cf32}\ASCOM\Utilities\EraseProfile.exe; Tasks: cleanprofile
 
 ;NOVAS and Kepler 32 bit interface components
-Filename: {app}\GACInstall.exe; Parameters: ASCOM.NOVAS.dll; Flags: runhidden; StatusMsg: Installing NOVAS 2 to the assembly cache
-Filename: {app}\GACInstall.exe; Parameters: ASCOM.Kepler.dll; Flags: runhidden; StatusMsg: Installing Kepler to the assembly cache
-Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.NOVAS.dll"""; Flags: runhidden; StatusMsg: Registering NOVAS for COM
-Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.Kepler.dll"""; Flags: runhidden; StatusMsg: Registering Kepler for COM
+;Filename: {app}\GACInstall.exe; Parameters: ASCOM.NOVAS.dll; Flags: runhidden; StatusMsg: Installing NOVAS 2 to the assembly cache
+;Filename: {app}\GACInstall.exe; Parameters: ASCOM.Kepler.dll; Flags: runhidden; StatusMsg: Installing Kepler to the assembly cache
+;Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.NOVAS.dll"""; Flags: runhidden; StatusMsg: Registering NOVAS for COM
+;Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.Kepler.dll"""; Flags: runhidden; StatusMsg: Registering Kepler for COM
 
 ;ASCOM Interfaces and Exceptions
-Filename: {app}\GACInstall.exe; Parameters: ASCOM.Interfaces.dll; Flags: runhidden; StatusMsg: Installing ASCOM.Interfaces to the assembly cache
+; Filename: {app}\GACInstall.exe; Parameters: ASCOM.Interfaces.dll; Flags: runhidden; StatusMsg: Installing ASCOM.Interfaces to the assembly cache
 Filename: {app}\GACInstall.exe; Parameters: ASCOM.Exceptions.dll; Flags: runhidden; StatusMsg: Installing ASCOM.Exceptions to the assembly cache
 
 ;Publisher policy
 #emit "Filename: {app}\GACInstall.exe; Parameters: policy." + str(Major) + "." + str(Minor) + ".ASCOM.Utilities.dll; Flags: runhidden; StatusMsg: Installing ASCOM Utilities policy to the assembly cache"
 #emit "Filename: {app}\GACInstall.exe; Parameters: policy." + str(Major) + "." + str(Minor) + ".ASCOM.Astrometry.dll; Flags: runhidden; StatusMsg: Installing ASCOM Astrometry policy to the assembly cache"
-Filename: {app}\Readme55.txt\ReadMe55.txt; Description: ReadMe file; StatusMsg: Displaying ReadMe file; Flags: shellexec skipifdoesntexist postinstall skipifsilent unchecked
+Filename: {app}\ReadMe55.txt; Description: ReadMe file; StatusMsg: Displaying ReadMe file; Flags: shellexec skipifdoesntexist postinstall skipifsilent unchecked
 
 [UninstallRun]
 ; uninstall Utilties, Astrometry and IConform from the GAC and unregister COM types for 32and 64bit COM
@@ -233,13 +234,13 @@ Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\
 Filename: {cf32}\ASCOM\Utilities\RestoreOriginalHelpers.cmd; Parameters: """{cf32}\ASCOM\Utilities\*.dll"" ""{cf32}\ASCOM"""; StatusMsg: Restoring helper dlls; Flags: runhidden
 
 ;NOVAS and Kepler 32 bit interfaces
-Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.NOVAS"""; Flags: runhidden; StatusMsg: Uninstalling NOVAS 2 from the assembly cache
-Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Kepler"""; Flags: runhidden; StatusMsg: Uninstalling Kepler from the assembly cache
-Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.NOVAS.dll"""; Flags: runhidden; StatusMsg: Unregistering NOVAS for COM
-Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.Kepler.dll"""; Flags: runhidden; StatusMsg: Unregistering Kepler for COM
+;Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.NOVAS"""; Flags: runhidden; StatusMsg: Uninstalling NOVAS 2 from the assembly cache
+;Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Kepler"""; Flags: runhidden; StatusMsg: Uninstalling Kepler from the assembly cache
+;Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.NOVAS.dll"""; Flags: runhidden; StatusMsg: Unregistering NOVAS for COM
+;Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.Kepler.dll"""; Flags: runhidden; StatusMsg: Unregistering Kepler for COM
 
 ;ASCOM Interfaces and Exceptions
-Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Interfaces"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Interfaces from the assembly cache
+;Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Interfaces"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Interfaces from the assembly cache
 Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Exceptions"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Exceptions from the assembly cache
 
 ;Publisher policy
