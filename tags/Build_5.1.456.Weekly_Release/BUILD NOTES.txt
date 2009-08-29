@@ -1,0 +1,42 @@
+The 'Master Build' contains three significant Solution Configurations (targets):
+1. Debug - builds components in debug mode
+2. Release - builds components with optimization enabled
+3. Platform Dependencies - builds the Platform Dependencies folder in debug mode.
+
+Build Process
+=============
+
+The platform build is automatic and is currently performed by TeamCity build server.
+
+Platform Releases
+=================
+
+A platform release can be made by simply copying a tagged build from the
+tags folder of the ASCOM SVN repository. The TeamCity build server will
+have a build configuration that builds the entire platform and creates a
+labelled build in the tags folder. This build process can be started from the
+TeamCity web interface by any member of the Platform Release Managers group.
+
+Platform Dependencies
+=====================
+
+The purpose of the Platform Dependencies folder is to provide a staging area
+for the core components that driver and simulator developers may reference
+during development. This is needed because those developers do not necessarily
+have permission to access the entire SVN repository.
+
+Building the Platform Dependencies target builds the core assemblies (in Debug
+configuration) and copies the outputs to the Platform Dependencies folder, from
+whence they may be committed to Subversion. Driver developers will pick up those
+updates the next time they do an SVN Update.
+
+Driver and Simulator Development
+================================
+
+When developing a new driver or simulator, developers should reference components
+in the Platform Dependencies folder. Do not reference components installed in the
+Global Assembly Cache (GAC).
+
+Driver and Simulator setup projects should NOT redistribute core components. The
+Platform components will be installed in the GAC by the Platform Installer. The
+driver/simulator will then automatically detect and use those components.
