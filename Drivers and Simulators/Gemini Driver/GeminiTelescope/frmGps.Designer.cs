@@ -37,6 +37,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.comboBoxBaudRate = new System.Windows.Forms.ComboBox();
             this.buttonQuery = new System.Windows.Forms.Button();
+            this.checkBoxUpdateClock = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // labelLatitude
@@ -139,12 +140,24 @@
             this.buttonQuery.UseVisualStyleBackColor = false;
             this.buttonQuery.Click += new System.EventHandler(this.buttonQuery_Click);
             // 
+            // checkBoxUpdateClock
+            // 
+            this.checkBoxUpdateClock.AutoSize = true;
+            this.checkBoxUpdateClock.ForeColor = System.Drawing.Color.White;
+            this.checkBoxUpdateClock.Location = new System.Drawing.Point(112, 88);
+            this.checkBoxUpdateClock.Name = "checkBoxUpdateClock";
+            this.checkBoxUpdateClock.Size = new System.Drawing.Size(91, 17);
+            this.checkBoxUpdateClock.TabIndex = 28;
+            this.checkBoxUpdateClock.Text = "Update Clock";
+            this.checkBoxUpdateClock.UseVisualStyleBackColor = true;
+            // 
             // frmGps
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(292, 165);
+            this.Controls.Add(this.checkBoxUpdateClock);
             this.Controls.Add(this.buttonQuery);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.comboBoxBaudRate);
@@ -176,5 +189,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox comboBoxBaudRate;
         private System.Windows.Forms.Button buttonQuery;
+        private System.Windows.Forms.CheckBox checkBoxUpdateClock;
     }
 }

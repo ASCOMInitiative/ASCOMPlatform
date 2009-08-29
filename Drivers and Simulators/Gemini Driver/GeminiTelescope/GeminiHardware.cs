@@ -190,6 +190,7 @@ namespace ASCOM.GeminiTelescope
         private static bool m_UseGeminiTime;
 
 
+
         private static bool m_Tracking;
 
         private static bool m_AtPark;
@@ -210,6 +211,7 @@ namespace ASCOM.GeminiTelescope
 
         private static string m_GpsComPort;
         private static int m_GpsBaudRate;
+        private static bool m_GpsUpdateClock;
 
         private static string m_PassThroughComPort;
 
@@ -395,6 +397,7 @@ namespace ASCOM.GeminiTelescope
 
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsComPort", "COM1");
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsBaudRate", "9600");
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsUpdateClock", true.ToString());
 
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AdditionalAlign", false.ToString());
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Precession", false.ToString());
@@ -437,6 +440,8 @@ namespace ASCOM.GeminiTelescope
             m_GpsComPort = m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsComPort", "");
             if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsBaudRate", ""), out m_GpsBaudRate))
                 m_GpsBaudRate = 9600;
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsUpdateClock", ""), out m_GpsUpdateClock))
+                m_GpsUpdateClock = false;
 
             if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "DataBits", ""), out m_DataBits))
                 m_DataBits = 8;
@@ -700,6 +705,19 @@ namespace ASCOM.GeminiTelescope
                 m_Profile.DeviceType = "Telescope";
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsBaudRate", value.ToString());
                 m_GpsBaudRate = value;
+            }
+        }
+        /// <summary>
+        /// Get/Set Gps Updates Clock
+        /// </summary>
+        public static bool GpsUpdateClock
+        {
+            get { return m_GpsUpdateClock; }
+            set 
+            {
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsUpdateClock", value.ToString());
+                m_GpsUpdateClock = value; 
             }
         }
         /// <summary>

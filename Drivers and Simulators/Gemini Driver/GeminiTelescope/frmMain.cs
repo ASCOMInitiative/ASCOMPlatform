@@ -301,6 +301,10 @@ namespace ASCOM.GeminiTelescope
             setupForm.ComPort = GeminiHardware.ComPort;
             setupForm.BaudRate = GeminiHardware.BaudRate.ToString();
 
+            setupForm.GpsBaudRate = GeminiHardware.GpsBaudRate.ToString();
+            setupForm.GpsComPort = GeminiHardware.GpsComPort;
+            setupForm.GpsUpdateClock = GeminiHardware.GpsUpdateClock;
+
             setupForm.Elevation = GeminiHardware.Elevation;
             setupForm.Latitude = GeminiHardware.Latitude;
             setupForm.Longitude = GeminiHardware.Longitude;
@@ -328,6 +332,13 @@ namespace ASCOM.GeminiTelescope
                     GeminiHardware.UseGeminiSite = setupForm.UseGeminiSite;
 
                     GeminiHardware.BootMode = setupForm.BootMode;
+
+                    int gpsBaudRate;
+                    int.TryParse(setupForm.GpsBaudRate, out gpsBaudRate);
+                    GeminiHardware.GpsBaudRate = gpsBaudRate;
+                    GeminiHardware.GpsComPort = setupForm.GpsComPort;
+                    GeminiHardware.GpsUpdateClock = setupForm.GpsUpdateClock;
+
                 }
                 catch
                 {
