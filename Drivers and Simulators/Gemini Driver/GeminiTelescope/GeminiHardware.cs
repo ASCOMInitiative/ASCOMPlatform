@@ -286,7 +286,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Tracer object for all tracing needs
         /// </summary>
-        static internal Tracer Trace
+        static public Tracer Trace
         {
             get { return m_Trace; }
         }
@@ -439,6 +439,10 @@ namespace ASCOM.GeminiTelescope
             if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseGeminiTime", ""), out m_UseGeminiTime))
                 m_UseGeminiTime = false;
 
+            if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "TraceLevel", ""), out m_TraceLevel))
+                m_TraceLevel = 2;
+
+            TraceLevel = m_TraceLevel;
 
             Trace.Info(2, "User Settings", m_AdditionalAlign, m_Precession, m_Refraction, m_AdvancedMode, m_UseGeminiSite, m_UseGeminiTime);
 
