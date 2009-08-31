@@ -231,6 +231,8 @@ namespace ASCOM.GeminiTelescope
 
         private bool m_FoundHome = false;
 
+        private bool m_AsyncSlewStarted = false;
+
         //
         // Constructor - Must be public for COM registration!
         //
@@ -891,14 +893,15 @@ namespace ASCOM.GeminiTelescope
         public short SlewSettleTime
         {
             // TODO Replace this with your implementation
-            get { throw new ASCOM.PropertyNotImplementedException("SlewSettleTime", false); }
-            set { throw new ASCOM.PropertyNotImplementedException("SlewSettleTime", true); }
+            get { return (short)GeminiHardware.SlewSettleTime;  }
+            set { GeminiHardware.SlewSettleTime = (int)value;  }
         }
 
         public void SlewToAltAz(double Azimuth, double Altitude)
         {
             GeminiHardware.TargetAzimuth = Azimuth;
             GeminiHardware.TargetAltitude = Altitude;
+            GeminiHardware.Velocity = "S";
             GeminiHardware.SlewHorizon();
             WaitForSlewToEnd();
 
@@ -909,8 +912,10 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.TargetAzimuth = Azimuth;
             GeminiHardware.TargetAltitude = Altitude;
             if (Slewing) AbortSlew();
+            GeminiHardware.Velocity = "S";
             GeminiHardware.SlewHorizonAsync();
             WaitForVelocity("SC", GeminiHardware.MAX_TIMEOUT);
+            m_AsyncSlewStarted = true;
         }
 
         public void SlewToCoordinates(double RightAscension, double Declination)
@@ -921,6 +926,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.TargetRightAscension = RightAscension;
             GeminiHardware.TargetDeclination = Declination;
             if (Slewing) AbortSlew();
+            GeminiHardware.Velocity = "S";
             GeminiHardware.SlewEquatorial();
 
             WaitForSlewToEnd();
@@ -934,8 +940,10 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.TargetRightAscension = RightAscension;
             GeminiHardware.TargetDeclination = Declination;
             if (Slewing) AbortSlew();
+            GeminiHardware.Velocity = "S";
             GeminiHardware.SlewEquatorialAsync();
             WaitForVelocity("SC", GeminiHardware.MAX_TIMEOUT);
+            m_AsyncSlewStarted = true;
         }
 
         private void WaitForSlewToEnd()
@@ -948,6 +956,7 @@ namespace ASCOM.GeminiTelescope
 
             while (GeminiHardware.Velocity=="S"  || GeminiHardware.Velocity=="C") System.Threading.Thread.Sleep(500);
 
+            System.Threading.Thread.Sleep(GeminiHardware.SlewSettleTime * 1000);
         }
 
         public void SlewToTarget()
@@ -956,6 +965,7 @@ namespace ASCOM.GeminiTelescope
                 throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             if (Slewing) AbortSlew();
+            GeminiHardware.Velocity = "S";
             GeminiHardware.SlewEquatorial();
             WaitForSlewToEnd();
         }
@@ -966,8 +976,10 @@ namespace ASCOM.GeminiTelescope
                 throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             if (Slewing) AbortSlew();
+            GeminiHardware.Velocity = "S";
             GeminiHardware.SlewEquatorialAsync();
             WaitForVelocity("SC", GeminiHardware.MAX_TIMEOUT);
+            m_AsyncSlewStarted = true;
         }
 
         public bool Slewing
@@ -982,6 +994,11 @@ namespace ASCOM.GeminiTelescope
                 }
                 else
                 {
+                    if (m_AsyncSlewStarted) // need to wait out the slewsettletime here...
+                    {
+                        System.Threading.Thread.Sleep(GeminiHardware.SlewSettleTime * 1000);
+                        m_AsyncSlewStarted = false;
+                    }
                     return false;
                 }
             }

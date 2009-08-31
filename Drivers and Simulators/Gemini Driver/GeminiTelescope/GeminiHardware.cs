@@ -203,6 +203,16 @@ namespace ASCOM.GeminiTelescope
 
         private static TimeSpan m_GPSTimeDifference = TimeSpan.Zero;    // GPS UTC time - PC clock UTC time
 
+        private static int m_SlewSettleTime = 0;
+
+        public static int SlewSettleTime
+        {
+            get { return GeminiHardware.m_SlewSettleTime; }
+            set { GeminiHardware.m_SlewSettleTime = value;
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "SlewSettleTime", value.ToString());
+            }
+        }
+
         private static string m_ComPort;
         private static int m_BaudRate;
         private static ASCOM.Utilities.SerialParity m_Parity;
@@ -431,6 +441,9 @@ namespace ASCOM.GeminiTelescope
 
 
             Trace.Info(2, "User Settings", m_AdditionalAlign, m_Precession, m_Refraction, m_AdvancedMode, m_UseGeminiSite, m_UseGeminiTime);
+
+            if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "SlewSettleTime", ""), out m_SlewSettleTime))
+                m_SlewSettleTime = 2;
 
             m_ComPort = m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ComPort", "");
             if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "BaudRate", ""), out m_BaudRate))
