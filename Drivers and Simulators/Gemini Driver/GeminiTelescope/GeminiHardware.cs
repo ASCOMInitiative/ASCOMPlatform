@@ -1205,7 +1205,6 @@ namespace ASCOM.GeminiTelescope
                         m_BackgroundWorker = new System.Threading.Thread(BackgroundWorker_DoWork);
                         m_BackgroundWorker.Start();
 
-                        if (OnConnect != null) OnConnect(true, m_Clients);
 
                         try
                         {
@@ -1238,6 +1237,9 @@ namespace ASCOM.GeminiTelescope
                 }
 
             }
+
+            if (OnConnect != null && m_Connected) OnConnect(true, m_Clients);
+
             Trace.Exit("Connect()");
         }
 
@@ -1391,10 +1393,11 @@ namespace ASCOM.GeminiTelescope
         {
             Trace.Enter("Disconnect()");
 
+            bool bMessage = m_Connected;    // if currently connected, fire the disconnect message at the end
+
             lock (m_ConnectLock)
             {
                 Trace.Info(2, "Current connect state", m_Connected);
-                bool bMessage = m_Connected;    // if currently connected, fire the disconnect message at the end
 
                 m_Clients -= 1;
 
@@ -1438,9 +1441,9 @@ namespace ASCOM.GeminiTelescope
 
                     Trace.Info(2, "Pass-through port closed");
                 }
-
-                if (OnConnect != null && bMessage) OnConnect(false, m_Clients);
             }
+
+            if (OnConnect != null && bMessage) OnConnect(false, m_Clients);
 
             Trace.Exit("Disconnect()");
         }
@@ -1691,7 +1694,7 @@ namespace ASCOM.GeminiTelescope
                 CommandItem command;
 
                 // Gemini gets slow to respond when slewing, so increase timeout if we're in the middle of it:
-                int timeout = (m_Velocity == "S" ? MAX_TIMEOUT : 5000);
+                int timeout = (m_Velocity == "S" ? MAX_TIMEOUT*2 : MAX_TIMEOUT);
 
                 System.Diagnostics.Trace.Write("Poll commands: " + m_PolledVariablesString + "\r\n");
                 //Get RA and DEC etc
@@ -1971,11 +1974,13 @@ namespace ASCOM.GeminiTelescope
             }
             catch (Exception ex)
             {
-                Trace.Except(ex);
-
-                GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Timeout error occurred after " + command.m_Timeout + "msec while processing command '" + command.m_Command + "'");
-                if (OnError != null && m_Connected && m_AllowErrorNotify) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial port timed out!");
-                AddOneMoreError();
+                if (m_AllowErrorNotify)
+                {
+                    Trace.Except(ex);
+                    GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Timeout error occurred after " + command.m_Timeout + "msec while processing command '" + command.m_Command + "'");
+                    if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial port timed out!");
+                    AddOneMoreError();
+                }
                 return null;
             }
             finally
@@ -2042,7 +2047,7 @@ namespace ASCOM.GeminiTelescope
             {
                 Trace.Error("Too many errors");
 
-                if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Too many serial port errors! Please check Gemini.");
+                if (OnError != null && m_Connected && m_AllowErrorNotify) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Too many serial port errors! Please check Gemini.");
                 GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Too many serial port errors in the last " + SharedResources.MAXIMUM_ERROR_INTERVAL / 1000 + " seconds. Resetting serial port.");
 
                 lock (m_CommandQueue) // remove all pending commands, keep the queue locked so that the worker thread can't process during port reset
@@ -2344,10 +2349,16 @@ namespace ASCOM.GeminiTelescope
                 // compute civil time using whole hours only, since Gemini doesn't take fractions:
                 DateTime civil = value + TimeSpan.FromHours(utc_offset_hours);
 
-                string localTime = m_Util.HoursToHMS(m_Util.HMSToHours(civil.ToString("HH:mm:ss")));
+                string localTime = civil.ToString("HH:mm:ss");
                 string localDate = civil.ToString("MM/dd/yy");
                 result = DoCommandResult(":SC" + localDate, MAX_TIMEOUT, false);
                 result = DoCommandResult(":SL" + localTime, MAX_TIMEOUT, false);
+
+                DateTime test = UTCDate;
+                if (test - value > TimeSpan.FromSeconds(60))
+                {
+                    throw new ASCOM.DriverException(SharedResources.MSG_TIME_NOTSET, (int)SharedResources.SCODE_TIME_NOTSET);
+                }
             }
         }
 
