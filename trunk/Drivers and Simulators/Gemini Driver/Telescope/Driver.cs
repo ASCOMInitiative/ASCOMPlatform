@@ -894,7 +894,10 @@ namespace ASCOM.GeminiTelescope
         {
             // TODO Replace this with your implementation
             get { return (short)GeminiHardware.SlewSettleTime;  }
-            set { GeminiHardware.SlewSettleTime = (int)value;  }
+            set {
+                if (value < 1 || value > 120) throw new ASCOM.InvalidValueException("SlewSettleTime", value.ToString(), "1-120 seconds");    
+                GeminiHardware.SlewSettleTime = (int)value;  
+            }
         }
 
         public void SlewToAltAz(double Azimuth, double Altitude)
