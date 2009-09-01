@@ -102,6 +102,7 @@
     <Compile Include="ChooserForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="KeyValuePair.vb" />
     <Compile Include="VB6Support\VB6COMErrors.vb">
       <SubType>Code</SubType>
     </Compile>

@@ -577,6 +577,42 @@ ASCOM.Utilities
 		<para>You can create multiple instances of this object. When enabled, the Timer delivers Tick events periodically 
  (determined by setting the Interval property).</para>
 	</remarks>
+</member><member name="M:ASCOM.Utilities.KeyValuePair.#ctor">
+	<summary>
+ COM visible default constructor
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Utilities.KeyValuePair.#ctor(System.String,System.String)">
+	<summary>
+ Constructor that can set the key and value simultaneously.
+ </summary>
+	<param name="Key">The Key element of a key value pair</param>
+	<param name="Value">The Value element of a key value pair</param>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Utilities.KeyValuePair.Key">
+	<summary>
+ The Key element of a key value pair
+ </summary>
+	<value>Key</value>
+	<returns>Key as a string</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Utilities.KeyValuePair.Value">
+	<summary>
+ The Value element of a key value pair.
+ </summary>
+	<value>Value</value>
+	<returns>Value as a string</returns>
+	<remarks></remarks>
+</member><member name="T:ASCOM.Utilities.KeyValuePair">
+	<summary>
+ Class that returns a key and associated value
+ </summary>
+	<remarks>This class is used by some Profile properties and methods and
+ compensates for the inability of .NET to return Generic classes to COM clients.
+ <para>The properties and methods are: 
+ <see cref="P:ASCOM.Utilities.Profile.RegisteredDevices(System.String)">Profile.RegisteredDevices</see>, 
+ <see cref="M:ASCOM.Utilities.Profile.SubKeys(System.String,System.String)">Profile.SubKeys</see> and 
+ <see cref="M:ASCOM.Utilities.Profile.Values(System.String,System.String)">Profile.Values</see>.</para></remarks>
 </member><member name="M:ASCOM.Utilities.TraceLogger.#ctor">
 	<summary>
  Creates a new TraceLogger instance
@@ -616,20 +652,6 @@ ASCOM.Utilities
 	<param name="Message">Message to log</param>
 	<remarks>Use this for reporting issues that you don't want to appear on a line already opened 
  with StartLine</remarks>
-</member><member name="M:ASCOM.Utilities.TraceLogger.LogMessage(System.String,System.String)">
-	<summary>
- Logs a complete message in one call
- </summary>
-	<param name="Identifier">Identifies the meaning of the the message e.g. name of modeule or method logging the message.</param>
-	<param name="Message">Message to log</param>
-	<remarks>
-		<para>Use this for straightforward logging requrements. Writes all information in one command.</para>
-		<para>Will create a LOGISSUE message in the log if called before a line started by LogStart has been closed with LogFinish. 
- Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
-		<para>This overload is not available through COM, please use 
- "LogMessage(ByVal Identifier As String, ByVal Message As String, ByVal HexDump As Boolean)"
- with HexDump set False to achieve this effect.</para>
-	</remarks>
 </member><member name="M:ASCOM.Utilities.TraceLogger.LogMessage(System.String,System.String,System.Boolean)">
 	<summary>
  Logs a complete message in one call, including a hex translation of the message
@@ -656,19 +678,6 @@ ASCOM.Utilities
 		<para>Will create a LOGISSUE message in the log if called before a line started by LogStart has been closed with LogFinish. 
  Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
 	</remarks>
-</member><member name="M:ASCOM.Utilities.TraceLogger.LogContinue(System.String)">
-	<summary>
- Appends further message to a line started by LogStart, does not terminate the line.
- </summary>
-	<param name="Message">The additional message to appear in the line</param>
-	<remarks>
-		<para>This can be called multiple times to build up a complex log line if required.</para>
-		<para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart. 
- Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
-		<para>This overload is not available through COM, please use 
- "LogContinue(ByVal Message As String, ByVal HexDump As Boolean)"
- with HexDump set False to achieve this effect.</para>
-	</remarks>
 </member><member name="M:ASCOM.Utilities.TraceLogger.LogContinue(System.String,System.Boolean)">
 	<summary>
  Appends further message to a line started by LogStart, appends a hex translation of the message to the line, does not terminate the line.
@@ -679,19 +688,6 @@ ASCOM.Utilities
 		<para>This can be called multiple times to build up a complex log line if required.</para>
 		<para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart. 
  Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
-	</remarks>
-</member><member name="M:ASCOM.Utilities.TraceLogger.LogFinish(System.String)">
-	<summary>
- Closes a line started by LogStart with the supplied message
- </summary>
-	<param name="Message">The final message to terminate the line</param>
-	<remarks>
-		<para>Can only be called once for each line started by LogStart.</para>
-		<para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart.  
- Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
-		<para>This overload is not available through COM, please use 
- "LogFinish(ByVal Message As String, ByVal HexDump As Boolean)"
- with HexDump set False to achieve this effect.</para>
 	</remarks>
 </member><member name="M:ASCOM.Utilities.TraceLogger.LogFinish(System.String,System.Boolean)">
 	<summary>
@@ -730,6 +726,46 @@ ASCOM.Utilities
 		<code>
  TL = New TraceLogger("",TraceName")
  </code>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.TraceLogger.LogMessage(System.String,System.String)">
+	<summary>
+ Logs a complete message in one call
+ </summary>
+	<param name="Identifier">Identifies the meaning of the the message e.g. name of modeule or method logging the message.</param>
+	<param name="Message">Message to log</param>
+	<remarks>
+		<para>Use this for straightforward logging requrements. Writes all information in one command.</para>
+		<para>Will create a LOGISSUE message in the log if called before a line started by LogStart has been closed with LogFinish. 
+ Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+		<para>This overload is not available through COM, please use 
+ "LogMessage(ByVal Identifier As String, ByVal Message As String, ByVal HexDump As Boolean)"
+ with HexDump set False to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.TraceLogger.LogContinue(System.String)">
+	<summary>
+ Appends further message to a line started by LogStart, does not terminate the line.
+ </summary>
+	<param name="Message">The additional message to appear in the line</param>
+	<remarks>
+		<para>This can be called multiple times to build up a complex log line if required.</para>
+		<para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart. 
+ Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+		<para>This overload is not available through COM, please use 
+ "LogContinue(ByVal Message As String, ByVal HexDump As Boolean)"
+ with HexDump set False to achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.TraceLogger.LogFinish(System.String)">
+	<summary>
+ Closes a line started by LogStart with the supplied message
+ </summary>
+	<param name="Message">The final message to terminate the line</param>
+	<remarks>
+		<para>Can only be called once for each line started by LogStart.</para>
+		<para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart.  
+ Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+		<para>This overload is not available through COM, please use 
+ "LogFinish(ByVal Message As String, ByVal HexDump As Boolean)"
+ with HexDump set False to achieve this effect.</para>
 	</remarks>
 </member><member name="T:ASCOM.Utilities.TraceLogger">
 	<summary>
@@ -845,7 +881,7 @@ ASCOM.Utilities
 	<remarks></remarks>
 </member><member name="M:ASCOM.Utilities.Profile.Values(System.String,System.String)">
 	<summary>
- Return a list of the (unnamed and named variables) under the given DriverID. (for COM clients)
+ Return a list of the (unnamed and named variables) under the given DriverID and subkey.
  </summary>
 	<param name="DriverID">ProgID of the device to read from</param>
 	<param name="SubKey">Subkey from the profile root in which to write the value</param>
@@ -895,6 +931,19 @@ ASCOM.Utilities
 	<exception cref="T:ASCOM.Utilities.Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
 	<exception cref="T:ASCOM.Utilities.Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
 	<remarks>The sub-key and all data and keys beneath it are deleted.</remarks>
+</member><member name="M:ASCOM.Utilities.Profile.DeleteValue(System.String,System.String)">
+	<summary>
+ Delete the value from the registry. Name may be an empty string for the unnamed value. 
+ </summary>
+	<param name="DriverID">ProgID of the device to read from</param>
+	<param name="Name">Name of the variable whose value is retrieved</param>
+	<exception cref="T:ASCOM.Utilities.Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
+	<exception cref="T:ASCOM.Utilities.Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
+	<remarks>Specify "" to delete the unnamed value which is also known as the "default" value for a registry key.
+ <para>This overload is not available through COM, please use 
+ "DeleteValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
+ with SubKey set to empty string achieve this effect.</para>
+	</remarks>
 </member><member name="M:ASCOM.Utilities.Profile.GetValue(System.String,System.String)">
 	<summary>
  Retrieve a string value from the profile for the given Driver ID and variable name
@@ -911,6 +960,28 @@ ASCOM.Utilities
  "GetValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
  with SubKey set to empty string achieve this effect.</para>
 	</remarks>
+</member><member name="M:ASCOM.Utilities.Profile.SubKeys(System.String)">
+	<summary>
+ Return a list of the sub-keys under the root of the given DriverID
+ </summary>
+	<param name="DriverID">ProgID of the device to read from</param>
+	<returns>An ArrayList of key-value pairs</returns>
+	<remarks>The returned object contains entries for each sub-key. For each KeyValuePair in the list, 
+ the Key property is the sub-key name, and the Value property is the value. The unnamed ("default") value for that key is also returned.
+ <para>The KeyValuePair objects are instances of the <see cref="T:ASCOM.Utilities.KeyValuePair">KeyValuePair class</see></para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Profile.Values(System.String)">
+	<summary>
+ Return a list of the (unnamed and named variables) under the root of the given DriverID.
+ </summary>
+	<param name="DriverID">ProgID of the device to read from</param>
+	<returns>An ArrayList of KeyValuePairs</returns>
+	<remarks>The returned object contains entries for each value. For each entry, 
+ the Key property is the value's name, and the Value property is the string value itself. Note that the unnamed (default) 
+ value will be included if it has a value, even if the value is a blank string. The unnamed value will have its entry's 
+ Key property set to an empty string.
+ <para>The KeyValuePair objects are instances of the <see cref="T:ASCOM.Utilities.KeyValuePair">KeyValuePair class</see></para>
+	</remarks>
 </member><member name="M:ASCOM.Utilities.Profile.WriteValue(System.String,System.String,System.String)">
 	<summary>
  Writes a string value to the profile using the given Driver ID and variable name.
@@ -925,19 +996,6 @@ ASCOM.Utilities
  "WriteValue(ByVal DriverID As String, ByVal Name As String, ByVal Value As String, ByVal SubKey As String)"
  with SubKey set to empty string achieve this effect.
  </remarks>
-</member><member name="M:ASCOM.Utilities.Profile.DeleteValue(System.String,System.String)">
-	<summary>
- Delete the value from the registry. Name may be an empty string for the unnamed value. 
- </summary>
-	<param name="DriverID">ProgID of the device to read from</param>
-	<param name="Name">Name of the variable whose value is retrieved</param>
-	<exception cref="T:ASCOM.Utilities.Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
-	<exception cref="T:ASCOM.Utilities.Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
-	<remarks>Specify "" to delete the unnamed value which is also known as the "default" value for a registry key.
- <para>This overload is not available through COM, please use 
- "DeleteValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
- with SubKey set to empty string achieve this effect.</para>
-	</remarks>
 </member><member name="T:ASCOM.Utilities.Profile">
 	<summary>
  ASCOM Scope Driver Helper Registry Profile Object
@@ -947,42 +1005,6 @@ ASCOM.Utilities
  persistence information in a shared area of the file system.</para>
 		<para>Please code to the IProfile interface</para>
 	</remarks>
-</member><member name="M:ASCOM.Utilities.KeyValuePair.#ctor">
-	<summary>
- COM visible default constructor
- </summary>
-	<remarks></remarks>
-</member><member name="M:ASCOM.Utilities.KeyValuePair.#ctor(System.String,System.String)">
-	<summary>
- Constructor that can set the key and value simultaneously.
- </summary>
-	<param name="Key">The Key element of a key value pair</param>
-	<param name="Value">The Value element of a key value pair</param>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Utilities.KeyValuePair.Key">
-	<summary>
- The Key element of a key value pair
- </summary>
-	<value>Key</value>
-	<returns>Key as a string</returns>
-	<remarks></remarks>
-</member><member name="P:ASCOM.Utilities.KeyValuePair.Value">
-	<summary>
- The Value element of a key value pair.
- </summary>
-	<value>Value</value>
-	<returns>Value as a string</returns>
-	<remarks></remarks>
-</member><member name="T:ASCOM.Utilities.KeyValuePair">
-	<summary>
- Class that returns a key and associated value
- </summary>
-	<remarks>This class is used by some Profile properties and methods and
- compensates for the inability of .NET to return Generic classes to COM clients.
- <para>The properties and methods are: 
- <see cref="P:ASCOM.Utilities.Profile.RegisteredDevices(System.String)">Profile.RegisteredDevices</see>, 
- <see cref="M:ASCOM.Utilities.Profile.SubKeys(System.String,System.String)">Profile.SubKeys</see> and 
- <see cref="M:ASCOM.Utilities.Profile.Values(System.String,System.String)">Profile.Values</see>.</para></remarks>
 </member><member name="P:ASCOM.Utilities.Interfaces.IKeyValuePair.Key">
 	<summary>
  Key member of a key value pair
@@ -1782,10 +1804,10 @@ ASCOM.Utilities
 	<remarks></remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.IProfile.Values(System.String,System.String)">
 	<summary>
- Return a list of the (unnamed and named variables) under the given DriverID. (for COM clients)
+ Return a list of the (unnamed and named variables) under the given DriverID and subkey.
  </summary>
 	<param name="DriverID">ProgID of the device to read from</param>
-	<param name="SubKey">Subkey from the profile root in which to write the value</param>
+	<param name="SubKey">Subkey from the profile root from which to return values</param>
 	<returns>An ArrayList of KeyValuePair objects.</returns>
 	<remarks>The returned object contains entries for each value. For each entry, 
  the Key property is the value's name, and the Value property is the string value itself. Note that the unnamed (default) 
@@ -1831,6 +1853,17 @@ ASCOM.Utilities
  Interface to the .NET Profile component
  </summary>
 	<remarks></remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IProfileExtra.DeleteValue(System.String,System.String)">
+	<summary>
+ Delete the value from the registry. Name may be an empty string for the unnamed value. 
+ </summary>
+	<param name="DriverID">ProgID of the device to read from</param>
+	<param name="Name">Name of the variable whose value is retrieved</param>
+	<remarks>Specify "" to delete the unnamed value which is also known as the "default" value for a registry key.
+ <para>This overload is not available through COM, please use 
+ "DeleteValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
+ with SubKey set to empty string achieve this effect.</para>
+	</remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.IProfileExtra.GetValue(System.String,System.String)">
 	<summary>
  Retrieve a string value from the profile for the given Driver ID and variable name
@@ -1845,6 +1878,28 @@ ASCOM.Utilities
  "GetValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
  with SubKey set to empty string achieve this effect.</para>
 	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IProfileExtra.SubKeys(System.String)">
+	<summary>
+ Return a list of the sub-keys under the root of the given DriverID
+ </summary>
+	<param name="DriverID">ProgID of the device to read from</param>
+	<returns>An ArrayList of key-value pairs</returns>
+	<remarks>The returned object (scripting.dictionary) contains entries for each sub-key. For each KeyValuePair in the list, 
+ the Key property is the sub-key name, and the Value property is the value. The unnamed ("default") value for that key is also returned.
+ <para>The KeyValuePair objects are instances of the <see cref="T:ASCOM.Utilities.KeyValuePair">KeyValuePair class</see></para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IProfileExtra.Values(System.String)">
+	<summary>
+ Return a list of the (unnamed and named variables) under the given DriverID.
+ </summary>
+	<param name="DriverID">ProgID of the device to read from</param>
+	<returns>An ArrayList of KeyValuePair objects.</returns>
+	<remarks>The returned object contains entries for each value. For each entry, 
+ the Key property is the value's name, and the Value property is the string value itself. Note that the unnamed (default) 
+ value will be included if it has a value, even if the value is a blank string. The unnamed value will have its entry's 
+ Key property set to an empty string.
+ <para>The KeyValuePair objects are instances of the <see cref="T:ASCOM.Utilities.KeyValuePair">KeyValuePair class</see></para>
+	</remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.IProfileExtra.WriteValue(System.String,System.String,System.String)">
 	<summary>
  Writes a string value to the profile using the given Driver ID and variable name.
@@ -1857,17 +1912,6 @@ ASCOM.Utilities
  "WriteValue(ByVal DriverID As String, ByVal Name As String, ByVal Value As String, ByVal SubKey As String)"
  with SubKey set to empty string achieve this effect.
  </remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IProfileExtra.DeleteValue(System.String,System.String)">
-	<summary>
- Delete the value from the registry. Name may be an empty string for the unnamed value. 
- </summary>
-	<param name="DriverID">ProgID of the device to read from</param>
-	<param name="Name">Name of the variable whose value is retrieved</param>
-	<remarks>Specify "" to delete the unnamed value which is also known as the "default" value for a registry key.
- <para>This overload is not available through COM, please use 
- "DeleteValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
- with SubKey set to empty string achieve this effect.</para>
-	</remarks>
 </member><member name="P:ASCOM.Utilities.Interfaces.ISerial.AvailableComPorts">
 	<summary>
  Returns a list of all available ASCOM serial ports with COMnnn ports sorted into ascending port number order
@@ -2597,6 +2641,16 @@ ASCOM.Utilities
  <para>This property is independent of the Profile object's DeviceType property. Setting Chooser's DeviceType 
  property doesn't set the DeviceType property in Profile, you must set that also when needed.</para>
 	</remarks>
+</member><member name="M:ASCOM.Utilities.Chooser.Choose(System.String)">
+	<summary>
+ Select ASCOM driver to use including pre-selecting one in the dropdown list
+ </summary>
+	<param name="DriverProgID">Driver to preselect in the chooser dialogue</param>
+	<returns>Driver ID of chosen driver</returns>
+	<exception cref="T:ASCOM.Utilities.Exceptions.InvalidValueException">Thrown if the Chooser.DeviceType property has not been set before Choose is called. 
+ It must be set in order for Chooser to know which list of devices to display.</exception>
+	<remarks>The supplied driver will be pre-selected in the Chooser's list when the chooser window is first opened.
+ </remarks>
 </member><member name="M:ASCOM.Utilities.Chooser.Choose">
 	<summary>
  Select ASCOM driver to use without pre-selecting in the dropdown list
@@ -2608,16 +2662,6 @@ ASCOM.Utilities
 		<para>This overload is not available through COM, please use "Choose(ByVal DriverProgID As String)"
  with an empty string parameter to achieve this effect.</para>
 	</remarks>
-</member><member name="M:ASCOM.Utilities.Chooser.Choose(System.String)">
-	<summary>
- Select ASCOM driver to use including pre-selecting one in the dropdown list
- </summary>
-	<param name="DriverProgID">Driver to preselect in the chooser dialogue</param>
-	<returns>Driver ID of chosen driver</returns>
-	<exception cref="T:ASCOM.Utilities.Exceptions.InvalidValueException">Thrown if the Chooser.DeviceType property has not been set before Choose is called. 
- It must be set in order for Chooser to know which list of devices to display.</exception>
-	<remarks>The supplied driver will be pre-selected in the Chooser's list when the chooser window is first opened.
- </remarks>
 </member><member name="T:ASCOM.Utilities.Chooser">
 	<summary>
  The Chooser object provides a way for your application to let your user select the telescope to use.

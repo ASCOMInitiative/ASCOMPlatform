@@ -1331,8 +1331,10 @@ namespace ASCOM.GeminiTelescope
         ///   return true if already started and initialized,
         ///   otherwise, perform initialization based on configured options
         /// </summary>
-        /// <param name="sRes">value returned by Gemini to the ^G command</param>
         /// <returns></returns>
+        /// <remarks>
+        /// param name="sRes" value returned by Gemini to the ^G command /param
+        ///</remarks>
         private static bool StartGemini()
         {
             Trace.Enter("StartGemini");
@@ -1468,8 +1470,10 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Process queued up commands in the sequence queued.
         /// </summary>
-        /// <param name="sender">sender - not used</param>
-        /// <param name="e">work to perform - not used</param>
+        /// <remarks>
+        /// param name="sender"sender - not used /param
+        /// param name="e" work to perform - not used /param
+        /// </remarks>
         private static void BackgroundWorker_DoWork()
         {
 

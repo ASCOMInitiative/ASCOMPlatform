@@ -112,7 +112,7 @@ Public Class Chooser
 
 #End Region
 
-#Region "Chooser Implementation"
+#Region "IChooser Implementation"
     ''' <summary>
     ''' The type of device for which the Chooser will select a driver. (String, default = "Telescope")
     ''' </summary>
@@ -135,21 +135,6 @@ Public Class Chooser
             m_sDeviceType = Value
         End Set
     End Property
-
-    ''' <summary>
-    ''' Select ASCOM driver to use without pre-selecting in the dropdown list
-    ''' </summary>
-    ''' <returns>Driver ID of chosen driver</returns>
-    ''' <remarks>No driver will be pre-selected in the Chooser's list when the chooser window is first opened. 
-    ''' <exception cref="Exceptions.InvalidValueException">Thrown if the Chooser.DeviceType property has not been set before Choose is called. 
-    ''' It must be set in order for Chooser to know which list of devices to display.</exception>
-    ''' <para>This overload is not available through COM, please use "Choose(ByVal DriverProgID As String)"
-    ''' with an empty string parameter to achieve this effect.</para>
-    ''' </remarks>
-    <ComVisible(False)> _
-    Public Overloads Function Choose() As String Implements IChooserExtra.Choose
-        Return Me.Choose("")
-    End Function
 
     ''' <summary>
     ''' Select ASCOM driver to use including pre-selecting one in the dropdown list
@@ -202,7 +187,23 @@ Public Class Chooser
         End Try
         Return RetVal
     End Function
+#End Region
 
+#Region "IChooserExtra Implementation"
+    ''' <summary>
+    ''' Select ASCOM driver to use without pre-selecting in the dropdown list
+    ''' </summary>
+    ''' <returns>Driver ID of chosen driver</returns>
+    ''' <remarks>No driver will be pre-selected in the Chooser's list when the chooser window is first opened. 
+    ''' <exception cref="Exceptions.InvalidValueException">Thrown if the Chooser.DeviceType property has not been set before Choose is called. 
+    ''' It must be set in order for Chooser to know which list of devices to display.</exception>
+    ''' <para>This overload is not available through COM, please use "Choose(ByVal DriverProgID As String)"
+    ''' with an empty string parameter to achieve this effect.</para>
+    ''' </remarks>
+    <ComVisible(False)> _
+    Public Overloads Function Choose() As String Implements IChooserExtra.Choose
+        Return Me.Choose("")
+    End Function
 #End Region
 
 End Class

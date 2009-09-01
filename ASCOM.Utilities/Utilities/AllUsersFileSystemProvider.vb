@@ -5,6 +5,7 @@
 
 Imports System.IO
 Imports ASCOM.Utilities.Interfaces
+Imports System.Security.AccessControl
 
 Friend Class AllUsersFileSystemProvider
 
@@ -40,7 +41,19 @@ Friend Class AllUsersFileSystemProvider
 
     Friend Sub CreateDirectory(ByVal p_SubKeyName As String) Implements IFileStoreProvider.CreateDirectory
         'Creates a directory in the supplied path (p_SubKeyName)
-        Directory.CreateDirectory(CreatePath(p_SubKeyName))
+        Try
+            Directory.CreateDirectory(CreatePath(p_SubKeyName))
+            If p_SubKeyName = "\" Then
+                Dim dInfo As New DirectoryInfo(CreatePath(p_SubKeyName))
+                Dim dSecurity As DirectorySecurity
+                dSecurity = dInfo.GetAccessControl
+                dSecurity.AddAccessRule(New FileSystemAccessRule("Users", FileSystemRights.Delete, InheritanceFlags.ContainerInherit, PropagationFlags.InheritOnly, AccessControlType.Allow))
+                dSecurity.AddAccessRule(New FileSystemAccessRule("Users", FileSystemRights.DeleteSubdirectoriesAndFiles, InheritanceFlags.ContainerInherit, PropagationFlags.InheritOnly, AccessControlType.Allow))
+                dInfo.SetAccessControl(dSecurity)
+            End If
+        Catch ex As Exception
+            MsgBox("CreateDirectory Exception: " & ex.ToString)
+        End Try
     End Sub
 
     Friend Sub DeleteDirectory(ByVal p_SubKeyName As String) Implements IFileStoreProvider.DeleteDirectory

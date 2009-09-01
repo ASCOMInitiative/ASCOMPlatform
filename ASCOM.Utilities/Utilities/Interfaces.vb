@@ -16,7 +16,7 @@ Namespace Interfaces
     ''' <see cref="IProfile.Values">IProfile.Values</see>.</remarks>
     <Guid("CA653783-E47D-4e9d-9759-3B91BE0F4340"), _
     ComVisible(True)> _
-        Public Interface IKeyValuePair
+    Public Interface IKeyValuePair
         ''' <summary>
         ''' Key member of a key value pair
         ''' </summary>
@@ -144,7 +144,6 @@ Namespace Interfaces
         ''' "LogContinue(ByVal Message As String, ByVal HexDump As Boolean)"
         ''' with HexDump set False to achieve this effect.</para>
         ''' </remarks>
-        <ComVisible(False)> _
         Overloads Sub LogContinue(ByVal Message As String)
 
         ''' <summary>
@@ -159,7 +158,6 @@ Namespace Interfaces
         ''' "LogFinish(ByVal Message As String, ByVal HexDump As Boolean)"
         ''' with HexDump set False to achieve this effect.</para>
         ''' </remarks>
-        <ComVisible(False)> _
         Overloads Sub LogFinish(ByVal Message As String)
 
         ''' <summary>
@@ -175,7 +173,6 @@ Namespace Interfaces
         ''' "LogMessage(ByVal Identifier As String, ByVal Message As String, ByVal HexDump As Boolean)"
         ''' with HexDump set False to achieve this effect.</para>
         ''' </remarks>
-        <ComVisible(False)> _
         Overloads Sub LogMessage(ByVal Identifier As String, ByVal Message As String)
     End Interface
 
@@ -240,6 +237,7 @@ Namespace Interfaces
         ''' to 0, causing the calling Win32 process to give up control to the kernel scheduler and then immediately 
         ''' become eligible for scheduling. </remarks>
         <DispId(1)> Sub WaitForMilliseconds(ByVal Milliseconds As Integer)
+
         ''' <summary>
         ''' Convert sexagesimal degrees to binary double-precision degrees
         ''' </summary>
@@ -259,6 +257,7 @@ Namespace Interfaces
         ''' <para>Note that plain units, for example 23.128734523 are acceptable to the method. </para>
         ''' </remarks>
         <DispId(2)> Function DMSToDegrees(ByVal DMS As String) As Double
+
         ''' <summary>
         ''' Convert sexagesimal hours to binary double-precision hours
         ''' </summary>
@@ -281,6 +280,7 @@ Namespace Interfaces
         ''' for example 23.128734523 are acceptable to the method. </para>
         ''' </remarks>
         <DispId(3)> Function HMSToHours(ByVal HMS As String) As Double
+
         ''' <summary>
         ''' Convert sexagesimal hours to binary double-precision hours
         ''' </summary>
@@ -393,6 +393,7 @@ Namespace Interfaces
         ''' <returns>Current Platform version in m.n form</returns>
         ''' <remarks></remarks>
         <DispId(11)> ReadOnly Property PlatformVersion() As String
+
         ''' <summary>
         ''' Change the serial trace file (default C:\SerialTrace.txt)
         ''' </summary>
@@ -400,6 +401,7 @@ Namespace Interfaces
         ''' <returns>Serial trace file name </returns>
         ''' <remarks>Change this before setting the SerialTrace property to True. </remarks>
         <DispId(12)> Property SerialTraceFile() As String
+
         ''' <summary>
         ''' Enable/disable serial I/O tracing
         ''' </summary>
@@ -408,6 +410,7 @@ Namespace Interfaces
         ''' <remarks>If you want to change the serial trace file path, change the SerialTraceFile property before setting this to True. 
         ''' After setting this to True, serial trace info will be written to the last-set serial trace file. </remarks>
         <DispId(13)> Property SerialTrace() As Boolean
+
         ''' <summary>
         ''' The name of the computer's time zone
         ''' </summary>
@@ -415,6 +418,7 @@ Namespace Interfaces
         ''' <remarks>This will be in the local language of the operating system, and will reflect any daylight/summer time that may be in 
         ''' effect. </remarks>
         <DispId(14)> ReadOnly Property TimeZoneName() As String
+
         ''' <summary>
         ''' UTC offset (hours) for the computer's clock
         ''' </summary>
@@ -422,18 +426,21 @@ Namespace Interfaces
         ''' <remarks>The offset is in hours, such that UTC = local + offset. The offset includes any daylight/summer time that may be 
         ''' in effect.</remarks>
         <DispId(15)> ReadOnly Property TimeZoneOffset() As Double
+
         ''' <summary>
         ''' The current UTC Date
         ''' </summary>
         ''' <returns>The current UTC Date</returns>
         ''' <remarks></remarks>
         <DispId(16)> ReadOnly Property UTCDate() As Date
+
         ''' <summary>
         ''' Current Julian date
         ''' </summary>
         ''' <returns>Current Julian date</returns>
         ''' <remarks>This is quantised to the second in the COM component but to a small decimal fraction in the .NET component</remarks>
         <DispId(17)> ReadOnly Property JulianDate() As Double
+
         ''' <summary>
         ''' Convert local-time Date to Julian date
         ''' </summary>
@@ -441,6 +448,7 @@ Namespace Interfaces
         ''' <returns>Julian date</returns>
         ''' <remarks>Julian dates are always in UTC </remarks>
         <DispId(18)> Function DateLocalToJulian(ByVal LocalDate As Date) As Double
+
         ''' <summary>
         ''' Convert Julian date to local-time Date
         ''' </summary>
@@ -448,6 +456,7 @@ Namespace Interfaces
         ''' <returns>Date in local-time for the given Julian date</returns>
         ''' <remarks>Julian dates are always in UTC</remarks>
         <DispId(19)> Function DateJulianToLocal(ByVal JD As Double) As Date
+
         ''' <summary>
         ''' Convert UTC Date to Julian date
         ''' </summary>
@@ -455,6 +464,7 @@ Namespace Interfaces
         ''' <returns>Julian date</returns>
         ''' <remarks>Julian dates are always in UTC </remarks>
         <DispId(20)> Function DateUTCToJulian(ByVal UTCDate As Date) As Double
+
         ''' <summary>
         ''' Convert Julian date to UTC Date
         ''' </summary>
@@ -462,6 +472,7 @@ Namespace Interfaces
         ''' <returns>Date in UTC for the given Julian date</returns>
         ''' <remarks>Julian dates are always in UTC </remarks>
         <DispId(21)> Function DateJulianToUTC(ByVal JD As Double) As Date
+
         ''' <summary>
         ''' Convert UTC Date to local-time Date
         ''' </summary>
@@ -469,6 +480,7 @@ Namespace Interfaces
         ''' <returns>Date in local-time</returns>
         ''' <remarks></remarks>
         <DispId(22)> Function DateUTCToLocal(ByVal UTCDate As Date) As Date
+
         ''' <summary>
         ''' Convert local-time Date to UTC Date
         ''' </summary>
@@ -550,7 +562,6 @@ Namespace Interfaces
         ''' with suitable parameters to achieve this effect.</para>
         ''' </remarks>
         Overloads Function HoursToHMS(ByVal Hours As Double) As String
-
         ''' <summary>
         ''' Convert hours to sexagesimal hours, minutes, and seconds with default minutes and seconds delimters MM:SS
         ''' </summary>
@@ -564,7 +575,6 @@ Namespace Interfaces
         ''' with suitable parameters to achieve this effect.</para>
         ''' </remarks>
         Overloads Function HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String) As String
-
         ''' <summary>
         ''' Convert hours to sexagesimal hours, minutes, and seconds with default second delimiter of null string
         ''' </summary>
@@ -579,7 +589,6 @@ Namespace Interfaces
         ''' with suitable parameters to achieve this effect.</para>
         ''' </remarks>
         Overloads Function HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String) As String
-
         ''' <summary>
         ''' Convert hours to sexagesimal hours, minutes, and seconds
         ''' </summary>
@@ -895,10 +904,10 @@ Namespace Interfaces
         <DispId(8)> Overloads Sub WriteValue(ByVal DriverID As String, ByVal Name As String, ByVal Value As String, ByVal SubKey As String)
 
         ''' <summary>
-        ''' Return a list of the (unnamed and named variables) under the given DriverID. (for COM clients)
+        ''' Return a list of the (unnamed and named variables) under the given DriverID and subkey.
         ''' </summary>
         ''' <param name="DriverID">ProgID of the device to read from</param>
-        ''' <param name="SubKey">Subkey from the profile root in which to write the value</param>
+        ''' <param name="SubKey">Subkey from the profile root from which to return values</param>
         ''' <returns>An ArrayList of KeyValuePair objects.</returns>
         ''' <remarks>The returned object contains entries for each value. For each entry, 
         ''' the Key property is the value's name, and the Value property is the string value itself. Note that the unnamed (default) 
@@ -935,7 +944,7 @@ Namespace Interfaces
         ''' the Key property is the sub-key name, and the Value property is the value. The unnamed ("default") value for that key is also returned.
         ''' <para>The KeyValuePair objects are instances of the <see cref="KeyValuePair">KeyValuePair class</see></para>
         ''' </remarks>
-        <DispId(12)> Function SubKeys(ByVal DriverID As String, ByVal SubKey As String) As ArrayList
+        <DispId(12)> Overloads Function SubKeys(ByVal DriverID As String, ByVal SubKey As String) As ArrayList
 
         ''' <summary>
         ''' Delete a registry key for the given DriverID. SubKey may contain \ separated path to key to be deleted.
@@ -948,6 +957,18 @@ Namespace Interfaces
 
     <ComVisible(False)> _
     Public Interface IProfileExtra
+        ''' <summary>
+        ''' Delete the value from the registry. Name may be an empty string for the unnamed value. 
+        ''' </summary>
+        ''' <param name="DriverID">ProgID of the device to read from</param>
+        ''' <param name="Name">Name of the variable whose value is retrieved</param>
+        ''' <remarks>Specify "" to delete the unnamed value which is also known as the "default" value for a registry key.
+        ''' <para>This overload is not available through COM, please use 
+        ''' "DeleteValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
+        ''' with SubKey set to empty string achieve this effect.</para>
+        ''' </remarks>
+        Overloads Sub DeleteValue(ByVal DriverID As String, ByVal Name As String)
+
         ''' <summary>
         ''' Retrieve a string value from the profile for the given Driver ID and variable name
         ''' </summary>
@@ -964,6 +985,30 @@ Namespace Interfaces
         Overloads Function GetValue(ByVal DriverID As String, ByVal Name As String) As String
 
         ''' <summary>
+        ''' Return a list of the sub-keys under the root of the given DriverID
+        ''' </summary>
+        ''' <param name="DriverID">ProgID of the device to read from</param>
+        ''' <returns>An ArrayList of key-value pairs</returns>
+        ''' <remarks>The returned object (scripting.dictionary) contains entries for each sub-key. For each KeyValuePair in the list, 
+        ''' the Key property is the sub-key name, and the Value property is the value. The unnamed ("default") value for that key is also returned.
+        ''' <para>The KeyValuePair objects are instances of the <see cref="KeyValuePair">KeyValuePair class</see></para>
+        ''' </remarks>
+        Overloads Function SubKeys(ByVal DriverID As String) As ArrayList
+
+        ''' <summary>
+        ''' Return a list of the (unnamed and named variables) under the given DriverID.
+        ''' </summary>
+        ''' <param name="DriverID">ProgID of the device to read from</param>
+        ''' <returns>An ArrayList of KeyValuePair objects.</returns>
+        ''' <remarks>The returned object contains entries for each value. For each entry, 
+        ''' the Key property is the value's name, and the Value property is the string value itself. Note that the unnamed (default) 
+        ''' value will be included if it has a value, even if the value is a blank string. The unnamed value will have its entry's 
+        ''' Key property set to an empty string.
+        ''' <para>The KeyValuePair objects are instances of the <see cref="KeyValuePair">KeyValuePair class</see></para>
+        '''  </remarks>
+        Overloads Function Values(ByVal DriverID As String) As ArrayList
+
+        ''' <summary>
         ''' Writes a string value to the profile using the given Driver ID and variable name.
         ''' </summary>
         ''' <param name="DriverID">ProgID of the device to read from</param>
@@ -975,19 +1020,6 @@ Namespace Interfaces
         ''' with SubKey set to empty string achieve this effect.
         ''' </remarks>
         Overloads Sub WriteValue(ByVal DriverID As String, ByVal Name As String, ByVal Value As String)
-
-        ''' <summary>
-        ''' Delete the value from the registry. Name may be an empty string for the unnamed value. 
-        ''' </summary>
-        ''' <param name="DriverID">ProgID of the device to read from</param>
-        ''' <param name="Name">Name of the variable whose value is retrieved</param>
-        ''' <remarks>Specify "" to delete the unnamed value which is also known as the "default" value for a registry key.
-        ''' <para>This overload is not available through COM, please use 
-        ''' "DeleteValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
-        ''' with SubKey set to empty string achieve this effect.</para>
-        ''' </remarks>
-        Overloads Sub DeleteValue(ByVal DriverID As String, ByVal Name As String)
-
     End Interface
 
     ''' <summary>
