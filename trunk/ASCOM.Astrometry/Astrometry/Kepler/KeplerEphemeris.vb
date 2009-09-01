@@ -66,8 +66,9 @@ Namespace Kepler
     ''' and is about 60 seconds right now (2001). </para>
     ''' </remarks>
     <Guid("2F2B0413-1F83-4777-B3B4-38DE3C32DC6B"), _
-    ClassInterface(ClassInterfaceType.None)> _
-    Class Ephemeris
+    ClassInterface(ClassInterfaceType.None), _
+    comvisible(True)> _
+    Public Class Ephemeris
         Implements IEphemeris
 
         Private Const DTVEL As Double = 0.01
