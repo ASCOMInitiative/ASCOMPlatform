@@ -306,12 +306,15 @@ namespace ASCOM.Optec_IFW
 
         private void driverHelpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string HtmlPath = System.IO.Path.Combine(Application.ExecutablePath, "IFWReadMe.html");
-            //MessageBox.Show("Looking for the helpfile at the following path: " + HtmlPath);
-           // MessageBox.Show("Current Working Directory: " + System.IO.Directory.GetCurrentDirectory());
+            //string HtmlPath = System.IO.Path.Combine(Application.ExecutablePath, "IFWReadMe.html");
+            string HTMlpath = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
+            HTMlpath = Path.GetDirectoryName(HTMlpath);
+            HTMlpath = HTMlpath + "\\IFWReadMe.html";
+            MessageBox.Show("Looking for the helpfile at the following path: " + HTMlpath);
+            // MessageBox.Show("Current Working Directory: " + System.IO.Directory.GetCurrentDirectory());
             //Trace.WriteLine("Looking for the helpfile at the following path: " + HtmlPath);
             //Trace.Flush();
-            Process.Start(HtmlPath);
+            Process.Start(HTMlpath);
            
         }
 
