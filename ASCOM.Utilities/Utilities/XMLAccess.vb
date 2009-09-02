@@ -55,16 +55,25 @@ Friend Class XMLAccess
         Catch ex As ProfileNotFoundException
             MsgBox("Migrating ASCOM Profiles from registry to file system" & vbCrLf & vbCrLf & "You should only see this message once, if not, please post on Yahoo group ASCOM-Talk", , "ASCOM Utilities")
             'It doesn't exist so migrate
+
+            'Force logging to be enabled for this...
+            TL.Enabled = True
+            RunningVersions(TL) 'Capture date in case logging wasn't initially enabled
+
             TL.LogMessage("New", "ProfileNotFoundException - migrating keys")
             'Create the root directory if it doesn't already exist
             If Not FileStore.Exists("\" & VALUES_FILENAME) Then
                 FileStore.CreateDirectory("\")
                 CreateKey("\") 'Create the root key
             End If
-
+            TL.LogMessage("New", "Successfully created root directory and root key")
             FromKey = Registry.LocalMachine.OpenSubKey(ROOT_KEY_NAME) 'Source to copy from 
+            TL.LogMessage("New", "FromKey Opened OK: " & FromKey.Name & ", SubKeyCount: " & FromKey.SubKeyCount.ToString & ", ValueCount: " & FromKey.ValueCount.ToString)
             MigrateKey(FromKey, "") 'Use recursion to copy contents to new tree
+            TL.LogMessage("New", "Successfully migrated keys")
             FromKey.Close()
+            'Restore original logging state
+            TL.Enabled = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT) 'Get enabled / disabled state from the user registry
         Catch ex As Exception
             TL.LogMessage("XMLAccess.New Unexpected exception:", ex.ToString)
             MsgBox("XMLAccess.New Unexpected exception: " & ex.ToString)
@@ -480,7 +489,13 @@ Friend Class XMLAccess
         RecurseDepth += 1 'Increment the recursion depth indicator
 
         swLocal = Stopwatch.StartNew
-        TL.LogMessage("MigrateKeys " & RecurseDepth.ToString, "Start")
+        TL.LogMessage("MigrateKeys " & RecurseDepth.ToString, "To Directory: " & p_ToDir)
+        Try
+            TL.LogMessage("MigrateKeys" & RecurseDepth.ToString, "From Key: " & p_FromKey.Name & ", SubKeyCount: " & p_FromKey.SubKeyCount.ToString & ", ValueCount: " & p_FromKey.ValueCount.ToString)
+        Catch ex As Exception
+            TL.LogMessage("MigrateKeys", "Exception processing """ & p_ToDir & """: " & ex.ToString)
+            TL.LogMessage("MigrateKeys", "Exception above: no action taken, continuing...")
+        End Try
 
         'First copy values from the from key to the to key
         ValueNames = p_FromKey.GetValueNames
@@ -504,7 +519,7 @@ Friend Class XMLAccess
             MigrateKey(FromKey, p_ToDir & "\" & SubKeyName) 'Recursively process each key
             FromKey.Close()
         Next
-        swLocal.Stop() : TL.LogMessage("  ElapsedTime " & RecurseDepth.ToString, "  " & swLocal.ElapsedMilliseconds & " milliseconds")
+        swLocal.Stop() : TL.LogMessage("  ElapsedTime " & RecurseDepth.ToString, "  " & swLocal.ElapsedMilliseconds & " milliseconds, Completed Directory: " & p_ToDir)
         RecurseDepth -= 1 'Decrement the recursion depth counter
         swLocal = Nothing
     End Sub
