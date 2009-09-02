@@ -55,7 +55,7 @@
       <HintPath>..\..\Platform Dependencies\ASCOM.Attributes.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="ASCOM.Exceptions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+    <Reference Include="ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Platform Dependencies\ASCOM.Exceptions.dll</HintPath>
       <Private>False</Private>

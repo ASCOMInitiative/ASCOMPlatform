@@ -21,13 +21,26 @@
 ; Added ASCOM.Interfaces 5.0.0.0 and ASCOM.Attributes for Gemini drivers
 ; Removed ASCOM Interfaces 5.0.0.0 as we will now use the version 1.000 installed by platform 5a
 ; Converted to use Release versions
+; Setup Build 0 Released
+
+; Added astrometry pia task i.e. removed 32bit astrometry pias from normal install
+; Installed new exceptions version 1.1 rather than overwriting 1.0
+; Installed client toolkit 1.0.5 but I won't uninstall it.
+; Fixed issue with uninstalling Astrometry and Utilities policies
+
+; Setup Build 1 Released
+
 
 [Setup]
+#define Public SetupVersion 1; Setup program version number
+
 #define Public Major 0
 #define Public Minor 0
 #define Public Release 0
 #define Public Build 0
 #define AppVer ParseVersion("..\Utilities\bin\Debug\ASCOM.Utilities.dll", Major ,Minor ,Release ,Build) ; define version variable
+#define AppVer str(Major) + "." + str(Minor) + "." + str(Release) + "." + str(SetupVersion) ; redefine to include setup version
+
 AppCopyright=Copyright © 2009 ASCOM Initiative
 ;AppID must not change to maintain a consistent uninstall experience although AppName can be changed.
 ;This value is hard coded in the uninstall code below. If you do change this you must change the corresponding reference in
@@ -78,6 +91,7 @@ Name: {cf}\ASCOM\Uninstall\Utilities
 ;  Add an option to erase the HelperNET profile
 [Tasks]
 Name: cleanprofile; Description: Erase Utilities profile store (leaves registry profile intact); GroupDescription: """Installation Tasks"""; Flags: unchecked
+Name: astrometrypias; Description: Install 32bit Astrometry PIAs (Please leave unchecked); GroupDescription: """Installation Tasks"""; Flags: unchecked
 
 [Files]
 ;Install the ASCOM.Utilities code
@@ -154,20 +168,33 @@ Source: ..\..\GACInstall\bin\Release\GACInstall.exe; DestDir: {app}; Flags: igno
 ;ASCOM Icon
 Source: ..\Utilities\Resources\ASCOM.ico; DestDir: {app}; Flags: ignoreversion
 
-;NOVAS and Kepler PIAs and TLBs - Removed these as we now have .NET versions of Transform / NOVAS2 Kepler etc.
-Source: ..\..\Interfaces\NOVAS PIAs\ASCOM.NOVAS.DLL; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\Interfaces\Kepler PIAs\ASCOM.Kepler.DLL; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\Interfaces\NOVAS PIAs\NOVAS.tlb; DestDir: {app}; Flags: ignoreversion regtypelib 32bit
-Source: ..\..\Interfaces\Kepler PIAs\Kepler.tlb; DestDir: {app}; Flags: ignoreversion regtypelib 32bit
-
-;ASCOM Interfaces and Exceptions - Removed Interfaces as we will use the platform 5a version already installed
-;Source: ..\..\Interfaces\Master Interfaces\ASCOM.Interfaces.dll; DestDir: {app}; Flags: ignoreversion
-;Source: ..\..\Interfaces\Master Interfaces\AscomMasterInterfaces.tlb; DestDir: {app}; Flags: ignoreversion regtypelib
+;ASCOM Exceptions - Removed Interfaces as we will use the platform 5a version already installed
 Source: ..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.XML; DestDir: {app}; Flags: ignoreversion
 ;...and for 32bit directories on a 64bit system
 Source: ..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll; DestDir: {{cf32}\ASCOM\.net}; Flags: ignoreversion
 Source: ..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.XML; DestDir: {{cf32}\ASCOM\.net}; Flags: ignoreversion
+
+; Client toolbox 1.0.5, in case it isn't already installed
+Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.pdb; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.XML; DestDir: {app}; Flags: ignoreversion
+; Policy file to redirect to 1.0.5
+Source: "..\..\ClientToolbox\SimpsonBitsPolicyStuff\PolicyInstaller\policy.1.0.ASCOM.DriverAccess.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\ClientToolbox\SimpsonBitsPolicyStuff\PolicyInstaller\driveraccess.config"; DestDir: "{app}"; Flags: ignoreversion
+; 32bit directories
+Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.dll; DestDir: {{cf32}\ASCOM\.net}; Flags: ignoreversion
+Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.pdb; DestDir: {{cf32}\ASCOM\.net}; Flags: ignoreversion
+Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.XML; DestDir: {{cf32}\ASCOM\.net}; Flags: ignoreversion
+
+; Debug symbols directory
+Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.pdb; DestDir: {win}\Symbols\dll; Flags: ignoreversion
+
+;NOVAS and Kepler PIAs and TLBs- optional through task checkbox
+Source: ..\..\Interfaces\NOVAS PIAs\ASCOM.NOVAS.DLL; DestDir: {app}; Flags: ignoreversion; Tasks: astrometrypias
+Source: ..\..\Interfaces\Kepler PIAs\ASCOM.Kepler.DLL; DestDir: {app}; Flags: ignoreversion; Tasks: astrometrypias
+Source: ..\..\Interfaces\NOVAS PIAs\NOVAS.tlb; DestDir: {app}; Flags: ignoreversion regtypelib 32bit; Tasks: astrometrypias
+Source: ..\..\Interfaces\Kepler PIAs\Kepler.tlb; DestDir: {app}; Flags: ignoreversion regtypelib 32bit; Tasks: astrometrypias
 
 ;NOVAS C DLLs
 Source: ..\NOVAS-C x86-x64\Release\NOVAS-C.dll; DestDir: {app}; Flags: ignoreversion
@@ -205,16 +232,19 @@ Filename: {dotnet2032}\regasm.exe; Parameters: "/TLB ""{cf32}\ASCOM\.net\ASCOM.I
 Filename: {cf32}\ASCOM\Utilities\EraseProfile.exe; Tasks: cleanprofile
 
 ;NOVAS and Kepler 32 bit interface components
-Filename: {app}\GACInstall.exe; Parameters: ASCOM.NOVAS.dll; Flags: runhidden; StatusMsg: Installing NOVAS 2 to the assembly cache
-Filename: {app}\GACInstall.exe; Parameters: ASCOM.Kepler.dll; Flags: runhidden; StatusMsg: Installing Kepler to the assembly cache
-Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.NOVAS.dll"""; Flags: runhidden; StatusMsg: Registering NOVAS for COM
-Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.Kepler.dll"""; Flags: runhidden; StatusMsg: Registering Kepler for COM
+Filename: {app}\GACInstall.exe; Parameters: ASCOM.NOVAS.dll; Flags: runhidden; StatusMsg: Installing NOVAS 2 to the assembly cache; Tasks: astrometrypias
+Filename: {app}\GACInstall.exe; Parameters: ASCOM.Kepler.dll; Flags: runhidden; StatusMsg: Installing Kepler to the assembly cache; Tasks: astrometrypias
+Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.NOVAS.dll"""; Flags: runhidden; StatusMsg: Registering NOVAS for COM; Tasks: astrometrypias
+Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.Kepler.dll"""; Flags: runhidden; StatusMsg: Registering Kepler for COM; Tasks: astrometrypias
 
-;ASCOM Interfaces and Exceptions
-; Filename: {app}\GACInstall.exe; Parameters: ASCOM.Interfaces.dll; Flags: runhidden; StatusMsg: Installing ASCOM.Interfaces to the assembly cache
+;ASCOM Exceptions
 Filename: {app}\GACInstall.exe; Parameters: ASCOM.Exceptions.dll; Flags: runhidden; StatusMsg: Installing ASCOM.Exceptions to the assembly cache
 
-;Publisher policy
+; ASCOM Client Toolkit 1.0.5
+Filename: {app}\GACInstall.exe; Parameters: ASCOM.DriverAccess.dll; Flags: runhidden; StatusMsg: Installing Client Access Toolkit to the assembly cache
+Filename: {app}\GACInstall.exe; Parameters: """{app}\policy.1.0.ASCOM.DriverAccess.dll"""; Flags: runhidden; StatusMsg: Installing Client Access Toolkit Policy to the assembly cache
+
+;Publisher policies for Astrometry and Utilities
 #emit "Filename: {app}\GACInstall.exe; Parameters: policy." + str(Major) + "." + str(Minor) + ".ASCOM.Utilities.dll; Flags: runhidden; StatusMsg: Installing ASCOM Utilities policy to the assembly cache"
 #emit "Filename: {app}\GACInstall.exe; Parameters: policy." + str(Major) + "." + str(Minor) + ".ASCOM.Astrometry.dll; Flags: runhidden; StatusMsg: Installing ASCOM Astrometry policy to the assembly cache"
 Filename: {app}\ReadMe55.txt; Description: ReadMe file; StatusMsg: Displaying ReadMe file; Flags: shellexec skipifdoesntexist postinstall skipifsilent unchecked
@@ -235,18 +265,20 @@ Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\
 Filename: {cf32}\ASCOM\Utilities\RestoreOriginalHelpers.cmd; Parameters: """{cf32}\ASCOM\Utilities\*.dll"" ""{cf32}\ASCOM"""; StatusMsg: Restoring helper dlls; Flags: runhidden
 
 ;NOVAS and Kepler 32 bit interfaces
-Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.NOVAS"""; Flags: runhidden; StatusMsg: Uninstalling NOVAS 2 from the assembly cache
-Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Kepler"""; Flags: runhidden; StatusMsg: Uninstalling Kepler from the assembly cache
-Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.NOVAS.dll"""; Flags: runhidden; StatusMsg: Unregistering NOVAS for COM
-Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.Kepler.dll"""; Flags: runhidden; StatusMsg: Unregistering Kepler for COM
+Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.NOVAS"""; Flags: runhidden; StatusMsg: Uninstalling NOVAS 2 from the assembly cache; Tasks: astrometrypias
+Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Kepler"""; Flags: runhidden; StatusMsg: Uninstalling Kepler from the assembly cache; Tasks: astrometrypias
+Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.NOVAS.dll"""; Flags: runhidden; StatusMsg: Unregistering NOVAS for COM; Tasks: astrometrypias
+Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.Kepler.dll"""; Flags: runhidden; StatusMsg: Unregistering Kepler for COM; Tasks: astrometrypias
 
-;ASCOM Interfaces and Exceptions
-;Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Interfaces"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Interfaces from the assembly cache
+;ASCOM Exceptions
 Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Exceptions"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Exceptions from the assembly cache
 
+; ASCOM Client Toolkit
+; I'm deliberately leaving this installed as it is a prerequisite rather than part of this update
+
 ;Publisher policy
-#emit "Filename: {app}\GACInstall.exe; Parameters: ""/U """"policy." + str(Major) + "." + str(Minor) + ".ASCOM.Utilities.dll""""""; Flags: runhidden; StatusMsg: Uninstalling ASCOM Utilities policy from the assembly cache"
-#emit "Filename: {app}\GACInstall.exe; Parameters: ""/U """"policy." + str(Major) + "." + str(Minor) + ".ASCOM.Astrometry.dll""""""; Flags: runhidden; StatusMsg: Uninstalling ASCOM Astrometry policy from the assembly cache"
+#emit "Filename: {app}\GACInstall.exe; Parameters: ""/U """"policy." + str(Major) + "." + str(Minor) + ".ASCOM.Utilities""""""; Flags: runhidden; StatusMsg: Uninstalling ASCOM Utilities policy from the assembly cache"
+#emit "Filename: {app}\GACInstall.exe; Parameters: ""/U """"policy." + str(Major) + "." + str(Minor) + ".ASCOM.Astrometry""""""; Flags: runhidden; StatusMsg: Uninstalling ASCOM Astrometry policy from the assembly cache"
 
 [UninstallDelete]
 Type: files; Name: {cf32}\ASCOM\Utilities\*.*
