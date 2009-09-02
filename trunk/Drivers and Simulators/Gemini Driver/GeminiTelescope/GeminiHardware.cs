@@ -248,9 +248,9 @@ namespace ASCOM.GeminiTelescope
 
         public static bool PassThroughPortEnabled
         {
-            get { return GeminiHardware.m_PassThroughPortEnabled; }
+            get { return m_PassThroughPortEnabled; }
             set { 
-                GeminiHardware.m_PassThroughPortEnabled = value;
+                m_PassThroughPortEnabled = value;
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughPortEnabled", value.ToString());
             }
         }
@@ -304,7 +304,7 @@ namespace ASCOM.GeminiTelescope
 
         private static SerialPort m_SerialPort; // main physical port
 
-        private static PassThroughPort m_PassThroughPort = new PassThroughPort();    // a secondary port (virtual) for connecting non-ASCOM compliant Gemini applications
+        private static PassThroughPort m_PassThroughPort = null; // a secondary port (virtual) for connecting non-ASCOM compliant Gemini applications
 
         private static bool m_Connected = false; //Keep track of the connection status of the hardware
 
@@ -496,6 +496,12 @@ namespace ASCOM.GeminiTelescope
             if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughPortEnabled", ""), out m_PassThroughPortEnabled))
                 m_PassThroughPortEnabled = false;
 
+            if (m_PassThroughPortEnabled && m_PassThroughComPort.Equals(m_ComPort, StringComparison.CurrentCultureIgnoreCase))
+            {
+                Trace.Error("Pass-through port is invalid", m_PassThroughComPort);
+                if (OnError != null) OnError("Pass-through port will be disabled", "Gemini Pass-Through port # is invalid: " + m_PassThroughComPort);
+                PassThroughPortEnabled = false;
+            }
 
             if (m_ComPort != "")
             {
@@ -1232,6 +1238,7 @@ namespace ASCOM.GeminiTelescope
                         if (m_PassThroughPortEnabled)
                             try {
                                 Trace.Info(2, "Open pass-through port");
+                                m_PassThroughPort = new PassThroughPort();
                                 m_PassThroughPort.Initialize(m_PassThroughComPort, m_PassThroughBaudRate);   
                             } 
                             catch (Exception ptp_e)
@@ -1239,6 +1246,7 @@ namespace ASCOM.GeminiTelescope
                                 Trace.Except(ptp_e);
                                 GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Cannot open pass-through port: " +ptp_e.Message);
                                 if (OnError != null) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Cannot open pass-through port: " + ptp_e.Message);
+                                m_PassThroughPort = null;                                
                             }
                         System.Threading.Thread.Sleep(1000);
                     }
@@ -1456,7 +1464,7 @@ namespace ASCOM.GeminiTelescope
 
                     Trace.Info(2, "Closing pass-through port");
 
-                    m_PassThroughPort.Stop();
+                    if (m_PassThroughPort!=null) m_PassThroughPort.Stop();
 
                     Trace.Info(2, "Pass-through port closed");
                 }
@@ -1637,14 +1645,15 @@ namespace ASCOM.GeminiTelescope
         {
             StringBuilder sb = new StringBuilder();
 
-            if (m_PassThroughPort.PortActive)
+            if (m_PassThroughPort!=null && m_PassThroughPort.PortActive)
             {
                 while (m_SerialPort.BytesToRead > 0)
                 {
                     int c = m_SerialPort.ReadByte();
                     if (c>=0x80) sb.Append(Convert.ToChar(c));
                 }
-                if (sb.Length > 0 && m_PassThroughPort.PortActive) m_PassThroughPort.PassStringToPort(sb);
+                if (sb.Length > 0 && (m_PassThroughPort!=null && m_PassThroughPort.PortActive))
+                    m_PassThroughPort.PassStringToPort(sb);
             }
             else m_SerialPort.DiscardInBuffer();
         }
@@ -2136,7 +2145,8 @@ namespace ASCOM.GeminiTelescope
                     }
                     else
                     {
-                        if (outp.Length > 0 && m_PassThroughPort.PortActive) m_PassThroughPort.PassStringToPort(outp);
+                        if (outp.Length > 0 && (m_PassThroughPort!=null && m_PassThroughPort.PortActive))
+                            m_PassThroughPort.PassStringToPort(outp);
                         return res.ToString();
                     }
                 }
@@ -2144,7 +2154,8 @@ namespace ASCOM.GeminiTelescope
                 {
                     if (m_SerialTimeoutExpired.WaitOne(0))
                     {
-                        if (outp.Length > 0 && m_PassThroughPort.PortActive) m_PassThroughPort.PassStringToPort(outp);
+                        if (outp.Length > 0 && (m_PassThroughPort!=null && m_PassThroughPort.PortActive))
+                            m_PassThroughPort.PassStringToPort(outp);
                         throw new TimeoutException("ReadTo");
                     }
                     System.Threading.Thread.Sleep(0);  //[pk] should instead wait on a waithandle set by serialdatareceived event...
@@ -2174,7 +2185,8 @@ namespace ASCOM.GeminiTelescope
 
                     if (res.Length == chars)
                     {
-                        if (outp.Length > 0 && m_PassThroughPort.PortActive) m_PassThroughPort.PassStringToPort(outp);
+                        if (outp.Length > 0 && (m_PassThroughPort!=null && m_PassThroughPort.PortActive))
+                            m_PassThroughPort.PassStringToPort(outp);
                         return res.ToString();
                     }
                 }
@@ -2182,7 +2194,8 @@ namespace ASCOM.GeminiTelescope
                 {
                     if (m_SerialTimeoutExpired.WaitOne(0))
                     {
-                        if (outp.Length > 0 && m_PassThroughPort.PortActive) m_PassThroughPort.PassStringToPort(outp);
+                        if (outp.Length > 0 && (m_PassThroughPort!=null && m_PassThroughPort.PortActive))
+                            m_PassThroughPort.PassStringToPort(outp);
                         throw new TimeoutException("ReadNumber");
                     }
                     System.Threading.Thread.Sleep(0);   //[pk] should instead wait on a waithandle set by serialdatareceived event...
