@@ -735,5 +735,6 @@ namespace ASCOM.GeminiTelescope
                 }
             }
         }
+
     }
 }

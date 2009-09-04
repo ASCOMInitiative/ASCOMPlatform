@@ -159,6 +159,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resource1.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="TelescopeSetupDialogForm.resx">
       <DependentUpon>TelescopeSetupDialogForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -168,8 +172,16 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ReferenceCountedObject.cs" />
+    <Compile Include="Resource1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource1.resx</DependentUpon>
+    </Compile>
     <Compile Include="SharedResources.cs" />
     <Compile Include="GeminiHardware.cs" />
+    <Compile Include="TButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TelescopeSetupDialogForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -185,6 +197,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ReadMe.htm" />
+    <None Include="Resources\diamond1-down.gif" />
+    <None Include="Resources\diamond1.gif" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
