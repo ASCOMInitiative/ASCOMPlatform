@@ -388,8 +388,10 @@ namespace ASCOM.GeminiTelescope
             // 
             this.buttonSlew4.FlatAppearance.BorderSize = 0;
             this.buttonSlew4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSlew4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(0)));
             this.buttonSlew4.ImageIndex = 0;
-            this.buttonSlew4.Location = new System.Drawing.Point(77, 131);
+            this.buttonSlew4.Location = new System.Drawing.Point(77, 130);
+            this.buttonSlew4.Margin = new System.Windows.Forms.Padding(0);
             this.buttonSlew4.Name = "buttonSlew4";
             this.buttonSlew4.Size = new System.Drawing.Size(64, 64);
             this.buttonSlew4.TabIndex = 21;
@@ -400,8 +402,10 @@ namespace ASCOM.GeminiTelescope
             // 
             this.buttonSlew2.FlatAppearance.BorderSize = 0;
             this.buttonSlew2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSlew2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(0)));
             this.buttonSlew2.ImageIndex = 0;
-            this.buttonSlew2.Location = new System.Drawing.Point(41, 166);
+            this.buttonSlew2.Location = new System.Drawing.Point(40, 166);
+            this.buttonSlew2.Margin = new System.Windows.Forms.Padding(0);
             this.buttonSlew2.Name = "buttonSlew2";
             this.buttonSlew2.Size = new System.Drawing.Size(64, 64);
             this.buttonSlew2.TabIndex = 20;
@@ -412,8 +416,10 @@ namespace ASCOM.GeminiTelescope
             // 
             this.buttonSlew3.FlatAppearance.BorderSize = 0;
             this.buttonSlew3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSlew3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(0)));
             this.buttonSlew3.ImageIndex = 0;
-            this.buttonSlew3.Location = new System.Drawing.Point(5, 134);
+            this.buttonSlew3.Location = new System.Drawing.Point(6, 134);
+            this.buttonSlew3.Margin = new System.Windows.Forms.Padding(0);
             this.buttonSlew3.Name = "buttonSlew3";
             this.buttonSlew3.Size = new System.Drawing.Size(64, 64);
             this.buttonSlew3.TabIndex = 19;
@@ -424,8 +430,10 @@ namespace ASCOM.GeminiTelescope
             // 
             this.buttonSlew1.FlatAppearance.BorderSize = 0;
             this.buttonSlew1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSlew1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(0)));
             this.buttonSlew1.ImageIndex = 0;
-            this.buttonSlew1.Location = new System.Drawing.Point(41, 99);
+            this.buttonSlew1.Location = new System.Drawing.Point(42, 99);
+            this.buttonSlew1.Margin = new System.Windows.Forms.Padding(0);
             this.buttonSlew1.Name = "buttonSlew1";
             this.buttonSlew1.Size = new System.Drawing.Size(64, 64);
             this.buttonSlew1.TabIndex = 18;
