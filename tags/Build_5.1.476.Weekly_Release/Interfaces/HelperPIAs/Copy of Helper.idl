@@ -1,0 +1,482 @@
+//
+// =========================
+// ASCOM Helper Type Library
+// =========================
+//
+// Bob Denny 02-May-2007
+//
+// This was created from an OLEView dump, then I removed the references
+// to IObjectSafety and Scripting Runtime, so a PIA could be created
+// without needing PIAs for those two things. Otherwise, this is exactly 
+// the interfaces, coclasses and enums for Helper and Helper2 (well, 
+// except for the library name, LIBID, and some helpstrings. In addition
+//
+// LIBRARY NAMESPACE AND INTERFACE NAMESPACES
+//
+// I added the custom attribute to control the namespace instead of
+// TLBIMP's /namespace option. 
+//
+
+#define VARIANT_TRUE ((VARIANT_BOOL)-1)
+#define VARIANT_FALSE ((VARIANT_BOOL)0)
+
+#if (__midl >= 501)
+midl_pragma warning( disable: 2400 2401 )   // rbd These warnings are n/a
+#endif
+
+[
+  uuid(12DC26BD-E8F7-4328-8A8B-B16C6D87A077),
+  version(1.0),
+  helpstring("ASCOM Helper Type Library"),
+  custom(0F21F359-AB84-41E8-9A78-36D110E6D2F9, "ASCOM.Helper")
+]
+library ASCOMHelperLibrary
+{
+    importlib("stdole2.tlb");
+
+    // Forward declare all types defined in this typelib
+    interface _Serial;
+    interface _Util;
+    interface _Chooser;
+    interface _Profile;
+    interface _Timer;
+    dispinterface __Timer;
+
+    //
+    // Enums
+    //
+    [
+        uuid(3B4688A7-E5E8-4645-8F15-258351DF03B5), 
+        version(1.0), 
+        helpstring("ASCOM Driver Helper Serial Port Object")
+    ]
+    typedef enum PortSpeed {
+        ps300 = 300,
+        ps1200 = 1200,
+        ps2400 = 2400,
+        ps4800 = 4800,
+        ps9600 = 9600,
+        ps14400 = 14400,
+        ps19200 = 19200,
+        ps28800 = 28800,
+        ps38400 = 38400,
+        ps57600 = 57600,
+        ps115200 = 0x0001c200
+    } PortSpeed;
+
+    [
+        uuid(027422A5-E2CE-455C-90A3-C0001038CD7B), 
+        version(1.0), 
+        helpstring("ASCOM Driver Helper Utilities Object")
+    ]
+    typedef enum MessageBoxOptions {
+        mbOKOnly = 0,
+        mbOKCancel = 1,
+        mbAbortRetryIgnore = 2,
+        mbYesNoCancel = 3,
+        mbYesNo = 4,
+        mbRetryCancel = 5,
+        mbIconStop = 16,
+        mbIconQuestion = 32,
+        mbIconExclamation = 48,
+        mbIconInformation = 64,
+        mbDefButton1 = 0,
+        mbDefButton2 = 256,
+        mbDefButton3 = 512,
+        mbAbblicationModal = 0,
+        mbSystemModal = 4096,
+        mbNoFocus = 32768,
+        mbSetForeground = 0x00010000,
+        mbDefaultDesktopOnly = 0x00020000
+    } MessageBoxOptions;
+
+    [
+        uuid(5475F540-0417-46BD-8EEE-F4BDB9FDE557), 
+        version(1.0), 
+        helpstring("ASCOM Driver Helper Utilities Object")
+    ]
+    typedef enum MessageBoxAnswers {
+        mbOK = 1,
+        mbCancel = 2,
+        mbAbort = 3,
+        mbRetry = 4,
+        mbIgnore = 5,
+        mbYes = 6,
+        mbNo = 7
+    } MessageBoxAnswers;
+
+    [
+        uuid(6D64D5A9-E88A-4693-917E-EB115FDBB39F),
+        version(1.0),
+        helpstring("ASCOM Driver Helper Utilities Object")
+    ]
+    typedef enum FirstDayOfWeek {
+        fmtUseSystemDayOfWeek = 0,
+        fmtSunday = 1,
+        fmtMonday = 2,
+        fmtTuesday = 3,
+        fmtWednesday = 4,
+        fmtThursday = 5,
+        fmtFriday = 6,
+        fmtSaturday = 7
+    } FirstDayOfWeek;
+
+    [
+        uuid(11A6CEBE-FD26-4FA6-9B41-F79BD4F5E9DF), 
+        version(1.0), 
+        helpstring("ASCOM Driver Helper Utilities Object")
+    ]
+    typedef enum FirstWeekOfYear {
+        fmtUseSystem = 0,
+        fmtFirstJan1 = 1,
+        fmtFirstFourDays = 2,
+        fmtFirstFullWeek = 3
+    } FirstWeekOfYear;
+
+    //
+    // Interfaces and CoClasses
+    //
+    [
+      odl,
+      uuid(6584A675-F5D4-4C24-82EB-AB4EAEA8C9C5),
+      version(1.0),
+      helpstring("ASCOM Driver Helper Serial Port Object"),
+      hidden,
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface _Serial : IDispatch {
+        [restricted] void Missing7();
+        [restricted] void Missing8();
+        [restricted] void Missing9();
+        [id(0x68030003), propget, helpstring("The COM port number to use for serial communication")]
+        HRESULT Port([out, retval] short* );
+        [id(0x68030003), propput, helpstring("The COM port number to use for serial communication")]
+        HRESULT Port([in] short );
+        [id(0x68030002), propget, helpstring("The maximum time that the object will wait for incoming receive data (seconds, default = 5)")]
+        HRESULT ReceiveTimeout([out, retval] short* );
+        [id(0x68030002), propput, helpstring("The maximum time that the object will wait for incoming receive data (seconds, default = 5)")]
+        HRESULT ReceiveTimeout([in] short );
+        [id(0x68030001), propget, helpstring("True means the object is connected to the physical serial (COM) port. ")]
+        HRESULT Connected([out, retval] VARIANT_BOOL* );
+        [id(0x68030001), propput, helpstring("True means the object is connected to the physical serial (COM) port. ")]
+        HRESULT Connected([in] VARIANT_BOOL );
+        [id(0x68030000), propget, helpstring("The data speed at which the port runs (baud, PortSpeed enum, default 9600)")]
+        HRESULT Speed([out, retval] PortSpeed* );
+        [id(0x68030000), propput, helpstring("The data speed at which the port runs (baud, PortSpeed enum, default 9600)")]
+        HRESULT Speed([in] PortSpeed );
+        [id(0x60030006), helpstring("Send the string of text data to the serial port")]
+        HRESULT Transmit([in] BSTR Data);
+        [id(0x60030007), helpstring("Send the binary data array to the serial port")]
+        HRESULT TransmitBinary([in, out] SAFEARRAY(unsigned char)* Data);
+        [id(0x60030008), helpstring("Receive at least one character from the serial port")]
+        HRESULT Receive([out, retval] BSTR* );
+        [id(0x60030009), helpstring("Receive one byte from the serial port")]
+        HRESULT ReceiveByte([out, retval] unsigned char* );
+        [id(0x6003000a), helpstring("Receive exactly the given number of text characters")]
+        HRESULT ReceiveCounted(
+                        [in] short Count, 
+                        [out, retval] BSTR* );
+        [id(0x6003000b), helpstring("Receive text until the given terminator string is seen")]
+        HRESULT ReceiveTerminated(
+                        [in] BSTR Terminator, 
+                        [out, retval] BSTR* );
+        [id(0x6003000c), helpstring("Empties both the incoming and outgoing buffers for the serial port.")]
+        HRESULT ClearBuffers();
+        [restricted] void Missing25();
+        [restricted] void Missing26();
+        [restricted] void Missing27();
+        [id(0x60030010)]
+        HRESULT ReceiveCountedBinary(
+                        [in] short Count, 
+                        [out, retval] SAFEARRAY(unsigned char)* );
+        [id(0x60030011)]
+        HRESULT ReceiveTerminatedBinary(
+                        [in, out] SAFEARRAY(unsigned char)* Terminator, 
+                        [out, retval] SAFEARRAY(unsigned char)* );
+        [restricted] void Missing30();
+        [restricted] void Missing31();
+        [restricted] void Missing32();
+        [id(0x68030012), propget]
+        HRESULT ReceiveTimeoutMs([out, retval] long* );
+        [id(0x68030012), propput]
+        HRESULT ReceiveTimeoutMs([in] long );
+    };
+
+    [
+      uuid(70AF32BB-5ED3-489E-A119-CD97E5F1E435),
+      version(1.0),
+      helpstring("ASCOM Driver Helper Serial Port Object")
+    ]
+    coclass Serial {
+        [default] interface _Serial;
+    };
+
+    [
+      odl,
+      uuid(A970B0B4-982F-4F12-BADA-6EE42D31FE27),
+      version(1.0),
+      helpstring("ASCOM Driver Helper Utilities Object"),
+      hidden,
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface _Util : IDispatch {
+        [restricted] void Missing7();
+        [restricted] void Missing8();
+        [restricted] void Missing9();
+        [id(0x60030001), helpstring("Convert sexagesimal degrees to binary double-precision degrees")]
+        HRESULT DMSToDegrees(
+                        [in] BSTR DMS, 
+                        [out, retval] double* );
+        [id(0x60030002), helpstring("Convert sexagesimal hours to binary double-precision hours")]
+        HRESULT HMSToHours(
+                        [in] BSTR HMS, 
+                        [out, retval] double* );
+        [id(0x60030003), helpstring("Convert sexagesimal hours to binary double-precision degrees")]
+        HRESULT HMSToDegrees(
+                        [in] BSTR HMS, 
+                        [out, retval] double* );
+        [id(0x60030004), helpstring("Convert degrees to sexagesimal degrees, minutes, and seconds")]
+        HRESULT DegreesToDMS(
+                        [in] double Degrees, 
+                        [in, optional, defaultvalue("° ")] BSTR DegDelim, 
+                        [in, optional, defaultvalue("' ")] BSTR MinDelim, 
+                        [in, optional, defaultvalue("""")] BSTR SecDelim, 
+                        [in, optional, defaultvalue(0)] short SecDecimalDigits, 
+                        [out, retval] BSTR* );
+        [id(0x60030005), helpstring("Convert hours to sexagesimal hours, minutes, and seconds")]
+        HRESULT HoursToHMS(
+                        [in] double Hours, 
+                        [in, optional, defaultvalue(":")] BSTR HrsDelim, 
+                        [in, optional, defaultvalue(":")] BSTR MinDelim, 
+                        [in, optional, defaultvalue("")] BSTR SecDelim, 
+                        [in, optional, defaultvalue(0)] short SecDecimalDigits, 
+                        [out, retval] BSTR* );
+        [id(0x60030006), helpstring("Convert degrees to sexagesimal hours, minutes, and seconds")]
+        HRESULT DegreesToHMS(
+                        [in] double Degrees, 
+                        [in, optional, defaultvalue(":")] BSTR HrsDelim, 
+                        [in, optional, defaultvalue(":")] BSTR MinDelim, 
+                        [in, optional, defaultvalue("")] BSTR SecDelim, 
+                        [in, optional, defaultvalue(0)] short SecDecimalDigits, 
+                        [out, retval] BSTR* );
+        [id(0x60030007), helpstring("Convert degrees to sexagesimal degrees and minutes")]
+        HRESULT DegreesToDM(
+                        [in] double Degrees, 
+                        [in, optional, defaultvalue("° ")] BSTR DegDelim, 
+                        [in, optional, defaultvalue("'")] BSTR MinDelim, 
+                        [in, optional, defaultvalue(0)] short MinDecimalDigits, 
+                        [out, retval] BSTR* );
+        [id(0x60030008), helpstring("Convert hours to sexagesimal hours and minutes")]
+        HRESULT HoursToHM(
+                        [in] double Hours, 
+                        [in, optional, defaultvalue(":")] BSTR HrsDelim, 
+                        [in, optional, defaultvalue("")] BSTR MinDelim, 
+                        [in, optional, defaultvalue(0)] short MinDecimalDigits, 
+                        [out, retval] BSTR* );
+        [id(0x60030009), helpstring("Convert degrees to sexagesimal hours and minutes")]
+        HRESULT DegreesToHM(
+                        [in] double Degrees, 
+                        [in, optional, defaultvalue(":")] BSTR HrsDelim, 
+                        [in, optional, defaultvalue("")] BSTR MinDelim, 
+                        [in, optional, defaultvalue(0)] short MinDecimalDigits, 
+                        [out, retval] BSTR* );
+        [id(0x6003000a), helpstring("Yields for events and the user interface. Use this in scripts as often as practical.")]
+        HRESULT Yield();
+        [id(0x6003000b), helpstring("Pauses for a given interval in milliseconds.")]
+        HRESULT WaitForMilliseconds([in] long Milliseconds);
+        [id(0x6003000c), helpstring("Display an alert box with configurable icon, text, caption, and button set. Return an answer appropriate to selected button set.")]
+        HRESULT MessageBox(
+                        [in] BSTR Message, 
+                        [in, optional, defaultvalue(65536)] MessageBoxOptions Options, 
+                        [in, optional, defaultvalue("ASCOM Util Object")] BSTR title, 
+                        [out, retval] MessageBoxAnswers* );
+        [id(0x6003000d), helpstring("Returns a string containing a value which is formatted according to instructions contained in a format expression (string).")]
+        HRESULT FormatVar(
+                        [in] VARIANT Value, 
+                        [in] BSTR FormatStr, 
+                        [in, optional, defaultvalue(0)] FirstDayOfWeek FirstDayOfWeek, 
+                        [in, optional, defaultvalue(0)] FirstWeekOfYear FirstWeekOfYear, 
+                        [out, retval] BSTR* );
+        [id(0x6003000e), helpstring("Return a copy of a string with leading white-space removed")]
+        HRESULT LTrimString(
+                        [in] BSTR Text, 
+                        [out, retval] BSTR* );
+        [id(0x6003000f), helpstring("Return a copy of a string with trailing white-space removed")]
+        HRESULT RTrimString(
+                        [in] BSTR Text, 
+                        [out, retval] BSTR* );
+        [id(0x60030010), helpstring("Return a copy of a string with leading and trailing white-space removed")]
+        HRESULT TrimString(
+                        [in] BSTR Text, 
+                        [out, retval] BSTR* );
+        [id(0x60030011), helpstring("Load a dynamic link library, given its full file pathname.")]
+        HRESULT LoadDLL([in] BSTR File);
+    };
+
+    [
+      uuid(7D51F28C-BABC-4D38-B630-7997D24998B6),
+      version(1.0),
+      helpstring("ASCOM Driver Helper Utilities Object")
+    ]
+    coclass Util {
+        [default] interface _Util;
+    };
+
+    [
+      odl,
+      uuid(AFCA6983-B844-41E4-8024-2D7F9BCEBA8C),
+      version(1.0),
+      helpstring("ASCOM Driver Helper Chooser Object"),
+      hidden,
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface _Chooser : IDispatch {
+        [restricted] void Missing7();
+        [restricted] void Missing8();
+        [restricted] void Missing9();
+        [id(0x68030000), propget]
+        HRESULT DeviceType([out, retval] BSTR* );
+        [id(0x68030000), propput]
+        HRESULT DeviceType([in, out] BSTR* );
+        [id(0x60030002), helpstring("Select ASCOM Telescope Driver to use, return Driver ID of chosen driver")]
+        HRESULT Choose(
+                        [in, optional, defaultvalue("")] BSTR CurrentDriverID, 
+                        [out, retval] BSTR* );
+    };
+
+    [
+      uuid(BDE110B3-5859-440C-8ABA-AD9A9D5F7481),
+      version(1.0),
+      helpstring("ASCOM Driver Helper Chooser Object")
+    ]
+    coclass Chooser {
+        [default] interface _Chooser;
+    };
+
+    [
+      odl,
+      uuid(F9753A79-1B26-4A3E-A1FC-250775C19F0B),
+      version(1.0),
+      helpstring("ASCOM Driver Helper Registry Profile Object"),
+      hidden,
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface _Profile : IDispatch {
+        [restricted] void Missing7();
+        [restricted] void Missing8();
+        [restricted] void Missing9();
+        [id(0x68030000), propget]
+        HRESULT DeviceType([out, retval] BSTR* );
+        [id(0x68030000), propput]
+        HRESULT DeviceType([in, out] BSTR* );
+        [id(0x60030002), helpstring("Return True if the driver with the given DriverID is registered.")]
+        HRESULT IsRegistered(
+                        [in] BSTR DriverID, 
+                        [out, retval] VARIANT_BOOL* );
+        [id(0x60030003), helpstring("Register the driver with the given DriverID and friendly name. Does nothing if already registered, so safe to call on driver load.")]
+        HRESULT Register(
+                        [in] BSTR DriverID, 
+                        [in] BSTR DescriptiveName);
+        [id(0x60030004), helpstring("Remove all data for the given DriverID from the registry. This deletes the entire tree, including the DriverID root key.")]
+        HRESULT Unregister([in] BSTR DriverID);
+        [id(0x60030005), helpstring("Retrieve the string value from the registry. Name may be """" for the unnamed value. Optional path to subkey for given Driver ID may be supplied.")]
+        HRESULT GetValue(
+                        [in] BSTR DriverID, 
+                        [in] BSTR Name, 
+                        [in, optional, defaultvalue("")] BSTR SubKey, 
+                        [out, retval] BSTR* );
+        [id(0x60030006), helpstring("Write the value to the registry. Name may be """" for the unnamed value. Optional path to subkey for given Driver ID may be supplied.")]
+        HRESULT WriteValue(
+                        [in] BSTR DriverID, 
+                        [in] BSTR Name, 
+                        [in] BSTR Value, 
+                        [in, optional, defaultvalue("")] BSTR SubKey);
+        [id(0x60030007), helpstring("Return a list of the (unnamed and named) under the given DriverID. Optional path to starting subkey for given Driver ID may be supplied.")]
+        HRESULT Values(
+                        [in] BSTR DriverID, 
+                        [in, optional, defaultvalue("")] BSTR SubKey, 
+                        [out, retval] IUnknown** );
+        [id(0x60030008), helpstring("Delete the value from the registry. Name may be """" for the unnamed value. Optional path to subkey for given Driver ID may be supplied.")]
+        HRESULT DeleteValue(
+                        [in] BSTR DriverID, 
+                        [in] BSTR Name, 
+                        [in, optional, defaultvalue("")] BSTR SubKey);
+        [id(0x60030009), helpstring("Create a registry key for the given DriverID. SubKey may contain "" separated path to key to be created.")]
+        HRESULT CreateSubKey(
+                        [in] BSTR DriverID, 
+                        [in] BSTR SubKey);
+        [id(0x6003000a), helpstring("Return a list of the subkeys under the  given DriverID. Optional path to starting subkey for given Driver ID may be given.")]
+        HRESULT SubKeys(
+                        [in] BSTR DriverID, 
+                        [in, optional, defaultvalue("")] BSTR SubKey, 
+                        [out, retval] IUnknown** );
+        [id(0x6003000b), helpstring("Delete a registry key for the given DriverID. SubKey may contain "" separated path to key to be deleted.")]
+        HRESULT DeleteSubKey(
+                        [in] BSTR DriverID, 
+                        [in] BSTR SubKey);
+    };
+
+    [
+      uuid(EDEBAAF9-E097-4D30-AA5F-6A4B0F17DC6D),
+      version(1.0),
+      helpstring("ASCOM Driver Helper Registry Profile Object")
+    ]
+    coclass Profile {
+        [default] interface _Profile;
+    };
+
+    [
+      odl,
+      uuid(363C40A0-321B-4476-92D6-6BC86C306B94),
+      version(1.0),
+      hidden,
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface _Timer : IDispatch {
+        [restricted] void Missing7();
+        [restricted] void Missing8();
+        [restricted] void Missing9();
+        [id(0x68030001), propget]
+        HRESULT Interval([out, retval] long* );
+        [id(0x68030001), propput]
+        HRESULT Interval([in, out] long* );
+        [id(0x68030000), propget]
+        HRESULT Enabled([out, retval] VARIANT_BOOL* );
+        [id(0x68030000), propput]
+        HRESULT Enabled([in, out] VARIANT_BOOL* );
+    };
+
+    [
+      uuid(51C1A9FC-E1B8-45A9-B934-EE7DE7DD1B3B),
+      version(1.0)
+    ]
+    coclass Timer {
+        [default] interface _Timer;
+        [default, source] dispinterface __Timer;
+    };
+
+    [
+      uuid(B7435319-A92E-444E-B4ED-C21BD6DF8446),
+      version(1.0),
+      hidden,
+      nonextensible
+    ]
+    dispinterface __Timer {
+        properties:
+        methods:
+            [id(0x00000001)]
+            void Tick();
+    };
+
+};
+
