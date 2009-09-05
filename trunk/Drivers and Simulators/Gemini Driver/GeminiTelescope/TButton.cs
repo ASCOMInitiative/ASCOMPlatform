@@ -9,11 +9,17 @@ namespace ASCOM.GeminiTelescope
 
     public class TButton : System.Windows.Forms.Button
     {
+        const int _buttonsize = 64;
+
         public TButton()
             : base()
         {
 
-            Point[] pts = { new Point(0, 31), new Point(31, 0), new Point(63, 31), new Point(31, 63) };
+            Point[] pts = {   new Point(0, _buttonsize / 2 - 1), 
+                              new Point(_buttonsize / 2 - 1, 0), 
+                              new Point(_buttonsize - 1, _buttonsize / 2 - 1), 
+                              new Point(_buttonsize / 2 - 1, _buttonsize - 1) };
+
             GraphicsPath p = new GraphicsPath();
             p.AddPolygon(pts);
             p.CloseFigure();
@@ -22,7 +28,7 @@ namespace ASCOM.GeminiTelescope
 
             ImageList = new System.Windows.Forms.ImageList();
             ImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth24Bit;
-            ImageList.ImageSize = new System.Drawing.Size(64, 64);
+            ImageList.ImageSize = new System.Drawing.Size(_buttonsize, _buttonsize);
 
 
             ImageList.Images.Add(((System.Drawing.Image)(Resource1.ResourceManager.GetObject("diamond1"))));

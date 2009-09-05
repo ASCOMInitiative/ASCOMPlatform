@@ -1487,7 +1487,7 @@ namespace ASCOM.GeminiTelescope
 
             Trace.Enter("BackgroundWorker thread");
 
-            while (!m_CancelAsync)
+            while (!m_CancelAsync && m_SerialPort.IsOpen)
             {
                 object [] commands = null;
 
@@ -1535,16 +1535,7 @@ namespace ASCOM.GeminiTelescope
 
                         Trace.Info(2, "Transmitting commands", all_commands);
 
-#if DEBUG
-                        System.Diagnostics.Trace.Write(
-                            DateTime.Now.Hour.ToString("0") + ":" +
-                            DateTime.Now.Minute.ToString("00") + ":" +
-                            DateTime.Now.Second.ToString("00") + "." + System.DateTime.Now.Millisecond.ToString("000"))
-                            ;
-                        System.Diagnostics.Trace.Write("  Command '" + all_commands + "' ");
-
                         int startTime = System.Environment.TickCount;
-#endif
 
                         Transmit(all_commands);
 
@@ -1552,14 +1543,6 @@ namespace ASCOM.GeminiTelescope
 
                         foreach (CommandItem ci in commands)
                         {
-#if DEBUG
-                            if (ci.WaitObject != null)
-                                System.Diagnostics.Trace.Write("..result expected..");
-                            else
-                                System.Diagnostics.Trace.Write("..result not expected..");
-
-                            System.Diagnostics.Trace.Write("waiting... ");
-#endif
                             Trace.Info(4, "Waiting for", ci.m_Command);
 
                             // wait for the result whether or not the caller wants it
@@ -1570,10 +1553,6 @@ namespace ASCOM.GeminiTelescope
 
                             Trace.Info(4, "Result", result);
 
-
-#if DEBUG
-                            System.Diagnostics.Trace.Write("result='" + (result ?? "null") + "'");
-#endif
 
                             if (ci.WaitObject != null)    // receive result, if one is expected
                             {
@@ -1590,11 +1569,6 @@ namespace ASCOM.GeminiTelescope
                             }
                         }
 
-#if DEBUG
-                        System.Diagnostics.Trace.WriteLine(" done in " + (System.Environment.TickCount - startTime).ToString() + " msecs");
-#else
-                        System.Diagnostics.Trace.WriteLine(" done!");
-#endif
                         if (bNeedStatusUpdate || (DateTime.Now - m_LastUpdate).TotalMilliseconds > SharedResources.GEMINI_POLLING_INTERVAL)
                         {
                             m_AllowErrorNotify = false; //don't bother the user with timeout errors during polling  -- these are not very important
