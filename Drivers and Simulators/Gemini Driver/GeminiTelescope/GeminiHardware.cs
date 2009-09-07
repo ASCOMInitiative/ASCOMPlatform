@@ -1478,10 +1478,6 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Process queued up commands in the sequence queued.
         /// </summary>
-        /// <remarks>
-        /// param name="sender"sender - not used /param
-        /// param name="e" work to perform - not used /param
-        /// </remarks>
         private static void BackgroundWorker_DoWork()
         {
 
@@ -1493,6 +1489,7 @@ namespace ASCOM.GeminiTelescope
 
                 lock (m_CommandQueue)
                 {
+                    // process multiple commands, if more than one is queued up:
                     if (m_CommandQueue.Count > 0)
                     {
                         Trace.Info(4, "Command queue depth", m_CommandQueue.Count);
@@ -1583,8 +1580,9 @@ namespace ASCOM.GeminiTelescope
                         m_AllowErrorNotify = true;
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Trace.Error("Unexpected exception", ex.ToString());
                 }
                 finally
                 {

@@ -493,9 +493,9 @@ namespace ASCOM.GeminiTelescope
 
         private void mountParametersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (true /*GeminiHardware.Connected*/)
             {
-                MountParameters parametersForm = new MountParameters();
+                frmAdvancedSettings parametersForm = new frmAdvancedSettings();
 
 
                 DialogResult ans = parametersForm.ShowDialog(this);

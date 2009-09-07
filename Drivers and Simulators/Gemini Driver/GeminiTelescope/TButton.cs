@@ -17,9 +17,9 @@ namespace ASCOM.GeminiTelescope
 
             Point[] pts = {   new Point(0, _buttonsize / 2 - 1), 
                               new Point(_buttonsize / 2 - 1, 0), 
-                              new Point(_buttonsize - 1, _buttonsize / 2 - 1), 
-                              new Point(_buttonsize - 1, _buttonsize / 2 + 3),
-                              new Point(_buttonsize / 2 +3, _buttonsize - 1),
+                              new Point(_buttonsize , _buttonsize / 2 - 1), 
+                              new Point(_buttonsize , _buttonsize / 2 + 2),
+                              new Point(_buttonsize / 2 + 2, _buttonsize - 1),
                               new Point(_buttonsize / 2 - 1, _buttonsize - 1) };
 
             GraphicsPath p = new GraphicsPath();

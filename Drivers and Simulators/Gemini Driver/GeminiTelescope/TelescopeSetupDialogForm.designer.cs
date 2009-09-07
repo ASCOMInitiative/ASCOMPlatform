@@ -30,6 +30,7 @@ namespace ASCOM.GeminiTelescope
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Button buttonGps;
+            System.Windows.Forms.Button pbGeminiSettings;
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -80,6 +81,7 @@ namespace ASCOM.GeminiTelescope
             this.radioButtonWarmStart = new System.Windows.Forms.RadioButton();
             this.radioButtonWarmRestart = new System.Windows.Forms.RadioButton();
             buttonGps = new System.Windows.Forms.Button();
+            pbGeminiSettings = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -99,9 +101,9 @@ namespace ASCOM.GeminiTelescope
             buttonGps.ForeColor = System.Drawing.Color.White;
             buttonGps.Location = new System.Drawing.Point(238, 303);
             buttonGps.Name = "buttonGps";
-            buttonGps.Size = new System.Drawing.Size(84, 23);
+            buttonGps.Size = new System.Drawing.Size(105, 23);
             buttonGps.TabIndex = 23;
-            buttonGps.Text = "GPS Settings";
+            buttonGps.Text = "GPS Settings...";
             buttonGps.UseVisualStyleBackColor = false;
             buttonGps.Click += new System.EventHandler(this.buttonGps_Click);
             // 
@@ -648,12 +650,25 @@ namespace ASCOM.GeminiTelescope
             this.radioButtonWarmRestart.Text = "Warm Restart";
             this.radioButtonWarmRestart.UseVisualStyleBackColor = true;
             // 
+            // pbGeminiSettings
+            // 
+            pbGeminiSettings.BackColor = System.Drawing.Color.Black;
+            pbGeminiSettings.ForeColor = System.Drawing.Color.White;
+            pbGeminiSettings.Location = new System.Drawing.Point(238, 267);
+            pbGeminiSettings.Name = "pbGeminiSettings";
+            pbGeminiSettings.Size = new System.Drawing.Size(105, 23);
+            pbGeminiSettings.TabIndex = 30;
+            pbGeminiSettings.Text = "Gemini Settings...";
+            pbGeminiSettings.UseVisualStyleBackColor = false;
+            pbGeminiSettings.Click += new System.EventHandler(this.pbGeminiSettings_Click);
+            // 
             // TelescopeSetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(560, 360);
+            this.Controls.Add(pbGeminiSettings);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.checkBoxAdditionalAlign);
