@@ -196,7 +196,7 @@ Public Class Serial
 
 #Region "New and IDisposable Support"
     Sub New()
-        Dim SerialProfile As IAccess = Nothing
+        Dim SerialProfile As XMLAccess = Nothing
         Dim TraceFileName As String = ""
 
         mut = New System.Threading.Mutex 'Create a new mutex to control access to the serial port

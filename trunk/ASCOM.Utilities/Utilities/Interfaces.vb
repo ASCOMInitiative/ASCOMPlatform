@@ -957,6 +957,9 @@ Namespace Interfaces
 
     <ComVisible(False)> _
     Public Interface IProfileExtra
+
+        Sub MigrateProfile()
+
         ''' <summary>
         ''' Delete the value from the registry. Name may be an empty string for the unnamed value. 
         ''' </summary>
@@ -1214,7 +1217,6 @@ Namespace Interfaces
 
     Friend Interface IAccess
         'Interface for a general profile store provider, this is independent of the actual mechanic used to store the profile
-        Inherits IDisposable
         Function GetProfile(ByVal p_SubKeyName As String, ByVal p_ValueName As String) As String
         Sub WriteProfile(ByVal p_SubKeyName As String, ByVal p_ValueName As String, ByVal p_ValueData As String)
         Function EnumProfile(ByVal p_SubKeyName As String) As Generic.SortedList(Of String, String)
@@ -1223,6 +1225,7 @@ Namespace Interfaces
         Function EnumKeys(ByVal p_SubKeyName As String) As Generic.SortedList(Of String, String)
         Sub DeleteKey(ByVal p_SubKeyName As String)
         Sub RenameKey(ByVal CurrentSubKeyName As String, ByVal NewSubKeyName As String)
+        Sub MigrateProfile()
     End Interface 'Interface for a general profile store provider
 
 #End Region

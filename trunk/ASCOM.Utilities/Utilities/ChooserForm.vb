@@ -28,7 +28,7 @@ Friend Class ChooserForm
     Private m_Drivers As New Generic.SortedList(Of String, String)
 
     Private Sub ChooserForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
-        Dim ProfileStore As IAccess
+        Dim ProfileStore As XMLAccess
         Dim i, iSel As Integer
         Dim cb As System.Windows.Forms.ComboBox
         Dim sDescription As String = ""
@@ -142,7 +142,7 @@ Friend Class ChooserForm
     ' driver and activate its setup dialog.
     '
     Private Sub cmdProperties_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdProperties.Click
-        Dim ProfileStore As IAccess
+        Dim ProfileStore As XMLAccess
         Dim oDrv As Object = Nothing ' The driver
         Dim cb As System.Windows.Forms.ComboBox
         Dim bConnected As Boolean
@@ -209,7 +209,7 @@ Friend Class ChooserForm
     End Sub
 
     Private Sub cbDriverSelector_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cbDriverSelector.SelectedIndexChanged
-        Dim ProfileStore As IAccess
+        Dim ProfileStore As XMLAccess
         Dim sProgID As String = ""
         Dim buf As String
 
@@ -255,7 +255,7 @@ Friend Class ChooserForm
     End Sub
 
     Private Sub MenuAutoTraceFilenames_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuUseTraceAutoFilenames.Click
-        Dim ProfileStore As IAccess
+        Dim ProfileStore As XMLAccess
         ProfileStore = New XMLAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
         'Auto filenames currently disabled, so enable them
         MenuUseTraceAutoFilenames.Checked = True 'Enable the auto tracename flag
@@ -270,7 +270,7 @@ Friend Class ChooserForm
     End Sub
 
     Private Sub MenuSerialTraceFile_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuUseTraceManualFilename.Click
-        Dim ProfileStore As IAccess
+        Dim ProfileStore As XMLAccess
         Dim RetVal As System.Windows.Forms.DialogResult
 
         ProfileStore = New XMLAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
@@ -295,7 +295,7 @@ Friend Class ChooserForm
     End Sub
 
     Private Sub MenuSerialTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuSerialTraceEnabled.Click
-        Dim ProfileStore As IAccess
+        Dim ProfileStore As XMLAccess
 
         ProfileStore = New XMLAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
         MenuSerialTraceEnabled.Checked = False 'Uncheck the enabled flag, make it inaccessible and clear the trace file name

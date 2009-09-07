@@ -2,6 +2,7 @@ Option Strict On
 Option Explicit On
 Imports ASCOM.Utilities.Interfaces
 Imports System.Runtime.InteropServices
+Imports System.ComponentModel
 
 ''' <summary>
 ''' ASCOM Scope Driver Helper Registry Profile Object
@@ -44,7 +45,7 @@ Public Class Profile
     ' -----------------------------------------------------------------------------
 
     Private m_sDeviceType As String ' Device type specified by user
-    Private ProfileStore As IAccess
+    Private ProfileStore As XMLAccess
     Private TL As TraceLogger
 
 
@@ -58,6 +59,15 @@ Public Class Profile
         TL = New TraceLogger("", "Profile")
         TL.Enabled = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT) 'Get enabled / disabled state from the user registry
         TL.LogMessage("New", "Trace logger created OK")
+    End Sub
+
+    Public Sub New(ByVal IgnoreExceptions As Boolean)
+        MyBase.New()
+        ProfileStore = New XMLAccess(IgnoreExceptions) 'Get access to the profile store
+        m_sDeviceType = "Telescope"
+        TL = New TraceLogger("", "Profile")
+        TL.Enabled = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT) 'Get enabled / disabled state from the user registry
+        TL.LogMessage("New", "Trace logger created OK - Ignoring any ProfileNotFound exceptions")
     End Sub
 
     ''' <summary>
@@ -391,6 +401,20 @@ Public Class Profile
 #End Region
 
 #Region "IProfileExtra Implementation"
+    <EditorBrowsable(EditorBrowsableState.Never), _
+    ComVisible(False)> _
+    Public Sub MigrateProfile() Implements IProfileExtra.MigrateProfile
+        TL.LogMessage("MigrateProfile", "Migrating profile")
+        Try
+            ProfileStore.MigrateProfile()
+            TL.LogMessage("MigrateProfile", "Completed migration")
+        Catch ex As Exception
+            TL.LogMessage("MigrateProfile", "Exception: " & ex.ToString)
+            Throw
+        End Try
+    End Sub
+
+
     ''' <summary>
     ''' Delete the value from the registry. Name may be an empty string for the unnamed value. 
     ''' </summary>
@@ -455,7 +479,7 @@ Public Class Profile
     '''  </remarks>
     <ComVisible(False)> _
     Public Overloads Function Values(ByVal DriverID As String) As ArrayList Implements IProfileExtra.Values
-        Return Me.values(DriverID, "")
+        Return Me.Values(DriverID, "")
     End Function
 
     ''' <summary>

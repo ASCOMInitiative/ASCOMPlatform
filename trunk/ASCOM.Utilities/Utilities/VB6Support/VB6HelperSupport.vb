@@ -72,7 +72,7 @@ Namespace VB6HelperSupport 'Tuck this out of the way of the main ASCOM.Utilities
         'The function and sub signatures below exactly match those provided by the registry toolkit 
         'originally used by the helpers.
 
-        Private Profile As IAccess
+        Private Profile As XMLAccess
         Private TL As TraceLogger
 
 #Region "New and IDisposable Support"
