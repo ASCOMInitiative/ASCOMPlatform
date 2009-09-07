@@ -209,6 +209,7 @@
             this.comboBox1.DataSource = this.geminiPropertiesBindingSource;
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboBox1.ForeColor = System.Drawing.Color.Lime;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(117, 3);
             this.comboBox1.Name = "comboBox1";
@@ -223,13 +224,16 @@
             // 
             this.comboBox2.BackColor = System.Drawing.Color.Black;
             this.comboBox2.DataSource = this.geminiPropertiesBindingSource;
+            this.comboBox2.DisplayMember = "HandControllerMode";
             this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboBox2.ForeColor = System.Drawing.Color.Lime;
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.Location = new System.Drawing.Point(117, 29);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(108, 21);
             this.comboBox2.TabIndex = 3;
+            this.comboBox2.ValueMember = "HandControllerMode";
             // 
             // checkBox1
             // 
@@ -377,6 +381,7 @@
             this.comboBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.comboBox3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboBox3.ForeColor = System.Drawing.Color.Lime;
             this.comboBox3.FormattingEnabled = true;
             this.comboBox3.Location = new System.Drawing.Point(117, 3);
             this.comboBox3.Name = "comboBox3";
@@ -388,6 +393,7 @@
             this.numericUpDown1.BackColor = System.Drawing.Color.Black;
             this.numericUpDown1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numericUpDown1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numericUpDown1.ForeColor = System.Drawing.Color.Lime;
             this.numericUpDown1.Location = new System.Drawing.Point(117, 34);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(108, 20);
@@ -398,6 +404,7 @@
             this.numericUpDown2.BackColor = System.Drawing.Color.Black;
             this.numericUpDown2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numericUpDown2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numericUpDown2.ForeColor = System.Drawing.Color.Lime;
             this.numericUpDown2.Location = new System.Drawing.Point(345, 34);
             this.numericUpDown2.Name = "numericUpDown2";
             this.numericUpDown2.Size = new System.Drawing.Size(111, 20);
@@ -465,6 +472,7 @@
             this.numericUpDown7.BackColor = System.Drawing.Color.Black;
             this.numericUpDown7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numericUpDown7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numericUpDown7.ForeColor = System.Drawing.Color.Lime;
             this.numericUpDown7.Location = new System.Drawing.Point(345, 67);
             this.numericUpDown7.Name = "numericUpDown7";
             this.numericUpDown7.Size = new System.Drawing.Size(111, 20);
@@ -487,6 +495,7 @@
             this.numericUpDown6.BackColor = System.Drawing.Color.Black;
             this.numericUpDown6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numericUpDown6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numericUpDown6.ForeColor = System.Drawing.Color.Lime;
             this.numericUpDown6.Location = new System.Drawing.Point(345, 35);
             this.numericUpDown6.Name = "numericUpDown6";
             this.numericUpDown6.Size = new System.Drawing.Size(111, 20);
@@ -509,6 +518,7 @@
             this.numericUpDown5.BackColor = System.Drawing.Color.Black;
             this.numericUpDown5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numericUpDown5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numericUpDown5.ForeColor = System.Drawing.Color.Lime;
             this.numericUpDown5.Location = new System.Drawing.Point(345, 3);
             this.numericUpDown5.Name = "numericUpDown5";
             this.numericUpDown5.Size = new System.Drawing.Size(111, 20);
@@ -531,6 +541,7 @@
             this.numericUpDown4.BackColor = System.Drawing.Color.Black;
             this.numericUpDown4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numericUpDown4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numericUpDown4.ForeColor = System.Drawing.Color.Lime;
             this.numericUpDown4.Location = new System.Drawing.Point(117, 35);
             this.numericUpDown4.Name = "numericUpDown4";
             this.numericUpDown4.Size = new System.Drawing.Size(108, 20);
@@ -541,6 +552,7 @@
             this.numericUpDown3.BackColor = System.Drawing.Color.Black;
             this.numericUpDown3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numericUpDown3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numericUpDown3.ForeColor = System.Drawing.Color.Lime;
             this.numericUpDown3.Location = new System.Drawing.Point(117, 3);
             this.numericUpDown3.Name = "numericUpDown3";
             this.numericUpDown3.Size = new System.Drawing.Size(108, 20);
@@ -588,6 +600,7 @@
             this.comboBox4.DataSource = this.geminiPropertiesBindingSource;
             this.comboBox4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboBox4.ForeColor = System.Drawing.Color.Lime;
             this.comboBox4.FormattingEnabled = true;
             this.comboBox4.Location = new System.Drawing.Point(117, 67);
             this.comboBox4.Name = "comboBox4";
@@ -633,11 +646,11 @@
             this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 5;
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel4.Size = new System.Drawing.Size(459, 134);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
@@ -646,6 +659,7 @@
             this.numericUpDown14.BackColor = System.Drawing.Color.Black;
             this.numericUpDown14.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numericUpDown14.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numericUpDown14.ForeColor = System.Drawing.Color.Lime;
             this.numericUpDown14.Location = new System.Drawing.Point(323, 107);
             this.numericUpDown14.Name = "numericUpDown14";
             this.numericUpDown14.Size = new System.Drawing.Size(133, 20);
@@ -656,6 +670,7 @@
             this.numericUpDown13.BackColor = System.Drawing.Color.Black;
             this.numericUpDown13.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numericUpDown13.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numericUpDown13.ForeColor = System.Drawing.Color.Lime;
             this.numericUpDown13.Location = new System.Drawing.Point(186, 107);
             this.numericUpDown13.Name = "numericUpDown13";
             this.numericUpDown13.Size = new System.Drawing.Size(131, 20);
@@ -681,7 +696,7 @@
             this.label20.ForeColor = System.Drawing.Color.Lime;
             this.label20.Location = new System.Drawing.Point(323, 0);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(133, 26);
+            this.label20.Size = new System.Drawing.Size(133, 20);
             this.label20.TabIndex = 26;
             this.label20.Text = "DEC";
             this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -691,7 +706,8 @@
             this.numericUpDown8.BackColor = System.Drawing.Color.Black;
             this.numericUpDown8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numericUpDown8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numericUpDown8.Location = new System.Drawing.Point(323, 81);
+            this.numericUpDown8.ForeColor = System.Drawing.Color.Lime;
+            this.numericUpDown8.Location = new System.Drawing.Point(323, 79);
             this.numericUpDown8.Name = "numericUpDown8";
             this.numericUpDown8.Size = new System.Drawing.Size(133, 20);
             this.numericUpDown8.TabIndex = 24;
@@ -701,9 +717,9 @@
             this.label13.AutoSize = true;
             this.label13.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label13.ForeColor = System.Drawing.Color.Lime;
-            this.label13.Location = new System.Drawing.Point(3, 78);
+            this.label13.Location = new System.Drawing.Point(3, 76);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(177, 26);
+            this.label13.Size = new System.Drawing.Size(177, 28);
             this.label13.TabIndex = 23;
             this.label13.Text = "Servo Encoder Resolution (100..2048)";
             this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -713,7 +729,8 @@
             this.numericUpDown9.BackColor = System.Drawing.Color.Black;
             this.numericUpDown9.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numericUpDown9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numericUpDown9.Location = new System.Drawing.Point(323, 55);
+            this.numericUpDown9.ForeColor = System.Drawing.Color.Lime;
+            this.numericUpDown9.Location = new System.Drawing.Point(323, 51);
             this.numericUpDown9.Name = "numericUpDown9";
             this.numericUpDown9.Size = new System.Drawing.Size(133, 20);
             this.numericUpDown9.TabIndex = 20;
@@ -723,7 +740,8 @@
             this.numericUpDown10.BackColor = System.Drawing.Color.Black;
             this.numericUpDown10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numericUpDown10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numericUpDown10.Location = new System.Drawing.Point(323, 29);
+            this.numericUpDown10.ForeColor = System.Drawing.Color.Lime;
+            this.numericUpDown10.Location = new System.Drawing.Point(323, 23);
             this.numericUpDown10.Name = "numericUpDown10";
             this.numericUpDown10.Size = new System.Drawing.Size(133, 20);
             this.numericUpDown10.TabIndex = 18;
@@ -733,7 +751,8 @@
             this.numericUpDown11.BackColor = System.Drawing.Color.Black;
             this.numericUpDown11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numericUpDown11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numericUpDown11.Location = new System.Drawing.Point(186, 55);
+            this.numericUpDown11.ForeColor = System.Drawing.Color.Lime;
+            this.numericUpDown11.Location = new System.Drawing.Point(186, 51);
             this.numericUpDown11.Name = "numericUpDown11";
             this.numericUpDown11.Size = new System.Drawing.Size(131, 20);
             this.numericUpDown11.TabIndex = 16;
@@ -743,7 +762,8 @@
             this.numericUpDown12.BackColor = System.Drawing.Color.Black;
             this.numericUpDown12.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numericUpDown12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numericUpDown12.Location = new System.Drawing.Point(186, 29);
+            this.numericUpDown12.ForeColor = System.Drawing.Color.Lime;
+            this.numericUpDown12.Location = new System.Drawing.Point(186, 23);
             this.numericUpDown12.Name = "numericUpDown12";
             this.numericUpDown12.Size = new System.Drawing.Size(131, 20);
             this.numericUpDown12.TabIndex = 15;
@@ -753,9 +773,9 @@
             this.label16.AutoSize = true;
             this.label16.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label16.ForeColor = System.Drawing.Color.Lime;
-            this.label16.Location = new System.Drawing.Point(3, 52);
+            this.label16.Location = new System.Drawing.Point(3, 48);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(177, 26);
+            this.label16.Size = new System.Drawing.Size(177, 28);
             this.label16.TabIndex = 4;
             this.label16.Text = "Spur Gear Ratio (20..150):";
             this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -765,9 +785,9 @@
             this.label17.AutoSize = true;
             this.label17.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label17.ForeColor = System.Drawing.Color.Lime;
-            this.label17.Location = new System.Drawing.Point(3, 26);
+            this.label17.Location = new System.Drawing.Point(3, 20);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(177, 26);
+            this.label17.Size = new System.Drawing.Size(177, 28);
             this.label17.TabIndex = 0;
             this.label17.Text = "Worm Gear Ratio (+/- 80 to 720):";
             this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -779,8 +799,9 @@
             this.comboBox5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.comboBox5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboBox5.ForeColor = System.Drawing.Color.Lime;
             this.comboBox5.FormattingEnabled = true;
-            this.comboBox5.Location = new System.Drawing.Point(186, 81);
+            this.comboBox5.Location = new System.Drawing.Point(186, 79);
             this.comboBox5.Name = "comboBox5";
             this.comboBox5.Size = new System.Drawing.Size(131, 21);
             this.comboBox5.TabIndex = 22;
@@ -792,7 +813,7 @@
             this.label19.ForeColor = System.Drawing.Color.Lime;
             this.label19.Location = new System.Drawing.Point(186, 0);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(131, 26);
+            this.label19.Size = new System.Drawing.Size(131, 20);
             this.label19.TabIndex = 25;
             this.label19.Text = "RA";
             this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -852,6 +873,7 @@
             this.numericUpDown16.BackColor = System.Drawing.Color.Black;
             this.numericUpDown16.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numericUpDown16.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numericUpDown16.ForeColor = System.Drawing.Color.Lime;
             this.numericUpDown16.Location = new System.Drawing.Point(345, 32);
             this.numericUpDown16.Name = "numericUpDown16";
             this.numericUpDown16.Size = new System.Drawing.Size(111, 20);
@@ -874,6 +896,7 @@
             this.numericUpDown18.BackColor = System.Drawing.Color.Black;
             this.numericUpDown18.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numericUpDown18.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numericUpDown18.ForeColor = System.Drawing.Color.Lime;
             this.numericUpDown18.Location = new System.Drawing.Point(117, 32);
             this.numericUpDown18.Name = "numericUpDown18";
             this.numericUpDown18.Size = new System.Drawing.Size(108, 20);
@@ -951,7 +974,7 @@
             // 
             this.checkBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox7.ForeColor = System.Drawing.Color.Lime;
-            this.checkBox7.Location = new System.Drawing.Point(103, 616);
+            this.checkBox7.Location = new System.Drawing.Point(114, 616);
             this.checkBox7.Name = "checkBox7";
             this.checkBox7.Size = new System.Drawing.Size(206, 50);
             this.checkBox7.TabIndex = 9;
