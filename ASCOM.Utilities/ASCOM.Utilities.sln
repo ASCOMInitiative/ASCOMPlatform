@@ -7,6 +7,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EraseProfile", "EraseProfil
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Profile Explorer", "Profile Explorer\Profile Explorer.vbproj", "{2CB726BB-E327-41C8-9AEC-5327E5187147}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "MigrateProfile", "MigrateProfile\MigrateProfile.vbproj", "{A6F7ADB8-B812-4BFA-B2BD-DF61CC35A200}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{2CB726BB-E327-41C8-9AEC-5327E5187147}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CB726BB-E327-41C8-9AEC-5327E5187147}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CB726BB-E327-41C8-9AEC-5327E5187147}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6F7ADB8-B812-4BFA-B2BD-DF61CC35A200}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6F7ADB8-B812-4BFA-B2BD-DF61CC35A200}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6F7ADB8-B812-4BFA-B2BD-DF61CC35A200}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6F7ADB8-B812-4BFA-B2BD-DF61CC35A200}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

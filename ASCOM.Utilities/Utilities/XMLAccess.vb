@@ -35,8 +35,15 @@ Friend Class XMLAccess
 
 #Region "New and IDisposable Support"
     Public Sub New()
+        Me.New(False) 'Create but respect any exceptions thrown
+    End Sub
+
+    Sub New(ByVal p_CallingComponent As String)
+        Me.New(False)
+    End Sub
+
+    Sub New(ByVal p_IgnoreTest As Boolean)
         Dim PlatformVersion As String
-        Dim FromKey As RegistryKey
         KeyCache = New Generic.Dictionary(Of String, Generic.SortedList(Of String, String))
 
         TL = New TraceLogger("", "XMLAccess") 'Create a new trace logger
@@ -48,40 +55,18 @@ Friend Class XMLAccess
 
         FileStore = New AllUsersFileSystemProvider
         'FileStore = New IsolatedStorageFileStoreProvider
-        Try
-            If Not FileStore.Exists("\" & VALUES_FILENAME) Then Throw New Exceptions.ProfileNotFoundException("Utilities Error Base key does not exist")
-            PlatformVersion = GetProfile("\", "PlatformVersion")
-            'OK, no exception so assume that we are initialised
-        Catch ex As ProfileNotFoundException
-            MsgBox("Migrating ASCOM Profiles from registry to file system" & vbCrLf & vbCrLf & "You should only see this message once, if not, please post on Yahoo group ASCOM-Talk", , "ASCOM Utilities")
-            'It doesn't exist so migrate
 
-            'Force logging to be enabled for this...
-            TL.Enabled = True
-            RunningVersions(TL) 'Capture date in case logging wasn't initially enabled
-
-            TL.LogMessage("New", "ProfileNotFoundException - migrating keys")
-            'Create the root directory if it doesn't already exist
-            If Not FileStore.Exists("\" & VALUES_FILENAME) Then
-                FileStore.CreateDirectory("\")
-                CreateKey("\") 'Create the root key
-            End If
-            TL.LogMessage("New", "Successfully created root directory and root key")
-            FromKey = Registry.LocalMachine.OpenSubKey(ROOT_KEY_NAME) 'Source to copy from 
-            TL.LogMessage("New", "FromKey Opened OK: " & FromKey.Name & ", SubKeyCount: " & FromKey.SubKeyCount.ToString & ", ValueCount: " & FromKey.ValueCount.ToString)
-            MigrateKey(FromKey, "") 'Use recursion to copy contents to new tree
-            TL.LogMessage("New", "Successfully migrated keys")
-            FromKey.Close()
-            'Restore original logging state
-            TL.Enabled = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT) 'Get enabled / disabled state from the user registry
-        Catch ex As Exception
-            TL.LogMessage("XMLAccess.New Unexpected exception:", ex.ToString)
-            MsgBox("XMLAccess.New Unexpected exception: " & ex.ToString)
-        End Try
-    End Sub
-
-    Sub New(ByVal p_CallingComponent As String)
-        Me.New()
+        ' Bypass test for initial setup by MigrateProfile because the profile isn't yet set up
+        If Not p_IgnoreTest Then
+            Try
+                If Not FileStore.Exists("\" & VALUES_FILENAME) Then Throw New Exceptions.ProfileNotFoundException("Utilities Error Base key does not exist")
+                PlatformVersion = GetProfile("\", "PlatformVersion")
+                'OK, no exception so assume that we are initialised
+            Catch ex As Exception
+                TL.LogMessage("XMLAccess.New Unexpected exception:", ex.ToString)
+                Throw
+            End Try
+        End If
     End Sub
 
     ' IDisposable
@@ -318,6 +303,40 @@ Friend Class XMLAccess
         End If
         Values = Nothing
         sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
+    End Sub
+
+    Sub MigrateProfile() Implements IAccess.MigrateProfile
+        Dim FromKey As RegistryKey
+
+        Try
+            'Force logging to be enabled for this...
+            TL.Enabled = True
+            RunningVersions(TL) 'Capture date in case logging wasn't initially enabled
+
+            TL.LogMessage("MigrateProfile", "Migrating keys")
+            'Create the root directory if it doesn't already exist
+            If Not FileStore.Exists("\" & VALUES_FILENAME) Then
+                FileStore.CreateDirectory("\")
+                CreateKey("\") 'Create the root key
+            End If
+            TL.LogMessage("MigrateProfile", "Successfully created root directory and root key")
+
+            'Get correct registry root key depending on whether we are running as 32 or 64bit
+            FromKey = Registry.LocalMachine.OpenSubKey(ROOT_KEY_NAME) 'Source to copy from 
+            If Not FromKey Is Nothing Then 'Got a key
+                TL.LogMessage("MigrateProfile", "FromKey Opened OK: " & FromKey.Name & ", SubKeyCount: " & FromKey.SubKeyCount.ToString & ", ValueCount: " & FromKey.ValueCount.ToString)
+                MigrateKey(FromKey, "") 'Use recursion to copy contents to new tree
+                TL.LogMessage("MigrateProfile", "Successfully migrated keys")
+                FromKey.Close()
+                'Restore original logging state
+                TL.Enabled = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT) 'Get enabled / disabled state from the user registry
+            Else 'Didn't get a key from either location so throw an error
+                Throw New ProfileNotFoundException("Cannot find ASCOM Profile in HKLM\" & ROOT_KEY_NAME & " Is Platform 5 installed?")
+            End If
+        Catch ex As Exception
+            TL.LogMessage("MigrateProfile", "Exception: " & ex.ToString)
+            Throw
+        End Try
     End Sub
 #End Region
 
