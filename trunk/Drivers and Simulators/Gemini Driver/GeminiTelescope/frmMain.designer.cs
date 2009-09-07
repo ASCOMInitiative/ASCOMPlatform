@@ -59,9 +59,9 @@ namespace ASCOM.GeminiTelescope
             this.RadioButtonGuide = new System.Windows.Forms.RadioButton();
             this.CheckBoxFlipRa = new System.Windows.Forms.CheckBox();
             this.BaloonIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.buttonSlew4 = new ASCOM.GeminiTelescope.TButton();
-            this.buttonSlew2 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew3 = new ASCOM.GeminiTelescope.TButton();
+            this.buttonSlew2 = new ASCOM.GeminiTelescope.TButton();
+            this.buttonSlew4 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew1 = new ASCOM.GeminiTelescope.TButton();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
@@ -325,6 +325,7 @@ namespace ASCOM.GeminiTelescope
             this.GroupBox1.Controls.Add(this.RadioButtonSlew);
             this.GroupBox1.Controls.Add(this.RadioButtonCenter);
             this.GroupBox1.Controls.Add(this.RadioButtonGuide);
+            this.GroupBox1.ForeColor = System.Drawing.Color.White;
             this.GroupBox1.Location = new System.Drawing.Point(10, 267);
             this.GroupBox1.Name = "GroupBox1";
             this.GroupBox1.Size = new System.Drawing.Size(128, 38);
@@ -384,19 +385,19 @@ namespace ASCOM.GeminiTelescope
             this.BaloonIcon.Text = "Gemini Driver Status";
             this.BaloonIcon.Visible = true;
             // 
-            // buttonSlew4
+            // buttonSlew3
             // 
-            this.buttonSlew4.FlatAppearance.BorderSize = 0;
-            this.buttonSlew4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonSlew4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(0)));
-            this.buttonSlew4.ImageIndex = 0;
-            this.buttonSlew4.Location = new System.Drawing.Point(77, 130);
-            this.buttonSlew4.Margin = new System.Windows.Forms.Padding(0);
-            this.buttonSlew4.Name = "buttonSlew4";
-            this.buttonSlew4.Size = new System.Drawing.Size(64, 64);
-            this.buttonSlew4.TabIndex = 21;
-            this.buttonSlew4.Text = "W";
-            this.buttonSlew4.UseVisualStyleBackColor = true;
+            this.buttonSlew3.FlatAppearance.BorderSize = 0;
+            this.buttonSlew3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSlew3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(0)));
+            this.buttonSlew3.ImageIndex = 0;
+            this.buttonSlew3.Location = new System.Drawing.Point(6, 134);
+            this.buttonSlew3.Margin = new System.Windows.Forms.Padding(0);
+            this.buttonSlew3.Name = "buttonSlew3";
+            this.buttonSlew3.Size = new System.Drawing.Size(64, 64);
+            this.buttonSlew3.TabIndex = 19;
+            this.buttonSlew3.Text = "E";
+            this.buttonSlew3.UseVisualStyleBackColor = true;
             // 
             // buttonSlew2
             // 
@@ -412,19 +413,19 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew2.Text = "S";
             this.buttonSlew2.UseVisualStyleBackColor = true;
             // 
-            // buttonSlew3
+            // buttonSlew4
             // 
-            this.buttonSlew3.FlatAppearance.BorderSize = 0;
-            this.buttonSlew3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonSlew3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(0)));
-            this.buttonSlew3.ImageIndex = 0;
-            this.buttonSlew3.Location = new System.Drawing.Point(6, 134);
-            this.buttonSlew3.Margin = new System.Windows.Forms.Padding(0);
-            this.buttonSlew3.Name = "buttonSlew3";
-            this.buttonSlew3.Size = new System.Drawing.Size(64, 64);
-            this.buttonSlew3.TabIndex = 19;
-            this.buttonSlew3.Text = "E";
-            this.buttonSlew3.UseVisualStyleBackColor = true;
+            this.buttonSlew4.FlatAppearance.BorderSize = 0;
+            this.buttonSlew4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSlew4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(0)));
+            this.buttonSlew4.ImageIndex = 0;
+            this.buttonSlew4.Location = new System.Drawing.Point(77, 130);
+            this.buttonSlew4.Margin = new System.Windows.Forms.Padding(0);
+            this.buttonSlew4.Name = "buttonSlew4";
+            this.buttonSlew4.Size = new System.Drawing.Size(64, 64);
+            this.buttonSlew4.TabIndex = 21;
+            this.buttonSlew4.Text = "W";
+            this.buttonSlew4.UseVisualStyleBackColor = true;
             // 
             // buttonSlew1
             // 

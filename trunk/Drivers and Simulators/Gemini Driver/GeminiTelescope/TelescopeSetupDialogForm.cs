@@ -307,6 +307,12 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        private void pbGeminiSettings_Click(object sender, EventArgs e)
+        {
+            frmAdvancedSettings settings = new frmAdvancedSettings();
+            DialogResult re = settings.ShowDialog();
+        }
+
         
     }
 }

@@ -8,23 +8,22 @@ using System.Windows.Forms;
 
 namespace ASCOM.GeminiTelescope
 {
-    public partial class MountParameters : Form
+    public partial class frmAdvancedSettings : Form
     {
-        public MountParameters()
+        public frmAdvancedSettings()
         {
             InitializeComponent();
         }
 
-        private void cmdOK_Click(object sender, EventArgs e)
+        private void label4_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void cmdCancel_Click(object sender, EventArgs e)
+        private void numericUpDown13_ValueChanged(object sender, EventArgs e)
         {
 
         }
 
-        
     }
 }
