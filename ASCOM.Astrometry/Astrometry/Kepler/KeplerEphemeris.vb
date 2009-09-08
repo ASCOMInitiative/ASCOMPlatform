@@ -67,7 +67,7 @@ Namespace Kepler
     ''' </remarks>
     <Guid("2F2B0413-1F83-4777-B3B4-38DE3C32DC6B"), _
     ClassInterface(ClassInterfaceType.None), _
-    comvisible(True)> _
+    ComVisible(True)> _
     Public Class Ephemeris
         Implements IEphemeris
 

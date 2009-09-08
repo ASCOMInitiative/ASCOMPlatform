@@ -35,15 +35,16 @@
 ; Added MigrateProfile and desktop icon option
 ; Changed setup name to ASCOM Platform Major.Minor Updater (vMajor.Minor.Release.Build)
 ; Setup build 4 Released
-
+; Changed AppVer to access Release code rather than Debug code
+; Setup build 5
 [Setup]
-#define Public SetupVersion 4; Setup program version number
+#define Public SetupVersion 5; Setup program version number
 
 #define Public Major 0
 #define Public Minor 0
 #define Public Release 0
 #define Public Build 0
-#define AppVer ParseVersion("..\Utilities\bin\Debug\ASCOM.Utilities.dll", Major ,Minor ,Release ,Build) ; define version variable
+#define AppVer ParseVersion("..\Utilities\bin\Release\ASCOM.Utilities.dll", Major ,Minor ,Release ,Build) ; define version variable
 #define AppVer str(Major) + "." + str(Minor) + "." + str(Release) + "." + str(SetupVersion) ; redefine to include setup version
 
 AppCopyright=Copyright © 2009 ASCOM Initiative
@@ -184,19 +185,19 @@ Source: ..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.XML; DestD
 Source: ..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
 Source: ..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.XML; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
 
-; Client toolbox 1.0.5, in case it isn't already installed
+;Client toolbox 1.0.5, in case it isn't already installed
 Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.pdb; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.XML; DestDir: {app}; Flags: ignoreversion
-; Policy file to redirect to 1.0.5
+;Policy file to redirect to 1.0.5
 Source: ..\..\ClientToolbox\SimpsonBitsPolicyStuff\PolicyInstaller\policy.1.0.ASCOM.DriverAccess.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\ClientToolbox\SimpsonBitsPolicyStuff\PolicyInstaller\driveraccess.config; DestDir: {app}; Flags: ignoreversion
-; 32bit directories
+;32bit directories
 Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.dll; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
 Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.pdb; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
 Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.XML; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
 
-; Debug symbols directory
+;Debug symbols directory
 Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.pdb; DestDir: {win}\Symbols\dll; Flags: ignoreversion
 
 ;NOVAS and Kepler PIAs and TLBs- optional through task checkbox
@@ -286,8 +287,8 @@ Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\
 ;ASCOM Exceptions
 Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Exceptions"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Exceptions from the assembly cache
 
-; ASCOM Client Toolkit
-; I'm deliberately leaving this installed as it is a prerequisite rather than part of this update
+;ASCOM Client Toolkit
+;I'm deliberately leaving this installed as it is a prerequisite rather than part of this update
 
 ;Publisher policy
 #emit "Filename: {app}\GACInstall.exe; Parameters: ""/U """"policy." + str(Major) + "." + str(Minor) + ".ASCOM.Utilities""""""; Flags: runhidden; StatusMsg: Uninstalling ASCOM Utilities policy from the assembly cache"
