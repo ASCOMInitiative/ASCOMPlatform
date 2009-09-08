@@ -23,7 +23,8 @@ End Module
 ''' Type of body, Major Planet, Moon, Sun or Minor Planet
 ''' </summary>
 ''' <remarks></remarks>
-<Guid("A1D2C046-F7BC-474f-8D95-6E7B761DEECB")> _
+<Guid("A1D2C046-F7BC-474f-8D95-6E7B761DEECB"), _
+ComVisible(True)> _
 Public Enum BodyType As Integer
     ''' <summary>
     ''' Luna
@@ -60,7 +61,8 @@ End Enum
 ''' Co-ordinate origin: centre of Sun or solar system barycentre
 ''' </summary>
 ''' <remarks></remarks>
-<Guid("9591FC6A-3EF1-41ae-9FE1-FE0C76686A85")> _
+<Guid("9591FC6A-3EF1-41ae-9FE1-FE0C76686A85"), _
+ComVisible(True)> _
 Public Enum Origin As Integer
     ''' <summary>
     ''' Centre of mass of the solar system
@@ -78,7 +80,8 @@ End Enum
 ''' Body number starting with Mercury = 1
 ''' </summary>
 ''' <remarks></remarks>
-<Guid("C839867F-E152-44e1-8356-2DB450329EDC")> _
+<Guid("C839867F-E152-44e1-8356-2DB450329EDC"), _
+ComVisible(True)> _
 Public Enum Body As Integer
     ''' <summary>
     ''' Mercury
@@ -141,7 +144,8 @@ End Enum
 ''' Type of refraction correction
 ''' </summary>
 ''' <remarks></remarks>
-<Guid("32914B41-41C3-4f68-A974-E9ABCE0BA03A")> _
+<Guid("32914B41-41C3-4f68-A974-E9ABCE0BA03A"), _
+ComVisible(True)> _
 Public Enum RefractionOption As Integer
     ''' <summary>
     ''' No refraction correction will be applied
@@ -164,7 +168,8 @@ End Enum
 ''' Type of transformation: Epoch, Equator and Equinox or all three
 ''' </summary>
 ''' <remarks></remarks>
-<Guid("6ADE707E-1D7E-471a-94C9-F9FCC56755B1")> _
+<Guid("6ADE707E-1D7E-471a-94C9-F9FCC56755B1"), _
+ComVisible(True)> _
 Public Enum TransformationOption As Integer
     ''' <summary>
     ''' Change epoch only
@@ -187,7 +192,8 @@ End Enum
 ''' Direction of nutation correction
 ''' </summary>
 ''' <remarks></remarks>
-<Guid("394E0981-3344-4cff-8ABA-E19A775AAD29")> _
+<Guid("394E0981-3344-4cff-8ABA-E19A775AAD29"), _
+ComVisible(True)> _
 Public Enum NutationDirection As Integer
     ''' <summary>
     ''' Convert mean equator and equinox to true equator and equinox
@@ -209,6 +215,7 @@ End Enum
 ''' <remarks>Designates a celestial object.
 ''' </remarks>
 <Guid("558F644F-E112-4e88-9D79-20063BB25C3E"), _
+ComVisible(True), _
 StructLayoutAttribute(LayoutKind.Sequential)> _
 Public Structure BodyDescription
     ''' <summary>
@@ -244,6 +251,7 @@ End Structure
 ''' NOVAS-C functions require J2000.0 catalog data with FK5-type units (shown in square brackets below).
 ''' </remarks>
 <Guid("6320FEDA-8582-4048-988A-7D4DE7978C71"), _
+ComVisible(True), _
 StructLayoutAttribute(LayoutKind.Sequential, CharSet:=CharSet.[Ansi])> _
    Public Structure CatEntry
     ''' <summary>
@@ -312,8 +320,9 @@ End Structure
 ''' structure if a more sophisticated refraction model is employed.
 ''' </remarks>
 <Guid("ED02B64A-320F-47cd-90D9-3DF2DF07602D"), _
+ComVisible(True), _
 StructLayoutAttribute(LayoutKind.Sequential, CharSet:=CharSet.[Ansi])> _
-    Public Structure SiteInfo
+Public Structure SiteInfo
     ''' <summary>
     ''' Geodetic latitude in degrees; north positive.
     ''' </summary>
@@ -347,8 +356,9 @@ End Structure
 ''' <remarks>Object position vector
 ''' </remarks>
 <Guid("69651C90-75F5-4f46-8D0F-22D186151D45"), _
+ComVisible(True), _
 StructLayoutAttribute(LayoutKind.Sequential, CharSet:=CharSet.[Ansi])> _
-    Public Structure PosVector
+Public Structure PosVector
     ''' <summary>
     ''' x co-ordinate
     ''' </summary>
@@ -372,6 +382,7 @@ End Structure
 ''' <remarks>Object velocity vector
 ''' </remarks>
 <Guid("F18240B0-00CC-4ff7-9A94-AC835387F959"), _
+ComVisible(True), _
 StructLayoutAttribute(LayoutKind.Sequential, CharSet:=CharSet.[Ansi])> _
 Public Structure VelVector
     ''' <summary>
@@ -397,6 +408,7 @@ End Structure
 ''' <remarks>Fundamental arguments, in radians
 '''</remarks>
 <Guid("5EE28FFB-39CD-4d23-BF62-11EE4C581681"), _
+ComVisible(True), _
 StructLayoutAttribute(LayoutKind.Sequential, CharSet:=CharSet.[Ansi])> _
     Public Structure FundamentalArgs
     ''' <summary>

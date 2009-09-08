@@ -10,6 +10,7 @@ Namespace Exceptions
     ''' </summary>
     ''' <remarks></remarks>
     <Serializable(), _
+    ComVisible(True), _
     Guid("A8B9A15E-0F01-46ce-AF6E-BEFD3CB9E2BC"), _
     ClassInterface(ClassInterfaceType.None)> _
         Public Class TransformUninitialisedException
@@ -54,6 +55,7 @@ Namespace Exceptions
     ''' </summary>
     ''' <remarks></remarks>
     <Serializable(), _
+    ComVisible(True), _
     Guid("FCE7DF74-B3AF-4ef6-AD7D-324B87492307"), _
     ClassInterface(ClassInterfaceType.None)> _
         Public Class CompatibilityException
@@ -98,6 +100,7 @@ Namespace Exceptions
     ''' <remarks></remarks>
     ''' 
     <Serializable(), _
+    ComVisible(True), _
     Guid("4CFCC2FF-6348-4268-B481-E92BE3B30039"), _
     ClassInterface(ClassInterfaceType.None)> _
         Public Class ValueNotSetException
@@ -141,6 +144,7 @@ Namespace Exceptions
     ''' </summary>
     ''' <remarks>This probably occurs because another variable has not been set or a required method has not been called.</remarks>
     <Serializable(), _
+    ComVisible(True), _
     Guid("F934C471-CFA7-478c-A25E-CED11236EF1A"), _
     ClassInterface(ClassInterfaceType.None)> _
         Public Class ValueNotAvailableException
@@ -184,6 +188,7 @@ Namespace Exceptions
     ''' </summary>
     ''' <remarks>This probably occurs because another variable has not been set or a required method has not been called.</remarks>
     <Serializable(), _
+    ComVisible(True), _
     Guid("7E2164AD-F002-4b30-98A1-BE1CEC954260"), _
     ClassInterface(ClassInterfaceType.None)> _
         Public Class NOVASFunctionException

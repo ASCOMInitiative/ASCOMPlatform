@@ -1696,19 +1696,6 @@ ASCOM.Astrometry
 	<remarks>The GAST parameter must be for Greenwich, not local. The time is rotated through the 
  site longitude. See SetFromSiteJD() for an equivalent method that takes UTC Julian Date and 
  Delta-T (eliminating the need for calculating hyper-accurate GAST yourself).</remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.IPositionVector.SetFromSiteJD(ASCOM.Astrometry.NOVASCOM.Site,System.Double)">
-	<summary>
- Initialize the PositionVector from a Site object using UTC Julian date
- </summary>
-	<param name="site">The Site object from which to initialize</param>
-	<param name="ujd">UTC Julian Date</param>
-	<returns>True if successful or throws an exception</returns>
-	<remarks>The Julian date must be UTC Julian date, not terrestrial. Calculations will use the internal delta-T tables and estimator to get 
- delta-T. 
- This overload is not available through COM, please use 
- "SetFromSiteJD(ByVal site As Site, ByVal ujd As Double, ByVal delta_t As Double)"
- with delta_t set to 0.0 to achieve this effect.
- </remarks>
 </member><member name="M:ASCOM.Astrometry.NOVASCOM.IPositionVector.SetFromSiteJD(ASCOM.Astrometry.NOVASCOM.Site,System.Double,System.Double)">
 	<summary>
  Initialize the PositionVector from a Site object using UTC Julian date and Delta-T
@@ -1807,6 +1794,19 @@ ASCOM.Astrometry
  proper motion. Thus, a PositionVector object gives access to some of the lower-level NOVAS functions. 
  <para><b>Note:</b> The equatorial coordinate properties of this object are dependent variables, and thus are read-only. Changing any cartesian coordinate will cause the equatorial coordinates to be recalculated. 
  </para></remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.IPositionVectorExtra.SetFromSiteJD(ASCOM.Astrometry.NOVASCOM.Site,System.Double)">
+	<summary>
+ Initialize the PositionVector from a Site object using UTC Julian date
+ </summary>
+	<param name="site">The Site object from which to initialize</param>
+	<param name="ujd">UTC Julian Date</param>
+	<returns>True if successful or throws an exception</returns>
+	<remarks>The Julian date must be UTC Julian date, not terrestrial. Calculations will use the internal delta-T tables and estimator to get 
+ delta-T. 
+ This overload is not available through COM, please use 
+ "SetFromSiteJD(ByVal site As Site, ByVal ujd As Double, ByVal delta_t As Double)"
+ with delta_t set to 0.0 to achieve this effect.
+ </remarks>
 </member><member name="M:ASCOM.Astrometry.NOVASCOM.ISite.Set(System.Double,System.Double,System.Double)">
 	<summary>
  Set all site properties in one method call
@@ -2025,20 +2025,6 @@ ASCOM.Astrometry
  of mass. The GAST parameter must be for Greenwich, not local. The time is rotated through 
  the site longitude. See SetFromSiteJD() for an equivalent method that takes UTC Julian 
  Date and optionally Delta-T (eliminating the need for calculating hyper-accurate GAST yourself). </remarks>
-</member><member name="M:ASCOM.Astrometry.NOVASCOM.IVelocityVector.SetFromSiteJD(ASCOM.Astrometry.NOVASCOM.Site,System.Double)">
-	<summary>
- Initialize the VelocityVector from a Site object using UTC Julian Date
- </summary>
-	<param name="site">The Site object from which to initialize</param>
-	<param name="ujd">UTC Julian Date</param>
-	<returns>True if OK otherwise throws an exception</returns>
-	<remarks>The velocity vector is that of the observer with respect to the Earth's center 
- of mass. The Julian date must be UTC Julian date, not terrestrial. This call will use 
- the internal tables and estimator to get delta-T.
- This overload is not available through COM, please use 
- "SetFromSiteJD(ByVal site As Site, ByVal ujd As Double, ByVal delta_t As Double)"
- with delta_t set to 0.0 to achieve this effect.
- </remarks>
 </member><member name="M:ASCOM.Astrometry.NOVASCOM.IVelocityVector.SetFromSiteJD(ASCOM.Astrometry.NOVASCOM.Site,System.Double,System.Double)">
 	<summary>
  Initialize the VelocityVector from a Site object using UTC Julian Date and Delta-T
@@ -2111,6 +2097,20 @@ ASCOM.Astrometry
  a Star object (essentially an FK5 or HIP catalog entry) or a Site (lat/long/height). For the star 
  object the proper motions, distance and radial velocity are used, for a site, the velocity is that 
  of the observer with respect to the Earth's center of mass. </remarks>
+</member><member name="M:ASCOM.Astrometry.NOVASCOM.IVelocityVectorExtra.SetFromSiteJD(ASCOM.Astrometry.NOVASCOM.Site,System.Double)">
+	<summary>
+ Initialize the VelocityVector from a Site object using UTC Julian Date
+ </summary>
+	<param name="site">The Site object from which to initialize</param>
+	<param name="ujd">UTC Julian Date</param>
+	<returns>True if OK otherwise throws an exception</returns>
+	<remarks>The velocity vector is that of the observer with respect to the Earth's center 
+ of mass. The Julian date must be UTC Julian date, not terrestrial. This call will use 
+ the internal tables and estimator to get delta-T.
+ This overload is not available through COM, please use 
+ "SetFromSiteJD(ByVal site As Site, ByVal ujd As Double, ByVal delta_t As Double)"
+ with delta_t set to 0.0 to achieve this effect.
+ </remarks>
 </member><member name="M:ASCOM.Astrometry.NOVAS.INOVAS2.AppStar(System.Double,ASCOM.Astrometry.BodyDescription@,ASCOM.Astrometry.CatEntry@,System.Double@,System.Double@)">
 	<summary>
  Computes the apparent place of a star 
