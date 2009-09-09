@@ -1023,6 +1023,12 @@ namespace ASCOM.GeminiTelescope
         {
             GeminiHardware.Trace.Enter("GeminiProps:SyncWithGemini", write);
 
+            if (!GeminiHardware.Connected)
+            {
+                GeminiHardware.Trace.Exit("GeminiProps:SyncWithGemini", false, "mount not connected");
+                return false;
+            }
+
             PropertyInfo [] ps = typeof(GeminiProperties).GetProperties(BindingFlags.Public|BindingFlags.SetProperty|BindingFlags.GetProperty|BindingFlags.Instance);
             foreach (PropertyInfo p in ps)
             {

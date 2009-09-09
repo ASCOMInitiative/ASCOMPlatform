@@ -38,6 +38,10 @@ namespace ASCOM.GeminiTelescope
             comboBox5.Items.AddRange(GeminiProperties.Mount_names);
 
             GeminiProperties props = new GeminiProperties();
+
+            // read default profile
+            props.Serialize(false, null);
+
             
             props.SyncWithGemini(false);    // read all the properties from the mount
 
