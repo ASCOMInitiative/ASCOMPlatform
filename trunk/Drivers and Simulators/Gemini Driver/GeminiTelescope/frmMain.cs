@@ -55,6 +55,8 @@ namespace ASCOM.GeminiTelescope
                 controlMenu,
                 new MenuItem("Configure Telescope...", new EventHandler(ConfigureTelescopeMenu)),
 
+                new MenuItem("Advanced Gemini Settings...", new EventHandler(AdvancedGeminiMenu)),
+
                 new MenuItem("Configure Focuser...", new EventHandler(ConfigureFocuserMenu)),
             new MenuItem("-"),
             notifyMenu,
@@ -134,6 +136,17 @@ namespace ASCOM.GeminiTelescope
             }
 
             m_BaloonMenu.MenuItems["Control"].Checked = this.Visible;
+        }
+
+        void AdvancedGeminiMenu(object sender, EventArgs e)
+        {
+            _DoAdvancedDialog();
+        }
+
+        private void _DoAdvancedDialog()
+        {
+            frmAdvancedSettings frmSettings = new frmAdvancedSettings();
+            frmSettings.ShowDialog();
         }
 
         void ConfigureTelescopeMenu(object sender, EventArgs e)

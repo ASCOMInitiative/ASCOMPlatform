@@ -273,27 +273,27 @@ namespace ASCOM.GeminiTelescope
             this.focuserSetupDialogToolStripMenuItem,
             this.mountParametersToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(198, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(223, 92);
             // 
             // setupDialogToolStripMenuItem
             // 
             this.setupDialogToolStripMenuItem.Name = "setupDialogToolStripMenuItem";
-            this.setupDialogToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
-            this.setupDialogToolStripMenuItem.Text = "Telescope Setup Dialog";
+            this.setupDialogToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
+            this.setupDialogToolStripMenuItem.Text = "Telescope Setup Dialog...";
             this.setupDialogToolStripMenuItem.Click += new System.EventHandler(this.setupDialogToolStripMenuItem_Click);
             // 
             // focuserSetupDialogToolStripMenuItem
             // 
             this.focuserSetupDialogToolStripMenuItem.Name = "focuserSetupDialogToolStripMenuItem";
-            this.focuserSetupDialogToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
-            this.focuserSetupDialogToolStripMenuItem.Text = "Focuser Setup Dialog";
+            this.focuserSetupDialogToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
+            this.focuserSetupDialogToolStripMenuItem.Text = "Focuser Setup Dialog...";
             this.focuserSetupDialogToolStripMenuItem.Click += new System.EventHandler(this.focuserSetupDialogToolStripMenuItem_Click);
             // 
             // mountParametersToolStripMenuItem
             // 
             this.mountParametersToolStripMenuItem.Name = "mountParametersToolStripMenuItem";
-            this.mountParametersToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
-            this.mountParametersToolStripMenuItem.Text = "Mount Parameters";
+            this.mountParametersToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
+            this.mountParametersToolStripMenuItem.Text = "Advanced Gemini Settings...";
             this.mountParametersToolStripMenuItem.Click += new System.EventHandler(this.mountParametersToolStripMenuItem_Click);
             // 
             // ButtonFlip

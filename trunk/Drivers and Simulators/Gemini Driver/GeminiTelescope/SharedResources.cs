@@ -64,6 +64,7 @@ namespace ASCOM.GeminiTelescope
         public static uint SCODE_TIME_NOTSET = ERROR_BASE + 0x407;
         public static string MSG_TIME_NOTSET = "Failed to set Gemini time";
 
+        public static string DEAULT_PROFILE = "GeminiDefaultProfile.gp";
 
         //Astronomy Releated Constants
         public static double DEG_RAD = Math.PI / 180;

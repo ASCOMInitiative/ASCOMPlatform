@@ -1074,7 +1074,7 @@ namespace ASCOM.GeminiTelescope
             set {
                 GeminiHardware.Trace.Enter("IT:SlewSettleTime.Set", value);
 
-                if (value < 1 || value > 120) throw new ASCOM.InvalidValueException("SlewSettleTime", value.ToString(), "1-120 seconds");    
+                if (value < 0 || value > 100) throw new ASCOM.InvalidValueException("SlewSettleTime", value.ToString(), "0-100 seconds");    
                 GeminiHardware.SlewSettleTime = (int)value;
                 GeminiHardware.Trace.Exit("IT:SlewSettleTime.Set", value);
             }
@@ -1151,7 +1151,7 @@ namespace ASCOM.GeminiTelescope
 
             while (GeminiHardware.Velocity=="S"  || GeminiHardware.Velocity=="C") System.Threading.Thread.Sleep(500);
 
-            System.Threading.Thread.Sleep(GeminiHardware.SlewSettleTime * 1000);
+            System.Threading.Thread.Sleep((GeminiHardware.SlewSettleTime+2) * 1000);
 
             GeminiHardware.Trace.Exit(4, "WaitForSlewToEnd");
         }
@@ -1201,7 +1201,7 @@ namespace ASCOM.GeminiTelescope
                 {
                     if (m_AsyncSlewStarted) // need to wait out the slewsettletime here...
                     {
-                        System.Threading.Thread.Sleep(GeminiHardware.SlewSettleTime * 1000);
+                        System.Threading.Thread.Sleep((GeminiHardware.SlewSettleTime+2) * 1000);
                         m_AsyncSlewStarted = false;
                     }
                     GeminiHardware.Trace.Enter("IT:Slewing.Get", false);
