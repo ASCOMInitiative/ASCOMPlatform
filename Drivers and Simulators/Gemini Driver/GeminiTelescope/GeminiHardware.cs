@@ -183,12 +183,30 @@ namespace ASCOM.GeminiTelescope
         private static double m_TargetAzimuth= SharedResources.INVALID_DOUBLE;
 
         private static bool m_AdditionalAlign;
+
+        public static bool SwapSyncAdditionalAlign
+        {
+            get { return GeminiHardware.m_AdditionalAlign; }
+            set { GeminiHardware.m_AdditionalAlign = value; }
+        }
+
         private static bool m_Precession;
         private static bool m_Refraction;
         private static bool m_AdvancedMode;
         private static bool m_UseGeminiSite;
         private static bool m_UseGeminiTime;
 
+
+        private static bool m_SendAdvancedSettings;
+
+        public static bool SendAdvancedSettings
+        {
+            get { return GeminiHardware.m_SendAdvancedSettings; }
+            set { 
+                GeminiHardware.m_SendAdvancedSettings = value;
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "SendAdvancedSettings", value.ToString());
+            }
+        }
 
 
         private static bool m_Tracking;
@@ -508,6 +526,8 @@ namespace ASCOM.GeminiTelescope
                 m_SerialPort.PortName = m_ComPort;
             }
 
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "SendAdvancedSettings", ""), out m_SendAdvancedSettings))
+                m_SendAdvancedSettings = false;
 
             Trace.Info(2, "Pass Through Port", m_PassThroughComPort, m_PassThroughBaudRate, m_PassThroughPortEnabled);
 
@@ -1249,6 +1269,12 @@ namespace ASCOM.GeminiTelescope
                                 m_PassThroughPort = null;                                
                             }
                         System.Threading.Thread.Sleep(1000);
+
+                        if (SendAdvancedSettings)
+                        {
+                            SetGeminiAdvancedSettings();
+                        }
+
                     }
                     else
                     {
@@ -1266,6 +1292,17 @@ namespace ASCOM.GeminiTelescope
             if (OnConnect != null && m_Connected) OnConnect(true, m_Clients);
 
             Trace.Exit("Connect()");
+        }
+
+        private static void SetGeminiAdvancedSettings()
+        {
+            Trace.Enter("SetGeminiAdvancedSettings");
+            GeminiProperties props = new GeminiProperties();
+            if (props.Serialize(false, null))   //read default profile settings
+            {
+                Trace.Info(2, "Apply Advanced settings");
+                props.SyncWithGemini(true); //send the default profile to Gemini
+            }
         }
 
         private static void SendStartUpCommands()
@@ -1857,7 +1894,7 @@ namespace ASCOM.GeminiTelescope
         ///  commands and their results are synchronized after 
         ///  this
         /// </summary>
-        private static void Resync()
+        public static void Resync()
         {
             Trace.Enter("Resync");
 
