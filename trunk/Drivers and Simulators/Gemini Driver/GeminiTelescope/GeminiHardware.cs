@@ -1244,6 +1244,7 @@ namespace ASCOM.GeminiTelescope
                         m_WaitForCommand.Reset();
 
                         Trace.Info(2, "Creating worker thread");
+                        m_CancelAsync = false;
 
                         m_BackgroundWorker = new System.Threading.Thread(BackgroundWorker_DoWork);
                         m_BackgroundWorker.Start();
@@ -1638,9 +1639,8 @@ namespace ASCOM.GeminiTelescope
                     m_WaitForCommand.WaitOne(waitfor);
             }
 
+            Trace.Exit("BackgroundWorker thread", m_CancelAsync, m_SerialPort.IsOpen);
             m_CancelAsync = false;
-
-            Trace.Exit("BackgroundWorker thread");
 
         }
 
