@@ -41,6 +41,8 @@ namespace ASCOM.GeminiTelescope
             tmrUpdate.Start();
             GeminiHardware.OnConnect += new ConnectDelegate(OnConnectEvent);
             GeminiHardware.OnError += new ErrorDelegate(OnError);
+            GeminiHardware.OnInfo += new ErrorDelegate(OnInfo);
+
             m_BaloonMenu = new ContextMenu();
 
             MenuItem notifyMenu = new MenuItem("Show Notifications", new EventHandler(ShowNotificationsMenu));
@@ -88,12 +90,13 @@ namespace ASCOM.GeminiTelescope
             ControlPanelMenu(sender, e);
         }
 
-        private void ShowStatus(Point pt, bool autoHide)
+        void StartStatus(object arg)
         {
-            if (m_StatusForm != null) m_StatusForm.Close();
-            m_StatusForm = new frmStatus();
-
+            Point pt = (Point)arg;
             Screen scr = Screen.FromPoint(pt);
+
+            m_StatusForm = new frmStatus();
+            m_StatusForm.AutoHide = true;
 
             Point top = (pt);
             top.Y -= m_StatusForm.Bounds.Height + 32;
@@ -105,8 +108,24 @@ namespace ASCOM.GeminiTelescope
             m_StatusForm.Location = top;
 
             m_StatusForm.Visible = true;
-            m_StatusForm.AutoHide = autoHide;
             m_StatusForm.Show();
+            Application.Run(m_StatusForm);
+        }
+
+        System.Threading.Thread statusThread = null;
+
+        private void ShowStatus(Point pt, bool autoHide)
+        {
+            if (statusThread != null)
+            {
+                if (m_StatusForm!=null && m_StatusForm.InvokeRequired)
+                    m_StatusForm.Invoke(new EventHandler(m_StatusForm.ShowMe));
+                return;
+            }
+            // Create a new thread from which to start the status screen form
+            statusThread = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(StartStatus));
+            statusThread.Start(pt);
+
 
             /*
             if (BaloonIcon.ContextMenuStrip != null) return;           
@@ -192,10 +211,17 @@ namespace ASCOM.GeminiTelescope
              this.Invoke(new InfoBaloonDelegate(SetBaloonText), new object[] {from, msg, ToolTipIcon.Error});
         }
 
+        void OnInfo(string from, string msg)
+        {
+            this.Invoke(new InfoBaloonDelegate(SetBaloonText), new object[] { from, msg, ToolTipIcon.Info});
+        }
+
         void SetBaloonText(string title, string text, ToolTipIcon icon)
         {
             if (m_ShowNotifications)
             {
+                tmrBaloon.Stop();
+
                 BaloonIcon.ShowBalloonTip(4000, text, title, icon);
                 // time to turn off the baloon text, since Windows has a minimum of about 20-30 seconds before
                 // the message turns off on its own while the task bar is visible:
@@ -570,6 +596,15 @@ namespace ASCOM.GeminiTelescope
             }
 
             GeminiHardware.Connected = false;
+            if (m_StatusForm != null && m_StatusForm.InvokeRequired)
+            {
+                m_StatusForm.Invoke(new EventHandler(m_StatusForm.ShutDown));
+                if (statusThread != null)
+                {
+                    if (!statusThread.Join(1000))
+                        statusThread.Abort();
+                }
+            }
         }
 
         private void focuserSetupDialogToolStripMenuItem_Click(object sender, EventArgs e)
