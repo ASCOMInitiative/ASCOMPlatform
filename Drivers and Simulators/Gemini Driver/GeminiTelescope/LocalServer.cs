@@ -562,6 +562,16 @@ namespace ASCOM.GeminiTelescope
         [STAThread]
         static void Main(string[] args)
         {
+            // Add the event handler for handling UI thread exceptions to the event.
+            Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
+            // Set the unhandled exception mode to force all Windows Forms errors to go through
+            // our handler.
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+
+            // Add the event handler for handling non-UI thread exceptions to the event. 
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+
+            
             if (!LoadComObjectAssemblies()) return;						// Load served COM class assemblies, get types
 
             if (!ProcessArguments(args)) return;						// Register/Unregister
@@ -600,6 +610,55 @@ namespace ASCOM.GeminiTelescope
             // Now stop the Garbage Collector thread.
             GarbageCollector.StopThread();
             GarbageCollector.WaitForThreadToStop();
+        }
+
+        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            try
+            {
+                if (m_MainForm != null)
+                {
+                    if (GeminiHardware.Trace != null)
+                    {
+                        Exception ex = e.ExceptionObject as Exception;
+                        if (ex != null)
+                        {
+                            GeminiHardware.Trace.Except(ex);
+                            GeminiHardware.Trace.Error("CurrentDomain_Exception", ex.Message, ex.Source, ex.StackTrace, ex.InnerException);
+                        }
+                        MessageBox.Show(SharedResources.TELESCOPE_DRIVER_NAME + " has encountered an error and must now close\r\n\r\n"+ex.ToString(), SharedResources.TELESCOPE_DRIVER_NAME + "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            finally
+            {
+                System.Diagnostics.Process.GetCurrentProcess().Kill();
+            }
+        }
+
+        static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            try
+            {
+                if (m_MainForm != null)
+                {
+                    if (GeminiHardware.Trace != null)
+                    {
+                        Exception ex = e.Exception as Exception;
+                        if (ex != null)
+                        {
+                            GeminiHardware.Trace.Except(ex);
+                            GeminiHardware.Trace.Error("ThreadException", ex.Message, ex.Source, ex.StackTrace, ex.InnerException);
+                            MessageBox.Show(SharedResources.TELESCOPE_DRIVER_NAME + " has encountered an error and must now close\r\n\r\n" + ex.ToString(), SharedResources.TELESCOPE_DRIVER_NAME + "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+
+                }
+            }
+            finally
+            {
+                System.Diagnostics.Process.GetCurrentProcess().Kill();
+            }
         }
         #endregion
     }

@@ -391,8 +391,8 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         static GeminiHardware()
         {
-            TraceLevel = 2;    // 
-            Trace.Enter("GeminiHardware");
+            TraceLevel = 4;    // 
+            Trace.Enter("GeminiHardware", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version, DateTime.Now.ToString());
 
             m_Profile = new ASCOM.Utilities.Profile();
             m_Util = new ASCOM.Utilities.Util();
@@ -466,7 +466,7 @@ namespace ASCOM.GeminiTelescope
                 m_UseGeminiTime = false;
 
             if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "TraceLevel", ""), out m_TraceLevel))
-                m_TraceLevel = 2;
+                m_TraceLevel = 4;
 
             TraceLevel = m_TraceLevel;
 
@@ -1652,6 +1652,7 @@ namespace ASCOM.GeminiTelescope
                         string all_commands = String.Empty;
 
                         bool bNeedStatusUpdate = false;
+
 
                         foreach (CommandItem ci in commands)
                         {
