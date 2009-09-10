@@ -371,6 +371,12 @@ namespace ASCOM.GeminiTelescope
                 return GeminiHardware.m_Util.DegreesToDMS(az, ":", ":", "");
             }
         }
+
+        public bool IsConnected
+        {
+            get { return GeminiHardware.Connected; }
+        }
+
 #endregion
 
 #region Advanced Properties
