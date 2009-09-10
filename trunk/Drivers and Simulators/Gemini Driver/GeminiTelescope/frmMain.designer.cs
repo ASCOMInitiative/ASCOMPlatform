@@ -398,8 +398,8 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew3.TabIndex = 19;
             this.buttonSlew3.Text = "E";
             this.buttonSlew3.UseVisualStyleBackColor = true;
-            this.buttonSlew3.MouseDown+=new System.Windows.Forms.MouseEventHandler(buttonSlew3_MouseDown);
-            this.buttonSlew3.MouseUp += new System.Windows.Forms.MouseEventHandler(buttonSlew3_MouseUp);
+            this.buttonSlew3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew3_MouseDown);
+            this.buttonSlew3.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew3_MouseUp);
             // 
             // buttonSlew2
             // 
@@ -407,15 +407,15 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSlew2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(0)));
             this.buttonSlew2.ImageIndex = 0;
-            this.buttonSlew2.Location = new System.Drawing.Point(40, 166);
+            this.buttonSlew2.Location = new System.Drawing.Point(42, 168);
             this.buttonSlew2.Margin = new System.Windows.Forms.Padding(0);
             this.buttonSlew2.Name = "buttonSlew2";
             this.buttonSlew2.Size = new System.Drawing.Size(64, 64);
             this.buttonSlew2.TabIndex = 20;
             this.buttonSlew2.Text = "S";
             this.buttonSlew2.UseVisualStyleBackColor = true;
-            this.buttonSlew2.MouseDown += new System.Windows.Forms.MouseEventHandler(buttonSlew2_MouseDown);
-            this.buttonSlew2.MouseUp += new System.Windows.Forms.MouseEventHandler(buttonSlew2_MouseUp);
+            this.buttonSlew2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew2_MouseDown);
+            this.buttonSlew2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew2_MouseUp);
             // 
             // buttonSlew4
             // 
@@ -423,15 +423,15 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSlew4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(0)));
             this.buttonSlew4.ImageIndex = 0;
-            this.buttonSlew4.Location = new System.Drawing.Point(77, 130);
+            this.buttonSlew4.Location = new System.Drawing.Point(77, 134);
             this.buttonSlew4.Margin = new System.Windows.Forms.Padding(0);
             this.buttonSlew4.Name = "buttonSlew4";
             this.buttonSlew4.Size = new System.Drawing.Size(64, 64);
             this.buttonSlew4.TabIndex = 21;
             this.buttonSlew4.Text = "W";
             this.buttonSlew4.UseVisualStyleBackColor = true;
-            this.buttonSlew4.MouseDown += new System.Windows.Forms.MouseEventHandler(buttonSlew4_MouseDown);
-            this.buttonSlew4.MouseUp += new System.Windows.Forms.MouseEventHandler(buttonSlew4_MouseUp);
+            this.buttonSlew4.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew4_MouseDown);
+            this.buttonSlew4.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew4_MouseUp);
             // 
             // buttonSlew1
             // 
@@ -446,9 +446,8 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew1.TabIndex = 18;
             this.buttonSlew1.Text = "N";
             this.buttonSlew1.UseVisualStyleBackColor = true;
-            this.buttonSlew1.MouseDown += new System.Windows.Forms.MouseEventHandler(buttonSlew1_MouseDown);
-            this.buttonSlew1.MouseUp += new System.Windows.Forms.MouseEventHandler(buttonSlew1_MouseUp);
-
+            this.buttonSlew1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseDown);
+            this.buttonSlew1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseUp);
             // 
             // frmMain
             // 
