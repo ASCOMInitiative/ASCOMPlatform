@@ -683,7 +683,6 @@ namespace ASCOM.GeminiTelescope
                 if (RadioButtonCenter.Checked) cmds[0] = ":RC";
                 if (RadioButtonSlew.Checked) cmds[0] = ":RS";
                 if (CheckBoxFlipDec.Checked)
-                    if (CheckBoxFlipDec.Checked)
                     {
                         cmds[1] = ":Mn";
                     }
@@ -783,6 +782,7 @@ namespace ASCOM.GeminiTelescope
                 }
             }
         }
+
 
     }
 }

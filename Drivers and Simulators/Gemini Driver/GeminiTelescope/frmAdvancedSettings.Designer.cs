@@ -90,7 +90,7 @@
             this.numericUpDown18 = new System.Windows.Forms.NumericUpDown();
             this.label22 = new System.Windows.Forms.Label();
             this.checkBox5 = new System.Windows.Forms.CheckBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.pbOK = new System.Windows.Forms.Button();
             this.pbApply = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.pbReboot = new System.Windows.Forms.Button();
@@ -1198,18 +1198,18 @@
             this.checkBox5.Text = "Use Encoders:";
             this.checkBox5.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // pbOK
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(398, 595);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 33;
-            this.button1.Text = "OK";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.pbOK_Click);
+            this.pbOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pbOK.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.pbOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.pbOK.Location = new System.Drawing.Point(398, 595);
+            this.pbOK.Name = "pbOK";
+            this.pbOK.Size = new System.Drawing.Size(75, 23);
+            this.pbOK.TabIndex = 33;
+            this.pbOK.Text = "OK";
+            this.pbOK.UseVisualStyleBackColor = true;
+            this.pbOK.Click += new System.EventHandler(this.pbOK_Click);
             // 
             // pbApply
             // 
@@ -1336,7 +1336,7 @@
             // 
             // frmAdvancedSettings
             // 
-            this.AcceptButton = this.button1;
+            this.AcceptButton = this.pbOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
@@ -1351,7 +1351,7 @@
             this.Controls.Add(this.pbReboot);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.pbApply);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.pbOK);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
@@ -1461,7 +1461,7 @@
         private System.Windows.Forms.NumericUpDown numericUpDown18;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.CheckBox checkBox5;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button pbOK;
         private System.Windows.Forms.Button pbApply;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button pbReboot;

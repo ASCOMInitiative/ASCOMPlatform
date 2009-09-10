@@ -38,6 +38,7 @@ namespace ASCOM.GeminiTelescope
 
             geminiPropertiesBindingSource.Add(props);
             geminiPropertiesBindingSource.ResetBindings(false);
+            SetControlColor(tableLayoutPanel1);
         }
 
         private void pbOK_Click(object sender, EventArgs e)
@@ -78,6 +79,19 @@ namespace ASCOM.GeminiTelescope
                 }
             }
         }
-        
+
+        private void SetControlColor(Control panel)
+        {
+            foreach (Control c in panel.Controls)
+            {
+                if (c.BackColor == Color.Transparent || c.BackColor == Color.Black)
+                    if (GeminiHardware.Connected)
+                        c.ForeColor = Color.Lime;
+                    else
+                        c.ForeColor = Color.LightGray;
+            }
+
+        }
+
     }
 }

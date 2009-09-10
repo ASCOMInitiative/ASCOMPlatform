@@ -28,6 +28,8 @@ namespace ASCOM.GeminiTelescope
 {
     public partial class frmAdvancedSettings : Form
     {
+        const string Cap = "Advanced Gemini Settings";
+
         public frmAdvancedSettings()
         {
             this.UseWaitCursor = true;
@@ -42,16 +44,50 @@ namespace ASCOM.GeminiTelescope
             GeminiProperties props = new GeminiProperties();
 
             // read default profile
-            props.Serialize(false, null);
+            if (props.Serialize(false, null))
+                this.Text = Cap + " (" + SharedResources.DEAULT_PROFILE + ")";
 
-            
-            props.SyncWithGemini(false);    // read all the properties from the mount
+
+            if (props.SyncWithGemini(false))    // read all the properties from the mount
+                this.Text = Cap + " [settings from Gemini]";
 
             this.geminiPropertiesBindingSource.Add(props);
 
             chkSendSettings.Checked = GeminiHardware.SendAdvancedSettings;
+
+            OnConnectChange(true, 1);
+
             this.UseWaitCursor = false;
         }
+
+        private void SetControlColor(Control panel)
+        {
+            foreach (Control c in panel.Controls)
+            {
+                if (c.BackColor == Color.Transparent || c.BackColor == Color.Black)
+                    if (GeminiHardware.Connected)
+                    {
+                            c.ForeColor = Color.Lime;
+                    }
+                    else 
+                        c.ForeColor = Color.LightGray;
+            }
+
+        }
+
+        void OnConnectChange(bool connect, int clients)
+        {
+            SetControlColor(tableLayoutPanel1);
+            SetControlColor(tableLayoutPanel2);
+            SetControlColor(tableLayoutPanel3);
+            SetControlColor(tableLayoutPanel4);
+            SetControlColor(tableLayoutPanel5);
+
+            pbApply.Enabled = GeminiHardware.Connected;
+            pbReboot.Enabled = GeminiHardware.Connected;
+            pbOK.Enabled = GeminiHardware.Connected;
+        }
+
 
         private void pbApply_Click(object sender, EventArgs e)
         {
@@ -73,6 +109,7 @@ namespace ASCOM.GeminiTelescope
 
                     props.SyncWithGemini(false);   // read all the properties from the mount
                     geminiPropertiesBindingSource.ResetBindings(false);
+                    this.Text = Cap + " [settings from Gemini]";
                 }
                 catch (Exception ex)
                 {
@@ -103,7 +140,11 @@ namespace ASCOM.GeminiTelescope
                 if (res != DialogResult.OK) return;
                 GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
                 if (props.Serialize(false, openFileDialog.FileName)) // read profile
+                {
                     geminiPropertiesBindingSource.ResetBindings(false);
+                    this.Text = Cap + " (" + System.IO.Path.GetFileName(openFileDialog.FileName) + ")";
+
+                }
             }
             catch (Exception ex)
             {
@@ -129,7 +170,8 @@ namespace ASCOM.GeminiTelescope
                 DialogResult res = saveFileDialog.ShowDialog(this);
                 if (res != DialogResult.OK) return;
                 GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
-                props.Serialize(true, saveFileDialog.FileName);     // save profile         
+                if (props.Serialize(true, saveFileDialog.FileName))     // save profile         
+                    this.Text = Cap + " (" + System.IO.Path.GetFileName(saveFileDialog.FileName) + ")";
             }
             catch (Exception ex)
             {

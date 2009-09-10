@@ -398,6 +398,8 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew3.TabIndex = 19;
             this.buttonSlew3.Text = "E";
             this.buttonSlew3.UseVisualStyleBackColor = true;
+            this.buttonSlew3.MouseDown+=new System.Windows.Forms.MouseEventHandler(buttonSlew3_MouseDown);
+            this.buttonSlew3.MouseUp += new System.Windows.Forms.MouseEventHandler(buttonSlew3_MouseUp);
             // 
             // buttonSlew2
             // 
@@ -412,6 +414,8 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew2.TabIndex = 20;
             this.buttonSlew2.Text = "S";
             this.buttonSlew2.UseVisualStyleBackColor = true;
+            this.buttonSlew2.MouseDown += new System.Windows.Forms.MouseEventHandler(buttonSlew2_MouseDown);
+            this.buttonSlew2.MouseUp += new System.Windows.Forms.MouseEventHandler(buttonSlew2_MouseUp);
             // 
             // buttonSlew4
             // 
@@ -426,6 +430,8 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew4.TabIndex = 21;
             this.buttonSlew4.Text = "W";
             this.buttonSlew4.UseVisualStyleBackColor = true;
+            this.buttonSlew4.MouseDown += new System.Windows.Forms.MouseEventHandler(buttonSlew4_MouseDown);
+            this.buttonSlew4.MouseUp += new System.Windows.Forms.MouseEventHandler(buttonSlew4_MouseUp);
             // 
             // buttonSlew1
             // 
@@ -440,6 +446,9 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew1.TabIndex = 18;
             this.buttonSlew1.Text = "N";
             this.buttonSlew1.UseVisualStyleBackColor = true;
+            this.buttonSlew1.MouseDown += new System.Windows.Forms.MouseEventHandler(buttonSlew1_MouseDown);
+            this.buttonSlew1.MouseUp += new System.Windows.Forms.MouseEventHandler(buttonSlew1_MouseUp);
+
             // 
             // frmMain
             // 

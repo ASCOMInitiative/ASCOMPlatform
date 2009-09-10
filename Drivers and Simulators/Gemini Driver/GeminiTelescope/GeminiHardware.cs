@@ -2041,6 +2041,8 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static void Resync()
         {
+            if (!Connected) return;
+
             Trace.Enter("Resync");
 
             if (m_SerialPort.IsOpen)
