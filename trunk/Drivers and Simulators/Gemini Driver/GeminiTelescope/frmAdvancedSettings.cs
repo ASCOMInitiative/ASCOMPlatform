@@ -30,6 +30,8 @@ namespace ASCOM.GeminiTelescope
     {
         public frmAdvancedSettings()
         {
+            this.UseWaitCursor = true;
+
             InitializeComponent();
 
             comboBox1.Items.AddRange(GeminiProperties.Brightness_names);
@@ -48,6 +50,7 @@ namespace ASCOM.GeminiTelescope
             this.geminiPropertiesBindingSource.Add(props);
 
             chkSendSettings.Checked = GeminiHardware.SendAdvancedSettings;
+            this.UseWaitCursor = false;
         }
 
         private void pbApply_Click(object sender, EventArgs e)
@@ -56,13 +59,17 @@ namespace ASCOM.GeminiTelescope
 
             if (this.ValidateChildren())
             {
+                this.UseWaitCursor = true;
+
                 try
                 {
                     GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
-                    props.SyncWithGemini(true);    // read all the properties from the mount
+                    props.SyncWithGemini(true);    // write all properties from profile to Gemini
 
-                    if (GeminiHardware.SendAdvancedSettings) 
+                    if (GeminiHardware.SendAdvancedSettings)
                         props.Serialize(true, null);   // save to default profile
+
+                    props.ClearProfile();
 
                     props.SyncWithGemini(false);   // read all the properties from the mount
                     geminiPropertiesBindingSource.ResetBindings(false);
@@ -71,6 +78,10 @@ namespace ASCOM.GeminiTelescope
                 {
                     GeminiHardware.Trace.Except(ex);
                     MessageBox.Show("Unable to save profile:\r\n" + ex.Message);
+                }
+                finally
+                {
+                    this.UseWaitCursor = false;
                 }
             }
             GeminiHardware.Trace.Exit("AdvancedSettings:pbApply_Click");
@@ -147,7 +158,6 @@ namespace ASCOM.GeminiTelescope
                 if (res == DialogResult.Yes)
                 {
                     GeminiHardware.DoCommandResult(">65535:", GeminiHardware.MAX_TIMEOUT, false);
-                    GeminiHardware.Resync();
                 }
             }
         }
@@ -160,6 +170,7 @@ namespace ASCOM.GeminiTelescope
                 {
                     try
                     {
+                        this.UseWaitCursor = true;
                         GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
                         props.SyncWithGemini(true);
                         if (GeminiHardware.SendAdvancedSettings) props.Serialize(true, null);     // save default profile
@@ -167,6 +178,10 @@ namespace ASCOM.GeminiTelescope
                     catch (Exception ex)
                     {
                         GeminiHardware.Trace.Except(ex);
+                    }
+                    finally
+                    {
+                        this.UseWaitCursor = false;
                     }
                 }
             }

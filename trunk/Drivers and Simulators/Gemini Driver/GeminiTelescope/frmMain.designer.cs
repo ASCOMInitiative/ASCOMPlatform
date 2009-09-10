@@ -273,7 +273,7 @@ namespace ASCOM.GeminiTelescope
             this.focuserSetupDialogToolStripMenuItem,
             this.mountParametersToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(223, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(223, 70);
             // 
             // setupDialogToolStripMenuItem
             // 
@@ -459,6 +459,7 @@ namespace ASCOM.GeminiTelescope
             this.Controls.Add(this.checkBoxTrack);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "frmMain";
             this.ShowInTaskbar = false;

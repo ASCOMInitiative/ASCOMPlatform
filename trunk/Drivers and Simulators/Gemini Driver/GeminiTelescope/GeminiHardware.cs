@@ -276,6 +276,8 @@ namespace ASCOM.GeminiTelescope
         private static System.Threading.AutoResetEvent m_WaitForCommand;
 
         private static string m_PolledVariablesString = ":GR#:GD#:GA#:GZ#:Gv#:GS#:Gm#:h?#<99:F#";
+        private static string m_ShortPolledVariablesString1 = ":GR#:GD#:GA#:GZ#:Gv#";
+        private static string m_ShortPolledVariablesString2 = ":GS#:Gm#:h?#<99:F#";
 
         public static int MAX_TIMEOUT = 10000; //max default timeout for all commands
 
@@ -366,6 +368,12 @@ namespace ASCOM.GeminiTelescope
         ///  checksum error, or other failure to complete a request
         /// </summary>
         public static ErrorDelegate OnError;
+
+
+        /// <summary>
+        /// OnInfo is fired when a UI notification to the user is needed
+        /// </summary>
+        public static ErrorDelegate OnInfo;
 
         private static bool m_AllowErrorNotify = true;
 
@@ -1210,17 +1218,21 @@ namespace ASCOM.GeminiTelescope
                     {
                         Trace.Info(2, "Before Port.Open");
                         m_SerialPort.Open();
-
+                
                         m_SerialPort.DtrEnable = true;
                         Trace.Info(2, "After Port.Open");
                     }
                     catch (Exception e)
                     {
-                        Trace.Except(e);
-                        GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial comm error connecting to port " + m_ComPort + ":" + e.Message);
-                        if (OnError != null) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Connection Failed: " + e.Message);
-                        m_Connected = false;
-                        throw e;    //rethrow the exception
+                        if (!HuntForGemini())
+                        {
+                            m_Clients -= 1;
+                            Trace.Except(e);
+                            GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial comm error connecting to port " + m_ComPort + ":" + e.Message);
+                            if (OnError != null) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Connection Failed: " + e.Message);
+                            m_Connected = false;
+                            throw e;    //rethrow the exception
+                        }
                     }
 
                     m_TargetRightAscension = SharedResources.INVALID_DOUBLE;
@@ -1384,10 +1396,24 @@ namespace ASCOM.GeminiTelescope
         private static bool StartGemini()
         {
             Trace.Enter("StartGemini");
+            if (OnInfo!=null) OnInfo("Connecting to Gemini on " + m_SerialPort.PortName + ", " + m_SerialPort.BaudRate.ToString(), "Connecting...");
+            Transmit("\x6");
+            System.Threading.Thread.Sleep(0);
+            CommandItem ci = new CommandItem("\x6", 10, true); // quick timeout, don't want to hang up the user for too long
+            string sRes = GetCommandResult(ci);
+
 
             Transmit("\x6");
-            CommandItem ci = new CommandItem("\x6", 10000, true);
-            string sRes = GetCommandResult(ci);
+            ci = new CommandItem("\x6", 1000, true);
+            sRes = GetCommandResult(ci);
+
+            if (sRes == null)
+            {
+                if (!HuntForGemini()) return false;
+                Transmit("\x6");
+                ci = new CommandItem("\x6", 10000, true);
+                sRes = GetCommandResult(ci);
+            }
 
             Trace.Info(2, "^G result", sRes);
 
@@ -1449,6 +1475,85 @@ namespace ASCOM.GeminiTelescope
             Trace.Exit("Start Gemini", sRes);
 
             return sRes == "G"; // true if startup completed, otherwise false
+        }
+
+        /// <summary>
+        /// search through all defined COM ports for Gemini
+        /// try various baud rates, 4800,9600,19200
+        /// </summary>
+        /// <returns></returns>
+        private static bool HuntForGemini()
+        {            
+            Trace.Enter("HuntForGemini", m_SerialPort.PortName, m_SerialPort.BaudRate);
+            
+            m_AllowErrorNotify = false;
+
+            try
+            {
+                if (m_SerialPort.IsOpen) m_SerialPort.Close();
+
+                string[] ports = SerialPort.GetPortNames();
+                int[] rates = { 9600, 4800, 19200, 38400 };
+
+                foreach (string p in ports)
+                {
+
+                    if (OnInfo != null) OnInfo("Searching for Gemini", "Checking serial port " + p);
+
+                    for (int i = 0; i < rates.Length; ++i)
+                    {
+                        m_SerialPort.PortName = p;
+
+                        m_SerialPort.BaudRate = rates[i];
+                        try
+                        {
+                            m_SerialPort.Open();
+                            m_SerialPort.DtrEnable = true;
+
+                            if (m_SerialPort.IsOpen)
+                            {
+                                Transmit("\x6");
+                                System.Threading.Thread.Sleep(0);
+                                CommandItem ci = new CommandItem("\x6", 10, true); // quick timeout, don't want to hang up the user for too long
+                                string sRes = GetCommandResult(ci);
+
+                                Transmit("\x6");
+                                System.Threading.Thread.Sleep(0);
+                                ci = new CommandItem("\x6", 250, true); // quick timeout, don't want to hang up the user for too long
+                                sRes = GetCommandResult(ci);
+
+                                
+                                if (sRes == null)
+                                {
+                                    m_SerialPort.Close();
+                                }
+                                else
+                                {
+                                    Trace.Info(1, "Found Gemini!", p, rates[i]);
+                                    GeminiHardware.ComPort = p;
+                                    GeminiHardware.BaudRate = rates[i];
+                                    return true;
+                                }
+                            }
+                        }
+                        catch (Exception ex1)
+                        {
+                            Trace.Except(ex1);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.Except(ex);
+            }
+            finally
+            {
+                m_AllowErrorNotify = true;
+                Trace.Exit("HuntForGemini");
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -1607,14 +1712,14 @@ namespace ASCOM.GeminiTelescope
                         if (bNeedStatusUpdate || (DateTime.Now - m_LastUpdate).TotalMilliseconds > SharedResources.GEMINI_POLLING_INTERVAL)
                         {
                             m_AllowErrorNotify = false; //don't bother the user with timeout errors during polling  -- these are not very important
-                            UpdatePolledVariables(); //update variables if one of them was altered by a processed command
+                            UpdatePolledVariables(bNeedStatusUpdate); //update variables if one of them was altered by a processed command
                             m_AllowErrorNotify = false;
                         }
                     }
                     else
                     {
                         m_AllowErrorNotify = false; //don't bother the user with timeout errors during polling  -- these are not very important
-                        UpdatePolledVariables();
+                        UpdatePolledVariables(false);
                         m_AllowErrorNotify = true;
                     }
                 }
@@ -1715,19 +1820,26 @@ namespace ASCOM.GeminiTelescope
             if (UTC_Offset != null) int.TryParse(UTC_Offset, out m_UTCOffset);
 
             //Get RA and DEC etc
-            UpdatePolledVariables();
+            UpdatePolledVariables(true);
 
             m_LastUpdate = System.DateTime.Now;
         }
 
 
+        static private int m_PollUpdateCount = 0;    // keep track of number of updates
+
 
         /// <summary>
         /// update all variable sthat are polled on an interval
+        /// if UpdateAll is true, all polled variables are queries
+        ///  otherwise, some variables are queried less frequently to
+        ///  reduce serial port traffic and load on Gemini and PC
         /// </summary>
-        private static void UpdatePolledVariables()
+        /// 
+        private static void UpdatePolledVariables(bool UpdateAll)
         {
-            Trace.Enter("UpdatePolledVariables");
+
+            Trace.Enter("UpdatePolledVariables", UpdateAll);
             try
             {
                 CommandItem command;
@@ -1735,144 +1847,177 @@ namespace ASCOM.GeminiTelescope
                 // Gemini gets slow to respond when slewing, so increase timeout if we're in the middle of it:
                 int timeout = (m_Velocity == "S" ? MAX_TIMEOUT*2 : MAX_TIMEOUT);
 
-                System.Diagnostics.Trace.Write("Poll commands: " + m_PolledVariablesString + "\r\n");
-                //Get RA and DEC etc
-                DiscardInBuffer(); //clear all received data
-                Transmit(m_PolledVariablesString);
+                int level = 0;
+                string vars;
 
-                command = new CommandItem(":GR", timeout, true);
-                string RA = GetCommandResult(command);
-                if (RA == null)
+                m_PollUpdateCount++;
+
+                if (UpdateAll)
                 {
-                    Trace.Error("timeout", command.m_Command);
-                    Resync();
-                    return;
+                    level = 3;   // update all
+                    vars = m_PolledVariablesString;
                 }
-
-                command = new CommandItem(":GD", timeout, true);
-                string DEC = GetCommandResult(command);
-                if (DEC == null)
-                {
-                    Trace.Error("timeout", command.m_Command);
-                    Resync();
-                    return;
-                }
-
-                command = new CommandItem(":GA", timeout, true);
-                string ALT = GetCommandResult(command);
-                if (ALT == null)
-                {
-                    Trace.Error("timeout", command.m_Command);
-                    Resync();
-                    return;
-                }
-
-
-                command = new CommandItem(":GZ", timeout, true);
-                string AZ = GetCommandResult(command);
-
-                if (AZ == null)
-                {
-                    Trace.Error("timeout", command.m_Command);
-                    Resync();
-                    return;
-                }
-
-                command = new CommandItem(":Gv", timeout, true);
-                string V = GetCommandResult(command);
-                if (V == null)
-                {
-                    Trace.Error("timeout", command.m_Command);
-                    Resync();
-                    return;
-                }
-
-                command = new CommandItem(":GS", timeout, true);
-                string ST = GetCommandResult(command);
-                if (ST == null)
-                {
-                    Trace.Error("timeout", command.m_Command);
-                    Resync();
-                    return;
-                }
-                command = new CommandItem(":Gm", timeout, true);
-                string SOP = GetCommandResult(command);
-                if (SOP == null)
-                {
-                    Trace.Error("timeout", command.m_Command);
-                    Resync();
-                    return;
-                }
-                command = new CommandItem(":h?", timeout, true);
-                string HOME = GetCommandResult(command);
-                if (HOME == null)
-                {
-                    Trace.Error("timeout", command.m_Command);
-                    Resync();
-                    return;
-                }
-
-                command = new CommandItem("<99:", timeout, true);
-                string STATUS = GetCommandResult(command);
-                if (STATUS == null)
-                {
-                    Trace.Error("timeout", command.m_Command);
-                    Resync();
-                    return;
-                }
-
-                if (RA != null) m_RightAscension = m_Util.HMSToHours(RA);
-
-                if (DEC != null) m_Declination = m_Util.DMSToDegrees(DEC);
-
-                if (ALT != null) m_Altitude = m_Util.DMSToDegrees(ALT);
-
-                if (AZ != null) m_Azimuth = m_Util.DMSToDegrees(AZ);
-                if (V != null) m_Velocity = V;
-
-                if (Velocity == "N") m_Tracking = false;
                 else
-                    m_Tracking = true;
-
-                if (ST != null)
-                {
-                    m_SiderealTime = m_Util.HMSToHours(ST);
-                }
-                if (SOP != null) m_SideOfPier = SOP;
-
-                if (HOME != null)
-                {
-                    m_ParkState = HOME;
-                    if (HOME == "1")
+                    if ((m_PollUpdateCount & 1) == 0)   // update set #1
                     {
-                        m_AtHome = true;
-                        if (Velocity == "N") m_AtPark = true;
-                        else
-                        {
-                            m_AtPark = false;
-                        }
+                        level = 1;
+                        vars = m_ShortPolledVariablesString1;
                     }
                     else
                     {
-                        m_AtHome = false;
-                        m_AtPark = false;
+                        level = 2;          // update set #2
+                        vars = m_ShortPolledVariablesString2;
                     }
-                }
 
-                if (STATUS != null)
+
+                System.Diagnostics.Trace.Write("Poll commands: " + vars + "\r\n");
+                //Get RA and DEC etc
+                DiscardInBuffer(); //clear all received data
+                Transmit(vars);
+
+                string trc = "";
+                
+
+                if ((level & 1) != 0)
                 {
-                    int.TryParse(STATUS, out m_GeminiStatusByte);
-
-                    // if reached safety limit, send out one notification 
-                    if ((m_GeminiStatusByte & 16) != 0 && !m_SafetyNotified)
+                    command = new CommandItem(":GR", timeout, true);
+                    string RA = GetCommandResult(command);
+                    if (RA == null)
                     {
-                        if (OnSafetyLimit != null) OnSafetyLimit();
-                        m_SafetyNotified = true;
+                        Trace.Error("timeout", command.m_Command);
+                        Resync();
+                        return;
                     }
-                    else if ((m_GeminiStatusByte & 16) == 0) m_SafetyNotified = false;
+
+                    command = new CommandItem(":GD", timeout, true);
+                    string DEC = GetCommandResult(command);
+                    if (DEC == null)
+                    {
+                        Trace.Error("timeout", command.m_Command);
+                        Resync();
+                        return;
+                    }
+
+                    command = new CommandItem(":GA", timeout, true);
+                    string ALT = GetCommandResult(command);
+                    if (ALT == null)
+                    {
+                        Trace.Error("timeout", command.m_Command);
+                        Resync();
+                        return;
+                    }
+
+
+                    command = new CommandItem(":GZ", timeout, true);
+                    string AZ = GetCommandResult(command);
+
+                    if (AZ == null)
+                    {
+                        Trace.Error("timeout", command.m_Command);
+                        Resync();
+                        return;
+                    }
+
+                    command = new CommandItem(":Gv", timeout, true);
+                    string V = GetCommandResult(command);
+                    if (V == null)
+                    {
+                        Trace.Error("timeout", command.m_Command);
+                        Resync();
+                        return;
+                    }
+
+                    if (RA != null) m_RightAscension = m_Util.HMSToHours(RA);
+                    if (DEC != null) m_Declination = m_Util.DMSToDegrees(DEC);
+                    if (ALT != null) m_Altitude = m_Util.DMSToDegrees(ALT);
+                    if (AZ != null) m_Azimuth = m_Util.DMSToDegrees(AZ);
+                    if (V != null) m_Velocity = V;
+                    trc = "RA=" + RA + ", DEC=" + DEC + "ALT=" + ALT + " AZ=" + AZ + " Velocity=" + Velocity;
+
                 }
 
-                string trc = "RA=" + RA + ", DEC=" + DEC + "ALT=" + ALT + " AZ=" + AZ + " SOP=" + SOP + " HOME=" + HOME + " Velocity=" + Velocity + " Status=" + m_GeminiStatusByte.ToString();
+                if ((level & 2) != 0)
+                {
+                    command = new CommandItem(":GS", timeout, true);
+                    string ST = GetCommandResult(command);
+                    if (ST == null)
+                    {
+                        Trace.Error("timeout", command.m_Command);
+                        Resync();
+                        return;
+                    }
+                    command = new CommandItem(":Gm", timeout, true);
+                    string SOP = GetCommandResult(command);
+                    if (SOP == null)
+                    {
+                        Trace.Error("timeout", command.m_Command);
+                        Resync();
+                        return;
+                    }
+                    command = new CommandItem(":h?", timeout, true);
+                    string HOME = GetCommandResult(command);
+                    if (HOME == null)
+                    {
+                        Trace.Error("timeout", command.m_Command);
+                        Resync();
+                        return;
+                    }
+
+                    command = new CommandItem("<99:", timeout, true);
+                    string STATUS = GetCommandResult(command);
+                    if (STATUS == null)
+                    {
+                        Trace.Error("timeout", command.m_Command);
+                        Resync();
+                        return;
+                    }
+
+                    if (Velocity == "N") m_Tracking = false;
+                    else
+                        m_Tracking = true;
+
+                    if (ST != null)
+                    {
+                        m_SiderealTime = m_Util.HMSToHours(ST);
+                    }
+                    if (SOP != null) m_SideOfPier = SOP;
+
+                    if (HOME != null)
+                    {
+                        m_ParkState = HOME;
+                        if (HOME == "1")
+                        {
+                            m_AtHome = true;
+                            if (Velocity == "N") m_AtPark = true;
+                            else
+                            {
+                                m_AtPark = false;
+                            }
+                        }
+                        else
+                        {
+                            m_AtHome = false;
+                            m_AtPark = false;
+                        }
+                    }
+
+                    if (STATUS != null)
+                    {
+                        int.TryParse(STATUS, out m_GeminiStatusByte);
+
+                        // if reached safety limit, send out one notification 
+                        if ((m_GeminiStatusByte & 16) != 0 && !m_SafetyNotified)
+                        {
+                            if (OnSafetyLimit != null) OnSafetyLimit();
+                            m_SafetyNotified = true;
+                        }
+                        else if ((m_GeminiStatusByte & 16) == 0) m_SafetyNotified = false;
+                    }
+
+                    trc += " SOP=" + SOP + " HOME=" + HOME + " Status=" + m_GeminiStatusByte.ToString();
+                }
+
+
                 Trace.Info(4, trc);
 
                 System.Diagnostics.Trace.Write("Done polling: " + trc +  "\r\n");
@@ -1903,6 +2048,7 @@ namespace ASCOM.GeminiTelescope
                 lock (m_CommandQueue)
                 {
                     string sRes = null;
+                    int count = 3;
                     do
                     {
                         try
@@ -1919,9 +2065,16 @@ namespace ASCOM.GeminiTelescope
                             Trace.Except(ex);
                         }
 
-                    } while (sRes != "G");
-                    Trace.Info(2, "Got a sync");
-                    System.Threading.Thread.Sleep(1000);
+                    } while (sRes != "G" && --count > 0);
+
+                    if (sRes=="G")
+                    {
+                        Trace.Info(2, "Got a sync");
+                        System.Threading.Thread.Sleep(1000);
+                    }
+                    else
+                        Trace.Info(2, "Didn't get a sync, giving up!");
+
                     m_SerialPort.DiscardOutBuffer();
                     DiscardInBuffer();
                 }
@@ -2020,6 +2173,8 @@ namespace ASCOM.GeminiTelescope
                     if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial port timed out!");
                     AddOneMoreError();
                 }
+                else Resync();
+
                 return null;
             }
             finally
@@ -2027,7 +2182,7 @@ namespace ASCOM.GeminiTelescope
                 tmrReadTimeout.Stop();
             }
 
-                        
+
             if (m_SerialErrorOccurred.WaitOne(0))
             {
                 Trace.Error("Serial port error", command.m_Command);
@@ -2114,6 +2269,8 @@ namespace ASCOM.GeminiTelescope
                 m_TotalErrors = 0;
                 m_FirstErrorTick = 0;
             }
+            else Resync();
+
             Trace.Exit("AddOneMoreError");
         }
 

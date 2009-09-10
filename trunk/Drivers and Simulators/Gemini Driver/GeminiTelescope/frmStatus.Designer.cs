@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label32 = new System.Windows.Forms.Label();
-            this.geminiPropertiesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.label31 = new System.Windows.Forms.Label();
             this.label30 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
@@ -63,6 +62,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.txtVersion = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.geminiPropertiesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -134,11 +134,6 @@
             this.label32.Size = new System.Drawing.Size(80, 21);
             this.label32.TabIndex = 32;
             this.label32.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // geminiPropertiesBindingSource
-            // 
-            this.geminiPropertiesBindingSource.DataSource = typeof(ASCOM.GeminiTelescope.GeminiProperties);
-            this.geminiPropertiesBindingSource.CurrentItemChanged += new System.EventHandler(this.geminiPropertiesBindingSource_CurrentItemChanged);
             // 
             // label31
             // 
@@ -489,6 +484,11 @@
             this.label1.Text = "Gemini Version:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // geminiPropertiesBindingSource
+            // 
+            this.geminiPropertiesBindingSource.DataSource = typeof(ASCOM.GeminiTelescope.GeminiProperties);
+            this.geminiPropertiesBindingSource.CurrentItemChanged += new System.EventHandler(this.geminiPropertiesBindingSource_CurrentItemChanged);
+            // 
             // frmStatus
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -506,7 +506,8 @@
             this.Text = "Gemini Status";
             this.Load += new System.EventHandler(this.frmStatus_Load);
             this.VisibleChanged += new System.EventHandler(this.frmStatus_VisibleChanged);
-            this.Move += new System.EventHandler(this.frmStatus_Move);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmStatus_FormClosed);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmStatus_FormClosing);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).EndInit();

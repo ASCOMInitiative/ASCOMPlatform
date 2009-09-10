@@ -35,6 +35,7 @@ namespace ASCOM.GeminiTelescope
 
         private SerializableDictionary<string, object> mProfile = new SerializableDictionary<string, object>();
 
+        
         public SerializableDictionary<string, object> Profile
         {
             get { return mProfile; }
@@ -58,47 +59,6 @@ namespace ASCOM.GeminiTelescope
 
             public string name;
         }
-#if false
-        static public List<ItemList> MountTypeList = new List<ItemList>() {
-            new ItemList(0, "Custom"),
-            new ItemList(1, "GM-8"),
-            new ItemList(2, "G-11"),
-            new ItemList(3, "HGM-200"),
-            new ItemList(4, "MI-250"),
-            new ItemList(5, "Titan"),
-            new ItemList(6, "Titan50")
-        };
-
-        static public List<ItemList> BrightnessList = new List<ItemList>() {
-            new ItemList(0, "100%"),
-            new ItemList(1, "53%"),
-            new ItemList(2, "40%"),
-            new ItemList(3, "27%"),
-            new ItemList(4, "20%"),
-            new ItemList(5, "13%"),
-            new ItemList(6, "6.6%")
-        };
-
-        static public List<ItemList> MoveSpeedList = new List<ItemList>()
-        {
-            new ItemList(161, "Visual"),
-            new ItemList(162, "Photo"),
-            new ItemList(163, "All Speeds")
-        };
-
-
-        static public List<ItemList> TrackingRateList = new List<ItemList>()
-        {
-            new ItemList(131, "Sidereal"),
-            new ItemList(132, "King Rate"),
-            new ItemList(133, "Lunar"),
-            new ItemList(134, "Solar"),
-            new ItemList(135, "Terrestrial"),
-            new ItemList(136, "Closed Loop"),
-            new ItemList(137, "Comet Rate")
-        };
-
-#endif
 
         static public string[] Mount_names = {"Custom", "GM-8", "G-11", "HGM-200", "MI-250", "Titan", "Titan50"};
         static public string[] TrackingRate_names = { "Sidereal", "King Rate", "Lunar", "Solar", "Terrestrial", "Closed Loop", "Comet Rate" };
@@ -114,6 +74,14 @@ namespace ASCOM.GeminiTelescope
         }
 
 
+        /// <summary>
+        /// Erase all entries in the current profile
+        /// </summary>
+        public void ClearProfile()
+        {
+            mProfile.Clear();
+            RTProfile.Clear();
+        }
 
         private void NotifyPropertyChanged(String info)
         {
@@ -142,6 +110,50 @@ namespace ASCOM.GeminiTelescope
             }
             return res;
         }
+
+
+        private Dictionary<string, bool> WaitList = new Dictionary<string, bool>();
+        private Dictionary<string, string> RTProfile = new Dictionary<string, string>();
+
+
+        void OnHardwarePropertyUpdate(string sCmd, string sResult)
+        {
+            lock (RTProfile)
+            {
+                if (sResult != null)
+                    RTProfile[sCmd] = sResult;
+                WaitList[sCmd] = false;
+            }
+        }
+
+        private string get_PropAsync(string sCmd)
+        {
+            string res = null;
+
+            if (!GeminiHardware.Connected) return null;
+            lock (RTProfile)
+            {
+                if (RTProfile.ContainsKey(sCmd))
+                    res = RTProfile[sCmd] as string;
+
+                if (!WaitList.ContainsKey(sCmd) || !WaitList[sCmd])
+                {
+                    if (RTProfile.ContainsKey(sCmd))
+                    {
+                        GeminiHardware.DoCommandAsync(sCmd, 5000, new HardwareAsyncDelegate(OnHardwarePropertyUpdate), false);
+                        WaitList[sCmd] = true;
+                    }
+                    else
+                    {
+                        res = GeminiHardware.DoCommandResult(sCmd, GeminiHardware.MAX_TIMEOUT, false);    //first time, get the value non-async
+                        RTProfile[sCmd] = res;
+                    }
+                }
+            }
+            return res;
+        }
+
+
 
         private int get_int_Prop(string s)
         {
@@ -194,8 +206,9 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                if (!GeminiHardware.Connected) return null;
-                string res = get_Prop(":GVN");
+                string res = get_PropAsync(":GVN");
+                if (res == null) return null;
+
                 return string.Format("L{0} v{1}.{2}", GeminiHardware.Version.Substring(0, 1), GeminiHardware.Version.Substring(1, 1), GeminiHardware.Version.Substring(2,1));
             }
         }
@@ -204,7 +217,7 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                string res = get_Prop("<0:");
+                string res = get_PropAsync("<0:");
                 int idx = 0;
                 if (!int.TryParse(res, out idx)) return null;
                 return Mount_names[idx];
@@ -215,7 +228,7 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                string res = get_Prop(":GL");
+                string res = get_PropAsync(":GL");
                 return res;
             }
         }
@@ -224,7 +237,7 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                string res = get_Prop(":GC");
+                string res = get_PropAsync(":GC");
                 return res;
             }
         }
@@ -234,7 +247,7 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                string res = get_Prop("<130:");
+                string res = get_PropAsync("<130:");
                 int rate ;
                 if (!int.TryParse(res, out rate)) return null;
                 return TrackingRate_names[rate-131];
@@ -256,7 +269,7 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                string prop = get_Prop("<160:");
+                string prop = get_PropAsync("<160:");
                 int hc;
                 if (!int.TryParse(prop, out hc)) return null; 
                 return HandController_names[hc - 161];
@@ -267,7 +280,7 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                string prop = get_Prop("<140:");
+                string prop = get_PropAsync("<140:");
                 int rate;
                 if (!int.TryParse(prop, out rate)) return null;
                 return rate.ToString() + "x";
@@ -278,7 +291,7 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                string prop = get_Prop("<120:");
+                string prop = get_PropAsync("<120:");
                 int rate;
                 if (!int.TryParse(prop, out rate)) return null;
                 return rate.ToString() + "x";
@@ -289,7 +302,7 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                string prop = get_Prop("<150:");
+                string prop = get_PropAsync("<150:");
                 double rate;
                 if (!double.TryParse(prop, out rate)) return null;
                 return rate.ToString("0.0") + "x";
@@ -301,7 +314,7 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                string prop = get_Prop("<170:");
+                string prop = get_PropAsync("<170:");
                 int rate;
                 if (!int.TryParse(prop, out rate)) return null;
                 return rate.ToString() + "x";
@@ -312,7 +325,7 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                string prop = get_Prop("<509:");
+                string prop = get_PropAsync("<509:");
                 int stat;
                 if (!int.TryParse(prop, out stat)) return null;
                 return (stat & 1) == 0 ? "PEC OFF" : "PEC ON";
@@ -361,30 +374,6 @@ namespace ASCOM.GeminiTelescope
 #endregion
 
 #region Advanced Properties
-
-#if false
-
-        public  List<ItemList> TrackingRatDisplay
-        {
-            get { return TrackingRateList; }
-        }
-
-
-        public  List<ItemList> BrightnessDisplay
-        {
-            get { return BrightnessList; }
-        }
-
-         public List<ItemList> MountDisplay
-        {
-            get { return MountTypeList; }
-        }
-
-        public  List<ItemList> HandControllerDisplay
-        {
-            get { return MoveSpeedList; }
-        }
-#endif
 
         public string LEDBrightness
         {
@@ -1079,6 +1068,8 @@ namespace ASCOM.GeminiTelescope
                 }
 
                 FileName = path + "\\" + SharedResources.DEAULT_PROFILE;
+
+                if (!write && !File.Exists(FileName)) return false;
             }
 
             GeminiHardware.Trace.Enter("GeminiProps:Serialize", write, FileName);
@@ -1098,7 +1089,6 @@ namespace ASCOM.GeminiTelescope
                     XmlSerializer serializer = new XmlSerializer(typeof(SerializableDictionary<string, object>));
                     mProfile = (SerializableDictionary<string, object>)serializer.Deserialize(reader);
                     reader.Close();
-                    string s = mProfile.ToString();
                 }
             }
             catch (Exception ex)

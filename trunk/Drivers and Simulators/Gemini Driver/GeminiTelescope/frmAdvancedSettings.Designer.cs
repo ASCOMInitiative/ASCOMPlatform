@@ -57,7 +57,6 @@
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.numericUpDown17 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
-            this.label12 = new System.Windows.Forms.Label();
             this.numericUpDown6 = new System.Windows.Forms.NumericUpDown();
             this.label11 = new System.Windows.Forms.Label();
             this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
@@ -102,6 +101,7 @@
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.checkBox8 = new System.Windows.Forms.CheckBox();
             this.pbModel = new System.Windows.Forms.Button();
+            this.label12 = new System.Windows.Forms.Label();
             this.geminiPropertiesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -211,11 +211,11 @@
             this.checkBox2.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.geminiPropertiesBindingSource, "DoesPrecession", true));
             this.checkBox2.Dock = System.Windows.Forms.DockStyle.Right;
             this.checkBox2.ForeColor = System.Drawing.Color.Lime;
-            this.checkBox2.Location = new System.Drawing.Point(233, 29);
+            this.checkBox2.Location = new System.Drawing.Point(262, 29);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(223, 20);
+            this.checkBox2.Size = new System.Drawing.Size(194, 20);
             this.checkBox2.TabIndex = 5;
-            this.checkBox2.Text = "Gemini Calculates Precession from J2000:";
+            this.checkBox2.Text = "Gemini expects J2000 co-ordinates:";
             this.checkBox2.UseVisualStyleBackColor = true;
             // 
             // label3
@@ -511,7 +511,6 @@
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel3.Controls.Add(this.numericUpDown17, 1, 2);
             this.tableLayoutPanel3.Controls.Add(this.numericUpDown7, 3, 2);
-            this.tableLayoutPanel3.Controls.Add(this.label12, 0, 2);
             this.tableLayoutPanel3.Controls.Add(this.numericUpDown6, 3, 1);
             this.tableLayoutPanel3.Controls.Add(this.label11, 2, 1);
             this.tableLayoutPanel3.Controls.Add(this.numericUpDown5, 3, 0);
@@ -521,6 +520,7 @@
             this.tableLayoutPanel3.Controls.Add(this.label7, 0, 1);
             this.tableLayoutPanel3.Controls.Add(this.label8, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.label9, 2, 2);
+            this.tableLayoutPanel3.Controls.Add(this.label12, 0, 2);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -561,19 +561,6 @@
             this.numericUpDown7.Name = "numericUpDown7";
             this.numericUpDown7.Size = new System.Drawing.Size(111, 20);
             this.numericUpDown7.TabIndex = 17;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label12.ForeColor = System.Drawing.Color.Lime;
-            this.label12.Location = new System.Drawing.Point(3, 64);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(108, 32);
-            this.label12.TabIndex = 23;
-            this.label12.Text = "TVC (0..255):";
-            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label12.Visible = false;
             // 
             // numericUpDown6
             // 
@@ -1330,6 +1317,19 @@
             this.pbModel.UseVisualStyleBackColor = true;
             this.pbModel.Click += new System.EventHandler(this.pbModel_Click);
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label12.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label12.ForeColor = System.Drawing.Color.Lime;
+            this.label12.Location = new System.Drawing.Point(3, 64);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(108, 32);
+            this.label12.TabIndex = 22;
+            this.label12.Text = "TVC (0..255):";
+            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // geminiPropertiesBindingSource
             // 
             this.geminiPropertiesBindingSource.DataSource = typeof(ASCOM.GeminiTelescope.GeminiProperties);
@@ -1339,6 +1339,7 @@
             this.AcceptButton = this.button1;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.CancelButton = this.button3;
             this.ClientSize = new System.Drawing.Size(490, 686);
@@ -1359,6 +1360,7 @@
             this.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmAdvancedSettings";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Advanced Gemini Settings";
             this.groupBox1.ResumeLayout(false);
@@ -1435,7 +1437,6 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.NumericUpDown numericUpDown4;
         private System.Windows.Forms.NumericUpDown numericUpDown7;
-        private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
@@ -1476,5 +1477,6 @@
         private System.Windows.Forms.CheckBox checkBox8;
         private System.Windows.Forms.NumericUpDown numericUpDown17;
         private System.Windows.Forms.Button pbModel;
+        private System.Windows.Forms.Label label12;
     }
 }
