@@ -1286,7 +1286,7 @@ namespace ASCOM.GeminiTelescope
                     }
                     catch (Exception e)
                     {
-                        if (!HuntForGemini())
+                        if (!HuntForGemini(null))
                         {
                             m_Clients -= 1;
                             Trace.Except(e);
@@ -1471,7 +1471,7 @@ namespace ASCOM.GeminiTelescope
 
             if (sRes == null)
             {
-                if (!HuntForGemini()) return false;
+                if (!HuntForGemini(null)) return false;
                 Transmit("\x6");
                 ci = new CommandItem("\x6", 10000, true);
                 sRes = GetCommandResult(ci);
@@ -1480,14 +1480,23 @@ namespace ASCOM.GeminiTelescope
             Trace.Info(2, "^G result", sRes);
 
 
-            // scrolling message? wait for it to end:
-            while (sRes == "B")
+            if (sRes == "B")
             {
-                Trace.Info(4, "Waiting...");
-                System.Threading.Thread.Sleep(500);
-                Transmit("\x6");
-                ci = new CommandItem("\x6", 5000, true);
-                sRes = GetCommandResult(ci); ;
+                // scrolling message? wait for it to end:
+                while (sRes == "B" || sRes==null)
+                {
+                    Trace.Info(4, "Waiting...");
+                    System.Threading.Thread.Sleep(500);
+                    Transmit("\x6");
+                    ci = new CommandItem("\x6", 1000, true);
+                    sRes = GetCommandResult(ci);
+                    
+                    // if no response, it could be because while we did
+                    // HuntForGemini previously, we may have gotten the wrong baud rate.
+                    // Gemini allows a connection at 9600 baud while the scrolling message (before the boot menu)
+                    // is scrolling, so try one more time to scan the same port to find the correct rate:
+                    if (sRes == null) if (!HuntForGemini(m_SerialPort.PortName)) return false;
+                }
             }
 
 
@@ -1525,7 +1534,7 @@ namespace ASCOM.GeminiTelescope
             }
 
             // processing Cold start mode -- wait for this to end
-            while (sRes == "S")
+            while (sRes == "S" || sRes=="b")
             {
                 Trace.Info(4, "Waiting for completion", sRes);
                 System.Threading.Thread.Sleep(500);
@@ -1543,8 +1552,9 @@ namespace ASCOM.GeminiTelescope
         /// search through all defined COM ports for Gemini
         /// try various baud rates, 4800,9600,19200
         /// </summary>
+        /// 
         /// <returns></returns>
-        private static bool HuntForGemini()
+        private static bool HuntForGemini(string one_port)
         {            
             Trace.Enter("HuntForGemini", m_SerialPort.PortName, m_SerialPort.BaudRate);
             
@@ -1555,6 +1565,10 @@ namespace ASCOM.GeminiTelescope
                 if (m_SerialPort.IsOpen) m_SerialPort.Close();
 
                 string[] ports = SerialPort.GetPortNames();
+
+                // if port was specified, just look at that port:
+                if (one_port != null) ports = new string[] { one_port };
+
                 int[] rates = { 9600, 4800, 19200, 38400 };
 
                 foreach (string p in ports)
@@ -1576,12 +1590,12 @@ namespace ASCOM.GeminiTelescope
                             {
                                 Transmit("\x6");
                                 System.Threading.Thread.Sleep(0);
-                                CommandItem ci = new CommandItem("\x6", 10, true); // quick timeout, don't want to hang up the user for too long
+                                CommandItem ci = new CommandItem("\x6", 100, true); // quick timeout, don't want to hang up the user for too long
                                 string sRes = GetCommandResult(ci);
 
                                 Transmit("\x6");
                                 System.Threading.Thread.Sleep(0);
-                                ci = new CommandItem("\x6", 250, true); // quick timeout, don't want to hang up the user for too long
+                                ci = new CommandItem("\x6", 500, true); // quick timeout, don't want to hang up the user for too long
                                 sRes = GetCommandResult(ci);
 
                                 

@@ -599,9 +599,9 @@ namespace ASCOM.GeminiTelescope
                 }
                 catch { }
 
+                ButtonConnect.Enabled = true;
                 if (!GeminiHardware.Connected)
                 {
-                    ButtonConnect.Enabled = true;
                     ButtonConnect.Text = "Connect";
                     ButtonConnect.Update();
                     MessageBox.Show("Cannot connect to Gemini!\r\n" + m_LastError, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Hand);
