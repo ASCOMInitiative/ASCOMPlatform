@@ -83,6 +83,8 @@ namespace ASCOM.GeminiTelescope
             toolTip1.ReshowDelay = 500;
             // Force the ToolTip text to be displayed whether or not the form is active.
             toolTip1.ShowAlways = true;
+            toolTip1.UseAnimation = true;
+            toolTip1.UseFading = true;
 
             // Set up the ToolTip text for the Button and Checkbox.
             toolTip1.SetToolTip(this.ButtonConnect, "Connect to Gemini");
@@ -103,7 +105,7 @@ namespace ASCOM.GeminiTelescope
             toolTip1.SetToolTip(this.labelRa,  "Mount Right Ascension");
             toolTip1.SetToolTip(this.labelDec, "Mount Declination");
 
-            toolTip1.SetToolTip(this.checkBoxTrack, "Enable Tracking");
+            toolTip1.SetToolTip(this.checkBoxTrack, "Stop/Start Tracking");
             toolTip1.SetToolTip(this.CheckBoxFlipDec, "Swap DEC buttons");
             toolTip1.SetToolTip(this.CheckBoxFlipRa, "Swap RA buttons");
         }
@@ -345,6 +347,9 @@ namespace ASCOM.GeminiTelescope
                     labelSlew.ForeColor = m_ActiveForeColor;
                     labelSlew.BackColor = m_ActiveBkColor;
                 }
+
+                pbStop.Visible = (GeminiHardware.Velocity == "S");  //only show Stop! button when slewing
+
 
             }
 
@@ -656,11 +661,8 @@ namespace ASCOM.GeminiTelescope
         }
 
         private void ButtonPark_Click(object sender, EventArgs e)
-        {   
-            if (GeminiHardware.Connected)
-                ButtonPark.ContextMenuStrip.Show(Cursor.Position);
-
-            //GeminiHardware.DoCommandResult(":hC", 5000, false);
+        {
+            ButtonPark.ContextMenuStrip.Show(Cursor.Position);
         }
 
         private void buttonSlew0_MouseClick(object sender, MouseEventArgs e)
@@ -864,6 +866,11 @@ namespace ASCOM.GeminiTelescope
                 else
                     GeminiHardware.DoCommandResult(":hW", GeminiHardware.MAX_TIMEOUT, false);
             }
+        }
+
+        private void pbStop_Click(object sender, EventArgs e)
+        {
+            GeminiHardware.DoCommandResult(":Q", GeminiHardware.MAX_TIMEOUT, false);
         }
 
 
