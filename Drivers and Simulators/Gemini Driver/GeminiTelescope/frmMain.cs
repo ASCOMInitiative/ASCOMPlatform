@@ -74,7 +74,40 @@ namespace ASCOM.GeminiTelescope
             BaloonIcon.MouseDoubleClick += new MouseEventHandler(BaloonIcon_MouseDoubleClick);
             BaloonIcon.MouseMove += new MouseEventHandler(BaloonIcon_MouseMove);
             GeminiHardware.OnSafetyLimit += new SafetyDelegate(OnSafetyLimit);
+
+            ToolTip toolTip1 = new ToolTip();
+
+            // Set up the delays for the ToolTip.
+            toolTip1.AutoPopDelay = 5000;
+            toolTip1.InitialDelay = 1000;
+            toolTip1.ReshowDelay = 500;
+            // Force the ToolTip text to be displayed whether or not the form is active.
+            toolTip1.ShowAlways = true;
+
+            // Set up the ToolTip text for the Button and Checkbox.
+            toolTip1.SetToolTip(this.ButtonConnect, "Connect to Gemini");
+            toolTip1.SetToolTip(this.ButtonFlip, "Perform Meridian Flip");
+            toolTip1.SetToolTip(this.ButtonPark, "Park mount");
+            toolTip1.SetToolTip(this.ButtonSetup, "Setup Driver and Gemini");
+
+            toolTip1.SetToolTip(this.buttonSlew1, "Slew DEC+");
+            toolTip1.SetToolTip(this.buttonSlew2, "Slew DEC-");
+            toolTip1.SetToolTip(this.buttonSlew3, "Slew RA-");
+            toolTip1.SetToolTip(this.buttonSlew4, "Slew RA+");
+
+            toolTip1.SetToolTip(this.RadioButtonCenter , "Use Centering speed");
+            toolTip1.SetToolTip(this.RadioButtonGuide, "Use Guiding speed");
+            toolTip1.SetToolTip(this.RadioButtonSlew , "Use Slew speed");
+
+            toolTip1.SetToolTip(this.labelLst, "Mount Local Sidereal Time");
+            toolTip1.SetToolTip(this.labelRa,  "Mount Right Ascension");
+            toolTip1.SetToolTip(this.labelDec, "Mount Declination");
+
+            toolTip1.SetToolTip(this.checkBoxTrack, "Enable Tracking");
+            toolTip1.SetToolTip(this.CheckBoxFlipDec, "Swap DEC buttons");
+            toolTip1.SetToolTip(this.CheckBoxFlipRa, "Swap RA buttons");
         }
+
 
         void BaloonIcon_MouseMove(object sender, MouseEventArgs e)
         {
@@ -327,7 +360,8 @@ namespace ASCOM.GeminiTelescope
             else
                 tooltip+="not connected";
 
-
+            checkBoxTrack.Checked = (GeminiHardware.Velocity == "N" ? false : true);
+            
             BaloonIcon.Text = ""; // tooltip;    
         }
 
@@ -551,13 +585,22 @@ namespace ASCOM.GeminiTelescope
         {
             if (!GeminiHardware.Connected)
             {
+                ButtonConnect.Enabled = false;
+                ButtonConnect.Text = "Connecting...";
+                ButtonConnect.Update();
                 try
                 {
                     GeminiHardware.Connected = true;
                 }
                 catch { }
+
                 if (!GeminiHardware.Connected)
-                    MessageBox.Show("Cannot connect to Gemini!\r\n"+m_LastError, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK,   MessageBoxIcon.Hand);
+                {
+                    ButtonConnect.Enabled = true;
+                    ButtonConnect.Text = "Connect";
+                    ButtonConnect.Update();
+                    MessageBox.Show("Cannot connect to Gemini!\r\n" + m_LastError, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                }
                 else
                     this.ButtonConnect.Text = "Disconnect";
             }
@@ -613,8 +656,11 @@ namespace ASCOM.GeminiTelescope
         }
 
         private void ButtonPark_Click(object sender, EventArgs e)
-        {
-            GeminiHardware.DoCommandResult(":hC", 5000, false);
+        {   
+            if (GeminiHardware.Connected)
+                ButtonPark.ContextMenuStrip.Show(Cursor.Position);
+
+            //GeminiHardware.DoCommandResult(":hC", 5000, false);
         }
 
         private void buttonSlew0_MouseClick(object sender, MouseEventArgs e)
@@ -782,6 +828,44 @@ namespace ASCOM.GeminiTelescope
                 }
             }
         }
+
+        private void toolStripMenuParkHere_Click(object sender, EventArgs e)
+        {
+            GeminiHardware.DoCommandResult(":hN", GeminiHardware.MAX_TIMEOUT, false);
+        }
+
+        private void toolStripMenuParkCWD_Click(object sender, EventArgs e)
+        {
+            this.UseWaitCursor = true;
+            GeminiHardware.DoCommandResult(":hC", GeminiHardware.MAX_TIMEOUT, false);
+            GeminiHardware.WaitForHomeOrPark("Park");
+            GeminiHardware.DoCommandResult(":hN", GeminiHardware.MAX_TIMEOUT, false);
+            this.UseWaitCursor = false;
+        }
+
+        private void toolStripMenuParkHome_Click(object sender, EventArgs e)
+        {
+            this.UseWaitCursor = true;
+            GeminiHardware.DoCommandResult(":hP", GeminiHardware.MAX_TIMEOUT, false);
+            GeminiHardware.WaitForHomeOrPark("Home");
+
+            GeminiHardware.DoCommandResult(":hN", GeminiHardware.MAX_TIMEOUT, false);
+            this.UseWaitCursor = false;
+        }
+
+        private void checkBoxTrack_Click(object sender, EventArgs e)
+        {
+            if (GeminiHardware.Connected)
+            {
+                checkBoxTrack.Checked = !checkBoxTrack.Checked;
+
+                if (!checkBoxTrack.Checked)
+                    GeminiHardware.DoCommandResult(":hN", GeminiHardware.MAX_TIMEOUT, false);
+                else
+                    GeminiHardware.DoCommandResult(":hW", GeminiHardware.MAX_TIMEOUT, false);
+            }
+        }
+
 
 
     }

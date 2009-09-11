@@ -59,6 +59,8 @@ namespace ASCOM.GeminiTelescope
         /// <param name="speed"></param>
         public void Initialize(string port, int speed)
         {
+            GeminiHardware.Trace.Enter("PTP:Initialize", port, speed);
+
             if (m_SerialPort.IsOpen) m_SerialPort.Close();  //reset the port if already open
 
             m_SerialPort.PortName = port;
@@ -82,6 +84,7 @@ namespace ASCOM.GeminiTelescope
             m_ListenerThread = new System.Threading.Thread(ListenUp);
             m_ListenerThread.Start();
 
+            GeminiHardware.Trace.Exit("PTP:Initialize", port, speed);
         
         }
 
@@ -90,6 +93,8 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public void Stop()
         {
+            GeminiHardware.Trace.Enter("PTP:Stop");
+
             try
             {
                 m_CancelAsync.Set();
@@ -101,6 +106,8 @@ namespace ASCOM.GeminiTelescope
                 m_ListenerThread = null;
             }
             catch { }
+            GeminiHardware.Trace.Enter("PTP:Stop");
+
         }
         
         /// <summary>
@@ -115,6 +122,7 @@ namespace ASCOM.GeminiTelescope
             {
                 m_DisplayString += s.ToString();
                 m_DisplayDataAvailable.Set();
+                GeminiHardware.Trace.Info(1, "PTP:PassStringToPort", m_DisplayString);
             }
         }
 
@@ -145,6 +153,8 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         private void ListenUp()
         {
+            GeminiHardware.Trace.Enter("PTP:ListenUp");
+
             string incoming = "";
             System.Threading.ManualResetEvent [] evts = {m_SerialDataAvailable, m_DisplayDataAvailable, m_CancelAsync};
 
@@ -154,116 +164,136 @@ namespace ASCOM.GeminiTelescope
 
             while (!m_CancelAsync.WaitOne(0))
             {
-                if (incoming.Length > 0 || m_SerialPort.BytesToRead > 0)
+
+                try
                 {
-                    m_SerialDataAvailable.Reset();
-
-                    m_PortActive = true;    // if at some data has been received over this port, consider it active
-
-                    while (m_SerialPort.BytesToRead > 0)
-                        incoming += Convert.ToChar(m_SerialPort.ReadByte());
-
-
-                    string[] cmds = incoming.Split(new char[] { '#' }, StringSplitOptions.RemoveEmptyEntries);
-
-
-                    if (cmds[0] == "\x6")   // treat ^G as a reset
+                    if (incoming.Length > 0 || m_SerialPort.BytesToRead > 0)
                     {
-                        incoming = "";
-                        cmds = new string[] { "\x6" };
-                        m_SerialPort.DiscardInBuffer();
-                        m_SerialPort.DiscardOutBuffer();
-                    }
-                    else
-                    if (incoming.EndsWith("#"))
-                        incoming = "";
-                    else 
-                    {
-                        incoming = cmds[cmds.Length - 1]; // last command is not terminated yet, leave it in the buffer
-                        Array.Resize<string>(ref cmds, cmds.Length - 1);    //remove last, unterminated item from array
-                    }
+                        m_SerialDataAvailable.Reset();
 
-                    //re-terminate all commands after split:
-                    for (int i = 0; i < cmds.Length; ++i)
-                        cmds[i] += "#";
+                        m_PortActive = true;    // if at some data has been received over this port, consider it active
+                        while (m_SerialPort.BytesToRead > 0)
+                            incoming += Convert.ToChar(m_SerialPort.ReadByte());
 
-                    //if (cmds.Length == 0) continue;
 
-                    while (cmds.Length > 0) // process all commands in batches, max batch size of 16
-                    {
-                        string[] res = null;
+                        GeminiHardware.Trace.Info(4, "Incoming data:", incoming);
 
-                        if (cmds.Length > 16)   // SEND A MAX OF 16 COMMANDS AT A TIME
+                        string[] cmds = incoming.Split(new char[] { '#' }, StringSplitOptions.RemoveEmptyEntries);
+
+                        if (cmds != null && cmds.Length > 0)
                         {
-                            string[] cmds16 = new string[16];
-                            Array.Copy(cmds, 0, cmds16, 0, 16);
-                            GeminiHardware.DoCommandResult(cmds16, GeminiHardware.MAX_TIMEOUT, true, out res);
-                            cmds16 = new string[cmds.Length - 16];
-                            Array.Copy(cmds, 16, cmds16, 0, cmds.Length - 16);  // remove first 16
-                            cmds = cmds16;
-                        }
-                        else
-                        {
-                            GeminiHardware.DoCommandResult(cmds, GeminiHardware.MAX_TIMEOUT, true, out res);
-                            cmds = new string[0];
-                        }
-
-                        if (res != null)
-                            foreach (string r in res)
+                            if (cmds[0] == "\x6")   // treat ^G as a reset
                             {
-                                if (r != null)
+                                incoming = "";
+                                cmds = new string[] { "\x6" };
+                                m_SerialPort.DiscardInBuffer();
+                                m_SerialPort.DiscardOutBuffer();
+                            }
+                            else
+                                if (incoming.EndsWith("#"))
+                                    incoming = "";
+                                else
                                 {
-                                    //writing too quick, or nobody's listening?
-                                    while (m_SerialPort.BytesToWrite + r.Length >= m_SerialPort.WriteBufferSize)
-                                        System.Threading.Thread.Sleep(500);
+                                    incoming = cmds[cmds.Length - 1]; // last command is not terminated yet, leave it in the buffer
+                                    Array.Resize<string>(ref cmds, cmds.Length - 1);    //remove last, unterminated item from array
+                                }
 
+                            //re-terminate all commands after split:
+                            for (int i = 0; i < cmds.Length; ++i)
+                                cmds[i] += "#";
+                        }
+                        //if (cmds.Length == 0) continue;
+
+                        while (cmds != null && cmds.Length > 0) // process all commands in batches, max batch size of 16
+                        {
+                            string[] res = null;
+
+                            if (cmds.Length > 16)   // SEND A MAX OF 16 COMMANDS AT A TIME
+                            {
+                                string[] cmds16 = new string[16];
+                                Array.Copy(cmds, 0, cmds16, 0, 16);
+
+                                GeminiHardware.Trace.Info(2, "PTP: Process 16 commands", cmds.Length);
+                                GeminiHardware.DoCommandResult(cmds16, GeminiHardware.MAX_TIMEOUT, true, out res);
+                                cmds16 = new string[cmds.Length - 16];
+                                Array.Copy(cmds, 16, cmds16, 0, cmds.Length - 16);  // remove first 16
+                                cmds = cmds16;
+                            }
+                            else
+                            {
+                                GeminiHardware.Trace.Info(2, "PTP: Process commands", cmds.Length);
+                                GeminiHardware.DoCommandResult(cmds, GeminiHardware.MAX_TIMEOUT, true, out res);
+                                cmds = new string[0];
+                            }
+
+                            if (res != null)
+                                foreach (string r in res)
+                                {
+                                    if (r != null)
+                                    {
+                                        //writing too quick, or nobody's listening?
+                                        while (m_SerialPort.BytesToWrite + r.Length >= m_SerialPort.WriteBufferSize)
+                                            System.Threading.Thread.Sleep(500);
+
+                                        lock (m_SerialPort)
+                                        {
+                                            GeminiHardware.Trace.Info(4, "PTP: Write to port", r);
+                                            m_SerialPort.Write(Encoding.GetEncoding("Latin1").GetBytes(r), 0, r.Length);
+                                            m_SerialPort.BaseStream.Flush();
+                                            System.Threading.Thread.Sleep(0);
+                                        }
+                                    }
+                                }
+                        }
+
+                    }
+                    else // all is quiet. no pending commands to execute, check if a new display stream is ready
+                    {
+
+                        if (m_DisplayDataAvailable.WaitOne(0))
+                        {
+                            m_DisplayDataAvailable.Reset();
+
+                            GeminiHardware.Trace.Info(2, "PTP: display data");
+
+                            if (m_SerialPort.IsOpen)
+                            {
+                                lock (m_LockDisplayData)
+                                {
                                     lock (m_SerialPort)
                                     {
-                                        m_SerialPort.Write(Encoding.GetEncoding("Latin1").GetBytes(r), 0, r.Length);
+                                        GeminiHardware.Trace.Info(4, "PTP: write to port(2)", m_DisplayString );
+                                        m_SerialPort.Write(Encoding.GetEncoding("Latin1").GetBytes(m_DisplayString), 0, m_DisplayString.Length);
                                         m_SerialPort.BaseStream.Flush();
                                         System.Threading.Thread.Sleep(0);
                                     }
-                                }
-                            }
-                    }
 
-                } 
-                else // all is quiet. no pending commands to execute, check if a new display stream is ready
-                {
-
-                    if (m_DisplayDataAvailable.WaitOne(0))
-                    {
-                        m_DisplayDataAvailable.Reset();
-
-                        if (m_SerialPort.IsOpen)
-                        {
-                            lock (m_LockDisplayData)
-                            {
-                                lock (m_SerialPort)
-                                {
-                                    m_SerialPort.Write(Encoding.GetEncoding("Latin1").GetBytes(m_DisplayString), 0, m_DisplayString.Length);
-                                    m_SerialPort.BaseStream.Flush();
-                                    System.Threading.Thread.Sleep(0);
-                                }
 #if DEBUG
-                                System.Diagnostics.Trace.Write("PassStringToVirtualPort: ");
-                                string txt_out = "";
-                                string hx_out = "";
-                                for (int i = 0; i < m_DisplayString.Length; ++i)
-                                {
-                                    txt_out += Convert.ToChar(((byte)m_DisplayString[i]) & 0x7f);
-                                    hx_out += (((int)m_DisplayString[i] & 0x7f)).ToString("x") + " ";
-                                }
-                                System.Diagnostics.Trace.WriteLine(" " + txt_out + " " + hx_out);
+                                    System.Diagnostics.Trace.Write("PassStringToVirtualPort: ");
+                                    string txt_out = "";
+                                    string hx_out = "";
+                                    for (int i = 0; i < m_DisplayString.Length; ++i)
+                                    {
+                                        txt_out += Convert.ToChar(((byte)m_DisplayString[i]) & 0x7f);
+                                        hx_out += (((int)m_DisplayString[i] & 0x7f)).ToString("x") + " ";
+                                    }
+                                    System.Diagnostics.Trace.WriteLine(" " + txt_out + " " + hx_out);
 #endif
 
-                                m_DisplayString = "";
+                                    m_DisplayString = "";
+                                }
                             }
                         }
-                    }
 
+                    }
+                    System.Threading.WaitHandle.WaitAny(evts, 500); //wait for display or serial command data to become available, or just sleep for a while
                 }
-                System.Threading.WaitHandle.WaitAny(evts, 500); //wait for display or serial command data to become available, or just sleep for a while
+                catch (Exception ex) //all unexpected exceptions, try to log and recover.
+                {
+                    incoming = "";          //reset data that may've caused an exception
+                    m_DisplayString = "";   // " " "
+                    GeminiHardware.Trace.Error("ListenUp:Exception: ", ex.ToString(), ex.Message, ex.StackTrace, ex.Source, ex.InnerException);
+                }
             }
         }
     }
