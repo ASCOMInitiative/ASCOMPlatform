@@ -66,6 +66,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.numericUpDown15 = new System.Windows.Forms.NumericUpDown();
@@ -101,7 +102,6 @@
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.checkBox8 = new System.Windows.Forms.CheckBox();
             this.pbModel = new System.Windows.Forms.Button();
-            this.label12 = new System.Windows.Forms.Label();
             this.geminiPropertiesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -740,6 +740,19 @@
             this.label9.Text = "Slew Settle Time (0..100 seconds)";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label12.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label12.ForeColor = System.Drawing.Color.Lime;
+            this.label12.Location = new System.Drawing.Point(3, 64);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(108, 32);
+            this.label12.TabIndex = 22;
+            this.label12.Text = "TVC (0..255):";
+            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // groupBox4
             // 
             this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
@@ -1317,19 +1330,6 @@
             this.pbModel.UseVisualStyleBackColor = true;
             this.pbModel.Click += new System.EventHandler(this.pbModel_Click);
             // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label12.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.label12.ForeColor = System.Drawing.Color.Lime;
-            this.label12.Location = new System.Drawing.Point(3, 64);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(108, 32);
-            this.label12.TabIndex = 22;
-            this.label12.Text = "TVC (0..255):";
-            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // geminiPropertiesBindingSource
             // 
             this.geminiPropertiesBindingSource.DataSource = typeof(ASCOM.GeminiTelescope.GeminiProperties);
@@ -1361,7 +1361,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmAdvancedSettings";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Advanced Gemini Settings";
             this.groupBox1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);

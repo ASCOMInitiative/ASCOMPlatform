@@ -1184,6 +1184,68 @@ namespace ASCOM.GeminiTelescope
             get { return m_Clients; }
         }
 
+
+        /// <summary>
+        /// Wait for completion of a goto home or park at cwd operation
+        /// </summary>
+        /// <param name="where">'home' or 'park' for logging and exception reporting purposes</param>
+        public static void WaitForHomeOrPark(string where)
+        {
+            Trace.Enter(4, "WaitForHomeOrPark", where);
+
+            int count = 0;
+
+            // wait for parking move to begin, wait for a maximum of 16*250ms = 4 seconds
+            while (ParkState != "2" && count < 16) { System.Threading.Thread.Sleep(250); count++; }
+            //            if (count == 16) throw new TimeoutException(where + " operation didn't start");
+
+            // now wait for it to end
+            while (ParkState == "2") { System.Threading.Thread.Sleep(1000); };
+
+            // 0 => didn't park.
+            //if (GeminiHardware.ParkState == "0") throw new DriverException("Failed to " + where, (int)SharedResources.ERROR_BASE);
+            Trace.Exit(4, "WaitForHomeOrPark", where);
+        }
+
+        /// <summary>
+        /// Wait for completion of asynchronous slew operation, at end wait out the slewsettle time
+        /// </summary>
+        public static void WaitForSlewToEnd()
+        {
+            Trace.Enter(4, "WaitForSlewToEnd");
+
+            Velocity = "";
+
+            int when = System.Environment.TickCount + 5000;
+            while (System.Environment.TickCount < when && !(Velocity == "S" || Velocity == "C"))
+                System.Threading.Thread.Sleep(500);
+
+            while (Velocity == "S" || Velocity == "C") System.Threading.Thread.Sleep(500);
+
+            System.Threading.Thread.Sleep((SlewSettleTime + 2) * 1000);
+
+            Trace.Exit(4, "WaitForSlewToEnd");
+        }
+
+
+        /// <summary>
+        /// wait for one or more possible velocity states of the mount
+        /// </summary>
+        /// <param name="p">contains one or more letters representing velocities we are waiting for: N, T, G, C, S</param>
+        /// <param name="tmout">how long to wait or -1 to wait indefinitely</param>
+        /// <returns></returns>
+        public static bool WaitForVelocity(string p, int tmout)
+        {
+            Trace.Enter(4, "WaitForVelocity", p, tmout);
+
+            int timeout = System.Environment.TickCount + tmout;
+            while ((tmout <= 0 || System.Environment.TickCount < timeout) && !p.Contains(Velocity)) System.Threading.Thread.Sleep(500);
+
+            Trace.Exit(4, "WaitForVelocity", p, tmout, Velocity);
+            if (p.Contains(Velocity)) return true;
+            return false;
+        }
+
 #endregion
 
 #region Telescope Implementation
