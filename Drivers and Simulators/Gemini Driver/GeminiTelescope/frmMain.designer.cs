@@ -63,6 +63,7 @@ namespace ASCOM.GeminiTelescope
             this.RadioButtonGuide = new System.Windows.Forms.RadioButton();
             this.CheckBoxFlipRa = new System.Windows.Forms.CheckBox();
             this.BaloonIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.pbStop = new System.Windows.Forms.Button();
             this.buttonSlew3 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew2 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew4 = new ASCOM.GeminiTelescope.TButton();
@@ -444,6 +445,23 @@ namespace ASCOM.GeminiTelescope
             this.BaloonIcon.Text = "Gemini Driver Status";
             this.BaloonIcon.Visible = true;
             // 
+            // pbStop
+            // 
+            this.pbStop.AccessibleDescription = "Stop Slew";
+            this.pbStop.BackColor = System.Drawing.Color.DarkRed;
+            this.pbStop.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.pbStop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.pbStop.ForeColor = System.Drawing.Color.White;
+            this.pbStop.Location = new System.Drawing.Point(74, 309);
+            this.pbStop.Margin = new System.Windows.Forms.Padding(1, 3, 0, 3);
+            this.pbStop.Name = "pbStop";
+            this.pbStop.Size = new System.Drawing.Size(67, 24);
+            this.pbStop.TabIndex = 22;
+            this.pbStop.Text = "Stop!";
+            this.pbStop.UseVisualStyleBackColor = false;
+            this.pbStop.Visible = false;
+            this.pbStop.Click += new System.EventHandler(this.pbStop_Click);
+            // 
             // buttonSlew3
             // 
             this.buttonSlew3.AccessibleDescription = "Slew East";
@@ -518,6 +536,7 @@ namespace ASCOM.GeminiTelescope
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(147, 400);
+            this.Controls.Add(this.pbStop);
             this.Controls.Add(this.buttonSlew3);
             this.Controls.Add(this.buttonSlew2);
             this.Controls.Add(this.buttonSlew4);
@@ -589,6 +608,7 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
+        private System.Windows.Forms.Button pbStop;
 
 
     }
