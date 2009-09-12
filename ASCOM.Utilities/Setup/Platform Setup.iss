@@ -28,15 +28,21 @@
 ; Installed client toolkit 1.0.5 but I won't uninstall it.
 ; Fixed issue with uninstalling Astrometry and Utilities policies
 ; Setup Build 1 Released
+
 ; Added extra debug information on running assemblies in trace logs
 ; Setup Build 2 Released
+
 ; Removed extra {} from a number of file copies
-; Setup build 3
+; Setup build 3 Released
+
 ; Added MigrateProfile and desktop icon option
 ; Changed setup name to ASCOM Platform Major.Minor Updater (vMajor.Minor.Release.Build)
 ; Setup build 4 Released
+
 ; Changed AppVer to access Release code rather than Debug code
+; Added pre-requisite test for Platform 5 as that must be present for the update to work
 ; Setup build 5
+
 [Setup]
 #define Public SetupVersion 5; Setup program version number
 
@@ -301,6 +307,20 @@ Type: files; Name: {app}\ASCOM.Utilities.tlb
 Type: dirifempty; Name: {app}
 
 [Code]
+//This funciton is called automatically before install starts and will test whether platform 5 is installed
+function InitializeSetup(): Boolean;
+begin
+  // Initialise return value
+  Result:= True;
+
+  // Test for platform 5
+  if not FileExists(ExpandConstant('{cf32}\ASCOM\Interface\AscomMasterInterfaces.tlb')) then begin
+    MsgBox('ASCOM Platform 5 is not installed. You must install ASCOM Platform 5a before installing this update. You can download this from http:\\www.ascom.com\downloads', mbCriticalError, MB_OK);
+    Result:= False;
+  end;
+
+end;
+
 procedure CurStepChanged(CurStep: TSetupStep);
 var
   ResultCode: Integer;
