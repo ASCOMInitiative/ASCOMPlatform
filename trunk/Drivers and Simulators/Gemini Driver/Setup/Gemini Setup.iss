@@ -15,11 +15,11 @@
 
 ; Determiine the driver version number from the GeminiTelescope executable (only Major, Minor and Release are used
 ; as SetupVersion replaces Build)
-#define Public Major 99
-#define Public Minor 98
-#define Public Release 97
-#define Public Build 96
-#define AppVer ParseVersion("..\Telescope\bin\x86\Release\ASCOM.GeminiTelescope.Telescope.dll", Major ,Minor ,Release ,Build) ; define version variables
+#define Public Major 0
+#define Public Minor 0
+#define Public Release 0
+#define Public Build 0
+#define AppVer ParseVersion("..\GeminiTelescope\bin\x64\Release\ASCOM.GeminiTelescope.exe", Major ,Minor ,Release ,Build) ; define version variables
 #define AppVer str(Major) + "." + str(Minor) + "." + str(Release) + "." + str(SetupVersion) ; redefine to include setup version
 
 AppCopyright=Copyright © 2009 ASCOM Gemini Developers Group
@@ -28,7 +28,7 @@ AppCopyright=Copyright © 2009 ASCOM Gemini Developers Group
 ;the [Code] CurStepChanged section
 AppID=ASCOM.GeminiTelescope
 
-#emit "AppName=ASCOM Gemini Telescope Installler " + str(Major) + "." + str(Minor);
+#emit "AppName=Gemini Driver Installler " + str(Major) + "." + str(Minor);
 #emit "AppVerName=ASCOM Gemini Telescope " + Appver
 #emit "AppVersion=" + AppVer
 AppPublisher=ASCOM Gemini Developers
@@ -122,7 +122,7 @@ begin
 
   // Test for platform 5
   RegQueryStringValue(HKLM, 'Software\ASCOM', 'PlatformVersion', PlatVer);
-  if not (PlatVer = '5') then begin
+  if not FileExists(ExpandConstant('{cf32}\ASCOM\Interface\AscomMasterInterfaces.tlb')) then begin
     MsgBox('ASCOM Platform 5 is not installed. You must install ASCOM Platform 5a before installing this update. You can download this from http:\\www.ascom.com\downloads', mbCriticalError, MB_OK);
     Result:= False;
   end;
