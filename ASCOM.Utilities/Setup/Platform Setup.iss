@@ -41,6 +41,9 @@
 
 ; Changed AppVer to access Release code rather than Debug code
 ; Added pre-requisite test for Platform 5 as that must be present for the update to work
+; Changed Ad/Remove programs title to ASCOM Platform 5.5 Update (x.x.x.x)
+; Made erase profile run minimised
+; Fixed the application name to be ASCOM Platform 5.5 update
 ; Setup build 5
 
 [Setup]
@@ -58,8 +61,9 @@ AppCopyright=Copyright © 2009 ASCOM Initiative
 ;This value is hard coded in the uninstall code below. If you do change this you must change the corresponding reference in
 ;the [Code] CurStepChanged section
 AppID=ASCOM.Platform.NET.Components
-#emit "AppName=ASCOM Platform " + str(Major) + "." + str(Minor) + " Update" ;
-#emit "AppVerName=ASCOM Platform 5 Update " + Appver
+;#emit "AppName=ASCOM Platform " + str(Major) + "." + str(Minor) + " Update" ;
+AppName=ASCOM Platform 5.5 Update
+#emit "AppVerName=ASCOM Platform 5.5 Update (" + Appver + ")"
 #emit "AppVersion=" + AppVer
 AppPublisher=ASCOM Initiative
 AppPublisherURL=http://ascom-standards.org/
@@ -248,7 +252,7 @@ Filename: {dotnet2032}\regasm.exe; Parameters: "/TLB ""{cf32}\ASCOM\.net\ASCOM.A
 Filename: {dotnet2032}\regasm.exe; Parameters: "/TLB ""{cf32}\ASCOM\.net\ASCOM.IConform.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering ASCOM.IConform for 32bit COM
 
 ;Erase and migrate the profile if needed
-Filename: {cf32}\ASCOM\Utilities\EraseProfile.exe; Tasks: cleanprofile
+Filename: {cf32}\ASCOM\Utilities\EraseProfile.exe; Tasks: cleanprofile; Flags: runminimized; statusMsg: Erasing Profile
 Filename: {cf32}\ASCOM\Utilities\MigrateProfile.exe; Parameters: /MIGRATEIFNEEDED; Flags: runminimized; statusMsg: Migrating Profile if necessary
 
 ;NOVAS and Kepler 32 bit interface components

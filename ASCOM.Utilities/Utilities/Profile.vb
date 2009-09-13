@@ -407,7 +407,8 @@ Public Class Profile
         TL.LogMessage("MigrateProfile", "Migrating profile")
         Try
             ProfileStore.MigrateProfile()
-            TL.LogMessage("MigrateProfile", "Completed migration")
+            ProfileStore.WriteProfile("", "PlatformVersion", PLATFORM_VERSION)
+            TL.LogMessage("MigrateProfile", "Completed migration to platform " & PLATFORM_VERSION)
         Catch ex As Exception
             TL.LogMessage("MigrateProfile", "Exception: " & ex.ToString)
             Throw
