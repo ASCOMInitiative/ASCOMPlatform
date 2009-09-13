@@ -243,12 +243,18 @@ namespace ASCOM.GeminiTelescope
         void OnError(string from, string msg)
         {
             m_LastError = msg;
-             this.Invoke(new InfoBaloonDelegate(SetBaloonText), new object[] {from, msg, ToolTipIcon.Error});
+            if (this.InvokeRequired)
+                this.BeginInvoke(new InfoBaloonDelegate(SetBaloonText), new object[] { from, msg, ToolTipIcon.Error });
+            else
+                SetBaloonText(from, msg, ToolTipIcon.Info);
         }
 
         void OnInfo(string from, string msg)
         {
-            this.Invoke(new InfoBaloonDelegate(SetBaloonText), new object[] { from, msg, ToolTipIcon.Info});
+            if (this.InvokeRequired)
+                this.BeginInvoke(new InfoBaloonDelegate(SetBaloonText), new object[] { from, msg, ToolTipIcon.Info});
+            else 
+                SetBaloonText(from, msg, ToolTipIcon.Info);
         }
 
         void SetBaloonText(string title, string text, ToolTipIcon icon)
@@ -295,7 +301,10 @@ namespace ASCOM.GeminiTelescope
         /// <param name="Clients"></param>
         void OnConnectEvent(bool Connected, int Clients)
         {
-            this.Invoke(new ConnectDelegate(ConnectStateChanged), new object[] {Connected, Clients});
+            if (this.InvokeRequired)
+                this.BeginInvoke(new ConnectDelegate(ConnectStateChanged), new object[] { Connected, Clients });
+            else
+                ConnectStateChanged(Connected, Clients);
         }
 
         /// <summary>
@@ -310,7 +319,9 @@ namespace ASCOM.GeminiTelescope
 
         void OnSafetyLimitEvent()
         {
-            this.Invoke(new SafetyDelegate(OnSafetyLimit));
+            if (this.InvokeRequired)
+                this.BeginInvoke(new SafetyDelegate(OnSafetyLimit));
+            OnSafetyLimit();
         }
 
         void tmrUpdate_Tick(object sender, EventArgs e)
@@ -469,11 +480,16 @@ namespace ASCOM.GeminiTelescope
 
         public void DoTelescopeSetupDialog()
         {
-            this.Invoke(new SetupDialogDelegate(_DoSetupTelescopeDialog));
+            if (this.InvokeRequired)
+                this.Invoke(new SetupDialogDelegate(_DoSetupTelescopeDialog));
+            else _DoSetupTelescopeDialog();
+
         }
         public void DoFocuserSetupDialog()
         {
-            this.Invoke(new SetupDialogDelegate(_DoFocuserSetupDialog));
+            if (InvokeRequired)
+                this.Invoke(new SetupDialogDelegate(_DoFocuserSetupDialog));
+            else _DoFocuserSetupDialog();
         }
         
         private void buttonSetup_Click(object sender, EventArgs e)
@@ -508,7 +524,11 @@ namespace ASCOM.GeminiTelescope
                 SetTextCallback setText = new SetTextCallback(SetLstText);
                 string text = GeminiHardware.m_Util.HoursToHMS(value,":",":",""); // .ConvertDoubleToHMS(value);
                
-                try{this.Invoke(setText, text);}
+                try{
+                    if (InvokeRequired) this.Invoke(setText, text);
+                    else
+                        SetLstText(text);
+                }
                 catch { }
                 
            
@@ -520,7 +540,12 @@ namespace ASCOM.GeminiTelescope
             {
                 SetTextCallback setText = new SetTextCallback(SetRaText);
                 string text = GeminiHardware.m_Util.HoursToHMS(value, ":", ":", ""); 
-                try { this.Invoke(setText, text); }
+                try {
+
+                    if (InvokeRequired)
+                        this.Invoke(setText, text);
+                    else SetRaText(text);
+                }
                 catch { }
             }
         }
@@ -530,7 +555,12 @@ namespace ASCOM.GeminiTelescope
             {
                 SetTextCallback setText = new SetTextCallback(SetDecText);
                 string text = GeminiHardware.m_Util.DegreesToDMS(value, ":", ":", ""); 
-                try { this.Invoke(setText, text); }
+                try {
+                    if (InvokeRequired)
+                        this.Invoke(setText, text);
+                    else
+                        SetDecText(text);
+                }
                 catch { }
             }
         }
@@ -618,11 +648,14 @@ namespace ASCOM.GeminiTelescope
                     if (res != DialogResult.Yes)
                         return;
                 }
-                try
-                {
-                    GeminiHardware.Connected = false;
-                }
-                catch { }
+                
+                while (GeminiHardware.Clients > 0)
+                    try
+                    {
+                        GeminiHardware.Connected = false;
+                    }
+                    catch { }
+
                 if (GeminiHardware.Connected != false)
                     MessageBox.Show("Cannot disconnect from telescope", SharedResources.TELESCOPE_DRIVER_NAME);
                 else
@@ -643,7 +676,9 @@ namespace ASCOM.GeminiTelescope
                 }
             }
 
-            GeminiHardware.Connected = false;
+            while (GeminiHardware.Clients > 0)  //disconnect all clients
+                GeminiHardware.Connected = false;
+
             if (m_StatusForm != null && m_StatusForm.InvokeRequired)
             {
                 m_StatusForm.Invoke(new EventHandler(m_StatusForm.ShutDown));
