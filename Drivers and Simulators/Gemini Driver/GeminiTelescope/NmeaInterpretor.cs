@@ -63,6 +63,7 @@ namespace ASCOM.GeminiTelescope
         public NmeaInterpreter()
         {
             comPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(comPort_DataReceived);
+            comPort.ReadTimeout = 1000;
         }
 
         // Processes information from the GPS re
