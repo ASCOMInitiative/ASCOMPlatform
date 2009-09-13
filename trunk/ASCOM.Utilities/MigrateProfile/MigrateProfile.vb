@@ -61,16 +61,20 @@ Module MigrateProfile
                 Try
                     PR = New Profile(True) 'Do not generate ProfileNotFound exception as we have'nt migrated yet!
                 Catch Ex2 As Exception
-                    MsgBox("MigrateProfile - Unexpected Ex2 Exception: " & Ex2.ToString)
+                    MsgBox("MigrateProfile - Unexpected profile creation exception: " & Ex2.ToString)
                 End Try
 
-                If Not parmEraseOnly Then PR.MigrateProfile()
+                Try
+                    If Not parmEraseOnly Then PR.MigrateProfile()
+                Catch Ex2 As Exception
+                    MsgBox("MigrateProfile - Unexpected migration exception: " & Ex2.ToString)
+                End Try
 
                 PR.Dispose() 'Clean up profile object
                 PR = Nothing
             End If
         Catch Ex1 As Exception
-            MsgBox("MigrateProfile - Unexpected Ex1 Exception: " & Ex1.ToString)
+            MsgBox("MigrateProfile - Unexpected overall migration exception: " & Ex1.ToString)
         End Try
 
 

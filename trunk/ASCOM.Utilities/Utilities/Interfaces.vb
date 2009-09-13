@@ -206,8 +206,7 @@ Namespace Interfaces
         <DispId(2)> Overloads Function Choose(ByVal DriverProgID As String) As String
     End Interface 'Interface to Utilities.Chooser
 
-    <ComVisible(False)> _
-    Interface IChooserExtra
+    <ComVisible(False)> Public Interface IChooserExtra
         ''' <summary>
         ''' Select ASCOM driver to use without pre-selecting in the dropdown list
         ''' </summary>
@@ -490,8 +489,7 @@ Namespace Interfaces
         <DispId(23)> Function DateLocalToUTC(ByVal LocalDate As Date) As Date
     End Interface 'Interface to Utilities.Util
 
-    <ComVisible(False)> _
-    Interface IUtilExtra
+    <ComVisible(False)> Public Interface IUtilExtra
         ''' <summary>
         ''' Convert degrees to sexagesimal degrees, minutes and seconds with default delimiters DD° MM' SS" 
         ''' </summary>
@@ -955,8 +953,7 @@ Namespace Interfaces
         <DispId(13)> Sub DeleteSubKey(ByVal DriverID As String, ByVal SubKey As String)
     End Interface 'Interface to Utilities.Profile
 
-    <ComVisible(False)> _
-    Public Interface IProfileExtra
+    <ComVisible(False)> Public Interface IProfileExtra
 
         Sub MigrateProfile()
 

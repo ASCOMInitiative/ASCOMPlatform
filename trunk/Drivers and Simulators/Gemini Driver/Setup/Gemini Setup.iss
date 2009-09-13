@@ -29,7 +29,7 @@ AppCopyright=Copyright © 2009 ASCOM Gemini Developers Group
 AppID=ASCOM.GeminiTelescope
 
 #emit "AppName=Gemini Driver Installler " + str(Major) + "." + str(Minor);
-#emit "AppVerName=ASCOM Gemini Telescope " + Appver
+#emit "AppVerName=ASCOM Gemini Telescope Driver (" + Appver + ")"
 #emit "AppVersion=" + AppVer
 AppPublisher=ASCOM Gemini Developers
 AppPublisherURL=http://ascom-standards.org/
