@@ -62,12 +62,6 @@
       </summary>
     </member>
 
-    <member name="R:Project">
-      <summary>
-        This project contains all the ASCOM astrometry routines
-      </summary>
-    </member>
-    
     <member name="N:ASCOM.Astrometry.NOVAS">
       <summary>
         <h2>NOVAS-C: Naval Observatory Vector Astrometry Subroutines

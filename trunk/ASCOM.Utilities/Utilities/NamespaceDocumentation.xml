@@ -10,7 +10,17 @@
         This project contains the core platform components, platform utilities and the VB6 COM based Helper components
       </summary>
     </member>
-    
+
+    <member name="N:ASCOM">
+      <summary>
+        <h2>ASCOM</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains all ASCOM components and applications
+        </p>
+      </summary>
+    </member>
+
     <member name="N:ASCOM.Utilities">
       <summary>
         <h2>ASCOM.Utilities</h2>

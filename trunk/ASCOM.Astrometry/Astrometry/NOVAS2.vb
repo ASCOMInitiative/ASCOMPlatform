@@ -5,8 +5,6 @@ Imports System.Runtime.InteropServices
 Imports ASCOM.Utilities
 'See the Is64Bit function for code that enables this assembly to find the C NOVAS DLLs
 
-
-
 Namespace NOVAS
 
     ''' <summary>

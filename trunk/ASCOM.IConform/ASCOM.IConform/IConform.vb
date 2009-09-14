@@ -32,8 +32,26 @@ End Interface
 ''' </summary>
 ''' <remarks></remarks>
 Public Interface IConformErrorNumbers
+    ''' <summary>
+    ''' Error number the driver will return for a not implemented error
+    ''' </summary>
+    ''' <value>NotImplemented error number</value>
+    ''' <returns>Integer error number</returns>
+    ''' <remarks></remarks>
     Property NotImplemented() As Integer()
+    ''' <summary>
+    ''' Error number the driver will return for an invalid value error
+    ''' </summary>
+    ''' <value>InvalidValue error number</value>
+    ''' <returns>Integer error number</returns>
+    ''' <remarks></remarks>
     Property InvalidValue() As Integer()
+    ''' <summary>
+    ''' Error number the driver will return for a value not set error
+    ''' </summary>
+    ''' <value>NotSetError error number</value>
+    ''' <returns>Integer error number</returns>
+    ''' <remarks></remarks>
     Property ValueNotSet() As Integer()
 End Interface
 
@@ -42,10 +60,40 @@ End Interface
 ''' </summary>
 ''' <remarks></remarks>
 Public Interface IConformCommandStrings
+    ''' <summary>
+    ''' Command to be sent for CommandString test
+    ''' </summary>
+    ''' <value>String command to be sent</value>
+    ''' <returns>String command that will be sent</returns>
+    ''' <remarks></remarks>
     Property CommandString() As String
+    ''' <summary>
+    ''' Expected respons to CommandString command
+    ''' </summary>
+    ''' <value>String response expected</value>
+    ''' <returns>String response expected</returns>
+    ''' <remarks></remarks>
     Property ReturnString() As String
+    ''' <summary>
+    ''' Command to be sent for CommandBlind test
+    ''' </summary>
+    ''' <value>String command to be sent</value>
+    ''' <returns>String command that will be sent</returns>
+    ''' <remarks></remarks>
     Property CommandBlind() As String
+    ''' <summary>
+    ''' Command to be sent for CommandBlind test
+    ''' </summary>
+    ''' <value>String command to be sent</value>
+    ''' <returns>String command that will be sent</returns>
+    ''' <remarks></remarks>
     Property CommandBool() As String
+    ''' <summary>
+    ''' Command to be sent for CommandBool test
+    ''' </summary>
+    ''' <value>String command to be sent</value>
+    ''' <returns>String command that will be sent</returns>
+    ''' <remarks></remarks>
     Property ReturnBool() As Boolean
 End Interface
 
@@ -152,12 +200,12 @@ Public Class ConformCommandStrings
     Private rtnString As String, rtnBool As Boolean
 
     ''' <summary>
-    ''' 
+    ''' Set all Conform CommandXXX commands and expected responses in one call
     ''' </summary>
-    ''' <param name="CommandString"></param>
-    ''' <param name="ReturnString"></param>
-    ''' <param name="CommandBlind"></param>
-    ''' <param name="CommandBool"></param>
+    ''' <param name="CommandString">String to be sent through CommandString method</param>
+    ''' <param name="ReturnString">Expected return value from CommandString command</param>
+    ''' <param name="CommandBlind">String to be sent through CommandBling method</param>
+    ''' <param name="CommandBool">Expected return value from CommandBlind command</param>
     ''' <param name="ReturnBool">Expected boolean response from CommandBool command</param>
     ''' <remarks>To suppress a Command XXX test, set the command and return values to Nothing (VB) 
     ''' or null (C#). To accept any response to a command just set the return value to Nothing or null

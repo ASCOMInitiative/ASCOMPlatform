@@ -32,10 +32,66 @@ ASCOM.IConform
  Driver interface to inform Conform of valid driver commands and returned error codes.
  </summary>
 	<remarks></remarks>
+</member><member name="P:ASCOM.Conform.IConformErrorNumbers.NotImplemented">
+	<summary>
+ Error number the driver will return for a not implemented error
+ </summary>
+	<value>NotImplemented error number</value>
+	<returns>Integer error number</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Conform.IConformErrorNumbers.InvalidValue">
+	<summary>
+ Error number the driver will return for an invalid value error
+ </summary>
+	<value>InvalidValue error number</value>
+	<returns>Integer error number</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Conform.IConformErrorNumbers.ValueNotSet">
+	<summary>
+ Error number the driver will return for a value not set error
+ </summary>
+	<value>NotSetError error number</value>
+	<returns>Integer error number</returns>
+	<remarks></remarks>
 </member><member name="T:ASCOM.Conform.IConformErrorNumbers">
 	<summary>
  Interface for Conform error numbers class
  </summary>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Conform.IConformCommandStrings.CommandString">
+	<summary>
+ Command to be sent for CommandString test
+ </summary>
+	<value>String command to be sent</value>
+	<returns>String command that will be sent</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Conform.IConformCommandStrings.ReturnString">
+	<summary>
+ Expected respons to CommandString command
+ </summary>
+	<value>String response expected</value>
+	<returns>String response expected</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Conform.IConformCommandStrings.CommandBlind">
+	<summary>
+ Command to be sent for CommandBlind test
+ </summary>
+	<value>String command to be sent</value>
+	<returns>String command that will be sent</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Conform.IConformCommandStrings.CommandBool">
+	<summary>
+ Command to be sent for CommandBlind test
+ </summary>
+	<value>String command to be sent</value>
+	<returns>String command that will be sent</returns>
+	<remarks></remarks>
+</member><member name="P:ASCOM.Conform.IConformCommandStrings.ReturnBool">
+	<summary>
+ Command to be sent for CommandBool test
+ </summary>
+	<value>String command to be sent</value>
+	<returns>String command that will be sent</returns>
 	<remarks></remarks>
 </member><member name="T:ASCOM.Conform.IConformCommandStrings">
 	<summary>
@@ -94,11 +150,12 @@ ASCOM.IConform
 	<remarks></remarks>
 </member><member name="M:ASCOM.Conform.ConformCommandStrings.#ctor(System.String,System.String,System.String,System.String,System.Boolean)">
 	<summary>
-	</summary>
-	<param name="CommandString"></param>
-	<param name="ReturnString"></param>
-	<param name="CommandBlind"></param>
-	<param name="CommandBool"></param>
+ Set all Conform CommandXXX commands and expected responses in one call
+ </summary>
+	<param name="CommandString">String to be sent through CommandString method</param>
+	<param name="ReturnString">Expected return value from CommandString command</param>
+	<param name="CommandBlind">String to be sent through CommandBling method</param>
+	<param name="CommandBool">Expected return value from CommandBlind command</param>
 	<param name="ReturnBool">Expected boolean response from CommandBool command</param>
 	<remarks>To suppress a Command XXX test, set the command and return values to Nothing (VB) 
  or null (C#). To accept any response to a command just set the return value to Nothing or null
