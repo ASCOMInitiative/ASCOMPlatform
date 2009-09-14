@@ -1,6 +1,7 @@
 ﻿'Public and private interfaces for the ASCOM.Utilities namesapce
 
 Imports System.Runtime.InteropServices
+Imports System.ComponentModel
 Imports ASCOM.Utilities
 
 Namespace Interfaces
@@ -131,6 +132,10 @@ Namespace Interfaces
 
     End Interface ' Interface to Utilities.TraceLogger
 
+    ''' <summary>
+    ''' Addiitonal methods that are only visible to .NET clients and not to COM clients
+    ''' </summary>
+    ''' <remarks></remarks>
     <ComVisible(False)> Public Interface ITraceLoggerExtra
         ''' <summary>
         ''' Appends further message to a line started by LogStart, does not terminate the line.
@@ -206,6 +211,10 @@ Namespace Interfaces
         <DispId(2)> Overloads Function Choose(ByVal DriverProgID As String) As String
     End Interface 'Interface to Utilities.Chooser
 
+    ''' <summary>
+    ''' Addiitonal methods that are only visible to .NET clients and not to COM clients
+    ''' </summary>
+    ''' <remarks></remarks>
     <ComVisible(False)> Public Interface IChooserExtra
         ''' <summary>
         ''' Select ASCOM driver to use without pre-selecting in the dropdown list
@@ -489,6 +498,10 @@ Namespace Interfaces
         <DispId(23)> Function DateLocalToUTC(ByVal LocalDate As Date) As Date
     End Interface 'Interface to Utilities.Util
 
+    ''' <summary>
+    ''' Addiitonal methods that are only visible to .NET clients and not to COM clients
+    ''' </summary>
+    ''' <remarks></remarks>
     <ComVisible(False)> Public Interface IUtilExtra
         ''' <summary>
         ''' Convert degrees to sexagesimal degrees, minutes and seconds with default delimiters DD° MM' SS" 
@@ -804,6 +817,10 @@ Namespace Interfaces
         <DispId(2)> Property Enabled() As Boolean
     End Interface 'Interface to Utilities.Timer
 
+    ''' <summary>
+    ''' Timer event interface
+    ''' </summary>
+    ''' <remarks></remarks>
     <Guid("BDDA4DFD-77F8-4bd2-ACC0-AF32B4F8B9C2"), _
     InterfaceType(ComInterfaceType.InterfaceIsIDispatch), _
     ComVisible(True)> _
@@ -953,8 +970,17 @@ Namespace Interfaces
         <DispId(13)> Sub DeleteSubKey(ByVal DriverID As String, ByVal SubKey As String)
     End Interface 'Interface to Utilities.Profile
 
+    ''' <summary>
+    ''' Addiitonal methods that are only visible to .NET clients and not to COM clients
+    ''' </summary>
+    ''' <remarks></remarks>
     <ComVisible(False)> Public Interface IProfileExtra
 
+        ''' <summary>
+        ''' Migrate the ASCOM profile from registry to filestore
+        ''' </summary>
+        ''' <remarks></remarks>
+        <EditorBrowsable(EditorBrowsableState.Never)> _
         Sub MigrateProfile()
 
         ''' <summary>

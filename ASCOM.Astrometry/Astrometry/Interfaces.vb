@@ -737,8 +737,12 @@ Namespace NOVASCOM
         <DispId(15)> Property z() As Double
     End Interface
 
+    ''' <summary>
+    ''' Interface for PositionVector methods that are only accessible through .NET and not through COM
+    ''' </summary>
+    ''' <remarks></remarks>
     <ComVisible(False)> _
-    Public Interface IPositionVectorExtra
+        Public Interface IPositionVectorExtra
         ''' <summary>
         ''' Initialize the PositionVector from a Site object using UTC Julian date
         ''' </summary>
@@ -1056,8 +1060,12 @@ Namespace NOVASCOM
         <DispId(9)> Property z() As Double
     End Interface
 
+    ''' <summary>
+    ''' Interface for VelocityVector methods that are only accessible through .NET and not through COM
+    ''' </summary>
+    ''' <remarks></remarks>
     <ComVisible(False)> _
-    Public Interface IVelocityVectorExtra
+        Public Interface IVelocityVectorExtra
         ''' <summary>
         ''' Initialize the VelocityVector from a Site object using UTC Julian Date
         ''' </summary>
@@ -1080,9 +1088,13 @@ End Namespace
 #Region "NOVAS2 Interface"
 Namespace NOVAS
 
+    ''' <summary>
+    ''' Interface to the NOVAS2 component
+    ''' </summary>
+    ''' <remarks>Implemented by the NOVAS2COM component</remarks>
     <Guid("3D201554-007C-47e6-805D-F66D1CA35543"), _
-    ComVisible(True)> _
-    Public Interface INOVAS2
+        ComVisible(True)> _
+        Public Interface INOVAS2
         ''' <summary>
         ''' Computes the apparent place of a star 
         ''' </summary>

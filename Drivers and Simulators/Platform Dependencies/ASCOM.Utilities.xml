@@ -537,11 +537,21 @@ ASCOM.Utilities
  Exception thrown when an attempt is made to read a value that has not yet been set.
  </summary>
 	<remarks></remarks>
+</member><member name="T:ASCOM.Utilities.Timer.TickEventHandler">
+	<summary>
+ Timer tick event handler
+ </summary>
+	<remarks></remarks>
 </member><member name="E:ASCOM.Utilities.Timer.Tick">
 	<summary>
  Fired once per Interval when timer is Enabled.
  </summary>
 	<remarks>To sink this event in Visual Basic, declare the object variable using the WithEvents keyword.</remarks>
+</member><member name="M:ASCOM.Utilities.Timer.#ctor">
+	<summary>
+ Create a new timer component
+ </summary>
+	<remarks></remarks>
 </member><member name="M:ASCOM.Utilities.Timer.Dispose(System.Boolean)">
 	<summary>
  Disposes of resources used by the profile object - called by IDisposable interface
@@ -782,6 +792,17 @@ ASCOM.Utilities
  and fractional second at the time that the message was logged, Identifier is the supplied identifier (usually the subroutine, 
  function, property or method from which the message is sent) and Message is the message to be logged.</para>
 	</remarks>
+</member><member name="M:ASCOM.Utilities.Profile.#ctor">
+	<summary>
+ Create a new Profile object
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ASCOM.Utilities.Profile.#ctor(System.Boolean)">
+	<summary>
+ Create a new profile object ignoring profile not found exceptions if generated
+ </summary>
+	<param name="IgnoreExceptions">Ignore ProfileNotFound exceptions</param>
+	<remarks></remarks>
 </member><member name="M:ASCOM.Utilities.Profile.Dispose(System.Boolean)">
 	<summary>
  Disposes of resources used by the profile object - called by IDisposable interface
@@ -931,6 +952,11 @@ ASCOM.Utilities
 	<exception cref="T:ASCOM.Utilities.Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
 	<exception cref="T:ASCOM.Utilities.Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
 	<remarks>The sub-key and all data and keys beneath it are deleted.</remarks>
+</member><member name="M:ASCOM.Utilities.Profile.MigrateProfile">
+	<summary>
+ Migrate the ASCOM profile from registry to file store
+ </summary>
+	<remarks></remarks>
 </member><member name="M:ASCOM.Utilities.Profile.DeleteValue(System.String,System.String)">
 	<summary>
  Delete the value from the registry. Name may be an empty string for the unnamed value. 
@@ -1152,6 +1178,11 @@ ASCOM.Utilities
  "LogMessage(ByVal Identifier As String, ByVal Message As String, ByVal HexDump As Boolean)"
  with HexDump set False to achieve this effect.</para>
 	</remarks>
+</member><member name="T:ASCOM.Utilities.Interfaces.ITraceLoggerExtra">
+	<summary>
+ Addiitonal methods that are only visible to .NET clients and not to COM clients
+ </summary>
+	<remarks></remarks>
 </member><member name="P:ASCOM.Utilities.Interfaces.IChooser.DeviceType">
 	<summary>
  The type of device for which the Chooser will select a driver. (String, default = "Telescope")
@@ -1186,6 +1217,11 @@ ASCOM.Utilities
  <para>This overload is not available through COM, please use "Choose(ByVal DriverProgID As String)"
  with an empty string parameter to achieve this effect.</para>
 	</remarks>
+</member><member name="T:ASCOM.Utilities.Interfaces.IChooserExtra">
+	<summary>
+ Addiitonal methods that are only visible to .NET clients and not to COM clients
+ </summary>
+	<remarks></remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.IUtil.WaitForMilliseconds(System.Int32)">
 	<summary>
  Pauses for a given interval in milliseconds.
@@ -1708,6 +1744,11 @@ ASCOM.Utilities
  "DegreesToHM(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
  with suitable parameters to achieve this effect.</para>
 	</remarks>
+</member><member name="T:ASCOM.Utilities.Interfaces.IUtilExtra">
+	<summary>
+ Addiitonal methods that are only visible to .NET clients and not to COM clients
+ </summary>
+	<remarks></remarks>
 </member><member name="P:ASCOM.Utilities.Interfaces.ITimer.Interval">
 	<summary>
  The interval between Tick events when the timer is Enabled in milliseconds, (default = 1000)
@@ -1732,6 +1773,11 @@ ASCOM.Utilities
  Fired once per Interval when timer is Enabled.
  </summary>
 	<remarks>To sink this event in Visual Basic, declare the object variable using the WithEvents keyword.</remarks>
+</member><member name="T:ASCOM.Utilities.Interfaces.ITimerEvent">
+	<summary>
+ Timer event interface
+ </summary>
+	<remarks></remarks>
 </member><member name="P:ASCOM.Utilities.Interfaces.IProfile.DeviceType">
 	<summary>
  The type of ASCOM device for which profile data and registration services are provided 
@@ -1853,6 +1899,11 @@ ASCOM.Utilities
  Interface to the .NET Profile component
  </summary>
 	<remarks></remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IProfileExtra.MigrateProfile">
+	<summary>
+ Migrate the ASCOM profile from registry to filestore
+ </summary>
+	<remarks></remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.IProfileExtra.DeleteValue(System.String,System.String)">
 	<summary>
  Delete the value from the registry. Name may be an empty string for the unnamed value. 
@@ -1912,6 +1963,11 @@ ASCOM.Utilities
  "WriteValue(ByVal DriverID As String, ByVal Name As String, ByVal Value As String, ByVal SubKey As String)"
  with SubKey set to empty string achieve this effect.
  </remarks>
+</member><member name="T:ASCOM.Utilities.Interfaces.IProfileExtra">
+	<summary>
+ Addiitonal methods that are only visible to .NET clients and not to COM clients
+ </summary>
+	<remarks></remarks>
 </member><member name="P:ASCOM.Utilities.Interfaces.ISerial.AvailableComPorts">
 	<summary>
  Returns a list of all available ASCOM serial ports with COMnnn ports sorted into ascending port number order
