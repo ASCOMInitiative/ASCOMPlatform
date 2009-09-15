@@ -1,0 +1,28 @@
+<Project DefaultTargets="AllTemplates" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<CSharpProjectDirectory>$(MSBuildProjectDirectory)\Driver Template CSharp</CSharpProjectDirectory>
+		<VBProjectDirectory>$(MSBuildProjectDirectory)\Driver Template VB</VBProjectDirectory>
+		<CSZipName>ASCOM 6.0 Device Driver CS.zip</CSZipName>
+		<!--The fully qualified path to the C# output zip file.-->
+		<CSZipOutput>$(MSBuildProjectDirectory)\$(CSZipName)</CSZipOutput>
+		<VBZipName>ASCOM 6.0 Device Driver VB.zip</VBZipName>
+		<VBZipOutput>$(MSBuildProjectDirectory)\$(VBZipName)</VBZipOutput>
+	</PropertyGroup>
+	
+	<Import Project="C:\Program Files (x86)\MSBuild\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" />
+	<!--The items to be included in the template project-->
+	<ItemGroup>
+		<CSSources Include="$(CSharpProjectDirectory)\**\*.*" Exclude="$(CSharpProjectDirectory)\obj\**\*.*;$(CSharpProjectDirectory)\bin\**\*.*;$(CSharpProjectDirectory)\**\.svn\**\*.*;$(CSharpProjectDirectory)\Placeholder*.*" />
+	</ItemGroup>
+	<ItemGroup>
+		<VBSources Include="$(VBProjectDirectory)\**\*.*" Exclude="$(VBProjectDirectory)\obj\**\*.*;$(VBProjectDirectory)\bin\**\*.*;$(VBProjectDirectory)\**\.svn\**\*.*;$(VBProjectDirectory)\Placeholder*.*">
+		</VBSources>
+	</ItemGroup>
+	<Target Name="AllTemplates" DependsOnTargets="CSharpDriverTemplate; VBDriverTemplate"></Target>
+	<Target Name="CSharpDriverTemplate" Outputs="$(CSZipOutput)" Inputs="@(CSSources)">
+		<MSBuild.Community.Tasks.Zip Files="@(CSSources)" ZipFileName="$(CSZipOutput)" Comment="Zips up the sources into the zipped template project." Flatten="False" WorkingDirectory="$(CSharpProjectDirectory)" />
+	</Target>
+	<Target Name="VBDriverTemplate" Inputs="@(VBSources)" Outputs="$(VBZipOutput)">
+		<MSBuild.Community.Tasks.Zip Files="@(VBSources)" ZipFileName="$(VBZipOutput)" Comment="Zips up the sources into the zipped template project." WorkingDirectory="$(VBProjectDirectory)" Flatten="False" />
+	</Target>
+</Project>

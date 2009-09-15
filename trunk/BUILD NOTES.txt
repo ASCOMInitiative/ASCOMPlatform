@@ -7,6 +7,10 @@ Build Process
 =============
 
 The platform build is automatic and is currently performed by TeamCity build server.
+Developers building locally on their workstations should use the Debug configuration
+for most purposes.Please avoid building the Platform Dependencies configuration
+locally, the dependencies are intended to be checked out fully-formed and used
+'as-is'.
 
 Platform Releases
 =================
@@ -30,13 +34,23 @@ configuration) and copies the outputs to the Platform Dependencies folder, from
 whence they may be committed to Subversion. Driver developers will pick up those
 updates the next time they do an SVN Update.
 
+** AVOID COMMITTING THE PLATFORM DEPENDENCIES FOLDER UNNECESSARILY **
+Binaries do not compress well and tend to bloat the repository and will
+ultimately start to affect performance if committed too often.The dependencies
+folder is intended to represent a stable base platform for developers and should
+be updated as infrequently as possible.
+
 Driver and Simulator Development
 ================================
 
 When developing a new driver or simulator, developers should reference components
 in the Platform Dependencies folder. Do not reference components installed in the
-Global Assembly Cache (GAC).
+Global Assembly Cache (GAC) - this makes your build non-portable and it will cause
+the automated build to fail.
 
 Driver and Simulator setup projects should NOT redistribute core components. The
 Platform components will be installed in the GAC by the Platform Installer. The
-driver/simulator will then automatically detect and use those components.
+driver/simulator will then automatically detect and use those components when
+installed on the end-user system.
+
+Please make sure that you exclude any core components from your setup project.
