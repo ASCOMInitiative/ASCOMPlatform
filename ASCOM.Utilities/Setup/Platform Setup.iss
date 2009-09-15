@@ -169,7 +169,7 @@ Source: ..\OriginalHelpers\RestoreOriginalHelpers.cmd; DestDir: {cf32}\ASCOM\Uti
 
 ;ASCOM Platform .NET Help files
 Source: ..\Help\Help\PlatformHelp.chm; DestDir: {cf}\ASCOM\Doc; Flags: ignoreversion
-Source: ..\Help\Help\HelperNET.pdf; DestDir: {cf}\ASCOM\Doc; Flags: ignoreversion
+Source: ..\Help\Help\Platform 5.5.pdf; DestDir: {cf}\ASCOM\Doc; Flags: ignoreversion
 Source: ReadMe55.txt; DestDir: {app}; Flags: ignoreversion
 
 ;Profile Explorer
@@ -233,7 +233,7 @@ Root: HKLM32; Subkey: SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFolder
 
 [Icons]
 Name: {commonprograms}\ASCOM Platform\Docs\ASCOM Platform Update 5.5; Filename: {cf}\ASCOM\Doc\PlatformHelp.chm
-Name: {commonprograms}\ASCOM Platform\Docs\ASCOM Platform Architecture; Filename: {cf}\ASCOM\Doc\HelperNET.pdf
+Name: {commonprograms}\ASCOM Platform\Docs\ASCOM Platform Architecture; Filename: {cf}\ASCOM\Doc\Platform 5.5.pdf
 Name: {commonprograms}\ASCOM Platform\Tools\Profile Explorer; Filename: {pf}\ASCOM\Profile Explorer\ProfileExplorer.exe
 Name: {commondesktop}\Migrate Profile; Filename: {cf32}\ASCOM\Utilities\MigrateProfile.exe; Tasks: desktopicons
 Name: {commondesktop}\Erase Profile; Filename: {cf32}\ASCOM\Utilities\EraseProfile.exe; Tasks: desktopicons
