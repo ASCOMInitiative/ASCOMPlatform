@@ -68,21 +68,18 @@ Module VersionCode
     End Sub
 
     Sub AssemblyInfo(ByVal TL As TraceLogger, ByVal AssName As String, ByVal Ass As Assembly)
+        Dim FileVer As FileVersionInfo
         If Not Ass Is Nothing Then
             TL.LogMessage("Versions", AssName & " Version: " & Ass.GetName.Version.ToString)
+            FileVer = FileVersionInfo.GetVersionInfo(Ass.Location.ToString)
+            TL.LogMessage("Versions", AssName & " FileVersion: " & FileVer.FileVersion.ToString)
             TL.LogMessage("Versions", AssName & " Name: " & Ass.GetName.FullName.ToString)
             TL.LogMessage("Versions", AssName & " CodeBase: " & Ass.GetName.CodeBase.ToString)
             TL.LogMessage("Versions", AssName & " Location: " & Ass.Location.ToString)
             TL.LogMessage("Versions", AssName & " From GAC: " & Ass.GlobalAssemblyCache.ToString)
-
         Else
             TL.LogMessage("Versions", AssName & " No assembly found")
-
         End If
-
     End Sub
-
-
-
 End Module
 #End Region

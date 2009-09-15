@@ -69,15 +69,20 @@
       		as before and .NET clients are able to use the Client Access Toolkit to talk to drivers through either COM or 
       		.NET interfaces. .NET clients and drivers continue to use the Helper components through COM interfaces.</para>
       		
-      		<para>The final picture shows the changes that the new .NET components bring. The new .NET components allow .NET 
-      		clients and drivers to use native .NET interfaces to access these components; they no longer need to use COM 
-      		interfaces. Additionally some functionality in the COM Helpers is proxied out to the .NET components through 
-      		private COM interfaces.</para>
+      		<para>The third picture shows how original COM clients use Platform 5.5. They continue to use original drivers
+      		that use the VB6 Helpers but these have been "hollowed out" so that serial, profile and chooser functions 
+      		are transparently carried out in the Platform 5.5 .NET based components. The original COM applications
+      		are unaware of the change because they continue to see the original VB6 helper interface. Original COM 
+      		clients are also able to use new .NET drivers, through their COM interfaces as presented through the Chooser.</para>
       		
-      		<para>This allows some problematic code in the COM Helpers to be removed and replaced with equivalent function provided 
-      		by the .NET components while fully retaining the original COM interface. Retention of the binary COM interface is 
-      		important in order to ensure compatibility with older applications and drivers, the HelprNET approach provides 
-      		this and also allows the functionality in the .NET components to grow as the ASCOM Platform evolves.</para>
+      		<para>The fourth picture shows a similar picture for newly developed or refactored COM applications,
+      		the difference being that they will go directly to the COM interfaces exposed by the new .NET components
+      		rather than to the original VB6 helper components and will thus have access to all the new functions in 
+      		Platform 5.5.</para>
+      		
+      		<para>The final picture shows the changes that the new components bring to .NET clients. These clients no
+      		longer need to use the COM component interfaces being able to access the .NET assemblies directly.
+      		They will also benefit from IntelliSense if developed in Visual Studio.</para>
       		
       	</content>
     </section>
@@ -86,7 +91,10 @@
     	<title>Notes</title>
       	<content>
       		<list class="bullet">
- 				<listItem>See the section titled Key Changes in 5.5 for a summary of updates and new functionality.</listItem>
+ 				<listItem>See the section titled 
+ 				<link xlink:href="661ad380-12b9-4a1f-b79c-5dde4f5e781b" />
+ 				for a summary of updates and new functionality.
+ 				</listItem>
   				<listItem>This update appears as <quoteInline>ASCOM Platform 5.5 Update</quoteInline> in 
   				the add/remove programs dialogue</listItem>
   				<listItem>Install saves copies of the original helper components and restores these if the update is 

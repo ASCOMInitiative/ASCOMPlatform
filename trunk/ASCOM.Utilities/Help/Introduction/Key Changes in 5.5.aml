@@ -2,19 +2,31 @@
 <topic id="661ad380-12b9-4a1f-b79c-5dde4f5e781b" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
         
-    <section address="KeyChangesin5.5">
-    	<title>Key Changes in 5.5</title>
+    <section address="KeyChangesin5.5All">
+    	<title>Key Changes in 5.5 - For Everyone</title>
       	<content>
       		<list class="bullet">
-      			<listItem>PlatformVersion now reports 5.5</listItem>
- 				<listItem>Compatibility fixes for Vista and Windows 7:
+      			<listItem>Improved compatibility with USB serial drivers</listItem>
+      			<listItem>Compatibility fixes for Vista and Windows 7:
   					<list class="bullet">
+  						<listItem>Registry access issues fixed</listItem>
   						<listItem>Adminstrator level no longer required to run ASCOM applications using Profile component.</listItem>
   						<listItem>Chooser no longer hides driver setup dialogues</listItem>
   					</list></listItem>
+  				<listItem>PlatformVersion now reports 5.5</listItem>
  				<listItem>Profile moved from registry to file system.</listItem>
+  				<listItem>New Profile Explorer - Allows profile values to be set and read from the new profile file store.</listItem>
+  				<listItem>Profile and Serial tracing can now be enabled from a new menu in the Chooser component</listItem>
   				<listItem>Support for 64bit client applications and drivers.</listItem>
-  				<listItem>Native .NET components available for those programming with .NET</listItem>
+  				<listItem>Improved logging for serial and profile access with log files saved in the My Documents\ASCOM folder</listItem>
+  			</list>
+      	</content>
+    </section>
+    <section address="KeyChangesin5.5Dev">
+     	<title>Key Changes in 5.5 - For Developers</title>
+      	<content>
+      		<list class="bullet">
+     			<listItem>Native .NET components available for those programming with .NET languages</listItem>
   				<listItem>ASCOM.Utilities namespace based on original Helpers with additional features:
   					<list class="bullet">
   						<listItem>Many methods now support overloads to make coding easier.</listItem>
@@ -53,8 +65,6 @@
   						J2000, apparent and topocentric co-ordinates.</listItem>
   					</list>
   				</listItem>
-  				<listItem>New Profile Explorer - Allows profile values to be read and set from the new profile file store.</listItem>
-  				<listItem>Profile and Serial Tracing can now be enabled from a new menu in the Chooser component</listItem>
   				<listItem>This help file contains a number of code examples.</listItem>
   				<listItem>Comprehensive namespace documentation.</listItem>
   			</list>
