@@ -27,6 +27,8 @@ using System.Text;
 using System.ComponentModel;
 using System.Timers;
 using System.IO.Ports;
+using System.Windows.Forms;
+using System.Drawing;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -281,7 +283,7 @@ namespace ASCOM.GeminiTelescope
 
         public static int MAX_TIMEOUT = 10000; //max default timeout for all commands
 
-        static Timer tmrReadTimeout = new Timer();
+        static System.Timers.Timer tmrReadTimeout = new System.Timers.Timer();
         static System.Threading.AutoResetEvent m_SerialTimeoutExpired = new System.Threading.AutoResetEvent(false);
         static System.Threading.AutoResetEvent m_SerialErrorOccurred = new System.Threading.AutoResetEvent(false);
 
@@ -342,6 +344,8 @@ namespace ASCOM.GeminiTelescope
         private static int m_GeminiStatusByte;              // result of <99: native command, polled on an interval
         private static bool m_SafetyNotified;               // true if safety limit notification was already sent
 
+
+        private static frmStatus m_StatusForm = null;
 
         //Focuser Private Data
         private static int m_MaxIncrement = 0;
@@ -1029,7 +1033,7 @@ namespace ASCOM.GeminiTelescope
             for (int i = 0; i < ci.Length; ++i)
                 ci[i] = new CommandItem(cmd[i], timeout, true, bRaw); //initialize all CommandItem objects
 
-            QueueCommands(ci);  // queue them all at once
+            if (!QueueCommands(ci)) return null;  // queue them all at once
 
             // construct an array of all the wait handles
             System.Threading.ManualResetEvent[] events = new System.Threading.ManualResetEvent[ci.Length];
@@ -1070,7 +1074,7 @@ namespace ASCOM.GeminiTelescope
             for (int i = 0; i < ci.Length; ++i)
                 ci[i] = new CommandItem(cmd[i], timeout, true, bRaw); //initialize all CommandItem objects
 
-            QueueCommands(ci);  // queue them all at once
+            if (!QueueCommands(ci)) return;  // queue them all at once
 
             int total_timeout = 0;
             // construct an array of all the wait handles
@@ -1123,7 +1127,14 @@ namespace ASCOM.GeminiTelescope
         private static void DoCommandAndWaitAsync(object command_item)
         {
             CommandItem ci = (CommandItem)command_item;
-            QueueCommand(ci);
+
+            if (!QueueCommand(ci))
+            {
+                if (ci.m_AsyncDelegate != null)
+                        ci.m_AsyncDelegate(ci.m_Command, null);
+                return;
+            }
+
             if (ci.m_AsyncDelegate!=null)
                 try
                 {
@@ -1147,7 +1158,12 @@ namespace ASCOM.GeminiTelescope
         {
             CommandItem [] ci = (CommandItem[])command_items;
 
-            QueueCommands(ci);
+            if (!QueueCommands(ci))
+            {
+                CommandItem last_ci = ci[ci.Length - 1];
+                last_ci.m_AsyncDelegate(last_ci.m_Command, null);
+                return;
+            }
 
             System.Threading.ManualResetEvent[] events = new System.Threading.ManualResetEvent[ci.Length];
 
@@ -1244,6 +1260,45 @@ namespace ASCOM.GeminiTelescope
             Trace.Exit(4, "WaitForVelocity", p, tmout, Velocity);
             if (p.Contains(Velocity)) return true;
             return false;
+        }
+
+
+        static private void StartStatus(object arg)
+        {
+            Point pt = (Point)arg;
+            Screen scr = Screen.FromPoint(pt);
+
+            m_StatusForm = new frmStatus();
+            m_StatusForm.AutoHide = true;
+
+            Point top = (pt);
+            top.Y -= m_StatusForm.Bounds.Height + 32;
+            top.X -= 32;
+
+            top.Y = Math.Min(top.Y, scr.WorkingArea.Height - m_StatusForm.Bounds.Height - 32);
+            top.X = Math.Min(top.X, scr.WorkingArea.Width - m_StatusForm.Bounds.Width - 32);
+
+            m_StatusForm.Location = top;
+
+            m_StatusForm.Visible = true;
+            m_StatusForm.Show();
+            Application.Run(m_StatusForm);
+        }
+
+        private static System.Threading.Thread statusThread = null;
+
+        public static void ShowStatus(Point pt, bool autoHide)
+        {
+            if (statusThread != null)
+            {
+                if (m_StatusForm != null && m_StatusForm.InvokeRequired)
+                    m_StatusForm.BeginInvoke(new EventHandler(m_StatusForm.ShowMe));
+                return;
+            }
+            // Create a new thread from which to start the status screen form
+            statusThread = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(StartStatus));
+            statusThread.Start(pt);
+
         }
 
 #endregion
@@ -1649,49 +1704,73 @@ namespace ASCOM.GeminiTelescope
 
                 Trace.Info(2, "Remaining clients", m_Clients);
 
-                if (m_Clients == 0)
+                if (m_Clients <= 0)
                 {
-                    Trace.Info(2, "No more clients, disconnect");
-                    m_CancelAsync = true;
-
-                    m_Connected = false;
-
-                    lock (m_CommandQueue)
-                        m_CommandQueue.Clear();
-
-                    // wait for the thread to die for 2 seconds,
-                    // then kill it -- we don't want to tie up the serial comm
-                    if (m_BackgroundWorker != null)
+                    try
                     {
-                        Trace.Info(2, "Stopping bkgd thread");
-                        m_WaitForCommand.Set(); // wake up the background thread
-                        if (!m_BackgroundWorker.Join(5000))
-                            m_BackgroundWorker.Abort();
-                        Trace.Info(2, "Bkgd thread stopped");
-                    }
+                        Trace.Info(2, "No more clients, disconnect");
+                        m_CancelAsync = true;
 
-                    lock (m_CommandQueue)
+                        m_Connected = false;
+                        // no new commands will be queued after m_Connected is set to false, clear out
+                        // anything remaining:
                         m_CommandQueue.Clear();
 
-                    Trace.Info(2, "Closing serial port");
+                        // wait for the thread to die for 5 seconds,
+                        // then kill it -- we don't want to tie up the serial comm
+                        if (m_BackgroundWorker != null)
+                        {
+                            Trace.Info(2, "Stopping bkgd thread");
+                            m_WaitForCommand.Set(); // wake up the background thread
+                            if (!m_BackgroundWorker.Join(5000))
+                                m_BackgroundWorker.Abort();
+                            Trace.Info(2, "Bkgd thread stopped");
+                        }
 
-                    m_SerialPort.Close();
+                        Trace.Info(2, "Closing serial port");
+                        m_SerialPort.Close();
+                        Trace.Info(2, "Serial port closed");
 
-                    Trace.Info(2, "Serial port closed");
+                        m_BackgroundWorker = null;
 
-                    m_BackgroundWorker = null;
-
-                    Trace.Info(2, "Closing pass-through port");
-
-                    if (m_PassThroughPort!=null) m_PassThroughPort.Stop();
-
-                    Trace.Info(2, "Pass-through port closed");
+                        Trace.Info(2, "Closing pass-through port");
+                        if (m_PassThroughPort != null) m_PassThroughPort.Stop();
+                        Trace.Info(2, "Pass-through port closed");
+                    }
+                    catch { }
+                    CloseStatusForm();
                 }
             }
 
             if (OnConnect != null && bMessage) OnConnect(false, m_Clients);
 
             Trace.Exit("Disconnect()");
+        }
+
+        public static void CloseStatusForm()
+        {
+            GeminiHardware.Trace.Info(4, "Before closing status form");
+
+            if (m_StatusForm != null && m_StatusForm.InvokeRequired)
+            {
+                GeminiHardware.Trace.Info(4, "Before BeginInvoke status form");
+                m_StatusForm.BeginInvoke(new EventHandler(m_StatusForm.ShutDown));
+
+                GeminiHardware.Trace.Info(4, "After BeginInvoke status form");
+
+                if (statusThread != null)
+                {
+                    if (!statusThread.Join(2000))
+                    {
+                        GeminiHardware.Trace.Info(4, "Thread.Abort status form");
+                        statusThread.Abort();
+                    }
+                    statusThread = null;
+
+                }
+                m_StatusForm = null;
+                GeminiHardware.Trace.Info(4, "After closing status form");
+            }
         }
 
         /// <summary>
@@ -3029,29 +3108,33 @@ namespace ASCOM.GeminiTelescope
         /// Add command item 'ci' to the queue for execution
         /// </summary>
         /// <param name="ci">actual command to queue</param>
-        private static void QueueCommand(CommandItem ci)
+        private static bool QueueCommand(CommandItem ci)
         {
             System.Diagnostics.Trace.WriteLine("Queue command..."+ci.m_Command);
             lock (m_CommandQueue)
             {
+                if (!m_Connected) return false;
                 m_CommandQueue.Enqueue(ci);
             }
             m_WaitForCommand.Set();     //signal to the background worker that commands are queued up
+            return true;
         }
 
         /// <summary>
         /// Add all the command items in 'ci' to the queue for execution
         /// </summary>
         /// <param name="ci">array of commands to be executed in sequence</param>
-        private static void QueueCommands(CommandItem[] ci)
+        private static bool QueueCommands(CommandItem[] ci)
         {
             System.Diagnostics.Trace.WriteLine("Queue commands..." + ci[0].m_Command);
             lock (m_CommandQueue)
             {
+                if (!m_Connected) return false;
                 for(int i=0; i<ci.Length; ++i)
                     m_CommandQueue.Enqueue(ci[i]);
             }
             m_WaitForCommand.Set();     //signal to the background worker that commands are queued up
+            return true;
         }
 
 

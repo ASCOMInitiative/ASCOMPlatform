@@ -116,7 +116,7 @@ namespace ASCOM.GeminiTelescope
             if (m_StatusForm == null || !m_StatusForm.Visible)
             {
                 Screen scr = Screen.FromPoint(Cursor.Position);
-                ShowStatus(new Point(scr.WorkingArea.Right, scr.WorkingArea.Bottom), true);
+                GeminiHardware.ShowStatus(new Point(scr.WorkingArea.Right, scr.WorkingArea.Bottom), true);
             }
         }
 
@@ -125,48 +125,6 @@ namespace ASCOM.GeminiTelescope
             ControlPanelMenu(sender, e);
         }
 
-        void StartStatus(object arg)
-        {
-            Point pt = (Point)arg;
-            Screen scr = Screen.FromPoint(pt);
-
-            m_StatusForm = new frmStatus();
-            m_StatusForm.AutoHide = true;
-
-            Point top = (pt);
-            top.Y -= m_StatusForm.Bounds.Height + 32;
-            top.X -= 32;
-
-            top.Y = Math.Min(top.Y, scr.WorkingArea.Height - m_StatusForm.Bounds.Height - 32);
-            top.X = Math.Min(top.X, scr.WorkingArea.Width - m_StatusForm.Bounds.Width - 32);
-
-            m_StatusForm.Location = top;
-
-            m_StatusForm.Visible = true;
-            m_StatusForm.Show();
-            Application.Run(m_StatusForm);
-        }
-
-        System.Threading.Thread statusThread = null;
-
-        private void ShowStatus(Point pt, bool autoHide)
-        {
-            if (statusThread != null)
-            {
-                if (m_StatusForm!=null && m_StatusForm.InvokeRequired)
-                    m_StatusForm.Invoke(new EventHandler(m_StatusForm.ShowMe));
-                return;
-            }
-            // Create a new thread from which to start the status screen form
-            statusThread = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(StartStatus));
-            statusThread.Start(pt);
-
-
-            /*
-            if (BaloonIcon.ContextMenuStrip != null) return;           
-            BaloonIcon.ContextMenu.Show(this, this.PointToClient(Cursor.Position));
-          */
-        }
 
         void BaloonIcon_MouseClick(object sender, MouseEventArgs e)
         {
@@ -284,7 +242,7 @@ namespace ASCOM.GeminiTelescope
 
                 SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME, "Mount is connected", ToolTipIcon.Info);
             }
-            if (!Connected && Clients == 0) // last client to disconnect
+            if (!Connected && Clients <= 0) // last client to disconnect
             {
                 ButtonConnect.Text = "Connect";
                 labelLst.Text = "00:00:00";
@@ -525,7 +483,7 @@ namespace ASCOM.GeminiTelescope
                 string text = GeminiHardware.m_Util.HoursToHMS(value,":",":",""); // .ConvertDoubleToHMS(value);
                
                 try{
-                    if (InvokeRequired) this.Invoke(setText, text);
+                    if (InvokeRequired) this.BeginInvoke(setText, text);
                     else
                         SetLstText(text);
                 }
@@ -543,7 +501,7 @@ namespace ASCOM.GeminiTelescope
                 try {
 
                     if (InvokeRequired)
-                        this.Invoke(setText, text);
+                        this.BeginInvoke(setText, text);
                     else SetRaText(text);
                 }
                 catch { }
@@ -557,7 +515,7 @@ namespace ASCOM.GeminiTelescope
                 string text = GeminiHardware.m_Util.DegreesToDMS(value, ":", ":", ""); 
                 try {
                     if (InvokeRequired)
-                        this.Invoke(setText, text);
+                        this.BeginInvoke(setText, text);
                     else
                         SetDecText(text);
                 }
@@ -678,16 +636,8 @@ namespace ASCOM.GeminiTelescope
 
             while (GeminiHardware.Clients > 0)  //disconnect all clients
                 GeminiHardware.Connected = false;
-
-            if (m_StatusForm != null && m_StatusForm.InvokeRequired)
-            {
-                m_StatusForm.Invoke(new EventHandler(m_StatusForm.ShutDown));
-                if (statusThread != null)
-                {
-                    if (!statusThread.Join(1000))
-                        statusThread.Abort();
-                }
-            }
+        
+            GeminiHardware.CloseStatusForm();
         }
 
         private void focuserSetupDialogToolStripMenuItem_Click(object sender, EventArgs e)
