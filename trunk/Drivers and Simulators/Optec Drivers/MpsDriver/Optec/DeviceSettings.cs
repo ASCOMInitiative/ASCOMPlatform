@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.InteropServices;
+using ASCOM.Helper;
 
 namespace ASCOM.Optec
 {
+    [ComVisible(false)]
+
     class DeviceSettings    // This class contains methods which are used to access 
                             // device specific settings stored by the user. It's used
                             // by the driver constructor as well as SetupDialog().
@@ -17,9 +21,21 @@ namespace ASCOM.Optec
         //       Probably should return a default value if nothing exists in the
         //       profile for the given port number.
         //
-        internal static string Name(int PortNumber)
+        public static string Name(int PortNumber)
         {
-           return "Your code here";
+            string StrName = "Port" + PortNumber.ToString() + "Name";
+            string Name;
+            //try
+            //{
+            //    ProfileTools.WriteValue(MultiPortSelector.s_csDriverID, StrName, "Test", "");
+            //    Name = ProfileTools.GetValue(MultiPortSelector.s_csDriverID, StrName, "");
+            //}
+            //catch
+            //{
+            //    Name = "Port " + PortNumber.ToString();
+            //    ProfileTools.WriteValue(MultiPortSelector.s_csDriverID, StrName, Name, "");
+            //}
+            return "Name" + PortNumber.ToString();
         }
 
         public static double RightAscensionOffset(int PortNumber)
