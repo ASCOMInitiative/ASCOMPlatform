@@ -18,3 +18,13 @@ D:\JordansProgramming\ASCOM Repository\Optec Drivers\MpsDriver\Optec\bin\Debug\A
 D:\JordansProgramming\ASCOM Repository\Optec Drivers\MpsDriver\Optec\bin\Debug\ASCOM.Optec.MultiPortSelector.tlb
 D:\JordansProgramming\ASCOM Repository\Optec Drivers\MpsDriver\Optec\obj\Debug\ASCOM.Optec.MultiPortSelector.dll
 D:\JordansProgramming\ASCOM Repository\Optec Drivers\MpsDriver\Optec\obj\Debug\ASCOM.Optec.MultiPortSelector.pdb
+D:\dev\astro\ascom\Drivers and Simulators\Optec Drivers\MpsDriver\Optec\obj\Debug\ResolveAssemblyReference.cache
+D:\dev\astro\ascom\Drivers and Simulators\Optec Drivers\MpsDriver\Optec\obj\Debug\Optec.csproj.ResolveComReference.cache
+D:\dev\astro\ascom\Drivers and Simulators\Optec Drivers\MpsDriver\Optec\obj\Debug\ASCOM.Optec.Properties.Resources.resources
+D:\dev\astro\ascom\Drivers and Simulators\Optec Drivers\MpsDriver\Optec\obj\Debug\ASCOM.Optec.SetupDialogForm.resources
+D:\dev\astro\ascom\Drivers and Simulators\Optec Drivers\MpsDriver\Optec\obj\Debug\Optec.csproj.GenerateResource.Cache
+D:\dev\astro\ascom\Drivers and Simulators\Optec Drivers\MpsDriver\Optec\bin\Debug\ASCOM.Optec.MultiPortSelector.dll
+D:\dev\astro\ascom\Drivers and Simulators\Optec Drivers\MpsDriver\Optec\bin\Debug\ASCOM.Optec.MultiPortSelector.pdb
+D:\dev\astro\ascom\Drivers and Simulators\Optec Drivers\MpsDriver\Optec\bin\Debug\ASCOM.Optec.MultiPortSelector.tlb
+D:\dev\astro\ascom\Drivers and Simulators\Optec Drivers\MpsDriver\Optec\obj\Debug\ASCOM.Optec.MultiPortSelector.dll
+D:\dev\astro\ascom\Drivers and Simulators\Optec Drivers\MpsDriver\Optec\obj\Debug\ASCOM.Optec.MultiPortSelector.pdb
