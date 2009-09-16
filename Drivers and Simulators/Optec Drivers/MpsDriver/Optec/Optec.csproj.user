@@ -13,4 +13,10 @@
     <FallbackCulture>en-US</FallbackCulture>
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <StartAction>Program</StartAction>
+    <StartProgram>C:\WINDOWS\SysWOW64\cscript.exe</StartProgram>
+    <StartWorkingDirectory>D:\dev\astro\ascom\Drivers and Simulators\Optec Drivers\MpsDriver\Optec\</StartWorkingDirectory>
+    <StartArguments>test.js</StartArguments>
+  </PropertyGroup>
 </Project>

@@ -18,6 +18,8 @@
 // Date			Who	Vers	Description
 // -----------	---	-----	-------------------------------------------------------
 // 25-Aug-2009	RBD	1.0.0	Initial edit, from ASCOM FilterWheel Driver template
+// ??-???-2009  JS          Fill in some things
+// 16-Sep-2009  RBD         Help with construction and some refactoring
 // --------------------------------------------------------------------------------
 //
 using System;
@@ -75,7 +77,7 @@ namespace ASCOM.Optec
 		private short _focusOffset;
 		private double _rotationOffset;						// Can't be a Short
 
-		private Port() { }									// Prevent creation of this object
+		internal Port() { }								    // Prevent creation of this object
 
 		public string Name									// Port.PortName is redundant, Port.Name seems better?
 		{
@@ -120,6 +122,7 @@ namespace ASCOM.Optec
 		//
 		private static string s_csDriverID = "ASCOM.Optec.MultiPortSelector";
 		private static string s_csDriverDescription = "Optec MultiPortSelector";
+        private static short s_sNumberOfPorts = 4;
 
 		private ArrayList _ports;
 
@@ -130,39 +133,16 @@ namespace ASCOM.Optec
 		{
 			_ports = new ArrayList();
 			// Here read config, construct Port objects and add them to _ports.
-
-            short NumberOfPorts = 4;
-
-            //Port P0 = new Port();   //
-            //Port P1 = new Port();     //    One for each physical  
-            //Port P2 = new Port();     //    port on the device.
-            //Port P3 = new Port();   //
-
-            //_ports.Add(P0);
-            //_ports.Add(P1);
-            //_ports.Add(P2);
-            //_ports.Add(P3);
-
-            //string[] PNames = new string[NumberOfPorts];					
-            //double[] RAOffsets = new double[NumberOfPorts]; 
-            //double[] DecOffsets = new double[NumberOfPorts];	
-            //short[] FocusOffsets = new short[NumberOfPorts];
-            //double[] RotationOffsets = new double[NumberOfPorts];
-
-            //PNames = DeviceSettings.RetrievePNames(NumberOfPorts);
-            //RAOffsets = DeviceSettings.RetrieveRAOffsets(NumberOfPorts);
-            //DecOffsets = DeviceSettings.RetrieveDecOffsets(NumberOfPorts);
-            //FocusOffsets = DeviceSettings.RetrieveFocusOffsets(NumberOfPorts);
-            //RotationOffsets = DeviceSettings.RetrieveRotationOffsets(NumberOfPorts);
-
-            //foreach (Port i in _ports)
-            //{
-            //    i.Name = PNames[i];
-            //    i.RightAscensionOffset = RAOffsets[i];
-            //    i.DeclinationOffset = DecOffsets[i];
-            //    i.FocusOffset = FocusOffsets[i];
-            //    i.RotationOffset = RotationOffsets[i];
-            //}
+            for (int i = 0; i < s_sNumberOfPorts; i++)
+            {
+                Port P = new Port();
+                P.Name = DeviceSettings.Name(i);
+                P.RightAscensionOffset = DeviceSettings.RightAscensionOffset(i);
+                P.DeclinationOffset = DeviceSettings.DeclinationOffset(i);
+                P.FocusOffset = DeviceSettings.FocusOffset(i);
+                P.RotationOffset = DeviceSettings.RotationOffset(i);
+                _ports.Add(P);
+            }
 
 		}
 
