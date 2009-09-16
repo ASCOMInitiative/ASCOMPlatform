@@ -40,8 +40,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraSimulator", "Drivers 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstallerGen", "Driver Inst\InstallerGen\InstallerGen.csproj", "{A4006FB9-7B26-44C6-B66A-E3A1EFA85D16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsExtras", "Driver Inst\WinFormsExtras\WinFormsExtras.csproj", "{AB4FE9A1-B71D-4710-AA18-2F9DE496F43B}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Driver Installer", "Driver Installer", "{2F656A36-ED02-4FE2-AA49-C212A92908AA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Platform.DependencyBuilder", "ASCOM.Platform.DependencyBuilder\ASCOM.Platform.DependencyBuilder.csproj", "{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9}"
@@ -52,6 +50,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platform Dependencies", "Pl
 		Drivers and Simulators\Platform Dependencies\ASCOM.Astrometry.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Astrometry.dll
 		Drivers and Simulators\Platform Dependencies\ASCOM.Astrometry.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.Astrometry.pdb
 		Drivers and Simulators\Platform Dependencies\ASCOM.Astrometry.xml = Drivers and Simulators\Platform Dependencies\ASCOM.Astrometry.xml
+		Drivers and Simulators\Platform Dependencies\ASCOM.Attributes.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Attributes.dll
+		Drivers and Simulators\Platform Dependencies\ASCOM.Attributes.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.Attributes.pdb
 		Drivers and Simulators\Platform Dependencies\ASCOM.Controls.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Controls.dll
 		Drivers and Simulators\Platform Dependencies\ASCOM.Controls.dll.config = Drivers and Simulators\Platform Dependencies\ASCOM.Controls.dll.config
 		Drivers and Simulators\Platform Dependencies\ASCOM.Controls.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.Controls.pdb
@@ -61,12 +61,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platform Dependencies", "Pl
 		Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.dll
 		Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.pdb
 		Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.XML = Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.XML
+		Drivers and Simulators\Platform Dependencies\ASCOM.IConform.dll = Drivers and Simulators\Platform Dependencies\ASCOM.IConform.dll
+		Drivers and Simulators\Platform Dependencies\ASCOM.IConform.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.IConform.pdb
+		Drivers and Simulators\Platform Dependencies\ASCOM.IConform.xml = Drivers and Simulators\Platform Dependencies\ASCOM.IConform.xml
 		Drivers and Simulators\Platform Dependencies\ASCOM.Interfaces.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Interfaces.dll
 		Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.dll = Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.dll
 		Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.dll.config = Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.dll.config
 		Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.pdb
 		Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.XML = Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.XML
 		Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.dll
+		Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.pdb
+		Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.xml = Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.xml
 		Drivers and Simulators\Platform Dependencies\AscomMasterInterfaces.tlb = Drivers and Simulators\Platform Dependencies\AscomMasterInterfaces.tlb
 		Drivers and Simulators\Platform Dependencies\NOVAS-C.dll = Drivers and Simulators\Platform Dependencies\NOVAS-C.dll
 		Drivers and Simulators\Platform Dependencies\NOVAS-C.pdb = Drivers and Simulators\Platform Dependencies\NOVAS-C.pdb
@@ -142,6 +147,8 @@ EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ASCOM Device Driver VB", "DriverTemplates\Driver Template VB\ASCOM Device Driver VB.vbproj", "{71BB4DA7-4092-416D-89FE-97CD15207371}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "MigrateProfile", "ASCOM.Utilities\MigrateProfile\MigrateProfile.vbproj", "{A6F7ADB8-B812-4BFA-B2BD-DF61CC35A200}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GACInstall", "GACInstall\GACInstall.csproj", "{68255A7C-76E3-4D51-9475-6CFE21188FF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -226,13 +233,6 @@ Global
 		{A4006FB9-7B26-44C6-B66A-E3A1EFA85D16}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A4006FB9-7B26-44C6-B66A-E3A1EFA85D16}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
 		{A4006FB9-7B26-44C6-B66A-E3A1EFA85D16}.TeamCity|Any CPU.Build.0 = Release|Any CPU
-		{AB4FE9A1-B71D-4710-AA18-2F9DE496F43B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AB4FE9A1-B71D-4710-AA18-2F9DE496F43B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AB4FE9A1-B71D-4710-AA18-2F9DE496F43B}.Platform Dependencies|Any CPU.ActiveCfg = Debug|Any CPU
-		{AB4FE9A1-B71D-4710-AA18-2F9DE496F43B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AB4FE9A1-B71D-4710-AA18-2F9DE496F43B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AB4FE9A1-B71D-4710-AA18-2F9DE496F43B}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
-		{AB4FE9A1-B71D-4710-AA18-2F9DE496F43B}.TeamCity|Any CPU.Build.0 = Release|Any CPU
 		{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9}.Platform Dependencies|Any CPU.ActiveCfg = Debug|Any CPU
 		{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9}.Platform Dependencies|Any CPU.Build.0 = Debug|Any CPU
@@ -382,6 +382,14 @@ Global
 		{A6F7ADB8-B812-4BFA-B2BD-DF61CC35A200}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A6F7ADB8-B812-4BFA-B2BD-DF61CC35A200}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
 		{A6F7ADB8-B812-4BFA-B2BD-DF61CC35A200}.TeamCity|Any CPU.Build.0 = Release|Any CPU
+		{68255A7C-76E3-4D51-9475-6CFE21188FF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68255A7C-76E3-4D51-9475-6CFE21188FF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68255A7C-76E3-4D51-9475-6CFE21188FF6}.Platform Dependencies|Any CPU.ActiveCfg = Release|Any CPU
+		{68255A7C-76E3-4D51-9475-6CFE21188FF6}.Platform Dependencies|Any CPU.Build.0 = Release|Any CPU
+		{68255A7C-76E3-4D51-9475-6CFE21188FF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68255A7C-76E3-4D51-9475-6CFE21188FF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68255A7C-76E3-4D51-9475-6CFE21188FF6}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
+		{68255A7C-76E3-4D51-9475-6CFE21188FF6}.TeamCity|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -389,6 +397,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{1BF4D092-6FA8-4E00-9FCB-3F05510F97C9} = {9A54CA39-AB72-45B4-B09F-63679076D040}
 		{F1D8A6F0-1A98-4430-8DCD-6D1432449765} = {9A54CA39-AB72-45B4-B09F-63679076D040}
+		{68255A7C-76E3-4D51-9475-6CFE21188FF6} = {9A54CA39-AB72-45B4-B09F-63679076D040}
 		{C9BD6FCB-97C7-4096-B917-6E59B6E2C684} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
 		{D58C0488-CD98-4ACA-B1E2-E8F8429DB2D4} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
 		{78EEC039-93C9-4027-B2B7-2DD0CF6A9993} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
@@ -416,7 +425,6 @@ Global
 		{D5B05B98-92C6-4404-949D-AADCE36D864F} = {358D1EAC-1E2A-479F-80DB-3E7E22E39D97}
 		{9EE4BA96-FE1D-463E-A59F-2AC547581B6B} = {358D1EAC-1E2A-479F-80DB-3E7E22E39D97}
 		{F319D614-A93C-4952-9D75-4230DB9896B8} = {358D1EAC-1E2A-479F-80DB-3E7E22E39D97}
-		{AB4FE9A1-B71D-4710-AA18-2F9DE496F43B} = {2F656A36-ED02-4FE2-AA49-C212A92908AA}
 		{A4006FB9-7B26-44C6-B66A-E3A1EFA85D16} = {2F656A36-ED02-4FE2-AA49-C212A92908AA}
 		{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3} = {E100639A-B65F-4B34-A733-D6344AF2EF46}
 		{F0654070-4450-461F-A484-58D356E1740E} = {D5B05B98-92C6-4404-949D-AADCE36D864F}

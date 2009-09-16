@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A4006FB9-7B26-44C6-B66A-E3A1EFA85D16}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -76,12 +76,6 @@
     <None Include="Bug72T-sm.jpg" />
     <Content Include="Template\DriverInstallTemplate.iss" />
     <Content Include="Template\TemplateSubstitutionParameters.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WinFormsExtras\WinFormsExtras.csproj">
-      <Project>{AB4FE9A1-B71D-4710-AA18-2F9DE496F43B}</Project>
-      <Name>WinFormsExtras</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
