@@ -15,8 +15,8 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <StartAction>Program</StartAction>
-    <StartProgram>C:\WINDOWS\SysWOW64\cscript.exe</StartProgram>
-    <StartWorkingDirectory>D:\dev\astro\ascom\Drivers and Simulators\Optec Drivers\MpsDriver\Optec\</StartWorkingDirectory>
-    <StartArguments>test.js</StartArguments>
+    <StartProgram>C:\Windows\SysWOW64\cscript.exe</StartProgram>
+    <StartArguments>Test.js</StartArguments>
+    <StartWorkingDirectory>D:\JordansProgramming\ASCOM Repository\Optec Drivers\MpsDriver\Optec\</StartWorkingDirectory>
   </PropertyGroup>
 </Project>

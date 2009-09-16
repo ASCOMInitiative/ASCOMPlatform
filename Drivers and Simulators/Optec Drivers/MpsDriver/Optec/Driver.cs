@@ -120,7 +120,7 @@ namespace ASCOM.Optec
 		//
 		// Driver ID and descriptive string that shows in the Chooser
 		//
-		private static string s_csDriverID = "ASCOM.Optec.MultiPortSelector";
+		internal static string s_csDriverID = "ASCOM.Optec.MultiPortSelector";
 		private static string s_csDriverDescription = "Optec MultiPortSelector";
         private static short s_sNumberOfPorts = 4;
 
