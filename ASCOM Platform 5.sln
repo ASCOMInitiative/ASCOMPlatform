@@ -53,7 +53,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platform Dependencies", "Pl
 		Drivers and Simulators\Platform Dependencies\ASCOM.Attributes.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Attributes.dll
 		Drivers and Simulators\Platform Dependencies\ASCOM.Attributes.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.Attributes.pdb
 		Drivers and Simulators\Platform Dependencies\ASCOM.Controls.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Controls.dll
-		Drivers and Simulators\Platform Dependencies\ASCOM.Controls.dll.config = Drivers and Simulators\Platform Dependencies\ASCOM.Controls.dll.config
 		Drivers and Simulators\Platform Dependencies\ASCOM.Controls.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.Controls.pdb
 		Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.dll = Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.dll
 		Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.pdb
@@ -66,7 +65,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platform Dependencies", "Pl
 		Drivers and Simulators\Platform Dependencies\ASCOM.IConform.xml = Drivers and Simulators\Platform Dependencies\ASCOM.IConform.xml
 		Drivers and Simulators\Platform Dependencies\ASCOM.Interfaces.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Interfaces.dll
 		Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.dll = Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.dll
-		Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.dll.config = Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.dll.config
 		Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.pdb
 		Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.XML = Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.XML
 		Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.dll
@@ -142,7 +140,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Driver Templates", "Driver 
 		DriverTemplateDeveloperNotes.htm = DriverTemplateDeveloperNotes.htm
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM Device Driver CSharp", "DriverTemplates\Driver Template CSharp\ASCOM Device Driver CSharp.csproj", "{64308775-BD4A-469C-BCAB-3ED830B811AF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM Device Driver CS", "DriverTemplates\Driver Template CSharp\ASCOM Device Driver CS.csproj", "{64308775-BD4A-469C-BCAB-3ED830B811AF}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ASCOM Device Driver VB", "DriverTemplates\Driver Template VB\ASCOM Device Driver VB.vbproj", "{71BB4DA7-4092-416D-89FE-97CD15207371}"
 EndProject
@@ -367,13 +365,19 @@ Global
 		{44999847-A7B6-462D-B663-FE988D98E317}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
 		{44999847-A7B6-462D-B663-FE988D98E317}.TeamCity|Any CPU.Build.0 = Release|Any CPU
 		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Platform Dependencies|Any CPU.ActiveCfg = Release|Any CPU
 		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{64308775-BD4A-469C-BCAB-3ED830B811AF}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
+		{64308775-BD4A-469C-BCAB-3ED830B811AF}.TeamCity|Any CPU.Build.0 = Release|Any CPU
 		{71BB4DA7-4092-416D-89FE-97CD15207371}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71BB4DA7-4092-416D-89FE-97CD15207371}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71BB4DA7-4092-416D-89FE-97CD15207371}.Platform Dependencies|Any CPU.ActiveCfg = Release|Any CPU
 		{71BB4DA7-4092-416D-89FE-97CD15207371}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71BB4DA7-4092-416D-89FE-97CD15207371}.Release|Any CPU.Build.0 = Release|Any CPU
 		{71BB4DA7-4092-416D-89FE-97CD15207371}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
+		{71BB4DA7-4092-416D-89FE-97CD15207371}.TeamCity|Any CPU.Build.0 = Release|Any CPU
 		{A6F7ADB8-B812-4BFA-B2BD-DF61CC35A200}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A6F7ADB8-B812-4BFA-B2BD-DF61CC35A200}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6F7ADB8-B812-4BFA-B2BD-DF61CC35A200}.Platform Dependencies|Any CPU.ActiveCfg = Release|Any CPU
@@ -385,7 +389,6 @@ Global
 		{68255A7C-76E3-4D51-9475-6CFE21188FF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{68255A7C-76E3-4D51-9475-6CFE21188FF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68255A7C-76E3-4D51-9475-6CFE21188FF6}.Platform Dependencies|Any CPU.ActiveCfg = Release|Any CPU
-		{68255A7C-76E3-4D51-9475-6CFE21188FF6}.Platform Dependencies|Any CPU.Build.0 = Release|Any CPU
 		{68255A7C-76E3-4D51-9475-6CFE21188FF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68255A7C-76E3-4D51-9475-6CFE21188FF6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{68255A7C-76E3-4D51-9475-6CFE21188FF6}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
