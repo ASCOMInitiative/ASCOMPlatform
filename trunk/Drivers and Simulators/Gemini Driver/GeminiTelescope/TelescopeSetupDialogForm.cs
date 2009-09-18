@@ -28,14 +28,31 @@ namespace ASCOM.GeminiTelescope
                 comboBoxComPort.Items.Add(s);
             }
 
+            string[] joys = Joystick.JoystickNames;
+            if (joys != null)
+            {
+                foreach (string s in Joystick.JoystickNames)
+                {
+                    cmbJoystick.Items.Add(s);
+                }
+                cmbJoystick.SelectedItem = GeminiHardware.JoystickName;
+
+                chkJoystick.CheckState = GeminiHardware.UseJoystick ? CheckState.Checked : CheckState.Unchecked;
+                if (!chkJoystick.Checked) cmbJoystick.Enabled = false;
+            }
+            else
+            {   // no joysticks detected
+                chkJoystick.CheckState = CheckState.Unchecked;
+                chkJoystick.Enabled = false;
+                cmbJoystick.Enabled = false;
+
+            }
+
             Version version = new Version(Application.ProductVersion);
             labelVersion.Text = "ASCOM Gemini Telescope .NET " + string.Format("Version {0}.{1}.{2}", version.Major, version.Minor, version.Build);
             TimeZone localZone = TimeZone.CurrentTimeZone;
-            labelTime.Text = "Time zone is " + localZone.StandardName;
-            if (localZone.IsDaylightSavingTime(DateTime.Now))
-            {
-                labelTime.Text += " (currently DST)"; 
-            }
+            
+            labelTime.Text = "Time zone is " + (localZone.IsDaylightSavingTime(DateTime.Now)? localZone.DaylightName : localZone.StandardName);
 
         }
 
@@ -260,9 +277,9 @@ namespace ASCOM.GeminiTelescope
                     GeminiHardware.PassThroughComPort = frm.ComPort;
                     GeminiHardware.PassThroughBaudRate = int.Parse(frm.BaudRate);
                 }
-                catch 
+                catch
                 {
-                    MessageBox.Show("Settings are invalid", SharedResources.TELESCOPE_DRIVER_NAME);
+                    MessageBox.Show("Some port settings are invalid", SharedResources.TELESCOPE_DRIVER_NAME);
                 }
             }
         }
@@ -313,6 +330,20 @@ namespace ASCOM.GeminiTelescope
             DialogResult re = settings.ShowDialog();
         }
 
-        
+        private void chkJoystick_CheckedChanged(object sender, EventArgs e)
+        {
+            cmbJoystick.Enabled = chkJoystick.Checked;
+        }
+
+
+        public bool UseJoystick
+        {
+            get { return chkJoystick.Checked; }
+        }
+
+        public string JoystickName
+        {
+            get { return cmbJoystick.SelectedItem.ToString(); }
+        }
     }
 }
