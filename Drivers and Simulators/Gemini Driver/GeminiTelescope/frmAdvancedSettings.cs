@@ -95,6 +95,10 @@ namespace ASCOM.GeminiTelescope
 
             if (this.ValidateChildren())
             {
+
+                DialogResult res = MessageBox.Show("You are about to write advanced settings to Gemini.\r\n\r\nAre you sure you want to do this?", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                if (res != DialogResult.Yes) return;
+
                 this.UseWaitCursor = true;
 
                 try

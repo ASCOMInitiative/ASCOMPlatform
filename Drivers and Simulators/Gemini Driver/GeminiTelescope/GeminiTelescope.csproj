@@ -113,13 +113,28 @@
       <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationCore">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutBox\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AstronomyFunctions.cs" />
     <Compile Include="ClassFactory.cs" />
     <Compile Include="frmAdvancedSettings.cs">
@@ -242,6 +257,18 @@
     <Compile Include="Win32API.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AboutBox\Gemini.ico" />
+    <Resource Include="AboutBox\gemini_Image1.png">
+      <CustomToolNamespace>GeminiAbout</CustomToolNamespace>
+    </Resource>
+    <Resource Include="AboutBox\Image2.png" />
+    <Resource Include="AboutBox\gemini_Image.jpg">
+      <CustomToolNamespace>GeminiAbout</CustomToolNamespace>
+    </Resource>
+    <Resource Include="AboutBox\gemini_Logo.png">
+      <CustomToolNamespace>GeminiAbout</CustomToolNamespace>
+    </Resource>
+    <Content Include="AboutBox\Rene[1].jpg" />
     <Content Include="ASCOM.png" />
     <Content Include="GeminiSB32x32.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -284,6 +311,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Documentation\GeminiHardware.chm" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="AboutBox\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

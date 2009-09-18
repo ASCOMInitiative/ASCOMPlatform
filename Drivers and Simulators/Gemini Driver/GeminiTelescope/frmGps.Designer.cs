@@ -171,6 +171,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmGps";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "GPS";
             this.Load += new System.EventHandler(this.frmGps_Load);
             this.ResumeLayout(false);

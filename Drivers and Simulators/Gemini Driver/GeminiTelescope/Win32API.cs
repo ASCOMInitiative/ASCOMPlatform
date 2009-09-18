@@ -215,8 +215,8 @@ namespace ASCOM.GeminiTelescope
                 m_JEX.dwFlags = Win32API.JOY_RETURNXY;
                 if (Win32API.joyGetPosEx(m_JoyNbr.ToInt32(), ref m_JEX) == 0)
                 {
-                    m_PosX = (double)(m_JEX.dwXpos - m_CenterX)*2 / (MaxX-MinX);
-                    m_PosY = (double)(m_JEX.dwYpos - m_CenterY)*2 / (MaxY-MinY);
+                    m_PosX = (double)(m_JEX.dwXpos - m_CenterX)*2 / (MaxX-MinX) -1;
+                    m_PosY = (double)(m_JEX.dwYpos - m_CenterY)*2 / (MaxY-MinY) -1;
                 }
                 return m_PosX; 
             }
@@ -256,17 +256,56 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        public static string[] JoystickNames
+        {
+            get
+            {
+                Win32API.JOYINFOEX jex = new Win32API.JOYINFOEX();
+
+                jex.dwSize = 64;
+                jex.dwFlags = Win32API.JOY_RETURNXY;
+
+                List<string> id_list = new List<string>();
+                Win32API.JOYCAPS jc = new Win32API.JOYCAPS();
+
+                for (int i = 0; i < Win32API.joyGetNumDevs(); ++i)
+                    if (Win32API.joyGetPosEx(i, ref jex) == 0) {
+                        if (Win32API.joyGetDevCaps((IntPtr)i, ref jc, 404) == 0) 
+                        id_list.Add(i.ToString() + ":" + jc.szPname);
+                    }
+                if (id_list.Count > 0)
+                    return id_list.ToArray();
+                else
+                    return null;
+            }
+        }
+
         public bool Initialize(IntPtr jnbr)
         {
             m_JoyNbr = jnbr;
 
             if (Win32API.joyGetDevCaps(jnbr, ref m_JCAPS, 404) != 0) return false;
-
+            m_JEX.dwFlags = Win32API.JOY_RETURNXY;
             Win32API.joyGetPosEx(m_JoyNbr.ToInt32(), ref m_JEX);
             m_CenterX = m_JEX.dwXpos;
             m_CenterY = m_JEX.dwYpos;
 
             return true;
         }
+
+        public bool Initialize(string name)
+        {
+            string[] names = JoystickNames;
+            int idx = Array.IndexOf(names, name);
+            if (idx >= 0)
+                return this.Initialize((IntPtr)idx);
+
+            // if didn't match the name, just use the first available joystick port:
+            if (names.Length > 0)
+                return this.Initialize((IntPtr)0);  
+
+            return false;
+        }
+
     }
 }

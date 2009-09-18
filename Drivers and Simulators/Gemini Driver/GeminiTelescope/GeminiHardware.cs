@@ -206,6 +206,7 @@ namespace ASCOM.GeminiTelescope
             get { return GeminiHardware.m_SendAdvancedSettings; }
             set { 
                 GeminiHardware.m_SendAdvancedSettings = value;
+                m_Profile.DeviceType = "Telescope";
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "SendAdvancedSettings", value.ToString());
             }
         }
@@ -229,7 +230,8 @@ namespace ASCOM.GeminiTelescope
         {
             get { return GeminiHardware.m_SlewSettleTime; }
             set { GeminiHardware.m_SlewSettleTime = value;
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "SlewSettleTime", value.ToString());
+            m_Profile.DeviceType = "Telescope";
+            m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "SlewSettleTime", value.ToString());
             }
         }
 
@@ -250,6 +252,7 @@ namespace ASCOM.GeminiTelescope
             get { return GeminiHardware.m_PassThroughComPort; }
             set { 
                 GeminiHardware.m_PassThroughComPort = value;
+                m_Profile.DeviceType = "Telescope";
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughComPort", value);
             }
         }
@@ -260,7 +263,8 @@ namespace ASCOM.GeminiTelescope
         {
             get { return GeminiHardware.m_PassThroughBaudRate; }
             set {
-                GeminiHardware.m_PassThroughBaudRate = value; 
+                GeminiHardware.m_PassThroughBaudRate = value;
+                m_Profile.DeviceType = "Telescope";
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughBaudRate", value.ToString());
             }
         }
@@ -271,6 +275,7 @@ namespace ASCOM.GeminiTelescope
             get { return m_PassThroughPortEnabled; }
             set { 
                 m_PassThroughPortEnabled = value;
+                m_Profile.DeviceType = "Telescope";
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughPortEnabled", value.ToString());
             }
         }
@@ -311,6 +316,31 @@ namespace ASCOM.GeminiTelescope
         static public Tracer Trace
         {
             get { return m_Trace; }
+        }
+
+
+        private static bool m_UseJoystick = false;
+
+        public static bool UseJoystick
+        {
+            get { return GeminiHardware.m_UseJoystick; }
+            set {
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseJoystick", value.ToString());
+                GeminiHardware.m_UseJoystick = value; 
+            }
+        }
+
+        private static string m_JoystickName = null;
+
+        public static string JoystickName
+        {
+            get { return GeminiHardware.m_JoystickName; }
+            set {
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickName", value.ToString());
+                GeminiHardware.m_JoystickName = value; 
+            }
         }
 
 
@@ -544,6 +574,12 @@ namespace ASCOM.GeminiTelescope
             Trace.Info(2, "Pass Through Port", m_PassThroughComPort, m_PassThroughBaudRate, m_PassThroughPortEnabled);
 
 
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseJoystick", ""), out m_UseJoystick))
+                m_UseJoystick = false;
+
+            m_JoystickName = m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickName", "");
+
+
             //Get the Boot Mode from settings
             try
             {
@@ -661,6 +697,7 @@ namespace ASCOM.GeminiTelescope
                         bootMode = "3";
                         break;
                 }
+                m_Profile.DeviceType = "Telescope";
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "BootMode", bootMode);
             }
 
@@ -3126,7 +3163,9 @@ namespace ASCOM.GeminiTelescope
         /// <param name="ci">array of commands to be executed in sequence</param>
         private static bool QueueCommands(CommandItem[] ci)
         {
-            System.Diagnostics.Trace.WriteLine("Queue commands..." + ci[0].m_Command);
+            System.Diagnostics.Trace.Write("Queue commands...");
+            foreach(CommandItem c in ci) System.Diagnostics.Trace.Write(c.m_Command + ", ");
+            System.Diagnostics.Trace.WriteLine("");
             lock (m_CommandQueue)
             {
                 if (!m_Connected) return false;

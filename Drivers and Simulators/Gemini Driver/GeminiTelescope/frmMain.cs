@@ -18,6 +18,7 @@ namespace ASCOM.GeminiTelescope
 
         Timer tmrUpdate = new Timer();
         Timer tmrBaloon = new Timer();
+        Timer tmrJoystick = new Timer();
 
         string m_LastError = "";
 
@@ -32,6 +33,11 @@ namespace ASCOM.GeminiTelescope
         bool m_ShowNotifications = true;
 
         frmStatus m_StatusForm  = null;
+
+        Joystick m_Joystick = null;
+
+        string [] m_JoystickRate = {null, null};           // these keep last joystick rate and
+        string [] m_JoystickDirection = {null, null};      // direction commands issued in X and Y
 
         public frmMain()
         {
@@ -63,6 +69,7 @@ namespace ASCOM.GeminiTelescope
             new MenuItem("-"),
             notifyMenu,
             new MenuItem("-"),
+            new MenuItem("About Gemini Driver...", new EventHandler(aboutGeminiDriverToolStripMenuItem_Click)),
             new MenuItem("Exit", new EventHandler(ExitMenu))
             });
 
@@ -108,6 +115,120 @@ namespace ASCOM.GeminiTelescope
             toolTip1.SetToolTip(this.checkBoxTrack, "Stop/Start Tracking");
             toolTip1.SetToolTip(this.CheckBoxFlipDec, "Swap DEC buttons");
             toolTip1.SetToolTip(this.CheckBoxFlipRa, "Swap RA buttons");
+
+            tmrJoystick.Tick += new EventHandler(tmrJoystick_Tick);
+
+        }
+
+        private void StartJoystick()
+        {
+            m_JoystickRate[0] = null;
+            m_JoystickRate[1] = null;
+            m_JoystickDirection[0] = null;
+            m_JoystickRate[1] = null;
+
+            int[] joys = Joystick.Joysticks;
+            if (joys != null && joys.Length > 0)
+            {
+                if (!string.IsNullOrEmpty(GeminiHardware.JoystickName))
+                {
+                    m_Joystick = new Joystick();
+                    if (m_Joystick.Initialize(GeminiHardware.JoystickName))
+                    {
+                        tmrJoystick.Interval = 500;
+                        tmrJoystick.Start();
+                    }
+                    else
+                        SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME, "Joystick is not available\r\n" + GeminiHardware.JoystickName, ToolTipIcon.Warning);
+                }
+            }
+        }
+
+        void tmrJoystick_Tick(object sender, EventArgs e)
+        {
+            tmrJoystick.Stop();
+            if (GeminiHardware.Connected && this.Visible && GeminiHardware.UseJoystick && !string.IsNullOrEmpty(GeminiHardware.JoystickName))
+            {
+                double x = m_Joystick.PosX;
+                double y = m_Joystick.PosY;
+
+
+                // joystick positions are reported from -1 to 1
+                // 0 .. 0.25 means no movement (near center)
+                // 0.25 .. 0.5 => move at guiding speed
+                // 0.5 .. 0.75 => move at centering speed
+                // 0.75 .. 1.0 => move at slew speed
+
+
+                List<string> cmds = new List<string>();
+
+                if (this.CheckBoxFlipRa.Checked) y = -y;
+                if (this.CheckBoxFlipDec.Checked) x = -x;
+
+                double maxval = Math.Max(Math.Abs(x), Math.Abs(y));
+
+                string dir, rate;
+
+                // set RA speed and issue move commands:
+                if (Math.Abs(x) < 0.25)
+                {
+                    if (m_JoystickDirection[0] != null || m_JoystickRate[0] != null)  //already stopped, don't process this again
+                    {
+                        cmds.Add(":Qe");
+                        cmds.Add(":Qw");
+                        m_JoystickRate[0] = null;
+                        m_JoystickDirection[0] = null;
+                    }
+                }
+                else
+                {
+                    if (Math.Abs(x) < 0.5) rate = ":RG";        // move at guiding speed
+                    else if (Math.Abs(x) < 0.75) rate= ":RC";   // centering speed
+                    else rate = ":RS";                          // slewing speed
+
+                    if (x < 0) dir = ":Me";
+                    else dir = ":Mw";
+
+                    if (rate != m_JoystickRate[0] || dir != m_JoystickDirection[0])
+                    {
+                        cmds.Add(rate);
+                        cmds.Add(dir);
+                        m_JoystickDirection[0] = dir;
+                        m_JoystickRate[0] = rate;
+                    }
+                }
+
+                // set DEC speed and issue move commands:
+                if (Math.Abs(y) < 0.25)
+                {
+                    if (m_JoystickDirection[1] != null || m_JoystickRate[1] != null)  //process only if we're not already stopped in this axis
+                    {
+                        cmds.Add(":Qn");
+                        cmds.Add(":Qs");
+                        m_JoystickRate[1] = null;
+                        m_JoystickDirection[1] = null;
+                    }
+                }
+                else
+                {
+                    if (Math.Abs(y) < 0.5) rate = ":RG";        // move at guiding speed
+                    else if (Math.Abs(y) < 0.75) rate = ":RC";   // centering speed
+                    else rate = ":RS";                          // slewing speed
+
+                    if (y < 0) dir = ":Ms";
+                    else dir = ":Mn";
+
+                    if (rate != m_JoystickRate[1] || dir != m_JoystickDirection[1])
+                    {
+                        cmds.Add(rate);
+                        cmds.Add(dir);
+                        m_JoystickDirection[1] = dir;
+                        m_JoystickRate[1] = rate;
+                    }
+                }
+                if (cmds.Count > 0) GeminiHardware.DoCommand(cmds.ToArray(), false);
+                tmrJoystick.Start();
+            }
         }
 
 
@@ -239,8 +360,11 @@ namespace ASCOM.GeminiTelescope
             if (Connected && Clients == 1)  // first client to connect, change UI to show the connected status
             {
                 ButtonConnect.Text = "Disconnect";
-
                 SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME, "Mount is connected", ToolTipIcon.Info);
+            }
+            if (Connected)
+            {
+                if (GeminiHardware.UseJoystick && !string.IsNullOrEmpty(GeminiHardware.JoystickName)) StartJoystick();
             }
             if (!Connected && Clients <= 0) // last client to disconnect
             {
@@ -249,6 +373,7 @@ namespace ASCOM.GeminiTelescope
                 labelRa.Text = "00:00:00";
                 labelDec.Text = "+00:00:00";
                 SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME, "Mount is disconnected", ToolTipIcon.Info);
+                tmrJoystick.Stop();
             }        
         }
 
@@ -366,31 +491,60 @@ namespace ASCOM.GeminiTelescope
 
             if (ans == DialogResult.OK)
             {
+                string error = "";
+
                 try
                 {
                     GeminiHardware.ComPort = setupForm.ComPort;
-                    GeminiHardware.BaudRate = int.Parse(setupForm.BaudRate);
-
-                    GeminiHardware.Elevation = setupForm.Elevation;
-                    GeminiHardware.Latitude = setupForm.Latitude;
-                    GeminiHardware.Longitude = setupForm.Longitude;
-
-                    GeminiHardware.UseGeminiTime = setupForm.UseGeminiTime;
-                    GeminiHardware.UseGeminiSite = setupForm.UseGeminiSite;
-
-                    GeminiHardware.BootMode = setupForm.BootMode;
-
-                    int gpsBaudRate;
-                    int.TryParse(setupForm.GpsBaudRate, out gpsBaudRate);
-                    GeminiHardware.GpsBaudRate = gpsBaudRate;
-                    GeminiHardware.GpsComPort = setupForm.GpsComPort;
-                    GeminiHardware.GpsUpdateClock = setupForm.GpsUpdateClock;
-
                 }
-                catch
+                catch 
                 {
-                    MessageBox.Show("Settings are invalid", SharedResources.TELESCOPE_DRIVER_NAME);
+                    error += "COM Port, ";
                 }
+
+                try{ GeminiHardware.BaudRate = int.Parse(setupForm.BaudRate); }
+                catch { error += "Baud Rate, ";}
+
+                try {GeminiHardware.Elevation = setupForm.Elevation;}
+                catch {error += "Elevation, ";}
+
+                try { GeminiHardware.Latitude = setupForm.Latitude; }
+                catch {error+="Latitude, "; }
+                
+                try {GeminiHardware.Longitude = setupForm.Longitude;}
+                catch { error += "Longitude, ";  }
+
+                GeminiHardware.UseGeminiTime = setupForm.UseGeminiTime;
+                GeminiHardware.UseGeminiSite = setupForm.UseGeminiSite;
+
+                GeminiHardware.BootMode = setupForm.BootMode;
+
+                int gpsBaudRate;
+                if (!int.TryParse(setupForm.GpsBaudRate, out gpsBaudRate))
+                    error += "GPS Baud Rate, ";
+                else
+                    GeminiHardware.GpsBaudRate = gpsBaudRate;
+                try { GeminiHardware.GpsComPort = setupForm.GpsComPort; }
+                catch { error += "GPS COM Port"; }
+                GeminiHardware.GpsUpdateClock = setupForm.GpsUpdateClock;
+
+                if (setupForm.UseJoystick && !string.IsNullOrEmpty(setupForm.JoystickName))
+                {
+                    GeminiHardware.UseJoystick = true;
+                    GeminiHardware.JoystickName = setupForm.JoystickName;
+                }
+                else
+                {
+                    GeminiHardware.UseJoystick = false;
+                }
+
+                
+                if (error != "")
+                {
+                    if (error.EndsWith(", ")) error = error.Substring(0, error.Length - 2);
+                    MessageBox.Show("The following setting(s) are invalid:\r\n" + error, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
             }
 
             setupForm.Dispose();
@@ -428,7 +582,7 @@ namespace ASCOM.GeminiTelescope
                 }
                 catch
                 {
-                    MessageBox.Show("Settings are invalid", SharedResources.TELESCOPE_DRIVER_NAME);
+                    MessageBox.Show("Some settings are invalid", SharedResources.TELESCOPE_DRIVER_NAME);
                 }
             }
 
@@ -670,6 +824,8 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
+                ((Control)sender).Capture = true;
+
                 string[] cmds = { null, null };
 
                 if (RadioButtonGuide.Checked) cmds[0] = ":RG";
@@ -692,6 +848,7 @@ namespace ASCOM.GeminiTelescope
 
         private void buttonSlew1_MouseUp(object sender, MouseEventArgs e)
         {
+            ((Control)sender).Capture = false;
             if (GeminiHardware.Connected)
             {
 
@@ -710,6 +867,7 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
+                ((Control)sender).Capture = true;
                 string[] cmds = { null, null };
 
                 if (RadioButtonGuide.Checked) cmds[0] = ":RG";
@@ -730,6 +888,8 @@ namespace ASCOM.GeminiTelescope
 
         private void buttonSlew2_MouseUp(object sender, MouseEventArgs e)
         {
+            ((Control)sender).Capture = false;
+
             if (GeminiHardware.Connected)
             {
                 if (CheckBoxFlipDec.Checked)
@@ -747,6 +907,8 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
+                ((Control)sender).Capture = true;
+
                 string[] cmds = { null, null };
 
                 if (RadioButtonGuide.Checked) cmds[0] = ":RG";
@@ -766,6 +928,8 @@ namespace ASCOM.GeminiTelescope
 
         private void buttonSlew4_MouseUp(object sender, MouseEventArgs e)
         {
+            ((Control)sender).Capture = false;
+
             if (GeminiHardware.Connected)
             {
                 if (CheckBoxFlipRa.Checked)
@@ -783,6 +947,8 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
+                ((Control)sender).Capture = true;
+
                 string[] cmds = { null, null };
 
                 if (RadioButtonGuide.Checked) cmds[0] = ":RG";
@@ -803,6 +969,7 @@ namespace ASCOM.GeminiTelescope
 
         private void buttonSlew3_MouseUp(object sender, MouseEventArgs e)
         {
+            ((Control)sender).Capture = false;
             if (GeminiHardware.Connected)
             {
                 if (CheckBoxFlipRa.Checked)
@@ -856,6 +1023,22 @@ namespace ASCOM.GeminiTelescope
         private void pbStop_Click(object sender, EventArgs e)
         {
             GeminiHardware.DoCommandResult(":Q", GeminiHardware.MAX_TIMEOUT, false);
+        }
+
+        private void frmMain_VisibleChanged(object sender, EventArgs e)
+        {
+            if (GeminiHardware.UseJoystick) 
+                if (this.Visible)
+                    if (GeminiHardware.UseJoystick)
+                        if (GeminiHardware.Connected) StartJoystick();
+                     else
+                         tmrJoystick.Stop();
+        }
+
+        private void aboutGeminiDriverToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GeminiAbout.MainWindow win = new GeminiAbout.MainWindow();
+            win.Show();
         }
 
 
