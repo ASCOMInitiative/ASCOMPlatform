@@ -63,6 +63,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="COMPortForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="COMPortForm.designer.cs">
+      <DependentUpon>COMPortForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Defaults.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Defaults.settings</DependentUpon>
+    </Compile>
     <Compile Include="DeviceComm.cs" />
     <Compile Include="DeviceSettings.cs" />
     <Compile Include="Driver.cs" />
@@ -80,6 +91,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="COMPortForm.resx">
+      <DependentUpon>COMPortForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -91,6 +106,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\Defaults.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Defaults.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Test.js" />
   </ItemGroup>
   <ItemGroup>

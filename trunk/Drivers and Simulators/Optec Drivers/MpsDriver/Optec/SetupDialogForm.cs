@@ -42,5 +42,13 @@ namespace ASCOM.Optec
 				MessageBox.Show(other.Message);
 			}
 		}
+
+        private void Connect_Btn_Click(object sender, EventArgs e)
+        {
+            //DeviceComm.Connect();
+            //DeviceComm.ComState = 2;
+            //MessageBox.Show(DeviceComm.ComState.ToString());
+
+        }
 	}
 }
