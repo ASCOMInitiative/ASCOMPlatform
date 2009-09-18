@@ -133,7 +133,7 @@ namespace ASCOM.Optec
 		{
 			_ports = new ArrayList();
 			// Here read config, construct Port objects and add them to _ports.
-            for (int i = 0; i < s_sNumberOfPorts; i++)
+            for (int i = 1; i <= s_sNumberOfPorts; i++)
             {
                 Port P = new Port();
                 P.Name = DeviceSettings.Name(i);
@@ -188,33 +188,62 @@ namespace ASCOM.Optec
 		public bool Connected
 		{
 			// TODO Replace this with your implementation
-			get { throw new PropertyNotImplementedException("Connected", false); }
-			set { throw new PropertyNotImplementedException("Connected", true); }
+			get 
+            {
+                if (DeviceComm.ComState == 2) return true;
+                else return false;
+            }
+            set
+            {
+                if (value)  //connect
+                {
+                    if (DeviceComm.ComState != 2) DeviceComm.Connect();
+                }
+                else        //dissconnect
+                {
+                    DeviceComm.Dissconnect();
+                }
+            }
 		}
 
 		public short Position
 		{
 			// TODO Replace this with your implementation
-			get { throw new PropertyNotImplementedException("Position", false); }
-			set { throw new PropertyNotImplementedException("Position", true); }
+			get 
+            {
+                return DeviceComm.CurrentPosition;
+            }
+            set { DeviceComm.CurrentPosition = value; }
 		}
 
 		public string DriverName
 		{
-			// TODO Replace this with your implementation
-			get { throw new PropertyNotImplementedException("DriverName", false); }
+			get 
+            {
+                string D_Name = "Optec MPS ASCOM Driver";
+                return D_Name;
+            }
 		}
 
 		public string Description
 		{
-			// TODO Replace this with your implementation
-			get { throw new PropertyNotImplementedException("Description", false); }
+			
+			get 
+            {
+                string D_Descript = "This driver has been written in compliance with ASCOM standards!\n" +
+                    "This driver is designed to control the Optec Perseus 4-Port Selector\n";
+                return D_Descript;
+            }
 		}
 
 		public string DriverInfo
-		{
-			// TODO Replace this with your implementation
-			get { throw new PropertyNotImplementedException("DriverInfo", false); }
+		{ 
+			get 
+            {
+                string D_Info = "This driver handles all commnincation to the device via the RS-232 Serial Port.\n" +
+                    "This driver is designed to control the Optec Perseus 4-Port Selector\n";
+                return D_Info;
+            }
 		}
 
 		public ArrayList Ports
