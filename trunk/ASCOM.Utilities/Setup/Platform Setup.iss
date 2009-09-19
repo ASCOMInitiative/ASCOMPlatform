@@ -344,6 +344,3 @@ WelcomeLabel1=%n%n[name]%n
 #emit "WelcomeLabel2=This will update your computer to version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
 [_ISToolPreCompile]
 Name: ASCOM Redirection Policies.exe; Parameters: ; Flags: runminimized abortonerror
-[_ISTool]
-LogFile=C:\Documents and Settings\Peter\My Documents\ASCOM Source\ASCOM.Utilities\Setup\Setup.log
-LogFileAppend=false
