@@ -27,8 +27,12 @@
     <HelpTitle>ASCOM Platform Help</HelpTitle>
     <CopyrightText>Copyright &amp;#169%3b ASCOM Initiative 2009</CopyrightText>
     <ApiFilter>
-      <Filter entryType="Namespace" fullName="ASCOM.Utilities.VB6HelperSupport" isExposed="False" />
-    </ApiFilter>
+      <Filter entryType="Namespace" fullName="ASCOM.Utilities" isExposed="True">
+  <Filter entryType="Class" fullName="ASCOM.Utilities.Profile" filterName="Profile" isExposed="True">
+    <Filter entryType="Method" fullName="ASCOM.Utilities.Profile.MigrateProfile" filterName="MigrateProfile" isExposed="False" />
+  </Filter>
+</Filter>
+<Filter entryType="Namespace" fullName="ASCOM.Utilities.VB6HelperSupport" isExposed="False" /></ApiFilter>
     <PresentationStyle>vs2005 ASCOM</PresentationStyle>
     <Preliminary>False</Preliminary>
     <NamingMethod>MemberName</NamingMethod>

@@ -83,7 +83,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ASCOM.Attributes, Version=5.3.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+    <Reference Include="ASCOM.Attributes, Version=5.5.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Platform Dependencies\ASCOM.Attributes.dll</HintPath>
       <Private>False</Private>
@@ -98,7 +98,7 @@
       <HintPath>..\..\Platform Dependencies\ASCOM.Interfaces.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="ASCOM.Utilities, Version=5.3.1.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+    <Reference Include="ASCOM.Utilities, Version=5.5.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <HintPath>..\..\Platform Dependencies\ASCOM.Utilities.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>

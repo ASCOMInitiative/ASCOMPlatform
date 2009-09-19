@@ -1,5 +1,5 @@
 ﻿'NOVAS2COM component implementation
-'This class is an instantiable version of the NOVAS2 shared component because COM cannot see shared classes
+'This class is an instanciable version of the NOVAS2 shared component because COM cannot see shared classes
 'It is recommended that it only be used from COM clients and that .NET clients use the shared NOVAS2 component
 
 Imports System.Runtime.InteropServices
@@ -8,12 +8,12 @@ Imports ASCOM.Astrometry.NOVASCOM
 
 Namespace NOVAS
     ''' <summary>
-    ''' NOVAS2COM: Instantiable class presenting the contents of the NOVAS 2 library. 
+    ''' NOVAS2COM: Instanciable class presenting the contents of the NOVAS 2 library. 
     ''' NOVAS was developed by the Astronomical Applications department of the United States Naval 
     ''' Observatory. The C language version of NOVAS was developed by John Bangert at USNO/AA.
     ''' </summary>
     ''' <remarks>
-    ''' The NOVAS2COM class is an instantiable class usable by COM clients. This means that you have to create an instance of the 
+    ''' The NOVAS2COM class is an instanciable class usable by COM clients. This means that you have to create an instance of the 
     ''' class in order to access its members. So, this works:
     ''' <code>
     ''' Dim Nov as New ASCOM.Astrometry.NOVAS2COM

@@ -182,7 +182,7 @@ End Namespace
 
 Namespace Kepler
     ''' <summary>
-    ''' Kepler Ephemeris Interface
+    ''' Interface to the Kepler Ephemeris component
     ''' </summary>
     ''' <remarks>
     ''' The Ephemeris object contains an orbit engine which takes the orbital parameters of a solar system 
@@ -375,7 +375,7 @@ End Namespace
 #Region "NOVASCOM Interfaces"
 Namespace NOVASCOM
     ''' <summary>
-    ''' Represents the "state" of the Earth at a given Terrestrial Julian date
+    ''' Interface to an Earth object that represents the "state" of the Earth at a given Terrestrial Julian date
     ''' </summary>
     ''' <remarks>Objects of class Earth represent the "state" of the Earth at a given Terrestrial Julian date. 
     ''' The state includes barycentric and heliocentric position vectors for the earth, plus obliquity, 
@@ -481,7 +481,7 @@ Namespace NOVASCOM
     End Interface
 
     ''' <summary>
-    ''' Provide characteristics of a solar system body
+    ''' Interface to a Planet component that provides characteristics of a solar system body
     ''' </summary>
     ''' <remarks>Objects of class Planet hold the characteristics of a solar system body. Properties are 
     ''' type (major or minor planet), number (for major and numbered minor planets), name (for unnumbered 
@@ -602,7 +602,7 @@ Namespace NOVASCOM
     End Interface
 
     ''' <summary>
-    ''' NOVAS-COM PositionVector Class
+    ''' Interface to the NOVAS-COM PositionVector Class
     ''' </summary>
     ''' <remarks>Objects of class PositionVector contain vectors used for positions (earth, sites, 
     ''' stars and planets) throughout NOVAS-COM. Of course, its properties include the x, y, and z 
@@ -759,7 +759,7 @@ Namespace NOVASCOM
     End Interface
 
     ''' <summary>
-    ''' NOVAS-COM Site Class
+    ''' Interface to the NOVAS-COM Site Class
     ''' </summary>
     ''' <remarks>Objects of class Site contain the specifications for an observer's location on the Earth 
     ''' ellipsoid. Properties are latitude, longitude, height above mean sea level, the ambient temperature 
@@ -814,7 +814,7 @@ Namespace NOVASCOM
     End Interface
 
     ''' <summary>
-    ''' NOVAS-COM Star Class
+    ''' Interface to the NOVAS-COM Star Class
     ''' </summary>
     ''' <remarks>Objects of class Site contain the specifications for a star's catalog position in either FK5 or Hipparcos units (both must be J2000). Properties are right ascension and declination, proper motions, parallax, radial velocity, catalog type (FK5 or HIP), catalog number, optional ephemeris engine to use for barycenter calculations, and an optional value for delta-T. Unless you specifically set the DeltaT property, calculations performed by this class which require the value of delta-T (TT - UT1) rely on an internal function to estimate delta-T. 
     '''<para>The high-level NOVAS astrometric functions are implemented as methods of Star: 
@@ -974,7 +974,7 @@ Namespace NOVASCOM
     End Interface
 
     ''' <summary>
-    ''' NOVAS_COM VelocityVector Class
+    ''' interface to the NOVAS_COM VelocityVector Class
     ''' </summary>
     ''' <remarks>Objects of class VelocityVector contain vectors used for velocities (earth, sites, 
     ''' planets, and stars) throughout NOVAS-COM. Of course, its properties include the x, y, and z 

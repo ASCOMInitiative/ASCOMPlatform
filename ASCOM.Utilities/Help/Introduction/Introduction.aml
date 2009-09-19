@@ -33,6 +33,40 @@
 		</content>
     </section>
 
+    <section address="Issues">
+    	<title>Issues and Enhancement Requests</title>
+      	<content>
+		<para>Please use the ASCOM Yahoo group:
+		<externalLink>
+			<linkText>ASCOM Talk</linkText>
+			<linkAlternateText>http://tech.groups.yahoo.com/group/ASCOM-Talk/messages</linkAlternateText>
+			<linkUri>http://tech.groups.yahoo.com/group/ASCOM-Talk/messages</linkUri>
+			<linkTarget>_blank</linkTarget>
+		</externalLink>
+
+		at <quoteInline>http://tech.groups.yahoo.com/group/ASCOM-Talk/messages</quoteInline> to report and discuss issues that you
+		come across when using the ASCOM Platform and particularly this 5.5 update. You may be requested to submit
+		a report and supporting information to our Jira issue and enhancement tracking system:
+		<externalLink>
+			<linkText>ASCOM Jira Issue and Request Tracking System</linkText>
+			<linkAlternateText>http://teamserver.tigranetworks.co.uk:8010</linkAlternateText>
+			<linkUri>http://teamserver.tigranetworks.co.uk:8010</linkUri>
+			<linkTarget>_blank</linkTarget>
+		</externalLink>
+		
+		at <quoteInline>http://teamserver.tigranetworks.co.uk:8010</quoteInline>
+		</para>
+		
+		<para>The Jira system above is also a very good place to make Platform enhancement requests and, of course, you can 
+		always log issues in Jira as a first point of call if you wish. Undoubtedly though, the quickest way to get 
+		help will be through ASCOM-Talk.</para>
+		
+		</content>
+    </section>
+
+
+
+
 	<section address="Introduction-Developers">
     	<title>Introduction - ASCOM Driver and Application Developers</title>
       	<content>

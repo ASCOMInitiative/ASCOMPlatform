@@ -873,19 +873,26 @@ ASCOM.Utilities
 		<para>Unregister must only be called if the driver has already been registered. If you are not sure 
  use the IsRegistered function to check the status and only unregister if the driver is registered.</para>
 	</remarks>
-</member><member name="M:ASCOM.Utilities.Profile.GetValue(System.String,System.String,System.String)">
+</member><member name="M:ASCOM.Utilities.Profile.GetValue(System.String,System.String,System.String,System.String)">
 	<summary>
- Retrieve a string value from the profile using the supplied subkey for the given Driver ID and variable name.
+ Retrieve a string value from the profile using the supplied subkey for the given Driver ID 
+ and variable name. Set and return the default value if the requested variable name has not yet been set.
  </summary>
 	<param name="DriverID">ProgID of the device to read from</param>
 	<param name="Name">Name of the variable whose value is retrieved</param>
 	<param name="SubKey">Subkey from the profile root from which to read the value</param>
+	<param name="DefaultValue">Default value to be used if there is no value currently set</param>
 	<returns>Retrieved variable value</returns>
 	<exception cref="T:ASCOM.Utilities.Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
 	<exception cref="T:ASCOM.Utilities.Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
 	<remarks>
 		<para>Name may be an empty string for the unnamed value. The unnamed value is also known as the "default" value for a registry key.</para>
 		<para>Does not provide access to other registry data types such as binary and doubleword. </para>
+		<para>If a default value is supplied and the value is not already present in the profile store,
+ the default value will be set in the profile store and then returned as the value of the 
+ DriverID/SubKey/Name. If the default value is set to null (C#) or Nothing (VB) then no value will
+ be set in the profile and an empty string will be returned as the value of the 
+ DriverID/SubKey/Name.</para>
 	</remarks>
 </member><member name="M:ASCOM.Utilities.Profile.WriteValue(System.String,System.String,System.String,System.String)">
 	<summary>
@@ -985,6 +992,20 @@ ASCOM.Utilities
 		<para>This overload is not available through COM, please use 
  "GetValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
  with SubKey set to empty string achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Profile.GetValue(System.String,System.String,System.String)">
+	<summary>
+ Retrieve a string value from the profile using the supplied subkey for the given Driver ID and variable name.
+ </summary>
+	<param name="DriverID">ProgID of the device to read from</param>
+	<param name="Name">Name of the variable whose value is retrieved</param>
+	<param name="SubKey">Subkey from the profile root from which to read the value</param>
+	<returns>Retrieved variable value</returns>
+	<exception cref="T:ASCOM.Utilities.Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
+	<exception cref="T:ASCOM.Utilities.Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
+	<remarks>
+		<para>Name may be an empty string for the unnamed value. The unnamed value is also known as the "default" value for a registry key.</para>
+		<para>Does not provide access to other registry data types such as binary and doubleword. </para>
 	</remarks>
 </member><member name="M:ASCOM.Utilities.Profile.SubKeys(System.String)">
 	<summary>
@@ -1827,17 +1848,24 @@ ASCOM.Utilities
  </summary>
 	<param name="DriverID">ProgID of the device to unregister</param>
 	<remarks>This deletes the entire device profile tree, including the DriverID root key.</remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IProfile.GetValue(System.String,System.String,System.String)">
+</member><member name="M:ASCOM.Utilities.Interfaces.IProfile.GetValue(System.String,System.String,System.String,System.String)">
 	<summary>
- Retrieve a string value from the profile using the supplied subkey for the given Driver ID and variable name.
+ Retrieve a string value from the profile using the supplied subkey for the given Driver ID 
+ and variable name. Set and return the default value if the requested variable name has not yet been set.
  </summary>
 	<param name="DriverID">ProgID of the device to read from</param>
 	<param name="Name">Name of the variable whose value is retrieved</param>
 	<param name="SubKey">Subkey from the profile root from which to read the value</param>
+	<param name="DefaultValue">Default value to be used if there is no value currently set</param>
 	<returns>Retrieved variable value</returns>
 	<remarks>
 		<para>Name may be an empty string for the unnamed value. The unnamed value is also known as the "default" value for a registry key.</para>
 		<para>Does not provide access to other registry data types such as binary and doubleword. </para>
+		<para>If a default value is supplied and the value is not already present in the profile store,
+ the default value will be set in the profile store and then returned as the value of the 
+ DriverID/SubKey/Name. If the default value is set to null (C#) or Nothing (VB) then no value will
+ be set in the profile and an empty string will be returned as the value of the 
+ DriverID/SubKey/Name.</para>
 	</remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.IProfile.WriteValue(System.String,System.String,System.String,System.String)">
 	<summary>
@@ -1928,6 +1956,18 @@ ASCOM.Utilities
 		<para>This overload is not available through COM, please use 
  "GetValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String)"
  with SubKey set to empty string achieve this effect.</para>
+	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IProfileExtra.GetValue(System.String,System.String,System.String)">
+	<summary>
+ Retrieve a string value from the profile using the supplied subkey for the given Driver ID and variable name.
+ </summary>
+	<param name="DriverID">ProgID of the device to read from</param>
+	<param name="Name">Name of the variable whose value is retrieved</param>
+	<param name="SubKey">Subkey from the profile root from which to read the value</param>
+	<returns>Retrieved variable value</returns>
+	<remarks>
+		<para>Name may be an empty string for the unnamed value. The unnamed value is also known as the "default" value for a registry key.</para>
+		<para>Does not provide access to other registry data types such as binary and doubleword. </para>
 	</remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.IProfileExtra.SubKeys(System.String)">
 	<summary>

@@ -114,8 +114,8 @@ Name: {cf}\ASCOM\Uninstall\Utilities
 
 ;  Add an option to erase the HelperNET profile
 [Tasks]
-Name: cleanprofile; Description: Erase Utilities profile store (leaves registry profile intact); GroupDescription: """Installation Tasks"""; Flags: unchecked
-Name: desktopicons; Description: Install EraseProfile and MigrateProfile desktop icons; GroupDescription: """Installation Tasks"""
+Name: cleanprofile; Description: Erase Utilities profile store (leaves registry profile intact); GroupDescription: Release Candidate Testing; Flags: unchecked
+Name: desktopicons; Description: Install EraseProfile and MigrateProfile desktop icons; GroupDescription: Release Candidate Testing
 
 [Files]
 ;Install the ASCOM.Utilities code
@@ -269,7 +269,7 @@ Filename: {app}\GACInstall.exe; Parameters: """{app}\policy.1.0.ASCOM.DriverAcce
 ;Publisher policies for Astrometry and Utilities
 #emit "Filename: {app}\GACInstall.exe; Parameters: policy." + str(Major) + "." + str(Minor) + ".ASCOM.Utilities.dll; Flags: runhidden; StatusMsg: Installing ASCOM Utilities policy to the assembly cache"
 #emit "Filename: {app}\GACInstall.exe; Parameters: policy." + str(Major) + "." + str(Minor) + ".ASCOM.Astrometry.dll; Flags: runhidden; StatusMsg: Installing ASCOM Astrometry policy to the assembly cache"
-Filename: {app}\ReadMe55.txt; Description: ReadMe file; StatusMsg: Displaying ReadMe file; Flags: shellexec skipifdoesntexist postinstall skipifsilent unchecked
+Filename: {app}\ReadMe55.txt; Description: ReadMe file; StatusMsg: Displaying ReadMe file; Flags: shellexec skipifdoesntexist postinstall skipifsilent
 
 [UninstallRun]
 ; uninstall Utilties, Astrometry and IConform from the GAC and unregister COM types for 32and 64bit COM
