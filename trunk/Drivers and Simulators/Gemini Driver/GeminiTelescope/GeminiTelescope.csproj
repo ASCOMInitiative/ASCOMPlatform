@@ -268,7 +268,6 @@
     <Resource Include="AboutBox\gemini_Logo.png">
       <CustomToolNamespace>GeminiAbout</CustomToolNamespace>
     </Resource>
-    <Content Include="AboutBox\Rene[1].jpg" />
     <Content Include="ASCOM.png" />
     <Content Include="GeminiSB32x32.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

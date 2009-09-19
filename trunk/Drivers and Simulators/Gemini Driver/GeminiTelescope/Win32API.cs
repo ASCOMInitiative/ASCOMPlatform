@@ -215,8 +215,8 @@ namespace ASCOM.GeminiTelescope
                 m_JEX.dwFlags = Win32API.JOY_RETURNXY;
                 if (Win32API.joyGetPosEx(m_JoyNbr.ToInt32(), ref m_JEX) == 0)
                 {
-                    m_PosX = (double)(m_JEX.dwXpos - m_CenterX)*2 / (MaxX-MinX) -1;
-                    m_PosY = (double)(m_JEX.dwYpos - m_CenterY)*2 / (MaxY-MinY) -1;
+                    m_PosX = (double)(m_JEX.dwXpos - m_CenterX)*2 / (MaxX-MinX);
+                    m_PosY = (double)(m_JEX.dwYpos - m_CenterY)*2 / (MaxY-MinY);
                 }
                 return m_PosX; 
             }
@@ -285,8 +285,9 @@ namespace ASCOM.GeminiTelescope
             m_JoyNbr = jnbr;
 
             if (Win32API.joyGetDevCaps(jnbr, ref m_JCAPS, 404) != 0) return false;
+            m_JEX.dwSize = 64;
             m_JEX.dwFlags = Win32API.JOY_RETURNXY;
-            Win32API.joyGetPosEx(m_JoyNbr.ToInt32(), ref m_JEX);
+            if (Win32API.joyGetPosEx(m_JoyNbr.ToInt32(), ref m_JEX) != 0) return false;
             m_CenterX = m_JEX.dwXpos;
             m_CenterY = m_JEX.dwYpos;
 

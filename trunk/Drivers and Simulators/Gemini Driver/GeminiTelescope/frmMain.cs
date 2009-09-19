@@ -36,8 +36,8 @@ namespace ASCOM.GeminiTelescope
 
         Joystick m_Joystick = null;
 
-        string [] m_JoystickRate = {null, null};           // these keep last joystick rate and
-        string [] m_JoystickDirection = {null, null};      // direction commands issued in X and Y
+        string m_JoystickRate = null;           // these keep last joystick rate and
+        string m_JoystickDirection =null;      // direction commands issued 
 
         public frmMain()
         {
@@ -122,10 +122,8 @@ namespace ASCOM.GeminiTelescope
 
         private void StartJoystick()
         {
-            m_JoystickRate[0] = null;
-            m_JoystickRate[1] = null;
-            m_JoystickDirection[0] = null;
-            m_JoystickRate[1] = null;
+            m_JoystickRate = null;
+            m_JoystickRate = null;
 
             int[] joys = Joystick.Joysticks;
             if (joys != null && joys.Length > 0)
@@ -152,6 +150,7 @@ namespace ASCOM.GeminiTelescope
                 double x = m_Joystick.PosX;
                 double y = m_Joystick.PosY;
 
+                System.Diagnostics.Trace.WriteLine("JOYSTICK : X = " + x.ToString() + "   Y = " + y.ToString());
 
                 // joystick positions are reported from -1 to 1
                 // 0 .. 0.25 means no movement (near center)
@@ -165,66 +164,66 @@ namespace ASCOM.GeminiTelescope
                 if (this.CheckBoxFlipRa.Checked) y = -y;
                 if (this.CheckBoxFlipDec.Checked) x = -x;
 
-                double maxval = Math.Max(Math.Abs(x), Math.Abs(y));
-
                 string dir, rate;
 
-                // set RA speed and issue move commands:
-                if (Math.Abs(x) < 0.25)
+                // if last joystick rate was zero, but we are still moving at speed, then
+                // the mount must be slowing down from a slew.. continue waiting
+                if ((m_JoystickRate == null) && (GeminiHardware.Velocity == "S"))
                 {
-                    if (m_JoystickDirection[0] != null || m_JoystickRate[0] != null)  //already stopped, don't process this again
-                    {
-                        cmds.Add(":Qe");
-                        cmds.Add(":Qw");
-                        m_JoystickRate[0] = null;
-                        m_JoystickDirection[0] = null;
-                    }
+                    tmrJoystick.Start();
+                    return;
                 }
-                else
-                {
-                    if (Math.Abs(x) < 0.5) rate = ":RG";        // move at guiding speed
-                    else if (Math.Abs(x) < 0.75) rate= ":RC";   // centering speed
-                    else rate = ":RS";                          // slewing speed
 
+                // stop all slew -- joystick is centered
+                if (Math.Abs(x) < 0.25 && Math.Abs(y) < 0.25)
+                {
+                    if (m_JoystickDirection != null || m_JoystickRate != null)  //already stopped, don't process this again
+                    {
+                        m_JoystickRate = null;
+                        m_JoystickDirection = null;
+                        GeminiHardware.DoCommand(":Q", false);
+                    }
+                    tmrJoystick.Start();
+                    return;
+                }
+
+                double val = Math.Max(Math.Abs(x), Math.Abs(y));
+
+                if (val < 0.5) rate = ":RG";        // move at guiding speed
+                else if (val < 0.75) rate = ":RC";   // centering speed
+                else
+                    rate = ":RS";                          // slewing speed
+
+                if (Math.Abs(x) > Math.Abs(y))
+                {
                     if (x < 0) dir = ":Me";
                     else dir = ":Mw";
-
-                    if (rate != m_JoystickRate[0] || dir != m_JoystickDirection[0])
-                    {
-                        cmds.Add(rate);
-                        cmds.Add(dir);
-                        m_JoystickDirection[0] = dir;
-                        m_JoystickRate[0] = rate;
-                    }
-                }
-
-                // set DEC speed and issue move commands:
-                if (Math.Abs(y) < 0.25)
-                {
-                    if (m_JoystickDirection[1] != null || m_JoystickRate[1] != null)  //process only if we're not already stopped in this axis
-                    {
-                        cmds.Add(":Qn");
-                        cmds.Add(":Qs");
-                        m_JoystickRate[1] = null;
-                        m_JoystickDirection[1] = null;
-                    }
                 }
                 else
                 {
-                    if (Math.Abs(y) < 0.5) rate = ":RG";        // move at guiding speed
-                    else if (Math.Abs(y) < 0.75) rate = ":RC";   // centering speed
-                    else rate = ":RS";                          // slewing speed
-
                     if (y < 0) dir = ":Ms";
                     else dir = ":Mn";
+                }
 
-                    if (rate != m_JoystickRate[1] || dir != m_JoystickDirection[1])
+                if (rate != m_JoystickRate || dir != m_JoystickDirection)
+                {
+                    // if we are moving at speed, we can't change rates/directions until
+                    // the mount slows down to tracking speed. Issue move quit command, and 
+                    // return until next time...
+                    if (((GeminiHardware.Velocity == "S") && (m_JoystickRate == ":RS" || rate == ":RS")) ||
+                         ((GeminiHardware.Velocity == "C") && (rate == ":RS")))
                     {
-                        cmds.Add(rate);
-                        cmds.Add(dir);
-                        m_JoystickDirection[1] = dir;
-                        m_JoystickRate[1] = rate;
+                        GeminiHardware.DoCommand(":Q", false);
+                        m_JoystickRate = null;
+                        m_JoystickDirection = null;
+                        tmrJoystick.Start();
+                        return;
                     }
+
+                    cmds.Add(rate);
+                    cmds.Add(dir);
+                    m_JoystickDirection = dir;
+                    m_JoystickRate = rate;
                 }
                 if (cmds.Count > 0) GeminiHardware.DoCommand(cmds.ToArray(), false);
                 tmrJoystick.Start();
@@ -1022,6 +1021,7 @@ namespace ASCOM.GeminiTelescope
 
         private void pbStop_Click(object sender, EventArgs e)
         {
+            //tmrJoystick.Stop();
             GeminiHardware.DoCommandResult(":Q", GeminiHardware.MAX_TIMEOUT, false);
         }
 
@@ -1037,8 +1037,8 @@ namespace ASCOM.GeminiTelescope
 
         private void aboutGeminiDriverToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GeminiAbout.MainWindow win = new GeminiAbout.MainWindow();
-            win.Show();
+//            GeminiAbout.MainWindow win = new GeminiAbout.MainWindow();
+//            win.Show();
         }
 
 
