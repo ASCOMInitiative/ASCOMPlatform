@@ -289,7 +289,7 @@
                 </TransformGroup>
             </Label.RenderTransform>
         </Label>
-        <Image x:Name="image1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="48" Height="56" Grid.Column="1" Source="gemini_Image1.png" Stretch="Fill" RenderTransformOrigin="0.5,0.5">
+        <Image x:Name="image1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="48" Height="56" Grid.Column="1" Source="gemini_Image1.png" Stretch="Fill" RenderTransformOrigin="0.5,0.5" MouseDown="ASCOM_MouseDown">
 			<Image.RenderTransform>
 				<TransformGroup>
 					<ScaleTransform/>
@@ -300,7 +300,7 @@
 			</Image.RenderTransform>
 		</Image>
 		<Canvas x:Name="logo" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Height="127" ClipToBounds="True"/>
-		<Image x:Name="Layer_1" Width="200" Height="127" RenderTransformOrigin="0.5,0.5" Source="gemini_Logo.png" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1">
+		<Image x:Name="Layer_1" Width="200" Height="127" RenderTransformOrigin="0.5,0.5" Source="gemini_Logo.png" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" MouseDown="Logo_MouseDown">
 			<Image.RenderTransform>
 				<TransformGroup>
 					<ScaleTransform/>

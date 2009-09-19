@@ -1764,6 +1764,8 @@ namespace ASCOM.GeminiTelescope
                             Trace.Info(2, "Bkgd thread stopped");
                         }
 
+                        Transmit(":Q#"); // stop all slews, in case we are in the middle of one
+
                         Trace.Info(2, "Closing serial port");
                         m_SerialPort.Close();
                         Trace.Info(2, "Serial port closed");

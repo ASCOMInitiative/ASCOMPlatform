@@ -27,5 +27,15 @@ namespace GeminiAbout
         {
             this.Close();
         }
+
+        private void Logo_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://www.docgoerlich.de/Gemini.html");
+        }
+
+        private void ASCOM_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://www.ascom-standards.org");
+        }
 	}
 }
