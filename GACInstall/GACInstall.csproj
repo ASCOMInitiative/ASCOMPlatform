@@ -7,7 +7,7 @@
     <ProjectGuid>{68255A7C-76E3-4D51-9475-6CFE21188FF6}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GACInstall</RootNamespace>
+    <RootNamespace>ASCOM.GACInstall</RootNamespace>
     <AssemblyName>GACInstall</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -17,7 +17,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <StartupObject>GACInstall.Program</StartupObject>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>PeterSimpson.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>ASCOM.snk</AssemblyOriginatorKeyFile>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -44,13 +44,14 @@
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -90,7 +91,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="PeterSimpson.snk" />
+    <None Include="ASCOM.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
