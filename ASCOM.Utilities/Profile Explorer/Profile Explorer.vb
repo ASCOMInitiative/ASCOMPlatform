@@ -219,7 +219,7 @@ Public Class frmProfileExplorer
         If Not e.CancelEdit Then 'Check if user has cancelled edit
             If Not (e.Label Is Nothing) Then
                 If e.Label.Length > 0 Then 'Check for label being empty string
-                    If e.Label.IndexOfAny(New Char() {"@"c, "."c, ","c, "!"c}) = NOT_FOUND Then 'Check for invalid characters
+                    If e.Label.IndexOfAny(New Char() {"@"c, ","c, "!"c}) = NOT_FOUND Then 'Check for invalid characters
                         e.Node.EndEdit(False) ' Stop editing without canceling the label change.
                         'MsgBox("Action" & Action.ToString)
                         'Check whether the new key is duplicate of one already existing
