@@ -3,10 +3,10 @@ Module RedirectPolicy
     Private Const BATCH_FILE_NAME As String = "BuildPolicy1.Cmd"
     Private Const POLICY_FILE_NAME As String = "PublisherPolicy.xml"
     Private Const UTILITIES_ASSEMBLY_NAME As String = "ASCOM.Utilities" ' Don't add .dll
-    Private Const UTILITIES_ASSEMBLY_DIRECTORY As String = "..\..\ASCOM.Utilities\Utilities\Bin\Debug\"
+    Private Const UTILITIES_ASSEMBLY_DIRECTORY As String = "..\..\ASCOM.Utilities\Utilities\Bin\Release\"
 
     Private Const ASTROMETRY_ASSEMBLY_NAME As String = "ASCOM.Astrometry" ' Don't add .dll
-    Private Const ASTROMETRY_ASSEMBLY_DIRECTORY As String = "..\..\ASCOM.Astrometry\Astrometry\Bin\Debug\"
+    Private Const ASTROMETRY_ASSEMBLY_DIRECTORY As String = "..\..\ASCOM.Astrometry\Astrometry\Bin\Release\"
 
 
     Private Const AL_LINK As String = POLICY_FILE_NAME
