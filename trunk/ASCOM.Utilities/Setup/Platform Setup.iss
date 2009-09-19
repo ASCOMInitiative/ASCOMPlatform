@@ -44,10 +44,18 @@
 ; Changed Ad/Remove programs title to ASCOM Platform 5.5 Update (x.x.x.x)
 ; Made erase profile run minimised
 ; Fixed the application name to be ASCOM Platform 5.5 update
-; Setup build 5
+; Removed ISTool Setup log file reference
+; Setup build 5 Released
+
+; Removed NOVAS and Kepler PIA install task and moved to a separate installer as this is for testing only and not for release
+; Make GACInstall a shared file
+; Changed client toolkit files to the original versions from the 1.0.5a installer rather than from the new SVN build
+; Added client toolkit symbols to the symbols directory
+; Utilities uplevelled to 5.5.0.0
+; Setup Build 6 Released
 
 [Setup]
-#define Public SetupVersion 5; Setup program version number
+#define Public SetupVersion 6; Setup program version number
 
 #define Public Major 0
 #define Public Minor 0
@@ -108,7 +116,6 @@ Name: {cf}\ASCOM\Uninstall\Utilities
 [Tasks]
 Name: cleanprofile; Description: Erase Utilities profile store (leaves registry profile intact); GroupDescription: """Installation Tasks"""; Flags: unchecked
 Name: desktopicons; Description: Install EraseProfile and MigrateProfile desktop icons; GroupDescription: """Installation Tasks"""
-Name: astrometrypias; Description: Install 32bit Astrometry PIAs (Please leave unchecked); GroupDescription: """Installation Tasks"""; Flags: unchecked
 
 [Files]
 ;Install the ASCOM.Utilities code
@@ -183,7 +190,7 @@ Source: ..\MigrateProfile\bin\Release\MigrateProfile.exe; DestDir: {cf32}\ASCOM\
 Source: ..\MigrateProfile\bin\Release\MigrateProfile.pdb; DestDir: {cf32}\ASCOM\Utilities; Flags: ignoreversion
 
 ;Tool to install into GAC
-Source: ..\..\GACInstall\bin\Release\GACInstall.exe; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\GACInstall\bin\Release\GACInstall.exe; DestDir: {app}; Flags: ignoreversion sharedfile
 
 ;ASCOM Icon
 Source: ..\Utilities\Resources\ASCOM.ico; DestDir: {app}; Flags: ignoreversion
@@ -196,25 +203,22 @@ Source: ..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll; DestD
 Source: ..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.XML; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
 
 ;Client toolbox 1.0.5, in case it isn't already installed
-Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.pdb; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.XML; DestDir: {app}; Flags: ignoreversion
+Source: Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.dll; DestDir: {app}; Flags: ignoreversion
+Source: Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.pdb; DestDir: {app}; Flags: ignoreversion
+Source: Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.XML; DestDir: {app}; Flags: ignoreversion
+;Debug symbols to the symbols directory
+Source: Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.pdb; DestDir: {win}\Symbols\dll; Flags: ignoreversion
+;32bit directories
+Source: Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.dll; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
+Source: Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.pdb; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
+Source: Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.XML; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
+
 ;Policy file to redirect to 1.0.5
 Source: ..\..\ClientToolbox\SimpsonBitsPolicyStuff\PolicyInstaller\policy.1.0.ASCOM.DriverAccess.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\ClientToolbox\SimpsonBitsPolicyStuff\PolicyInstaller\driveraccess.config; DestDir: {app}; Flags: ignoreversion
-;32bit directories
-Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.dll; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
-Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.pdb; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
-Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.XML; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
 
 ;Debug symbols directory
 Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.pdb; DestDir: {win}\Symbols\dll; Flags: ignoreversion
-
-;NOVAS and Kepler PIAs and TLBs- optional through task checkbox
-Source: ..\..\Interfaces\NOVAS PIAs\ASCOM.NOVAS.DLL; DestDir: {app}; Flags: ignoreversion; Tasks: astrometrypias
-Source: ..\..\Interfaces\Kepler PIAs\ASCOM.Kepler.DLL; DestDir: {app}; Flags: ignoreversion; Tasks: astrometrypias
-Source: ..\..\Interfaces\NOVAS PIAs\NOVAS.tlb; DestDir: {app}; Flags: ignoreversion regtypelib 32bit; Tasks: astrometrypias
-Source: ..\..\Interfaces\Kepler PIAs\Kepler.tlb; DestDir: {app}; Flags: ignoreversion regtypelib 32bit; Tasks: astrometrypias
 
 ;NOVAS C DLLs
 Source: ..\NOVAS-C x86-x64\Release\NOVAS-C.dll; DestDir: {app}; Flags: ignoreversion
@@ -255,12 +259,6 @@ Filename: {dotnet2032}\regasm.exe; Parameters: "/TLB ""{cf32}\ASCOM\.net\ASCOM.I
 Filename: {cf32}\ASCOM\Utilities\EraseProfile.exe; Tasks: cleanprofile; Flags: runminimized; statusMsg: Erasing Profile
 Filename: {cf32}\ASCOM\Utilities\MigrateProfile.exe; Parameters: /MIGRATEIFNEEDED; Flags: runminimized; statusMsg: Migrating Profile if necessary
 
-;NOVAS and Kepler 32 bit interface components
-Filename: {app}\GACInstall.exe; Parameters: ASCOM.NOVAS.dll; Flags: runhidden; StatusMsg: Installing NOVAS 2 to the assembly cache; Tasks: astrometrypias
-Filename: {app}\GACInstall.exe; Parameters: ASCOM.Kepler.dll; Flags: runhidden; StatusMsg: Installing Kepler to the assembly cache; Tasks: astrometrypias
-Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.NOVAS.dll"""; Flags: runhidden; StatusMsg: Registering NOVAS for COM; Tasks: astrometrypias
-Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.Kepler.dll"""; Flags: runhidden; StatusMsg: Registering Kepler for COM; Tasks: astrometrypias
-
 ;ASCOM Exceptions
 Filename: {app}\GACInstall.exe; Parameters: ASCOM.Exceptions.dll; Flags: runhidden; StatusMsg: Instlling ASCOM.Exceptions to the assembly cache
 
@@ -287,12 +285,6 @@ Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\
 Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.Utilities.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering Utilities for COM
 
 Filename: {cf32}\ASCOM\Utilities\RestoreOriginalHelpers.cmd; Parameters: """{cf32}\ASCOM\Utilities\*.dll"" ""{cf32}\ASCOM"""; StatusMsg: Restoring helper dlls; Flags: runhidden
-
-;NOVAS and Kepler 32 bit interfaces
-Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.NOVAS"""; Flags: runhidden; StatusMsg: Uninstalling NOVAS 2 from the assembly cache; Tasks: astrometrypias
-Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Kepler"""; Flags: runhidden; StatusMsg: Uninstalling Kepler from the assembly cache; Tasks: astrometrypias
-Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.NOVAS.dll"""; Flags: runhidden; StatusMsg: Unregistering NOVAS for COM; Tasks: astrometrypias
-Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.Kepler.dll"""; Flags: runhidden; StatusMsg: Unregistering Kepler for COM; Tasks: astrometrypias
 
 ;ASCOM Exceptions
 Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Exceptions"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Exceptions from the assembly cache
@@ -343,4 +335,4 @@ end;
 WelcomeLabel1=%n%n[name]%n
 #emit "WelcomeLabel2=This will update your computer to version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
 [_ISToolPreCompile]
-Name: ASCOM Redirection Policies.exe; Parameters: ; Flags: runminimized abortonerror
+Name: ..\..\ASCOM Redirection Policies\ASCOM Redirection Policies\bin\Release\ASCOM Redirection Policies.exe; Parameters: ; Flags: runminimized abortonerror
