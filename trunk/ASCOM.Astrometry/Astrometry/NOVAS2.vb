@@ -13,7 +13,8 @@ Namespace NOVAS
     ''' Observatory. The C language version of NOVAS was developed by John Bangert at USNO/AA.
     ''' </summary>
     ''' <remarks>
-    ''' The NOVAS class is a STATIC class. This means that you do not have to create an instance of the 
+    ''' The NOVAS class is a STATIC class and is the component of preference for .NET programmers. 
+    ''' This means that you do not have to create an instance of the 
     ''' class in order to access its members. Instead you reference them directly from the class. So, this works:
     ''' <code>rc = ASCOM.Astrometry.NOVAS2.AppStar(tjd, earth, star, ra, dec)</code> 
     ''' while this does not work: 

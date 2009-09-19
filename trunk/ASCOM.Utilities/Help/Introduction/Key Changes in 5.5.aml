@@ -22,6 +22,7 @@
   			</list>
       	</content>
     </section>
+
     <section address="KeyChangesin5.5Dev">
      	<title>Key Changes in 5.5 - For Developers</title>
       	<content>
@@ -33,6 +34,8 @@
   						<listItem>Full intellisense help is available in Visual Studio</listItem>
   						<listItem>All components provide a Dispose method</listItem>
   						<listItem>New TraceLogger class to make driver and applicaiton logging easy and consistent among drivers and clients</listItem>
+  						<listItem>Profile: New GetValue(Driver, ValueName, SubKey, DefaultValue) method that sets DefaultValue 
+  						in the profile if no value is yet set.</listItem>
   						<listItem>Profile: New list of registered device types</listItem>
   						<listItem>Profile: New list of registered devices</listItem>
   						<listItem>Profile: Profile use can now be traced.</listItem>
@@ -58,7 +61,7 @@
   						component available in Platform 5.</listItem>
   						<listItem>New implementation of the complete USNO NOVAS 2 astrometry engine. This is implemented as a 
   						static class</listItem>
-  						<listItem>New instantiable version of the NOVAS2 engine for use by COM clients that can't access the static class.</listItem>
+  						<listItem>New instanciable version of the NOVAS2 engine for use by COM clients that can't access the static class.</listItem>
 	  					<listItem>New 32 / 64 bit implementation of the NOVASCOM component. This updates the optional 32bit COM 
 	  					component available in platform 5.</listItem>
   						<listItem>New Transform component optimised for drivers that need a simple mechanic to convert between

@@ -566,12 +566,12 @@ ASCOM.Astrometry
 	<remarks>Corrects Earth-fixed geocentric rectangular coordinates for polar motion.  Transforms a vector from Earth-fixed geographic system to rotating system based on rotational equator and orthogonal Greenwich meridian through axis of rotation.</remarks>
 </member><member name="T:ASCOM.Astrometry.NOVAS.NOVAS2COM">
 	<summary>
- NOVAS2COM: Instantiable class presenting the contents of the NOVAS 2 library. 
+ NOVAS2COM: Instanciable class presenting the contents of the NOVAS 2 library. 
  NOVAS was developed by the Astronomical Applications department of the United States Naval 
  Observatory. The C language version of NOVAS was developed by John Bangert at USNO/AA.
  </summary>
 	<remarks>
- The NOVAS2COM class is an instantiable class usable by COM clients. This means that you have to create an instance of the 
+ The NOVAS2COM class is an instanciable class usable by COM clients. This means that you have to create an instance of the 
  class in order to access its members. So, this works:
  <code>
  Dim Nov as New ASCOM.Astrometry.NOVAS2COM
@@ -1970,7 +1970,7 @@ ASCOM.Astrometry
 	<remarks></remarks>
 </member><member name="T:ASCOM.Astrometry.Kepler.IEphemeris">
 	<summary>
- Kepler Ephemeris Interface
+ Interface to the Kepler Ephemeris component
  </summary>
 	<remarks>
  The Ephemeris object contains an orbit engine which takes the orbital parameters of a solar system 
@@ -2115,7 +2115,7 @@ ASCOM.Astrometry
 	<remarks></remarks>
 </member><member name="T:ASCOM.Astrometry.NOVASCOM.IEarth">
 	<summary>
- Represents the "state" of the Earth at a given Terrestrial Julian date
+ Interface to an Earth object that represents the "state" of the Earth at a given Terrestrial Julian date
  </summary>
 	<remarks>Objects of class Earth represent the "state" of the Earth at a given Terrestrial Julian date. 
  The state includes barycentric and heliocentric position vectors for the earth, plus obliquity, 
@@ -2218,7 +2218,7 @@ ASCOM.Astrometry
 	<remarks></remarks>
 </member><member name="T:ASCOM.Astrometry.NOVASCOM.IPlanet">
 	<summary>
- Provide characteristics of a solar system body
+ Interface to a Planet component that provides characteristics of a solar system body
  </summary>
 	<remarks>Objects of class Planet hold the characteristics of a solar system body. Properties are 
  type (major or minor planet), number (for major and numbered minor planets), name (for unnumbered 
@@ -2367,7 +2367,7 @@ ASCOM.Astrometry
 	<remarks></remarks>
 </member><member name="T:ASCOM.Astrometry.NOVASCOM.IPositionVector">
 	<summary>
- NOVAS-COM PositionVector Class
+ Interface to the NOVAS-COM PositionVector Class
  </summary>
 	<remarks>Objects of class PositionVector contain vectors used for positions (earth, sites, 
  stars and planets) throughout NOVAS-COM. Of course, its properties include the x, y, and z 
@@ -2442,7 +2442,7 @@ ASCOM.Astrometry
 	<remarks></remarks>
 </member><member name="T:ASCOM.Astrometry.NOVASCOM.ISite">
 	<summary>
- NOVAS-COM Site Class
+ Interface to the NOVAS-COM Site Class
  </summary>
 	<remarks>Objects of class Site contain the specifications for an observer's location on the Earth 
  ellipsoid. Properties are latitude, longitude, height above mean sea level, the ambient temperature 
@@ -2592,7 +2592,7 @@ ASCOM.Astrometry
 	<remarks></remarks>
 </member><member name="T:ASCOM.Astrometry.NOVASCOM.IStar">
 	<summary>
- NOVAS-COM Star Class
+ Interface to the NOVAS-COM Star Class
  </summary>
 	<remarks>Objects of class Site contain the specifications for a star's catalog position in either FK5 or Hipparcos units (both must be J2000). Properties are right ascension and declination, proper motions, parallax, radial velocity, catalog type (FK5 or HIP), catalog number, optional ephemeris engine to use for barycenter calculations, and an optional value for delta-T. Unless you specifically set the DeltaT property, calculations performed by this class which require the value of delta-T (TT - UT1) rely on an internal function to estimate delta-T. 
 <para>The high-level NOVAS astrometric functions are implemented as methods of Star: 
@@ -2678,7 +2678,7 @@ ASCOM.Astrometry
 	<remarks></remarks>
 </member><member name="T:ASCOM.Astrometry.NOVASCOM.IVelocityVector">
 	<summary>
- NOVAS_COM VelocityVector Class
+ interface to the NOVAS_COM VelocityVector Class
  </summary>
 	<remarks>Objects of class VelocityVector contain vectors used for velocities (earth, sites, 
  planets, and stars) throughout NOVAS-COM. Of course, its properties include the x, y, and z 
@@ -3317,7 +3317,8 @@ ASCOM.Astrometry
 	<remarks></remarks>
 </member><member name="T:ASCOM.Astrometry.Exceptions.CompatibilityException">
 	<summary>
- Exception thrown when an incompatible component is encountered that prevents Utilities from funcitoning
+ Exception thrown when an incompatible component is encountered that prevents an Astrometric compoent 
+ from functioning correctly.
  correctly.
  </summary>
 	<remarks></remarks>
@@ -4311,7 +4312,8 @@ ASCOM.Astrometry
  Observatory. The C language version of NOVAS was developed by John Bangert at USNO/AA.
  </summary>
 	<remarks>
- The NOVAS class is a STATIC class. This means that you do not have to create an instance of the 
+ The NOVAS class is a STATIC class and is the component of preference for .NET programmers. 
+ This means that you do not have to create an instance of the 
  class in order to access its members. Instead you reference them directly from the class. So, this works:
  <code>rc = ASCOM.Astrometry.NOVAS2.AppStar(tjd, earth, star, ra, dec)</code> 
  while this does not work: 

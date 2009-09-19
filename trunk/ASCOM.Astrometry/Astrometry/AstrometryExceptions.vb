@@ -50,7 +50,8 @@ Namespace Exceptions
     End Class
 
     ''' <summary>
-    ''' Exception thrown when an incompatible component is encountered that prevents Utilities from funcitoning
+    ''' Exception thrown when an incompatible component is encountered that prevents an Astrometric compoent 
+    ''' from functioning correctly.
     ''' correctly.
     ''' </summary>
     ''' <remarks></remarks>
