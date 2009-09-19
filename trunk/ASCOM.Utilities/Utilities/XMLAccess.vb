@@ -251,26 +251,39 @@ Friend Class XMLAccess
         Return RetValues
     End Function
 
-    Friend Function GetProfile(ByVal p_SubKeyName As String, ByVal p_ValueName As String) As String Implements IAccess.GetProfile
+    Friend Overloads Function GetProfile(ByVal p_SubKeyName As String, ByVal p_ValueName As String, ByVal p_DefaultValue As String) As String Implements IAccess.GetProfile
         'Read a single value from a key
         Dim Values As Generic.SortedList(Of String, String), RetVal As String
 
         sw.Reset() : sw.Start() 'Start timing this call
-        TL.LogMessage("GetProfile", "SubKey: """ & p_SubKeyName & """ Name: """ & p_ValueName & """")
+        TL.LogMessage("GetProfile", "SubKey: """ & p_SubKeyName & """ Name: """ & p_ValueName & """" & """ DefaultValue: """ & p_DefaultValue & """")
 
         RetVal = "" 'Initialise return value to null string
-        Values = ReadValues(p_SubKeyName) 'Read in the key values
         Try
+            Values = ReadValues(p_SubKeyName) 'Read in the key values
             If p_ValueName = "" Then 'Requested the default value
                 RetVal = Values.Item(COLLECTION_DEFAULT_VALUE_NAME)
             Else 'Requested a particular value
                 RetVal = Values.Item(p_ValueName)
             End If
-        Catch : End Try 'Missing value generates an exception and should return a null string
+        Catch 'Missing value generates an exception and should return a null string or the supplied default value
+            If Not (p_DefaultValue Is Nothing) Then 'We have been supplied a default value so set it and then return it
+                WriteProfile(p_SubKeyName, p_ValueName, p_DefaultValue)
+                RetVal = p_DefaultValue
+                TL.LogMessage("GetProfile", "Value not yet set, returning supplied default value: " & p_DefaultValue)
+            Else
+                TL.LogMessage("GetProfile", "Value not yet set and no default value supplied, returning null string")
+            End If
+
+        End Try
 
         Values = Nothing
         sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
         Return RetVal
+    End Function
+
+    Friend Overloads Function GetProfile(ByVal p_SubKeyName As String, ByVal p_ValueName As String) As String Implements IAccess.GetProfile
+        Return Me.GetProfile(p_SubKeyName, p_ValueName, Nothing)
     End Function
 
     Friend Sub WriteProfile(ByVal p_SubKeyName As String, ByVal p_ValueName As String, ByVal p_ValueData As String) Implements IAccess.WriteProfile

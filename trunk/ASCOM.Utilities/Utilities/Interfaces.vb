@@ -896,17 +896,24 @@ Namespace Interfaces
         <DispId(6)> Sub Unregister(ByVal DriverID As String)
 
         ''' <summary>
-        ''' Retrieve a string value from the profile using the supplied subkey for the given Driver ID and variable name.
+        ''' Retrieve a string value from the profile using the supplied subkey for the given Driver ID 
+        ''' and variable name. Set and return the default value if the requested variable name has not yet been set.
         ''' </summary>
         ''' <param name="DriverID">ProgID of the device to read from</param>
         ''' <param name="Name">Name of the variable whose value is retrieved</param>
         ''' <param name="SubKey">Subkey from the profile root from which to read the value</param>
+        ''' <param name="DefaultValue">Default value to be used if there is no value currently set</param>
         ''' <returns>Retrieved variable value</returns>
         ''' <remarks>
         ''' <para>Name may be an empty string for the unnamed value. The unnamed value is also known as the "default" value for a registry key.</para>
         ''' <para>Does not provide access to other registry data types such as binary and doubleword. </para>
+        ''' <para>If a default value is supplied and the value is not already present in the profile store,
+        ''' the default value will be set in the profile store and then returned as the value of the 
+        ''' DriverID/SubKey/Name. If the default value is set to null (C#) or Nothing (VB) then no value will
+        ''' be set in the profile and an empty string will be returned as the value of the 
+        ''' DriverID/SubKey/Name.</para>
         ''' </remarks>
-        <DispId(7)> Overloads Function GetValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String) As String
+        <DispId(7)> Overloads Function GetValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String, ByVal DefaultValue As String) As String
 
         ''' <summary>
         ''' Writes a string value to the profile using the supplied subkey for the given Driver ID and variable name.
@@ -1009,6 +1016,19 @@ Namespace Interfaces
         ''' with SubKey set to empty string achieve this effect.</para>
         ''' </remarks>
         Overloads Function GetValue(ByVal DriverID As String, ByVal Name As String) As String
+
+        ''' <summary>
+        ''' Retrieve a string value from the profile using the supplied subkey for the given Driver ID and variable name.
+        ''' </summary>
+        ''' <param name="DriverID">ProgID of the device to read from</param>
+        ''' <param name="Name">Name of the variable whose value is retrieved</param>
+        ''' <param name="SubKey">Subkey from the profile root from which to read the value</param>
+        ''' <returns>Retrieved variable value</returns>
+        ''' <remarks>
+        ''' <para>Name may be an empty string for the unnamed value. The unnamed value is also known as the "default" value for a registry key.</para>
+        ''' <para>Does not provide access to other registry data types such as binary and doubleword. </para>
+        ''' </remarks>
+        Overloads Function GetValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String) As String
 
         ''' <summary>
         ''' Return a list of the sub-keys under the root of the given DriverID
@@ -1240,7 +1260,8 @@ Namespace Interfaces
 
     Friend Interface IAccess
         'Interface for a general profile store provider, this is independent of the actual mechanic used to store the profile
-        Function GetProfile(ByVal p_SubKeyName As String, ByVal p_ValueName As String) As String
+        Overloads Function GetProfile(ByVal p_SubKeyName As String, ByVal p_ValueName As String) As String
+        Overloads Function GetProfile(ByVal p_SubKeyName As String, ByVal p_ValueName As String, ByVal p_DefaultValue As String) As String
         Sub WriteProfile(ByVal p_SubKeyName As String, ByVal p_ValueName As String, ByVal p_ValueData As String)
         Function EnumProfile(ByVal p_SubKeyName As String) As Generic.SortedList(Of String, String)
         Sub DeleteProfile(ByVal p_SubKeyName As String, ByVal p_ValueName As String)

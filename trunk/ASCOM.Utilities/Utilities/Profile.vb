@@ -262,25 +262,32 @@ Public Class Profile
     End Sub
 
     ''' <summary>
-    ''' Retrieve a string value from the profile using the supplied subkey for the given Driver ID and variable name.
+    ''' Retrieve a string value from the profile using the supplied subkey for the given Driver ID 
+    ''' and variable name. Set and return the default value if the requested variable name has not yet been set.
     ''' </summary>
     ''' <param name="DriverID">ProgID of the device to read from</param>
     ''' <param name="Name">Name of the variable whose value is retrieved</param>
     ''' <param name="SubKey">Subkey from the profile root from which to read the value</param>
+    ''' <param name="DefaultValue">Default value to be used if there is no value currently set</param>
     ''' <returns>Retrieved variable value</returns>
     ''' <exception cref="Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
     ''' <exception cref="Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
     ''' <remarks>
     ''' <para>Name may be an empty string for the unnamed value. The unnamed value is also known as the "default" value for a registry key.</para>
     ''' <para>Does not provide access to other registry data types such as binary and doubleword. </para>
+    ''' <para>If a default value is supplied and the value is not already present in the profile store,
+    ''' the default value will be set in the profile store and then returned as the value of the 
+    ''' DriverID/SubKey/Name. If the default value is set to null (C#) or Nothing (VB) then no value will
+    ''' be set in the profile and an empty string will be returned as the value of the 
+    ''' DriverID/SubKey/Name.</para>
     ''' </remarks>
-    Public Overloads Function GetValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String) As String Implements IProfile.GetValue
+    Public Overloads Function GetValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String, ByVal DefaultValue As String) As String Implements IProfile.GetValue
         'Get a profile value
         Dim Rtn As String
-        TL.LogMessage("GetValue", "Driver: " & DriverID & " Name: " & Name & " Subkey: """ & SubKey & """")
+        TL.LogMessage("GetValue", "Driver: " & DriverID & " Name: " & Name & " Subkey: """ & SubKey & """" & " DefaultValue: """ & DefaultValue & """")
 
         CheckRegistered(DriverID)
-        Rtn = ProfileStore.GetProfile(MakeKey(DriverID, SubKey), Name)
+        Rtn = ProfileStore.GetProfile(MakeKey(DriverID, SubKey), Name, DefaultValue)
         TL.LogMessage("  GetValue", "  " & Rtn)
 
         Return Rtn
@@ -463,7 +470,25 @@ Public Class Profile
     ''' </remarks>
     <ComVisible(False)> _
     Public Overloads Function GetValue(ByVal DriverID As String, ByVal Name As String) As String Implements IProfileExtra.GetValue
-        Return Me.GetValue(DriverID, Name, "")
+        Return Me.GetValue(DriverID, Name, "", Nothing)
+    End Function
+
+    ''' <summary>
+    ''' Retrieve a string value from the profile using the supplied subkey for the given Driver ID and variable name.
+    ''' </summary>
+    ''' <param name="DriverID">ProgID of the device to read from</param>
+    ''' <param name="Name">Name of the variable whose value is retrieved</param>
+    ''' <param name="SubKey">Subkey from the profile root from which to read the value</param>
+    ''' <returns>Retrieved variable value</returns>
+    ''' <exception cref="Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
+    ''' <exception cref="Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
+    ''' <remarks>
+    ''' <para>Name may be an empty string for the unnamed value. The unnamed value is also known as the "default" value for a registry key.</para>
+    ''' <para>Does not provide access to other registry data types such as binary and doubleword. </para>
+    ''' </remarks>
+    <ComVisible(False)> _
+    Public Overloads Function GetValue(ByVal DriverID As String, ByVal Name As String, ByVal SubKey As String) As String Implements IProfileExtra.GetValue
+        Return Me.GetValue(DriverID, Name, SubKey, Nothing)
     End Function
 
     ''' <summary>
