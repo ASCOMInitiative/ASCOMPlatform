@@ -137,12 +137,13 @@
         Me.lblTitle.BackColor = System.Drawing.SystemColors.Control
         Me.lblTitle.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblTitle.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblTitle.Location = New System.Drawing.Point(12, 35)
+        Me.lblTitle.Location = New System.Drawing.Point(12, 24)
         Me.lblTitle.Name = "lblTitle"
         Me.lblTitle.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblTitle.Size = New System.Drawing.Size(321, 31)
+        Me.lblTitle.Size = New System.Drawing.Size(321, 42)
         Me.lblTitle.TabIndex = 2
-        Me.lblTitle.Text = "<runtime>"
+        Me.lblTitle.Text = "Line 1" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Line 2" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Line 3"
+        Me.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'ChooserMenu
         '
