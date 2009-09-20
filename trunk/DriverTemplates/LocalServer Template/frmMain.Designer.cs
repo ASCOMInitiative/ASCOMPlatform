@@ -1,6 +1,6 @@
 using System;
 
-namespace ASCOM.$safeprojectname$
+namespace TEMPLATENAMESPACE
 {
 	partial class frmMain
 	{
@@ -49,7 +49,7 @@ namespace ASCOM.$safeprojectname$
 			this.Controls.Add(this.label1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "frmMain";
-			this.Text = "$safeprojectname$ Driver Server";
+			this.Text = "TEMPLATEDEVICENAME Driver Server";
 			this.ResumeLayout(false);
 
 		}

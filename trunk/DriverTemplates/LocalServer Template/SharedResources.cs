@@ -20,14 +20,14 @@ namespace ASCOM.LocalServerName
 {
 	public class SharedResources
 	{
-		private static ASCOM. m_SharedSerial;		// Shared serial port
+// Shared serial port
 		private static int s_z;
 
 		private SharedResources() { }							// Prevent creation of instances
 
 		static SharedResources()								// Static initialization
 		{
-			m_SharedSerial = new ASCOM.Helper.Serial();
+			SharedSerial = new ASCOM.Utilities.Serial();
 			s_z = 0;
 		}
 
@@ -36,7 +36,7 @@ namespace ASCOM.LocalServerName
 		//
 
 		// Shared serial port 
-		public static ASCOM.Helper.Serial SharedSerial { get { return m_SharedSerial; } }
+		public static ASCOM.Utilities.Serial SharedSerial { get; private set; }
 		public static int z { get { return s_z++; } }
 	}
 }

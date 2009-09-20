@@ -1,5 +1,5 @@
 //
-// $safeprojectname$ Local COM Server
+// TEMPLATEDEVICENAME Local COM Server
 //
 // This is the core of a managed COM Local Server, capable of serving
 // multiple instances of multiple interfdaces, within a single
@@ -22,9 +22,9 @@ using Microsoft.Win32;
 using System.Text;
 using System.Threading;
 
-namespace ASCOM.TEMPLATEDEVICENAME
+namespace TEMPLATENAMESPACE
 {
-	public class TEMPLATEDEVICECLASS
+	public class TEMPLATEDEVICENAME
 	{
 
 		#region Access to kernel32.dll, user32.dll, and ole32.dll functions
@@ -103,10 +103,10 @@ namespace ASCOM.TEMPLATEDEVICENAME
 		#endregion
 
 		#region Private Data
-		private static uint m_uiMainThreadId;					// Stores the main thread's thread id.
+// Stores the main thread's thread id.
 		private static int m_iObjsInUse;						// Keeps a count on the total number of objects alive.
 		private static int m_iServerLocks;						// Keeps a lock count on this application.
-		private static bool m_bComStart;						// True if server started by COM (-embedding)
+// True if server started by COM (-embedding)
 		private static frmMain m_MainForm = null;				// Reference to our main form
 		private static ArrayList m_ComObjectAssys;				// Dynamically loaded assemblies containing served COM objects
 		private static ArrayList m_ComObjectTypes;				// Served COM object types
@@ -115,10 +115,10 @@ namespace ASCOM.TEMPLATEDEVICENAME
 		#endregion
 
 		// This property returns the main thread's id.
-		public static uint MainThreadId { get { return m_uiMainThreadId; } }
+		public static uint MainThreadId { get; private set; }
 
 		// Used to tell if started by COM or manually
-		public static bool StartedByCOM { get { return m_bComStart; } }
+		public static bool StartedByCOM { get; private set; }
 
 
 		#region Server Lock, Object Counting, and AutoQuit on COM startup
@@ -127,7 +127,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
 		{
 			get
 			{
-				lock (typeof($safeprojectname$))
+				lock (typeof(TEMPLATEDEVICENAME))
 				{
 					return m_iObjsInUse;
 				}
@@ -153,7 +153,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
 		{
 			get
 			{
-				lock (typeof(TEMPLATEDEVICECLASS))
+				lock (typeof(TEMPLATEDEVICENAME))
 				{
 					return m_iServerLocks;
 				}
@@ -185,11 +185,11 @@ namespace ASCOM.TEMPLATEDEVICENAME
 		//
 		public static void ExitIf()
 		{
-			lock (typeof(TEMPLATEDEVICECLASS))
+			lock (typeof(TEMPLATEDEVICENAME))
 			{
 				if ((ObjectsCount <= 0) && (ServerLockCount <= 0))
 				{
-					if (m_bComStart)
+					if (StartedByCOM)
 					{
 						UIntPtr wParam = new UIntPtr(0);
 						IntPtr lParam = new IntPtr(0);
@@ -211,7 +211,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
 		// below our executable. The code below takes care of the situation
 		// where we're running in the VS.NET IDE, allowing the ServedClasses
 		// folder to be in the solution folder, while we are executing in
-		// the $safeprojectname$\bin\Debug subfolder.
+		// the TEMPLATEDEVICENAME\bin\Debug subfolder.
 		//
 		private static bool LoadComObjectAssemblies()
 		{
@@ -219,9 +219,9 @@ namespace ASCOM.TEMPLATEDEVICENAME
 			m_ComObjectTypes = new ArrayList();
 
 			string assyPath = Assembly.GetEntryAssembly().Location;
-			int i = assyPath.LastIndexOf(@"\$safeprojectname$\bin\");						// Look for us running in IDE
+			int i = assyPath.LastIndexOf(@"\TEMPLATEDEVICENAME\bin\");						// Look for us running in IDE
 			if (i == -1) i = assyPath.LastIndexOf('\\');
-			assyPath = assyPath.Remove(i, assyPath.Length - i) + "\\$safeprojectname$ServedClasses";
+			assyPath = String.Format("{0}\\TEMPLATEDEVICENAMEServedClasses", assyPath.Remove(i, assyPath.Length - i));
 
 			DirectoryInfo d = new DirectoryInfo(assyPath);
 			foreach (FileInfo fi in d.GetFiles("*.dll"))
@@ -235,18 +235,27 @@ namespace ASCOM.TEMPLATEDEVICENAME
 				try
 				{
 					Assembly so = Assembly.LoadFrom(aPath);
-					m_ComObjectTypes.Add(so.GetType(fqClassName, true));
-					m_ComObjectAssys.Add(so);
+					// Check to see if the assembly has the ServedClassName attribute, only use it if it does.
+					object[] attrbutes = so.GetCustomAttributes(typeof(ASCOM.ServedClassNameAttribute), false);
+					if (attrbutes.Length > 0)
+					{
+						m_ComObjectTypes.Add(so.GetType(fqClassName, true));
+						m_ComObjectAssys.Add(so);
+					}
 				}
 				catch (Exception e)
 				{
-					MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + e.Message,
-						"$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+					MessageBox.Show(String.Format("Failed to load served COM class assembly {0} - {1}", fi.Name, e.Message),
+						"TEMPLATEDEVICENAME", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 					return false;
 				}
 
 			}
 			return true;
+		}
+		private static string GetDeviceClass(string progid)
+		{
+			return progid.Substring(progid.LastIndexOf('.') + 1);
 		}
 		#endregion
 
@@ -300,7 +309,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
 			catch (Exception ex)
 			{
 				MessageBox.Show("Error while registering the server:\n" + ex.ToString(),
-						"$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+						"TEMPLATEDEVICENAME", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 				return;
 			}
 			finally
@@ -358,22 +367,29 @@ namespace ASCOM.TEMPLATEDEVICENAME
 					// ASCOM 
 					//
 					assy = type.Assembly;
-					attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyProductAttribute));
-					string chooserName = ((AssemblyProductAttribute)attr).Product;
-					Helper.Profile P = new Helper.Profile();
-					P.DeviceTypeV = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
-					P.Register(progid, chooserName);
-					try										// In case Helper becomes native .NET
+					//attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyProductAttribute));
+					//string chooserName = ((AssemblyProductAttribute)attr).Product;
+
+					// Pull the display name from the ServedClassName attribute.
+					attr = Attribute.GetCustomAttribute(assy, typeof(ASCOM.ServedClassNameAttribute));
+					string chooserName = ((ASCOM.ServedClassNameAttribute)attr).DisplayName ?? "TEMPLATEDEVICENAME";
+					using (var P = new ASCOM.Utilities.Profile { DeviceType = GetDeviceClass(progid) })
 					{
-						Marshal.ReleaseComObject(P);
+						P.Register(progid, chooserName);
+						try
+						{
+							// In case Helper becomes native .NET
+							Marshal.ReleaseComObject(P);
+						}
+						catch (Exception)
+						{
+						}
 					}
-					catch (Exception) { }
-					P = null;
 				}
 				catch (Exception ex)
 				{
-					MessageBox.Show("Error while registering the server:\n" + ex.ToString(),
-							"$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+					MessageBox.Show(String.Format("Error while registering the server:\n{0}", ex),
+							"TEMPLATEDEVICENAME", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 					bFail = true;
 				}
 				finally
@@ -397,9 +413,8 @@ namespace ASCOM.TEMPLATEDEVICENAME
 			//
 			// Local server's DCOM/AppID information
 			//
-			Registry.ClassesRoot.DeleteSubKey("APPID\\" + m_sAppId, false);
-			Registry.ClassesRoot.DeleteSubKey("APPID\\" +
-					Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1), false);
+			Registry.ClassesRoot.DeleteSubKey(String.Format("APPID\\{0}", m_sAppId), false);
+			Registry.ClassesRoot.DeleteSubKey(String.Format("APPID\\{0}", Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1)), false);
 
 			//
 			// For each of the driver assemblies
@@ -414,31 +429,34 @@ namespace ASCOM.TEMPLATEDEVICENAME
 				//
 				// HKCR\progid
 				//
-				Registry.ClassesRoot.DeleteSubKey(progid + "\\CLSID", false);
+				Registry.ClassesRoot.DeleteSubKey(String.Format("{0}\\CLSID", progid), false);
 				Registry.ClassesRoot.DeleteSubKey(progid, false);
 				//
 				// HKCR\CLSID\clsid
 				//
-				Registry.ClassesRoot.DeleteSubKey("CLSID\\" + clsid + "\\Implemented Categories\\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}", false);
-				Registry.ClassesRoot.DeleteSubKey("CLSID\\" + clsid + "\\Implemented Categories", false);
-				Registry.ClassesRoot.DeleteSubKey("CLSID\\" + clsid + "\\ProgId", false);
-				Registry.ClassesRoot.DeleteSubKey("CLSID\\" + clsid + "\\LocalServer32", false);
-				Registry.ClassesRoot.DeleteSubKey("CLSID\\" + clsid + "\\Programmable", false);
-				Registry.ClassesRoot.DeleteSubKey("CLSID\\" + clsid, false);
+				Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\Implemented Categories\\{{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}}", clsid), false);
+				Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\Implemented Categories", clsid), false);
+				Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\ProgId", clsid), false);
+				Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\LocalServer32", clsid), false);
+				Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\Programmable", clsid), false);
+				Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}", clsid), false);
 				try
 				{
 					//
 					// ASCOM
 					//
-					Helper.Profile P = new Helper.Profile();
-					P.DeviceTypeV = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
-					P.Unregister(progid);
-					try										// In case Helper becomes native .NET
+					using (var P = new ASCOM.Utilities.Profile { DeviceType = GetDeviceClass(progid) })
 					{
-						Marshal.ReleaseComObject(P);
+						P.Unregister(progid);
+						try
+						{
+							// In case Helper becomes native .NET
+							Marshal.ReleaseComObject(P);
+						}
+						catch (Exception)
+						{
+						}
 					}
-					catch (Exception) { }
-					P = null;
 				}
 				catch (Exception) { }
 			}
@@ -461,7 +479,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
 				if (!factory.RegisterClassObject())
 				{
 					MessageBox.Show("Failed to register class factory for " + type.Name,
-						"$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+						"TEMPLATEDEVICENAME", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 					return false;
 				}
 			}
@@ -496,7 +514,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
 				switch (args[0].ToLower())
 				{
 					case "-embedding":
-						m_bComStart = true;										// Indicate COM started us
+						StartedByCOM = true;										// Indicate COM started us
 						break;
 
 					case "-register":
@@ -517,12 +535,12 @@ namespace ASCOM.TEMPLATEDEVICENAME
 
 					default:
 						MessageBox.Show("Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding",
-							"$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+							"TEMPLATEDEVICENAME", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 						break;
 				}
 			}
 			else
-				m_bComStart = false;
+				StartedByCOM = false;
 
 			return bRet;
 		}
@@ -544,13 +562,13 @@ namespace ASCOM.TEMPLATEDEVICENAME
 			// Initialize critical member variables.
 			m_iObjsInUse = 0;
 			m_iServerLocks = 0;
-			m_uiMainThreadId = GetCurrentThreadId();
+			MainThreadId = GetCurrentThreadId();
 			Thread.CurrentThread.Name = "Main Thread";
 
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			m_MainForm = new frmMain();
-			if (m_bComStart) m_MainForm.WindowState = FormWindowState.Minimized;
+			if (StartedByCOM) m_MainForm.WindowState = FormWindowState.Minimized;
 
 			// Register the class factories of the served objects
 			RegisterClassFactories();
