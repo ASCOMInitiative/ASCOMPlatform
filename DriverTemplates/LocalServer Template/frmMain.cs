@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ASCOM.$safeprojectname$
+namespace TEMPLATENAMESPACE
 {
 	public partial class frmMain : Form
 	{

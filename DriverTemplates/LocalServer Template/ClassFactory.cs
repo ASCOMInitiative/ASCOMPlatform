@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Collections;
 
-namespace ASCOM.$safeprojectname$
+namespace TEMPLATENAMESPACE
 {
 
 	#region C# Definition of IClassFactory
@@ -227,11 +227,11 @@ namespace ASCOM.$safeprojectname$
 		void IClassFactory.LockServer(bool bLock)
 		{
 			if (bLock)
-				$safeprojectname$.CountLock();
+				TEMPLATEDEVICENAME.CountLock();
 			else
-				$safeprojectname$.UncountLock();
+				TEMPLATEDEVICENAME.UncountLock();
 			// Always attempt to see if we need to shutdown this server application.
-			$safeprojectname$.ExitIf();
+			TEMPLATEDEVICENAME.ExitIf();
 		}
 		#endregion
 	}
