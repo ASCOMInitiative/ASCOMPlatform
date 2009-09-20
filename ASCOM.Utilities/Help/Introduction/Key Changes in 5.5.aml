@@ -53,23 +53,23 @@
   					</list>
   				</listItem>
   				<listItem>New InvalidValue and ValueNotSet exceptions to support expected error conditions in drivers</listItem>
-  				<listItem>IConform interface now part of the platform. This allows drivers to communicate decicxe specific
+  				<listItem>IConform interface now part of the platform. This allows drivers to communicate device specific
   				commands to Conform for use when testing the Telescope CommandXXX commands.</listItem>
   				<listItem>New ASCOM.Astrometry namespace supporting a variety of astrometric functions
   					<list class="bullet">
-  						<listItem>New 32 /64 bit implementation of the Kepler ephemeris engine. This updates the optional 32bit COM 
+   						<listItem>New Transform component optimised for drivers that need a simple mechanic to convert between
+  						J2000, apparent and topocentric co-ordinates.</listItem>
+ 						<listItem>New 32 /64 bit implementation of the Kepler ephemeris engine. This updates the optional 32bit COM 
   						component available in Platform 5.</listItem>
   						<listItem>New implementation of the complete USNO NOVAS 2 astrometry engine. This is implemented as a 
   						static class</listItem>
   						<listItem>New instanciable version of the NOVAS2 engine for use by COM clients that can't access the static class.</listItem>
 	  					<listItem>New 32 / 64 bit implementation of the NOVASCOM component. This updates the optional 32bit COM 
-	  					component available in platform 5.</listItem>
-  						<listItem>New Transform component optimised for drivers that need a simple mechanic to convert between
-  						J2000, apparent and topocentric co-ordinates.</listItem>
+	  					component available in Platform 5.</listItem>
   					</list>
   				</listItem>
   				<listItem>This help file contains a number of code examples.</listItem>
-  				<listItem>Comprehensive namespace documentation.</listItem>
+  				<listItem>Comprehensive namespace documentation in this help file.</listItem>
   			</list>
       	</content>
     </section>

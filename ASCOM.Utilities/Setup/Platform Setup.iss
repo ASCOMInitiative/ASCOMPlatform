@@ -53,9 +53,13 @@
 ; Added client toolkit symbols to the symbols directory
 ; Utilities uplevelled to 5.5.0.0
 ; Setup Build 6 Released
+; Corrected ASCOM download url given when platform 5 is not installed
+; Changed location of Platform 5a Architecture pdf to make it more easily found.
+; Setup Build 7
 
 [Setup]
-#define Public SetupVersion 6; Setup program version number
+; Setup program version number - change this each time you change this setup script
+#define Public SetupVersion 7
 
 #define Public Major 0
 #define Public Minor 0
@@ -176,7 +180,7 @@ Source: ..\OriginalHelpers\RestoreOriginalHelpers.cmd; DestDir: {cf32}\ASCOM\Uti
 
 ;ASCOM Platform .NET Help files
 Source: ..\Help\Help\PlatformHelp.chm; DestDir: {cf}\ASCOM\Doc; Flags: ignoreversion
-Source: ..\Help\Help\Platform 5.5.pdf; DestDir: {cf}\ASCOM\Doc; Flags: ignoreversion
+Source: ..\Help\Platform 5.5 Architecture\Platform 5.5.pdf; DestDir: {cf}\ASCOM\Doc; Flags: ignoreversion
 Source: ReadMe55.txt; DestDir: {app}; Flags: ignoreversion
 
 ;Profile Explorer

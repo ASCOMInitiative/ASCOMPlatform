@@ -28,11 +28,12 @@
     <CopyrightText>Copyright &amp;#169%3b ASCOM Initiative 2009</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM.Utilities" isExposed="True">
-  <Filter entryType="Class" fullName="ASCOM.Utilities.Profile" filterName="Profile" isExposed="True">
-    <Filter entryType="Method" fullName="ASCOM.Utilities.Profile.MigrateProfile" filterName="MigrateProfile" isExposed="False" />
-  </Filter>
-</Filter>
-<Filter entryType="Namespace" fullName="ASCOM.Utilities.VB6HelperSupport" isExposed="False" /></ApiFilter>
+        <Filter entryType="Class" fullName="ASCOM.Utilities.Profile" filterName="Profile" isExposed="True">
+          <Filter entryType="Method" fullName="ASCOM.Utilities.Profile.MigrateProfile" filterName="MigrateProfile" isExposed="False" />
+        </Filter>
+      </Filter>
+      <Filter entryType="Namespace" fullName="ASCOM.Utilities.VB6HelperSupport" isExposed="False" />
+    </ApiFilter>
     <PresentationStyle>vs2005 ASCOM</PresentationStyle>
     <Preliminary>False</Preliminary>
     <NamingMethod>MemberName</NamingMethod>
@@ -147,7 +148,7 @@
     <None Include="Version History\Version Summary.aml" />
     <None Include="Introduction\ASCOM Platform for COM.aml" />
     <None Include="Introduction\ASCOM Platform for .NET.aml" />
-    <None Include="Version History\Version 5.3.0.0.aml" />
+    <None Include="Version History\Version 5.5 RC1.aml" />
     <None Include="Introduction\Introduction.aml" />
   </ItemGroup>
   <ItemGroup>
