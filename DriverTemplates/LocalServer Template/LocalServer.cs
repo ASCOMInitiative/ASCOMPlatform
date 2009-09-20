@@ -1,5 +1,5 @@
 //
-// RotatorSimulator Local COM Server
+// $safeprojectname$ Local COM Server
 //
 // This is the core of a managed COM Local Server, capable of serving
 // multiple instances of multiple interfdaces, within a single
@@ -8,23 +8,23 @@
 // multiple interfaces to multiple clients (e.g. Meade Telescope
 // and Focuser) as well as hubs (e.g., POTH).
 //
-// Written by: Robert B. Denny (Version 1.0.0, 14-May-2007)
+// Written by: Robert B. Denny (Version 1.0.1, 29-May-2007)
 //
-// 28-May-07 rbd	Unregister missing Programmable subkey, was raising error.
 //
 using System;
-using System.Collections;
 using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows.Forms;
+using System.Drawing;
+using System.Collections;
+using System.Runtime.InteropServices;
+using System.Reflection;
 using Microsoft.Win32;
-using Helper = ASCOM.Utilities;
+using System.Text;
+using System.Threading;
 
-namespace ASCOM.Simulator
+namespace ASCOM.TEMPLATEDEVICENAME
 {
-	public class RotatorSimulator
+	public class TEMPLATEDEVICECLASS
 	{
 
 		#region Access to kernel32.dll, user32.dll, and ole32.dll functions
@@ -103,17 +103,16 @@ namespace ASCOM.Simulator
 		#endregion
 
 		#region Private Data
-		protected static uint m_uiMainThreadId;					// Stores the main thread's thread id.
-		protected static int m_iObjsInUse;						// Keeps a count on the total number of objects alive.
-		protected static int m_iServerLocks;					// Keeps a lock count on this application.
-		protected static bool m_bComStart;						// True if server started by COM (-embedding)
-		protected static ArrayList m_ComObjectAssys;			// Dynamically loaded assemblies containing served COM objects
-		protected static ArrayList m_ComObjectTypes;			// Served COM object types
-		protected static ArrayList m_ClassFactories;			// Served COM object class factories
-		protected static string m_sAppId = "{770ba0e5-fb34-47c8-93df-1ac09118edb8}";	// Our AppId
+		private static uint m_uiMainThreadId;					// Stores the main thread's thread id.
+		private static int m_iObjsInUse;						// Keeps a count on the total number of objects alive.
+		private static int m_iServerLocks;						// Keeps a lock count on this application.
+		private static bool m_bComStart;						// True if server started by COM (-embedding)
+		private static frmMain m_MainForm = null;				// Reference to our main form
+		private static ArrayList m_ComObjectAssys;				// Dynamically loaded assemblies containing served COM objects
+		private static ArrayList m_ComObjectTypes;				// Served COM object types
+		private static ArrayList m_ClassFactories;				// Served COM object class factories
+		private static string m_sAppId = "{$guid1$}";	// Our AppId
 		#endregion
-
-		public static frmMain m_MainForm = null;				// Reference to our main form
 
 		// This property returns the main thread's id.
 		public static uint MainThreadId { get { return m_uiMainThreadId; } }
@@ -121,13 +120,14 @@ namespace ASCOM.Simulator
 		// Used to tell if started by COM or manually
 		public static bool StartedByCOM { get { return m_bComStart; } }
 
+
 		#region Server Lock, Object Counting, and AutoQuit on COM startup
 		// Returns the total number of objects alive currently.
 		public static int ObjectsCount
 		{
 			get
 			{
-				lock (typeof(RotatorSimulator))
+				lock (typeof($safeprojectname$))
 				{
 					return m_iObjsInUse;
 				}
@@ -153,7 +153,7 @@ namespace ASCOM.Simulator
 		{
 			get
 			{
-				lock (typeof(RotatorSimulator))
+				lock (typeof(TEMPLATEDEVICECLASS))
 				{
 					return m_iServerLocks;
 				}
@@ -181,15 +181,15 @@ namespace ASCOM.Simulator
 		//
 		// If so, and if we were started by COM, we post a WM_QUIT message to the main thread's
 		// message loop. This will cause the message loop to exit and hence the termination 
-		// of this application. 
+		// of this application. If hand-started, then just trace that it WOULD exit now.
 		//
 		public static void ExitIf()
 		{
-			lock (typeof(RotatorSimulator))
+			lock (typeof(TEMPLATEDEVICECLASS))
 			{
 				if ((ObjectsCount <= 0) && (ServerLockCount <= 0))
 				{
-					if(m_bComStart)
+					if (m_bComStart)
 					{
 						UIntPtr wParam = new UIntPtr(0);
 						IntPtr lParam = new IntPtr(0);
@@ -211,17 +211,17 @@ namespace ASCOM.Simulator
 		// below our executable. The code below takes care of the situation
 		// where we're running in the VS.NET IDE, allowing the ServedClasses
 		// folder to be in the solution folder, while we are executing in
-		// the RotatorSimulator\bin\Debug subfolder.
+		// the $safeprojectname$\bin\Debug subfolder.
 		//
-		protected static bool LoadComObjectAssemblies()
+		private static bool LoadComObjectAssemblies()
 		{
 			m_ComObjectAssys = new ArrayList();
 			m_ComObjectTypes = new ArrayList();
 
 			string assyPath = Assembly.GetEntryAssembly().Location;
-			int i = assyPath.LastIndexOf(@"\RotatorServer\bin\");						// Look for us running in IDE
+			int i = assyPath.LastIndexOf(@"\$safeprojectname$\bin\");						// Look for us running in IDE
 			if (i == -1) i = assyPath.LastIndexOf('\\');
-			assyPath = assyPath.Remove(i, assyPath.Length - i) + "\\RotatorSimulatorServedClasses";
+			assyPath = assyPath.Remove(i, assyPath.Length - i) + "\\$safeprojectname$ServedClasses";
 
 			DirectoryInfo d = new DirectoryInfo(assyPath);
 			foreach (FileInfo fi in d.GetFiles("*.dll"))
@@ -235,18 +235,13 @@ namespace ASCOM.Simulator
 				try
 				{
 					Assembly so = Assembly.LoadFrom(aPath);
-                    //Added check to see if the dll has the ServedClassNameAttribute
-                    object[] attributes = so.GetCustomAttributes(typeof(ServedClassNameAttribute),false);
-                    if (attributes.Length > 0)
-                    {
 					m_ComObjectTypes.Add(so.GetType(fqClassName, true));
 					m_ComObjectAssys.Add(so);
 				}
-                }
 				catch (Exception e)
 				{
 					MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + e.Message,
-						"Rotator Simulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+						"$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 					return false;
 				}
 
@@ -267,7 +262,7 @@ namespace ASCOM.Simulator
 		// adds DCOM info for the local server itself, so it can be activated
 		// via an outboiud connection from TheSky.
 		//
-		protected static void RegisterObjects()
+		private static void RegisterObjects()
 		{
 			RegistryKey key = null;
 			RegistryKey key2 = null;
@@ -305,7 +300,7 @@ namespace ASCOM.Simulator
 			catch (Exception ex)
 			{
 				MessageBox.Show("Error while registering the server:\n" + ex.ToString(),
-						"RotatorSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+						"$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 				return;
 			}
 			finally
@@ -363,14 +358,10 @@ namespace ASCOM.Simulator
 					// ASCOM 
 					//
 					assy = type.Assembly;
-                    //attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyProductAttribute));
-                    //string chooserName = ((AssemblyProductAttribute)attr).Product;
-
-                    //Modified to pull from the custom Attribute ServedClassName
-                    attr = Attribute.GetCustomAttribute(assy, typeof(ServedClassNameAttribute));
-                    string chooserName = ((ServedClassNameAttribute)attr).DisplayName;
-
-					var P = new ASCOM.Utilities.Profile { DeviceType = progid.Substring(progid.LastIndexOf('.') + 1) };
+					attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyProductAttribute));
+					string chooserName = ((AssemblyProductAttribute)attr).Product;
+					Helper.Profile P = new Helper.Profile();
+					P.DeviceTypeV = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
 					P.Register(progid, chooserName);
 					try										// In case Helper becomes native .NET
 					{
@@ -382,7 +373,7 @@ namespace ASCOM.Simulator
 				catch (Exception ex)
 				{
 					MessageBox.Show("Error while registering the server:\n" + ex.ToString(),
-							"RotatorSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+							"$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 					bFail = true;
 				}
 				finally
@@ -401,18 +392,14 @@ namespace ASCOM.Simulator
 		// **TODO** If the above does AppID/DCOM stuff, this would have
 		// to remove that stuff too.
 		//
-		protected static void UnregisterObjects()
+		private static void UnregisterObjects()
 		{
 			//
 			// Local server's DCOM/AppID information
 			//
-			try
-			{
-				Registry.ClassesRoot.DeleteSubKey("APPID\\" + m_sAppId);
-				Registry.ClassesRoot.DeleteSubKey("APPID\\" +
-						Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1));
-			}
-			catch (Exception) { }
+			Registry.ClassesRoot.DeleteSubKey("APPID\\" + m_sAppId, false);
+			Registry.ClassesRoot.DeleteSubKey("APPID\\" +
+					Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1), false);
 
 			//
 			// For each of the driver assemblies
@@ -443,15 +430,15 @@ namespace ASCOM.Simulator
 					//
 					// ASCOM
 					//
-					using (Helper.Profile P = new Helper.Profile { DeviceType = progid.Substring(progid.LastIndexOf('.') + 1) })
+					Helper.Profile P = new Helper.Profile();
+					P.DeviceTypeV = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
+					P.Unregister(progid);
+					try										// In case Helper becomes native .NET
 					{
-						P.Unregister(progid);
-						try										// In case Helper becomes native .NET
-						{
-							Marshal.ReleaseComObject(P);
-						}
-						catch (Exception) { }
+						Marshal.ReleaseComObject(P);
 					}
+					catch (Exception) { }
+					P = null;
 				}
 				catch (Exception) { }
 			}
@@ -464,7 +451,7 @@ namespace ASCOM.Simulator
 		// that we serve. This requires the class facgtory name to be
 		// equal to the served class name + "ClassFactory".
 		//
-		protected static bool RegisterClassFactories()
+		private static bool RegisterClassFactories()
 		{
 			m_ClassFactories = new ArrayList();
 			foreach (Type type in m_ComObjectTypes)
@@ -474,7 +461,7 @@ namespace ASCOM.Simulator
 				if (!factory.RegisterClassObject())
 				{
 					MessageBox.Show("Failed to register class factory for " + type.Name,
-						"RotatorSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+						"$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 					return false;
 				}
 			}
@@ -482,7 +469,7 @@ namespace ASCOM.Simulator
 			return true;
 		}
 
-		protected static void RevokeClassFactories()
+		private static void RevokeClassFactories()
 		{
 			ClassFactory.SuspendClassObjects();									// Prevent race conditions
 			foreach (ClassFactory factory in m_ClassFactories)
@@ -496,7 +483,7 @@ namespace ASCOM.Simulator
 		// If the return value is true, we carry on and start this application.
 		// If the return value is false, we terminate this application immediately.
 		//
-		protected static bool ProcessArguments(string[] args)
+		private static bool ProcessArguments(string[] args)
 		{
 			bool bRet = true;
 
@@ -530,7 +517,7 @@ namespace ASCOM.Simulator
 
 					default:
 						MessageBox.Show("Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding",
-							"RotatorSimulator", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+							"$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 						break;
 				}
 			}
@@ -550,7 +537,6 @@ namespace ASCOM.Simulator
 		[STAThread]
 		static void Main(string[] args)
 		{
-
 			if (!LoadComObjectAssemblies()) return;						// Load served COM class assemblies, get types
 
 			if (!ProcessArguments(args)) return;						// Register/Unregister
@@ -566,8 +552,8 @@ namespace ASCOM.Simulator
 			m_MainForm = new frmMain();
 			if (m_bComStart) m_MainForm.WindowState = FormWindowState.Minimized;
 
-			// Initialize hardware layer
-			RotatorHardware.Initialize();
+			// Register the class factories of the served objects
+			RegisterClassFactories();
 
 			// Start up the garbage collection thread.
 			GarbageCollection GarbageCollector = new GarbageCollection(1000);
@@ -575,16 +561,13 @@ namespace ASCOM.Simulator
 			GCThread.Name = "Garbage Collection Thread";
 			GCThread.Start();
 
-			// Register the class factories of the served objects
-			RegisterClassFactories();
-
 			//
 			// Start the message loop. This serializes incoming calls to our
 			// served COM objects, making this act like the VB6 equivalent!
 			//
 			Application.Run(m_MainForm);
 
-			// Exiting... Revoke the class factories immediately.
+			// Revoke the class factories immediately.
 			// Don't wait until the thread has stopped before
 			// we perform revocation!!!
 			RevokeClassFactories();
@@ -592,10 +575,6 @@ namespace ASCOM.Simulator
 			// Now stop the Garbage Collector thread.
 			GarbageCollector.StopThread();
 			GarbageCollector.WaitForThreadToStop();
-
-			// And finally save the hardware state for next time
-			RotatorHardware.Finalize_();
-
 		}
 		#endregion
 	}

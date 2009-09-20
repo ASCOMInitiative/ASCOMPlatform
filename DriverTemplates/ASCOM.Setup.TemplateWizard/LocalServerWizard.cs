@@ -7,9 +7,9 @@ using EnvDTE80;
 
 namespace ASCOM.Setup
 {
-	public class Wizard : IWizard
+	public class LocalServerWizard : IWizard
 	{
-		private UserInputForm inputForm;
+		private LocalServerForm inputForm;
 		private const string csAscom = "ASCOM.";
 		private const string csDeviceIdFormat = "ASCOM.{0}.{1}";
 
@@ -73,13 +73,13 @@ namespace ASCOM.Setup
 			{
 				// Display a form to the user. The form collects 
 				// input for the custom message.
-				inputForm = new UserInputForm();
+				inputForm = new LocalServerForm();
 				inputForm.ShowDialog();
 
 				// Save user inputs.
 				DeviceId = inputForm.DeviceId;
 				DeviceName = inputForm.DeviceName;
-				DeviceClass = inputForm.DeviceClass;
+				DeviceClass = LocalServerForm.DeviceClass;
 				Namespace = inputForm.Namespace;
 				inputForm.Dispose();
 				inputForm = null;
@@ -109,18 +109,5 @@ namespace ASCOM.Setup
 		{
 			return true;
 		}
-
-#if DEBUG
-		void DumpCodeModel(Project project)
-		{
-			MessageBox.Show("Attach to process now", "Debug");
-			ProjectItem item = project.ProjectItems.Item("Driver.cs");
-			FileCodeModel fcm = item.FileCodeModel;
-			CodeClass codeClass = (CodeClass2)fcm.CodeElements.Item(DeviceClass);
-			// Implement the I<DeviceClass> interface on the driver class. Does not insert method stubs.
-			codeClass.AddImplementedInterface("ASCOM.Interface.I" + DeviceClass, 0);
-		}
-#endif
-
 	}
 }

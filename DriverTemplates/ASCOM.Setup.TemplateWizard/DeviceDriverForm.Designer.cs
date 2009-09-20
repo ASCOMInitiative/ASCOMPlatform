@@ -1,6 +1,6 @@
 ﻿namespace ASCOM.Setup
 {
-	partial class UserInputForm
+	partial class DeviceDriverForm
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -29,7 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserInputForm));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DeviceDriverForm));
 			this.cbDeviceClass = new System.Windows.Forms.ComboBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.txtDeviceName = new System.Windows.Forms.TextBox();

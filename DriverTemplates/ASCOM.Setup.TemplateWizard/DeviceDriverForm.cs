@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 
 namespace ASCOM.Setup
 {
-	public partial class UserInputForm : Form
+	public partial class DeviceDriverForm : Form
 	{
 		/// <summary>
 		/// Format string for ASCOM DeviceId.
@@ -28,7 +28,7 @@ namespace ASCOM.Setup
 		/// Placeholder text used for null or invalid DeviceClass.
 		/// </summary>
 		private const string csDeviceClassPlaceholder = "<DeviceClass>";
-		public UserInputForm()
+		public DeviceDriverForm()
 		{
 			InitializeComponent();
 		}

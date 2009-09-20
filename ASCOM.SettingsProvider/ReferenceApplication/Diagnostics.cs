@@ -16,8 +16,8 @@ namespace TiGra
 	/// See http://www.sysinternals.com
 	/// </para>
 	/// </summary>
-	public class Diagnostics
-		{
+	internal class Diagnostics
+	{
 		/// <summary>
 		/// Text versions of the various trace levels.
 		/// </summary>
@@ -35,94 +35,94 @@ namespace TiGra
 		/// Construct and initialise diagnostics.
 		/// </summary>
 		protected Diagnostics()
-			{
+		{
 #if DEBUG
 			string strLevel = "Verbose";
 #else
 			string strLevel = "Warning";
 #endif
 			ts = new TraceSwitch("ASCOM.SettingsProvider.ReferenceApplication", "ASCOM.SettingsProvider.ReferenceApplication", strLevel);
-			Trace.WriteLine("===== ASCOM.SettingsProvider.ReferenceApplication Start Diagnostics: TraceLevel = " + ts.Level.ToString() + " =====");
-			}
+			Trace.WriteLine(String.Format("===== ASCOM.SettingsProvider.ReferenceApplication Start Diagnostics: TraceLevel = {0} =====", ts.Level));
+		}
 		/// <summary>
 		/// Gets a reference to the one and only instance of this singleton class.
 		/// </summary>
 		/// <returns>a reference to the one and only instance of this singleton class.</returns>
 		public static Diagnostics GetInstance()
-			{
+		{
 			if (theOne == null)
 				theOne = new Diagnostics();
 			return theOne;
-			}
+		}
 
 		/// <summary>
 		/// Send an object to the trace channel at severity level Error.
 		/// </summary>
 		/// <param name="msg">The object (which may be a string) to display.</param>
 		static public void TraceError(object msg)
-			{
-			Trace.WriteLineIf(ts.TraceError, msg, ts.Description + "[Error]");
-			}
+		{
+			Trace.WriteLineIf(ts.TraceError, msg, String.Format("{0}[Error]", ts.Description));
+		}
 		/// <summary>
 		/// Format and send a list of objects to the trace channel at severity level Error.
 		/// </summary>
 		/// <param name="format">Format string used to format the objects.</param>
 		/// <param name="items">List of objects to be displayed.</param>
 		static public void TraceError(string format, params object[] items)
-			{
-			Trace.WriteLineIf(ts.TraceError, String.Format(format, items), ts.Description + "[Error]");
-			}
+		{
+			Trace.WriteLineIf(ts.TraceError, String.Format(format, items), String.Format("{0}[Error]", ts.Description));
+		}
 		/// <summary>
 		/// Send an object to the trace channel at severity level Warning.
 		/// </summary>
 		/// <param name="msg">The object (which may be a string) to display.</param>
 		static public void TraceWarning(object msg)
-			{
-			Trace.WriteLineIf(ts.TraceWarning, msg, ts.Description + "[Warn]");
-			}
+		{
+			Trace.WriteLineIf(ts.TraceWarning, msg, String.Format("{0}[Warn]", ts.Description));
+		}
 		/// <summary>
 		/// Format and send a list of objects to the trace channel at severity level Warning.
 		/// </summary>
 		/// <param name="format">Format string used to format the objects.</param>
 		/// <param name="items">List of objects to be displayed.</param>
 		static public void TraceWarning(string format, params object[] items)
-			{
-			Trace.WriteLineIf(ts.TraceWarning, String.Format(format, items), ts.Description + "[Warn]");
-			}
+		{
+			Trace.WriteLineIf(ts.TraceWarning, String.Format(format, items), String.Format("{0}[Warn]", ts.Description));
+		}
 		/// <summary>
 		/// Send an object to the trace channel at severity level Information.
 		/// </summary>
 		/// <param name="msg">The object (which may be a string) to display.</param>
 		static public void TraceInfo(object msg)
-			{
-			Trace.WriteLineIf(ts.TraceInfo, msg, ts.Description + "[Info]");
-			}
+		{
+			Trace.WriteLineIf(ts.TraceInfo, msg, String.Format("{0}[Info]", ts.Description));
+		}
 		/// <summary>
 		/// Format and send a list of objects to the trace channel at severity level Information.
 		/// </summary>
 		/// <param name="format">Format string used to format the objects.</param>
 		/// <param name="items">List of objects to be displayed.</param>
 		static public void TraceInfo(string format, params object[] items)
-			{
-			Trace.WriteLineIf(ts.TraceInfo, String.Format(format, items), ts.Description + "[Info]");
-			}
+		{
+			Trace.WriteLineIf(ts.TraceInfo, String.Format(format, items), String.Format("{0}[Info]", ts.Description));
+		}
 		/// <summary>
 		/// Send an object to the trace channel at severity level Verbose Information.
 		/// </summary>
 		/// <param name="msg">The object (which may be a string) to display.</param>
 		static public void TraceVerbose(object msg)
-			{
-			Trace.WriteLineIf(ts.TraceVerbose, msg, ts.Description + "[Verb]");
-			}
+		{
+			Trace.WriteLineIf(ts.TraceVerbose, msg, String.Format("{0}[Verb]", ts.Description));
+		}
 		/// <summary>
 		/// Format and send a list of objects to the trace channel at severity level Verbose Information.
 		/// </summary>
 		/// <param name="format">Format string used to format the objects.</param>
 		/// <param name="items">List of objects to be displayed.</param>
 		static public void TraceVerbose(string format, params object[] items)
-			{
-			Trace.WriteLineIf(ts.TraceVerbose, String.Format(format, items), ts.Description + "[Verb]");
-			}
+		{
+			Trace.WriteLineIf(ts.TraceVerbose, String.Format(format, items), String.Format("{0}[Verb]", ts.Description));
+		}
 		/// <summary>
 		/// Utility function. Expands non-printable ASCII characters into mnemonic human-readable form.
 		/// </summary>
@@ -130,20 +130,20 @@ namespace TiGra
 		/// Returns a new string with non-printing characters replaced by human-readable mnemonics.
 		/// </returns>
 		static public string ExpandASCII(string strTrace)
-			{
+		{
 			StringBuilder expanded = new StringBuilder(Math.Max(64, strTrace.Length * 3));
 			foreach (char c in strTrace)
-				{
+			{
 				byte b = (byte)c;
 				string strASCII = Enum.GetName(typeof(ASCII), b);
 				if (strASCII != null)
-					expanded.Append("<" + strASCII + ">");
+					expanded.Append(String.Format("<{0}>", strASCII));
 				else
 					expanded.Append(c);
-				}
-			return expanded.ToString();
 			}
+			return expanded.ToString();
 		}
+	}
 #pragma warning disable 1591	// No XML documentation is required for this enum
 	/// <summary>
 	/// RawWord type with enumeration constants for ASCII control codes.

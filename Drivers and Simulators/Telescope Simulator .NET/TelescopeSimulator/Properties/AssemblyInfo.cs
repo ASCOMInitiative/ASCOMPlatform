@@ -8,20 +8,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ASCOM TelescopeSimulator server")]
 [assembly: AssemblyDescription("ASCOM multi-interface server for TelescopeSimulator")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("ASCOM Initiative")]
-[assembly: AssemblyProduct("")]
 [assembly: AssemblyCopyright("Copyright © 2009, Robert Turner")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
 
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
-//
-[assembly: AssemblyVersion("1.0.1.0")]
-[assembly: AssemblyFileVersion("1.0.1.0")]
+// Version information for Platform components is set at the solution level.
 
 [assembly: ComVisibleAttribute(false)]
