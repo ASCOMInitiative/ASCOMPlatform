@@ -45,7 +45,7 @@ using TiGra.ExtensionMethods;
 using TiGra;
 
 namespace ASCOM
-	{
+{
 	/// <summary>
 	/// Provides settings storage for ASCOM device drivers.
 	/// Settings are persisted in the ASCOM Device Profile store.
@@ -56,29 +56,29 @@ namespace ASCOM
 	/// http://www.tigranetworks.co.uk/Astronomy
 	/// </remarks>
 	public class SettingsProvider : System.Configuration.SettingsProvider
-		{
+	{
 		//static Profile ascomProfile = new Profile();
 
 		/// <summary>
 		/// Returns the provider's friendly name used during configuration.
 		/// </summary>
 		public override string Name
-			{
+		{
 			get
-				{
+			{
 				return "ASCOM Settings Provider";
-				}
 			}
+		}
 		/// <summary>
 		/// Gets the provider's friendly description.
 		/// </summary>
 		public override string Description
-			{
+		{
 			get
-				{
+			{
 				return "Stores settings in the ASCOM Device Profile store.";
-				}
 			}
+		}
 		/// <summary>
 		/// Backing store for the ApplicationName property.
 		/// </summary>
@@ -88,16 +88,17 @@ namespace ASCOM
 		/// This value is set during provider initialization and cannot be changed thereafter.
 		/// </summary>
 		public override string ApplicationName
-			{
+		{
 			get
-				{
+			{
 				return appName;
-				}
-			set
-				{
-				// Do nothing.
-				}
 			}
+			set
+			{
+				Diagnostics.TraceWarning("Unexpected setting of ApplicationName to {0}", value);
+				appName = value;
+			}
+		}
 		/// <summary>
 		/// Initializes the ASCOM Settings Provider.
 		/// </summary>
@@ -113,11 +114,11 @@ namespace ASCOM
 		/// beginning with "ASCOM.".
 		/// </remarks>
 		public override void Initialize(string name, System.Collections.Specialized.NameValueCollection config)
-			{
+		{
 			appName = Assembly.GetEntryAssembly().GetName().Name;
 			base.Initialize(appName, config);
 			//EnsureRegistered(appName);	// Ensure the driver is registered with ASCOM Chooser.
-			}
+		}
 		/// <summary>
 		/// Retrieves a collection of settings values from the underlying ASCOM Profile store.
 		/// </summary>
@@ -132,18 +133,18 @@ namespace ASCOM
 		/// retrieving them, then the property's default value is used.
 		/// </remarks>
 		public override System.Configuration.SettingsPropertyValueCollection GetPropertyValues(System.Configuration.SettingsContext context, System.Configuration.SettingsPropertyCollection collection)
-			{
+		{
 			Diagnostics.TraceInfo("Retrieving ASCOM Profile Properties for DeviceID={0}, {1} properties", ApplicationName, collection.Count);
 			SettingsPropertyValueCollection pvc = new SettingsPropertyValueCollection();
 			foreach (SettingsProperty item in collection)
-				{
+			{
 				SettingsPropertyValue spv = new SettingsPropertyValue(item);
 				// Parse the ASCOM DeviceID or use default values.
 				string deviceName = null;
 				string deviceType = null;
 				string deviceId;
 				try
-					{
+				{
 					DeviceIdAttribute idAttribute = item.Attributes[typeof(DeviceIdAttribute)] as DeviceIdAttribute;
 					deviceId = idAttribute.DeviceId;
 					// Split the Device ID into a Device Name and a Device Type.
@@ -152,52 +153,53 @@ namespace ASCOM
 					deviceName = deviceId.Head(split);
 					deviceType = deviceId.RemoveHead(split + 1);
 					Diagnostics.TraceVerbose("Parsed DeviceID as {0}.{1}", deviceName, deviceType);
-					}
+				}
 				catch (Exception)
-					{
+				{
 					if (String.IsNullOrEmpty(deviceName))
 						deviceName = "Unnamed";
 					if (String.IsNullOrEmpty(deviceType))
 						deviceType = "Non-Device";
-					deviceId = deviceName + "." + deviceType;
+					deviceId = String.Format("{0}.{1}", deviceName, deviceType);
 					Diagnostics.TraceWarning("Unable to parse DeviceID, using {0}.{1}", deviceName, deviceType);
-					}
-				Profile ascomProfile = new Profile();
-				ascomProfile.DeviceType = deviceType;
-				try
+				}
+				using (var ascomProfile = new Profile { DeviceType = deviceType })
+				{
+					try
 					{
-					string value = ascomProfile.GetValue(deviceId, item.Name, String.Empty);
-					if (String.IsNullOrEmpty(value))
+						string value = ascomProfile.GetValue(deviceId, item.Name, String.Empty);
+						if (String.IsNullOrEmpty(value))
 						{
-						spv.PropertyValue = item.DefaultValue;
-						Diagnostics.TraceVerbose("Defaulted/empty ASCOM Profile DeviceID={0}, Key={1}, Value={2}", deviceId, item.Name, item.DefaultValue.ToString());
+							spv.PropertyValue = item.DefaultValue;
+							Diagnostics.TraceVerbose("Defaulted/empty ASCOM Profile DeviceID={0}, Key={1}, Value={2}", deviceId, item.Name, item.DefaultValue.ToString());
 						}
-					else
+						else
 						{
-						spv.SerializedValue = value;
-						Diagnostics.TraceVerbose("Retrieved ASCOM Profile DeviceID={0}, Key={1}, Value={2}", deviceId, item.Name, value);
+							spv.SerializedValue = value;
+							Diagnostics.TraceVerbose("Retrieved ASCOM Profile DeviceID={0}, Key={1}, Value={2}", deviceId, item.Name, value);
 						}
 					}
-				catch
+					catch
 					{
-					spv.PropertyValue = spv.Property.DefaultValue;
-					Diagnostics.TraceVerbose("Defaulted/missing ASCOM Profile DeviceID={0}, Key={1}, Value={2}", deviceId, item.Name, spv.PropertyValue);
+						spv.PropertyValue = spv.Property.DefaultValue;
+						Diagnostics.TraceVerbose("Defaulted/missing ASCOM Profile DeviceID={0}, Key={1}, Value={2}", deviceId, item.Name, spv.PropertyValue);
 					}
+				}
 				spv.IsDirty = false;
 				pvc.Add(spv);
-				}
-			return pvc;
 			}
+			return pvc;
+		}
 		/// <summary>
 		/// Persists a collection of settings values to the underlying ASCOM Profile store.
 		/// </summary>
 		/// <param name="context"></param>
 		/// <param name="collection"></param>
 		public override void SetPropertyValues(System.Configuration.SettingsContext context, System.Configuration.SettingsPropertyValueCollection collection)
-			{
+		{
 			Diagnostics.TraceInfo("Persisting ASCOM Profile Properties for DeviceID={0}, {1} properties", ApplicationName, collection.Count);
 			foreach (SettingsPropertyValue item in collection)
-				{
+			{
 				//ToDo: better error checking and handling needed below.
 				DeviceIdAttribute idAttribute = item.Property.Attributes[typeof(DeviceIdAttribute)] as DeviceIdAttribute;
 				string deviceId = idAttribute.DeviceId;
@@ -206,19 +208,21 @@ namespace ASCOM
 				int split = deviceId.LastIndexOf('.');
 				string deviceName = deviceId.Head(split);
 				string deviceType = deviceId.RemoveHead(split + 1);
-				Profile ascomProfile = new Profile();
-				ascomProfile.DeviceType = deviceType;
-				try
+				using (Profile ascomProfile = new Profile())
+				{
+					ascomProfile.DeviceType = deviceType;
+					try
 					{
-					Diagnostics.TraceVerbose("Writing ASCOM Profile DeviceID={0}, Key={1}, Value={2}", deviceId, item.Name, item.SerializedValue);
-					ascomProfile.WriteValue(deviceId, item.Name, item.SerializedValue.ToString(), String.Empty);
+						Diagnostics.TraceVerbose("Writing ASCOM Profile DeviceID={0}, Key={1}, Value={2}", deviceId, item.Name, item.SerializedValue);
+						ascomProfile.WriteValue(deviceId, item.Name, item.SerializedValue.ToString(), String.Empty);
 					}
-				catch
+					catch
 					{
-					Diagnostics.TraceError("Failed to persist property Key={0}", item.Name);
+						Diagnostics.TraceError("Failed to persist property Key={0}", item.Name);
 					}
 				}
 			}
+		}
 		/// <summary>
 		/// Checks whether the driver is registered with ASCOM and, if not, registers it.
 		/// </summary>
@@ -227,12 +231,12 @@ namespace ASCOM
 		/// that is used to query the ASCOM Device Profile.
 		/// </param>
 		/// <param name="DriverID">The full ASCOM DeviceID to be verified.</param>
-		private void EnsureRegistered(Profile ascomProfile, string DriverID)
-			{
+		private static void EnsureRegistered(Profile ascomProfile, string DriverID)
+		{
 			if (!ascomProfile.IsRegistered(DriverID))
-				{
+			{
 				ascomProfile.Register(DriverID, "Auto-registered");
-				}
 			}
 		}
 	}
+}
