@@ -311,7 +311,7 @@ begin
 
   // Test for platform 5
   if not FileExists(ExpandConstant('{cf32}\ASCOM\Interface\AscomMasterInterfaces.tlb')) then begin
-    MsgBox('ASCOM Platform 5 is not installed. You must install ASCOM Platform 5a before installing this update. You can download this from http:\\www.ascom.com\downloads', mbCriticalError, MB_OK);
+    MsgBox('ASCOM Platform 5 is not installed. You must install ASCOM Platform 5a before installing this update. You can download this from http:\\www.ascom-standards.org', mbCriticalError, MB_OK);
     Result:= False;
   end;
 
