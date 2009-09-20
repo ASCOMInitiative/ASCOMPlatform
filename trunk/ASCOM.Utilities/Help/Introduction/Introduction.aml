@@ -22,13 +22,13 @@
 		
 		<para>A key goal has been to maintain 100% compatibility with existing ASCOM drivers and applications and
 		all existing applications will continue to work without any change by their developers. The benefits above will just 
-		appear after the 5.5 update is installed</para>
+		appear after the 5.5 update is installed.</para>
 		
 		<para>In the longer term this update provides developers with modern implementations of the ASCOM platform tools
 		and a migration path to protect their applications from the possibility that the currrent VB6 based support 
 		components will stop working due to some future change in the Windows platform.</para>
 		
-		<para>The Platform 5.5 update provides compatibility with all Microsoft operating systems from Windows XXX to Windows 7,
+		<para>The Platform 5.5 update provides compatibility with all Microsoft operating systems from Windows XP to Windows 7,
 		including the 32bit and 64bit variants.</para>
 		</content>
     </section>
