@@ -26,6 +26,8 @@
 ' The ClassInterface/None addribute prevents an empty interface called
 ' _Dome from being created and used as the [default] interface
 '
+Imports ASCOM.Interface
+
 <Guid("70896ae0-b6c4-4303-a945-01219bf40bb4")> _
 <ClassInterface(ClassInterfaceType.None)> _
 Public Class Dome
