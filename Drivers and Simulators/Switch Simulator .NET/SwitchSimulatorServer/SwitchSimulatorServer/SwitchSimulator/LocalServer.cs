@@ -1,5 +1,5 @@
 //
-// FilterWheelSim Local COM Server
+// SwitchSimulator Local COM Server
 //
 // This is the core of a managed COM Local Server, capable of serving
 // multiple instances of multiple interfdaces, within a single
@@ -14,18 +14,15 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
-using System.Drawing;
 using System.Collections;
 using System.Runtime.InteropServices;
 using System.Reflection;
 using Microsoft.Win32;
-using System.Text;
 using System.Threading;
-using Helper = ASCOM.Utilities;
 
-namespace ASCOM.FilterWheelSim
+namespace ASCOM.SwitchSimulator
 {
-    public class FilterWheelSim
+    public class LocalServer
     {
 
         #region Access to kernel32.dll, user32.dll, and ole32.dll functions
@@ -104,23 +101,22 @@ namespace ASCOM.FilterWheelSim
         #endregion
 
         #region Private Data
-        private static uint m_uiMainThreadId;					// Stores the main thread's thread id.
+// Stores the main thread's thread id.
         private static int m_iObjsInUse;						// Keeps a count on the total number of objects alive.
         private static int m_iServerLocks;						// Keeps a lock count on this application.
-        private static bool m_bComStart;						// True if server started by COM (-embedding)
+// True if server started by COM (-embedding)
+		private static frmMain m_MainForm;				// Reference to our main form
         private static ArrayList m_ComObjectAssys;				// Dynamically loaded assemblies containing served COM objects
         private static ArrayList m_ComObjectTypes;				// Served COM object types
         private static ArrayList m_ClassFactories;				// Served COM object class factories
-        private static string m_sAppId = "{59ecdf97-54fd-4d98-9df1-2a88feb417b3}";	// Our AppId
+        private static string m_sAppId = "{3bd62a8c-644c-4ea7-a041-0764d0e12630}";	// Our AppId
         #endregion
 
-        public static frmHandbox m_MainForm = null;		    // Reference to our main form
-
         // This property returns the main thread's id.
-        public static uint MainThreadId { get { return m_uiMainThreadId; } }
+		public static uint MainThreadId { get; private set; }
 
         // Used to tell if started by COM or manually
-        public static bool StartedByCOM { get { return m_bComStart; } }
+		public static bool StartedByCOM { get; private set; }
 
 
         #region Server Lock, Object Counting, and AutoQuit on COM startup
@@ -129,7 +125,7 @@ namespace ASCOM.FilterWheelSim
         {
             get
             {
-                lock (typeof(FilterWheelSim))
+                lock (typeof(LocalServer))
                 {
                     return m_iObjsInUse;
                 }
@@ -155,7 +151,7 @@ namespace ASCOM.FilterWheelSim
         {
             get
             {
-                lock (typeof(FilterWheelSim))
+                lock (typeof(LocalServer))
                 {
                     return m_iServerLocks;
                 }
@@ -187,11 +183,11 @@ namespace ASCOM.FilterWheelSim
         //
         public static void ExitIf()
         {
-            lock (typeof(FilterWheelSim))
+            lock (typeof(LocalServer))
             {
                 if ((ObjectsCount <= 0) && (ServerLockCount <= 0))
                 {
-                    if (m_bComStart)
+                    if (StartedByCOM)
                     {
                         UIntPtr wParam = new UIntPtr(0);
                         IntPtr lParam = new IntPtr(0);
@@ -213,7 +209,7 @@ namespace ASCOM.FilterWheelSim
         // below our executable. The code below takes care of the situation
         // where we're running in the VS.NET IDE, allowing the ServedClasses
         // folder to be in the solution folder, while we are executing in
-        // the FilterWheelSim\bin\Debug subfolder.
+        // the SwitchSimulator\bin\Debug subfolder.
         //
         private static bool LoadComObjectAssemblies()
         {
@@ -222,17 +218,17 @@ namespace ASCOM.FilterWheelSim
 
             string assy = Assembly.GetEntryAssembly().Location;
 			string assyPath = Path.GetDirectoryName(assy);
-			//int i = assyPath.LastIndexOf(@"\FilterWheelServer\bin\");						// Look for us running in IDE
-			//if (i == -1) i = assyPath.LastIndexOf('\\');
-			//assyPath = assyPath.Remove(i, assyPath.Length - i) + "\\FilterWheelSimServedClasses";
 
-			//[TPL] Always look for served classes in the ServedClasses folder in the same folder as the executable.
 			string servedClassesPath = Path.Combine(assyPath, "ServedClasses");
-			DirectoryInfo d = new DirectoryInfo(servedClassesPath);
+			//int i = assyPath.LastIndexOf(@"\SwitchSimulator\bin\");						// Look for us running in IDE
+			//if (i == -1) i = assyPath.LastIndexOf('\\');
+			//assyPath = assyPath.Remove(i, assyPath.Length - i) + "\\SwitchSimulatorServedClasses";
+
+            DirectoryInfo d = new DirectoryInfo(servedClassesPath);
             foreach (FileInfo fi in d.GetFiles("*.dll"))
             {
                 string aPath = fi.FullName;
-                string fqClassName = fi.Name.Replace(fi.Extension, "");						// COM class FQN
+                string fqClassName = fi.Name.Replace(fi.Extension, String.Empty);						// COM class FQN
                 //
                 // First try to load the assembly and get the types for
                 // the class and the class facctory. If this doesn't work ????
@@ -240,6 +236,7 @@ namespace ASCOM.FilterWheelSim
 				try
 				{
 					Assembly so = Assembly.LoadFrom(aPath);
+					//Added check to see if the dll has the ServedClassNameAttribute
 					object[] attributes = so.GetCustomAttributes(typeof(ServedClassNameAttribute), false);
 					if (attributes.Length > 0)
 					{
@@ -249,8 +246,8 @@ namespace ASCOM.FilterWheelSim
 				}
 				catch (Exception e)
 				{
-					MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + e.Message,
-						"FilterWheelSim", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+					MessageBox.Show(String.Format("Failed to load served COM class assembly {0} - {1}", fi.Name, e.Message),
+						"SwitchSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 					return false;
 				}
 
@@ -291,7 +288,7 @@ namespace ASCOM.FilterWheelSim
                 //
                 // HKCR\APPID\appid
                 //
-                key = Registry.ClassesRoot.CreateSubKey("APPID\\" + m_sAppId);
+				key = Registry.ClassesRoot.CreateSubKey(String.Format("APPID\\{0}", m_sAppId));
                 key.SetValue(null, assyDescription);
                 key.SetValue("AppID", m_sAppId);
                 key.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord);
@@ -300,16 +297,15 @@ namespace ASCOM.FilterWheelSim
                 //
                 // HKCR\APPID\exename.ext
                 //
-                key = Registry.ClassesRoot.CreateSubKey("APPID\\" +
-                            Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1));
+				key = Registry.ClassesRoot.CreateSubKey(String.Format("APPID\\{0}", Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1)));
                 key.SetValue("AppID", m_sAppId);
                 key.Close();
                 key = null;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error while registering the server:\n" + ex.ToString(),
-                        "FilterWheelSim", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+				MessageBox.Show(String.Format("Error while registering the server:\n{0}", ex),
+                        "SwitchSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
             finally
@@ -330,7 +326,7 @@ namespace ASCOM.FilterWheelSim
                     //
                     string clsid = Marshal.GenerateGuidForType(type).ToString("B");
                     string progid = Marshal.GenerateProgIdForType(type);
-                    key = Registry.ClassesRoot.CreateSubKey("CLSID\\" + clsid);
+					key = Registry.ClassesRoot.CreateSubKey(String.Format("CLSID\\{0}", clsid));
                     key.SetValue(null, progid);						// Could be assyTitle/Desc??, but .NET components show ProgId here
                     key.SetValue("AppId", m_sAppId);
                     key2 = key.CreateSubKey("Implemented Categories");
@@ -367,9 +363,14 @@ namespace ASCOM.FilterWheelSim
                     // ASCOM 
                     //
                     assy = type.Assembly;
-					attr = Attribute.GetCustomAttribute(assy, typeof(ServedClassNameAttribute));
-					string chooserName = ((ServedClassNameAttribute)attr).DisplayName;
-					using (var P = new Helper.Profile { DeviceType = progid.Substring(progid.LastIndexOf('.') + 1) })
+                    //attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyProductAttribute));
+                    //string chooserName = ((AssemblyProductAttribute)attr).Product;
+
+                    //Modified to pull from the custom Attribute ServedClassName
+                    attr = Attribute.GetCustomAttribute(assy, typeof(ServedClassNameAttribute));
+                    string chooserName = ((ServedClassNameAttribute)attr).DisplayName;
+
+					using (var P = new ASCOM.Utilities.Profile { DeviceType = progid.Substring(progid.LastIndexOf('.') + 1) })
 					{
 						P.Register(progid, chooserName);
 						try
@@ -384,8 +385,8 @@ namespace ASCOM.FilterWheelSim
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error while registering the server:\n" + ex.ToString(),
-                            "FilterWheelSim", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+					MessageBox.Show(String.Format("Error while registering the server:\n{0}", ex),
+                            "SwitchSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     bFail = true;
                 }
                 finally
@@ -404,14 +405,17 @@ namespace ASCOM.FilterWheelSim
         // **TODO** If the above does AppID/DCOM stuff, this would have
         // to remove that stuff too.
         //
-        private static void UnregisterObjects()
+		protected static void UnregisterObjects()
         {
             //
             // Local server's DCOM/AppID information
             //
-            Registry.ClassesRoot.DeleteSubKey("APPID\\" + m_sAppId, false);
-            Registry.ClassesRoot.DeleteSubKey("APPID\\" +
-                    Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1), false);
+			try
+			{
+				Registry.ClassesRoot.DeleteSubKey(String.Format("APPID\\{0}", m_sAppId), false);
+				Registry.ClassesRoot.DeleteSubKey(String.Format("APPID\\{0}", Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1)), false);
+			}
+			catch (Exception) { }
 
             //
             // For each of the driver assemblies
@@ -426,31 +430,31 @@ namespace ASCOM.FilterWheelSim
                 //
                 // HKCR\progid
                 //
-                Registry.ClassesRoot.DeleteSubKey(progid + "\\CLSID", false);
+				Registry.ClassesRoot.DeleteSubKey(String.Format("{0}\\CLSID", progid), false);
                 Registry.ClassesRoot.DeleteSubKey(progid, false);
                 //
                 // HKCR\CLSID\clsid
                 //
-                Registry.ClassesRoot.DeleteSubKey("CLSID\\" + clsid + "\\Implemented Categories\\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}", false);
-                Registry.ClassesRoot.DeleteSubKey("CLSID\\" + clsid + "\\Implemented Categories", false);
-                Registry.ClassesRoot.DeleteSubKey("CLSID\\" + clsid + "\\ProgId", false);
-                Registry.ClassesRoot.DeleteSubKey("CLSID\\" + clsid + "\\LocalServer32", false);
-                Registry.ClassesRoot.DeleteSubKey("CLSID\\" + clsid + "\\Programmable", false);
-                Registry.ClassesRoot.DeleteSubKey("CLSID\\" + clsid, false);
+				Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\Implemented Categories\\{{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}}", clsid), false);
+				Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\Implemented Categories", clsid), false);
+				Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\ProgId", clsid), false);
+				Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\LocalServer32", clsid), false);
+				Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}\\Programmable", clsid), false);
+				Registry.ClassesRoot.DeleteSubKey(String.Format("CLSID\\{0}", clsid), false);
                 try
                 {
                     //
                     // ASCOM
                     //
-                    Helper.Profile P = new Helper.Profile();
-                    P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
-                    P.Unregister(progid);
-                    try										// In case Helper becomes native .NET
-                    {
-                        Marshal.ReleaseComObject(P);
-                    }
-                    catch (Exception) { }
-                    P = null;
+					using (var P = new ASCOM.Utilities.Profile { DeviceType = progid.Substring(progid.LastIndexOf('.') + 1) })
+					{
+						P.Unregister(progid);
+						try										// In case Helper becomes native .NET
+						{
+							Marshal.ReleaseComObject(P);
+						}
+						catch (Exception) { }
+					}
                 }
                 catch (Exception) { }
             }
@@ -460,10 +464,10 @@ namespace ASCOM.FilterWheelSim
         #region Class Factory Support
         //
         // On startup, we register the class factories of the COM objects
-        // that we serve. This requires the class factory name to be
+        // that we serve. This requires the class facgtory name to be
         // equal to the served class name + "ClassFactory".
         //
-        private static bool RegisterClassFactories()
+		protected static bool RegisterClassFactories()
         {
             m_ClassFactories = new ArrayList();
             foreach (Type type in m_ComObjectTypes)
@@ -472,8 +476,8 @@ namespace ASCOM.FilterWheelSim
                 m_ClassFactories.Add(factory);
                 if (!factory.RegisterClassObject())
                 {
-                    MessageBox.Show("Failed to register class factory for " + type.Name,
-                        "FilterWheelSim", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+					MessageBox.Show(String.Format("Failed to register class factory for {0}", type.Name),
+                        "SwitchSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return false;
                 }
             }
@@ -481,7 +485,7 @@ namespace ASCOM.FilterWheelSim
             return true;
         }
 
-        private static void RevokeClassFactories()
+		protected static void RevokeClassFactories()
         {
             ClassFactory.SuspendClassObjects();									// Prevent race conditions
             foreach (ClassFactory factory in m_ClassFactories)
@@ -495,7 +499,7 @@ namespace ASCOM.FilterWheelSim
         // If the return value is true, we carry on and start this application.
         // If the return value is false, we terminate this application immediately.
         //
-        private static bool ProcessArguments(string[] args)
+		protected static bool ProcessArguments(string[] args)
         {
             bool bRet = true;
 
@@ -508,7 +512,7 @@ namespace ASCOM.FilterWheelSim
                 switch (args[0].ToLower())
                 {
                     case "-embedding":
-                        m_bComStart = true;										// Indicate COM started us
+                        StartedByCOM = true;										// Indicate COM started us
                         break;
 
                     case "-register":
@@ -528,13 +532,13 @@ namespace ASCOM.FilterWheelSim
                         break;
 
                     default:
-                        MessageBox.Show("Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding",
-                            "FilterWheelSim", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+						MessageBox.Show(String.Format("Unknown argument: {0}\nValid are : -register, -unregister and -embedding", args[0]),
+                            "SwitchSimulator", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         break;
                 }
             }
             else
-                m_bComStart = false;
+                StartedByCOM = false;
 
             return bRet;
         }
@@ -556,28 +560,26 @@ namespace ASCOM.FilterWheelSim
             // Initialize critical member variables.
             m_iObjsInUse = 0;
             m_iServerLocks = 0;
-            m_uiMainThreadId = GetCurrentThreadId();
+            MainThreadId = GetCurrentThreadId();
             Thread.CurrentThread.Name = "Main Thread";
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            m_MainForm = new frmHandbox();
-            // if (m_bComStart) m_MainForm.WindowState = FormWindowState.Minimized;
-            // if (m_bComStart) m_MainForm.Visible = false;
-            
-            // Initialize hardware layer
-            SimulatedHardware.Initialize();
+            m_MainForm = new frmMain();
+            if (StartedByCOM) m_MainForm.WindowState = FormWindowState.Minimized;
 
-            // Register the class factories of the served objects
-            RegisterClassFactories();
+			// Initialise the hardware layer here
+			// SwitchHardware.Initialize()
 
             // Start up the garbage collection thread.
             GarbageCollection GarbageCollector = new GarbageCollection(1000);
-            Thread GCThread = new Thread(new ThreadStart(GarbageCollector.GCWatch));
-            GCThread.Name = "Garbage Collection Thread";
+			Thread GCThread = new Thread(GarbageCollector.GCWatch) { Name = "Garbage Collection Thread" };
             GCThread.Start();
 
-            //
+            			
+            // Register the class factories of the served objects
+            RegisterClassFactories();
+
             // Start the message loop. This serializes incoming calls to our
             // served COM objects, making this act like the VB6 equivalent!
             //
@@ -591,6 +593,8 @@ namespace ASCOM.FilterWheelSim
             // Now stop the Garbage Collector thread.
             GarbageCollector.StopThread();
             GarbageCollector.WaitForThreadToStop();
+			// And finally save the hardware state for next time
+			//SwitchHardware.Finalize_();
         }
         #endregion
     }
