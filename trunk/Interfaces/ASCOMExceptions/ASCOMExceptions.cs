@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.Serialization;
 
 namespace ASCOM
 {
@@ -45,6 +46,14 @@ namespace ASCOM
         /// See ASCOM.Exception.ValueNotSetException.
         /// </remarks>
         public static int ValueNotSet = unchecked((int)0x80040402);
+		/// <summary>
+		/// An error related to settings.
+		/// </summary>
+		public static int SettingsProviderError = unchecked((int)0x80040403);
+		/// <summary>
+		/// A 'catch-all' error code used when nothing else was specified.
+		/// </summary>
+		public static int UnspecifiedError = unchecked((int)0x800404FF);
         /// <summary>
 		/// The starting value for driver-specific error numbers. 
 		/// </summary>
@@ -96,6 +105,26 @@ namespace ASCOM
 		{
 			this.HResult = number;
 		}
+		public DriverException()
+		{
+			this.HResult = ErrorCodes.UnspecifiedError;
+		}
+		public DriverException(string message)
+			: base(message)
+		{
+			
+		}
+		public DriverException(string message, Exception innerException)
+			: base(message, innerException)
+		{
+			
+		}
+		protected DriverException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
+			: base(info, context)
+		{
+			
+		}
+         
 
 		/// <summary>
 		/// The error code for this exception (hex 80040400 - 800404FF)

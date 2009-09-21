@@ -60,6 +60,14 @@ namespace ASCOM
 		//static Profile ascomProfile = new Profile();
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="SettingsProvider"/> class.
+		/// </summary>
+ 		protected SettingsProvider()
+		{
+			
+		}
+
+		/// <summary>
 		/// Returns the provider's friendly name used during configuration.
 		/// </summary>
 		public override string Name
@@ -83,6 +91,7 @@ namespace ASCOM
 		/// Backing store for the ApplicationName property.
 		/// </summary>
 		private string appName = String.Empty;
+                                              
 		/// <summary>
 		/// Gets the name of the driver or application for which settings are being managed.
 		/// This value is set during provider initialization and cannot be changed thereafter.
@@ -200,7 +209,10 @@ namespace ASCOM
 			Diagnostics.TraceInfo("Persisting ASCOM Profile Properties for DeviceID={0}, {1} properties", ApplicationName, collection.Count);
 			foreach (SettingsPropertyValue item in collection)
 			{
-				//ToDo: better error checking and handling needed below.
+				if (!item.Property.Attributes.ContainsKey(typeof(DeviceIdAttribute)))
+				{
+					throw new PropertyNotAttributedException(item.Name);
+				}
 				DeviceIdAttribute idAttribute = item.Property.Attributes[typeof(DeviceIdAttribute)] as DeviceIdAttribute;
 				string deviceId = idAttribute.DeviceId;
 				// Split the Device ID into a Device Name and a Device Type.
