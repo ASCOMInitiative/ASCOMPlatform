@@ -42,9 +42,13 @@
             this.PortName_TB = new System.Windows.Forms.TextBox();
             this.OK_Btn = new System.Windows.Forms.Button();
             this.Cancel_Btn = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.FocusOffset_NUD = new System.Windows.Forms.NumericUpDown();
+            this.label9 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.RightAscension_NUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Declination_NUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Rotation_NUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.FocusOffset_NUD)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -59,7 +63,18 @@
             // 
             // RightAscension_NUD
             // 
+            this.RightAscension_NUD.DecimalPlaces = 1;
+            this.RightAscension_NUD.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
             this.RightAscension_NUD.Location = new System.Drawing.Point(117, 110);
+            this.RightAscension_NUD.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
             this.RightAscension_NUD.Name = "RightAscension_NUD";
             this.RightAscension_NUD.Size = new System.Drawing.Size(86, 20);
             this.RightAscension_NUD.TabIndex = 1;
@@ -77,6 +92,8 @@
             this.PortNumber_CB.Size = new System.Drawing.Size(33, 21);
             this.PortNumber_CB.TabIndex = 2;
             this.PortNumber_CB.Text = "1";
+            this.PortNumber_CB.SelectedIndexChanged += new System.EventHandler(this.PortNumber_CB_SelectedIndexChanged);
+            this.PortNumber_CB.Click += new System.EventHandler(this.PortNumber_CB_Click);
             // 
             // label2
             // 
@@ -92,9 +109,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(30, 112);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(82, 13);
+            this.label3.Size = new System.Drawing.Size(84, 13);
             this.label3.TabIndex = 4;
-            this.label3.Text = "Right Ascention";
+            this.label3.Text = "Right Ascension";
             // 
             // label4
             // 
@@ -107,7 +124,18 @@
             // 
             // Declination_NUD
             // 
+            this.Declination_NUD.DecimalPlaces = 1;
+            this.Declination_NUD.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
             this.Declination_NUD.Location = new System.Drawing.Point(117, 136);
+            this.Declination_NUD.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
             this.Declination_NUD.Name = "Declination_NUD";
             this.Declination_NUD.Size = new System.Drawing.Size(86, 20);
             this.Declination_NUD.TabIndex = 5;
@@ -133,7 +161,18 @@
             // 
             // Rotation_NUD
             // 
+            this.Rotation_NUD.DecimalPlaces = 1;
+            this.Rotation_NUD.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
             this.Rotation_NUD.Location = new System.Drawing.Point(117, 162);
+            this.Rotation_NUD.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
             this.Rotation_NUD.Name = "Rotation_NUD";
             this.Rotation_NUD.Size = new System.Drawing.Size(86, 20);
             this.Rotation_NUD.TabIndex = 8;
@@ -143,9 +182,9 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(204, 164);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(45, 13);
+            this.label7.Size = new System.Drawing.Size(47, 13);
             this.label7.TabIndex = 10;
-            this.label7.Text = "degrees";
+            this.label7.Text = "Degrees";
             // 
             // PortName_TB
             // 
@@ -156,8 +195,8 @@
             // 
             // OK_Btn
             // 
-            this.OK_Btn.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.OK_Btn.Location = new System.Drawing.Point(173, 197);
+            this.OK_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.OK_Btn.Location = new System.Drawing.Point(193, 214);
             this.OK_Btn.Name = "OK_Btn";
             this.OK_Btn.Size = new System.Drawing.Size(75, 23);
             this.OK_Btn.TabIndex = 12;
@@ -167,19 +206,53 @@
             // 
             // Cancel_Btn
             // 
+            this.Cancel_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.Cancel_Btn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.Cancel_Btn.Location = new System.Drawing.Point(15, 197);
+            this.Cancel_Btn.Location = new System.Drawing.Point(30, 222);
             this.Cancel_Btn.Name = "Cancel_Btn";
             this.Cancel_Btn.Size = new System.Drawing.Size(75, 23);
             this.Cancel_Btn.TabIndex = 13;
             this.Cancel_Btn.Text = "Cancel";
             this.Cancel_Btn.UseVisualStyleBackColor = true;
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(76, 190);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(36, 13);
+            this.label8.TabIndex = 15;
+            this.label8.Text = "Focus";
+            // 
+            // FocusOffset_NUD
+            // 
+            this.FocusOffset_NUD.Location = new System.Drawing.Point(117, 188);
+            this.FocusOffset_NUD.Maximum = new decimal(new int[] {
+            7000,
+            0,
+            0,
+            0});
+            this.FocusOffset_NUD.Name = "FocusOffset_NUD";
+            this.FocusOffset_NUD.Size = new System.Drawing.Size(86, 20);
+            this.FocusOffset_NUD.TabIndex = 14;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(204, 190);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(70, 13);
+            this.label9.TabIndex = 16;
+            this.label9.Text = "Motor Counts";
+            // 
             // OffsetsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(265, 232);
+            this.ClientSize = new System.Drawing.Size(280, 257);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.FocusOffset_NUD);
+            this.Controls.Add(this.label9);
             this.Controls.Add(this.Cancel_Btn);
             this.Controls.Add(this.OK_Btn);
             this.Controls.Add(this.PortName_TB);
@@ -197,9 +270,11 @@
             this.Name = "OffsetsForm";
             this.Text = "Setup Offsets";
             this.TopMost = true;
+            this.Load += new System.EventHandler(this.OffsetsForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.RightAscension_NUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Declination_NUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Rotation_NUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.FocusOffset_NUD)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -221,5 +296,8 @@
         private System.Windows.Forms.NumericUpDown Declination_NUD;
         private System.Windows.Forms.NumericUpDown Rotation_NUD;
         private System.Windows.Forms.TextBox PortName_TB;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.NumericUpDown FocusOffset_NUD;
+        private System.Windows.Forms.Label label9;
     }
 }

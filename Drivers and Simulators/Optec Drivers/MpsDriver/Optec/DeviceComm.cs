@@ -94,9 +94,13 @@ namespace ASCOM.Optec
                 }
                 if (desiredState == 0)
                 {
+                    
                     if (SerialTools.Connected)
                     {
+                        
+                        
                         SerialTools.Connected = false; //Close the port
+                    
                     }
                     d_ComState = 0;
                     returnValue = true;
@@ -206,7 +210,7 @@ namespace ASCOM.Optec
             //THIS SHOULD GET THE DEVICE IN THE SERIAL LOOP SO WE CAN TALK TO IT
             //AND IT SHOULD GET THE CURRENT POSITION OF THE DEVICE AND STORE IT IN Current_Position
             SetComState(2); //get device communicating (in serial loop)
-            GetPosition();  //this sets d_CurrentPosition to the device current pos
+            //GetPosition();  //this sets d_CurrentPosition to the device current pos
         }
         internal static void Disconnect()
         {

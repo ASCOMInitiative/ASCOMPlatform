@@ -117,6 +117,7 @@ namespace ASCOM.Optec
                 LED_GB.Enabled = true;
                 LEDOff_RB.Enabled = true;
                 LEDOn_RB.Enabled = true;
+                setupOffsetsToolStripMenuItem.Enabled = true;
             }
             else
             {
@@ -128,6 +129,7 @@ namespace ASCOM.Optec
                 LED_GB.Enabled = false;
                 LEDOff_RB.Enabled = false;
                 LEDOn_RB.Enabled = false;
+                setupOffsetsToolStripMenuItem.Enabled = false;
             }
         }
 
