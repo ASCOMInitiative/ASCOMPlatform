@@ -121,9 +121,7 @@
             this.comboBoxBaudRate.FormattingEnabled = true;
             this.comboBoxBaudRate.Items.AddRange(new object[] {
             "4800",
-            "9600",
-            "19200",
-            "38400"});
+            "9600"});
             this.comboBoxBaudRate.Location = new System.Drawing.Point(16, 128);
             this.comboBoxBaudRate.Name = "comboBoxBaudRate";
             this.comboBoxBaudRate.Size = new System.Drawing.Size(89, 21);
