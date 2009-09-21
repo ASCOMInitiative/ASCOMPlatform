@@ -27,7 +27,7 @@ namespace ASCOM.Optec
             }
             else { PortSelected = false; }
             d_ComState = 0;
-            CurrentPosition = 0;
+            d_CurrentPosition = 0;
             MPSErrorMsg = "Multi-Port Selector ERROR:\n";
         }
         public static short ComState
@@ -40,15 +40,36 @@ namespace ASCOM.Optec
             get { return d_CurrentPosition; }
             set { SetPosition(value); }
         }
-
         private static void SetPosition(short value)
         {
-            //TODO: Add Implementation here
-            d_CurrentPosition = value;
 
-            //throw new System.NotImplementedException();
+            if (value < 1 || value > 4)
+            {
+                throw new InvalidOperationException("Can not move to the position " + value + 
+                    "/n Position must be between 0 and 4");
+                
+
+            }
+            if (ComState == 2)
+            {
+                string cmdstring = "RP000" + value.ToString();
+
+                if (SendCmd(cmdstring, 1000).Contains("!"))
+                {
+                    d_CurrentPosition = value;
+                }
+                //else return without changing currentposition
+                return;
+            }
+            else
+            {
+                //do not change current position
+                return;
+            }
+
+            ;
+;
         }
-
         private static bool SetComState(short desiredState)
         {
             /*
@@ -69,16 +90,13 @@ namespace ASCOM.Optec
                 {
                     //attempt to get the user to select a COM Port
                     //if they select one continue if they don't fail
-                    if (SelectCOMPort() == false) return false;
+                    if (SelectCOMPort() == false) { d_ComState = 0; return false; }
                 }
                 if (desiredState == 0)
                 {
                     if (SerialTools.Connected)
                     {
-                        // Prepare device for dissconnect if necessary. Exit Serial Loop
-
-                        //Close the port
-                        SerialTools.Connected = false;
+                        SerialTools.Connected = false; //Close the port
                     }
                     d_ComState = 0;
                     returnValue = true;
@@ -96,9 +114,9 @@ namespace ASCOM.Optec
                     received = SerialTools.ReceiveTerminated("\n\r");
                     if (!received.Contains("!"))
                     {
-                        returnValue = false;
                         d_ComState = 1;
                         throw new FormatException("When connecting, response did not contain \"!\"");
+                        //return false;
                     }
                     else
                     {
@@ -109,7 +127,7 @@ namespace ASCOM.Optec
                 }
                 if (desiredState == 3)
                 {
-
+                    //this will never be the desired state
                 }
             }
             catch (COMException Ex)
@@ -136,7 +154,6 @@ namespace ASCOM.Optec
             return returnValue;
             
         }
-
         private static bool SelectCOMPort()
         {
             //Prompt user to select a COM Port 
@@ -147,16 +164,14 @@ namespace ASCOM.Optec
         }
         private static string SendCmd(string CMD, int Timeout )
         {
-            string ReturnString = "DEVICE-ERROR";   //guilty untill proven innocent
+            string ReturnString = "DEVICE-ERROR";   //guilty until proven innocent
 
+            // SHOULD NOT GET HERE IF ComState IS NOT ALREADY 2 SO NO NEED TO CHECK
             //step 1
-            if (ComState != 2) 
-            {
-                if(SetComState(2) != true) 
-                {
-                    return ReturnString;
-                }
-            }
+            //if (ComState != 2) 
+            //{
+            //    SetComState(2);
+            //}
 
             //step 2
             SerialTools.ClearBuffers();
@@ -166,22 +181,22 @@ namespace ASCOM.Optec
             {
                 SerialTools.Transmit(CMD);
             }
-            catch (Exception)
+            catch (Exception Ex)
             {
-                //TODO: 
+                MessageBox.Show("An error occured while attempting to send command: " + CMD + 
+                    "\n Error Details: " + Ex.ToString());
+                return ReturnString;
             }
-
-            //step 4
-            SerialTools.ReceiveTimeoutMs = Timeout;
-
-            //step 5
+  
             try
             {
+                SerialTools.ReceiveTimeoutMs = Timeout;
                 ReturnString = SerialTools.ReceiveTerminated("\n\r");  //line feed, carriage return
             }
-            catch
+            catch(Exception Ex)
             {
-                //TODO: 
+                MessageBox.Show("An error occured while attempting to send command: " + CMD +
+                    "\n Error Details: " + Ex.ToString()); 
             }
 
             return ReturnString;
@@ -190,26 +205,29 @@ namespace ASCOM.Optec
         {
             //THIS SHOULD GET THE DEVICE IN THE SERIAL LOOP SO WE CAN TALK TO IT
             //AND IT SHOULD GET THE CURRENT POSITION OF THE DEVICE AND STORE IT IN Current_Position
-            SetComState(2); //get device communicating
-            
-            GetPosition();
-            
-
+            SetComState(2); //get device communicating (in serial loop)
+            GetPosition();  //this sets d_CurrentPosition to the device current pos
         }
-        internal static void Dissconnect()
+        internal static void Disconnect()
         {
-            throw new System.NotImplementedException();
+            SetComState(0);
         }
         private static void GetPosition()
         {
             string Pos = "";
-            if (ComState != 2)
-                if (!SetComState(2))
-                    Pos = SendCmd("RX0000", 1000);
-                
+            if (ComState == 2)
+            {
+                Pos = SendCmd("RX0000", 1000);
+            }
+            else
+            {
+                return;
+            }
+
             if (Pos.Contains("ERROR")) throw new COMException("SendCmd attempt failed");
             else if (Pos.Length < 1) throw new COMException("SendCmd yeilded no response");
             else d_CurrentPosition = short.Parse(Pos.Substring(3, 1));
         }
+
     }
 }

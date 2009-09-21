@@ -29,27 +29,32 @@ namespace ASCOM.Optec
 		private void InitializeComponent()
 		{
             this.cmdOK = new System.Windows.Forms.Button();
-            this.Connect_Btn = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.CurrentPosition_CB = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.LEDOn_RB = new System.Windows.Forms.RadioButton();
             this.LED_GB = new System.Windows.Forms.GroupBox();
+            this.LEDPicture = new System.Windows.Forms.PictureBox();
             this.LEDOff_RB = new System.Windows.Forms.RadioButton();
-            this.Offsets_Btn = new System.Windows.Forms.Button();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.PortPicture = new System.Windows.Forms.PictureBox();
             this.picASCOM = new System.Windows.Forms.PictureBox();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.operationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.connectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setupOffsetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.disconnectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LED_GB.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LEDPicture)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PortPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmdOK
             // 
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdOK.Location = new System.Drawing.Point(6, 337);
+            this.cmdOK.Location = new System.Drawing.Point(7, 297);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(105, 25);
             this.cmdOK.TabIndex = 0;
@@ -57,30 +62,21 @@ namespace ASCOM.Optec
             this.cmdOK.UseVisualStyleBackColor = true;
             this.cmdOK.Click += new System.EventHandler(this.cmdOK_Click);
             // 
-            // Connect_Btn
+            // CurrentPosition_CB
             // 
-            this.Connect_Btn.Location = new System.Drawing.Point(6, 12);
-            this.Connect_Btn.Name = "Connect_Btn";
-            this.Connect_Btn.Size = new System.Drawing.Size(64, 29);
-            this.Connect_Btn.TabIndex = 4;
-            this.Connect_Btn.Text = "Connect";
-            this.Connect_Btn.UseVisualStyleBackColor = true;
-            this.Connect_Btn.Click += new System.EventHandler(this.Connect_Btn_Click);
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.CurrentPosition_CB.Enabled = false;
+            this.CurrentPosition_CB.FormattingEnabled = true;
+            this.CurrentPosition_CB.Items.AddRange(new object[] {
             "1",
             "2",
             "3",
             "4"});
-            this.comboBox1.Location = new System.Drawing.Point(4, 75);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(103, 21);
-            this.comboBox1.TabIndex = 6;
-            this.comboBox1.Text = "Select Position...";
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.CurrentPosition_CB.Location = new System.Drawing.Point(4, 75);
+            this.CurrentPosition_CB.Name = "CurrentPosition_CB";
+            this.CurrentPosition_CB.Size = new System.Drawing.Size(103, 21);
+            this.CurrentPosition_CB.TabIndex = 6;
+            this.CurrentPosition_CB.Text = "Select Position...";
+            this.CurrentPosition_CB.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -94,6 +90,7 @@ namespace ASCOM.Optec
             // LEDOn_RB
             // 
             this.LEDOn_RB.AutoSize = true;
+            this.LEDOn_RB.Enabled = false;
             this.LEDOn_RB.Location = new System.Drawing.Point(9, 17);
             this.LEDOn_RB.Name = "LEDOn_RB";
             this.LEDOn_RB.Size = new System.Drawing.Size(39, 17);
@@ -105,7 +102,7 @@ namespace ASCOM.Optec
             // 
             // LED_GB
             // 
-            this.LED_GB.Controls.Add(this.pictureBox2);
+            this.LED_GB.Controls.Add(this.LEDPicture);
             this.LED_GB.Controls.Add(this.LEDOff_RB);
             this.LED_GB.Controls.Add(this.LEDOn_RB);
             this.LED_GB.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
@@ -117,9 +114,21 @@ namespace ASCOM.Optec
             this.LED_GB.Text = "LED";
             this.LED_GB.UseCompatibleTextRendering = true;
             // 
+            // LEDPicture
+            // 
+            this.LEDPicture.Enabled = false;
+            this.LEDPicture.Image = global::ASCOM.Optec.Properties.Resources.LEDOff;
+            this.LEDPicture.Location = new System.Drawing.Point(53, 23);
+            this.LEDPicture.Name = "LEDPicture";
+            this.LEDPicture.Size = new System.Drawing.Size(46, 34);
+            this.LEDPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.LEDPicture.TabIndex = 10;
+            this.LEDPicture.TabStop = false;
+            // 
             // LEDOff_RB
             // 
             this.LEDOff_RB.AutoSize = true;
+            this.LEDOff_RB.Enabled = false;
             this.LEDOff_RB.Location = new System.Drawing.Point(9, 40);
             this.LEDOff_RB.Name = "LEDOff_RB";
             this.LEDOff_RB.Size = new System.Drawing.Size(39, 17);
@@ -129,67 +138,97 @@ namespace ASCOM.Optec
             this.LEDOff_RB.UseVisualStyleBackColor = true;
             this.LEDOff_RB.CheckedChanged += new System.EventHandler(this.LED_CheckedChanged);
             // 
-            // Offsets_Btn
+            // PortPicture
             // 
-            this.Offsets_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Offsets_Btn.Location = new System.Drawing.Point(6, 306);
-            this.Offsets_Btn.Name = "Offsets_Btn";
-            this.Offsets_Btn.Size = new System.Drawing.Size(105, 25);
-            this.Offsets_Btn.TabIndex = 10;
-            this.Offsets_Btn.Text = "Offsets...";
-            this.Offsets_Btn.UseVisualStyleBackColor = true;
-            this.Offsets_Btn.Click += new System.EventHandler(this.Offsets_Btn_Click);
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Image = global::ASCOM.Optec.Properties.Resources.LEDOff;
-            this.pictureBox2.Location = new System.Drawing.Point(53, 23);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(46, 34);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox2.TabIndex = 10;
-            this.pictureBox2.TabStop = false;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::ASCOM.Optec.Properties.Resources.Rotator1;
-            this.pictureBox1.Location = new System.Drawing.Point(6, 102);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(103, 109);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 5;
-            this.pictureBox1.TabStop = false;
+            this.PortPicture.Enabled = false;
+            this.PortPicture.Image = global::ASCOM.Optec.Properties.Resources.Rotator1;
+            this.PortPicture.Location = new System.Drawing.Point(6, 102);
+            this.PortPicture.Name = "PortPicture";
+            this.PortPicture.Size = new System.Drawing.Size(103, 109);
+            this.PortPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.PortPicture.TabIndex = 5;
+            this.PortPicture.TabStop = false;
             // 
             // picASCOM
             // 
             this.picASCOM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picASCOM.Image = global::ASCOM.Optec.Properties.Resources.ASCOM;
-            this.picASCOM.Location = new System.Drawing.Point(76, 1);
+            this.picASCOM.Location = new System.Drawing.Point(77, 27);
             this.picASCOM.Name = "picASCOM";
-            this.picASCOM.Size = new System.Drawing.Size(35, 64);
+            this.picASCOM.Size = new System.Drawing.Size(35, 42);
             this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picASCOM.TabIndex = 3;
             this.picASCOM.TabStop = false;
             this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
             this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.operationsToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(118, 24);
+            this.menuStrip1.TabIndex = 11;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // operationsToolStripMenuItem
+            // 
+            this.operationsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.connectToolStripMenuItem,
+            this.disconnectToolStripMenuItem,
+            this.setupOffsetsToolStripMenuItem,
+            this.exitToolStripMenuItem});
+            this.operationsToolStripMenuItem.Name = "operationsToolStripMenuItem";
+            this.operationsToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.operationsToolStripMenuItem.Text = "File";
+            // 
+            // connectToolStripMenuItem
+            // 
+            this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
+            this.connectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.connectToolStripMenuItem.Text = "Connect";
+            this.connectToolStripMenuItem.Click += new System.EventHandler(this.connectToolStripMenuItem_Click);
+            // 
+            // setupOffsetsToolStripMenuItem
+            // 
+            this.setupOffsetsToolStripMenuItem.Enabled = false;
+            this.setupOffsetsToolStripMenuItem.Name = "setupOffsetsToolStripMenuItem";
+            this.setupOffsetsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.setupOffsetsToolStripMenuItem.Text = "Setup Offsets";
+            this.setupOffsetsToolStripMenuItem.Click += new System.EventHandler(this.SetupOffsets);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // disconnectToolStripMenuItem
+            // 
+            this.disconnectToolStripMenuItem.Enabled = false;
+            this.disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
+            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.disconnectToolStripMenuItem.Text = "Disconnect";
+            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(117, 367);
-            this.Controls.Add(this.Offsets_Btn);
+            this.ClientSize = new System.Drawing.Size(118, 327);
             this.Controls.Add(this.LED_GB);
-            this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.Connect_Btn);
+            this.Controls.Add(this.CurrentPosition_CB);
+            this.Controls.Add(this.PortPicture);
             this.Controls.Add(this.picASCOM);
             this.Controls.Add(this.cmdOK);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.menuStrip1);
             this.ForeColor = System.Drawing.Color.Black;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SetupDialogForm";
@@ -198,11 +237,14 @@ namespace ASCOM.Optec
             this.Text = "Optec Setup";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.SetupDialogForm_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SetupDialogForm_FormClosing);
             this.LED_GB.ResumeLayout(false);
             this.LED_GB.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LEDPicture)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PortPicture)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -211,15 +253,19 @@ namespace ASCOM.Optec
 		#endregion
 
         private System.Windows.Forms.Button cmdOK;
-		private System.Windows.Forms.PictureBox picASCOM;
-        private System.Windows.Forms.Button Connect_Btn;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.PictureBox picASCOM;
+        private System.Windows.Forms.PictureBox PortPicture;
+        private System.Windows.Forms.ComboBox CurrentPosition_CB;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RadioButton LEDOn_RB;
         private System.Windows.Forms.GroupBox LED_GB;
         private System.Windows.Forms.RadioButton LEDOff_RB;
-        private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.Button Offsets_Btn;
+        private System.Windows.Forms.PictureBox LEDPicture;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem operationsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem connectToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem disconnectToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setupOffsetsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
 	}
 }

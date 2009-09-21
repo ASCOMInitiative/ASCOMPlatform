@@ -4,14 +4,14 @@ H.DeviceType = "MultiPortSelector";					// Make chooser for MultiPortSelectors
 var MPS = new ActiveXObject(H.Choose(""));			// Create instance of selected Driver
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-MPS.Connected = true;
-if (MPS.Connected == true) 
-{
-    WScript.Echo("\nCONNECTED!\n");
-}
-else{
-    WScript.Echo("\nNot Connected\n");
-}
+//MPS.Connected = true;
+//if (MPS.Connected == true) 
+//{
+//    wscript.echo("\nconnected!\n");
+//}
+//else{
+//    wscript.echo("\nnot connected\n");
+//}
 /////////////////////////////////////////////////////////////////////////////////////////////
 WScript.Echo("\nDriver Name = " + MPS.DriverName );
 WScript.Echo("\nPosition = " + MPS.Position );
@@ -27,7 +27,7 @@ for(i = 0; i<4; i++)
 }
 
 WScript.Echo("\nSet Port Names to PortA, Port B... Then Read Names again\n");
-//MPS.Ports(1).Name = "PortA";
+MPS.Ports.Name = "PortA";
 //MPS.Ports(1).Name = "PortB";
 //Pts(2).Name = "PortC";
 //Pts(3).Name = "PortD";

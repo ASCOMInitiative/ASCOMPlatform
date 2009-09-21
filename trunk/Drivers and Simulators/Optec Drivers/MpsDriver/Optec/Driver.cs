@@ -42,11 +42,11 @@ namespace ASCOM.Optec
 	[Guid("4843F695-0253-4e02-8CC8-1D9A07C8A959")]						// Force InterfaceID for stability (typ.)
 	public interface IPort
 	{
-		string Name					{ get; }
-		double RightAscensionOffset { get; }
-		double DeclinationOffset	{ get; }
-		short FocusOffset			{ get; }
-		double RotationOffset		{ get; }
+        string Name                 { get; set; }
+        double RightAscensionOffset { get; set; }
+        double DeclinationOffset    { get; set; }
+        short FocusOffset           { get; set; }
+        double RotationOffset       { get; set; }
 	}
 
 	[Guid("B8B816DC-D5E5-4a26-8649-ADEF40A3BBB1")]
@@ -82,7 +82,10 @@ namespace ASCOM.Optec
 		public string Name									// Port.PortName is redundant, Port.Name seems better?
 		{
 			get { return _name; }
-			set { _name = value; }
+			set {  
+                    _name = value;
+                    //DeviceSettings.SetName(indexer, value);
+                }
 		}
 		public double RightAscensionOffset
 		{
@@ -199,9 +202,9 @@ namespace ASCOM.Optec
                 {
                     if (DeviceComm.ComState != 2) DeviceComm.Connect();
                 }
-                else        //dissconnect
+                else        //disconnect
                 {
-                    DeviceComm.Dissconnect();
+                    DeviceComm.Disconnect();
                 }
             }
 		}
