@@ -66,5 +66,47 @@ namespace ASCOM.Optec.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        internal static System.Drawing.Bitmap LEDOff {
+            get {
+                object obj = ResourceManager.GetObject("LEDOff", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap LEDOn {
+            get {
+                object obj = ResourceManager.GetObject("LEDOn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Rotator1 {
+            get {
+                object obj = ResourceManager.GetObject("Rotator1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Rotator2 {
+            get {
+                object obj = ResourceManager.GetObject("Rotator2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Rotator3 {
+            get {
+                object obj = ResourceManager.GetObject("Rotator3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Rotator4 {
+            get {
+                object obj = ResourceManager.GetObject("Rotator4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

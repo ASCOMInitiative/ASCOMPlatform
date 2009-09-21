@@ -69,6 +69,12 @@
     <Compile Include="COMPortForm.designer.cs">
       <DependentUpon>COMPortForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="OffsetsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OffsetsForm.Designer.cs">
+      <DependentUpon>OffsetsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Defaults.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -93,6 +99,10 @@
   <ItemGroup>
     <EmbeddedResource Include="COMPortForm.resx">
       <DependentUpon>COMPortForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OffsetsForm.resx">
+      <DependentUpon>OffsetsForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -142,6 +152,12 @@
   <ItemGroup>
     <Content Include="ASCOM.png" />
     <Content Include="ReadMe.htm" />
+    <None Include="Resources\LEDOn1.jpg" />
+    <None Include="Resources\LEDOn.jpg" />
+    <None Include="Resources\Rotator111.bmp" />
+    <None Include="Resources\Rotator11.bmp" />
+    <None Include="Resources\Rotator1.bmp" />
+    <None Include="Resources\Rotator.bmp" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
