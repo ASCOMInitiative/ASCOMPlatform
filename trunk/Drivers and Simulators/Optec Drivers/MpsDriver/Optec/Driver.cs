@@ -58,6 +58,7 @@ namespace ASCOM.Optec
 		string Description			{ get; }
 		string DriverInfo			{ get; }
 		ArrayList Ports				{ get; }
+        void SetupDialog();
 	}
 
 	//
@@ -77,35 +78,66 @@ namespace ASCOM.Optec
 		private short _focusOffset;
 		private double _rotationOffset;						// Can't be a Short
 
-		internal Port() { }								    // Prevent creation of this object
+        private static int indexCount = 0;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Port"/> class.
+        /// Set's the port's index value in strict order of creation.
+        /// </summary>
+
+		internal Port() 
+        {
+            this.Index = indexCount++;
+            if (indexCount == 4) indexCount = 0;    //this is so I can create multiple MPS's
+        }								    // Prevent creation of this object
+        internal int Index
+        {
+            get;  private set;
+        }
 		public string Name									// Port.PortName is redundant, Port.Name seems better?
 		{
 			get { return _name; }
-			set {  
-                    _name = value;
-                    //DeviceSettings.SetName(indexer, value);
-                }
+			set 
+            {  
+                _name = value;
+                DeviceSettings.SetName(this.Index + 1, value);
+            }
 		}
 		public double RightAscensionOffset
 		{
 			get { return _rightAscensionOffset; }
-			set { _rightAscensionOffset = value; }
+			set 
+            {
+                _rightAscensionOffset = value;
+                DeviceSettings.SetRightAscensionOffset(this.Index + 1, value);
+            }
 		}
 		public double DeclinationOffset
 		{
 			get { return _declinationOffset; }
-			set { _declinationOffset = value; }
+			set 
+            { 
+                _declinationOffset = value;
+                DeviceSettings.SetDeclinationOffset(this.Index + 1, value);
+            }
 		}
 		public short FocusOffset
 		{
 			get { return _focusOffset; }
-			set { _focusOffset = value; }
+			set 
+            { 
+                _focusOffset = value;
+                DeviceSettings.SetFocusOffset(this.Index + 1, value); 
+            }
 		}
 		public double RotationOffset
 		{
 			get { return _rotationOffset; }
-			set { _rotationOffset = value; }
+			set 
+            {
+                _rotationOffset = value;
+                DeviceSettings.SetRotationOffset(this.Index + 1, value);
+            }
 		}
 	}
 
@@ -146,6 +178,7 @@ namespace ASCOM.Optec
                 P.RotationOffset = DeviceSettings.RotationOffset(i);
                 _ports.Add(P);
             }
+            
 
 		}
 

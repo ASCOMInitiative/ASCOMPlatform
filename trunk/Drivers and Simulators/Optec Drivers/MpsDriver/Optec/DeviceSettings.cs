@@ -44,7 +44,7 @@ namespace ASCOM.Optec
                     Name = "";
                     break;
             }
-            return "PORT" + PortNumber.ToString();
+            return Name;
         }
 
         public static double RightAscensionOffset(int PortNumber)
