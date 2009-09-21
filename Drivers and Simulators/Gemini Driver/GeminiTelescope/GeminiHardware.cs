@@ -466,7 +466,7 @@ namespace ASCOM.GeminiTelescope
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "BaudRate", "9600");
 
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsComPort", "COM1");
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsBaudRate", "9600");
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsBaudRate", "4800");
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsUpdateClock", true.ToString());
 
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AdditionalAlign", false.ToString());
@@ -516,7 +516,7 @@ namespace ASCOM.GeminiTelescope
 
             m_GpsComPort = m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsComPort", "");
             if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsBaudRate", ""), out m_GpsBaudRate))
-                m_GpsBaudRate = 9600;
+                m_GpsBaudRate = 4800;
             if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsUpdateClock", ""), out m_GpsUpdateClock))
                 m_GpsUpdateClock = false;
 
