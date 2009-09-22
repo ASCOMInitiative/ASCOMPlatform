@@ -38,6 +38,16 @@
             See ASCOM.Exception.ValueNotSetException.
             </remarks>
         </member>
+        <member name="F:ASCOM.ErrorCodes.SettingsProviderError">
+            <summary>
+            An error related to settings.
+            </summary>
+        </member>
+        <member name="F:ASCOM.ErrorCodes.UnspecifiedError">
+            <summary>
+            A 'catch-all' error code used when nothing else was specified.
+            </summary>
+        </member>
         <member name="F:ASCOM.ErrorCodes.DriverBase">
             <summary>
             The starting value for driver-specific error numbers. 

@@ -4,6 +4,23 @@
         <name>ASCOM.SettingsProvider</name>
     </assembly>
     <members>
+        <member name="T:ASCOM.PropertyNotAttributedException">
+            <summary>
+            Exception thrown when teh SettingsProvider finds a setting that does not have a DeviceID attribute.
+            </summary>
+        </member>
+        <member name="M:ASCOM.PropertyNotAttributedException.#ctor(System.String)">
+            <summary>
+            Constructs a new PropertyNotAttributedException.
+            </summary>
+            <param name="message">The exception message</param>
+        </member>
+        <member name="P:ASCOM.PropertyNotAttributedException.PropertyName">
+            <summary>
+            Gets or sets the name of the property that caused teh exception.
+            </summary>
+            <value>The name of the property.</value>
+        </member>
         <member name="T:TiGra.ExtensionMethods.StringExtensions">
             <summary>
             Extension methods for manipulating strings.
@@ -155,6 +172,11 @@
             Copyright © 2009 TiGra Astronomy, all rights reserved.
             http://www.tigranetworks.co.uk/Astronomy
             </remarks>
+        </member>
+        <member name="M:ASCOM.SettingsProvider.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.SettingsProvider"/> class.
+            </summary>
         </member>
         <member name="F:ASCOM.SettingsProvider.appName">
             <summary>
