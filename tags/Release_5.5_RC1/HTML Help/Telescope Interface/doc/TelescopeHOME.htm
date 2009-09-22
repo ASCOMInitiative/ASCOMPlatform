@@ -1,0 +1,54 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=Windows-1252">
+	<title>ASCOM Telescope 2.0 Programmer's Reference</title>
+
+	<style type="text/css">
+		@import url(dc3_hh.css);
+	</style>
+</head>
+<body>
+
+<h1><a name="TelescopeHOME"></a><a href="http://ASCOM_Standards.org/"><img src="images/Bug72T-sm.jpg" width="48" height="56" alt="" border="0" align="left"></a>&nbsp;&nbsp;Telescope Interface Standard 2.0<br>
+&nbsp;&nbsp;Programmer's Reference <span class="v2rev">(revised 16-Jan-2008)</span> </h1>
+
+<div class=note>Please conduct discussions regarding this interface and its usage on the <a href="http://groups.yahoo.com/group/ASCOM-Talk" target="browser">ASCOM-Talk List</a>.
+
+<p><b><a href="http://groups.yahoo.com/group/ASCOM-Talk/join" target="browser">Click here to join ASCOM-Talk</a></b></div>
+
+<h2>Introduction</h2>
+
+This document describes the interface used by low-level telescope "driver" components as part of the Astronomy Common Object Model (ASCOM). Components that implement this interface can provide a way for programs to control various telescopes via a standard set of properties and methods. 
+<p>This specification covers a <i>simple, low-level</i> telescope control interface for reading and writing coordinates, slewing, synchronizing and access to common controller functions. It does not provide for accessories such as focusers, flip mirrors, etc. Those sorts of things will have their own interfaces. The characteristics of this interface comply with the <a href="http://ascom-standards.org/qual-spec.html" target="browser">ASCOM Quality Guidelines</a>, assuring consistent behavior and compatibility with the widest possible variety of Windows Automation clients.
+
+<p><p>In addition to containing features, the 2.0 specification has been clarified in numerous areas. These changes appear with <span class="v2new">this background color</span> when they apply to existing V1 properties and methods. New properties and methods in V2.0 are not marked with the change color. For a summary of the <span class="v2new">changes and additions since the previous standard</span> (Telescope 1.4), please refer to the <a href="TelescopeRELNOTES.htm">Release Notes</a>.</p>
+<p>&nbsp;</p>
+<p class="v2rev">The revision of 16-Jan-2008 (in this color) clarifies the meaning of the <a href="TelescopeTelescopePROPSideOfPier.htm">SideOfPier</a> property. </p>
+<h2>Implementation and Conventions</h2>
+
+<p class="v2new">All of the methods and properties specified must be present in any conforming driver's interface. However, some methods and properties may not actually be implemented; they will raise a "not implemented" error when called or accessed.</p>
+
+<p>Equatorial coordinates are <span class="v2new">in the system specified by the new <a href="TelescopeTelescopePROPEquatorialSystem.htm">EquatorialSystem</a> property (usually local topocentric, and depending on the mount), hours for right ascension, and degrees for declination</span>. Thus, "inner loop" issues such as mechanical compensation must be contained within the driver or it's underlying controller(s). Time is in Coordinated Universal Time (UTC). 
+
+<h2>Usage</h2>
+
+<p>To control a particular telescope type, a program would create an instance of the driver for that telescope type, then use the standard properties and methods described in this document to effect control of that scope. Thus any program or script that uses the standard driver interface automatically gains access to any telescope type for which a driver exists. For more information on ASCOM, see the <a href="http://ascom-standards.org/" target="browser">ASCOM Home Page</a>.
+
+
+<h2>For best results</h2>
+
+This will display best if you have Internet Explorer 5 or later, text size set to "smaller", and the following fonts installed:
+<ul>
+	<li> Arial
+	<li> Verdana
+	<li> Lucida Console
+</ul>
+
+
+<hr color="silver" size=2>
+<div class=copyright>Copyright &copy; 2001-2008, The ASCOM Initiative</div>
+
+</body>
+</html>
