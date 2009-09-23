@@ -17,7 +17,6 @@ namespace ASCOM.OptecTCF_Driver
 
         #endregion
 
-
         #region DeviceComm Connection METHODS
 
         internal static void Connect()

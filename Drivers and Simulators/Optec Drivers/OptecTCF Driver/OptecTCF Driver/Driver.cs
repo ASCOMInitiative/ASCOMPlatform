@@ -49,7 +49,6 @@ namespace ASCOM.OptecTCF_Driver
         // Driver ID and descriptive string that shows in the Chooser
         //
         internal static string s_csDriverID = "ASCOM.OptecTCF_Driver.Focuser";
-        // TODO Change the descriptive string for your driver then remove this line
         private static string s_csDriverDescription = "Optec TCF-S";
 
         //
