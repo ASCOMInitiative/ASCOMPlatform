@@ -132,16 +132,15 @@ namespace ASCOM.GeminiTelescope
         {
             if (buttonQuery.Text == "Query")
             {
+                if (comboBoxComPort.SelectedItem == null) MessageBox.Show("Select Com Port"); return;
                 try
                 {
-                    if (comboBoxComPort.SelectedItem.ToString() != "")
-                    {
+                   
                         interpreter.ComPort = comboBoxComPort.SelectedItem.ToString();
                         interpreter.BaudRate = int.Parse(comboBoxBaudRate.SelectedItem.ToString());
                         interpreter.Conneced = true;
                         buttonQuery.Text = "Stop";
-                    }
-                    else { MessageBox.Show("Select Com Port"); }
+                   
                 }
                 catch (Exception ex)
                 { MessageBox.Show(ex.Message); }
