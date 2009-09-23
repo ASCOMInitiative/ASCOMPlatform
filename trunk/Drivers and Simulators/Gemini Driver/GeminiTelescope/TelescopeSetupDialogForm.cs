@@ -257,6 +257,12 @@ namespace ASCOM.GeminiTelescope
             get { return checkBoxUseGeminiTime.Checked; }
             set { checkBoxUseGeminiTime.Checked = value; }
         }
+
+        public bool ShowHandbox
+        {
+            get { return checkBoxShowHandbox.Checked; }
+            set { checkBoxShowHandbox.Checked = value; }
+        }
         
         #endregion
 

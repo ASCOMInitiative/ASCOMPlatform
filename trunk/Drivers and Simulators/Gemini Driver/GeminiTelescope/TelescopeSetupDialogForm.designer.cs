@@ -62,7 +62,7 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.checkBoxAdvancedMode = new System.Windows.Forms.CheckBox();
+            this.checkBoxShowHandbox = new System.Windows.Forms.CheckBox();
             this.checkBoxPrecession = new System.Windows.Forms.CheckBox();
             this.checkBoxRefraction = new System.Windows.Forms.CheckBox();
             this.checkBoxAdditionalAlign = new System.Windows.Forms.CheckBox();
@@ -450,16 +450,16 @@ namespace ASCOM.GeminiTelescope
             this.label6.TabIndex = 6;
             this.label6.Text = "Com Port:";
             // 
-            // checkBoxAdvancedMode
+            // checkBoxShowHandbox
             // 
-            this.checkBoxAdvancedMode.AutoSize = true;
-            this.checkBoxAdvancedMode.ForeColor = System.Drawing.Color.White;
-            this.checkBoxAdvancedMode.Location = new System.Drawing.Point(238, 153);
-            this.checkBoxAdvancedMode.Name = "checkBoxAdvancedMode";
-            this.checkBoxAdvancedMode.Size = new System.Drawing.Size(125, 17);
-            this.checkBoxAdvancedMode.TabIndex = 24;
-            this.checkBoxAdvancedMode.Text = "Show Handbox Form";
-            this.checkBoxAdvancedMode.UseVisualStyleBackColor = false;
+            this.checkBoxShowHandbox.AutoSize = true;
+            this.checkBoxShowHandbox.ForeColor = System.Drawing.Color.White;
+            this.checkBoxShowHandbox.Location = new System.Drawing.Point(238, 153);
+            this.checkBoxShowHandbox.Name = "checkBoxShowHandbox";
+            this.checkBoxShowHandbox.Size = new System.Drawing.Size(125, 17);
+            this.checkBoxShowHandbox.TabIndex = 24;
+            this.checkBoxShowHandbox.Text = "Show Handbox Form";
+            this.checkBoxShowHandbox.UseVisualStyleBackColor = false;
             // 
             // checkBoxPrecession
             // 
@@ -726,7 +726,7 @@ namespace ASCOM.GeminiTelescope
             this.Controls.Add(this.checkBoxAdditionalAlign);
             this.Controls.Add(this.checkBoxRefraction);
             this.Controls.Add(this.checkBoxPrecession);
-            this.Controls.Add(this.checkBoxAdvancedMode);
+            this.Controls.Add(this.checkBoxShowHandbox);
             this.Controls.Add(buttonGps);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.labelTime);
@@ -797,7 +797,7 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.CheckBox checkBoxUseGeminiTime;
-        private System.Windows.Forms.CheckBox checkBoxAdvancedMode;
+        private System.Windows.Forms.CheckBox checkBoxShowHandbox;
         private System.Windows.Forms.CheckBox checkBoxPrecession;
         private System.Windows.Forms.CheckBox checkBoxRefraction;
         private System.Windows.Forms.CheckBox checkBoxAdditionalAlign;

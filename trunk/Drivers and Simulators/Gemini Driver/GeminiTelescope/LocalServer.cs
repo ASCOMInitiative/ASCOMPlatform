@@ -106,7 +106,7 @@ namespace ASCOM.GeminiTelescope
         private static uint m_uiMainThreadId;					// Stores the main thread's thread id.
         private static int m_iObjsInUse;						// Keeps a count on the total number of objects alive.
         private static int m_iServerLocks;						// Keeps a lock count on this application.
-        private static bool m_bComStart;						// True if server started by COM (-embedding)
+        public static bool m_bComStart;						// True if server started by COM (-embedding)
         public static frmMain m_MainForm = null;				// Reference to our main form
         private static ArrayList m_ComObjectAssys;				// Dynamically loaded assemblies containing served COM objects
         private static ArrayList m_ComObjectTypes;				// Served COM object types

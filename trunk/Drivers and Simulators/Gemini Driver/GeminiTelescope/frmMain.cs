@@ -556,6 +556,8 @@ namespace ASCOM.GeminiTelescope
             setupForm.UseGeminiSite = GeminiHardware.UseGeminiSite;
             setupForm.UseGeminiTime = GeminiHardware.UseGeminiTime;
 
+            setupForm.ShowHandbox = GeminiHardware.ShowHandbox;
+
             setupForm.BootMode = GeminiHardware.BootMode;
 
 
@@ -588,6 +590,8 @@ namespace ASCOM.GeminiTelescope
 
                 GeminiHardware.UseGeminiTime = setupForm.UseGeminiTime;
                 GeminiHardware.UseGeminiSite = setupForm.UseGeminiSite;
+
+                GeminiHardware.ShowHandbox = setupForm.ShowHandbox;
 
                 GeminiHardware.BootMode = setupForm.BootMode;
 
@@ -753,8 +757,8 @@ namespace ASCOM.GeminiTelescope
             SharedResources.SetTopWindow(this);
 
             SetSlewButtons();
-            this.Hide();
-            //GeminiHardware.Start();
+            if (!GeminiHardware.ShowHandbox && GeminiTelescope.m_bComStart) this.Hide();
+            
         }
 
         #region Thread Safe Callback Functions
