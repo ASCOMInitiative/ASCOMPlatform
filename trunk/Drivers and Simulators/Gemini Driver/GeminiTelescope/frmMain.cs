@@ -39,6 +39,8 @@ namespace ASCOM.GeminiTelescope
         string m_JoystickRate = null;           // these keep last joystick rate and
         string m_JoystickDirection =null;      // direction commands issued 
 
+        bool m_ExitFormMenuCall = false;
+
         public frmMain()
         {
             InitializeComponent();
@@ -316,7 +318,9 @@ namespace ASCOM.GeminiTelescope
 
         void ExitMenu(object sender, EventArgs e)
         {
+            m_ExitFormMenuCall = true;
             this.Close();
+            
         }
 
         void ControlPanelMenu(object sender, EventArgs e)
@@ -853,9 +857,17 @@ namespace ASCOM.GeminiTelescope
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
+            //If we hit the close X on the form then hide it. If called from exit menu then exit for real.
+            if (!m_ExitFormMenuCall)
+            {
+                e.Cancel = true;
+                this.Hide();
+                return;
+            }
+            m_ExitFormMenuCall = false;
             if (GeminiHardware.Connected && GeminiHardware.Clients > 0)
             {
-                DialogResult res = MessageBox.Show("Gemini connection"+(GeminiHardware.Clients>1? "s are": " is") +" still active. Are you sure you want to disconnect and exit?",
+                DialogResult res = MessageBox.Show("Gemini connection" + (GeminiHardware.Clients > 1 ? "s are" : " is") + " still active. Are you sure you want to disconnect and exit?",
                     SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (res != DialogResult.Yes)
                 {
@@ -866,8 +878,9 @@ namespace ASCOM.GeminiTelescope
 
             while (GeminiHardware.Clients > 0)  //disconnect all clients
                 GeminiHardware.Connected = false;
-        
+
             GeminiHardware.CloseStatusForm();
+            
         }
 
         private void focuserSetupDialogToolStripMenuItem_Click(object sender, EventArgs e)
