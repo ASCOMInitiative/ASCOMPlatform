@@ -133,7 +133,7 @@ namespace ASCOM.GeminiTelescope
                     m_Joystick = new Joystick();
                     if (m_Joystick.Initialize(GeminiHardware.JoystickName))
                     {
-                        tmrJoystick.Interval = 500;
+                        tmrJoystick.Interval = 200;
                         tmrJoystick.Start();
                     }
                     else
@@ -141,6 +141,12 @@ namespace ASCOM.GeminiTelescope
                 }
             }
         }
+
+        private uint m_PreviousJoystickButtonState = 0;
+        private int[] m_AutoFireCount = new int[32];
+        
+        // joystic position corrresponding to mount G/C/S speeds:
+        private double[] joystick_speeds = { 0.251, 0.501, 0.751 };
 
         void tmrJoystick_Tick(object sender, EventArgs e)
         {
@@ -151,6 +157,13 @@ namespace ASCOM.GeminiTelescope
                 double y = m_Joystick.PosY;
 
                 System.Diagnostics.Trace.WriteLine("JOYSTICK : X = " + x.ToString() + "   Y = " + y.ToString());
+
+                uint buttons = m_Joystick.ButtonState;
+                
+                ProcessButtonPress(ref buttons, m_PreviousJoystickButtonState);
+                
+                m_PreviousJoystickButtonState = buttons;
+
 
                 // joystick positions are reported from -1 to 1
                 // 0 .. 0.25 means no movement (near center)
@@ -185,6 +198,16 @@ namespace ASCOM.GeminiTelescope
                     }
                     tmrJoystick.Start();
                     return;
+                }
+
+                // fixed speed selected, use the value in JoysticFixedSpeed (0-2 == G/C/S):
+                if (!GeminiHardware.JoystickIsAnalog)
+                {
+                    double speed = joystick_speeds[GeminiHardware.JoystickFixedSpeed];
+                    if (x < -0.25) x = -speed;
+                    if (x > 0.25) x = speed;
+                    if (y < -0.25) y = -speed;
+                    if (y > 0.25) y = speed;
                 }
 
                 double val = Math.Max(Math.Abs(x), Math.Abs(y));
@@ -227,6 +250,46 @@ namespace ASCOM.GeminiTelescope
                 }
                 if (cmds.Count > 0) GeminiHardware.DoCommand(cmds.ToArray(), false);
                 tmrJoystick.Start();
+            }
+        }
+
+        private void ProcessButtonPress(ref uint buttons, uint prev_buttons)
+        {
+            uint mask = 1;
+
+            for (int i = 0; i < 32; ++i, mask<<=1)
+            {
+                // if previously fired this
+                if (m_AutoFireCount[i] > 0 && m_AutoFireCount[i] < 5)
+                {
+                    if ((buttons & mask) == 0) //cancel auto-fire -- button is now up
+                    {
+                        m_AutoFireCount[i] = 0;
+                        continue;
+                    }
+                    buttons &= ~mask;   // remove button press, so next time we detect this as a new press
+
+                    m_AutoFireCount[i]++;
+                    continue; //wait for 5 cycles before continuous firing
+                }
+
+                // button changed state?
+                if ((buttons & mask) != (prev_buttons & mask))
+                {
+                    if ((buttons & mask) == 0 && m_AutoFireCount[i] > 0)
+                        m_AutoFireCount[i] = 0;
+
+                    UserCommand.Execute(GeminiHardware.JoystickButtonMap[i], (buttons & mask) != 0);
+
+                    // if this is the first button down in a while, let up
+                    // and wait for 5 cycles before continually firing:
+                    if ((buttons & mask) != 0 && m_AutoFireCount[i] == 0)
+                    {
+                        UserCommand.Execute(GeminiHardware.JoystickButtonMap[i], false);    //key up
+                        buttons &= ~mask;   //remove it from state, so it fires the next time
+                        m_AutoFireCount[i]++;
+                    }
+                }
             }
         }
 
@@ -417,21 +480,21 @@ namespace ASCOM.GeminiTelescope
                 Declination = GeminiHardware.Declination;
                 SiderealTime = GeminiHardware.SiderealTime;
 
-                labelSlew.BackColor = (GeminiHardware.Velocity == "S"? m_ActiveBkColor : m_InactiveBkColor);
+                labelSlew.BackColor = (GeminiHardware.Velocity == "S" ? m_ActiveBkColor : m_InactiveBkColor);
 
                 // blink the text while slewing is active:
-                Color active = ((m_UpdateCount & 1 )==0? m_ActiveForeColor : m_InactiveForeColor );
+                Color active = ((m_UpdateCount & 1) == 0 ? m_ActiveForeColor : m_InactiveForeColor);
 
                 labelSlew.ForeColor = (GeminiHardware.Velocity == "S" ? active : m_InactiveForeColor);
                 labelPARK.BackColor = (GeminiHardware.AtPark ? m_ActiveBkColor : m_InactiveBkColor);
-                labelPARK.ForeColor = (GeminiHardware.AtPark? m_ActiveForeColor : m_InactiveForeColor);
+                labelPARK.ForeColor = (GeminiHardware.AtPark ? m_ActiveForeColor : m_InactiveForeColor);
 
                 switch (GeminiHardware.Velocity)
                 {
                     case "S": labelSlew.Text = "SLEW"; break;
                     case "C": labelSlew.Text = "CENTER"; break;
                     case "N": labelSlew.Text = "STOP"; break;
-                    default : labelSlew.Text = "TRACK"; break;
+                    default: labelSlew.Text = "TRACK"; break;
                 }
                 //add an indicator for a "safety limit alert".
                 if (GeminiHardware.AtSafetyLimit)
@@ -443,6 +506,16 @@ namespace ASCOM.GeminiTelescope
 
                 pbStop.Visible = (GeminiHardware.Velocity == "S");  //only show Stop! button when slewing
 
+
+            }
+            else
+            {
+                labelSlew.ForeColor = m_InactiveForeColor;
+                labelPARK.BackColor = m_InactiveBkColor;
+                labelPARK.ForeColor = m_InactiveForeColor;
+
+                labelSlew.Text = "STOP"; 
+                pbStop.Visible = false;  //only show Stop! button when slewing
 
             }
 
@@ -1037,6 +1110,7 @@ namespace ASCOM.GeminiTelescope
 
         private void aboutGeminiDriverToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
 //            GeminiAbout.MainWindow win = new GeminiAbout.MainWindow();
 //            win.Show();
         }

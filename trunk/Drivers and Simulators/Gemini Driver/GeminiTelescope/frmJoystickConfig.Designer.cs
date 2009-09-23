@@ -236,11 +236,11 @@
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 427);
+            this.label1.Location = new System.Drawing.Point(12, 427);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(308, 13);
+            this.label1.Size = new System.Drawing.Size(340, 13);
             this.label1.TabIndex = 13;
-            this.label1.Text = "Press a button on the joystick to see it highlited in the list above.";
+            this.label1.Text = "HINT: Press a button on the joystick to see it highlited in the list above.";
             // 
             // frmJoystickConfig
             // 

@@ -83,6 +83,7 @@ namespace ASCOM.GeminiTelescope
             this.radioButtonWarmRestart = new System.Windows.Forms.RadioButton();
             this.chkJoystick = new System.Windows.Forms.CheckBox();
             this.cmbJoystick = new System.Windows.Forms.ComboBox();
+            this.btnJoysticConfig = new System.Windows.Forms.Button();
             buttonGps = new System.Windows.Forms.Button();
             pbGeminiSettings = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
@@ -673,14 +674,12 @@ namespace ASCOM.GeminiTelescope
             // chkJoystick
             // 
             this.chkJoystick.ForeColor = System.Drawing.Color.White;
-            this.chkJoystick.Image = ((System.Drawing.Image)(resources.GetObject("chkJoystick.Image")));
-            this.chkJoystick.Location = new System.Drawing.Point(238, 240);
+            this.chkJoystick.Location = new System.Drawing.Point(238, 244);
             this.chkJoystick.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.chkJoystick.Name = "chkJoystick";
-            this.chkJoystick.Size = new System.Drawing.Size(96, 36);
+            this.chkJoystick.Size = new System.Drawing.Size(69, 28);
             this.chkJoystick.TabIndex = 31;
             this.chkJoystick.Text = "Joystick:";
-            this.chkJoystick.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.chkJoystick.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.chkJoystick.UseVisualStyleBackColor = false;
             this.chkJoystick.CheckedChanged += new System.EventHandler(this.chkJoystick_CheckedChanged);
@@ -692,10 +691,25 @@ namespace ASCOM.GeminiTelescope
             this.cmbJoystick.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbJoystick.ForeColor = System.Drawing.Color.White;
             this.cmbJoystick.FormattingEnabled = true;
-            this.cmbJoystick.Location = new System.Drawing.Point(334, 247);
+            this.cmbJoystick.Location = new System.Drawing.Point(303, 247);
             this.cmbJoystick.Name = "cmbJoystick";
-            this.cmbJoystick.Size = new System.Drawing.Size(138, 21);
+            this.cmbJoystick.Size = new System.Drawing.Size(105, 21);
             this.cmbJoystick.TabIndex = 32;
+            // 
+            // btnJoysticConfig
+            // 
+            this.btnJoysticConfig.AutoSize = true;
+            this.btnJoysticConfig.BackColor = System.Drawing.Color.Transparent;
+            this.btnJoysticConfig.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnJoysticConfig.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.btnJoysticConfig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnJoysticConfig.Image = ((System.Drawing.Image)(resources.GetObject("btnJoysticConfig.Image")));
+            this.btnJoysticConfig.Location = new System.Drawing.Point(414, 238);
+            this.btnJoysticConfig.Name = "btnJoysticConfig";
+            this.btnJoysticConfig.Size = new System.Drawing.Size(45, 41);
+            this.btnJoysticConfig.TabIndex = 33;
+            this.btnJoysticConfig.UseVisualStyleBackColor = false;
+            this.btnJoysticConfig.Click += new System.EventHandler(this.btnJoysticConfig_Click);
             // 
             // TelescopeSetupDialogForm
             // 
@@ -703,6 +717,7 @@ namespace ASCOM.GeminiTelescope
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(490, 376);
+            this.Controls.Add(this.btnJoysticConfig);
             this.Controls.Add(this.cmbJoystick);
             this.Controls.Add(this.chkJoystick);
             this.Controls.Add(pbGeminiSettings);
@@ -802,5 +817,6 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.RadioButton radioButtonColdStart;
         private System.Windows.Forms.CheckBox chkJoystick;
         private System.Windows.Forms.ComboBox cmbJoystick;
+        private System.Windows.Forms.Button btnJoysticConfig;
     }
 }

@@ -206,22 +206,26 @@ namespace ASCOM.GeminiTelescope
         }
 
         
+
+        private uint m_Buttons;
+
         private double m_PosX;
+
 
         public double PosX
         {
             get {
                 m_JEX.dwSize = 64;
-                m_JEX.dwFlags = Win32API.JOY_RETURNXY;
+                m_JEX.dwFlags = Win32API.JOY_RETURNXY | Win32API.JOY_RETURNBUTTONS;
                 if (Win32API.joyGetPosEx(m_JoyNbr.ToInt32(), ref m_JEX) == 0)
                 {
                     m_PosX = (double)(m_JEX.dwXpos - m_CenterX)*2 / (MaxX-MinX);
                     m_PosY = (double)(m_JEX.dwYpos - m_CenterY)*2 / (MaxY-MinY);
+                    m_Buttons = (uint)m_JEX.dwButtons;
                 }
                 return m_PosX; 
             }
         }
-
      
         private double m_PosY;
 
@@ -229,6 +233,17 @@ namespace ASCOM.GeminiTelescope
         {
             get { return m_PosY; }
         }
+
+        public uint ButtonState
+        {
+            get { return m_Buttons; }
+        }
+
+        public bool IsButtonPressed(int nbr)
+        {
+            return (m_Buttons & (1 << nbr)) != 0;
+        }
+
         private int m_CenterX = 0;
         private int m_CenterY = 0;
 
@@ -242,7 +257,7 @@ namespace ASCOM.GeminiTelescope
                 Win32API.JOYINFOEX jex = new Win32API.JOYINFOEX();
 
                 jex.dwSize = 64;
-                jex.dwFlags = Win32API.JOY_RETURNXY;
+                jex.dwFlags = Win32API.JOY_RETURNXY | Win32API.JOY_RETURNBUTTONS;
 
                 List<int> id_list = new List<int>();
 
@@ -260,6 +275,7 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
+
                 Win32API.JOYINFOEX jex = new Win32API.JOYINFOEX();
 
                 jex.dwSize = 64;
@@ -307,6 +323,34 @@ namespace ASCOM.GeminiTelescope
 
             return false;
         }
+
+#if false
+        static List<object> _Joysticks = new List<object>();
+
+        public static List<object> JoySticks
+        {
+            get
+            {
+                    _Joysticks = new List<object>();
+                    DeviceList devices = Manager.GetDevices(DeviceClass.GameControl, EnumDevicesFlags.AttachedOnly);
+                    if (devices != null)
+                    {
+                        foreach (DeviceInstance deviceInstance in devices)
+                        {
+                            _Joysticks.Add(deviceInstance);
+                            Device device = new Device(deviceInstance.InstanceGuid);
+                            device.SetCooperativeLevel(null, CooperativeLevelFlags.Background | CooperativeLevelFlags.NonExclusive);
+                            device.SetDataFormat(DeviceDataFormat.Joystick);
+                            device.Acquire();
+                            JoystickState js = device.CurrentJoystickState;
+                        }
+                    }
+                
+                return _Joysticks;
+            }
+        }
+
+#endif
 
     }
 }

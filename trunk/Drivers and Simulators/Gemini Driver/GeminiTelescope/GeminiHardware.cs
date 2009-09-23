@@ -235,6 +235,45 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+
+        private static double m_FocalLength;
+
+        public static double FocalLength
+        {
+            get { return GeminiHardware.m_FocalLength; }
+            set {
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "FocalLength", value.ToString());
+                GeminiHardware.m_FocalLength = value; 
+            }
+        }
+
+        private static double m_ApertureArea;
+
+        public static double ApertureArea
+        {
+            get { return GeminiHardware.m_ApertureArea; }
+            set {
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureArea", value.ToString());
+                GeminiHardware.m_ApertureArea = value;
+            }
+        }
+
+
+        private static double m_ApertureDiameter;
+
+        public static double ApertureDiameter
+        {
+            get { return GeminiHardware.m_ApertureDiameter; }
+            set {
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureDiameter", value.ToString());
+                GeminiHardware.m_ApertureDiameter = value;
+            }
+        }
+        
+
         private static string m_ComPort;
         private static int m_BaudRate;
         private static ASCOM.Utilities.SerialParity m_Parity;
@@ -341,6 +380,52 @@ namespace ASCOM.GeminiTelescope
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickName", value.ToString());
                 GeminiHardware.m_JoystickName = value; 
             }
+        }
+
+
+        private static UserFunction[] m_JoystickButtonMap;
+
+        public static UserFunction[] JoystickButtonMap
+        {
+            get { return m_JoystickButtonMap; }
+            set { 
+                m_JoystickButtonMap = value;
+                GeminiHardware.m_Profile.DeviceType = "Telescope";
+                for (int i = 0; i < value.Length; ++i)
+                {
+                    int v = (int)value[i];
+                    GeminiHardware.m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Button " + (i+1).ToString(), v.ToString());
+                }
+            }
+        }
+
+        private static double m_JoystickAccelerator = 0;
+
+        public static double JoystickAccelerator
+        {
+            get { return GeminiHardware.m_JoystickAccelerator; }
+            set { GeminiHardware.m_JoystickAccelerator = value; }
+        }
+
+        private static bool m_JoystickIsAnalog = true;
+
+        public static bool JoystickIsAnalog
+        {
+            get { return GeminiHardware.m_JoystickIsAnalog; }
+            set { 
+                GeminiHardware.m_JoystickIsAnalog = value;
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickIsAnalog", value.ToString());
+                m_JoystickFixedSpeed = 0;   //reset this to guiding speed
+            }
+        }
+
+        private static int m_JoystickFixedSpeed = 0; // 0 = guide, 1=center, 2 = slew
+
+        public static int JoystickFixedSpeed
+        {
+            get { return GeminiHardware.m_JoystickFixedSpeed; }
+            set { GeminiHardware.m_JoystickFixedSpeed = value; }
         }
 
 
@@ -547,6 +632,16 @@ namespace ASCOM.GeminiTelescope
                 m_Elevation = 0.0;
 
 
+            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureArea", ""), out m_ApertureArea))
+                m_ApertureArea = 0.0;
+
+            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureDiameter", ""), out m_ApertureDiameter))
+                m_ApertureDiameter = 0.0;
+
+            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "FocalLength", ""), out m_FocalLength))
+                m_FocalLength = 0.0;
+
+
             Trace.Info(2, "Geo Settings", m_Latitude, m_Longitude, m_Elevation);
             
             m_PassThroughComPort = m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughComPort", "");
@@ -579,6 +674,10 @@ namespace ASCOM.GeminiTelescope
 
             m_JoystickName = m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickName", "");
 
+            m_JoystickButtonMap = JoystickButtonMapFromProfile();
+
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickIsAnalog", ""), out m_JoystickIsAnalog))
+                m_JoystickIsAnalog = true;
 
             //Get the Boot Mode from settings
             try
@@ -666,6 +765,20 @@ namespace ASCOM.GeminiTelescope
 
             Trace.Exit("GetProfileSettings");
 
+        }
+
+        private static UserFunction[] JoystickButtonMapFromProfile()
+        {
+            UserFunction [] funcs = new UserFunction[32];
+            
+            for (int i = 0; i < 32; ++i)
+            {
+                string value = GeminiHardware.m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Button " + (i + 1).ToString(), "");
+                int val = 0;
+                int.TryParse(value, out val);
+                funcs[i] = (UserFunction)val;
+            }
+            return funcs;
         }
 
 #endregion

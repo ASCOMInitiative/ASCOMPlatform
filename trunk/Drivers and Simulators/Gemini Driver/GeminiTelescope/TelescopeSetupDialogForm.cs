@@ -345,5 +345,13 @@ namespace ASCOM.GeminiTelescope
         {
             get { return cmbJoystick.SelectedItem.ToString(); }
         }
+
+        private void btnJoysticConfig_Click(object sender, EventArgs e)
+        {
+            frmJoystickConfig frm = new frmJoystickConfig();
+            DialogResult res = frm.ShowDialog(this);
+            if (res == DialogResult.OK)
+                frm.PersistProfile(true);
+        }
     }
 }
