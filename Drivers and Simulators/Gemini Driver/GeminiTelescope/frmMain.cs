@@ -1110,12 +1110,9 @@ namespace ASCOM.GeminiTelescope
 
         private void aboutGeminiDriverToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-//            GeminiAbout.MainWindow win = new GeminiAbout.MainWindow();
-//            win.Show();
+            GeminiAbout.MainWindow win = new GeminiAbout.MainWindow();
+            win.Show();
         }
-
-
 
     }
 }
