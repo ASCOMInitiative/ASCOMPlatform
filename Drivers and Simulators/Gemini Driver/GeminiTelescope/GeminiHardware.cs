@@ -194,7 +194,7 @@ namespace ASCOM.GeminiTelescope
 
         private static bool m_Precession;
         private static bool m_Refraction;
-        private static bool m_AdvancedMode;
+        private static bool m_ShowHandbox;
         private static bool m_UseGeminiSite;
         private static bool m_UseGeminiTime;
 
@@ -557,7 +557,7 @@ namespace ASCOM.GeminiTelescope
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AdditionalAlign", false.ToString());
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Precession", false.ToString());
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Refraction", false.ToString());
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AdvancedMode", false.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Show Handbox", false.ToString());
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseGeminiSite", true.ToString());
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseGeminiTime", true.ToString());
 
@@ -577,8 +577,8 @@ namespace ASCOM.GeminiTelescope
                 m_Precession = false;
             if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Refraction", ""), out m_Refraction))
                 m_Refraction = false;
-            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "AdvancedMode", ""), out m_AdvancedMode))
-                m_AdvancedMode = false;
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Show Handbox", ""), out m_ShowHandbox))
+                m_ShowHandbox = false;
             if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseGeminiSite", ""), out m_UseGeminiSite))
                 m_UseGeminiSite= false;
             if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseGeminiTime", ""), out m_UseGeminiTime))
@@ -589,7 +589,7 @@ namespace ASCOM.GeminiTelescope
 
             TraceLevel = m_TraceLevel;
 
-            Trace.Info(2, "User Settings", m_AdditionalAlign, m_Precession, m_Refraction, m_AdvancedMode, m_UseGeminiSite, m_UseGeminiTime);
+            Trace.Info(2, "User Settings", m_AdditionalAlign, m_Precession, m_Refraction, m_ShowHandbox, m_UseGeminiSite, m_UseGeminiTime);
 
             if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "SlewSettleTime", ""), out m_SlewSettleTime))
                 m_SlewSettleTime = 2;
@@ -832,6 +832,20 @@ namespace ASCOM.GeminiTelescope
         {
             get { return GeminiHardware.m_UTCOffset; }
             set { GeminiHardware.m_UTCOffset = value; }
+        }
+
+        /// <summary>
+        /// Get/Set Hanbox Form Setting 
+        /// </summary>
+        public static bool ShowHandbox
+        {
+            get { return m_ShowHandbox; }
+            set
+            {
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Show Handbox", value.ToString());
+                m_ShowHandbox = value;
+            }
         }
 
         /// <summary>
