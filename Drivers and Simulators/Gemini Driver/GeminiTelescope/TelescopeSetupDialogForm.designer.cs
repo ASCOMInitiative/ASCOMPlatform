@@ -366,8 +366,8 @@ namespace ASCOM.GeminiTelescope
             // tableLayoutPanel4
             // 
             this.tableLayoutPanel4.ColumnCount = 2;
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 57.78894F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 42.21106F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 43.71859F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 56.28141F));
             this.tableLayoutPanel4.Controls.Add(this.checkBoxUseGeminiTime, 0, 1);
             this.tableLayoutPanel4.Controls.Add(this.labelUtc, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.label5, 0, 0);
@@ -396,7 +396,7 @@ namespace ASCOM.GeminiTelescope
             // labelUtc
             // 
             this.labelUtc.AutoSize = true;
-            this.labelUtc.Location = new System.Drawing.Point(117, 0);
+            this.labelUtc.Location = new System.Drawing.Point(90, 0);
             this.labelUtc.Name = "labelUtc";
             this.labelUtc.Size = new System.Drawing.Size(49, 13);
             this.labelUtc.TabIndex = 7;
