@@ -307,18 +307,22 @@ namespace ASCOM.GeminiTelescope
 
         public double ApertureArea
         {
-            get { throw new PropertyNotImplementedException("ApertureArea", false); }
+            get {
+                GeminiHardware.Trace.Enter("IT:ApertureArea.Get", GeminiHardware.ApertureArea); 
+                return GeminiHardware.ApertureArea;
+            }
         }
 
         public double ApertureDiameter
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("ApertureDiameter", false); }
+            get {
+                GeminiHardware.Trace.Enter("IT:ApertureDiameter.Get", GeminiHardware.ApertureDiameter); 
+                return GeminiHardware.ApertureDiameter;
+            }
         }
 
         public bool AtHome
         {
-            // TODO Replace this with your implementation
             get {
                 GeminiHardware.Trace.Enter("IT:AtHome.Get", m_FoundHome);                
                 return m_FoundHome; }
@@ -709,8 +713,10 @@ namespace ASCOM.GeminiTelescope
 
         public double FocalLength
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("FocalLength", false); }
+            get {
+                GeminiHardware.Trace.Enter("IT:Altitude.Get", GeminiHardware.FocalLength); 
+                return GeminiHardware.FocalLength;
+            }
         }
 
 
