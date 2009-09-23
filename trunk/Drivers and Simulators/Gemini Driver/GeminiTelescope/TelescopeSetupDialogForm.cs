@@ -292,7 +292,7 @@ namespace ASCOM.GeminiTelescope
 
         private void timerUpdate_Tick(object sender, EventArgs e)
         {
-            labelUtc.Text = DateTime.UtcNow.ToLongTimeString();
+            labelUtc.Text = DateTime.UtcNow.ToShortDateString() + " " + DateTime.UtcNow.ToShortTimeString();
         }
 
         private void checkBoxUseGeminiSite_CheckedChanged(object sender, EventArgs e)
