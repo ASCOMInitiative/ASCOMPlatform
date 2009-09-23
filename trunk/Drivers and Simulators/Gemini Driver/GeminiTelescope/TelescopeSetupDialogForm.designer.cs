@@ -155,9 +155,9 @@ namespace ASCOM.GeminiTelescope
             // 
             this.groupBox1.Controls.Add(this.tableLayoutPanel1);
             this.groupBox1.ForeColor = System.Drawing.Color.White;
-            this.groupBox1.Location = new System.Drawing.Point(12, 132);
+            this.groupBox1.Location = new System.Drawing.Point(12, 119);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(205, 128);
+            this.groupBox1.Size = new System.Drawing.Size(205, 140);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Site Information";
@@ -187,8 +187,8 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(199, 109);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(199, 121);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // checkBoxUseGeminiSite
@@ -196,17 +196,17 @@ namespace ASCOM.GeminiTelescope
             this.checkBoxUseGeminiSite.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.checkBoxUseGeminiSite, 4);
             this.checkBoxUseGeminiSite.ForeColor = System.Drawing.Color.White;
-            this.checkBoxUseGeminiSite.Location = new System.Drawing.Point(3, 90);
+            this.checkBoxUseGeminiSite.Location = new System.Drawing.Point(3, 87);
             this.checkBoxUseGeminiSite.Name = "checkBoxUseGeminiSite";
-            this.checkBoxUseGeminiSite.Size = new System.Drawing.Size(122, 16);
+            this.checkBoxUseGeminiSite.Size = new System.Drawing.Size(158, 30);
             this.checkBoxUseGeminiSite.TabIndex = 22;
-            this.checkBoxUseGeminiSite.Text = "Use Gemini Site Info";
+            this.checkBoxUseGeminiSite.Text = "Don\'t Sync Gemini Site Info \r\nWhen Connecting";
             this.checkBoxUseGeminiSite.UseVisualStyleBackColor = false;
             this.checkBoxUseGeminiSite.CheckedChanged += new System.EventHandler(this.checkBoxUseGeminiSite_CheckedChanged);
             // 
             // textBoxLongitudeMinutes
             // 
-            this.textBoxLongitudeMinutes.Location = new System.Drawing.Point(157, 32);
+            this.textBoxLongitudeMinutes.Location = new System.Drawing.Point(157, 31);
             this.textBoxLongitudeMinutes.Name = "textBoxLongitudeMinutes";
             this.textBoxLongitudeMinutes.Size = new System.Drawing.Size(34, 20);
             this.textBoxLongitudeMinutes.TabIndex = 12;
@@ -248,7 +248,7 @@ namespace ASCOM.GeminiTelescope
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 29);
+            this.label2.Location = new System.Drawing.Point(3, 28);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(57, 13);
             this.label2.TabIndex = 6;
@@ -257,7 +257,7 @@ namespace ASCOM.GeminiTelescope
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 58);
+            this.label3.Location = new System.Drawing.Point(3, 56);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(54, 13);
             this.label3.TabIndex = 7;
@@ -266,7 +266,7 @@ namespace ASCOM.GeminiTelescope
             // textBoxElevation
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.textBoxElevation, 2);
-            this.textBoxElevation.Location = new System.Drawing.Point(71, 61);
+            this.textBoxElevation.Location = new System.Drawing.Point(71, 59);
             this.textBoxElevation.Name = "textBoxElevation";
             this.textBoxElevation.Size = new System.Drawing.Size(78, 20);
             this.textBoxElevation.TabIndex = 5;
@@ -277,14 +277,14 @@ namespace ASCOM.GeminiTelescope
             this.comboBoxLongitude.Items.AddRange(new object[] {
             "E",
             "W"});
-            this.comboBoxLongitude.Location = new System.Drawing.Point(71, 32);
+            this.comboBoxLongitude.Location = new System.Drawing.Point(71, 31);
             this.comboBoxLongitude.Name = "comboBoxLongitude";
             this.comboBoxLongitude.Size = new System.Drawing.Size(38, 21);
             this.comboBoxLongitude.TabIndex = 8;
             // 
             // textBoxLongitudeDegrees
             // 
-            this.textBoxLongitudeDegrees.Location = new System.Drawing.Point(116, 32);
+            this.textBoxLongitudeDegrees.Location = new System.Drawing.Point(116, 31);
             this.textBoxLongitudeDegrees.Name = "textBoxLongitudeDegrees";
             this.textBoxLongitudeDegrees.Size = new System.Drawing.Size(34, 20);
             this.textBoxLongitudeDegrees.TabIndex = 11;
@@ -356,9 +356,9 @@ namespace ASCOM.GeminiTelescope
             // 
             this.groupBox3.Controls.Add(this.tableLayoutPanel4);
             this.groupBox3.ForeColor = System.Drawing.Color.White;
-            this.groupBox3.Location = new System.Drawing.Point(12, 279);
+            this.groupBox3.Location = new System.Drawing.Point(12, 265);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(205, 65);
+            this.groupBox3.Size = new System.Drawing.Size(205, 79);
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Time";
@@ -375,10 +375,10 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 2;
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 41.30435F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 58.69565F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 28.33333F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 71.66666F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(199, 46);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(199, 60);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
             // checkBoxUseGeminiTime
@@ -386,17 +386,17 @@ namespace ASCOM.GeminiTelescope
             this.checkBoxUseGeminiTime.AutoSize = true;
             this.tableLayoutPanel4.SetColumnSpan(this.checkBoxUseGeminiTime, 4);
             this.checkBoxUseGeminiTime.ForeColor = System.Drawing.Color.White;
-            this.checkBoxUseGeminiTime.Location = new System.Drawing.Point(3, 22);
+            this.checkBoxUseGeminiTime.Location = new System.Drawing.Point(3, 20);
             this.checkBoxUseGeminiTime.Name = "checkBoxUseGeminiTime";
-            this.checkBoxUseGeminiTime.Size = new System.Drawing.Size(106, 17);
+            this.checkBoxUseGeminiTime.Size = new System.Drawing.Size(142, 30);
             this.checkBoxUseGeminiTime.TabIndex = 23;
-            this.checkBoxUseGeminiTime.Text = "Use Gemini Time";
+            this.checkBoxUseGeminiTime.Text = "Don\'t Sync Gemini Time \r\nWhen Connecting";
             this.checkBoxUseGeminiTime.UseVisualStyleBackColor = false;
             // 
             // labelUtc
             // 
             this.labelUtc.AutoSize = true;
-            this.labelUtc.Location = new System.Drawing.Point(90, 0);
+            this.labelUtc.Location = new System.Drawing.Point(89, 0);
             this.labelUtc.Name = "labelUtc";
             this.labelUtc.Size = new System.Drawing.Size(49, 13);
             this.labelUtc.TabIndex = 7;
