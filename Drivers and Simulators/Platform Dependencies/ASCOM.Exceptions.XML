@@ -38,6 +38,23 @@
             See ASCOM.Exception.ValueNotSetException.
             </remarks>
         </member>
+        <member name="F:ASCOM.ErrorCodes.NotConnected">
+            <summary>
+            Error code used to indicate that the communications channel is not connected.
+            </summary>
+        </member>
+        <member name="F:ASCOM.ErrorCodes.InvalidWhileParked">
+            <summary>
+            Error code used to indicate that the attempted operation is invalid because the mount
+            is currently in a Parked state.
+            </summary>
+        </member>
+        <member name="F:ASCOM.ErrorCodes.InvalidWhileSlaved">
+            <summary>
+            Error code used to indicate that the attempted operation is invalid because the mount
+            is currently in a Slaved state.
+            </summary>
+        </member>
         <member name="F:ASCOM.ErrorCodes.SettingsProviderError">
             <summary>
             An error related to settings.
@@ -93,6 +110,27 @@
             <param name="number">Error code for the exception (80040400 - 80040FFF).</param>
             <param name="inner">The inner exception that led to throwing this exception</param>
         </member>
+        <member name="M:ASCOM.DriverException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.DriverException"/> class.
+            Sets the COM HResult to <see cref="F:ASCOM.ErrorCodes.UnspecifiedError"/>.
+            </summary>
+        </member>
+        <member name="M:ASCOM.DriverException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.DriverException"/> class
+            with a human-readable descriptive message.
+            </summary>
+            <param name="message">The human-readable description of the problem.</param>
+        </member>
+        <member name="M:ASCOM.DriverException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.DriverException"/> class from
+            another caught exception and a human-readable descriptinve message.
+            </summary>
+            <param name="message">The human-readable description of the problem.</param>
+            <param name="innerException">The caught (inner) exception.</param>
+        </member>
         <member name="P:ASCOM.DriverException.Number">
             <summary>
             The error code for this exception (hex 80040400 - 800404FF)
@@ -102,6 +140,10 @@
             <summary>
             Exception to report an invalid value supplied to a driver.
             </summary>
+            <remarks>
+            The most useful way to use this exception is to inform the user which property/method/parameter
+            had the invalid value and also the range of allowed values.
+            </remarks>
         </member>
         <member name="M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String)">
             <summary>
@@ -165,8 +207,13 @@
             All properties and methods defined by the relevant ASCOM standard interface must exist in each driver. However,
             those properties and methods do not all have to be <i>implemented</i>. This exception is a base class for
             PropertyNotImplementedException and MethodNotImplementedException, which drivers should use for throwing
-            the relevant exception(s). This class is intended to be used by clients who wich to catch either of
+            the relevant exception(s). This class is intended to be used by clients who wish to catch either of
             the two specific exceptions in a single catch() clause.
+            </summary>
+        </member>
+        <member name="F:ASCOM.NotImplementedException.csMessage">
+            <summary>
+            A format string used to create the exception's human-readable message.
             </summary>
         </member>
         <member name="M:ASCOM.NotImplementedException.#ctor(System.String)">
@@ -248,6 +295,138 @@
         <member name="P:ASCOM.MethodNotImplementedException.Method">
             <summary>
             The method that is not implemented
+            </summary>
+        </member>
+        <member name="T:ASCOM.NotConnectedException">
+            <summary>
+            This exception should be raised when an operation is attempted that requires communication with the
+            device, but the device is disconnected.
+            </summary>
+        </member>
+        <member name="M:ASCOM.NotConnectedException.#ctor">
+            <summary>
+            Default public constructor for NotConnectedException takes no parameters.
+            </summary>
+        </member>
+        <member name="M:ASCOM.NotConnectedException.#ctor(System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.NotConnectedException"/> class
+            from another exception.
+            </summary>
+            <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="M:ASCOM.NotConnectedException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.NotConnectedException"/> class
+            with a non-default error message.
+            </summary>
+            <param name="message">A descriptive human-readable message.</param>
+        </member>
+        <member name="M:ASCOM.NotConnectedException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.NotConnectedException"/> class
+            based on another exception.
+            </summary>
+            <param name="message">Descriptive text documenting the cause or source of the error.</param>
+            <param name="innerException">The inner exception the led to the throwing of this exception.</param>
+        </member>
+        <member name="T:ASCOM.OutOfRangeException">
+            <summary>
+            Exception thrown when a value is outside the allowed range.
+            This would typically be used to range-check method arguments.
+            </summary>
+        </member>
+        <member name="M:ASCOM.OutOfRangeException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.OutOfRangeException"/> class.
+            </summary>
+        </member>
+        <member name="M:ASCOM.OutOfRangeException.#ctor(System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.OutOfRangeException"/> class
+            with a caught (inner) exception.
+            </summary>
+            <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="M:ASCOM.OutOfRangeException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.OutOfRangeException"/> class
+            specifying the name of the value causing the exception.
+            </summary>
+            <param name="valueName">Name of the value that caused the exception.</param>
+        </member>
+        <member name="M:ASCOM.OutOfRangeException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.OutOfRangeException"/> class
+            with the name of the value that caused the exception and a caught (inner) exception.
+            </summary>
+            <param name="valueName">Name of the value that caused the exception.</param>
+            <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="M:ASCOM.OutOfRangeException.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.OutOfRangeException"/> class.
+            </summary>
+            <param name="valueName">Name of the value that caused the exception.</param>
+            <param name="rangeDescription">A description of the acceptable range of values.</param>
+        </member>
+        <member name="M:ASCOM.OutOfRangeException.#ctor(System.String,System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.OutOfRangeException"/> class
+            with the name of the value that caused the exception,
+            A description of the allowed range of values
+            and a caught (inner) exception.
+            </summary>
+            <param name="valueName">Name of the value that caused the exception.</param>
+            <param name="rangeDescription">The description of the acceptable range of values.</param>
+            <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="P:ASCOM.OutOfRangeException.ValueName">
+            <summary>
+            Gets the name of the value that is out of range. This may be shown to the user.
+            </summary>
+            <value>The name of the value.</value>
+        </member>
+        <member name="P:ASCOM.OutOfRangeException.ExpectedRange">
+            <summary>
+            Gets a description of the range of valid values. This may be shown to the user.
+            </summary>
+            <value>The expected range.</value>
+        </member>
+        <member name="T:ASCOM.ParkedException">
+            <summary>
+            This exception should be used to indicate that movement (or other invalid operation) was attempted
+            while the device was in a parked state.
+            </summary>
+        </member>
+        <member name="M:ASCOM.ParkedException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.ParkedException"/> class
+            using default error text and error codes.
+            </summary>
+        </member>
+        <member name="M:ASCOM.ParkedException.#ctor(System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.ParkedException"/> class
+            with a caught (inner) exception.
+            </summary>
+            <param name="inner">The inner.</param>
+        </member>
+        <member name="T:ASCOM.SlavedException">
+            <summary>
+            This exception should be used to indicate that movement (or other invalid operation) was attempted
+            while the device was in slaved mode. This applies primarily to domes drivers.
+            </summary>
+        </member>
+        <member name="M:ASCOM.SlavedException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.SlavedException"/> class.
+            </summary>
+        </member>
+        <member name="M:ASCOM.SlavedException.#ctor(System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.SlavedException"/> class
+            with a caught (inner) exception.
             </summary>
         </member>
     </members>
