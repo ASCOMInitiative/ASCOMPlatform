@@ -39,12 +39,14 @@ namespace ASCOM.GeminiTelescope
 
                 chkJoystick.CheckState = GeminiHardware.UseJoystick ? CheckState.Checked : CheckState.Unchecked;
                 if (!chkJoystick.Checked) cmbJoystick.Enabled = false;
+                chkJoystick.BackColor = Color.Transparent;
             }
             else
             {   // no joysticks detected
                 chkJoystick.CheckState = CheckState.Unchecked;
                 chkJoystick.Enabled = false;
                 cmbJoystick.Enabled = false;
+                chkJoystick.ForeColor = Color.FromArgb(64, 64, 64);
 
             }
 
@@ -338,7 +340,7 @@ namespace ASCOM.GeminiTelescope
 
         private void chkJoystick_CheckedChanged(object sender, EventArgs e)
         {
-            cmbJoystick.Enabled = chkJoystick.Checked;
+            cmbJoystick.Enabled = chkJoystick.Checked;           
         }
 
 
