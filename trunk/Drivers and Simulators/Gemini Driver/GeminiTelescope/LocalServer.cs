@@ -563,7 +563,7 @@ namespace ASCOM.GeminiTelescope
         static void Main(string[] args)
         {
 
-            Mutex mut;
+            Mutex mut = null;
 
 
             // Add the event handler for handling UI thread exceptions to the event.
@@ -587,7 +587,6 @@ namespace ASCOM.GeminiTelescope
             }
             catch
             {
-                mut = new Mutex(false, SharedResources.TELESCOPE_PROGRAM_ID + "_Mutex");
             }
 
 
@@ -630,7 +629,7 @@ namespace ASCOM.GeminiTelescope
             GarbageCollector.StopThread();
             GarbageCollector.WaitForThreadToStop();
 
-            mut.ReleaseMutex();
+            if (mut!=null) mut.ReleaseMutex();
 
         }
 

@@ -398,14 +398,13 @@ namespace ASCOM.GeminiTelescope
             // CheckBoxFlipDec
             // 
             this.CheckBoxFlipDec.AccessibleDescription = "Flip Dec Direction";
-            this.CheckBoxFlipDec.AutoSize = true;
             this.CheckBoxFlipDec.ForeColor = System.Drawing.Color.White;
-            this.CheckBoxFlipDec.Location = new System.Drawing.Point(94, 232);
+            this.CheckBoxFlipDec.Location = new System.Drawing.Point(95, 232);
             this.CheckBoxFlipDec.Name = "CheckBoxFlipDec";
             this.CheckBoxFlipDec.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.CheckBoxFlipDec.Size = new System.Drawing.Size(46, 30);
             this.CheckBoxFlipDec.TabIndex = 6;
-            this.CheckBoxFlipDec.Text = "Flip\r\nDec";
+            this.CheckBoxFlipDec.Text = "Rev\r\nDec";
             this.CheckBoxFlipDec.UseVisualStyleBackColor = false;
             // 
             // GroupBox1
@@ -463,11 +462,11 @@ namespace ASCOM.GeminiTelescope
             // 
             this.CheckBoxFlipRa.AccessibleDescription = "Flip RA Direction";
             this.CheckBoxFlipRa.ForeColor = System.Drawing.Color.White;
-            this.CheckBoxFlipRa.Location = new System.Drawing.Point(9, 232);
+            this.CheckBoxFlipRa.Location = new System.Drawing.Point(7, 232);
             this.CheckBoxFlipRa.Name = "CheckBoxFlipRa";
-            this.CheckBoxFlipRa.Size = new System.Drawing.Size(42, 30);
+            this.CheckBoxFlipRa.Size = new System.Drawing.Size(53, 30);
             this.CheckBoxFlipRa.TabIndex = 5;
-            this.CheckBoxFlipRa.Text = "Flip\r\nRA";
+            this.CheckBoxFlipRa.Text = "RevRA";
             this.CheckBoxFlipRa.UseVisualStyleBackColor = false;
             // 
             // BaloonIcon
@@ -483,10 +482,10 @@ namespace ASCOM.GeminiTelescope
             this.pbStop.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.pbStop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.pbStop.ForeColor = System.Drawing.Color.White;
-            this.pbStop.Location = new System.Drawing.Point(52, 237);
+            this.pbStop.Location = new System.Drawing.Point(51, 237);
             this.pbStop.Margin = new System.Windows.Forms.Padding(1, 3, 0, 3);
             this.pbStop.Name = "pbStop";
-            this.pbStop.Size = new System.Drawing.Size(43, 24);
+            this.pbStop.Size = new System.Drawing.Size(44, 24);
             this.pbStop.TabIndex = 9;
             this.pbStop.Text = "Stop!";
             this.pbStop.UseVisualStyleBackColor = false;

@@ -389,6 +389,19 @@ namespace ASCOM.GeminiTelescope
                 tmrBaloon.Stop();
                 BaloonIcon.Visible = false;
                 BaloonIcon.Visible = true;
+
+                if (m_Messages.Count > 0)
+                {
+                    msg m = m_Messages[0];
+                    m_Messages.RemoveAt(0);
+
+                    BaloonIcon.ShowBalloonTip(4000, m.text, m.title, m.icon);
+                    m_LastMessageTime = DateTime.Now;
+                    // time to turn off the baloon text, since Windows has a minimum of about 20-30 seconds before
+                    // the message turns off on its own while the task bar is visible:
+                    tmrBaloon.Interval = (m_Messages.Count > 0? 1500 : 4000);
+                    tmrBaloon.Start();
+                }
             }
             catch { }
         }
@@ -415,16 +428,38 @@ namespace ASCOM.GeminiTelescope
                 SetBaloonText(from, msg, ToolTipIcon.Info);
         }
 
+        class msg
+        {
+            public string title;
+            public string text;
+            public ToolTipIcon icon;
+            public msg(string _title, string _text, ToolTipIcon _icon)
+            {
+                title = _title; text = _text; icon = _icon;
+            }
+        }
+
+        List<msg> m_Messages = new List<msg>();
+        DateTime m_LastMessageTime = DateTime.Now;
+
         void SetBaloonText(string title, string text, ToolTipIcon icon)
         {
             if (m_ShowNotifications)
             {
+                // if messages pending or last message was visible for less than 1 second, queue up and wait
+                if (m_Messages.Count > 0 || (DateTime.Now - m_LastMessageTime < TimeSpan.FromSeconds(1.5)))
+                {
+                    m_Messages.Add(new msg(title, text, icon));
+                    return;
+                }
+
                 tmrBaloon.Stop();
 
                 BaloonIcon.ShowBalloonTip(4000, text, title, icon);
                 // time to turn off the baloon text, since Windows has a minimum of about 20-30 seconds before
                 // the message turns off on its own while the task bar is visible:
                 tmrBaloon.Interval = 4000;
+                m_LastMessageTime = DateTime.Now;
                 tmrBaloon.Start();
             }
         }
@@ -1186,6 +1221,11 @@ namespace ASCOM.GeminiTelescope
             byte pec = GeminiHardware.PECStatus;
             pec =(byte)( (pec & 0xfe) | (checkboxPEC.Checked ? 1 : 0));
             GeminiHardware.PECStatus = pec;
+        }
+
+        private void buttonSlew4_Click(object sender, EventArgs e)
+        {
+
         }
 
     }
