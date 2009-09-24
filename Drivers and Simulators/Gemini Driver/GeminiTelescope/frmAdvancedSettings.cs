@@ -63,9 +63,16 @@ namespace ASCOM.GeminiTelescope
         void pbButton_EnabledChanged(object sender, EventArgs e)
         {
             Control c = sender as Control;
-            if (c.Enabled) c.BackColor = Color.Transparent;
+            if (c.Enabled)
+            {
+                if (c.Tag == null) c.Tag = c.BackColor;
+                c.BackColor = (Color)(c.Tag);
+            }
             else
-                c.BackColor = Color.FromArgb(64,64,64);
+            {
+                c.Tag = c.BackColor;
+                c.BackColor = Color.FromArgb(64, 64, 64);
+            }
         }
 
         private void SetControlColor(Control panel)

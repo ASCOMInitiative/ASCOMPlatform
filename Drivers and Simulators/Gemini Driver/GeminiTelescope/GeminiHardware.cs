@@ -455,6 +455,7 @@ namespace ASCOM.GeminiTelescope
         private static int m_TotalErrors = 0;              //total number of errors encountered since m_FirstErrorTick count
         private static int m_FirstErrorTick = 0;           //
 
+        private static DateTime m_LastDataTick;              // tick of when the last successful data was received from the mount
 
         private static int m_GeminiStatusByte;              // result of <99: native command, polled on an interval
         private static bool m_SafetyNotified;               // true if safety limit notification was already sent
@@ -1887,12 +1888,16 @@ namespace ASCOM.GeminiTelescope
                         {
                             Trace.Info(2, "Stopping bkgd thread");
                             m_WaitForCommand.Set(); // wake up the background thread
-                            if (!m_BackgroundWorker.Join(5000))
-                                m_BackgroundWorker.Abort();
+                            try
+                            {
+                                if (!m_BackgroundWorker.Join(2000))
+                                    m_BackgroundWorker.Abort();
+                            }
+                            catch { }
                             Trace.Info(2, "Bkgd thread stopped");
                         }
 
-                        Transmit(":Q#"); // stop all slews, in case we are in the middle of one
+                        //Transmit(":Q#"); // stop all slews, in case we are in the middle of one
 
                         Trace.Info(2, "Closing serial port");
                         m_SerialPort.Close();
@@ -2364,7 +2369,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static void Resync()
         {
-            if (!Connected) return;
+            if (!m_Connected) return;
 
             Trace.Enter("Resync");
 
@@ -2496,9 +2501,10 @@ namespace ASCOM.GeminiTelescope
                     Trace.Except(ex);
                     GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Timeout error occurred after " + command.m_Timeout + "msec while processing command '" + command.m_Command + "'");
                     if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial port timed out!");
-                    AddOneMoreError();
                 }
-                else Resync();
+                //else Resync();
+
+                AddOneMoreError();
 
                 return null;
             }
@@ -2517,6 +2523,9 @@ namespace ASCOM.GeminiTelescope
                 AddOneMoreError();
                 return null;  // error occurred!
             }
+
+            if (result!=null)
+                m_LastDataTick = DateTime.Now;      // remember when last successfull data was received.
 
             // return value for native commands has a checksum appended: validate it and remove it from the return string:
             if (!string.IsNullOrEmpty(result) && command.m_Command[0] == '<' && !command.m_Raw)
@@ -2551,6 +2560,16 @@ namespace ASCOM.GeminiTelescope
         private static void AddOneMoreError()
         {
             Trace.Enter("AddOneMoreError", m_TotalErrors);
+
+            if (Connected && DateTime.Now - m_LastDataTick  > TimeSpan.FromMilliseconds(SharedResources.MAXIMUM_ERROR_INTERVAL))
+            {
+                string msg = "No response from Gemini for " + (SharedResources.MAXIMUM_ERROR_INTERVAL/1000 ).ToString() + " seconds, terminating connection";
+                Trace.Error(msg);
+                GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, msg);
+                if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Gemini is not responding! Terminating connection.");
+                while (m_Connected) Disconnect();
+                return;
+            }
 
             // if this is the first error, or if it's been longer than maximum interval since the last error, start from scratch
             if (m_TotalErrors == 0)
@@ -2594,7 +2613,7 @@ namespace ASCOM.GeminiTelescope
                 m_TotalErrors = 0;
                 m_FirstErrorTick = 0;
             }
-            else Resync();
+            //else Resync();
 
             Trace.Exit("AddOneMoreError");
         }
@@ -3122,7 +3141,7 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                string s = DoCommandResult("<509:", GeminiHardware.MAX_TIMEOUT, false);
+                string s = DoCommandResult("<509:", 2000, false);
                 byte res = 0;
                 byte.TryParse(s, out res);
                 return res;

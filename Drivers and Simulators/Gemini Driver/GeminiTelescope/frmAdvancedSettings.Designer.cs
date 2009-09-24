@@ -33,7 +33,6 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.comboBox5 = new System.Windows.Forms.ComboBox();
-            this.geminiPropertiesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.label15 = new System.Windows.Forms.Label();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -42,7 +41,6 @@
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.pbSetSafetyLimit = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -103,9 +101,10 @@
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.checkBox8 = new System.Windows.Forms.CheckBox();
             this.pbModel = new System.Windows.Forms.Button();
+            this.geminiPropertiesBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.checkBox7 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -132,6 +131,7 @@
             this.tableLayoutPanel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown18)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -164,9 +164,9 @@
             this.tableLayoutPanel1.Controls.Add(this.comboBox2, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.checkBox1, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.checkBox3, 2, 2);
-            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.dateTimePicker1, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.pbSetSafetyLimit, 2, 3);
+            this.tableLayoutPanel1.Controls.Add(this.checkBox7, 0, 3);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -191,10 +191,6 @@
             this.comboBox5.Name = "comboBox5";
             this.comboBox5.Size = new System.Drawing.Size(108, 21);
             this.comboBox5.TabIndex = 0;
-            // 
-            // geminiPropertiesBindingSource
-            // 
-            this.geminiPropertiesBindingSource.DataSource = typeof(ASCOM.GeminiTelescope.GeminiProperties);
             // 
             // label15
             // 
@@ -302,29 +298,16 @@
             this.checkBox3.Text = "Gemini Calculates Refraction:";
             this.checkBox3.UseVisualStyleBackColor = true;
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.ForeColor = System.Drawing.Color.Lime;
-            this.label2.Location = new System.Drawing.Point(3, 78);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(108, 29);
-            this.label2.TabIndex = 8;
-            this.label2.Text = "Alarm Time:";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // dateTimePicker1
             // 
             this.dateTimePicker1.CalendarForeColor = System.Drawing.Color.Black;
             this.dateTimePicker1.CalendarMonthBackground = System.Drawing.Color.Black;
+            this.dateTimePicker1.Checked = false;
             this.dateTimePicker1.CustomFormat = "HH:mm:ss";
-            this.dateTimePicker1.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.geminiPropertiesBindingSource, "AlarmSet", true));
             this.dateTimePicker1.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "AlarmTime", true));
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dateTimePicker1.Location = new System.Drawing.Point(117, 81);
             this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.ShowCheckBox = true;
             this.dateTimePicker1.ShowUpDown = true;
             this.dateTimePicker1.Size = new System.Drawing.Size(108, 20);
             this.dateTimePicker1.TabIndex = 3;
@@ -1335,6 +1318,23 @@
             this.pbModel.UseVisualStyleBackColor = true;
             this.pbModel.Click += new System.EventHandler(this.pbModel_Click);
             // 
+            // geminiPropertiesBindingSource
+            // 
+            this.geminiPropertiesBindingSource.DataSource = typeof(ASCOM.GeminiTelescope.GeminiProperties);
+            // 
+            // checkBox7
+            // 
+            this.checkBox7.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.checkBox7.AutoSize = true;
+            this.checkBox7.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.geminiPropertiesBindingSource, "AlarmSet", true));
+            this.checkBox7.Location = new System.Drawing.Point(14, 84);
+            this.checkBox7.Name = "checkBox7";
+            this.checkBox7.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBox7.Size = new System.Drawing.Size(97, 17);
+            this.checkBox7.TabIndex = 12;
+            this.checkBox7.Text = "Set Alarm Time";
+            this.checkBox7.UseVisualStyleBackColor = true;
+            // 
             // frmAdvancedSettings
             // 
             this.AcceptButton = this.pbOK;
@@ -1367,7 +1367,6 @@
             this.groupBox1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
@@ -1398,6 +1397,7 @@
             this.tableLayoutPanel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown18)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1415,7 +1415,6 @@
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.CheckBox checkBox3;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.Button pbSetSafetyLimit;
         private System.Windows.Forms.GroupBox groupBox2;
@@ -1479,5 +1478,6 @@
         private System.Windows.Forms.NumericUpDown numericUpDown17;
         private System.Windows.Forms.Button pbModel;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.CheckBox checkBox7;
     }
 }

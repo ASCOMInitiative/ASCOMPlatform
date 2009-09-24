@@ -27,12 +27,15 @@ namespace ASCOM.GeminiTelescope
         private static string[] m_FocuserCmds = { ":FF", ":FM", ":FS" };
         private static int m_FocuserSpeed = 0;
 
+        private static bool m_InMenu = false;
+
+
         private static bool Cmd(string cm)
         {
 
             if (GeminiHardware.Connected)
             {
-                GeminiHardware.DoCommandResult(cm, GeminiHardware.MAX_TIMEOUT, false);
+                string result = GeminiHardware.DoCommandResult(cm, GeminiHardware.MAX_TIMEOUT, false);
                 return true;
             }
             return false;
@@ -123,8 +126,13 @@ namespace ASCOM.GeminiTelescope
                 case UserFunction.HandLeft: return SendKeyCmd(1, keyDown); 
                 case UserFunction.HandRight: return SendKeyCmd(8, keyDown);
                 case UserFunction.HandMenu: 
-                    SendKeyCmd(16, keyDown);    //menu button doesn't work if Gemini is in local control mode!
-                    return true;
+                    //SendKeyCmd(16, keyDown);    //menu button doesn't work if Gemini is in local control mode!
+                    if (!keyDown) {
+                        m_InMenu = !m_InMenu;
+                        if (m_InMenu) return Cmd(":HM");
+                        else { SendKeyCmd(16, keyDown); Cmd(":Hm"); Cmd(":Hm"); return true; }
+                        }
+                    break;
                 case UserFunction.ParkCWD: if (!keyDown) { Cmd(":hC"); return Cmd(":hN"); } break;
                 case UserFunction.GoHome: if (!keyDown) return Cmd(":hP"); break;
                 case UserFunction.StopSlew: if (keyDown) return Cmd(":Q"); break;

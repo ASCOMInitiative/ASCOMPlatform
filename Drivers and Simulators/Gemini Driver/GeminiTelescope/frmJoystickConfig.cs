@@ -84,7 +84,7 @@ namespace ASCOM.GeminiTelescope
             new AssignmentClass("Hand Controller Down button", UserFunction.HandDown),
             new AssignmentClass("Hand Controller Left button", UserFunction.HandLeft),
             new AssignmentClass("Hand Controller Right button", UserFunction.HandRight),
-/*            new AssignmentClass("Hand Controller Menu button", UserFunction.HandMenu), */ // Menu button cmd doesn't work when Gemini is in local controller mode
+            new AssignmentClass("Hand Controller Menu button", UserFunction.HandMenu), // Menu button cmd doesn't work when Gemini is in local controller mode
             new AssignmentClass("Perform Meridian Flip", UserFunction.MeridianFlip),
             new AssignmentClass("Park at CWD", UserFunction.ParkCWD),
             new AssignmentClass("Go to Home Position", UserFunction.GoHome),
