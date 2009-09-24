@@ -313,7 +313,10 @@ namespace ASCOM.GeminiTelescope
         public bool Initialize(string name)
         {
             string[] names = JoystickNames;
-            int idx = Array.IndexOf(names, name);
+            if (names == null || names.Length == 0) return false;
+
+            int idx = Array.FindIndex(names, delegate(string item){ return item.Equals(name);});
+
             if (idx >= 0)
                 return this.Initialize((IntPtr)idx);
 

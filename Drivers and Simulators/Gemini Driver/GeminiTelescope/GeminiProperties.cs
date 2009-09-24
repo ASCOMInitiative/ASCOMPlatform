@@ -238,7 +238,12 @@ namespace ASCOM.GeminiTelescope
             get
             {
                 string res = get_PropAsync(":GC");
-                return res;
+                if (res != null)
+                {
+                    DateTime tm = DateTime.ParseExact(res, "MM/dd/yy", new System.Globalization.DateTimeFormatInfo()); // Parse to a local datetime using the given format                    
+                    return tm.ToShortDateString();
+                }
+                return null;
             }
         }
 
@@ -260,7 +265,7 @@ namespace ASCOM.GeminiTelescope
             {
                 if (!GeminiHardware.Connected) return null;
                 // gemini stores timezone with sign reversed from UTC:
-                return "UTC" + (GeminiHardware.UTCOffset > 0? " - " : " + ") + GeminiHardware.UTCOffset.ToString();
+                return "UTC" + (GeminiHardware.UTCOffset > 0? " - " : " + ") + Math.Abs(GeminiHardware.UTCOffset).ToString();
             }
         }
 

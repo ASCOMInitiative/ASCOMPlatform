@@ -1446,6 +1446,7 @@ namespace ASCOM.GeminiTelescope
 
             m_StatusForm.Visible = true;
             m_StatusForm.Show();
+            Win32API.SetForegroundWindow(m_StatusForm.Handle);
             Application.Run(m_StatusForm);
         }
 
@@ -3106,6 +3107,32 @@ namespace ASCOM.GeminiTelescope
             if (result[2].StartsWith("2")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: No object selected");
             if (result[2].StartsWith("3")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: Manual control");
         }
+
+        /// <summary>
+        /// Set/Get PEC Status byte from Gemini
+        ///  PEC status. Decimal
+        ///     1: PEC active,
+        ///     2: freshly trained (not yet altered) PEC data are available as current PEC data,
+        ///     4: PEC training in progress,
+        ///     8: PEC training was just completed,
+        ///     16: PEC training will start soon,
+        ///     32: PEC data are available.
+        /// </summary>
+        public static byte PECStatus
+        {
+            get
+            {
+                string s = DoCommandResult("<509:", GeminiHardware.MAX_TIMEOUT, false);
+                byte res = 0;
+                byte.TryParse(s, out res);
+                return res;
+            }
+            set
+            {
+                DoCommand(">509:" + value.ToString(), false);            
+            }
+        }
+
         #endregion
 
         #region Focuser Implementation

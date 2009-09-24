@@ -118,6 +118,8 @@ namespace ASCOM.GeminiTelescope
             toolTip1.SetToolTip(this.CheckBoxFlipDec, "Swap DEC buttons");
             toolTip1.SetToolTip(this.CheckBoxFlipRa, "Swap RA buttons");
 
+            toolTip1.SetToolTip(this.checkboxPEC, "Enable/Disable Periodic Error Correction (PEC)");
+
             tmrJoystick.Tick += new EventHandler(tmrJoystick_Tick);
 
         }
@@ -536,7 +538,27 @@ namespace ASCOM.GeminiTelescope
                 tooltip+="not connected";
 
             checkBoxTrack.Checked = (GeminiHardware.Velocity == "N" ? false : true);
-            
+
+            byte pec = GeminiHardware.PECStatus;
+            if ((pec & 1) != 0)
+            {
+                checkboxPEC.Enabled = true;
+                checkboxPEC.Checked = true;
+            }
+            else if ((pec & 32) != 0) //data available
+            {
+                checkboxPEC.Enabled = true;
+                checkboxPEC.Checked = false;
+            }
+            else
+            {
+                checkboxPEC.Enabled = false;
+                checkboxPEC.Checked = false;
+            }
+
+            checkboxPEC.BackColor = (checkboxPEC.Enabled ? Color.Transparent : Color.FromArgb(64, 64, 64)) ;
+
+
             BaloonIcon.Text = ""; // tooltip;    
         }
 
@@ -1129,6 +1151,15 @@ namespace ASCOM.GeminiTelescope
         {
             GeminiAbout.MainWindow win = new GeminiAbout.MainWindow();
             win.Show();
+        }
+
+        private void checkboxPEC_Clicked(object sender, EventArgs e)
+        {
+            checkboxPEC.Checked = !checkboxPEC.Checked;
+            
+            byte pec = GeminiHardware.PECStatus;
+            pec =(byte)( (pec & 0xfe) | (checkboxPEC.Checked ? 1 : 0));
+            GeminiHardware.PECStatus = pec;
         }
 
     }
