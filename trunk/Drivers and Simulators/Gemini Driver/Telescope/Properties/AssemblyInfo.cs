@@ -39,3 +39,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 [assembly: ASCOM.ServedClassNameAttribute("Gemini Telescope .NET")]
+[assembly: ASCOM.DeviceId("ASCOM.GeminiTelescope.Telescope")]

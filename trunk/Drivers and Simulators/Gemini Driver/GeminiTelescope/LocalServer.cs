@@ -316,13 +316,6 @@ namespace ASCOM.GeminiTelescope
             }
 
 
-            //Registration happens below not here.
-            //Utilities.Profile prof = new ASCOM.Utilities.Profile();
-            //prof.DeviceType = "Telescope";
-            //prof.Register(SharedResources.TELESCOPE_PROGRAM_ID, SharedResources.TELESCOPE_DRIVER_NAME);
-            //prof.DeviceType = "Focuser";
-            //prof.Register(SharedResources.FOCUSER_PROGRAM_ID, SharedResources.FOCUSER_DRIVER_NAME);
-
             //Initialise registered classes counter
             int ClassCount = 0;
             
@@ -338,7 +331,9 @@ namespace ASCOM.GeminiTelescope
                     // HKCR\CLSID\clsid
                     //
                     string clsid = Marshal.GenerateGuidForType(type).ToString("B");
-                    string progid = Marshal.GenerateProgIdForType(type);
+                    attr = Attribute.GetCustomAttribute(assy, typeof(ASCOM.DeviceIdAttribute));
+                    string progid = ((ASCOM.DeviceIdAttribute)attr).DeviceId;
+
                     key = Registry.ClassesRoot.CreateSubKey("CLSID\\" + clsid);
                     key.SetValue(null, progid);						// Could be assyTitle/Desc??, but .NET components show ProgId here
                     key.SetValue("AppId", m_sAppId);
@@ -432,7 +427,11 @@ namespace ASCOM.GeminiTelescope
             foreach (Type type in m_ComObjectTypes)
             {
                 string clsid = Marshal.GenerateGuidForType(type).ToString("B");
-                string progid = Marshal.GenerateProgIdForType(type);
+
+                Assembly assy = type.Assembly;
+
+                Attribute attr = Attribute.GetCustomAttribute(assy, typeof(ASCOM.DeviceIdAttribute));
+                string progid = ((ASCOM.DeviceIdAttribute)attr).DeviceId;
                 //
                 // Best efforts
                 //
