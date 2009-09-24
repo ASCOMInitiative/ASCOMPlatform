@@ -53,6 +53,9 @@ namespace ASCOM.GeminiTelescope
 
             m_BaloonMenu = new ContextMenu();
 
+            MenuItem connectMenu = new MenuItem("Connect", new EventHandler(ConnectMenu));
+            connectMenu.Name = "Connect";
+
             MenuItem notifyMenu = new MenuItem("Show Notifications", new EventHandler(ShowNotificationsMenu));
             notifyMenu.Name = "Notifications";
             notifyMenu.Checked = m_ShowNotifications;
@@ -62,6 +65,9 @@ namespace ASCOM.GeminiTelescope
             controlMenu.Checked = this.Visible;
 
             m_BaloonMenu.MenuItems.AddRange(new MenuItem[] { 
+                connectMenu,
+
+                new MenuItem("-"),
                 controlMenu,
                 new MenuItem("Configure Telescope...", new EventHandler(ConfigureTelescopeMenu)),
 
@@ -366,6 +372,11 @@ namespace ASCOM.GeminiTelescope
             m_BaloonMenu.MenuItems["Notifications"].Checked = m_ShowNotifications;
         }
 
+        void ConnectMenu(object sender, EventArgs e)
+        {
+            ButtonConnect_Click(sender, e);
+        }
+
         /// <summary>
         /// hide the baloon text
         /// </summary>
@@ -428,6 +439,7 @@ namespace ASCOM.GeminiTelescope
             if (Connected && Clients == 1)  // first client to connect, change UI to show the connected status
             {
                 ButtonConnect.Text = "Disconnect";
+                BaloonIcon.ContextMenu.MenuItems["Connect"].Text = "Disconnect";
                 SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME, "Mount is connected", ToolTipIcon.Info);
             }
             if (Connected)
@@ -437,6 +449,8 @@ namespace ASCOM.GeminiTelescope
             if (!Connected && Clients <= 0) // last client to disconnect
             {
                 ButtonConnect.Text = "Connect";
+                BaloonIcon.ContextMenu.MenuItems["Connect"].Text = "Connect";
+
                 labelLst.Text = "00:00:00";
                 labelRa.Text = "00:00:00";
                 labelDec.Text = "+00:00:00";
@@ -586,8 +600,11 @@ namespace ASCOM.GeminiTelescope
 
             setupForm.BootMode = GeminiHardware.BootMode;
 
-
-            DialogResult ans = setupForm.ShowDialog(this);
+            DialogResult ans;
+            if (this.Visible==false)
+                ans = setupForm.ShowDialog(this);
+            else
+                ans = setupForm.ShowDialog(null);
 
             if (ans == DialogResult.OK)
             {
@@ -927,7 +944,16 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
-                GeminiHardware.DoCommand(":Mf", false);
+                string res = GeminiHardware.DoCommandResult(":Mf", GeminiHardware.MAX_TIMEOUT, false);
+                switch (res)
+                {
+                    case "1Object below horizon.": 
+                        MessageBox.Show(this, "Object below the horizon -- cannot do a meridian flip", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        break;
+                    case "4Position unreachable.":
+                        MessageBox.Show(this, "Cannot perform a meridian flip: object is unreachable from the other side", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        break;
+                }
             }
         }
 
