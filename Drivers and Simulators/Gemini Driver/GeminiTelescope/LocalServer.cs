@@ -112,6 +112,7 @@ namespace ASCOM.GeminiTelescope
         private static ArrayList m_ComObjectTypes;				// Served COM object types
         private static ArrayList m_ClassFactories;				// Served COM object class factories
         private static string m_sAppId = "{fbe30603-14ea-45ed-96d5-98c5e00f9c1c}";	// Our AppId
+
         #endregion
 
         // This property returns the main thread's id.
@@ -561,6 +562,10 @@ namespace ASCOM.GeminiTelescope
         [STAThread]
         static void Main(string[] args)
         {
+
+            Mutex mut;
+
+
             // Add the event handler for handling UI thread exceptions to the event.
             Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
             // Set the unhandled exception mode to force all Windows Forms errors to go through
@@ -570,7 +575,22 @@ namespace ASCOM.GeminiTelescope
             // Add the event handler for handling non-UI thread exceptions to the event. 
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
-            
+
+            try
+            {
+                mut = new Mutex(false, SharedResources.TELESCOPE_PROGRAM_ID + "_Mutex");
+                if (!mut.WaitOne(0))
+                {
+                    MessageBox.Show("Another instance of " + SharedResources.TELESCOPE_DRIVER_NAME + " is already running.\r\nPlease close it first.", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+            catch
+            {
+                mut = new Mutex(false, SharedResources.TELESCOPE_PROGRAM_ID + "_Mutex");
+            }
+
+
             if (!LoadComObjectAssemblies()) return;						// Load served COM class assemblies, get types
 
             if (!ProcessArguments(args)) return;						// Register/Unregister
@@ -609,6 +629,9 @@ namespace ASCOM.GeminiTelescope
             // Now stop the Garbage Collector thread.
             GarbageCollector.StopThread();
             GarbageCollector.WaitForThreadToStop();
+
+            mut.ReleaseMutex();
+
         }
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
