@@ -2,12 +2,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ASCOM.Exception</RootNamespace>
+    <RootNamespace>ASCOM</RootNamespace>
     <AssemblyName>ASCOM.Exceptions</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>ASCOM.snk</AssemblyOriginatorKeyFile>
@@ -38,10 +38,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ASCOMExceptions.cs" />
+    <Compile Include="MethodNotImplementedException.cs" />
+    <Compile Include="DriverException.cs" />
+    <Compile Include="ErrorCodes.cs" />
+    <Compile Include="InvalidValueException.cs" />
+    <Compile Include="NotConnectedException.cs" />
+    <Compile Include="NotImplementedException.cs" />
+    <Compile Include="OutOfRangeException.cs" />
+    <Compile Include="ParkedException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyNotImplementedException.cs" />
+    <Compile Include="SlavedException.cs" />
+    <Compile Include="ValueNotSetException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ASCOM.snk" />
