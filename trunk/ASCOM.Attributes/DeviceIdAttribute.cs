@@ -9,7 +9,7 @@ namespace ASCOM
 	/// This is intended primarily for use with the <see cref="ASCOM.SettingsProvider"/> class.
 	/// This attribute is placed on the driver's <c>Properties.Settings</c> class, which propagates
 	/// down to each of the settings properties. When the setting is passed to the
-	/// <see cref="ASCOM.SettingsProvider"/> calss at runtime, the settings provider looks for this attribute
+	/// <see cref="ASCOM.SettingsProvider"/> class at runtime, the settings provider looks for this attribute
 	/// to determine which settings hive to save the value in when it is passed to 
 	/// <see cref="ASCOM.Utilities.Profile"/>.
 	/// </summary>
