@@ -60,6 +60,14 @@ namespace ASCOM.GeminiTelescope
             this.UseWaitCursor = false;
         }
 
+        void pbButton_EnabledChanged(object sender, EventArgs e)
+        {
+            Control c = sender as Control;
+            if (c.Enabled) c.BackColor = Color.Transparent;
+            else
+                c.BackColor = Color.FromArgb(64,64,64);
+        }
+
         private void SetControlColor(Control panel)
         {
             foreach (Control c in panel.Controls)
@@ -86,6 +94,9 @@ namespace ASCOM.GeminiTelescope
             pbApply.Enabled = GeminiHardware.Connected;
             pbReboot.Enabled = GeminiHardware.Connected;
             pbOK.Enabled = GeminiHardware.Connected;
+            pbButton_EnabledChanged(pbApply, null);
+            pbButton_EnabledChanged(pbReboot, null);
+            pbButton_EnabledChanged(pbOK, null);
         }
 
 
