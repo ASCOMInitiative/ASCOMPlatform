@@ -52,6 +52,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platform Dependencies", "Pl
 		Drivers and Simulators\Platform Dependencies\ASCOM.Astrometry.xml = Drivers and Simulators\Platform Dependencies\ASCOM.Astrometry.xml
 		Drivers and Simulators\Platform Dependencies\ASCOM.Attributes.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Attributes.dll
 		Drivers and Simulators\Platform Dependencies\ASCOM.Attributes.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.Attributes.pdb
+		Drivers and Simulators\Platform Dependencies\ASCOM.Attributes.xml = Drivers and Simulators\Platform Dependencies\ASCOM.Attributes.xml
 		Drivers and Simulators\Platform Dependencies\ASCOM.Controls.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Controls.dll
 		Drivers and Simulators\Platform Dependencies\ASCOM.Controls.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.Controls.pdb
 		Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.dll = Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.dll
