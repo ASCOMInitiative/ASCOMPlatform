@@ -101,8 +101,10 @@
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.checkBox8 = new System.Windows.Forms.CheckBox();
             this.pbModel = new System.Windows.Forms.Button();
-            this.geminiPropertiesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.checkBox7 = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.geminiPropertiesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -144,7 +146,7 @@
             this.groupBox1.ForeColor = System.Drawing.Color.White;
             this.groupBox1.Location = new System.Drawing.Point(13, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(465, 126);
+            this.groupBox1.Size = new System.Drawing.Size(465, 156);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Controller Settings";
@@ -155,6 +157,8 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.label21, 2, 4);
+            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.comboBox5, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.label15, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.checkBox2, 2, 1);
@@ -170,12 +174,13 @@
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 4;
+            this.tableLayoutPanel1.RowCount = 5;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(459, 107);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(459, 137);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // comboBox5
@@ -199,7 +204,7 @@
             this.label15.ForeColor = System.Drawing.Color.Lime;
             this.label15.Location = new System.Drawing.Point(3, 0);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(108, 26);
+            this.label15.Size = new System.Drawing.Size(108, 27);
             this.label15.TabIndex = 11;
             this.label15.Text = "Mount Type:";
             this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -211,9 +216,9 @@
             this.checkBox2.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.geminiPropertiesBindingSource, "DoesPrecession", true));
             this.checkBox2.Dock = System.Windows.Forms.DockStyle.Right;
             this.checkBox2.ForeColor = System.Drawing.Color.Lime;
-            this.checkBox2.Location = new System.Drawing.Point(262, 29);
+            this.checkBox2.Location = new System.Drawing.Point(262, 30);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(194, 20);
+            this.checkBox2.Size = new System.Drawing.Size(194, 21);
             this.checkBox2.TabIndex = 5;
             this.checkBox2.Text = "Gemini expects J2000 co-ordinates:";
             this.checkBox2.UseVisualStyleBackColor = true;
@@ -223,9 +228,9 @@
             this.label3.AutoSize = true;
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label3.ForeColor = System.Drawing.Color.Lime;
-            this.label3.Location = new System.Drawing.Point(3, 52);
+            this.label3.Location = new System.Drawing.Point(3, 54);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(108, 26);
+            this.label3.Size = new System.Drawing.Size(108, 27);
             this.label3.TabIndex = 4;
             this.label3.Text = "Hand Controller Mode:";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -235,9 +240,9 @@
             this.label1.AutoSize = true;
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label1.ForeColor = System.Drawing.Color.Lime;
-            this.label1.Location = new System.Drawing.Point(3, 26);
+            this.label1.Location = new System.Drawing.Point(3, 27);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(108, 26);
+            this.label1.Size = new System.Drawing.Size(108, 27);
             this.label1.TabIndex = 0;
             this.label1.Text = "LED Brightness:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -251,7 +256,7 @@
             this.comboBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBox1.ForeColor = System.Drawing.Color.Lime;
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(117, 29);
+            this.comboBox1.Location = new System.Drawing.Point(117, 30);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(108, 21);
             this.comboBox1.TabIndex = 1;
@@ -265,7 +270,7 @@
             this.comboBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBox2.ForeColor = System.Drawing.Color.Lime;
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(117, 55);
+            this.comboBox2.Location = new System.Drawing.Point(117, 57);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(108, 21);
             this.comboBox2.TabIndex = 2;
@@ -279,7 +284,7 @@
             this.checkBox1.ForeColor = System.Drawing.Color.Lime;
             this.checkBox1.Location = new System.Drawing.Point(285, 3);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(171, 20);
+            this.checkBox1.Size = new System.Drawing.Size(171, 21);
             this.checkBox1.TabIndex = 4;
             this.checkBox1.Text = "Sync performs Additional Align:";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -291,9 +296,9 @@
             this.checkBox3.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.geminiPropertiesBindingSource, "DoesRefraction", true));
             this.checkBox3.Dock = System.Windows.Forms.DockStyle.Right;
             this.checkBox3.ForeColor = System.Drawing.Color.Lime;
-            this.checkBox3.Location = new System.Drawing.Point(291, 55);
+            this.checkBox3.Location = new System.Drawing.Point(291, 57);
             this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(165, 20);
+            this.checkBox3.Size = new System.Drawing.Size(165, 21);
             this.checkBox3.TabIndex = 6;
             this.checkBox3.Text = "Gemini Calculates Refraction:";
             this.checkBox3.UseVisualStyleBackColor = true;
@@ -306,7 +311,7 @@
             this.dateTimePicker1.CustomFormat = "HH:mm:ss";
             this.dateTimePicker1.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "AlarmTime", true));
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker1.Location = new System.Drawing.Point(117, 81);
+            this.dateTimePicker1.Location = new System.Drawing.Point(117, 84);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.ShowUpDown = true;
             this.dateTimePicker1.Size = new System.Drawing.Size(108, 20);
@@ -318,9 +323,9 @@
             this.pbSetSafetyLimit.Dock = System.Windows.Forms.DockStyle.Right;
             this.pbSetSafetyLimit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.pbSetSafetyLimit.ForeColor = System.Drawing.Color.Black;
-            this.pbSetSafetyLimit.Location = new System.Drawing.Point(253, 81);
+            this.pbSetSafetyLimit.Location = new System.Drawing.Point(253, 84);
             this.pbSetSafetyLimit.Name = "pbSetSafetyLimit";
-            this.pbSetSafetyLimit.Size = new System.Drawing.Size(203, 23);
+            this.pbSetSafetyLimit.Size = new System.Drawing.Size(203, 21);
             this.pbSetSafetyLimit.TabIndex = 8;
             this.pbSetSafetyLimit.Text = "Set Safety Limit to the Current Position";
             this.pbSetSafetyLimit.UseVisualStyleBackColor = false;
@@ -334,7 +339,7 @@
             this.groupBox2.Controls.Add(this.tableLayoutPanel2);
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.ForeColor = System.Drawing.Color.White;
-            this.groupBox2.Location = new System.Drawing.Point(12, 144);
+            this.groupBox2.Location = new System.Drawing.Point(12, 174);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(465, 81);
             this.groupBox2.TabIndex = 1;
@@ -482,7 +487,7 @@
             this.groupBox3.Controls.Add(this.tableLayoutPanel3);
             this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox3.ForeColor = System.Drawing.Color.White;
-            this.groupBox3.Location = new System.Drawing.Point(12, 231);
+            this.groupBox3.Location = new System.Drawing.Point(12, 261);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(465, 115);
             this.groupBox3.TabIndex = 2;
@@ -748,7 +753,7 @@
             this.groupBox4.Controls.Add(this.tableLayoutPanel4);
             this.groupBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox4.ForeColor = System.Drawing.Color.White;
-            this.groupBox4.Location = new System.Drawing.Point(9, 352);
+            this.groupBox4.Location = new System.Drawing.Point(9, 382);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(465, 153);
             this.groupBox4.TabIndex = 3;
@@ -1074,7 +1079,7 @@
             this.groupBox5.Controls.Add(this.tableLayoutPanel5);
             this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox5.ForeColor = System.Drawing.Color.White;
-            this.groupBox5.Location = new System.Drawing.Point(9, 511);
+            this.groupBox5.Location = new System.Drawing.Point(9, 541);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(465, 77);
             this.groupBox5.TabIndex = 4;
@@ -1204,7 +1209,7 @@
             this.pbOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.pbOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.pbOK.ForeColor = System.Drawing.Color.White;
-            this.pbOK.Location = new System.Drawing.Point(398, 595);
+            this.pbOK.Location = new System.Drawing.Point(398, 625);
             this.pbOK.Name = "pbOK";
             this.pbOK.Size = new System.Drawing.Size(75, 23);
             this.pbOK.TabIndex = 33;
@@ -1216,7 +1221,7 @@
             // 
             this.pbApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pbApply.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.pbApply.Location = new System.Drawing.Point(398, 624);
+            this.pbApply.Location = new System.Drawing.Point(398, 654);
             this.pbApply.Name = "pbApply";
             this.pbApply.Size = new System.Drawing.Size(75, 23);
             this.pbApply.TabIndex = 34;
@@ -1229,7 +1234,7 @@
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button3.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.Location = new System.Drawing.Point(398, 654);
+            this.button3.Location = new System.Drawing.Point(398, 684);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 35;
@@ -1240,7 +1245,7 @@
             // 
             this.pbReboot.BackColor = System.Drawing.Color.Maroon;
             this.pbReboot.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pbReboot.Location = new System.Drawing.Point(9, 608);
+            this.pbReboot.Location = new System.Drawing.Point(9, 638);
             this.pbReboot.Name = "pbReboot";
             this.pbReboot.Size = new System.Drawing.Size(88, 66);
             this.pbReboot.TabIndex = 38;
@@ -1252,7 +1257,7 @@
             // 
             this.chkSendSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkSendSettings.ForeColor = System.Drawing.Color.Lime;
-            this.chkSendSettings.Location = new System.Drawing.Point(103, 646);
+            this.chkSendSettings.Location = new System.Drawing.Point(103, 676);
             this.chkSendSettings.Name = "chkSendSettings";
             this.chkSendSettings.Size = new System.Drawing.Size(158, 36);
             this.chkSendSettings.TabIndex = 37;
@@ -1264,7 +1269,7 @@
             // 
             this.pbLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pbLoad.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.pbLoad.Location = new System.Drawing.Point(301, 624);
+            this.pbLoad.Location = new System.Drawing.Point(301, 654);
             this.pbLoad.Name = "pbLoad";
             this.pbLoad.Size = new System.Drawing.Size(75, 23);
             this.pbLoad.TabIndex = 31;
@@ -1276,7 +1281,7 @@
             // 
             this.pbSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pbSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.pbSave.Location = new System.Drawing.Point(301, 653);
+            this.pbSave.Location = new System.Drawing.Point(301, 683);
             this.pbSave.Name = "pbSave";
             this.pbSave.Size = new System.Drawing.Size(75, 23);
             this.pbSave.TabIndex = 32;
@@ -1299,7 +1304,7 @@
             this.checkBox8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBox8.AutoSize = true;
             this.checkBox8.CheckAlign = System.Drawing.ContentAlignment.BottomRight;
-            this.checkBox8.Location = new System.Drawing.Point(275, 600);
+            this.checkBox8.Location = new System.Drawing.Point(275, 630);
             this.checkBox8.Name = "checkBox8";
             this.checkBox8.Size = new System.Drawing.Size(101, 17);
             this.checkBox8.TabIndex = 30;
@@ -1310,7 +1315,7 @@
             // pbModel
             // 
             this.pbModel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.pbModel.Location = new System.Drawing.Point(103, 608);
+            this.pbModel.Location = new System.Drawing.Point(103, 638);
             this.pbModel.Name = "pbModel";
             this.pbModel.Size = new System.Drawing.Size(134, 32);
             this.pbModel.TabIndex = 36;
@@ -1318,22 +1323,49 @@
             this.pbModel.UseVisualStyleBackColor = true;
             this.pbModel.Click += new System.EventHandler(this.pbModel_Click);
             // 
-            // geminiPropertiesBindingSource
-            // 
-            this.geminiPropertiesBindingSource.DataSource = typeof(ASCOM.GeminiTelescope.GeminiProperties);
-            // 
             // checkBox7
             // 
             this.checkBox7.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.checkBox7.AutoSize = true;
             this.checkBox7.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.geminiPropertiesBindingSource, "AlarmSet", true));
-            this.checkBox7.Location = new System.Drawing.Point(14, 84);
+            this.checkBox7.Location = new System.Drawing.Point(14, 86);
             this.checkBox7.Name = "checkBox7";
             this.checkBox7.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.checkBox7.Size = new System.Drawing.Size(97, 17);
             this.checkBox7.TabIndex = 12;
             this.checkBox7.Text = "Set Alarm Time";
             this.checkBox7.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.label2, 2);
+            this.label2.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "EastSafetyLimit", true));
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.ForeColor = System.Drawing.Color.Lime;
+            this.label2.Location = new System.Drawing.Point(3, 108);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(222, 29);
+            this.label2.TabIndex = 13;
+            this.label2.Text = "East Safety Limit: 000 deg";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "WestSafetyLimit", true));
+            this.label21.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label21.ForeColor = System.Drawing.Color.Lime;
+            this.label21.Location = new System.Drawing.Point(231, 108);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(225, 29);
+            this.label21.TabIndex = 15;
+            this.label21.Text = "West Safety Limit: 000 deg";
+            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // geminiPropertiesBindingSource
+            // 
+            this.geminiPropertiesBindingSource.DataSource = typeof(ASCOM.GeminiTelescope.GeminiProperties);
             // 
             // frmAdvancedSettings
             // 
@@ -1343,7 +1375,7 @@
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.Black;
             this.CancelButton = this.button3;
-            this.ClientSize = new System.Drawing.Size(490, 686);
+            this.ClientSize = new System.Drawing.Size(490, 715);
             this.Controls.Add(this.pbModel);
             this.Controls.Add(this.checkBox8);
             this.Controls.Add(this.pbSave);
@@ -1479,5 +1511,7 @@
         private System.Windows.Forms.Button pbModel;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.CheckBox checkBox7;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label21;
     }
 }
