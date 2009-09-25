@@ -46,7 +46,7 @@ namespace ASCOM.GeminiTelescope
                 chkJoystick.CheckState = CheckState.Unchecked;
                 chkJoystick.Enabled = false;
                 cmbJoystick.Enabled = false;
-                chkJoystick.ForeColor = Color.FromArgb(64, 64, 64);
+                chkJoystick.BackColor= Color.FromArgb(64, 64, 64);
 
             }
 
@@ -340,7 +340,7 @@ namespace ASCOM.GeminiTelescope
 
         private void chkJoystick_CheckedChanged(object sender, EventArgs e)
         {
-            cmbJoystick.Enabled = chkJoystick.Checked;           
+            cmbJoystick.Enabled = chkJoystick.Checked;
         }
 
 
