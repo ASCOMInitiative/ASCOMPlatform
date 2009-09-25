@@ -332,6 +332,8 @@ namespace ASCOM.GeminiTelescope
                     // HKCR\CLSID\clsid
                     //
                     string clsid = Marshal.GenerateGuidForType(type).ToString("B");
+
+                    assy = type.Assembly;
                     attr = Attribute.GetCustomAttribute(assy, typeof(ASCOM.DeviceIdAttribute));
                     string progid = ((ASCOM.DeviceIdAttribute)attr).DeviceId;
 
@@ -511,7 +513,7 @@ namespace ASCOM.GeminiTelescope
         private static bool ProcessArguments(string[] args)
         {
             bool bRet = true;
-            
+
             //
             //**TODO** -Embedding is "ActiveX start". Prohibit non_AX starting?
             //
