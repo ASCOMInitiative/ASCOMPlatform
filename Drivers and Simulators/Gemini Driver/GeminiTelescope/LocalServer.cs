@@ -511,13 +511,13 @@ namespace ASCOM.GeminiTelescope
         private static bool ProcessArguments(string[] args)
         {
             bool bRet = true;
-
+            
             //
             //**TODO** -Embedding is "ActiveX start". Prohibit non_AX starting?
             //
             if (args.Length > 0)
             {
-
+                
                 switch (args[0].ToLower())
                 {
                     case "-embedding":
