@@ -479,6 +479,56 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        public string WestSafetyLimit
+        {
+            get { return (string)get_Profile("WestSafetyLimit", "Western Safety Limit"); }
+            set { mProfile["WestSafetyLimit"] = value; }
+        }
+
+        private string WestSafetyLimit_Gemini
+        {
+            get
+            {
+                string res = get_Prop("<220:");
+                int d = 0, m = 0;
+                try
+                {
+                    // east        west
+                    //<ddd>d<mm>;<ddd>d<mm>
+                    d = int.Parse(res.Substring(7, 3));
+                    m = int.Parse(res.Substring(11, 2));
+                }
+                catch { }
+
+                return string.Format("Western Safety Limit: {0:0}°{1:00}", d, m);
+            }
+        }
+
+
+        public string EastSafetyLimit
+        {
+            get { return (string)get_Profile("EastSafetyLimit", "Eastern Safety Limit"); }
+            set { mProfile["EastSafetyLimit"] = value; }
+        }
+
+        private string EastSafetyLimit_Gemini
+        {
+            get
+            {
+                string res = get_Prop("<220:");
+                int d = 0, m = 0;
+                try
+                {
+                    // east        west
+                    //<ddd>d<mm>;<ddd>d<mm>
+                    d = int.Parse(res.Substring(0, 3));
+                    m = int.Parse(res.Substring(4, 2));
+                }
+                catch { }
+                return string.Format("Eastern Safety Limit: {0:0}°{1:00}", d, m);
+            }
+        }
+
 
         public bool PEC_Is_On
         {
