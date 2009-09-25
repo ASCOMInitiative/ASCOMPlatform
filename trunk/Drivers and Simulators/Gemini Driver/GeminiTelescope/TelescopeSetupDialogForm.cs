@@ -237,20 +237,20 @@ namespace ASCOM.GeminiTelescope
                 if (value)
                 {
                     comboBoxLatitude.Enabled = false;
-                    textBoxLatitudeDegrees.Enabled = false;
-                    textBoxLatitudeMinutes.Enabled = false;
+                    textBoxLatitudeDegrees.ReadOnly = true;
+                    textBoxLatitudeMinutes.ReadOnly = true;
                     comboBoxLongitude.Enabled = false;
-                    textBoxLongitudeDegrees.Enabled = false;
-                    textBoxLongitudeMinutes.Enabled = false;
+                    textBoxLongitudeDegrees.ReadOnly = true;
+                    textBoxLongitudeMinutes.ReadOnly = true;
                 }
                 else
                 {
                     comboBoxLatitude.Enabled = true;
-                    textBoxLatitudeDegrees.Enabled = true;
-                    textBoxLatitudeMinutes.Enabled = true;
+                    textBoxLatitudeDegrees.ReadOnly = false;
+                    textBoxLatitudeMinutes.ReadOnly = false;
                     comboBoxLongitude.Enabled = true;
-                    textBoxLongitudeDegrees.Enabled = true;
-                    textBoxLongitudeMinutes.Enabled = true;
+                    textBoxLongitudeDegrees.ReadOnly = false;
+                    textBoxLongitudeMinutes.ReadOnly = false;
                 }
             }
         }
