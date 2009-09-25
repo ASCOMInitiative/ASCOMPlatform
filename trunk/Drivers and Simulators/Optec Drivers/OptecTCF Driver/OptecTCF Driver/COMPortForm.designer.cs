@@ -36,7 +36,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(29, 35);
+            this.label1.Location = new System.Drawing.Point(26, 35);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(269, 13);
             this.label1.TabIndex = 0;
@@ -45,7 +45,7 @@
             // COMPort_CB
             // 
             this.COMPort_CB.FormattingEnabled = true;
-            this.COMPort_CB.Location = new System.Drawing.Point(304, 32);
+            this.COMPort_CB.Location = new System.Drawing.Point(307, 32);
             this.COMPort_CB.Name = "COMPort_CB";
             this.COMPort_CB.Size = new System.Drawing.Size(60, 21);
             this.COMPort_CB.Sorted = true;
@@ -82,7 +82,7 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox COMPort_CB;
         private System.Windows.Forms.Button OK_Btn;
+        public System.Windows.Forms.ComboBox COMPort_CB;
     }
 }
