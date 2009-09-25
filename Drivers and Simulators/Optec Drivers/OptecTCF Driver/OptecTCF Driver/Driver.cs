@@ -101,38 +101,46 @@ namespace ASCOM.OptecTCF_Driver
 
         public bool Absolute
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Absolute", false); }
-        }
+            get { return true; }
+        }  //FINISHED
 
         public void Halt()
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("Halt");
-        }
+            // This operation is not supported by Optec Drivers
+            throw new ASCOM.MethodNotImplementedException("Halt");
+        }    //FINISHED
 
         public bool IsMoving
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("IsMoving", false); }
-        }
+            //This driver does not allow any other methods to be called
+            //while the device is moving. So this is always false.
+            get { return false; }
+        }  //FINISHED
 
         public bool Link
         {
             // TODO Replace this with your implementation
-            get { return DeviceComm.Connected; }
+            get { return DeviceComm.GetConnectionState(); }
             set
             {
-                if (value)
+                try
                 {
-                    DeviceComm.Connect();
+                    if (value)
+                    {
+                        DeviceComm.Connect();
+                    }
+                    else
+                    {
+                        DeviceComm.Disconnect();
+                    }
                 }
-                else
+                catch (Exception Ex)
                 {
-                    DeviceComm.Disconnect();
+
+                    throw new ASCOM.DriverException("Device Failed to change Link state.\n" + Ex.ToString(), Ex);
                 }
             }
-        }
+        }      //FINISHED
 
         public int MaxIncrement
         {
@@ -154,15 +162,14 @@ namespace ASCOM.OptecTCF_Driver
 
         public int Position
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Position", false); }
-        }
+            get { return DeviceComm.GetPosition(); }
+        }      //FINISHED
 
         public void SetupDialog()
         {
             SetupDialogForm F = new SetupDialogForm();
             F.ShowDialog();
-        }
+        }    //FINISHED
 
         public double StepSize
         {
@@ -173,21 +180,19 @@ namespace ASCOM.OptecTCF_Driver
         public bool TempComp
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("TempComp", false); }
-            set { throw new PropertyNotImplementedException("TempComp", true); }
+            get { return DeviceComm.InTempCompMode(); }
+            set { DeviceComm.EnterTempCompMode(value); }
         }
 
         public bool TempCompAvailable
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("TempCompAvailable", false); }
-        }
+            get { return true; }
+        }    //FINISHED
 
         public double Temperature
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Temperature", false); }
-        }
+            get { return DeviceComm.GetTemperaterature(); }
+        }        //
 
         #endregion
     }
