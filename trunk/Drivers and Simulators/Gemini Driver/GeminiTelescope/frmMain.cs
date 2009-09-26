@@ -936,6 +936,7 @@ namespace ASCOM.GeminiTelescope
             {
                 e.Cancel = true;
                 this.Hide();
+                SetBaloonText("Gemini ASCOM controller is still running,\r\nand can be accessed from this icon", "Gemini is minimized", ToolTipIcon.Info);
                 return;
             }
             m_ExitFormMenuCall = false;
