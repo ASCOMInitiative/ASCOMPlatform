@@ -1005,7 +1005,7 @@ namespace ASCOM.GeminiTelescope
             {
                 
                 Trace.Enter("Latitude", value);
-                if (value < -90 || value > 90) throw new ASCOM.OutOfRangeException();
+                if (value < -90 || value > 90) throw new ASCOM.InvalidValueException("Latitude", value.ToString(), "-90..90");
                 m_Profile.DeviceType = "Telescope";
                 m_Latitude = value;
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Latitude", value.ToString());
@@ -1024,7 +1024,7 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 Trace.Enter("Longitude", value);
-                if (value < -180 || value > 180) throw new ASCOM.OutOfRangeException();
+                if (value < -180 || value > 180) throw new ASCOM.InvalidValueException("Longitude", value.ToString(), "-180..180");
                 m_Profile.DeviceType = "Telescope";
                 m_Longitude = value;
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Longitude", value.ToString());
@@ -2145,13 +2145,40 @@ namespace ASCOM.GeminiTelescope
             string UTC_Offset = GetCommandResult(command);
 
 
-            if (longitude != null && !UseDriverSite) Longitude = -m_Util.DMSToDegrees(longitude);  // Gemini has the reverse notion of longitude sign: + for West, - for East
-            if (latitude != null && !UseDriverSite) Latitude = m_Util.DMSToDegrees(latitude);
-            if (UTC_Offset != null) int.TryParse(UTC_Offset, out m_UTCOffset);
+            try
+            {
+                if (longitude != null && !UseDriverSite)  Longitude = -m_Util.DMSToDegrees(longitude);  // Gemini has the reverse notion of longitude sign: + for West, - for East}
+            }
+            catch (Exception ex)
+            {
+                Trace.Except(ex);
+            }
+            try
+            {
+                if (latitude != null && !UseDriverSite) Latitude = m_Util.DMSToDegrees(latitude);
+            }
+            catch (Exception ex)
+            {
+                Trace.Except(ex);
+            }
+            try
+            {
+                if (UTC_Offset != null) int.TryParse(UTC_Offset, out m_UTCOffset);
+            }
+            catch (Exception ex)
+            {
+                Trace.Except(ex);
+            }
 
-            //Get RA and DEC etc
-            UpdatePolledVariables(true);
-
+            try
+            {
+                //Get RA and DEC etc
+                UpdatePolledVariables(true);
+            }
+            catch (Exception ex)
+            {
+                Trace.Except(ex);
+            }
             m_LastUpdate = System.DateTime.Now;
         }
 
@@ -2872,11 +2899,10 @@ namespace ASCOM.GeminiTelescope
             {
                 try
                 {
-                    DateTime geminiDateTime;
+                    DateTime geminiDateTime = DateTime.Now ;
                     string l_Time = GeminiHardware.DoCommandResult(":GL", GeminiHardware.MAX_TIMEOUT, false);
                     string l_Date = GeminiHardware.DoCommandResult(":GC", GeminiHardware.MAX_TIMEOUT, false);
                     double l_TZOffset = double.Parse(GeminiHardware.DoCommandResult(":GG", GeminiHardware.MAX_TIMEOUT, false));
-
                     geminiDateTime = DateTime.ParseExact(l_Date + " " + l_Time, "MM/dd/yy HH:mm:ss", new System.Globalization.DateTimeFormatInfo()); // Parse to a local datetime using the given format
                     geminiDateTime = geminiDateTime.AddHours(l_TZOffset); // Add this to the local time to get a UTC date time
                     return geminiDateTime;
@@ -2899,12 +2925,6 @@ namespace ASCOM.GeminiTelescope
                 string localDate = civil.ToString("MM/dd/yy");
                 result = DoCommandResult(":SC" + localDate, MAX_TIMEOUT, false);
                 result = DoCommandResult(":SL" + localTime, MAX_TIMEOUT, false);
-
-                DateTime test = UTCDate;
-                if (test - value > TimeSpan.FromSeconds(60))
-                {
-                    throw new ASCOM.DriverException(SharedResources.MSG_TIME_NOTSET, (int)SharedResources.SCODE_TIME_NOTSET);
-                }
             }
         }
 

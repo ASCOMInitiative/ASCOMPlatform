@@ -36,6 +36,7 @@ namespace ASCOM.GeminiTelescope
             this.cmdCancel = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.pbSetSiteNow = new System.Windows.Forms.Button();
             this.checkBoxUseDriverSite = new System.Windows.Forms.CheckBox();
             this.textBoxLongitudeMinutes = new System.Windows.Forms.TextBox();
             this.textBoxLatitudeMinutes = new System.Windows.Forms.TextBox();
@@ -55,6 +56,7 @@ namespace ASCOM.GeminiTelescope
             this.label8 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.pbSetTimeNow = new System.Windows.Forms.Button();
             this.checkBoxUseDriverTime = new System.Windows.Forms.CheckBox();
             this.labelUtc = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -81,8 +83,6 @@ namespace ASCOM.GeminiTelescope
             this.chkJoystick = new System.Windows.Forms.CheckBox();
             this.cmbJoystick = new System.Windows.Forms.ComboBox();
             this.btnJoysticConfig = new System.Windows.Forms.Button();
-            this.pbSetTimeNow = new System.Windows.Forms.Button();
-            this.pbSetSiteNow = new System.Windows.Forms.Button();
             buttonGps = new System.Windows.Forms.Button();
             pbGeminiSettings = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
@@ -191,6 +191,17 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(199, 121);
             this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // pbSetSiteNow
+            // 
+            this.pbSetSiteNow.Location = new System.Drawing.Point(3, 94);
+            this.pbSetSiteNow.Name = "pbSetSiteNow";
+            this.pbSetSiteNow.Size = new System.Drawing.Size(62, 23);
+            this.pbSetSiteNow.TabIndex = 34;
+            this.pbSetSiteNow.Text = "Set Now";
+            this.pbSetSiteNow.UseVisualStyleBackColor = false;
+            this.pbSetSiteNow.Visible = false;
+            this.pbSetSiteNow.Click += new System.EventHandler(this.pbSetSiteNow_Click);
             // 
             // checkBoxUseDriverSite
             // 
@@ -388,6 +399,17 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 36.70886F));
             this.tableLayoutPanel4.Size = new System.Drawing.Size(199, 79);
             this.tableLayoutPanel4.TabIndex = 0;
+            // 
+            // pbSetTimeNow
+            // 
+            this.pbSetTimeNow.Location = new System.Drawing.Point(3, 52);
+            this.pbSetTimeNow.Name = "pbSetTimeNow";
+            this.pbSetTimeNow.Size = new System.Drawing.Size(62, 23);
+            this.pbSetTimeNow.TabIndex = 34;
+            this.pbSetTimeNow.Text = "Set Now";
+            this.pbSetTimeNow.UseVisualStyleBackColor = false;
+            this.pbSetTimeNow.Visible = false;
+            this.pbSetTimeNow.Click += new System.EventHandler(this.pbSetTimeNow_Click_1);
             // 
             // checkBoxUseDriverTime
             // 
@@ -689,28 +711,6 @@ namespace ASCOM.GeminiTelescope
             this.btnJoysticConfig.TabIndex = 33;
             this.btnJoysticConfig.UseVisualStyleBackColor = false;
             this.btnJoysticConfig.Click += new System.EventHandler(this.btnJoysticConfig_Click);
-            // 
-            // pbSetTimeNow
-            // 
-            this.pbSetTimeNow.Enabled = false;
-            this.pbSetTimeNow.Location = new System.Drawing.Point(3, 52);
-            this.pbSetTimeNow.Name = "pbSetTimeNow";
-            this.pbSetTimeNow.Size = new System.Drawing.Size(62, 23);
-            this.pbSetTimeNow.TabIndex = 34;
-            this.pbSetTimeNow.Text = "Set Now";
-            this.pbSetTimeNow.UseVisualStyleBackColor = false;
-            this.pbSetTimeNow.Click += new System.EventHandler(this.pbSetTimeNow_Click_1);
-            // 
-            // pbSetSiteNow
-            // 
-            this.pbSetSiteNow.Enabled = false;
-            this.pbSetSiteNow.Location = new System.Drawing.Point(3, 94);
-            this.pbSetSiteNow.Name = "pbSetSiteNow";
-            this.pbSetSiteNow.Size = new System.Drawing.Size(62, 23);
-            this.pbSetSiteNow.TabIndex = 34;
-            this.pbSetSiteNow.Text = "Set Now";
-            this.pbSetSiteNow.UseVisualStyleBackColor = false;
-            this.pbSetSiteNow.Click += new System.EventHandler(this.pbSetSiteNow_Click);
             // 
             // TelescopeSetupDialogForm
             // 
