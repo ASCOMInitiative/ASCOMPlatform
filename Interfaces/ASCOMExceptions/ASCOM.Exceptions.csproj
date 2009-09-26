@@ -48,7 +48,6 @@
     <Compile Include="InvalidValueException.cs" />
     <Compile Include="NotConnectedException.cs" />
     <Compile Include="NotImplementedException.cs" />
-    <Compile Include="OutOfRangeException.cs" />
     <Compile Include="ParkedException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyNotImplementedException.cs" />
