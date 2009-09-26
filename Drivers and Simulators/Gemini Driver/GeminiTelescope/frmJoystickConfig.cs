@@ -71,7 +71,7 @@ namespace ASCOM.GeminiTelescope
 
         static AssignmentClass [] AllAssignments = 
         {
-            new AssignmentClass("(Not Assigned)", UserFunction.Unassigned),
+            new AssignmentClass("------------------------", UserFunction.Unassigned),
 /*
             new AssignmentClass("Use Guiding Speed with Joystick", UserFunction.GuidingSpeed),
             new AssignmentClass("Use Centering Speed with Joystick", UserFunction.CenteringSpeed),
@@ -147,20 +147,32 @@ namespace ASCOM.GeminiTelescope
 
             }
 
-            PersistProfile(false);  // load all settings from profile
 
             if (!string.IsNullOrEmpty(GeminiHardware.JoystickName))
             {
-                if (!m_JS.Initialize(GeminiHardware.JoystickName))
+                if (!m_JS.Initialize(GeminiHardware.JoystickName, GeminiHardware.JoystickAxis))
                     m_JS = null;
                 else
                 {
                     tmrJoystick.Tick += new EventHandler(tmrJoystick_Tick);
                     tmrJoystick.Interval = 200;
                     tmrJoystick.Start();
+
+                    int axis = m_JS.NumberOfAxis;
+                    for (int i = 0; i < axis; i += 2)
+                    {
+                        cmbAxis.Items.Add("Axis " + (i + 1).ToString() + " and " + (i + 2).ToString());
+                    }
+
+//                    if (m_JS.HasPOV4)
+//                        cmbAxis.Items.Add("POV 4-way Controller");
+
+                    if (cmbAxis.Items.Count > 0)
+                        cmbAxis.SelectedIndex = 0;
                 }
             }
 
+            PersistProfile(false);  // load all settings from profile
         }
 
         uint prev_buttons = 0;
@@ -211,7 +223,10 @@ namespace ASCOM.GeminiTelescope
                 }
                 GeminiHardware.JoystickButtonMap = button_mappings;
                 GeminiHardware.JoystickIsAnalog = rbAnalog.Checked;
-
+                if (cmbAxis.SelectedIndex >= 0)
+                {
+                    GeminiHardware.JoystickAxis = cmbAxis.SelectedIndex;
+                }
                 return true;
             }
             else
@@ -225,6 +240,9 @@ namespace ASCOM.GeminiTelescope
                 }
                 rbAnalog.Checked = GeminiHardware.JoystickIsAnalog;
                 rbFixed.Checked = !GeminiHardware.JoystickIsAnalog;
+
+                if (cmbAxis.Items.Count > GeminiHardware.JoystickAxis)
+                    cmbAxis.SelectedIndex = GeminiHardware.JoystickAxis;
                 return true;
             }
 

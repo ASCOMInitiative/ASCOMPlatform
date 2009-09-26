@@ -185,27 +185,34 @@ namespace ASCOM.GeminiTelescope
         private Win32API.JOYCAPS m_JCAPS = new Win32API.JOYCAPS();
 
 
+        // x,y   z,r  u,v 
         public int MinX
         {
-            get { return m_JCAPS.wXmin; }
+            get { return (Axis==1? m_JCAPS.wZmin : (Axis==2? m_JCAPS.wUmin : m_JCAPS.wXmin)); }
         }
 
         public int MaxX
         {
-            get { return m_JCAPS.wXmax; }
+            get { return (Axis == 1 ? m_JCAPS.wZmax : (Axis == 2 ? m_JCAPS.wUmax : m_JCAPS.wXmax)); }
         }
 
         public int MinY
         {
-            get { return m_JCAPS.wYmin; }
+            get { return (Axis == 1 ? m_JCAPS.wRmin : (Axis == 2 ? m_JCAPS.wVmin : m_JCAPS.wYmin)); }
         }
 
         public int MaxY
         {
-            get { return m_JCAPS.wYmax; }
+            get { return (Axis == 1 ? m_JCAPS.wRmax : (Axis == 2 ? m_JCAPS.wVmax : m_JCAPS.wYmax)); }
         }
 
-        
+        private int m_Axis = 0;
+
+        public int Axis
+        {
+            get { return m_Axis; }
+            set { m_Axis = value; }
+        }
 
         private uint m_Buttons;
 
@@ -216,11 +223,28 @@ namespace ASCOM.GeminiTelescope
         {
             get {
                 m_JEX.dwSize = 64;
-                m_JEX.dwFlags = Win32API.JOY_RETURNXY | Win32API.JOY_RETURNBUTTONS;
+                m_JEX.dwFlags = Win32API.JOY_RETURNALL;
                 if (Win32API.joyGetPosEx(m_JoyNbr.ToInt32(), ref m_JEX) == 0)
                 {
-                    m_PosX = (double)(m_JEX.dwXpos - m_CenterX)*2 / (MaxX-MinX);
-                    m_PosY = (double)(m_JEX.dwYpos - m_CenterY)*2 / (MaxY-MinY);
+                    double x, y;
+                    if (m_Axis == 1)
+                    {
+                        x = m_JEX.dwZpos;
+                        y = m_JEX.dwRpos;
+                    }
+                    else if (m_Axis == 2)
+                    {
+                        x = m_JEX.dwUpos;
+                        y = m_JEX.dwVpos;
+                    }
+                    else
+                    {
+                        x = m_JEX.dwXpos;
+                        y = m_JEX.dwYpos;
+                    }
+
+                    m_PosX = (double)(x - m_CenterX)*2 / (MaxX-MinX);
+                    m_PosY = (double)(y - m_CenterY)*2 / (MaxY-MinY);
                     m_Buttons = (uint)m_JEX.dwButtons;
                 }
                 return m_PosX; 
@@ -296,21 +320,51 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        public bool Initialize(IntPtr jnbr)
+        public int NumberOfAxis
+        {
+            get { return m_JCAPS.wNumAxes; }
+        }
+
+        public bool HasPOV4
+        {
+            get {return (m_JCAPS.wCaps & Win32API.JOYCAPS_POV4DIR) != 0; }
+        }
+        public bool Initialize(IntPtr jnbr, int axis)
         {
             m_JoyNbr = jnbr;
 
             if (Win32API.joyGetDevCaps(jnbr, ref m_JCAPS, 404) != 0) return false;
+            if (m_JCAPS.wNumAxes < axis * 2)
+            {
+                axis = 0;
+            }
+
+            m_Axis = axis;
+
             m_JEX.dwSize = 64;
-            m_JEX.dwFlags = Win32API.JOY_RETURNXY;
+            m_JEX.dwFlags = Win32API.JOY_RETURNALL;
             if (Win32API.joyGetPosEx(m_JoyNbr.ToInt32(), ref m_JEX) != 0) return false;
-            m_CenterX = m_JEX.dwXpos;
-            m_CenterY = m_JEX.dwYpos;
+
+            if (axis == 0)
+            {
+                m_CenterX = m_JEX.dwXpos;
+                m_CenterY = m_JEX.dwYpos;
+            }
+            else if (axis == 1)
+            {
+                m_CenterX = m_JEX.dwZpos;
+                m_CenterY = m_JEX.dwRpos;
+            }
+            else if (axis == 2)
+            {
+                m_CenterX = m_JEX.dwUpos;
+                m_CenterY = m_JEX.dwVpos;
+            }
 
             return true;
         }
 
-        public bool Initialize(string name)
+        public bool Initialize(string name, int axis)
         {
             string[] names = JoystickNames;
             if (names == null || names.Length == 0) return false;
@@ -318,11 +372,11 @@ namespace ASCOM.GeminiTelescope
             int idx = Array.FindIndex(names, delegate(string item){ return item.Equals(name);});
 
             if (idx >= 0)
-                return this.Initialize((IntPtr)idx);
+                return this.Initialize((IntPtr)idx, axis);
 
             // if didn't match the name, just use the first available joystick port:
             if (names.Length > 0)
-                return this.Initialize((IntPtr)0);  
+                return this.Initialize((IntPtr)0, axis);  
 
             return false;
         }
@@ -335,7 +389,7 @@ namespace ASCOM.GeminiTelescope
             get
             {
                     _Joysticks = new List<object>();
-                    DeviceList devices = Manager.GetDevices(DeviceClass.GameControl, EnumDevicesFlags.AttachedOnly);
+                    DeviceList devices = Manager.GetDevices(DeviceClass.GameControl, EnumDevicesFlags.IncludeHidden);
                     if (devices != null)
                     {
                         foreach (DeviceInstance deviceInstance in devices)

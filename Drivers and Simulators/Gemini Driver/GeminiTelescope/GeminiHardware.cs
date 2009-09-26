@@ -383,6 +383,19 @@ namespace ASCOM.GeminiTelescope
         }
 
 
+        private static int m_JoystickAxis;
+
+        public static int JoystickAxis
+        {
+            get { return GeminiHardware.m_JoystickAxis; }
+            set {
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickAxis", value.ToString());
+                GeminiHardware.m_JoystickAxis = value;
+            }
+        }
+
+
         private static UserFunction[] m_JoystickButtonMap;
 
         public static UserFunction[] JoystickButtonMap
@@ -676,6 +689,9 @@ namespace ASCOM.GeminiTelescope
             m_JoystickName = m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickName", "");
 
             m_JoystickButtonMap = JoystickButtonMapFromProfile();
+
+            if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickAxis", ""), out m_JoystickAxis))
+                m_JoystickAxis = 0;
 
             if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickIsAnalog", ""), out m_JoystickIsAnalog))
                 m_JoystickIsAnalog = true;

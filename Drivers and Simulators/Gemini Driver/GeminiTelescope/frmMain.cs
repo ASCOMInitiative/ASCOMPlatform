@@ -141,7 +141,7 @@ namespace ASCOM.GeminiTelescope
                 if (!string.IsNullOrEmpty(GeminiHardware.JoystickName))
                 {
                     m_Joystick = new Joystick();
-                    if (m_Joystick.Initialize(GeminiHardware.JoystickName))
+                    if (m_Joystick.Initialize(GeminiHardware.JoystickName, GeminiHardware.JoystickAxis))
                     {
                         tmrJoystick.Interval = 200;
                         tmrJoystick.Start();
