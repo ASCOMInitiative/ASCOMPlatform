@@ -176,11 +176,13 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                double lat=0;
+                double lat=-900;
                 try
                 {
                     lat = double.Parse(textBoxLatitudeDegrees.Text) + double.Parse(textBoxLatitudeMinutes.Text) / 60;
                     if (comboBoxLatitude.SelectedItem.ToString() == "S") { lat = -lat; }
+
+                    if (lat < -90 || lat > 90) lat = -900;
                 }
                 catch { }
                 return lat;
@@ -205,11 +207,13 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                double log = 0;
+                double log = -900;
                 try
                 {
                     log = double.Parse(textBoxLongitudeDegrees.Text) + double.Parse(textBoxLongitudeMinutes.Text) / 60;
                     if (comboBoxLongitude.SelectedItem.ToString() == "W") { log = -log; }
+
+                    if (log < -180 || log > 180) log = -900;
                 }
                 catch { }
                 return log;
@@ -228,12 +232,12 @@ namespace ASCOM.GeminiTelescope
                 textBoxLongitudeMinutes.Text = ((value - (int)value) * 60).ToString("00.00");
             }
         }
-        public bool UseGeminiSite
+        public bool UseDriverSite
         {
-            get { return checkBoxUseGeminiSite.Checked; }
+            get { return checkBoxUseDriverSite.Checked; }
             set 
             { 
-                checkBoxUseGeminiSite.Checked = value;
+                checkBoxUseDriverSite.Checked = value;
                 if (value)
                 {
                     comboBoxLatitude.Enabled = false;
@@ -254,10 +258,10 @@ namespace ASCOM.GeminiTelescope
                 }
             }
         }
-        public bool UseGeminiTime
+        public bool UseDriverTime
         {
-            get { return checkBoxUseGeminiTime.Checked; }
-            set { checkBoxUseGeminiTime.Checked = value; }
+            get { return checkBoxUseDriverTime.Checked; }
+            set { checkBoxUseDriverTime.Checked = value; }
         }
 
         public bool ShowHandbox
@@ -299,7 +303,9 @@ namespace ASCOM.GeminiTelescope
 
         private void checkBoxUseGeminiSite_CheckedChanged(object sender, EventArgs e)
         {
-            UseGeminiSite = checkBoxUseGeminiSite.Checked;
+            UseDriverSite = checkBoxUseDriverSite.Checked;
+            if (checkBoxUseDriverSite.Checked && GeminiHardware.Connected) pbSetSiteNow.Enabled = true;
+
         }
 
         private void buttonGps_Click(object sender, EventArgs e)
@@ -322,8 +328,8 @@ namespace ASCOM.GeminiTelescope
                         Latitude = gpsForm.Latitude;
                         Longitude = gpsForm.Longitude;
                         m_GpsUpdateClock = gpsForm.UpdateClock;
-                        checkBoxUseGeminiSite.Checked = false;
-                        if (m_GpsUpdateClock) checkBoxUseGeminiTime.Checked = false;
+                        checkBoxUseDriverSite.Checked = false;
+                        if (m_GpsUpdateClock) checkBoxUseDriverTime.Checked = false;
                     }
                 }
                 catch
@@ -360,6 +366,33 @@ namespace ASCOM.GeminiTelescope
             DialogResult res = frm.ShowDialog(this);
             if (res == DialogResult.OK)
                 frm.PersistProfile(true);
+        }
+
+       
+
+        private void checkBoxUseDriverTime_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxUseDriverTime.Checked && GeminiHardware.Connected) pbSetTimeNow.Enabled = true;
+        }
+
+        
+
+        private void pbSetTimeNow_Click_1(object sender, EventArgs e)
+        {
+            if (GeminiHardware.Connected) GeminiHardware.UTCDate = DateTime.UtcNow;
+        }
+
+        private void pbSetSiteNow_Click(object sender, EventArgs e)
+        {
+            if (GeminiHardware.Connected)
+            {
+                if (Longitude != -900 && Latitude != -900)
+                {
+                    GeminiHardware.SetLatitude(Latitude);
+                    GeminiHardware.SetLongitude(Longitude);
+                }
+                else { MessageBox.Show("Invalid Site Settings"); }
+            }
         }
     }
 }

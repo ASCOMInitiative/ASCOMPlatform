@@ -195,8 +195,8 @@ namespace ASCOM.GeminiTelescope
         private static bool m_Precession;
         private static bool m_Refraction;
         private static bool m_ShowHandbox;
-        private static bool m_UseGeminiSite;
-        private static bool m_UseGeminiTime;
+        private static bool m_UseDriverSite;
+        private static bool m_UseDriverTime;
 
 
         private static bool m_SendAdvancedSettings;
@@ -559,8 +559,8 @@ namespace ASCOM.GeminiTelescope
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Precession", false.ToString());
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Refraction", false.ToString());
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Show Handbox", false.ToString());
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseGeminiSite", true.ToString());
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseGeminiTime", true.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Use Driver Site", true.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Use Driver Time", true.ToString());
 
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughPortEnabled", false.ToString());
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughComPort", "COM10");
@@ -580,17 +580,17 @@ namespace ASCOM.GeminiTelescope
                 m_Refraction = false;
             if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Show Handbox", ""), out m_ShowHandbox))
                 m_ShowHandbox = false;
-            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseGeminiSite", ""), out m_UseGeminiSite))
-                m_UseGeminiSite= false;
-            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseGeminiTime", ""), out m_UseGeminiTime))
-                m_UseGeminiTime = false;
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Use Driver Site", ""), out m_UseDriverSite))
+                m_UseDriverSite= false;
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Use Driver Time", ""), out m_UseDriverTime))
+                m_UseDriverTime = false;
 
             if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "TraceLevel", ""), out m_TraceLevel))
                 m_TraceLevel = 4;
 
             TraceLevel = m_TraceLevel;
 
-            Trace.Info(2, "User Settings", m_AdditionalAlign, m_Precession, m_Refraction, m_ShowHandbox, m_UseGeminiSite, m_UseGeminiTime);
+            Trace.Info(2, "User Settings", m_AdditionalAlign, m_Precession, m_Refraction, m_ShowHandbox, m_UseDriverSite, m_UseDriverTime);
 
             if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "SlewSettleTime", ""), out m_SlewSettleTime))
                 m_SlewSettleTime = 2;
@@ -852,27 +852,27 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get/Set Use Gemini Site 
         /// </summary>
-        public static bool UseGeminiSite
+        public static bool UseDriverSite
         {
-            get { return m_UseGeminiSite; }
+            get { return m_UseDriverSite; }
             set
             {
                 m_Profile.DeviceType = "Telescope";
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseGeminiSite", value.ToString());
-                m_UseGeminiSite = value;
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Use Driver Site", value.ToString());
+                m_UseDriverSite = value;
             }
         }
         /// <summary>
         /// Get/Set Use Gemini Time 
         /// </summary>
-        public static bool UseGeminiTime
+        public static bool UseDriverTime
         {
-            get { return m_UseGeminiTime; }
+            get { return m_UseDriverTime; }
             set
             {
                 m_Profile.DeviceType = "Telescope";
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseGeminiTime", value.ToString());
-                m_UseGeminiTime = value;
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Use Driver Time", value.ToString());
+                m_UseDriverTime = value;
             }
         }
         /// <summary>
@@ -1003,7 +1003,9 @@ namespace ASCOM.GeminiTelescope
             get { return m_Latitude; }
             set
             {
+                
                 Trace.Enter("Latitude", value);
+                if (value < -90 || value > 90) throw new ASCOM.OutOfRangeException();
                 m_Profile.DeviceType = "Telescope";
                 m_Latitude = value;
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Latitude", value.ToString());
@@ -1022,7 +1024,7 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 Trace.Enter("Longitude", value);
-
+                if (value < -180 || value > 180) throw new ASCOM.OutOfRangeException();
                 m_Profile.DeviceType = "Telescope";
                 m_Longitude = value;
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Longitude", value.ToString());
@@ -1618,7 +1620,7 @@ namespace ASCOM.GeminiTelescope
             Refraction = m_Refraction;  // update this setting to the mount 
 
             //Set the site and time if required
-            if (!m_UseGeminiSite)
+            if (m_UseDriverSite)
             {
                 Trace.Info(2, "Set Long/Lat from PC", m_Latitude, m_Longitude);
 
@@ -1626,7 +1628,7 @@ namespace ASCOM.GeminiTelescope
                 SetLongitude(m_Longitude);
             }
 
-            if (!m_UseGeminiTime)
+            if (m_UseDriverTime)
             {
                 Trace.Info(2, "Set UTC from PC", (DateTime.UtcNow + m_GPSTimeDifference).ToString());
 
@@ -2143,8 +2145,8 @@ namespace ASCOM.GeminiTelescope
             string UTC_Offset = GetCommandResult(command);
 
 
-            if (longitude != null && UseGeminiSite) Longitude = -m_Util.DMSToDegrees(longitude);  // Gemini has the reverse notion of longitude sign: + for West, - for East
-            if (latitude != null && UseGeminiSite) Latitude = m_Util.DMSToDegrees(latitude);
+            if (longitude != null && !UseDriverSite) Longitude = -m_Util.DMSToDegrees(longitude);  // Gemini has the reverse notion of longitude sign: + for West, - for East
+            if (latitude != null && !UseDriverSite) Latitude = m_Util.DMSToDegrees(latitude);
             if (UTC_Offset != null) int.TryParse(UTC_Offset, out m_UTCOffset);
 
             //Get RA and DEC etc

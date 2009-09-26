@@ -628,8 +628,8 @@ namespace ASCOM.GeminiTelescope
             setupForm.Latitude = GeminiHardware.Latitude;
             setupForm.Longitude = GeminiHardware.Longitude;
 
-            setupForm.UseGeminiSite = GeminiHardware.UseGeminiSite;
-            setupForm.UseGeminiTime = GeminiHardware.UseGeminiTime;
+            setupForm.UseDriverSite = GeminiHardware.UseDriverSite;
+            setupForm.UseDriverTime = GeminiHardware.UseDriverTime;
 
             setupForm.ShowHandbox = GeminiHardware.ShowHandbox;
 
@@ -666,8 +666,8 @@ namespace ASCOM.GeminiTelescope
                 try {GeminiHardware.Longitude = setupForm.Longitude;}
                 catch { error += "Longitude, ";  }
 
-                GeminiHardware.UseGeminiTime = setupForm.UseGeminiTime;
-                GeminiHardware.UseGeminiSite = setupForm.UseGeminiSite;
+                GeminiHardware.UseDriverTime = setupForm.UseDriverTime;
+                GeminiHardware.UseDriverSite = setupForm.UseDriverSite;
 
                 GeminiHardware.ShowHandbox = setupForm.ShowHandbox;
 
