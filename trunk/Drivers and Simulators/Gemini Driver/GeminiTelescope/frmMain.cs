@@ -561,6 +561,22 @@ namespace ASCOM.GeminiTelescope
 
                 pbStop.Visible = (GeminiHardware.Velocity == "S");  //only show Stop! button when slewing
 
+                byte pec = GeminiHardware.PECStatus;
+                if ((pec & 1) != 0)
+                {
+                    checkboxPEC.Enabled = true;
+                    checkboxPEC.Checked = true;
+                }
+                else if ((pec & 32) != 0) //data available
+                {
+                    checkboxPEC.Enabled = true;
+                    checkboxPEC.Checked = false;
+                }
+                else
+                {
+                    checkboxPEC.Enabled = false;
+                    checkboxPEC.Checked = false;
+                }
 
             }
             else
@@ -588,22 +604,6 @@ namespace ASCOM.GeminiTelescope
 
             checkBoxTrack.Checked = (GeminiHardware.Velocity == "N" ? false : true);
 
-            byte pec = GeminiHardware.PECStatus;
-            if ((pec & 1) != 0)
-            {
-                checkboxPEC.Enabled = true;
-                checkboxPEC.Checked = true;
-            }
-            else if ((pec & 32) != 0) //data available
-            {
-                checkboxPEC.Enabled = true;
-                checkboxPEC.Checked = false;
-            }
-            else
-            {
-                checkboxPEC.Enabled = false;
-                checkboxPEC.Checked = false;
-            }
 
             checkboxPEC.BackColor = (checkboxPEC.Enabled ? Color.Transparent : Color.FromArgb(64, 64, 64)) ;
 
@@ -936,7 +936,7 @@ namespace ASCOM.GeminiTelescope
             {
                 e.Cancel = true;
                 this.Hide();
-                SetBaloonText("Gemini ASCOM controller is still running,\r\nand can be accessed from this icon", "Gemini is minimized", ToolTipIcon.Info);
+                SetBaloonText("Gemini ASCOM controller is still running.\r\nIt can be accessed from this icon", "Gemini Controller was minimized", ToolTipIcon.Info);
                 return;
             }
             m_ExitFormMenuCall = false;

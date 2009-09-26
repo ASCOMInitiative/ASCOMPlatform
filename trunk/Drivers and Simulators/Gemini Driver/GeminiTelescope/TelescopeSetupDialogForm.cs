@@ -299,13 +299,14 @@ namespace ASCOM.GeminiTelescope
         private void timerUpdate_Tick(object sender, EventArgs e)
         {
             labelUtc.Text = DateTime.UtcNow.ToShortDateString() + " " + DateTime.UtcNow.ToShortTimeString();
+            pbSetSiteNow.Visible = GeminiHardware.Connected;
+            pbSetTimeNow.Visible = GeminiHardware.Connected;
+
         }
 
         private void checkBoxUseGeminiSite_CheckedChanged(object sender, EventArgs e)
         {
             UseDriverSite = checkBoxUseDriverSite.Checked;
-            if (checkBoxUseDriverSite.Checked && GeminiHardware.Connected) pbSetSiteNow.Enabled = true;
-
         }
 
         private void buttonGps_Click(object sender, EventArgs e)
@@ -372,14 +373,23 @@ namespace ASCOM.GeminiTelescope
 
         private void checkBoxUseDriverTime_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBoxUseDriverTime.Checked && GeminiHardware.Connected) pbSetTimeNow.Enabled = true;
         }
 
         
 
         private void pbSetTimeNow_Click_1(object sender, EventArgs e)
         {
-            if (GeminiHardware.Connected) GeminiHardware.UTCDate = DateTime.UtcNow;
+            if (GeminiHardware.Connected)
+            {
+                try
+                {
+                    GeminiHardware.UTCDate = DateTime.UtcNow;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Failed to set Gemini time",SharedResources.TELESCOPE_DRIVER_NAME); 
+                }
+            }
         }
 
         private void pbSetSiteNow_Click(object sender, EventArgs e)
@@ -388,10 +398,17 @@ namespace ASCOM.GeminiTelescope
             {
                 if (Longitude != -900 && Latitude != -900)
                 {
-                    GeminiHardware.SetLatitude(Latitude);
-                    GeminiHardware.SetLongitude(Longitude);
+                    try
+                    {
+                        GeminiHardware.SetLatitude(Latitude);
+                        GeminiHardware.SetLongitude(Longitude);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Invalid Site Settings",SharedResources.TELESCOPE_DRIVER_NAME); 
+                    }
                 }
-                else { MessageBox.Show("Invalid Site Settings"); }
+                else { MessageBox.Show("Invalid Site Settings", SharedResources.TELESCOPE_DRIVER_NAME); }
             }
         }
     }
