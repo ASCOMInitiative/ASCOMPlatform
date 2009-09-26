@@ -63,9 +63,6 @@ namespace ASCOM.GeminiTelescope
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.checkBoxShowHandbox = new System.Windows.Forms.CheckBox();
-            this.checkBoxPrecession = new System.Windows.Forms.CheckBox();
-            this.checkBoxRefraction = new System.Windows.Forms.CheckBox();
-            this.checkBoxAdditionalAlign = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.label4 = new System.Windows.Forms.Label();
@@ -103,7 +100,7 @@ namespace ASCOM.GeminiTelescope
             // 
             buttonGps.BackColor = System.Drawing.Color.Black;
             buttonGps.ForeColor = System.Drawing.Color.White;
-            buttonGps.Location = new System.Drawing.Point(236, 351);
+            buttonGps.Location = new System.Drawing.Point(236, 323);
             buttonGps.Name = "buttonGps";
             buttonGps.Size = new System.Drawing.Size(105, 23);
             buttonGps.TabIndex = 23;
@@ -115,7 +112,7 @@ namespace ASCOM.GeminiTelescope
             // 
             pbGeminiSettings.BackColor = System.Drawing.Color.Black;
             pbGeminiSettings.ForeColor = System.Drawing.Color.White;
-            pbGeminiSettings.Location = new System.Drawing.Point(236, 322);
+            pbGeminiSettings.Location = new System.Drawing.Point(236, 291);
             pbGeminiSettings.Name = "pbGeminiSettings";
             pbGeminiSettings.Size = new System.Drawing.Size(105, 23);
             pbGeminiSettings.TabIndex = 30;
@@ -129,7 +126,7 @@ namespace ASCOM.GeminiTelescope
             this.cmdOK.BackColor = System.Drawing.Color.Black;
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.cmdOK.ForeColor = System.Drawing.Color.White;
-            this.cmdOK.Location = new System.Drawing.Point(416, 325);
+            this.cmdOK.Location = new System.Drawing.Point(416, 290);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 0;
@@ -143,7 +140,7 @@ namespace ASCOM.GeminiTelescope
             this.cmdCancel.BackColor = System.Drawing.Color.Black;
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cmdCancel.ForeColor = System.Drawing.Color.White;
-            this.cmdCancel.Location = new System.Drawing.Point(416, 351);
+            this.cmdCancel.Location = new System.Drawing.Point(416, 322);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
@@ -300,7 +297,7 @@ namespace ASCOM.GeminiTelescope
             this.labelVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelVersion.AutoSize = true;
             this.labelVersion.ForeColor = System.Drawing.Color.White;
-            this.labelVersion.Location = new System.Drawing.Point(9, 386);
+            this.labelVersion.Location = new System.Drawing.Point(9, 355);
             this.labelVersion.Name = "labelVersion";
             this.labelVersion.Size = new System.Drawing.Size(120, 13);
             this.labelVersion.TabIndex = 18;
@@ -311,7 +308,7 @@ namespace ASCOM.GeminiTelescope
             this.labelTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTime.AutoSize = true;
             this.labelTime.ForeColor = System.Drawing.Color.White;
-            this.labelTime.Location = new System.Drawing.Point(297, 386);
+            this.labelTime.Location = new System.Drawing.Point(297, 355);
             this.labelTime.Name = "labelTime";
             this.labelTime.Size = new System.Drawing.Size(185, 13);
             this.labelTime.TabIndex = 19;
@@ -460,50 +457,12 @@ namespace ASCOM.GeminiTelescope
             // 
             this.checkBoxShowHandbox.AutoSize = true;
             this.checkBoxShowHandbox.ForeColor = System.Drawing.Color.White;
-            this.checkBoxShowHandbox.Location = new System.Drawing.Point(236, 229);
+            this.checkBoxShowHandbox.Location = new System.Drawing.Point(238, 229);
             this.checkBoxShowHandbox.Name = "checkBoxShowHandbox";
             this.checkBoxShowHandbox.Size = new System.Drawing.Size(125, 17);
             this.checkBoxShowHandbox.TabIndex = 24;
             this.checkBoxShowHandbox.Text = "Show Handbox Form";
             this.checkBoxShowHandbox.UseVisualStyleBackColor = false;
-            this.checkBoxShowHandbox.Visible = false;
-            // 
-            // checkBoxPrecession
-            // 
-            this.checkBoxPrecession.AutoSize = true;
-            this.checkBoxPrecession.ForeColor = System.Drawing.Color.White;
-            this.checkBoxPrecession.Location = new System.Drawing.Point(236, 253);
-            this.checkBoxPrecession.Name = "checkBoxPrecession";
-            this.checkBoxPrecession.Size = new System.Drawing.Size(165, 17);
-            this.checkBoxPrecession.TabIndex = 25;
-            this.checkBoxPrecession.Text = "Gemini Calculates Precession";
-            this.checkBoxPrecession.UseVisualStyleBackColor = false;
-            this.checkBoxPrecession.Visible = false;
-            // 
-            // checkBoxRefraction
-            // 
-            this.checkBoxRefraction.AutoSize = true;
-            this.checkBoxRefraction.ForeColor = System.Drawing.Color.White;
-            this.checkBoxRefraction.Location = new System.Drawing.Point(236, 276);
-            this.checkBoxRefraction.Name = "checkBoxRefraction";
-            this.checkBoxRefraction.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.checkBoxRefraction.Size = new System.Drawing.Size(162, 17);
-            this.checkBoxRefraction.TabIndex = 26;
-            this.checkBoxRefraction.Text = "Gemini Calculates Refraction";
-            this.checkBoxRefraction.UseVisualStyleBackColor = false;
-            this.checkBoxRefraction.Visible = false;
-            // 
-            // checkBoxAdditionalAlign
-            // 
-            this.checkBoxAdditionalAlign.AutoSize = true;
-            this.checkBoxAdditionalAlign.ForeColor = System.Drawing.Color.White;
-            this.checkBoxAdditionalAlign.Location = new System.Drawing.Point(236, 299);
-            this.checkBoxAdditionalAlign.Name = "checkBoxAdditionalAlign";
-            this.checkBoxAdditionalAlign.Size = new System.Drawing.Size(234, 17);
-            this.checkBoxAdditionalAlign.TabIndex = 27;
-            this.checkBoxAdditionalAlign.Text = "Sync Does Additional Align (Updates Model)";
-            this.checkBoxAdditionalAlign.UseVisualStyleBackColor = false;
-            this.checkBoxAdditionalAlign.Visible = false;
             // 
             // groupBox2
             // 
@@ -730,16 +689,13 @@ namespace ASCOM.GeminiTelescope
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(487, 408);
+            this.ClientSize = new System.Drawing.Size(487, 377);
             this.Controls.Add(this.btnJoysticConfig);
             this.Controls.Add(this.cmbJoystick);
             this.Controls.Add(this.chkJoystick);
             this.Controls.Add(pbGeminiSettings);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.checkBoxAdditionalAlign);
-            this.Controls.Add(this.checkBoxRefraction);
-            this.Controls.Add(this.checkBoxPrecession);
             this.Controls.Add(this.checkBoxShowHandbox);
             this.Controls.Add(buttonGps);
             this.Controls.Add(this.groupBox3);
@@ -812,9 +768,6 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.CheckBox checkBoxUseGeminiTime;
         private System.Windows.Forms.CheckBox checkBoxShowHandbox;
-        private System.Windows.Forms.CheckBox checkBoxPrecession;
-        private System.Windows.Forms.CheckBox checkBoxRefraction;
-        private System.Windows.Forms.CheckBox checkBoxAdditionalAlign;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Label label4;
