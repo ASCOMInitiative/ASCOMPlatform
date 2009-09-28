@@ -144,21 +144,20 @@ namespace ASCOM.OptecTCF_Driver
 
         public int MaxIncrement
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("MaxIncrement", false); }
-        }
+            //Max Increment is the same as Max Step in our case so use the same method...
+            get { return DeviceComm.GetMaxStep(); }
+        }  //FINISHED
 
         public int MaxStep
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("MaxStep", false); }
-        }
+            get { return DeviceComm.GetMaxStep(); }
+        }       //FINISHED
 
         public void Move(int val)
         {
             // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("Move");
-        }
+            DeviceComm.MoveFocus(val);
+        }    //FINISHED
 
         public int Position
         {
@@ -173,16 +172,14 @@ namespace ASCOM.OptecTCF_Driver
 
         public double StepSize
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("StepSize", false); }
-        }
+            get { return DeviceComm.GetStepSize(); }
+        }       //FINISHED
 
         public bool TempComp
         {
-            // TODO Replace this with your implementation
             get { return DeviceComm.InTempCompMode(); }
             set { DeviceComm.EnterTempCompMode(value); }
-        }
+        }     //FINISHED
 
         public bool TempCompAvailable
         {
@@ -192,7 +189,7 @@ namespace ASCOM.OptecTCF_Driver
         public double Temperature
         {
             get { return DeviceComm.GetTemperaterature(); }
-        }        //
+        }        //FINISHED
 
         #endregion
     }
