@@ -24,12 +24,6 @@ namespace ASCOM.OptecTCF_Driver
         }
 #endregion
 
-#region DeviceComm Properties
-
-
-
-#endregion
-
 #region DeviceComm Learn Related Methods
 
         internal static int GetLearnedSlope(char AorB)
@@ -244,6 +238,39 @@ namespace ASCOM.OptecTCF_Driver
 
 #region DeviceComm Focuser Operations METHODS
 
+        internal static string[] GetFVandDT()   //Firmware Version & Device Type
+        {
+            try
+            {
+                string resp = "";
+                resp = SendCmd("FVxxxx", 500, ExpectResponse, ".");
+                int i = resp.IndexOf(".");
+                string version = resp.Substring(i - 1, 4);
+                string type = "";
+                if (resp[i + 4] == '1')
+                {
+                    type = "TCF-S";
+                }
+                else if (resp[i + 4] == '3')
+                {
+                    type = "TCF-S3";
+                }
+                else
+                {
+                    throw new InvalidResponse("\n Failed to get device type. Device type was not a 1 or a 3.\n" + 
+                    "Response from device was: " + resp + "\n");
+                }
+                string[] ReturnVals = {version, type};
+                return ReturnVals;
+
+            }
+            catch (Exception Ex)
+            {   
+                throw new DriverException("Error retrieving firmware version and device type", Ex);
+            }
+
+        }
+
         internal static bool InTempCompMode()
         {
             if (CurrentMode == DeviceModes.AutoModeX) return true;
@@ -266,12 +293,12 @@ namespace ASCOM.OptecTCF_Driver
                 else if (CurrentPos > pos)
                 {
                     cmd = "FI" + diff.ToString().PadLeft(4, '0');
-                    SendCmd(cmd, TimeOut, ExpectResponse, "!");
+                    SendCmd(cmd, TimeOut, ExpectResponse, "*");
                 }
                 else if (CurrentPos < pos)
                 {
-                    cmd = "FI" + diff.ToString().PadLeft(4, '0');
-                    SendCmd(cmd, TimeOut, ExpectResponse, "!" ); 
+                    cmd = "FO" + diff.ToString().PadLeft(4, '0');
+                    SendCmd(cmd, TimeOut, ExpectResponse, "*" ); 
                 }
             }
             catch (Exception Ex)
@@ -450,21 +477,20 @@ namespace ASCOM.OptecTCF_Driver
 
         internal static int GetMaxStep()
         {
-            throw new MethodNotImplementedException("GetMaxStep");
-            string resp = "";
             try
             {
-                resp = SendCmd("???????", 500, ExpectResponse, "TCF");
-                if (resp == "??????")
+                string[] FV = GetFVandDT();
+                string DevType = FV[1];
+                if (DevType == "TCF-S3")
                     return 10000;
-                else if (resp == "???????")
+                else if (DevType == "TCF-S")
                 {
                     return 7000;
                 }
                 else
                 {
                     throw new InvalidResponse("\nGetMaxStep command did not receive a valid response.\n" +
-                         "Response was: " + resp + ".\n");
+                         "Response was: " + DevType + ".\n");
                 }
             }
             catch (Exception Ex)
@@ -475,21 +501,20 @@ namespace ASCOM.OptecTCF_Driver
 
         internal static double GetStepSize()
         {
-            throw new MethodNotImplementedException("GetMaxStep");
-            string resp = "";
             try
             {
-                resp = SendCmd("???????", 500, ExpectResponse, "TCF");
-                if (resp == "??????")
+                string[] FV = GetFVandDT();
+                string DevType = FV[1];
+                if (DevType == "TCF-S3")
                     return 2.032;
-                else if (resp == "???????")
+                else if (DevType == "TCF-S")
                 {
                     return 2.54;
                 }
                 else
                 {
                     throw new InvalidResponse("\nGetStepSize command did not receive a valid response.\n" +
-                         "Response was: " + resp + ".\n");
+                         "Response was: " + DevType + ".\n");
                 }
             }
             catch (Exception Ex)

@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Optec Focuser Driver")]
 [assembly: AssemblyDescription("ASCOM Focuser Driver for OptecTCF-S")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("ASCOM Initiative")]
+[assembly: AssemblyCompany("Optec Inc.")]
 [assembly: AssemblyProduct("Optec TCF-S")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]

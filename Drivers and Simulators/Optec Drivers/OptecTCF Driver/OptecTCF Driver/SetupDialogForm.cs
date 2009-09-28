@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using System.Windows;
 
 namespace ASCOM.OptecTCF_Driver
 {
@@ -47,6 +48,76 @@ namespace ASCOM.OptecTCF_Driver
         {
             COMPortForm CPFrm = new COMPortForm();
             CPFrm.ShowDialog();
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AboutBox1 AboxForm = new AboutBox1();
+            AboxForm.ShowDialog();
+        }
+
+        private void SetupDialogForm_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                DeviceComm.Connect();
+                UpdateControls();
+
+            }
+            catch
+            {
+                UpdateControls(); ;
+            }
+        }
+
+        private void connectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DeviceComm.Connect();
+                UpdateControls();
+            }
+            catch(Exception Ex)
+            {
+                UpdateControls();
+                DialogResult Result;
+                Result = MessageBox.Show("Could not connect to device.\n" + 
+                            "This may result from not selecting the correct COM port.\n" + 
+                            "Would you like to see the exception data?", 
+                            "Connection Failed" ,MessageBoxButtons.YesNo);
+                if (Result == DialogResult.Yes)
+                    MessageBox.Show("Error Message: \n" + Ex.ToString());
+                else
+                {
+                    //don't display anything....
+                }
+            }
+        }
+        internal void UpdateControls()
+        {
+            if (DeviceComm.GetConnectionState())
+            {
+                StatusLabel.Text = "Connected successfully!";
+                connectToolStripMenuItem.Enabled = false;
+                disconnectToolStripMenuItem.Enabled = true;
+            }
+            else
+            {
+                StatusLabel.Text = "Device is not connected";
+                connectToolStripMenuItem.Enabled = true;
+                disconnectToolStripMenuItem.Enabled = false;
+            }
+        }
+
+        private void disconnectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DeviceComm.Disconnect();
+            UpdateControls();
+        }
+
+        private void SetupDialogForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DeviceComm.Disconnect();
         }
     }
 }
