@@ -30,6 +30,158 @@ namespace ASCOM.OptecTCF_Driver
 
 #endregion
 
+#region DeviceComm Learn Related Methods
+
+        internal static int GetLearnedSlope(char AorB)
+        {
+            try 
+	        {	        
+		        if (AorB == 'A')
+                {
+                    string resp = SendCmd("FREADA",500,ExpectResponse, "A=");
+                    int i = resp.IndexOf("=") + 2;
+                    int slope = int.Parse(resp.Substring(i,3));
+                    return slope;
+
+                }
+                else if (AorB == 'B')
+                {
+                    string resp = SendCmd("FREADB",500,ExpectResponse, "B=");
+                    int i = resp.IndexOf("=") + 2;
+                    int slope = int.Parse(resp.Substring(i,3));
+                    return slope;
+                }
+                else 
+                {
+                    throw new InvalidValueException("GetLearnedSlope", AorB.ToString(), "Must be A or B");
+                }
+	        }
+	        catch (Exception Ex)
+	        {        		
+		        throw new DriverException("\nError executing GetLearnedSlope method.\n" + Ex.ToString(), Ex);
+	        }
+        }
+
+        internal static void LoadSlope(int slope, char AorB)
+        {
+            try
+            {
+                string cmd = "";
+                string slp = "";
+                if (slope > 999) throw new InvalidValueException("Load Slope", "Slope", "000 to 999");
+                if (slope < 0) throw new InvalidValueException("Load Slope", "Slope", "000 to 999");
+                slp = slope.ToString().PadLeft(3, '0');
+                if (AorB == 'A')
+                {
+                    
+                    cmd = "FLA" + slp;
+                }
+                else if (AorB == 'B')
+                {
+                    cmd = "FLB" + slp;
+                }
+                else 
+                { 
+                    throw new InvalidValueException("LoadSlope", AorB.ToString(), "Must be A or B"); 
+                }
+                
+                SendCmd(cmd, 500, ExpectResponse, "DONE");
+
+            }
+            catch (Exception Ex)
+            {
+                throw new DriverException("\nError executing LoadSlope method.\n" + Ex.ToString(), Ex);
+            }
+        }
+
+        internal static void SetFocuserDelay(int delay, char AorB)
+        {
+            try
+            {
+                if (delay < 1) throw new InvalidValueException("SetFocuserDelay", "Delay", "001 to 999");
+                if (delay > 999) throw new InvalidValueException("SetFocuserDelay", "Delay", "001 to 999");
+                if (AorB != 'A' && AorB != 'B') throw new InvalidValueException("SetFocuserDelay", "AorB", "A or B");
+                string cmd = delay.ToString().PadLeft(3, '0');
+                if (AorB == 'A')
+                {
+                    cmd = "FDA";
+                }
+                else if (AorB == 'B')
+                {
+                    cmd = "FDB";
+                }
+                cmd = cmd + delay.ToString().PadLeft(3, '0');    //cmd = FDAnnn or FDBnnn
+                SendCmd(cmd, 500, ExpectResponse, "DONE");
+            }
+            catch (Exception Ex)
+            {
+                throw new DriverException("\nError executing LoadSlope method.\n" + Ex.ToString(), Ex);
+            }
+        }
+
+        internal static char GetSlopeSign(char AorB)
+        {
+            try
+            {
+                if (AorB != 'A' && AorB != 'B') throw new InvalidValueException("SetFocuserDelay", "AorB", "A or B");
+                
+                string resp = "";
+                if (AorB == 'A')
+                {
+                    resp = SendCmd("FtxxxA", 500, ExpectNoResponse, "A=");
+                }
+                else if (AorB == 'B')
+                {
+                    resp = SendCmd("FtxxxB", 500, ExpectNoResponse, "B=");
+                }
+                int i = resp.IndexOf("=") + 1;
+                char signChar = resp[i];
+
+                if (signChar == '0') return '+';
+                else if (signChar == '1') return '-';
+                else throw new InvalidResponse("\n Expected slope sign 1 or 0.\n Received: " + signChar.ToString() + "\n");
+            }
+            catch (Exception Ex)
+            {
+                throw new DriverException("\nError executing GetSlopeSign method.\n" + Ex.ToString(), Ex);
+            }
+
+        }
+
+        internal static void SetSlopeSign(char sign, char AorB)
+        {
+            try
+            {
+                if (sign != '+' && sign != '-') throw new InvalidValueException("SetSlopeSign", "slope", "+ or -");
+                if (AorB != 'A' && AorB != 'B') throw new InvalidValueException("SetSlopeSign", "slope", "+ or -");
+                string cmd = "";
+                if (sign == 'A')
+                {
+                    cmd = "FZAxx";
+                }
+                else if (sign == 'B')
+                {
+                    cmd = "FZBxx";
+                }
+                if (sign == '+')
+                {
+                    cmd = cmd + "0";
+                }
+                else if (sign == '-')
+                {
+                    cmd = cmd + "1";
+                }
+                SendCmd(cmd, 500, ExpectResponse, "DONE");
+            }
+            catch (Exception Ex)
+            {    
+                throw new DriverException("\nError executing SetSlopeSign method./n" + Ex.ToString(), Ex);
+            }
+        }
+
+
+#endregion
+
 #region DeviceComm Connection METHODS
 
         internal static void Connect()
@@ -58,7 +210,7 @@ namespace ASCOM.OptecTCF_Driver
             catch (Exception Ex)  //thrown if the receive times out
             {
                 CurrentMode = DeviceModes.Unknown;
-                throw new ASCOM.DriverException("Connection attempt failed", Ex);
+                throw new ASCOM.DriverException("\nConnection attempt failed", Ex);
             }
         }
 
@@ -92,11 +244,6 @@ namespace ASCOM.OptecTCF_Driver
 
 #region DeviceComm Focuser Operations METHODS
 
-        internal static bool CheckIfConnected()
-        {
-            throw new System.NotImplementedException();
-        }
-
         internal static bool InTempCompMode()
         {
             if (CurrentMode == DeviceModes.AutoModeX) return true;
@@ -107,14 +254,33 @@ namespace ASCOM.OptecTCF_Driver
         {
             try
             {
-                throw new MethodNotImplementedException("MoveFocus");
+                int CurrentPos = GetPosition();
+                int diff = Math.Abs(CurrentPos - pos);
+                string cmd = "";
+                int TimeOut = 35 * 1000;    //35 Second timeout
+
+                if (CurrentPos == pos)
+                {
+                    return;
+                }
+                else if (CurrentPos > pos)
+                {
+                    cmd = "FI" + diff.ToString().PadLeft(4, '0');
+                    SendCmd(cmd, TimeOut, ExpectResponse, "!");
+                }
+                else if (CurrentPos < pos)
+                {
+                    cmd = "FI" + diff.ToString().PadLeft(4, '0');
+                    SendCmd(cmd, TimeOut, ExpectResponse, "!" ); 
+                }
             }
             catch (Exception Ex)
             {
-                throw new ASCOM.DriverException("Failed to move focus.\n" + Ex.ToString(), Ex);
+                throw new ASCOM.DriverException("\nFailed to move focus.\n" + Ex.ToString(), Ex);
             }
         }
-        public static int GetPosition()
+
+        internal static int GetPosition()
         {
             try
             {
@@ -125,11 +291,11 @@ namespace ASCOM.OptecTCF_Driver
             }
             catch (Exception Ex)
             {
-                throw new DriverException("Error retrieving position./n" + Ex.ToString(), Ex);
+                throw new DriverException("\nError retrieving position./n" + Ex.ToString(), Ex);
             }
         }
 
-        public static void MoveToCenter()
+        internal static void MoveToCenter()
         {
             try
             {
@@ -139,6 +305,7 @@ namespace ASCOM.OptecTCF_Driver
             catch { }
 
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -147,7 +314,8 @@ namespace ASCOM.OptecTCF_Driver
         /// <param name="ResponseDesired"></param>
         /// <param name="ResponseContains"></param>
         /// <returns></returns>
-        private static string SendCmd(string Cmd, int timeout, bool ResponseDesired, string ResponseContains)
+        private static string SendCmd(string Cmd, int timeout, bool ResponseDesired, 
+            string ResponseContains)
         {
             bool BadResponse = false;
             if (CurrentMode == DeviceModes.Sleeping && Cmd.Contains("FW"))
@@ -165,8 +333,8 @@ namespace ASCOM.OptecTCF_Driver
             else if (CurrentMode != DeviceModes.SerialLoop)
             {
                         //NOT ok to send command
-                throw new InvalidPrerequisits("Device is not in the correct state to send the command: " + Cmd + 
-                    "\nCurrent state is : " + CurrentMode.ToString());
+                throw new InvalidPrerequisits("\nDevice is not in the correct state to send the command: " + Cmd + 
+                    "\nCurrent state is : " + CurrentMode.ToString() + "\n" );
             }
 
             //SEND THE COMMAND//
@@ -241,7 +409,7 @@ namespace ASCOM.OptecTCF_Driver
                             SendCmd("FBxxxx", 500, ExpectResponse, "B");
                             break;
                         default:
-                            throw new ASCOM.InvalidValueException("Temp Comp Mode", mode.ToString(), "A or B");
+                            throw new ASCOM.InvalidValueException("\nTemp Comp Mode", mode.ToString(), "A or B");
                     }
                     CurrentMode = DeviceModes.AutoModeX;
                     System.Threading.Thread.Sleep(300);
@@ -256,24 +424,103 @@ namespace ASCOM.OptecTCF_Driver
             }
             catch (Exception Ex)
             {
-                string ErrorString = "Failed to change Focus Mode ";
+                string ErrorString = "\nFailed to change Auto Focus Mode ";
                 if (Enter) ErrorString += "while attempting to ENTER Temp Comp Mode.\n";
                 else ErrorString += "while attempting to EXIT Temp Comp Mode.\n";
                 throw new ASCOM.DriverException(ErrorString + Ex.ToString() + "\n" , Ex);
             }
         }
 
-        
+        internal static double GetTemperaterature()
+        {
+            try
+            {
+                string resp = SendCmd("FTMPRO", 500, ExpectResponse, "T=");
+                int i = resp.IndexOf("=") + 1;
+                string t = resp.Substring(i, 4);
+                double temp = double.Parse(t);
+                return temp;
+            }
+            catch (Exception Ex)
+            {
+                throw new DriverException("\n Unexpcted Error in GetTemperature method.\n" +
+                    Ex.ToString(), Ex);
+            }
+        }
+
+        internal static int GetMaxStep()
+        {
+            throw new MethodNotImplementedException("GetMaxStep");
+            string resp = "";
+            try
+            {
+                resp = SendCmd("???????", 500, ExpectResponse, "TCF");
+                if (resp == "??????")
+                    return 10000;
+                else if (resp == "???????")
+                {
+                    return 7000;
+                }
+                else
+                {
+                    throw new InvalidResponse("\nGetMaxStep command did not receive a valid response.\n" +
+                         "Response was: " + resp + ".\n");
+                }
+            }
+            catch (Exception Ex)
+            {
+                throw new DriverException("/nAn Unexpected error occured in GetMaxStep.\n" + Ex.ToString());
+            }
+        }
+
+        internal static double GetStepSize()
+        {
+            throw new MethodNotImplementedException("GetMaxStep");
+            string resp = "";
+            try
+            {
+                resp = SendCmd("???????", 500, ExpectResponse, "TCF");
+                if (resp == "??????")
+                    return 2.032;
+                else if (resp == "???????")
+                {
+                    return 2.54;
+                }
+                else
+                {
+                    throw new InvalidResponse("\nGetStepSize command did not receive a valid response.\n" +
+                         "Response was: " + resp + ".\n");
+                }
+            }
+            catch (Exception Ex)
+            {
+                throw new DriverException("/nAn Unexpected error occured in GetStepSize.\n" + Ex.ToString());
+            }
+        }
+
+        internal static void QuietModeOn(bool state)
+        {
+            try
+            {
+                if (state == true)  //enable output of data every se
+                {
+                    SendCmd("FQUIT0", 500, ExpectResponse, "DONE");
+                }
+                else                 //disable data output
+                {
+                    SendCmd("FQUIT1", 500, ExpectResponse, "DONE");
+                }
+            }
+            catch (Exception Ex)
+            {       
+                throw new DriverException("\n An error occured while setting QuietMode.\n" 
+                    + Ex.ToString(), Ex);
+            }
+        }
+
 
 #endregion
 
-
-
-
-        internal static double GetTemperaterature()
-        {
-            throw new System.NotImplementedException();
-        }
     }   //end of the DeviceComm class
 
 
