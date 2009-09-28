@@ -25,6 +25,17 @@ else j+= "FAILED to enter Temp Comp Mode\n";
 F.TempComp = false;
 if (F.TempComp == false) j+= "Exited Temperature Mode!\n";
 else j+= "Failed to Exit Temp Comp Mode\n";
+j+= "Max Increment = " + F.MaxIncrement + "\n";
+j+= "Max Step = " + F.MaxStep + "\n";
+j+= "Step Size = " + F.StepSize + "\n";
+j+= "Position = " + F.Position + "\n";
+j+= "Moving to 3500... \n";
+F.Move(3300);
+j+= "New Position = " + F.Position + "\n";
+j+= "Moving to 3300... \n";
+F.Move(3500);
+j+= "New Position = " + F.Position + "\n";
+
 
 
 

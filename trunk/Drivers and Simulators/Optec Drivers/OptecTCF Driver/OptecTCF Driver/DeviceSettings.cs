@@ -10,31 +10,42 @@ namespace ASCOM.OptecTCF_Driver
         private static ASCOM.Utilities.Profile Prof;
         private const string ProfileString_LastPort = "LastUsedCOMPort";
         private const string ProfileString_AutoMode = "AutoMode";
-        private static bool t_PortSelected;
-        private static string t_LastPort;
+
         
         static DeviceSettings()
         {
-            
-            t_PortSelected = false;
-            Prof = new ASCOM.Utilities.Profile(true);
-            Prof.DeviceType = "Focuser";
+            try
+            {
+                t_PortSelected = false;
+                Prof = new ASCOM.Utilities.Profile(true);
+                Prof.DeviceType = "Focuser";
 
-            ///Check if a port has been selected in the past
-            string PortToUse;
-            PortToUse = Prof.GetValue(Focuser.s_csDriverID, ProfileString_LastPort, "", "");
-            if (PortToUse == "") t_PortSelected = false;
-            else if (PortToUse.Substring(0, 3) == "COM" && PortToUse.Length > 3)
-            {
-                t_PortSelected = true;
-                t_LastPort = PortToUse;
+                ///Check if a port has been selected in the past
+                string PortToUse;
+                PortToUse = Prof.GetValue(Focuser.s_csDriverID, ProfileString_LastPort, "", "");
+                if (PortToUse == "") t_PortSelected = false;
+                else if (PortToUse.Substring(0, 3) == "COM" && PortToUse.Length > 3)
+                {
+                    t_PortSelected = true;
+                    t_LastPort = PortToUse;
+                }
+                else
+                {
+                    throw new ApplicationException("The COM Port string stored in the config does not " +
+                        "contain COMnn.\n The method which stores the COM string contains an error");
+                }
+
+                
             }
-            else
+            catch (Exception Ex)
             {
-                throw new ApplicationException("The COM Port string stored in the config does not " +
-                    "contain COMnn.\n The method which stores the COM string contains an error");
+                throw new DriverException("\nError initializing device settings. \n " + Ex.ToString(), Ex);
             }
         }
+        #region Device Properties
+
+        private static bool t_PortSelected;
+        private static string t_LastPort;
 
         internal static bool PortSelected
         {
@@ -49,6 +60,10 @@ namespace ASCOM.OptecTCF_Driver
                return Prof.GetValue(Focuser.s_csDriverID, ProfileString_LastPort);
             }
         }
+
+        #endregion
+
+        #region DeviceSettings Methods
 
         internal static void SetCOMPort(string p)
         {
@@ -65,15 +80,17 @@ namespace ASCOM.OptecTCF_Driver
             throw new System.NotImplementedException();
         }
 
-        //internal static string GetDeviceType()
-        //{
-
-        //}
 
         internal static string GetComPort()
         {
             t_LastPort = Prof.GetValue(Focuser.s_csDriverID, ProfileString_LastPort, "", "");
             return t_LastPort;
         }
+
+        #endregion
+
+
+
+
     }
 }
