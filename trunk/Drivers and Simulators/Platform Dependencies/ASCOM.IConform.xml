@@ -6,20 +6,7 @@ ASCOM.IConform
 </name>
 </assembly>
 <members>
-<member name="P:ASCOM.Conform.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:ASCOM.Conform.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:ASCOM.Conform.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
-</member><member name="P:ASCOM.Conform.IConform.ConformErrors">
+<member name="P:ASCOM.Conform.IConform.ConformErrors">
 	<summary>
  Error numbers returned for "Not Implemented", "Invalid Value" and "Not Set" error states.
  </summary>
@@ -220,6 +207,19 @@ ASCOM.IConform
  CommandXXX commands.
  </summary>
 	<remarks></remarks>
+</member><member name="P:ASCOM.Conform.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:ASCOM.Conform.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:ASCOM.Conform.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
 </member>
 </members>
 </doc>

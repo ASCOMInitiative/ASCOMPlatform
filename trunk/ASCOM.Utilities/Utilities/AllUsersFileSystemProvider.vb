@@ -6,6 +6,7 @@
 Imports System.IO
 Imports ASCOM.Utilities.Interfaces
 Imports System.Security.AccessControl
+Imports System.Security.Principal
 
 Friend Class AllUsersFileSystemProvider
 
@@ -39,19 +40,36 @@ Friend Class AllUsersFileSystemProvider
         End Get
     End Property
 
-    Friend Sub CreateDirectory(ByVal p_SubKeyName As String) Implements IFileStoreProvider.CreateDirectory
+    Friend Sub CreateDirectory(ByVal p_SubKeyName As String, ByVal p_TL As TraceLogger) Implements IFileStoreProvider.CreateDirectory
         'Creates a directory in the supplied path (p_SubKeyName)
         Try
+            p_TL.LogMessage("  CreateDirectory", "Creating directory for: """ & p_SubKeyName & """")
             Directory.CreateDirectory(CreatePath(p_SubKeyName))
+            p_TL.LogMessage("  CreateDirectory", "Created directory OK")
             If p_SubKeyName = "\" Then
+                p_TL.LogMessage("  CreateDirectory", "Setting security on Root directory")
                 Dim dInfo As New DirectoryInfo(CreatePath(p_SubKeyName))
                 Dim dSecurity As DirectorySecurity
+
+                'PWGS 5.5.2.0 Fix for users security group not being globally usable
+                'Build a temp domainSID using the Null SID passed in as a SDDL string. The constructor will 
+                'accept the traditional notation or the SDDL notation interchangeably.
+                Dim DomainSid As New SecurityIdentifier("S-1-0-0")
+                'Create a security Identifier for the BuiltinUsers Group to be passed to the new accessrule
+                Dim Ident As New SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, DomainSid)
+                p_TL.LogMessage("  CreateDirectory", "Creating security rules")
                 dSecurity = dInfo.GetAccessControl
-                dSecurity.AddAccessRule(New FileSystemAccessRule("Users", FileSystemRights.Delete, InheritanceFlags.ContainerInherit, PropagationFlags.InheritOnly, AccessControlType.Allow))
-                dSecurity.AddAccessRule(New FileSystemAccessRule("Users", FileSystemRights.DeleteSubdirectoriesAndFiles, InheritanceFlags.ContainerInherit, PropagationFlags.InheritOnly, AccessControlType.Allow))
+                'dSecurity.AddAccessRule(New FileSystemAccessRule("Users", FileSystemRights.Delete, InheritanceFlags.ContainerInherit, PropagationFlags.InheritOnly, AccessControlType.Allow))
+                'dSecurity.AddAccessRule(New FileSystemAccessRule("Users", FileSystemRights.DeleteSubdirectoriesAndFiles, InheritanceFlags.ContainerInherit, PropagationFlags.InheritOnly, AccessControlType.Allow))
+                dSecurity.AddAccessRule(New FileSystemAccessRule(Ident, FileSystemRights.Delete, InheritanceFlags.ContainerInherit, PropagationFlags.InheritOnly, AccessControlType.Allow))
+                dSecurity.AddAccessRule(New FileSystemAccessRule(Ident, FileSystemRights.DeleteSubdirectoriesAndFiles, InheritanceFlags.ContainerInherit, PropagationFlags.InheritOnly, AccessControlType.Allow))
+                p_TL.LogMessage("  CreateDirectory", "Added access rules")
+
                 dInfo.SetAccessControl(dSecurity)
+                p_TL.LogMessage("  CreateDirectory", "Successfully set security ACL!")
             End If
         Catch ex As Exception
+            p_TL.LogMessage("FileSystem.CreateDirectory", "Exception: " & ex.ToString)
             MsgBox("CreateDirectory Exception: " & ex.ToString)
         End Try
     End Sub

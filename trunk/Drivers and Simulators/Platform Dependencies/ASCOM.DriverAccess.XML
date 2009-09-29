@@ -4,121 +4,101 @@
         <name>ASCOM.DriverAccess</name>
     </assembly>
     <members>
-        <member name="T:ASCOM.DriverAccess.Focuser">
+        <member name="T:ASCOM.DriverAccess.Switch">
             <summary>
-            Provides universal access to Focuser drivers
+            Provides universal access to Switch drivers
             </summary>
         </member>
-        <member name="M:ASCOM.DriverAccess.Focuser.#ctor(System.String)">
+        <member name="M:ASCOM.DriverAccess.Switch.#ctor(System.String)">
             <summary>
-            Creates a focuser object with the given Prog ID
+            Creates a Switch object with the given Prog ID
             </summary>
-            <param name="focuserID"></param>
+            <param name="switchID"></param>
         </member>
-        <member name="M:ASCOM.DriverAccess.Focuser.Choose(System.String)">
+        <member name="M:ASCOM.DriverAccess.Switch.Choose(System.String)">
             <summary>
-            Brings up the ASCOM Chooser Dialog to choose a Focuser
+            Brings up the ASCOM Chooser Dialog to choose a Switch
             </summary>
-            <param name="focuserID">Focuser Prog ID for default or null for None</param>
-            <returns>Prog ID for chosen focuser or null for none</returns>
+            <param name="switchID">Switch Prog ID for default or null for None</param>
+            <returns>Prog ID for chosen Switch or null for none</returns>
         </member>
-        <member name="M:ASCOM.DriverAccess.Focuser.Halt">
+        <member name="M:ASCOM.DriverAccess.Switch.GetSwitch(System.Int16)">
             <summary>
-            Immediately stop any focuser motion due to a previous Move() method call.
-            Some focusers may not support this function, in which case an exception will be raised. 
-            Recommendation: Host software should call this method upon initialization and,
-            if it fails, disable the Halt button in the user interface. 
+            Returns the state of the switch number ID
             </summary>
+            <param name="ID">Switch numbr</param>
+            <returns>Switch state, True is on, False off</returns>
         </member>
-        <member name="M:ASCOM.DriverAccess.Focuser.Move(System.Int32)">
+        <member name="M:ASCOM.DriverAccess.Switch.GetSwitchName(System.Int16)">
             <summary>
-            Step size (microns) for the focuser.
-            Raises an exception if the focuser does not intrinsically know what the step size is. 
+            Returns the switch state
             </summary>
-            <param name="val"></param>
+            <param name="ID">Switch name</param>
+            <returns>Switch state, True is On, False off</returns>
         </member>
-        <member name="M:ASCOM.DriverAccess.Focuser.SetupDialog">
+        <member name="M:ASCOM.DriverAccess.Switch.SetSwitch(System.Int16,System.Boolean)">
             <summary>
-            Display a dialog box for the user to enter in custom setup parameters, such as a COM port selection.
-            If no dialog is required or supported, the method shall return immediately. 
+            Sets a switch 
             </summary>
+            <param name="ID">Switch number</param>
+            <param name="State">State, true is on, false off</param>
         </member>
-        <member name="M:ASCOM.DriverAccess.Focuser.Dispose">
+        <member name="M:ASCOM.DriverAccess.Switch.SetSwitchName(System.Int16,System.String)">
+            <summary>
+            Turn a switch on or off
+            </summary>
+            <param name="ID">Switch name</param>
+            <param name="State">true is on, false off</param>
+        </member>
+        <member name="M:ASCOM.DriverAccess.Switch.SetupDialog">
+            <summary>
+            Launches a configuration dialog box for the driver.  The call will not return
+            until the user clicks OK or cancel manually.
+            </summary>
+            <exception cref="T:System.Exception">Must throw an exception if Setup dialog is unavailable.</exception>
+        </member>
+        <member name="M:ASCOM.DriverAccess.Switch.Dispose">
             <summary>
             Dispose the late-bound interface, if needed. Will release it via COM
             if it is a COM object, else if native .NET will just dereference it
             for GC.
             </summary>
         </member>
-        <member name="P:ASCOM.DriverAccess.Focuser.Absolute">
+        <member name="P:ASCOM.DriverAccess.Switch.Connected">
             <summary>
-            True if the focuser is capable of absolute position; that is, being commanded to a specific step location.
+            Set True to Connect to the switches; set False to terminate the Connection.
+            The current Connected status can also be read back as this property.
+            An exception will be raised if the Connected fails to change state for any reason.
             </summary>
         </member>
-        <member name="P:ASCOM.DriverAccess.Focuser.IsMoving">
+        <member name="P:ASCOM.DriverAccess.Switch.Description">
             <summary>
-            True if the focuser is currently moving to a new position. False if the focuser is stationary.
+            Returns a description of the Switch controller
             </summary>
         </member>
-        <member name="P:ASCOM.DriverAccess.Focuser.Link">
+        <member name="P:ASCOM.DriverAccess.Switch.DriverInfo">
             <summary>
-            State of the connection to the focuser.
-            et True to start the link to the focuser; set False to terminate the link. 
-            The current link status can also be read back as this property. 
-            An exception will be raised if the link fails to change state for any reason. 
+            Returns the driver info
             </summary>
         </member>
-        <member name="P:ASCOM.DriverAccess.Focuser.MaxIncrement">
+        <member name="P:ASCOM.DriverAccess.Switch.DriverVersion">
             <summary>
-            Maximum increment size allowed by the focuser; 
-            i.e. the maximum number of steps allowed in one move operation.
-            For most focusers this is the same as the MaxStep property.
-            This is normally used to limit the Increment display in the host software. 
+            Returns the driver version
             </summary>
         </member>
-        <member name="P:ASCOM.DriverAccess.Focuser.MaxStep">
+        <member name="P:ASCOM.DriverAccess.Switch.InterfaceVersion">
             <summary>
-            Maximum step position permitted.
-            The focuser can step between 0 and MaxStep. 
-            If an attempt is made to move the focuser beyond these limits,
-            it will automatically stop at the limit. 
+            Returns the Switch Interface version
             </summary>
         </member>
-        <member name="P:ASCOM.DriverAccess.Focuser.Position">
+        <member name="P:ASCOM.DriverAccess.Switch.MaxSwitch">
             <summary>
-            Current focuser position, in steps.
-            Valid only for absolute positioning focusers (see the Absolute property).
-            An exception will be raised for relative positioning focusers.   
+            Returns the number of switches
             </summary>
         </member>
-        <member name="P:ASCOM.DriverAccess.Focuser.StepSize">
+        <member name="P:ASCOM.DriverAccess.Switch.Name">
             <summary>
-            Step size (microns) for the focuser.
-            Raises an exception if the focuser does not intrinsically know what the step size is. 
-            
-            </summary>
-        </member>
-        <member name="P:ASCOM.DriverAccess.Focuser.TempComp">
-            <summary>
-            The state of temperature compensation mode (if available), else always False.
-            If the TempCompAvailable property is True, then setting TempComp to True
-            puts the focuser into temperature tracking mode. While in temperature tracking mode,
-            Move commands will be rejected by the focuser. Set to False to turn off temperature tracking.
-            An exception will be raised if TempCompAvailable is False and an attempt is made to set TempComp to true. 
-            
-            </summary>
-        </member>
-        <member name="P:ASCOM.DriverAccess.Focuser.TempCompAvailable">
-            <summary>
-            True if focuser has temperature compensation available.
-            Will be True only if the focuser's temperature compensation can be turned on and off via the TempComp property. 
-            </summary>
-        </member>
-        <member name="P:ASCOM.DriverAccess.Focuser.Temperature">
-            <summary>
-            Current ambient temperature as measured by the focuser.
-            Raises an exception if ambient temperature is not available.
-            Commonly available on focusers with a built-in temperature compensation mode. 
+            returns the name of the switch interface
             </summary>
         </member>
         <member name="T:ASCOM.DriverAccess.Dome">
@@ -349,6 +329,162 @@
             True if any part of the dome is currently moving, False if all dome components are steady.
             Raises an error if Dome.Slaved is True, if not supported, if a communications failure occurs,
             or if the dome can not reach indicated azimuth. 
+            </summary>
+        </member>
+        <member name="T:ASCOM.DriverAccess.Rotator">
+            <summary>
+            Provides universal access to Rotator drivers
+            </summary>
+        </member>
+        <member name="M:ASCOM.DriverAccess.Rotator.#ctor(System.String)">
+            <summary>
+            Creates a rotator object with the given Prog ID
+            </summary>
+            <param name="rotatorID"></param>
+        </member>
+        <member name="M:ASCOM.DriverAccess.Rotator.Choose(System.String)">
+            <summary>
+            Brings up the ASCOM Chooser Dialog to choose a Rotator
+            </summary>
+            <param name="rotatorID">Focuser Prog ID for default or null for None</param>
+            <returns>Prog ID for chosen Rotator or null for none</returns>
+        </member>
+        <member name="M:ASCOM.DriverAccess.Rotator.Halt">
+            <summary>
+            Immediately stop any Rotator motion due to a previous Move() or MoveAbsolute() method call.
+            </summary>
+        </member>
+        <member name="M:ASCOM.DriverAccess.Rotator.Move(System.Single)">
+            <summary>
+            Causes the rotator to move Position degrees relative to the current Position value.
+            </summary>
+            <param name="Position">Relative position to move in degrees from current Position.</param>
+        </member>
+        <member name="M:ASCOM.DriverAccess.Rotator.MoveAbsolute(System.Single)">
+            <summary>
+            Causes the rotator to move the absolute position of Position degrees.
+            </summary>
+            <param name="Position">absolute position in degrees.</param>
+        </member>
+        <member name="M:ASCOM.DriverAccess.Rotator.SetupDialog">
+            <summary>
+            Display a dialog box for the user to enter in custom setup parameters, such as a COM port selection.
+            </summary>
+        </member>
+        <member name="M:ASCOM.DriverAccess.Rotator.Dispose">
+            <summary>
+            Dispose the late-bound interface, if needed. Will release it via COM
+            if it is a COM object, else if native .NET will just dereference it
+            for GC.
+            </summary>
+        </member>
+        <member name="P:ASCOM.DriverAccess.Rotator.CanReverse">
+            <summary>
+            Returns True if the Rotator supports the Rotator.Reverse() method.
+            </summary>
+        </member>
+        <member name="P:ASCOM.DriverAccess.Rotator.Connected">
+            <summary>
+            Set True to start the Connected to the Rotator; set False to terminate the Connected.
+            The current Connected status can also be read back as this property.
+            An exception will be raised if the Connected fails to change state for any reason.
+            </summary>
+        </member>
+        <member name="P:ASCOM.DriverAccess.Rotator.IsMoving">
+            <summary>
+            True if the Rotator is currently moving to a new position. False if the Rotator is stationary.
+            </summary>
+        </member>
+        <member name="P:ASCOM.DriverAccess.Rotator.Position">
+            <summary>
+            Current instantaneous Rotator position, in degrees.
+            </summary>
+        </member>
+        <member name="P:ASCOM.DriverAccess.Rotator.Reverse">
+            <summary>
+            Sets or Returns the rotator’s Reverse state.
+            </summary>
+        </member>
+        <member name="P:ASCOM.DriverAccess.Rotator.StepSize">
+            <summary>
+            The minimum StepSize, in degrees.
+            </summary>
+        </member>
+        <member name="P:ASCOM.DriverAccess.Rotator.TargetPosition">
+            <summary>
+            Current Rotator target position, in degrees.
+            </summary>
+        </member>
+        <member name="T:ASCOM.DriverAccess.FilterWheel">
+            <summary>
+            Provides universal access to FilterWheel drivers
+            </summary>
+        </member>
+        <member name="M:ASCOM.DriverAccess.FilterWheel.#ctor(System.String)">
+            <summary>
+            Creates a FilterWheel object with the given Prog ID
+            </summary>
+            <param name="filterWheelID"></param>
+        </member>
+        <member name="M:ASCOM.DriverAccess.FilterWheel.Choose(System.String)">
+            <summary>
+            Brings up the ASCOM Chooser Dialog to choose a FilterWheel
+            </summary>
+            <param name="filterWheelID">FilterWheel Prog ID for default or null for None</param>
+            <returns>Prog ID for chosen FilterWheel or null for none</returns>
+        </member>
+        <member name="M:ASCOM.DriverAccess.FilterWheel.SetupDialog">
+            <summary>
+            Launches a configuration dialog box for the driver.  The call will not return
+            until the user clicks OK or cancel manually.
+            </summary>
+            <exception cref="T:System.Exception">Must throw an exception if Setup dialog is unavailable.</exception>
+        </member>
+        <member name="M:ASCOM.DriverAccess.FilterWheel.Dispose">
+            <summary>
+            Dispose the late-bound interface, if needed. Will release it via COM
+            if it is a COM object, else if native .NET will just dereference it
+            for GC.
+            </summary>
+        </member>
+        <member name="P:ASCOM.DriverAccess.FilterWheel.Connected">
+            <summary>
+            Controls the link between the driver and the filter wheel. Set True to enable
+            the link. Set False to disable the link. You can also read the property to check
+            whether it is connected.
+            </summary>
+        </member>
+        <member name="P:ASCOM.DriverAccess.FilterWheel.FocusOffsets">
+            <summary>
+            For each valid slot number (from 0 to N-1), reports the focus offset for
+            the given filter position.  These values are focuser- and filter
+            -dependent, and  would usually be set up by the user via the SetupDialog.
+            The number of slots N can be determined from the length of the array.
+            If focuser offsets are not available, then it should report back 0 for all
+            array values.
+            </summary>
+        </member>
+        <member name="P:ASCOM.DriverAccess.FilterWheel.Names">
+            <summary>
+            For each valid slot number (from 0 to N-1), reports the name given to the
+            filter position.  These names would usually be set up by the user via the
+            SetupDialog.  The number of slots N can be determined from the length of
+            the array.  If filter names are not available, then it should report back
+            "Filter 1", "Filter 2", etc.
+            </summary>
+        </member>
+        <member name="P:ASCOM.DriverAccess.FilterWheel.Position">
+            <summary>
+            Write number between 0 and N-1, where N is the number of filter slots (see
+            Filter.Names). Starts filter wheel rotation immediately when written*. Reading
+            the property gives current slot number (if wheel stationary) or -1 if wheel is
+            moving. This is mandatory; valid slot numbers shall not be reported back while
+            the filter wheel is rotating past filter positions.
+            
+            Note that some filter wheels are built into the camera (one driver, two
+            interfaces).  Some cameras may not actually rotate the wheel until the
+            exposure is triggered.  In this case, the written value is available
+            immediately as the read value, and -1 is never produced.
             </summary>
         </member>
         <member name="T:ASCOM.DriverAccess.Camera">
@@ -758,259 +894,6 @@
             <summary>
             Sets the subframe start position for the Y axis (0 based). Also returns the
             current value.  If binning is active, value is in binned pixels.
-            </summary>
-        </member>
-        <member name="T:ASCOM.DriverAccess.Switch">
-            <summary>
-            Provides universal access to Switch drivers
-            </summary>
-        </member>
-        <member name="M:ASCOM.DriverAccess.Switch.#ctor(System.String)">
-            <summary>
-            Creates a Switch object with the given Prog ID
-            </summary>
-            <param name="switchID"></param>
-        </member>
-        <member name="M:ASCOM.DriverAccess.Switch.Choose(System.String)">
-            <summary>
-            Brings up the ASCOM Chooser Dialog to choose a Switch
-            </summary>
-            <param name="switchID">Switch Prog ID for default or null for None</param>
-            <returns>Prog ID for chosen Switch or null for none</returns>
-        </member>
-        <member name="M:ASCOM.DriverAccess.Switch.GetSwitch(System.Int16)">
-            <summary>
-            Returns the state of the switch number ID
-            </summary>
-            <param name="ID">Switch numbr</param>
-            <returns>Switch state, True is on, False off</returns>
-        </member>
-        <member name="M:ASCOM.DriverAccess.Switch.GetSwitchName(System.Int16)">
-            <summary>
-            Returns the switch state
-            </summary>
-            <param name="ID">Switch name</param>
-            <returns>Switch state, True is On, False off</returns>
-        </member>
-        <member name="M:ASCOM.DriverAccess.Switch.SetSwitch(System.Int16,System.Boolean)">
-            <summary>
-            Sets a switch 
-            </summary>
-            <param name="ID">Switch number</param>
-            <param name="State">State, true is on, false off</param>
-        </member>
-        <member name="M:ASCOM.DriverAccess.Switch.SetSwitchName(System.Int16,System.String)">
-            <summary>
-            Turn a switch on or off
-            </summary>
-            <param name="ID">Switch name</param>
-            <param name="State">true is on, false off</param>
-        </member>
-        <member name="M:ASCOM.DriverAccess.Switch.SetupDialog">
-            <summary>
-            Launches a configuration dialog box for the driver.  The call will not return
-            until the user clicks OK or cancel manually.
-            </summary>
-            <exception cref="T:System.Exception">Must throw an exception if Setup dialog is unavailable.</exception>
-        </member>
-        <member name="M:ASCOM.DriverAccess.Switch.Dispose">
-            <summary>
-            Dispose the late-bound interface, if needed. Will release it via COM
-            if it is a COM object, else if native .NET will just dereference it
-            for GC.
-            </summary>
-        </member>
-        <member name="P:ASCOM.DriverAccess.Switch.Connected">
-            <summary>
-            Set True to Connect to the switches; set False to terminate the Connection.
-            The current Connected status can also be read back as this property.
-            An exception will be raised if the Connected fails to change state for any reason.
-            </summary>
-        </member>
-        <member name="P:ASCOM.DriverAccess.Switch.Description">
-            <summary>
-            Returns a description of the Switch controller
-            </summary>
-        </member>
-        <member name="P:ASCOM.DriverAccess.Switch.DriverInfo">
-            <summary>
-            Returns the driver info
-            </summary>
-        </member>
-        <member name="P:ASCOM.DriverAccess.Switch.DriverVersion">
-            <summary>
-            Returns the driver version
-            </summary>
-        </member>
-        <member name="P:ASCOM.DriverAccess.Switch.InterfaceVersion">
-            <summary>
-            Returns the Switch Interface version
-            </summary>
-        </member>
-        <member name="P:ASCOM.DriverAccess.Switch.MaxSwitch">
-            <summary>
-            Returns the number of switches
-            </summary>
-        </member>
-        <member name="P:ASCOM.DriverAccess.Switch.Name">
-            <summary>
-            returns the name of the switch interface
-            </summary>
-        </member>
-        <member name="T:ASCOM.DriverAccess.Rotator">
-            <summary>
-            Provides universal access to Rotator drivers
-            </summary>
-        </member>
-        <member name="M:ASCOM.DriverAccess.Rotator.#ctor(System.String)">
-            <summary>
-            Creates a rotator object with the given Prog ID
-            </summary>
-            <param name="rotatorID"></param>
-        </member>
-        <member name="M:ASCOM.DriverAccess.Rotator.Choose(System.String)">
-            <summary>
-            Brings up the ASCOM Chooser Dialog to choose a Rotator
-            </summary>
-            <param name="rotatorID">Focuser Prog ID for default or null for None</param>
-            <returns>Prog ID for chosen Rotator or null for none</returns>
-        </member>
-        <member name="M:ASCOM.DriverAccess.Rotator.Halt">
-            <summary>
-            Immediately stop any Rotator motion due to a previous Move() or MoveAbsolute() method call.
-            </summary>
-        </member>
-        <member name="M:ASCOM.DriverAccess.Rotator.Move(System.Single)">
-            <summary>
-            Causes the rotator to move Position degrees relative to the current Position value.
-            </summary>
-            <param name="Position">Relative position to move in degrees from current Position.</param>
-        </member>
-        <member name="M:ASCOM.DriverAccess.Rotator.MoveAbsolute(System.Single)">
-            <summary>
-            Causes the rotator to move the absolute position of Position degrees.
-            </summary>
-            <param name="Position">absolute position in degrees.</param>
-        </member>
-        <member name="M:ASCOM.DriverAccess.Rotator.SetupDialog">
-            <summary>
-            Display a dialog box for the user to enter in custom setup parameters, such as a COM port selection.
-            </summary>
-        </member>
-        <member name="M:ASCOM.DriverAccess.Rotator.Dispose">
-            <summary>
-            Dispose the late-bound interface, if needed. Will release it via COM
-            if it is a COM object, else if native .NET will just dereference it
-            for GC.
-            </summary>
-        </member>
-        <member name="P:ASCOM.DriverAccess.Rotator.CanReverse">
-            <summary>
-            Returns True if the Rotator supports the Rotator.Reverse() method.
-            </summary>
-        </member>
-        <member name="P:ASCOM.DriverAccess.Rotator.Connected">
-            <summary>
-            Set True to start the Connected to the Rotator; set False to terminate the Connected.
-            The current Connected status can also be read back as this property.
-            An exception will be raised if the Connected fails to change state for any reason.
-            </summary>
-        </member>
-        <member name="P:ASCOM.DriverAccess.Rotator.IsMoving">
-            <summary>
-            True if the Rotator is currently moving to a new position. False if the Rotator is stationary.
-            </summary>
-        </member>
-        <member name="P:ASCOM.DriverAccess.Rotator.Position">
-            <summary>
-            Current instantaneous Rotator position, in degrees.
-            </summary>
-        </member>
-        <member name="P:ASCOM.DriverAccess.Rotator.Reverse">
-            <summary>
-            Sets or Returns the rotator’s Reverse state.
-            </summary>
-        </member>
-        <member name="P:ASCOM.DriverAccess.Rotator.StepSize">
-            <summary>
-            The minimum StepSize, in degrees.
-            </summary>
-        </member>
-        <member name="P:ASCOM.DriverAccess.Rotator.TargetPosition">
-            <summary>
-            Current Rotator target position, in degrees.
-            </summary>
-        </member>
-        <member name="T:ASCOM.DriverAccess.FilterWheel">
-            <summary>
-            Provides universal access to FilterWheel drivers
-            </summary>
-        </member>
-        <member name="M:ASCOM.DriverAccess.FilterWheel.#ctor(System.String)">
-            <summary>
-            Creates a FilterWheel object with the given Prog ID
-            </summary>
-            <param name="filterWheelID"></param>
-        </member>
-        <member name="M:ASCOM.DriverAccess.FilterWheel.Choose(System.String)">
-            <summary>
-            Brings up the ASCOM Chooser Dialog to choose a FilterWheel
-            </summary>
-            <param name="filterWheelID">FilterWheel Prog ID for default or null for None</param>
-            <returns>Prog ID for chosen FilterWheel or null for none</returns>
-        </member>
-        <member name="M:ASCOM.DriverAccess.FilterWheel.SetupDialog">
-            <summary>
-            Launches a configuration dialog box for the driver.  The call will not return
-            until the user clicks OK or cancel manually.
-            </summary>
-            <exception cref="T:System.Exception">Must throw an exception if Setup dialog is unavailable.</exception>
-        </member>
-        <member name="M:ASCOM.DriverAccess.FilterWheel.Dispose">
-            <summary>
-            Dispose the late-bound interface, if needed. Will release it via COM
-            if it is a COM object, else if native .NET will just dereference it
-            for GC.
-            </summary>
-        </member>
-        <member name="P:ASCOM.DriverAccess.FilterWheel.Connected">
-            <summary>
-            Controls the link between the driver and the filter wheel. Set True to enable
-            the link. Set False to disable the link. You can also read the property to check
-            whether it is connected.
-            </summary>
-        </member>
-        <member name="P:ASCOM.DriverAccess.FilterWheel.FocusOffsets">
-            <summary>
-            For each valid slot number (from 0 to N-1), reports the focus offset for
-            the given filter position.  These values are focuser- and filter
-            -dependent, and  would usually be set up by the user via the SetupDialog.
-            The number of slots N can be determined from the length of the array.
-            If focuser offsets are not available, then it should report back 0 for all
-            array values.
-            </summary>
-        </member>
-        <member name="P:ASCOM.DriverAccess.FilterWheel.Names">
-            <summary>
-            For each valid slot number (from 0 to N-1), reports the name given to the
-            filter position.  These names would usually be set up by the user via the
-            SetupDialog.  The number of slots N can be determined from the length of
-            the array.  If filter names are not available, then it should report back
-            "Filter 1", "Filter 2", etc.
-            </summary>
-        </member>
-        <member name="P:ASCOM.DriverAccess.FilterWheel.Position">
-            <summary>
-            Write number between 0 and N-1, where N is the number of filter slots (see
-            Filter.Names). Starts filter wheel rotation immediately when written*. Reading
-            the property gives current slot number (if wheel stationary) or -1 if wheel is
-            moving. This is mandatory; valid slot numbers shall not be reported back while
-            the filter wheel is rotating past filter positions.
-            
-            Note that some filter wheels are built into the camera (one driver, two
-            interfaces).  Some cameras may not actually rotate the wheel until the
-            exposure is triggered.  In this case, the written value is available
-            immediately as the read value, and -1 is never produced.
             </summary>
         </member>
         <member name="T:ASCOM.DriverAccess.Telescope">
@@ -1791,6 +1674,123 @@
             <summary>
             The minimum rate (degrees per second)
             This must always be a positive number. It indicates the maximum rate in either direction about the axis. 
+            </summary>
+        </member>
+        <member name="T:ASCOM.DriverAccess.Focuser">
+            <summary>
+            Provides universal access to Focuser drivers
+            </summary>
+        </member>
+        <member name="M:ASCOM.DriverAccess.Focuser.#ctor(System.String)">
+            <summary>
+            Creates a focuser object with the given Prog ID
+            </summary>
+            <param name="focuserID"></param>
+        </member>
+        <member name="M:ASCOM.DriverAccess.Focuser.Choose(System.String)">
+            <summary>
+            Brings up the ASCOM Chooser Dialog to choose a Focuser
+            </summary>
+            <param name="focuserID">Focuser Prog ID for default or null for None</param>
+            <returns>Prog ID for chosen focuser or null for none</returns>
+        </member>
+        <member name="M:ASCOM.DriverAccess.Focuser.Halt">
+            <summary>
+            Immediately stop any focuser motion due to a previous Move() method call.
+            Some focusers may not support this function, in which case an exception will be raised. 
+            Recommendation: Host software should call this method upon initialization and,
+            if it fails, disable the Halt button in the user interface. 
+            </summary>
+        </member>
+        <member name="M:ASCOM.DriverAccess.Focuser.Move(System.Int32)">
+            <summary>
+            Step size (microns) for the focuser.
+            Raises an exception if the focuser does not intrinsically know what the step size is. 
+            </summary>
+            <param name="val"></param>
+        </member>
+        <member name="M:ASCOM.DriverAccess.Focuser.SetupDialog">
+            <summary>
+            Display a dialog box for the user to enter in custom setup parameters, such as a COM port selection.
+            If no dialog is required or supported, the method shall return immediately. 
+            </summary>
+        </member>
+        <member name="M:ASCOM.DriverAccess.Focuser.Dispose">
+            <summary>
+            Dispose the late-bound interface, if needed. Will release it via COM
+            if it is a COM object, else if native .NET will just dereference it
+            for GC.
+            </summary>
+        </member>
+        <member name="P:ASCOM.DriverAccess.Focuser.Absolute">
+            <summary>
+            True if the focuser is capable of absolute position; that is, being commanded to a specific step location.
+            </summary>
+        </member>
+        <member name="P:ASCOM.DriverAccess.Focuser.IsMoving">
+            <summary>
+            True if the focuser is currently moving to a new position. False if the focuser is stationary.
+            </summary>
+        </member>
+        <member name="P:ASCOM.DriverAccess.Focuser.Link">
+            <summary>
+            State of the connection to the focuser.
+            et True to start the link to the focuser; set False to terminate the link. 
+            The current link status can also be read back as this property. 
+            An exception will be raised if the link fails to change state for any reason. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.DriverAccess.Focuser.MaxIncrement">
+            <summary>
+            Maximum increment size allowed by the focuser; 
+            i.e. the maximum number of steps allowed in one move operation.
+            For most focusers this is the same as the MaxStep property.
+            This is normally used to limit the Increment display in the host software. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.DriverAccess.Focuser.MaxStep">
+            <summary>
+            Maximum step position permitted.
+            The focuser can step between 0 and MaxStep. 
+            If an attempt is made to move the focuser beyond these limits,
+            it will automatically stop at the limit. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.DriverAccess.Focuser.Position">
+            <summary>
+            Current focuser position, in steps.
+            Valid only for absolute positioning focusers (see the Absolute property).
+            An exception will be raised for relative positioning focusers.   
+            </summary>
+        </member>
+        <member name="P:ASCOM.DriverAccess.Focuser.StepSize">
+            <summary>
+            Step size (microns) for the focuser.
+            Raises an exception if the focuser does not intrinsically know what the step size is. 
+            
+            </summary>
+        </member>
+        <member name="P:ASCOM.DriverAccess.Focuser.TempComp">
+            <summary>
+            The state of temperature compensation mode (if available), else always False.
+            If the TempCompAvailable property is True, then setting TempComp to True
+            puts the focuser into temperature tracking mode. While in temperature tracking mode,
+            Move commands will be rejected by the focuser. Set to False to turn off temperature tracking.
+            An exception will be raised if TempCompAvailable is False and an attempt is made to set TempComp to true. 
+            
+            </summary>
+        </member>
+        <member name="P:ASCOM.DriverAccess.Focuser.TempCompAvailable">
+            <summary>
+            True if focuser has temperature compensation available.
+            Will be True only if the focuser's temperature compensation can be turned on and off via the TempComp property. 
+            </summary>
+        </member>
+        <member name="P:ASCOM.DriverAccess.Focuser.Temperature">
+            <summary>
+            Current ambient temperature as measured by the focuser.
+            Raises an exception if ambient temperature is not available.
+            Commonly available on focusers with a built-in temperature compensation mode. 
             </summary>
         </member>
     </members>

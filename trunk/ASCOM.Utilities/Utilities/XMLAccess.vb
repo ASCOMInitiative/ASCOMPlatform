@@ -143,7 +143,7 @@ Friend Class XMLAccess
                     'Test whether the key already exists
                     If Not FileStore.Exists(SubKey & "\" & VALUES_FILENAME) Then
                         '   Logger.'LogMsg("  CreateKey", "  Creating key """ & SubKey & """")
-                        FileStore.CreateDirectory(SubKey)  'It doesn't exist so create it
+                        FileStore.CreateDirectory(SubKey, TL)  'It doesn't exist so create it
                         InitalValues.Clear() 'Now add the file containing the contents of the key
                         InitalValues.Add(COLLECTION_DEFAULT_VALUE_NAME, COLLECTION_DEFAULT_UNSET_VALUE)
                         WriteValues(SubKey, InitalValues, False) 'Write the profile file
@@ -266,7 +266,7 @@ Friend Class XMLAccess
             Else 'Requested a particular value
                 RetVal = Values.Item(p_ValueName)
             End If
-        Catch 'Missing value generates an exception and should return a null string or the supplied default value
+        Catch ex As Generic.KeyNotFoundException 'Missing value generates a KeyNotFound exception and should return a null string or the supplied default value
             If Not (p_DefaultValue Is Nothing) Then 'We have been supplied a default value so set it and then return it
                 WriteProfile(p_SubKeyName, p_ValueName, p_DefaultValue)
                 RetVal = p_DefaultValue
@@ -274,7 +274,15 @@ Friend Class XMLAccess
             Else
                 TL.LogMessage("GetProfile", "Value not yet set and no default value supplied, returning null string")
             End If
-
+        Catch ex As Exception 'Any other exception
+            If Not (p_DefaultValue Is Nothing) Then 'We have been supplied a default value so set it and then return it
+                WriteProfile(p_SubKeyName, p_ValueName, p_DefaultValue)
+                RetVal = p_DefaultValue
+                TL.LogMessage("GetProfile", "Key not yet set, returning supplied default value: " & p_DefaultValue)
+            Else
+                TL.LogMessage("GetProfile", "Key not yet set and no default value supplied, throwing exception: " & ex.Message)
+                Throw
+            End If
         End Try
 
         Values = Nothing
@@ -329,7 +337,7 @@ Friend Class XMLAccess
             TL.LogMessage("MigrateProfile", "Migrating keys")
             'Create the root directory if it doesn't already exist
             If Not FileStore.Exists("\" & VALUES_FILENAME) Then
-                FileStore.CreateDirectory("\")
+                FileStore.CreateDirectory("\", TL)
                 CreateKey("\") 'Create the root key
             End If
             TL.LogMessage("MigrateProfile", "Successfully created root directory and root key")
