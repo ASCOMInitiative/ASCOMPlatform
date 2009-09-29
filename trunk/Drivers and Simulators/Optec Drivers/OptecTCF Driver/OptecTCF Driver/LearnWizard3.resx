@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,4 +117,32 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="textBox1.Text" xml:space="preserve">
+    <value>To get an accurate slope, you should allow your scope to undergo a temperature swing of at least 8°C. 
+
+Once a temp change has occured, move the focus In and Out until the field is in focus again.  Then press Next to continue.
+
+Note: Most scopes will require the focus to be moved Out as the temperature decreases.</value>
+  </data>
+  <metadata name="timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        AAABAAEAICAQAAAAAADoAgAAFgAAACgAAAAgAAAAQAAAAAEABAAAAAAAgAIAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAACAAACAAAAAgIAAgAAAAIAAgACAgAAAwMDAAICAgAAAAP8AAP8AAAD//wD/AAAA/wD/AP//
+        AAD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACQAAAAAA
+        AAAAAAAAAAAAkAmQAAAAAAAAAAAAAAAACZAJmQAAAAAAAAAAAAAAAJmQAJmQAAAAAAAAAAAAAAmZAACZ
+        mQAAAAAAAAAAAACZmQAAmZmQAAAAAAAAAAAJmZkAAJmZmQAAAAAAAAAAmZmZAACZmZmQAAAAAAAACZmZ
+        mQAACZmZmQAAAAAAAJmZmZAAAAmZmZmQAAAAAAmZmZmQAAAJmZmZmQAAAACZmZmZkAAACZmZmZmQAAAJ
+        mZmZmZAAAAmZmZmZmQAAmZmZmZmQAAAJmZmZmZmQCZmZmZmZkAAACZmZmZmZAACZmZmZmZAAAAmZmZmZ
+        kAAACZmZmZmQAAAJmZmZmQAAAACZmZmZkAAACZmZmZAAAAAACZmZmZAAAJmZmZkAAAAAAACZmZmZAACZ
+        mZmQAAAAAAAACZmZmQAAmZmZAAAAAAAAAACZmZkAAJmZkAAAAAAAAAAACZmZAACZmQAAAAAAAAAAAACZ
+        mQAAmZAAAAAAAAAAAAAACZkACZkAAAAAAAAAAAAAAACZkAmQAAAAAAAAAAAAAAAACZAJAAAAAAAAAAAA
+        AAAAAACQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///////////////+////9n///+Y//
+        //HH///jw///w8H//4PA//8DwH/+A+A//AfgH/gH4A/wB+AH4AfgA8AH4AGAB+ADwAfgB+AH4A/wB+Af
+        +AfAP/wDwH/+A8D//wPB//+Dw///w8f//+OP///xn///+b////3//////////w==
+</value>
+  </data>
 </root>

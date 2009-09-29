@@ -16,6 +16,7 @@ if (F.Link == true) j+= "Connect Passed!\n"
 //if(F.Link == true) WScript.Echo("Connected Successfully")
 //connected!
 
+j += "Temperature = " + F.Temperature + "\n";
 j += "Position = " + F.Position + "\n";
 
 j+= "Testing Temp Comp mode.........\n";
@@ -35,7 +36,7 @@ j+= "New Position = " + F.Position + "\n";
 j+= "Moving to 3300... \n";
 F.Move(3500);
 j+= "New Position = " + F.Position + "\n";
-
+j += "Temperature = " + F.Temperature + "\n";
 
 
 

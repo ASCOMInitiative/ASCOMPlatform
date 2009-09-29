@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Optec Inc.")]
 [assembly: AssemblyProduct("Optec TCF-S")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCopyright("Optec Inc. 2009 ©")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

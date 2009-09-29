@@ -102,20 +102,20 @@ namespace ASCOM.OptecTCF_Driver
         public bool Absolute
         {
             get { return true; }
-        }  //FINISHED
+        }             //FINISHED
 
         public void Halt()
         {
             // This operation is not supported by Optec Drivers
             throw new ASCOM.MethodNotImplementedException("Halt");
-        }    //FINISHED
+        }               //FINISHED
 
         public bool IsMoving
         {
             //This driver does not allow any other methods to be called
             //while the device is moving. So this is always false.
             get { return false; }
-        }  //FINISHED
+        }             //FINISHED
 
         public bool Link
         {
@@ -140,46 +140,46 @@ namespace ASCOM.OptecTCF_Driver
                     throw new ASCOM.DriverException("Device Failed to change Link state.\n" + Ex.ToString(), Ex);
                 }
             }
-        }      //FINISHED
+        }                 //FINISHED
 
         public int MaxIncrement
         {
             //Max Increment is the same as Max Step in our case so use the same method...
             get { return DeviceComm.GetMaxStep(); }
-        }  //FINISHED
+        }          //FINISHED
 
         public int MaxStep
         {
             get { return DeviceComm.GetMaxStep(); }
-        }       //FINISHED
+        }               //FINISHED
 
         public void Move(int val)
         {
             // TODO Replace this with your implementation
             DeviceComm.MoveFocus(val);
-        }    //FINISHED
+        }        //FINISHED
 
         public int Position
         {
             get { return DeviceComm.GetPosition(); }
-        }      //FINISHED
+        }              //FINISHED
 
         public void SetupDialog()
         {
             SetupDialogForm F = new SetupDialogForm();
             F.ShowDialog();
-        }    //FINISHED
+        }        //FINISHED
 
         public double StepSize
         {
             get { return DeviceComm.GetStepSize(); }
-        }       //FINISHED
+        }           //FINISHED
 
         public bool TempComp
         {
             get { return DeviceComm.InTempCompMode(); }
             set { DeviceComm.EnterTempCompMode(value); }
-        }     //FINISHED
+        }             //FINISHED
 
         public bool TempCompAvailable
         {

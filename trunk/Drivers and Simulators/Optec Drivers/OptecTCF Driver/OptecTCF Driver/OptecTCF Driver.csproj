@@ -82,6 +82,36 @@
     <Compile Include="DeviceComm.cs" />
     <Compile Include="DeviceSettings.cs" />
     <Compile Include="Driver.cs" />
+    <Compile Include="LearnWizard1_5.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LearnWizard1_5.Designer.cs">
+      <DependentUpon>LearnWizard1_5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LearnWizard2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LearnWizard2.Designer.cs">
+      <DependentUpon>LearnWizard2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LearnWizard1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LearnWizard1.Designer.cs">
+      <DependentUpon>LearnWizard1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LearnWizard3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LearnWizard3.Designer.cs">
+      <DependentUpon>LearnWizard3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LearnWizard4.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LearnWizard4.Designer.cs">
+      <DependentUpon>LearnWizard4.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <DependentUpon>Resources.resx</DependentUpon>
@@ -102,6 +132,26 @@
     </EmbeddedResource>
     <EmbeddedResource Include="COMPortForm.resx">
       <DependentUpon>COMPortForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LearnWizard1_5.resx">
+      <DependentUpon>LearnWizard1_5.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LearnWizard2.resx">
+      <DependentUpon>LearnWizard2.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LearnWizard1.resx">
+      <DependentUpon>LearnWizard1.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LearnWizard3.resx">
+      <DependentUpon>LearnWizard3.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LearnWizard4.resx">
+      <DependentUpon>LearnWizard4.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -146,6 +196,8 @@
   <ItemGroup>
     <Content Include="ASCOM.png" />
     <Content Include="ReadMe.htm" />
+    <None Include="Resources\TCF-S3_TCF-S_1_Medium.jpg" />
+    <None Include="Resources\Optec Logo-large png.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
