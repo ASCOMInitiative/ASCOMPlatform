@@ -2609,9 +2609,19 @@ namespace ASCOM.GeminiTelescope
                         if (command.m_Raw) //Raw should return the full string including #
                             result += "#";
                         break;
+
+                        // '0' or two strings, each terminated with '#' (:SC command)
+                    case GeminiCommand.ResultType.ZeroOrTwoHash:
+                        result = ReadNumber(1);
+                        if (result != "0")
+                        {
+                            result += ReadTo('#');
+                            if (command.m_Raw) result += '#';
+                            result += ReadTo('#');
+                            if (command.m_Raw) result += '#';
+                        }
+                        break;
                 }
-
-
             }
             catch (Exception ex)
             {
