@@ -107,6 +107,7 @@
     </NamespaceSummaries>
     <SdkLinkType>Msdn</SdkLinkType>
     <FrameworkVersion>3.5</FrameworkVersion>
+    <KeepLogFile>True</KeepLogFile>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->
@@ -143,7 +144,7 @@
     <None Include="Examples\Chooser.aml" />
     <None Include="Examples\Profile.aml" />
     <None Include="Examples\Serial.aml" />
-    <None Include="Version History\Version 5.1.2.0.aml" />
+    <None Include="Version History\Version 5.5 RC2.aml" />
     <None Include="Version History\Version Template.aml" />
     <None Include="Version History\Version Summary.aml" />
     <None Include="Introduction\ASCOM Platform for COM.aml" />

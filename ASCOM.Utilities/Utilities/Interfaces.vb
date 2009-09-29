@@ -1247,7 +1247,7 @@ Namespace Interfaces
 
     Friend Interface IFileStoreProvider
         'Interface that a file store provider must implement to support a storage provider
-        Sub CreateDirectory(ByVal p_SubKeyName As String)
+        Sub CreateDirectory(ByVal p_SubKeyName As String, ByVal p_TL As TraceLogger)
         Sub DeleteDirectory(ByVal p_SubKeyName As String)
         Sub EraseFileStore()
         ReadOnly Property GetDirectoryNames(ByVal p_SubKeyName As String) As String()

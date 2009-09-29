@@ -55,11 +55,17 @@
 ; Setup Build 6 Released
 ; Corrected ASCOM download url given when platform 5 is not installed
 ; Changed location of Platform 5a Architecture pdf to make it more easily found.
-; Setup Build 7
+; Setup Build 7 Released
+
+; Added extra delete files and delete directories commands to clean up tlbs and directories left over after uninstall
+; Setup Build 8 Released
+
+; Removed directory delete commands that caused an access issue on Tim's PC.
+; Setup Build 9 Released
 
 [Setup]
 ; Setup program version number - change this each time you change this setup script
-#define Public SetupVersion 7
+#define Public SetupVersion 9
 
 #define Public Major 0
 #define Public Minor 0
@@ -303,8 +309,20 @@ Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Exceptions"""; Flags: ru
 [UninstallDelete]
 Type: files; Name: {cf32}\ASCOM\Utilities\*.*
 Type: dirifempty; Name: {cf32}\ASCOM\Utilities
+Type: files; Name: {cf32}\ASCOM\.net\ASCOM.Utilities.tlb
+Type: files; Name: {cf32}\ASCOM\.net\ASCOM.Astrometry.tlb
+Type: files; Name: {cf32}\ASCOM\.net\ASCOM.IConform.tlb
+Type: dirifempty; Name: {cf32}\ASCOM\Uninstall\Utilities
+
+Type: files; Name: {cf}\ASCOM\Utilities\*.*
+Type: dirifempty; Name: {cf}\ASCOM\Utilities
 Type: files; Name: {app}\ASCOM.Utilities.tlb
+Type: files; Name: {app}\ASCOM.Astrometry.tlb
+Type: files; Name: {app}\ASCOM.IConform.tlb
+Type: dirifempty; Name: {cf}\ASCOM\Uninstall\Utilities
+;Type: dirifempty; Name: {cf}\ASCOM\Uninstall
 Type: dirifempty; Name: {app}
+;Type: dirifempty; Name: {cf}\ASCOM
 
 [Code]
 //This funciton is called automatically before install starts and will test whether platform 5 is installed

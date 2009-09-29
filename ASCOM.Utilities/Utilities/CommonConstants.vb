@@ -40,14 +40,26 @@ Module VersionCode
 
         'Get Operating system information
         Dim OS As System.OperatingSystem = System.Environment.OSVersion
-        TL.LogMessage("Versions", "OS Version " & OS.Platform & " Service Pack: " & OS.ServicePack & " Full: " & OS.VersionString)
+        TL.LogMessage("Versions", "OS Version: " & OS.Platform & ", Service Pack: " & OS.ServicePack & ", Full: " & OS.VersionString)
+        If IsWow64() Then 'Application is under WoW64 so OS must be 64bit
+            TL.LogMessage("Versions", "Operating system is 64bit")
+        Else 'Could be 32bit or 64bit Use IntPtr
+            Select Case System.IntPtr.Size
+                Case 4
+                    TL.LogMessage("Versions", "Operating system is 32bit")
+                Case 8
+                    TL.LogMessage("Versions", "Operating system is 64bit")
+                Case Else
+                    TL.LogMessage("Versions", "Operating system is unknown bits, PTR length is: " & System.IntPtr.Size)
+            End Select
+        End If
         Select Case System.IntPtr.Size
             Case 4
-                TL.LogMessage("Versions", "Operating system is 32bit")
+                TL.LogMessage("Versions", "Application is 32bit")
             Case 8
-                TL.LogMessage("Versions", "Operating system is 64bit")
+                TL.LogMessage("Versions", "Application is 64bit")
             Case Else
-                TL.LogMessage("Versions", "Operating system is unknown bits, PTR length is: " & System.IntPtr.Size)
+                TL.LogMessage("Versions", "Application is unknown bits, PTR length is: " & System.IntPtr.Size)
         End Select
 
         'Get file system information
@@ -81,5 +93,26 @@ Module VersionCode
             TL.LogMessage("Versions", AssName & " No assembly found")
         End If
     End Sub
+
+    Private Function IsWow64() As Boolean
+
+        Dim value As IntPtr
+        value = System.Diagnostics.Process.GetCurrentProcess.Handle
+
+        'Dim processHandle As Long = GetProcessHandle(System.Diagnostics.Process.GetCurrentProcess().Id)
+        Dim retVal As Boolean
+        If IsWow64Process(value, retVal) Then
+            Return retVal
+        Else
+            Return False
+        End If
+    End Function
+
+    <DllImport("Kernel32.dll", SetLastError:=True, CallingConvention:=CallingConvention.Winapi)> _
+          Public Function IsWow64Process( _
+          ByVal hProcess As System.IntPtr, _
+          ByRef wow64Process As Boolean) As <MarshalAs(UnmanagedType.Bool)> Boolean
+    End Function
+
 End Module
 #End Region
