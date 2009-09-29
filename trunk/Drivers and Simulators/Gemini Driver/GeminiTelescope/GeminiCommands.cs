@@ -20,7 +20,8 @@ namespace ASCOM.GeminiTelescope
             HashChar,       // hash-terminated ('#') string
             ZeroOrHash,     // character '0' (zero) or a hash ('#') terminated string
             OneOrHash,      // character '1' (one) or a hash ('#') terminated string
-            NumberofChars   // specific number of characters
+            NumberofChars,   // specific number of characters
+            ZeroOrTwoHash // :SC command
         }
 
         internal GeminiCommand(ResultType type, int chars) : this(type, chars, false)
@@ -157,7 +158,10 @@ namespace ASCOM.GeminiTelescope
             Commands.Add(":Sa", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));                        
   
             Commands.Add(":SB", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
-            Commands.Add(":SC", new GeminiCommand(GeminiCommand.ResultType.ZeroOrHash, 0, true));
+            
+            // :SC is special case, returns '0' if invalid, or
+            // two strings '1Updating planetary data#' followed by '<24 blanks>#'
+            Commands.Add(":SC", new GeminiCommand(GeminiCommand.ResultType.ZeroOrTwoHash, 0, true));
             Commands.Add(":SE", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
             Commands.Add(":SG", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1, true));
             Commands.Add(":SL", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1, true));
