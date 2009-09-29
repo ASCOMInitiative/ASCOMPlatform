@@ -85,6 +85,9 @@ Source: ..\GeminiTelescope\bin\x64\Release\ASCOM.GeminiTelescope.pdb; DestDir: {
 Source: ..\GeminiTelescope\bin\x86\Release\ASCOM.GeminiTelescope.exe; DestDir: {cf}\ASCOM\Telescope\Gemini; Check: NotIs64BitInstallMode; Flags: ignoreversion
 Source: ..\GeminiTelescope\bin\x86\Release\ASCOM.GeminiTelescope.pdb; DestDir: {cf}\ASCOM\Telescope\Gemini; Check: NotIs64BitInstallMode; Flags: ignoreversion
 
+Source: ..\GeminiTelescope\bin\x64\Release\Interop.SpeechLib.dll; DestDir: {cf}\ASCOM\Telescope\Gemini; Check: Is64BitInstallMode; Flags: ignoreversion
+Source: ..\GeminiTelescope\bin\x86\Release\Interop.SpeechLib.dll; DestDir: {cf}\ASCOM\Telescope\Gemini; Check: NotIs64BitInstallMode; Flags: ignoreversion
+
 Source: ..\Telescope\bin\x64\Release\ASCOM.GeminiTelescope.Telescope.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\GeminiTelescopeServedClasses; Check: Is64BitInstallMode; Flags: ignoreversion; Tasks: ; Languages: 
 Source: ..\Telescope\bin\x64\Release\ASCOM.GeminiTelescope.Telescope.pdb; DestDir: {cf}\ASCOM\Telescope\Gemini\GeminiTelescopeServedClasses; Check: Is64BitInstallMode; Flags: ignoreversion
 Source: ..\Telescope\bin\x86\Release\ASCOM.GeminiTelescope.Telescope.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\GeminiTelescopeServedClasses; Check: NotIs64BitInstallMode; Flags: ignoreversion
