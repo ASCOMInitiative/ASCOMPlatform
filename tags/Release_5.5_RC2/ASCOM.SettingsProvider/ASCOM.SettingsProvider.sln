@@ -1,0 +1,108 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.SettingsProvider", "ASCOM.SettingsProvider\ASCOM.SettingsProvider.csproj", "{4FFFD202-81D4-4549-880B-09B640D72C1D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReferenceApplication", "ReferenceApplication\ReferenceApplication.csproj", "{13913A60-F183-4956-8B25-B7641163176A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Driver Templates", "Driver Templates", "{0031A430-4E2F-408E-BF56-E1E947A5E775}"
+	ProjectSection(SolutionItems) = preProject
+		Template update procedure.htm = Template update procedure.htm
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Driver Templates Unit Tests", "Template Projects\Driver Templates Unit Tests\Driver Templates Unit Tests.csproj", "{6480BA50-BB33-4B7E-B182-9C51DDDF160C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7FB3D366-A99A-4084-8DF2-22F330F07D6D}"
+	ProjectSection(SolutionItems) = preProject
+		ASCOM.SettingsProvider.vsmdi = ASCOM.SettingsProvider.vsmdi
+		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.SettingsProvider Public Documentation", "ASCOM.SettingsProvider Public Documentation\ASCOM.SettingsProvider Public Documentation.csproj", "{50AB210D-BD52-4400-9924-939B7406A525}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ASCOM Settings Provider x64 Setup", "ASCOM Settings Provider x64 Setup\ASCOM Settings Provider Setup.vdproj", "{FBFECB80-A4E9-49FF-84D1-5641501EF315}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ASCOM Settings Provider x86 Setup", "ASCOM Settings Provider x86 Setup\ASCOM Settings Provider x86 Setup.vdproj", "{6AD0D4EA-D9AF-4985-9A41-394F376891A0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Referenced Projects", "Referenced Projects", "{AA4DBFA2-F255-4984-AB20-439D793A00B3}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "HelperNET", "..\HelperNET\HelperNET\HelperNET.vbproj", "{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraTemplateProjectCS", "CameraTemplateProjectCS\CameraTemplateProjectCS.csproj", "{4D736437-E342-4033-97E9-4E1D091ABE3F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Exceptions", "..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj", "{5F6CF410-7B16-4A32-99D2-0D92196C4490}"
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = ASCOM.SettingsProvider.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug Quick|Any CPU = Debug Quick|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4FFFD202-81D4-4549-880B-09B640D72C1D}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FFFD202-81D4-4549-880B-09B640D72C1D}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
+		{4FFFD202-81D4-4549-880B-09B640D72C1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FFFD202-81D4-4549-880B-09B640D72C1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FFFD202-81D4-4549-880B-09B640D72C1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FFFD202-81D4-4549-880B-09B640D72C1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13913A60-F183-4956-8B25-B7641163176A}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
+		{13913A60-F183-4956-8B25-B7641163176A}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
+		{13913A60-F183-4956-8B25-B7641163176A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13913A60-F183-4956-8B25-B7641163176A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13913A60-F183-4956-8B25-B7641163176A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13913A60-F183-4956-8B25-B7641163176A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6480BA50-BB33-4B7E-B182-9C51DDDF160C}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
+		{6480BA50-BB33-4B7E-B182-9C51DDDF160C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6480BA50-BB33-4B7E-B182-9C51DDDF160C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6480BA50-BB33-4B7E-B182-9C51DDDF160C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6480BA50-BB33-4B7E-B182-9C51DDDF160C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50AB210D-BD52-4400-9924-939B7406A525}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
+		{50AB210D-BD52-4400-9924-939B7406A525}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50AB210D-BD52-4400-9924-939B7406A525}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50AB210D-BD52-4400-9924-939B7406A525}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50AB210D-BD52-4400-9924-939B7406A525}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBFECB80-A4E9-49FF-84D1-5641501EF315}.Debug Quick|Any CPU.ActiveCfg = Debug
+		{FBFECB80-A4E9-49FF-84D1-5641501EF315}.Debug|Any CPU.ActiveCfg = Debug
+		{FBFECB80-A4E9-49FF-84D1-5641501EF315}.Debug|Any CPU.Build.0 = Debug
+		{FBFECB80-A4E9-49FF-84D1-5641501EF315}.Release|Any CPU.ActiveCfg = Release
+		{FBFECB80-A4E9-49FF-84D1-5641501EF315}.Release|Any CPU.Build.0 = Release
+		{6AD0D4EA-D9AF-4985-9A41-394F376891A0}.Debug Quick|Any CPU.ActiveCfg = Debug
+		{6AD0D4EA-D9AF-4985-9A41-394F376891A0}.Debug|Any CPU.ActiveCfg = Debug
+		{6AD0D4EA-D9AF-4985-9A41-394F376891A0}.Debug|Any CPU.Build.0 = Debug
+		{6AD0D4EA-D9AF-4985-9A41-394F376891A0}.Release|Any CPU.ActiveCfg = Release
+		{6AD0D4EA-D9AF-4985-9A41-394F376891A0}.Release|Any CPU.Build.0 = Release
+		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
+		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
+		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D736437-E342-4033-97E9-4E1D091ABE3F}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D736437-E342-4033-97E9-4E1D091ABE3F}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
+		{4D736437-E342-4033-97E9-4E1D091ABE3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D736437-E342-4033-97E9-4E1D091ABE3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D736437-E342-4033-97E9-4E1D091ABE3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D736437-E342-4033-97E9-4E1D091ABE3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F6CF410-7B16-4A32-99D2-0D92196C4490}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F6CF410-7B16-4A32-99D2-0D92196C4490}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
+		{5F6CF410-7B16-4A32-99D2-0D92196C4490}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F6CF410-7B16-4A32-99D2-0D92196C4490}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F6CF410-7B16-4A32-99D2-0D92196C4490}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F6CF410-7B16-4A32-99D2-0D92196C4490}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6480BA50-BB33-4B7E-B182-9C51DDDF160C} = {0031A430-4E2F-408E-BF56-E1E947A5E775}
+		{7FB3D366-A99A-4084-8DF2-22F330F07D6D} = {0031A430-4E2F-408E-BF56-E1E947A5E775}
+		{4D736437-E342-4033-97E9-4E1D091ABE3F} = {0031A430-4E2F-408E-BF56-E1E947A5E775}
+		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C} = {AA4DBFA2-F255-4984-AB20-439D793A00B3}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		VisualSVNWorkingCopyRoot = .
+	EndGlobalSection
+EndGlobal
