@@ -783,7 +783,7 @@ namespace ASCOM.GeminiTelescope
         {
             GeminiHardware.Trace.Enter("IT:MoveAxis", Axis, Rate);
 
-            if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            //if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
 
             string[] cmds = { null, null };
@@ -883,8 +883,8 @@ namespace ASCOM.GeminiTelescope
 
             GeminiHardware.Trace.Enter("IT:PulseGuide", Direction, Duration);
 
-            if (GeminiHardware.AtPark)
-                throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            //if (GeminiHardware.AtPark)
+            //    throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             string cmd = String.Empty;
 
@@ -1097,8 +1097,8 @@ namespace ASCOM.GeminiTelescope
         {
             GeminiHardware.Trace.Enter("IT:SlewToCoordinates", RightAscension, Declination);
 
-            if (GeminiHardware.AtHome || GeminiHardware.AtPark)
-                throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            //if (GeminiHardware.AtHome || GeminiHardware.AtPark)
+            //    throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             GeminiHardware.TargetRightAscension = RightAscension;
             GeminiHardware.TargetDeclination = Declination;
@@ -1114,8 +1114,8 @@ namespace ASCOM.GeminiTelescope
         {
             GeminiHardware.Trace.Enter("IT:SlewToCoordinatesAsync", RightAscension, Declination);
 
-            if (GeminiHardware.AtHome || GeminiHardware.AtPark)
-                throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            //if (GeminiHardware.AtHome || GeminiHardware.AtPark)
+            //    throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             GeminiHardware.TargetRightAscension = RightAscension;
             GeminiHardware.TargetDeclination = Declination;
@@ -1131,8 +1131,8 @@ namespace ASCOM.GeminiTelescope
         {
             GeminiHardware.Trace.Enter("IT:SlewToTarget", GeminiHardware.TargetRightAscension, GeminiHardware.TargetDeclination);
 
-            if (GeminiHardware.AtHome || GeminiHardware.AtPark)
-                throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            //if (GeminiHardware.AtHome || GeminiHardware.AtPark)
+            //    throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             if (Slewing) AbortSlew();
             GeminiHardware.Velocity = "S";
@@ -1146,8 +1146,8 @@ namespace ASCOM.GeminiTelescope
         {
             GeminiHardware.Trace.Enter("IT:SlewToTargetAsync", GeminiHardware.TargetRightAscension, GeminiHardware.TargetDeclination);
 
-            if (GeminiHardware.AtHome || GeminiHardware.AtPark)
-                throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            //if (GeminiHardware.AtHome || GeminiHardware.AtPark)
+            //    throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             if (Slewing) AbortSlew();
             GeminiHardware.Velocity = "S";
