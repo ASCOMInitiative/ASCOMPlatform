@@ -99,10 +99,10 @@ namespace ASCOM.GeminiTelescope
         {
             if (!GeminiHardware.Connected) return null;
 
-            string res;
+            string res = null;
             try
             {
-                res = GeminiHardware.DoCommandResult(s, 1000, false);
+                res = GeminiHardware.DoCommandResult(s, 2000, false);
             }
             catch
             {
@@ -547,9 +547,11 @@ namespace ASCOM.GeminiTelescope
 
             set {
                 string prop = get_Prop("<509:");
+                if (prop == "0" || prop == null) prop = get_Prop("<509:");
+
                 int stat;
                 if (!int.TryParse(prop, out stat)) return ;
-                stat = (stat & ~1) | (value? 1 : 0);
+                stat = (stat & 0xfe) | (value? 1 : 0);
                 GeminiHardware.DoCommandResult(">509:" + stat.ToString(), GeminiHardware.MAX_TIMEOUT, false);                
             }
         }
@@ -568,7 +570,7 @@ namespace ASCOM.GeminiTelescope
             {
                 for (int i = 0; i < Mount_names.Length; ++i)
                     if (Mount_names[i].Equals((string)value))
-                        GeminiHardware.DoCommandResult(">" + i.ToString() + ":", GeminiHardware.MAX_TIMEOUT, false);
+                        GeminiHardware.DoCommandResult(">" + i.ToString(), GeminiHardware.MAX_TIMEOUT, false);
             }
         }
 
@@ -586,7 +588,7 @@ namespace ASCOM.GeminiTelescope
             set {
                 for (int i = 0; i < HandController_names.Length; ++i)
                     if (HandController_names[i].Equals((string)value))
-                        GeminiHardware.DoCommandResult(">" + (i + 161).ToString() + ":", GeminiHardware.MAX_TIMEOUT, false);
+                        GeminiHardware.DoCommandResult(">" + (i + 161).ToString(), GeminiHardware.MAX_TIMEOUT, false);
             }
         }
 
@@ -602,7 +604,7 @@ namespace ASCOM.GeminiTelescope
             set {
                 for (int i = 0; i < TrackingRate_names.Length; ++i)
                     if (TrackingRate_names[i].Equals(value))
-                        GeminiHardware.DoCommandResult(">" + (i + 131).ToString() + ":", GeminiHardware.MAX_TIMEOUT, false);
+                        GeminiHardware.DoCommandResult(">" + (i + 131).ToString(), GeminiHardware.MAX_TIMEOUT, false);
             }
         }
 

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using ASCOM.GeminiTelescope.Properties;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -17,11 +18,35 @@ namespace ASCOM.GeminiTelescope
         private string m_GpsBaudRate;
         private bool m_GpsUpdateClock;
 
+        private bool m_DoneInitialize;
+
+        private bool m_UseSpeech = false;
+
+        public bool UseSpeech
+        {
+            get { return chkVoice.Checked; }
+            set { m_UseSpeech = value; }
+        }
+        private string m_SpeechVoice = "";
+
+        public string SpeechVoice
+        {
+            get { return m_SpeechVoice; }
+            set { m_SpeechVoice = value; }
+        }
+        private Speech.SpeechType m_SpeechFlags = 0;
+
+        internal Speech.SpeechType SpeechFlags
+        {
+            get { return m_SpeechFlags; }
+            set { m_SpeechFlags = value; }
+        }
+
         public TelescopeSetupDialogForm()
         {
-            InitializeComponent();
-            
+            m_DoneInitialize = false;
 
+            InitializeComponent();           
 
             foreach (string s in System.IO.Ports.SerialPort.GetPortNames())
             {
@@ -50,12 +75,17 @@ namespace ASCOM.GeminiTelescope
 
             }
 
+            chkVoice.Checked = GeminiHardware.UseSpeech;
+            m_SpeechVoice = GeminiHardware.SpeechVoice;
+            m_SpeechFlags = GeminiHardware.SpeechFilter;
+
             Version version = new Version(Application.ProductVersion);
             labelVersion.Text = "ASCOM Gemini Telescope .NET " + string.Format("Version {0}.{1}.{2}", version.Major, version.Minor, version.Build);
             TimeZone localZone = TimeZone.CurrentTimeZone;
             
             labelTime.Text = "Time zone is " + (localZone.IsDaylightSavingTime(DateTime.Now)? localZone.DaylightName : localZone.StandardName);
 
+            m_DoneInitialize = true;
         }
 
         private void cmdOK_Click(object sender, EventArgs e)
@@ -291,7 +321,7 @@ namespace ASCOM.GeminiTelescope
                 }
                 catch
                 {
-                    MessageBox.Show("Some port settings are invalid", SharedResources.TELESCOPE_DRIVER_NAME);
+                    MessageBox.Show(Resources.SomeInvalidSettings, SharedResources.TELESCOPE_DRIVER_NAME);
                 }
             }
         }
@@ -387,7 +417,7 @@ namespace ASCOM.GeminiTelescope
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Failed to set Gemini time",SharedResources.TELESCOPE_DRIVER_NAME); 
+                    MessageBox.Show(Resources.FailedSetTime,SharedResources.TELESCOPE_DRIVER_NAME); 
                 }
             }
         }
@@ -405,11 +435,30 @@ namespace ASCOM.GeminiTelescope
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Invalid Site Settings",SharedResources.TELESCOPE_DRIVER_NAME); 
+                        MessageBox.Show(Resources.InvalidSite,SharedResources.TELESCOPE_DRIVER_NAME); 
                     }
                 }
-                else { MessageBox.Show("Invalid Site Settings", SharedResources.TELESCOPE_DRIVER_NAME); }
+                else { MessageBox.Show(Resources.InvalidSite, SharedResources.TELESCOPE_DRIVER_NAME); }
             }
         }
+
+        private void chkVoice_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkVoice.Checked && m_DoneInitialize)
+            {
+                frmVoice frm = new frmVoice();
+                frm.Flags = m_SpeechFlags;
+                frm.Voice = m_SpeechVoice;
+                DialogResult res = frm.ShowDialog(this);
+                if (res == DialogResult.Cancel) chkVoice.Checked = false;
+                else
+                {
+                    m_SpeechVoice = frm.Voice;
+                    m_SpeechFlags = frm.Flags;
+                }
+                m_UseSpeech = chkVoice.Checked;
+            }
+        }
+
     }
 }

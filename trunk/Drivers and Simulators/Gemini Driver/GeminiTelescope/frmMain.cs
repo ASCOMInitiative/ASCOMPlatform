@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using ASCOM.GeminiTelescope.Properties;
+using System.Globalization;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -21,6 +23,7 @@ namespace ASCOM.GeminiTelescope
         Timer tmrJoystick = new Timer();
 
         string m_LastError = "";
+
 
         ContextMenu m_BaloonMenu = null;
 
@@ -43,6 +46,9 @@ namespace ASCOM.GeminiTelescope
 
         public frmMain()
         {
+
+            System.Threading.Thread.CurrentThread.CurrentUICulture = System.Threading.Thread.CurrentThread.CurrentCulture;
+            
             InitializeComponent();
             tmrUpdate.Interval = 2000;
             tmrUpdate.Tick += new EventHandler(tmrUpdate_Tick);
@@ -53,14 +59,14 @@ namespace ASCOM.GeminiTelescope
 
             m_BaloonMenu = new ContextMenu();
 
-            MenuItem connectMenu = new MenuItem("Connect", new EventHandler(ConnectMenu));
+            MenuItem connectMenu = new MenuItem(Resources.Connect, new EventHandler(ConnectMenu));
             connectMenu.Name = "Connect";
 
-            MenuItem notifyMenu = new MenuItem("Show Notifications", new EventHandler(ShowNotificationsMenu));
+            MenuItem notifyMenu = new MenuItem(Resources.ShowNotifications, new EventHandler(ShowNotificationsMenu));
             notifyMenu.Name = "Notifications";
             notifyMenu.Checked = m_ShowNotifications;
 
-            MenuItem controlMenu = new MenuItem("Hand Controller...", new EventHandler(ControlPanelMenu));
+            MenuItem controlMenu = new MenuItem(Resources.ShowHandController, new EventHandler(ControlPanelMenu));
             controlMenu.Name = "Control";
             controlMenu.Checked = this.Visible;
 
@@ -69,16 +75,16 @@ namespace ASCOM.GeminiTelescope
 
                 new MenuItem("-"),
                 controlMenu,
-                new MenuItem("Configure Telescope...", new EventHandler(ConfigureTelescopeMenu)),
+                new MenuItem(Resources.ConfigureTelescope + "...", new EventHandler(ConfigureTelescopeMenu)),
 
-                new MenuItem("Advanced Gemini Settings...", new EventHandler(AdvancedGeminiMenu)),
+                new MenuItem(Resources.AdvancedSettings + "...", new EventHandler(AdvancedGeminiMenu)),
 
-                new MenuItem("Configure Focuser...", new EventHandler(ConfigureFocuserMenu)),
+                new MenuItem(Resources.ConfigureFocuser+ "...", new EventHandler(ConfigureFocuserMenu)),
             new MenuItem("-"),
             notifyMenu,
             new MenuItem("-"),
-            new MenuItem("About Gemini Driver...", new EventHandler(aboutGeminiDriverToolStripMenuItem_Click)),
-            new MenuItem("Exit", new EventHandler(ExitMenu))
+            new MenuItem(Resources.AboutGeminiDriver + "...", new EventHandler(aboutGeminiDriverToolStripMenuItem_Click)),
+            new MenuItem(Resources.Exit, new EventHandler(ExitMenu))
             });
 
             BaloonIcon.ContextMenu = m_BaloonMenu;
@@ -102,29 +108,29 @@ namespace ASCOM.GeminiTelescope
             toolTip1.UseFading = true;
 
             // Set up the ToolTip text for the Button and Checkbox.
-            toolTip1.SetToolTip(this.ButtonConnect, "Connect to Gemini");
-            toolTip1.SetToolTip(this.ButtonFlip, "Perform Meridian Flip");
-            toolTip1.SetToolTip(this.ButtonPark, "Park mount");
-            toolTip1.SetToolTip(this.ButtonSetup, "Setup Driver and Gemini");
+            toolTip1.SetToolTip(this.ButtonConnect, Resources.ConnectingToGemini);
+            toolTip1.SetToolTip(this.ButtonFlip, Resources.MeridianFlip);
+            toolTip1.SetToolTip(this.ButtonPark, Resources.ParkMount);
+            toolTip1.SetToolTip(this.ButtonSetup, Resources.SetupDriver);
 
-            toolTip1.SetToolTip(this.buttonSlew1, "Slew DEC+");
-            toolTip1.SetToolTip(this.buttonSlew2, "Slew DEC-");
-            toolTip1.SetToolTip(this.buttonSlew3, "Slew RA-");
-            toolTip1.SetToolTip(this.buttonSlew4, "Slew RA+");
+            toolTip1.SetToolTip(this.buttonSlew1, Resources.SlewDECP);
+            toolTip1.SetToolTip(this.buttonSlew2, Resources.SlewDECM);
+            toolTip1.SetToolTip(this.buttonSlew3, Resources.SlewRAM);
+            toolTip1.SetToolTip(this.buttonSlew4, Resources.SlewRAP);
 
-            toolTip1.SetToolTip(this.RadioButtonCenter , "Use Centering speed");
-            toolTip1.SetToolTip(this.RadioButtonGuide, "Use Guiding speed");
-            toolTip1.SetToolTip(this.RadioButtonSlew , "Use Slew speed");
+            toolTip1.SetToolTip(this.RadioButtonCenter , Resources.UseCenter);
+            toolTip1.SetToolTip(this.RadioButtonGuide, Resources.UseGuide);
+            toolTip1.SetToolTip(this.RadioButtonSlew , Resources.UseSlew);
 
-            toolTip1.SetToolTip(this.labelLst, "Mount Local Sidereal Time");
-            toolTip1.SetToolTip(this.labelRa,  "Mount Right Ascension");
-            toolTip1.SetToolTip(this.labelDec, "Mount Declination");
+            toolTip1.SetToolTip(this.labelLst, Resources.MountLST);
+            toolTip1.SetToolTip(this.labelRa,  Resources.MountRA);
+            toolTip1.SetToolTip(this.labelDec, Resources.MountDEC);
 
-            toolTip1.SetToolTip(this.checkBoxTrack, "Stop/Start Tracking");
-            toolTip1.SetToolTip(this.CheckBoxFlipDec, "Swap DEC buttons");
-            toolTip1.SetToolTip(this.CheckBoxFlipRa, "Swap RA buttons");
+            toolTip1.SetToolTip(this.checkBoxTrack, Resources.MountStopStart);
+            toolTip1.SetToolTip(this.CheckBoxFlipDec, Resources.SwapDEC);
+            toolTip1.SetToolTip(this.CheckBoxFlipRa, Resources.SwapRA);
 
-            toolTip1.SetToolTip(this.checkboxPEC, "Enable/Disable Periodic Error Correction (PEC)");
+            toolTip1.SetToolTip(this.checkboxPEC, Resources.EnablePEC);
 
             tmrJoystick.Tick += new EventHandler(tmrJoystick_Tick);
 
@@ -141,7 +147,7 @@ namespace ASCOM.GeminiTelescope
                 if (!string.IsNullOrEmpty(GeminiHardware.JoystickName))
                 {
                     m_Joystick = new Joystick();
-                    if (m_Joystick.Initialize(GeminiHardware.JoystickName, GeminiHardware.JoystickAxis))
+                    if (m_Joystick.Initialize(GeminiHardware.JoystickName, GeminiHardware.JoystickAxisRA, GeminiHardware.JoystickAxisDEC))
                     {
                         tmrJoystick.Interval = 200;
                         tmrJoystick.Start();
@@ -205,6 +211,7 @@ namespace ASCOM.GeminiTelescope
                         m_JoystickRate = null;
                         m_JoystickDirection = null;
                         GeminiHardware.DoCommand(":Q", false);
+                        Speech.SayIt(Resources.JoystickStop, Speech.SpeechType.Command); 
                     }
                     tmrJoystick.Start();
                     return;
@@ -222,20 +229,22 @@ namespace ASCOM.GeminiTelescope
 
                 double val = Math.Max(Math.Abs(x), Math.Abs(y));
 
-                if (val < 0.5) rate = ":RG";        // move at guiding speed
-                else if (val < 0.75) rate = ":RC";   // centering speed
+                string s_dir, s_rate;
+
+                if (val < 0.5) {rate = ":RG"; s_rate = "guide";}        // move at guiding speed
+                else if (val < 0.75) { rate = ":RC"; s_rate = "center"; }   // centering speed
                 else
-                    rate = ":RS";                          // slewing speed
+                { rate = ":RS"; s_rate = "slew"; }                          // slewing speed
 
                 if (Math.Abs(x) > Math.Abs(y))
                 {
-                    if (x < 0) dir = ":Me";
-                    else dir = ":Mw";
+                    if (x < 0) { dir = ":Me"; s_dir = "East"; }
+                    else {  dir = ":Mw"; s_dir = "West"; }
                 }
                 else
                 {
-                    if (y < 0) dir = ":Ms";
-                    else dir = ":Mn";
+                    if (y > 0) { dir = ":Ms"; s_dir = "South"; }
+                    else { dir = ":Mn"; s_dir = "North"; }
                 }
 
                 if (rate != m_JoystickRate || dir != m_JoystickDirection)
@@ -257,6 +266,7 @@ namespace ASCOM.GeminiTelescope
                     cmds.Add(dir);
                     m_JoystickDirection = dir;
                     m_JoystickRate = rate;
+                    Speech.SayIt(Resources.MoveJoystick + " "+ s_dir + " at " + s_rate + " speed", Speech.SpeechType.Command); 
                 }
                 if (cmds.Count > 0) GeminiHardware.DoCommand(cmds.ToArray(), false);
                 tmrJoystick.Start();
@@ -334,12 +344,15 @@ namespace ASCOM.GeminiTelescope
         void ControlPanelMenu(object sender, EventArgs e)
         {
             if (this.Visible)
-            { this.Hide(); }
+            { this.Hide();
+            Speech.SayIt(Resources.HideHandController, Speech.SpeechType.Command);
+            }
             else
             { 
                 this.Show();
                 this.WindowState = FormWindowState.Normal;
                 SharedResources.SetTopWindow(this);
+                Speech.SayIt(Resources.ShowHandController, Speech.SpeechType.Command);
             }
 
             m_BaloonMenu.MenuItems["Control"].Checked = this.Visible;
@@ -370,6 +383,11 @@ namespace ASCOM.GeminiTelescope
         {
             m_ShowNotifications = !m_ShowNotifications;
             m_BaloonMenu.MenuItems["Notifications"].Checked = m_ShowNotifications;
+            if (m_ShowNotifications) 
+                Speech.SayIt(Resources.ShowNotifications, Speech.SpeechType.Command);
+            else
+                Speech.SayIt(Resources.HideHandController, Speech.SpeechType.Command);
+
         }
 
         void ConnectMenu(object sender, EventArgs e)
@@ -456,6 +474,12 @@ namespace ASCOM.GeminiTelescope
                 tmrBaloon.Stop();
 
                 BaloonIcon.ShowBalloonTip(4000, text, title, icon);
+
+                if (icon == ToolTipIcon.Error)
+                    Speech.SayIt(text, Speech.SpeechType.Error);
+                else
+                    Speech.SayIt(text, Speech.SpeechType.Announcement);
+
                 // time to turn off the baloon text, since Windows has a minimum of about 20-30 seconds before
                 // the message turns off on its own while the task bar is visible:
                 tmrBaloon.Interval = 4000;
@@ -544,6 +568,8 @@ namespace ASCOM.GeminiTelescope
                 labelPARK.BackColor = (GeminiHardware.AtPark ? m_ActiveBkColor : m_InactiveBkColor);
                 labelPARK.ForeColor = (GeminiHardware.AtPark ? m_ActiveForeColor : m_InactiveForeColor);
 
+                string prev_label = labelSlew.Text;
+
                 switch (GeminiHardware.Velocity)
                 {
                     case "S": labelSlew.Text = "SLEW"; break;
@@ -560,6 +586,13 @@ namespace ASCOM.GeminiTelescope
                 }
 
                 pbStop.Visible = (GeminiHardware.Velocity == "S");  //only show Stop! button when slewing
+
+                if (labelSlew.Text != prev_label)
+                {
+                    Speech.SayIt("Mount " + labelSlew.Text, Speech.SpeechType.Status);
+                }
+
+                bool prev_pec = checkboxPEC.Checked;
 
                 byte pec = GeminiHardware.PECStatus;
                 if ((pec & 1) != 0)
@@ -578,6 +611,10 @@ namespace ASCOM.GeminiTelescope
                     checkboxPEC.Checked = false;
                 }
 
+                if (checkboxPEC.Checked != prev_pec)
+                {
+                    Speech.SayIt("P E C " + (checkboxPEC.Checked? "enabled" : "disabled"), Speech.SpeechType.Status);
+                }
             }
             else
             {
@@ -614,7 +651,10 @@ namespace ASCOM.GeminiTelescope
 
         private void _DoSetupTelescopeDialog()
         {
-                    
+
+            Speech.SayIt(Resources.SetupTelescope, Speech.SpeechType.Command);
+
+
             TelescopeSetupDialogForm setupForm = new TelescopeSetupDialogForm();
 
             setupForm.ComPort = GeminiHardware.ComPort;
@@ -634,6 +674,9 @@ namespace ASCOM.GeminiTelescope
             setupForm.ShowHandbox = GeminiHardware.ShowHandbox;
 
             setupForm.BootMode = GeminiHardware.BootMode;
+            setupForm.UseSpeech = GeminiHardware.UseSpeech;
+            setupForm.SpeechFlags = GeminiHardware.SpeechFilter;
+            setupForm.SpeechVoice = GeminiHardware.SpeechVoice;
 
             DialogResult ans;
             if (this.Visible==false)
@@ -692,19 +735,28 @@ namespace ASCOM.GeminiTelescope
                     GeminiHardware.UseJoystick = false;
                 }
 
+                GeminiHardware.UseSpeech = setupForm.UseSpeech;
+                GeminiHardware.SpeechVoice = setupForm.SpeechVoice;
+                GeminiHardware.SpeechFilter = setupForm.SpeechFlags;
+
+                Speech.SpeechInitialize(this.Handle, GeminiHardware.UseSpeech? GeminiHardware.SpeechVoice : null);
+                Speech.Filter = GeminiHardware.SpeechFilter;
                 
                 if (error != "")
                 {
                     if (error.EndsWith(", ")) error = error.Substring(0, error.Length - 2);
-                    MessageBox.Show("The following setting(s) are invalid:\r\n" + error, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(Resources.InvalidSettings + "\r\n" + error, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
+                tmrJoystick.Stop();
+                StartJoystick();    //restart if settings have changed
             }
 
             setupForm.Dispose();
         }
         private void _DoFocuserSetupDialog()
         {
+            Speech.SayIt(Resources.ShowSetupFocuser, Speech.SpeechType.Command);
             FocuserSetupDialogForm setupForm = new FocuserSetupDialogForm();
             setupForm.ComPort = GeminiHardware.ComPort;
             setupForm.BaudRate = GeminiHardware.BaudRate.ToString();
@@ -736,7 +788,7 @@ namespace ASCOM.GeminiTelescope
                 }
                 catch
                 {
-                    MessageBox.Show("Some settings are invalid", SharedResources.TELESCOPE_DRIVER_NAME);
+                    MessageBox.Show(Resources.SomeInvalidSettings, SharedResources.TELESCOPE_DRIVER_NAME);
                 }
             }
 
@@ -832,6 +884,16 @@ namespace ASCOM.GeminiTelescope
         }
         private void frmMain_Load(object sender, EventArgs e)
         {
+
+            try
+            {
+                Speech.SpeechInitialize(this.Handle, GeminiHardware.UseSpeech ? GeminiHardware.SpeechVoice : null);
+                Speech.Filter = GeminiHardware.SpeechFilter;
+            }
+            catch
+            {
+            }
+
             SharedResources.SetTopWindow(this);
 
             SetSlewButtons();
@@ -886,6 +948,8 @@ namespace ASCOM.GeminiTelescope
         {
             if (!GeminiHardware.Connected)
             {
+                Speech.SayIt(Resources.Connect, Speech.SpeechType.Command);
+
                 ButtonConnect.Enabled = false;
                 ButtonConnect.Text = "Connecting...";
                 ButtonConnect.Update();
@@ -900,16 +964,17 @@ namespace ASCOM.GeminiTelescope
                 {
                     ButtonConnect.Text = "Connect";
                     ButtonConnect.Update();
-                    MessageBox.Show("Cannot connect to Gemini!\r\n" + m_LastError, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                    MessageBox.Show(Resources.CannotConnect + "\r\n" + m_LastError, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 }
                 else
                     this.ButtonConnect.Text = "Disconnect";
             }
             else
             {
+                Speech.SayIt(Resources.Disconnect, Speech.SpeechType.Command);
                 if (GeminiHardware.Clients > 1)
                 {
-                    DialogResult res = MessageBox.Show("Other programs are still connected. Are you sure you want to disconnect from the mount?",
+                    DialogResult res = MessageBox.Show(Resources.DisconnectWarning,
                         SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
                     if (res != DialogResult.Yes)
                         return;
@@ -923,7 +988,7 @@ namespace ASCOM.GeminiTelescope
                     catch { }
 
                 if (GeminiHardware.Connected != false)
-                    MessageBox.Show("Cannot disconnect from telescope", SharedResources.TELESCOPE_DRIVER_NAME);
+                    MessageBox.Show(Resources.CannotDisconnect, SharedResources.TELESCOPE_DRIVER_NAME);
                 else
                     this.ButtonConnect.Text = "Connect";
             }
@@ -936,13 +1001,13 @@ namespace ASCOM.GeminiTelescope
             {
                 e.Cancel = true;
                 this.Hide();
-                SetBaloonText("Gemini ASCOM controller is still running.\r\nIt can be accessed from this icon", "Gemini Controller was minimized", ToolTipIcon.Info);
+                SetBaloonText(Resources.DriverRunning, Resources.DriverMinimized, ToolTipIcon.Info);
                 return;
             }
             m_ExitFormMenuCall = false;
             if (GeminiHardware.Connected && GeminiHardware.Clients > 0)
             {
-                DialogResult res = MessageBox.Show("Gemini connection" + (GeminiHardware.Clients > 1 ? "s are" : " is") + " still active. Are you sure you want to disconnect and exit?",
+                DialogResult res = MessageBox.Show("Gemini connection" + (GeminiHardware.Clients > 1 ? "s are" : " is") + " still active. " + Resources.GeminiConnectionAlive1,
                     SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (res != DialogResult.Yes)
                 {
@@ -972,6 +1037,7 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
+
                 GeminiHardware.DoCommand(":Q",false);
             }
         }
@@ -980,14 +1046,17 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
+                Speech.SayIt(Resources.MedidianFlip, Speech.SpeechType.Command);
                 string res = GeminiHardware.DoCommandResult(":Mf", GeminiHardware.MAX_TIMEOUT, false);
                 switch (res)
                 {
-                    case "1Object below horizon.": 
-                        MessageBox.Show(this, "Object below the horizon -- cannot do a meridian flip", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    case "1Object below horizon.":
+                        Speech.SayIt(Resources.ObjectBelowHorizon, Speech.SpeechType.Error);
+                        MessageBox.Show(this, Resources.ObjectBelowHorizon, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                     case "4Position unreachable.":
-                        MessageBox.Show(this, "Cannot perform a meridian flip: object is unreachable from the other side", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        Speech.SayIt(Resources.ObjectUnreachable, Speech.SpeechType.Error);
+                        MessageBox.Show(this, Resources.ObjectUnreachable, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                 }
             }
@@ -997,13 +1066,15 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
+                Speech.SayIt(Resources.DownButton, Speech.SpeechType.Command);
                 ((Control)sender).Capture = true;
 
                 string[] cmds = { null, null };
 
-                if (RadioButtonGuide.Checked) cmds[0] = ":RG";
-                if (RadioButtonCenter.Checked) cmds[0] = ":RC";
-                if (RadioButtonSlew.Checked) cmds[0] = ":RS";
+                if (RadioButtonGuide.Checked) { cmds[0] = ":RG"; Speech.SayIt(Resources.AtGuideSpeed, Speech.SpeechType.Command); }
+
+                if (RadioButtonCenter.Checked) { cmds[0] = ":RC"; Speech.SayIt(Resources.AtCenterSpeed, Speech.SpeechType.Command); } 
+                if (RadioButtonSlew.Checked) { cmds[0] = ":RS"; Speech.SayIt(Resources.AtSlewSpeed, Speech.SpeechType.Command); }
 
                 if (CheckBoxFlipDec.Checked)
                 {
@@ -1038,6 +1109,7 @@ namespace ASCOM.GeminiTelescope
 
         private void buttonSlew2_MouseDown(object sender, MouseEventArgs e)
         {
+            Speech.SayIt(Resources.UpButton, Speech.SpeechType.Command);
             if (GeminiHardware.Connected)
             {
                 ((Control)sender).Capture = true;
@@ -1080,6 +1152,8 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
+                Speech.SayIt(Resources.RightButton, Speech.SpeechType.Command);
+
                 ((Control)sender).Capture = true;
 
                 string[] cmds = { null, null };
@@ -1120,6 +1194,8 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
+                Speech.SayIt(Resources.LeftButton, Speech.SpeechType.Command);
+
                 ((Control)sender).Capture = true;
 
                 string[] cmds = { null, null };
@@ -1158,12 +1234,16 @@ namespace ASCOM.GeminiTelescope
 
         private void toolStripMenuParkHere_Click(object sender, EventArgs e)
         {
+            Speech.SayIt(Resources.ParkHere, Speech.SpeechType.Command);
+
             GeminiHardware.DoCommandResult(":hN", GeminiHardware.MAX_TIMEOUT, false);
+
         }
 
         private void toolStripMenuParkCWD_Click(object sender, EventArgs e)
         {
             this.UseWaitCursor = true;
+            Speech.SayIt(Resources.ParkCWD, Speech.SpeechType.Command);
             GeminiHardware.DoCommandResult(":hC", GeminiHardware.MAX_TIMEOUT, false);
             GeminiHardware.WaitForHomeOrPark("Park");
             GeminiHardware.DoCommandResult(":hN", GeminiHardware.MAX_TIMEOUT, false);
@@ -1173,6 +1253,8 @@ namespace ASCOM.GeminiTelescope
         private void toolStripMenuParkHome_Click(object sender, EventArgs e)
         {
             this.UseWaitCursor = true;
+            Speech.SayIt(Resources.ParkHome, Speech.SpeechType.Command);
+
             GeminiHardware.DoCommandResult(":hP", GeminiHardware.MAX_TIMEOUT, false);
             GeminiHardware.WaitForHomeOrPark("Home");
 
@@ -1197,6 +1279,7 @@ namespace ASCOM.GeminiTelescope
         {
             //tmrJoystick.Stop();
             GeminiHardware.DoCommandResult(":Q", GeminiHardware.MAX_TIMEOUT, false);
+            Speech.SayIt(Resources.StopSlew, Speech.SpeechType.Command);
         }
 
         private void frmMain_VisibleChanged(object sender, EventArgs e)
@@ -1211,6 +1294,8 @@ namespace ASCOM.GeminiTelescope
 
         private void aboutGeminiDriverToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Speech.SayIt(Resources.AboutGeminiDriver, Speech.SpeechType.Command);
+
             GeminiAbout.MainWindow win = new GeminiAbout.MainWindow();
             win.Show();
         }
@@ -1227,6 +1312,11 @@ namespace ASCOM.GeminiTelescope
         private void buttonSlew4_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void exitDriverMenuItem_Click(object sender, EventArgs e)
+        {
+            ExitMenu(sender, e);
         }
 
     }

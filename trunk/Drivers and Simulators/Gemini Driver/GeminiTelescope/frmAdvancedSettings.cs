@@ -23,6 +23,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using ASCOM.GeminiTelescope.Properties;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -114,7 +115,7 @@ namespace ASCOM.GeminiTelescope
             if (this.ValidateChildren())
             {
 
-                DialogResult res = MessageBox.Show("You are about to write advanced settings to Gemini.\r\n\r\nAre you sure you want to do this?", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                DialogResult res = MessageBox.Show(Resources.OverwriteSettings, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                 if (res != DialogResult.Yes) return;
 
                 this.UseWaitCursor = true;
@@ -136,7 +137,7 @@ namespace ASCOM.GeminiTelescope
                 catch (Exception ex)
                 {
                     GeminiHardware.Trace.Except(ex);
-                    MessageBox.Show("Unable to save profile:\r\n" + ex.Message);
+                    MessageBox.Show( Resources.NoProfileSave + "\r\n" + ex.Message);
                 }
                 finally
                 {
@@ -171,7 +172,7 @@ namespace ASCOM.GeminiTelescope
             catch (Exception ex)
             {
                 GeminiHardware.Trace.Except(ex);
-                MessageBox.Show("Unable to load profile:\r\n" + ex.Message);
+                MessageBox.Show(Resources.NoProfileLoad+ "\r\n" + ex.Message);
             }
             GeminiHardware.Trace.Enter("AdvancedSettings:pbSave_Click");
                  
@@ -198,7 +199,7 @@ namespace ASCOM.GeminiTelescope
             catch (Exception ex)
             {
                 GeminiHardware.Trace.Except(ex);
-                MessageBox.Show("Unable to save profile:\r\n" + ex.Message);
+                MessageBox.Show(Resources.NoProfileSave + "\r\n" + ex.Message);
             }
             GeminiHardware.Trace.Exit("AdvancedSettings:pbSave_Click");
         }
@@ -209,7 +210,7 @@ namespace ASCOM.GeminiTelescope
             if (GeminiHardware.Connected)
             {
                 GeminiHardware.DoCommandResult(">220:", GeminiHardware.MAX_TIMEOUT, false);
-                MessageBox.Show("Safety Limit set to current position");
+                MessageBox.Show(Resources.SafetyLimitSet);                
             }
         }
 
@@ -218,7 +219,7 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
-                DialogResult res = MessageBox.Show("Are you sure you want to reboot Gemini controller?", "Reboot Gemini", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Hand);
+                DialogResult res = MessageBox.Show(Resources.RebootController, "Reboot Gemini", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Hand);
                 if (res == DialogResult.Yes)
                 {
                     GeminiHardware.DoCommandResult(">65535:", GeminiHardware.MAX_TIMEOUT, false);

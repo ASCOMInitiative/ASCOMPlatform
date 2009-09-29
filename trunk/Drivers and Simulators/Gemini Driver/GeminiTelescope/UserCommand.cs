@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ASCOM.GeminiTelescope.Properties;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -110,6 +111,7 @@ namespace ASCOM.GeminiTelescope
                         int acc = GeminiHardware.JoystickFixedSpeed + 1;
                         if (acc > 2) acc = 2;
                         GeminiHardware.JoystickFixedSpeed = acc;
+                        Speech.SayIt("Accelerate", Speech.SpeechType.Command);
                     }
                     break;
                 case UserFunction.DecelerateSlew:
@@ -118,50 +120,68 @@ namespace ASCOM.GeminiTelescope
                         int dec = GeminiHardware.JoystickFixedSpeed - 1;
                         if (dec < 0) dec = 0;
                         GeminiHardware.JoystickAccelerator = dec;
+                        Speech.SayIt("Decelerate", Speech.SpeechType.Command);
                     }
                     break;
                 case UserFunction.MeridianFlip: if (!keyDown) return Cmd(":Mf"); break;
-                case UserFunction.HandUp: return SendKeyCmd(4, keyDown); 
-                case UserFunction.HandDown: return SendKeyCmd(2, keyDown); 
-                case UserFunction.HandLeft: return SendKeyCmd(1, keyDown); 
-                case UserFunction.HandRight: return SendKeyCmd(8, keyDown);
+                case UserFunction.HandUp: { SendKeyCmd(4, keyDown); if (keyDown) Speech.SayIt(Resources.UpKey, Speech.SpeechType.Command); return true; }
+                case UserFunction.HandDown: { SendKeyCmd(2, keyDown); if (keyDown) Speech.SayIt(Resources.DownKey, Speech.SpeechType.Command); return true; }
+                case UserFunction.HandLeft: { SendKeyCmd(1, keyDown); if (keyDown) Speech.SayIt(Resources.LeftKey, Speech.SpeechType.Command); return true; }
+                case UserFunction.HandRight: { SendKeyCmd(8, keyDown); if (keyDown) Speech.SayIt(Resources.RightKey, Speech.SpeechType.Command); return true; }
                 case UserFunction.HandMenu: 
                     //SendKeyCmd(16, keyDown);    //menu button doesn't work if Gemini is in local control mode!
                     if (!keyDown) {
                         m_InMenu = !m_InMenu;
-                        if (m_InMenu) return Cmd(":HM");
-                        else { SendKeyCmd(16, keyDown); Cmd(":Hm"); Cmd(":Hm"); return true; }
-                        }
+                        if (m_InMenu) { Cmd(":HM"); Speech.SayIt(Resources.EnterMenu, Speech.SpeechType.Command); return true; }
+
+                        else { Cmd(":Hm"); Cmd(":Hm"); Speech.SayIt(Resources.ExitMenu, Speech.SpeechType.Command); return true; }
+                    }
                     break;
-                case UserFunction.ParkCWD: if (!keyDown) { Cmd(":hC"); return Cmd(":hN"); } break;
-                case UserFunction.GoHome: if (!keyDown) return Cmd(":hP"); break;
-                case UserFunction.StopSlew: if (keyDown) return Cmd(":Q"); break;
-                case UserFunction.StopTrack: if (keyDown) return Cmd(":hN"); break;
-                case UserFunction.StartTrack: if (keyDown) return Cmd(":hW"); break;
-                case UserFunction.AllSpeedMode: if (!keyDown) return Cmd(">163:"); break;
-                case UserFunction.PhotoMode: if (!keyDown) return Cmd(">162:"); break;
-                case UserFunction.VisualMode: if (!keyDown) return Cmd(">161:"); break;
-                case UserFunction.ToggleMode: if (!keyDown) return ToggleMode(); break;
+                case UserFunction.ParkCWD:
+                    if (!keyDown)
+                    {
+                        Cmd(":hC");
+                        Cmd(":hN");
+                        Speech.SayIt(Resources.ParkCWD, Speech.SpeechType.Command);
+                        return true;
+                    }
+                    break;
+                case UserFunction.GoHome: if (!keyDown)
+                    {
+                        Cmd(":hP"); Speech.SayIt(Resources.GoHome, Speech.SpeechType.Command);
+                        return true;
+                    } 
+                    break;
+                case UserFunction.StopSlew: if (keyDown) { Cmd(":Q"); Speech.SayIt(Resources.StopSlew, Speech.SpeechType.Command); return true; }
+                    break;
+                case UserFunction.StopTrack: if (keyDown) { Cmd(":hN"); Speech.SayIt(Resources.StopTracking, Speech.SpeechType.Command); return true; }  break;
+                case UserFunction.StartTrack: if (keyDown) { Cmd(":hW"); Speech.SayIt(Resources.StartTracking, Speech.SpeechType.Command); return true; }  break;
+                case UserFunction.AllSpeedMode: if (!keyDown) { Cmd(">163:"); Speech.SayIt(Resources.AllSpeedsMode, Speech.SpeechType.Command); return true; }  break;
+                case UserFunction.PhotoMode: if (!keyDown) { Cmd(">162:"); Speech.SayIt(Resources.PhotoMode, Speech.SpeechType.Command); return true; }  break;
+                case UserFunction.VisualMode: if (!keyDown) { Cmd(">161:"); Speech.SayIt(Resources.VisualMode, Speech.SpeechType.Command); return true; }  break;
+                case UserFunction.ToggleMode: if (!keyDown) { ToggleMode(); Speech.SayIt("Toggle mode", Speech.SpeechType.Command); return true; } break;
                 case UserFunction.FocuserIn:
-                    if (keyDown) return Cmd(":F+");
-                    else return Cmd(":FQ");
+                    if (keyDown) { Cmd(":F+"); Speech.SayIt("Focuser In", Speech.SpeechType.Command); return true;  }
+                    else { Cmd(":FQ"); return true; }
                   
                 case UserFunction.FocuserOut:
-                    if (keyDown) return Cmd(":F-");
-                    else return Cmd(":FQ");
+                    if (keyDown) { Cmd(":F-"); Speech.SayIt("Focuser Out", Speech.SpeechType.Command); return true; }
+                    else { Cmd(":FQ");  return true; }
                  
-                case UserFunction.FocuserFast: if (!keyDown) { m_FocuserSpeed = 0; return Cmd(":FF"); } break;
-                case UserFunction.FocuserMedium: if (!keyDown) { m_FocuserSpeed = 1; return Cmd(":FM"); } break;
-                case UserFunction.FocuserSlow: if (!keyDown) { m_FocuserSpeed = 2; return Cmd(":FS"); } break;
+                case UserFunction.FocuserFast: if (!keyDown) { m_FocuserSpeed = 0; Cmd(":FF");  Speech.SayIt(Resources.FocuserFast, Speech.SpeechType.Command); return true; } break;
+                case UserFunction.FocuserMedium: if (!keyDown) { m_FocuserSpeed = 1; Cmd(":FM");  Speech.SayIt(Resources.FocuserMedium, Speech.SpeechType.Command); return true;  } break;
+                case UserFunction.FocuserSlow: if (!keyDown) { m_FocuserSpeed = 2; Cmd(":FS");  Speech.SayIt(Resources.FocuserSlow, Speech.SpeechType.Command); return true; } break;
                 case UserFunction.ToggleFocuserSpeed: 
                     if (!keyDown)
                     {
                         if (++m_FocuserSpeed > 2) m_FocuserSpeed = 0;
                         Cmd(m_FocuserCmds[m_FocuserSpeed]);
+                        Speech.SayIt("Focuser Speed Toggle", Speech.SpeechType.Command); 
+                        return true;
                     }
                     break;
-                case UserFunction.Search2: if (!keyDown) return Cmd(":MF6"); break;
-                case UserFunction.Search1: if (!keyDown) return Cmd(":MF8"); break;
+                case UserFunction.Search2: if (!keyDown) { Cmd(":MF6"); Speech.SayIt(Resources.ObjectSearch2, Speech.SpeechType.Command); return true; } break;
+                case UserFunction.Search1: if (!keyDown) { Cmd(":MF8"); Speech.SayIt(Resources.ObjectSearch1, Speech.SpeechType.Command); return true; } break;
             }
             return false;
         }

@@ -153,6 +153,8 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         private void ListenUp()
         {
+            System.Threading.Thread.CurrentThread.CurrentUICulture = System.Threading.Thread.CurrentThread.CurrentCulture;
+
             GeminiHardware.Trace.Enter("PTP:ListenUp");
 
             string incoming = "";
