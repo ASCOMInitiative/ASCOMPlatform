@@ -2024,8 +2024,8 @@ namespace ASCOM.GeminiTelescope
                 {
                     if (!statusThread.Join(2000))
                     {
-                        GeminiHardware.Trace.Info(4, "Thread.Abort status form");
-                        statusThread.Abort();
+                        GeminiHardware.Trace.Info(4, "Failed to stop thread: status form");
+//                        statusThread.Abort();
                     }
                     statusThread = null;
 

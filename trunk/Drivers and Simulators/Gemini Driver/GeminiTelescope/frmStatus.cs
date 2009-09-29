@@ -35,21 +35,29 @@ namespace ASCOM.GeminiTelescope
 
         internal void ShutDown(object sender, EventArgs e)
         {
-            this.Hide();
-            tmrUpdate.Stop();
-            this.Close();
-            this.Dispose();
+            try
+            {
+                this.Hide();
+                tmrUpdate.Stop();
+                this.Close();
+                this.Dispose();
+            }
+            catch { }
         }
 
 
         private void frmStatus_Load(object sender, EventArgs e)
         {
-            this.geminiPropertiesBindingSource.Add(new GeminiProperties());
-            tmrUpdate.Interval = 1500;
-            tmrUpdate.Tick += new EventHandler(tmrUpdate_Tick);
-            tmrUpdate.Start();
-            SharedResources.SetTopWindow(this);
-            this.Move += new System.EventHandler(this.frmStatus_Move);
+            try
+            {
+                this.geminiPropertiesBindingSource.Add(new GeminiProperties());
+                tmrUpdate.Interval = 1500;
+                tmrUpdate.Tick += new EventHandler(tmrUpdate_Tick);
+                tmrUpdate.Start();
+                SharedResources.SetTopWindow(this);
+                this.Move += new System.EventHandler(this.frmStatus_Move);
+            }
+            catch { }
         }
 
         void tmrUpdate_Tick(object sender, EventArgs e)
