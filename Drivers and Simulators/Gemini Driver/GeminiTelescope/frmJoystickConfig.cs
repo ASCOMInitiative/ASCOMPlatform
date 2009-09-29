@@ -24,6 +24,7 @@ using System.Drawing;
 
 using System.Text;
 using System.Windows.Forms;
+using ASCOM.GeminiTelescope.Properties;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -78,31 +79,31 @@ namespace ASCOM.GeminiTelescope
             new AssignmentClass("Use Slewing Speed with Joystick", UserFunction.SlewingSpeed),
             new AssignmentClass("Toggle Joystick Speed: Guiding/Centering/Slewing", UserFunction.ToggleSpeed),            
 */ 
-            new AssignmentClass("Accelerate Joystick Fixed Speed", UserFunction.AccelerateSlew),
-            new AssignmentClass("Decelerate Joystick Fixed Speed", UserFunction.DecelerateSlew),
-            new AssignmentClass("Hand Controller Up button", UserFunction.HandUp),
-            new AssignmentClass("Hand Controller Down button", UserFunction.HandDown),
-            new AssignmentClass("Hand Controller Left button", UserFunction.HandLeft),
-            new AssignmentClass("Hand Controller Right button", UserFunction.HandRight),
-            new AssignmentClass("Hand Controller Menu button", UserFunction.HandMenu), // Menu button cmd doesn't work when Gemini is in local controller mode
-            new AssignmentClass("Perform Meridian Flip", UserFunction.MeridianFlip),
-            new AssignmentClass("Park at CWD", UserFunction.ParkCWD),
-            new AssignmentClass("Go to Home Position", UserFunction.GoHome),
-            new AssignmentClass("Stop Slewing", UserFunction.StopSlew),
-            new AssignmentClass("Stop Tracking", UserFunction.StopTrack),
-            new AssignmentClass("Start Tracking", UserFunction.StartTrack),
-            new AssignmentClass("Visual Mode", UserFunction.VisualMode),
-            new AssignmentClass("All Speeds Mode", UserFunction.AllSpeedMode),
-            new AssignmentClass("Photo Mode", UserFunction.PhotoMode),
-            new AssignmentClass("Toggle between Visual, All Speed, and Photo modes", UserFunction.ToggleMode),
-            new AssignmentClass("Move Focuser In", UserFunction.FocuserIn),
-            new AssignmentClass("Move Focuser Out", UserFunction.FocuserOut),
-            new AssignmentClass("Set Fast Focuser Speed", UserFunction.FocuserFast),
-            new AssignmentClass("Set Medium Focuser Speed", UserFunction.FocuserMedium),
-            new AssignmentClass("Set Slow Focuser Speed", UserFunction.FocuserSlow),
-            new AssignmentClass("Toggle Focuser Speed: Slow/Medium/Fast", UserFunction.ToggleFocuserSpeed),
-            new AssignmentClass("Object Search 2 Degrees", UserFunction.Search2),
-            new AssignmentClass("Object Search 1 Degree", UserFunction.Search1),
+            new AssignmentClass(Resources.AccJoystick, UserFunction.AccelerateSlew),
+            new AssignmentClass(Resources.DecJoystick, UserFunction.DecelerateSlew),
+            new AssignmentClass(Resources.HC_UP, UserFunction.HandUp),
+            new AssignmentClass(Resources.HC_DN, UserFunction.HandDown),
+            new AssignmentClass(Resources.HC_LF, UserFunction.HandLeft),
+            new AssignmentClass(Resources.HC_RT, UserFunction.HandRight),
+            new AssignmentClass(Resources.HC_MENU, UserFunction.HandMenu), // Menu button cmd doesn't work when Gemini is in local controller mode
+            new AssignmentClass(Resources.PERF_FLIP, UserFunction.MeridianFlip),
+            new AssignmentClass(Resources.ParkCWD, UserFunction.ParkCWD),
+            new AssignmentClass(Resources.GoHome, UserFunction.GoHome),
+            new AssignmentClass(Resources.StopSlew, UserFunction.StopSlew),
+            new AssignmentClass(Resources.StopTracking, UserFunction.StopTrack),
+            new AssignmentClass(Resources.StartTracking, UserFunction.StartTrack),
+            new AssignmentClass(Resources.VisualMode, UserFunction.VisualMode),
+            new AssignmentClass(Resources.AllSpeedsMode, UserFunction.AllSpeedMode),
+            new AssignmentClass(Resources.PhotoMode, UserFunction.PhotoMode),
+            new AssignmentClass(Resources.ToggleVAP, UserFunction.ToggleMode),
+            new AssignmentClass(Resources.MoveFocusIn, UserFunction.FocuserIn),
+            new AssignmentClass(Resources.MoveFocusOut, UserFunction.FocuserOut),
+            new AssignmentClass(Resources.SetFastFocuser, UserFunction.FocuserFast),
+            new AssignmentClass(Resources.SetMediumFocuser, UserFunction.FocuserMedium),
+            new AssignmentClass(Resources.SetSlowFocuser, UserFunction.FocuserSlow),
+            new AssignmentClass(Resources.ToggleFocuserSpeed, UserFunction.ToggleFocuserSpeed),
+            new AssignmentClass(Resources.ObjSrch2, UserFunction.Search2),
+            new AssignmentClass(Resources.ObjSrch1, UserFunction.Search1),
         };
 
 
@@ -150,7 +151,7 @@ namespace ASCOM.GeminiTelescope
 
             if (!string.IsNullOrEmpty(GeminiHardware.JoystickName))
             {
-                if (!m_JS.Initialize(GeminiHardware.JoystickName, GeminiHardware.JoystickAxis))
+                if (!m_JS.Initialize(GeminiHardware.JoystickName, GeminiHardware.JoystickAxisRA, GeminiHardware.JoystickAxisDEC))
                     m_JS = null;
                 else
                 {
@@ -159,16 +160,21 @@ namespace ASCOM.GeminiTelescope
                     tmrJoystick.Start();
 
                     int axis = m_JS.NumberOfAxis;
-                    for (int i = 0; i < axis; i += 2)
+                    for (int i = 0; i < axis; i++)
                     {
-                        cmbAxis.Items.Add("Axis " + (i + 1).ToString() + " and " + (i + 2).ToString());
+                        cmbAxisRA.Items.Add("Axis " + (i + 1).ToString() );
+                        cmbAxisDEC.Items.Add("Axis " + (i + 1).ToString());
                     }
 
 //                    if (m_JS.HasPOV4)
 //                        cmbAxis.Items.Add("POV 4-way Controller");
 
-                    if (cmbAxis.Items.Count > 0)
-                        cmbAxis.SelectedIndex = 0;
+                    // default to axis 0 and 1 (X & Y):
+                    if (cmbAxisRA.Items.Count > 0)
+                        cmbAxisRA.SelectedIndex = 0;
+
+                    if (cmbAxisDEC.Items.Count > 1)
+                        cmbAxisDEC.SelectedIndex = 1;
                 }
             }
 
@@ -223,10 +229,15 @@ namespace ASCOM.GeminiTelescope
                 }
                 GeminiHardware.JoystickButtonMap = button_mappings;
                 GeminiHardware.JoystickIsAnalog = rbAnalog.Checked;
-                if (cmbAxis.SelectedIndex >= 0)
+                if (cmbAxisRA.SelectedIndex >= 0)
                 {
-                    GeminiHardware.JoystickAxis = cmbAxis.SelectedIndex;
+                    GeminiHardware.JoystickAxisRA = cmbAxisRA.SelectedIndex;
                 }
+                if (cmbAxisDEC.SelectedIndex >= 0)
+                {
+                    GeminiHardware.JoystickAxisDEC = cmbAxisDEC.SelectedIndex;
+                }
+
                 return true;
             }
             else
@@ -241,8 +252,12 @@ namespace ASCOM.GeminiTelescope
                 rbAnalog.Checked = GeminiHardware.JoystickIsAnalog;
                 rbFixed.Checked = !GeminiHardware.JoystickIsAnalog;
 
-                if (cmbAxis.Items.Count > GeminiHardware.JoystickAxis)
-                    cmbAxis.SelectedIndex = GeminiHardware.JoystickAxis;
+                if (cmbAxisRA.Items.Count > GeminiHardware.JoystickAxisRA)
+                    cmbAxisRA.SelectedIndex = GeminiHardware.JoystickAxisRA;
+
+                if (cmbAxisDEC.Items.Count > GeminiHardware.JoystickAxisDEC)
+                    cmbAxisDEC.SelectedIndex = GeminiHardware.JoystickAxisDEC;
+
                 return true;
             }
 
@@ -264,13 +279,23 @@ namespace ASCOM.GeminiTelescope
         private void button1_Click(object sender, EventArgs e)
         {
             ButtonGrid.EndEdit();
-
+            if (cmbAxisDEC.SelectedIndex >= 0 &&
+                cmbAxisDEC.SelectedIndex == cmbAxisRA.SelectedIndex)
+            {
+                MessageBox.Show(Resources.SameAxis, SharedResources.TELESCOPE_DRIVER_NAME);
+                DialogResult = DialogResult.None;
+            }
         }
 
         private void btnClear_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < ButtonGrid.Rows.Count; ++i)
                 ButtonGrid.Rows[i].Cells[1].Value = AllAssignments[0];
+        }
+
+        private void groupBox3_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

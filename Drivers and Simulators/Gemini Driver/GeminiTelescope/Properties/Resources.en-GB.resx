@@ -176,7 +176,7 @@
     <value>Down Key</value>
   </data>
   <data name="DriverMinimized" xml:space="preserve">
-    <value>Gemini Controller was minimized</value>
+    <value>Gemini Controller was minimised</value>
   </data>
   <data name="DriverRunning" xml:space="preserve">
     <value>Gemini ASCOM controller is still running.

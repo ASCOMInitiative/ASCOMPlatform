@@ -113,6 +113,10 @@
       <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Interop.SpeechLib, Version=5.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Interop.SpeechLib.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -137,6 +141,12 @@
     </Compile>
     <Compile Include="AstronomyFunctions.cs" />
     <Compile Include="ClassFactory.cs" />
+    <Compile Include="frmVoiceOut.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmVoiceOut.Designer.cs">
+      <DependentUpon>frmVoiceOut.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmAdvancedSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -176,6 +186,7 @@
     <Compile Include="GeminiProperties.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="MainSpeech.cs" />
     <Compile Include="NmeaInterpretor.cs" />
     <Compile Include="PassThroughPort.cs" />
     <Compile Include="FocuserSetupDialogForm.cs">
@@ -201,6 +212,9 @@
     <Compile Include="GeminiError.cs" />
     <Compile Include="LocalServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="frmVoiceOut.resx">
+      <DependentUpon>frmVoiceOut.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FocuserSetupDialogForm.resx">
       <DependentUpon>FocuserSetupDialogForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -237,6 +251,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.en-GB.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.en-GB.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="TelescopeSetupDialogForm.resx">
       <DependentUpon>TelescopeSetupDialogForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -244,6 +262,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.en-GB.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.en-GB.resx</DependentUpon>
     </Compile>
     <Compile Include="ReferenceCountedObject.cs" />
     <Compile Include="Resource1.Designer.cs">
@@ -253,6 +276,7 @@
     </Compile>
     <Compile Include="SharedResources.cs" />
     <Compile Include="GeminiHardware.cs" />
+    <Compile Include="Speech.cs" />
     <Compile Include="TButton.cs">
       <SubType>Component</SubType>
     </Compile>

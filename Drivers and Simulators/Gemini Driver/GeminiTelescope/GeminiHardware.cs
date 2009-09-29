@@ -29,6 +29,7 @@ using System.Timers;
 using System.IO.Ports;
 using System.Windows.Forms;
 using System.Drawing;
+using ASCOM.GeminiTelescope.Properties;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -383,18 +384,30 @@ namespace ASCOM.GeminiTelescope
         }
 
 
-        private static int m_JoystickAxis;
+        private static int m_JoystickAxisRA;
 
-        public static int JoystickAxis
+        public static int JoystickAxisRA
         {
-            get { return GeminiHardware.m_JoystickAxis; }
+            get { return GeminiHardware.m_JoystickAxisRA; }
             set {
                 m_Profile.DeviceType = "Telescope";
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickAxis", value.ToString());
-                GeminiHardware.m_JoystickAxis = value;
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickAxisRA", value.ToString());
+                GeminiHardware.m_JoystickAxisRA = value;
             }
         }
 
+        private static int m_JoystickAxisDEC;
+
+        public static int JoystickAxisDEC
+        {
+            get { return GeminiHardware.m_JoystickAxisDEC; }
+            set
+            {
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickAxisDEC", value.ToString());
+                GeminiHardware.m_JoystickAxisDEC = value;
+            }
+        }
 
         private static UserFunction[] m_JoystickButtonMap;
 
@@ -439,6 +452,45 @@ namespace ASCOM.GeminiTelescope
         {
             get { return GeminiHardware.m_JoystickFixedSpeed; }
             set { GeminiHardware.m_JoystickFixedSpeed = value; }
+        }
+
+
+        private static bool m_UseSpeech = false;
+
+        public static bool UseSpeech
+        {
+            get { return GeminiHardware.m_UseSpeech; }
+            set { 
+                GeminiHardware.m_UseSpeech = value; 
+                GeminiHardware.m_Profile.DeviceType = "Telescope";
+                GeminiHardware.m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseSpeech", value.ToString());
+            }
+        }
+
+
+        private static Speech.SpeechType m_SpeechFilter = 0;
+
+        internal static Speech.SpeechType SpeechFilter
+        {
+            get { return GeminiHardware.m_SpeechFilter; }
+            set { 
+                
+                GeminiHardware.m_SpeechFilter = value;
+                GeminiHardware.m_Profile.DeviceType = "Telescope";
+                GeminiHardware.m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "SpeechFilter", ((int)value).ToString());
+            }
+        }
+
+        private static string m_SpeechVoice = "";
+
+        public static string SpeechVoice
+        {
+            get { return GeminiHardware.m_SpeechVoice; }
+            set { 
+                GeminiHardware.m_SpeechVoice = value;
+                GeminiHardware.m_Profile.DeviceType = "Telescope";
+                GeminiHardware.m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "SpeechVoice", value.ToString());
+            }
         }
 
 
@@ -668,7 +720,7 @@ namespace ASCOM.GeminiTelescope
             if (m_PassThroughPortEnabled && m_PassThroughComPort.Equals(m_ComPort, StringComparison.CurrentCultureIgnoreCase))
             {
                 Trace.Error("Pass-through port is invalid", m_PassThroughComPort);
-                if (OnError != null) OnError("Pass-through port will be disabled", "Gemini Pass-Through port # is invalid: " + m_PassThroughComPort);
+                if (OnError != null) OnError(Resources.PTPDisabled, Resources.PTPInvalid + m_PassThroughComPort);
                 PassThroughPortEnabled = false;
             }
 
@@ -690,11 +742,25 @@ namespace ASCOM.GeminiTelescope
 
             m_JoystickButtonMap = JoystickButtonMapFromProfile();
 
-            if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickAxis", ""), out m_JoystickAxis))
-                m_JoystickAxis = 0;
+            if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickAxisRA", ""), out m_JoystickAxisRA))
+                m_JoystickAxisRA = 0;
+
+            if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickAxisDEC", ""), out m_JoystickAxisDEC))
+                m_JoystickAxisDEC = 1;
 
             if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickIsAnalog", ""), out m_JoystickIsAnalog))
                 m_JoystickIsAnalog = true;
+
+            m_SpeechVoice = m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "SpeechVoice", "");
+
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseSpeech", ""), out m_UseSpeech))
+                m_UseSpeech = false;
+
+            int filter = 0;
+            if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "SpeechFilter", ""), out filter))
+                m_SpeechFilter = 0;
+            else
+                m_SpeechFilter = (Speech.SpeechType)filter;
 
             //Get the Boot Mode from settings
             try
@@ -1309,6 +1375,8 @@ namespace ASCOM.GeminiTelescope
         /// <param name="command_item">CommandItem type containing command to execute</param>
         private static void DoCommandAndWaitAsync(object command_item)
         {
+            System.Threading.Thread.CurrentThread.CurrentUICulture = System.Threading.Thread.CurrentThread.CurrentCulture;
+
             CommandItem ci = (CommandItem)command_item;
 
             if (!QueueCommand(ci))
@@ -1339,6 +1407,8 @@ namespace ASCOM.GeminiTelescope
         /// <param name="command_items">CommandItems array containing commands to execute</param>
         private static void DoCommandsAndWaitAsync(object command_items)
         {
+            System.Threading.Thread.CurrentThread.CurrentUICulture = System.Threading.Thread.CurrentThread.CurrentCulture;
+
             CommandItem [] ci = (CommandItem[])command_items;
 
             if (!QueueCommands(ci))
@@ -1448,6 +1518,8 @@ namespace ASCOM.GeminiTelescope
 
         static private void StartStatus(object arg)
         {
+            System.Threading.Thread.CurrentThread.CurrentUICulture = System.Threading.Thread.CurrentThread.CurrentCulture;
+
             Point pt = (Point)arg;
             Screen scr = Screen.FromPoint(pt);
 
@@ -1530,7 +1602,7 @@ namespace ASCOM.GeminiTelescope
                             m_Clients -= 1;
                             Trace.Except(e);
                             GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial comm error connecting to port " + m_ComPort + ":" + e.Message);
-                            if (OnError != null) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Connection Failed: " + e.Message);
+                            if (OnError != null) OnError(SharedResources.TELESCOPE_DRIVER_NAME, Resources.ConnectionFailed + e.Message);
                             m_Connected = false;
                             throw e;    //rethrow the exception
                         }
@@ -1578,8 +1650,8 @@ namespace ASCOM.GeminiTelescope
                             catch (Exception ptp_e)
                             {
                                 Trace.Except(ptp_e);
-                                GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Cannot open pass-through port: " +ptp_e.Message);
-                                if (OnError != null) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Cannot open pass-through port: " + ptp_e.Message);
+                                GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, Resources.CannotOpenPTP +ptp_e.Message);
+                                if (OnError != null) OnError(SharedResources.TELESCOPE_DRIVER_NAME, Resources.CannotOpenPTP + ptp_e.Message);
                                 m_PassThroughPort = null;                                
                             }
                         System.Threading.Thread.Sleep(1000);
@@ -1593,7 +1665,7 @@ namespace ASCOM.GeminiTelescope
                     else
                     {
                         Trace.Error("Gemini is not responding. Please check that it's connected");
-                        if (OnError != null) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Gemini is not responding. Please check that it's connected.");
+                        if (OnError != null) OnError(SharedResources.TELESCOPE_DRIVER_NAME, Resources.GeminiNotResponding);
 
                         Disconnect();
 
@@ -1697,7 +1769,7 @@ namespace ASCOM.GeminiTelescope
         private static bool StartGemini()
         {
             Trace.Enter("StartGemini");
-            if (OnInfo!=null) OnInfo("Connecting to Gemini on " + m_SerialPort.PortName + ", " + m_SerialPort.BaudRate.ToString(), "Connecting...");
+            if (OnInfo!=null) OnInfo(Resources.ConnectingToGemini+ m_SerialPort.PortName + ", " + m_SerialPort.BaudRate.ToString(), Resources.Connecting);
             Transmit("\x6");
             System.Threading.Thread.Sleep(0);
             CommandItem ci = new CommandItem("\x6", 10, true); // quick timeout, don't want to hang up the user for too long
@@ -1813,7 +1885,7 @@ namespace ASCOM.GeminiTelescope
                 foreach (string p in ports)
                 {
 
-                    if (OnInfo != null) OnInfo("Searching for Gemini", "Checking serial port " + p);
+                    if (OnInfo != null) OnInfo(Resources.SearchForGemini, Resources.CheckPort + p);
 
                     for (int i = 0; i < rates.Length; ++i)
                     {
@@ -1968,6 +2040,8 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         private static void BackgroundWorker_DoWork()
         {
+
+            System.Threading.Thread.CurrentThread.CurrentUICulture = System.Threading.Thread.CurrentThread.CurrentCulture;
 
             Trace.Enter("BackgroundWorker thread");
 
@@ -2545,7 +2619,7 @@ namespace ASCOM.GeminiTelescope
                 {
                     Trace.Except(ex);
                     GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Timeout error occurred after " + command.m_Timeout + "msec while processing command '" + command.m_Command + "'");
-                    if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial port timed out!");
+                    if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, Resources.SerialTimeout);
                 }
                 //else Resync();
 
@@ -2564,7 +2638,7 @@ namespace ASCOM.GeminiTelescope
                 Trace.Error("Serial port error", command.m_Command);
 
                 GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial comm error reported while processing command '" + command.m_Command + "'");
-                if (OnError != null && m_Connected && m_AllowErrorNotify) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial port communication error");
+                if (OnError != null && m_Connected && m_AllowErrorNotify) OnError(SharedResources.TELESCOPE_DRIVER_NAME, Resources.SerialError);
                 AddOneMoreError();
                 return null;  // error occurred!
             }
@@ -2583,7 +2657,7 @@ namespace ASCOM.GeminiTelescope
                     Trace.Error("Bad Checksum", command.m_Command, result);
 
                     GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial comm error (bad checksum) while processing command '" + command.m_Command + "'");
-                    if (OnError != null && m_Connected && m_AllowErrorNotify) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Serial port communication error");
+                    if (OnError != null && m_Connected && m_AllowErrorNotify) OnError(SharedResources.TELESCOPE_DRIVER_NAME, Resources.SerialError);
                     AddOneMoreError();
                     result = null;
                 }
@@ -2611,7 +2685,7 @@ namespace ASCOM.GeminiTelescope
                 string msg = "No response from Gemini for " + (SharedResources.MAXIMUM_ERROR_INTERVAL/1000 ).ToString() + " seconds, terminating connection";
                 Trace.Error(msg);
                 GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, msg);
-                if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Gemini is not responding! Terminating connection.");
+                if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, Resources.TerminatingConnection );
                 while (m_Connected) Disconnect();
                 return;
             }
@@ -2630,7 +2704,7 @@ namespace ASCOM.GeminiTelescope
             {
                 Trace.Error("Too many errors");
 
-                if (OnError != null && m_Connected && m_AllowErrorNotify) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Too many serial port errors! Please check Gemini.");
+                if (OnError != null && m_Connected && m_AllowErrorNotify) OnError(SharedResources.TELESCOPE_DRIVER_NAME, Resources.TooManyErrors);
                 GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Too many serial port errors in the last " + SharedResources.MAXIMUM_ERROR_INTERVAL / 1000 + " seconds. Resetting serial port.");
 
                 lock (m_CommandQueue) // remove all pending commands, keep the queue locked so that the worker thread can't process during port reset
@@ -3186,7 +3260,7 @@ namespace ASCOM.GeminiTelescope
             }
             set
             {
-                DoCommand(">509:" + value.ToString(), false);            
+                DoCommand(">509:" + value.ToString()+":", false);            
             }
         }
 

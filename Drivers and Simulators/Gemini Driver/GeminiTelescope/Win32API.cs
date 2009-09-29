@@ -188,36 +188,125 @@ namespace ASCOM.GeminiTelescope
         // x,y   z,r  u,v 
         public int MinX
         {
-            get { return (Axis==1? m_JCAPS.wZmin : (Axis==2? m_JCAPS.wUmin : m_JCAPS.wXmin)); }
+            get
+            {
+                switch (AxisRA)
+                {
+                    case 0: return m_JCAPS.wXmin;
+                    case 1: return m_JCAPS.wYmin;
+                    case 2: return m_JCAPS.wZmin;
+                    case 3: return m_JCAPS.wRmin;
+                    case 4: return m_JCAPS.wUmin;
+                    case 5: return m_JCAPS.wVmin;
+                    default: return m_JCAPS.wXmin;
+                }
+            }
         }
 
         public int MaxX
         {
-            get { return (Axis == 1 ? m_JCAPS.wZmax : (Axis == 2 ? m_JCAPS.wUmax : m_JCAPS.wXmax)); }
+            get
+            {
+                switch (AxisRA)
+                {
+                    case 0: return m_JCAPS.wXmax;
+                    case 1: return m_JCAPS.wYmax;
+                    case 2: return m_JCAPS.wZmax;
+                    case 3: return m_JCAPS.wRmax;
+                    case 4: return m_JCAPS.wUmax;
+                    case 5: return m_JCAPS.wVmax;
+                    default: return m_JCAPS.wXmax;
+                }
+            }
         }
 
         public int MinY
         {
-            get { return (Axis == 1 ? m_JCAPS.wRmin : (Axis == 2 ? m_JCAPS.wVmin : m_JCAPS.wYmin)); }
+            get
+            {
+                switch (AxisDEC)
+                {
+                    case 0: return m_JCAPS.wXmin;
+                    case 1: return m_JCAPS.wYmin;
+                    case 2: return m_JCAPS.wZmin;
+                    case 3: return m_JCAPS.wRmin;
+                    case 4: return m_JCAPS.wUmin;
+                    case 5: return m_JCAPS.wVmin;
+                    default: return m_JCAPS.wXmin;
+                }
+            }
         }
 
         public int MaxY
         {
-            get { return (Axis == 1 ? m_JCAPS.wRmax : (Axis == 2 ? m_JCAPS.wVmax : m_JCAPS.wYmax)); }
+            get
+            {
+                switch (AxisDEC)
+                {
+                    case 0: return m_JCAPS.wXmax;
+                    case 1: return m_JCAPS.wYmax;
+                    case 2: return m_JCAPS.wZmax;
+                    case 3: return m_JCAPS.wRmax;
+                    case 4: return m_JCAPS.wUmax;
+                    case 5: return m_JCAPS.wVmax;
+                    default: return m_JCAPS.wXmax;
+                }
+            }
         }
 
-        private int m_Axis = 0;
+        private int m_AxisRA = 0;
+        private int m_AxisDEC = 0;
 
-        public int Axis
+        public int AxisRA
         {
-            get { return m_Axis; }
-            set { m_Axis = value; }
+            get { return m_AxisRA; }
+            set { m_AxisRA = value; }
         }
+
+        public int AxisDEC
+        {
+            get { return m_AxisDEC; }
+            set { m_AxisDEC = value; }
+        }
+
 
         private uint m_Buttons;
 
         private double m_PosX;
 
+        private int RawX
+        {
+            get
+            {
+                switch (AxisRA)
+                {
+                    case 0: return m_JEX.dwXpos; 
+                    case 1: return m_JEX.dwYpos; 
+                    case 2: return m_JEX.dwZpos; 
+                    case 3: return m_JEX.dwRpos; 
+                    case 4: return m_JEX.dwUpos; 
+                    case 5: return m_JEX.dwVpos; 
+                    default: return m_JEX.dwXpos;
+                }
+            }
+        }
+
+        private int RawY
+        {
+            get
+            {
+                switch (AxisDEC)
+                {
+                    case 0: return m_JEX.dwXpos;
+                    case 1: return m_JEX.dwYpos;
+                    case 2: return m_JEX.dwZpos;
+                    case 3: return m_JEX.dwRpos;
+                    case 4: return m_JEX.dwUpos;
+                    case 5: return m_JEX.dwVpos;
+                    default: return m_JEX.dwXpos;
+                }
+            }
+        }
 
         public double PosX
         {
@@ -226,25 +315,8 @@ namespace ASCOM.GeminiTelescope
                 m_JEX.dwFlags = Win32API.JOY_RETURNALL;
                 if (Win32API.joyGetPosEx(m_JoyNbr.ToInt32(), ref m_JEX) == 0)
                 {
-                    double x, y;
-                    if (m_Axis == 1)
-                    {
-                        x = m_JEX.dwZpos;
-                        y = m_JEX.dwRpos;
-                    }
-                    else if (m_Axis == 2)
-                    {
-                        x = m_JEX.dwUpos;
-                        y = m_JEX.dwVpos;
-                    }
-                    else
-                    {
-                        x = m_JEX.dwXpos;
-                        y = m_JEX.dwYpos;
-                    }
-
-                    m_PosX = (double)(x - m_CenterX)*2 / (MaxX-MinX);
-                    m_PosY = (double)(y - m_CenterY)*2 / (MaxY-MinY);
+                    m_PosX = (double)(RawX - m_CenterX)*2 / (MaxX-MinX);
+                    m_PosY = (double)(RawY - m_CenterY)*2 / (MaxY-MinY);
                     m_Buttons = (uint)m_JEX.dwButtons;
                 }
                 return m_PosX; 
@@ -329,42 +401,35 @@ namespace ASCOM.GeminiTelescope
         {
             get {return (m_JCAPS.wCaps & Win32API.JOYCAPS_POV4DIR) != 0; }
         }
-        public bool Initialize(IntPtr jnbr, int axis)
+        public bool Initialize(IntPtr jnbr, int axisRA, int axisDEC)
         {
             m_JoyNbr = jnbr;
 
             if (Win32API.joyGetDevCaps(jnbr, ref m_JCAPS, 404) != 0) return false;
-            if (m_JCAPS.wNumAxes < axis * 2)
+            if (m_JCAPS.wNumAxes < axisRA )
             {
-                axis = 0;
+                axisRA = 0;
             }
 
-            m_Axis = axis;
+            if (m_JCAPS.wNumAxes < axisDEC)
+            {
+                axisDEC = 0;
+            }
+
+            m_AxisRA = axisRA;
+            m_AxisDEC = axisDEC;
 
             m_JEX.dwSize = 64;
             m_JEX.dwFlags = Win32API.JOY_RETURNALL;
             if (Win32API.joyGetPosEx(m_JoyNbr.ToInt32(), ref m_JEX) != 0) return false;
 
-            if (axis == 0)
-            {
-                m_CenterX = m_JEX.dwXpos;
-                m_CenterY = m_JEX.dwYpos;
-            }
-            else if (axis == 1)
-            {
-                m_CenterX = m_JEX.dwZpos;
-                m_CenterY = m_JEX.dwRpos;
-            }
-            else if (axis == 2)
-            {
-                m_CenterX = m_JEX.dwUpos;
-                m_CenterY = m_JEX.dwVpos;
-            }
+            m_CenterX = RawX;
+            m_CenterY = RawY;
 
             return true;
         }
 
-        public bool Initialize(string name, int axis)
+        public bool Initialize(string name, int axisRA, int axisDEC)
         {
             string[] names = JoystickNames;
             if (names == null || names.Length == 0) return false;
@@ -372,11 +437,11 @@ namespace ASCOM.GeminiTelescope
             int idx = Array.FindIndex(names, delegate(string item){ return item.Equals(name);});
 
             if (idx >= 0)
-                return this.Initialize((IntPtr)idx, axis);
+                return this.Initialize((IntPtr)idx, axisRA, axisDEC);
 
             // if didn't match the name, just use the first available joystick port:
             if (names.Length > 0)
-                return this.Initialize((IntPtr)0, axis);  
+                return this.Initialize((IntPtr)0, axisRA, axisDEC);  
 
             return false;
         }

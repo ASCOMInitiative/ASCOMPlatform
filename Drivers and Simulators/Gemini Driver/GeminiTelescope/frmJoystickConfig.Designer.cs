@@ -36,6 +36,11 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmJoystickConfig));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.cmbAxisDEC = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cmbAxisRA = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.ButtonGrid = new System.Windows.Forms.DataGridView();
             this.ButtonNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -47,14 +52,11 @@
             this.button2 = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.cmbAxis = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ButtonGrid)).BeginInit();
             this.GroupBox1.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -70,20 +72,76 @@
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(405, 495);
             this.tableLayoutPanel1.TabIndex = 9;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.cmbAxisDEC);
+            this.groupBox3.Controls.Add(this.label3);
+            this.groupBox3.Controls.Add(this.cmbAxisRA);
+            this.groupBox3.Controls.Add(this.label2);
+            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox3.ForeColor = System.Drawing.Color.White;
+            this.groupBox3.Location = new System.Drawing.Point(3, 3);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(399, 84);
+            this.groupBox3.TabIndex = 11;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Controller Selection";
+            this.groupBox3.Enter += new System.EventHandler(this.groupBox3_Enter);
+            // 
+            // cmbAxisDEC
+            // 
+            this.cmbAxisDEC.BackColor = System.Drawing.Color.Black;
+            this.cmbAxisDEC.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbAxisDEC.ForeColor = System.Drawing.Color.White;
+            this.cmbAxisDEC.FormattingEnabled = true;
+            this.cmbAxisDEC.Location = new System.Drawing.Point(237, 47);
+            this.cmbAxisDEC.Name = "cmbAxisDEC";
+            this.cmbAxisDEC.Size = new System.Drawing.Size(125, 21);
+            this.cmbAxisDEC.TabIndex = 3;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 50);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(219, 13);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Select controller axis to move Gemini in DEC:";
+            // 
+            // cmbAxisRA
+            // 
+            this.cmbAxisRA.BackColor = System.Drawing.Color.Black;
+            this.cmbAxisRA.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbAxisRA.ForeColor = System.Drawing.Color.White;
+            this.cmbAxisRA.FormattingEnabled = true;
+            this.cmbAxisRA.Location = new System.Drawing.Point(237, 21);
+            this.cmbAxisRA.Name = "cmbAxisRA";
+            this.cmbAxisRA.Size = new System.Drawing.Size(125, 21);
+            this.cmbAxisRA.TabIndex = 1;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(10, 24);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(212, 13);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Select controller axis to move Gemini in RA:";
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.ButtonGrid);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.ForeColor = System.Drawing.Color.White;
-            this.groupBox2.Location = new System.Drawing.Point(3, 143);
+            this.groupBox2.Location = new System.Drawing.Point(3, 173);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(399, 349);
+            this.groupBox2.Size = new System.Drawing.Size(399, 319);
             this.groupBox2.TabIndex = 10;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Joystick Button Assignment";
@@ -136,7 +194,7 @@
             this.ButtonGrid.ShowCellErrors = false;
             this.ButtonGrid.ShowEditingIcon = false;
             this.ButtonGrid.ShowRowErrors = false;
-            this.ButtonGrid.Size = new System.Drawing.Size(393, 330);
+            this.ButtonGrid.Size = new System.Drawing.Size(393, 300);
             this.ButtonGrid.TabIndex = 0;
             this.ButtonGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ButtonGrid_CellClick);
             // 
@@ -170,7 +228,7 @@
             this.GroupBox1.Controls.Add(this.rbAnalog);
             this.GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.GroupBox1.ForeColor = System.Drawing.Color.White;
-            this.GroupBox1.Location = new System.Drawing.Point(3, 63);
+            this.GroupBox1.Location = new System.Drawing.Point(3, 93);
             this.GroupBox1.Name = "GroupBox1";
             this.GroupBox1.Size = new System.Drawing.Size(399, 74);
             this.GroupBox1.TabIndex = 9;
@@ -247,39 +305,6 @@
             this.label1.TabIndex = 13;
             this.label1.Text = "HINT: Press a button on the joystick to see it highlited in the list above.";
             // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.cmbAxis);
-            this.groupBox3.Controls.Add(this.label2);
-            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox3.ForeColor = System.Drawing.Color.White;
-            this.groupBox3.Location = new System.Drawing.Point(3, 3);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(399, 54);
-            this.groupBox3.TabIndex = 11;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Controller Selection";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 24);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(215, 13);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Select axis controller to use to move Gemini:";
-            // 
-            // cmbAxis
-            // 
-            this.cmbAxis.BackColor = System.Drawing.Color.Black;
-            this.cmbAxis.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbAxis.ForeColor = System.Drawing.Color.White;
-            this.cmbAxis.FormattingEnabled = true;
-            this.cmbAxis.Location = new System.Drawing.Point(231, 21);
-            this.cmbAxis.Name = "cmbAxis";
-            this.cmbAxis.Size = new System.Drawing.Size(154, 21);
-            this.cmbAxis.TabIndex = 1;
-            // 
             // frmJoystickConfig
             // 
             this.AcceptButton = this.button1;
@@ -303,12 +328,12 @@
             this.Text = "Gemini Joystick Configuration";
             this.Load += new System.EventHandler(this.frmJoystickConfig_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ButtonGrid)).EndInit();
             this.GroupBox1.ResumeLayout(false);
             this.GroupBox1.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -329,8 +354,10 @@
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.Label label1;
         internal System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.ComboBox cmbAxis;
+        private System.Windows.Forms.ComboBox cmbAxisRA;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cmbAxisDEC;
+        private System.Windows.Forms.Label label3;
 
 
     }
