@@ -66,5 +66,19 @@ namespace ASCOM.OptecTCF_Driver.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        internal static System.Drawing.Bitmap Optec_Logo_large_png {
+            get {
+                object obj = ResourceManager.GetObject("Optec_Logo_large_png", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap TCF_S3_TCF_S_1_Medium {
+            get {
+                object obj = ResourceManager.GetObject("TCF_S3_TCF_S_1_Medium", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

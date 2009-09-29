@@ -104,17 +104,17 @@ namespace ASCOM.OptecTCF_Driver
         {
             try
             {
-                //DeviceComm.Connect();
+                DeviceComm.Connect();
                 string[] FVandDT = DeviceComm.GetFVandDT();
                 textBoxDescription.Text += Environment.NewLine + "Device Type: " + FVandDT[1];
                 textBoxDescription.Text += Environment.NewLine + "Firmware Version: " + FVandDT[0];
                 textBoxDescription.Update();
             }
-            catch (Exception Ex)
+            catch 
             {
                 textBoxDescription.Text += Environment.NewLine + "Could not connect to device to obtain"  +
                     " device type and firmware verison. Have you selected the correct COM port?";
-                MessageBox.Show(Ex.ToString());
+                
             }
         }
     }

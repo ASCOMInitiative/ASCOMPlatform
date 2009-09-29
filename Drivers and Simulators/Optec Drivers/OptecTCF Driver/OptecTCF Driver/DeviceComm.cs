@@ -122,11 +122,11 @@ namespace ASCOM.OptecTCF_Driver
                 string resp = "";
                 if (AorB == 'A')
                 {
-                    resp = SendCmd("FtxxxA", 500, ExpectNoResponse, "A=");
+                    resp = SendCmd("FtxxxA", 500, ExpectResponse, "A=");
                 }
                 else if (AorB == 'B')
                 {
-                    resp = SendCmd("FtxxxB", 500, ExpectNoResponse, "B=");
+                    resp = SendCmd("FtxxxB", 500, ExpectResponse, "B=");
                 }
                 int i = resp.IndexOf("=") + 1;
                 char signChar = resp[i];
@@ -149,11 +149,11 @@ namespace ASCOM.OptecTCF_Driver
                 if (sign != '+' && sign != '-') throw new InvalidValueException("SetSlopeSign", "slope", "+ or -");
                 if (AorB != 'A' && AorB != 'B') throw new InvalidValueException("SetSlopeSign", "slope", "+ or -");
                 string cmd = "";
-                if (sign == 'A')
+                if (AorB == 'A')
                 {
                     cmd = "FZAxx";
                 }
-                else if (sign == 'B')
+                else if (AorB == 'B')
                 {
                     cmd = "FZBxx";
                 }
@@ -368,7 +368,6 @@ namespace ASCOM.OptecTCF_Driver
             string received = "";
             try
             {
-                
                 ASerialPort.ReceiveTimeoutMs = timeout;
                 if (Cmd.Contains("FM"))
                 {
@@ -387,7 +386,9 @@ namespace ASCOM.OptecTCF_Driver
                 
                 if (!ResponseDesired) return "";
                 ReadAgain:            
+                
                 received = received + ASerialPort.ReceiveTerminated("\n\r");
+                
                 if (received.Contains(ResponseContains))
                 {
                     return received;
@@ -414,8 +415,6 @@ namespace ASCOM.OptecTCF_Driver
             {
                 throw new InvalidPrerequisits("Error sending command: " + Cmd + "\n", Ex);
             }
-
-            
         }
 
         internal static void EnterTempCompMode(bool Enter)
@@ -462,7 +461,7 @@ namespace ASCOM.OptecTCF_Driver
         {
             try
             {
-                string resp = SendCmd("FTMPRO", 500, ExpectResponse, "T=");
+                string resp = SendCmd("FTMPRO", 2000, ExpectResponse, "T=");
                 int i = resp.IndexOf("=") + 1;
                 string t = resp.Substring(i, 4);
                 double temp = double.Parse(t);
