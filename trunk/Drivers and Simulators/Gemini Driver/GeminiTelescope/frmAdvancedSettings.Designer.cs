@@ -32,6 +32,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAdvancedSettings));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.label21 = new System.Windows.Forms.Label();
+            this.geminiPropertiesBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.label2 = new System.Windows.Forms.Label();
             this.comboBox5 = new System.Windows.Forms.ComboBox();
             this.label15 = new System.Windows.Forms.Label();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
@@ -43,6 +46,7 @@
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.pbSetSafetyLimit = new System.Windows.Forms.Button();
+            this.checkBox7 = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.label6 = new System.Windows.Forms.Label();
@@ -101,12 +105,9 @@
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.checkBox8 = new System.Windows.Forms.CheckBox();
             this.pbModel = new System.Windows.Forms.Button();
-            this.checkBox7 = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
-            this.geminiPropertiesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -133,7 +134,6 @@
             this.tableLayoutPanel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown18)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -182,6 +182,37 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(459, 137);
             this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "WestSafetyLimit", true));
+            this.label21.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label21.ForeColor = System.Drawing.Color.Lime;
+            this.label21.Location = new System.Drawing.Point(231, 108);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(225, 29);
+            this.label21.TabIndex = 15;
+            this.label21.Text = "West Safety Limit: 000 deg";
+            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // geminiPropertiesBindingSource
+            // 
+            this.geminiPropertiesBindingSource.DataSource = typeof(ASCOM.GeminiTelescope.GeminiProperties);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.label2, 2);
+            this.label2.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "EastSafetyLimit", true));
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.ForeColor = System.Drawing.Color.Lime;
+            this.label2.Location = new System.Drawing.Point(3, 108);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(222, 29);
+            this.label2.TabIndex = 13;
+            this.label2.Text = "East Safety Limit: 000 deg";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // comboBox5
             // 
@@ -330,6 +361,19 @@
             this.pbSetSafetyLimit.Text = "Set Safety Limit to the Current Position";
             this.pbSetSafetyLimit.UseVisualStyleBackColor = false;
             this.pbSetSafetyLimit.Click += new System.EventHandler(this.pbSetSafetyLimit_Click);
+            // 
+            // checkBox7
+            // 
+            this.checkBox7.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.checkBox7.AutoSize = true;
+            this.checkBox7.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.geminiPropertiesBindingSource, "AlarmSet", true));
+            this.checkBox7.Location = new System.Drawing.Point(14, 86);
+            this.checkBox7.Name = "checkBox7";
+            this.checkBox7.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBox7.Size = new System.Drawing.Size(97, 17);
+            this.checkBox7.TabIndex = 12;
+            this.checkBox7.Text = "Set Alarm Time";
+            this.checkBox7.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
@@ -1323,50 +1367,6 @@
             this.pbModel.UseVisualStyleBackColor = true;
             this.pbModel.Click += new System.EventHandler(this.pbModel_Click);
             // 
-            // checkBox7
-            // 
-            this.checkBox7.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.checkBox7.AutoSize = true;
-            this.checkBox7.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.geminiPropertiesBindingSource, "AlarmSet", true));
-            this.checkBox7.Location = new System.Drawing.Point(14, 86);
-            this.checkBox7.Name = "checkBox7";
-            this.checkBox7.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBox7.Size = new System.Drawing.Size(97, 17);
-            this.checkBox7.TabIndex = 12;
-            this.checkBox7.Text = "Set Alarm Time";
-            this.checkBox7.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.tableLayoutPanel1.SetColumnSpan(this.label2, 2);
-            this.label2.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "EastSafetyLimit", true));
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.ForeColor = System.Drawing.Color.Lime;
-            this.label2.Location = new System.Drawing.Point(3, 108);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(222, 29);
-            this.label2.TabIndex = 13;
-            this.label2.Text = "East Safety Limit: 000 deg";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "WestSafetyLimit", true));
-            this.label21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label21.ForeColor = System.Drawing.Color.Lime;
-            this.label21.Location = new System.Drawing.Point(231, 108);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(225, 29);
-            this.label21.TabIndex = 15;
-            this.label21.Text = "West Safety Limit: 000 deg";
-            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // geminiPropertiesBindingSource
-            // 
-            this.geminiPropertiesBindingSource.DataSource = typeof(ASCOM.GeminiTelescope.GeminiProperties);
-            // 
             // frmAdvancedSettings
             // 
             this.AcceptButton = this.pbOK;
@@ -1392,6 +1392,8 @@
             this.Controls.Add(this.groupBox1);
             this.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "frmAdvancedSettings";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -1399,6 +1401,7 @@
             this.groupBox1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
@@ -1429,7 +1432,6 @@
             this.tableLayoutPanel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown18)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

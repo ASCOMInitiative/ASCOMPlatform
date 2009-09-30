@@ -12,7 +12,10 @@ namespace ASCOM.GeminiTelescope
     {
         Timer tmrUpdate = new Timer();
 
+
         public bool AutoHide = true;
+
+        private DateTime m_previousActive = DateTime.Now;
 
         public frmStatus()
         {
@@ -25,12 +28,24 @@ namespace ASCOM.GeminiTelescope
         }
 
         internal void ShowMe(object sender, EventArgs e)
-        {
-            geminiPropertiesBindingSource.ResetBindings(false);
-            this.Show();
+        {            
+            if (!this.Visible)
+            {
+                geminiPropertiesBindingSource.ResetBindings(false);
+                this.Show();
+                SharedResources.SetTopWindow(this);
+            }
+            else
+            {
+                if (DateTime.Now - m_previousActive < TimeSpan.FromSeconds(1)) return;  // don't respond more than once a second!
+                Win32API.SetForegroundWindow(this.Handle);
+            }
+
+            tmrUpdate.Stop();
             AutoHide = true;
-            tmrUpdate.Interval = 1500;
+            tmrUpdate.Interval = 2000;
             tmrUpdate.Start();
+            m_previousActive = DateTime.Now;
         }
 
         internal void ShutDown(object sender, EventArgs e)

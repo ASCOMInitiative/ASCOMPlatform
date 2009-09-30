@@ -32,8 +32,6 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label32 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
-            this.label30 = new System.Windows.Forms.Label();
-            this.label29 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.label26 = new System.Windows.Forms.Label();
@@ -62,6 +60,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.txtVersion = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.label30 = new System.Windows.Forms.Label();
             this.geminiPropertiesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).BeginInit();
@@ -77,10 +77,10 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.Controls.Add(this.label32, 3, 7);
             this.tableLayoutPanel1.Controls.Add(this.label31, 2, 7);
-            this.tableLayoutPanel1.Controls.Add(this.label30, 1, 7);
-            this.tableLayoutPanel1.Controls.Add(this.label29, 0, 7);
-            this.tableLayoutPanel1.Controls.Add(this.label28, 3, 6);
-            this.tableLayoutPanel1.Controls.Add(this.label27, 2, 6);
+            this.tableLayoutPanel1.Controls.Add(this.label30, 3, 6);
+            this.tableLayoutPanel1.Controls.Add(this.label29, 2, 6);
+            this.tableLayoutPanel1.Controls.Add(this.label28, 1, 7);
+            this.tableLayoutPanel1.Controls.Add(this.label27, 0, 7);
             this.tableLayoutPanel1.Controls.Add(this.label26, 1, 6);
             this.tableLayoutPanel1.Controls.Add(this.label25, 0, 6);
             this.tableLayoutPanel1.Controls.Add(this.label24, 3, 5);
@@ -147,53 +147,29 @@
             this.label31.Text = "AZ:";
             this.label31.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label30
-            // 
-            this.label30.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "ALT", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged, "Not connected"));
-            this.label30.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label30.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label30.ForeColor = System.Drawing.Color.Fuchsia;
-            this.label30.Location = new System.Drawing.Point(129, 147);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(78, 21);
-            this.label30.TabIndex = 30;
-            this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label29
-            // 
-            this.label29.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label29.ForeColor = System.Drawing.Color.Lime;
-            this.label29.Location = new System.Drawing.Point(3, 147);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(120, 21);
-            this.label29.TabIndex = 29;
-            this.label29.Text = "ALT:";
-            this.label29.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // label28
             // 
             this.label28.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "DEC", true, System.Windows.Forms.DataSourceUpdateMode.OnValidation, "Not connected"));
             this.label28.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label28.ForeColor = System.Drawing.Color.Fuchsia;
-            this.label28.Location = new System.Drawing.Point(339, 126);
+            this.label28.Location = new System.Drawing.Point(129, 147);
             this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(80, 21);
+            this.label28.Size = new System.Drawing.Size(78, 21);
             this.label28.TabIndex = 28;
-            this.label28.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.label28.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label27
             // 
             this.label27.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label27.ForeColor = System.Drawing.Color.Lime;
-            this.label27.Location = new System.Drawing.Point(213, 126);
+            this.label27.Location = new System.Drawing.Point(3, 147);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(120, 21);
             this.label27.TabIndex = 27;
             this.label27.Text = "DEC:";
-            this.label27.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label26
             // 
@@ -205,7 +181,7 @@
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(78, 21);
             this.label26.TabIndex = 26;
-            this.label26.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label25
             // 
@@ -217,7 +193,7 @@
             this.label25.Size = new System.Drawing.Size(120, 21);
             this.label25.TabIndex = 25;
             this.label25.Text = "RA:";
-            this.label25.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label24
             // 
@@ -484,6 +460,30 @@
             this.label1.Text = "Gemini Version:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // label29
+            // 
+            this.label29.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label29.ForeColor = System.Drawing.Color.Lime;
+            this.label29.Location = new System.Drawing.Point(213, 126);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(120, 21);
+            this.label29.TabIndex = 29;
+            this.label29.Text = "ALT:";
+            this.label29.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label30
+            // 
+            this.label30.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "ALT", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged, "Not connected"));
+            this.label30.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label30.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label30.ForeColor = System.Drawing.Color.Fuchsia;
+            this.label30.Location = new System.Drawing.Point(339, 126);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(80, 21);
+            this.label30.TabIndex = 30;
+            this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // geminiPropertiesBindingSource
             // 
             this.geminiPropertiesBindingSource.DataSource = typeof(ASCOM.GeminiTelescope.GeminiProperties);
@@ -501,7 +501,6 @@
             this.Name = "frmStatus";
             this.Opacity = 0.9;
             this.ShowIcon = false;
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Gemini Status";
             this.Load += new System.EventHandler(this.frmStatus_Load);
@@ -521,8 +520,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.Label label31;
-        private System.Windows.Forms.Label label30;
-        private System.Windows.Forms.Label label29;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.Label label26;
@@ -551,5 +548,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label txtVersion;
         private System.Windows.Forms.BindingSource geminiPropertiesBindingSource;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Label label29;
     }
 }

@@ -102,6 +102,9 @@ namespace ASCOM.GeminiTelescope
         /// <param name="window"></param>
         public static void SetTopWindow(System.Windows.Forms.Control window)
         {
+
+            Win32API.SetWindowPos(window.Handle, Win32API.HWND_TOPMOST, 0, 0, 0, 0, Win32API.SWP_NOMOVE | Win32API.SWP_NOSIZE);
+            Win32API.SetWindowPos(window.Handle, Win32API.HWND_NOTTOPMOST, 0, 0, 0, 0, Win32API.SWP_NOMOVE | Win32API.SWP_NOSIZE);
             Win32API.SetForegroundWindow(window.Handle);
         }
     }
