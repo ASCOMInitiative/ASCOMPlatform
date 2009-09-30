@@ -1024,6 +1024,13 @@ namespace ASCOM.GeminiTelescope.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap starfield {
+            get {
+                object obj = ResourceManager.GetObject("starfield", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to Start Tracking.
         /// </summary>
