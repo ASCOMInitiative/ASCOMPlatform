@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LearnWizard3));
             this.Cancel_Btn = new System.Windows.Forms.Button();
             this.Next_Btn = new System.Windows.Forms.Button();
@@ -40,6 +39,9 @@
             this.FirstPos_LB = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
+            this.Increment_NUD = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
             this.Position_LB = new System.Windows.Forms.Label();
             this.Out_Btn = new System.Windows.Forms.Button();
             this.Temp_LB = new System.Windows.Forms.Label();
@@ -48,8 +50,9 @@
             this.In_Btn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Increment_NUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -106,7 +109,7 @@
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.AutoSize = true;
             this.label3.Enabled = false;
-            this.label3.Location = new System.Drawing.Point(34, 242);
+            this.label3.Location = new System.Drawing.Point(35, 233);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(57, 13);
             this.label3.TabIndex = 21;
@@ -117,7 +120,7 @@
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label4.AutoSize = true;
             this.label4.Enabled = false;
-            this.label4.Location = new System.Drawing.Point(44, 261);
+            this.label4.Location = new System.Drawing.Point(45, 252);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(47, 13);
             this.label4.TabIndex = 22;
@@ -128,7 +131,7 @@
             this.FirstTemp_Lb.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.FirstTemp_Lb.AutoSize = true;
             this.FirstTemp_Lb.Enabled = false;
-            this.FirstTemp_Lb.Location = new System.Drawing.Point(91, 242);
+            this.FirstTemp_Lb.Location = new System.Drawing.Point(92, 233);
             this.FirstTemp_Lb.Name = "FirstTemp_Lb";
             this.FirstTemp_Lb.Size = new System.Drawing.Size(34, 13);
             this.FirstTemp_Lb.TabIndex = 23;
@@ -139,7 +142,7 @@
             this.FirstPos_LB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.FirstPos_LB.AutoSize = true;
             this.FirstPos_LB.Enabled = false;
-            this.FirstPos_LB.Location = new System.Drawing.Point(91, 261);
+            this.FirstPos_LB.Location = new System.Drawing.Point(92, 252);
             this.FirstPos_LB.Name = "FirstPos_LB";
             this.FirstPos_LB.Size = new System.Drawing.Size(25, 13);
             this.FirstPos_LB.TabIndex = 24;
@@ -151,7 +154,7 @@
             this.label7.AutoSize = true;
             this.label7.Enabled = false;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(34, 224);
+            this.label7.Location = new System.Drawing.Point(35, 215);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(90, 13);
             this.label7.TabIndex = 29;
@@ -162,6 +165,9 @@
             this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.label6);
+            this.panel2.Controls.Add(this.Increment_NUD);
+            this.panel2.Controls.Add(this.label5);
             this.panel2.Controls.Add(this.Position_LB);
             this.panel2.Controls.Add(this.Out_Btn);
             this.panel2.Controls.Add(this.Temp_LB);
@@ -169,16 +175,58 @@
             this.panel2.Controls.Add(this.label2);
             this.panel2.Controls.Add(this.In_Btn);
             this.panel2.Controls.Add(this.label1);
-            this.panel2.Location = new System.Drawing.Point(191, 220);
+            this.panel2.Location = new System.Drawing.Point(155, 201);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(191, 72);
+            this.panel2.Size = new System.Drawing.Size(227, 96);
             this.panel2.TabIndex = 35;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(55, 5);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(114, 20);
+            this.label6.TabIndex = 36;
+            this.label6.Text = "Focus Adjust";
+            // 
+            // Increment_NUD
+            // 
+            this.Increment_NUD.Location = new System.Drawing.Point(62, 35);
+            this.Increment_NUD.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.Increment_NUD.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.Increment_NUD.Name = "Increment_NUD";
+            this.Increment_NUD.Size = new System.Drawing.Size(45, 20);
+            this.Increment_NUD.TabIndex = 34;
+            this.Increment_NUD.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label5.Location = new System.Drawing.Point(4, 37);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(57, 13);
+            this.label5.TabIndex = 35;
+            this.label5.Text = "Increment:";
             // 
             // Position_LB
             // 
             this.Position_LB.AutoSize = true;
             this.Position_LB.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.Position_LB.Location = new System.Drawing.Point(136, 40);
+            this.Position_LB.Location = new System.Drawing.Point(186, 70);
             this.Position_LB.Name = "Position_LB";
             this.Position_LB.Size = new System.Drawing.Size(25, 13);
             this.Position_LB.TabIndex = 31;
@@ -186,9 +234,9 @@
             // 
             // Out_Btn
             // 
-            this.Out_Btn.Location = new System.Drawing.Point(7, 40);
+            this.Out_Btn.Location = new System.Drawing.Point(67, 66);
             this.Out_Btn.Name = "Out_Btn";
-            this.Out_Btn.Size = new System.Drawing.Size(58, 21);
+            this.Out_Btn.Size = new System.Drawing.Size(49, 21);
             this.Out_Btn.TabIndex = 33;
             this.Out_Btn.Text = "Out";
             this.Out_Btn.UseVisualStyleBackColor = true;
@@ -198,7 +246,7 @@
             // 
             this.Temp_LB.AutoSize = true;
             this.Temp_LB.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.Temp_LB.Location = new System.Drawing.Point(136, 21);
+            this.Temp_LB.Location = new System.Drawing.Point(186, 51);
             this.Temp_LB.Name = "Temp_LB";
             this.Temp_LB.Size = new System.Drawing.Size(34, 13);
             this.Temp_LB.TabIndex = 30;
@@ -207,8 +255,8 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(68, 3);
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(118, 33);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(107, 13);
             this.label8.TabIndex = 28;
@@ -218,7 +266,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label2.Location = new System.Drawing.Point(89, 40);
+            this.label2.Location = new System.Drawing.Point(139, 70);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(47, 13);
             this.label2.TabIndex = 29;
@@ -226,9 +274,9 @@
             // 
             // In_Btn
             // 
-            this.In_Btn.Location = new System.Drawing.Point(7, 13);
+            this.In_Btn.Location = new System.Drawing.Point(7, 66);
             this.In_Btn.Name = "In_Btn";
-            this.In_Btn.Size = new System.Drawing.Size(58, 21);
+            this.In_Btn.Size = new System.Drawing.Size(49, 21);
             this.In_Btn.TabIndex = 32;
             this.In_Btn.Text = "In";
             this.In_Btn.UseVisualStyleBackColor = true;
@@ -238,7 +286,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label1.Location = new System.Drawing.Point(79, 21);
+            this.label1.Location = new System.Drawing.Point(129, 51);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(57, 13);
             this.label1.TabIndex = 28;
@@ -255,11 +303,10 @@
             this.pictureBox1.TabIndex = 20;
             this.pictureBox1.TabStop = false;
             // 
-            // timer1
+            // backgroundWorker1
             // 
-            this.timer1.Enabled = true;
-            this.timer1.Interval = 1000;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.backgroundWorker1.WorkerSupportsCancellation = true;
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             // 
             // LearnWizard3
             // 
@@ -281,8 +328,10 @@
             this.Name = "LearnWizard3";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Temp Comp Slope Learn Wizard";
+            this.Load += new System.EventHandler(this.LearnWizard3_Load);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Increment_NUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -309,6 +358,9 @@
         public System.Windows.Forms.Label FirstPos_LB;
         public System.Windows.Forms.Label Position_LB;
         public System.Windows.Forms.Label Temp_LB;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.NumericUpDown Increment_NUD;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }

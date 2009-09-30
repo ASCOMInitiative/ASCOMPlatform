@@ -233,7 +233,7 @@ namespace ASCOM.OptecTCF_Driver
                 }
                 catch(DivideByZeroException)
                 {
-                    MessageBox.Show("No temperature change has occured. Can not computer slope");
+                    MessageBox.Show("No temperature change has occured. Can not compute slope");
                     return;
                 }
                 goto Step4;
@@ -261,29 +261,71 @@ namespace ASCOM.OptecTCF_Driver
 
         }
 
-        private void SaveSlope(char Mode, double FirstTemp, double SecondTemp, int FirstPos, int SecondPos)
+        private bool SaveSlope(char Mode, double FirstTemp, double SecondTemp, int FirstPos, int SecondPos)
         {
             
-            if (Math.Abs(FirstTemp - SecondTemp) < 8)
+            if (Math.Abs(FirstTemp - SecondTemp) < 5)
             {
-                //Not enough temp change
+                MessageBox.Show("WARNING: Temperature difference should be at least 5° for an accurate time constant.");
             }
             if (FirstPos == SecondPos)
             {
-                //Error no position change
+                MessageBox.Show("Could not save time constant to device. Both focuser positions can not be the same.\n" );
+                return false;
             }
+            
 
             //Calculate Slope - Slope = Steps per Degree
-            int slope = (SecondPos - FirstPos) / ((int)SecondTemp - (int)FirstTemp);
+            int slope = (FirstPos - SecondPos) /  (Convert.ToInt32(SecondTemp) - Convert.ToInt32(FirstTemp));
             char SlopeSign;
             if (slope < 0) SlopeSign = '-';
             else SlopeSign = '+';
 
             slope = Math.Abs(slope);
+
+            if (slope < 2 || slope > 999)
+            {
+                MessageBox.Show("Could not save time constant to device. TC must be between 2 and 99.\n"
+                    + "Calculated TC = " + slope.ToString() + ".\n");
+                return false;
+            }
+
             DeviceComm.LoadSlope(slope, Mode);
             DeviceComm.SetSlopeSign(SlopeSign, Mode);
+            return true;
+        }
 
+        private void firstPointToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DeviceComm.Connect();
+                SetStartPtForm SSPFrm = new SetStartPtForm();
+                SSPFrm.ShowDialog();
+                SSPFrm.Dispose();
+                SSPFrm = null;
+            }
+            catch
+            {
+                MessageBox.Show("Unable to connect to device. \nHave you selected the right COM port?");
+            }
+            
+        }
 
+        private void endPointToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DeviceComm.Connect();
+                SetEndPtForm SEPFrm = new SetEndPtForm();
+                SEPFrm.ShowDialog();
+                SEPFrm.Dispose();
+                SEPFrm = null;
+            }
+            catch
+            {
+                MessageBox.Show("Unable to connect to device. \nHave you selected the right COM port?");
+            }
         }
 
 
