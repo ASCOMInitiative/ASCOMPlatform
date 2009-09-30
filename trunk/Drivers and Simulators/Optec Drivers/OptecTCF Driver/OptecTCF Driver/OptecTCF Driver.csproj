@@ -118,6 +118,24 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="SetEndPtForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SetEndPtForm.Designer.cs">
+      <DependentUpon>SetEndPtForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SetSlopeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SetSlopeForm.Designer.cs">
+      <DependentUpon>SetSlopeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SetStartPtForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SetStartPtForm.Designer.cs">
+      <DependentUpon>SetStartPtForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SetupDialogForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -157,6 +175,18 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SetEndPtForm.resx">
+      <DependentUpon>SetEndPtForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SetSlopeForm.resx">
+      <DependentUpon>SetSlopeForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SetStartPtForm.resx">
+      <DependentUpon>SetStartPtForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SetupDialogForm.resx">

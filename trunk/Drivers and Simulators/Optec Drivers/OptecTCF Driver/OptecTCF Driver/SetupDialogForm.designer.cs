@@ -48,6 +48,9 @@ namespace ASCOM.OptecTCF_Driver
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.manuallyEnterSlopeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.displayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.picASCOM = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -126,7 +129,7 @@ namespace ASCOM.OptecTCF_Driver
             // chooseCOMPortToolStripMenuItem
             // 
             this.chooseCOMPortToolStripMenuItem.Name = "chooseCOMPortToolStripMenuItem";
-            this.chooseCOMPortToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.chooseCOMPortToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.chooseCOMPortToolStripMenuItem.Text = "Choose COM Port";
             this.chooseCOMPortToolStripMenuItem.Click += new System.EventHandler(this.chooseCOMPortToolStripMenuItem_Click);
             // 
@@ -134,36 +137,40 @@ namespace ASCOM.OptecTCF_Driver
             // 
             this.learnToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.wizardToolStripMenuItem,
+            this.displayToolStripMenuItem,
             this.firstPointToolStripMenuItem,
-            this.endPointToolStripMenuItem});
+            this.endPointToolStripMenuItem,
+            this.manuallyEnterSlopeToolStripMenuItem});
             this.learnToolStripMenuItem.Name = "learnToolStripMenuItem";
-            this.learnToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
-            this.learnToolStripMenuItem.Text = "Learn...";
-  
+            this.learnToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.learnToolStripMenuItem.Text = "Temp Comp Constant";
             // 
             // wizardToolStripMenuItem
             // 
             this.wizardToolStripMenuItem.Name = "wizardToolStripMenuItem";
-            this.wizardToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.wizardToolStripMenuItem.Text = "Wizard...";
+            this.wizardToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.wizardToolStripMenuItem.Text = "Learn Wizard...";
             this.wizardToolStripMenuItem.Click += new System.EventHandler(this.wizardToolStripMenuItem_Click);
             // 
             // firstPointToolStripMenuItem
             // 
             this.firstPointToolStripMenuItem.Name = "firstPointToolStripMenuItem";
-            this.firstPointToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.firstPointToolStripMenuItem.Text = "First Point...";
+            this.firstPointToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.firstPointToolStripMenuItem.Text = "Set Start Point";
+            this.firstPointToolStripMenuItem.Click += new System.EventHandler(this.firstPointToolStripMenuItem_Click);
             // 
             // endPointToolStripMenuItem
             // 
             this.endPointToolStripMenuItem.Name = "endPointToolStripMenuItem";
-            this.endPointToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.endPointToolStripMenuItem.Text = "End Point...";
+            this.endPointToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.endPointToolStripMenuItem.Text = "Set End Point";
+            this.endPointToolStripMenuItem.Click += new System.EventHandler(this.endPointToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.aboutToolStripMenuItem});
+            this.aboutToolStripMenuItem,
+            this.helpToolStripMenuItem1});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "&Help";
@@ -171,8 +178,8 @@ namespace ASCOM.OptecTCF_Driver
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
-            this.aboutToolStripMenuItem.Text = "&About...";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // statusStrip1
@@ -223,6 +230,24 @@ namespace ASCOM.OptecTCF_Driver
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "A";
             this.radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // manuallyEnterSlopeToolStripMenuItem
+            // 
+            this.manuallyEnterSlopeToolStripMenuItem.Name = "manuallyEnterSlopeToolStripMenuItem";
+            this.manuallyEnterSlopeToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.manuallyEnterSlopeToolStripMenuItem.Text = "Manually Enter Slope";
+            // 
+            // helpToolStripMenuItem1
+            // 
+            this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
+            this.helpToolStripMenuItem1.Size = new System.Drawing.Size(107, 22);
+            this.helpToolStripMenuItem1.Text = "&Help";
+            // 
+            // displayToolStripMenuItem
+            // 
+            this.displayToolStripMenuItem.Name = "displayToolStripMenuItem";
+            this.displayToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.displayToolStripMenuItem.Text = "Display Learned Values";
             // 
             // picASCOM
             // 
@@ -294,5 +319,8 @@ namespace ASCOM.OptecTCF_Driver
         private System.Windows.Forms.ToolStripMenuItem wizardToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem firstPointToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem endPointToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem displayToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem manuallyEnterSlopeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem1;
     }
 }
