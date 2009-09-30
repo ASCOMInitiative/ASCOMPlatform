@@ -1537,7 +1537,6 @@ namespace ASCOM.GeminiTelescope
 
             m_StatusForm.Visible = true;
             m_StatusForm.Show();
-            Win32API.SetForegroundWindow(m_StatusForm.Handle);
             Application.Run(m_StatusForm);
         }
 
@@ -1772,7 +1771,8 @@ namespace ASCOM.GeminiTelescope
             if (OnInfo!=null) OnInfo(Resources.ConnectingToGemini+ m_SerialPort.PortName + ", " + m_SerialPort.BaudRate.ToString(), Resources.Connecting);
             Transmit("\x6");
             System.Threading.Thread.Sleep(0);
-            CommandItem ci = new CommandItem("\x6", 10, true); // quick timeout, don't want to hang up the user for too long
+            
+            CommandItem ci = new CommandItem("\x6", 500, true); // quick timeout, don't want to hang up the user for too long
             string sRes = GetCommandResult(ci);
 
 
@@ -2488,7 +2488,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static void Resync()
         {
-            if (!m_Connected) return;
+            if (!m_Connected || m_BackgroundWorker== null || !m_BackgroundWorker.IsAlive) return;
 
             Trace.Enter("Resync");
 
@@ -2690,6 +2690,8 @@ namespace ASCOM.GeminiTelescope
         {
             Trace.Enter("AddOneMoreError", m_TotalErrors);
 
+            if (!Connected || m_BackgroundWorker == null || !m_BackgroundWorker.IsAlive) return;    //not ready yet
+
             if (Connected && DateTime.Now - m_LastDataTick  > TimeSpan.FromMilliseconds(SharedResources.MAXIMUM_ERROR_INTERVAL))
             {
                 string msg = "No response from Gemini for " + (SharedResources.MAXIMUM_ERROR_INTERVAL/1000 ).ToString() + " seconds, terminating connection";
@@ -2884,6 +2886,8 @@ namespace ASCOM.GeminiTelescope
                 // make sure we are fully connected/disconnected before returning a status,
                 // so that another worker thread doesn't come in with a request while a connect is 
                 // still in progress [pk]
+                if (!m_Connected) return false;
+
                 lock (m_ConnectLock) { return m_Connected; }
             }
             set

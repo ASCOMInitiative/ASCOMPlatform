@@ -255,6 +255,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.en-GB.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.ru-RU.resx" />
     <EmbeddedResource Include="TelescopeSetupDialogForm.resx">
       <DependentUpon>TelescopeSetupDialogForm.cs</DependentUpon>
     </EmbeddedResource>

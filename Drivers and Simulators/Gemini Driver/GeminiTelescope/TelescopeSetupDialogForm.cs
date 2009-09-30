@@ -394,6 +394,7 @@ namespace ASCOM.GeminiTelescope
         private void btnJoysticConfig_Click(object sender, EventArgs e)
         {
             frmJoystickConfig frm = new frmJoystickConfig();
+            frm.JoystickName = (cmbJoystick.SelectedIndex >= 0 ? (string)cmbJoystick.SelectedItem : "");
             DialogResult res = frm.ShowDialog(this);
             if (res == DialogResult.OK)
                 frm.PersistProfile(true);

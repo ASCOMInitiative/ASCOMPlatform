@@ -15,6 +15,9 @@ namespace ASCOM.GeminiTelescope
         public static IntPtr HWND_TOP = (IntPtr)(0);
         public static IntPtr HWND_BOTTOM = (IntPtr)1;
         public static IntPtr HWND_TOPMOST = (IntPtr)(-1);
+        public static IntPtr HWND_NOTTOPMOST = (IntPtr)(-2);
+                    
+
         public const UInt32 SWP_NOSIZE = 0x0001;
         public const UInt32 SWP_NOMOVE = 0x0002;
         public const UInt32 SWP_NOZORDER = 0x0004;

@@ -110,6 +110,15 @@ namespace ASCOM.GeminiTelescope
         Joystick m_JS = new Joystick();
         Timer tmrJoystick = new Timer();
 
+        private string m_JoystickName;
+
+        public string JoystickName
+        {
+            get { return m_JoystickName; }
+            set { m_JoystickName = value; }
+        }
+
+
         public frmJoystickConfig()
         {
             InitializeComponent();
@@ -149,9 +158,9 @@ namespace ASCOM.GeminiTelescope
             }
 
 
-            if (!string.IsNullOrEmpty(GeminiHardware.JoystickName))
+            if (!string.IsNullOrEmpty(JoystickName))
             {
-                if (!m_JS.Initialize(GeminiHardware.JoystickName, GeminiHardware.JoystickAxisRA, GeminiHardware.JoystickAxisDEC))
+                if (!m_JS.Initialize(JoystickName, GeminiHardware.JoystickAxisRA, GeminiHardware.JoystickAxisDEC))
                     m_JS = null;
                 else
                 {

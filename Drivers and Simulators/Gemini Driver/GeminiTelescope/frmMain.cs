@@ -238,13 +238,13 @@ namespace ASCOM.GeminiTelescope
 
                 if (Math.Abs(x) > Math.Abs(y))
                 {
-                    if (x < 0) { dir = ":Me"; s_dir = "East"; }
-                    else {  dir = ":Mw"; s_dir = "West"; }
+                    if (x < 0) { dir = ":Me"; s_dir = "Left"; }
+                    else {  dir = ":Mw"; s_dir = "Right"; }
                 }
                 else
                 {
-                    if (y > 0) { dir = ":Ms"; s_dir = "South"; }
-                    else { dir = ":Mn"; s_dir = "North"; }
+                    if (y > 0) { dir = ":Ms"; s_dir = "Down"; }
+                    else { dir = ":Mn"; s_dir = "Up"; }
                 }
 
                 if (rate != m_JoystickRate || dir != m_JoystickDirection)
@@ -1066,7 +1066,7 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
-                Speech.SayIt(Resources.DownButton, Speech.SpeechType.Command);
+                Speech.SayIt(Resources.UpButton, Speech.SpeechType.Command);
                 ((Control)sender).Capture = true;
 
                 string[] cmds = { null, null };
@@ -1109,7 +1109,7 @@ namespace ASCOM.GeminiTelescope
 
         private void buttonSlew2_MouseDown(object sender, MouseEventArgs e)
         {
-            Speech.SayIt(Resources.UpButton, Speech.SpeechType.Command);
+            Speech.SayIt(Resources.DownButton, Speech.SpeechType.Command);
             if (GeminiHardware.Connected)
             {
                 ((Control)sender).Capture = true;
@@ -1236,7 +1236,7 @@ namespace ASCOM.GeminiTelescope
         {
             Speech.SayIt(Resources.ParkHere, Speech.SpeechType.Command);
 
-            GeminiHardware.DoCommandResult(":hN", GeminiHardware.MAX_TIMEOUT, false);
+            GeminiHardware.DoCommand(":hN", false);
 
         }
 
@@ -1244,9 +1244,9 @@ namespace ASCOM.GeminiTelescope
         {
             this.UseWaitCursor = true;
             Speech.SayIt(Resources.ParkCWD, Speech.SpeechType.Command);
-            GeminiHardware.DoCommandResult(":hC", GeminiHardware.MAX_TIMEOUT, false);
-            GeminiHardware.WaitForHomeOrPark("Park");
-            GeminiHardware.DoCommandResult(":hN", GeminiHardware.MAX_TIMEOUT, false);
+            GeminiHardware.DoCommand(":hC", false);
+//            GeminiHardware.WaitForHomeOrPark("Park");
+//            GeminiHardware.DoCommandResult(":hN", GeminiHardware.MAX_TIMEOUT, false);
             this.UseWaitCursor = false;
         }
 
@@ -1255,10 +1255,10 @@ namespace ASCOM.GeminiTelescope
             this.UseWaitCursor = true;
             Speech.SayIt(Resources.ParkHome, Speech.SpeechType.Command);
 
-            GeminiHardware.DoCommandResult(":hP", GeminiHardware.MAX_TIMEOUT, false);
-            GeminiHardware.WaitForHomeOrPark("Home");
+            GeminiHardware.DoCommand(":hP", false);
+//            GeminiHardware.WaitForHomeOrPark("Home");
 
-            GeminiHardware.DoCommandResult(":hN", GeminiHardware.MAX_TIMEOUT, false);
+//            GeminiHardware.DoCommandResult(":hN", GeminiHardware.MAX_TIMEOUT, false);
             this.UseWaitCursor = false;
         }
 
