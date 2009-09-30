@@ -822,17 +822,17 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.SouthernHemisphere)
             {
-                buttonSlew1.Text = "S";
-                buttonSlew2.Text = "N";
-                buttonSlew3.Text = "E";
-                buttonSlew4.Text = "W";
+                //buttonSlew1.Text = "S";
+                //buttonSlew2.Text = "N";
+                //buttonSlew3.Text = "E";
+                //buttonSlew4.Text = "W";
             }
             else
             {
-                buttonSlew1.Text = "N";
-                buttonSlew2.Text = "S";
-                buttonSlew3.Text = "E";
-                buttonSlew4.Text = "W";
+                //buttonSlew1.Text = "N";
+                //buttonSlew2.Text = "S";
+                //buttonSlew3.Text = "E";
+                //buttonSlew4.Text = "W";
             }
         }
 
@@ -1298,8 +1298,10 @@ namespace ASCOM.GeminiTelescope
         {
             Speech.SayIt(Resources.AboutGeminiDriver, Speech.SpeechType.Command);
 
-            GeminiAbout.MainWindow win = new GeminiAbout.MainWindow();
-            win.Show();
+//            GeminiAbout.MainWindow win = new GeminiAbout.MainWindow();
+//            win.Show();
+            AboutBox1 box = new AboutBox1();
+            box.ShowDialog(this);
         }
 
         private void checkboxPEC_Clicked(object sender, EventArgs e)

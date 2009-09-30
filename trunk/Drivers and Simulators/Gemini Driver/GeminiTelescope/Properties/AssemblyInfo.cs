@@ -9,8 +9,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("ASCOM multi-interface server for GeminiTelescope")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("Copyright © 2009, Robert Turner, Paul Kanevsky")]
+[assembly: AssemblyProduct("ASCOM Gemini Telescope Driver")]
+[assembly: AssemblyCopyright("Copyright © 2009 Paul Kanevsky, Robert Turner")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -21,7 +21,7 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.0.14.0")]
-[assembly: AssemblyFileVersion("1.0.14.0")]
+[assembly: AssemblyVersion("1.0.15.0")]
+[assembly: AssemblyFileVersion("1.0.15.0")]
 
 [assembly: ComVisibleAttribute(false)]

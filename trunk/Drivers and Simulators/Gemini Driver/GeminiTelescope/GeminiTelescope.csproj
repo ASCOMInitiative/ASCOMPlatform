@@ -136,8 +136,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AboutBox\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="AboutBox\AboutBox1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox\AboutBox1.Designer.cs">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
     </Compile>
     <Compile Include="AstronomyFunctions.cs" />
     <Compile Include="ClassFactory.cs" />
@@ -212,6 +215,9 @@
     <Compile Include="GeminiError.cs" />
     <Compile Include="LocalServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AboutBox\AboutBox1.resx">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmVoiceOut.resx">
       <DependentUpon>frmVoiceOut.cs</DependentUpon>
     </EmbeddedResource>
@@ -292,17 +298,6 @@
     <Compile Include="Win32API.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AboutBox\Gemini.ico" />
-    <Resource Include="AboutBox\gemini_Image1.png">
-      <CustomToolNamespace>GeminiAbout</CustomToolNamespace>
-    </Resource>
-    <Resource Include="AboutBox\Image2.png" />
-    <Resource Include="AboutBox\gemini_Image.jpg">
-      <CustomToolNamespace>GeminiAbout</CustomToolNamespace>
-    </Resource>
-    <Resource Include="AboutBox\gemini_Logo.png">
-      <CustomToolNamespace>GeminiAbout</CustomToolNamespace>
-    </Resource>
     <Content Include="ASCOM.png" />
     <Content Include="GeminiSB32x32.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -345,12 +340,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Documentation\GeminiHardware.chm" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="AboutBox\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
