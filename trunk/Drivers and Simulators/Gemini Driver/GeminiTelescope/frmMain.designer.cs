@@ -65,7 +65,7 @@ namespace ASCOM.GeminiTelescope
             this.RadioButtonCenter = new System.Windows.Forms.RadioButton();
             this.RadioButtonGuide = new System.Windows.Forms.RadioButton();
             this.CheckBoxFlipRa = new System.Windows.Forms.CheckBox();
-            this.BaloonIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.BalloonIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.pbStop = new System.Windows.Forms.Button();
             this.checkboxPEC = new System.Windows.Forms.CheckBox();
             this.buttonSlew3 = new ASCOM.GeminiTelescope.TButton();
@@ -472,11 +472,11 @@ namespace ASCOM.GeminiTelescope
             this.CheckBoxFlipRa.Text = "RevRA";
             this.CheckBoxFlipRa.UseVisualStyleBackColor = false;
             // 
-            // BaloonIcon
+            // BalloonIcon
             // 
-            this.BaloonIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("BaloonIcon.Icon")));
-            this.BaloonIcon.Text = "Gemini Driver Status";
-            this.BaloonIcon.Visible = true;
+            this.BalloonIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("BaloonIcon.Icon")));
+            this.BalloonIcon.Text = "Gemini Driver Status";
+            this.BalloonIcon.Visible = true;
             // 
             // pbStop
             // 
@@ -657,7 +657,7 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.ToolStripMenuItem setupDialogToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mountParametersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem focuserSetupDialogToolStripMenuItem;
-        private System.Windows.Forms.NotifyIcon BaloonIcon;
+        private System.Windows.Forms.NotifyIcon BalloonIcon;
         private TButton buttonSlew1;
         private TButton buttonSlew4;
         private TButton buttonSlew2;

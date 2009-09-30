@@ -25,7 +25,7 @@ namespace ASCOM.GeminiTelescope
         string m_LastError = "";
 
 
-        ContextMenu m_BaloonMenu = null;
+        ContextMenu m_BalloonMenu = null;
 
         Color m_ActiveBkColor = Color.FromArgb(255, 0, 0);
         Color m_InactiveBkColor = Color.FromArgb(64,0,0);
@@ -57,7 +57,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.OnError += new ErrorDelegate(OnError);
             GeminiHardware.OnInfo += new ErrorDelegate(OnInfo);
 
-            m_BaloonMenu = new ContextMenu();
+            m_BalloonMenu = new ContextMenu();
 
             MenuItem connectMenu = new MenuItem(Resources.Connect, new EventHandler(ConnectMenu));
             connectMenu.Name = "Connect";
@@ -70,7 +70,7 @@ namespace ASCOM.GeminiTelescope
             controlMenu.Name = "Control";
             controlMenu.Checked = this.Visible;
 
-            m_BaloonMenu.MenuItems.AddRange(new MenuItem[] { 
+            m_BalloonMenu.MenuItems.AddRange(new MenuItem[] { 
                 connectMenu,
 
                 new MenuItem("-"),
@@ -87,13 +87,13 @@ namespace ASCOM.GeminiTelescope
             new MenuItem(Resources.Exit, new EventHandler(ExitMenu))
             });
 
-            BaloonIcon.ContextMenu = m_BaloonMenu;
-            BaloonIcon.MouseClick += new MouseEventHandler(BaloonIcon_MouseClick);
+            BalloonIcon.ContextMenu = m_BalloonMenu;
+            BalloonIcon.MouseClick += new MouseEventHandler(BalloonIcon_MouseClick);
 
-            BaloonIcon.Visible = true;
+            BalloonIcon.Visible = true;
             tmrBaloon.Tick += new EventHandler(tmrBaloon_Tick);
-            BaloonIcon.MouseDoubleClick += new MouseEventHandler(BaloonIcon_MouseDoubleClick);
-            BaloonIcon.MouseMove += new MouseEventHandler(BaloonIcon_MouseMove);
+            BalloonIcon.MouseDoubleClick += new MouseEventHandler(BalloonIcon_MouseDoubleClick);
+            BalloonIcon.MouseMove += new MouseEventHandler(BalloonIcon_MouseMove);
             GeminiHardware.OnSafetyLimit += new SafetyDelegate(OnSafetyLimit);
 
             ToolTip toolTip1 = new ToolTip();
@@ -314,7 +314,7 @@ namespace ASCOM.GeminiTelescope
         }
 
 
-        void BaloonIcon_MouseMove(object sender, MouseEventArgs e)
+        void BalloonIcon_MouseMove(object sender, MouseEventArgs e)
         {
             if (m_StatusForm == null || !m_StatusForm.Visible)
             {
@@ -323,13 +323,13 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        void BaloonIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        void BalloonIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             ControlPanelMenu(sender, e);
         }
 
 
-        void BaloonIcon_MouseClick(object sender, MouseEventArgs e)
+        void BalloonIcon_MouseClick(object sender, MouseEventArgs e)
         {
             //ShowStatus(Cursor.Position);
         }
@@ -355,7 +355,7 @@ namespace ASCOM.GeminiTelescope
                 Speech.SayIt(Resources.ShowHandController, Speech.SpeechType.Command);
             }
 
-            m_BaloonMenu.MenuItems["Control"].Checked = this.Visible;
+            m_BalloonMenu.MenuItems["Control"].Checked = this.Visible;
         }
 
         void AdvancedGeminiMenu(object sender, EventArgs e)
@@ -382,7 +382,7 @@ namespace ASCOM.GeminiTelescope
         void ShowNotificationsMenu(object sender, EventArgs e)
         {
             m_ShowNotifications = !m_ShowNotifications;
-            m_BaloonMenu.MenuItems["Notifications"].Checked = m_ShowNotifications;
+            m_BalloonMenu.MenuItems["Notifications"].Checked = m_ShowNotifications;
             if (m_ShowNotifications) 
                 Speech.SayIt(Resources.ShowNotifications, Speech.SpeechType.Command);
             else
@@ -405,15 +405,15 @@ namespace ASCOM.GeminiTelescope
             try
             {
                 tmrBaloon.Stop();
-                BaloonIcon.Visible = false;
-                BaloonIcon.Visible = true;
+                BalloonIcon.Visible = false;
+                BalloonIcon.Visible = true;
 
                 if (m_Messages.Count > 0)
                 {
                     msg m = m_Messages[0];
                     m_Messages.RemoveAt(0);
 
-                    BaloonIcon.ShowBalloonTip(4000, m.text, m.title, m.icon);
+                    BalloonIcon.ShowBalloonTip(4000, m.text, m.title, m.icon);
                     m_LastMessageTime = DateTime.Now;
                     // time to turn off the baloon text, since Windows has a minimum of about 20-30 seconds before
                     // the message turns off on its own while the task bar is visible:
@@ -473,7 +473,7 @@ namespace ASCOM.GeminiTelescope
 
                 tmrBaloon.Stop();
 
-                BaloonIcon.ShowBalloonTip(4000, text, title, icon);
+                BalloonIcon.ShowBalloonTip(4000, text, title, icon);
 
                 if (icon == ToolTipIcon.Error)
                     Speech.SayIt(text, Speech.SpeechType.Error);
@@ -498,7 +498,9 @@ namespace ASCOM.GeminiTelescope
             if (Connected && Clients == 1)  // first client to connect, change UI to show the connected status
             {
                 ButtonConnect.Text = "Disconnect";
-                BaloonIcon.ContextMenu.MenuItems["Connect"].Text = "Disconnect";
+                BalloonIcon.ContextMenu.MenuItems["Connect"].Text = "Disconnect";
+
+                m_Messages.Clear(); // remove all queued up messages, we don't care now that the mount is connected:
                 SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME, "Mount is connected", ToolTipIcon.Info);
             }
             if (Connected)
@@ -508,7 +510,7 @@ namespace ASCOM.GeminiTelescope
             if (!Connected && Clients <= 0) // last client to disconnect
             {
                 ButtonConnect.Text = "Connect";
-                BaloonIcon.ContextMenu.MenuItems["Connect"].Text = "Connect";
+                BalloonIcon.ContextMenu.MenuItems["Connect"].Text = "Connect";
 
                 labelLst.Text = "00:00:00";
                 labelRa.Text = "00:00:00";
@@ -627,7 +629,7 @@ namespace ASCOM.GeminiTelescope
 
             }
 
-            m_BaloonMenu.MenuItems["Control"].Checked = this.Visible;
+            m_BalloonMenu.MenuItems["Control"].Checked = this.Visible;
 
             string tooltip = "Gemini is ";
             if (GeminiHardware.Connected)
@@ -645,7 +647,7 @@ namespace ASCOM.GeminiTelescope
             checkboxPEC.BackColor = (checkboxPEC.Enabled ? Color.Transparent : Color.FromArgb(64, 64, 64)) ;
 
 
-            BaloonIcon.Text = ""; // tooltip;    
+            BalloonIcon.Text = ""; // tooltip;    
         }
 
 
