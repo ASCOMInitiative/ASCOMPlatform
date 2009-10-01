@@ -1549,7 +1549,7 @@ namespace ASCOM.TelescopeSimulator
             }
 
 
-            if (Duration < 0) throw new ASCOM.OutOfRangeException();
+            if (Duration < 0) throw new ASCOM.InvalidValueException("PulseGuide",Duration.ToString(),">0");
 
             tempTicks = TelescopeHardware.GetTickCount() + Duration;
 
