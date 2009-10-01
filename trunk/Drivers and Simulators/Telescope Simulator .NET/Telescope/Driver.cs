@@ -1521,8 +1521,72 @@ namespace ASCOM.TelescopeSimulator
 
         public void PulseGuide(GuideDirections Direction, int Duration)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("PulseGuide");
+            string directionString = "";
+            long tempTicks = 0;
+
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    directionString = "unknown";
+                    switch (Direction)
+                    {
+                        case GuideDirections.guideEast: directionString = "East"; break;
+                        case GuideDirections.guideNorth: directionString = "North"; break;
+                        case GuideDirections.guideSouth: directionString = "South"; break;
+                        case GuideDirections.guideWest: directionString = "West"; break;
+                    }
+
+                    SharedResources.TrafficForm.TrafficStart("Pulse Guide: " + directionString + ", " + Duration.ToString());
+
+                }
+            }
+
+            if (!TelescopeHardware.CanPulseGuide)
+            {
+
+                throw new ASCOM.MethodNotImplementedException("PulseGuide");
+            }
+
+
+            if (Duration < 0) throw new ASCOM.OutOfRangeException();
+
+            tempTicks = TelescopeHardware.GetTickCount() + Duration;
+
+            switch (Direction)
+            {
+                case GuideDirections.guideNorth:
+                    TelescopeHardware.m_GuideRateDeclination = Math.Abs(TelescopeHardware.m_GuideRateDeclination);
+                    TelescopeHardware.m_PulseGuideTixDec = tempTicks;
+                    break;
+                case GuideDirections.guideSouth:
+                    TelescopeHardware.m_GuideRateDeclination = -Math.Abs(TelescopeHardware.m_GuideRateDeclination);
+                    TelescopeHardware.m_PulseGuideTixDec = tempTicks;
+                    break;
+
+                case GuideDirections.guideEast:
+                    TelescopeHardware.m_GuideRateRightAscension = Math.Abs(TelescopeHardware.m_GuideRateRightAscension);
+                    TelescopeHardware.m_PulseGuideTixRa = tempTicks;
+                    break;
+                case GuideDirections.guideWest:
+                    TelescopeHardware.m_GuideRateRightAscension = -Math.Abs(TelescopeHardware.m_GuideRateRightAscension);
+                    TelescopeHardware.m_PulseGuideTixRa = tempTicks;
+                    break;
+            }
+
+            if (!TelescopeHardware.CanDualAxisPulseGuide)
+            {
+                System.Threading.Thread.Sleep(Duration);
+            }
+
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Slew)
+                {
+                    SharedResources.TrafficForm.TrafficEnd(" (done) ");
+
+                }
+            }
         }
 
         public double RightAscension

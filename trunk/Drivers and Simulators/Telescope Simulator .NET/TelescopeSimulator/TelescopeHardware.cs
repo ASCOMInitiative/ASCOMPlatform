@@ -21,11 +21,15 @@ using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
 using System.Timers;
+using System.Runtime.InteropServices;
 
 namespace ASCOM.TelescopeSimulator
 {
     public class TelescopeHardware
     {
+        [DllImport("kernel32.dll", CallingConvention = CallingConvention.StdCall)]
+        public static extern long GetTickCount();
+
         private static Timer m_Timer = new Timer(); //Simulated Hardware by running a Timer
         private static Utilities.Profile m_Profile;
         private static bool m_OnTop;
@@ -96,6 +100,7 @@ namespace ASCOM.TelescopeSimulator
         public static double  m_GuideRateDeclination;
         public static double m_GuideRateRightAscension;
 
+        
         private static int m_TrackingRate;
 
         private static SlewType m_SlewState = SlewType.SlewNone;
@@ -112,8 +117,8 @@ namespace ASCOM.TelescopeSimulator
 
         private static int m_DateDelta;
 
-        private static long m_PulseGuideTixRa = 0;
-        private static long m_PulseGuideTixDec = 0;
+        public static long m_PulseGuideTixRa = 0;
+        public static long m_PulseGuideTixDec = 0;
 
         public static double m_DeltaAz = 0;
         public static double m_DeltaAlt = 0;
