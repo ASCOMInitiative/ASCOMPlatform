@@ -173,7 +173,6 @@ namespace ASCOM.OptecTCF_Driver
             }
         }
 
-
 #endregion
 
 #region DeviceComm Connection METHODS
@@ -333,14 +332,6 @@ namespace ASCOM.OptecTCF_Driver
 
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="Cmd"></param>
-        /// <param name="timeout"></param>
-        /// <param name="ResponseDesired"></param>
-        /// <param name="ResponseContains"></param>
-        /// <returns></returns>
         private static string SendCmd(string Cmd, int timeout, bool ResponseDesired, 
             string ResponseContains)
         {
@@ -539,6 +530,34 @@ namespace ASCOM.OptecTCF_Driver
             {       
                 throw new DriverException("\n An error occured while setting QuietMode.\n" 
                     + Ex.ToString(), Ex);
+            }
+        }
+
+        internal static void SetDelay(char AorB, double delay)
+        {
+            try
+            {
+                if (AorB != 'A' && AorB != 'B') throw new InvalidValueException("SetDelay", AorB.ToString(), "A or B");
+                if (delay < 1 || delay > 10.99) throw new InvalidValueException("SetDelay", delay.ToString(), "1 through 10.99");
+
+                delay = delay - 1;
+                string cmd;
+                string delaystring = (delay*100).ToString().PadLeft(3,'0');
+                
+                if (AorB == 'A')
+                {
+                    cmd = "FDA" + delaystring;
+                }
+                else 
+                {
+                    cmd = "FDB" + delaystring;
+                }
+
+                SendCmd(cmd, 600, ExpectResponse, "DONE");
+            }
+            catch (Exception Ex)
+            {
+                throw new DriverException("Error setting delay", Ex);
             }
         }
 

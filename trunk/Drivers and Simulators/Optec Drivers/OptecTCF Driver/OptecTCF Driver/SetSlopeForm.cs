@@ -13,13 +13,13 @@ namespace ASCOM.OptecTCF_Driver
         public SetSlopeForm()
         {
             InitializeComponent();
-            this.label1.Text = "Enter Slope =";
+            this.label1.Text = "Enter Temperature Coefficient =";
             this.Slope_TB.ReadOnly = false;
         }
         public SetSlopeForm(string slope, char sign)
         {
             InitializeComponent();
-            this.label1.Text = "Calculated Slope =";
+            this.label1.Text = "Temperature Coefficient =";
             this.Slope_TB.Text = sign.ToString() + slope;
         }
 

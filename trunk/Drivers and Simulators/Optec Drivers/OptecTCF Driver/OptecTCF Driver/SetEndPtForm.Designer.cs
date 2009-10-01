@@ -32,18 +32,18 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
             this.Temp_TB = new System.Windows.Forms.TextBox();
-            this.CapStPt_BTN = new System.Windows.Forms.Button();
             this.Pos_TB = new System.Windows.Forms.TextBox();
+            this.CapStPt_BTN = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.Cancel_Btn = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.StartPointDateTime_TB = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.StartPtTemp_TB = new System.Windows.Forms.TextBox();
             this.StartPointPos_TB = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.StartPointDateTime_TB = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -88,16 +88,6 @@
             this.Temp_TB.TabIndex = 6;
             this.Temp_TB.Text = "999999";
             // 
-            // CapStPt_BTN
-            // 
-            this.CapStPt_BTN.Location = new System.Drawing.Point(62, 294);
-            this.CapStPt_BTN.Name = "CapStPt_BTN";
-            this.CapStPt_BTN.Size = new System.Drawing.Size(127, 26);
-            this.CapStPt_BTN.TabIndex = 0;
-            this.CapStPt_BTN.Text = "Capture End Point";
-            this.CapStPt_BTN.UseVisualStyleBackColor = true;
-            this.CapStPt_BTN.Click += new System.EventHandler(this.CapStPt_BTN_Click);
-            // 
             // Pos_TB
             // 
             this.Pos_TB.Location = new System.Drawing.Point(95, 25);
@@ -106,6 +96,16 @@
             this.Pos_TB.Size = new System.Drawing.Size(86, 20);
             this.Pos_TB.TabIndex = 5;
             this.Pos_TB.Text = "00000";
+            // 
+            // CapStPt_BTN
+            // 
+            this.CapStPt_BTN.Location = new System.Drawing.Point(62, 294);
+            this.CapStPt_BTN.Name = "CapStPt_BTN";
+            this.CapStPt_BTN.Size = new System.Drawing.Size(127, 26);
+            this.CapStPt_BTN.TabIndex = 0;
+            this.CapStPt_BTN.Text = "d";
+            this.CapStPt_BTN.UseVisualStyleBackColor = true;
+            this.CapStPt_BTN.Click += new System.EventHandler(this.CapStPt_BTN_Click);
             // 
             // label4
             // 
@@ -148,6 +148,25 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Start Point";
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(36, 83);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(53, 13);
+            this.label6.TabIndex = 7;
+            this.label6.Text = "Captured:";
+            // 
+            // StartPointDateTime_TB
+            // 
+            this.StartPointDateTime_TB.Location = new System.Drawing.Point(95, 80);
+            this.StartPointDateTime_TB.Multiline = true;
+            this.StartPointDateTime_TB.Name = "StartPointDateTime_TB";
+            this.StartPointDateTime_TB.ReadOnly = true;
+            this.StartPointDateTime_TB.Size = new System.Drawing.Size(86, 34);
+            this.StartPointDateTime_TB.TabIndex = 8;
+            this.StartPointDateTime_TB.Text = "Time...\r\nDate...";
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -183,25 +202,6 @@
             this.StartPointPos_TB.Size = new System.Drawing.Size(86, 20);
             this.StartPointPos_TB.TabIndex = 5;
             this.StartPointPos_TB.Text = "00000";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(36, 83);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(53, 13);
-            this.label6.TabIndex = 7;
-            this.label6.Text = "Captured:";
-            // 
-            // StartPointDateTime_TB
-            // 
-            this.StartPointDateTime_TB.Location = new System.Drawing.Point(95, 80);
-            this.StartPointDateTime_TB.Multiline = true;
-            this.StartPointDateTime_TB.Name = "StartPointDateTime_TB";
-            this.StartPointDateTime_TB.ReadOnly = true;
-            this.StartPointDateTime_TB.Size = new System.Drawing.Size(86, 34);
-            this.StartPointDateTime_TB.TabIndex = 8;
-            this.StartPointDateTime_TB.Text = "Time...\r\nDate...";
             // 
             // SetEndPtForm
             // 
