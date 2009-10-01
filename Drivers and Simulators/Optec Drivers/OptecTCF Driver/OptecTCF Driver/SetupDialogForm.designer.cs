@@ -57,17 +57,17 @@ namespace ASCOM.OptecTCF_Driver
             this.FocStatusControls = new System.Windows.Forms.GroupBox();
             this.Out_BTN = new System.Windows.Forms.Button();
             this.Increment_NUD = new System.Windows.Forms.NumericUpDown();
-            this.PowerLight = new System.Windows.Forms.PictureBox();
             this.Pos_TB = new System.Windows.Forms.TextBox();
             this.In_BTN = new System.Windows.Forms.Button();
             this.Temp_TB = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.picASCOM = new System.Windows.Forms.PictureBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            this.PowerLight = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.picASCOM = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -156,8 +156,8 @@ namespace ASCOM.OptecTCF_Driver
             // learnToolStripMenuItem
             // 
             this.learnToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.wizardToolStripMenuItem,
             this.displayToolStripMenuItem,
+            this.wizardToolStripMenuItem,
             this.firstPointToolStripMenuItem,
             this.endPointToolStripMenuItem,
             this.manuallyEnterSlopeToolStripMenuItem});
@@ -177,6 +177,7 @@ namespace ASCOM.OptecTCF_Driver
             this.displayToolStripMenuItem.Name = "displayToolStripMenuItem";
             this.displayToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
             this.displayToolStripMenuItem.Text = "Display Learned Values";
+            this.displayToolStripMenuItem.Click += new System.EventHandler(this.displayToolStripMenuItem_Click_1);
             // 
             // firstPointToolStripMenuItem
             // 
@@ -211,14 +212,14 @@ namespace ASCOM.OptecTCF_Driver
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem1
             // 
             this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
-            this.helpToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.helpToolStripMenuItem1.Size = new System.Drawing.Size(107, 22);
             this.helpToolStripMenuItem1.Text = "&Help";
             // 
             // statusStrip1
@@ -354,16 +355,6 @@ namespace ASCOM.OptecTCF_Driver
             0,
             0});
             // 
-            // PowerLight
-            // 
-            this.PowerLight.Image = global::ASCOM.OptecTCF_Driver.Properties.Resources.RedLight;
-            this.PowerLight.Location = new System.Drawing.Point(11, 19);
-            this.PowerLight.Name = "PowerLight";
-            this.PowerLight.Size = new System.Drawing.Size(17, 16);
-            this.PowerLight.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.PowerLight.TabIndex = 7;
-            this.PowerLight.TabStop = false;
-            // 
             // Pos_TB
             // 
             this.Pos_TB.BackColor = System.Drawing.SystemColors.MenuText;
@@ -428,6 +419,26 @@ namespace ASCOM.OptecTCF_Driver
             this.label3.TabIndex = 10;
             this.label3.Text = "Step Size:";
             // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.WorkerSupportsCancellation = true;
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            // 
+            // backgroundWorker2
+            // 
+            this.backgroundWorker2.WorkerSupportsCancellation = true;
+            this.backgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
+            // 
+            // PowerLight
+            // 
+            this.PowerLight.Image = global::ASCOM.OptecTCF_Driver.Properties.Resources.RedLight;
+            this.PowerLight.Location = new System.Drawing.Point(11, 19);
+            this.PowerLight.Name = "PowerLight";
+            this.PowerLight.Size = new System.Drawing.Size(17, 16);
+            this.PowerLight.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.PowerLight.TabIndex = 7;
+            this.PowerLight.TabStop = false;
+            // 
             // pictureBox1
             // 
             this.pictureBox1.Image = global::ASCOM.OptecTCF_Driver.Properties.Resources.Optec_Logo_large_png;
@@ -451,16 +462,6 @@ namespace ASCOM.OptecTCF_Driver
             this.picASCOM.TabStop = false;
             this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
             this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
-            // 
-            // backgroundWorker1
-            // 
-            this.backgroundWorker1.WorkerSupportsCancellation = true;
-            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-            // 
-            // backgroundWorker2
-            // 
-            this.backgroundWorker2.WorkerSupportsCancellation = true;
-            this.backgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
             // 
             // SetupDialogForm
             // 

@@ -81,6 +81,12 @@
     </Compile>
     <Compile Include="DeviceComm.cs" />
     <Compile Include="DeviceSettings.cs" />
+    <Compile Include="DisplayTempCoEffs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DisplayTempCoEffs.Designer.cs">
+      <DependentUpon>DisplayTempCoEffs.cs</DependentUpon>
+    </Compile>
     <Compile Include="Driver.cs" />
     <Compile Include="LearnWizard1_5.cs">
       <SubType>Form</SubType>
@@ -150,6 +156,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="COMPortForm.resx">
       <DependentUpon>COMPortForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DisplayTempCoEffs.resx">
+      <DependentUpon>DisplayTempCoEffs.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="LearnWizard1_5.resx">
@@ -226,6 +236,7 @@
   <ItemGroup>
     <Content Include="ASCOM.png" />
     <Content Include="ReadMe.htm" />
+    <None Include="Resources\Optec Logo-medium png.png" />
     <None Include="Resources\RedLight.png" />
     <None Include="Resources\TCF-S3_TCF-S_1_Medium.jpg" />
     <None Include="Resources\Optec Logo-large png.png" />

@@ -504,7 +504,17 @@ namespace ASCOM.OptecTCF_Driver
             {
                 DeviceComm.Connect();
                 SetSlopeForm SSFrm = new SetSlopeForm();
-                SSFrm.Show();
+                SSFrm.ShowDialog();
+            }
+        }
+
+        private void displayToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            lock (LockObject)
+            {
+                DeviceComm.Connect();
+                DisplayTempCoEffs Frm = new DisplayTempCoEffs();
+                Frm.ShowDialog();
             }
         }
 
