@@ -74,6 +74,13 @@ namespace ASCOM.OptecTCF_Driver.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap RedLight {
+            get {
+                object obj = ResourceManager.GetObject("RedLight", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap TCF_S3_TCF_S_1_Medium {
             get {
                 object obj = ResourceManager.GetObject("TCF_S3_TCF_S_1_Medium", resourceCulture);

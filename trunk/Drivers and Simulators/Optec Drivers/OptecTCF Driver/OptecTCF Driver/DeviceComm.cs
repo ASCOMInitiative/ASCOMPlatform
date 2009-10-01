@@ -56,7 +56,7 @@ namespace ASCOM.OptecTCF_Driver
 	        }
         }
 
-        internal static void LoadSlope(int slope, char AorB)
+        internal static void SetSlope(int slope, char AorB)
         {
             try
             {

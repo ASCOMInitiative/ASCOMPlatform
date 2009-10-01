@@ -18,18 +18,30 @@ namespace ASCOM.OptecTCF_Driver
 
         private void CapStPt_BTN_Click(object sender, EventArgs e)
         {
-            double temp = double.Parse(Temp_TB.Text);
-            int pos = int.Parse(Pos_TB.Text);
-            DateTime dt = DateTime.Now;
+            try
+            {
+                string TempString = Temp_TB.Text;
+                int i = TempString.IndexOf("°");
+                TempString = TempString.Substring(0, i);
+                
+                double temp = double.Parse(TempString);
+                
+                int pos = int.Parse(Pos_TB.Text);
+                DateTime dt = DateTime.Now;
 
-            SlopePoint stpt = new SlopePoint();
-            stpt.DateAndTime = dt;
-            stpt.Temperature = temp;
-            stpt.Position = pos;
+                SlopePoint stpt = new SlopePoint();
+                stpt.DateAndTime = dt;
+                stpt.Temperature = temp;
+                stpt.Position = pos;
 
-            DeviceSettings.SetStartPoint(stpt);
-            
-            this.Close();
+                DeviceSettings.SetStartPoint(stpt);
+                MessageBox.Show("Start point sucessfully stored!");
+                this.Close();
+            }
+            catch(Exception Ex)
+            {
+                MessageBox.Show("The following error occured...\n" + Ex.ToString());
+            }
 
         }
 
@@ -52,7 +64,7 @@ namespace ASCOM.OptecTCF_Driver
         private void UpdateControls(string pos, string temp)
         {
             Pos_TB.Text = pos;
-            Temp_TB.Text = temp;
+            Temp_TB.Text = temp + " °C";
         }
 
         private void Cancel_Btn_Click(object sender, EventArgs e)
