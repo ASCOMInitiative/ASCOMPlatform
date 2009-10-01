@@ -24,7 +24,10 @@ namespace ASCOM.OptecTCF_Driver
 
             EndPtDateTimeB,
             EndPtTempB,
-            EndPtPosB
+            EndPtPosB,
+
+            ModeAName,
+            ModeBName
         }
 
         static DeviceSettings()
@@ -91,9 +94,25 @@ namespace ASCOM.OptecTCF_Driver
             }
         }
 
-        internal static char GetModeAorB()
+        internal static char GetActiveMode()
         {
-            throw new System.NotImplementedException();
+            
+            
+            string AorB = Prof.GetValue(Focuser.s_csDriverID, ProfileStrings.AutoMode.ToString(), "", "A");
+            if (char.Parse(AorB) != 'A' && char.Parse(AorB) != 'B')
+                throw new InvalidValueException("AorB", AorB.ToString(), "A or B");
+            return char.Parse(AorB);
+        }
+
+        internal static void SetActiveMode(char AorB)
+        {
+            if (AorB != 'A' && AorB != 'B')
+                throw new InvalidValueException("AorB", AorB.ToString(), "A or B");
+            else
+            {
+                Prof.WriteValue(Focuser.s_csDriverID, ProfileStrings.AutoMode.ToString(), AorB.ToString());
+            }
+
         }
 
         internal static string GetComPort()
@@ -122,6 +141,49 @@ namespace ASCOM.OptecTCF_Driver
             Prof.WriteValue(Focuser.s_csDriverID, ProfileStrings.StartPtTemp.ToString(), Temp, "");
             Prof.WriteValue(Focuser.s_csDriverID, ProfileStrings.StartPtDateTime.ToString(), DateTime, "");      
         }
+
+        internal static string CalculateSlope(int Pos1, double Temp1, int Pos2, double Temp2)
+        {
+            if (Temp1 == Temp2) throw new InvalidOperationException("Temperature1 and Temperature2 can not be equal.\n");
+            if (Pos1 == Pos2) throw new InvalidOperationException("Position1 and Position2 can not be equal.\n");
+
+            //Calculate Slope - Slope = Steps per Degree
+            int slope = (Pos1 - Pos2) / (Convert.ToInt32(Temp2) - Convert.ToInt32(Temp1));
+            char SlopeSign;
+            if (slope < 0) SlopeSign = '-';
+            else SlopeSign = '+';
+
+            slope = Math.Abs(slope);
+
+            if (slope < 2 || slope > 999)
+            {
+                //MessageBox.Show("Could not save time constant to device. TC must be between 2 and 99.\n"
+                //    + "Calculated TC = " + slope.ToString() + ".\n");
+                throw new InvalidOperationException("ABS(Slope) must be beween 2 and 999");
+            }
+            return SlopeSign.ToString() + slope.ToString().PadLeft(3, '0');
+        }
+
+        internal static void SetModeNames(string A_Name, string B_Name)
+        {
+            Prof.WriteValue(Focuser.s_csDriverID, ProfileStrings.ModeAName.ToString(), A_Name);
+            Prof.WriteValue(Focuser.s_csDriverID, ProfileStrings.ModeBName.ToString(), B_Name);
+        }
+
+        internal static string GetModeName(char AorB)
+        {
+            if (AorB != 'A' && AorB != 'B') throw new InvalidValueException("AorB", AorB.ToString(), "A or B");
+            else if (AorB == 'A')
+            {
+                return Prof.GetValue(Focuser.s_csDriverID, ProfileStrings.ModeAName.ToString(), "", "Temp Comp Mode A");
+            }
+            else
+            {
+                return Prof.GetValue(Focuser.s_csDriverID, ProfileStrings.ModeBName.ToString(), "", "Temp Comp Mode B");
+            }
+        }
+
+        
 
         //internal static SlopePoint GetEndPoint(char AorB)
         //{
@@ -170,6 +232,8 @@ namespace ASCOM.OptecTCF_Driver
         //}
 
         #endregion
+
+
     }
 
 

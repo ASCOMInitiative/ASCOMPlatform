@@ -226,6 +226,7 @@
   <ItemGroup>
     <Content Include="ASCOM.png" />
     <Content Include="ReadMe.htm" />
+    <None Include="Resources\RedLight.png" />
     <None Include="Resources\TCF-S3_TCF-S_1_Medium.jpg" />
     <None Include="Resources\Optec Logo-large png.png" />
   </ItemGroup>
