@@ -268,7 +268,7 @@ namespace ASCOM.GeminiTelescope
             set 
             { 
                 checkBoxUseDriverSite.Checked = value;
-                if (value)
+                if (!value)
                 {
                     comboBoxLatitude.Enabled = false;
                     textBoxLatitudeDegrees.ReadOnly = true;
