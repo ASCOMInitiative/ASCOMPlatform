@@ -370,7 +370,8 @@ namespace ASCOM.Simulator
                     attr = Attribute.GetCustomAttribute(assy, typeof(ServedClassNameAttribute));
                     string chooserName = ((ServedClassNameAttribute)attr).DisplayName;
 
-					var P = new ASCOM.Utilities.Profile { DeviceType = progid.Substring(progid.LastIndexOf('.') + 1) };
+					var P = new ASCOM.Utilities.Profile();
+					P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);
 					P.Register(progid, chooserName);
 					try										// In case Helper becomes native .NET
 					{
@@ -443,8 +444,9 @@ namespace ASCOM.Simulator
 					//
 					// ASCOM
 					//
-					using (Helper.Profile P = new Helper.Profile { DeviceType = progid.Substring(progid.LastIndexOf('.') + 1) })
+					using (Helper.Profile P = new Helper.Profile())
 					{
+						P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);
 						P.Unregister(progid);
 						try										// In case Helper becomes native .NET
 						{
