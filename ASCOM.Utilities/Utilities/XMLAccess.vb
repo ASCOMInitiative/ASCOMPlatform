@@ -177,7 +177,6 @@ Friend Class XMLAccess
         sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
     End Sub
 
-
     Friend Sub DeleteProfile(ByVal p_SubKeyName As String, ByVal p_ValueName As String) Implements IAccess.DeleteProfile
         'Delete a value from a key
         Dim Values As Generic.SortedList(Of String, String)
@@ -339,8 +338,10 @@ Friend Class XMLAccess
             If Not FileStore.Exists("\" & VALUES_FILENAME) Then
                 FileStore.CreateDirectory("\", TL)
                 CreateKey("\") 'Create the root key
+                TL.LogMessage("MigrateProfile", "Successfully created root directory and root key")
+            Else
+                TL.LogMessage("MigrateProfile", "Root directory already exists")
             End If
-            TL.LogMessage("MigrateProfile", "Successfully created root directory and root key")
 
             'Get correct registry root key depending on whether we are running as 32 or 64bit
             FromKey = Registry.LocalMachine.OpenSubKey(ROOT_KEY_NAME) 'Source to copy from 
