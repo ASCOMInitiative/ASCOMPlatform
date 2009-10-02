@@ -1323,5 +1323,13 @@ namespace ASCOM.GeminiTelescope
             ExitMenu(sender, e);
         }
 
+        private void buttonSync_Click(object sender, EventArgs e)
+        {
+            if (GeminiHardware.TargetDeclination != SharedResources.INVALID_DOUBLE || GeminiHardware.TargetRightAscension != SharedResources.INVALID_DOUBLE)
+            { GeminiHardware.SyncEquatorial(); }
+            else
+            { MessageBox.Show("No Target!"); }
+        }
+
     }
 }
