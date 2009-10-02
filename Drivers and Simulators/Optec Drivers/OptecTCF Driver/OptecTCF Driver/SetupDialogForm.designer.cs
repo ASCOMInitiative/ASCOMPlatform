@@ -28,6 +28,7 @@ namespace ASCOM.OptecTCF_Driver
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetupDialogForm));
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
@@ -38,8 +39,8 @@ namespace ASCOM.OptecTCF_Driver
             this.setupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chooseCOMPortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.learnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.wizardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.displayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.wizardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.firstPointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.endPointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manuallyEnterSlopeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,17 +58,18 @@ namespace ASCOM.OptecTCF_Driver
             this.FocStatusControls = new System.Windows.Forms.GroupBox();
             this.Out_BTN = new System.Windows.Forms.Button();
             this.Increment_NUD = new System.Windows.Forms.NumericUpDown();
+            this.PowerLight = new System.Windows.Forms.PictureBox();
             this.Pos_TB = new System.Windows.Forms.TextBox();
             this.In_BTN = new System.Windows.Forms.Button();
             this.Temp_TB = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
-            this.PowerLight = new System.Windows.Forms.PictureBox();
+            this.backgroundWorkerTemp = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorkerPos = new System.ComponentModel.BackgroundWorker();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.picASCOM = new System.Windows.Forms.PictureBox();
+            this.Timer_Temp = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -165,19 +167,19 @@ namespace ASCOM.OptecTCF_Driver
             this.learnToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.learnToolStripMenuItem.Text = "Temp Comp Constant";
             // 
-            // wizardToolStripMenuItem
-            // 
-            this.wizardToolStripMenuItem.Name = "wizardToolStripMenuItem";
-            this.wizardToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this.wizardToolStripMenuItem.Text = "Learn Wizard...";
-            this.wizardToolStripMenuItem.Click += new System.EventHandler(this.wizardToolStripMenuItem_Click);
-            // 
             // displayToolStripMenuItem
             // 
             this.displayToolStripMenuItem.Name = "displayToolStripMenuItem";
             this.displayToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
             this.displayToolStripMenuItem.Text = "Display Learned Values";
             this.displayToolStripMenuItem.Click += new System.EventHandler(this.displayToolStripMenuItem_Click_1);
+            // 
+            // wizardToolStripMenuItem
+            // 
+            this.wizardToolStripMenuItem.Name = "wizardToolStripMenuItem";
+            this.wizardToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.wizardToolStripMenuItem.Text = "Learn Wizard...";
+            this.wizardToolStripMenuItem.Click += new System.EventHandler(this.wizardToolStripMenuItem_Click);
             // 
             // firstPointToolStripMenuItem
             // 
@@ -355,6 +357,16 @@ namespace ASCOM.OptecTCF_Driver
             0,
             0});
             // 
+            // PowerLight
+            // 
+            this.PowerLight.Image = global::ASCOM.OptecTCF_Driver.Properties.Resources.RedLight;
+            this.PowerLight.Location = new System.Drawing.Point(11, 19);
+            this.PowerLight.Name = "PowerLight";
+            this.PowerLight.Size = new System.Drawing.Size(17, 16);
+            this.PowerLight.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.PowerLight.TabIndex = 7;
+            this.PowerLight.TabStop = false;
+            // 
             // Pos_TB
             // 
             this.Pos_TB.BackColor = System.Drawing.SystemColors.MenuText;
@@ -365,7 +377,7 @@ namespace ASCOM.OptecTCF_Driver
             this.Pos_TB.Name = "Pos_TB";
             this.Pos_TB.Size = new System.Drawing.Size(58, 24);
             this.Pos_TB.TabIndex = 6;
-            this.Pos_TB.Text = "XX °C";
+            this.Pos_TB.Text = "------";
             // 
             // In_BTN
             // 
@@ -388,7 +400,7 @@ namespace ASCOM.OptecTCF_Driver
             this.Temp_TB.Name = "Temp_TB";
             this.Temp_TB.Size = new System.Drawing.Size(58, 24);
             this.Temp_TB.TabIndex = 3;
-            this.Temp_TB.Text = "XX °C";
+            this.Temp_TB.Text = "----°C";
             // 
             // label2
             // 
@@ -419,25 +431,15 @@ namespace ASCOM.OptecTCF_Driver
             this.label3.TabIndex = 10;
             this.label3.Text = "Step Size:";
             // 
-            // backgroundWorker1
+            // backgroundWorkerTemp
             // 
-            this.backgroundWorker1.WorkerSupportsCancellation = true;
-            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.backgroundWorkerTemp.WorkerSupportsCancellation = true;
+            this.backgroundWorkerTemp.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerTemp_DoWork);
             // 
-            // backgroundWorker2
+            // backgroundWorkerPos
             // 
-            this.backgroundWorker2.WorkerSupportsCancellation = true;
-            this.backgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
-            // 
-            // PowerLight
-            // 
-            this.PowerLight.Image = global::ASCOM.OptecTCF_Driver.Properties.Resources.RedLight;
-            this.PowerLight.Location = new System.Drawing.Point(11, 19);
-            this.PowerLight.Name = "PowerLight";
-            this.PowerLight.Size = new System.Drawing.Size(17, 16);
-            this.PowerLight.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.PowerLight.TabIndex = 7;
-            this.PowerLight.TabStop = false;
+            this.backgroundWorkerPos.WorkerSupportsCancellation = true;
+            this.backgroundWorkerPos.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerPos_DoWork);
             // 
             // pictureBox1
             // 
@@ -462,6 +464,11 @@ namespace ASCOM.OptecTCF_Driver
             this.picASCOM.TabStop = false;
             this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
             this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
+            // 
+            // Timer_Temp
+            // 
+            this.Timer_Temp.Interval = 3000;
+            this.Timer_Temp.Tick += new System.EventHandler(this.Timer_Temp_Tick);
             // 
             // SetupDialogForm
             // 
@@ -543,7 +550,8 @@ namespace ASCOM.OptecTCF_Driver
         private System.Windows.Forms.Button Out_BTN;
         private System.Windows.Forms.NumericUpDown Increment_NUD;
         private System.Windows.Forms.Label label3;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private System.ComponentModel.BackgroundWorker backgroundWorker2;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerTemp;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerPos;
+        private System.Windows.Forms.Timer Timer_Temp;
     }
 }

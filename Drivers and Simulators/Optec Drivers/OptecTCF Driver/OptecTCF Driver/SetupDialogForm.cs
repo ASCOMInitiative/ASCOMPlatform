@@ -13,7 +13,8 @@ namespace ASCOM.OptecTCF_Driver
     public partial class SetupDialogForm : Form
     {
         private bool ConnectedForControls = false;
-        private delegate void UpdateDisplayHandler(int pos, double temp);
+        private delegate void UpdatePosDisplayHandler(string s);
+        private delegate void UpdateTempDisplayHandler(double temp);
         private static Object LockObject = new Object();
         private int CurrentPos = 000;
         private int DesiredPos = 000;
@@ -75,6 +76,7 @@ namespace ASCOM.OptecTCF_Driver
                 UpdateControls();
                 this.ModeAName_TB.Text = DeviceSettings.GetModeName('A');
                 this.ModeBName_TB.Text = DeviceSettings.GetModeName('B');
+                OnFirstConnect();
                 
 
             }
@@ -91,8 +93,8 @@ namespace ASCOM.OptecTCF_Driver
             {
                 ModeB_RB.Checked = true;
             }
-            this.backgroundWorker1.RunWorkerAsync();
-            this.backgroundWorker2.RunWorkerAsync();
+            this.backgroundWorkerTemp.RunWorkerAsync();
+            this.backgroundWorkerPos.RunWorkerAsync();
         }
 
         private void connectToolStripMenuItem_Click(object sender, EventArgs e)
@@ -102,6 +104,7 @@ namespace ASCOM.OptecTCF_Driver
                 DeviceComm.Connect();
                 MaxPos = DeviceComm.GetMaxStep();
                 UpdateControls();
+                OnFirstConnect();
             }
             catch(Exception Ex)
             {
@@ -400,77 +403,57 @@ namespace ASCOM.OptecTCF_Driver
 
         }
 
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        private void backgroundWorkerTemp_DoWork(object sender, DoWorkEventArgs e)
         {
-            ///this continually updates the display
-            int pos = 0;
+            ///this updates the temperature display
             double temp = 0;
-            while (true)
-            {
                 if (ConnectedForControls && this.Visible)
                 {
                     try
                     {
                         lock (LockObject)
                         {
-
-                            pos = DeviceComm.GetPosition();
-                            CurrentPos = pos;
                             temp = DeviceComm.GetTemperaterature();
-                            this.BeginInvoke(new UpdateDisplayHandler(UpdateDisplay), new Object[] { pos, temp });
+                            this.BeginInvoke(new UpdateTempDisplayHandler(UpdateTempDisplay), new Object[] { temp });
                         }
                     }
                     catch { }
                 }
-            }
         }
 
-        private void UpdateDisplay(int pos, double temp)
+        private void UpdateTempDisplay(double temp)
         {
             if (this.Visible)
             {
-                //this.Pos_TB.Text = DesiredPos.ToString();
-                if (DesiredPos != CurrentPos)
-                {
-                    if (DesiredPos != 0)
-                    {
-                        this.Pos_TB.Text = "MOVING";
-                        this.Temp_TB.Text = temp.ToString() + " °C";
-                    }
-                    else
-                    {
-                        this.Pos_TB.Text = "------";
-                        this.Temp_TB.Text = temp.ToString() + " °C";
-                    }
-                }
-                else
-                {
-                    
-                    this.Pos_TB.Text = pos.ToString();
-                    this.Temp_TB.Text = temp.ToString() + " °C";
-                }
+                this.Temp_TB.Text = temp.ToString() + " °C";
             }
+        }     
+
+        private void backgroundWorkerPos_DoWork(object sender, DoWorkEventArgs e)
+        {
+            
+            if ((ConnectedForControls && this.Visible) && (CurrentPos != DesiredPos))
+            {
+                try
+                {
+                    lock (LockObject)
+                    {
+                        this.BeginInvoke(new UpdatePosDisplayHandler(UpdatePosDisplay), new Object[] { "MOVING"} );
+                        DeviceComm.MoveFocus(DesiredPos);
+                        CurrentPos = DesiredPos;
+                        this.BeginInvoke(new UpdatePosDisplayHandler(UpdatePosDisplay), new Object[]{CurrentPos.ToString()});
+                    }
+                }
+                catch { }
+            }
+            
         }
 
-        private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
+        private void UpdatePosDisplay(string pos)
         {
-            while (true)
+            if (this.Visible)
             {
-                if ((ConnectedForControls && this.Visible) && (CurrentPos != DesiredPos))
-                {
-                    try
-                    {
-                        lock (LockObject)
-                        {
-                            if (DesiredPos == 0)
-                            {
-                                DesiredPos = CurrentPos;
-                            }
-                            DeviceComm.MoveFocus(DesiredPos);
-                        }
-                    }
-                    catch { }
-                }
+                this.Pos_TB.Text = pos;
             }
         }
 
@@ -478,12 +461,14 @@ namespace ASCOM.OptecTCF_Driver
         {
             DesiredPos = DesiredPos - Convert.ToInt32(Increment_NUD.Value);
             if (DesiredPos < 1) DesiredPos = 1;
+            backgroundWorkerPos.RunWorkerAsync();
         }
 
         private void Out_BTN_Click(object sender, EventArgs e)
         {
             DesiredPos = DesiredPos + Convert.ToInt32(Increment_NUD.Value);
             if (DesiredPos > MaxPos) DesiredPos = MaxPos;
+            backgroundWorkerPos.RunWorkerAsync();
         }
 
         private void ModeRBChecked_Changed(object sender, EventArgs e)
@@ -500,25 +485,68 @@ namespace ASCOM.OptecTCF_Driver
 
         private void manuallyEnterSlopeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            lock (LockObject)
+            try
             {
-                DeviceComm.Connect();
-                SetSlopeForm SSFrm = new SetSlopeForm();
-                SSFrm.ShowDialog();
+                lock (LockObject)
+                {
+                    DeviceComm.Connect();
+                    SetSlopeForm SSFrm = new SetSlopeForm();
+                    SSFrm.ShowDialog();
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Failed to connect to device. \nMake sure a COM port has been selected.");
+                return;
             }
         }
 
         private void displayToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            lock (LockObject)
+            try
             {
-                DeviceComm.Connect();
-                DisplayTempCoEffs Frm = new DisplayTempCoEffs();
-                Frm.ShowDialog();
+                lock (LockObject)
+                {
+                    DeviceComm.Connect();
+                    DisplayTempCoEffs Frm = new DisplayTempCoEffs();
+                    Frm.ShowDialog();
+                }
+            }
+            catch (Exception)
+            {
+                
+                MessageBox.Show("Failed to connect to device. \nMake sure a COM port has been selected.");
+                return;
             }
         }
 
-       
+        private void Timer_Temp_Tick(object sender, EventArgs e)
+        {
+            if (!backgroundWorkerTemp.IsBusy)
+            {
+                backgroundWorkerTemp.RunWorkerAsync();
+            }
+        }
+
+        private void OnFirstConnect()
+        {
+            try
+            {
+                lock (LockObject)
+                {
+                    int p = DeviceComm.GetPosition();
+                    double t = DeviceComm.GetTemperaterature();
+                    CurrentPos = DesiredPos = p;
+                    Pos_TB.Text = p.ToString();
+                    Temp_TB.Text = t.ToString() + " °C";
+
+                }
+                Timer_Temp.Enabled = true;
+            }
+            catch
+            {
+            }
+        }
 
     }
 }

@@ -27,7 +27,10 @@ namespace ASCOM.OptecTCF_Driver
             EndPtPosB,
 
             ModeAName,
-            ModeBName
+            ModeBName,
+
+            DelayA,
+            DelayB
         }
 
         static DeviceSettings()
@@ -180,6 +183,33 @@ namespace ASCOM.OptecTCF_Driver
             else
             {
                 return Prof.GetValue(Focuser.s_csDriverID, ProfileStrings.ModeBName.ToString(), "", "Temp Comp Mode B");
+            }
+        }
+
+        internal static double GetDelayFromConfig(char AorB)
+        {
+            if (AorB != 'A' && AorB != 'B') throw new InvalidValueException("AorB", AorB.ToString(), "A or B");
+            else if (AorB == 'A')
+            {
+                string d = Prof.GetValue(Focuser.s_csDriverID, ProfileStrings.DelayA.ToString(), "", "1.00");
+                return double.Parse(d);
+            }
+            else
+            {
+                string d = Prof.GetValue(Focuser.s_csDriverID, ProfileStrings.DelayB.ToString(), "", "1.00");
+                return double.Parse(d);
+            }
+        }
+        internal static void SetDelayToConfig(char AorB, double delay)
+        {
+            if (AorB != 'A' && AorB != 'B') throw new InvalidValueException("AorB", AorB.ToString(), "A or B");
+            else if (AorB == 'A')
+            {
+                Prof.WriteValue(Focuser.s_csDriverID, ProfileStrings.DelayA.ToString(), delay.ToString());
+            }
+            else
+            {
+                Prof.WriteValue(Focuser.s_csDriverID, ProfileStrings.DelayB.ToString(), delay.ToString());
             }
         }
 

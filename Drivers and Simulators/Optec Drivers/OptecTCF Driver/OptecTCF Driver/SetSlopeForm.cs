@@ -43,11 +43,11 @@ namespace ASCOM.OptecTCF_Driver
             this.ModeB_RB.Text += DeviceSettings.GetModeName('B') + ")";
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Cancel_Click(object sender, EventArgs e)
         {
             DialogResult YesNo = new DialogResult();
             YesNo = MessageBox.Show("Are you sure you want to cancel?\n" +
-                "End Point will be discarded and Time Constant will not be saved.", "Cancel?",
+                "Changes will not be saved.", "Cancel?",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (YesNo == DialogResult.Yes) this.Close();
 
@@ -60,6 +60,12 @@ namespace ASCOM.OptecTCF_Driver
             int slope = 0;
             try
             {
+               /////SAVE DELAY //////////////////////////////////////////////
+                //check if slope if for mode A or B
+                if (ModeB_RB.Checked) AorB = 'B';           //otherwise already 'A'
+                DeviceComm.SetDelay(AorB, Convert.ToDouble(this.Delay_NUD.Value));
+                DeviceSettings.SetDelayToConfig(AorB, Convert.ToDouble(this.Delay_NUD.Value));
+                ////SAVE TC ///////////////////////////////////////////////
                 string text = this.Slope_TB.Text;
                 int i = text.IndexOf('+');
                 int j = text.IndexOf('-');
@@ -92,9 +98,7 @@ namespace ASCOM.OptecTCF_Driver
                     MessageBox.Show("Slope must be between 2 and 999");
                     return;
                 }
-                //check if slope if for mode A or B
-                if (ModeB_RB.Checked) AorB = 'B';           //otherwise already 'A'
-
+                
                 //set slope
                 DeviceComm.SetSlope(slope, AorB);
                 DeviceComm.SetSlopeSign(sign, AorB);
@@ -115,12 +119,23 @@ namespace ASCOM.OptecTCF_Driver
                 if (ModeA_RB.Checked)
                 {
                     Slope_TB.Text = DeviceComm.GetSlopeSign('A').ToString() + DeviceComm.GetLearnedSlope('A').ToString();
+                    Delay_NUD.Value = Convert.ToDecimal(DeviceSettings.GetDelayFromConfig('A'));
                 }
                 else
                 {
                     Slope_TB.Text = DeviceComm.GetSlopeSign('B').ToString() + DeviceComm.GetLearnedSlope('B').ToString();
+                    Delay_NUD.Value = Convert.ToDecimal(DeviceSettings.GetDelayFromConfig('B'));
                 }
             }
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+            string msg;
+            msg = "The update delay determines the length of time between focuser\n" +
+                "temperature corrections when the device is opearting in temperature\n" +
+                    "compensation mode. Default is 1 second. Range is 1 to 10.99 seconds.";
+            MessageBox.Show(msg, "Update Delay",MessageBoxButtons.OK,MessageBoxIcon.Information);
         }
 
        
