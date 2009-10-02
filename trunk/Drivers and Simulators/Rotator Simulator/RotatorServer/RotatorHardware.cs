@@ -169,7 +169,7 @@ namespace ASCOM.Simulator
 
 		public static void Halt()
 		{
-			CheckMoving(true);
+			// CheckMoving(true);	// ASCOM-24: Fails Conform, should be harmless.
 			lock (s_objSync) 
 			{ 
 				s_fTargetPosition = s_fPosition;
