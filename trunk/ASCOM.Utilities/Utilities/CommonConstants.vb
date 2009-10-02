@@ -23,10 +23,6 @@ End Module
 Module VersionCode
     Friend Sub RunningVersions(ByVal TL As TraceLogger)
         Dim AssemblyNames() As AssemblyName
-        AssemblyInfo(TL, "Executing Assembly", Assembly.GetExecutingAssembly)
-        AssemblyInfo(TL, "Entry Assembly", Assembly.GetEntryAssembly)
-        AssemblyInfo(TL, "Calling Assembly", Assembly.GetCallingAssembly)
-
         'Get loaded assemblies
         Dim Assemblies() As Assembly 'Define an array of assembly information
         Dim AppDom As System.AppDomain = AppDomain.CurrentDomain
@@ -62,6 +58,11 @@ Module VersionCode
                 TL.LogMessage("Versions", "Application is unknown bits, PTR length is: " & System.IntPtr.Size)
         End Select
 
+        'Get assembly versions
+        AssemblyInfo(TL, "Executing Assembly", Assembly.GetExecutingAssembly)
+        AssemblyInfo(TL, "Entry Assembly", Assembly.GetEntryAssembly)
+        AssemblyInfo(TL, "Calling Assembly", Assembly.GetCallingAssembly)
+
         'Get file system information
         Dim MachineName As String = System.Environment.MachineName
         Dim ProcCount As Integer = System.Environment.ProcessorCount
@@ -71,18 +72,20 @@ Module VersionCode
 
         'Get fully qualified paths to particular directories in a non OS specific way
         'There are many more options in the SpecialFolders Enum than are shown here!
-        TL.LogMessage("Versions", "Application Data: " & System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData))
-        TL.LogMessage("Versions", "Common Files: " & System.Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles))
         TL.LogMessage("Versions", "My Documents: " & System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
+        TL.LogMessage("Versions", "Application Data: " & System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData))
+        TL.LogMessage("Versions", "Common Application Data: " & System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData))
         TL.LogMessage("Versions", "Program Files: " & System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles))
+        TL.LogMessage("Versions", "Common Files: " & System.Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles))
         TL.LogMessage("Versions", "System: " & System.Environment.GetFolderPath(Environment.SpecialFolder.System))
         TL.LogMessage("Versions", "Current: " & System.Environment.CurrentDirectory)
+
     End Sub
 
     Sub AssemblyInfo(ByVal TL As TraceLogger, ByVal AssName As String, ByVal Ass As Assembly)
         Dim FileVer As FileVersionInfo
         If Not Ass Is Nothing Then
-            TL.LogMessage("Versions", AssName & " Version: " & Ass.GetName.Version.ToString)
+            TL.LogMessage("Versions", AssName & " AssemblyVersion: " & Ass.GetName.Version.ToString)
             FileVer = FileVersionInfo.GetVersionInfo(Ass.Location.ToString)
             TL.LogMessage("Versions", AssName & " FileVersion: " & FileVer.FileVersion.ToString)
             TL.LogMessage("Versions", AssName & " Name: " & Ass.GetName.FullName.ToString)
