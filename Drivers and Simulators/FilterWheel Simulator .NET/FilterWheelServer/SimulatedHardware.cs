@@ -52,7 +52,7 @@ namespace ASCOM.FilterWheelSim
         // Exception codes/messages
         public const string ERR_SOURCE = "ASCOM FilterWheel Simulator";
 
-        public static int SCODE_NOT_IMPLEMENTED = ErrorCodes.DriverBase + 0x400;
+        public static int SCODE_NOT_IMPLEMENTED = ErrorCodes.NotImplemented;
         public const string MSG_NOT_IMPLEMENTED = " is not implemented by this filter wheel driver.";
 
         public static int SCODE_DLL_LOADFAIL = ErrorCodes.DriverBase + 0x401;
@@ -61,7 +61,7 @@ namespace ASCOM.FilterWheelSim
         public static int SCODE_NOT_CONNECTED = ErrorCodes.DriverBase + 0x402;
         public const string MSG_NOT_CONNECTED = "The filter wheel is not connected";
 
-        public static int SCODE_VAL_OUTOFRANGE = ErrorCodes.DriverBase + 0x404;
+        public static int SCODE_VAL_OUTOFRANGE = ErrorCodes.InvalidValue;
         public const string MSG_VAL_OUTOFRANGE = "The value is out of range";
 
         public static int SCODE_MOVING = ErrorCodes.DriverBase + 0x405;
@@ -206,6 +206,7 @@ namespace ASCOM.FilterWheelSim
             get
             {
                 LogTraffic("Get FilterNames...");
+
                 string[] temp = m_asFilterNames;
                 Array.Resize(ref temp, m_iSlots);
                 if (m_bLogTraffic)
@@ -409,6 +410,9 @@ namespace ASCOM.FilterWheelSim
 
             SetupDialog.TopMost = true;   // The ASCOM chooser dialog sits on top if we don't do this :(
 
+            // Hide the main handbox form - reduce screen clutter
+            FilterWheelSim.m_MainForm.Hide();
+
             if (SetupDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 // Update the hardware config
@@ -417,6 +421,9 @@ namespace ASCOM.FilterWheelSim
             }
             else
                 LogTraffic("  (setup Cancel)");
+
+            // Show the main handbox form
+            FilterWheelSim.m_MainForm.Show();
 
         }
             

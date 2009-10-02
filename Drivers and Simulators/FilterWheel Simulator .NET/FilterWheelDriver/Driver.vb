@@ -31,6 +31,7 @@
     '	==========
     Inherits ReferenceCountedObjectBase
     Implements IFilterWheel ' Early-bind interface implemented by this driver
+    Implements IConform
     '	==========
 
     Private Const SCODE_NOT_CONNECTED As Integer = vbObjectError + &H402
@@ -88,6 +89,30 @@
 
 #End Region
 
+
+#Region "IConform Members"
+
+    Public ReadOnly Property ConformCommands() As ConformCommandStrings Implements IConform.ConformCommands
+        Get
+            ConformCommands = New ConformCommandStrings()
+        End Get
+    End Property
+
+    Public ReadOnly Property ConformCommandsRaw() As ConformCommandStrings Implements IConform.ConformCommandsRaw
+        Get
+            ConformCommandsRaw = New ConformCommandStrings()
+        End Get
+    End Property
+
+    Public ReadOnly Property ConformErrors() As ConformErrorNumbers Implements IConform.ConformErrors
+        Get
+            ConformErrors = New ConformErrorNumbers(New Integer() {ErrorCodes.NotImplemented}, _
+                                                    New Integer() {ErrorCodes.InvalidValue}, _
+                                                    New Integer() {ErrorCodes.ValueNotSet})
+        End Get
+    End Property
+
+#End Region
 
     '---------------------------------------------------------------------
     '
