@@ -426,10 +426,12 @@ namespace ASCOM.GeminiTelescope
             set { mProfile["DoesPrecession"] = value; }
         }
 
+        private bool m_Precession;
+
         private bool DoesPrecession_Gemini
         {
             get { return GeminiHardware.Precession; }
-            set { GeminiHardware.Precession = value; }
+            set { m_Precession  = value; }
         }
 
 
@@ -442,7 +444,7 @@ namespace ASCOM.GeminiTelescope
         private bool DoesRefraction_Gemini
         {
             get { return GeminiHardware.Refraction; }
-            set { GeminiHardware.Refraction = value; }
+            set { GeminiHardware.SetPrecessionRefraction(m_Precession, value); }
         }
 
         public DateTime AlarmTime
@@ -475,7 +477,7 @@ namespace ASCOM.GeminiTelescope
             }
             set
             {
-                GeminiHardware.DoCommandResult(value ? ">182:" : ">181:", GeminiHardware.MAX_TIMEOUT, false);
+                string prop  =GeminiHardware.DoCommandResult(value ? ">182:" : ">181:", GeminiHardware.MAX_TIMEOUT, false);
             }
         }
 
@@ -545,7 +547,7 @@ namespace ASCOM.GeminiTelescope
                 return (stat & 1) == 0 ? false : true;
             }
 
-            set {
+            set {              
                 string prop = get_Prop("<509:");
                 if (prop == "0" || prop == null) prop = get_Prop("<509:");
 
@@ -1020,7 +1022,13 @@ namespace ASCOM.GeminiTelescope
         public bool SavePEC
         {
             get { return (bool)get_Profile("SavePEC", false); }
-            set { mProfile["SavePEC"] = value; }
+            set {
+                if (value == SavePEC) return;   // was already set to true
+                mProfile["SavePEC"] = value;
+                if (value) PECTable = PECTable_Gemini;  // get the table from Gemini
+                else
+                    PECTable = new SerializableDictionary<int, string>();
+            }
         }
 
         /// <summary>
@@ -1054,9 +1062,9 @@ namespace ASCOM.GeminiTelescope
                 Cursor.Current = Cursors.WaitCursor;
                 foreach (KeyValuePair<int, string> kp in value)
                 {
-
                     GeminiHardware.DoCommandResult(">511:" + kp.Value.ToString(), GeminiHardware.MAX_TIMEOUT, false);
                 }
+                GeminiHardware.PECStatus = 32+2;      // PEC data is available
                 Cursor.Current = Cursors.Default;
             }
         }
@@ -1095,9 +1103,9 @@ namespace ASCOM.GeminiTelescope
                 try
                 {
                     if (pGemini != null)
-                        if (write)
+                        if (write && pGemini.GetSetMethod(true) !=null && p.GetGetMethod()!=null)
                             pGemini.SetValue(this, p.GetValue(this, null), null);
-                        else
+                        else if (!write && p.GetSetMethod()!=null && pGemini.GetGetMethod(true)!=null)
                             p.SetValue(this, pGemini.GetValue(this, null), null);
                 }
                 catch (Exception ex)
@@ -1105,6 +1113,18 @@ namespace ASCOM.GeminiTelescope
                     GeminiHardware.Trace.Except(ex);
                 }
             }
+
+            // save PEC table if requested:
+            if (write && SavePEC)
+            {
+                PECTable_Gemini = PECTable;
+            }
+            else if (!write && SavePEC)
+            {
+                PECTable = PECTable_Gemini;
+            }
+
+
             GeminiHardware.Trace.Exit("GeminiProps:SyncWithGemini", write);
             return true;
         }

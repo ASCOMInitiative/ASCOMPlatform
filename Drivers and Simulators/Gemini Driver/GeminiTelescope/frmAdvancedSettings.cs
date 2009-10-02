@@ -263,5 +263,12 @@ namespace ASCOM.GeminiTelescope
         {
             GeminiHardware.SendAdvancedSettings = chkSendSettings.Checked;
         }
+
+        private void SavePEC_CheckedChanged(object sender, EventArgs e)
+        {
+            GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
+            props.SavePEC = chkSavePEC.Checked;
+
+        }
     }
 }
