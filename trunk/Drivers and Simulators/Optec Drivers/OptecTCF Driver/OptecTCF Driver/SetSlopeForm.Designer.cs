@@ -33,12 +33,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.Slope_TB = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.Cancel_Btn = new System.Windows.Forms.Button();
             this.SetSlope_BTN = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.Delay_NUD = new System.Windows.Forms.NumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Delay_NUD)).BeginInit();
             this.SuspendLayout();
             // 
             // ModeA_RB
@@ -97,16 +98,16 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Choose Focus Mode";
             // 
-            // button1
+            // Cancel_Btn
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(156, 210);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Cancel";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.Cancel_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Cancel_Btn.Location = new System.Drawing.Point(156, 210);
+            this.Cancel_Btn.Name = "Cancel_Btn";
+            this.Cancel_Btn.Size = new System.Drawing.Size(75, 23);
+            this.Cancel_Btn.TabIndex = 5;
+            this.Cancel_Btn.Text = "Cancel";
+            this.Cancel_Btn.UseVisualStyleBackColor = true;
+            this.Cancel_Btn.Click += new System.EventHandler(this.Cancel_Click);
             // 
             // SetSlope_BTN
             // 
@@ -128,43 +129,57 @@
             this.label2.TabIndex = 7;
             this.label2.Text = "Update Delay:";
             // 
-            // numericUpDown1
+            // Delay_NUD
             // 
-            this.numericUpDown1.DecimalPlaces = 2;
-            this.numericUpDown1.Increment = new decimal(new int[] {
+            this.Delay_NUD.DecimalPlaces = 2;
+            this.Delay_NUD.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.numericUpDown1.Location = new System.Drawing.Point(178, 164);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
+            this.Delay_NUD.Location = new System.Drawing.Point(178, 164);
+            this.Delay_NUD.Maximum = new decimal(new int[] {
             1099,
             0,
             0,
             131072});
-            this.numericUpDown1.Minimum = new decimal(new int[] {
+            this.Delay_NUD.Minimum = new decimal(new int[] {
             100,
             0,
             0,
             131072});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(50, 20);
-            this.numericUpDown1.TabIndex = 8;
-            this.numericUpDown1.Value = new decimal(new int[] {
+            this.Delay_NUD.Name = "Delay_NUD";
+            this.Delay_NUD.Size = new System.Drawing.Size(50, 20);
+            this.Delay_NUD.TabIndex = 8;
+            this.Delay_NUD.Value = new decimal(new int[] {
             100,
             0,
             0,
             131072});
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.label3.Location = new System.Drawing.Point(234, 166);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(65, 13);
+            this.label3.TabIndex = 9;
+            this.label3.Text = "What\'s this?";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // SetSlopeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(328, 242);
-            this.Controls.Add(this.numericUpDown1);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.Delay_NUD);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.SetSlope_BTN);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.Cancel_Btn);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.Slope_TB);
             this.Controls.Add(this.label1);
@@ -174,7 +189,7 @@
             this.Load += new System.EventHandler(this.SetSlopeForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Delay_NUD)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -187,9 +202,10 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox Slope_TB;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button Cancel_Btn;
         private System.Windows.Forms.Button SetSlope_BTN;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown Delay_NUD;
+        private System.Windows.Forms.Label label3;
     }
 }
