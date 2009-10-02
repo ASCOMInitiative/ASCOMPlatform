@@ -1,3 +1,8 @@
+//
+// 02-Oct-09	Bob Denny	ASCOM-24 : Fis conform error, Halt() when ot moving is harmless.
+//							Throw error if angles outside 0 <= angle < 360 
+//							(this is a reference implementation!)
+//
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -149,9 +154,10 @@ namespace ASCOM.Simulator
 		//
 		public static void Move(float RelativePosition)
 		{
-			CheckConnected(); 
+			CheckConnected();
 			lock (s_objSync) 
-			{ 
+			{
+				CheckAngle(s_fTargetPosition + RelativePosition);
 				s_fTargetPosition += RelativePosition; 
 				s_bMoving = true;
 			}
@@ -159,7 +165,8 @@ namespace ASCOM.Simulator
 
 		public static void MoveAbsolute(float Position)
 		{
-			CheckConnected(); 
+			CheckConnected();
+			CheckAngle(Position);
 			lock (s_objSync) 
 			{ 
 				s_fTargetPosition = Position;
@@ -230,6 +237,13 @@ namespace ASCOM.Simulator
 		{
 			if (!s_bConnected) throw new ASCOM.DriverException("The rotator is not connected", 
 								unchecked(ASCOM.ErrorCodes.DriverBase + 2));
+		}
+
+		private static void CheckAngle(float angle)
+		{
+			if (angle < 0.0F || angle >= 360.0F) 
+				throw new ASCOM.DriverException("Angle out of range, must be 0 <= angle < 360",
+								unchecked(ASCOM.ErrorCodes.DriverBase + 5));
 		}
 
 		private static void CheckMoving(bool bAssert)
