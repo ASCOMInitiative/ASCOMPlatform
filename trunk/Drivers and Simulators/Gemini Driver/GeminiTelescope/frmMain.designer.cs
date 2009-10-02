@@ -606,7 +606,6 @@ namespace ASCOM.GeminiTelescope
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "frmMain";
-            this.ShowInTaskbar = false;
             this.Text = "Gemini";
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.VisibleChanged += new System.EventHandler(this.frmMain_VisibleChanged);
