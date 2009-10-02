@@ -19,4 +19,4 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("5c53ff1c-b4f2-49d6-85ca-e7b3d249d12e")]
 
-[assembly: ASCOM.TelescopeSimulator.ServedClassName("Telescope Simulator .NET")]
+[assembly: ASCOM.ServedClassNameAttribute("Telescope Simulator .NET")]

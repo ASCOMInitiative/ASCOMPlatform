@@ -241,7 +241,7 @@ namespace ASCOM.TelescopeSimulator
                     Assembly so = Assembly.LoadFrom(aPath);
 
                     //Added check to see if the dll has the ServedClassNameAttribute
-                    object[] attributes = so.GetCustomAttributes(typeof(ServedClassNameAttribute),false);
+                    object[] attributes = so.GetCustomAttributes(typeof(ASCOM.ServedClassNameAttribute),false);
                     if (attributes.Length > 0)
                     {
                         m_ComObjectTypes.Add(so.GetType(fqClassName, true));
@@ -373,7 +373,7 @@ namespace ASCOM.TelescopeSimulator
 
                     //Modified to pull from the custom Attribute ServedClassName
                     attr = Attribute.GetCustomAttribute(assy, typeof(ServedClassNameAttribute));
-                    string chooserName = ((ServedClassNameAttribute)attr).ServedClassName;
+                    string chooserName = ((ASCOM.ServedClassNameAttribute)attr).DisplayName;
 
 					var P = new ASCOM.Utilities.Profile { DeviceType = progid.Substring(progid.LastIndexOf('.') + 1) };
                     P.Register(progid, chooserName);
