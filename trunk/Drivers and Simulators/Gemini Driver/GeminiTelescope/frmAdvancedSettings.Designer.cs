@@ -33,7 +33,6 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label21 = new System.Windows.Forms.Label();
-            this.geminiPropertiesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.label2 = new System.Windows.Forms.Label();
             this.comboBox5 = new System.Windows.Forms.ComboBox();
             this.label15 = new System.Windows.Forms.Label();
@@ -103,11 +102,11 @@
             this.pbSave = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.checkBox8 = new System.Windows.Forms.CheckBox();
+            this.chkSavePEC = new System.Windows.Forms.CheckBox();
             this.pbModel = new System.Windows.Forms.Button();
+            this.geminiPropertiesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -134,6 +133,7 @@
             this.tableLayoutPanel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown18)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -195,10 +195,6 @@
             this.label21.TabIndex = 15;
             this.label21.Text = "West Safety Limit: 000 deg";
             this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // geminiPropertiesBindingSource
-            // 
-            this.geminiPropertiesBindingSource.DataSource = typeof(ASCOM.GeminiTelescope.GeminiProperties);
             // 
             // label2
             // 
@@ -1343,18 +1339,19 @@
             this.saveFileDialog.Filter = "Gemini Profile (*.gp)|*.gp";
             this.saveFileDialog.Title = "Save Gemini Profile";
             // 
-            // checkBox8
+            // chkSavePEC
             // 
-            this.checkBox8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkBox8.AutoSize = true;
-            this.checkBox8.CheckAlign = System.Drawing.ContentAlignment.BottomRight;
-            this.checkBox8.Location = new System.Drawing.Point(275, 630);
-            this.checkBox8.Name = "checkBox8";
-            this.checkBox8.Size = new System.Drawing.Size(101, 17);
-            this.checkBox8.TabIndex = 30;
-            this.checkBox8.Text = "Save PEC Data";
-            this.checkBox8.UseVisualStyleBackColor = true;
-            this.checkBox8.Visible = false;
+            this.chkSavePEC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkSavePEC.AutoSize = true;
+            this.chkSavePEC.CheckAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.chkSavePEC.Location = new System.Drawing.Point(265, 630);
+            this.chkSavePEC.Name = "chkSavePEC";
+            this.chkSavePEC.Size = new System.Drawing.Size(111, 17);
+            this.chkSavePEC.TabIndex = 30;
+            this.chkSavePEC.Text = "Include PEC Data";
+            this.chkSavePEC.UseVisualStyleBackColor = true;
+            this.chkSavePEC.Visible = false;
+            this.chkSavePEC.CheckedChanged += new System.EventHandler(this.SavePEC_CheckedChanged);
             // 
             // pbModel
             // 
@@ -1367,6 +1364,10 @@
             this.pbModel.UseVisualStyleBackColor = true;
             this.pbModel.Click += new System.EventHandler(this.pbModel_Click);
             // 
+            // geminiPropertiesBindingSource
+            // 
+            this.geminiPropertiesBindingSource.DataSource = typeof(ASCOM.GeminiTelescope.GeminiProperties);
+            // 
             // frmAdvancedSettings
             // 
             this.AcceptButton = this.pbOK;
@@ -1377,7 +1378,7 @@
             this.CancelButton = this.button3;
             this.ClientSize = new System.Drawing.Size(490, 715);
             this.Controls.Add(this.pbModel);
-            this.Controls.Add(this.checkBox8);
+            this.Controls.Add(this.chkSavePEC);
             this.Controls.Add(this.pbSave);
             this.Controls.Add(this.pbLoad);
             this.Controls.Add(this.chkSendSettings);
@@ -1401,7 +1402,6 @@
             this.groupBox1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
@@ -1432,6 +1432,7 @@
             this.tableLayoutPanel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown18)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1508,7 +1509,7 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.ComboBox comboBox5;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.CheckBox checkBox8;
+        private System.Windows.Forms.CheckBox chkSavePEC;
         private System.Windows.Forms.NumericUpDown numericUpDown17;
         private System.Windows.Forms.Button pbModel;
         private System.Windows.Forms.Label label12;

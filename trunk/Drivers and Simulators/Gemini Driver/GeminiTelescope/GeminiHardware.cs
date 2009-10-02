@@ -1133,7 +1133,7 @@ namespace ASCOM.GeminiTelescope
                 {
                     Trace.Enter("Precession.Set", value);
                     if (m_Refraction)
-                        DoCommandResult(":p1", MAX_TIMEOUT, false);
+                        DoCommandResult(":p2", MAX_TIMEOUT, false);
                     else
                         DoCommandResult(":p0", MAX_TIMEOUT, false);
                 }
@@ -1142,7 +1142,7 @@ namespace ASCOM.GeminiTelescope
                     if (m_Refraction)
                         DoCommandResult(":p3", MAX_TIMEOUT, false);
                     else
-                        DoCommandResult(":p2", MAX_TIMEOUT, false);
+                        DoCommandResult(":p1", MAX_TIMEOUT, false);
                 }
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Precession", m_Precession.ToString());
             }
@@ -1167,6 +1167,22 @@ namespace ASCOM.GeminiTelescope
                 Precession = Precession; // this updates the mount with refraction and precession settings
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Refraction", m_Refraction.ToString());
             }
+        }
+
+        /// <summary>
+        /// Sets both, precession and refraction in a single command
+        /// </summary>
+        /// <param name="precess"></param>
+        /// <param name="refract"></param>
+        /// <returns></returns>
+        public static bool SetPrecessionRefraction(bool precess, bool refract)
+        {
+            Trace.Enter("SetPrecessionRefraction", precess, refract);
+            m_Refraction = refract;
+            Precession = precess; // this updates the mount with refraction and precession settings
+            m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Refraction", m_Refraction.ToString());
+            Trace.Enter("SetPrecessionRefraction", precess, refract);
+            return true;
         }
 
         public static bool AtSafetyLimit
@@ -1885,7 +1901,7 @@ namespace ASCOM.GeminiTelescope
                 foreach (string p in ports)
                 {
 
-                    if (OnInfo != null) OnInfo(Resources.SearchForGemini, Resources.CheckPort + p);
+                    if (OnInfo != null) OnInfo(Resources.SearchForGemini, Resources.CheckPort + " " + p);
 
                     for (int i = 0; i < rates.Length; ++i)
                     {
@@ -2318,6 +2334,7 @@ namespace ASCOM.GeminiTelescope
 
 
                 System.Diagnostics.Trace.Write("Poll commands: " + vars + "\r\n");
+                Trace.Info(4, "Poll commands", vars);
                 //Get RA and DEC etc
                 DiscardInBuffer(); //clear all received data
                 Transmit(vars);
@@ -2476,7 +2493,7 @@ namespace ASCOM.GeminiTelescope
                 m_SerialPort.DiscardOutBuffer();
                 DiscardInBuffer();
             }
-            Trace.Enter("UpdatePolledVariables");
+            Trace.Exit("UpdatePolledVariables");
         }
 
         /// <summary>
@@ -2657,7 +2674,7 @@ namespace ASCOM.GeminiTelescope
                 m_LastDataTick = DateTime.Now;      // remember when last successfull data was received.
 
             // return value for native commands has a checksum appended: validate it and remove it from the return string:
-            if (!string.IsNullOrEmpty(result) && command.m_Command[0] == '<' && !command.m_Raw)
+            if (!string.IsNullOrEmpty(result) && (command.m_Command[0] == '<' || command.m_Command[0]=='>') && !command.m_Raw)
             {
                 char chksum = result[result.Length - 1];
                 result = result.Substring(0, result.Length - 1); //remove checksum character
@@ -2853,13 +2870,24 @@ namespace ASCOM.GeminiTelescope
         private static GeminiCommand FindGeminiCommand(string full_cmd)
         {
 
-            if (full_cmd.StartsWith("<"))       // native get command is always '#' terminated
+            bool found = GeminiCommands.Commands.ContainsKey(full_cmd);
+
+            if (full_cmd.StartsWith("<") && !found)       // native get command is always '#' terminated
                 return new GeminiCommand(GeminiCommand.ResultType.HashChar, 0);
             else if (full_cmd.StartsWith(">"))  // native set command always no return value
+            {
+                int idx = full_cmd.IndexOf(':');
+                if (idx > 0)
+                {
+                    string nc = full_cmd.Substring(0, idx + 1);
+                    if (GeminiCommands.Commands.ContainsKey(nc))
+                        return GeminiCommands.Commands[nc];
+                }
                 return new GeminiCommand(GeminiCommand.ResultType.NoResult, 0);
+            }
             else
             {
-                if (GeminiCommands.Commands.ContainsKey(full_cmd))
+                if (found)
                     return GeminiCommands.Commands[full_cmd];
 
                 // try to match the longest string first. Maximum length
@@ -3274,7 +3302,7 @@ namespace ASCOM.GeminiTelescope
             }
             set
             {
-                DoCommand(">509:" + value.ToString()+":", false);            
+                DoCommand(">509:" + value.ToString(), false);            
             }
         }
 
@@ -3413,8 +3441,10 @@ namespace ASCOM.GeminiTelescope
         /// <returns>completed command to send to the mount</returns>
         private static string CompleteStandardCommand(string p)
         {
+            // resolve some common mistakes in specifying Gemini commands:
             if (p[0]!=':') p = ":"+p;
-            return p+"#"; // standard commands end in '#' character, no checksum needed
+            if (!p.EndsWith("#")) p = p + "#";
+            return p; // standard commands end in '#' character, no checksum needed
         }
 
         /// <summary>
@@ -3424,6 +3454,8 @@ namespace ASCOM.GeminiTelescope
         /// <returns>completed command to send to the mount</returns>
         private static string CompleteNativeCommand(string p)
         {
+            // resolve some common mistakes in specifying Gemini commands:
+            if (!p.Contains(":")) p = p + ":";  // no argument and not ':' terminated??
             return p + ComputeChecksum(p) + "#";
         }
 

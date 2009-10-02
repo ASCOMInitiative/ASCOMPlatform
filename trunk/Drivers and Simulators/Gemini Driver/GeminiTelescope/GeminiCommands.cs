@@ -135,10 +135,10 @@ namespace ASCOM.GeminiTelescope
             Commands.Add(":Or", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
             Commands.Add(":Os", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
 
-            Commands.Add(":p0", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
-            Commands.Add(":p1", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
-            Commands.Add(":p2", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
-            Commands.Add(":p3", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
+            Commands.Add(":p0", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0, true));
+            Commands.Add(":p1", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0, true));
+            Commands.Add(":p2", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0, true));
+            Commands.Add(":p3", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0, true));
 
             Commands.Add(":P", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 14)); // "LOW  PRECISION" or "HIGH PRECISION"
 
@@ -192,6 +192,13 @@ namespace ASCOM.GeminiTelescope
             Commands.Add(":T", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
             Commands.Add(":Hm", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
             Commands.Add(":HM", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
+            // commands >181: and >182: are exceptions -- they set value, and return value
+            // documentation is wrong: >181: returns '0#' and >182: returns '1'
+            // >509: returns just a '#'
+            Commands.Add(">181:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
+            Commands.Add(">182:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
+            Commands.Add(">509:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
+            Commands.Add(">511:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
         }
 
     }
