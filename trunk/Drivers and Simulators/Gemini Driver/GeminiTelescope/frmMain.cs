@@ -585,8 +585,14 @@ namespace ASCOM.GeminiTelescope
                     labelSlew.Text = "LIMIT!";
                     labelSlew.ForeColor = m_ActiveForeColor;
                     labelSlew.BackColor = m_ActiveBkColor;
+                    labelLimit.Text = "00:00:00";
                 }
 
+                // update limit distance every 4th time
+                if ((m_UpdateCount & 3) == 0)
+                {
+                    UpdateTimeToLimit();
+                }
                 pbStop.Visible = (GeminiHardware.Velocity == "S");  //only show Stop! button when slewing
 
                 if (labelSlew.Text != prev_label)
@@ -648,6 +654,52 @@ namespace ASCOM.GeminiTelescope
 
 
             BalloonIcon.Text = ""; // tooltip;    
+        }
+
+        private void UpdateTimeToLimit()
+        {
+            string safety = GeminiHardware.DoCommandResult("<230:", GeminiHardware.MAX_TIMEOUT, false);
+            string position = GeminiHardware.DoCommandResult("<235:", GeminiHardware.MAX_TIMEOUT, false);
+            string size = GeminiHardware.DoCommandResult("<237:", GeminiHardware.MAX_TIMEOUT, false);
+            if (safety == null || position == null || size == null) return; //???
+
+            string [] sp = safety.Split(new char[] {';'});
+            if (sp==null || sp.Length !=2) return;
+
+            int west_limit = 0;
+
+            // west limit in clusters of 256 motor encoder ticks
+            if (!int.TryParse(sp[1], out west_limit)) return;
+
+            
+            sp = position.Split(new char[] {';'});
+            if (sp==null || sp.Length !=2) return;
+            int ra_clusters = 0;
+
+            // current RA position in clusters of 256 motor encoder ticks
+            if (!int.TryParse(sp[0], out ra_clusters)) return;
+
+            sp = safety.Split(new char[] {';'});
+            if (sp==null || sp.Length !=2) return;
+            int size_clusters = 0;
+
+            // size of 1/2 a cirlce (180 degrees) in RA in clusters of 256 motor encoder ticks
+            if (!int.TryParse(sp[0], out size_clusters)) return;
+
+            double rate = SharedResources.EARTH_ANG_ROT_DEG_MIN/60.0; //sidereal rate per second
+
+            // sidereal tracking rate in clusters per second:
+            rate = (double)size_clusters * (SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0) / 180.0;
+
+            double distance = ra_clusters - west_limit;
+            if (distance <= 0) labelLimit.Text = "00:00:00";
+            else
+            {
+                double seconds = distance / rate;
+                TimeSpan ts = TimeSpan.FromSeconds(seconds);
+                labelLimit.Text = string.Format("{0:00}:{1:00}:{2:00}", ts.Hours, ts.Minutes, ts.Seconds);
+            }
+
         }
 
 
