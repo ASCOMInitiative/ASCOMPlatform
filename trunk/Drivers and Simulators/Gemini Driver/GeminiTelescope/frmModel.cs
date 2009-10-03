@@ -39,6 +39,14 @@ namespace ASCOM.GeminiTelescope
             geminiPropertiesBindingSource.Add(props);
             geminiPropertiesBindingSource.ResetBindings(false);
             SetControlColor(tableLayoutPanel1);
+
+            GeminiHardware.OnConnect += new ConnectDelegate(OnConnectChange);
+
+        }
+
+        void OnConnectChange(bool connect, int clients)
+        {
+            SetControlColor(tableLayoutPanel1);
         }
 
         private void pbOK_Click(object sender, EventArgs e)

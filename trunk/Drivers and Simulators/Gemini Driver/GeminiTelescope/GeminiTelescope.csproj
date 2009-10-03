@@ -144,6 +144,12 @@
     </Compile>
     <Compile Include="AstronomyFunctions.cs" />
     <Compile Include="ClassFactory.cs" />
+    <Compile Include="frmSafetyLimits.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSafetyLimits.Designer.cs">
+      <DependentUpon>frmSafetyLimits.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmVoiceOut.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -217,6 +223,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AboutBox\AboutBox1.resx">
       <DependentUpon>AboutBox1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSafetyLimits.resx">
+      <DependentUpon>frmSafetyLimits.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmVoiceOut.resx">
       <DependentUpon>frmVoiceOut.cs</DependentUpon>

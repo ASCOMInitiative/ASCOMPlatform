@@ -109,7 +109,7 @@ namespace ASCOM.GeminiTelescope
 
             // Set up the ToolTip text for the Button and Checkbox.
             toolTip1.SetToolTip(this.ButtonConnect, Resources.ConnectingToGemini);
-            toolTip1.SetToolTip(this.ButtonFlip, Resources.MeridianFlip);
+            toolTip1.SetToolTip(this.FuncMenu, Resources.PerformFunctions);
             toolTip1.SetToolTip(this.ButtonPark, Resources.ParkMount);
             toolTip1.SetToolTip(this.ButtonSetup, Resources.SetupDriver);
 
@@ -1044,25 +1044,6 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        private void ButtonFlip_Click(object sender, EventArgs e)
-        {
-            if (GeminiHardware.Connected)
-            {
-                Speech.SayIt(Resources.MedidianFlip, Speech.SpeechType.Command);
-                string res = GeminiHardware.DoCommandResult(":Mf", GeminiHardware.MAX_TIMEOUT, false);
-                switch (res)
-                {
-                    case "1Object below horizon.":
-                        Speech.SayIt(Resources.ObjectBelowHorizon, Speech.SpeechType.Error);
-                        MessageBox.Show(this, Resources.ObjectBelowHorizon, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        break;
-                    case "4Position unreachable.":
-                        Speech.SayIt(Resources.ObjectUnreachable, Speech.SpeechType.Error);
-                        MessageBox.Show(this, Resources.ObjectUnreachable, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        break;
-                }
-            }
-        }
 
         private void buttonSlew1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -1318,6 +1299,26 @@ namespace ASCOM.GeminiTelescope
 
         }
 
+        private void ButtonFlip_Click(object sender, EventArgs e)
+        {
+            if (GeminiHardware.Connected)
+            {
+                Speech.SayIt(Resources.MedidianFlip, Speech.SpeechType.Command);
+                string res = GeminiHardware.DoCommandResult(":Mf", GeminiHardware.MAX_TIMEOUT, false);
+                switch (res)
+                {
+                    case "1Object below horizon.":
+                        Speech.SayIt(Resources.ObjectBelowHorizon, Speech.SpeechType.Error);
+                        MessageBox.Show(this, Resources.ObjectBelowHorizon, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        break;
+                    case "4Position unreachable.":
+                        Speech.SayIt(Resources.ObjectUnreachable, Speech.SpeechType.Error);
+                        MessageBox.Show(this, Resources.ObjectUnreachable, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        break;
+                }
+            }
+        }
+
         private void exitDriverMenuItem_Click(object sender, EventArgs e)
         {
             ExitMenu(sender, e);
@@ -1328,7 +1329,21 @@ namespace ASCOM.GeminiTelescope
             if (GeminiHardware.TargetDeclination != SharedResources.INVALID_DOUBLE || GeminiHardware.TargetRightAscension != SharedResources.INVALID_DOUBLE)
             { GeminiHardware.SyncEquatorial(); }
             else
-            { MessageBox.Show("No Target!"); }
+            { MessageBox.Show("No Target!", SharedResources.TELESCOPE_DRIVER_NAME); }
+        }
+
+        private void FuncMenu_Click(object sender, EventArgs e)
+        {
+            FuncMenu.ContextMenuStrip.Show(Cursor.Position);
+        }
+
+        private void buttonAddlAlign_Click(object sender, EventArgs e)
+        {
+            if (GeminiHardware.TargetDeclination != SharedResources.INVALID_DOUBLE || GeminiHardware.TargetRightAscension != SharedResources.INVALID_DOUBLE)
+            { GeminiHardware.AlignEquatorial(); }
+            else
+            { MessageBox.Show("No Target!", SharedResources.TELESCOPE_DRIVER_NAME); }
+
         }
 
     }

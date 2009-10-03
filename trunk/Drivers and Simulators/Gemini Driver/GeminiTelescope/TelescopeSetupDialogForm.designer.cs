@@ -102,6 +102,8 @@ namespace ASCOM.GeminiTelescope
             // buttonGps
             // 
             buttonGps.BackColor = System.Drawing.Color.Black;
+            buttonGps.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            buttonGps.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             buttonGps.ForeColor = System.Drawing.Color.White;
             buttonGps.Location = new System.Drawing.Point(236, 340);
             buttonGps.Name = "buttonGps";
@@ -114,6 +116,8 @@ namespace ASCOM.GeminiTelescope
             // pbGeminiSettings
             // 
             pbGeminiSettings.BackColor = System.Drawing.Color.Black;
+            pbGeminiSettings.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            pbGeminiSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             pbGeminiSettings.ForeColor = System.Drawing.Color.White;
             pbGeminiSettings.Location = new System.Drawing.Point(236, 311);
             pbGeminiSettings.Name = "pbGeminiSettings";
@@ -128,6 +132,8 @@ namespace ASCOM.GeminiTelescope
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdOK.BackColor = System.Drawing.Color.Black;
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.cmdOK.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.cmdOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdOK.ForeColor = System.Drawing.Color.White;
             this.cmdOK.Location = new System.Drawing.Point(416, 310);
             this.cmdOK.Name = "cmdOK";
@@ -142,6 +148,8 @@ namespace ASCOM.GeminiTelescope
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdCancel.BackColor = System.Drawing.Color.Black;
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cmdCancel.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.cmdCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdCancel.ForeColor = System.Drawing.Color.White;
             this.cmdCancel.Location = new System.Drawing.Point(416, 339);
             this.cmdCancel.Name = "cmdCancel";
@@ -195,6 +203,8 @@ namespace ASCOM.GeminiTelescope
             // 
             // pbSetSiteNow
             // 
+            this.pbSetSiteNow.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pbSetSiteNow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.pbSetSiteNow.Location = new System.Drawing.Point(3, 94);
             this.pbSetSiteNow.Name = "pbSetSiteNow";
             this.pbSetSiteNow.Size = new System.Drawing.Size(62, 23);
@@ -403,6 +413,8 @@ namespace ASCOM.GeminiTelescope
             // 
             // pbSetTimeNow
             // 
+            this.pbSetTimeNow.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pbSetTimeNow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.pbSetTimeNow.Location = new System.Drawing.Point(3, 52);
             this.pbSetTimeNow.Name = "pbSetTimeNow";
             this.pbSetTimeNow.Size = new System.Drawing.Size(62, 23);
@@ -567,6 +579,8 @@ namespace ASCOM.GeminiTelescope
             // 
             this.buttonVirtualPort.BackColor = System.Drawing.Color.Black;
             this.tableLayoutPanel2.SetColumnSpan(this.buttonVirtualPort, 2);
+            this.buttonVirtualPort.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.buttonVirtualPort.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonVirtualPort.Location = new System.Drawing.Point(3, 56);
             this.buttonVirtualPort.Name = "buttonVirtualPort";
             this.buttonVirtualPort.Size = new System.Drawing.Size(188, 23);
@@ -729,7 +743,7 @@ namespace ASCOM.GeminiTelescope
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Black;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
             this.ClientSize = new System.Drawing.Size(487, 394);
             this.Controls.Add(this.chkVoice);
             this.Controls.Add(this.btnJoysticConfig);

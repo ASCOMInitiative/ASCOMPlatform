@@ -179,8 +179,11 @@ namespace ASCOM.GeminiTelescope
 
             Commands.Add(":W", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
 
-            Commands.Add(":HC0", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
+            // enter/exit second hand controller mode
             Commands.Add(":HC1", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
+            Commands.Add(":HC0", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
+
+            // commands to press various buttons and button combinations on the hand controller, :k@ means nothing's pressed
             Commands.Add(":kD", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
             Commands.Add(":kA", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
             Commands.Add(":kH", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
@@ -188,10 +191,16 @@ namespace ASCOM.GeminiTelescope
             Commands.Add(":k@", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
             Commands.Add(":kP", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
             Commands.Add(":kI", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
+
             Commands.Add(":HI", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
+            
+            // request controller button status: returns @# if nothing's pressed
             Commands.Add(":T", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
-            Commands.Add(":Hm", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
+
+            // enter, exit menu mode
             Commands.Add(":HM", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
+            Commands.Add(":Hm", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
+            
             // commands >181: and >182: are exceptions -- they set value, and return value
             // documentation is wrong: >181: returns '0#' and >182: returns '1'
             // >509: returns just a '#'

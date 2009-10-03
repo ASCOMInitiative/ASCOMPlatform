@@ -45,6 +45,9 @@
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.pbSetSafetyLimit = new System.Windows.Forms.Button();
+            this.menuSafetyPopup = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.menuSetSafetyHere = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuSetLimits = new System.Windows.Forms.ToolStripMenuItem();
             this.checkBox7 = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -107,6 +110,7 @@
             this.geminiPropertiesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.menuSafetyPopup.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -194,7 +198,7 @@
             this.label21.Size = new System.Drawing.Size(225, 29);
             this.label21.TabIndex = 15;
             this.label21.Text = "West Safety Limit: 000 deg";
-            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label2
             // 
@@ -208,7 +212,7 @@
             this.label2.Size = new System.Drawing.Size(222, 29);
             this.label2.TabIndex = 13;
             this.label2.Text = "East Safety Limit: 000 deg";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // comboBox5
             // 
@@ -347,16 +351,47 @@
             // pbSetSafetyLimit
             // 
             this.pbSetSafetyLimit.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.pbSetSafetyLimit.ContextMenuStrip = this.menuSafetyPopup;
             this.pbSetSafetyLimit.Dock = System.Windows.Forms.DockStyle.Right;
             this.pbSetSafetyLimit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.pbSetSafetyLimit.ForeColor = System.Drawing.Color.Black;
-            this.pbSetSafetyLimit.Location = new System.Drawing.Point(253, 84);
+            this.pbSetSafetyLimit.Image = ((System.Drawing.Image)(resources.GetObject("pbSetSafetyLimit.Image")));
+            this.pbSetSafetyLimit.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.pbSetSafetyLimit.Location = new System.Drawing.Point(315, 81);
+            this.pbSetSafetyLimit.Margin = new System.Windows.Forms.Padding(0);
             this.pbSetSafetyLimit.Name = "pbSetSafetyLimit";
-            this.pbSetSafetyLimit.Size = new System.Drawing.Size(203, 21);
+            this.pbSetSafetyLimit.Size = new System.Drawing.Size(144, 27);
             this.pbSetSafetyLimit.TabIndex = 8;
-            this.pbSetSafetyLimit.Text = "Set Safety Limit to the Current Position";
+            this.pbSetSafetyLimit.Text = "Set Safety Limits";
             this.pbSetSafetyLimit.UseVisualStyleBackColor = false;
             this.pbSetSafetyLimit.Click += new System.EventHandler(this.pbSetSafetyLimit_Click);
+            // 
+            // menuSafetyPopup
+            // 
+            this.menuSafetyPopup.BackColor = System.Drawing.Color.Black;
+            this.menuSafetyPopup.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuSetSafetyHere,
+            this.menuSetLimits});
+            this.menuSafetyPopup.Name = "contextMenuStrip1";
+            this.menuSafetyPopup.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.menuSafetyPopup.ShowImageMargin = false;
+            this.menuSafetyPopup.Size = new System.Drawing.Size(296, 48);
+            // 
+            // menuSetSafetyHere
+            // 
+            this.menuSetSafetyHere.ForeColor = System.Drawing.Color.White;
+            this.menuSetSafetyHere.Name = "menuSetSafetyHere";
+            this.menuSetSafetyHere.Size = new System.Drawing.Size(295, 22);
+            this.menuSetSafetyHere.Text = "Set Safety Limit to the Current Mount Position!";
+            this.menuSetSafetyHere.Click += new System.EventHandler(this.menuSetSafetyHere_Click);
+            // 
+            // menuSetLimits
+            // 
+            this.menuSetLimits.ForeColor = System.Drawing.Color.White;
+            this.menuSetLimits.Name = "menuSetLimits";
+            this.menuSetLimits.Size = new System.Drawing.Size(295, 22);
+            this.menuSetLimits.Text = "Set Arbitrary Safety and Goto Limits...";
+            this.menuSetLimits.Click += new System.EventHandler(this.menuSetLimits_Click);
             // 
             // checkBox7
             // 
@@ -1247,6 +1282,7 @@
             // 
             this.pbOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pbOK.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.pbOK.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.pbOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.pbOK.ForeColor = System.Drawing.Color.White;
             this.pbOK.Location = new System.Drawing.Point(398, 625);
@@ -1260,6 +1296,7 @@
             // pbApply
             // 
             this.pbApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pbApply.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.pbApply.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.pbApply.Location = new System.Drawing.Point(398, 654);
             this.pbApply.Name = "pbApply";
@@ -1273,6 +1310,7 @@
             // 
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button3.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button3.Location = new System.Drawing.Point(398, 684);
             this.button3.Name = "button3";
@@ -1308,6 +1346,7 @@
             // pbLoad
             // 
             this.pbLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pbLoad.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.pbLoad.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.pbLoad.Location = new System.Drawing.Point(301, 654);
             this.pbLoad.Name = "pbLoad";
@@ -1320,6 +1359,7 @@
             // pbSave
             // 
             this.pbSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pbSave.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.pbSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.pbSave.Location = new System.Drawing.Point(301, 683);
             this.pbSave.Name = "pbSave";
@@ -1350,11 +1390,11 @@
             this.chkSavePEC.TabIndex = 30;
             this.chkSavePEC.Text = "Include PEC Data";
             this.chkSavePEC.UseVisualStyleBackColor = true;
-            this.chkSavePEC.Visible = false;
             this.chkSavePEC.CheckedChanged += new System.EventHandler(this.SavePEC_CheckedChanged);
             // 
             // pbModel
             // 
+            this.pbModel.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.pbModel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.pbModel.Location = new System.Drawing.Point(103, 638);
             this.pbModel.Name = "pbModel";
@@ -1374,7 +1414,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.BackColor = System.Drawing.Color.Black;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
             this.CancelButton = this.button3;
             this.ClientSize = new System.Drawing.Size(490, 715);
             this.Controls.Add(this.pbModel);
@@ -1402,6 +1442,7 @@
             this.groupBox1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.menuSafetyPopup.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
@@ -1516,5 +1557,8 @@
         private System.Windows.Forms.CheckBox checkBox7;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.ContextMenuStrip menuSafetyPopup;
+        private System.Windows.Forms.ToolStripMenuItem menuSetSafetyHere;
+        private System.Windows.Forms.ToolStripMenuItem menuSetLimits;
     }
 }
