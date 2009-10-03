@@ -28,8 +28,8 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutBox1));
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.GeminiPictureBox = new System.Windows.Forms.PictureBox();
+            this.ASCOMpictureBox = new System.Windows.Forms.PictureBox();
             this.labelProductName = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
@@ -39,31 +39,37 @@
             this.linkLabel4 = new System.Windows.Forms.LinkLabel();
             this.labelVersion = new System.Windows.Forms.Label();
             this.labelCopyright = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GeminiPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ASCOMpictureBox)).BeginInit();
             this.SuspendLayout();
             // 
-            // pictureBox1
+            // GeminiPictureBox
             // 
-            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox1.Location = new System.Drawing.Point(17, 365);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(120, 73);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.GeminiPictureBox.BackColor = System.Drawing.Color.Transparent;
+            this.GeminiPictureBox.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("GeminiPictureBox.BackgroundImage")));
+            this.GeminiPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.GeminiPictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.GeminiPictureBox.Location = new System.Drawing.Point(17, 365);
+            this.GeminiPictureBox.Name = "GeminiPictureBox";
+            this.GeminiPictureBox.Size = new System.Drawing.Size(120, 73);
+            this.GeminiPictureBox.TabIndex = 0;
+            this.GeminiPictureBox.TabStop = false;
+            this.GeminiPictureBox.DoubleClick += new System.EventHandler(this.GeminiPictureBox_Click);
+            this.GeminiPictureBox.Click += new System.EventHandler(this.GeminiPictureBox_Click);
             // 
-            // pictureBox2
+            // ASCOMpictureBox
             // 
-            this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox2.BackgroundImage = global::ASCOM.GeminiTelescope.Properties.Resources.ASCOM;
-            this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox2.Location = new System.Drawing.Point(494, 361);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(61, 77);
-            this.pictureBox2.TabIndex = 1;
-            this.pictureBox2.TabStop = false;
+            this.ASCOMpictureBox.BackColor = System.Drawing.Color.Transparent;
+            this.ASCOMpictureBox.BackgroundImage = global::ASCOM.GeminiTelescope.Properties.Resources.ASCOM;
+            this.ASCOMpictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ASCOMpictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ASCOMpictureBox.Location = new System.Drawing.Point(494, 361);
+            this.ASCOMpictureBox.Name = "ASCOMpictureBox";
+            this.ASCOMpictureBox.Size = new System.Drawing.Size(61, 77);
+            this.ASCOMpictureBox.TabIndex = 1;
+            this.ASCOMpictureBox.TabStop = false;
+            this.ASCOMpictureBox.DoubleClick += new System.EventHandler(this.ASCOMpictureBox_Click);
+            this.ASCOMpictureBox.Click += new System.EventHandler(this.ASCOMpictureBox_Click);
             // 
             // labelProductName
             // 
@@ -193,8 +199,8 @@
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.labelProductName);
-            this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.ASCOMpictureBox);
+            this.Controls.Add(this.GeminiPictureBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -205,8 +211,8 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AboutBox1";
             this.TransparencyKey = System.Drawing.Color.Black;
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GeminiPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ASCOMpictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -214,8 +220,8 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.PictureBox GeminiPictureBox;
+        private System.Windows.Forms.PictureBox ASCOMpictureBox;
         private System.Windows.Forms.Label labelProductName;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.LinkLabel linkLabel1;

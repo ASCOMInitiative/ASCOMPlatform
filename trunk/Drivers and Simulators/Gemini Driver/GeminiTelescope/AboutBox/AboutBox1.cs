@@ -100,5 +100,32 @@ namespace ASCOM.GeminiTelescope
             }
         }
         #endregion
+
+        private void GeminiPictureBox_Click(object sender, EventArgs e)
+        {
+            LaunchURL("http://www.docgoerlich.de/Gemini.html");
+        }
+
+        private void ASCOMpictureBox_Click(object sender, EventArgs e)
+        {
+            LaunchURL("http://ascom-standards.org/");
+        }
+
+        private void LaunchURL(string url)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(url);
+            }
+            catch (System.ComponentModel.Win32Exception noBrowser)
+            {
+                if (noBrowser.ErrorCode == -2147467259)
+                    MessageBox.Show(noBrowser.Message);
+            }
+            catch (System.Exception other)
+            {
+                MessageBox.Show(other.Message);
+            }
+        }
     }
 }
