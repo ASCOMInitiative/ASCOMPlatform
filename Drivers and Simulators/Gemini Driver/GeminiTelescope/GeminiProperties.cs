@@ -532,6 +532,151 @@ namespace ASCOM.GeminiTelescope
         }
 
 
+        public double WestSafetyLimitDegrees
+        {
+            get { return (double)get_Profile("WestSafetyLimitDegrees", 123.0); }
+            set { mProfile["WestSafetyLimitDegrees"] = value; }
+        }
+
+        private double WestSafetyLimitDegrees_Gemini
+        {
+            get
+            {
+                string res = get_Prop("<220:");
+                int d = 0, m = 0;
+                try
+                {
+                    // east        west
+                    //<ddd>d<mm>;<ddd>d<mm>
+                    d = int.Parse(res.Substring(7, 3));
+                    m = int.Parse(res.Substring(11, 2));
+                }
+                catch { }
+
+                return ((double)d) + ((double)m / 60.0);
+            }
+            set
+            {
+                string cmd = ">222:" + string.Format("{0:000}d{1:00}", Math.Truncate(value), (value - Math.Truncate(value)) * 60.0);
+                GeminiHardware.DoCommandResult(cmd, GeminiHardware.MAX_TIMEOUT, false);
+            }
+        }
+
+
+        public double EastSafetyLimitDegrees
+        {
+            get { return (double)get_Profile("EastSafetyLimitDegrees", 114.0); }
+            set { mProfile["EastSafetyLimitDegrees"] = value; }
+        }
+
+        private double EastSafetyLimitDegrees_Gemini
+        {
+            get
+            {
+                string res = get_Prop("<220:");
+                int d = 0, m = 0;
+                try
+                {
+                    // east        west
+                    //<ddd>d<mm>;<ddd>d<mm>
+                    d = int.Parse(res.Substring(0, 3));
+                    m = int.Parse(res.Substring(4, 2));
+                }
+                catch { }
+                return ((double)d) + ((double)m / 60.0);
+            }
+            set
+            {
+                string cmd = ">221:" + string.Format("{0:000}d{1:00}", Math.Truncate(value), (value - Math.Truncate(value)) * 60.0);
+                GeminiHardware.DoCommandResult(cmd, GeminiHardware.MAX_TIMEOUT, false);
+            }
+        }
+
+        public double Latitude
+        {
+            get { return (double)get_Profile("Latitude", 0.0); }
+            set { mProfile["Latitude"] = value; }
+        }
+
+        private double Latitude_Gemini
+        {
+            get
+            {
+                return GeminiHardware.Latitude;
+            }
+            set
+            {
+                GeminiHardware.SetLatitude(value);
+            }
+        }
+
+        public double Longitude
+        {
+            get { return (double)get_Profile("Longitude", 0.0); }
+            set { mProfile["Longitude"] = value; }
+        }
+
+        private double Longitude_Gemini
+        {
+            get
+            {
+                return GeminiHardware.Longitude;
+            }
+            set
+            {
+                GeminiHardware.SetLongitude(value);
+            }
+        }
+
+        public int UTC_Offset
+        {
+            get { return (int)get_Profile("UTC_Offset", 0); }
+            set { mProfile["UTC_Offset"] = value; }
+        }
+
+        private int UTC_Offset_Gemini
+        {
+            get
+            {
+                return GeminiHardware.UTCOffset;
+            }
+            set
+            {
+                GeminiHardware.UTCOffset = value;
+            }
+        }
+
+        public double GotoLimitDegrees
+        {
+            get { return (double)get_Profile("GotoLimitDegrees", 0.0); }
+            set { mProfile["GotoLimitDegrees"] = value; }
+        }
+
+        private double GotoLimitDegrees_Gemini
+        {
+            get
+            {
+                string res = get_Prop("<223:");
+                int d = 0, m = 0;
+                try
+                {
+                    //<ddd>d<mm>
+                    d = int.Parse(res.Substring(0, 3));
+                    m = int.Parse(res.Substring(4, 2));
+                }
+                catch { }
+                return ((double)d) + ((double)m / 60.0);
+            }
+
+            set
+            {
+                string cmd = ">223:" + string.Format("{0:000}d{1:00}", Math.Truncate(value), (value - Math.Truncate(value)) * 60.0);
+                GeminiHardware.DoCommandResult(cmd, GeminiHardware.MAX_TIMEOUT, false);
+            }
+
+        }
+
+
         public bool PEC_Is_On
         {
             get { return (bool)get_Profile("PECStatus", false);}

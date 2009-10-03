@@ -490,4 +490,7 @@ Are you sure you want to do this?</value>
   <data name="MountRA" xml:space="preserve">
     <value>Mount Right Ascension</value>
   </data>
+  <data name="PerformFunctions" xml:space="preserve">
+    <value>Perform Mount Functions</value>
+  </data>
 </root>

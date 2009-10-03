@@ -120,28 +120,7 @@
   <metadata name="geminiPropertiesBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <metadata name="menuSafetyPopup.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>502, 17</value>
-  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="pbSetSafetyLimit.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAK/QAA
-        Cv0BS5xZCwAAARBJREFUOE9j+P//PwM6Tuh5woxNHJsYhmaQIqABMkDMRIwhWA0onPX8f/zkt0rEGILV
-        gNyZz/4ndN/7HzfhtQYh72A1IGPK0//z9v/+H9Rw8zXQAFt8huAKg/+z9/3637n173+30sv/gQbY4zIE
-        qwGRXY/+T9n263/J0r//E6b//W+TexanIVgNCGx++L917XuwZuOSL/+lo6/9N45c9t+h6Gw8ukuwGuBR
-        df9/ydx3cM2KLj3/pX1WBxKdDuxL7/4PbHkGthmieaUXrjSB1QUWeXf+2xRcgWm2wZegsBpgmHUbrFnK
-        a7krodSI1QCdtBtAZ6/xJaQZJI/VACnvtX7S3iuIylBYDSDGZpgaig0AAOHY1PSKOymCAAAAAElFTkSu
-        QmCC
-</value>
-  </data>
-  <metadata name="openFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>240, 17</value>
-  </metadata>
-  <metadata name="saveFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>373, 17</value>
-  </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAcAICAAAAAACACoCAAAdgAAABAQAAAAAAgAaAUAAB4JAAANDQAAAAAADelJAQCGDgAAMDAAAAAA

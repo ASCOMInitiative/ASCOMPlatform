@@ -1608,6 +1608,7 @@ namespace ASCOM.GeminiTelescope
                         m_SerialPort.Open();
                 
                         m_SerialPort.DtrEnable = true;
+                        m_SerialPort.Encoding = Encoding.GetEncoding("Latin1");
                         Trace.Info(2, "After Port.Open");
                     }
                     catch (Exception e)
@@ -1759,7 +1760,7 @@ namespace ASCOM.GeminiTelescope
             {
                 Trace.Info(0, "Serial Transmit", s);
 
-                m_SerialPort.Write(s);
+                m_SerialPort.Write(Encoding.GetEncoding("Latin1").GetBytes(s), 0, s.Length);
                 m_SerialPort.BaseStream.Flush();
                 Trace.Info(4, "Finished Port.Write");
             }
@@ -1912,6 +1913,7 @@ namespace ASCOM.GeminiTelescope
                         {
                             m_SerialPort.Open();
                             m_SerialPort.DtrEnable = true;
+                            m_SerialPort.Encoding = Encoding.GetEncoding("Latin1");
 
                             if (m_SerialPort.IsOpen)
                             {
@@ -2679,7 +2681,7 @@ namespace ASCOM.GeminiTelescope
                 char chksum = result[result.Length - 1];
                 result = result.Substring(0, result.Length - 1); //remove checksum character
 
-                if (chksum != ComputeChecksum(result))  // bad checksum -- ignore the return value! 
+                if ((((int)chksum) & 0x7f) != (ComputeChecksum(result)&0x7f))  // bad checksum -- ignore the return value! 
                 {
                     Trace.Error("Bad Checksum", command.m_Command, result);
 
@@ -2751,6 +2753,7 @@ namespace ASCOM.GeminiTelescope
 
                         Trace.Info(2, "Opening port");
                         m_SerialPort.Open();
+                        m_SerialPort.Encoding = Encoding.GetEncoding("Latin1");
                     }
                     catch (Exception ex)
                     {
@@ -2789,7 +2792,8 @@ namespace ASCOM.GeminiTelescope
             {
                 if (m_SerialPort.BytesToRead > 0)
                 {
-                    char c = Convert.ToChar(m_SerialPort.ReadByte());
+                    int b = m_SerialPort.ReadByte();
+                    char c = (char)(b);
 
                     if (c != terminate)
                     {
@@ -3172,6 +3176,44 @@ namespace ASCOM.GeminiTelescope
         
         }
 
+        /// <summary>
+        /// Syncs the mount using Ra and Dec
+        /// </summary>
+        public static void AlignEquatorial()
+        {
+            AlignToEquatorialCoords(m_TargetRightAscension, m_TargetDeclination);
+        }
+
+
+        /// <summary>
+        /// Syncs the mount using Ra and Dec coordinates passed in
+        /// </summary>
+        public static void AlignToEquatorialCoords(double ra, double dec)
+        {
+            string[] cmd = { ":Sr" + m_Util.HoursToHMS(ra, ":", ":", ""), ":Sd" + m_Util.DegreesToDMS(dec, ":", ":", ""), "" };
+            if (m_AdditionalAlign)
+            {
+                cmd[2] = ":CM";
+            }
+            else
+            {
+                cmd[2] = ":Cm";
+            }
+            string[] result = null;
+            DoCommandResult(cmd, MAX_TIMEOUT / 2, false, out result);
+            if (result == null || result[0] == null || result[1] == null || result[2] == null)
+                throw new TimeoutException((m_AdditionalAlign ? "Align to" : "Sync to ") + "RA/DEC");
+            if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("RA value is invalid");
+            if (result[1] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("DEC value is invalid");
+            if (result[2] == "No object!") throw new ASCOM.Utilities.Exceptions.InvalidValueException((m_AdditionalAlign ? "Align to" : "Sync to ") + "RA/DEC");
+
+            m_RightAscension = ra;// Update state machine variables with new RA and DEC.
+            m_Declination = dec;
+
+        }
+
+
+
 
         /// <summary>
         /// Slews the mount using Ra and Dec
@@ -3466,10 +3508,10 @@ namespace ASCOM.GeminiTelescope
         /// <returns>Gemini checksum character</returns>
         private static char ComputeChecksum(string p)
         {
-            int chksum = 0;
+            byte chksum = 0;
 
             for (int i = 0; i < p.Length; ++i)
-                chksum ^= p[i];
+                chksum ^= (byte)p[i];
 
             return (char)((chksum & 0x7f) + 0x40);
         }

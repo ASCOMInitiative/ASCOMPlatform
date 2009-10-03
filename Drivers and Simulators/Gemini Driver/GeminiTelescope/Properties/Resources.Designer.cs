@@ -791,6 +791,15 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Perform Mount Functions.
+        /// </summary>
+        internal static string PerformFunctions {
+            get {
+                return ResourceManager.GetString("PerformFunctions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Photo Mode.
         /// </summary>
         internal static string PhotoMode {

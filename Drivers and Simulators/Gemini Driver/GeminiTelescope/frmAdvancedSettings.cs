@@ -58,6 +58,8 @@ namespace ASCOM.GeminiTelescope
 
             OnConnectChange(true, 1);
 
+            GeminiHardware.OnConnect += new ConnectDelegate(OnConnectChange);
+
             this.UseWaitCursor = false;
         }
 
@@ -207,11 +209,7 @@ namespace ASCOM.GeminiTelescope
 
         private void pbSetSafetyLimit_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.Connected)
-            {
-                GeminiHardware.DoCommandResult(">220:", GeminiHardware.MAX_TIMEOUT, false);
-                MessageBox.Show(Resources.SafetyLimitSet);                
-            }
+            pbSetSafetyLimit.ContextMenuStrip.Show(Cursor.Position);
         }
 
 
@@ -268,6 +266,40 @@ namespace ASCOM.GeminiTelescope
         {
             GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
             props.SavePEC = chkSavePEC.Checked;
+
+        }
+
+        private void menuSetSafetyHere_Click(object sender, EventArgs e)
+        {
+            if (GeminiHardware.Connected)
+            {
+                GeminiHardware.DoCommandResult(">220:", GeminiHardware.MAX_TIMEOUT, false);
+                MessageBox.Show(Resources.SafetyLimitSet);                
+            }
+        }
+
+        private void menuSetLimits_Click(object sender, EventArgs e)
+        {
+            frmSafetyLimits dlg = new frmSafetyLimits((GeminiProperties)this.geminiPropertiesBindingSource[0]);
+            DialogResult res = dlg.ShowDialog(this);
+        }
+
+        private void g11DefaultsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (GeminiHardware.Connected)
+            {
+                GeminiHardware.DoCommandResult(">43690:", GeminiHardware.MAX_TIMEOUT, false);
+                MessageBox.Show(Resources.SafetyLimitSet);
+            }
+        }
+
+        private void mI250DefaultsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (GeminiHardware.Connected)
+            {
+                GeminiHardware.DoCommandResult(">43691:", GeminiHardware.MAX_TIMEOUT, false);
+                MessageBox.Show(Resources.SafetyLimitSet);
+            }
 
         }
     }
