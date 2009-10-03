@@ -238,6 +238,7 @@ namespace ASCOM.FilterWheelSim
         private void frmSetupDialog_Shown(object sender, EventArgs e)
         {
             EnableDisableControls();
+            this.BringToFront();
         }
 
 #endregion
