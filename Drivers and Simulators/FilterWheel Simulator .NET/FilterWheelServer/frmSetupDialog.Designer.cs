@@ -432,7 +432,6 @@
             this.MinimizeBox = false;
             this.Name = "frmSetupDialog";
             this.ShowIcon = false;
-            this.ShowInTaskbar = false;
             this.Text = "Filter Wheel Simulator Setup";
             this.Shown += new System.EventHandler(this.frmSetupDialog_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();

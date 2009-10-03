@@ -408,7 +408,7 @@ namespace ASCOM.FilterWheelSim
             SetupDialog.ImplementsOffsets = SimulatedHardware.ImplementsOffsets;
             SetupDialog.PreemptsMoves = SimulatedHardware.PreemptMoves;
 
-            SetupDialog.TopMost = true;   // The ASCOM chooser dialog sits on top if we don't do this :(
+            //SetupDialog.TopMost = true;   // The ASCOM chooser dialog sits on top if we don't do this :(
 
             // Hide the main handbox form - reduce screen clutter
             FilterWheelSim.m_MainForm.Hide();
