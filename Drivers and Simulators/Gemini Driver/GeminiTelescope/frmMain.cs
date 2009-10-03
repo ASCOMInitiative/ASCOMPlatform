@@ -679,7 +679,7 @@ namespace ASCOM.GeminiTelescope
             // current RA position in clusters of 256 motor encoder ticks
             if (!int.TryParse(sp[0], out ra_clusters)) return;
 
-            sp = safety.Split(new char[] {';'});
+            sp = size.Split(new char[] {';'});
             if (sp==null || sp.Length !=2) return;
             int size_clusters = 0;
 
