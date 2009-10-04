@@ -11,15 +11,16 @@ Imports System.Security.Principal
 Friend Class AllUsersFileSystemProvider
 
     Implements IFileStoreProvider
+    Private Const ASCOM_DIRECTORY As String = "\ASCOM"
+    Private Const PROFILE_DIRECTORY As String = ASCOM_DIRECTORY & "\Profile" 'Root directory within the supplied file system space
 
-    Private Const ASCOM_DIRECTORY As String = "\ASCOM\Profile" 'Root directory within the supplied file system space
-
-    Private BaseFolder As String
+    Private BaseFolder, ASCOMFolder As String
 
 #Region "New"
     Friend Sub New()
         'Find the location of the All Users profile
-        BaseFolder = System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) & ASCOM_DIRECTORY
+        ASCOMFolder = System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) & ASCOM_DIRECTORY
+        BaseFolder = System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) & PROFILE_DIRECTORY
     End Sub
 #End Region
 
@@ -47,8 +48,8 @@ Friend Class AllUsersFileSystemProvider
             Directory.CreateDirectory(CreatePath(p_SubKeyName))
             p_TL.LogMessage("  CreateDirectory", "Created directory OK")
             If p_SubKeyName = "\" Then
-                p_TL.LogMessage("  CreateDirectory", "Setting security on Root directory")
-                Dim dInfo As New DirectoryInfo(CreatePath(p_SubKeyName))
+                p_TL.LogMessage("  CreateDirectory", "Setting security on ASCOM Root directory")
+                Dim dInfo As New DirectoryInfo(ASCOMFolder) 'Apply to the ASCOM folder itself
                 Dim dSecurity As DirectorySecurity
 
                 'PWGS 5.5.2.0 Fix for users security group not being globally usable
@@ -59,8 +60,6 @@ Friend Class AllUsersFileSystemProvider
                 Dim Ident As New SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, DomainSid)
                 p_TL.LogMessage("  CreateDirectory", "Creating security rules")
                 dSecurity = dInfo.GetAccessControl
-                'dSecurity.AddAccessRule(New FileSystemAccessRule("Users", FileSystemRights.Delete, InheritanceFlags.ContainerInherit, PropagationFlags.InheritOnly, AccessControlType.Allow))
-                'dSecurity.AddAccessRule(New FileSystemAccessRule("Users", FileSystemRights.DeleteSubdirectoriesAndFiles, InheritanceFlags.ContainerInherit, PropagationFlags.InheritOnly, AccessControlType.Allow))
                 dSecurity.AddAccessRule(New FileSystemAccessRule(Ident, FileSystemRights.Delete, InheritanceFlags.ContainerInherit, PropagationFlags.InheritOnly, AccessControlType.Allow))
                 dSecurity.AddAccessRule(New FileSystemAccessRule(Ident, FileSystemRights.DeleteSubdirectoriesAndFiles, InheritanceFlags.ContainerInherit, PropagationFlags.InheritOnly, AccessControlType.Allow))
                 p_TL.LogMessage("  CreateDirectory", "Added access rules")

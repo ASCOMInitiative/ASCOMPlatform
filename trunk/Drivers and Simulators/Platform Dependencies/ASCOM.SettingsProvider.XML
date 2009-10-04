@@ -13,7 +13,7 @@
             <summary>
             Constructs a new PropertyNotAttributedException.
             </summary>
-            <param name="message">The exception message</param>
+            <param name="propertyName">The property name</param>
         </member>
         <member name="P:ASCOM.PropertyNotAttributedException.PropertyName">
             <summary>

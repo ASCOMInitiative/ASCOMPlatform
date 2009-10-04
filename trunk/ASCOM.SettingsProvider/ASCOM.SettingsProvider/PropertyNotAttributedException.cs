@@ -22,7 +22,7 @@ namespace ASCOM
 		/// <summary>
 		/// Constructs a new PropertyNotAttributedException.
 		/// </summary>
-		/// <param name="message">The exception message</param>
+        /// <param name="propertyName">The property name</param>
 		public PropertyNotAttributedException(string propertyName)
 			: base(String.Format("Setting [{0}] was missing a [DeviceIdAttribute].", propertyName), ErrorCodes.SettingsProviderError)
 		{

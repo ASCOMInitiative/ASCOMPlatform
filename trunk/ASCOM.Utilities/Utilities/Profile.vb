@@ -414,6 +414,34 @@ Public Class Profile
         CheckRegistered(DriverID)
         ProfileStore.DeleteKey(MakeKey(DriverID, SubKey))
     End Sub
+
+    ''' <summary>
+    ''' Read an entire device profile
+    ''' </summary>
+    ''' <param name="deviceId">The ProgID of the device</param>
+    ''' <returns>Device profile encoded in XML</returns>
+    ''' <exception cref="ASCOM.MethodNotImplementedException">This method will be implemented in a future update</exception>
+    ''' <remarks>This is not implemented and returns a MethodNotImplemented exception,
+    ''' it will be implemented in a future update. An XML schema will also be made available to support 
+    ''' this method.</remarks>
+    Function GetProfileXml(ByVal deviceId As String) As String Implements IProfile.GetProfileXML
+        Throw New MethodNotImplementedException("GetProfileXML will be implemented in a later update")
+    End Function
+
+    ''' <summary>
+    ''' Set an entire device profile
+    ''' </summary>
+    ''' <param name="deviceId">The ProgID of the device</param>
+    ''' <param name="xml">An XML encoding of the profile</param>
+    ''' <exception cref="ASCOM.MethodNotImplementedException">This method will be implemented in a future update</exception>
+    ''' <remarks>This is not implemented and returns a MethodNotImplemented exception,
+    ''' it will be implemented in a future update. An XML schema will also be made available to support 
+    ''' this method.</remarks>
+    Sub SetProfileXml(ByVal deviceId As String, ByVal xml As String) Implements IProfile.SetProfileXML
+        Throw New MethodNotImplementedException("SetProfileXML will be implemented in a later update")
+    End Sub
+
+
 #End Region
 
 #Region "IProfileExtra Implementation"

@@ -448,7 +448,7 @@ Public Class Serial
     ''' <value>Integer, serial port timeout in seconds</value>
     ''' <returns>Integer, serial port timeout in seconds.</returns>
     ''' <remarks>The minimum delay timout that can be set through this command is 1 seconds. Use ReceiveTimeoutMs to set a timeout less than 1 second.</remarks>
-    ''' <exception cref="InvalidValueException">Thrown when <paramref name="value"><c>=0</c></paramref> is invalid.</exception>
+    ''' <exception cref="InvalidValueException">Thrown when <paramref name="value"><c>=0</c></paramref> is invalid (outside the range 1 to 120 seconds.</exception>
     Public Property ReceiveTimeout() As Integer Implements ISerial.ReceiveTimeout
         'Get and set the receive timeout
         Get
@@ -456,7 +456,7 @@ Public Class Serial
         End Get
         Set(ByVal value As Integer)
             value = value * 1000 ' Timeout is measured in milliseconds
-            If (value <= 0) Or (value > 120000) Then Throw New InvalidValueException("ReceiveTimeout Invalid timeout value: " & Format(CDbl(value / 1000), "0.0") & " seconds")
+            If (value <= 0) Or (value > 120000) Then Throw New InvalidValueException("ReceiveTimeout", Format(CDbl(value / 1000), "0.0"), "0 to 120 seconds")
             m_ReceiveTimeout = value
             If m_Connected Then
                 m_Port.WriteTimeout = value
@@ -480,7 +480,7 @@ Public Class Serial
             Return m_ReceiveTimeout
         End Get
         Set(ByVal value As Integer)
-            If (value <= 0) Or (value > 120000) Then Throw New InvalidValueException("ReceiveTimeoutMs Invalid timeout value: " & value.ToString & " milliseconds")
+            If (value <= 0) Or (value > 120000) Then Throw New InvalidValueException("ReceiveTimeoutMs", value.ToString, "1 to 120000 milliseconds")
             m_ReceiveTimeout = value
             If m_Connected Then
                 m_Port.WriteTimeout = value
@@ -677,7 +677,7 @@ Public Class Serial
         Try
             If GetMutex() Then
                 'Check for bad terminator string
-                If Terminator = "" Then Throw New InvalidValueException("ReceiveTerminated - Terminator cannot be a null string")
+                If Terminator = "" Then Throw New InvalidValueException("ReceiveTerminated Terminator", "Null or empty string", "Character or character string")
 
                 Logger.LogStart("ReceiveTerminated " & Terminator.ToString, "< ")
 
@@ -727,7 +727,7 @@ Public Class Serial
         Try
             If GetMutex() Then
                 'Check for bad terminator string
-                If Terminator = "" Then Throw New InvalidValueException("ReceiveTerminatedBinary - Terminator cannot be a null string")
+                If Terminator = "" Then Throw New InvalidValueException("ReceiveTerminatedBinary Terminator", "Null or empty string", "Character or character string")
 
                 Logger.LogStart("ReceiveTerminatedBinary " & Terminator.ToString, "< ")
 

@@ -137,6 +137,14 @@ Public Class TraceLogger
     End Sub
 
     ''' <summary>
+    ''' Insert a blank line into the log file
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Sub BlankLine() Implements ITraceLogger.BlankLine
+        LogMessage("", "", False)
+    End Sub
+
+    ''' <summary>
     ''' Logs a complete message in one call, including a hex translation of the message
     ''' </summary>
     ''' <param name="Identifier">Identifies the meaning of the the message e.g. name of modeule or method logging the message.</param>
@@ -370,7 +378,7 @@ Public Class TraceLogger
             'Case "" 'Do nothing - no log required
             '    Throw New HelperException("TRACELOGGER.CREATELOGFILE - Call made but no log filename has been set")
             Case "", SERIAL_AUTO_FILENAME
-                If g_LogFileType = "" Then Throw New InvalidValueException("TRACELOGGER.CREATELOGFILE - Call made but no log filetype has been set")
+                If g_LogFileType = "" Then Throw New ValueNotSetException("TRACELOGGER.CREATELOGFILE - Call made but no log filetype has been set")
                 My.Computer.FileSystem.CreateDirectory(g_LogFilePath) 'Create the directory if it doesn't exist
                 Do 'Create a unique log file name based on date, time and required name
                     LogFileName = g_LogFilePath & "\ASCOM." & g_LogFileType & "." & Format(Now, "HHmm.ssfff") & FileNameSuffix.ToString & ".txt"

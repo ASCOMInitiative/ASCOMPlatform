@@ -169,6 +169,12 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
+      <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
+      <Name>ASCOM.Exceptions</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

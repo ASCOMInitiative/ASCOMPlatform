@@ -387,7 +387,7 @@ namespace System.GAC
             uint major;
             uint minor;
             name.GetVersion(out major, out minor);
-            return new Version((int)major >> 16, (int)major & 0xFFFF, (int)minor >> 16, (int)minor & 0xFFFF);
+            return new Version((int)(major >> 16), (int)(major & 0xFFFF), (int)(minor >> 16), (int)(minor & 0xFFFF));
         }
 
         public static byte[] GetPublicKeyToken(IAssemblyName name)

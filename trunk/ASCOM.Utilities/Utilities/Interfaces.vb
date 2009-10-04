@@ -130,6 +130,12 @@ Namespace Interfaces
         ''' </remarks>
         <DispId(7)> Sub SetLogFile(ByVal LogFileName As String, ByVal LogFileType As String)
 
+        ''' <summary>
+        ''' Insert a blank line into the log file
+        ''' </summary>
+        ''' <remarks></remarks>
+        <DispId(8)> Sub BlankLine()
+
     End Interface ' Interface to Utilities.TraceLogger
 
     ''' <summary>
@@ -975,6 +981,29 @@ Namespace Interfaces
         ''' <param name="SubKey">Subkey from the profile root in which to write the value</param>
         ''' <remarks>The sub-key and all data and keys beneath it are deleted.</remarks>
         <DispId(13)> Sub DeleteSubKey(ByVal DriverID As String, ByVal SubKey As String)
+
+        ''' <summary>
+        ''' Read an entire device profile
+        ''' </summary>
+        ''' <param name="deviceId">The ProgID of the device</param>
+        ''' <returns>Device profile encoded in XML</returns>
+        ''' <exception cref="ASCOM.MethodNotImplementedException">This method will be implemented in a future update</exception>
+        ''' <remarks>This is not implemented and returns a MethodNotImplemented exception,
+        ''' it will be implemented in a future update. An XML schema will also be made available to support 
+        ''' this method.</remarks>
+        <DispId(14)> Function GetProfileXML(ByVal deviceId As String) As String
+
+        ''' <summary>
+        ''' Set an entire device profile
+        ''' </summary>
+        ''' <param name="deviceId">The ProgID of the device</param>
+        ''' <param name="xml">An XML encoding of the profile</param>
+        ''' <exception cref="ASCOM.MethodNotImplementedException">This method will be implemented in a future update</exception>
+        ''' <remarks>This is not implemented and returns a MethodNotImplemented exception,
+        ''' it will be implemented in a future update. An XML schema will also be made available to support 
+        ''' this method.</remarks>
+        <DispId(15)> Sub SetProfileXML(ByVal deviceId As String, ByVal xml As String)
+
     End Interface 'Interface to Utilities.Profile
 
     ''' <summary>

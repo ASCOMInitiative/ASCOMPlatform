@@ -225,7 +225,6 @@
         Me.MinimizeBox = False
         Me.Name = "ChooserForm"
         Me.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "ASCOM <runtime> Chooser"
         CType(Me.picASCOM, System.ComponentModel.ISupportInitialize).EndInit()
