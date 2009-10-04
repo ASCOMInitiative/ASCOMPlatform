@@ -494,6 +494,20 @@ namespace ASCOM.GeminiTelescope
         }
 
 
+        private static bool m_KeepMainFormOnTop = false;
+
+        public static bool KeepMainFormOnTop
+        {
+            get { return GeminiHardware.m_KeepMainFormOnTop; }
+            set
+            {
+                GeminiHardware.m_KeepMainFormOnTop = value;
+                GeminiHardware.m_Profile.DeviceType = "Telescope";
+                GeminiHardware.m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "KeepMainFormOnTop", value.ToString());
+            }
+        }
+   
+
         public enum GeminiBootMode
         {
             Prompt = 0,
@@ -761,6 +775,9 @@ namespace ASCOM.GeminiTelescope
                 m_SpeechFilter = 0;
             else
                 m_SpeechFilter = (Speech.SpeechType)filter;
+
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "KeepMainFormOnTop", ""), out m_KeepMainFormOnTop))
+                m_KeepMainFormOnTop = false;
 
             //Get the Boot Mode from settings
             try

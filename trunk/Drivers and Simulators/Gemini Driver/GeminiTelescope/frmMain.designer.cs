@@ -37,6 +37,8 @@ namespace ASCOM.GeminiTelescope
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.labelLimit = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.labelDec = new System.Windows.Forms.Label();
             this.labelRa = new System.Windows.Forms.Label();
             this.labelLst = new System.Windows.Forms.Label();
@@ -73,8 +75,8 @@ namespace ASCOM.GeminiTelescope
             this.BalloonIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.pbStop = new System.Windows.Forms.Button();
             this.checkboxPEC = new System.Windows.Forms.CheckBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.labelLimit = new System.Windows.Forms.Label();
+            this.keepThisWindowOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.buttonSlew2 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew3 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew4 = new ASCOM.GeminiTelescope.TButton();
@@ -140,6 +142,28 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(126, 72);
             this.tableLayoutPanel1.TabIndex = 8;
+            // 
+            // labelLimit
+            // 
+            this.labelLimit.AutoSize = true;
+            this.labelLimit.Dock = System.Windows.Forms.DockStyle.Right;
+            this.labelLimit.ForeColor = System.Drawing.Color.Red;
+            this.labelLimit.Location = new System.Drawing.Point(74, 54);
+            this.labelLimit.Name = "labelLimit";
+            this.labelLimit.Size = new System.Drawing.Size(49, 18);
+            this.labelLimit.TabIndex = 13;
+            this.labelLimit.Text = "00:00:00";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.ForeColor = System.Drawing.Color.White;
+            this.label4.Location = new System.Drawing.Point(0, 54);
+            this.label4.Margin = new System.Windows.Forms.Padding(0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(47, 13);
+            this.label4.TabIndex = 12;
+            this.label4.Text = "To Limit:";
             // 
             // labelDec
             // 
@@ -421,17 +445,20 @@ namespace ASCOM.GeminiTelescope
             this.contextMenuStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem5,
             this.toolStripMenuItem6,
-            this.toolStripMenuItem4});
+            this.toolStripMenuItem4,
+            this.toolStripSeparator2,
+            this.keepThisWindowOnTopToolStripMenuItem});
             this.contextMenuStrip3.Name = "contextMenuStrip1";
-            this.contextMenuStrip3.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.contextMenuStrip3.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.contextMenuStrip3.ShowCheckMargin = true;
             this.contextMenuStrip3.ShowImageMargin = false;
-            this.contextMenuStrip3.Size = new System.Drawing.Size(255, 70);
+            this.contextMenuStrip3.Size = new System.Drawing.Size(280, 120);
             // 
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.ForeColor = System.Drawing.Color.White;
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(254, 22);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(279, 22);
             this.toolStripMenuItem5.Text = "Sync at current coordinates";
             this.toolStripMenuItem5.Click += new System.EventHandler(this.buttonSync_Click);
             // 
@@ -439,7 +466,7 @@ namespace ASCOM.GeminiTelescope
             // 
             this.toolStripMenuItem6.ForeColor = System.Drawing.Color.White;
             this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-            this.toolStripMenuItem6.Size = new System.Drawing.Size(254, 22);
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(279, 22);
             this.toolStripMenuItem6.Text = "Additional Align at current coordinates";
             this.toolStripMenuItem6.Click += new System.EventHandler(this.buttonAddlAlign_Click);
             // 
@@ -447,7 +474,7 @@ namespace ASCOM.GeminiTelescope
             // 
             this.toolStripMenuItem4.ForeColor = System.Drawing.Color.White;
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(254, 22);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(279, 22);
             this.toolStripMenuItem4.Text = "Perform a Meridian Flip";
             this.toolStripMenuItem4.Click += new System.EventHandler(this.ButtonFlip_Click);
             // 
@@ -564,27 +591,20 @@ namespace ASCOM.GeminiTelescope
             this.checkboxPEC.UseVisualStyleBackColor = false;
             this.checkboxPEC.Click += new System.EventHandler(this.checkboxPEC_Clicked);
             // 
-            // label4
+            // keepThisWindowOnTopToolStripMenuItem
             // 
-            this.label4.AutoSize = true;
-            this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(0, 54);
-            this.label4.Margin = new System.Windows.Forms.Padding(0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(47, 13);
-            this.label4.TabIndex = 12;
-            this.label4.Text = "To Limit:";
+            this.keepThisWindowOnTopToolStripMenuItem.Checked = true;
+            this.keepThisWindowOnTopToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.keepThisWindowOnTopToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.keepThisWindowOnTopToolStripMenuItem.Name = "keepThisWindowOnTopToolStripMenuItem";
+            this.keepThisWindowOnTopToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
+            this.keepThisWindowOnTopToolStripMenuItem.Text = "Keep this window On Top";
+            this.keepThisWindowOnTopToolStripMenuItem.Click += new System.EventHandler(this.keepThisWindowOnTopToolStripMenuItem_Click);
             // 
-            // labelLimit
+            // toolStripSeparator2
             // 
-            this.labelLimit.AutoSize = true;
-            this.labelLimit.Dock = System.Windows.Forms.DockStyle.Right;
-            this.labelLimit.ForeColor = System.Drawing.Color.Red;
-            this.labelLimit.Location = new System.Drawing.Point(74, 54);
-            this.labelLimit.Name = "labelLimit";
-            this.labelLimit.Size = new System.Drawing.Size(49, 18);
-            this.labelLimit.TabIndex = 13;
-            this.labelLimit.Text = "00:00:00";
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(276, 6);
             // 
             // buttonSlew2
             // 
@@ -740,6 +760,8 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem6;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label labelLimit;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem keepThisWindowOnTopToolStripMenuItem;
 
 
     }
