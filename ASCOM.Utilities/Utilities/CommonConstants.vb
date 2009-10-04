@@ -2,6 +2,7 @@
 
 Imports System.Reflection
 Imports System.Runtime.InteropServices
+Imports ASCOM.Utilities
 
 #Region "Common Constants"
 
@@ -22,17 +23,8 @@ End Module
 
 Module VersionCode
     Friend Sub RunningVersions(ByVal TL As TraceLogger)
-        Dim AssemblyNames() As AssemblyName
-        'Get loaded assemblies
         Dim Assemblies() As Assembly 'Define an array of assembly information
         Dim AppDom As System.AppDomain = AppDomain.CurrentDomain
-        Assemblies = AppDom.GetAssemblies 'Get a list of loaded assemblies
-        For Each FoundAssembly As Assembly In Assemblies
-            TL.LogMessage("Versions", "Loaded Assemblies: " & FoundAssembly.GetName.Name & " " & FoundAssembly.GetName.Version.ToString)
-        Next
-
-        TL.LogMessage("Versions", "CLR version: " & System.Environment.Version.ToString)
-        AssemblyNames = Assembly.GetExecutingAssembly.GetReferencedAssemblies
 
         'Get Operating system information
         Dim OS As System.OperatingSystem = System.Environment.OSVersion
@@ -57,33 +49,52 @@ Module VersionCode
             Case Else
                 TL.LogMessage("Versions", "Application is unknown bits, PTR length is: " & System.IntPtr.Size)
         End Select
+        TL.LogMessage("Versions", "")
+
+        'Get common language runtime version
+        TL.LogMessage("Versions", "CLR version: " & System.Environment.Version.ToString)
+
+        'Get file system information
+        Dim UserDomainName As String = System.Environment.UserDomainName
+        Dim UserName As String = System.Environment.UserName
+        Dim MachineName As String = System.Environment.MachineName
+        Dim ProcCount As Integer = System.Environment.ProcessorCount
+        Dim SysDir As String = System.Environment.SystemDirectory
+        Dim WorkSet As Long = System.Environment.WorkingSet
+        TL.LogMessage("Versions", "Machine name: " & MachineName & " Number of processors: " & ProcCount & " System directory: " & SysDir & " Working set size: " & WorkSet & " bytes UserName: " & UserName & " DomainName: " & UserDomainName)
+        TL.LogMessage("Versions", "")
+
+        'Get fully qualified paths to particular directories in a non OS specific way
+        'There are many more options in the SpecialFolders Enum than are shown here!
+        TL.LogMessage("Versions", "My Documents:            " & System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
+        TL.LogMessage("Versions", "Application Data:        " & System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData))
+        TL.LogMessage("Versions", "Common Application Data: " & System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData))
+        TL.LogMessage("Versions", "Program Files:           " & System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles))
+        TL.LogMessage("Versions", "Common Files:            " & System.Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles))
+        TL.LogMessage("Versions", "System:                  " & System.Environment.GetFolderPath(Environment.SpecialFolder.System))
+        TL.LogMessage("Versions", "Current:                 " & System.Environment.CurrentDirectory)
+        TL.LogMessage("Versions", "")
+
+        'Get loaded assemblies
+        Assemblies = AppDom.GetAssemblies 'Get a list of loaded assemblies
+        For Each FoundAssembly As Assembly In Assemblies
+            TL.LogMessage("Versions", "Loaded Assemblies: " & FoundAssembly.GetName.Name & " " & FoundAssembly.GetName.Version.ToString)
+        Next
+        TL.LogMessage("Versions", "")
 
         'Get assembly versions
         AssemblyInfo(TL, "Executing Assembly", Assembly.GetExecutingAssembly)
         AssemblyInfo(TL, "Entry Assembly", Assembly.GetEntryAssembly)
         AssemblyInfo(TL, "Calling Assembly", Assembly.GetCallingAssembly)
-
-        'Get file system information
-        Dim MachineName As String = System.Environment.MachineName
-        Dim ProcCount As Integer = System.Environment.ProcessorCount
-        Dim SysDir As String = System.Environment.SystemDirectory
-        Dim WorkSet As Long = System.Environment.WorkingSet
-        TL.LogMessage("Versions", "Machine name: " & MachineName & " Number of processors: " & ProcCount & " System directory: " & SysDir & " Working set size: " & WorkSet & " bytes")
-
-        'Get fully qualified paths to particular directories in a non OS specific way
-        'There are many more options in the SpecialFolders Enum than are shown here!
-        TL.LogMessage("Versions", "My Documents: " & System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
-        TL.LogMessage("Versions", "Application Data: " & System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData))
-        TL.LogMessage("Versions", "Common Application Data: " & System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData))
-        TL.LogMessage("Versions", "Program Files: " & System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles))
-        TL.LogMessage("Versions", "Common Files: " & System.Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles))
-        TL.LogMessage("Versions", "System: " & System.Environment.GetFolderPath(Environment.SpecialFolder.System))
-        TL.LogMessage("Versions", "Current: " & System.Environment.CurrentDirectory)
+        TL.LogMessage("Versions", "")
 
     End Sub
 
     Sub AssemblyInfo(ByVal TL As TraceLogger, ByVal AssName As String, ByVal Ass As Assembly)
         Dim FileVer As FileVersionInfo
+
+        AssName = Left(AssName & ":" & Space(20), 19)
+
         If Not Ass Is Nothing Then
             TL.LogMessage("Versions", AssName & " AssemblyVersion: " & Ass.GetName.Version.ToString)
             FileVer = FileVersionInfo.GetVersionInfo(Ass.Location.ToString)

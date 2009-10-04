@@ -189,7 +189,7 @@ ASCOM.Utilities
 	<value>Integer, serial port timeout in seconds</value>
 	<returns>Integer, serial port timeout in seconds.</returns>
 	<remarks>The minimum delay timout that can be set through this command is 1 seconds. Use ReceiveTimeoutMs to set a timeout less than 1 second.</remarks>
-	<exception cref="T:ASCOM.Utilities.Exceptions.InvalidValueException">Thrown when <paramref name="value"><c>=0</c></paramref> is invalid.</exception>
+	<exception cref="T:ASCOM.InvalidValueException">Thrown when <paramref name="value"><c>=0</c></paramref> is invalid (outside the range 1 to 120 seconds.</exception>
 </member><member name="P:ASCOM.Utilities.Serial.ReceiveTimeoutMs">
 	<summary>
  The maximum time that the ASCOM serial port will wait for incoming receive data (milliseconds, default = 5000)
@@ -198,7 +198,7 @@ ASCOM.Utilities
 	<returns>Integer, serial port timeout in milli-seconds</returns>
 	<remarks>If a timeout occurs, an IO timeout error is raised. See ReceiveTimeout for an alternate form 
  using the timeout in seconds. </remarks>
-	<exception cref="T:ASCOM.Utilities.Exceptions.InvalidValueException">Thrown when <paramref name="value"><c>=0</c></paramref> is invalid.</exception>
+	<exception cref="T:ASCOM.InvalidValueException">Thrown when <paramref name="value"><c>=0</c></paramref> is invalid.</exception>
 </member><member name="P:ASCOM.Utilities.Serial.Speed">
 	<summary>
  Gets and sets the baud rate of the ASCOM serial port
@@ -662,6 +662,11 @@ ASCOM.Utilities
 	<param name="Message">Message to log</param>
 	<remarks>Use this for reporting issues that you don't want to appear on a line already opened 
  with StartLine</remarks>
+</member><member name="M:ASCOM.Utilities.TraceLogger.BlankLine">
+	<summary>
+ Insert a blank line into the log file
+ </summary>
+	<remarks></remarks>
 </member><member name="M:ASCOM.Utilities.TraceLogger.LogMessage(System.String,System.String,System.Boolean)">
 	<summary>
  Logs a complete message in one call, including a hex translation of the message
@@ -959,6 +964,26 @@ ASCOM.Utilities
 	<exception cref="T:ASCOM.Utilities.Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
 	<exception cref="T:ASCOM.Utilities.Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
 	<remarks>The sub-key and all data and keys beneath it are deleted.</remarks>
+</member><member name="M:ASCOM.Utilities.Profile.GetProfileXml(System.String)">
+	<summary>
+ Read an entire device profile
+ </summary>
+	<param name="deviceId">The ProgID of the device</param>
+	<returns>Device profile encoded in XML</returns>
+	<exception cref="T:ASCOM.MethodNotImplementedException">This method will be implemented in a future update</exception>
+	<remarks>This is not implemented and returns a MethodNotImplemented exception,
+ it will be implemented in a future update. An XML schema will also be made available to support 
+ this method.</remarks>
+</member><member name="M:ASCOM.Utilities.Profile.SetProfileXml(System.String,System.String)">
+	<summary>
+ Set an entire device profile
+ </summary>
+	<param name="deviceId">The ProgID of the device</param>
+	<param name="xml">An XML encoding of the profile</param>
+	<exception cref="T:ASCOM.MethodNotImplementedException">This method will be implemented in a future update</exception>
+	<remarks>This is not implemented and returns a MethodNotImplemented exception,
+ it will be implemented in a future update. An XML schema will also be made available to support 
+ this method.</remarks>
 </member><member name="M:ASCOM.Utilities.Profile.MigrateProfile">
 	<summary>
  Migrate the ASCOM profile from registry to file store
@@ -1154,6 +1179,11 @@ ASCOM.Utilities
  TL = New TraceLogger("",TraceName")
  </code>
 	</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.ITraceLogger.BlankLine">
+	<summary>
+ Insert a blank line into the log file
+ </summary>
+	<remarks></remarks>
 </member><member name="T:ASCOM.Utilities.Interfaces.ITraceLogger">
 	<summary>
  Interface to the TraceLogger component
@@ -1922,6 +1952,26 @@ ASCOM.Utilities
 	<param name="DriverID">ProgID of the device to read from</param>
 	<param name="SubKey">Subkey from the profile root in which to write the value</param>
 	<remarks>The sub-key and all data and keys beneath it are deleted.</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IProfile.GetProfileXML(System.String)">
+	<summary>
+ Read an entire device profile
+ </summary>
+	<param name="deviceId">The ProgID of the device</param>
+	<returns>Device profile encoded in XML</returns>
+	<exception cref="T:ASCOM.MethodNotImplementedException">This method will be implemented in a future update</exception>
+	<remarks>This is not implemented and returns a MethodNotImplemented exception,
+ it will be implemented in a future update. An XML schema will also be made available to support 
+ this method.</remarks>
+</member><member name="M:ASCOM.Utilities.Interfaces.IProfile.SetProfileXML(System.String,System.String)">
+	<summary>
+ Set an entire device profile
+ </summary>
+	<param name="deviceId">The ProgID of the device</param>
+	<param name="xml">An XML encoding of the profile</param>
+	<exception cref="T:ASCOM.MethodNotImplementedException">This method will be implemented in a future update</exception>
+	<remarks>This is not implemented and returns a MethodNotImplemented exception,
+ it will be implemented in a future update. An XML schema will also be made available to support 
+ this method.</remarks>
 </member><member name="T:ASCOM.Utilities.Interfaces.IProfile">
 	<summary>
  Interface to the .NET Profile component

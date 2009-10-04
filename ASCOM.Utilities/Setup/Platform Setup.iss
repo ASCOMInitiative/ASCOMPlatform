@@ -63,9 +63,13 @@
 ; Removed directory delete commands that caused an access issue on Tim's PC.
 ; Setup Build 9 Released
 
+; Added ASCOM Diagnostics to installer with user options
+; Moved EraseProfile and Migrate profile execution after all assemblies have been installed to GAC
+; Setup Build 10 Released
+
 [Setup]
 ; Setup program version number - change this each time you change this setup script
-#define Public SetupVersion 9
+#define Public SetupVersion 10
 
 #define Public Major 0
 #define Public Minor 0
@@ -126,6 +130,7 @@ Name: {cf}\ASCOM\Uninstall\Utilities
 [Tasks]
 Name: cleanprofile; Description: Erase Utilities profile store (leaves registry profile intact); GroupDescription: Release Candidate Testing; Flags: unchecked
 Name: desktopicons; Description: Install EraseProfile and MigrateProfile desktop icons; GroupDescription: Release Candidate Testing
+Name: diagnostics; Description: Install ASCOM Diagnostics desktop icon ; GroupDescription: Release Candidate Testing
 
 [Files]
 ;Install the ASCOM.Utilities code
@@ -241,6 +246,12 @@ Source: ..\NOVAS-C x86-x64\Release\NOVAS-C.pdb; DestDir: {cf32}\ASCOM\.net; Flag
 Source: ..\NOVAS-C x86-x64\x64\Release\NOVAS-C64.dll; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
 Source: ..\NOVAS-C x86-x64\x64\Release\NOVAS-C64.pdb; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
 
+;ASCOM Diagnostics
+Source: ..\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe; DestDir: {app}; Flags: ignoreversion
+Source: ..\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb; DestDir: {app}; Flags: ignoreversion
+source: ..\FusionLib\bin\Release\FusionLib.dll; DestDir: {app}; Flags: ignoreversion
+source: ..\FusionLib\bin\Release\FusionLib.pdb; DestDir: {app}; Flags: ignoreversion
+
 [Registry]
 Root: HKLM64; Subkey: SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM64; ValueType: string; ValueName: ; ValueData: {cf}\ASCOM\.net; Flags: uninsdeletekey; Check: IsWin64
 Root: HKLM32; Subkey: SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM64; ValueType: string; ValueName: ; ValueData: {cf64}\ASCOM\.net; Flags: uninsdeletekey; Check: IsWin64
@@ -249,8 +260,10 @@ Root: HKLM32; Subkey: SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFolder
 Name: {commonprograms}\ASCOM Platform\Docs\ASCOM Platform Update 5.5; Filename: {cf}\ASCOM\Doc\PlatformHelp.chm
 Name: {commonprograms}\ASCOM Platform\Docs\ASCOM Platform Architecture; Filename: {cf}\ASCOM\Doc\Platform 5.5.pdf
 Name: {commonprograms}\ASCOM Platform\Tools\Profile Explorer; Filename: {pf}\ASCOM\Profile Explorer\ProfileExplorer.exe
+Name: {commonprograms}\ASCOM Platform\Tools\ASCOM Diagnostics; Filename: {app}\ASCOM Diagnostics.exe
 Name: {commondesktop}\Migrate Profile; Filename: {cf32}\ASCOM\Utilities\MigrateProfile.exe; Tasks: desktopicons
 Name: {commondesktop}\Erase Profile; Filename: {cf32}\ASCOM\Utilities\EraseProfile.exe; Tasks: desktopicons
+Name: {commondesktop}\ASCOM Diagnostics; Filename: {app}\ASCOM Diagnostics.exe; Tasks: diagnostics
 
 [Run]
 ; Install Utilties, Astrometry and IConform to the GAC and register COM types for 32and 64bit COM
@@ -265,10 +278,6 @@ Filename: {dotnet2032}\regasm.exe; Parameters: "/TLB ""{cf32}\ASCOM\.net\ASCOM.U
 Filename: {dotnet2032}\regasm.exe; Parameters: "/TLB ""{cf32}\ASCOM\.net\ASCOM.Astrometry.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering ASCOM.Astrometry for 32bit COM
 Filename: {dotnet2032}\regasm.exe; Parameters: "/TLB ""{cf32}\ASCOM\.net\ASCOM.IConform.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering ASCOM.IConform for 32bit COM
 
-;Erase and migrate the profile if needed
-Filename: {cf32}\ASCOM\Utilities\EraseProfile.exe; Tasks: cleanprofile; Flags: runminimized; statusMsg: Erasing Profile
-Filename: {cf32}\ASCOM\Utilities\MigrateProfile.exe; Parameters: /MIGRATEIFNEEDED; Flags: runminimized; statusMsg: Migrating Profile if necessary
-
 ;ASCOM Exceptions
 Filename: {app}\GACInstall.exe; Parameters: ASCOM.Exceptions.dll; Flags: runhidden; StatusMsg: Instlling ASCOM.Exceptions to the assembly cache
 
@@ -279,6 +288,12 @@ Filename: {app}\GACInstall.exe; Parameters: """{app}\policy.1.0.ASCOM.DriverAcce
 ;Publisher policies for Astrometry and Utilities
 #emit "Filename: {app}\GACInstall.exe; Parameters: policy." + str(Major) + "." + str(Minor) + ".ASCOM.Utilities.dll; Flags: runhidden; StatusMsg: Installing ASCOM Utilities policy to the assembly cache"
 #emit "Filename: {app}\GACInstall.exe; Parameters: policy." + str(Major) + "." + str(Minor) + ".ASCOM.Astrometry.dll; Flags: runhidden; StatusMsg: Installing ASCOM Astrometry policy to the assembly cache"
+
+; Erase and migrate the profile if needed
+Filename: {cf32}\ASCOM\Utilities\EraseProfile.exe; Tasks: cleanprofile; Flags: runminimized; statusMsg: Erasing Profile
+Filename: {cf32}\ASCOM\Utilities\MigrateProfile.exe; Parameters: /MIGRATEIFNEEDED; Flags: runminimized; statusMsg: Migrating Profile if necessary
+
+; ReadMe file
 Filename: {app}\ReadMe55.txt; Description: ReadMe file; StatusMsg: Displaying ReadMe file; Flags: shellexec skipifdoesntexist postinstall skipifsilent
 
 [UninstallRun]
