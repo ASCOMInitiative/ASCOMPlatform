@@ -193,7 +193,7 @@
     <value>Cannot connect to Gemini!</value>
   </data>
   <data name="CannotUseVoice" xml:space="preserve">
-    <value>This voice cannot be used for announcements. Please select another.</value>
+    <value>This voice may be unusable for announcements. Please try another.</value>
   </data>
   <data name="SomeInvalidSettings" xml:space="preserve">
     <value>Some settings are invalid!</value>

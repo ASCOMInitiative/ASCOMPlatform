@@ -149,7 +149,7 @@
     <value>Cannot disconnect from telescope</value>
   </data>
   <data name="CannotUseVoice" xml:space="preserve">
-    <value>This voice cannot be used for announcements. Please select another.</value>
+    <value>This voice may be unusable for announcements. Please try another.</value>
   </data>
   <data name="ConfigureFocuser" xml:space="preserve">
     <value>Configure Focuser</value>

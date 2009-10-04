@@ -167,7 +167,7 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This voice cannot be used for announcements. Please select another..
+        ///   Looks up a localized string similar to This voice may be unusable for announcements. Please try another..
         /// </summary>
         internal static string CannotUseVoice {
             get {

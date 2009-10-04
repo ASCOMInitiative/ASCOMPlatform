@@ -86,7 +86,7 @@ namespace ASCOM.GeminiTelescope
 
         public static bool SayIt(string s, Speech.SpeechType flags)
         {
-            if (m_SPV!=null && (flags & m_Filter) != 0 && m_Speak)
+            if (m_SPV!=null && (flags & (m_Filter|Speech.SpeechType.Always)) != 0 && m_Speak)
                 try
                 {
                     m_SPV.Speak(s, SpeechVoiceSpeakFlags.SVSFlagsAsync);

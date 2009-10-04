@@ -98,8 +98,13 @@ namespace ASCOM.GeminiTelescope
         {
             string s = (string)cmbVoices.SelectedItem;
             if (Speech.SpeechInitialize(this.Handle, s))
-                if (!Speech.SayIt(s, Speech.SpeechType.Announcement))
+                if (!Speech.SayIt(s, Speech.SpeechType.Always))
                     MessageBox.Show(Resources.CannotUseVoice, SharedResources.TELESCOPE_DRIVER_NAME);
+        }
+
+        private void frmVoice_Load(object sender, EventArgs e)
+        {
+
         }
 
 
