@@ -1144,10 +1144,12 @@ namespace ASCOM.GeminiTelescope
 
         private void buttonSlew2_MouseDown(object sender, MouseEventArgs e)
         {
-            Speech.SayIt(Resources.DownButton, Speech.SpeechType.Command);
             if (GeminiHardware.Connected)
             {
-                ((Control)sender).Capture = true;
+                Speech.SayIt(Resources.DownButton, Speech.SpeechType.Command);
+
+               ((Control)sender).Capture = true;
+
                 string[] cmds = { null, null };
 
                 if (RadioButtonGuide.Checked) cmds[0] = ":RG";
@@ -1269,32 +1271,39 @@ namespace ASCOM.GeminiTelescope
 
         private void toolStripMenuParkHere_Click(object sender, EventArgs e)
         {
-            Speech.SayIt(Resources.ParkHere, Speech.SpeechType.Command);
+            if (GeminiHardware.Connected)
+            {
+                Speech.SayIt(Resources.ParkHere, Speech.SpeechType.Command);
 
-            GeminiHardware.DoCommand(":hN", false);
-
+                GeminiHardware.DoCommand(":hN", false);
+            }
         }
 
         private void toolStripMenuParkCWD_Click(object sender, EventArgs e)
         {
-            this.UseWaitCursor = true;
-            Speech.SayIt(Resources.ParkCWD, Speech.SpeechType.Command);
-            GeminiHardware.DoCommand(":hC", false);
-//            GeminiHardware.WaitForHomeOrPark("Park");
-//            GeminiHardware.DoCommandResult(":hN", GeminiHardware.MAX_TIMEOUT, false);
-            this.UseWaitCursor = false;
+            if (GeminiHardware.Connected)
+            {
+                this.UseWaitCursor = true;
+                Speech.SayIt(Resources.ParkCWD, Speech.SpeechType.Command);
+                GeminiHardware.DoCommand(":hC", false);
+//              GeminiHardware.WaitForHomeOrPark("Park");
+//              GeminiHardware.DoCommandResult(":hN", GeminiHardware.MAX_TIMEOUT, false);
+                this.UseWaitCursor = false;
+            }
         }
 
         private void toolStripMenuParkHome_Click(object sender, EventArgs e)
         {
-            this.UseWaitCursor = true;
-            Speech.SayIt(Resources.ParkHome, Speech.SpeechType.Command);
+            if (GeminiHardware.Connected)
+            {
+                this.UseWaitCursor = true;
+                Speech.SayIt(Resources.ParkHome, Speech.SpeechType.Command);
 
-            GeminiHardware.DoCommand(":hP", false);
-//            GeminiHardware.WaitForHomeOrPark("Home");
-
-//            GeminiHardware.DoCommandResult(":hN", GeminiHardware.MAX_TIMEOUT, false);
-            this.UseWaitCursor = false;
+                GeminiHardware.DoCommand(":hP", false);
+//              GeminiHardware.WaitForHomeOrPark("Home");
+//              GeminiHardware.DoCommandResult(":hN", GeminiHardware.MAX_TIMEOUT, false);
+                this.UseWaitCursor = false;
+            }
         }
 
         private void checkBoxTrack_Click(object sender, EventArgs e)
@@ -1346,10 +1355,6 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.PECStatus = pec;
         }
 
-        private void buttonSlew4_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void ButtonFlip_Click(object sender, EventArgs e)
         {
