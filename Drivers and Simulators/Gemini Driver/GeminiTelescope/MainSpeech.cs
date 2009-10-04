@@ -32,7 +32,8 @@ namespace ASCOM.GeminiTelescope
             Error = 2,              // all error messages displayed as pop-ups
             Information = 4,        // all information 
             Command = 8,            // all commands received from user/API
-            Status = 16             // status changes
+            Status = 16,            // status changes
+            Always = 256           // say it always, no matter what flags are set
         };
 
         public static SpeechType Filter
