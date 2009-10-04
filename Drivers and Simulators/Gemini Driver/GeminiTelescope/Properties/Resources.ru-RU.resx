@@ -486,4 +486,79 @@
   <data name="SameAxis" xml:space="preserve">
     <value>RA and DEC относятся к одной  и той же оси контроллера. Пожалуйста, выберите различныe оси.</value>
   </data>
+  <data name="BaudRate" xml:space="preserve">
+    <value>Baud Rate</value>
+  </data>
+  <data name="COMport" xml:space="preserve">
+    <value>COM port</value>
+  </data>
+  <data name="Connected" xml:space="preserve">
+    <value>connected</value>
+  </data>
+  <data name="Control" xml:space="preserve">
+    <value>Control</value>
+  </data>
+  <data name="Disabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="dispCENTER" xml:space="preserve">
+    <value>CENTER</value>
+  </data>
+  <data name="dispLIMIT" xml:space="preserve">
+    <value>LIMIT!</value>
+  </data>
+  <data name="dispSLEW" xml:space="preserve">
+    <value>SLEW</value>
+  </data>
+  <data name="dispSTOP" xml:space="preserve">
+    <value>STOP</value>
+  </data>
+  <data name="dispTRACK" xml:space="preserve">
+    <value>TRACK</value>
+  </data>
+  <data name="Elevation" xml:space="preserve">
+    <value>Elevation</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="GeminiIs" xml:space="preserve">
+    <value>Gemini is </value>
+  </data>
+  <data name="GPS" xml:space="preserve">
+    <value>GPS</value>
+  </data>
+  <data name="Latitude" xml:space="preserve">
+    <value>Latitude</value>
+  </data>
+  <data name="Longitude" xml:space="preserve">
+    <value>Longitude</value>
+  </data>
+  <data name="Mount" xml:space="preserve">
+    <value>Mount</value>
+  </data>
+  <data name="MountIsConnected" xml:space="preserve">
+    <value>Mount is connected</value>
+  </data>
+  <data name="MountIsDisconnected" xml:space="preserve">
+    <value>Mount is disconnected</value>
+  </data>
+  <data name="MountStopped" xml:space="preserve">
+    <value>Mount stopped</value>
+  </data>
+  <data name="NoTarget" xml:space="preserve">
+    <value>No Target!</value>
+  </data>
+  <data name="NotConnected" xml:space="preserve">
+    <value>not connected</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
+  <data name="SafetyLimitReached" xml:space="preserve">
+    <value>Safety limit reached!</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
 </root>

@@ -66,6 +66,8 @@ namespace ASCOM.GeminiTelescope
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.keepThisWindowOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CheckBoxFlipDec = new System.Windows.Forms.CheckBox();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
             this.RadioButtonSlew = new System.Windows.Forms.RadioButton();
@@ -75,8 +77,6 @@ namespace ASCOM.GeminiTelescope
             this.BalloonIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.pbStop = new System.Windows.Forms.Button();
             this.checkboxPEC = new System.Windows.Forms.CheckBox();
-            this.keepThisWindowOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.buttonSlew2 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew3 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew4 = new ASCOM.GeminiTelescope.TButton();
@@ -161,9 +161,9 @@ namespace ASCOM.GeminiTelescope
             this.label4.Location = new System.Drawing.Point(0, 54);
             this.label4.Margin = new System.Windows.Forms.Padding(0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(47, 13);
+            this.label4.Size = new System.Drawing.Size(44, 13);
             this.label4.TabIndex = 12;
-            this.label4.Text = "To Limit:";
+            this.label4.Text = "To Limit";
             // 
             // labelDec
             // 
@@ -452,7 +452,7 @@ namespace ASCOM.GeminiTelescope
             this.contextMenuStrip3.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.contextMenuStrip3.ShowCheckMargin = true;
             this.contextMenuStrip3.ShowImageMargin = false;
-            this.contextMenuStrip3.Size = new System.Drawing.Size(280, 120);
+            this.contextMenuStrip3.Size = new System.Drawing.Size(280, 98);
             // 
             // toolStripMenuItem5
             // 
@@ -477,6 +477,21 @@ namespace ASCOM.GeminiTelescope
             this.toolStripMenuItem4.Size = new System.Drawing.Size(279, 22);
             this.toolStripMenuItem4.Text = "Perform a Meridian Flip";
             this.toolStripMenuItem4.Click += new System.EventHandler(this.ButtonFlip_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(276, 6);
+            // 
+            // keepThisWindowOnTopToolStripMenuItem
+            // 
+            this.keepThisWindowOnTopToolStripMenuItem.Checked = true;
+            this.keepThisWindowOnTopToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.keepThisWindowOnTopToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.keepThisWindowOnTopToolStripMenuItem.Name = "keepThisWindowOnTopToolStripMenuItem";
+            this.keepThisWindowOnTopToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
+            this.keepThisWindowOnTopToolStripMenuItem.Text = "Keep this window On Top";
+            this.keepThisWindowOnTopToolStripMenuItem.Click += new System.EventHandler(this.keepThisWindowOnTopToolStripMenuItem_Click);
             // 
             // CheckBoxFlipDec
             // 
@@ -590,21 +605,6 @@ namespace ASCOM.GeminiTelescope
             this.checkboxPEC.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.checkboxPEC.UseVisualStyleBackColor = false;
             this.checkboxPEC.Click += new System.EventHandler(this.checkboxPEC_Clicked);
-            // 
-            // keepThisWindowOnTopToolStripMenuItem
-            // 
-            this.keepThisWindowOnTopToolStripMenuItem.Checked = true;
-            this.keepThisWindowOnTopToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.keepThisWindowOnTopToolStripMenuItem.ForeColor = System.Drawing.Color.White;
-            this.keepThisWindowOnTopToolStripMenuItem.Name = "keepThisWindowOnTopToolStripMenuItem";
-            this.keepThisWindowOnTopToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
-            this.keepThisWindowOnTopToolStripMenuItem.Text = "Keep this window On Top";
-            this.keepThisWindowOnTopToolStripMenuItem.Click += new System.EventHandler(this.keepThisWindowOnTopToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(276, 6);
             // 
             // buttonSlew2
             // 
