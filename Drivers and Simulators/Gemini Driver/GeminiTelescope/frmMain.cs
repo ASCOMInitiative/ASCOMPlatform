@@ -344,14 +344,16 @@ namespace ASCOM.GeminiTelescope
         void ControlPanelMenu(object sender, EventArgs e)
         {
             if (this.Visible)
-            { this.Hide();
-            Speech.SayIt(Resources.HideHandController, Speech.SpeechType.Command);
+            {
+                this.Hide();
+                Speech.SayIt(Resources.HideHandController, Speech.SpeechType.Command);
             }
             else
-            { 
+            {
                 this.Show();
                 this.WindowState = FormWindowState.Normal;
                 SharedResources.SetTopWindow(this);
+                SetTopMost();
                 Speech.SayIt(Resources.ShowHandController, Speech.SpeechType.Command);
             }
 
@@ -951,6 +953,7 @@ namespace ASCOM.GeminiTelescope
             SharedResources.SetTopWindow(this);
 
             SetSlewButtons();
+            SetTopMost();
             if (!GeminiHardware.ShowHandbox && GeminiTelescope.m_bComStart) this.Hide();
             
         }
@@ -1401,6 +1404,18 @@ namespace ASCOM.GeminiTelescope
             else
             { MessageBox.Show("No Target!", SharedResources.TELESCOPE_DRIVER_NAME); }
 
+        }
+
+        private void SetTopMost()
+        {
+            this.TopMost = GeminiHardware.KeepMainFormOnTop;
+            keepThisWindowOnTopToolStripMenuItem.Checked = GeminiHardware.KeepMainFormOnTop;
+        }
+
+        private void keepThisWindowOnTopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GeminiHardware.KeepMainFormOnTop = !GeminiHardware.KeepMainFormOnTop;
+            SetTopMost();
         }
 
     }
