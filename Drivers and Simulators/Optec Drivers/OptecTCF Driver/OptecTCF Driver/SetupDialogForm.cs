@@ -24,6 +24,52 @@ namespace ASCOM.OptecTCF_Driver
         {
             InitializeComponent();
         }
+
+        public void ConnectForSetup()
+        {
+            this.Cursor = Cursors.WaitCursor;
+            try
+            {
+
+                lock (LockObject)
+                {
+                    DeviceComm.Connect();
+                    MaxPos = DeviceComm.GetMaxStep();
+                    int p = DeviceComm.GetPosition();
+                    CurrentPos = DesiredPos = p;
+                    Pos_TB.Text = p.ToString();
+                    double t = DeviceComm.GetTemperaterature();
+                    Temp_TB.Text = t.ToString() + "°C";
+                }
+
+                this.ModeAName_TB.Text = DeviceSettings.GetModeName('A');
+                this.ModeBName_TB.Text = DeviceSettings.GetModeName('B');
+
+                char Mode = DeviceSettings.GetActiveMode();
+                if (Mode == 'A')
+                {
+                    ModeA_RB.Checked = true;
+                }
+                else if (Mode == 'B')
+                {
+                    ModeB_RB.Checked = true;
+                }
+                this.backgroundWorkerTemp.RunWorkerAsync();
+                this.backgroundWorkerPos.RunWorkerAsync();
+                Timer_Temp.Enabled = true;
+
+            }
+            catch (Exception Ex)
+            {  
+                throw new DriverException("Error in ConnectForSetup", Ex);
+            }
+            finally
+            {
+                UpdateControls();
+                this.Cursor = Cursors.Default;
+            }
+                
+        }
         
         private void cmdOK_Click(object sender, EventArgs e)
         {
@@ -71,54 +117,49 @@ namespace ASCOM.OptecTCF_Driver
         {
             try
             {
-                DeviceComm.Connect();
-                MaxPos = DeviceComm.GetMaxStep();
-                UpdateControls();
-                this.ModeAName_TB.Text = DeviceSettings.GetModeName('A');
-                this.ModeBName_TB.Text = DeviceSettings.GetModeName('B');
-                OnFirstConnect();
-                
+                ConnectForSetup();     
+            }
+            catch(Exception Ex)
+            {
+                if (Ex.InnerException.Message.Contains("ER=1"))
+                {
+                    MessageBox.Show("Warning: Temperature Probe Not Detected");
+                    Timer_Temp.Enabled = false;
+                }
+                else
+                {
+                    //MessageBox.Show(Ex.ToString());
+                }
+            }
 
-            }
-            catch
-            {
-                UpdateControls(); ;
-            }
-            char Mode = DeviceSettings.GetActiveMode();
-            if (Mode == 'A')
-            {
-                ModeA_RB.Checked = true;
-            }
-            else if (Mode == 'B')
-            {
-                ModeB_RB.Checked = true;
-            }
-            this.backgroundWorkerTemp.RunWorkerAsync();
-            this.backgroundWorkerPos.RunWorkerAsync();
         }
 
         private void connectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
-                DeviceComm.Connect();
-                MaxPos = DeviceComm.GetMaxStep();
-                UpdateControls();
-                OnFirstConnect();
+                ConnectForSetup();
             }
             catch(Exception Ex)
             {
-                UpdateControls();
-                DialogResult Result;
-                Result = MessageBox.Show("Could not connect to device.\n" + 
-                            "This may result from not selecting the correct COM port.\n" + 
-                            "Would you like to see the exception data?", 
-                            "Connection Failed" ,MessageBoxButtons.YesNo);
-                if (Result == DialogResult.Yes)
-                    MessageBox.Show("Error Message: \n" + Ex.ToString());
+                if (Ex.InnerException.Message.Contains("ER=1"))
+                {
+                    MessageBox.Show("Warning: No temperature probe detected.", "No Temp Probe", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
                 else
                 {
-                    //don't display anything....
+                    UpdateControls();
+                    DialogResult Result;
+                    Result = MessageBox.Show("Could not connect to device.\n" +
+                                "This may result from not selecting the correct COM port.\n" +
+                                "Would you like to see the exception data?",
+                                "Connection Failed", MessageBoxButtons.YesNo);
+                    if (Result == DialogResult.Yes)
+                        MessageBox.Show("Error Message: \n" + Ex.ToString());
+                    else
+                    {
+                        //don't display anything....
+                    }
                 }
             }
         }
@@ -155,8 +196,16 @@ namespace ASCOM.OptecTCF_Driver
 
         private void disconnectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DeviceComm.Disconnect();
-            UpdateControls();
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
+                DeviceComm.Disconnect();
+                UpdateControls();
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
         }
 
         private void SetupDialogForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -417,7 +466,23 @@ namespace ASCOM.OptecTCF_Driver
                             this.BeginInvoke(new UpdateTempDisplayHandler(UpdateTempDisplay), new Object[] { temp });
                         }
                     }
-                    catch { }
+                    catch (Exception Ex)
+                    {
+                        if (Ex.InnerException.Message.Contains("ER=1"))
+                        {
+                            MessageBox.Show("Warning: Temperature Probe Not Detected.");
+                            lock (LockObject)
+                            {
+                                this.BeginInvoke(new UpdateTempDisplayHandler(UpdateTempDisplay), new Object[] { -9999 });
+                            }
+                            Timer_Temp.Enabled = false;
+                        }
+                        else
+                        {
+                            MessageBox.Show("An error occured while trying to communicate with the device.\n" +
+                                "Check the connection cables and try to reconnect");
+                        }
+                    }
                 }
         }
 
@@ -425,7 +490,14 @@ namespace ASCOM.OptecTCF_Driver
         {
             if (this.Visible)
             {
-                this.Temp_TB.Text = temp.ToString() + " °C";
+                if (temp == -9999)
+                {
+                    this.Temp_TB.Text = "??????";
+                }
+                else
+                {
+                    this.Temp_TB.Text = temp.ToString() + "°C";
+                }
             }
         }     
 
@@ -459,16 +531,30 @@ namespace ASCOM.OptecTCF_Driver
 
         private void In_BTN_Click(object sender, EventArgs e)
         {
-            DesiredPos = DesiredPos - Convert.ToInt32(Increment_NUD.Value);
-            if (DesiredPos < 1) DesiredPos = 1;
-            backgroundWorkerPos.RunWorkerAsync();
+            lock (LockObject)
+            {
+                DesiredPos = DesiredPos - Convert.ToInt32(Increment_NUD.Value);
+                if (DesiredPos < 1) DesiredPos = 1;
+            }
+            if (!backgroundWorkerPos.IsBusy)
+            {
+                backgroundWorkerPos.RunWorkerAsync();
+            }
+            
         }
 
         private void Out_BTN_Click(object sender, EventArgs e)
         {
-            DesiredPos = DesiredPos + Convert.ToInt32(Increment_NUD.Value);
-            if (DesiredPos > MaxPos) DesiredPos = MaxPos;
-            backgroundWorkerPos.RunWorkerAsync();
+            lock (LockObject)
+            {
+                DesiredPos = DesiredPos + Convert.ToInt32(Increment_NUD.Value);
+                if (DesiredPos > MaxPos) DesiredPos = MaxPos;
+            }
+            if (!backgroundWorkerPos.IsBusy)
+            {
+                backgroundWorkerPos.RunWorkerAsync();
+            }
+            
         }
 
         private void ModeRBChecked_Changed(object sender, EventArgs e)
@@ -525,26 +611,7 @@ namespace ASCOM.OptecTCF_Driver
             if (!backgroundWorkerTemp.IsBusy)
             {
                 backgroundWorkerTemp.RunWorkerAsync();
-            }
-        }
-
-        private void OnFirstConnect()
-        {
-            try
-            {
-                lock (LockObject)
-                {
-                    int p = DeviceComm.GetPosition();
-                    double t = DeviceComm.GetTemperaterature();
-                    CurrentPos = DesiredPos = p;
-                    Pos_TB.Text = p.ToString();
-                    Temp_TB.Text = t.ToString() + " °C";
-
-                }
-                Timer_Temp.Enabled = true;
-            }
-            catch
-            {
+                UpdateControls();
             }
         }
 
