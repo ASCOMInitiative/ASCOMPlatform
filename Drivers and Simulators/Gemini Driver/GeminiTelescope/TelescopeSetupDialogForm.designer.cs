@@ -36,8 +36,9 @@ namespace ASCOM.GeminiTelescope
             this.cmdCancel = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.pbSetSiteNow = new System.Windows.Forms.Button();
-            this.checkBoxUseDriverSite = new System.Windows.Forms.CheckBox();
+            this.comboBoxSites = new System.Windows.Forms.ComboBox();
+            this.pbSiteConfig = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
             this.textBoxLongitudeMinutes = new System.Windows.Forms.TextBox();
             this.textBoxLatitudeMinutes = new System.Windows.Forms.TextBox();
             this.textBoxLatitudeDegrees = new System.Windows.Forms.TextBox();
@@ -48,6 +49,9 @@ namespace ASCOM.GeminiTelescope
             this.textBoxElevation = new System.Windows.Forms.TextBox();
             this.comboBoxLongitude = new System.Windows.Forms.ComboBox();
             this.textBoxLongitudeDegrees = new System.Windows.Forms.TextBox();
+            this.pbSetSiteNow = new System.Windows.Forms.Button();
+            this.checkBoxUseDriverSite = new System.Windows.Forms.CheckBox();
+            this.comboBoxTZ = new System.Windows.Forms.ComboBox();
             this.labelVersion = new System.Windows.Forms.Label();
             this.labelTime = new System.Windows.Forms.Label();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -84,8 +88,6 @@ namespace ASCOM.GeminiTelescope
             this.chkVoice = new System.Windows.Forms.CheckBox();
             this.btnJoysticConfig = new System.Windows.Forms.Button();
             this.picASCOM = new System.Windows.Forms.PictureBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.comboBoxTZ = new System.Windows.Forms.ComboBox();
             buttonGps = new System.Windows.Forms.Button();
             pbGeminiSettings = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
@@ -107,7 +109,7 @@ namespace ASCOM.GeminiTelescope
             buttonGps.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             buttonGps.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             buttonGps.ForeColor = System.Drawing.Color.White;
-            buttonGps.Location = new System.Drawing.Point(261, 340);
+            buttonGps.Location = new System.Drawing.Point(263, 353);
             buttonGps.Name = "buttonGps";
             buttonGps.Size = new System.Drawing.Size(105, 23);
             buttonGps.TabIndex = 23;
@@ -121,7 +123,7 @@ namespace ASCOM.GeminiTelescope
             pbGeminiSettings.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             pbGeminiSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             pbGeminiSettings.ForeColor = System.Drawing.Color.White;
-            pbGeminiSettings.Location = new System.Drawing.Point(261, 311);
+            pbGeminiSettings.Location = new System.Drawing.Point(263, 324);
             pbGeminiSettings.Name = "pbGeminiSettings";
             pbGeminiSettings.Size = new System.Drawing.Size(105, 23);
             pbGeminiSettings.TabIndex = 30;
@@ -137,7 +139,7 @@ namespace ASCOM.GeminiTelescope
             this.cmdOK.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.cmdOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdOK.ForeColor = System.Drawing.Color.White;
-            this.cmdOK.Location = new System.Drawing.Point(430, 351);
+            this.cmdOK.Location = new System.Drawing.Point(430, 371);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 0;
@@ -153,7 +155,7 @@ namespace ASCOM.GeminiTelescope
             this.cmdCancel.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.cmdCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdCancel.ForeColor = System.Drawing.Color.White;
-            this.cmdCancel.Location = new System.Drawing.Point(430, 380);
+            this.cmdCancel.Location = new System.Drawing.Point(430, 400);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
@@ -167,7 +169,7 @@ namespace ASCOM.GeminiTelescope
             this.groupBox1.ForeColor = System.Drawing.Color.White;
             this.groupBox1.Location = new System.Drawing.Point(12, 119);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(223, 171);
+            this.groupBox1.Size = new System.Drawing.Size(223, 199);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Site Information";
@@ -179,38 +181,166 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23.79664F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 21.63332F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23.25581F));
-            this.tableLayoutPanel1.Controls.Add(this.label10, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxLongitudeMinutes, 3, 1);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxLatitudeMinutes, 3, 0);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxLatitudeDegrees, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.comboBoxLatitude, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxElevation, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.comboBoxLongitude, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxLongitudeDegrees, 2, 1);
-            this.tableLayoutPanel1.Controls.Add(this.pbSetSiteNow, 0, 5);
-            this.tableLayoutPanel1.Controls.Add(this.checkBoxUseDriverSite, 0, 4);
-            this.tableLayoutPanel1.Controls.Add(this.comboBoxTZ, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.comboBoxSites, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.pbSiteConfig, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label10, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxLongitudeMinutes, 3, 2);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxLatitudeMinutes, 3, 1);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxLatitudeDegrees, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.comboBoxLatitude, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxElevation, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.comboBoxLongitude, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxLongitudeDegrees, 2, 2);
+            this.tableLayoutPanel1.Controls.Add(this.pbSetSiteNow, 0, 6);
+            this.tableLayoutPanel1.Controls.Add(this.checkBoxUseDriverSite, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.comboBoxTZ, 1, 4);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 6;
+            this.tableLayoutPanel1.RowCount = 7;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(217, 152);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(217, 180);
             this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // comboBoxSites
+            // 
+            this.tableLayoutPanel1.SetColumnSpan(this.comboBoxSites, 3);
+            this.comboBoxSites.DisplayMember = "Name";
+            this.comboBoxSites.FormattingEnabled = true;
+            this.comboBoxSites.Location = new System.Drawing.Point(70, 3);
+            this.comboBoxSites.Name = "comboBoxSites";
+            this.comboBoxSites.Size = new System.Drawing.Size(144, 21);
+            this.comboBoxSites.TabIndex = 38;
+            // 
+            // pbSiteConfig
+            // 
+            this.pbSiteConfig.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pbSiteConfig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.pbSiteConfig.Location = new System.Drawing.Point(3, 3);
+            this.pbSiteConfig.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.pbSiteConfig.Name = "pbSiteConfig";
+            this.pbSiteConfig.Size = new System.Drawing.Size(61, 22);
+            this.pbSiteConfig.TabIndex = 37;
+            this.pbSiteConfig.Text = "Set Site";
+            this.pbSiteConfig.UseVisualStyleBackColor = false;
+            this.pbSiteConfig.Click += new System.EventHandler(this.pbSiteConfig_Click);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label10.Location = new System.Drawing.Point(3, 100);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(61, 25);
+            this.label10.TabIndex = 35;
+            this.label10.Text = "Time Zone:";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // textBoxLongitudeMinutes
+            // 
+            this.textBoxLongitudeMinutes.Location = new System.Drawing.Point(167, 53);
+            this.textBoxLongitudeMinutes.Name = "textBoxLongitudeMinutes";
+            this.textBoxLongitudeMinutes.Size = new System.Drawing.Size(34, 20);
+            this.textBoxLongitudeMinutes.TabIndex = 12;
+            // 
+            // textBoxLatitudeMinutes
+            // 
+            this.textBoxLatitudeMinutes.Location = new System.Drawing.Point(167, 28);
+            this.textBoxLatitudeMinutes.Name = "textBoxLatitudeMinutes";
+            this.textBoxLatitudeMinutes.Size = new System.Drawing.Size(34, 20);
+            this.textBoxLatitudeMinutes.TabIndex = 10;
+            // 
+            // textBoxLatitudeDegrees
+            // 
+            this.textBoxLatitudeDegrees.Location = new System.Drawing.Point(121, 28);
+            this.textBoxLatitudeDegrees.Name = "textBoxLatitudeDegrees";
+            this.textBoxLatitudeDegrees.Size = new System.Drawing.Size(34, 20);
+            this.textBoxLatitudeDegrees.TabIndex = 9;
+            // 
+            // comboBoxLatitude
+            // 
+            this.comboBoxLatitude.FormattingEnabled = true;
+            this.comboBoxLatitude.Items.AddRange(new object[] {
+            "N",
+            "S"});
+            this.comboBoxLatitude.Location = new System.Drawing.Point(70, 28);
+            this.comboBoxLatitude.Name = "comboBoxLatitude";
+            this.comboBoxLatitude.Size = new System.Drawing.Size(38, 21);
+            this.comboBoxLatitude.TabIndex = 5;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Location = new System.Drawing.Point(3, 25);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(61, 25);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Latitude:";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.Location = new System.Drawing.Point(3, 50);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(61, 25);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Longitude:";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label3.Location = new System.Drawing.Point(3, 75);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(61, 25);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "Elevation:";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // textBoxElevation
+            // 
+            this.tableLayoutPanel1.SetColumnSpan(this.textBoxElevation, 2);
+            this.textBoxElevation.Location = new System.Drawing.Point(70, 78);
+            this.textBoxElevation.Name = "textBoxElevation";
+            this.textBoxElevation.Size = new System.Drawing.Size(85, 20);
+            this.textBoxElevation.TabIndex = 5;
+            // 
+            // comboBoxLongitude
+            // 
+            this.comboBoxLongitude.FormattingEnabled = true;
+            this.comboBoxLongitude.Items.AddRange(new object[] {
+            "E",
+            "W"});
+            this.comboBoxLongitude.Location = new System.Drawing.Point(70, 53);
+            this.comboBoxLongitude.Name = "comboBoxLongitude";
+            this.comboBoxLongitude.Size = new System.Drawing.Size(38, 21);
+            this.comboBoxLongitude.TabIndex = 8;
+            // 
+            // textBoxLongitudeDegrees
+            // 
+            this.textBoxLongitudeDegrees.Location = new System.Drawing.Point(121, 53);
+            this.textBoxLongitudeDegrees.Name = "textBoxLongitudeDegrees";
+            this.textBoxLongitudeDegrees.Size = new System.Drawing.Size(34, 20);
+            this.textBoxLongitudeDegrees.TabIndex = 11;
             // 
             // pbSetSiteNow
             // 
             this.pbSetSiteNow.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.pbSetSiteNow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.pbSetSiteNow.Location = new System.Drawing.Point(3, 125);
+            this.pbSetSiteNow.Location = new System.Drawing.Point(3, 150);
             this.pbSetSiteNow.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.pbSetSiteNow.Name = "pbSetSiteNow";
             this.pbSetSiteNow.Size = new System.Drawing.Size(61, 23);
@@ -225,7 +355,7 @@ namespace ASCOM.GeminiTelescope
             this.checkBoxUseDriverSite.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.checkBoxUseDriverSite, 4);
             this.checkBoxUseDriverSite.ForeColor = System.Drawing.Color.White;
-            this.checkBoxUseDriverSite.Location = new System.Drawing.Point(3, 103);
+            this.checkBoxUseDriverSite.Location = new System.Drawing.Point(3, 128);
             this.checkBoxUseDriverSite.Name = "checkBoxUseDriverSite";
             this.checkBoxUseDriverSite.Size = new System.Drawing.Size(156, 17);
             this.checkBoxUseDriverSite.TabIndex = 22;
@@ -233,103 +363,23 @@ namespace ASCOM.GeminiTelescope
             this.checkBoxUseDriverSite.UseVisualStyleBackColor = false;
             this.checkBoxUseDriverSite.CheckedChanged += new System.EventHandler(this.checkBoxUseGeminiSite_CheckedChanged);
             // 
-            // textBoxLongitudeMinutes
+            // comboBoxTZ
             // 
-            this.textBoxLongitudeMinutes.Location = new System.Drawing.Point(167, 28);
-            this.textBoxLongitudeMinutes.Name = "textBoxLongitudeMinutes";
-            this.textBoxLongitudeMinutes.Size = new System.Drawing.Size(34, 20);
-            this.textBoxLongitudeMinutes.TabIndex = 12;
-            // 
-            // textBoxLatitudeMinutes
-            // 
-            this.textBoxLatitudeMinutes.Location = new System.Drawing.Point(167, 3);
-            this.textBoxLatitudeMinutes.Name = "textBoxLatitudeMinutes";
-            this.textBoxLatitudeMinutes.Size = new System.Drawing.Size(34, 20);
-            this.textBoxLatitudeMinutes.TabIndex = 10;
-            // 
-            // textBoxLatitudeDegrees
-            // 
-            this.textBoxLatitudeDegrees.Location = new System.Drawing.Point(121, 3);
-            this.textBoxLatitudeDegrees.Name = "textBoxLatitudeDegrees";
-            this.textBoxLatitudeDegrees.Size = new System.Drawing.Size(34, 20);
-            this.textBoxLatitudeDegrees.TabIndex = 9;
-            // 
-            // comboBoxLatitude
-            // 
-            this.comboBoxLatitude.FormattingEnabled = true;
-            this.comboBoxLatitude.Items.AddRange(new object[] {
-            "N",
-            "S"});
-            this.comboBoxLatitude.Location = new System.Drawing.Point(70, 3);
-            this.comboBoxLatitude.Name = "comboBoxLatitude";
-            this.comboBoxLatitude.Size = new System.Drawing.Size(38, 21);
-            this.comboBoxLatitude.TabIndex = 5;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(61, 25);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Latitude:";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(3, 25);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(61, 25);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "Longitude:";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Location = new System.Drawing.Point(3, 50);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(61, 25);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "Elevation:";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // textBoxElevation
-            // 
-            this.tableLayoutPanel1.SetColumnSpan(this.textBoxElevation, 2);
-            this.textBoxElevation.Location = new System.Drawing.Point(70, 53);
-            this.textBoxElevation.Name = "textBoxElevation";
-            this.textBoxElevation.Size = new System.Drawing.Size(85, 20);
-            this.textBoxElevation.TabIndex = 5;
-            // 
-            // comboBoxLongitude
-            // 
-            this.comboBoxLongitude.FormattingEnabled = true;
-            this.comboBoxLongitude.Items.AddRange(new object[] {
-            "E",
-            "W"});
-            this.comboBoxLongitude.Location = new System.Drawing.Point(70, 28);
-            this.comboBoxLongitude.Name = "comboBoxLongitude";
-            this.comboBoxLongitude.Size = new System.Drawing.Size(38, 21);
-            this.comboBoxLongitude.TabIndex = 8;
-            // 
-            // textBoxLongitudeDegrees
-            // 
-            this.textBoxLongitudeDegrees.Location = new System.Drawing.Point(121, 28);
-            this.textBoxLongitudeDegrees.Name = "textBoxLongitudeDegrees";
-            this.textBoxLongitudeDegrees.Size = new System.Drawing.Size(34, 20);
-            this.textBoxLongitudeDegrees.TabIndex = 11;
+            this.tableLayoutPanel1.SetColumnSpan(this.comboBoxTZ, 3);
+            this.comboBoxTZ.DisplayMember = "Id";
+            this.comboBoxTZ.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBoxTZ.FormattingEnabled = true;
+            this.comboBoxTZ.Location = new System.Drawing.Point(70, 103);
+            this.comboBoxTZ.Name = "comboBoxTZ";
+            this.comboBoxTZ.Size = new System.Drawing.Size(144, 23);
+            this.comboBoxTZ.TabIndex = 36;
             // 
             // labelVersion
             // 
             this.labelVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelVersion.AutoSize = true;
             this.labelVersion.ForeColor = System.Drawing.Color.White;
-            this.labelVersion.Location = new System.Drawing.Point(9, 413);
+            this.labelVersion.Location = new System.Drawing.Point(9, 433);
             this.labelVersion.Name = "labelVersion";
             this.labelVersion.Size = new System.Drawing.Size(120, 13);
             this.labelVersion.TabIndex = 18;
@@ -340,7 +390,7 @@ namespace ASCOM.GeminiTelescope
             this.labelTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTime.AutoSize = true;
             this.labelTime.ForeColor = System.Drawing.Color.White;
-            this.labelTime.Location = new System.Drawing.Point(311, 413);
+            this.labelTime.Location = new System.Drawing.Point(311, 433);
             this.labelTime.Name = "labelTime";
             this.labelTime.Size = new System.Drawing.Size(185, 13);
             this.labelTime.TabIndex = 19;
@@ -391,7 +441,7 @@ namespace ASCOM.GeminiTelescope
             // 
             this.groupBox3.Controls.Add(this.tableLayoutPanel4);
             this.groupBox3.ForeColor = System.Drawing.Color.White;
-            this.groupBox3.Location = new System.Drawing.Point(12, 296);
+            this.groupBox3.Location = new System.Drawing.Point(12, 324);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(223, 98);
             this.groupBox3.TabIndex = 22;
@@ -504,7 +554,7 @@ namespace ASCOM.GeminiTelescope
             // 
             this.checkBoxShowHandbox.AutoSize = true;
             this.checkBoxShowHandbox.ForeColor = System.Drawing.Color.White;
-            this.checkBoxShowHandbox.Location = new System.Drawing.Point(263, 229);
+            this.checkBoxShowHandbox.Location = new System.Drawing.Point(263, 235);
             this.checkBoxShowHandbox.Name = "checkBoxShowHandbox";
             this.checkBoxShowHandbox.Size = new System.Drawing.Size(125, 17);
             this.checkBoxShowHandbox.TabIndex = 24;
@@ -682,7 +732,7 @@ namespace ASCOM.GeminiTelescope
             // chkJoystick
             // 
             this.chkJoystick.ForeColor = System.Drawing.Color.White;
-            this.chkJoystick.Location = new System.Drawing.Point(263, 164);
+            this.chkJoystick.Location = new System.Drawing.Point(263, 170);
             this.chkJoystick.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.chkJoystick.Name = "chkJoystick";
             this.chkJoystick.Size = new System.Drawing.Size(107, 28);
@@ -699,7 +749,7 @@ namespace ASCOM.GeminiTelescope
             this.cmbJoystick.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbJoystick.ForeColor = System.Drawing.Color.White;
             this.cmbJoystick.FormattingEnabled = true;
-            this.cmbJoystick.Location = new System.Drawing.Point(263, 198);
+            this.cmbJoystick.Location = new System.Drawing.Point(263, 204);
             this.cmbJoystick.Name = "cmbJoystick";
             this.cmbJoystick.Size = new System.Drawing.Size(163, 21);
             this.cmbJoystick.TabIndex = 32;
@@ -708,7 +758,7 @@ namespace ASCOM.GeminiTelescope
             // 
             this.chkVoice.AutoSize = true;
             this.chkVoice.ForeColor = System.Drawing.Color.White;
-            this.chkVoice.Location = new System.Drawing.Point(263, 252);
+            this.chkVoice.Location = new System.Drawing.Point(263, 258);
             this.chkVoice.Name = "chkVoice";
             this.chkVoice.Size = new System.Drawing.Size(130, 17);
             this.chkVoice.TabIndex = 34;
@@ -724,7 +774,7 @@ namespace ASCOM.GeminiTelescope
             this.btnJoysticConfig.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnJoysticConfig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnJoysticConfig.Image = ((System.Drawing.Image)(resources.GetObject("btnJoysticConfig.Image")));
-            this.btnJoysticConfig.Location = new System.Drawing.Point(377, 154);
+            this.btnJoysticConfig.Location = new System.Drawing.Point(377, 160);
             this.btnJoysticConfig.Name = "btnJoysticConfig";
             this.btnJoysticConfig.Size = new System.Drawing.Size(45, 41);
             this.btnJoysticConfig.TabIndex = 33;
@@ -745,34 +795,12 @@ namespace ASCOM.GeminiTelescope
             this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
             this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
             // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label10.Location = new System.Drawing.Point(3, 75);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(61, 25);
-            this.label10.TabIndex = 35;
-            this.label10.Text = "Time Zone:";
-            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // comboBoxTZ
-            // 
-            this.tableLayoutPanel1.SetColumnSpan(this.comboBoxTZ, 3);
-            this.comboBoxTZ.DisplayMember = "Id";
-            this.comboBoxTZ.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comboBoxTZ.FormattingEnabled = true;
-            this.comboBoxTZ.Location = new System.Drawing.Point(70, 78);
-            this.comboBoxTZ.Name = "comboBoxTZ";
-            this.comboBoxTZ.Size = new System.Drawing.Size(144, 23);
-            this.comboBoxTZ.TabIndex = 36;
-            // 
             // TelescopeSetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
-            this.ClientSize = new System.Drawing.Size(501, 435);
+            this.ClientSize = new System.Drawing.Size(501, 455);
             this.Controls.Add(this.chkVoice);
             this.Controls.Add(this.btnJoysticConfig);
             this.Controls.Add(this.cmbJoystick);
@@ -874,5 +902,7 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.CheckBox chkVoice;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.ComboBox comboBoxTZ;
+        private System.Windows.Forms.ComboBox comboBoxSites;
+        private System.Windows.Forms.Button pbSiteConfig;
     }
 }

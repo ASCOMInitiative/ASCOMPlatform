@@ -1218,6 +1218,35 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        public static SiteInfo[] Sites
+        {
+            get
+            {
+                SiteInfo[] inf = new SiteInfo[5];
+                string[] cmd = { ":GM", ":GN", ":GO", ":GP" };
+                for (int i = 0; i < 4; ++i)
+                {
+                    string s1 = DoCommandResult(cmd[i], MAX_TIMEOUT, false);
+                    inf[i] = new SiteInfo { Name = s1, Latitude=0.0, Longitude=0.0, UTCOffset=0 };
+                }
+                inf[4] = new SiteInfo { Name = "(Restore Previous)" };
+                return inf;
+            }
+        }
+
+        /// <summary>
+        /// select one of 4 pre-defined sites in Gemini memory
+        /// </summary>
+        /// <param name="siteNumber"></param>
+        /// <returns></returns>
+        public static bool SetSiteNumber( int siteNumber )
+        {
+            if (siteNumber < 0 || siteNumber >= 4) return false; // only 4 supported by Gemini
+            DoCommandResult(":W" + siteNumber.ToString(), MAX_TIMEOUT, false);
+            UpdateSiteInfo();
+            return true;
+        }
+
         /// <summary>
         /// Execute a single serial command, block and wait for the response from the mount, return it 
         /// </summary>
@@ -2212,6 +2241,40 @@ namespace ASCOM.GeminiTelescope
 
         }
 
+        private static void UpdateSiteInfo()
+        {
+            string longitude = DoCommandResult(":Gg", MAX_TIMEOUT, false);
+            string latitude = DoCommandResult(":Gt", MAX_TIMEOUT, false);
+            string UTC_Offset = DoCommandResult(":GG", MAX_TIMEOUT, false);
+
+            try
+            {
+                if (longitude != null) m_Longitude = -m_Util.DMSToDegrees(longitude);  // Gemini has the reverse notion of longitude sign: + for West, - for East}
+            }
+            catch (Exception ex)
+            {
+                Trace.Except(ex);
+            }
+            try
+            {
+                if (latitude != null) m_Latitude = m_Util.DMSToDegrees(latitude);
+            }
+            catch (Exception ex)
+            {
+                Trace.Except(ex);
+            }
+
+            try
+            {
+                if (UTC_Offset != null) int.TryParse(UTC_Offset, out m_UTCOffset);
+            }
+            catch (Exception ex)
+            {
+                Trace.Except(ex);
+            }
+
+
+        }
         /// <summary>
         /// Discard anything in the in-buffer, but keep all the binary 
         /// data, as it may be needed by the software on the other side of the
@@ -2243,7 +2306,7 @@ namespace ASCOM.GeminiTelescope
             CommandItem command;
 
             DiscardInBuffer(); //clear all received data
-            
+
             //longitude, latitude, UTC offset
             Transmit(":GV#:Gg#:Gt#:GG#");
 
@@ -2280,7 +2343,7 @@ namespace ASCOM.GeminiTelescope
 
             try
             {
-                if (longitude != null && !UseDriverSite)  Longitude = -m_Util.DMSToDegrees(longitude);  // Gemini has the reverse notion of longitude sign: + for West, - for East}
+                if (longitude != null && !UseDriverSite) Longitude = -m_Util.DMSToDegrees(longitude);  // Gemini has the reverse notion of longitude sign: + for West, - for East}
             }
             catch (Exception ex)
             {
@@ -2302,6 +2365,7 @@ namespace ASCOM.GeminiTelescope
             {
                 Trace.Except(ex);
             }
+
 
             try
             {
