@@ -2296,7 +2296,7 @@ namespace ASCOM.GeminiTelescope
             }
             try
             {
-                if (UTC_Offset != null) int.TryParse(UTC_Offset, out m_UTCOffset);
+                if (UTC_Offset != null && !UseDriverSite) int.TryParse(UTC_Offset, out m_UTCOffset);
             }
             catch (Exception ex)
             {
