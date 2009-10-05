@@ -215,19 +215,28 @@ namespace ASCOM.OptecTCF_Driver
 
         internal static void Disconnect()
         {
-            if (CurrentMode == DeviceModes.SerialLoop)
+            try
             {
-                SendCmd("FFxxxx", 1000, ExpectResponse, "END");
+                System.Threading.Thread.Sleep(500);
+                if (CurrentMode == DeviceModes.SerialLoop)
+                {
+                    SendCmd("FFxxxx", 1000, ExpectResponse, "END");
+                }
+                else if (CurrentMode == DeviceModes.AutoModeX)
+                {
+                    SendCmd("FMxxxx", 1000, ExpectResponse, "END");
+                    SendCmd("FFxxxx", 1000, ExpectResponse, "!");
+                }
+                else if (CurrentMode == DeviceModes.Sleeping)
+                {
+                    SendCmd("FWxxxx", 1000, ExpectResponse, "WAKE");
+                    SendCmd("FFxxxx", 1000, ExpectResponse, "END");
+                }
             }
-            else if (CurrentMode == DeviceModes.AutoModeX)
+            catch
             {
-                SendCmd("FMxxxx", 1000, ExpectResponse, "END");
-                SendCmd("FFxxxx", 1000, ExpectResponse, "!");
-            }
-            else if (CurrentMode == DeviceModes.Sleeping)
-            {
-                SendCmd("FWxxxx", 1000, ExpectResponse, "WAKE");
-                SendCmd("FFxxxx", 1000, ExpectResponse, "END");
+                //if this fails that means we arn't communicating with the device so it is already disconnected
+                //Do nothing here...
             }
             ASerialPort.Connected = false;
             CurrentMode = DeviceModes.Unknown;
@@ -454,7 +463,7 @@ namespace ASCOM.OptecTCF_Driver
             {
                 string resp = SendCmd("FTMPRO", 2000, ExpectResponse, "T=");
                 int i = resp.IndexOf("=") + 1;
-                string t = resp.Substring(i, 4);
+                string t = resp.Substring(i, 5);
                 double temp = double.Parse(t);
                 return temp;
             }
