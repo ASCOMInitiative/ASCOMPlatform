@@ -711,6 +711,8 @@ namespace ASCOM.GeminiTelescope
             if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Elevation", ""), out m_Elevation))
                 m_Elevation = 0.0;
 
+            if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "UTCOffset", ""), out m_UTCOffset))
+                m_UTCOffset = -(int)(TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).TotalHours);
 
             if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureArea", ""), out m_ApertureArea))
                 m_ApertureArea = 0.0;
@@ -931,7 +933,12 @@ namespace ASCOM.GeminiTelescope
         public static int UTCOffset
         {
             get { return GeminiHardware.m_UTCOffset; }
-            set { GeminiHardware.m_UTCOffset = value; }
+            set {
+                GeminiHardware.m_UTCOffset = value;
+                string result = DoCommandResult(":SG" + (value > 0 ? "+" : "") + (value).ToString("0"), MAX_TIMEOUT, false);
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "UTCOffset", value.ToString());
+            }
         }
 
         /// <summary>
@@ -1743,10 +1750,11 @@ namespace ASCOM.GeminiTelescope
             //Set the site and time if required
             if (m_UseDriverSite)
             {
-                Trace.Info(2, "Set Long/Lat from PC", m_Latitude, m_Longitude);
-
+                Trace.Info(2, "Set Long/Lat/UTCOffset from PC", m_Latitude, m_Longitude, m_UTCOffset);
+        
                 SetLatitude(m_Latitude);
                 SetLongitude(m_Longitude);
+                UTCOffset = m_UTCOffset;
             }
 
             if (m_UseDriverTime)
