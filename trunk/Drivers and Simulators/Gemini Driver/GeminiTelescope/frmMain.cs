@@ -737,6 +737,7 @@ namespace ASCOM.GeminiTelescope
             setupForm.UseSpeech = GeminiHardware.UseSpeech;
             setupForm.SpeechFlags = GeminiHardware.SpeechFilter;
             setupForm.SpeechVoice = GeminiHardware.SpeechVoice;
+            setupForm.Sites = GeminiHardware.Sites;
 
             DialogResult ans;
             if (this.Visible==false)

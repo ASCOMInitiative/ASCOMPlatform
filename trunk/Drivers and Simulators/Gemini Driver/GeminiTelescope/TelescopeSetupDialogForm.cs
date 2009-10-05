@@ -21,6 +21,9 @@ namespace ASCOM.GeminiTelescope
         private bool m_DoneInitialize;
 
         private bool m_UseSpeech = false;
+        private double m_SaveLatitude;
+        private double m_SaveLongitude;
+        private int m_SaveUTCOffset;
 
         public string[] TimeZones = {
             "UTC-11",
@@ -297,6 +300,28 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        public SiteInfo[] Sites
+        {
+            get
+            {
+                SiteInfo[] inf = new SiteInfo[4];
+                return inf;
+            }
+            set
+            {
+                int count = 0;
+                foreach (SiteInfo inf in value)
+                {
+
+                    if (inf != null && !string.IsNullOrEmpty(inf.Name))
+                        comboBoxSites.Items.Add(inf);
+
+                    count ++;
+                }
+            }
+        }
+
+
         public int TZ
         {
             get
@@ -354,6 +379,9 @@ namespace ASCOM.GeminiTelescope
         private void TelescopeSetupDialogForm_Load(object sender, EventArgs e)
         {
             SharedResources.SetTopWindow(this);
+            m_SaveLatitude = Latitude;
+            m_SaveLongitude = Longitude;
+            m_SaveUTCOffset = TZ;
         }
 
         private void buttonVirtualPort_Click(object sender, EventArgs e)
@@ -511,5 +539,37 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        private void pbSiteConfig_Click(object sender, EventArgs e)
+        {
+            if (comboBoxSites.SelectedIndex >= 0 && comboBoxSites.SelectedIndex < 5)
+                if (GeminiHardware.SetSiteNumber(comboBoxSites.SelectedIndex))
+                {
+                    Longitude = GeminiHardware.Longitude;
+                    Latitude = GeminiHardware.Latitude;
+                    TZ = -GeminiHardware.UTCOffset;
+                }
+                else if (comboBoxSites.SelectedIndex == 4)  //restore original values
+                {
+                    GeminiHardware.Longitude = m_SaveLongitude;
+                    GeminiHardware.Latitude = m_SaveLatitude;
+                    GeminiHardware.UTCOffset = -m_SaveUTCOffset;
+
+                    Longitude = GeminiHardware.Longitude;
+                    Latitude = GeminiHardware.Latitude;
+                    TZ = -GeminiHardware.UTCOffset;
+                }
+
+        }
+
     }
+
+
+    public class SiteInfo
+    {
+        public string Name {get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public int UTCOffset { get; set; }
+    }
+
 }
