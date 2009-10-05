@@ -22,6 +22,35 @@ namespace ASCOM.GeminiTelescope
 
         private bool m_UseSpeech = false;
 
+        public string[] TimeZones = {
+            "UTC-11",
+            "UTC-10 AM HST",
+            "UTC-9  AM YST",
+            "UTC-8  AM PST/YDT",
+            "UTC-7  AM MST/PDT",
+            "UTC-6  AM CST/MDT",
+            "UTC-5  AM EST/CDT",
+            "UTC-4  AM AST/EDT",
+            "UTC-3  AM ADT",
+            "UTC-2",
+            "UTC-1  AZOT",
+            "UTC+0  GMT",
+            "UTC+1  CET, BST",
+            "UTC+2  CEST, EET",
+            "UTC+3  EEST, MSK",
+            "UTC+4 ",
+            "UTC+5",
+            "UTC+6",
+            "UTC+7",
+            "UTC+8  AU WST",
+            "UTC+9 ",
+            "UTC+10 AEST",
+            "UTC+11 AEDT",
+            "UTC+12",
+            "UTC+13",
+            "UTC+14"
+        };
+        
         public bool UseSpeech
         {
             get { return chkVoice.Checked; }
@@ -85,6 +114,11 @@ namespace ASCOM.GeminiTelescope
             
             labelTime.Text = "Time zone is " + (localZone.IsDaylightSavingTime(DateTime.Now)? localZone.DaylightName : localZone.StandardName);
 
+            foreach (string tz in TimeZones)
+            {
+                int idx = comboBoxTZ.Items.Add(tz);
+            }
+            
             m_DoneInitialize = true;
         }
 
@@ -262,6 +296,21 @@ namespace ASCOM.GeminiTelescope
                 textBoxLongitudeMinutes.Text = ((value - (int)value) * 60).ToString("00.00");
             }
         }
+
+        public int TZ
+        {
+            get
+            {
+                if (comboBoxTZ.SelectedIndex >= 0) return comboBoxTZ.SelectedIndex - 11;
+                else return (int)TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).TotalHours;
+            }
+            set
+            {
+                if (value < -11 || value > 14) value = (int)TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).TotalHours;
+                comboBoxTZ.SelectedIndex = value + 11;
+            }
+        }
+
         public bool UseDriverSite
         {
             get { return checkBoxUseDriverSite.Checked; }
@@ -433,6 +482,7 @@ namespace ASCOM.GeminiTelescope
                     {
                         GeminiHardware.SetLatitude(Latitude);
                         GeminiHardware.SetLongitude(Longitude);
+                        GeminiHardware.UTCOffset = -TZ;
                     }
                     catch (Exception ex)
                     {

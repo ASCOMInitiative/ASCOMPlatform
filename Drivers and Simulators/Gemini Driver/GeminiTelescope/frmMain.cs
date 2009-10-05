@@ -726,6 +726,7 @@ namespace ASCOM.GeminiTelescope
             setupForm.Elevation = GeminiHardware.Elevation;
             setupForm.Latitude = GeminiHardware.Latitude;
             setupForm.Longitude = GeminiHardware.Longitude;
+            setupForm.TZ = -GeminiHardware.UTCOffset; 
 
             setupForm.UseDriverSite = GeminiHardware.UseDriverSite;
             setupForm.UseDriverTime = GeminiHardware.UseDriverTime;
@@ -767,6 +768,9 @@ namespace ASCOM.GeminiTelescope
                 
                 try {GeminiHardware.Longitude = setupForm.Longitude;}
                 catch { error += Resources.Longitude + ", ";  }
+
+                try { GeminiHardware.UTCOffset = -setupForm.TZ; }
+                catch { error += "Timezone" + ", "; }
 
                 GeminiHardware.UseDriverTime = setupForm.UseDriverTime;
                 GeminiHardware.UseDriverSite = setupForm.UseDriverSite;
