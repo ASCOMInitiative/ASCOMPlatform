@@ -80,6 +80,8 @@ namespace ASCOM.GeminiTelescope
                 new MenuItem(Resources.AdvancedSettings + "...", new EventHandler(AdvancedGeminiMenu)),
 
                 new MenuItem(Resources.ConfigureFocuser+ "...", new EventHandler(ConfigureFocuserMenu)),
+
+                new MenuItem(Resources.ConfigureCatalogs + "...", new EventHandler(configureCatalogsToolStripMenuItem_Click)),
             new MenuItem("-"),
             notifyMenu,
             new MenuItem("-"),
@@ -1424,6 +1426,12 @@ namespace ASCOM.GeminiTelescope
         {
             GeminiHardware.KeepMainFormOnTop = !GeminiHardware.KeepMainFormOnTop;
             SetTopMost();
+        }
+
+        private void configureCatalogsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmUserCatalog frm = new frmUserCatalog();
+            frm.ShowDialog(this);
         }
 
     }

@@ -58,6 +58,7 @@ namespace ASCOM.GeminiTelescope
             this.setupDialogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.focuserSetupDialogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mountParametersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.configureCatalogsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutGeminiDriverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitDriverMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -367,13 +368,14 @@ namespace ASCOM.GeminiTelescope
             this.setupDialogToolStripMenuItem,
             this.focuserSetupDialogToolStripMenuItem,
             this.mountParametersToolStripMenuItem,
+            this.configureCatalogsToolStripMenuItem,
             this.toolStripSeparator1,
             this.aboutGeminiDriverToolStripMenuItem,
             this.exitDriverMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.contextMenuStrip1.ShowImageMargin = false;
-            this.contextMenuStrip1.Size = new System.Drawing.Size(198, 120);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(198, 142);
             // 
             // setupDialogToolStripMenuItem
             // 
@@ -399,6 +401,14 @@ namespace ASCOM.GeminiTelescope
             this.mountParametersToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.mountParametersToolStripMenuItem.Text = "Advanced Gemini Settings...";
             this.mountParametersToolStripMenuItem.Click += new System.EventHandler(this.mountParametersToolStripMenuItem_Click);
+            // 
+            // configureCatalogsToolStripMenuItem
+            // 
+            this.configureCatalogsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.configureCatalogsToolStripMenuItem.Name = "configureCatalogsToolStripMenuItem";
+            this.configureCatalogsToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.configureCatalogsToolStripMenuItem.Text = Resources.ConfigureCatalogs + "...";
+            this.configureCatalogsToolStripMenuItem.Click += new System.EventHandler(this.configureCatalogsToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -452,7 +462,7 @@ namespace ASCOM.GeminiTelescope
             this.contextMenuStrip3.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.contextMenuStrip3.ShowCheckMargin = true;
             this.contextMenuStrip3.ShowImageMargin = false;
-            this.contextMenuStrip3.Size = new System.Drawing.Size(280, 98);
+            this.contextMenuStrip3.Size = new System.Drawing.Size(280, 120);
             // 
             // toolStripMenuItem5
             // 
@@ -762,6 +772,7 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.Label labelLimit;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem keepThisWindowOnTopToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem configureCatalogsToolStripMenuItem;
 
 
     }
