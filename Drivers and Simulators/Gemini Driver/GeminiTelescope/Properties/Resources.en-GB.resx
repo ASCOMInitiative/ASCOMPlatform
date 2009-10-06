@@ -562,4 +562,7 @@ Are you sure you want to do this?</value>
   <data name="Status" xml:space="preserve">
     <value>Status</value>
   </data>
+  <data name="ConfigureCatalogs" xml:space="preserve">
+    <value>Manage Catalogues</value>
+  </data>
 </root>

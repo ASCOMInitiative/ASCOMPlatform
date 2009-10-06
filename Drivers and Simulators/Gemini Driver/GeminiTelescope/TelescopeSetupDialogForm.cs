@@ -493,7 +493,7 @@ namespace ASCOM.GeminiTelescope
                 {
                     GeminiHardware.UTCDate = DateTime.UtcNow;
                 }
-                catch (Exception ex)
+                catch
                 {
                     MessageBox.Show(Resources.FailedSetTime,SharedResources.TELESCOPE_DRIVER_NAME); 
                 }
@@ -512,7 +512,7 @@ namespace ASCOM.GeminiTelescope
                         GeminiHardware.SetLongitude(Longitude);
                         GeminiHardware.UTCOffset = -TZ;
                     }
-                    catch (Exception ex)
+                    catch
                     {
                         MessageBox.Show(Resources.InvalidSite,SharedResources.TELESCOPE_DRIVER_NAME); 
                     }

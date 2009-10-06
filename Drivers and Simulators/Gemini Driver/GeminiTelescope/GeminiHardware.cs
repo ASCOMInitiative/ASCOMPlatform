@@ -177,6 +177,8 @@ namespace ASCOM.GeminiTelescope
         private static double m_Declination;
         private static double m_Altitude;
         private static double m_Azimuth;
+        public static string TargetName { get; set; }
+
         private static double m_TargetRightAscension = SharedResources.INVALID_DOUBLE;
         private static double m_TargetDeclination = SharedResources.INVALID_DOUBLE;
         private static double m_SiderealTime;
@@ -1141,7 +1143,7 @@ namespace ASCOM.GeminiTelescope
         }
 
         /// <summary>
-        /// Get/Set Equatorial system type: JNOW = 1, or J2000  = 2
+        /// Get/Set Equatorial system type: true => Gemini computes precession from J2000, false => coordinates are already precessed
         ///   current Refraction setting is also updated to the mount, as that's the only way Gemini takes
         ///   these settings: together.
         /// </summary>
@@ -1625,6 +1627,45 @@ namespace ASCOM.GeminiTelescope
 
         }
 
+
+        public static SerializableDictionary<string, CatalogObject> GetUserCatalog
+        {
+            get
+            {
+                SerializableDictionary<string, CatalogObject> uc = new SerializableDictionary<string, CatalogObject>();
+                string snbr = DoCommandResult(":On", MAX_TIMEOUT, false);
+                int nbr;
+                DoCommandResult(":Os", MAX_TIMEOUT, false);
+                if (!int.TryParse(snbr, out nbr)) return null;
+                for (int i = 0; i < nbr; ++i)
+                {
+                    string line = DoCommandResult(":Or", MAX_TIMEOUT, false);
+                    if (line == null) return null;
+                    CatalogObject obj = null;
+                    if (!CatalogObject.TryParse(line, "From Gemini", out obj)) return null;
+                    if (!uc.ContainsKey(obj.Name))
+                        uc.Add(obj.Name, obj);
+                }
+                return uc;
+            }
+        }
+
+        public static System.Collections.Generic.List<CatalogObject> SetUserCatalog
+        {
+            set
+            {
+                DoCommandResult(":Oc", MAX_TIMEOUT, false);
+                int count = 0;
+                foreach (CatalogObject obj in value)
+                {
+                    string sline;
+                    sline = obj.Name.Substring(0, Math.Min(obj.Name.Length, 10)) + "," + m_Util.HoursToHMS(obj.RA, ":", ":", "") + "," + m_Util.DegreesToDMS(obj.DEC, ":", ":", "");
+                    DoCommandResult(":Od" + sline, MAX_TIMEOUT, false);
+                    if (++count >= 4096) break; // no more!
+                }
+            }
+        }
+
 #endregion
 
 #region Telescope Implementation
@@ -1681,6 +1722,7 @@ namespace ASCOM.GeminiTelescope
                     m_TargetDeclination = SharedResources.INVALID_DOUBLE;
                     m_TargetAltitude = SharedResources.INVALID_DOUBLE;
                     m_TargetAzimuth = SharedResources.INVALID_DOUBLE;
+                    TargetName = null;
 
                     lock(m_CommandQueue) 
                         m_CommandQueue.Clear();
@@ -3078,7 +3120,10 @@ namespace ASCOM.GeminiTelescope
         public static double TargetRightAscension
         { 
             get { return m_TargetRightAscension; }
-            set { m_TargetRightAscension = value; }
+            set { 
+                m_TargetRightAscension = value;
+                TargetName = null;
+            }
         }
 
         /// <summary>
@@ -3096,7 +3141,10 @@ namespace ASCOM.GeminiTelescope
         public static double TargetAltitude
         {
             get { return m_TargetAltitude; }
-            set { m_TargetAltitude = value; }
+            set {
+                m_TargetAltitude = value;
+                TargetName = null;
+            }
         }
 
         /// <summary>
@@ -3243,22 +3291,26 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static void SyncToEquatorialCoords(double ra, double dec)
         {
-            string[] cmd = { ":Sr" + m_Util.HoursToHMS(ra, ":", ":", ""), ":Sd" + m_Util.DegreesToDMS(dec, ":", ":", ""), "" };
+            string[] cmd = { ":Sr" + m_Util.HoursToHMS(ra, ":", ":", ""), 
+                             ":ON" + (TargetName??"PC Object"),
+                             ":Sd" + m_Util.DegreesToDMS(dec, ":", ":", ""), "" };
+            TargetName = null;
+
             if (m_AdditionalAlign)
             {
-                cmd[2] = ":Cm";
+                cmd[3] = ":Cm";
             }
             else
             {
-                cmd[2] = ":CM";
+                cmd[3] = ":CM";
             }
             string[] result = null;
             DoCommandResult(cmd, MAX_TIMEOUT / 2, false, out result);
-            if (result == null || result[0] == null || result[1] == null || result[2] == null)
+            if (result == null || result[0] == null || result[2] == null || result[3] == null)
                 throw new TimeoutException((m_AdditionalAlign ? "Align to" : "Sync to ") + "RA/DEC");
             if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("RA value is invalid");
-            if (result[1] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("DEC value is invalid");
-            if (result[2] == "No object!") throw new ASCOM.Utilities.Exceptions.InvalidValueException((m_AdditionalAlign ? "Align to" : "Sync to ") + "RA/DEC");
+            if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("DEC value is invalid");
+            if (result[3] == "No object!") throw new ASCOM.Utilities.Exceptions.InvalidValueException((m_AdditionalAlign ? "Align to" : "Sync to ") + "RA/DEC");
             
             m_RightAscension = ra;// Update state machine variables with new RA and DEC.
             m_Declination = dec;
@@ -3279,22 +3331,26 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static void AlignToEquatorialCoords(double ra, double dec)
         {
-            string[] cmd = { ":Sr" + m_Util.HoursToHMS(ra, ":", ":", ""), ":Sd" + m_Util.DegreesToDMS(dec, ":", ":", ""), "" };
+            string[] cmd = { ":Sr" + m_Util.HoursToHMS(ra, ":", ":", ""), 
+                             ":ON" + (TargetName??"PC Object"),
+                             ":Sd" + m_Util.DegreesToDMS(dec, ":", ":", ""), "" };
+            TargetName = null;
+
             if (m_AdditionalAlign)
             {
-                cmd[2] = ":CM";
+                cmd[3] = ":CM";
             }
             else
             {
-                cmd[2] = ":Cm";
+                cmd[3] = ":Cm";
             }
             string[] result = null;
             DoCommandResult(cmd, MAX_TIMEOUT / 2, false, out result);
-            if (result == null || result[0] == null || result[1] == null || result[2] == null)
+            if (result == null || result[0] == null || result[2] == null || result[3] == null)
                 throw new TimeoutException((m_AdditionalAlign ? "Align to" : "Sync to ") + "RA/DEC");
             if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("RA value is invalid");
-            if (result[1] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("DEC value is invalid");
-            if (result[2] == "No object!") throw new ASCOM.Utilities.Exceptions.InvalidValueException((m_AdditionalAlign ? "Align to" : "Sync to ") + "RA/DEC");
+            if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("DEC value is invalid");
+            if (result[3] == "No object!") throw new ASCOM.Utilities.Exceptions.InvalidValueException((m_AdditionalAlign ? "Align to" : "Sync to ") + "RA/DEC");
 
             m_RightAscension = ra;// Update state machine variables with new RA and DEC.
             m_Declination = dec;
@@ -3309,59 +3365,72 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static void SlewEquatorial()
         {
-            string[] cmd = { ":Sr" + m_Util.HoursToHMS(TargetRightAscension, ":", ":", ""), ":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ""), ":MS"};
+            string[] cmd = { ":Sr" + m_Util.HoursToHMS(TargetRightAscension, ":", ":", ""), 
+                             ":ON" + (TargetName??"PC Object"),
+                             ":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ""), ":MS"};
+
+            TargetName = null;
 
 
             string [] result= null;
 
             DoCommandResult(cmd, MAX_TIMEOUT/2, false, out result);
 
-            if (result == null || result[0] == null || result[1] == null || result[2] == null) throw new TimeoutException("SlewEquatorial");
-            if (result[2] == "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to object below horizon");
-            if (result[2] == "4") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Position unreachable");
-            if (result[2] == "5") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Mount not aligned");
-            if (result[2] == "6") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to outside of safety limits");
-            if (result[0] != "1" || result[1] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew RA/DEC: Invalid coordinates");
+            if (result == null || result[0] == null || result[2] == null || result[3] == null) throw new TimeoutException("SlewEquatorial");
+            if (result[3] == "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to object below horizon");
+            if (result[3] == "4") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Position unreachable");
+            if (result[3] == "5") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Mount not aligned");
+            if (result[3] == "6") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to outside of safety limits");
+            if (result[0] != "1" || result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew RA/DEC: Invalid coordinates");
         }
         /// <summary>
         /// Slews the mount using Ra and Dec
         /// </summary>
         public static void SlewEquatorialAsync()
         {
-            string[] cmd = { ":Sr" + m_Util.HoursToHMS(TargetRightAscension, ":", ":", ""), ":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ""), ":MS" };
+            string[] cmd = { ":Sr" + m_Util.HoursToHMS(TargetRightAscension, ":", ":", ""), 
+                             ":ON" + (TargetName??"PC Object"),
+                             ":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ""), ":MS" };
+
+            TargetName = null;
 
             string[] result = null;
 
             DoCommandResult(cmd, MAX_TIMEOUT/2, false, out result);
 
-            if (result == null || result[0] == null || result[1] == null || result[2] == null) throw new TimeoutException("SlewEquatorialAsync");
-            if (result[2] == "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to object below horizon");
-            if (result[2] == "4") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Position unreachable");
-            if (result[2] == "5") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Mount not aligned");
-            if (result[2] == "6") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to outside of safety limits");
-            if (result[0] != "1" || result[1] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("SlewAsync: Invalid coordinates");
+            if (result == null || result[0] == null || result[2] == null || result[3] == null) throw new TimeoutException("SlewEquatorialAsync");
+            if (result[3] == "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to object below horizon");
+            if (result[3] == "4") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Position unreachable");
+            if (result[3] == "5") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Mount not aligned");
+            if (result[3] == "6") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to outside of safety limits");
+            if (result[0] != "1" || result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("SlewAsync: Invalid coordinates");
 
         }
 
 
         public static void SyncHorizonCoordinates(double azimuth, double altitude)
         {
-            string[] cmd = { ":Sz" + m_Util.DegreesToDMS(azimuth, ":", ":", ""), ":Sa" + m_Util.DegreesToDMS(altitude, ":", ":", ""), "" };
+            string[] cmd = { ":Sz" + m_Util.DegreesToDMS(azimuth, ":", ":", ""), 
+                             ":ON" + (TargetName??"PC Object"),
+                             ":Sa" + m_Util.DegreesToDMS(altitude, ":", ":", ""), "" };
+
+            TargetName = null;
+
             if (m_AdditionalAlign)
             {
-                cmd[2] = ":Cm";
+                cmd[3] = ":Cm";
             }
             else
             {
-                cmd[2] = ":CM";
+                cmd[3] = ":CM";
             }
             string[] result = null;
             DoCommandResult(cmd, MAX_TIMEOUT / 2, false, out result);
-            if (result == null || result[0] == null || result[1] == null || result[2] == null)
+            if (result == null || result[0] == null || result[2] == null || result[3] == null)
                 throw new TimeoutException((m_AdditionalAlign ? "Align to" : "Sync to ") + "Alt/Az");
             if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Alt value is invalid");
-            if (result[1] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Az value is invalid");
-            if (result[2] == "No object!") throw new ASCOM.Utilities.Exceptions.InvalidValueException((m_AdditionalAlign ? "Align to" : "Sync to ") + "Alt/Az");
+            if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Az value is invalid");
+            if (result[3] == "No object!") throw new ASCOM.Utilities.Exceptions.InvalidValueException((m_AdditionalAlign ? "Align to" : "Sync to ") + "Alt/Az");
 
             m_Azimuth = azimuth; // Update state machine variables
             m_Altitude = altitude;
@@ -3380,17 +3449,22 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static void SlewHorizon()
         {
-            string[] cmd = { ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ""), ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ""), ":MA" };
+            string[] cmd = { ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ""), 
+                             ":ON" + (TargetName??"PC Object"),
+                             ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ""), ":MA" };
+
+            TargetName = null;
+
             string[] result = null;
 
             DoCommandResult(cmd, MAX_TIMEOUT / 2, false, out result);
-            if (result == null || result[0] == null || result[1] == null || result[2] == null)
+            if (result == null || result[0] == null || result[2] == null || result[3] == null)
                 throw new TimeoutException("Slew to Alt/Az");
             if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Alt value is invalid");
-            if (result[1] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Az value is invalid");
-            if (result[2].StartsWith("1")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: Object below horizon");
-            if (result[2].StartsWith("2")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: No object selected");
-            if (result[2].StartsWith("3")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: Manual control");
+            if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Az value is invalid");
+            if (result[3].StartsWith("1")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: Object below horizon");
+            if (result[3].StartsWith("2")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: No object selected");
+            if (result[3].StartsWith("3")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: Manual control");
         }
 
         /// <summary>
@@ -3398,18 +3472,22 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static void SlewHorizonAsync()
         {
-            string[] cmd = { ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ""), ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ""), ":MA" };
+            string[] cmd = { ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ""), 
+                             ":ON" + (TargetName??"PC Object"),
+                             ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ""), ":MA" };
+
+            TargetName = null;
 
             string[] result = null;
             DoCommandResult(cmd, MAX_TIMEOUT/2, false, out result);
 
-            if (result==null || result[0] == null || result[1] == null || result[2] == null)
+            if (result==null || result[0] == null || result[2] == null || result[3] == null)
                 throw new TimeoutException("Slew to Alt/Az");
             if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Alt value is invalid");
-            if (result[1] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Az value is invalid");
-            if (result[2].StartsWith("1")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: Object below horizon");
-            if (result[2].StartsWith("2")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: No object selected");
-            if (result[2].StartsWith("3")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: Manual control");
+            if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Az value is invalid");
+            if (result[3].StartsWith("1")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: Object below horizon");
+            if (result[3].StartsWith("2")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: No object selected");
+            if (result[3].StartsWith("3")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: Manual control");
         }
 
         /// <summary>
