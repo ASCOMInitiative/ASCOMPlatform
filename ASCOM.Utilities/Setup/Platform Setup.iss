@@ -61,15 +61,22 @@
 ; Setup Build 8 Released
 
 ; Removed directory delete commands that caused an access issue on Tim's PC.
-; Setup Build 9 Released
+; Setup Build 9 Released - RC2
 
 ; Added ASCOM Diagnostics to installer with user options
 ; Moved EraseProfile and Migrate profile execution after all assemblies have been installed to GAC
 ; Setup Build 10 Released
 
+; Added RegAsm lines without TLB in order to register objects for late binding
+; Corrected status messages in uninstall run section
+; Changed installer title to reference RC3
+; Centralised release candidate number to one variable which is then used in several places
+; Setup Build 11 Released - RC3
+
 [Setup]
 ; Setup program version number - change this each time you change this setup script
-#define Public SetupVersion 10
+#define Public SetupVersion 11
+#define Public RC "RC3"
 
 #define Public Major 0
 #define Public Minor 0
@@ -83,9 +90,8 @@ AppCopyright=Copyright © 2009 ASCOM Initiative
 ;This value is hard coded in the uninstall code below. If you do change this you must change the corresponding reference in
 ;the [Code] CurStepChanged section
 AppID=ASCOM.Platform.NET.Components
-;#emit "AppName=ASCOM Platform " + str(Major) + "." + str(Minor) + " Update" ;
-AppName=ASCOM Platform 5.5 Update
-#emit "AppVerName=ASCOM Platform 5.5 Update (" + Appver + ")"
+#emit "AppName=ASCOM Platform 5.5 Update " + RC
+#emit "AppVerName=ASCOM Platform 5.5 Update " + RC + " (" + Appver + ")"
 #emit "AppVersion=" + AppVer
 AppPublisher=ASCOM Initiative
 AppPublisherURL=http://ascom-standards.org/
@@ -98,7 +104,7 @@ DisableDirPage=true
 DisableProgramGroupPage=true
 OutputDir=.
 PrivilegesRequired=admin
-#emit "OutputBaseFilename=ASCOM Platform " + str(Major) +"." + str(Minor) + " Updater (v" + AppVer +")"
+#emit "OutputBaseFilename=ASCOM Platform " + str(Major) +"." + str(Minor) + " Updater " + RC + " (v" + AppVer +")"
 Compression=lzma
 SolidCompression=true
 SetupIconFile=..\Utilities\Resources\ASCOM.ico
@@ -112,8 +118,8 @@ UninstallFilesDir={cf}\ASCOM\Uninstall\Utilities
 UsePreviousTasks=false
 VersionInfoCompany=ASCOM Initiative
 VersionInfoCopyright=ASCOM Initiative
-VersionInfoDescription=ASCOM Platform .NET Components 5.0
-VersionInfoProductName=ASCOM Platform .NET Components
+VersionInfoDescription=ASCOM Platform 5.5 Update
+VersionInfoProductName=ASCOM Platform 5.5 Update
 #emit "VersionInfoProductVersion=" + AppVer
 #emit "VersionInfoVersion=" + AppVer
 ArchitecturesInstallIn64BitMode=X64
@@ -271,12 +277,18 @@ Filename: {app}\GACInstall.exe; Parameters: ASCOM.Utilities.dll; Flags: runhidde
 Filename: {app}\GACInstall.exe; Parameters: ASCOM.Astrometry.dll; Flags: runhidden; StatusMsg: Installing ASCOM.Astrometry to the assembly cache
 Filename: {app}\GACInstall.exe; Parameters: ASCOM.IConform.dll; Flags: runhidden; StatusMsg: Installing ASCOM.IConform to the assembly cache
 Filename: {app}\GACInstall.exe; Parameters: ASCOM.Attributes.dll; Flags: runhidden; StatusMsg: Installing ASCOM.Attributes to the assembly cache
-Filename: {dotnet20}\regasm.exe; Parameters: "/TLB ""{app}\ASCOM.Utilities.dll"""; Flags: runhidden; StatusMsg: Registering Utilities for COM
-Filename: {dotnet20}\regasm.exe; Parameters: "/TLB ""{app}\ASCOM.Astrometry.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.Astrometry for COM
-Filename: {dotnet20}\regasm.exe; Parameters: "/TLB ""{app}\ASCOM.IConform.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.IConform for COM
-Filename: {dotnet2032}\regasm.exe; Parameters: "/TLB ""{cf32}\ASCOM\.net\ASCOM.Utilities.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering Utilities for 32bit COM
-Filename: {dotnet2032}\regasm.exe; Parameters: "/TLB ""{cf32}\ASCOM\.net\ASCOM.Astrometry.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering ASCOM.Astrometry for 32bit COM
-Filename: {dotnet2032}\regasm.exe; Parameters: "/TLB ""{cf32}\ASCOM\.net\ASCOM.IConform.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering ASCOM.IConform for 32bit COM
+Filename: {dotnet20}\regasm.exe; Parameters: "/TLB ""{app}\ASCOM.Utilities.dll"""; Flags: runhidden; StatusMsg: Registering Utilities type library for COM
+Filename: {dotnet20}\regasm.exe; Parameters: "/TLB ""{app}\ASCOM.Astrometry.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.Astrometry type library for COM
+Filename: {dotnet20}\regasm.exe; Parameters: "/TLB ""{app}\ASCOM.IConform.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.IConform type library for COM
+Filename: {dotnet2032}\regasm.exe; Parameters: "/TLB ""{cf32}\ASCOM\.net\ASCOM.Utilities.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering Utilities type library for 32bit COM
+Filename: {dotnet2032}\regasm.exe; Parameters: "/TLB ""{cf32}\ASCOM\.net\ASCOM.Astrometry.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering ASCOM.Astrometry type library for 32bit COM
+Filename: {dotnet2032}\regasm.exe; Parameters: "/TLB ""{cf32}\ASCOM\.net\ASCOM.IConform.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering ASCOM.IConform type library for 32bit COM
+Filename: {dotnet20}\regasm.exe; Parameters: """{app}\ASCOM.Utilities.dll"""; Flags: runhidden; StatusMsg: Registering Utilities for COM
+Filename: {dotnet20}\regasm.exe; Parameters: """{app}\ASCOM.Astrometry.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.Astrometry for COM
+Filename: {dotnet20}\regasm.exe; Parameters: """{app}\ASCOM.IConform.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.IConform for COM
+Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.Utilities.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering Utilities for 32bit COM
+Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.Astrometry.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering ASCOM.Astrometry for 32bit COM
+Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.IConform.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering ASCOM.IConform for 32bit COM
 
 ;ASCOM Exceptions
 Filename: {app}\GACInstall.exe; Parameters: ASCOM.Exceptions.dll; Flags: runhidden; StatusMsg: Instlling ASCOM.Exceptions to the assembly cache
@@ -302,12 +314,18 @@ Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Astrometry"""; Flags: ru
 Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Utilities"""; Flags: runhidden; StatusMsg: Uninstalling Utilities from the assembly cache
 Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.IConform"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.IConform from the assembly cache
 Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Attributes"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Attributes from the assembly cache
-Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister /TLB ""{app}\ASCOM.Astrometry.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.Astrometry for COM
-Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister /TLB ""{app}\ASCOM.Utilities.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.Utilities for COM
-Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister /TLB ""{app}\ASCOM.IConform.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.IConform for COM
-Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.IConform.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering ASCOM.IConform for COM
-Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.Astrometry.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering ASCOM.Astrometry for COM
-Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.Utilities.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering Utilities for COM
+Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister ""{app}\ASCOM.Astrometry.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.Astrometry for COM
+Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister ""{app}\ASCOM.Utilities.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.Utilities for COM
+Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister ""{app}\ASCOM.IConform.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.IConform for COM
+Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister ""{cf32}\ASCOM\.net\ASCOM.IConform.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Unregistering ASCOM.IConform from COM
+Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister ""{cf32}\ASCOM\.net\ASCOM.Astrometry.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Unregistering ASCOM.Astrometry from COM
+Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister ""{cf32}\ASCOM\.net\ASCOM.Utilities.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Unregistering Utilities from COM
+Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister /TLB ""{app}\ASCOM.Astrometry.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.Astrometry type library
+Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister /TLB ""{app}\ASCOM.Utilities.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.Utilities type library
+Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister /TLB ""{app}\ASCOM.IConform.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.IConform type library
+Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.IConform.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Unregistering 32bit ASCOM.IConform type library
+Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.Astrometry.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Unregistering 32bit ASCOM.Astrometry type library
+Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.Utilities.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Unregistering 32bit Utilities type library
 
 Filename: {cf32}\ASCOM\Utilities\RestoreOriginalHelpers.cmd; Parameters: """{cf32}\ASCOM\Utilities\*.dll"" ""{cf32}\ASCOM"""; StatusMsg: Restoring helper dlls; Flags: runhidden
 

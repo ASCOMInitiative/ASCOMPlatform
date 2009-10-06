@@ -127,6 +127,7 @@
       <ImageId>ManufLogos</ImageId>
     </Image>
     <Content Include="Introduction\Acknowledgements.aml" />
+    <None Include="Tools and Features\Diagnostics Tool.aml" />
     <None Include="Introduction\Key Changes in 5.5.aml" />
     <None Include="Examples\NOVAS2.aml" />
     <None Include="Examples\NOVASCOM.aml" />
@@ -137,7 +138,7 @@
     <None Include="Tools and Features\Profile Tracing.aml" />
     <None Include="Tools and Features\Profile Explorer.aml" />
     <None Include="Tools and Features\Serial Tracing.aml" />
-    <None Include="Version History\Version 5.1.3.0.aml" />
+    <None Include="Version History\Version 5.5 RC3.aml" />
     <None Include="Examples\Util.aml" />
     <None Include="Examples\TraceLogger.aml" />
     <None Include="Examples\Timer.aml" />

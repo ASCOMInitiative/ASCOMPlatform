@@ -19,6 +19,9 @@
   				<listItem>Profile and Serial tracing can now be enabled from a new menu in the Chooser component</listItem>
   				<listItem>Support for 64bit client applications and drivers.</listItem>
   				<listItem>Improved logging for serial and profile access with log files saved in the My Documents\ASCOM folder</listItem>
+  				<listItem>New Diagnostics tool to aid platform support</listItem>
+  				<listItem>Chooser now appears on the task bar like other applications, allowing it to be brought forward 
+  				if it becomes hidden.</listItem>
   			</list>
       	</content>
     </section>
@@ -38,7 +41,8 @@
   						in the profile if no value is yet set.</listItem>
   						<listItem>Profile: New list of registered device types</listItem>
   						<listItem>Profile: New list of registered devices</listItem>
-  						<listItem>Profile: Profile use can now be traced.</listItem>
+  						<listItem>Profile: Profile use can now be traced</listItem>
+  						<listItem>Profile: A complete device profile can be imported and exported in single commands</listItem>
   						<listItem>Serial: Now based on .NET serial port to improve reliability and stability</listItem>
 	  					<listItem>Serial: New LogMessage method to add a message to the serial log</listItem>
   						<listItem>Serial: New AvailablePorts method to list available ports</listItem>
