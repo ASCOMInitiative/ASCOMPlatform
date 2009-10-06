@@ -964,7 +964,7 @@ ASCOM.Utilities
 	<exception cref="T:ASCOM.Utilities.Exceptions.InvalidValueException">Thrown if DriverID is an empty string.</exception>
 	<exception cref="T:ASCOM.Utilities.Exceptions.DriverNotRegisteredException">Thrown if the driver is not registered,</exception>
 	<remarks>The sub-key and all data and keys beneath it are deleted.</remarks>
-</member><member name="M:ASCOM.Utilities.Profile.GetProfileXml(System.String)">
+</member><member name="M:ASCOM.Utilities.Profile.GetProfileXML(System.String)">
 	<summary>
  Read an entire device profile
  </summary>
@@ -974,7 +974,7 @@ ASCOM.Utilities
 	<remarks>This is not implemented and returns a MethodNotImplemented exception,
  it will be implemented in a future update. An XML schema will also be made available to support 
  this method.</remarks>
-</member><member name="M:ASCOM.Utilities.Profile.SetProfileXml(System.String,System.String)">
+</member><member name="M:ASCOM.Utilities.Profile.SetProfileXML(System.String,System.String)">
 	<summary>
  Set an entire device profile
  </summary>

@@ -424,7 +424,7 @@ Public Class Profile
     ''' <remarks>This is not implemented and returns a MethodNotImplemented exception,
     ''' it will be implemented in a future update. An XML schema will also be made available to support 
     ''' this method.</remarks>
-    Function GetProfileXml(ByVal deviceId As String) As String Implements IProfile.GetProfileXML
+    Function GetProfileXML(ByVal deviceId As String) As String Implements IProfile.GetProfileXML
         Throw New MethodNotImplementedException("GetProfileXML will be implemented in a later update")
     End Function
 
@@ -437,7 +437,7 @@ Public Class Profile
     ''' <remarks>This is not implemented and returns a MethodNotImplemented exception,
     ''' it will be implemented in a future update. An XML schema will also be made available to support 
     ''' this method.</remarks>
-    Sub SetProfileXml(ByVal deviceId As String, ByVal xml As String) Implements IProfile.SetProfileXML
+    Sub SetProfileXML(ByVal deviceId As String, ByVal xml As String) Implements IProfile.SetProfileXML
         Throw New MethodNotImplementedException("SetProfileXML will be implemented in a later update")
     End Sub
 
