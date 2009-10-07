@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmUserCatalog));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -41,6 +41,7 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.gvGeminiCatalog = new System.Windows.Forms.DataGridView();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.pbSendtObject = new System.Windows.Forms.Button();
             this.pbAddAll = new System.Windows.Forms.Button();
             this.pbAdd = new System.Windows.Forms.Button();
             this.btnGoto = new System.Windows.Forms.Button();
@@ -155,9 +156,11 @@
             // 
             // gvAllObjects
             // 
+            this.gvAllObjects.AllowUserToAddRows = false;
+            this.gvAllObjects.AllowUserToDeleteRows = false;
             this.gvAllObjects.AllowUserToResizeRows = false;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.gvAllObjects.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.gvAllObjects.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.gvAllObjects.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.gvAllObjects.BackgroundColor = System.Drawing.SystemColors.Window;
             this.gvAllObjects.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -173,6 +176,8 @@
             this.gvAllObjects.TabIndex = 0;
             this.gvAllObjects.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvAllObjects_ColumnHeaderMouseClick);
             this.gvAllObjects.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvAllObjects_CellMouseDoubleClick);
+            this.gvAllObjects.SelectionChanged += new System.EventHandler(this.gvAllObjects_SelectionChanged);
+            this.gvAllObjects.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvAllObjects_CellContentClick);
             // 
             // groupBox3
             // 
@@ -188,8 +193,8 @@
             // 
             // gvGeminiCatalog
             // 
-            dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.gvGeminiCatalog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.gvGeminiCatalog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
             this.gvGeminiCatalog.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.gvGeminiCatalog.BackgroundColor = System.Drawing.SystemColors.Window;
             this.gvGeminiCatalog.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -204,6 +209,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.pbSendtObject);
             this.panel2.Controls.Add(this.pbAddAll);
             this.panel2.Controls.Add(this.pbAdd);
             this.panel2.Controls.Add(this.btnGoto);
@@ -214,6 +220,16 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(89, 243);
             this.panel2.TabIndex = 1;
+            // 
+            // pbSendtObject
+            // 
+            this.pbSendtObject.Location = new System.Drawing.Point(6, 127);
+            this.pbSendtObject.Name = "pbSendtObject";
+            this.pbSendtObject.Size = new System.Drawing.Size(75, 23);
+            this.pbSendtObject.TabIndex = 6;
+            this.pbSendtObject.Text = "Send Object";
+            this.pbSendtObject.UseVisualStyleBackColor = true;
+            this.pbSendtObject.Click += new System.EventHandler(this.pbSendtObject_Click);
             // 
             // pbAddAll
             // 
@@ -237,7 +253,7 @@
             // 
             // btnGoto
             // 
-            this.btnGoto.Location = new System.Drawing.Point(6, 151);
+            this.btnGoto.Location = new System.Drawing.Point(6, 98);
             this.btnGoto.Name = "btnGoto";
             this.btnGoto.Size = new System.Drawing.Size(75, 23);
             this.btnGoto.TabIndex = 1;
@@ -297,6 +313,7 @@
             this.pbFromFile.TabIndex = 9;
             this.pbFromFile.Text = "From File...";
             this.pbFromFile.UseVisualStyleBackColor = true;
+            this.pbFromFile.Click += new System.EventHandler(this.pbFromFile_Click);
             // 
             // pbClear
             // 
@@ -414,8 +431,8 @@
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            this.openFileDialog1.Filter = "Gemini Catalog Files|*.gu";
+            this.openFileDialog1.DefaultExt = "guc";
+            this.openFileDialog1.Filter = "Gemini Catalog Files|*.guc|All Files|*.*";
             this.openFileDialog1.Title = "Load Catalog from a File";
             // 
             // frmUserCatalog
@@ -476,5 +493,6 @@
         private System.Windows.Forms.TextBox textSearch;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Button pbSendtObject;
     }
 }

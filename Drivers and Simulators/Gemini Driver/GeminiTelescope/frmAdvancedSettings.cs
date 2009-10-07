@@ -63,6 +63,25 @@ namespace ASCOM.GeminiTelescope
             this.UseWaitCursor = false;
         }
 
+        private void SetCollapsedGroups()
+        {
+            GeminiHardware.m_Profile.DeviceType = "Telescope";
+            foreach (Control gc in this.flowLayoutPanel1.Controls)
+            {
+                if (gc is Indigo.CollapsibleGroupBox)
+                {
+                    Indigo.CollapsibleGroupBox gb = gc as Indigo.CollapsibleGroupBox;
+                    bool bCollapse = false;
+
+                    string res = GeminiHardware.m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GroupCollapse_" + gb.Text, "");
+                    bool.TryParse(res, out bCollapse);
+                    gb.FullSize = gb.Size;
+                    gb.IsCollapsed = bCollapse;
+                    gb.ForeColor = (bCollapse ? Color.Gray : Color.White);
+                }
+            }
+        }
+
         void pbButton_EnabledChanged(object sender, EventArgs e)
         {
             Control c = sender as Control;
@@ -100,6 +119,7 @@ namespace ASCOM.GeminiTelescope
             SetControlColor(tableLayoutPanel3);
             SetControlColor(tableLayoutPanel4);
             SetControlColor(tableLayoutPanel5);
+            SetControlColor(this.panel1);
 
             pbApply.Enabled = GeminiHardware.Connected;
             pbReboot.Enabled = GeminiHardware.Connected;
@@ -301,6 +321,23 @@ namespace ASCOM.GeminiTelescope
                 MessageBox.Show(Resources.SafetyLimitSet);
             }
 
+        }
+
+        private void groupBox_CollapseBoxClickedEvent(object sender)
+        {
+            Indigo.CollapsibleGroupBox gb = (Indigo.CollapsibleGroupBox)sender;
+            if (gb.IsCollapsed)
+                gb.ForeColor = Color.Gray;
+            else
+                gb.ForeColor = Color.White;
+
+            GeminiHardware.m_Profile.DeviceType = "Telescope";
+            GeminiHardware.m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GroupCollapse_" + gb.Text, gb.IsCollapsed.ToString());
+        }
+
+        private void frmAdvancedSettings_Load(object sender, EventArgs e)
+        {
+            SetCollapsedGroups();
         }
     }
 }
