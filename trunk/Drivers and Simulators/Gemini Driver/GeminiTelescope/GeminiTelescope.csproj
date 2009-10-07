@@ -147,6 +147,12 @@
     </Compile>
     <Compile Include="AstronomyFunctions.cs" />
     <Compile Include="ClassFactory.cs" />
+    <Compile Include="CollapsibleGroupBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CollapsibleGroupBox.Designer.cs">
+      <DependentUpon>CollapsibleGroupBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmSafetyLimits.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -324,6 +330,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ReadMe.htm" />
+    <None Include="Resources\plus.bmp" />
+    <None Include="Resources\minus.bmp" />
     <None Include="Resources\diamond1-down.gif" />
     <None Include="Resources\diamond1.gif" />
   </ItemGroup>

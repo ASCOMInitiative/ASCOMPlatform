@@ -1364,8 +1364,12 @@ namespace ASCOM.GeminiTelescope
             }
 
             // success only if all wait handles are signalled by the worker thread. Return result from the last command:
-            if (System.Threading.ManualResetEvent.WaitAll(events, timeout < 0? -1 : total_timeout)) 
-                return ci[ci.Length-1].m_Result;
+
+            //  NOTE: WaitAll will not work on an STAThread, so instead, we wait on the last object, as these will all 
+            //    be signaled in order: //was: if (System.Threading.ManualResetEvent.WaitAll(events, timeout < 0? -1 : total_timeout)) 
+
+            if (events[ci.Length-1].WaitOne(timeout < 0 ? -1 : total_timeout)) 
+                return ci[ci.Length - 1].m_Result;
 
             return null;
         }
@@ -1406,7 +1410,10 @@ namespace ASCOM.GeminiTelescope
             }
 
             // success only if all wait handles are signalled by the worker thread. Return result from the last command:
-            if (System.Threading.ManualResetEvent.WaitAll(events, timeout<0? -1 :  total_timeout))
+
+            //  NOTE: WaitAll will not work on an STAThread, so instead, we wait on the last object, as these will all 
+            //    be signaled in order: //was: if (System.Threading.ManualResetEvent.WaitAll(events, timeout < 0? -1 : total_timeout)) 
+            if (events[ci.Length - 1].WaitOne(timeout < 0 ? -1 : total_timeout)) 
             {
                 result = new string [ci.Length];
                 for (int i = 0; i < ci.Length; ++i)
@@ -3381,7 +3388,8 @@ namespace ASCOM.GeminiTelescope
             if (result[3] == "4") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Position unreachable");
             if (result[3] == "5") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Mount not aligned");
             if (result[3] == "6") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to outside of safety limits");
-            if (result[0] != "1" || result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew RA/DEC: Invalid coordinates");
+            if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Invalid RA coordinate");                
+            if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Invalid DEC coordinates");
         }
         /// <summary>
         /// Slews the mount using Ra and Dec
@@ -3403,7 +3411,8 @@ namespace ASCOM.GeminiTelescope
             if (result[3] == "4") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Position unreachable");
             if (result[3] == "5") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Mount not aligned");
             if (result[3] == "6") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to outside of safety limits");
-            if (result[0] != "1" || result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("SlewAsync: Invalid coordinates");
+            if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Invalid RA coordinate");
+            if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Invalid DEC coordinate");
 
         }
 

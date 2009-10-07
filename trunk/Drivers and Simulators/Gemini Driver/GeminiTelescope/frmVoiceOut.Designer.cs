@@ -34,10 +34,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.cmbVoices = new System.Windows.Forms.ComboBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.chkNotify = new System.Windows.Forms.CheckBox();
-            this.chkCommand = new System.Windows.Forms.CheckBox();
-            this.chkStatus = new System.Windows.Forms.CheckBox();
             this.chkErrors = new System.Windows.Forms.CheckBox();
+            this.chkStatus = new System.Windows.Forms.CheckBox();
+            this.chkCommand = new System.Windows.Forms.CheckBox();
+            this.chkNotify = new System.Windows.Forms.CheckBox();
             this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -103,27 +103,17 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "What to Announce";
             // 
-            // chkNotify
+            // chkErrors
             // 
-            this.chkNotify.AutoSize = true;
-            this.chkNotify.Location = new System.Drawing.Point(17, 51);
-            this.chkNotify.Name = "chkNotify";
-            this.chkNotify.Size = new System.Drawing.Size(130, 17);
-            this.chkNotify.TabIndex = 0;
-            this.chkNotify.Tag = "1";
-            this.chkNotify.Text = "Notification Messages";
-            this.chkNotify.UseVisualStyleBackColor = true;
-            // 
-            // chkCommand
-            // 
-            this.chkCommand.AutoSize = true;
-            this.chkCommand.Location = new System.Drawing.Point(17, 74);
-            this.chkCommand.Name = "chkCommand";
-            this.chkCommand.Size = new System.Drawing.Size(139, 17);
-            this.chkCommand.TabIndex = 1;
-            this.chkCommand.Tag = "4";
-            this.chkCommand.Text = "User initiated operations";
-            this.chkCommand.UseVisualStyleBackColor = true;
+            this.chkErrors.AutoSize = true;
+            this.chkErrors.Location = new System.Drawing.Point(17, 28);
+            this.chkErrors.Name = "chkErrors";
+            this.chkErrors.Size = new System.Drawing.Size(119, 17);
+            this.chkErrors.TabIndex = 3;
+            this.chkErrors.Tag = "2";
+            this.chkErrors.Text = "Errors and warnings";
+            this.chkErrors.UseVisualStyleBackColor = true;
+            this.chkErrors.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
             // 
             // chkStatus
             // 
@@ -136,17 +126,27 @@
             this.chkStatus.Text = "Status Changes";
             this.chkStatus.UseVisualStyleBackColor = true;
             // 
-            // chkErrors
+            // chkCommand
             // 
-            this.chkErrors.AutoSize = true;
-            this.chkErrors.Location = new System.Drawing.Point(17, 28);
-            this.chkErrors.Name = "chkErrors";
-            this.chkErrors.Size = new System.Drawing.Size(119, 17);
-            this.chkErrors.TabIndex = 3;
-            this.chkErrors.Tag = "2";
-            this.chkErrors.Text = "Errors and warnings";
-            this.chkErrors.UseVisualStyleBackColor = true;
-            this.chkErrors.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
+            this.chkCommand.AutoSize = true;
+            this.chkCommand.Location = new System.Drawing.Point(17, 74);
+            this.chkCommand.Name = "chkCommand";
+            this.chkCommand.Size = new System.Drawing.Size(139, 17);
+            this.chkCommand.TabIndex = 1;
+            this.chkCommand.Tag = "4";
+            this.chkCommand.Text = "User initiated operations";
+            this.chkCommand.UseVisualStyleBackColor = true;
+            // 
+            // chkNotify
+            // 
+            this.chkNotify.AutoSize = true;
+            this.chkNotify.Location = new System.Drawing.Point(17, 51);
+            this.chkNotify.Name = "chkNotify";
+            this.chkNotify.Size = new System.Drawing.Size(130, 17);
+            this.chkNotify.TabIndex = 0;
+            this.chkNotify.Tag = "1";
+            this.chkNotify.Text = "Notification Messages";
+            this.chkNotify.UseVisualStyleBackColor = true;
             // 
             // frmVoice
             // 
@@ -168,6 +168,7 @@
             this.Name = "frmVoice";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Gemini Voice Announcer Setup";
+            this.Load += new System.EventHandler(this.frmVoice_Load);
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
