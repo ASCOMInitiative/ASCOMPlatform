@@ -77,6 +77,10 @@ namespace ASCOM.GeminiTelescope
             m_GeminiCatalogs.Add("sao catalog", "7");
             m_GeminiCatalogs.Add("lynds dark nebulae", ":");  
             m_GeminiCatalogs.Add("lynds bright nebulae", ";");
+
+
+            gvAllObjects.RowHeadersVisible = false;
+            gvGeminiCatalog.RowHeadersVisible = false;
         }
 
         private void PopulateCatalogs()
@@ -229,6 +233,7 @@ namespace ASCOM.GeminiTelescope
                 gvAllObjects.Columns["DEC"].DefaultCellStyle.Format = "0.00";
                 gvAllObjects.Columns["RA"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 gvAllObjects.Columns["DEC"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                gvAllObjects.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             }
             catch { }
         }
@@ -313,6 +318,8 @@ namespace ASCOM.GeminiTelescope
                 gvGeminiCatalog.Columns["DEC"].DefaultCellStyle.Format = "0.00";
                 gvGeminiCatalog.Columns["RA"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 gvGeminiCatalog.Columns["DEC"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                gvGeminiCatalog.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
             }
             catch { }
         }
