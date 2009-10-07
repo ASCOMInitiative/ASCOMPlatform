@@ -51,7 +51,7 @@ namespace ASCOM.GeminiTelescope
         // can be followed by an extension
         // character for NGC and IC
         // catalogues
-        Dictionary<string, int> m_GeminiCatalogs = new Dictionary<string, int>();
+        Dictionary<string, string> m_GeminiCatalogs = new Dictionary<string, string>();
 
         public frmUserCatalog()
         {
@@ -70,13 +70,13 @@ namespace ASCOM.GeminiTelescope
             CList.Add("RA", o => o.RA);
             CList.Add("DEC", o => o.DEC);
 
-            m_GeminiCatalogs.Add("messier", 1);
-            m_GeminiCatalogs.Add("ngc", 2);
-            m_GeminiCatalogs.Add("ic", 3);
-            m_GeminiCatalogs.Add("sharpless hii regions", 4);
-            m_GeminiCatalogs.Add("sao catalog", 7);
-            m_GeminiCatalogs.Add("lynds dark nebulae", 8);  //?? not documented 
-            m_GeminiCatalogs.Add("lynds bright nebulae", 9); //??
+            m_GeminiCatalogs.Add("messier", "1");
+            m_GeminiCatalogs.Add("ngc", "2");
+            m_GeminiCatalogs.Add("ic", "3");
+            m_GeminiCatalogs.Add("sharpless hii regions", "4");
+            m_GeminiCatalogs.Add("sao catalog", "7");
+            m_GeminiCatalogs.Add("lynds dark nebulae", ":");  
+            m_GeminiCatalogs.Add("lynds bright nebulae", ";");
         }
 
         private void PopulateCatalogs()
@@ -533,7 +533,8 @@ namespace ASCOM.GeminiTelescope
         private void gvAllObjects_SelectionChanged(object sender, EventArgs e)
         {
             SetButtonState();
-        }
+        
+}
 
         private void pbSendtObject_Click(object sender, EventArgs e)
         {
@@ -545,12 +546,16 @@ namespace ASCOM.GeminiTelescope
 
                     if (m_GeminiCatalogs.ContainsKey(cat))
                     {
-                        int catnbr = m_GeminiCatalogs[cat];
+                        string catnbr = m_GeminiCatalogs[cat];
                         string id = gvAllObjects.SelectedRows[0].Cells["Name"].Value.ToString();
-                        int i;
-                        for (i = id.Length - 1; i >= 0; --i)
-                            if (!char.IsDigit(id[i])) break;
-                        string cmd = string.Format(":OI{0}{1}", catnbr, id.Substring(i + 1));
+                        // strip off the catalog name first:
+                        id = id.TrimStart("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray());
+
+                        // if there's a '-' (as in Sh2-xxx) then remove everything before and including the dash
+                        int i = id.IndexOf('-');
+                        if (i > 0) id = id.Substring(i + 1);
+
+                        string cmd = string.Format(":OI{0}{1}", catnbr, id);
                         GeminiHardware.DoCommandResult(cmd, GeminiHardware.MAX_TIMEOUT, false);
                     }
                 }
