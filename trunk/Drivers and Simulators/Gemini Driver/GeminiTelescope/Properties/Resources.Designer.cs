@@ -931,6 +931,15 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Observation Log.
+        /// </summary>
+        internal static string ObservationLog {
+            get {
+                return ResourceManager.GetString("ObservationLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You are about to write advanced settings to Gemini.
         ///    
         ///Are you sure you want to do this?.

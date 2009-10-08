@@ -1666,13 +1666,36 @@ namespace ASCOM.GeminiTelescope
                 foreach (CatalogObject obj in value)
                 {
                     string sline;
-                    sline = obj.Name.Substring(0, Math.Min(obj.Name.Length, 10)) + "," + m_Util.HoursToHMS(obj.RA, ":", ":", "") + "," + m_Util.DegreesToDMS(obj.DEC, ":", ":", "");
+                    sline = obj.Name.Substring(0, Math.Min(obj.Name.Length, 10)) + "," + obj.RA.ToString(":", ":")+ "," + obj.DEC.ToString(":", ":");
                     DoCommandResult(":Od" + sline, MAX_TIMEOUT, false);
                     if (++count >= 4096) break; // no more!
                 }
             }
         }
 
+        public static System.Collections.Generic.List<string> ObservationLog
+        {
+            get
+            {
+                System.Collections.Generic.List<string> l = new System.Collections.Generic.List<string>();
+
+                DoCommandResult(":OS", MAX_TIMEOUT, false);
+                do
+                {
+                    string line = DoCommandResult(":OR", MAX_TIMEOUT, false);
+                    if (string.IsNullOrEmpty(line) || line.Equals("END", StringComparison.InvariantCultureIgnoreCase)) break;
+                    l.Add(line);
+                } while (true);
+
+                return l;
+            }
+            set
+            {
+                //clear only
+                DoCommandResult(":OC", MAX_TIMEOUT, false);
+            }
+        }
+       
 #endregion
 
 #region Telescope Implementation

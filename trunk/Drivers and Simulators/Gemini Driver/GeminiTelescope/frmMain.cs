@@ -81,7 +81,9 @@ namespace ASCOM.GeminiTelescope
 
                 new MenuItem(Resources.ConfigureFocuser+ "...", new EventHandler(ConfigureFocuserMenu)),
 
+                new MenuItem("-"),
                 new MenuItem(Resources.ConfigureCatalogs + "...", new EventHandler(configureCatalogsToolStripMenuItem_Click)),
+                new MenuItem(Resources.ObservationLog+"...", new EventHandler(observationLogToolStripMenuItem_Click)),
             new MenuItem("-"),
             notifyMenu,
             new MenuItem("-"),
@@ -1431,6 +1433,12 @@ namespace ASCOM.GeminiTelescope
         private void configureCatalogsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmUserCatalog frm = new frmUserCatalog();
+            frm.ShowDialog(this);
+        }
+
+        private void observationLogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmObservationLog frm = new frmObservationLog();
             frm.ShowDialog(this);
         }
 

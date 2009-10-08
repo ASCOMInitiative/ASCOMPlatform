@@ -153,6 +153,12 @@
     <Compile Include="CollapsibleGroupBox.Designer.cs">
       <DependentUpon>CollapsibleGroupBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmObservationLog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmObservationLog.Designer.cs">
+      <DependentUpon>frmObservationLog.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmSafetyLimits.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -238,6 +244,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AboutBox\AboutBox1.resx">
       <DependentUpon>AboutBox1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmObservationLog.resx">
+      <DependentUpon>frmObservationLog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmSafetyLimits.resx">
       <DependentUpon>frmSafetyLimits.cs</DependentUpon>
