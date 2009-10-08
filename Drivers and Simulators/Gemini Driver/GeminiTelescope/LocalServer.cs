@@ -546,6 +546,7 @@ namespace ASCOM.GeminiTelescope
                         UnregisterObjects();									//Unregister each served object
                         bRet = false;
                         break;
+                    case "-unregcom":
                     case "/unregcom":
                         m_UnregisterASCOM = false;
                         UnregisterObjects();									//Unregister each served object leave ASCOM profile
