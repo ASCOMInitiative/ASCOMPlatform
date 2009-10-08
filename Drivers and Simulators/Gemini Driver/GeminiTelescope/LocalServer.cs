@@ -112,6 +112,7 @@ namespace ASCOM.GeminiTelescope
         private static ArrayList m_ComObjectTypes;				// Served COM object types
         private static ArrayList m_ClassFactories;				// Served COM object class factories
         private static string m_sAppId = "{fbe30603-14ea-45ed-96d5-98c5e00f9c1c}";	// Our AppId
+        private static bool m_UnregisterASCOM = false;
 
         #endregion
 
@@ -452,22 +453,25 @@ namespace ASCOM.GeminiTelescope
                 Registry.ClassesRoot.DeleteSubKey("CLSID\\" + clsid + "\\LocalServer32", false);
                 Registry.ClassesRoot.DeleteSubKey("CLSID\\" + clsid + "\\Programmable", false);
                 Registry.ClassesRoot.DeleteSubKey("CLSID\\" + clsid, false);
-                try
+                if (m_UnregisterASCOM)
                 {
-                    //
-                    // ASCOM
-                    //
-                    ASCOM.Utilities.Profile P = new ASCOM.Utilities.Profile();
-                    P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
-                    P.Unregister(progid);
-                    try										// In case Helper becomes native .NET
+                    try
                     {
-                        Marshal.ReleaseComObject(P);
+                        //
+                        // ASCOM
+                        //
+                        ASCOM.Utilities.Profile P = new ASCOM.Utilities.Profile();
+                        P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
+                        P.Unregister(progid);
+                        try										// In case Helper becomes native .NET
+                        {
+                            Marshal.ReleaseComObject(P);
+                        }
+                        catch (Exception) { }
+                        P = null;
                     }
                     catch (Exception) { }
-                    P = null;
                 }
-                catch (Exception) { }
             }
         }
         #endregion
@@ -538,10 +542,15 @@ namespace ASCOM.GeminiTelescope
                     case "/unregister":
                     case "-unregserver":										// Emulate VB6
                     case "/unregserver":
+                        m_UnregisterASCOM = true;
                         UnregisterObjects();									//Unregister each served object
                         bRet = false;
                         break;
-
+                    case "/unregcom":
+                        m_UnregisterASCOM = false;
+                        UnregisterObjects();									//Unregister each served object leave ASCOM profile
+                        bRet = false;
+                        break;
                     default:
                         MessageBox.Show("Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding",
                             "GeminiTelescope", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
