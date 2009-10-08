@@ -15,7 +15,7 @@
 [Setup]
 ; SetupVersion is the installer version number and appears as the fourth digit in the installer version number
 ; Only increment SetupVersion when you make changes to the installer, it does not ned to increment when you make Gemini code changes
-#define Public SetupVersion 3; Setup program version number
+#define Public SetupVersion 6; Setup program version number
 
 ; Determiine the driver version number from the GeminiTelescope executable (only Major, Minor and Release are used
 ; as SetupVersion replaces Build)
@@ -98,8 +98,31 @@ Source: ..\Focuser\bin\x64\Release\ASCOM.GeminiTelescope.Focuser.pdb; DestDir: {
 Source: ..\Focuser\bin\x86\Release\ASCOM.GeminiTelescope.Focuser.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\GeminiTelescopeServedClasses; Check: NotIs64BitInstallMode; Flags: ignoreversion
 Source: ..\Focuser\bin\x86\Release\ASCOM.GeminiTelescope.Focuser.pdb; DestDir: {cf}\ASCOM\Telescope\Gemini\GeminiTelescopeServedClasses; Check: NotIs64BitInstallMode; Flags: ignoreversion
 
+; Language resources
+Source: ..\GeminiTelescope\bin\x64\Release\en-GB\ASCOM.GeminiTelescope.resources.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\en-GB; Check: Is64BitInstallMode; Flags: ignoreversion
+Source: ..\GeminiTelescope\bin\x86\Release\en-GB\ASCOM.GeminiTelescope.resources.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\en-GB; Check: NotIs64BitInstallMode; Flags: ignoreversion
+
+Source: ..\GeminiTelescope\bin\x64\Release\ru-RU\ASCOM.GeminiTelescope.resources.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\ru-RU; Check: Is64BitInstallMode; Flags: ignoreversion
+Source: ..\GeminiTelescope\bin\x86\Release\ru-RU\ASCOM.GeminiTelescope.resources.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\ru-RU; Check: NotIs64BitInstallMode; Flags: ignoreversion
+
 ;Gemini Icon
 Source: ..\GeminiTelescope\bin\Release\GeminiSB32x32.ico; DestDir: {cf}\ASCOM\Telescope\Gemini; Flags: ignoreversion
+
+;Catalog files
+Source: ..\Catalogs\Arp Peculiar Galaxies.guc; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
+Source: ..\Catalogs\Bright Star List.guc; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
+Source: ..\Catalogs\CED bright diffuse nebulae.guc; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
+Source: ..\Catalogs\Galactic Planetary Objects.guc; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
+Source: ..\Catalogs\IC.guc; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
+Source: ..\Catalogs\Lynds Bright Nebulae.guc; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
+Source: ..\Catalogs\Lynds Dark Nebulae.guc; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
+Source: ..\Catalogs\Messier.guc; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
+Source: ..\Catalogs\NGC.guc; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
+Source: ..\Catalogs\SAO Catalog.guc; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
+Source: ..\Catalogs\Sharpless HII Regions.guc; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
+Source: ..\Catalogs\VDB reflection nebulae.guc; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
+Source: ..\Catalogs\Washington Double Star Catalog.guc; DestDir: {commonappdata}\ASCOM\Gemini Telescope .NET\Catalogs; Flags: ignoreversion
+
 
 [Icons]
 Name: {commondesktop}\Gemini Telescope; Filename: {cf}\ASCOM\Telescope\Gemini\ASCOM.GeminiTelescope.exe; Tasks: desktopicon
@@ -110,7 +133,7 @@ Filename: {cf}\ASCOM\Telescope\Gemini\ASCOM.GeminiTelescope.exe; Parameters: /Re
 
 [UninstallRun]
 ;Run the driver to Unregister from COM
-Filename: {cf}\ASCOM\Telescope\Gemini\ASCOM.GeminiTelescope.exe; Parameters: /Unregister; Flags: runhidden; StatusMsg: Unregistering Gemini for COM
+Filename: {cf}\ASCOM\Telescope\Gemini\ASCOM.GeminiTelescope.exe; Parameters: /Unregcom; Flags: runhidden; StatusMsg: Unregistering Gemini for COM
 
 [UninstallDelete]
 Type: files; Name: {cf}\ASCOM\Telescope\Gemini\GeminiTelescopeServedClasses\*.*
