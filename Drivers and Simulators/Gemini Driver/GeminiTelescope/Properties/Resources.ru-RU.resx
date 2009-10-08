@@ -564,4 +564,7 @@
   <data name="ConfigureCatalogs" xml:space="preserve">
     <value>Manage Catalogs</value>
   </data>
+  <data name="ObservationLog" xml:space="preserve">
+    <value>Observation Log</value>
+  </data>
 </root>

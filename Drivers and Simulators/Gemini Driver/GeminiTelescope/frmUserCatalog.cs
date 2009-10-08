@@ -574,8 +574,8 @@ namespace ASCOM.GeminiTelescope
     public class CatalogObject
     {
         public string Name { get; set; }
-        public double RA { get; set; }
-        public double DEC { get; set; }
+        public RACoord RA { get; set; }
+        public DECCoord DEC { get; set; }
         public string Catalog { get; set; }
 
         public static bool TryParse(string s, string catalog, out CatalogObject obj)
@@ -587,8 +587,8 @@ namespace ASCOM.GeminiTelescope
             {
                 obj = new CatalogObject { 
                     Catalog = catalog, Name = sp[0], 
-                    RA = GeminiHardware.m_Util.HMSToHours(sp[1]), 
-                    DEC = GeminiHardware.m_Util.DMSToDegrees(sp[2]) };
+                    RA = new RACoord(GeminiHardware.m_Util.HMSToHours(sp[1])), 
+                    DEC = new DECCoord(GeminiHardware.m_Util.DMSToDegrees(sp[2])) };
             }
             catch
             {
@@ -602,8 +602,8 @@ namespace ASCOM.GeminiTelescope
         // current Gemini settings. DEC and RA are stored in J2000 coordinates:
         internal void GetCoords(out double ra, out double dec)
         {
-            ra = RA;
-            dec =DEC;
+            ra = RA.RA;
+            dec =DEC.DEC;
 
             GeminiHardware.m_Transform.SiteElevation = GeminiHardware.Elevation;
             GeminiHardware.m_Transform.SiteLatitude = GeminiHardware.Latitude;
@@ -626,8 +626,7 @@ namespace ASCOM.GeminiTelescope
 
         public override string ToString()
         {
-            return string.Format("{0},{1},{2}#", Name, GeminiHardware.m_Util.HoursToHMS(RA, ":", ":", ""),
-                        GeminiHardware.m_Util.DegreesToDMS(DEC, ":", ":", ""));
+            return string.Format("{0},{1},{2}#", Name, RA.ToString(":",":"), DEC.ToString(":",":"));
         }
 
         internal static bool TryParseDouble(string s, string catalog, out CatalogObject obj)
@@ -645,8 +644,8 @@ namespace ASCOM.GeminiTelescope
                 {
                     Catalog = catalog,
                     Name = sp[0],
-                    RA=ra/360.0 * 24.0,     // when specified as double, it is in degrees, so convert to hours 
-                    DEC=dec
+                    RA=new RACoord(ra/360.0 * 24.0),     // when specified as double, it is in degrees, so convert to hours 
+                    DEC=new DECCoord(dec)
                 };
             }
             catch
