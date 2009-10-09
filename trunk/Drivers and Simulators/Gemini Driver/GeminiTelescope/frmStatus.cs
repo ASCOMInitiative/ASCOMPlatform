@@ -13,7 +13,17 @@ namespace ASCOM.GeminiTelescope
         Timer tmrUpdate = new Timer();
 
 
-        public bool AutoHide = true;
+        private bool m_AutoHide = true;
+
+        public bool AutoHide
+        {
+            get { return m_AutoHide; }
+            set { 
+                m_AutoHide = value;
+                if (m_AutoHide) pbPin.ImageIndex = 0;
+                else pbPin.ImageIndex = 1;
+            }
+        }        
 
         private DateTime m_previousActive = DateTime.Now;
 
@@ -42,7 +52,6 @@ namespace ASCOM.GeminiTelescope
             }
 
             tmrUpdate.Stop();
-            AutoHide = true;
             tmrUpdate.Interval = 2000;
             tmrUpdate.Start();
             m_previousActive = DateTime.Now;
@@ -117,6 +126,16 @@ namespace ASCOM.GeminiTelescope
             tmrUpdate.Stop();
             this.Hide();
             e.Cancel = true;
+        }
+
+        private void pbPin_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pbPin_MouseDown(object sender, MouseEventArgs e)
+        {
+            AutoHide = !AutoHide;
         }
 
     }

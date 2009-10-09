@@ -1678,7 +1678,6 @@ namespace ASCOM.GeminiTelescope
             get
             {
                 System.Collections.Generic.List<string> l = new System.Collections.Generic.List<string>();
-
                 DoCommandResult(":OS", MAX_TIMEOUT, false);
                 do
                 {
@@ -1686,7 +1685,6 @@ namespace ASCOM.GeminiTelescope
                     if (string.IsNullOrEmpty(line) || line.Equals("END", StringComparison.InvariantCultureIgnoreCase)) break;
                     l.Add(line);
                 } while (true);
-
                 return l;
             }
             set

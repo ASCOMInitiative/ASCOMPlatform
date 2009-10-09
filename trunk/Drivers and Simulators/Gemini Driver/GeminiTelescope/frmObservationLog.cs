@@ -116,7 +116,8 @@ namespace ASCOM.GeminiTelescope
         {
             SetButtonState();
             GeminiHardware.OnConnect += new ConnectDelegate(OnConnect);
-            if (GeminiHardware.Connected) pbFromGemini_Click(pbFromGemini, null);
+            ObsTime.UTC = chkUTC.Checked;
+            pbFromGemini_Click(pbFromGemini, null);
         }
 
 
@@ -124,10 +125,11 @@ namespace ASCOM.GeminiTelescope
         {
             pbToGemini.Enabled = GeminiHardware.Connected;
             pbFromGemini.Enabled = GeminiHardware.Connected;
-            pbToGemini.BackColor = GeminiHardware.Connected ? Color.FromArgb(16,16,16): Color.FromArgb(64,64,64);
-            pbFromGemini.BackColor = GeminiHardware.Connected ? Color.FromArgb(16,16,16): Color.FromArgb(64, 64, 64);
+            btnGoto.Enabled = (GeminiHardware.Connected && gvLog.SelectedRows.Count == 1);
 
-          
+            pbToGemini.BackColor = pbToGemini.Enabled? Color.FromArgb(16,16,16): Color.FromArgb(64,64,64);
+            pbFromGemini.BackColor = pbFromGemini.Enabled? Color.FromArgb(16,16,16): Color.FromArgb(64, 64, 64);
+            btnGoto.BackColor = btnGoto.Enabled? Color.FromArgb(16,16,16): Color.FromArgb(64, 64, 64);          
         }
 
         void OnConnect(bool bConnect, int clients)
@@ -192,6 +194,150 @@ namespace ASCOM.GeminiTelescope
                     MessageBox.Show("Error writing file: " + ex.Message, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void chkUTC_CheckedChanged(object sender, EventArgs e)
+        {
+            ObsTime.UTC = chkUTC.Checked;
+            UpdateList();
+        }
+
+        private void btnGoto_Click(object sender, EventArgs e)
+        {
+            if (gvLog.SelectedRows.Count < 1 || gvLog.SelectedRows.Count > 1)
+            {
+                MessageBox.Show("Please select one!", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            Observation obs = gvLog.SelectedRows[0].DataBoundItem as Observation;
+
+            double ra, dec;
+
+            obs.GetCoords(out ra, out dec);
+
+            GeminiHardware.TargetRightAscension = ra;
+            GeminiHardware.TargetDeclination = dec;
+            GeminiHardware.TargetName = obs.Object;
+
+            try
+            {
+                if (sender == btnGoto)
+                    GeminiHardware.SlewEquatorial();
+#if false
+                else if (sender == btnSync)
+                    GeminiHardware.SyncEquatorial();
+                else
+                    GeminiHardware.AlignEquatorial();
+#endif
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Goto falied: " + ex.Message, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+
+        private void pbSendtObject_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (gvLog.SelectedRows.Count == 1)
+                {
+                    string id = gvLog.SelectedRows[0].Cells["Object"].Value.ToString().ToLower();
+
+                    if (!string.IsNullOrEmpty(id ))
+                    {
+                        string[] ids = id.Split(new char [] { ' ' });
+
+                        // strip off the catalog name first:
+                        id = ids[0].TrimStart("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray());
+
+                        // if there's a '-' (as in Sh2-xxx) then remove everything before and including the dash
+                        int i = id.IndexOf('-');
+                        if (i > 0) id = id.Substring(i + 1);
+
+                        string cat = ids[0].Substring(0, ids[0].Length - id.Length);    // first part is the catalog
+                        int catnbr = 0;
+                        // need a way to extract catalog number from object name... don't know how to do that....
+                        string cmd = string.Format(":OI{0}{1}", catnbr, id);
+                        GeminiHardware.DoCommandResult(cmd, GeminiHardware.MAX_TIMEOUT, false);
+                    }
+                }
+            }
+            catch { }
+
+        }
+
+        private void gvLog_SelectionChanged(object sender, EventArgs e)
+        {
+            SetButtonState();
+        }
+
+        private void pbFromFile_Click(object sender, EventArgs e)
+        {
+            string path;
+
+            try
+            {
+                path = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\ASCOM\\" + SharedResources.TELESCOPE_DRIVER_NAME;
+                System.IO.Directory.CreateDirectory(path);
+                path = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\ASCOM\\" + SharedResources.TELESCOPE_DRIVER_NAME + "\\Observation Logs";
+                System.IO.Directory.CreateDirectory(path);
+            }
+            catch
+            {
+            }
+
+            path = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\ASCOM\\" + SharedResources.TELESCOPE_DRIVER_NAME + "\\Observation Logs";
+            openFileDialog1.InitialDirectory = path;
+
+            DialogResult res = openFileDialog1.ShowDialog(this);
+            if (res == DialogResult.OK)
+            {
+                try
+                {
+                    System.IO.FileInfo fi = new System.IO.FileInfo(openFileDialog1.FileName);
+                    m_Observations.Clear();
+                    if (LoadObservations(fi.FullName, m_Observations))
+                    {
+                        UpdateList();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error reading file: " + ex.Message, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private bool LoadObservations(string p, List<Observation> m_Observations)
+        {
+            System.IO.StreamReader fi = null;
+
+            try
+            {
+                fi = System.IO.File.OpenText(p);
+                while (!fi.EndOfStream)
+                {
+                    string newl = fi.ReadLine();
+                    newl = newl.Trim();
+                    if (newl.Length > 0)
+                    {
+                        Observation obj = null;
+                        if (Observation.TryParseFixed(newl, out obj))
+                            m_Observations.Add(obj);
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+            finally
+            {
+                if (fi != null) fi.Close();
+            }
+
+            return true;
         }    
     }
 
@@ -245,9 +391,40 @@ namespace ASCOM.GeminiTelescope
         }
     }
 
+    public class ObsTime : IComparable
+    {
+        public static bool UTC = true;
+
+        public DateTime Time { get; set; }
+        public ObsTime(DateTime tm)
+        {
+            Time = tm;
+        }
+
+        public override string ToString()
+        {
+            return ToString("G");
+        }
+
+        public string ToString(string format)
+        {
+            if (UTC)
+                return Time.ToString(format);
+            else
+                return Time.ToLocalTime().ToString(format);
+        }
+        int IComparable.CompareTo(Object obj)
+        {
+            if (this.Time > ((ObsTime)obj).Time) return 1;
+            if (this.Time < ((ObsTime)obj).Time) return -1;
+            return 0;
+        }
+
+    }
+
     public class Observation
     {
-        public DateTime Time { get; set; }
+        public ObsTime Time { get; set; }
         public string Operation {get; set; }
         public RACoord RA {get; set; }
         public DECCoord DEC {get; set; }
@@ -288,7 +465,7 @@ namespace ASCOM.GeminiTelescope
                m = int.Parse(line.Substring(8, 2));
                s = int.Parse(line.Substring(10, 2));
 
-               obs.Time = new DateTime(y, mo, d, h, m, s, 0, DateTimeKind.Utc);
+               obs.Time = new ObsTime( new DateTime(y, mo, d, h, m, s, 0, DateTimeKind.Utc));
 
                obs.Operation = m_Ops[line.Substring(12, 1)];
                obs.RA = new RACoord(GeminiHardware.m_Util.HMSToHours(line.Substring(13, 8)));
@@ -307,6 +484,60 @@ namespace ASCOM.GeminiTelescope
                obs = null;
                return false;
            }
+        }
+
+        // return object coordinates
+        // precessed and refraction-adjusted, as needed based on
+        // current Gemini settings. DEC and RA are stored in J2000 coordinates:
+        internal void GetCoords(out double ra, out double dec)
+        {
+            // observations are already in the correct coordinate system for Gemini, no
+            // need to adjust:
+            ra = RA.RA;
+            dec = DEC.DEC;
+        }
+
+
+        /// <summary>
+        /// parse a text line generated by this observation log viewer, usually from a file
+        /// </summary>
+        /// <param name="newl"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        internal static bool TryParseFixed(string line, out Observation obs)
+        {
+            try
+            {
+                obs = new Observation();
+                string date = line.Substring(0,30);
+                date = date.Trim();
+                DateTime tm;
+                
+                tm = DateTime.Parse(date, new System.Globalization.DateTimeFormatInfo(), System.Globalization.DateTimeStyles.NoCurrentDateDefault) ;
+                obs.Time = new ObsTime(tm);
+
+                string op = line.Substring(31, 15);
+                op = op.Trim();
+                obs.Operation = op;
+
+                string ra = line.Substring(47,15);
+                string dec= line.Substring(47+15,15);
+                ra = ra.Trim();
+                dec = dec.Trim();
+                obs.RA = new RACoord(GeminiHardware.m_Util.HMSToHours(ra));
+                obs.DEC = new DECCoord(GeminiHardware.m_Util.DMSToDegrees(dec));
+
+                string obj = "";
+                if (line.Length > 47+30) obj = line.Substring(47+30+1);
+                obj = obj.Trim();
+                obs.Object = obj;
+                return true;
+            }
+            catch
+            {
+                obs = null;
+                return false;
+            }
         }
     }
 }
