@@ -82,8 +82,8 @@ namespace ASCOM.GeminiTelescope
                 new MenuItem(Resources.ConfigureFocuser+ "...", new EventHandler(ConfigureFocuserMenu)),
 
                 new MenuItem("-"),
-                new MenuItem(Resources.ConfigureCatalogs + "...", new EventHandler(configureCatalogsToolStripMenuItem_Click)),
                 new MenuItem(Resources.ObservationLog+"...", new EventHandler(observationLogToolStripMenuItem_Click)),
+                new MenuItem(Resources.ConfigureCatalogs + "...", new EventHandler(configureCatalogsToolStripMenuItem_Click)),
             new MenuItem("-"),
             notifyMenu,
             new MenuItem("-"),
@@ -507,7 +507,7 @@ namespace ASCOM.GeminiTelescope
                 BalloonIcon.ContextMenu.MenuItems[Resources.Connect].Text = Resources.Disconnect;
 
                 m_Messages.Clear(); // remove all queued up messages, we don't care now that the mount is connected:
-                SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME, Resources.MountIsConnected, ToolTipIcon.Info);
+                SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME + "\r\n" + (GeminiHardware.BaudRate.ToString()) + "b/s on " + GeminiHardware.ComPort, Resources.MountIsConnected, ToolTipIcon.Info);
             }
             if (Connected)
             {
@@ -578,6 +578,11 @@ namespace ASCOM.GeminiTelescope
                 labelSlew.ForeColor = (GeminiHardware.Velocity == "S" ? active : m_InactiveForeColor);
                 labelPARK.BackColor = (GeminiHardware.AtPark ? m_ActiveBkColor : m_InactiveBkColor);
                 labelPARK.ForeColor = (GeminiHardware.AtPark ? m_ActiveForeColor : m_InactiveForeColor);
+
+                if (GeminiHardware.AtPark)
+                    labelPARK.Text = "PARK";
+                else
+                    labelPARK.Text = GeminiHardware.SideOfPier == "E" ? "EAST" : "WEST";
 
                 string prev_label = labelSlew.Text;
 

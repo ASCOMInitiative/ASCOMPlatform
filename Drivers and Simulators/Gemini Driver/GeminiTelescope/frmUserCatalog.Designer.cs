@@ -227,7 +227,7 @@
             this.pbSendtObject.Name = "pbSendtObject";
             this.pbSendtObject.Size = new System.Drawing.Size(75, 23);
             this.pbSendtObject.TabIndex = 6;
-            this.pbSendtObject.Text = "Send Object";
+            this.pbSendtObject.Text = "Set Object";
             this.pbSendtObject.UseVisualStyleBackColor = true;
             this.pbSendtObject.Click += new System.EventHandler(this.pbSendtObject_Click);
             // 

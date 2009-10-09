@@ -34,12 +34,16 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.gvLog = new System.Windows.Forms.DataGridView();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pbSendtObject = new System.Windows.Forms.Button();
+            this.btnGoto = new System.Windows.Forms.Button();
+            this.chkUTC = new System.Windows.Forms.CheckBox();
             this.pbFromGemini = new System.Windows.Forms.Button();
             this.pbToGemini = new System.Windows.Forms.Button();
             this.pbToFile = new System.Windows.Forms.Button();
             this.pbFromFile = new System.Windows.Forms.Button();
             this.pbExit = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gvLog)).BeginInit();
@@ -108,10 +112,14 @@
             this.gvLog.Size = new System.Drawing.Size(560, 381);
             this.gvLog.TabIndex = 0;
             this.gvLog.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvLog_ColumnHeaderMouseClick);
+            this.gvLog.SelectionChanged += new System.EventHandler(this.gvLog_SelectionChanged);
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
+            this.panel1.Controls.Add(this.pbSendtObject);
+            this.panel1.Controls.Add(this.btnGoto);
+            this.panel1.Controls.Add(this.chkUTC);
             this.panel1.Controls.Add(this.pbFromGemini);
             this.panel1.Controls.Add(this.pbToGemini);
             this.panel1.Controls.Add(this.pbToFile);
@@ -122,6 +130,45 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(115, 433);
             this.panel1.TabIndex = 2;
+            // 
+            // pbSendtObject
+            // 
+            this.pbSendtObject.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.pbSendtObject.ForeColor = System.Drawing.Color.White;
+            this.pbSendtObject.Location = new System.Drawing.Point(12, 304);
+            this.pbSendtObject.Name = "pbSendtObject";
+            this.pbSendtObject.Size = new System.Drawing.Size(75, 23);
+            this.pbSendtObject.TabIndex = 17;
+            this.pbSendtObject.Text = "Set Object";
+            this.pbSendtObject.UseVisualStyleBackColor = true;
+            this.pbSendtObject.Visible = false;
+            this.pbSendtObject.Click += new System.EventHandler(this.pbSendtObject_Click);
+            // 
+            // btnGoto
+            // 
+            this.btnGoto.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGoto.ForeColor = System.Drawing.Color.White;
+            this.btnGoto.Location = new System.Drawing.Point(12, 275);
+            this.btnGoto.Name = "btnGoto";
+            this.btnGoto.Size = new System.Drawing.Size(75, 23);
+            this.btnGoto.TabIndex = 16;
+            this.btnGoto.Text = "Go To";
+            this.btnGoto.UseVisualStyleBackColor = true;
+            this.btnGoto.Click += new System.EventHandler(this.btnGoto_Click);
+            // 
+            // chkUTC
+            // 
+            this.chkUTC.AutoSize = true;
+            this.chkUTC.Checked = true;
+            this.chkUTC.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkUTC.ForeColor = System.Drawing.Color.White;
+            this.chkUTC.Location = new System.Drawing.Point(12, 229);
+            this.chkUTC.Name = "chkUTC";
+            this.chkUTC.Size = new System.Drawing.Size(85, 17);
+            this.chkUTC.TabIndex = 15;
+            this.chkUTC.Text = "Time in UTC";
+            this.chkUTC.UseVisualStyleBackColor = true;
+            this.chkUTC.CheckedChanged += new System.EventHandler(this.chkUTC_CheckedChanged);
             // 
             // pbFromGemini
             // 
@@ -169,7 +216,7 @@
             this.pbFromFile.TabIndex = 11;
             this.pbFromFile.Text = "From File...";
             this.pbFromFile.UseVisualStyleBackColor = true;
-            this.pbFromFile.Visible = false;
+            this.pbFromFile.Click += new System.EventHandler(this.pbFromFile_Click);
             // 
             // pbExit
             // 
@@ -189,6 +236,12 @@
             this.saveFileDialog1.Filter = "Text Files|*.txt";
             this.saveFileDialog1.Title = "Save Gemini Observation Log";
             // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.DefaultExt = "txt";
+            this.openFileDialog1.Filter = "Text Files|*.*";
+            this.openFileDialog1.Title = "Load Observation Log from a File";
+            // 
             // frmObservationLog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -203,6 +256,7 @@
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gvLog)).EndInit();
             this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -219,5 +273,9 @@
         private System.Windows.Forms.Button pbFromGemini;
         private System.Windows.Forms.Button pbToGemini;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.CheckBox chkUTC;
+        private System.Windows.Forms.Button pbSendtObject;
+        private System.Windows.Forms.Button btnGoto;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
