@@ -94,25 +94,29 @@
             // 
             // cmdCancel
             // 
-            this.cmdCancel.BackColor = System.Drawing.SystemColors.Control;
+            this.cmdCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cmdCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdCancel.ForeColor = System.Drawing.Color.White;
             this.cmdCancel.Location = new System.Drawing.Point(325, 345);
             this.cmdCancel.Name = "cmdCancel";
-            this.cmdCancel.Size = new System.Drawing.Size(59, 25);
+            this.cmdCancel.Size = new System.Drawing.Size(59, 24);
             this.cmdCancel.TabIndex = 5;
             this.cmdCancel.Text = "Cancel";
             this.cmdCancel.UseVisualStyleBackColor = false;
             // 
             // cmdOK
             // 
-            this.cmdOK.BackColor = System.Drawing.SystemColors.Control;
+            this.cmdOK.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.cmdOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdOK.ForeColor = System.Drawing.Color.White;
             this.cmdOK.Location = new System.Drawing.Point(325, 315);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 4;
             this.cmdOK.Text = "OK";
-            this.cmdOK.UseVisualStyleBackColor = false;
+            this.cmdOK.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
