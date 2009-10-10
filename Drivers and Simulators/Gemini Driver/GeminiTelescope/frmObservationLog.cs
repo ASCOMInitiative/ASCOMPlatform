@@ -155,16 +155,16 @@ namespace ASCOM.GeminiTelescope
             string path = "";
             try
             {
-                path = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\ASCOM\\" + SharedResources.TELESCOPE_DRIVER_NAME;
+                path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\ASCOM\\" + SharedResources.TELESCOPE_DRIVER_NAME;
                 System.IO.Directory.CreateDirectory(path);
-                path = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\ASCOM\\" + SharedResources.TELESCOPE_DRIVER_NAME + "\\Observation Logs";
+                path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\ASCOM\\" + SharedResources.TELESCOPE_DRIVER_NAME + "\\Observation Logs";
                 System.IO.Directory.CreateDirectory(path);
             }
             catch
             {
             }
 
-            path = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\ASCOM\\" + SharedResources.TELESCOPE_DRIVER_NAME + "\\Observation Logs";
+            path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\ASCOM\\" + SharedResources.TELESCOPE_DRIVER_NAME + "\\Observation Logs";
             saveFileDialog1.InitialDirectory = path;
             string fn = "Observation ";
             if (m_Observations.Count > 0)
@@ -278,16 +278,16 @@ namespace ASCOM.GeminiTelescope
 
             try
             {
-                path = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\ASCOM\\" + SharedResources.TELESCOPE_DRIVER_NAME;
+                path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\ASCOM\\" + SharedResources.TELESCOPE_DRIVER_NAME;
                 System.IO.Directory.CreateDirectory(path);
-                path = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\ASCOM\\" + SharedResources.TELESCOPE_DRIVER_NAME + "\\Observation Logs";
+                path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\ASCOM\\" + SharedResources.TELESCOPE_DRIVER_NAME + "\\Observation Logs";
                 System.IO.Directory.CreateDirectory(path);
             }
             catch
             {
             }
 
-            path = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\ASCOM\\" + SharedResources.TELESCOPE_DRIVER_NAME + "\\Observation Logs";
+            path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\ASCOM\\" + SharedResources.TELESCOPE_DRIVER_NAME + "\\Observation Logs";
             openFileDialog1.InitialDirectory = path;
 
             DialogResult res = openFileDialog1.ShowDialog(this);
