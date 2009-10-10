@@ -1940,7 +1940,7 @@ namespace ASCOM.GeminiTelescope
                     Trace.Info(4, "Waiting...");
                     System.Threading.Thread.Sleep(500);
                     Transmit("\x6");
-                    ci = new CommandItem("\x6", 1000, true);
+                    ci = new CommandItem("\x6", 3000, true);
                     sRes = GetCommandResult(ci);
                     
                     // if no response, it could be because while we did

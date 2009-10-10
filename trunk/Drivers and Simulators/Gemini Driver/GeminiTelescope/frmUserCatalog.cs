@@ -461,7 +461,7 @@ namespace ASCOM.GeminiTelescope
 
         private void pbToFile_Click(object sender, EventArgs e)
         {
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\ASCOM\\" + SharedResources.TELESCOPE_DRIVER_NAME + "\\Catalogs\\User";
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\ASCOM\\" + SharedResources.TELESCOPE_DRIVER_NAME + "\\UserCatalogs";
             try
             {
                 System.IO.Directory.CreateDirectory(path);
@@ -502,7 +502,7 @@ namespace ASCOM.GeminiTelescope
 
         private void pbFromFile_Click(object sender, EventArgs e)
         {
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\ASCOM\\" + SharedResources.TELESCOPE_DRIVER_NAME + "\\Catalogs\\User";
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\ASCOM\\" + SharedResources.TELESCOPE_DRIVER_NAME + "\\UserCatalogs";
             try
             {
                 System.IO.Directory.CreateDirectory(path);
