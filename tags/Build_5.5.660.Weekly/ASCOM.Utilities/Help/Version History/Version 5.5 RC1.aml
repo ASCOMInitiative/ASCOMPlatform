@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="c904b112-d671-4c56-a6eb-1f8d7c3d4c4b" revisionNumber="1">
+	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    	
+    	<section address="Changes">
+      		<title>Changes</title>
+      		<content>
+				<list class="bullet">
+ 		 			<listItem>Initial release</listItem>
+	  			</list>
+            </content>
+		</section>
+          			
+        <section address="IssuesFixed">
+           	<title>Issues Fixed</title>
+            <content>
+      			<list class="bullet">
+ 		 			<listItem>None</listItem>
+				</list>
+   			</content>
+   		</section>
+    	
+    	
+  		<section address="ToDo">
+      		<title>ToDo...</title>
+      		<content>
+      			<list class="bullet">
+ 			 		<listItem>Help file corrections. - please report these through the "Send Feedback" links.</listItem>
+ 			 		<listItem>Help file Code Examples -  translate to C# for inclusion alongside the VB examples. Any offers of help?</listItem>
+ 			 		<listItem>Help file Code Examples -  does anyone have useful snippets to include?</listItem>
+	  			</list>
+      		</content>
+    	</section>
+
+	</developerConceptualDocument>
+</topic>

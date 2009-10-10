@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="0a23ff52-a935-4cd7-a693-9e3b90f7df29" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <introduction>
+      <para>The Diagnostics Tool collects information about the ASCOM Platform to aid support.</para>
+    </introduction>
+
+    <section address="DIagTool">
+      <title>Diagnostics Tool</title>
+      <content>
+         <para></para>
+         <para></para>
+         <para></para>
+         <para></para>
+         <para></para>                                  
+      </content>
+    </section>
+  </developerConceptualDocument>
+</topic>
