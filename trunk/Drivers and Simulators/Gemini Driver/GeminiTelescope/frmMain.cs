@@ -34,6 +34,7 @@ namespace ASCOM.GeminiTelescope
 
         int m_UpdateCount = 0;
         bool m_ShowNotifications = true;
+        bool m_ShowStatusPanel = true;
 
         frmStatus m_StatusForm  = null;
 
@@ -66,6 +67,10 @@ namespace ASCOM.GeminiTelescope
             notifyMenu.Name = Resources.Notifications;
             notifyMenu.Checked = m_ShowNotifications;
 
+            MenuItem statusMenu = new MenuItem(Resources.ShowStatusPanel, new EventHandler(ShowStatusPanel));
+            statusMenu.Name = Resources.StatusPanel;
+            statusMenu.Checked = m_ShowStatusPanel;
+
             MenuItem controlMenu = new MenuItem(Resources.ShowHandController, new EventHandler(ControlPanelMenu));
             controlMenu.Name = Resources.Control;
             controlMenu.Checked = this.Visible;
@@ -86,6 +91,7 @@ namespace ASCOM.GeminiTelescope
                 new MenuItem(Resources.ConfigureCatalogs + "...", new EventHandler(configureCatalogsToolStripMenuItem_Click)),
             new MenuItem("-"),
             notifyMenu,
+            statusMenu,
             new MenuItem("-"),
             new MenuItem(Resources.AboutGeminiDriver + "...", new EventHandler(aboutGeminiDriverToolStripMenuItem_Click)),
             new MenuItem(Resources.Exit, new EventHandler(ExitMenu))
@@ -320,7 +326,7 @@ namespace ASCOM.GeminiTelescope
 
         void BalloonIcon_MouseMove(object sender, MouseEventArgs e)
         {
-            if (m_StatusForm == null || !m_StatusForm.Visible)
+            if ((m_StatusForm == null || !m_StatusForm.Visible) && m_ShowStatusPanel)
             {
                 Screen scr = Screen.FromPoint(Cursor.Position);
                 GeminiHardware.ShowStatus(new Point(scr.WorkingArea.Right, scr.WorkingArea.Bottom), true);
@@ -392,8 +398,18 @@ namespace ASCOM.GeminiTelescope
             if (m_ShowNotifications) 
                 Speech.SayIt(Resources.ShowNotifications, Speech.SpeechType.Command);
             else
-                Speech.SayIt(Resources.HideHandController, Speech.SpeechType.Command);
+                Speech.SayIt(Resources.HideNotifications, Speech.SpeechType.Command);
 
+        }
+
+        void ShowStatusPanel(object sender, EventArgs e)
+        {
+            m_ShowStatusPanel = !m_ShowStatusPanel;
+            m_BalloonMenu.MenuItems[Resources.StatusPanel].Checked = m_ShowStatusPanel;
+            if (m_ShowStatusPanel)
+                Speech.SayIt(Resources.ShowStatusPanel, Speech.SpeechType.Command);
+            else
+                Speech.SayIt(Resources.HideStatusPanel, Speech.SpeechType.Command);
         }
 
         void ConnectMenu(object sender, EventArgs e)
