@@ -216,7 +216,7 @@ namespace ASCOM.GeminiTelescope
             }
 
 
-            var qry = (from o in m_Objects.Values where (wh.Contains(o.Catalog) && o.Name.ToLower().Contains(m_Search)) select o);
+            var qry = (from o in m_Objects.Values where (wh.Contains(o.Catalog) && o.Name.ToLower().Contains(m_Search.ToLower())) select o);
 
             //select o);
             if (m_DirectionSort[m_OrderBy])
