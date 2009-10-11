@@ -140,8 +140,7 @@ namespace ASCOM.GeminiTelescope
                 case UserFunction.ParkCWD:
                     if (!keyDown)
                     {
-                        Cmd(":hC");
-                        Cmd(":hN");
+                        GeminiHardware.DoParkAsync(GeminiHardware.GeminiParkMode.SlewCWD);
                         Speech.SayIt(Resources.ParkCWD, Speech.SpeechType.Command);
                         return true;
                     }

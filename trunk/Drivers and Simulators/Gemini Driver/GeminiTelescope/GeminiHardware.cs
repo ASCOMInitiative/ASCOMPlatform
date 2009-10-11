@@ -220,7 +220,8 @@ namespace ASCOM.GeminiTelescope
         private static bool m_AtPark;
         private static bool m_AtHome;
         private static string m_ParkState = "";
-     
+        private static bool m_ParkWasExecuted = false;
+
         private static bool m_SouthernHemisphere = false;
 
         private static string m_GeminiVersion = "";
@@ -386,6 +387,42 @@ namespace ASCOM.GeminiTelescope
         }
 
 
+        private static double m_ParkAlt;
+
+        public static double ParkAlt
+        {
+            get { return GeminiHardware.m_ParkAlt; }
+            set { 
+                GeminiHardware.m_ParkAlt = value;
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ParkAlt", value.ToString());
+            }
+        }
+        private static double m_ParkAz;
+
+        public static double ParkAz
+        {
+            get { return GeminiHardware.m_ParkAz; }
+            set { 
+                GeminiHardware.m_ParkAz = value;
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ParkAz", value.ToString());
+            }
+        }
+
+        private static GeminiParkMode m_ParkPosition;
+
+        public static GeminiParkMode ParkPosition
+        {
+            get { return m_ParkPosition; }
+            set
+            {
+                GeminiHardware.m_ParkPosition  = value;
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ParkPosition", ((int)value).ToString());
+            }
+
+        }
         private static int m_JoystickAxisRA;
 
         public static int JoystickAxisRA
@@ -518,6 +555,15 @@ namespace ASCOM.GeminiTelescope
             WarmRestart = 3,
         }
         ;
+
+        public enum GeminiParkMode
+        {
+            NoSlew = 0,
+            SlewHome = 1,
+            SlewCWD = 2,
+            SlewAltAz = 3,
+        }
+
         private static GeminiBootMode m_BootMode = GeminiBootMode.Prompt; 
 
         private static SerialPort m_SerialPort; // main physical port
@@ -752,9 +798,21 @@ namespace ASCOM.GeminiTelescope
 
             Trace.Info(2, "Pass Through Port", m_PassThroughComPort, m_PassThroughBaudRate, m_PassThroughPortEnabled);
 
+            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ParkAlt", ""), out m_ParkAlt))
+                m_ParkAlt= 0.0;
+
+            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ParkAz", ""), out m_ParkAz))
+                m_ParkAz = 0.0;
+
+            int prk = 0;
+            if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ParkPosition", ""), out prk))
+                prk = 0;
+
+            m_ParkPosition = (GeminiParkMode)prk;
 
             if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseJoystick", ""), out m_UseJoystick))
                 m_UseJoystick = false;
+
 
             m_JoystickName = m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickName", "");
 
@@ -1552,6 +1610,22 @@ namespace ASCOM.GeminiTelescope
             // 0 => didn't park.
             //if (GeminiHardware.ParkState == "0") throw new DriverException("Failed to " + where, (int)SharedResources.ERROR_BASE);
             Trace.Exit(4, "WaitForHomeOrPark", where);
+        }
+
+
+        /// <summary>
+        /// Wait for mount to stop moving and tracking
+        /// </summary>
+        /// <param name="timeout">how long to wait in seconds</param>
+        public static bool WaitForStop(int timeout)
+        {
+            Trace.Enter(4, "WaitForStop");
+            int count = 0;
+
+            // wait for parking move to begin, wait for a maximum of 16*250ms = 4 seconds
+            while (m_Velocity != "N" && count < timeout*4) { System.Threading.Thread.Sleep(250); count++; }
+            if (m_Velocity == "N") return true;
+            return false;
         }
 
         /// <summary>
@@ -2626,6 +2700,15 @@ namespace ASCOM.GeminiTelescope
                         }
                     }
 
+                    if (m_ParkWasExecuted && Velocity != "N") //unparked!
+                    {
+                        m_AtPark = false;   //not parked anymore
+                        m_ParkWasExecuted = false;
+                    }
+                    else
+                        if (m_ParkWasExecuted && Velocity == "N")
+                            m_AtPark = true;
+
                     if (STATUS != null)
                     {
                         int.TryParse(STATUS, out m_GeminiStatusByte);
@@ -3141,6 +3224,73 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static bool AtPark
         { get { return m_AtPark; } }
+
+
+        /// <summary>
+        /// Park using specified park position mode
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <returns></returns>
+        public static void DoPark(object mode)
+        {
+            m_Trace.Enter("DoPark", mode);
+
+            if (!Connected) return;
+
+            bool wait = true;
+
+            switch ((GeminiParkMode)mode)
+            {
+                case GeminiParkMode.NoSlew:
+                    wait = false;
+                    break;  // already there
+                case GeminiParkMode.SlewCWD:
+                    GeminiHardware.DoCommandResult(":hC", GeminiHardware.MAX_TIMEOUT, false);
+                    break;
+                case GeminiParkMode.SlewHome:
+                    GeminiHardware.DoCommandResult(":hP", GeminiHardware.MAX_TIMEOUT, false);
+                    break;
+                case GeminiParkMode.SlewAltAz:
+                    m_TargetAltitude = ParkAlt;
+                    m_TargetAzimuth = ParkAz;
+                    try
+                    {
+                        SlewHorizonAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        m_Trace.Error(ex.Message);
+                        return;
+                    }
+                    break;
+            }
+
+            if (wait) WaitForSlewToEnd();
+
+            DoCommandResult(":hN", MAX_TIMEOUT, false);
+
+            if (!WaitForStop(120))    // wait for a stop for 2 minutes, then fail
+            {
+                m_Trace.Error("Failed to stop DoPark");
+                return;
+            }
+            m_ParkWasExecuted = true;
+
+            m_Trace.Exit("DoPark", true);
+        }
+
+        /// <summary>
+        /// Perform park operation on a worker thread
+        /// </summary>
+        /// <returns></returns>
+        public static bool DoParkAsync(GeminiParkMode mode)
+        {
+            if (!Connected) return false;
+            System.Threading.ThreadPool.QueueUserWorkItem(DoPark, mode );
+            return true;
+        }
+
+
 
         /// <summary>
         /// Get Set current TargetRightAscention propery
@@ -3751,6 +3901,7 @@ namespace ASCOM.GeminiTelescope
 
 
         #endregion
+
 
     }
 }
