@@ -1439,7 +1439,9 @@ namespace ASCOM.GeminiTelescope
         private void SetTopMost()
         {
             this.TopMost = GeminiHardware.KeepMainFormOnTop;
-            keepThisWindowOnTopToolStripMenuItem.Checked = GeminiHardware.KeepMainFormOnTop;
+            //keepThisWindowOnTopToolStripMenuItem.Checked = GeminiHardware.KeepMainFormOnTop;
+            if (GeminiHardware.KeepMainFormOnTop) keepThisWindowOnTopToolStripMenuItem.Text = "  Keep this window On Top";
+            else keepThisWindowOnTopToolStripMenuItem.Text = "* Keep this window On Top";
         }
 
         private void keepThisWindowOnTopToolStripMenuItem_Click(object sender, EventArgs e)
