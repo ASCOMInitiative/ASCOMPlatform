@@ -1310,8 +1310,8 @@ namespace ASCOM.GeminiTelescope
             if (GeminiHardware.Connected)
             {
                 Speech.SayIt(Resources.ParkHere, Speech.SpeechType.Command);
-
-                GeminiHardware.DoCommand(":hN", false);
+                GeminiHardware.DoParkAsync(GeminiHardware.GeminiParkMode.NoSlew);
+//                GeminiHardware.DoCommand(":hN", false);
             }
         }
 
@@ -1321,9 +1321,8 @@ namespace ASCOM.GeminiTelescope
             {
                 this.UseWaitCursor = true;
                 Speech.SayIt(Resources.ParkCWD, Speech.SpeechType.Command);
-                GeminiHardware.DoCommand(":hC", false);
-//              GeminiHardware.WaitForHomeOrPark("Park");
-//              GeminiHardware.DoCommandResult(":hN", GeminiHardware.MAX_TIMEOUT, false);
+                GeminiHardware.DoParkAsync(GeminiHardware.GeminiParkMode.SlewCWD);
+//                GeminiHardware.DoCommand(":hC", false);
                 this.UseWaitCursor = false;
             }
         }
@@ -1334,10 +1333,8 @@ namespace ASCOM.GeminiTelescope
             {
                 this.UseWaitCursor = true;
                 Speech.SayIt(Resources.ParkHome, Speech.SpeechType.Command);
-
-                GeminiHardware.DoCommand(":hP", false);
-//              GeminiHardware.WaitForHomeOrPark("Home");
-//              GeminiHardware.DoCommandResult(":hN", GeminiHardware.MAX_TIMEOUT, false);
+                GeminiHardware.DoParkAsync(GeminiHardware.GeminiParkMode.SlewHome);
+//                GeminiHardware.DoCommand(":hP", false);
                 this.UseWaitCursor = false;
             }
         }
@@ -1463,5 +1460,29 @@ namespace ASCOM.GeminiTelescope
             frm.ShowDialog(this);
         }
 
+        private void setCustomParkPositionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Speech.SayIt(Resources.ConfigurePark, Speech.SpeechType.Command); 
+
+            frmParkPosition frm = new frmParkPosition();
+            frm.ShowDialog(this);
+        }
+
+        private void parkAtCustomParkPositionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Speech.SayIt(Resources.Park, Speech.SpeechType.Command); 
+            GeminiHardware.DoParkAsync(GeminiHardware.ParkPosition);
+        }
+
+        private void unparkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (GeminiHardware.Connected)
+            {
+                Speech.SayIt(Resources.Unpark, Speech.SpeechType.Command);
+                GeminiHardware.DoCommandResult(":hW", GeminiHardware.MAX_TIMEOUT, false);
+            }
+        }
+
+    
     }
 }

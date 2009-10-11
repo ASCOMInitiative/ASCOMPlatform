@@ -565,7 +565,16 @@ Are you sure you want to do this?</value>
   <data name="ConfigureCatalogs" xml:space="preserve">
     <value>Manage Catalogues</value>
   </data>
+  <data name="ConfigurePark" xml:space="preserve">
+    <value>Configure Park Position</value>
+  </data>
   <data name="ObservationLog" xml:space="preserve">
     <value>Observation Log</value>
+  </data>
+  <data name="Park" xml:space="preserve">
+    <value>Park Gemini</value>
+  </data>
+  <data name="Unpark" xml:space="preserve">
+    <value>Unpark Gemini</value>
   </data>
 </root>

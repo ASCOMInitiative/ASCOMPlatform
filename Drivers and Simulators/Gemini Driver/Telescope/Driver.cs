@@ -865,11 +865,9 @@ namespace ASCOM.GeminiTelescope
 
             if (GeminiHardware.AtPark) return;  // already there
 
-           // string[] cmd = { ":hP", ":hN" };
-           // GeminiHardware.DoCommand(cmd);
-            GeminiHardware.DoCommandResult(":hC", GeminiHardware.MAX_TIMEOUT, false);
+            // synchronous with this thread, don't return until done:
+            GeminiHardware.DoPark(GeminiHardware.ParkPosition);
 
-            GeminiHardware.WaitForHomeOrPark("Park");
             GeminiHardware.Trace.Exit("IT:Park");
         }
 
