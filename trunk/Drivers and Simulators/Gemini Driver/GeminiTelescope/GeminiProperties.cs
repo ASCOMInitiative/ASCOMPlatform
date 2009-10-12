@@ -1167,6 +1167,13 @@ namespace ASCOM.GeminiTelescope
         public bool SavePEC
         {
             get { return (bool)get_Profile("SavePEC", false); }
+            set
+            { mProfile["SavePEC"] = value; }
+        }
+
+        private bool SavePEC_Gemini
+        {
+            get { return (bool)get_Profile("SavePEC", false); }
             set {
                 if (value == SavePEC) return;   // was already set to true
                 mProfile["SavePEC"] = value;
@@ -1174,6 +1181,7 @@ namespace ASCOM.GeminiTelescope
                 else
                     PECTable = new SerializableDictionary<int, string>();
             }
+
         }
 
         /// <summary>

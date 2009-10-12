@@ -110,8 +110,12 @@ namespace Indigo
         protected override void OnPaint(PaintEventArgs e)
         {
             HandleResize();
-            DrawGroupBox(e.Graphics);
-            DrawToggleButton(e.Graphics);
+            try
+            {
+                DrawGroupBox(e.Graphics);
+                DrawToggleButton(e.Graphics);
+            }
+            catch { }
         }
 
         #endregion

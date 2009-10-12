@@ -429,6 +429,10 @@ namespace ASCOM.GeminiTelescope
             m_CenterX = RawX;
             m_CenterY = RawY;
 
+            GeminiHardware.Trace.Info(2, "Joystick RA, DEC", m_AxisRA, m_AxisDEC);
+            GeminiHardware.Trace.Info(2, "Joystick Center", m_CenterX, m_CenterY);
+            GeminiHardware.Trace.Info(2, "Joystick Min/Max", MinX, MinY, MaxX, MaxY );
+
             return true;
         }
 
