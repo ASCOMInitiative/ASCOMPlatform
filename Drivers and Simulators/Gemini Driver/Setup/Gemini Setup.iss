@@ -15,7 +15,7 @@
 [Setup]
 ; SetupVersion is the installer version number and appears as the fourth digit in the installer version number
 ; Only increment SetupVersion when you make changes to the installer, it does not ned to increment when you make Gemini code changes
-#define Public SetupVersion 6; Setup program version number
+#define Public SetupVersion 7; Setup program version number
 
 ; Determiine the driver version number from the GeminiTelescope executable (only Major, Minor and Release are used
 ; as SetupVersion replaces Build)
@@ -144,6 +144,9 @@ Type: dirifempty; Name: {cf}\ASCOM\Telescope\Gemini\
 [Code]
 //This function is called automatically before install starts and will test whether platform 5 or later and the platform update are installed
 function InitializeSetup(): Boolean;
+  var
+	version: cardinal;
+
 begin
   // Initialise return value
   Result:= True;
@@ -159,6 +162,16 @@ begin
     if not FileExists(ExpandConstant('{cf}\ASCOM\.net\ASCOM.Utilities.dll')) then begin
       MsgBox('ASCOM Platform 5.5 Update is not installed. You must install the ASCOM Platform 5.5 updater before installing this driver. You can download this from http:\\www.ascom.com\downloads', mbCriticalError, MB_OK);
       Result:= False;
+    end;
+  end;
+
+  if Result then // check for .NET 3.5 SP1
+  begin
+		RegQueryDWordValue(HKLM, 'Software\Microsoft\NET Framework Setup\NDP\v3.5', 'SP', version);
+		if version < 1 then
+		begin
+     MsgBox('Microsoft .NET version 3.5 SP1 is not installed. You must install .NET 3.5 SP1 run-time before installing this driver.', mbCriticalError, MB_OK);
+       Result:= False;
     end;
   end;
 end;
@@ -183,9 +196,20 @@ begin
 end;
 
 
+const
+	dotnetfx35sp1_url = 'http://download.microsoft.com/download/0/6/1/061f001c-8752-4600-a198-53214c69b51f/dotnetfx35setup.exe';
+
+
+
 [Messages]
 WelcomeLabel1=%n%n[name]%n
 #emit "WelcomeLabel2=This will update your installation to version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
+
+
+
+[CustomMessages]
+dotnetfx35sp1_title=.NET Framework 3.5 Service Pack 1
+
 
 [_ISTool]
 LogFile=Setup.log
