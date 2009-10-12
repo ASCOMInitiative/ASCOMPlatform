@@ -590,8 +590,8 @@ namespace ASCOM.GeminiTelescope
         }
 
         /// <summary>
-        /// Set comet-tracking declination rate. This is the Gemini divisor value, valid 
-        /// range is 0...65535
+        /// Set comet-tracking declination rate. 
+        /// arcseconds per second, default = 0.0
         /// </summary>
         public double DeclinationRate
         {
@@ -599,10 +599,15 @@ namespace ASCOM.GeminiTelescope
             {
                 GeminiHardware.Trace.Enter("IT:DeclinationRate.Get");
                 string rate = GeminiHardware.DoCommandResult("<412:", GeminiHardware.MAX_TIMEOUT, false);
-                if (rate != null)
+                string wormGearRatio = GeminiHardware.DoCommandResult("<22:", GeminiHardware.MAX_TIMEOUT, false);
+                string spurGearRatio = GeminiHardware.DoCommandResult("<24:", GeminiHardware.MAX_TIMEOUT, false);
+                string encoderResolution = GeminiHardware.DoCommandResult("<26:", GeminiHardware.MAX_TIMEOUT, false);
+                if (rate != null && spurGearRatio != null && wormGearRatio != null && encoderResolution !=null)
                 {
                     GeminiHardware.Trace.Exit("IT:DeclinationRate.Get", rate);
-                    return int.Parse(rate);
+                    double stepsPerSecond = 22.8881835938 / double.Parse(rate);
+                    double arcSecondsPerStep = 129600.00 / (double.Parse(wormGearRatio) * double.Parse(spurGearRatio) * double.Parse(encoderResolution));
+                    return arcSecondsPerStep * stepsPerSecond;
                 }
                 throw new TimeoutException("DeclinationRate");
             }
@@ -610,11 +615,22 @@ namespace ASCOM.GeminiTelescope
             set 
             {
                 GeminiHardware.Trace.Enter("IT:DeclinationRate.Set", value);
-                int val = (int)value;
-                if (val < 0 || val > 65535) throw new InvalidValueException("DeclinationRate", value.ToString(), "0..65535");
-                string cmd = ">412:" + ((int)(value)).ToString();
-                GeminiHardware.DoCommandResult(cmd, GeminiHardware.MAX_TIMEOUT, false);
-                GeminiHardware.Trace.Exit("IT:DeclinationRate.Set", value);
+
+                string wormGearRatio = GeminiHardware.DoCommandResult("<22:", GeminiHardware.MAX_TIMEOUT, false);
+                string spurGearRatio = GeminiHardware.DoCommandResult("<24:", GeminiHardware.MAX_TIMEOUT, false);
+                string encoderResolution = GeminiHardware.DoCommandResult("<26:", GeminiHardware.MAX_TIMEOUT, false);
+
+                if (spurGearRatio != null && wormGearRatio != null && encoderResolution != null)
+                {
+                    double arcSecondsPerStep = 129600.00 / (double.Parse(wormGearRatio) * double.Parse(spurGearRatio) * double.Parse(encoderResolution));
+                    double stepsPerSecond = value / arcSecondsPerStep;
+                    int divisor = (int)(22.8881835938 / stepsPerSecond);
+                    if (divisor < -65535 || divisor > 65535) throw new InvalidValueException("DeclinationRate", value.ToString(), "Rate cannot be implementated. Too Slow.");
+                    string cmd = ">412:" + divisor.ToString();
+                    GeminiHardware.DoCommandResult(cmd, GeminiHardware.MAX_TIMEOUT, false);
+                    GeminiHardware.Trace.Exit("IT:DeclinationRate.Set", value);
+                }
+                else throw new TimeoutException("DeclinationRate");
             }
         }
 
