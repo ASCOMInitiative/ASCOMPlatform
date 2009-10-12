@@ -65,7 +65,7 @@ namespace ASCOM.TelescopeSimulator
         private static bool m_CanTrackingRates;
         
         //Telescope Implementation
-        private static int m_AlignmentMode;
+        private static ASCOM.Interface.AlignmentModes m_AlignmentMode;
         private static double m_ApertureArea;
         private static double m_ApertureDiameter;
         private static double m_FocalLength;
@@ -125,6 +125,7 @@ namespace ASCOM.TelescopeSimulator
         public static double m_DeltaRa = 0;
         public static double m_DeltaDec = 0;
 
+        private static ASCOM.Interface.PierSide m_SideOfPier;
 
         private static bool m_Connected = false; //Keep track of the connection status of the hardware
 
@@ -224,7 +225,27 @@ namespace ASCOM.TelescopeSimulator
 
             //Load up the values from saved
             m_OnTop = bool.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID,"AlwaysOnTop"));
-            m_AlignmentMode = int.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "AlignMode"));
+
+            switch (int.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "AlignMode")))
+            {
+                case 0:
+                    m_AlignmentMode = ASCOM.Interface.AlignmentModes.algAltAz;
+                    break;
+                case 1:
+                    m_AlignmentMode = ASCOM.Interface.AlignmentModes.algGermanPolar;
+                    break;
+                case 2:
+                    m_AlignmentMode = ASCOM.Interface.AlignmentModes.algPolar;
+                    break;
+                default:
+                    m_AlignmentMode = ASCOM.Interface.AlignmentModes.algGermanPolar;
+                    break;
+            }
+                
+           
+
+
+
             m_ApertureArea = double.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "ApertureArea"));
             m_ApertureArea = double.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "Aperture"));
             m_FocalLength = double.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "FocalLength"));
@@ -404,11 +425,29 @@ namespace ASCOM.TelescopeSimulator
                             break;
                     }
                 }
-                else
+                else if (m_SlewState == SlewType.SlewRaDec)
+                {
+
+                }
+                else if (m_SlewState == SlewType.SlewAltAz || m_SlewState == SlewType.SlewHome || m_SlewState == SlewType.SlewPark)
+                {
+
+                }
+                else if (m_SlewState == SlewType.SlewMoveAxis)
+                {
+
+                }
+                else if (m_PulseGuideTixRa > 0 || m_PulseGuideTixDec > 0)
                 {
 
                 }
             }
+
+            if (m_SlewState == SlewType.SlewSettle)
+            {
+
+            }
+
             m_SiderealTime = AstronomyFunctions.LocalSiderealTime(m_Longitude);
             TelescopeSimulator.m_MainForm.SiderealTime = m_SiderealTime;
             TelescopeSimulator.m_MainForm.Altitude = m_Altitude;
@@ -420,13 +459,25 @@ namespace ASCOM.TelescopeSimulator
         #region Properties For Settings
 
         //I used some of these as dual purpose if the driver uses the same exact property
-        public static int AlignmentMode
+        public static ASCOM.Interface.AlignmentModes AlignmentMode
         {
             get { return m_AlignmentMode; }
             set
             {
                 m_AlignmentMode = value;
-                m_Profile.WriteValue(SharedResources.PROGRAM_ID, "AlignMode", value.ToString());
+                switch (value)
+                {
+                    case ASCOM.Interface.AlignmentModes.algAltAz:
+                        m_Profile.WriteValue(SharedResources.PROGRAM_ID, "AlignMode", "0");
+                        break;
+                    case ASCOM.Interface.AlignmentModes.algGermanPolar:
+                        m_Profile.WriteValue(SharedResources.PROGRAM_ID, "AlignMode", "1");
+                        break;
+                    case ASCOM.Interface.AlignmentModes.algPolar:
+                        m_Profile.WriteValue(SharedResources.PROGRAM_ID, "AlignMode", "2");
+                        break;
+                }
+                
             }
         }
         public static bool OnTop
@@ -971,21 +1022,112 @@ namespace ASCOM.TelescopeSimulator
         #endregion
 
         #region Helper Functions
-       public static int SideOfPierRaDec(double RightAscension, double Declination)
+       public static ASCOM.Interface.PierSide SideOfPierRaDec(double RightAscension, double Declination)
        {
-           return 0;
+           double hourAngle;
+           if (m_AlignmentMode != ASCOM.Interface.AlignmentModes.algGermanPolar)
+           {
+               return ASCOM.Interface.PierSide.pierUnknown;
+           }
+           else
+           {
+               hourAngle = AstronomyFunctions.RangeHa(AstronomyFunctions.LocalSiderealTime(m_Longitude) - RightAscension);
+               if (hourAngle >=0) return ASCOM.Interface.PierSide.pierEast;
+               else return ASCOM.Interface.PierSide.pierWest;
+
+           }
+       }
+       public static ASCOM.Interface.PierSide SideOfPier(double Azimuth)
+       {
+           if (m_AlignmentMode != ASCOM.Interface.AlignmentModes.algGermanPolar)
+           {
+               return ASCOM.Interface.PierSide.pierUnknown;
+           }
+           if (Azimuth >= 180) return ASCOM.Interface.PierSide.pierEast;
+           else return ASCOM.Interface.PierSide.pierWest;
        }
        public static void StartSlewRaDec(double RightAscension, double Declination, bool DoSideOfPier)
        {
+           ASCOM.Interface.PierSide targetSideOfPier;
+           m_SlewState = SlewType.SlewNone;
+
+           if (DoSideOfPier) targetSideOfPier = SideOfPierRaDec(RightAscension, Declination);
+           else targetSideOfPier = m_SideOfPier;
+
+           if (targetSideOfPier != m_SideOfPier)
+           {
+               if (RightAscension >= 12) m_RightAscension = RightAscension - 12;
+               else m_RightAscension = RightAscension + 12;
+
+               CalculateAltAz();
+               m_SideOfPier = targetSideOfPier;
+               TelescopeSimulator.m_MainForm.LEDPier(m_SideOfPier);
+           }
+           m_DeltaRa = RightAscension - m_RightAscension;
+           m_DeltaDec = Declination - m_Declination;
+           m_DeltaAlt = 0;
+           m_DeltaAz = 0;
+
+           if (m_DeltaRa < -12) m_DeltaRa = m_DeltaRa + 24;
+           else if (m_DeltaRa > 12) m_DeltaRa = m_DeltaRa - 24;
+
+           ChangeHome(false);
+           ChangePark(false);
+
+           m_SlewState = SlewType.SlewRaDec;
        }
-       public static void StartSlewAltAz(double Altitude, double Azimuth, bool DoSideOfPier)
+       public static void StartSlewAltAz(double Altitude, double Azimuth, bool DoSideOfPier, SlewType Slew)
        {
+           ASCOM.Interface.PierSide targetSideOfPier;
+           m_SlewState = SlewType.SlewNone;
+
+           if (DoSideOfPier) targetSideOfPier = SideOfPier(Azimuth);
+           else targetSideOfPier = m_SideOfPier;
+
+           if (targetSideOfPier != m_SideOfPier)
+           {
+               if (Azimuth >= 180) m_Azimuth = Azimuth -180;
+               else m_Azimuth = Azimuth + 180;
+
+               CalculateRaDec();
+               m_SideOfPier = targetSideOfPier;
+               TelescopeSimulator.m_MainForm.LEDPier(m_SideOfPier);
+           }
+           m_DeltaRa = 0;
+           m_DeltaDec = 0;
+           m_DeltaAlt = Altitude - m_Altitude;
+           m_DeltaAz = Azimuth - m_Azimuth;
+
+           if (m_DeltaAz < -180) m_DeltaAz = m_DeltaAz +360;
+           else if (m_DeltaAz > 180) m_DeltaAz = m_DeltaAz -360;
+
+           ChangeHome(false);
+           ChangePark(false);
+
+           m_SlewState = Slew;
        }
        public static void Park()
        {
+           m_Tracking = false;
+           TelescopeSimulator.m_MainForm.Tracking();
+
+           StartSlewAltAz(m_ParkAltitude, m_ParkAzimuth, true, SlewType.SlewPark);
+           
        }
        public static void FindHome()
        {
+           double altitude;
+           double azimuth;
+
+           if (m_Latitude >= 0) azimuth = 180;
+           else azimuth = 0;
+
+           altitude = 90 - m_Latitude;
+
+           m_Tracking = false;
+           TelescopeSimulator.m_MainForm.Tracking();
+
+           StartSlewAltAz(altitude, azimuth, true, SlewType.SlewHome);
        }
        public static void ChangeHome(bool NewValue)
        {

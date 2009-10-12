@@ -383,5 +383,15 @@ namespace ASCOM.TelescopeSimulator
         {
             TelescopeHardware.SlewState = SlewType.SlewNone;
         }
+
+        public void Tracking()
+        {
+            if (TelescopeHardware.Tracking) checkBoxTrack.Checked = true;
+            else checkBoxTrack.Checked = false;
+        }
+        public void LEDPier(ASCOM.Interface.PierSide SideOfPier)
+        {
+
+        }
     }
 }
