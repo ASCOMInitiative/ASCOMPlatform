@@ -273,6 +273,7 @@
             this.chkSavePEC.AutoSize = true;
             this.chkSavePEC.BackColor = System.Drawing.Color.Transparent;
             this.chkSavePEC.CheckAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.chkSavePEC.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.geminiPropertiesBindingSource, "SavePEC", true));
             this.chkSavePEC.Location = new System.Drawing.Point(260, 8);
             this.chkSavePEC.Name = "chkSavePEC";
             this.chkSavePEC.Size = new System.Drawing.Size(111, 17);
