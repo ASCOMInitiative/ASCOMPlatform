@@ -300,7 +300,8 @@ namespace ASCOM.GeminiTelescope
         public double Altitude
         {
             get {
-                GeminiHardware.Trace.Enter("IT:Altitude.Get", GeminiHardware.Altitude);
+                System.Threading.Thread.Sleep(100); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
+                GeminiHardware.Trace.Enter("IT:IT:Altitude.Get", GeminiHardware.Altitude);
                 return GeminiHardware.Altitude;
             }
         }
@@ -324,6 +325,7 @@ namespace ASCOM.GeminiTelescope
         public bool AtHome
         {
             get {
+                System.Threading.Thread.Sleep(100); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
                 GeminiHardware.Trace.Enter("IT:AtHome.Get", m_FoundHome);                
                 return m_FoundHome; }
         }
@@ -331,6 +333,7 @@ namespace ASCOM.GeminiTelescope
         public bool AtPark
         {
             get {
+                System.Threading.Thread.Sleep(100); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
                 GeminiHardware.Trace.Enter("IT:AtPark.Get", GeminiHardware.AtPark);
                 return GeminiHardware.AtPark;
             }
@@ -370,6 +373,7 @@ namespace ASCOM.GeminiTelescope
         {
             get {
                 GeminiHardware.Trace.Enter("IT:Azimuth.Get", GeminiHardware.Azimuth);
+                System.Threading.Thread.Sleep(100); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
                 return GeminiHardware.Azimuth; }
         }
 
@@ -585,8 +589,10 @@ namespace ASCOM.GeminiTelescope
         public double Declination
         {
             get {
-                GeminiHardware.Trace.Enter("IT:Declination.Get", GeminiHardware.Declination);                 
-                return GeminiHardware.Declination; }
+                GeminiHardware.Trace.Enter("IT:Declination.Get", GeminiHardware.Declination);
+                System.Threading.Thread.Sleep(100); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
+                return GeminiHardware.Declination;
+            }
         }
 
         /// <summary>
@@ -942,9 +948,11 @@ namespace ASCOM.GeminiTelescope
         {
             
             get {
+                System.Threading.Thread.Sleep(100); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
                 double res = GeminiHardware.RightAscension;
                 GeminiHardware.Trace.Enter("IT:RightAscention.Get", res);
-                return res; }
+                return res;
+            }
         }
 
         /// <summary>
@@ -1018,7 +1026,10 @@ namespace ASCOM.GeminiTelescope
 
         public void SetPark()
         {
-            throw new MethodNotImplementedException("SetPark");
+            GeminiHardware.ParkAlt = GeminiHardware.Altitude;
+            GeminiHardware.ParkAz = GeminiHardware.Azimuth;
+            GeminiHardware.ParkPosition = GeminiHardware.GeminiParkMode.SlewAltAz;
+            GeminiHardware.Trace.Exit("IT:SetPark", GeminiHardware.ParkAlt, GeminiHardware.ParkAz);
         }
 
         public void SetupDialog()
@@ -1239,10 +1250,10 @@ namespace ASCOM.GeminiTelescope
 
         public bool Slewing
         {
-            
-
             get 
-            {                
+            {
+                System.Threading.Thread.Sleep(100); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
+
                 if (GeminiHardware.Velocity == "S" || GeminiHardware.Velocity == "C")
                 {
                     GeminiHardware.Trace.Enter("IT:Slewing.Get", true);
@@ -1341,7 +1352,9 @@ namespace ASCOM.GeminiTelescope
 
         public bool Tracking
         {
-            get { bool res = GeminiHardware.Tracking;
+            get {
+                System.Threading.Thread.Sleep(100); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)                
+                bool res = GeminiHardware.Tracking;
                 GeminiHardware.Trace.Enter("IT:Tracking.Get", res);
                 return res;
             }
