@@ -448,8 +448,8 @@ namespace ASCOM.GeminiTelescope
         public bool CanSetRightAscensionRate
         {
             get {
-                GeminiHardware.Trace.Enter("IT:CanSetRightAscensionRate.Get", false);
-                return false;
+                GeminiHardware.Trace.Enter("IT:CanSetRightAscensionRate.Get", true);
+                return true;
             }
         }
 
@@ -598,16 +598,20 @@ namespace ASCOM.GeminiTelescope
             get 
             {
                 GeminiHardware.Trace.Enter("IT:DeclinationRate.Get");
-                string rate = GeminiHardware.DoCommandResult("<412:", GeminiHardware.MAX_TIMEOUT, false);
+                string rateDivisor = GeminiHardware.DoCommandResult("<412:", GeminiHardware.MAX_TIMEOUT, false);
                 string wormGearRatio = GeminiHardware.DoCommandResult("<22:", GeminiHardware.MAX_TIMEOUT, false);
                 string spurGearRatio = GeminiHardware.DoCommandResult("<24:", GeminiHardware.MAX_TIMEOUT, false);
                 string encoderResolution = GeminiHardware.DoCommandResult("<26:", GeminiHardware.MAX_TIMEOUT, false);
-                if (rate != null && spurGearRatio != null && wormGearRatio != null && encoderResolution !=null)
+                if (rateDivisor != null && spurGearRatio != null && wormGearRatio != null && encoderResolution !=null)
                 {
+                    
+                    double stepsPerSecond = 22.8881835938 / double.Parse(rateDivisor);
+                    double arcSecondsPerStep = 129600.00 / (Math.Abs(double.Parse(wormGearRatio)) * double.Parse(spurGearRatio) * double.Parse(encoderResolution));
+
+                    double rate = arcSecondsPerStep * stepsPerSecond;
+
                     GeminiHardware.Trace.Exit("IT:DeclinationRate.Get", rate);
-                    double stepsPerSecond = 22.8881835938 / double.Parse(rate);
-                    double arcSecondsPerStep = 129600.00 / (double.Parse(wormGearRatio) * double.Parse(spurGearRatio) * double.Parse(encoderResolution));
-                    return arcSecondsPerStep * stepsPerSecond;
+                    return rate;
                 }
                 throw new TimeoutException("DeclinationRate");
             }
@@ -625,7 +629,7 @@ namespace ASCOM.GeminiTelescope
                     double arcSecondsPerStep = 129600.00 / (double.Parse(wormGearRatio) * double.Parse(spurGearRatio) * double.Parse(encoderResolution));
                     double stepsPerSecond = value / arcSecondsPerStep;
                     int divisor = (int)(22.8881835938 / stepsPerSecond);
-                    if (divisor < -65535 || divisor > 65535) throw new InvalidValueException("DeclinationRate", value.ToString(), "Rate cannot be implementated. Too Slow.");
+                    if (divisor < -65535 || divisor > 65535) throw new InvalidValueException("DeclinationRate", value.ToString(), "Rate cannot be implementated");
                     string cmd = ">412:" + divisor.ToString();
                     GeminiHardware.DoCommandResult(cmd, GeminiHardware.MAX_TIMEOUT, false);
                     GeminiHardware.Trace.Exit("IT:DeclinationRate.Set", value);
@@ -943,11 +947,73 @@ namespace ASCOM.GeminiTelescope
                 return res; }
         }
 
+        /// <summary>
+        /// The right ascension tracking rate offset from sidereal (seconds per sidereal second, default = 0.0)
+        /// </summary>
         public double RightAscensionRate
         {
-            // TODO Replace this with your implementation
-            get { return 0;  }
-            set { throw new PropertyNotImplementedException("RightAscensionRate", true); }
+            
+            get 
+            {
+                GeminiHardware.Trace.Enter("IT:RightAscensionRate.Get");
+                string rateDivisor = GeminiHardware.DoCommandResult("<411:", GeminiHardware.MAX_TIMEOUT, false);
+                string wormGearRatio = GeminiHardware.DoCommandResult("<21:", GeminiHardware.MAX_TIMEOUT, false);
+                string spurGearRatio = GeminiHardware.DoCommandResult("<23:", GeminiHardware.MAX_TIMEOUT, false);
+                string encoderResolution = GeminiHardware.DoCommandResult("<25:", GeminiHardware.MAX_TIMEOUT, false);
+                string mountType = GeminiHardware.DoCommandResult("<0:", GeminiHardware.MAX_TIMEOUT, false);
+
+                double preScaler = 1;
+
+                if (rateDivisor != null && spurGearRatio != null && wormGearRatio != null && encoderResolution != null && mountType != null)
+                {
+
+                    if (mountType == "1" || mountType == "5") preScaler = 2;
+
+                    double stepsPerSecond = (1500000/preScaler) / double.Parse(rateDivisor);
+                    double arcSecondsPerStep = 129600.00 / (Math.Abs(double.Parse(wormGearRatio)) * double.Parse(spurGearRatio) * double.Parse(encoderResolution));
+
+                    double rate = arcSecondsPerStep * stepsPerSecond;
+
+                    double offsetRate = (rate - 15.04157) / 0.9972695677;
+
+                    GeminiHardware.Trace.Exit("IT:RightAscensionRate.Get", offsetRate);
+                    return offsetRate;
+                }
+                throw new TimeoutException("RightAscensionRate");
+            }
+            set 
+            {
+                GeminiHardware.Trace.Enter("IT:RightAscensionRate.Set", value);
+                string wormGearRatio = GeminiHardware.DoCommandResult("<21:", GeminiHardware.MAX_TIMEOUT, false);
+                string spurGearRatio = GeminiHardware.DoCommandResult("<23:", GeminiHardware.MAX_TIMEOUT, false);
+                string encoderResolution = GeminiHardware.DoCommandResult("<25:", GeminiHardware.MAX_TIMEOUT, false);
+                string mountType = GeminiHardware.DoCommandResult("<0:", GeminiHardware.MAX_TIMEOUT, false);
+
+                double preScaler = 1;
+
+                if (spurGearRatio != null && wormGearRatio != null && encoderResolution != null && mountType != null)
+                {
+
+                    if (mountType == "1" || mountType == "5") preScaler = 2;
+
+                    double offsetRate = value * 0.9972695677 + 15.04157; //arcseconds per second
+
+                    
+                    double arcSecondsPerStep = 129600.00 / (Math.Abs(double.Parse(wormGearRatio)) * double.Parse(spurGearRatio) * double.Parse(encoderResolution));
+
+                    double stepsPerSecond = offsetRate / arcSecondsPerStep;
+
+                    int rateDivisor = (int)((1500000 / preScaler) / stepsPerSecond);
+
+                    if (rateDivisor < 256 || rateDivisor > 65535) throw new InvalidValueException("RightAscensionRate", value.ToString(), "Rate cannot be implementated");
+
+
+                    string cmd = ">411:" + rateDivisor.ToString();
+                    GeminiHardware.DoCommandResult(cmd, GeminiHardware.MAX_TIMEOUT, false);
+                    GeminiHardware.Trace.Exit("IT:RightAscensionRate.Set", value);
+                }
+                throw new TimeoutException("RightAscensionRate");
+            }
         }
 
         public void SetPark()
