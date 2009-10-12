@@ -439,6 +439,7 @@ namespace ASCOM.GeminiTelescope
                         checkBoxUseDriverSite.Checked = false;
                         if (m_GpsUpdateClock) checkBoxUseDriverTime.Checked = false;
                     }
+                    if (gpsForm.Elevation != SharedResources.INVALID_DOUBLE.ToString()) Elevation = double.Parse(gpsForm.Elevation);
                 }
                 catch
                 {

@@ -22,11 +22,8 @@ namespace ASCOM.GeminiTelescope
             Version version = new Version(Application.ProductVersion);
             labelVersion.Text = "ASCOM Gemini Telescope .NET " + string.Format("Version {0}.{1}.{2}", version.Major, version.Minor, version.Build);
             TimeZone localZone = TimeZone.CurrentTimeZone;
-            labelTime.Text = "Time zone is " + localZone.StandardName;
-            if (localZone.IsDaylightSavingTime(DateTime.Now))
-            {
-                labelTime.Text += " (currently DST)";
-            }
+
+            labelTime.Text = "Time zone is " + (localZone.IsDaylightSavingTime(DateTime.Now) ? localZone.DaylightName : localZone.StandardName);
         }
 
         #region Properties for Settings

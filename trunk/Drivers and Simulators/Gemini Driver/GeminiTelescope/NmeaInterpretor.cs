@@ -24,7 +24,7 @@ namespace ASCOM.GeminiTelescope
         #region Delegates
         public delegate void MessageDelegate(string message);
         public delegate void PositionReceivedEventHandler(string latitude,
-        string longitude);
+        string longitude, string elevation);
         public delegate void DateTimeChangedEventHandler(System.DateTime dateTime);
         public delegate void BearingReceivedEventHandler(double bearing);
         public delegate void SpeedReceivedEventHandler(double speed);
@@ -88,6 +88,8 @@ namespace ASCOM.GeminiTelescope
                     return ParseGPGSV(sentence);
                 case "$GPGSA":
                     return ParseGPGSA(sentence);
+                case "$GPGGA":
+                    return ParseGPGGA(sentence);
                 default:
                     // Indicate that the sentence was not re
                     //     cognized
@@ -99,6 +101,39 @@ namespace ASCOM.GeminiTelescope
         public string[] GetWords(string sentence)
         {
             return sentence.Split(',');
+        }
+
+        //Interprets a $GPGGA message
+        public bool ParseGPGGA(string sentence)
+        {
+            // Divide the sentence into words
+            string[] Words = GetWords(sentence);
+
+            if (Words[2] != "" & Words[3] != "" &
+            Words[4] != "" & Words[5] != "" &
+             Words[9] != "" & Words[10] != "")
+            {
+                // Yes. Extract latitude and longitude
+                // Append hours
+                string Latitude = Words[2].Substring(0, 2) + ":";
+                // Append minutes
+                Latitude = Latitude + Words[2].Substring(2);
+                // Append hours 
+                Latitude = Words[3] + Latitude; // Append the hemisphere
+                string Longitude = Words[4].Substring(0, 3) + ":";
+                // Append minutes
+                Longitude = Longitude + Words[4].Substring(3);
+                // Append the hemisphere
+                Longitude = Words[5] + Longitude;
+
+                string Elevation = Words[9];
+
+                // Notify the calling application of the
+                //     change
+                if (PositionReceived != null)
+                    PositionReceived(Latitude, Longitude, Elevation);
+            }
+            return true;
         }
         // Interprets a $GPRMC message
         public bool ParseGPRMC(string sentence)
@@ -125,7 +160,7 @@ namespace ASCOM.GeminiTelescope
                 // Notify the calling application of the
                 //     change
                 if (PositionReceived != null)
-                    PositionReceived(Latitude, Longitude);
+                    PositionReceived(Latitude, Longitude, SharedResources.INVALID_DOUBLE.ToString());
             }
             // Do we have enough values to parse sat
             //     ellite-derived time?

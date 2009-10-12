@@ -12,7 +12,7 @@ using ASCOM.GeminiTelescope.Properties;
 namespace ASCOM.GeminiTelescope
 {
     
-    public delegate void FormDelegate(string latitude, string longitude);
+    public delegate void FormDelegate(string latitude, string longitude, string elevation);
 
     public partial class frmGps : Form
     {
@@ -20,6 +20,7 @@ namespace ASCOM.GeminiTelescope
         private NmeaInterpreter interpreter = new NmeaInterpreter();
         private string m_Latitude;
         private string m_Longitude;
+        private string m_Elevation;
         
         public struct SystemTime
 
@@ -55,21 +56,32 @@ namespace ASCOM.GeminiTelescope
             interpreter.PositionReceived += new NmeaInterpreter.PositionReceivedEventHandler(interpreter_PositionReceived);
             interpreter.DateTimeChanged +=new NmeaInterpreter.DateTimeChangedEventHandler(interpreter_DateTimeChanged);
         }
-        private void ProcessForm(string latitude, string longitude)
+        private void ProcessForm(string latitude, string longitude, string elevation)
         {
-            labelLatitude.Text = "Latitude: " + latitude;
-            labelLongitude.Text = "Longitude: " + longitude;
+            
 
             m_Latitude = latitude.Substring(1);
             m_Longitude = longitude.Substring(1);
 
             if (latitude.Substring(0, 1) == "S") m_Latitude = "-" + m_Latitude;
             if (longitude.Substring(0, 1) == "W") m_Longitude = "-" + m_Longitude;
+
+            try
+            {
+                labelLatitude.Text = "Latitude: " + GeminiHardware.m_Util.DegreesToDMS(GeminiHardware.m_Util.DMSToDegrees(m_Latitude));
+                labelLongitude.Text = "Longitude: " + GeminiHardware.m_Util.DegreesToDMS(GeminiHardware.m_Util.DMSToDegrees(m_Longitude));
+            }
+            catch { }
+            
+            if (elevation != SharedResources.INVALID_DOUBLE.ToString()) labelElevation.Text = "Elevation: " + elevation;
+
+            m_Elevation = elevation;
+            
         }
-        private void interpreter_PositionReceived(string latitude, string longitude)
+        private void interpreter_PositionReceived(string latitude, string longitude, string elevation)
         {
             FormDelegate message = new FormDelegate(ProcessForm);
-            this.Invoke(message, new Object[] { latitude, longitude });
+            this.Invoke(message, new Object[] { latitude, longitude, elevation });
             
         }
         private void interpreter_DateTimeChanged(System.DateTime dateTime)
@@ -112,6 +124,8 @@ namespace ASCOM.GeminiTelescope
                 return log;
             }
         }
+        public string Elevation { get { return m_Elevation; } }
+
         public string ComPort
         {
             get { return comboBoxComPort.SelectedItem.ToString(); }

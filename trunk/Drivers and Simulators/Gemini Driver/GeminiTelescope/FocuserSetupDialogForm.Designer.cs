@@ -85,7 +85,7 @@
             // 
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picASCOM.Image = global::ASCOM.GeminiTelescope.Properties.Resources.ASCOM;
-            this.picASCOM.Location = new System.Drawing.Point(336, 12);
+            this.picASCOM.Location = new System.Drawing.Point(397, 12);
             this.picASCOM.Name = "picASCOM";
             this.picASCOM.Size = new System.Drawing.Size(48, 56);
             this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -94,11 +94,11 @@
             // 
             // cmdCancel
             // 
-            this.cmdCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
+            this.cmdCancel.BackColor = System.Drawing.Color.Black;
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cmdCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdCancel.ForeColor = System.Drawing.Color.White;
-            this.cmdCancel.Location = new System.Drawing.Point(325, 345);
+            this.cmdCancel.Location = new System.Drawing.Point(386, 342);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 24);
             this.cmdCancel.TabIndex = 5;
@@ -107,16 +107,16 @@
             // 
             // cmdOK
             // 
-            this.cmdOK.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
+            this.cmdOK.BackColor = System.Drawing.Color.Black;
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.cmdOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdOK.ForeColor = System.Drawing.Color.White;
-            this.cmdOK.Location = new System.Drawing.Point(325, 315);
+            this.cmdOK.Location = new System.Drawing.Point(386, 312);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 4;
             this.cmdOK.Text = "OK";
-            this.cmdOK.UseVisualStyleBackColor = true;
+            this.cmdOK.UseVisualStyleBackColor = false;
             // 
             // groupBox2
             // 
@@ -124,7 +124,7 @@
             this.groupBox2.ForeColor = System.Drawing.Color.White;
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(163, 78);
+            this.groupBox2.Size = new System.Drawing.Size(275, 78);
             this.groupBox2.TabIndex = 22;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Communications";
@@ -132,8 +132,8 @@
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 2;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 26.39405F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 73.60595F));
             this.tableLayoutPanel2.Controls.Add(this.label1, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.comboBoxComPort, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.label4, 0, 0);
@@ -145,7 +145,7 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 58.49057F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 41.50943F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(157, 59);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(269, 59);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // label1
@@ -160,9 +160,9 @@
             // comboBoxComPort
             // 
             this.comboBoxComPort.FormattingEnabled = true;
-            this.comboBoxComPort.Location = new System.Drawing.Point(81, 3);
+            this.comboBoxComPort.Location = new System.Drawing.Point(74, 3);
             this.comboBoxComPort.Name = "comboBoxComPort";
-            this.comboBoxComPort.Size = new System.Drawing.Size(73, 21);
+            this.comboBoxComPort.Size = new System.Drawing.Size(89, 21);
             this.comboBoxComPort.TabIndex = 22;
             // 
             // label4
@@ -182,16 +182,16 @@
             "9600",
             "19200",
             "38400"});
-            this.comboBoxBaudRate.Location = new System.Drawing.Point(81, 37);
+            this.comboBoxBaudRate.Location = new System.Drawing.Point(74, 37);
             this.comboBoxBaudRate.Name = "comboBoxBaudRate";
-            this.comboBoxBaudRate.Size = new System.Drawing.Size(73, 21);
+            this.comboBoxBaudRate.Size = new System.Drawing.Size(89, 21);
             this.comboBoxBaudRate.TabIndex = 24;
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.tableLayoutPanel1);
             this.groupBox1.ForeColor = System.Drawing.Color.White;
-            this.groupBox1.Location = new System.Drawing.Point(12, 106);
+            this.groupBox1.Location = new System.Drawing.Point(12, 117);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(275, 148);
             this.groupBox1.TabIndex = 23;
@@ -310,7 +310,7 @@
             // 
             this.checkBoxReverseDirection.AutoSize = true;
             this.checkBoxReverseDirection.ForeColor = System.Drawing.Color.White;
-            this.checkBoxReverseDirection.Location = new System.Drawing.Point(181, 24);
+            this.checkBoxReverseDirection.Location = new System.Drawing.Point(12, 96);
             this.checkBoxReverseDirection.Name = "checkBoxReverseDirection";
             this.checkBoxReverseDirection.Size = new System.Drawing.Size(141, 17);
             this.checkBoxReverseDirection.TabIndex = 24;
@@ -497,8 +497,9 @@
             this.labelTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTime.AutoSize = true;
             this.labelTime.ForeColor = System.Drawing.Color.White;
-            this.labelTime.Location = new System.Drawing.Point(199, 382);
+            this.labelTime.Location = new System.Drawing.Point(260, 382);
             this.labelTime.Name = "labelTime";
+            this.labelTime.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.labelTime.Size = new System.Drawing.Size(185, 13);
             this.labelTime.TabIndex = 28;
             this.labelTime.Text = "<run time - time zone and UTC offset>";
@@ -518,8 +519,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(396, 404);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
+            this.ClientSize = new System.Drawing.Size(457, 404);
             this.Controls.Add(this.labelTime);
             this.Controls.Add(this.labelVersion);
             this.Controls.Add(this.groupBox5);
