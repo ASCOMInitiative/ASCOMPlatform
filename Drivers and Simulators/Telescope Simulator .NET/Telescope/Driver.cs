@@ -126,7 +126,7 @@ namespace ASCOM.TelescopeSimulator
                 }
                 switch (TelescopeHardware.AlignmentMode)
                 {
-                    case 0:
+                    case AlignmentModes.algAltAz:
                         if (SharedResources.TrafficForm != null)
                         {
                             if (SharedResources.TrafficForm.Capabilities)
@@ -136,7 +136,7 @@ namespace ASCOM.TelescopeSimulator
                         }
                         
                         return AlignmentModes.algAltAz;
-                    case 1:
+                    case AlignmentModes.algGermanPolar:
                         if (SharedResources.TrafficForm != null)
                         {
                             if (SharedResources.TrafficForm.Capabilities)
@@ -146,7 +146,7 @@ namespace ASCOM.TelescopeSimulator
                         }
                         
                         return AlignmentModes.algGermanPolar;
-                    case 2:
+                    case  AlignmentModes.algPolar:
                         if (SharedResources.TrafficForm != null)
                         {
                             if (SharedResources.TrafficForm.Capabilities)
@@ -890,7 +890,7 @@ namespace ASCOM.TelescopeSimulator
 
             switch (TelescopeHardware.SideOfPierRaDec(RightAscension,Declination))
             {
-                case 0:
+                case  PierSide.pierUnknown:
                     if (SharedResources.TrafficForm != null)
                     {
                         if (SharedResources.TrafficForm.Other)
@@ -900,7 +900,7 @@ namespace ASCOM.TelescopeSimulator
                     }
                     return PierSide.pierUnknown;
                     
-                case 1:
+                case PierSide.pierEast:
                     if (SharedResources.TrafficForm != null)
                     {
                         if (SharedResources.TrafficForm.Other)
@@ -910,7 +910,7 @@ namespace ASCOM.TelescopeSimulator
                     }
                     return PierSide.pierEast;
                     
-                case 2:
+                case PierSide.pierWest:
                     if (SharedResources.TrafficForm != null)
                     {
                         if (SharedResources.TrafficForm.Other)
@@ -2013,7 +2013,7 @@ namespace ASCOM.TelescopeSimulator
             }
 
 
-            TelescopeHardware.StartSlewAltAz(Altitude, Azimuth, true);
+            TelescopeHardware.StartSlewAltAz(Altitude, Azimuth, true, SlewType.SlewAltAz);
 
 
             while (TelescopeHardware.SlewState == SlewType.SlewRaDec || TelescopeHardware.SlewState == SlewType.SlewSettle)
@@ -2051,7 +2051,7 @@ namespace ASCOM.TelescopeSimulator
             }
 
 
-            TelescopeHardware.StartSlewAltAz(Altitude, Azimuth, true);
+            TelescopeHardware.StartSlewAltAz(Altitude, Azimuth, true, SlewType.SlewAltAz);
         }
 
         public void SlewToCoordinates(double RightAscension, double Declination)
