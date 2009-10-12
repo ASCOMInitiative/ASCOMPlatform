@@ -386,6 +386,18 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        private static double m_JoystickSensitivity = 0;
+
+        public static double JoystickSensitivity
+        {
+            get { return GeminiHardware.m_JoystickSensitivity; }
+            set {
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickSensitivity", value.ToString());
+                GeminiHardware.m_JoystickSensitivity = value;
+            }
+        }
+
 
         private static double m_ParkAlt;
 
@@ -827,6 +839,9 @@ namespace ASCOM.GeminiTelescope
             if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickIsAnalog", ""), out m_JoystickIsAnalog))
                 m_JoystickIsAnalog = true;
 
+            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickSensitivity", ""), out m_JoystickSensitivity))
+                m_JoystickSensitivity = 0;
+
             m_SpeechVoice = m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "SpeechVoice", "");
 
             if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseSpeech", ""), out m_UseSpeech))
@@ -1265,7 +1280,7 @@ namespace ASCOM.GeminiTelescope
             m_Refraction = refract;
             Precession = precess; // this updates the mount with refraction and precession settings
             m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Refraction", m_Refraction.ToString());
-            Trace.Enter("SetPrecessionRefraction", precess, refract);
+            Trace.Exit("SetPrecessionRefraction", precess, refract);
             return true;
         }
 
@@ -3561,6 +3576,7 @@ namespace ASCOM.GeminiTelescope
             if (result[3] == "6") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to outside of safety limits");
             if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Invalid RA coordinate");                
             if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Invalid DEC coordinates");
+            m_Velocity = "S";   //set the correct velocity until next poll update
         }
         /// <summary>
         /// Slews the mount using Ra and Dec
@@ -3585,6 +3601,7 @@ namespace ASCOM.GeminiTelescope
             if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Invalid RA coordinate");
             if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Invalid DEC coordinate");
 
+            m_Velocity = "S";   //set the correct velocity until next poll update
         }
 
 
@@ -3614,6 +3631,9 @@ namespace ASCOM.GeminiTelescope
 
             m_Azimuth = azimuth; // Update state machine variables
             m_Altitude = altitude;
+
+            m_Velocity = "S";   //set the correct velocity until next poll update
+
         }
         
         /// <summary>
@@ -3645,6 +3665,8 @@ namespace ASCOM.GeminiTelescope
             if (result[3].StartsWith("1")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: Object below horizon");
             if (result[3].StartsWith("2")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: No object selected");
             if (result[3].StartsWith("3")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: Manual control");
+            m_Velocity = "S";   //set the correct velocity until next poll update
+
         }
 
         /// <summary>
@@ -3668,6 +3690,8 @@ namespace ASCOM.GeminiTelescope
             if (result[3].StartsWith("1")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: Object below horizon");
             if (result[3].StartsWith("2")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: No object selected");
             if (result[3].StartsWith("3")) throw new ASCOM.Utilities.Exceptions.InvalidValueException("Slew to Alt/Az: Manual control");
+
+            m_Velocity = "S";   //set the correct velocity until next poll update
         }
 
         /// <summary>

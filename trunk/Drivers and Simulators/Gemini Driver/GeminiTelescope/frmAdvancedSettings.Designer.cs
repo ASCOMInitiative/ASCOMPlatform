@@ -45,7 +45,6 @@
             this.chkSavePEC = new System.Windows.Forms.CheckBox();
             this.pbModel = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox1 = new Indigo.CollapsibleGroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label21 = new System.Windows.Forms.Label();
@@ -110,9 +109,9 @@
             this.numericUpDown18 = new System.Windows.Forms.NumericUpDown();
             this.label22 = new System.Windows.Forms.Label();
             this.checkBox5 = new System.Windows.Forms.CheckBox();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.menuSafetyPopup.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).BeginInit();
@@ -142,6 +141,7 @@
             this.tableLayoutPanel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown18)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuSafetyPopup
@@ -308,28 +308,13 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(480, 718);
             this.flowLayoutPanel1.TabIndex = 39;
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.pbOK);
-            this.panel1.Controls.Add(this.pbModel);
-            this.panel1.Controls.Add(this.pbApply);
-            this.panel1.Controls.Add(this.chkSavePEC);
-            this.panel1.Controls.Add(this.button3);
-            this.panel1.Controls.Add(this.pbReboot);
-            this.panel1.Controls.Add(this.pbSave);
-            this.panel1.Controls.Add(this.chkSendSettings);
-            this.panel1.Controls.Add(this.pbLoad);
-            this.panel1.Location = new System.Drawing.Point(3, 615);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(468, 100);
-            this.panel1.TabIndex = 5;
-            // 
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
             this.groupBox1.Controls.Add(this.tableLayoutPanel1);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.ForeColor = System.Drawing.Color.White;
+            this.groupBox1.FullSize = new System.Drawing.Size(471, 156);
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.MinimumSize = new System.Drawing.Size(471, 0);
             this.groupBox1.Name = "groupBox1";
@@ -582,6 +567,7 @@
             this.groupBox2.Controls.Add(this.tableLayoutPanel2);
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.ForeColor = System.Drawing.Color.White;
+            this.groupBox2.FullSize = new System.Drawing.Size(471, 81);
             this.groupBox2.Location = new System.Drawing.Point(3, 165);
             this.groupBox2.MinimumSize = new System.Drawing.Size(471, 0);
             this.groupBox2.Name = "groupBox2";
@@ -736,6 +722,7 @@
             this.groupBox3.Controls.Add(this.tableLayoutPanel3);
             this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox3.ForeColor = System.Drawing.Color.White;
+            this.groupBox3.FullSize = new System.Drawing.Size(471, 115);
             this.groupBox3.Location = new System.Drawing.Point(3, 252);
             this.groupBox3.MinimumSize = new System.Drawing.Size(471, 0);
             this.groupBox3.Name = "groupBox3";
@@ -1009,6 +996,7 @@
             this.groupBox4.Controls.Add(this.tableLayoutPanel4);
             this.groupBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox4.ForeColor = System.Drawing.Color.White;
+            this.groupBox4.FullSize = new System.Drawing.Size(471, 153);
             this.groupBox4.Location = new System.Drawing.Point(3, 373);
             this.groupBox4.MinimumSize = new System.Drawing.Size(471, 0);
             this.groupBox4.Name = "groupBox4";
@@ -1342,6 +1330,7 @@
             this.groupBox5.Controls.Add(this.tableLayoutPanel5);
             this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox5.ForeColor = System.Drawing.Color.White;
+            this.groupBox5.FullSize = new System.Drawing.Size(471, 77);
             this.groupBox5.Location = new System.Drawing.Point(3, 532);
             this.groupBox5.MinimumSize = new System.Drawing.Size(471, 0);
             this.groupBox5.Name = "groupBox5";
@@ -1473,6 +1462,22 @@
             this.checkBox5.Text = "Use Encoders:";
             this.checkBox5.UseVisualStyleBackColor = false;
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.pbOK);
+            this.panel1.Controls.Add(this.pbModel);
+            this.panel1.Controls.Add(this.pbApply);
+            this.panel1.Controls.Add(this.chkSavePEC);
+            this.panel1.Controls.Add(this.button3);
+            this.panel1.Controls.Add(this.pbReboot);
+            this.panel1.Controls.Add(this.pbSave);
+            this.panel1.Controls.Add(this.chkSendSettings);
+            this.panel1.Controls.Add(this.pbLoad);
+            this.panel1.Location = new System.Drawing.Point(3, 615);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(468, 100);
+            this.panel1.TabIndex = 5;
+            // 
             // frmAdvancedSettings
             // 
             this.AcceptButton = this.pbOK;
@@ -1496,8 +1501,6 @@
             this.Load += new System.EventHandler(this.frmAdvancedSettings_Load);
             this.menuSafetyPopup.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
@@ -1532,6 +1535,8 @@
             this.tableLayoutPanel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown18)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

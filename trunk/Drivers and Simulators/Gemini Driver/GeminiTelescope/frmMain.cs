@@ -184,11 +184,22 @@ namespace ASCOM.GeminiTelescope
 
                 System.Diagnostics.Trace.WriteLine("JOYSTICK : X = " + x.ToString() + "   Y = " + y.ToString());
 
+                GeminiHardware.Trace.Info(4, "JOYSTICK X,Y:", x.ToString() , y.ToString());
                 uint buttons = m_Joystick.ButtonState;
                 
                 ProcessButtonPress(ref buttons, m_PreviousJoystickButtonState);
                 
                 m_PreviousJoystickButtonState = buttons;
+
+                if (!GeminiHardware.JoystickIsAnalog)
+                {
+                    // make the requested sensitivity adjustment to joystick coordinates:
+                    if (GeminiHardware.JoystickSensitivity != 0) {
+                        GeminiHardware.Trace.Info(4, "JOYSTICK Sensitivity:", GeminiHardware.JoystickSensitivity.ToString());
+                        x *= GeminiHardware.JoystickSensitivity / 100.0;
+                        y *= GeminiHardware.JoystickSensitivity / 100.0; 
+                    }
+                }
 
 
                 // joystick positions are reported from -1 to 1
@@ -276,7 +287,8 @@ namespace ASCOM.GeminiTelescope
                     cmds.Add(dir);
                     m_JoystickDirection = dir;
                     m_JoystickRate = rate;
-                    Speech.SayIt(Resources.MoveJoystick + " "+ s_dir + " at " + s_rate + " speed", Speech.SpeechType.Command); 
+                    Speech.SayIt(Resources.MoveJoystick + " "+ s_dir + " at " + s_rate + " speed", Speech.SpeechType.Command);
+                    GeminiHardware.Trace.Info(4, "Move Joystick", s_dir, s_rate);
                 }
                 if (cmds.Count > 0) GeminiHardware.DoCommand(cmds.ToArray(), false);
                 tmrJoystick.Start();

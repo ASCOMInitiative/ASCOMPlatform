@@ -79,6 +79,8 @@ namespace ASCOM.GeminiTelescope
         public static int MAXIMUM_ERROR_INTERVAL = 20000;   // in msecs. 
         public static int RECOVER_SLEEP = 3000;         // how long to sleep while waiting to recover from errors
 
+        public static int DAYS_TO_KEEP_LOGS = 10;     // how many days to keep logs: older logs will be deleted on start-up
+
         private SharedResources() { }							// Prevent creation of instances
 
         static SharedResources()								// Static initialization
