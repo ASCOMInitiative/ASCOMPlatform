@@ -15,6 +15,7 @@ namespace ASCOM.GeminiTelescope
                 if (m_Log == null)
                 {
                     m_Log = new ASCOM.Utilities.TraceLogger(null, name);
+                    CleanUpLogs();
                 }
                 m_Log.Enabled = true;
                 m_Level = level;
@@ -22,6 +23,57 @@ namespace ASCOM.GeminiTelescope
             }
             catch { }
         }
+
+        private void CleanUpLogs()
+        {
+            try
+            {
+                string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\ASCOM";
+
+                System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(path);
+                System.IO.DirectoryInfo [] dirs = di.GetDirectories("Logs *");
+                foreach (System.IO.DirectoryInfo dir in dirs)
+                {
+                    // if more than 10-days old, delete old logs
+                    if (DateTime.Now - dir.LastWriteTime > TimeSpan.FromDays(SharedResources.DAYS_TO_KEEP_LOGS))
+                    {
+                        CleanUpFolder(dir);
+                    }
+                }
+
+            }
+            catch { }
+        }
+
+        private void CleanUpFolder(System.IO.DirectoryInfo dir)
+        {
+
+            System.IO.FileInfo [] fis = dir.GetFiles("ASCOM." + SharedResources.TELESCOPE_DRIVER_NAME + "*.*");
+            foreach (System.IO.FileInfo fi in fis)
+            {
+                try
+                {
+                    if (DateTime.Now  - fi.LastWriteTime > TimeSpan.FromDays(SharedResources.DAYS_TO_KEEP_LOGS))
+                    {
+                        fi.Delete();
+                    }
+                }
+                catch { }
+            }
+
+            // remove the folder if there are no files left:
+            fis = dir.GetFiles();
+            if (fis == null || fis.Length == 0)
+            {
+                try
+                {
+                    dir.Delete();
+                }
+                catch { }
+            }
+        }
+
+
 
         public void Enter(int level, string function, params object[] par)
         {

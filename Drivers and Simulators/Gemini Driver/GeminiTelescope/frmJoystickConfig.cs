@@ -247,6 +247,7 @@ namespace ASCOM.GeminiTelescope
                     GeminiHardware.JoystickAxisDEC = cmbAxisDEC.SelectedIndex;
                 }
 
+                GeminiHardware.JoystickSensitivity = (double)txtSensitivity.Value;
                 return true;
             }
             else
@@ -267,6 +268,7 @@ namespace ASCOM.GeminiTelescope
                 if (cmbAxisDEC.Items.Count > GeminiHardware.JoystickAxisDEC)
                     cmbAxisDEC.SelectedIndex = GeminiHardware.JoystickAxisDEC;
 
+                txtSensitivity.Value = (decimal)GeminiHardware.JoystickSensitivity;
                 return true;
             }
 
