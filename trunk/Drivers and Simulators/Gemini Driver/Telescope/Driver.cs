@@ -281,7 +281,7 @@ namespace ASCOM.GeminiTelescope
 
         public void AbortSlew()
         {
-            GeminiHardware.Trace.Enter("IT:IT:AbortSlew");
+            GeminiHardware.Trace.Enter("IT:AbortSlew");
             if (GeminiHardware.AtHome || GeminiHardware.AtPark)              
                 throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
             GeminiHardware.DoCommandResult(":Q", GeminiHardware.MAX_TIMEOUT, false);
@@ -292,7 +292,7 @@ namespace ASCOM.GeminiTelescope
         {
 
             get {
-                GeminiHardware.Trace.Enter("IT:IT:AlignmentMode.Get", AlignmentModes.algGermanPolar);
+                GeminiHardware.Trace.Enter("IT:AlignmentMode.Get", AlignmentModes.algGermanPolar);
                 return AlignmentModes.algGermanPolar; 
             }
         }
@@ -300,7 +300,7 @@ namespace ASCOM.GeminiTelescope
         public double Altitude
         {
             get {
-                GeminiHardware.Trace.Enter("IT:IT:Altitude.Get", GeminiHardware.Altitude);
+                GeminiHardware.Trace.Enter("IT:Altitude.Get", GeminiHardware.Altitude);
                 return GeminiHardware.Altitude;
             }
         }
@@ -585,7 +585,7 @@ namespace ASCOM.GeminiTelescope
         public double Declination
         {
             get {
-                GeminiHardware.Trace.Enter("IT:Connected.Set", GeminiHardware.Declination);                 
+                GeminiHardware.Trace.Enter("IT:Declination.Get", GeminiHardware.Declination);                 
                 return GeminiHardware.Declination; }
         }
 
@@ -923,7 +923,7 @@ namespace ASCOM.GeminiTelescope
             
             get {
                 double res = GeminiHardware.RightAscension;
-                GeminiHardware.Trace.Enter("IT:RightAscention", res);
+                GeminiHardware.Trace.Enter("IT:RightAscention.Get", res);
                 return res; }
         }
 
