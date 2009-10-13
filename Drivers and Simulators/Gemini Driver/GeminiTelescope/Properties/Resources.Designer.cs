@@ -97,6 +97,15 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Additional Align.
+        /// </summary>
+        internal static string Align {
+            get {
+                return ResourceManager.GetString("Align", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Speeds Mode.
         /// </summary>
         internal static string AllSpeedsMode {
@@ -1384,6 +1393,15 @@ namespace ASCOM.GeminiTelescope.Properties {
         internal static string SwapRA {
             get {
                 return ResourceManager.GetString("SwapRA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronize.
+        /// </summary>
+        internal static string Sync {
+            get {
+                return ResourceManager.GetString("Sync", resourceCulture);
             }
         }
         

@@ -104,6 +104,8 @@ namespace ASCOM.GeminiTelescope
             new AssignmentClass(Resources.ToggleFocuserSpeed, UserFunction.ToggleFocuserSpeed),
             new AssignmentClass(Resources.ObjSrch2, UserFunction.Search2),
             new AssignmentClass(Resources.ObjSrch1, UserFunction.Search1),
+            new AssignmentClass(Resources.Sync, UserFunction.Sync),
+            new AssignmentClass(Resources.Align, UserFunction.Align),
         };
 
 
@@ -247,7 +249,12 @@ namespace ASCOM.GeminiTelescope
                     GeminiHardware.JoystickAxisDEC = cmbAxisDEC.SelectedIndex;
                 }
 
-                GeminiHardware.JoystickSensitivity = (double)txtSensitivity.Value;
+                try
+                {
+                    GeminiHardware.JoystickSensitivity = (double)txtSensitivity.Value;
+                }
+                catch { }
+
                 return true;
             }
             else
@@ -268,7 +275,14 @@ namespace ASCOM.GeminiTelescope
                 if (cmbAxisDEC.Items.Count > GeminiHardware.JoystickAxisDEC)
                     cmbAxisDEC.SelectedIndex = GeminiHardware.JoystickAxisDEC;
 
-                txtSensitivity.Value = (decimal)GeminiHardware.JoystickSensitivity;
+                try
+                {
+                    txtSensitivity.Value = (decimal)GeminiHardware.JoystickSensitivity;
+                }
+                catch
+                {
+                    txtSensitivity.Value = 100;
+                }
                 return true;
             }
 

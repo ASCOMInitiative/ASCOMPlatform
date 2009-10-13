@@ -119,7 +119,7 @@ namespace ASCOM.GeminiTelescope
                     {
                         int dec = GeminiHardware.JoystickFixedSpeed - 1;
                         if (dec < 0) dec = 0;
-                        GeminiHardware.JoystickAccelerator = dec;
+                        GeminiHardware.JoystickFixedSpeed = dec;
                         Speech.SayIt("Decelerate", Speech.SpeechType.Command);
                     }
                     break;
@@ -181,6 +181,10 @@ namespace ASCOM.GeminiTelescope
                     break;
                 case UserFunction.Search2: if (!keyDown) { Cmd(":MF6"); Speech.SayIt(Resources.ObjectSearch2, Speech.SpeechType.Command); return true; } break;
                 case UserFunction.Search1: if (!keyDown) { Cmd(":MF8"); Speech.SayIt(Resources.ObjectSearch1, Speech.SpeechType.Command); return true; } break;
+                case UserFunction.Sync:
+                    if (!keyDown){Cmd(":CM"); Speech.SayIt(Resources.Sync, Speech.SpeechType.Command); return true; }; break;
+                case UserFunction.Align:
+                    if (!keyDown) { Cmd(":Cm"); Speech.SayIt(Resources.Align, Speech.SpeechType.Command); return true; }; break;
             }
             return false;
         }
@@ -217,7 +221,9 @@ namespace ASCOM.GeminiTelescope
         Search1 = 26,
         StartTrack=27,
         AccelerateSlew=28,
-        DecelerateSlew=29
+        DecelerateSlew=29,
+        Sync=30,
+        Align=31
 
     }
 

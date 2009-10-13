@@ -88,6 +88,8 @@ namespace ASCOM.GeminiTelescope
             this.chkVoice = new System.Windows.Forms.CheckBox();
             this.btnJoysticConfig = new System.Windows.Forms.Button();
             this.picASCOM = new System.Windows.Forms.PictureBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.cbLogging = new System.Windows.Forms.ComboBox();
             buttonGps = new System.Windows.Forms.Button();
             pbGeminiSettings = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
@@ -109,7 +111,7 @@ namespace ASCOM.GeminiTelescope
             buttonGps.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             buttonGps.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             buttonGps.ForeColor = System.Drawing.Color.White;
-            buttonGps.Location = new System.Drawing.Point(263, 353);
+            buttonGps.Location = new System.Drawing.Point(263, 371);
             buttonGps.Name = "buttonGps";
             buttonGps.Size = new System.Drawing.Size(105, 23);
             buttonGps.TabIndex = 23;
@@ -123,7 +125,7 @@ namespace ASCOM.GeminiTelescope
             pbGeminiSettings.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             pbGeminiSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             pbGeminiSettings.ForeColor = System.Drawing.Color.White;
-            pbGeminiSettings.Location = new System.Drawing.Point(263, 324);
+            pbGeminiSettings.Location = new System.Drawing.Point(263, 342);
             pbGeminiSettings.Name = "pbGeminiSettings";
             pbGeminiSettings.Size = new System.Drawing.Size(105, 23);
             pbGeminiSettings.TabIndex = 30;
@@ -795,12 +797,43 @@ namespace ASCOM.GeminiTelescope
             this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
             this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.ForeColor = System.Drawing.Color.White;
+            this.label11.Location = new System.Drawing.Point(263, 278);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(142, 13);
+            this.label11.TabIndex = 35;
+            this.label11.Text = "Logging/Diagnostic Options:";
+            // 
+            // cbLogging
+            // 
+            this.cbLogging.BackColor = System.Drawing.Color.Black;
+            this.cbLogging.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbLogging.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbLogging.ForeColor = System.Drawing.Color.White;
+            this.cbLogging.FormattingEnabled = true;
+            this.cbLogging.Items.AddRange(new object[] {
+            "1: No Logging",
+            "2: Serial Communications",
+            "3: Some Detail",
+            "4: More Detail",
+            "5: Very Detailed",
+            "6: All Available"});
+            this.cbLogging.Location = new System.Drawing.Point(263, 297);
+            this.cbLogging.Name = "cbLogging";
+            this.cbLogging.Size = new System.Drawing.Size(163, 21);
+            this.cbLogging.TabIndex = 36;
+            // 
             // TelescopeSetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
             this.ClientSize = new System.Drawing.Size(501, 455);
+            this.Controls.Add(this.cbLogging);
+            this.Controls.Add(this.label11);
             this.Controls.Add(this.chkVoice);
             this.Controls.Add(this.btnJoysticConfig);
             this.Controls.Add(this.cmbJoystick);
@@ -904,5 +937,7 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.ComboBox comboBoxTZ;
         private System.Windows.Forms.ComboBox comboBoxSites;
         private System.Windows.Forms.Button pbSiteConfig;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.ComboBox cbLogging;
     }
 }

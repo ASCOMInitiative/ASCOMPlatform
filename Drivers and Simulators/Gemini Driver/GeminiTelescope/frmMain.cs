@@ -776,6 +776,9 @@ namespace ASCOM.GeminiTelescope
             setupForm.SpeechVoice = GeminiHardware.SpeechVoice;
             setupForm.Sites = GeminiHardware.Sites;
 
+            setupForm.TraceLevel = GeminiHardware.TraceLevel;
+
+
             DialogResult ans;
             if (this.Visible==false)
                 ans = setupForm.ShowDialog(this);
@@ -816,6 +819,8 @@ namespace ASCOM.GeminiTelescope
                 GeminiHardware.ShowHandbox = setupForm.ShowHandbox;
 
                 GeminiHardware.BootMode = setupForm.BootMode;
+
+                GeminiHardware.TraceLevel = setupForm.TraceLevel;
 
                 int gpsBaudRate;
                 if (!int.TryParse(setupForm.GpsBaudRate, out gpsBaudRate))

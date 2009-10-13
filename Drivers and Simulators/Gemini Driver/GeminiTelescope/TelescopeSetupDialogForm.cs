@@ -239,6 +239,7 @@ namespace ASCOM.GeminiTelescope
             }
             set { textBoxElevation.Text = value.ToString(); }
         }
+
         public double Latitude
         {
             get
@@ -362,6 +363,21 @@ namespace ASCOM.GeminiTelescope
                 }
             }
         }
+
+        public int TraceLevel
+        {
+            get { return cbLogging.SelectedIndex-1; }
+            set
+            {
+                cbLogging.SelectedIndex = 0;
+                try
+                {
+                    cbLogging.SelectedIndex = value+1;
+                }
+                catch { }
+            }
+        }
+
         public bool UseDriverTime
         {
             get { return checkBoxUseDriverTime.Checked; }

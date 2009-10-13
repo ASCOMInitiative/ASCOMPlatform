@@ -589,11 +589,17 @@ Are you sure you want to do this?</value>
   <data name="StatusPanel" xml:space="preserve">
     <value>Status Panel</value>
   </data>
+  <data name="Align" xml:space="preserve">
+    <value>Additional Align</value>
+  </data>
   <data name="ConfigurePark" xml:space="preserve">
     <value>Configure Park Position</value>
   </data>
   <data name="Park" xml:space="preserve">
     <value>Park Gemini</value>
+  </data>
+  <data name="Sync" xml:space="preserve">
+    <value>Synchronize</value>
   </data>
   <data name="Unpark" xml:space="preserve">
     <value>Unpark Gemini</value>
