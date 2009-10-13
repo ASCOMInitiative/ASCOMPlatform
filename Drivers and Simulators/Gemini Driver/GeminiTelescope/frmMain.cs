@@ -1051,6 +1051,19 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        private void UpdateConnectStatus()
+        {
+            if (GeminiHardware.Connected)
+            {
+                this.ButtonConnect.Text = Resources.Disconnect;
+            }
+            else
+            {
+                ButtonConnect.Text = Resources.Connect;
+                ButtonConnect.Update();
+            }
+        }
+
         private void ButtonConnect_Click(object sender, EventArgs e)
         {
             if (!GeminiHardware.Connected)
@@ -1069,12 +1082,8 @@ namespace ASCOM.GeminiTelescope
                 ButtonConnect.Enabled = true;
                 if (!GeminiHardware.Connected)
                 {
-                    ButtonConnect.Text = Resources.Connect;
-                    ButtonConnect.Update();
                     MessageBox.Show(Resources.CannotConnect + "\r\n" + m_LastError, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 }
-                else
-                    this.ButtonConnect.Text = Resources.Disconnect;
             }
             else
             {
@@ -1096,9 +1105,9 @@ namespace ASCOM.GeminiTelescope
 
                 if (GeminiHardware.Connected != false)
                     MessageBox.Show(Resources.CannotDisconnect, SharedResources.TELESCOPE_DRIVER_NAME);
-                else
-                    this.ButtonConnect.Text = Resources.Connect;
             }
+
+            UpdateConnectStatus();
         }
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)

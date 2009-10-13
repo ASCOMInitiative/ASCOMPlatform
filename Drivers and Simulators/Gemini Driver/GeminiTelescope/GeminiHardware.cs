@@ -2191,6 +2191,7 @@ namespace ASCOM.GeminiTelescope
                 Trace.Info(2, "Current connect state", m_Connected);
 
                 m_Clients -= 1;
+                if (m_Clients < 0) m_Clients = 0;
 
                 Trace.Info(2, "Remaining clients", m_Clients);
 
