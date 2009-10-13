@@ -233,19 +233,27 @@ namespace ASCOM.GeminiTelescope
 
         private bool m_AsyncSlewStarted = false;
 
+        private bool m_Connected = false;
+
         //
         // Constructor - Must be public for COM registration!
         //
         public Telescope()
-        {/*
-            m_AxisRates = new AxisRates[3];
-            m_AxisRates[0] = new AxisRates(TelescopeAxes.axisPrimary);
-            m_AxisRates[1] = new AxisRates(TelescopeAxes.axisSecondary);
-            m_AxisRates[2] = new AxisRates(TelescopeAxes.axisTertiary);
-          */
+        {
+            
             m_TrackingRates = new TrackingRates();
-            // TODO Implement your additional construction here
         }
+
+
+        ~Telescope()
+        {
+            if (m_Connected)
+            {
+                m_Connected = false;
+                GeminiHardware.Connected = false;
+            }
+        }
+
 
         #region Private Code
 
@@ -272,6 +280,25 @@ namespace ASCOM.GeminiTelescope
             }
             return cmd;
         }
+
+        private bool IsConnected
+        {
+            get {
+                // if Gemini controller was disconnected, remove the reference count and mark this telescope object as disconnected:
+                if (m_Connected && !GeminiHardware.Connected)
+                {
+                    GeminiHardware.Connected = false;
+                    m_Connected = false;
+                }
+                return m_Connected && GeminiHardware.Connected; 
+            }
+        }
+
+        private void AssertConnect()
+        {
+            if (!IsConnected) throw new ASCOM.NotConnectedException();
+        }
+
         #endregion
         //
         // PUBLIC COM INTERFACE ITelescope IMPLEMENTATION
@@ -282,6 +309,7 @@ namespace ASCOM.GeminiTelescope
         public void AbortSlew()
         {
             GeminiHardware.Trace.Enter("IT:AbortSlew");
+            AssertConnect();
             if (GeminiHardware.AtHome || GeminiHardware.AtPark)              
                 throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
             GeminiHardware.DoCommandResult(":Q", GeminiHardware.MAX_TIMEOUT, false);
@@ -300,7 +328,8 @@ namespace ASCOM.GeminiTelescope
         public double Altitude
         {
             get {
-                System.Threading.Thread.Sleep(100); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
+                AssertConnect();
+                System.Threading.Thread.Sleep(10); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
                 GeminiHardware.Trace.Enter("IT:Altitude.Get", GeminiHardware.Altitude);
                 return GeminiHardware.Altitude;
             }
@@ -325,7 +354,8 @@ namespace ASCOM.GeminiTelescope
         public bool AtHome
         {
             get {
-                System.Threading.Thread.Sleep(100); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
+                AssertConnect();
+                System.Threading.Thread.Sleep(10); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
                 GeminiHardware.Trace.Enter("IT:AtHome.Get", m_FoundHome);                
                 return m_FoundHome; }
         }
@@ -333,7 +363,8 @@ namespace ASCOM.GeminiTelescope
         public bool AtPark
         {
             get {
-                System.Threading.Thread.Sleep(100); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
+                AssertConnect();
+                System.Threading.Thread.Sleep(10); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
                 GeminiHardware.Trace.Enter("IT:AtPark.Get", GeminiHardware.AtPark);
                 return GeminiHardware.AtPark;
             }
@@ -341,6 +372,7 @@ namespace ASCOM.GeminiTelescope
 
         public IAxisRates AxisRates(TelescopeAxes Axis)
         {
+            AssertConnect();
             GeminiHardware.Trace.Enter("IT:AxisRates");
 
             if (m_AxisRates == null)
@@ -372,8 +404,10 @@ namespace ASCOM.GeminiTelescope
         public double Azimuth
         {
             get {
+                AssertConnect();
+
                 GeminiHardware.Trace.Enter("IT:Azimuth.Get", GeminiHardware.Azimuth);
-                System.Threading.Thread.Sleep(100); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
+                System.Threading.Thread.Sleep(10); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
                 return GeminiHardware.Azimuth; }
         }
 
@@ -526,6 +560,7 @@ namespace ASCOM.GeminiTelescope
         public string CommandNative(string Command)
         {
             GeminiHardware.Trace.Enter("IT:CommandNative", Command);
+            AssertConnect();
 
             if (Command == String.Empty) throw new ASCOM.InvalidValueException("CommandNative", Command, "valid Gemini command");
             string result = GeminiHardware.DoCommandResult(Command, 1000, false);
@@ -541,6 +576,7 @@ namespace ASCOM.GeminiTelescope
         public void CommandBlind(string Command, bool Raw)
         {
             GeminiHardware.Trace.Enter("IT:CommandBlind", Command, Raw);
+            AssertConnect();
 
             if (Command == String.Empty) throw new ASCOM.InvalidValueException("CommandBlind", Command, "valid Gemini command");
             Command = PrepareCommand(Command); // Add leading colon if required
@@ -551,6 +587,8 @@ namespace ASCOM.GeminiTelescope
         public bool CommandBool(string Command, bool Raw)
         {
             GeminiHardware.Trace.Enter("IT:CommandBool", Command, Raw);
+            AssertConnect();
+
             if (Command == "") throw new InvalidValueException("CommandBool", "", "valid Gemini command");
             Command = PrepareCommand(Command); // Add leading colon if required
             string result = GeminiHardware.DoCommandResult(Command, GeminiHardware.MAX_TIMEOUT, Raw);
@@ -562,8 +600,9 @@ namespace ASCOM.GeminiTelescope
 
         public string CommandString(string Command, bool Raw)
         {
-
             GeminiHardware.Trace.Enter("IT:CommandString", Command, Raw);
+            AssertConnect();
+
             if (Command == String.Empty) throw new ASCOM.InvalidValueException("CommandString", Command, "valid Gemini command");
             Command = PrepareCommand(Command); // Add leading colon if required
             string result = GeminiHardware.DoCommandResult(Command, GeminiHardware.MAX_TIMEOUT, Raw);
@@ -576,12 +615,13 @@ namespace ASCOM.GeminiTelescope
         public bool Connected
         {
             get {
-                GeminiHardware.Trace.Enter("IT:Connected.Get", GeminiHardware.Connected);                
-                return GeminiHardware.Connected; }
+                GeminiHardware.Trace.Enter("IT:Connected.Get", IsConnected);                
+                return IsConnected; }
             set {
                 GeminiHardware.Trace.Enter("IT:Connected.Set", value);                
                 GeminiHardware.Connected = value;
                 if (value && !GeminiHardware.Connected) throw new ASCOM.Utilities.Exceptions.SerialPortInUseException("Connect");
+                m_Connected = value;
                 GeminiHardware.Trace.Exit("IT:Connected.Set", value);                
             }
         }
@@ -590,7 +630,8 @@ namespace ASCOM.GeminiTelescope
         {
             get {
                 GeminiHardware.Trace.Enter("IT:Declination.Get", GeminiHardware.Declination);
-                System.Threading.Thread.Sleep(100); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
+                AssertConnect();
+                System.Threading.Thread.Sleep(10); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
                 return GeminiHardware.Declination;
             }
         }
@@ -604,6 +645,7 @@ namespace ASCOM.GeminiTelescope
             get 
             {
                 GeminiHardware.Trace.Enter("IT:DeclinationRate.Get");
+                AssertConnect();
                 string rateDivisor = GeminiHardware.DoCommandResult("<412:", GeminiHardware.MAX_TIMEOUT, false);
                 string wormGearRatio = GeminiHardware.DoCommandResult("<22:", GeminiHardware.MAX_TIMEOUT, false);
                 string spurGearRatio = GeminiHardware.DoCommandResult("<24:", GeminiHardware.MAX_TIMEOUT, false);
@@ -625,6 +667,8 @@ namespace ASCOM.GeminiTelescope
             set 
             {
                 GeminiHardware.Trace.Enter("IT:DeclinationRate.Set", value);
+
+                AssertConnect();
 
                 string wormGearRatio = GeminiHardware.DoCommandResult("<22:", GeminiHardware.MAX_TIMEOUT, false);
                 string spurGearRatio = GeminiHardware.DoCommandResult("<24:", GeminiHardware.MAX_TIMEOUT, false);
@@ -660,12 +704,14 @@ namespace ASCOM.GeminiTelescope
         public bool DoesRefraction
         {
             get {
+                AssertConnect();
                 bool bRef = GeminiHardware.Refraction;
                 GeminiHardware.Trace.Enter("IT:DoesRefraction.Get", bRef);
                 return bRef; 
             }
             set {
                 GeminiHardware.Trace.Enter("IT:DoesRefraction.Set", value);
+                AssertConnect();
                 GeminiHardware.Refraction = value;
             }
         }
@@ -699,8 +745,9 @@ namespace ASCOM.GeminiTelescope
 
         public EquatorialCoordinateType EquatorialSystem
         {
-            get { 
-                
+            get {
+
+                AssertConnect();
                 EquatorialCoordinateType res = GeminiHardware.Precession ? EquatorialCoordinateType.equJ2000 : EquatorialCoordinateType.equLocalTopocentric;
                 GeminiHardware.Trace.Enter("IT:EquatorialSystem.Get", res);
                 return res; 
@@ -708,6 +755,7 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 GeminiHardware.Trace.Enter("IT:EquatorialSystem.Set", value);
+                AssertConnect();
                 if (value == EquatorialCoordinateType.equLocalTopocentric)
                     GeminiHardware.Precession = false;
                 else
@@ -723,6 +771,7 @@ namespace ASCOM.GeminiTelescope
         public void FindHome()
         {
             GeminiHardware.Trace.Enter("IT:FindHome");
+            AssertConnect();
 
             if (GeminiHardware.AtPark)
                 throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
@@ -753,9 +802,12 @@ namespace ASCOM.GeminiTelescope
         {
             get {
                 GeminiHardware.Trace.Enter("IT:GuideRateDeclination.Get", GuideRateRightAscension);
-                return GuideRateRightAscension; }
+                AssertConnect();
+                return GuideRateRightAscension;
+            }
             set {
                 GeminiHardware.Trace.Enter("IT:GuideRateDeclination.Set", value);
+                AssertConnect();
                 GuideRateRightAscension = value;
                 GeminiHardware.Trace.Exit("IT:GuideRateDeclination.Set", value);
             }
@@ -769,6 +821,7 @@ namespace ASCOM.GeminiTelescope
         {         
             get {
                 GeminiHardware.Trace.Enter("IT:GuideRateRightAscesion.Get");
+                AssertConnect();
 
                 string result = GeminiHardware.DoCommandResult("<150:", GeminiHardware.MAX_TIMEOUT, false);
                 if (result == null) throw new TimeoutException("GuideRateRightAscention");
@@ -798,7 +851,8 @@ namespace ASCOM.GeminiTelescope
 
         public bool IsPulseGuiding
         {
-            get { 
+            get {
+                AssertConnect();
                 bool res = GeminiHardware.IsPulseGuiding;
                 GeminiHardware.Trace.Enter("IT:IsPulseGuiding.Get", res);
                 return res;
@@ -809,6 +863,7 @@ namespace ASCOM.GeminiTelescope
         {
             GeminiHardware.Trace.Enter("IT:MoveAxis", Axis, Rate);
 
+            AssertConnect();
             //if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
 
@@ -888,6 +943,7 @@ namespace ASCOM.GeminiTelescope
         public void Park()
         {
             GeminiHardware.Trace.Enter("IT:Park");
+            AssertConnect();
 
             if (GeminiHardware.AtPark) return;  // already there
 
@@ -907,6 +963,7 @@ namespace ASCOM.GeminiTelescope
 
             GeminiHardware.Trace.Enter("IT:PulseGuide", Direction, Duration);
 
+            AssertConnect();
             //if (GeminiHardware.AtPark)
             //    throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
@@ -948,7 +1005,9 @@ namespace ASCOM.GeminiTelescope
         {
             
             get {
-                System.Threading.Thread.Sleep(100); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
+                AssertConnect();
+
+                System.Threading.Thread.Sleep(10); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
                 double res = GeminiHardware.RightAscension;
                 GeminiHardware.Trace.Enter("IT:RightAscention.Get", res);
                 return res;
@@ -964,6 +1023,7 @@ namespace ASCOM.GeminiTelescope
             get 
             {
                 GeminiHardware.Trace.Enter("IT:RightAscensionRate.Get");
+                AssertConnect();
                 string rateDivisor = GeminiHardware.DoCommandResult("<411:", GeminiHardware.MAX_TIMEOUT, false);
                 string wormGearRatio = GeminiHardware.DoCommandResult("<21:", GeminiHardware.MAX_TIMEOUT, false);
                 string spurGearRatio = GeminiHardware.DoCommandResult("<23:", GeminiHardware.MAX_TIMEOUT, false);
@@ -992,6 +1052,7 @@ namespace ASCOM.GeminiTelescope
             set 
             {
                 GeminiHardware.Trace.Enter("IT:RightAscensionRate.Set", value);
+                AssertConnect();
                 string wormGearRatio = GeminiHardware.DoCommandResult("<21:", GeminiHardware.MAX_TIMEOUT, false);
                 string spurGearRatio = GeminiHardware.DoCommandResult("<23:", GeminiHardware.MAX_TIMEOUT, false);
                 string encoderResolution = GeminiHardware.DoCommandResult("<25:", GeminiHardware.MAX_TIMEOUT, false);
@@ -1026,6 +1087,7 @@ namespace ASCOM.GeminiTelescope
 
         public void SetPark()
         {
+            AssertConnect();
             GeminiHardware.ParkAlt = GeminiHardware.Altitude;
             GeminiHardware.ParkAz = GeminiHardware.Azimuth;
             GeminiHardware.ParkPosition = GeminiHardware.GeminiParkMode.SlewAltAz;
@@ -1049,6 +1111,7 @@ namespace ASCOM.GeminiTelescope
         {
             get 
             {
+                AssertConnect();
                 if (GeminiHardware.SideOfPier == "E")
                 {
                     GeminiHardware.Trace.Enter("IT:SideOfPier.Get", PierSide.pierEast);
@@ -1068,6 +1131,7 @@ namespace ASCOM.GeminiTelescope
             set 
             {
                 GeminiHardware.Trace.Enter("IT:SideOfPier.Set", value);
+                AssertConnect();
 
                 if ((value == PierSide.pierEast && GeminiHardware.SideOfPier == "W") || (value == PierSide.pierWest && GeminiHardware.SideOfPier == "E"))
                 {
@@ -1084,6 +1148,7 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
+                AssertConnect();
                 double res = GeminiHardware.SiderealTime;
                 GeminiHardware.Trace.Enter("IT:SiderealTime.Get", res);
                 return res;
@@ -1105,15 +1170,18 @@ namespace ASCOM.GeminiTelescope
 
         public double SiteLatitude
         {
-            get { 
-                
+            get {
+
+                AssertConnect();
                 double res = GeminiHardware.Latitude;
                 GeminiHardware.Trace.Enter("IT:SiteLatitude.Get", res);
                 return res;            
             }
             set 
             {
+
                 GeminiHardware.Trace.Enter("IT:SiteLatitude.Set", value);
+                AssertConnect();
 
                 if (value < -90 || value > 90)
                 {
@@ -1126,7 +1194,8 @@ namespace ASCOM.GeminiTelescope
 
         public double SiteLongitude
         {
-            get { 
+            get {
+                AssertConnect();
                 double res = GeminiHardware.Longitude;
                 GeminiHardware.Trace.Enter("IT:SiteLongitude.Get", res);
                 return res;            
@@ -1134,6 +1203,7 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 GeminiHardware.Trace.Enter("IT:SiteLongitude.Set", value);
+                AssertConnect();
 
                 if (value < -180 || value > 180)
                 {
@@ -1162,6 +1232,7 @@ namespace ASCOM.GeminiTelescope
         public void SlewToAltAz(double Azimuth, double Altitude)
         {
             GeminiHardware.Trace.Enter("IT:SlewToAltAz", Azimuth, Altitude);
+            AssertConnect();
             GeminiHardware.TargetAzimuth = Azimuth;
             GeminiHardware.TargetAltitude = Altitude;
             GeminiHardware.Velocity = "S";
@@ -1174,6 +1245,7 @@ namespace ASCOM.GeminiTelescope
         {
             GeminiHardware.Trace.Enter("IT:SlewToAltAzAsync", Azimuth, Altitude);
 
+            AssertConnect();
             GeminiHardware.TargetAzimuth = Azimuth;
             GeminiHardware.TargetAltitude = Altitude;
             if (Slewing) AbortSlew();
@@ -1187,6 +1259,7 @@ namespace ASCOM.GeminiTelescope
         public void SlewToCoordinates(double RightAscension, double Declination)
         {
             GeminiHardware.Trace.Enter("IT:SlewToCoordinates", RightAscension, Declination);
+            AssertConnect();
 
             //if (GeminiHardware.AtHome || GeminiHardware.AtPark)
             //    throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
@@ -1204,6 +1277,7 @@ namespace ASCOM.GeminiTelescope
         public void SlewToCoordinatesAsync(double RightAscension, double Declination)
         {
             GeminiHardware.Trace.Enter("IT:SlewToCoordinatesAsync", RightAscension, Declination);
+            AssertConnect();
 
             //if (GeminiHardware.AtHome || GeminiHardware.AtPark)
             //    throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
@@ -1213,7 +1287,7 @@ namespace ASCOM.GeminiTelescope
             if (Slewing) AbortSlew();
             GeminiHardware.Velocity = "S";
             GeminiHardware.SlewEquatorialAsync();
-            GeminiHardware.WaitForVelocity("SC", GeminiHardware.MAX_TIMEOUT);
+//            GeminiHardware.WaitForVelocity("SC", GeminiHardware.MAX_TIMEOUT);
             m_AsyncSlewStarted = true;
             GeminiHardware.Trace.Exit("IT:SlewToCoordinatesAsync", RightAscension, Declination);
         }
@@ -1221,6 +1295,7 @@ namespace ASCOM.GeminiTelescope
         public void SlewToTarget()
         {
             GeminiHardware.Trace.Enter("IT:SlewToTarget", GeminiHardware.TargetRightAscension, GeminiHardware.TargetDeclination);
+            AssertConnect();
 
             //if (GeminiHardware.AtHome || GeminiHardware.AtPark)
             //    throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
@@ -1236,6 +1311,7 @@ namespace ASCOM.GeminiTelescope
         public void SlewToTargetAsync()
         {
             GeminiHardware.Trace.Enter("IT:SlewToTargetAsync", GeminiHardware.TargetRightAscension, GeminiHardware.TargetDeclination);
+            AssertConnect();
 
             //if (GeminiHardware.AtHome || GeminiHardware.AtPark)
             //    throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
@@ -1252,7 +1328,8 @@ namespace ASCOM.GeminiTelescope
         {
             get 
             {
-                System.Threading.Thread.Sleep(100); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
+                AssertConnect();
+                System.Threading.Thread.Sleep(10); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
 
                 if (GeminiHardware.Velocity == "S" || GeminiHardware.Velocity == "C")
                 {
@@ -1275,6 +1352,7 @@ namespace ASCOM.GeminiTelescope
         public void SyncToAltAz(double Azimuth, double Altitude)
         {
             GeminiHardware.Trace.Enter("IT:SyncToAltAz", Azimuth, Altitude);
+            AssertConnect();
 
             GeminiHardware.SyncHorizonCoordinates(Azimuth, Altitude);
 
@@ -1285,6 +1363,7 @@ namespace ASCOM.GeminiTelescope
         {
             GeminiHardware.Trace.Enter("IT:SyncToCoordinates", RightAscension, Declination);
 
+            AssertConnect();
             if (GeminiHardware.AtPark)
                     throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
@@ -1295,6 +1374,7 @@ namespace ASCOM.GeminiTelescope
         public void SyncToTarget()
         {
             GeminiHardware.Trace.Enter("IT:SyncToTarget", GeminiHardware.TargetRightAscension, GeminiHardware.TargetDeclination);
+            AssertConnect();
 
             if (GeminiHardware.AtPark)
                 throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
@@ -1308,6 +1388,7 @@ namespace ASCOM.GeminiTelescope
         public double TargetDeclination
         {
             get {
+                AssertConnect();
                 double val = GeminiHardware.TargetDeclination;
                 GeminiHardware.Trace.Enter("IT:TargetDeclination.Get", val);
 
@@ -1318,6 +1399,7 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 GeminiHardware.Trace.Enter("IT:TargetDeclination.Set", value);
+                AssertConnect();
                 if (value < -90 || value > 90)
                 {
                     throw new ASCOM.InvalidValueException("TargetDeclination", value.ToString(), "-90..90");
@@ -1329,8 +1411,9 @@ namespace ASCOM.GeminiTelescope
         public double TargetRightAscension
         {
             // TODO Replace this with your implementation
-            get { 
+            get {
 
+                AssertConnect();
                 double val = GeminiHardware.TargetRightAscension;
                 GeminiHardware.Trace.Enter("IT:TargetRightAscension.Get", val);
 
@@ -1342,6 +1425,7 @@ namespace ASCOM.GeminiTelescope
             {
                 GeminiHardware.Trace.Enter("IT:TargetRightAscension.Set", value);
 
+                AssertConnect();
                 if (value < 0 || value > 24)
                 {
                     throw new InvalidValueException("TargetRightAscension", value.ToString(), "0..24");
@@ -1353,7 +1437,8 @@ namespace ASCOM.GeminiTelescope
         public bool Tracking
         {
             get {
-                System.Threading.Thread.Sleep(100); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)                
+                AssertConnect();
+                System.Threading.Thread.Sleep(10); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)                
                 bool res = GeminiHardware.Tracking;
                 GeminiHardware.Trace.Enter("IT:Tracking.Get", res);
                 return res;
@@ -1362,6 +1447,7 @@ namespace ASCOM.GeminiTelescope
             {
                 GeminiHardware.Trace.Enter("IT:Tracking.Set", value);
 
+                AssertConnect();
                 if (value && !GeminiHardware.Tracking)
                 {
                     GeminiHardware.DoCommandResult(":hW", GeminiHardware.MAX_TIMEOUT, false);
@@ -1381,6 +1467,7 @@ namespace ASCOM.GeminiTelescope
         {
             get {
                 GeminiHardware.Trace.Enter("IT:TrackingRate.Get");
+                AssertConnect();
 
                 string res = GeminiHardware.DoCommandResult("<130:", GeminiHardware.MAX_TIMEOUT, false);
                 GeminiHardware.Trace.Exit("IT:TrackingRate.Get", res);
@@ -1397,6 +1484,7 @@ namespace ASCOM.GeminiTelescope
             set {
 
                 GeminiHardware.Trace.Enter("IT:TrackingRate.Set", value);
+                AssertConnect();
 
                 string cmd = "";
 
@@ -1422,12 +1510,14 @@ namespace ASCOM.GeminiTelescope
         public DateTime UTCDate
         {
             
-            get { 
+            get {
+                AssertConnect();
                 DateTime res = GeminiHardware.UTCDate;
                 GeminiHardware.Trace.Enter("IT:UTCDate.Get", res);
                 return res;
             }
             set {
+                AssertConnect();
                 GeminiHardware.Trace.Enter("IT:UTCDate.Set", value);
                 GeminiHardware.UTCDate = value;
                 GeminiHardware.Trace.Exit("IT:UTCDate.Set", value);
@@ -1437,6 +1527,7 @@ namespace ASCOM.GeminiTelescope
         public void Unpark()
         {
             GeminiHardware.Trace.Enter("IT:Unpark");
+            AssertConnect();
 
             GeminiHardware.DoCommandResult(":hW", GeminiHardware.MAX_TIMEOUT, false);
             GeminiHardware.WaitForVelocity("T", GeminiHardware.MAX_TIMEOUT);
