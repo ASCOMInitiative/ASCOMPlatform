@@ -348,6 +348,9 @@ namespace ASCOM.GeminiTelescope
                     m_Trace.Start(SharedResources.TELESCOPE_DRIVER_NAME, value);
                 else
                     m_Trace.Stop();
+                m_TraceLevel = value;
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "TraceLevel", value.ToString());
             }
         }
 
@@ -650,8 +653,6 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         static GeminiHardware()
         {
-            TraceLevel = 4;    // 
-            Trace.Enter("GeminiHardware", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version, DateTime.Now.ToString());
 
             m_Profile = new ASCOM.Utilities.Profile();
             m_Util = new ASCOM.Utilities.Util();
@@ -667,6 +668,8 @@ namespace ASCOM.GeminiTelescope
             tmrReadTimeout.Elapsed += new ElapsedEventHandler(tmrReadTimeout_Elapsed);
 
             GetProfileSettings();
+            Trace.Enter("GeminiHardware", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version, DateTime.Now.ToString());
+
             Trace.Exit("GeminiHardware");
         }
 
@@ -840,7 +843,7 @@ namespace ASCOM.GeminiTelescope
                 m_JoystickIsAnalog = true;
 
             if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickSensitivity", ""), out m_JoystickSensitivity))
-                m_JoystickSensitivity = 0;
+                m_JoystickSensitivity = 100;
 
             m_SpeechVoice = m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "SpeechVoice", "");
 

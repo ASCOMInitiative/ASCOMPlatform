@@ -77,7 +77,7 @@ namespace ASCOM.GeminiTelescope
 
         public void Enter(int level, string function, params object[] par)
         {
-            if (m_Log.Enabled && level <= m_Level) 
+            if (m_Log!=null && m_Log.Enabled && level <= m_Level) 
             {
                 lock (m_Log)
                 {
@@ -99,7 +99,7 @@ namespace ASCOM.GeminiTelescope
 
         public void Exit(int level, string function, params object[] result)
         {
-            if (m_Log.Enabled && level <= m_Level)
+            if (m_Log != null && m_Log.Enabled && level <= m_Level)
             {
                 lock (m_Log)
                 {
@@ -122,7 +122,7 @@ namespace ASCOM.GeminiTelescope
 
         public void Except(Exception e)
         {
-            if (m_Log.Enabled)
+            if (m_Log != null && m_Log.Enabled)
             {
                 lock (m_Log)
                 {
@@ -134,7 +134,7 @@ namespace ASCOM.GeminiTelescope
 
         public void Error(string s, params object[] values)
         {
-            if (m_Log.Enabled)
+            if (m_Log != null && m_Log.Enabled)
             {
                 lock (m_Log)
                 {
@@ -152,7 +152,7 @@ namespace ASCOM.GeminiTelescope
 
         public void Info(int level, string s, params object[] values)
         {
-            if (m_Log.Enabled && level <= m_Level)
+            if (m_Log != null && m_Log.Enabled && level <= m_Level)
             {
                 lock (m_Log)
                 {
@@ -170,7 +170,7 @@ namespace ASCOM.GeminiTelescope
 
         public void Stop()
         {
-            if (m_Log.Enabled)
+            if (m_Log != null && m_Log.Enabled)
             {
                 lock (m_Log)
                 {
