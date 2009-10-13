@@ -301,7 +301,7 @@ namespace ASCOM.GeminiTelescope
         {
             get {
                 System.Threading.Thread.Sleep(100); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
-                GeminiHardware.Trace.Enter("IT:IT:Altitude.Get", GeminiHardware.Altitude);
+                GeminiHardware.Trace.Enter("IT:Altitude.Get", GeminiHardware.Altitude);
                 return GeminiHardware.Altitude;
             }
         }
