@@ -114,12 +114,14 @@ namespace ASCOM.GeminiTelescope
         {
             frmAdvancedSettings par = (frmAdvancedSettings)this.Owner;
             par.menuItemGetSettings_Click(sender, e);
+            geminiPropertiesBindingSource.ResetBindings(false);
         }
 
         private void menuItemSendSettings_Click(object sender, EventArgs e)
         {
             frmAdvancedSettings par = (frmAdvancedSettings)this.Owner;
             par.menuItemSendSettings_Click(sender, e);
+            geminiPropertiesBindingSource.ResetBindings(false);
         }
 
         private void frmModel_Load(object sender, EventArgs e)
