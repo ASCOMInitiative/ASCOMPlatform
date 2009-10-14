@@ -701,8 +701,8 @@ namespace ASCOM.GeminiTelescope
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Precession", false.ToString());
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Refraction", false.ToString());
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Show Handbox", false.ToString());
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Use Driver Site", true.ToString());
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Use Driver Time", true.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Use Driver Site", false.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Use Driver Time", false.ToString());
 
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughPortEnabled", false.ToString());
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughComPort", "COM10");
