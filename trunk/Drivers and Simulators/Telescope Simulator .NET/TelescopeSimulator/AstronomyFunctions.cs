@@ -228,5 +228,18 @@ namespace ASCOM.TelescopeSimulator
                 return Declination;
             }
         }
+        public static double RangeAlt(double Alitude)
+        {
+            if (Alitude > 90) return 90;
+            else if (Alitude < 90) return -90;
+            else return Alitude;
+        }
+        public static double RangeAzimuth(double Azimuth)
+        {
+            if (Azimuth < 0) return Azimuth + 360;
+            if (Azimuth >= 360) return Azimuth - 360;
+            else return Azimuth;
+
+        }
     }
 }
