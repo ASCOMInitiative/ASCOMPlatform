@@ -1947,11 +1947,7 @@ namespace ASCOM.GeminiTelescope
                 SetLongitude(m_Longitude);
                 UTCOffset = m_UTCOffset;
             }
-            else
-            {
-                UpdateSiteInfo();
-            }
-
+            
             if (m_UseDriverTime)
             {
                 Trace.Info(2, "Set UTC from PC", (DateTime.UtcNow + m_GPSTimeDifference).ToString());
