@@ -83,6 +83,15 @@ namespace ASCOM.GeminiTelescope
             RTProfile.Clear();
         }
 
+        public void ClearProfile(List<string> props)
+        {
+            foreach (string s in props)
+            {
+                if (mProfile.ContainsKey(s))
+                    mProfile.Remove(s);
+                RTProfile.Clear();
+            }
+        }
         private void NotifyPropertyChanged(String info)
         {
             if (PropertyChanged != null)
@@ -679,8 +688,8 @@ namespace ASCOM.GeminiTelescope
 
         public bool PEC_Is_On
         {
-            get { return (bool)get_Profile("PECStatus", false);}
-            set { mProfile["PECStatus"] = value; } 
+            get { return (bool)get_Profile("PEC_Is_On", false);}
+            set { mProfile["PEC_Is_On"] = value; } 
         }
 
         private bool PEC_Is_On_Gemini
@@ -1236,36 +1245,7 @@ namespace ASCOM.GeminiTelescope
         {
             GeminiHardware.Trace.Enter("GeminiProps:SyncWithGemini", write);
 
-            if (!GeminiHardware.Connected)
-            {
-                GeminiHardware.Trace.Exit("GeminiProps:SyncWithGemini", false, "mount not connected");
-                return false;
-            }
-
-            PropertyInfo [] ps = typeof(GeminiProperties).GetProperties(BindingFlags.Public|BindingFlags.SetProperty|BindingFlags.GetProperty|BindingFlags.Instance);
-            foreach (PropertyInfo p in ps)
-            {
-                string name = p.Name;
-                PropertyInfo pGemini = typeof(GeminiProperties).GetProperty(p.Name + "_Gemini", BindingFlags.NonPublic | BindingFlags.SetProperty | BindingFlags.GetProperty | BindingFlags.Instance);
-
-                // for each public property in this class
-                // find an equivalent propert with _Gemini appended to it,
-                // and synchronize it with the public property.
-                // public properties read/write to the Profile dictionary only
-                // private properties that end with _Gemini read/write to Gemini directly
-                try
-                {
-                    if (pGemini != null)
-                        if (write && pGemini.GetSetMethod(true) !=null && p.GetGetMethod()!=null)
-                            pGemini.SetValue(this, p.GetValue(this, null), null);
-                        else if (!write && p.GetSetMethod()!=null && pGemini.GetGetMethod(true)!=null)
-                            p.SetValue(this, pGemini.GetValue(this, null), null);
-                }
-                catch (Exception ex)
-                {
-                    GeminiHardware.Trace.Except(ex);
-                }
-            }
+            if (!SyncWithGemini(write, null)) return false;
 
             // save PEC table if requested:
             if (write && SavePEC)
@@ -1277,10 +1257,62 @@ namespace ASCOM.GeminiTelescope
                 PECTable = PECTable_Gemini;
             }
 
+            GeminiHardware.Trace.Exit("GeminiProps:SyncWithGemini", write);
+            return true;
+        }
+
+
+        /// <summary>
+        /// Synchronize values from profile to/from Gemini, but only for properties
+        /// contained in 'properties' list, or all properties if 'properties'==null
+        /// </summary>
+        /// <param name="write"></param>
+        /// <param name="properties"></param>
+        /// <returns></returns>
+        public bool SyncWithGemini(bool write, List<string> properties)
+        {
+            GeminiHardware.Trace.Enter("GeminiProps:SyncWithGemini", write, properties);
+
+            if (!GeminiHardware.Connected)
+            {
+                GeminiHardware.Trace.Exit("GeminiProps:SyncWithGemini", false, "mount not connected");
+                return false;
+            }
+
+            PropertyInfo[] ps = typeof(GeminiProperties).GetProperties(BindingFlags.Public | BindingFlags.SetProperty | BindingFlags.GetProperty | BindingFlags.Instance);
+            foreach (PropertyInfo p in ps)
+            {
+                string name = p.Name;
+
+                // if properties list specified, and this one is not in it, skip it:
+                if (properties != null && !properties.Contains(name)) continue;
+
+                PropertyInfo pGemini = typeof(GeminiProperties).GetProperty(p.Name + "_Gemini", BindingFlags.NonPublic | BindingFlags.SetProperty | BindingFlags.GetProperty | BindingFlags.Instance);
+
+                // for each public property in this class
+                // find an equivalent propert with _Gemini appended to it,
+                // and synchronize it with the public property.
+                // public properties read/write to the Profile dictionary only
+                // private properties that end with _Gemini read/write to Gemini directly
+                try
+                {
+                    if (pGemini != null)
+                        if (write && pGemini.GetSetMethod(true) != null && p.GetGetMethod() != null)
+                            pGemini.SetValue(this, p.GetValue(this, null), null);
+                        else if (!write && p.GetSetMethod() != null && pGemini.GetGetMethod(true) != null)
+                            p.SetValue(this, pGemini.GetValue(this, null), null);
+                }
+                catch (Exception ex)
+                {
+                    GeminiHardware.Trace.Except(ex);
+                }
+            }
 
             GeminiHardware.Trace.Exit("GeminiProps:SyncWithGemini", write);
             return true;
         }
+
+
 
         /// <summary>
         /// Read/write the Profile dictionary to disk

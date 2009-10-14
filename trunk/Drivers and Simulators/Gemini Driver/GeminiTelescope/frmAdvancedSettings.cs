@@ -127,6 +127,10 @@ namespace ASCOM.GeminiTelescope
             pbButton_EnabledChanged(pbApply, null);
             pbButton_EnabledChanged(pbReboot, null);
             pbButton_EnabledChanged(pbOK, null);
+
+            menuItemGetSettings.Enabled = GeminiHardware.Connected;
+            menuItemSendSettings.Enabled = GeminiHardware.Connected;
+
         }
 
 
@@ -338,6 +342,73 @@ namespace ASCOM.GeminiTelescope
         private void frmAdvancedSettings_Load(object sender, EventArgs e)
         {
             SetCollapsedGroups();
+        }
+
+        Control m_ParentPanel = null;
+
+        public void pbUpdate_Click(object sender, EventArgs e)
+        {
+            Button pb = (Button)sender;
+            m_ParentPanel = pb.Parent;
+            pb.ContextMenuStrip.Show(pb, new Point(pb.Width, 0));
+        }
+
+        /// <summary>
+        /// get values for all bound controls on current panel from Gemini:
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void menuItemGetSettings_Click(object sender, EventArgs e)
+        {
+            List<string> p = GetAllBindings(m_ParentPanel);
+            GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
+            Cursor.Current = Cursors.WaitCursor;
+            props.ClearProfile(p);
+            props.SyncWithGemini(false, p);
+            geminiPropertiesBindingSource.ResetBindings(false);
+            Cursor.Current = Cursors.Default;
+        }
+
+        /// <summary>
+        /// write values for all bound controls on current panel to Gemini:
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void menuItemSendSettings_Click(object sender, EventArgs e)
+        {
+            List<string> p = GetAllBindings(m_ParentPanel);
+            GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
+
+            if (this.ValidateChildren())
+            {
+                Cursor.Current = Cursors.WaitCursor;
+                props.SyncWithGemini(true, p);
+                props.ClearProfile(p);
+                props.SyncWithGemini(false, p);  //fetch properties
+                geminiPropertiesBindingSource.ResetBindings(false);
+                Cursor.Current = Cursors.Default;
+            }
+        }
+
+        private List<string> GetAllBindings(Control panel)
+        {
+            List<string> l = new List<string>();
+            foreach (Control c in panel.Controls)
+            {
+                if (c.DataBindings != null && c.DataBindings.Count > 0)
+                    l.Add(c.DataBindings[0].BindingMemberInfo.BindingMember);
+                else
+                {   // some controls may have multiple binding properties associated with them
+                    // these will be listed in comma-separated format as a string, add all
+                    // of them to the list:
+                    if (c.Tag != null)
+                    {
+                        string[] props = ((string)c.Tag).Split(new char[] { ',' });
+                        l.AddRange(props);
+                    }
+                }
+            }
+            return l;
         }
     }
 }

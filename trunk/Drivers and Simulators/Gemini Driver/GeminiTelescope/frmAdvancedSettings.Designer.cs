@@ -43,12 +43,12 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.chkSavePEC = new System.Windows.Forms.CheckBox();
+            this.geminiPropertiesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.pbModel = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.groupBox1 = new Indigo.CollapsibleGroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label21 = new System.Windows.Forms.Label();
-            this.geminiPropertiesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.label2 = new System.Windows.Forms.Label();
             this.comboBox5 = new System.Windows.Forms.ComboBox();
             this.label15 = new System.Windows.Forms.Label();
@@ -62,8 +62,13 @@
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.pbSetSafetyLimit = new System.Windows.Forms.Button();
             this.checkBox7 = new System.Windows.Forms.CheckBox();
+            this.pbController = new System.Windows.Forms.Button();
+            this.menuUpdate = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.menuItemGetSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemSendSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox2 = new Indigo.CollapsibleGroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.pbTracking = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -73,6 +78,7 @@
             this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new Indigo.CollapsibleGroupBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.pbSpeed = new System.Windows.Forms.Button();
             this.numericUpDown17 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown6 = new System.Windows.Forms.NumericUpDown();
@@ -87,6 +93,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.groupBox4 = new Indigo.CollapsibleGroupBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.pbCustom = new System.Windows.Forms.Button();
             this.numericUpDown15 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown14 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown13 = new System.Windows.Forms.NumericUpDown();
@@ -103,6 +110,7 @@
             this.label19 = new System.Windows.Forms.Label();
             this.groupBox5 = new Indigo.CollapsibleGroupBox();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.pbExternal = new System.Windows.Forms.Button();
             this.checkBox6 = new System.Windows.Forms.CheckBox();
             this.numericUpDown16 = new System.Windows.Forms.NumericUpDown();
             this.label18 = new System.Windows.Forms.Label();
@@ -111,10 +119,11 @@
             this.checkBox5 = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.menuSafetyPopup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).BeginInit();
+            this.menuUpdate.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -177,7 +186,7 @@
             this.pbOK.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.pbOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.pbOK.ForeColor = System.Drawing.Color.White;
-            this.pbOK.Location = new System.Drawing.Point(393, 3);
+            this.pbOK.Location = new System.Drawing.Point(390, 8);
             this.pbOK.Name = "pbOK";
             this.pbOK.Size = new System.Drawing.Size(75, 23);
             this.pbOK.TabIndex = 33;
@@ -189,7 +198,7 @@
             // 
             this.pbApply.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.pbApply.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.pbApply.Location = new System.Drawing.Point(393, 32);
+            this.pbApply.Location = new System.Drawing.Point(390, 37);
             this.pbApply.Name = "pbApply";
             this.pbApply.Size = new System.Drawing.Size(75, 23);
             this.pbApply.TabIndex = 34;
@@ -202,7 +211,7 @@
             this.button3.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.Location = new System.Drawing.Point(393, 62);
+            this.button3.Location = new System.Drawing.Point(390, 67);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 35;
@@ -226,7 +235,7 @@
             this.chkSendSettings.BackColor = System.Drawing.Color.Transparent;
             this.chkSendSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkSendSettings.ForeColor = System.Drawing.Color.Lime;
-            this.chkSendSettings.Location = new System.Drawing.Point(92, 54);
+            this.chkSendSettings.Location = new System.Drawing.Point(105, 54);
             this.chkSendSettings.Name = "chkSendSettings";
             this.chkSendSettings.Size = new System.Drawing.Size(158, 36);
             this.chkSendSettings.TabIndex = 37;
@@ -238,7 +247,7 @@
             // 
             this.pbLoad.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.pbLoad.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.pbLoad.Location = new System.Drawing.Point(296, 32);
+            this.pbLoad.Location = new System.Drawing.Point(289, 38);
             this.pbLoad.Name = "pbLoad";
             this.pbLoad.Size = new System.Drawing.Size(75, 23);
             this.pbLoad.TabIndex = 31;
@@ -250,7 +259,7 @@
             // 
             this.pbSave.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.pbSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.pbSave.Location = new System.Drawing.Point(296, 61);
+            this.pbSave.Location = new System.Drawing.Point(289, 67);
             this.pbSave.Name = "pbSave";
             this.pbSave.Size = new System.Drawing.Size(75, 23);
             this.pbSave.TabIndex = 32;
@@ -274,7 +283,7 @@
             this.chkSavePEC.BackColor = System.Drawing.Color.Transparent;
             this.chkSavePEC.CheckAlign = System.Drawing.ContentAlignment.BottomRight;
             this.chkSavePEC.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.geminiPropertiesBindingSource, "SavePEC", true));
-            this.chkSavePEC.Location = new System.Drawing.Point(260, 8);
+            this.chkSavePEC.Location = new System.Drawing.Point(253, 14);
             this.chkSavePEC.Name = "chkSavePEC";
             this.chkSavePEC.Size = new System.Drawing.Size(111, 17);
             this.chkSavePEC.TabIndex = 30;
@@ -282,11 +291,15 @@
             this.chkSavePEC.UseVisualStyleBackColor = false;
             this.chkSavePEC.CheckedChanged += new System.EventHandler(this.SavePEC_CheckedChanged);
             // 
+            // geminiPropertiesBindingSource
+            // 
+            this.geminiPropertiesBindingSource.DataSource = typeof(ASCOM.GeminiTelescope.GeminiProperties);
+            // 
             // pbModel
             // 
             this.pbModel.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.pbModel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.pbModel.Location = new System.Drawing.Point(92, 16);
+            this.pbModel.Location = new System.Drawing.Point(105, 16);
             this.pbModel.Name = "pbModel";
             this.pbModel.Size = new System.Drawing.Size(134, 32);
             this.pbModel.TabIndex = 36;
@@ -304,9 +317,9 @@
             this.flowLayoutPanel1.Controls.Add(this.groupBox5);
             this.flowLayoutPanel1.Controls.Add(this.panel1);
             this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 12);
-            this.flowLayoutPanel1.MaximumSize = new System.Drawing.Size(480, 0);
+            this.flowLayoutPanel1.MaximumSize = new System.Drawing.Size(550, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(480, 718);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(481, 718);
             this.flowLayoutPanel1.TabIndex = 39;
             // 
             // groupBox1
@@ -327,10 +340,11 @@
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 3;
+            this.tableLayoutPanel1.ColumnCount = 4;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.Controls.Add(this.label21, 2, 4);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.comboBox5, 1, 0);
@@ -345,9 +359,10 @@
             this.tableLayoutPanel1.Controls.Add(this.dateTimePicker1, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.pbSetSafetyLimit, 2, 3);
             this.tableLayoutPanel1.Controls.Add(this.checkBox7, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.pbController, 3, 4);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
-            this.tableLayoutPanel1.MaximumSize = new System.Drawing.Size(465, 137);
+            this.tableLayoutPanel1.MaximumSize = new System.Drawing.Size(540, 137);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
@@ -355,6 +370,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(465, 137);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
@@ -365,16 +381,12 @@
             this.label21.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "WestSafetyLimit", true));
             this.label21.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label21.ForeColor = System.Drawing.Color.Lime;
-            this.label21.Location = new System.Drawing.Point(235, 108);
+            this.label21.Location = new System.Drawing.Point(223, 108);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(227, 29);
+            this.label21.Size = new System.Drawing.Size(214, 29);
             this.label21.TabIndex = 15;
             this.label21.Text = "West Safety Limit: 000 deg";
             this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // geminiPropertiesBindingSource
-            // 
-            this.geminiPropertiesBindingSource.DataSource = typeof(ASCOM.GeminiTelescope.GeminiProperties);
             // 
             // label2
             // 
@@ -386,7 +398,7 @@
             this.label2.ForeColor = System.Drawing.Color.Lime;
             this.label2.Location = new System.Drawing.Point(3, 108);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(226, 29);
+            this.label2.Size = new System.Drawing.Size(214, 29);
             this.label2.TabIndex = 13;
             this.label2.Text = "East Safety Limit: 000 deg";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -400,9 +412,9 @@
             this.comboBox5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBox5.ForeColor = System.Drawing.Color.Lime;
             this.comboBox5.FormattingEnabled = true;
-            this.comboBox5.Location = new System.Drawing.Point(119, 3);
+            this.comboBox5.Location = new System.Drawing.Point(113, 3);
             this.comboBox5.Name = "comboBox5";
-            this.comboBox5.Size = new System.Drawing.Size(108, 21);
+            this.comboBox5.Size = new System.Drawing.Size(104, 21);
             this.comboBox5.TabIndex = 0;
             // 
             // label15
@@ -413,7 +425,7 @@
             this.label15.ForeColor = System.Drawing.Color.Lime;
             this.label15.Location = new System.Drawing.Point(3, 0);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(110, 27);
+            this.label15.Size = new System.Drawing.Size(104, 27);
             this.label15.TabIndex = 11;
             this.label15.Text = "Mount Type:";
             this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -426,7 +438,7 @@
             this.checkBox2.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.geminiPropertiesBindingSource, "DoesPrecession", true));
             this.checkBox2.Dock = System.Windows.Forms.DockStyle.Right;
             this.checkBox2.ForeColor = System.Drawing.Color.Lime;
-            this.checkBox2.Location = new System.Drawing.Point(268, 30);
+            this.checkBox2.Location = new System.Drawing.Point(243, 30);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(194, 21);
             this.checkBox2.TabIndex = 5;
@@ -441,7 +453,7 @@
             this.label3.ForeColor = System.Drawing.Color.Lime;
             this.label3.Location = new System.Drawing.Point(3, 54);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(110, 27);
+            this.label3.Size = new System.Drawing.Size(104, 27);
             this.label3.TabIndex = 4;
             this.label3.Text = "Hand Controller Mode:";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -454,7 +466,7 @@
             this.label1.ForeColor = System.Drawing.Color.Lime;
             this.label1.Location = new System.Drawing.Point(3, 27);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(110, 27);
+            this.label1.Size = new System.Drawing.Size(104, 27);
             this.label1.TabIndex = 0;
             this.label1.Text = "LED Brightness:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -468,9 +480,9 @@
             this.comboBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBox1.ForeColor = System.Drawing.Color.Lime;
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(119, 30);
+            this.comboBox1.Location = new System.Drawing.Point(113, 30);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(108, 21);
+            this.comboBox1.Size = new System.Drawing.Size(104, 21);
             this.comboBox1.TabIndex = 1;
             // 
             // comboBox2
@@ -482,9 +494,9 @@
             this.comboBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBox2.ForeColor = System.Drawing.Color.Lime;
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(119, 57);
+            this.comboBox2.Location = new System.Drawing.Point(113, 57);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(108, 21);
+            this.comboBox2.Size = new System.Drawing.Size(104, 21);
             this.comboBox2.TabIndex = 2;
             // 
             // checkBox1
@@ -495,7 +507,7 @@
             this.checkBox1.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.geminiPropertiesBindingSource, "SyncDoesAlign", true));
             this.checkBox1.Dock = System.Windows.Forms.DockStyle.Right;
             this.checkBox1.ForeColor = System.Drawing.Color.Lime;
-            this.checkBox1.Location = new System.Drawing.Point(291, 3);
+            this.checkBox1.Location = new System.Drawing.Point(266, 3);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(171, 21);
             this.checkBox1.TabIndex = 4;
@@ -510,7 +522,7 @@
             this.checkBox3.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.geminiPropertiesBindingSource, "DoesRefraction", true));
             this.checkBox3.Dock = System.Windows.Forms.DockStyle.Right;
             this.checkBox3.ForeColor = System.Drawing.Color.Lime;
-            this.checkBox3.Location = new System.Drawing.Point(297, 57);
+            this.checkBox3.Location = new System.Drawing.Point(272, 57);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(165, 21);
             this.checkBox3.TabIndex = 6;
@@ -525,10 +537,10 @@
             this.dateTimePicker1.CustomFormat = "HH:mm:ss";
             this.dateTimePicker1.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "AlarmTime", true));
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker1.Location = new System.Drawing.Point(119, 84);
+            this.dateTimePicker1.Location = new System.Drawing.Point(113, 84);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.ShowUpDown = true;
-            this.dateTimePicker1.Size = new System.Drawing.Size(108, 20);
+            this.dateTimePicker1.Size = new System.Drawing.Size(104, 20);
             this.dateTimePicker1.TabIndex = 3;
             // 
             // pbSetSafetyLimit
@@ -540,11 +552,12 @@
             this.pbSetSafetyLimit.ForeColor = System.Drawing.Color.Black;
             this.pbSetSafetyLimit.Image = ((System.Drawing.Image)(resources.GetObject("pbSetSafetyLimit.Image")));
             this.pbSetSafetyLimit.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.pbSetSafetyLimit.Location = new System.Drawing.Point(321, 81);
+            this.pbSetSafetyLimit.Location = new System.Drawing.Point(296, 81);
             this.pbSetSafetyLimit.Margin = new System.Windows.Forms.Padding(0);
             this.pbSetSafetyLimit.Name = "pbSetSafetyLimit";
             this.pbSetSafetyLimit.Size = new System.Drawing.Size(144, 27);
             this.pbSetSafetyLimit.TabIndex = 8;
+            this.pbSetSafetyLimit.Tag = "EastSafetyLimitDegrees,WestSafetyLimitDegrees,GotoLimitDegrees";
             this.pbSetSafetyLimit.Text = "Set Safety Limits";
             this.pbSetSafetyLimit.UseVisualStyleBackColor = false;
             this.pbSetSafetyLimit.Click += new System.EventHandler(this.pbSetSafetyLimit_Click);
@@ -554,13 +567,58 @@
             this.checkBox7.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.checkBox7.AutoSize = true;
             this.checkBox7.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.geminiPropertiesBindingSource, "AlarmSet", true));
-            this.checkBox7.Location = new System.Drawing.Point(16, 86);
+            this.checkBox7.Location = new System.Drawing.Point(10, 86);
             this.checkBox7.Name = "checkBox7";
             this.checkBox7.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.checkBox7.Size = new System.Drawing.Size(97, 17);
             this.checkBox7.TabIndex = 12;
             this.checkBox7.Text = "Set Alarm Time";
             this.checkBox7.UseVisualStyleBackColor = true;
+            // 
+            // pbController
+            // 
+            this.pbController.AutoSize = true;
+            this.pbController.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.pbController.ContextMenuStrip = this.menuUpdate;
+            this.pbController.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pbController.FlatAppearance.BorderSize = 0;
+            this.pbController.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.pbController.Image = ((System.Drawing.Image)(resources.GetObject("pbController.Image")));
+            this.pbController.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.pbController.Location = new System.Drawing.Point(440, 108);
+            this.pbController.Margin = new System.Windows.Forms.Padding(0);
+            this.pbController.Name = "pbController";
+            this.pbController.Size = new System.Drawing.Size(22, 22);
+            this.pbController.TabIndex = 35;
+            this.pbController.UseVisualStyleBackColor = true;
+            this.pbController.Click += new System.EventHandler(this.pbUpdate_Click);
+            // 
+            // menuUpdate
+            // 
+            this.menuUpdate.BackColor = System.Drawing.Color.Black;
+            this.menuUpdate.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemGetSettings,
+            this.menuItemSendSettings});
+            this.menuUpdate.Name = "contextMenuStrip1";
+            this.menuUpdate.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.menuUpdate.ShowImageMargin = false;
+            this.menuUpdate.Size = new System.Drawing.Size(185, 48);
+            // 
+            // menuItemGetSettings
+            // 
+            this.menuItemGetSettings.ForeColor = System.Drawing.Color.White;
+            this.menuItemGetSettings.Name = "menuItemGetSettings";
+            this.menuItemGetSettings.Size = new System.Drawing.Size(184, 22);
+            this.menuItemGetSettings.Text = "Get Settings From Gemini";
+            this.menuItemGetSettings.Click += new System.EventHandler(this.menuItemGetSettings_Click);
+            // 
+            // menuItemSendSettings
+            // 
+            this.menuItemSendSettings.ForeColor = System.Drawing.Color.White;
+            this.menuItemSendSettings.Name = "menuItemSendSettings";
+            this.menuItemSendSettings.Size = new System.Drawing.Size(184, 22);
+            this.menuItemSendSettings.Text = "Send Settings To Gemini";
+            this.menuItemSendSettings.Click += new System.EventHandler(this.menuItemSendSettings_Click);
             // 
             // groupBox2
             // 
@@ -581,11 +639,13 @@
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
-            this.tableLayoutPanel2.ColumnCount = 4;
+            this.tableLayoutPanel2.ColumnCount = 5;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel2.Controls.Add(this.pbTracking, 4, 1);
             this.tableLayoutPanel2.Controls.Add(this.label6, 2, 1);
             this.tableLayoutPanel2.Controls.Add(this.label4, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.label5, 0, 0);
@@ -598,10 +658,28 @@
             this.tableLayoutPanel2.MinimumSize = new System.Drawing.Size(465, 62);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 2;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(465, 62);
             this.tableLayoutPanel2.TabIndex = 0;
+            // 
+            // pbTracking
+            // 
+            this.pbTracking.AutoSize = true;
+            this.pbTracking.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.pbTracking.ContextMenuStrip = this.menuUpdate;
+            this.pbTracking.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pbTracking.FlatAppearance.BorderSize = 0;
+            this.pbTracking.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.pbTracking.Image = ((System.Drawing.Image)(resources.GetObject("pbTracking.Image")));
+            this.pbTracking.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.pbTracking.Location = new System.Drawing.Point(440, 31);
+            this.pbTracking.Margin = new System.Windows.Forms.Padding(0);
+            this.pbTracking.Name = "pbTracking";
+            this.pbTracking.Size = new System.Drawing.Size(22, 22);
+            this.pbTracking.TabIndex = 36;
+            this.pbTracking.UseVisualStyleBackColor = true;
+            this.pbTracking.Click += new System.EventHandler(this.pbUpdate_Click);
             // 
             // label6
             // 
@@ -609,9 +687,9 @@
             this.label6.BackColor = System.Drawing.Color.Transparent;
             this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label6.ForeColor = System.Drawing.Color.Lime;
-            this.label6.Location = new System.Drawing.Point(235, 31);
+            this.label6.Location = new System.Drawing.Point(223, 31);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(110, 31);
+            this.label6.Size = new System.Drawing.Size(104, 31);
             this.label6.TabIndex = 13;
             this.label6.Text = " DEC Comet  Rate Divisor (0 to 65535):";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -624,7 +702,7 @@
             this.label4.ForeColor = System.Drawing.Color.Lime;
             this.label4.Location = new System.Drawing.Point(3, 31);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(110, 31);
+            this.label4.Size = new System.Drawing.Size(104, 31);
             this.label4.TabIndex = 4;
             this.label4.Text = "RA Tracking Divisor  (256 to 65535):";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -637,7 +715,7 @@
             this.label5.ForeColor = System.Drawing.Color.Lime;
             this.label5.Location = new System.Drawing.Point(3, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(110, 31);
+            this.label5.Size = new System.Drawing.Size(104, 31);
             this.label5.TabIndex = 0;
             this.label5.Text = "Tracking Rate:";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -652,9 +730,9 @@
             this.comboBox3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBox3.ForeColor = System.Drawing.Color.Lime;
             this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(119, 3);
+            this.comboBox3.Location = new System.Drawing.Point(113, 3);
             this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(110, 21);
+            this.comboBox3.Size = new System.Drawing.Size(104, 21);
             this.comboBox3.TabIndex = 1;
             // 
             // numericUpDown1
@@ -664,7 +742,7 @@
             this.numericUpDown1.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "TrackingDivisorRA", true));
             this.numericUpDown1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown1.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown1.Location = new System.Drawing.Point(119, 34);
+            this.numericUpDown1.Location = new System.Drawing.Point(113, 34);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -676,7 +754,7 @@
             0,
             0});
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(110, 20);
+            this.numericUpDown1.Size = new System.Drawing.Size(104, 20);
             this.numericUpDown1.TabIndex = 9;
             this.numericUpDown1.Value = new decimal(new int[] {
             256,
@@ -691,14 +769,14 @@
             this.numericUpDown2.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "TrackingDivisorDEC", true));
             this.numericUpDown2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown2.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown2.Location = new System.Drawing.Point(351, 34);
+            this.numericUpDown2.Location = new System.Drawing.Point(333, 34);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             65535,
             0,
             0,
             0});
             this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(111, 20);
+            this.numericUpDown2.Size = new System.Drawing.Size(104, 20);
             this.numericUpDown2.TabIndex = 11;
             // 
             // checkBox4
@@ -710,7 +788,7 @@
             this.checkBox4.Dock = System.Windows.Forms.DockStyle.Right;
             this.checkBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox4.ForeColor = System.Drawing.Color.Lime;
-            this.checkBox4.Location = new System.Drawing.Point(372, 3);
+            this.checkBox4.Location = new System.Drawing.Point(347, 3);
             this.checkBox4.Name = "checkBox4";
             this.checkBox4.Size = new System.Drawing.Size(90, 25);
             this.checkBox4.TabIndex = 10;
@@ -735,11 +813,13 @@
             // 
             // tableLayoutPanel3
             // 
-            this.tableLayoutPanel3.ColumnCount = 4;
+            this.tableLayoutPanel3.ColumnCount = 5;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel3.Controls.Add(this.pbSpeed, 4, 2);
             this.tableLayoutPanel3.Controls.Add(this.numericUpDown17, 1, 2);
             this.tableLayoutPanel3.Controls.Add(this.numericUpDown7, 3, 2);
             this.tableLayoutPanel3.Controls.Add(this.numericUpDown6, 3, 1);
@@ -754,14 +834,32 @@
             this.tableLayoutPanel3.Controls.Add(this.label12, 0, 2);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 16);
-            this.tableLayoutPanel3.MaximumSize = new System.Drawing.Size(465, 96);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 3;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(465, 96);
             this.tableLayoutPanel3.TabIndex = 0;
+            // 
+            // pbSpeed
+            // 
+            this.pbSpeed.AutoSize = true;
+            this.pbSpeed.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.pbSpeed.ContextMenuStrip = this.menuUpdate;
+            this.pbSpeed.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pbSpeed.FlatAppearance.BorderSize = 0;
+            this.pbSpeed.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.pbSpeed.Image = ((System.Drawing.Image)(resources.GetObject("pbSpeed.Image")));
+            this.pbSpeed.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.pbSpeed.Location = new System.Drawing.Point(440, 64);
+            this.pbSpeed.Margin = new System.Windows.Forms.Padding(0);
+            this.pbSpeed.Name = "pbSpeed";
+            this.pbSpeed.Size = new System.Drawing.Size(22, 22);
+            this.pbSpeed.TabIndex = 37;
+            this.pbSpeed.UseVisualStyleBackColor = true;
+            this.pbSpeed.Click += new System.EventHandler(this.pbUpdate_Click);
             // 
             // numericUpDown17
             // 
@@ -770,7 +868,7 @@
             this.numericUpDown17.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "TVC", true));
             this.numericUpDown17.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown17.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown17.Location = new System.Drawing.Point(119, 69);
+            this.numericUpDown17.Location = new System.Drawing.Point(113, 69);
             this.numericUpDown17.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.numericUpDown17.Maximum = new decimal(new int[] {
             255,
@@ -778,7 +876,7 @@
             0,
             0});
             this.numericUpDown17.Name = "numericUpDown17";
-            this.numericUpDown17.Size = new System.Drawing.Size(110, 20);
+            this.numericUpDown17.Size = new System.Drawing.Size(104, 20);
             this.numericUpDown17.TabIndex = 14;
             // 
             // numericUpDown7
@@ -788,10 +886,10 @@
             this.numericUpDown7.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "SlewSettleTime", true));
             this.numericUpDown7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown7.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown7.Location = new System.Drawing.Point(351, 69);
+            this.numericUpDown7.Location = new System.Drawing.Point(333, 69);
             this.numericUpDown7.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.numericUpDown7.Name = "numericUpDown7";
-            this.numericUpDown7.Size = new System.Drawing.Size(111, 20);
+            this.numericUpDown7.Size = new System.Drawing.Size(104, 20);
             this.numericUpDown7.TabIndex = 17;
             // 
             // numericUpDown6
@@ -807,7 +905,7 @@
             0,
             0,
             65536});
-            this.numericUpDown6.Location = new System.Drawing.Point(351, 37);
+            this.numericUpDown6.Location = new System.Drawing.Point(333, 37);
             this.numericUpDown6.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.numericUpDown6.Maximum = new decimal(new int[] {
             8,
@@ -820,7 +918,7 @@
             0,
             65536});
             this.numericUpDown6.Name = "numericUpDown6";
-            this.numericUpDown6.Size = new System.Drawing.Size(111, 20);
+            this.numericUpDown6.Size = new System.Drawing.Size(104, 20);
             this.numericUpDown6.TabIndex = 16;
             this.numericUpDown6.Value = new decimal(new int[] {
             2,
@@ -834,9 +932,9 @@
             this.label11.BackColor = System.Drawing.Color.Transparent;
             this.label11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label11.ForeColor = System.Drawing.Color.Lime;
-            this.label11.Location = new System.Drawing.Point(235, 32);
+            this.label11.Location = new System.Drawing.Point(223, 32);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(110, 32);
+            this.label11.Size = new System.Drawing.Size(104, 32);
             this.label11.TabIndex = 19;
             this.label11.Text = "Guiding Speed  (0.2..0.8)";
             this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -848,7 +946,7 @@
             this.numericUpDown5.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "CenteringSpeed", true));
             this.numericUpDown5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown5.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown5.Location = new System.Drawing.Point(351, 5);
+            this.numericUpDown5.Location = new System.Drawing.Point(333, 5);
             this.numericUpDown5.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.numericUpDown5.Maximum = new decimal(new int[] {
             255,
@@ -861,7 +959,7 @@
             0,
             0});
             this.numericUpDown5.Name = "numericUpDown5";
-            this.numericUpDown5.Size = new System.Drawing.Size(111, 20);
+            this.numericUpDown5.Size = new System.Drawing.Size(104, 20);
             this.numericUpDown5.TabIndex = 15;
             this.numericUpDown5.Value = new decimal(new int[] {
             1,
@@ -875,9 +973,9 @@
             this.label10.BackColor = System.Drawing.Color.Transparent;
             this.label10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label10.ForeColor = System.Drawing.Color.Lime;
-            this.label10.Location = new System.Drawing.Point(235, 0);
+            this.label10.Location = new System.Drawing.Point(223, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(110, 32);
+            this.label10.Size = new System.Drawing.Size(104, 32);
             this.label10.TabIndex = 17;
             this.label10.Text = "Centering Speed  (1..255)";
             this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -889,7 +987,7 @@
             this.numericUpDown4.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "GotoSlewSpeed", true));
             this.numericUpDown4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown4.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown4.Location = new System.Drawing.Point(119, 37);
+            this.numericUpDown4.Location = new System.Drawing.Point(113, 37);
             this.numericUpDown4.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.numericUpDown4.Maximum = new decimal(new int[] {
             20000,
@@ -902,7 +1000,7 @@
             0,
             0});
             this.numericUpDown4.Name = "numericUpDown4";
-            this.numericUpDown4.Size = new System.Drawing.Size(110, 20);
+            this.numericUpDown4.Size = new System.Drawing.Size(104, 20);
             this.numericUpDown4.TabIndex = 13;
             this.numericUpDown4.Value = new decimal(new int[] {
             20,
@@ -917,7 +1015,7 @@
             this.numericUpDown3.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "ManualSlewSpeed", true));
             this.numericUpDown3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown3.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown3.Location = new System.Drawing.Point(119, 5);
+            this.numericUpDown3.Location = new System.Drawing.Point(113, 5);
             this.numericUpDown3.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.numericUpDown3.Maximum = new decimal(new int[] {
             20000,
@@ -930,7 +1028,7 @@
             0,
             0});
             this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(110, 20);
+            this.numericUpDown3.Size = new System.Drawing.Size(104, 20);
             this.numericUpDown3.TabIndex = 12;
             this.numericUpDown3.Value = new decimal(new int[] {
             20,
@@ -946,7 +1044,7 @@
             this.label7.ForeColor = System.Drawing.Color.Lime;
             this.label7.Location = new System.Drawing.Point(3, 32);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(110, 32);
+            this.label7.Size = new System.Drawing.Size(104, 32);
             this.label7.TabIndex = 4;
             this.label7.Text = "Goto Slew Speed (20..2000)";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -959,7 +1057,7 @@
             this.label8.ForeColor = System.Drawing.Color.Lime;
             this.label8.Location = new System.Drawing.Point(3, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(110, 32);
+            this.label8.Size = new System.Drawing.Size(104, 32);
             this.label8.TabIndex = 0;
             this.label8.Text = "Manual Slew Speed (20..2000)";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -970,9 +1068,9 @@
             this.label9.BackColor = System.Drawing.Color.Transparent;
             this.label9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label9.ForeColor = System.Drawing.Color.Lime;
-            this.label9.Location = new System.Drawing.Point(235, 64);
+            this.label9.Location = new System.Drawing.Point(223, 64);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(110, 32);
+            this.label9.Size = new System.Drawing.Size(104, 32);
             this.label9.TabIndex = 21;
             this.label9.Text = "Slew Settle Time (0..100 seconds)";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -986,7 +1084,7 @@
             this.label12.ForeColor = System.Drawing.Color.Lime;
             this.label12.Location = new System.Drawing.Point(3, 64);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(110, 32);
+            this.label12.Size = new System.Drawing.Size(104, 32);
             this.label12.TabIndex = 22;
             this.label12.Text = "TVC (0..255):";
             this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1009,10 +1107,12 @@
             // 
             // tableLayoutPanel4
             // 
-            this.tableLayoutPanel4.ColumnCount = 3;
+            this.tableLayoutPanel4.ColumnCount = 4;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel4.Controls.Add(this.pbCustom, 4, 4);
             this.tableLayoutPanel4.Controls.Add(this.numericUpDown15, 1, 3);
             this.tableLayoutPanel4.Controls.Add(this.numericUpDown14, 2, 4);
             this.tableLayoutPanel4.Controls.Add(this.numericUpDown13, 1, 4);
@@ -1037,9 +1137,26 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel4.Size = new System.Drawing.Size(465, 134);
             this.tableLayoutPanel4.TabIndex = 0;
+            // 
+            // pbCustom
+            // 
+            this.pbCustom.AutoSize = true;
+            this.pbCustom.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.pbCustom.ContextMenuStrip = this.menuUpdate;
+            this.pbCustom.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pbCustom.FlatAppearance.BorderSize = 0;
+            this.pbCustom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.pbCustom.Image = ((System.Drawing.Image)(resources.GetObject("pbCustom.Image")));
+            this.pbCustom.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.pbCustom.Location = new System.Drawing.Point(440, 104);
+            this.pbCustom.Margin = new System.Windows.Forms.Padding(0);
+            this.pbCustom.Name = "pbCustom";
+            this.pbCustom.Size = new System.Drawing.Size(22, 22);
+            this.pbCustom.TabIndex = 37;
+            this.pbCustom.UseVisualStyleBackColor = true;
+            this.pbCustom.Click += new System.EventHandler(this.pbUpdate_Click);
             // 
             // numericUpDown15
             // 
@@ -1048,7 +1165,7 @@
             this.numericUpDown15.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "ServoEncoderResolutionRA", true));
             this.numericUpDown15.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown15.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown15.Location = new System.Drawing.Point(189, 79);
+            this.numericUpDown15.Location = new System.Drawing.Point(179, 79);
             this.numericUpDown15.Maximum = new decimal(new int[] {
             2048,
             0,
@@ -1060,7 +1177,7 @@
             0,
             0});
             this.numericUpDown15.Name = "numericUpDown15";
-            this.numericUpDown15.Size = new System.Drawing.Size(133, 20);
+            this.numericUpDown15.Size = new System.Drawing.Size(126, 20);
             this.numericUpDown15.TabIndex = 22;
             this.numericUpDown15.Value = new decimal(new int[] {
             100,
@@ -1075,7 +1192,7 @@
             this.numericUpDown14.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "StepsPerWormRevolutionDEC", true));
             this.numericUpDown14.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown14.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown14.Location = new System.Drawing.Point(328, 107);
+            this.numericUpDown14.Location = new System.Drawing.Point(311, 107);
             this.numericUpDown14.Maximum = new decimal(new int[] {
             25600,
             0,
@@ -1087,7 +1204,7 @@
             0,
             0});
             this.numericUpDown14.Name = "numericUpDown14";
-            this.numericUpDown14.Size = new System.Drawing.Size(134, 20);
+            this.numericUpDown14.Size = new System.Drawing.Size(126, 20);
             this.numericUpDown14.TabIndex = 25;
             this.numericUpDown14.Value = new decimal(new int[] {
             2000,
@@ -1102,7 +1219,7 @@
             this.numericUpDown13.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "StepsPerWormRevolutionRA", true));
             this.numericUpDown13.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown13.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown13.Location = new System.Drawing.Point(189, 107);
+            this.numericUpDown13.Location = new System.Drawing.Point(179, 107);
             this.numericUpDown13.Maximum = new decimal(new int[] {
             25600,
             0,
@@ -1114,7 +1231,7 @@
             0,
             0});
             this.numericUpDown13.Name = "numericUpDown13";
-            this.numericUpDown13.Size = new System.Drawing.Size(133, 20);
+            this.numericUpDown13.Size = new System.Drawing.Size(126, 20);
             this.numericUpDown13.TabIndex = 24;
             this.numericUpDown13.Value = new decimal(new int[] {
             2000,
@@ -1130,7 +1247,7 @@
             this.label14.ForeColor = System.Drawing.Color.Lime;
             this.label14.Location = new System.Drawing.Point(3, 104);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(180, 30);
+            this.label14.Size = new System.Drawing.Size(170, 30);
             this.label14.TabIndex = 27;
             this.label14.Text = "Steps per Worm Revolution:";
             this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1141,9 +1258,9 @@
             this.label20.BackColor = System.Drawing.Color.Transparent;
             this.label20.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label20.ForeColor = System.Drawing.Color.Lime;
-            this.label20.Location = new System.Drawing.Point(328, 0);
+            this.label20.Location = new System.Drawing.Point(311, 0);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(134, 20);
+            this.label20.Size = new System.Drawing.Size(126, 20);
             this.label20.TabIndex = 26;
             this.label20.Text = "DEC";
             this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1155,7 +1272,7 @@
             this.numericUpDown8.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "ServoEncoderResolutionDEC", true));
             this.numericUpDown8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown8.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown8.Location = new System.Drawing.Point(328, 79);
+            this.numericUpDown8.Location = new System.Drawing.Point(311, 79);
             this.numericUpDown8.Maximum = new decimal(new int[] {
             2048,
             0,
@@ -1167,7 +1284,7 @@
             0,
             0});
             this.numericUpDown8.Name = "numericUpDown8";
-            this.numericUpDown8.Size = new System.Drawing.Size(134, 20);
+            this.numericUpDown8.Size = new System.Drawing.Size(126, 20);
             this.numericUpDown8.TabIndex = 23;
             this.numericUpDown8.Value = new decimal(new int[] {
             100,
@@ -1183,7 +1300,7 @@
             this.label13.ForeColor = System.Drawing.Color.Lime;
             this.label13.Location = new System.Drawing.Point(3, 76);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(180, 28);
+            this.label13.Size = new System.Drawing.Size(170, 28);
             this.label13.TabIndex = 23;
             this.label13.Text = "Servo Encoder Resolution (100..2048)";
             this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1195,7 +1312,7 @@
             this.numericUpDown9.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "SpurGearRatioDEC", true));
             this.numericUpDown9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown9.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown9.Location = new System.Drawing.Point(328, 51);
+            this.numericUpDown9.Location = new System.Drawing.Point(311, 51);
             this.numericUpDown9.Maximum = new decimal(new int[] {
             150,
             0,
@@ -1207,7 +1324,7 @@
             0,
             0});
             this.numericUpDown9.Name = "numericUpDown9";
-            this.numericUpDown9.Size = new System.Drawing.Size(134, 20);
+            this.numericUpDown9.Size = new System.Drawing.Size(126, 20);
             this.numericUpDown9.TabIndex = 21;
             this.numericUpDown9.Value = new decimal(new int[] {
             20,
@@ -1222,7 +1339,7 @@
             this.numericUpDown10.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "WormGearRatioDEC", true));
             this.numericUpDown10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown10.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown10.Location = new System.Drawing.Point(328, 23);
+            this.numericUpDown10.Location = new System.Drawing.Point(311, 23);
             this.numericUpDown10.Maximum = new decimal(new int[] {
             720,
             0,
@@ -1234,7 +1351,7 @@
             0,
             -2147483648});
             this.numericUpDown10.Name = "numericUpDown10";
-            this.numericUpDown10.Size = new System.Drawing.Size(134, 20);
+            this.numericUpDown10.Size = new System.Drawing.Size(126, 20);
             this.numericUpDown10.TabIndex = 19;
             // 
             // numericUpDown11
@@ -1244,7 +1361,7 @@
             this.numericUpDown11.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "SpurGearRatioRA", true));
             this.numericUpDown11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown11.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown11.Location = new System.Drawing.Point(189, 51);
+            this.numericUpDown11.Location = new System.Drawing.Point(179, 51);
             this.numericUpDown11.Maximum = new decimal(new int[] {
             150,
             0,
@@ -1256,7 +1373,7 @@
             0,
             0});
             this.numericUpDown11.Name = "numericUpDown11";
-            this.numericUpDown11.Size = new System.Drawing.Size(133, 20);
+            this.numericUpDown11.Size = new System.Drawing.Size(126, 20);
             this.numericUpDown11.TabIndex = 20;
             this.numericUpDown11.Value = new decimal(new int[] {
             20,
@@ -1271,7 +1388,7 @@
             this.numericUpDown12.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "WormGearRatioRA", true));
             this.numericUpDown12.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown12.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown12.Location = new System.Drawing.Point(189, 23);
+            this.numericUpDown12.Location = new System.Drawing.Point(179, 23);
             this.numericUpDown12.Maximum = new decimal(new int[] {
             720,
             0,
@@ -1283,7 +1400,7 @@
             0,
             -2147483648});
             this.numericUpDown12.Name = "numericUpDown12";
-            this.numericUpDown12.Size = new System.Drawing.Size(133, 20);
+            this.numericUpDown12.Size = new System.Drawing.Size(126, 20);
             this.numericUpDown12.TabIndex = 18;
             // 
             // label16
@@ -1294,7 +1411,7 @@
             this.label16.ForeColor = System.Drawing.Color.Lime;
             this.label16.Location = new System.Drawing.Point(3, 48);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(180, 28);
+            this.label16.Size = new System.Drawing.Size(170, 28);
             this.label16.TabIndex = 4;
             this.label16.Text = "Spur Gear Ratio (20..150):";
             this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1307,7 +1424,7 @@
             this.label17.ForeColor = System.Drawing.Color.Lime;
             this.label17.Location = new System.Drawing.Point(3, 20);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(180, 28);
+            this.label17.Size = new System.Drawing.Size(170, 28);
             this.label17.TabIndex = 0;
             this.label17.Text = "Worm Gear Ratio (+/- 80 to 720):";
             this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1318,9 +1435,9 @@
             this.label19.BackColor = System.Drawing.Color.Transparent;
             this.label19.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label19.ForeColor = System.Drawing.Color.Lime;
-            this.label19.Location = new System.Drawing.Point(189, 0);
+            this.label19.Location = new System.Drawing.Point(179, 0);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(133, 20);
+            this.label19.Size = new System.Drawing.Size(126, 20);
             this.label19.TabIndex = 25;
             this.label19.Text = "RA";
             this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1343,11 +1460,13 @@
             // 
             // tableLayoutPanel5
             // 
-            this.tableLayoutPanel5.ColumnCount = 4;
+            this.tableLayoutPanel5.ColumnCount = 5;
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel5.Controls.Add(this.pbExternal, 4, 1);
             this.tableLayoutPanel5.Controls.Add(this.checkBox6, 2, 0);
             this.tableLayoutPanel5.Controls.Add(this.numericUpDown16, 3, 1);
             this.tableLayoutPanel5.Controls.Add(this.label18, 2, 1);
@@ -1359,10 +1478,28 @@
             this.tableLayoutPanel5.MinimumSize = new System.Drawing.Size(465, 58);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 2;
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel5.Size = new System.Drawing.Size(465, 58);
             this.tableLayoutPanel5.TabIndex = 0;
+            // 
+            // pbExternal
+            // 
+            this.pbExternal.AutoSize = true;
+            this.pbExternal.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.pbExternal.ContextMenuStrip = this.menuUpdate;
+            this.pbExternal.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pbExternal.FlatAppearance.BorderSize = 0;
+            this.pbExternal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.pbExternal.Image = ((System.Drawing.Image)(resources.GetObject("pbExternal.Image")));
+            this.pbExternal.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.pbExternal.Location = new System.Drawing.Point(440, 29);
+            this.pbExternal.Margin = new System.Windows.Forms.Padding(0);
+            this.pbExternal.Name = "pbExternal";
+            this.pbExternal.Size = new System.Drawing.Size(22, 22);
+            this.pbExternal.TabIndex = 37;
+            this.pbExternal.UseVisualStyleBackColor = true;
+            this.pbExternal.Click += new System.EventHandler(this.pbUpdate_Click);
             // 
             // checkBox6
             // 
@@ -1372,7 +1509,7 @@
             this.tableLayoutPanel5.SetColumnSpan(this.checkBox6, 2);
             this.checkBox6.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.geminiPropertiesBindingSource, "UseLimitSwitches", true));
             this.checkBox6.Dock = System.Windows.Forms.DockStyle.Left;
-            this.checkBox6.Location = new System.Drawing.Point(235, 3);
+            this.checkBox6.Location = new System.Drawing.Point(223, 3);
             this.checkBox6.Name = "checkBox6";
             this.checkBox6.Size = new System.Drawing.Size(118, 23);
             this.checkBox6.TabIndex = 27;
@@ -1386,7 +1523,7 @@
             this.numericUpDown16.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "EncoderResolutionDEC", true));
             this.numericUpDown16.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown16.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown16.Location = new System.Drawing.Point(351, 32);
+            this.numericUpDown16.Location = new System.Drawing.Point(333, 32);
             this.numericUpDown16.Maximum = new decimal(new int[] {
             32768,
             0,
@@ -1398,7 +1535,7 @@
             0,
             -2147483648});
             this.numericUpDown16.Name = "numericUpDown16";
-            this.numericUpDown16.Size = new System.Drawing.Size(111, 20);
+            this.numericUpDown16.Size = new System.Drawing.Size(104, 20);
             this.numericUpDown16.TabIndex = 29;
             // 
             // label18
@@ -1407,9 +1544,9 @@
             this.label18.BackColor = System.Drawing.Color.Transparent;
             this.label18.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label18.ForeColor = System.Drawing.Color.Lime;
-            this.label18.Location = new System.Drawing.Point(235, 29);
+            this.label18.Location = new System.Drawing.Point(223, 29);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(110, 29);
+            this.label18.Size = new System.Drawing.Size(104, 29);
             this.label18.TabIndex = 19;
             this.label18.Text = "DEC Enc. Resolution (+/- 2048..32768):";
             this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1421,7 +1558,7 @@
             this.numericUpDown18.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "EncoderResolutionRA", true));
             this.numericUpDown18.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown18.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown18.Location = new System.Drawing.Point(119, 32);
+            this.numericUpDown18.Location = new System.Drawing.Point(113, 32);
             this.numericUpDown18.Maximum = new decimal(new int[] {
             32768,
             0,
@@ -1433,7 +1570,7 @@
             0,
             -2147483648});
             this.numericUpDown18.Name = "numericUpDown18";
-            this.numericUpDown18.Size = new System.Drawing.Size(110, 20);
+            this.numericUpDown18.Size = new System.Drawing.Size(104, 20);
             this.numericUpDown18.TabIndex = 28;
             // 
             // label22
@@ -1444,7 +1581,7 @@
             this.label22.ForeColor = System.Drawing.Color.Lime;
             this.label22.Location = new System.Drawing.Point(3, 29);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(110, 29);
+            this.label22.Size = new System.Drawing.Size(104, 29);
             this.label22.TabIndex = 4;
             this.label22.Text = "RA Enc. Resolution (+/- 2048..32768):";
             this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1456,7 +1593,7 @@
             this.checkBox5.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBox5.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.geminiPropertiesBindingSource, "UseEncoders", true));
             this.checkBox5.Dock = System.Windows.Forms.DockStyle.Right;
-            this.checkBox5.Location = new System.Drawing.Point(17, 3);
+            this.checkBox5.Location = new System.Drawing.Point(11, 3);
             this.checkBox5.Name = "checkBox5";
             this.checkBox5.Size = new System.Drawing.Size(96, 23);
             this.checkBox5.TabIndex = 26;
@@ -1476,7 +1613,7 @@
             this.panel1.Controls.Add(this.pbLoad);
             this.panel1.Location = new System.Drawing.Point(3, 615);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(468, 100);
+            this.panel1.Size = new System.Drawing.Size(471, 100);
             this.panel1.TabIndex = 5;
             // 
             // frmAdvancedSettings
@@ -1489,7 +1626,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
             this.CancelButton = this.button3;
-            this.ClientSize = new System.Drawing.Size(496, 735);
+            this.ClientSize = new System.Drawing.Size(493, 735);
             this.Controls.Add(this.flowLayoutPanel1);
             this.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -1501,11 +1638,12 @@
             this.Text = "Advanced Gemini Settings";
             this.Load += new System.EventHandler(this.frmAdvancedSettings_Load);
             this.menuSafetyPopup.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).EndInit();
+            this.menuUpdate.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
@@ -1626,5 +1764,13 @@
         private System.Windows.Forms.ToolStripMenuItem menuSetLimits;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button pbController;
+        private System.Windows.Forms.Button pbTracking;
+        private System.Windows.Forms.Button pbSpeed;
+        private System.Windows.Forms.Button pbCustom;
+        private System.Windows.Forms.Button pbExternal;
+        private System.Windows.Forms.ContextMenuStrip menuUpdate;
+        private System.Windows.Forms.ToolStripMenuItem menuItemGetSettings;
+        private System.Windows.Forms.ToolStripMenuItem menuItemSendSettings;
     }
 }
