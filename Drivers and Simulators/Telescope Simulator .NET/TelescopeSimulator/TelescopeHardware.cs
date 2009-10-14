@@ -125,6 +125,8 @@ namespace ASCOM.TelescopeSimulator
         public static double m_DeltaRa = 0;
         public static double m_DeltaDec = 0;
 
+        private static double m_SettleTix;
+
         private static ASCOM.Interface.PierSide m_SideOfPier;
 
         private static bool m_Connected = false; //Keep track of the connection status of the hardware
@@ -345,6 +347,9 @@ namespace ASCOM.TelescopeSimulator
         {
             double step;
             double z;
+            double y;
+            double raRate;
+            double decRate;
 
             if (m_SlewState == SlewType.SlewNone) //Not slewing the scope 
             {
@@ -427,25 +432,182 @@ namespace ASCOM.TelescopeSimulator
                 }
                 else if (m_SlewState == SlewType.SlewRaDec)
                 {
+                    m_SettleTix = GetTickCount() + m_SlewSettleTime;
+
+                    //RA Step
+                    y = Math.Abs(m_DeltaRa);
+                    if (m_SlewSpeedFast / SharedResources.TIMER_INTERVAL >= 50) step = y / z;
+                    else if (y > 2 * m_SlewSpeedFast) step = m_SlewSpeedFast / z;
+                    else if (y > 2 * m_SlewSpeedMedium) step = m_SlewSpeedMedium / z;
+                    else if (y > 2 * m_SlewSpeedSlow) step = m_SlewSpeedSlow / z;
+                    else step = y / z;
+
+                    step = step * Math.Sign(m_DeltaRa);
+
+                    m_RightAscension += step;
+                    m_DeltaRa -= step;
+
+                    //Dec Step
+                    y = Math.Abs(m_DeltaDec);
+                    if (m_SlewSpeedFast / SharedResources.TIMER_INTERVAL >= 50) step = y;
+                    else if (y > 2 * m_SlewSpeedFast) step = m_SlewSpeedFast;
+                    else if (y > 2 * m_SlewSpeedMedium) step = m_SlewSpeedMedium;
+                    else if (y > 2 * m_SlewSpeedSlow) step = m_SlewSpeedSlow;
+                    else step = y;
+
+                    step = step * Math.Sign(m_DeltaDec);
+
+                    m_Declination += step;
+                    m_DeltaDec -= step;
+
+                    m_Declination = AstronomyFunctions.RangeDec(m_Declination);
+                    m_RightAscension = AstronomyFunctions.RangeHa(m_RightAscension);
+
+                    CalculateAltAz();
+
+                    if (Math.Abs(m_DeltaRa) < 0.0000001 && Math.Abs(m_DeltaDec) < 0.0000001) m_SlewState = SlewType.SlewSettle;
 
                 }
                 else if (m_SlewState == SlewType.SlewAltAz || m_SlewState == SlewType.SlewHome || m_SlewState == SlewType.SlewPark)
                 {
+                    m_SettleTix = GetTickCount() + m_SlewSettleTime;
 
+                    //Altitude Step
+                    y = Math.Abs(m_DeltaAlt);
+                    if (m_SlewSpeedFast / SharedResources.TIMER_INTERVAL >= 50) step = y;
+                    else if (y > 2 * m_SlewSpeedFast) step = m_SlewSpeedFast;
+                    else if (y > 2 * m_SlewSpeedMedium) step = m_SlewSpeedMedium;
+                    else if (y > 2 * m_SlewSpeedSlow) step = m_SlewSpeedSlow;
+                    else step = y;
+
+                    step = step * Math.Sign(m_DeltaAlt);
+
+                    m_Altitude += step;
+                    m_DeltaAlt -= step;
+
+                    //Azimuth Step
+                    y = Math.Abs(m_DeltaAz);
+                    if (m_SlewSpeedFast / SharedResources.TIMER_INTERVAL >= 50) step = y;
+                    else if (y > 2 * m_SlewSpeedFast) step = m_SlewSpeedFast;
+                    else if (y > 2 * m_SlewSpeedMedium) step = m_SlewSpeedMedium;
+                    else if (y > 2 * m_SlewSpeedSlow) step = m_SlewSpeedSlow;
+                    else step = y;
+
+                    step = step * Math.Sign(m_DeltaAz);
+
+                    m_Azimuth += step;
+                    m_DeltaAz -= step;
+
+                    m_Azimuth = AstronomyFunctions.RangeAzimuth(m_Azimuth);
+                    m_Altitude = AstronomyFunctions.RangeAlt(m_Altitude);
+                    CalculateRaDec();
+
+                    if (Math.Abs(m_DeltaAz) < 0.0000001 && Math.Abs(m_DeltaAlt) < 0.0000001)
+                    {
+                        if (m_SlewState == SlewType.SlewPark)
+                        {
+                            m_SlewState = SlewType.SlewNone;
+                            ChangePark(true);
+                        }
+                        else if (m_SlewState == SlewType.SlewHome)
+                        {
+                            m_SlewState = SlewType.SlewNone;
+                            ChangeHome(true);
+                        }
+                        else m_SlewState = SlewType.SlewSettle;
+                    }
+                    
                 }
                 else if (m_SlewState == SlewType.SlewMoveAxis)
                 {
+                    if (m_AlignmentMode == ASCOM.Interface.AlignmentModes.algAltAz)
+                    {
+                        m_Azimuth = m_Azimuth + m_DeltaAz * SharedResources.TIMER_INTERVAL;
+                        m_Altitude = m_Altitude + m_DeltaAlt * SharedResources.TIMER_INTERVAL;
+                        m_Azimuth = AstronomyFunctions.RangeAzimuth(m_Azimuth);
+                        m_Altitude = AstronomyFunctions.RangeAlt(m_Altitude);
+                        CalculateRaDec();
+                    }
+                    else
+                    {
+                        m_RightAscension = m_RightAscension + (m_DeltaAz * SharedResources.TIMER_INTERVAL) / 15;
+                        m_Declination = m_Declination + m_DeltaAlt * SharedResources.TIMER_INTERVAL;
+
+                        m_Declination = AstronomyFunctions.RangeDec(m_Declination);
+                        m_RightAscension = AstronomyFunctions.RangeHa(m_RightAscension);
+
+                        CalculateAltAz();
+                    }
 
                 }
                 else if (m_PulseGuideTixRa > 0 || m_PulseGuideTixDec > 0)
                 {
+                    ChangeHome(false);
+                    ChangePark(false);
+                    if (m_PulseGuideTixRa > 0)
+                    {
+                        if (m_PulseGuideTixRa + (SharedResources.TIMER_INTERVAL / 2) <= GetTickCount())
+                        {
+                            if (SharedResources.TrafficForm != null)
+                            {
+                                if (SharedResources.TrafficForm.Slew)
+                                {
+                                    SharedResources.TrafficForm.TrafficLine("(PulseGuide in RA complete)");
 
+                                }
+                            }
+                            m_PulseGuideTixRa = 0;
+                        }
+                    }
+
+                    if (m_PulseGuideTixDec > 0)
+                    {
+                        if (m_PulseGuideTixDec + (SharedResources.TIMER_INTERVAL / 2) <= GetTickCount())
+                        {
+                            if (SharedResources.TrafficForm != null)
+                            {
+                                if (SharedResources.TrafficForm.Slew)
+                                {
+                                    SharedResources.TrafficForm.TrafficLine("(PulseGuide in Dec complete)");
+
+                                }
+                            }
+                            m_PulseGuideTixDec = 0;
+                        }
+                    }
+
+                    if (m_Tracking) raRate = m_RightAscensionRate;
+                    else raRate = 15;
+                    raRate = (raRate / SharedResources.SIDRATE) / 3600;
+                    if (m_PulseGuideTixRa > 0) raRate = raRate + (m_GuideRateRightAscension / 15);
+
+                    decRate = m_DeclinationRate / 3600;
+                    if (m_PulseGuideTixDec > 0) decRate = decRate + m_GuideRateDeclination;
+
+                    m_RightAscension += raRate * SharedResources.TIMER_INTERVAL;
+                    m_Declination += decRate * SharedResources.TIMER_INTERVAL;
+
+                    m_Declination = AstronomyFunctions.RangeDec(m_Declination);
+                    m_RightAscension = AstronomyFunctions.RangeHa(m_RightAscension);
+
+                    CalculateAltAz();
                 }
             }
 
             if (m_SlewState == SlewType.SlewSettle)
             {
+                if (GetTickCount() > m_SettleTix)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Slew)
+                        {
+                            SharedResources.TrafficForm.TrafficLine("(Slew Complete)");
 
+                        }
+                    }
+                    m_SlewState = SlewType.SlewNone;
+                }
             }
 
             m_SiderealTime = AstronomyFunctions.LocalSiderealTime(m_Longitude);
