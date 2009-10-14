@@ -1939,7 +1939,7 @@ namespace ASCOM.GeminiTelescope
             Refraction = m_Refraction;  // update this setting to the mount 
 
             //Set the site and time if required
-            if (m_UseDriverSite)
+            if (m_UseDriverSite && !(m_Longitude == 0 && m_Latitude == 0))
             {
                 Trace.Info(2, "Set Long/Lat/UTCOffset from PC", m_Latitude, m_Longitude, m_UTCOffset);
         
