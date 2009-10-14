@@ -38,15 +38,18 @@ namespace ASCOM.GeminiTelescope
 
             geminiPropertiesBindingSource.Add(props);
             geminiPropertiesBindingSource.ResetBindings(false);
-            SetControlColor(tableLayoutPanel1);
 
             GeminiHardware.OnConnect += new ConnectDelegate(OnConnectChange);
+
+            OnConnectChange(false, 1);
 
         }
 
         void OnConnectChange(bool connect, int clients)
         {
             SetControlColor(tableLayoutPanel1);
+            menuItemGetSettings.Enabled = GeminiHardware.Connected;
+            menuItemSendSettings.Enabled = GeminiHardware.Connected;
         }
 
         private void pbOK_Click(object sender, EventArgs e)
@@ -98,6 +101,29 @@ namespace ASCOM.GeminiTelescope
                     else
                         c.ForeColor = Color.LightGray;
             }
+
+        }
+
+        private void pbUpdate_Click(object sender, EventArgs e)
+        {
+            frmAdvancedSettings par = (frmAdvancedSettings)this.Owner;
+            par.pbUpdate_Click(sender, e);
+        }
+
+        private void menuItemGetSettings_Click(object sender, EventArgs e)
+        {
+            frmAdvancedSettings par = (frmAdvancedSettings)this.Owner;
+            par.menuItemGetSettings_Click(sender, e);
+        }
+
+        private void menuItemSendSettings_Click(object sender, EventArgs e)
+        {
+            frmAdvancedSettings par = (frmAdvancedSettings)this.Owner;
+            par.menuItemSendSettings_Click(sender, e);
+        }
+
+        private void frmModel_Load(object sender, EventArgs e)
+        {
 
         }
 

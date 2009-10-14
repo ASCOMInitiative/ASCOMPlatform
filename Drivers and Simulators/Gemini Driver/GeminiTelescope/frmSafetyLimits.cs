@@ -27,6 +27,11 @@ namespace ASCOM.GeminiTelescope
     public partial class frmSafetyLimits : Form
     {
         SerializableDictionary<string, object> mBkupProfile;
+        const int LosmandyEastDefault = 114;
+        const int G11EastConservative = 99;    //safer value for G11
+        const int LosmandyWestDefault = 123;
+        const int MI250EastDefault = 92;
+        const int MI250WestDefault = 95;
 
         public frmSafetyLimits(GeminiProperties props)
         {
@@ -50,7 +55,7 @@ namespace ASCOM.GeminiTelescope
         void OnConnectChange(bool connect, int clients)
         {
             SetControlColor(this.groupBox1);
-            SetControlColor(this.groupBox2);
+            SetControlColor(this.groupBox2);           
         }
 
         private void SetControlColor(Control panel)
@@ -68,8 +73,26 @@ namespace ASCOM.GeminiTelescope
 
         private void pbOK_Click(object sender, EventArgs e)
         {
+            string losmandy_mounts = "GM-8,G-11,HGM-200,Titan,Titan50";
             if (ValidateChildren())
+            {
+                GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
+                if ((losmandy_mounts.Contains(props.MountTypeSetting) && 
+                        (numericUpDown1.Value > LosmandyEastDefault|| numericUpDown2.Value > LosmandyWestDefault)) ||
+                    (props.MountTypeSetting == "MI-250" && 
+                        (numericUpDown1.Value > MI250EastDefault || numericUpDown2.Value > MI250WestDefault)))
+                {
+                    DialogResult res = MessageBox.Show("The new safety limits are more aggressive than the Gemini default.\r\n\r\nIncorrect safety limits can result in hardware damage.\r\nAre you sure you want to use these new values?",
+                        "Safety Limit Warning", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                    if (res != DialogResult.Yes)
+                    {
+                        DialogResult = DialogResult.None;
+                        return;
+                    }
+                }
+
                 DialogResult = DialogResult.OK;
+            }
         }
 
         private void frmSafetyLimits_FormClosing(object sender, FormClosingEventArgs e)
@@ -96,14 +119,30 @@ namespace ASCOM.GeminiTelescope
 
         private void LosmandyDefault_Click(object sender, EventArgs e)
         {
-            numericUpDown1.Value = 114M;
-            numericUpDown2.Value = 123M;
+
+            GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
+
+            if (props.MountTypeSetting == "G-11")
+            {
+                DialogResult res = MessageBox.Show("Please note that Gemini default East limit of 114° is too aggressive for most G-11.\r\n\r\nWould you like to set the East limit to a more conservative 99° instead?",
+                    "Safety Limit Warning", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                if (res == DialogResult.Yes)
+                {
+                    numericUpDown1.Value = G11EastConservative;
+                    numericUpDown2.Value = LosmandyWestDefault;
+                    return;
+                }
+                else if (res == DialogResult.Cancel) return;    
+            }
+
+            numericUpDown1.Value = LosmandyEastDefault;
+            numericUpDown2.Value = LosmandyWestDefault;
         }
 
         private void MI250_Click(object sender, EventArgs e)
         {
-            numericUpDown1.Value = 92M;
-            numericUpDown2.Value = 95M;
+            numericUpDown1.Value = MI250EastDefault;
+            numericUpDown2.Value = MI250WestDefault;
         }
     }
 }
