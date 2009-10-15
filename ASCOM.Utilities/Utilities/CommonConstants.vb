@@ -61,7 +61,8 @@ Module VersionCode
         Dim ProcCount As Integer = System.Environment.ProcessorCount
         Dim SysDir As String = System.Environment.SystemDirectory
         Dim WorkSet As Long = System.Environment.WorkingSet
-        TL.LogMessage("Versions", "Machine name: " & MachineName & " Number of processors: " & ProcCount & " System directory: " & SysDir & " Working set size: " & WorkSet & " bytes UserName: " & UserName & " DomainName: " & UserDomainName)
+        TL.LogMessage("Versions", "Machine name: " & MachineName & " UserName: " & UserName & " DomainName: " & UserDomainName)
+        TL.LogMessage("Versions", "Number of processors: " & ProcCount & " System directory: " & SysDir & " Working set size: " & WorkSet & " bytes")
         TL.LogMessage("Versions", "")
 
         'Get fully qualified paths to particular directories in a non OS specific way

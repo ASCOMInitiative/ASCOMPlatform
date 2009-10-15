@@ -36,23 +36,23 @@ ASCOM.IConform
 	<summary>
  Error number the driver will return for a not implemented error
  </summary>
-	<value>NotImplemented error number</value>
-	<returns>Integer error number</returns>
-	<remarks></remarks>
+	<value>NotImplemented error number(s)</value>
+	<returns>Array of integer error numbers</returns>
+	<remarks>If you only use one error number, set it as element 0 of the array.</remarks>
 </member><member name="P:ASCOM.Conform.IConformErrorNumbers.InvalidValue">
 	<summary>
  Error number the driver will return for an invalid value error
  </summary>
-	<value>InvalidValue error number</value>
-	<returns>Integer error number</returns>
-	<remarks></remarks>
+	<value>InvalidValue error number(s)</value>
+	<returns>Array of integer error numbers</returns>
+	<remarks>If you only use one error number, set it as element 0 of the array.</remarks>
 </member><member name="P:ASCOM.Conform.IConformErrorNumbers.ValueNotSet">
 	<summary>
  Error number the driver will return for a value not set error
  </summary>
-	<value>NotSetError error number</value>
-	<returns>Integer error number</returns>
-	<remarks></remarks>
+	<value>NotSetError error number(s)</value>
+	<returns>Array of integer error number(s)</returns>
+	<remarks>If you only use one error number, set it as element 0 of the array.</remarks>
 </member><member name="T:ASCOM.Conform.IConformErrorNumbers">
 	<summary>
  Interface for Conform error numbers class

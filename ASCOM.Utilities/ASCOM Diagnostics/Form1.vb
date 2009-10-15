@@ -1,4 +1,12 @@
-﻿Imports ASCOM.Utilities
+﻿' Initial release
+' Version 1.0.1.0 - Released
+
+' Fixed issue where all setup log files were not recorded
+' Added Conform logs to list of retrieved setup logs
+' Added drive scan, reporting available space
+' Version 1.0.2.0 - Released 15/10/09 Peter Simpson
+
+Imports ASCOM.Utilities
 Imports Microsoft.Win32
 Imports System.IO
 Imports System.Diagnostics
@@ -39,6 +47,7 @@ Public Class Form1
     Private Sub btnCOM_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCOM.Click
         Dim ASCOMPath As String
         Dim PathShell As New System.Text.StringBuilder(260)
+        Dim Drives() As String, Drive As DriveInfo
 
         Try
             Status("Diagnostics running...")
@@ -50,6 +59,17 @@ Public Class Form1
             Try
 
                 RunningVersions(TL) 'Log diagnostic information
+                TL.LogMessage("", "")
+                Status("Scanning drives")
+                Drives = Directory.GetLogicalDrives
+                For Each DriveName As String In Drives
+                    Drive = New DriveInfo(DriveName)
+                    If Drive.IsReady Then
+                        TL.LogMessage("Drives", "Drive " & DriveName & " available space: " & Format(Drive.AvailableFreeSpace, "#,0.") & " bytes, capacity: " & Format(Drive.TotalSize, "#,0.") & " bytes, format: " & Drive.DriveFormat)
+                    Else
+                        TL.LogMessage("Drives", "Skipping drive " & DriveName & " because it is not ready")
+                    End If
+                Next
                 TL.LogMessage("", "")
 
                 ScanRegistry() 'Report Com Registration
@@ -108,15 +128,16 @@ Public Class Form1
 
                     'Search for word ASCOM in first part of file
                     ASCOMFile = False 'Initialise found flag
+                    LineCount = 0
                     Array.Clear(Lines, 1, NumLine) 'Clear out the array ready for next run
-                    Do Until LineCount = NumLine Or SR.EndOfStream
+                    Do Until (LineCount = NumLine) Or SR.EndOfStream
                         LineCount += 1
                         Lines(LineCount) = SR.ReadLine
                         If InStr(Lines(LineCount).ToUpper, "ASCOM") > 0 Then ASCOMFile = True
+                        If InStr(Lines(LineCount).ToUpper, "CONFORM") > 0 Then ASCOMFile = True
                     Loop
 
                     If ASCOMFile Then 'This is an ASCOM setup so list it
-                        LineCount = 0
 
                         For i = 1 To NumLine 'Include the lines read earlier
                             TL.LogMessage("SetupFile", Lines(i))
