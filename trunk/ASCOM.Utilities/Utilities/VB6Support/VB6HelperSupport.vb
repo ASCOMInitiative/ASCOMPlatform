@@ -93,7 +93,7 @@ Namespace VB6HelperSupport 'Tuck this out of the way of the main ASCOM.Utilities
             Try
                 Profile = New XMLAccess(ComponentName)
                 TL = New TraceLogger("", "VB6ProfileSupport")
-                TL.Enabled = True
+                TL.Enabled = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT) 'Get enabled / disabled state from the user registry
                 Call RunningVersions(TL)
             Catch ex As Exception
                 MsgBox("HelperProfile " & ex.ToString)

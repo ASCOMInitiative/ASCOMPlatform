@@ -56,7 +56,8 @@
   						1 second.</listItem>
   					</list>
   				</listItem>
-  				<listItem>New InvalidValue and ValueNotSet exceptions to support expected error conditions in drivers</listItem>
+  				<listItem>New InvalidValue, ValueNotSet, NotConnected, Parked and Slaved exceptions to support 
+  				expected error conditions in drivers.</listItem>
   				<listItem>IConform interface now part of the platform. This allows drivers to communicate device specific
   				commands to Conform for use when testing the Telescope CommandXXX commands.</listItem>
   				<listItem>New ASCOM.Astrometry namespace supporting a variety of astrometric functions

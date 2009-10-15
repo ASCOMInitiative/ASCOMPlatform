@@ -73,10 +73,14 @@
 ; Centralised release candidate number to one variable which is then used in several places
 ; Setup Build 11 Released - RC3
 
+; Updated to RC4 for RC4 release
+; Created new install options group to handle Profile Explorer and Diagnostics tools
+; Setup Build 12 XX - RC4
+
 [Setup]
 ; Setup program version number - change this each time you change this setup script
-#define Public SetupVersion 11
-#define Public RC "RC3"
+#define Public SetupVersion 12
+#define Public RC "RC4"
 
 #define Public Major 0
 #define Public Minor 0
@@ -134,9 +138,11 @@ Name: {cf}\ASCOM\Uninstall\Utilities
 
 ;  Add an option to erase the HelperNET profile
 [Tasks]
+Name: dt; Description: Dekstop Icons;
+Name: dt\diagnostics; Description: Install ASCOM Diagnostics desktop icon ; GroupDescription: Desktop Icons
+Name: dt\profileexplorer; Description: Install ASCOM Profile Explorer desktop icon ; GroupDescription: Desktop Icons
 Name: cleanprofile; Description: Erase Utilities profile store (leaves registry profile intact); GroupDescription: Release Candidate Testing; Flags: unchecked
 Name: desktopicons; Description: Install EraseProfile and MigrateProfile desktop icons; GroupDescription: Release Candidate Testing
-Name: diagnostics; Description: Install ASCOM Diagnostics desktop icon ; GroupDescription: Release Candidate Testing
 
 [Files]
 ;Install the ASCOM.Utilities code
@@ -269,7 +275,8 @@ Name: {commonprograms}\ASCOM Platform\Tools\Profile Explorer; Filename: {pf}\ASC
 Name: {commonprograms}\ASCOM Platform\Tools\ASCOM Diagnostics; Filename: {app}\ASCOM Diagnostics.exe
 Name: {commondesktop}\Migrate Profile; Filename: {cf32}\ASCOM\Utilities\MigrateProfile.exe; Tasks: desktopicons
 Name: {commondesktop}\Erase Profile; Filename: {cf32}\ASCOM\Utilities\EraseProfile.exe; Tasks: desktopicons
-Name: {commondesktop}\ASCOM Diagnostics; Filename: {app}\ASCOM Diagnostics.exe; Tasks: diagnostics
+Name: {commondesktop}\ASCOM Diagnostics; Filename: {app}\ASCOM Diagnostics.exe; Tasks: dt\diagnostics
+Name: {commondesktop}\ASCOM Profile Explorer; Filename: "{pf}\ASCOM\Profile Explorer\ProfileExplorer.exe"; Tasks: dt\profileexplorer
 
 [Run]
 ; Install Utilties, Astrometry and IConform to the GAC and register COM types for 32and 64bit COM

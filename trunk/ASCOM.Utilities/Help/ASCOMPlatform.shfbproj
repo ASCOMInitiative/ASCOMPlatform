@@ -133,7 +133,7 @@
     <None Include="Examples\NOVASCOM.aml" />
     <None Include="Introduction\Which NOVAS.aml" />
     <None Include="Examples\Transform.aml" />
-    <None Include="Version History\Version 5.2.0.0.aml" />
+    <None Include="Version History\Version 5.5 RC4.aml" />
     <None Include="Examples\Environment.aml" />
     <None Include="Tools and Features\Profile Tracing.aml" />
     <None Include="Tools and Features\Profile Explorer.aml" />

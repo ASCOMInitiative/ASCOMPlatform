@@ -5,14 +5,36 @@
       <para>The Diagnostics Tool collects information about the ASCOM Platform to aid support.</para>
     </introduction>
 
-    <section address="DIagTool">
+    <section address="DiagTool">
       <title>Diagnostics Tool</title>
       <content>
-         <para></para>
-         <para></para>
-         <para></para>
-         <para></para>
-         <para></para>                                  
+         <para>This tool collects a variety of information about the system to help diagnose driver and client
+         issues. The collected data is:         
+         </para>
+  		 <list class="bullet">
+		    <listItem>Operating system name and version including 32/64bit</listItem>
+		    <listItem>Memory size</listItem>
+		    <listItem>Common Language Runtime version </listItem>
+		    <listItem>Key directory locations</listItem>
+		    <listItem>List of drives and free space</listItem>
+		    <listItem>List of loaded assemblies</listItem>
+		    <listItem>COM Registration entries from the registry</listItem>
+		    <listItem>Version information for key ASCOM files</listItem>
+		    <listItem>Version information for key ASCOM GAC files</listItem>
+		    <listItem>Contents of ASCOM releated Inno installer setup logs (from Temp directory)</listItem>
+		 </list>
+		 <para>When the "Run Diagnostics" button is pressed, the information above is collected into a log file
+		 titled ASCOM.Diagnostics.hhmmssssss.txt that will be found in "My Documents\ASCOM\Logs yyyy-mm-dd".
+		 This file should be forwarded, together with other log files in the directory, to the person who
+		 is helping you.</para>
+		 
+		 <para>
+<alert class="note">
+  <para>No personal information or passwords are recorded in the diagnostics file with the exception of 
+  machine name, username and domain name. If you do not wish to reveal this information, please delete line 8 
+  of the diagnostic log.</para>
+</alert>
+</para>
       </content>
     </section>
   </developerConceptualDocument>
