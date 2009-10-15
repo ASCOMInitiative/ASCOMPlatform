@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="ebbf6175-1647-4e49-9f40-02de35df7f14" revisionNumber="0">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <summary>
+      <para>
+        The new ASCOM .NET components provide an easier developer experience for developing ASCOM drivers
+        using Visual Studio and .NET languages. This document describes how to adapt the ASCOM Template
+        projects to use the new components. In time, an updated set of templates will be produced which
+        have this new feature set already wired in.
+      </para>
+    </summary>
+
+    <introduction>
+      <para>
+        The ASCOM .NET Components consist of two main parts:
+      </para>
+      <list type="table">
+        <listheader>
+          <term>Component</term>
+          <description>Description</description>
+        </listheader>
+        <item>
+          <term>ASCOM.HelperNET</term>
+          <description>
+            Helper components constructed as native .NET assemblies. This component serves two purposes.
+            First, it gives .NET developers a native .NET version of the helper components, removing the need
+            to call into any COM components. Second, a compatibility wrapper is provided that replaces the old
+            Helper.dll and Helper2.dll and effectively redirecting older applications to use the new components.
+          </description>
+        </item>
+        <item>
+          <codeEntityReference>T:ASCOM.SettingsProvider</codeEntityReference>
+        </item>
+        <description>
+          This component builds upon the new helper components to provide better integration with Visual Studio
+          designers. Driver settings can be created, edited, saved and bound to controls on forms without the
+          need to write any code. Settings are stored and loaded using the underlying Helper.Profile class and
+          therefore will be stored in the standard ASCOM device profile storage.
+        </description>
+        <item>
+          Template projects
+        </item>
+        <description>
+          (in progress). Updated templates will provide a quick start for developers wishing to implement ASCOM
+          drivers and will automatically use the .NET helper components and settings provider.
+        </description>
+      </list>
+    </introduction>
+
+    <section>
+      <title>Adapting a Template Project</title>
+
+      <content>
+        <para>Some topic content</para>
+      </content>
+    </section>
+
+    <relatedTopics>
+      <!-- Supported Link Types
+    
+         All of the following linking mechanisms may be used in the topic's content 
+         as well as in the related topics section.
+    
+    Linking to API reference documentation: 
+    
+		    <codeEntityReference>API reference ID</codeEntityReference>
+
+    Linking to external resources and custom HTML topics: 
+
+        <externalLink>
+          <linkText>  Required hyperlink text  </linkText>
+          <linkAlternateText>  Optional link title  </linkAlternateText>
+          <linkUri>  Required URI  </linkUri>
+        </externalLink>
+    
+    Linking to other conceptual topics: 
+    
+        <link xlink:href="GUID topic name (without file extension)" />
+        
+    Linking to named references:
+    
+        (Refer to the project's Help\Settings\links.xml file for more information)
+    
+        <link xref="id"> Optional link text </link>
+        <link vref="id or URI"> Optional link text </link>
+        
+    -->
+
+      <!-- Example Usage 
+
+      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
+      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
+      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
+
+      <externalLink>
+        <linkText>Sandcastle Styles</linkText>
+        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
+        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
+      </externalLink>
+
+      <externalLink>
+        <linkText>Change Log</linkText>
+        <linkUri>ChangeLog.html</linkUri>
+      </externalLink>
+
+      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
+      
+      <link xref="home">Our Home Page</link>
+      <link vref="/controls/design.aspx">Control Architecture</link>
+      -->
+    </relatedTopics>
+
+  </developerConceptualDocument>
+</topic>

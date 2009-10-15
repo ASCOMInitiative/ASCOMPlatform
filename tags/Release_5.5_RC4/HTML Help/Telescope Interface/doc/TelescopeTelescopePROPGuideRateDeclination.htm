@@ -1,0 +1,120 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=Windows-1252">
+	<title>Telescope.GuideRateDeclination Property</title>
+
+	<style type="text/css">
+		@import url(dc3_hh.css);
+	</style>
+</head>
+<body>
+
+<div class="req">Optional</div>
+
+<h1><a name="TelescopeTelescopePROPGuideRateDeclination"></a>Telescope.GuideRateDeclination Property</h1>
+
+<p>
+<!-- See Also -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:See Also">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="TelescopeTelescopePROPGuideRateDeclinationC">
+</object>&nbsp;&nbsp;&nbsp;
+<!-- Example
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:Example">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="TelescopeTelescopePROPGuideRateDeclinationX">
+</object>&nbsp;&nbsp;&nbsp; -->
+<!-- parent class -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink">
+<param name="Text" value="Text:Telescope object">
+<param name="Flags" value=",,1">
+<param name="Item1" value="">
+<param name="Item2" value="TelescopeCLASSTelescopeO">
+</object>
+</p>
+
+<p class=desc>
+<img src="images/rw.gif" width=18 height=13
+align=absmiddle>&nbsp;<b>Telescope.GuideRateDeclination</b>&nbsp;&nbsp;(read-write, Double)<br>
+&nbsp;<br>
+The current Declination movement rate offset for telescope guiding (degrees/sec)</p>
+
+<h2>Syntax</h2>
+
+<p class=indent><code>
+Telescope.<b>GuideRateDeclination</b>&nbsp;[=&nbsp;<i>Double</i>]</code></p>
+
+<p>
+The property syntax has these parts:</p>
+
+<div class=indent>
+<table border=1 cellpadding=3 cellspacing=0>
+ <tr>
+  <th>Part</th>
+  <th>Description</th>
+ </tr>
+
+ <tr>
+  <td>Value&nbsp;(Double)</td>
+  <td>The current Declination movement rate offset for telescope guiding (degrees/sec)</td>
+ </tr>
+</table></div><br>
+
+<h2>Remarks</h2>
+
+This is the rate for both hardware/relay guiding and the <a href="TelescopeTelescopeMETHPulseGuide.htm">PulseGuide()</a> method. 
+
+<p>NOTES:
+<ul>
+<li>To discover whether this feature is supported, test the <a href="TelescopeTelescopePROPCanSetGuideRates.htm">CanSetGuideRates</a> property.</li>
+
+<li>The supported range of this property is telescope specific, however, if this feature is supported, it can be expected that the range is sufficient to allow correction of guiding errors caused by moderate misalignment and periodic error.</li>
+
+<li>If a telescope does not support separate guiding rates in Right Ascension and Declination, then it is permissible for <a href="TelescopeTelescopePROPGuideRateRightAscension.htm">GuideRateRightAscension</a> and GuideRateDeclination to be tied together. In this case, changing one of the two properties will cause a change in the other.
+
+<li>Mounts must start up with a known or default declination guide rate, and this property must return that known/default guide rate until changed.
+
+</ul>
+
+
+
+<hr color="silver" size=2>
+<div class=copyright>Copyright &copy; 2001-2008, The ASCOM Initiative</div>
+
+<Object type="application/x-oleobject"classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+    <param name="ALink Name" value="TelescopeTelescopePROPRightAscensionRateC">
+</OBJECT>
+<Object type="application/x-oleobject"classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+    <param name="ALink Name" value="TelescopeTelescopePROPDeclinationRateC">
+</OBJECT>
+<Object type="application/x-oleobject"classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+    <param name="ALink Name" value="TelescopeTelescopeMETHPulseGuideC">
+</OBJECT>
+<Object type="application/x-oleobject"classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+    <param name="ALink Name" value="TelescopeTelescopePROPGuideRateRightAscensionC">
+</OBJECT>
+<Object type="application/x-oleobject"classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+    <param name="ALink Name" value="TelescopeTelescopePROPCanSetGuideRatesC">
+</OBJECT>
+
+
+<object type="application/x-oleobject"
+ 	classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+	<param name="ALink Name" value="TelescopeCLASSTelescopeP">
+</object>
+
+</body>
+</html>
+

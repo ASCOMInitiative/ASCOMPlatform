@@ -1,0 +1,5 @@
+
+
+"FilterWheelSim.exe" /unregserver
+
+pause
