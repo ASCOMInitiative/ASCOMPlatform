@@ -445,11 +445,11 @@ namespace ASCOM.TelescopeSimulator
             {
                 if (SharedResources.TrafficForm.Capabilities)
                 {
-                    SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.CanMoveAxis(int.Parse(Axis.ToString())).ToString());
+                    SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.CanMoveAxis(Axis).ToString());
                 }
             }
             
-            return TelescopeHardware.CanMoveAxis(int.Parse(Axis.ToString()));
+            return TelescopeHardware.CanMoveAxis(Axis);
         }
 
         public bool CanPark
@@ -1634,15 +1634,89 @@ namespace ASCOM.TelescopeSimulator
 
         public double RightAscensionRate
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("RightAscensionRate", false); }
-            set { throw new PropertyNotImplementedException("RightAscensionRate", true); }
+            
+            get 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("RightAscensionRate->: ");
+
+                    }
+                }
+                
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd("(done)");
+
+                    }
+                }
+                return TelescopeHardware.RightAscensionRate; 
+            }
+            set 
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficStart("RightAscensionRate:<- " + value.ToString());
+
+                    }
+                }
+                if (!TelescopeHardware.CanSetEquatorialRates)
+                {
+                    if (SharedResources.TrafficForm != null)
+                    {
+                        if (SharedResources.TrafficForm.Other)
+                        {
+                            SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+
+                        }
+                    }
+                    throw new PropertyNotImplementedException("RightAscensionRate", false);
+                }
+                TelescopeHardware.RightAscensionRate = value; 
+            }
         }
 
         public void SetPark()
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("SetPark");
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Other)
+                {
+                    SharedResources.TrafficForm.TrafficStart("Set Park: ");
+
+                }
+            }
+            if (!TelescopeHardware.CanSetPark)
+            {
+                if (SharedResources.TrafficForm != null)
+                {
+                    if (SharedResources.TrafficForm.Other)
+                    {
+                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
+
+                    }
+                }
+                throw new PropertyNotImplementedException("SetPark", false);
+            }
+
+            TelescopeHardware.ParkAltitude = TelescopeHardware.Altitude;
+            TelescopeHardware.ParkAzimuth = TelescopeHardware.Azimuth;
+
+            if (SharedResources.TrafficForm != null)
+            {
+                if (SharedResources.TrafficForm.Other)
+                {
+                    SharedResources.TrafficForm.TrafficEnd("(done)");
+
+                }
+            }
+
         }
 
         public void SetupDialog()
@@ -2272,7 +2346,7 @@ namespace ASCOM.TelescopeSimulator
             {
                 throw new MethodNotImplementedException("SyncToCoordinates");
             }
-            if (RightAscension > 24 || RightAscension < 0 || Declination < -90 || Declination > 90)
+            if (RightAscension > 24 || RightAscension < 0 || Declination < -180 || Declination > 180)
             {
                 throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
             }

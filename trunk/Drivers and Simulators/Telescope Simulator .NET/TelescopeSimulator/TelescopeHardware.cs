@@ -1036,9 +1036,24 @@ namespace ASCOM.TelescopeSimulator
             set
             { m_Connected = value; }
         }
-       public static bool CanMoveAxis(int Axis)
+       public static bool CanMoveAxis(ASCOM.Interface.TelescopeAxes Axis)
         {
-            if (Axis < 0 || Axis > m_NumberMoveAxis)
+            int axis =0;
+            switch (Axis)
+            {
+                case ASCOM.Interface.TelescopeAxes.axisPrimary:
+                    axis = 1;
+                    break;
+                case ASCOM.Interface.TelescopeAxes.axisSecondary:
+                    axis = 2;
+                    break;
+                case ASCOM.Interface.TelescopeAxes.axisTertiary:
+                    axis = 3;
+                    break;
+            }
+
+
+            if (axis ==0 || axis > m_NumberMoveAxis)
             {return false;}
             else
             {return true;}
