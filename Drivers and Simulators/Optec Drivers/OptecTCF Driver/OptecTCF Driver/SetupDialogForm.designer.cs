@@ -57,6 +57,7 @@ namespace ASCOM.OptecTCF_Driver
             this.ModeB_RB = new System.Windows.Forms.RadioButton();
             this.ModeA_RB = new System.Windows.Forms.RadioButton();
             this.FocStatusControls = new System.Windows.Forms.GroupBox();
+            this.Center_Btn = new System.Windows.Forms.Button();
             this.Out_BTN = new System.Windows.Forms.Button();
             this.Increment_NUD = new System.Windows.Forms.NumericUpDown();
             this.PowerLight = new System.Windows.Forms.PictureBox();
@@ -75,7 +76,6 @@ namespace ASCOM.OptecTCF_Driver
             this.DeviceType_LB = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.errorProviderDT = new System.Windows.Forms.ErrorProvider(this.components);
-            this.Center_Btn = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -208,7 +208,7 @@ namespace ASCOM.OptecTCF_Driver
             // 
             this.manuallyEnterSlopeToolStripMenuItem.Name = "manuallyEnterSlopeToolStripMenuItem";
             this.manuallyEnterSlopeToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
-            this.manuallyEnterSlopeToolStripMenuItem.Text = "Manually Enter Coefficient";
+            this.manuallyEnterSlopeToolStripMenuItem.Text = "Manually Enter Coefficients";
             this.manuallyEnterSlopeToolStripMenuItem.Click += new System.EventHandler(this.manuallyEnterSlopeToolStripMenuItem_Click);
             // 
             // chooseDeviceTypeToolStripMenuItem
@@ -230,14 +230,14 @@ namespace ASCOM.OptecTCF_Driver
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem1
             // 
             this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
-            this.helpToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.helpToolStripMenuItem1.Size = new System.Drawing.Size(107, 22);
             this.helpToolStripMenuItem1.Text = "&Help";
             // 
             // statusStrip1
@@ -340,6 +340,17 @@ namespace ASCOM.OptecTCF_Driver
             this.FocStatusControls.TabIndex = 7;
             this.FocStatusControls.TabStop = false;
             this.FocStatusControls.Text = "Focuser Status";
+            // 
+            // Center_Btn
+            // 
+            this.Center_Btn.BackColor = System.Drawing.SystemColors.Control;
+            this.Center_Btn.Location = new System.Drawing.Point(149, 136);
+            this.Center_Btn.Name = "Center_Btn";
+            this.Center_Btn.Size = new System.Drawing.Size(61, 25);
+            this.Center_Btn.TabIndex = 11;
+            this.Center_Btn.Text = "Center";
+            this.Center_Btn.UseVisualStyleBackColor = false;
+            this.Center_Btn.Click += new System.EventHandler(this.Center_Btn_Click);
             // 
             // Out_BTN
             // 
@@ -527,17 +538,6 @@ namespace ASCOM.OptecTCF_Driver
             // errorProviderDT
             // 
             this.errorProviderDT.ContainerControl = this;
-            // 
-            // Center_Btn
-            // 
-            this.Center_Btn.BackColor = System.Drawing.SystemColors.Control;
-            this.Center_Btn.Location = new System.Drawing.Point(149, 136);
-            this.Center_Btn.Name = "Center_Btn";
-            this.Center_Btn.Size = new System.Drawing.Size(61, 25);
-            this.Center_Btn.TabIndex = 11;
-            this.Center_Btn.Text = "Center";
-            this.Center_Btn.UseVisualStyleBackColor = false;
-            this.Center_Btn.Click += new System.EventHandler(this.Center_Btn_Click);
             // 
             // SetupDialogForm
             // 

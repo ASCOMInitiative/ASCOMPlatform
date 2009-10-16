@@ -103,7 +103,7 @@
             this.CapStPt_BTN.Name = "CapStPt_BTN";
             this.CapStPt_BTN.Size = new System.Drawing.Size(127, 26);
             this.CapStPt_BTN.TabIndex = 0;
-            this.CapStPt_BTN.Text = "d";
+            this.CapStPt_BTN.Text = "Capture End Point";
             this.CapStPt_BTN.UseVisualStyleBackColor = true;
             this.CapStPt_BTN.Click += new System.EventHandler(this.CapStPt_BTN_Click);
             // 
@@ -125,7 +125,7 @@
             // Cancel_Btn
             // 
             this.Cancel_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Cancel_Btn.Location = new System.Drawing.Point(175, 334);
+            this.Cancel_Btn.Location = new System.Drawing.Point(181, 334);
             this.Cancel_Btn.Name = "Cancel_Btn";
             this.Cancel_Btn.Size = new System.Drawing.Size(75, 23);
             this.Cancel_Btn.TabIndex = 9;
@@ -207,7 +207,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(262, 362);
+            this.ClientSize = new System.Drawing.Size(268, 362);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label4);
@@ -215,7 +215,7 @@
             this.Controls.Add(this.CapStPt_BTN);
             this.Name = "SetEndPtForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Calculate Temp Constant";
+            this.Text = "Calculate Temp Coefficient";
             this.Load += new System.EventHandler(this.SetEndPtForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
