@@ -272,6 +272,12 @@ namespace ASCOM.OptecTCF_Driver
                 return ReturnVals;
 
             }
+            catch (LostCommWithDevice Ex)
+            {
+                throw new DriverException("No response from device", Ex);
+                //string[] ReturnVals = {"Unable To Determine Version", "Unable To Determine Type"};
+                //return ReturnVals;
+            }
             catch (Exception Ex)
             {   
                 throw new DriverException("Error retrieving firmware version and device type", Ex);
@@ -474,29 +480,35 @@ namespace ASCOM.OptecTCF_Driver
             }
         }
 
-        internal static int GetMaxStep()
-        {
-            try
-            {
-                string[] FV = GetFVandDT();
-                string DevType = FV[1];
-                if (DevType == "TCF-S3")
-                    return 10000;
-                else if (DevType == "TCF-S")
-                {
-                    return 7000;
-                }
-                else
-                {
-                    throw new InvalidResponse("\nGetMaxStep command did not receive a valid response.\n" +
-                         "Response was: " + DevType + ".\n");
-                }
-            }
-            catch (Exception Ex)
-            {
-                throw new DriverException("/nAn Unexpected error occured in GetMaxStep.\n" + Ex.ToString());
-            }
-        }
+        //internal static int GetMaxStep()
+        //{
+        //    //try
+        //    //{
+        //    //    string DevType = "";
+        //    //    DevType = DeviceSettings.GetDeviceType();
+        //    //    if (DevType == "?")
+        //    //    {
+        //    //        string[] FV = GetFVandDT();
+        //    //        DevType = FV[1];
+        //    //    }
+
+        //    //    if (DevType == "TCF-S3" || DevType == "TCF-S3i")
+        //    //        return 10000;
+        //    //    else if (DevType == "TCF-S" || DevType == "TCF-Si")
+        //    //    {
+        //    //        return 7000;
+        //    //    }
+        //    //    else
+        //    //    {
+        //    //        throw new InvalidResponse("\nGetMaxStep command did not receive a valid response.\n" +
+        //    //             "Response was: " + DevType + ".\n");
+        //    //    }
+        //    //}
+        //    //catch (Exception Ex)
+        //    //{
+        //    //    throw new DriverException("/nAn Unexpected error occured in GetMaxStep.\n" + Ex.ToString());
+        //    //}
+        //}
 
         internal static double GetStepSize()
         {
@@ -504,9 +516,9 @@ namespace ASCOM.OptecTCF_Driver
             {
                 string[] FV = GetFVandDT();
                 string DevType = FV[1];
-                if (DevType == "TCF-S3")
+                if (DevType == "TCF-S3" || DevType == "TCF-S3i")
                     return 2.032;
-                else if (DevType == "TCF-S")
+                else if (DevType == "TCF-S" || DevType == "TCF-Si")
                 {
                     return 2.54;
                 }

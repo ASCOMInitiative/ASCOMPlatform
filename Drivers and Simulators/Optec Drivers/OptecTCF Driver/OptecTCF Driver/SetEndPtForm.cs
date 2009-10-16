@@ -19,23 +19,44 @@ namespace ASCOM.OptecTCF_Driver
 
         public SetEndPtForm()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
+            }
+            catch(Exception Ex)
+            {
+                MessageBox.Show(Ex.ToString());
+            }
         }
 
         private void SetEndPtForm_Load(object sender, EventArgs e)
         {
-            SlopePoint stpt = DeviceSettings.GetStartPoint();
-            
-            FirstPosition = stpt.Position;
-            FirstTemperature = stpt.Temperature;
-            Date = stpt.DateAndTime.Date.ToString();
-            Time = stpt.DateAndTime.TimeOfDay.ToString();
+            try
+            {  
+                SlopePoint stpt = DeviceSettings.GetStartPoint();
+                if (stpt.Position == 11111)
+                {
+                    MessageBox.Show("You must set the start point first");
+                    this.Close();
+                }
 
-            StartPtTemp_TB.Text = FirstTemperature.ToString() + " °C";
-            StartPointPos_TB.Text = FirstPosition.ToString();
-            StartPointDateTime_TB.Text = Time + Environment.NewLine + Date;
-
-            backgroundWorker1.RunWorkerAsync();
+                FirstPosition = stpt.Position;
+                //if (FirstPosition == DeviceComm.GetPosition)
+                //{
+                //    MessageBox.Show("End point position can not equal 
+                //}
+                FirstTemperature = stpt.Temperature;
+                Date = stpt.DateAndTime.Date.ToString();
+                Time = stpt.DateAndTime.TimeOfDay.ToString();
+                StartPtTemp_TB.Text = FirstTemperature.ToString() + " °C";
+                StartPointPos_TB.Text = FirstPosition.ToString();
+                StartPointDateTime_TB.Text = Time + Environment.NewLine + Date;
+                backgroundWorker1.RunWorkerAsync();
+            }
+            catch(Exception Ex)
+            {
+                MessageBox.Show(Ex.ToString());
+            }
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)

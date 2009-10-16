@@ -58,10 +58,10 @@
             this.textBox2.Location = new System.Drawing.Point(20, 7);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(304, 31);
+            this.textBox2.Size = new System.Drawing.Size(362, 31);
             this.textBox2.TabIndex = 1;
             this.textBox2.TabStop = false;
-            this.textBox2.Text = "Welcome to the Slope Learn Wizard ";
+            this.textBox2.Text = "Welcome to the Coefficient Learn Wizard ";
             // 
             // Next_Btn
             // 
@@ -112,7 +112,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "LearnWizard1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Temp Comp Slope Learn Wizard";
+            this.Text = "Temperature Coefficient Learn Wizard";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -27,8 +27,8 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using ASCOM;
-using ASCOM.Helper;
-using ASCOM.Helper2;
+//using ASCOM.Helper;
+//using ASCOM.Helper2;
 using ASCOM.Interface;
 
 
@@ -66,8 +66,8 @@ namespace ASCOM.OptecTCF_Driver
         //
         private static void RegUnregASCOM(bool bRegister)
         {
-            Helper.Profile P = new Helper.Profile();
-            P.DeviceTypeV = "Focuser";					//  Requires Helper 5.0.3 or later
+            Utilities.Profile P = new Utilities.Profile();
+            P.DeviceType = "Focuser";					//  Requires Helper 5.0.3 or later
             if (bRegister)
                 P.Register(s_csDriverID, s_csDriverDescription);
             else
@@ -145,12 +145,12 @@ namespace ASCOM.OptecTCF_Driver
         public int MaxIncrement
         {
             //Max Increment is the same as Max Step in our case so use the same method...
-            get { return DeviceComm.GetMaxStep(); }
+            get { return DeviceSettings.GetMaxStep(); }
         }          //FINISHED
 
         public int MaxStep
         {
-            get { return DeviceComm.GetMaxStep(); }
+            get { return DeviceSettings.GetMaxStep(); }
         }               //FINISHED
 
         public void Move(int val)
@@ -172,7 +172,7 @@ namespace ASCOM.OptecTCF_Driver
 
         public double StepSize
         {
-            get { return DeviceComm.GetStepSize(); }
+            get { return DeviceSettings.GetMaxStep(); }
         }           //FINISHED
 
         public bool TempComp
