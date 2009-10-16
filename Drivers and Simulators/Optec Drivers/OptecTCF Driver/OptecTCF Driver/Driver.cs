@@ -27,8 +27,6 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using ASCOM;
-//using ASCOM.Helper;
-//using ASCOM.Helper2;
 using ASCOM.Interface;
 
 
