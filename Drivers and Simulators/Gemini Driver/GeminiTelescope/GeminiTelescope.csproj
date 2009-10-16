@@ -165,6 +165,12 @@
     <Compile Include="frmParkPosition.Designer.cs">
       <DependentUpon>frmParkPosition.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmProgress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmProgress.Designer.cs">
+      <DependentUpon>frmProgress.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmSafetyLimits.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -256,6 +262,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmParkPosition.resx">
       <DependentUpon>frmParkPosition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmProgress.resx">
+      <DependentUpon>frmProgress.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmSafetyLimits.resx">
       <DependentUpon>frmSafetyLimits.cs</DependentUpon>

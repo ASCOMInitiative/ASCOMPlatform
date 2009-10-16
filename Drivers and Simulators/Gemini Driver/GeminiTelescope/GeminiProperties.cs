@@ -1209,8 +1209,13 @@ namespace ASCOM.GeminiTelescope
                 Cursor.Current = Cursors.WaitCursor;
                 SerializableDictionary<int, string> pec = new SerializableDictionary<int, string>();
                 int MaxPEC = get_int_Prop("<503:");
+                double incr = 1;
+                if (MaxPEC != 0) incr = 100.0 / MaxPEC;
+
                 for (int i = 0; i < MaxPEC; )
                 {
+                    frmProgress.Update(incr, null);
+
                     string val = get_string_Prop("<511:" + i.ToString());
                     string[] parts = val.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
                     pec.Add(i, parts[0]+";"+i.ToString() + ";" + parts[1]);
@@ -1222,8 +1227,12 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 Cursor.Current = Cursors.WaitCursor;
+                double incr = 1;
+                if (value.Count != 0) incr = 100.0 / value.Count;
+
                 foreach (KeyValuePair<int, string> kp in value)
                 {
+                    frmProgress.Update(incr, null);
                     GeminiHardware.DoCommandResult(">511:" + kp.Value.ToString(), GeminiHardware.MAX_TIMEOUT, false);
                 }
                 GeminiHardware.PECStatus = 32+2;      // PEC data is available
@@ -1247,14 +1256,21 @@ namespace ASCOM.GeminiTelescope
 
             if (!SyncWithGemini(write, null)) return false;
 
-            // save PEC table if requested:
-            if (write && SavePEC)
+            if (SavePEC)
             {
-                PECTable_Gemini = PECTable;
-            }
-            else if (!write && SavePEC)
-            {
-                PECTable = PECTable_Gemini;
+                frmProgress.Initialize(0, 100, write ? "Send PEC data to Gemini" : "Get PEC Data from Gemini", null);
+                frmProgress.ShowProgress(null);
+
+                // save PEC table if requested:
+                if (write)
+                {
+                    PECTable_Gemini = PECTable;
+                }
+                else
+                {
+                    PECTable = PECTable_Gemini;
+                }
+                frmProgress.HideProgress();
             }
 
             GeminiHardware.Trace.Exit("GeminiProps:SyncWithGemini", write);
@@ -1272,17 +1288,27 @@ namespace ASCOM.GeminiTelescope
         public bool SyncWithGemini(bool write, List<string> properties)
         {
             GeminiHardware.Trace.Enter("GeminiProps:SyncWithGemini", write, properties);
-
+            
             if (!GeminiHardware.Connected)
             {
                 GeminiHardware.Trace.Exit("GeminiProps:SyncWithGemini", false, "mount not connected");
                 return false;
             }
 
+            frmProgress.Initialize(0, 100, write ? "Send Settings to Gemini" : "Get Settings from Gemini", null);
+            frmProgress.ShowProgress(null);
+
             PropertyInfo[] ps = typeof(GeminiProperties).GetProperties(BindingFlags.Public | BindingFlags.SetProperty | BindingFlags.GetProperty | BindingFlags.Instance);
+
+            double incr = 1;
+
+            if (ps.Length != 0) incr = 100.0 / ps.Length;
+
             foreach (PropertyInfo p in ps)
             {
                 string name = p.Name;
+
+                frmProgress.Update(incr, null);
 
                 // if properties list specified, and this one is not in it, skip it:
                 if (properties != null && !properties.Contains(name)) continue;
@@ -1308,6 +1334,7 @@ namespace ASCOM.GeminiTelescope
                 }
             }
 
+            frmProgress.HideProgress();
             GeminiHardware.Trace.Exit("GeminiProps:SyncWithGemini", write);
             return true;
         }

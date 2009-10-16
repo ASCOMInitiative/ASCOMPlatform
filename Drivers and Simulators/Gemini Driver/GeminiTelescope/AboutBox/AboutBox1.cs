@@ -44,7 +44,7 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                return Assembly.GetExecutingAssembly().GetName().Version.ToString() + "(beta)";
             }
         }
 
