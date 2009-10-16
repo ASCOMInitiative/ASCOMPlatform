@@ -1736,8 +1736,14 @@ namespace ASCOM.GeminiTelescope
                 int nbr;
                 DoCommandResult(":Os", MAX_TIMEOUT, false);
                 if (!int.TryParse(snbr, out nbr)) return null;
+
+                double incr = 1;
+                if (nbr !=0) incr= 100.0 / nbr;
+
                 for (int i = 0; i < nbr; ++i)
                 {
+                    frmProgress.Update(incr, null);
+
                     string line = DoCommandResult(":Or", MAX_TIMEOUT, false);
                     if (line == null) return null;
                     CatalogObject obj = null;
@@ -1755,8 +1761,13 @@ namespace ASCOM.GeminiTelescope
             {
                 DoCommandResult(":Oc", MAX_TIMEOUT, false);
                 int count = 0;
+                double incr = 1;
+                int nbr = value.Count;
+                if (nbr != 0) incr = 100.0 / nbr;
+
                 foreach (CatalogObject obj in value)
                 {
+                    frmProgress.Update(incr, null);
                     string sline;
                     sline = obj.Name.Substring(0, Math.Min(obj.Name.Length, 10)) + "," + obj.RA.ToString(":", ":")+ "," + obj.DEC.ToString(":", ":");
                     DoCommandResult(":Od" + sline, MAX_TIMEOUT, false);
@@ -1771,8 +1782,15 @@ namespace ASCOM.GeminiTelescope
             {
                 System.Collections.Generic.List<string> l = new System.Collections.Generic.List<string>();
                 DoCommandResult(":OS", MAX_TIMEOUT, false);
+                int cnt = 0;
+                int incr = 5;
                 do
                 {
+                    cnt += incr;
+                    if (incr < 0 && cnt < 70) incr = 5;
+                    else if (cnt >= 100) incr = -5;
+
+                    frmProgress.Update(incr, null);
                     string line = DoCommandResult(":OR", MAX_TIMEOUT, false);
                     if (string.IsNullOrEmpty(line) || line.Equals("END", StringComparison.InvariantCultureIgnoreCase)) break;
                     l.Add(line);
@@ -2140,7 +2158,7 @@ namespace ASCOM.GeminiTelescope
 
                                 Transmit("\x6");
                                 System.Threading.Thread.Sleep(0);
-                                ci = new CommandItem("\x6", 500, true); // quick timeout, don't want to hang up the user for too long
+                                ci = new CommandItem("\x6", 800, true); // quick timeout, don't want to hang up the user for too long
                                 sRes = GetCommandResult(ci);
 
                                 

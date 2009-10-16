@@ -52,7 +52,7 @@ namespace ASCOM.GeminiTelescope
         // character for NGC and IC
         // catalogues
         Dictionary<string, string> m_GeminiCatalogs = new Dictionary<string, string>();
-
+        
         public frmUserCatalog()
         {
             InitializeComponent();
@@ -105,10 +105,15 @@ namespace ASCOM.GeminiTelescope
             System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(path);
             System.IO.FileInfo[] files = di.GetFiles("*.guc");
 
+            double incr =  1;
+            if (files.Length != 0) incr = 100.0/files.Length;
+
             GeminiHardware.m_Profile.DeviceType = "Telescope";
             foreach (System.IO.FileInfo fi in files)
             {
+
                 string cn = fi.Name.Substring(0, fi.Name.Length - 4);
+                frmProgress.Update(incr, "Loading " + cn + "...");
                 if (LoadCatalog(fi.FullName, cn, m_Objects))
                 {
                     int idx = lbCatalogs.Items.Add(cn);
@@ -121,6 +126,7 @@ namespace ASCOM.GeminiTelescope
                     } else 
                         lbCatalogs.SetItemChecked(idx, true);
                 }
+                frmProgress.Update(0, "Loading " + cn + "...");
             }
             Cursor.Current = Cursors.Default;
         }
@@ -166,12 +172,15 @@ namespace ASCOM.GeminiTelescope
 
         private void frmUserCatalog_Load(object sender, EventArgs e)
         {
+            frmProgress.Initialize(0, 100, "Load Catatlogs...", null);
+            frmProgress.ShowProgress(this);
             PopulateCatalogs();
             PopulateAllObjects("");
             UpdateGeminiCatalog();
             lbCatalogs.ItemCheck += new ItemCheckEventHandler(lbCatalogs_ItemCheck);
             SetButtonState();
             GeminiHardware.OnConnect += new ConnectDelegate(OnConnect);
+            frmProgress.HideProgress();
         }
 
         void SetButtonState()
@@ -378,12 +387,15 @@ namespace ASCOM.GeminiTelescope
             if (GeminiHardware.Connected)
             {
                 Cursor.Current = Cursors.WaitCursor;
+                frmProgress.Initialize(0, 100, "Loading User Catalog from Gemini", null);
+                frmProgress.ShowProgress(this);
                 SerializableDictionary<string, CatalogObject> cat = GeminiHardware.GetUserCatalog;
                 if (cat != null)
                 {
                     m_GeminiObjects = cat;
                     UpdateGeminiCatalog();
                 }
+                frmProgress.HideProgress();
                 Cursor.Current = Cursors.Default;
             }
         }
@@ -400,6 +412,9 @@ namespace ASCOM.GeminiTelescope
                         res = MessageBox.Show("There are more than 4096 entries in the user catalog! Gemini will only accept the first 4096.\r\nDo you want to continue?", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                         if (res != DialogResult.Yes) return;
                     }
+                    frmProgress.Initialize(0, 100, "Send User Catalog to Gemini", null);
+                    frmProgress.ShowProgress(this);
+
                     Cursor.Current = Cursors.WaitCursor;
                     var qry = (from o in m_GeminiObjects.Values select o);
                     if (m_GeminiDirectionSort[m_GeminiOrderBy])
@@ -408,6 +423,7 @@ namespace ASCOM.GeminiTelescope
                         qry = qry.OrderBy(CList[m_GeminiOrderBy]).ThenBy(CList["Name"]);
 
                     GeminiHardware.SetUserCatalog = qry.ToList();
+                    frmProgress.HideProgress();
                     Cursor.Current = Cursors.Default;
                 }
             }
