@@ -2142,7 +2142,7 @@ namespace ASCOM.TelescopeSimulator
             {
                 throw new MethodNotImplementedException("SlewToTarget");
             }
-            if (RightAscension > 24 || RightAscension < 0 || Declination < -90 || Declination > 90)
+            if (RightAscension > 24 || RightAscension < 0 || Declination < -180 || Declination > 180)
             {
                 throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
             }
@@ -2180,7 +2180,7 @@ namespace ASCOM.TelescopeSimulator
             {
                 throw new MethodNotImplementedException("SlewToTarget");
             }
-            if (RightAscension > 24 || RightAscension < 0 || Declination < -90 || Declination > 90)
+            if (RightAscension > 24 || RightAscension < 0 || Declination < -180 || Declination > 180)
             {
                 throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
             }
@@ -2215,7 +2215,7 @@ namespace ASCOM.TelescopeSimulator
             {
                 throw new DriverException(SharedResources.MSG_NO_TARGET_COORDS, (int)SharedResources.SCODE_NO_TARGET_COORDS);
             }
-            if (TelescopeHardware.RightAscension > 24 || TelescopeHardware.RightAscension < 0 || TelescopeHardware.Declination < -90 || TelescopeHardware.Declination > 90)
+            if (TelescopeHardware.RightAscension > 24 || TelescopeHardware.RightAscension < 0 || TelescopeHardware.Declination < -180 || TelescopeHardware.Declination > 180)
             {
                 throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
             }
@@ -2246,7 +2246,7 @@ namespace ASCOM.TelescopeSimulator
             {
                 throw new DriverException(SharedResources.MSG_NO_TARGET_COORDS, (int)SharedResources.SCODE_NO_TARGET_COORDS);
             }
-            if (TelescopeHardware.RightAscension > 24 || TelescopeHardware.RightAscension < 0 || TelescopeHardware.Declination < -90 || TelescopeHardware.Declination > 90)
+            if (TelescopeHardware.RightAscension > 24 || TelescopeHardware.RightAscension < 0 || TelescopeHardware.Declination < -180 || TelescopeHardware.Declination > 180)
             {
                 throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
             }
@@ -2525,7 +2525,7 @@ namespace ASCOM.TelescopeSimulator
                     }
                     throw new MethodNotImplementedException("TargetRightAscension");
                 }
-                if (TelescopeHardware.TargetDeclination == SharedResources.INVALID_COORDINATE)
+                if (TelescopeHardware.RightAscension == SharedResources.INVALID_COORDINATE)
                 {
                     if (SharedResources.TrafficForm != null)
                     {
@@ -2900,15 +2900,15 @@ namespace ASCOM.TelescopeSimulator
                 case TelescopeAxes.axisPrimary:
                     // TODO Initialize this array with any Primary axis rates that your driver may provide
                     // Example: m_Rates = new Rate[] { new Rate(10.5, 30.2), new Rate(54.0, 43.6) }
-                    m_Rates = new Rate[0];
+                    m_Rates = new Rate[] { new Rate(10.5, 30.2), new Rate(54.0, 43.6) };
                     break;
                 case TelescopeAxes.axisSecondary:
                     // TODO Initialize this array with any Secondary axis rates that your driver may provide
-                    m_Rates = new Rate[0];
+                    m_Rates = new Rate[] { new Rate(10.5, 30.2), new Rate(54.0, 43.6) };
                     break;
                 case TelescopeAxes.axisTertiary:
                     // TODO Initialize this array with any Tertiary axis rates that your driver may provide
-                    m_Rates = new Rate[0];
+                    m_Rates = new Rate[] { new Rate(10.5, 30.2), new Rate(54.0, 43.6) };
                     break;
             }
         }
@@ -2933,7 +2933,6 @@ namespace ASCOM.TelescopeSimulator
         #endregion
 
     }
-
     //
     // TrackingRates is a strongly-typed collection that must be enumerable by
     // both COM and .NET. The ITrackingRates and IEnumerable interfaces provide
@@ -2945,9 +2944,10 @@ namespace ASCOM.TelescopeSimulator
     //
     [Guid("4bf5c72a-8491-49af-8668-626eac765e91")]
     [ClassInterface(ClassInterfaceType.None)]
-    public class TrackingRates : ITrackingRates, IEnumerable
+    public class TrackingRates : ITrackingRates, IEnumerable, IEnumerator
     {
-        private DriveRates[] m_TrackingRates;
+        public DriveRates[] m_TrackingRates;
+        private static int _pos = -1;
 
         //
         // Default constructor - Internal prevents public creation
@@ -2960,8 +2960,7 @@ namespace ASCOM.TelescopeSimulator
             // the tracking rates supported by your telescope. The one value
             // (tracking rate) that MUST be supported is driveSidereal!
             //
-            m_TrackingRates = new DriveRates[] { DriveRates.driveSidereal,DriveRates.driveKing,DriveRates.driveLunar,DriveRates.driveSolar };
-            
+            m_TrackingRates = new DriveRates[] { DriveRates.driveSidereal, DriveRates.driveKing, DriveRates.driveLunar, DriveRates.driveSolar };
         }
 
         #region ITrackingRates Members
@@ -2973,21 +2972,47 @@ namespace ASCOM.TelescopeSimulator
 
         public IEnumerator GetEnumerator()
         {
-            return m_TrackingRates.GetEnumerator();
+            return this as IEnumerator;
         }
+
 
         public DriveRates this[int Index]
         {
             get { return m_TrackingRates[Index - 1]; }	// 1-based
         }
+        #endregion
+
+        #region IEnumerator implementation
+
+        public bool MoveNext()
+        {
+            if (++_pos >= m_TrackingRates.Length) return false;
+            return true;
+        }
+
+        public void Reset()
+        {
+            _pos = -1;
+        }
+
+        public object Current
+        {
+            get
+            {
+                if (_pos < 0 || _pos >= m_TrackingRates.Length) throw new System.InvalidOperationException();
+                return m_TrackingRates[_pos];
+            }
+        }
 
         #endregion
     }
+
     [Guid("46753368-42d1-424a-85fa-26eee8f4c178")]
     [ClassInterface(ClassInterfaceType.None)]
-    public class TrackingRatesSimple : ITrackingRates, IEnumerable
+    public class TrackingRatesSimple : ITrackingRates, IEnumerable, IEnumerator
     {
-        private DriveRates[] m_TrackingRates;
+        public DriveRates[] m_TrackingRates;
+        private static int _pos = -1;
 
         //
         // Default constructor - Internal prevents public creation
@@ -3001,7 +3026,6 @@ namespace ASCOM.TelescopeSimulator
             // (tracking rate) that MUST be supported is driveSidereal!
             //
             m_TrackingRates = new DriveRates[] { DriveRates.driveSidereal };
-            
         }
 
         #region ITrackingRates Members
@@ -3013,12 +3037,36 @@ namespace ASCOM.TelescopeSimulator
 
         public IEnumerator GetEnumerator()
         {
-            return m_TrackingRates.GetEnumerator();
+            return this as IEnumerator;
         }
+
 
         public DriveRates this[int Index]
         {
             get { return m_TrackingRates[Index - 1]; }	// 1-based
+        }
+        #endregion
+
+        #region IEnumerator implementation
+
+        public bool MoveNext()
+        {
+            if (++_pos >= m_TrackingRates.Length) return false;
+            return true;
+        }
+
+        public void Reset()
+        {
+            _pos = -1;
+        }
+
+        public object Current
+        {
+            get
+            {
+                if (_pos < 0 || _pos >= m_TrackingRates.Length) throw new System.InvalidOperationException();
+                return m_TrackingRates[_pos];
+            }
         }
 
         #endregion
