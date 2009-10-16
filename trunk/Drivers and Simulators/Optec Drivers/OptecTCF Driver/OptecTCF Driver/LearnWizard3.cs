@@ -49,7 +49,7 @@ namespace ASCOM.OptecTCF_Driver
       
         private void LearnWizard3_Load(object sender, EventArgs e)
         {
-            maxPos = DeviceComm.GetMaxStep();
+            maxPos = DeviceSettings.GetMaxStep();
             DesiredPosition = DeviceComm.GetPosition();
             CurrentPosition = DesiredPosition;
             this.Position_LB.Text = DesiredPosition.ToString();

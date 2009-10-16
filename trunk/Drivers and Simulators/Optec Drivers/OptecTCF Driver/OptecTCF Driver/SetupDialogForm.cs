@@ -16,13 +16,25 @@ namespace ASCOM.OptecTCF_Driver
         private delegate void UpdatePosDisplayHandler(string s);
         private delegate void UpdateTempDisplayHandler(double temp);
         private static Object LockObject = new Object();
-        private int CurrentPos = 000;
-        private int DesiredPos = 000;
-        private int MaxPos = 0;
+        private int CurrentPos;
+        private int DesiredPos;
+        private int MaxPos;
+        private enum SDConnectionStates
+        {
+            Disconnected,
+            Connected,
+            ConnectedWithTP,
+            ConnectedWithRemote,
+            InAutoMode
+        }
+        
 
         public SetupDialogForm()
         {
             InitializeComponent();
+            CurrentPos = 000;
+            DesiredPos = 000;
+            MaxPos = 0;
         }
 
         public void ConnectForSetup()
@@ -34,7 +46,30 @@ namespace ASCOM.OptecTCF_Driver
                 lock (LockObject)
                 {
                     DeviceComm.Connect();
-                    MaxPos = DeviceComm.GetMaxStep();
+                    string[] received = {"", ""};
+                    try
+                    {
+                        received = DeviceComm.GetFVandDT();
+                        DeviceSettings.SetFirmwareVersion(received[0]);
+                        DeviceSettings.SetDeviceType(received[1]);
+                    }
+                    catch
+                    {
+                        //do nothing
+                    }
+                    //if (received[0] == "" && received[1] = "")
+                    //{
+
+                    //}
+
+                    if (DeviceSettings.GetDeviceType() == "?")
+                    {
+                        MessageBox.Show("Please Select A Device Type First...");
+                        DeviceComm.Disconnect();
+                        UpdateControls();
+                        return;
+                    }
+                    MaxPos = DeviceSettings.GetMaxStep();
                     int p = DeviceComm.GetPosition();
                     CurrentPos = DesiredPos = p;
                     Pos_TB.Text = p.ToString();
@@ -71,10 +106,7 @@ namespace ASCOM.OptecTCF_Driver
                 
         }
         
-        private void cmdOK_Click(object sender, EventArgs e)
-        {
-            Dispose();
-        }
+        
 
         private void cmdCancel_Click(object sender, EventArgs e)
         {
@@ -102,6 +134,7 @@ namespace ASCOM.OptecTCF_Driver
         {
             COMPortForm CPFrm = new COMPortForm();
             CPFrm.ShowDialog();
+            
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -166,12 +199,28 @@ namespace ASCOM.OptecTCF_Driver
 
         internal void UpdateControls()
         {
+           
             if (DeviceComm.GetConnectionState())
             {
+                //CONNECTED
                 ConnectedForControls = true;
                 StatusLabel.Text = "Connected successfully!";
                 connectToolStripMenuItem.Enabled = false;
                 disconnectToolStripMenuItem.Enabled = true;
+                string DT = DeviceSettings.GetDeviceType();
+                if (DT == "?")
+                {
+                    DeviceType_CB.Text = "Select Device";
+                    DeviceType_CB.Enabled = true;
+                    DeviceType_LB.Enabled = true;
+                }
+                else
+                {
+                    DeviceType_CB.Text = DT;
+                    DeviceType_CB.Enabled = false;
+                    DeviceType_LB.Enabled = false;
+                }
+ 
                 foreach (Control x in FocStatusControls.Controls)
                 {
                     x.Enabled = true;
@@ -180,16 +229,28 @@ namespace ASCOM.OptecTCF_Driver
             }
             else
             {
+                //NOT CONNECTED
                 ConnectedForControls = false;
                 StatusLabel.Text = "Device is not connected";
                 connectToolStripMenuItem.Enabled = true;
                 disconnectToolStripMenuItem.Enabled = false;
+
+                DeviceType_CB.Text = "Not Connected";
+                DeviceType_CB.Enabled = true;
+                DeviceType_LB.Enabled = true;
+
                 foreach (Control x in FocStatusControls.Controls)
                 {
                     x.Enabled = false;
                     PowerLight.Visible = false;
                 }
             }
+
+            DeviceType_LB.ForeColor = System.Drawing.SystemColors.ControlText;
+            DeviceType_LB.BackColor = System.Drawing.SystemColors.Control;
+            DeviceType_LB.Font = new Font(DeviceType_LB.Font, FontStyle.Regular);
+
+            
          
 
         }
@@ -200,6 +261,7 @@ namespace ASCOM.OptecTCF_Driver
             {
                 this.Cursor = Cursors.WaitCursor;
                 DeviceComm.Disconnect();
+                Timer_Temp.Enabled = false;
                 UpdateControls();
             }
             finally
@@ -237,7 +299,7 @@ namespace ASCOM.OptecTCF_Driver
                 ////////// CONNECT TO DEVICE ////////////////////////////////////////
                 try
                 {
-                    DeviceComm.Connect();
+                    ConnectForSetup();
                     UpdateControls();
                 }
                 catch
@@ -400,16 +462,20 @@ namespace ASCOM.OptecTCF_Driver
             {
                 lock (LockObject)
                 {
+                    Timer_Temp.Enabled = false;
                     DeviceComm.Connect();
                     SetStartPtForm SSPFrm = new SetStartPtForm();
                     SSPFrm.ShowDialog();
                     SSPFrm.Dispose();
                     SSPFrm = null;
+                    Timer_Temp.Enabled = true;
                 }
             }
-            catch
+            catch(Exception Ex)
             {
-                MessageBox.Show("Unable to connect to device. \nHave you selected the right COM port?");
+                MessageBox.Show("Unable to connect to device. \nHave you selected the right COM port?\n" + 
+                    "Exception Data: " + Ex.ToString());
+
             }
             
         }
@@ -421,10 +487,12 @@ namespace ASCOM.OptecTCF_Driver
                 lock(LockObject)
                 {
                     DeviceComm.Connect();
-                    SetEndPtForm SEPFrm = new SetEndPtForm();
+                    Timer_Temp.Enabled = false;
+                    SetEndPtForm SEPFrm = new SetEndPtForm();  
                     SEPFrm.ShowDialog();
                     SEPFrm.Dispose();
                     SEPFrm = null;
+                    Timer_Temp.Enabled = true;
                 }
             }
             catch
@@ -441,6 +509,7 @@ namespace ASCOM.OptecTCF_Driver
                 EditNames_Btn.Text = "Edit Names";
                 ModeAName_TB.ReadOnly = true;
                 ModeBName_TB.ReadOnly = true;
+                MessageBox.Show("Names Saved!");
             }
             else
             {
@@ -468,19 +537,30 @@ namespace ASCOM.OptecTCF_Driver
                     }
                     catch (Exception Ex)
                     {
-                        if (Ex.InnerException.Message.Contains("ER=1"))
+
+                        try
                         {
-                            MessageBox.Show("Warning: Temperature Probe Not Detected.");
-                            lock (LockObject)
+                            if (Ex.InnerException.Message.Contains("ER=1"))
                             {
-                                this.BeginInvoke(new UpdateTempDisplayHandler(UpdateTempDisplay), new Object[] { -9999 });
+                                MessageBox.Show("Warning: Temperature Probe Not Detected.");
+                                lock (LockObject)
+                                {
+                                    this.BeginInvoke(new UpdateTempDisplayHandler(UpdateTempDisplay), new Object[] { -9999 });
+                                }
+                                Timer_Temp.Enabled = false;
                             }
-                            Timer_Temp.Enabled = false;
+                            else
+                            {
+                                MessageBox.Show("An error occured while trying to communicate with the device.\n" +
+                                    "Check the connection cables and try to reconnect");
+                                DeviceComm.Disconnect();
+                                UpdateControls();
+                            }
                         }
-                        else
+                        catch 
                         {
-                            MessageBox.Show("An error occured while trying to communicate with the device.\n" +
-                                "Check the connection cables and try to reconnect");
+                            
+                            
                         }
                     }
                 }
@@ -575,9 +655,13 @@ namespace ASCOM.OptecTCF_Driver
             {
                 lock (LockObject)
                 {
+                    Timer_Temp.Enabled = false;
                     DeviceComm.Connect();
                     SetSlopeForm SSFrm = new SetSlopeForm();
                     SSFrm.ShowDialog();
+                    SSFrm.Dispose();
+                    SSFrm = null;
+                    Timer_Temp.Enabled = true;
                 }
             }
             catch
@@ -593,9 +677,10 @@ namespace ASCOM.OptecTCF_Driver
             {
                 lock (LockObject)
                 {
-                    DeviceComm.Connect();
+                    ConnectForSetup();
                     DisplayTempCoEffs Frm = new DisplayTempCoEffs();
                     Frm.ShowDialog();
+                    UpdateControls();
                 }
             }
             catch (Exception)
@@ -607,6 +692,7 @@ namespace ASCOM.OptecTCF_Driver
         }
 
         private void Timer_Temp_Tick(object sender, EventArgs e)
+        
         {
             if (!backgroundWorkerTemp.IsBusy)
             {
@@ -615,5 +701,61 @@ namespace ASCOM.OptecTCF_Driver
             }
         }
 
+        private void DeviceType_CB_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DeviceSettings.SetDeviceType(DeviceType_CB.Text);
+            DeviceType_CB.Enabled = false;
+            DeviceType_LB.Enabled = false;
+            DeviceType_LB.ForeColor = System.Drawing.SystemColors.ControlText;
+            DeviceType_LB.BackColor = System.Drawing.SystemColors.Control;
+            DeviceType_LB.Font = new Font(DeviceType_LB.Font, FontStyle.Regular);
+           
+        }
+
+        private void chooseDeviceTypeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DeviceType_CB.Enabled = true;
+            DeviceType_LB.Enabled = true;
+            DeviceType_LB.ForeColor = Color.Red;
+            DeviceType_LB.BackColor = Color.Blue;
+            DeviceType_LB.Font = new Font(DeviceType_LB.Font, FontStyle.Bold);
+            UpdateControls();
+            
+        }
+
+        
+        private void cmdOK_Click(object sender, EventArgs e)
+        {
+            if (DeviceSettings.GetDeviceType().Contains("TCF") && DeviceSettings.PortSelected) this.Dispose();
+        }
+
+        private void DeviceType_CB_Validating(object sender, CancelEventArgs e)
+        {
+            if (!DeviceType_CB.Text.Contains("TCF"))
+            {
+                errorProviderDT.SetError(DeviceType_CB, "Select a device type");
+            }
+        }
+
+        private void DeviceType_CB_Validated(object sender, EventArgs e)
+        {
+            errorProviderDT.SetError(DeviceType_CB, "");
+        }
+
+        private void Center_Btn_Click(object sender, EventArgs e)
+        {
+            lock (LockObject)
+            {
+                DesiredPos = DeviceSettings.GetMaxStep() / 2;
+                if (DesiredPos < 1) DesiredPos = 1;
+            }
+            if (!backgroundWorkerPos.IsBusy)
+            {
+                backgroundWorkerPos.RunWorkerAsync();
+            }
+        }
+
+       
+        
     }
 }

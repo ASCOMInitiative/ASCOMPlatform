@@ -118,9 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="textBox1.Text" xml:space="preserve">
-    <value>This tool will guide you through the process of "learning" the temperature compensation constant for your focuser/telescope configuration.
+    <value>This tool will guide you through the process of "learning" the temperature compensation coefficient for your focuser/telescope configuration.
 
-The temperature compensation constant varies with the configuration of your telescope and accessories. The constant should only have to be learned once unless you change your configuration.
+The temperature compensation coefficient varies with the configuration of your telescope and accessories. The constant should only have to be set
+ once unless you change your configuration.
 
 Please press Next to continue...
 

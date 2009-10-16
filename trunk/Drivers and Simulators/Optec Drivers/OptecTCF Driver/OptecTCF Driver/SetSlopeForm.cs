@@ -93,9 +93,9 @@ namespace ASCOM.OptecTCF_Driver
                 }
 
                 //check if slope is within bounds
-                if (slope < 1 || slope > 999)
+                if (slope < 0 || slope > 999)
                 {
-                    MessageBox.Show("Slope must be between 2 and 999");
+                    MessageBox.Show("Slope must be between 0 and 999");
                     return;
                 }
                 
