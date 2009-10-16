@@ -227,6 +227,8 @@ namespace ASCOM.TelescopeSimulator
             if (i == -1) i = assyPath.LastIndexOf('\\');
             assyPath = assyPath.Remove(i, assyPath.Length - i) + "\\TelescopeSimulatorServedClasses";
 
+            //assyPath = "C:\\Documents and Settings\\Robert Turner\\My Documents\\Projects\\Robert\\ASCOM Platform\\Telescope Simulator .NET\\Telescope\\bin\\Debug";
+
             DirectoryInfo d = new DirectoryInfo(assyPath);
             foreach (FileInfo fi in d.GetFiles("*.dll"))  //Modified to only load *.DLL
             {
@@ -499,7 +501,7 @@ namespace ASCOM.TelescopeSimulator
         private static bool ProcessArguments(string[] args)
         {
             bool bRet = true;
-
+            
             //
             //**TODO** -Embedding is "ActiveX start". Prohibit non_AX starting?
             //
