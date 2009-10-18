@@ -1013,11 +1013,13 @@ Namespace Interfaces
     <ComVisible(False)> Public Interface IProfileExtra
 
         ''' <summary>
-        ''' Migrate the ASCOM profile from registry to filestore
+        ''' Migrate the ASCOM profile from registry to file store
         ''' </summary>
+        ''' <param name="PlatformVersion">The platform version number to be set in the profile store during the migration</param>
+        ''' <param name="JustSetPlatformVersion">Flag indicating whether to migrate the profile or just set the platform version number</param>
         ''' <remarks></remarks>
         <EditorBrowsable(EditorBrowsableState.Never)> _
-        Sub MigrateProfile()
+        Sub MigrateProfile(ByVal PlatformVersion As String, ByVal JustSetPlatformVersion As Boolean)
 
         ''' <summary>
         ''' Delete the value from the registry. Name may be an empty string for the unnamed value. 

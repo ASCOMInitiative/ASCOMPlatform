@@ -445,18 +445,26 @@ Public Class Profile
 #End Region
 
 #Region "IProfileExtra Implementation"
+
     ''' <summary>
     ''' Migrate the ASCOM profile from registry to file store
     ''' </summary>
+    ''' <param name="PlatformVersion">The platform version number to be set in the profile store during the migration</param>
+    ''' <param name="JustSetPlatformVersion">Flag indicating whether to migrate the profile or just set the platform version number</param>
     ''' <remarks></remarks>
     <EditorBrowsable(EditorBrowsableState.Never), _
-        ComVisible(False)> _
-        Public Sub MigrateProfile() Implements IProfileExtra.MigrateProfile
-        TL.LogMessage("MigrateProfile", "Migrating profile")
+    ComVisible(False)> _
+    Public Sub MigrateProfile(ByVal PlatformVersion As String, ByVal JustSetPlatformVersion As Boolean) Implements IProfileExtra.MigrateProfile
+        TL.Enabled = True 'Force tracing on when migrating a profile
+        TL.LogMessage("MigrateProfile", "Migrating profile to platform version: " & PlatformVersion & ", JustSetPlatformVersion is: " & JustSetPlatformVersion.ToString)
         Try
-            ProfileStore.MigrateProfile()
-            ProfileStore.WriteProfile("", "PlatformVersion", PLATFORM_VERSION)
-            TL.LogMessage("MigrateProfile", "Completed migration to platform " & PLATFORM_VERSION)
+            If Not JustSetPlatformVersion Then ' We aren't just setting the platform version number so migrate the profile
+                ProfileStore.MigrateProfile()
+                TL.LogMessage("MigrateProfile", "Successfully migrated Profile")
+            End If
+            ProfileStore.WriteProfile("", "PlatformVersion", PlatformVersion) 'Set the platform version in the ASCOM root key
+            TL.LogMessage("MigrateProfile", "Successfully set PlatformVersion to: " & PlatformVersion)
+            TL.LogMessage("MigrateProfile", "Completed migration")
         Catch ex As Exception
             TL.LogMessage("MigrateProfile", "Exception: " & ex.ToString)
             Throw
