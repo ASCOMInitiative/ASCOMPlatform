@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.gvLog = new System.Windows.Forms.DataGridView();
@@ -87,19 +87,19 @@
             this.gvLog.AllowUserToAddRows = false;
             this.gvLog.AllowUserToDeleteRows = false;
             this.gvLog.AllowUserToResizeRows = false;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.Black;
-            this.gvLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Black;
+            this.gvLog.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.gvLog.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.gvLog.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.gvLog.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.gvLog.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gvLog.DefaultCellStyle = dataGridViewCellStyle2;
             this.gvLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gvLog.Location = new System.Drawing.Point(10, 23);
             this.gvLog.Name = "gvLog";
@@ -137,7 +137,7 @@
             this.pbSendtObject.ForeColor = System.Drawing.Color.White;
             this.pbSendtObject.Location = new System.Drawing.Point(12, 304);
             this.pbSendtObject.Name = "pbSendtObject";
-            this.pbSendtObject.Size = new System.Drawing.Size(75, 23);
+            this.pbSendtObject.Size = new System.Drawing.Size(85, 23);
             this.pbSendtObject.TabIndex = 17;
             this.pbSendtObject.Text = "Set Object";
             this.pbSendtObject.UseVisualStyleBackColor = true;
@@ -150,7 +150,7 @@
             this.btnGoto.ForeColor = System.Drawing.Color.White;
             this.btnGoto.Location = new System.Drawing.Point(12, 275);
             this.btnGoto.Name = "btnGoto";
-            this.btnGoto.Size = new System.Drawing.Size(75, 23);
+            this.btnGoto.Size = new System.Drawing.Size(85, 23);
             this.btnGoto.TabIndex = 16;
             this.btnGoto.Text = "Go To";
             this.btnGoto.UseVisualStyleBackColor = true;
@@ -176,7 +176,7 @@
             this.pbFromGemini.ForeColor = System.Drawing.Color.White;
             this.pbFromGemini.Location = new System.Drawing.Point(12, 23);
             this.pbFromGemini.Name = "pbFromGemini";
-            this.pbFromGemini.Size = new System.Drawing.Size(75, 23);
+            this.pbFromGemini.Size = new System.Drawing.Size(85, 23);
             this.pbFromGemini.TabIndex = 13;
             this.pbFromGemini.Text = "From Gemini";
             this.pbFromGemini.UseVisualStyleBackColor = true;
@@ -188,7 +188,7 @@
             this.pbToGemini.ForeColor = System.Drawing.Color.White;
             this.pbToGemini.Location = new System.Drawing.Point(12, 52);
             this.pbToGemini.Name = "pbToGemini";
-            this.pbToGemini.Size = new System.Drawing.Size(75, 23);
+            this.pbToGemini.Size = new System.Drawing.Size(85, 23);
             this.pbToGemini.TabIndex = 14;
             this.pbToGemini.Text = "Clear Gemini";
             this.pbToGemini.UseVisualStyleBackColor = true;
@@ -200,7 +200,7 @@
             this.pbToFile.ForeColor = System.Drawing.Color.White;
             this.pbToFile.Location = new System.Drawing.Point(12, 111);
             this.pbToFile.Name = "pbToFile";
-            this.pbToFile.Size = new System.Drawing.Size(75, 23);
+            this.pbToFile.Size = new System.Drawing.Size(85, 23);
             this.pbToFile.TabIndex = 12;
             this.pbToFile.Text = "To File...";
             this.pbToFile.UseVisualStyleBackColor = true;
@@ -212,7 +212,7 @@
             this.pbFromFile.ForeColor = System.Drawing.Color.White;
             this.pbFromFile.Location = new System.Drawing.Point(12, 139);
             this.pbFromFile.Name = "pbFromFile";
-            this.pbFromFile.Size = new System.Drawing.Size(75, 23);
+            this.pbFromFile.Size = new System.Drawing.Size(85, 23);
             this.pbFromFile.TabIndex = 11;
             this.pbFromFile.Text = "From File...";
             this.pbFromFile.UseVisualStyleBackColor = true;
@@ -224,7 +224,7 @@
             this.pbExit.ForeColor = System.Drawing.Color.White;
             this.pbExit.Location = new System.Drawing.Point(12, 176);
             this.pbExit.Name = "pbExit";
-            this.pbExit.Size = new System.Drawing.Size(75, 23);
+            this.pbExit.Size = new System.Drawing.Size(85, 23);
             this.pbExit.TabIndex = 7;
             this.pbExit.Text = "Exit";
             this.pbExit.UseVisualStyleBackColor = true;
