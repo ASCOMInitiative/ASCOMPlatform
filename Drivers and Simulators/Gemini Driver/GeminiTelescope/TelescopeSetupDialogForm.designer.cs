@@ -627,6 +627,7 @@ namespace ASCOM.GeminiTelescope
             "4800",
             "9600",
             "19200",
+            "28800",
             "38400"});
             this.comboBoxBaudRate.Location = new System.Drawing.Point(111, 28);
             this.comboBoxBaudRate.Name = "comboBoxBaudRate";
