@@ -148,8 +148,8 @@
   <data name="pbController.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAALAAAA
-        CwAB5DetvwAAAdJJREFUOE+lk99LU3EYxmu7cGTUNpSgibadGcHclkdHitiIGMHYRVf9B4Ou+wN0dKkX
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAK/AAA
+        CvwBmdu77wAAAdJJREFUOE+lk99LU3EYxmu7cGTUNpSgibadGcHclkdHitiIGMHYRVf9B4Ou+wN0dKkX
         Xqg30o1Bq8EGE3dhLH9k5E2/tphIUl6IF2HKJtkgdo4f9w6OYJso9oWXcy7O83mf7/u85yJw4b+OAGKx
         GOepWnMDUH2eejQdyn8P2Csf0NV9R74/GZBKpYhEIoTDYUKhEGpPLz6fvyb++uPX6YB8Pk80GsXtdmOx
         WDCZzLS0Otje0/mwegaAruvE43EUxYXJbKapqZkOp4etHZ23uR1uedWTr6BpGslksmpbxWqzc73tBk7F
@@ -163,8 +163,8 @@
   <data name="pbTracking.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAK/wAA
-        Cv8BNGKaggAAAdJJREFUOE+lk99LU3EYxmu7cGTUNpSgibadGcHclkdHitiIGMHYRVf9B4Ou+wN0dKkX
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAK+wAA
+        CvsBy58dkAAAAdJJREFUOE+lk99LU3EYxmu7cGTUNpSgibadGcHclkdHitiIGMHYRVf9B4Ou+wN0dKkX
         Xqg30o1Bq8EGE3dhLH9k5E2/tphIUl6IF2HKJtkgdo4f9w6OYJso9oWXcy7O83mf7/u85yJw4b+OAGKx
         GOepWnMDUH2eejQdyn8P2Csf0NV9R74/GZBKpYhEIoTDYUKhEGpPLz6fvyb++uPX6YB8Pk80GsXtdmOx
         WDCZzLS0Otje0/mwegaAruvE43EUxYXJbKapqZkOp4etHZ23uR1uedWTr6BpGslksmpbxWqzc73tBk7F
@@ -178,8 +178,8 @@
   <data name="pbSpeed.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAK/gAA
-        Cv4B5iV4ZgAAAdJJREFUOE+lk99LU3EYxmu7cGTUNpSgibadGcHclkdHitiIGMHYRVf9B4Ou+wN0dKkX
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAK+wAA
+        CvsBy58dkAAAAdJJREFUOE+lk99LU3EYxmu7cGTUNpSgibadGcHclkdHitiIGMHYRVf9B4Ou+wN0dKkX
         Xqg30o1Bq8EGE3dhLH9k5E2/tphIUl6IF2HKJtkgdo4f9w6OYJso9oWXcy7O83mf7/u85yJw4b+OAGKx
         GOepWnMDUH2eejQdyn8P2Csf0NV9R74/GZBKpYhEIoTDYUKhEGpPLz6fvyb++uPX6YB8Pk80GsXtdmOx
         WDCZzLS0Otje0/mwegaAruvE43EUxYXJbKapqZkOp4etHZ23uR1uedWTr6BpGslksmpbxWqzc73tBk7F
@@ -193,8 +193,8 @@
   <data name="pbCustom.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAK/gAA
-        Cv4B5iV4ZgAAAdJJREFUOE+lk99LU3EYxmu7cGTUNpSgibadGcHclkdHitiIGMHYRVf9B4Ou+wN0dKkX
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAK+wAA
+        CvsBy58dkAAAAdJJREFUOE+lk99LU3EYxmu7cGTUNpSgibadGcHclkdHitiIGMHYRVf9B4Ou+wN0dKkX
         Xqg30o1Bq8EGE3dhLH9k5E2/tphIUl6IF2HKJtkgdo4f9w6OYJso9oWXcy7O83mf7/u85yJw4b+OAGKx
         GOepWnMDUH2eejQdyn8P2Csf0NV9R74/GZBKpYhEIoTDYUKhEGpPLz6fvyb++uPX6YB8Pk80GsXtdmOx
         WDCZzLS0Otje0/mwegaAruvE43EUxYXJbKapqZkOp4etHZ23uR1uedWTr6BpGslksmpbxWqzc73tBk7F
@@ -208,8 +208,8 @@
   <data name="pbExternal.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAK/gAA
-        Cv4B5iV4ZgAAAdJJREFUOE+lk99LU3EYxmu7cGTUNpSgibadGcHclkdHitiIGMHYRVf9B4Ou+wN0dKkX
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAK+wAA
+        CvsBy58dkAAAAdJJREFUOE+lk99LU3EYxmu7cGTUNpSgibadGcHclkdHitiIGMHYRVf9B4Ou+wN0dKkX
         Xqg30o1Bq8EGE3dhLH9k5E2/tphIUl6IF2HKJtkgdo4f9w6OYJso9oWXcy7O83mf7/u85yJw4b+OAGKx
         GOepWnMDUH2eejQdyn8P2Csf0NV9R74/GZBKpYhEIoTDYUKhEGpPLz6fvyb++uPX6YB8Pk80GsXtdmOx
         WDCZzLS0Otje0/mwegaAruvE43EUxYXJbKapqZkOp4etHZ23uR1uedWTr6BpGslksmpbxWqzc73tBk7F

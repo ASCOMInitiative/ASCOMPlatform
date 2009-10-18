@@ -124,9 +124,12 @@ namespace ASCOM.GeminiTelescope
             pbApply.Enabled = GeminiHardware.Connected;
             pbReboot.Enabled = GeminiHardware.Connected;
             pbOK.Enabled = GeminiHardware.Connected;
+            pbFromGemini.Enabled = GeminiHardware.Connected;
+
             pbButton_EnabledChanged(pbApply, null);
             pbButton_EnabledChanged(pbReboot, null);
             pbButton_EnabledChanged(pbOK, null);
+            pbButton_EnabledChanged(pbFromGemini, null);
 
             menuItemGetSettings.Enabled = GeminiHardware.Connected;
             menuItemSendSettings.Enabled = GeminiHardware.Connected;
@@ -140,7 +143,6 @@ namespace ASCOM.GeminiTelescope
 
             if (this.ValidateChildren())
             {
-
                 DialogResult res = MessageBox.Show(Resources.OverwriteSettings, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                 if (res != DialogResult.Yes) return;
 
@@ -155,7 +157,7 @@ namespace ASCOM.GeminiTelescope
                         props.Serialize(true, null);   // save to default profile
 
                     props.ClearProfile();
-
+                    props.Serialize(false, null);   // start with default profile settings
                     props.SyncWithGemini(false);   // read all the properties from the mount
                     geminiPropertiesBindingSource.ResetBindings(false);
                     this.Text = Cap + " [settings from Gemini]";
@@ -409,6 +411,46 @@ namespace ASCOM.GeminiTelescope
                 }
             }
             return l;
+        }
+
+        private void pbSaveDefault_Click(object sender, EventArgs e)
+        {
+            GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
+            if (props.Serialize(true, null))    // save to default profile
+            {
+                MessageBox.Show("Default profile was saved as 'GeminiDefaultProfile.gp'", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } else
+                MessageBox.Show("Default profile was not saved!", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);            
+        }
+
+        private void pbFromGemini_Click(object sender, EventArgs e)
+        {
+            GeminiHardware.Trace.Enter("AdvancedSettings:FromGemini_Click");
+
+            if (this.ValidateChildren())
+            {
+                this.UseWaitCursor = true;
+
+                try
+                {
+                    GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
+                    props.ClearProfile();
+                    props.Serialize(false, null);   //read default profile
+                    props.SyncWithGemini(false);   // read all the properties from the mount
+                    geminiPropertiesBindingSource.ResetBindings(false);
+                    this.Text = Cap + " [settings from Gemini]";
+                }
+                catch (Exception ex)
+                {
+                    GeminiHardware.Trace.Except(ex);
+                }
+                finally
+                {
+                    this.UseWaitCursor = false;
+                }
+            }
+            GeminiHardware.Trace.Exit("AdvancedSettings:FromGemini_Click");
+
         }
     }
 }

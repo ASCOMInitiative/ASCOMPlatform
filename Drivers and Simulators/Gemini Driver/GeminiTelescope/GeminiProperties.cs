@@ -543,7 +543,7 @@ namespace ASCOM.GeminiTelescope
 
         public double WestSafetyLimitDegrees
         {
-            get { return (double)get_Profile("WestSafetyLimitDegrees", 123.0); }
+            get { return (double)get_Profile("WestSafetyLimitDegrees", 0); }
             set { mProfile["WestSafetyLimitDegrees"] = value; }
         }
 
@@ -566,6 +566,8 @@ namespace ASCOM.GeminiTelescope
             }
             set
             {
+                if (value <= 0) return; // value not set -- don't update the mount!
+
                 string cmd = ">222:" + string.Format("{0:000}d{1:00}", Math.Truncate(value), (value - Math.Truncate(value)) * 60.0);
                 GeminiHardware.DoCommandResult(cmd, GeminiHardware.MAX_TIMEOUT, false);
             }
@@ -574,7 +576,7 @@ namespace ASCOM.GeminiTelescope
 
         public double EastSafetyLimitDegrees
         {
-            get { return (double)get_Profile("EastSafetyLimitDegrees", 114.0); }
+            get { return (double)get_Profile("EastSafetyLimitDegrees", 0); }
             set { mProfile["EastSafetyLimitDegrees"] = value; }
         }
 
@@ -596,6 +598,8 @@ namespace ASCOM.GeminiTelescope
             }
             set
             {
+                if (value <= 0) return; // value not set -- don't update the mount!
+
                 string cmd = ">221:" + string.Format("{0:000}d{1:00}", Math.Truncate(value), (value - Math.Truncate(value)) * 60.0);
                 GeminiHardware.DoCommandResult(cmd, GeminiHardware.MAX_TIMEOUT, false);
             }
@@ -1177,7 +1181,12 @@ namespace ASCOM.GeminiTelescope
         {
             get { return (bool)get_Profile("SavePEC", false); }
             set
-            { mProfile["SavePEC"] = value; }
+            { 
+                mProfile["SavePEC"] = value;
+                if (!value)
+                    if (GeminiHardware.Connected && Profile.ContainsKey("PECTable"))
+                        Profile.Remove("PECTable"); // delete it: the user doesn't want pec data
+            }
         }
 
         private bool SavePEC_Gemini
@@ -1214,12 +1223,12 @@ namespace ASCOM.GeminiTelescope
 
                 for (int i = 0; i < MaxPEC; )
                 {
-                    frmProgress.Update(incr, null);
 
                     string val = get_string_Prop("<511:" + i.ToString());
                     string[] parts = val.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
                     pec.Add(i, parts[0]+";"+i.ToString() + ";" + parts[1]);
                     i += int.Parse(parts[1]);
+                    frmProgress.Update(int.Parse(parts[1])*incr, null);
                 }
                 Cursor.Current = Cursors.Default;
                 return pec;
@@ -1256,9 +1265,9 @@ namespace ASCOM.GeminiTelescope
 
             if (!SyncWithGemini(write, null)) return false;
 
-            if (SavePEC)
+            if (SavePEC && write)       // reading of PEC occurs when trying to save the profile
             {
-                frmProgress.Initialize(0, 100, write ? "Send PEC data to Gemini" : "Get PEC Data from Gemini", null);
+                frmProgress.Initialize(0, 100, write ? "Sending PEC data to Gemini" : "Getting PEC Data from Gemini", null);
                 frmProgress.ShowProgress(null);
 
                 // save PEC table if requested:
@@ -1272,6 +1281,8 @@ namespace ASCOM.GeminiTelescope
                 }
                 frmProgress.HideProgress();
             }
+            else if (GeminiHardware.Connected && !write && Profile.ContainsKey("PECTable"))
+                Profile.Remove("PECTable");
 
             GeminiHardware.Trace.Exit("GeminiProps:SyncWithGemini", write);
             return true;
@@ -1368,6 +1379,17 @@ namespace ASCOM.GeminiTelescope
             }
 
             GeminiHardware.Trace.Enter("GeminiProps:Serialize", write, FileName);
+
+            // get PEC from Gemini if PEC is not in the current profile, but user wants it saved!
+            if (write && SavePEC && !Profile.ContainsKey("PECTable"))
+            {
+                frmProgress.Initialize(0, 100, "Getting PEC data from Gemini", null);
+                frmProgress.ShowProgress(null);
+                PECTable = PECTable_Gemini;
+                frmProgress.HideProgress();
+            }
+            else if (GeminiHardware.Connected && !SavePEC && Profile.ContainsKey("PECTable"))
+                Profile.Remove("PECTable");
 
             try
             {
