@@ -324,6 +324,7 @@ namespace ASCOM.GeminiTelescope
         }
 
         private static System.Threading.AutoResetEvent m_WaitForCommand;
+        private static System.Threading.AutoResetEvent m_DataReceived;
 
         private static string m_PolledVariablesString = ":GR#:GD#:GA#:GZ#:Gv#:GS#:Gm#:h?#<99:F#";
         private static string m_ShortPolledVariablesString1 = ":GR#:GD#:GA#:GZ#:Gv#";
@@ -670,7 +671,15 @@ namespace ASCOM.GeminiTelescope
             GetProfileSettings();
             Trace.Enter("GeminiHardware", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version, DateTime.Now.ToString());
 
+            m_SerialPort.DataReceived += new SerialDataReceivedEventHandler(m_SerialPort_DataReceived);
+            m_DataReceived = new System.Threading.AutoResetEvent(false);
+
             Trace.Exit("GeminiHardware");
+        }
+
+        static void m_SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            m_DataReceived.Set();
         }
 
 
@@ -3069,7 +3078,7 @@ namespace ASCOM.GeminiTelescope
 
             for (; ; )
             {
-                if (m_SerialPort.BytesToRead > 0)
+                while (m_SerialPort.BytesToRead > 0)
                 {
                     int b = m_SerialPort.ReadByte();
                     char c = (char)(b);
@@ -3091,16 +3100,15 @@ namespace ASCOM.GeminiTelescope
                         return res.ToString();
                     }
                 }
-                else
+                if (m_SerialTimeoutExpired.WaitOne(0))
                 {
-                    if (m_SerialTimeoutExpired.WaitOne(0))
-                    {
-                        if (outp.Length > 0 && (m_PassThroughPort!=null && m_PassThroughPort.PortActive))
-                            m_PassThroughPort.PassStringToPort(outp);
-                        throw new TimeoutException("ReadTo");
-                    }
-                    System.Threading.Thread.Sleep(0);  //[pk] should instead wait on a waithandle set by serialdatareceived event...
+                    if (outp.Length > 0 && (m_PassThroughPort!=null && m_PassThroughPort.PortActive))
+                        m_PassThroughPort.PassStringToPort(outp);
+                    throw new TimeoutException("ReadTo");
                 }
+
+//                    System.Threading.Thread.Sleep(0);  //[pk] should instead wait on a waithandle set by serialdatareceived event...
+                m_DataReceived.WaitOne(250);
             }
         }
 
@@ -3116,7 +3124,7 @@ namespace ASCOM.GeminiTelescope
 
             for (; ; )
             {
-                if (m_SerialPort.BytesToRead > 0)
+                while (m_SerialPort.BytesToRead > 0)
                 {
                     byte c = (byte)m_SerialPort.ReadByte();
                     if ((int)c >= 0x80)
@@ -3131,16 +3139,14 @@ namespace ASCOM.GeminiTelescope
                         return res.ToString();
                     }
                 }
-                else
+                if (m_SerialTimeoutExpired.WaitOne(0))
                 {
-                    if (m_SerialTimeoutExpired.WaitOne(0))
-                    {
-                        if (outp.Length > 0 && (m_PassThroughPort!=null && m_PassThroughPort.PortActive))
-                            m_PassThroughPort.PassStringToPort(outp);
-                        throw new TimeoutException("ReadNumber");
-                    }
-                    System.Threading.Thread.Sleep(0);   //[pk] should instead wait on a waithandle set by serialdatareceived event...
+                    if (outp.Length > 0 && (m_PassThroughPort!=null && m_PassThroughPort.PortActive))
+                        m_PassThroughPort.PassStringToPort(outp);
+                    throw new TimeoutException("ReadNumber");
                 }
+//                    System.Threading.Thread.Sleep(0);   //[pk] should instead wait on a waithandle set by serialdatareceived event...
+                m_DataReceived.WaitOne(250);
             }
         }
 
