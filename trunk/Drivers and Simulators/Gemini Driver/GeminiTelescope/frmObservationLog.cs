@@ -22,38 +22,39 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ASCOM.GeminiTelescope.Properties;
 
 namespace ASCOM.GeminiTelescope
 {
     public partial class frmObservationLog : Form
     {
         List<Observation> m_Observations = new List<Observation>();
-        string m_OrderBy = "Time";
+        string m_OrderBy = Resources.Time;
         Dictionary<String, Func<Observation, IComparable>> CList = new Dictionary<String, Func<Observation, IComparable>>();
         Dictionary<string, bool> m_DirectionSort = new Dictionary<string, bool>();
 
         public frmObservationLog()
         {
             InitializeComponent();
-            CList.Add("Time", o => o.Time);
-            CList.Add("Operation", o => o.Operation);
-            CList.Add("RA", o => o.RA);
-            CList.Add("DEC", o => o.DEC);
-            CList.Add("Object", o => o.Object);
-            m_DirectionSort.Add("Time", false);
-            m_DirectionSort.Add("Operation", false);
-            m_DirectionSort.Add("RA", false);
-            m_DirectionSort.Add("DEC", false);
-            m_DirectionSort.Add("Object", false);
+            CList.Add(Resources.Time, o => o.Time);
+            CList.Add(Resources.Operation, o => o.Operation);
+            CList.Add(Resources.RA, o => o.RA);
+            CList.Add(Resources.DEC, o => o.DEC);
+            CList.Add(Resources.Object, o => o.Object);
+            m_DirectionSort.Add(Resources.Time, false);
+            m_DirectionSort.Add(Resources.Operation, false);
+            m_DirectionSort.Add(Resources.RA, false);
+            m_DirectionSort.Add(Resources.DEC, false);
+            m_DirectionSort.Add(Resources.Object, false);
         }
 
         private void UpdateList()
         {
             var qry = (from o in m_Observations orderby o.Time select o);
             if (m_DirectionSort[m_OrderBy])
-                qry = qry.OrderByDescending(CList[m_OrderBy]).ThenBy(CList["Time"]);
+                qry = qry.OrderByDescending(CList[m_OrderBy]).ThenBy(CList[Resources.Time]);
             else
-                qry = qry.OrderBy(CList[m_OrderBy]).ThenBy(CList["Time"]);
+                qry = qry.OrderBy(CList[m_OrderBy]).ThenBy(CList[Resources.Time]);
 
             List<Observation> list = qry.ToList();
             BindingSource bs = new BindingSource();
@@ -61,13 +62,13 @@ namespace ASCOM.GeminiTelescope
             try
             {
                 gvLog.DataSource = bs;
-                gvLog.Columns["Time"].DefaultCellStyle.Format = "G";
-                gvLog.Columns["RA"].DefaultCellStyle.Format = "0.00";
-                gvLog.Columns["DEC"].DefaultCellStyle.Format = "0.00";
-                gvLog.Columns["RA"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                gvLog.Columns["DEC"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                gvLog.Columns[Resources.Time].DefaultCellStyle.Format = "G";
+                gvLog.Columns[Resources.RA].DefaultCellStyle.Format = "0.00";
+                gvLog.Columns[Resources.DEC].DefaultCellStyle.Format = "0.00";
+                gvLog.Columns[Resources.RA].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                gvLog.Columns[Resources.DEC].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 gvLog.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                gvLog.Columns["Time"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                gvLog.Columns[Resources.Time].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             }
             catch { }
         }
@@ -76,7 +77,7 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
-                frmProgress.Initialize(0, 100, "Retrieve Gemini Observation Log", null);
+                frmProgress.Initialize(0, 100, Resources.RetrieveGeminiObservationLog, null);
                 frmProgress.ShowProgress(this);
 
                 List<string> allobs = GeminiHardware.ObservationLog;
@@ -150,9 +151,9 @@ namespace ASCOM.GeminiTelescope
         {
             var qry = (from o in m_Observations select o);
             if (m_DirectionSort[m_OrderBy])
-                qry = qry.OrderByDescending(CList[m_OrderBy]).ThenBy(CList["Time"]);
+                qry = qry.OrderByDescending(CList[m_OrderBy]).ThenBy(CList[Resources.Time]);
             else
-                qry = qry.OrderBy(CList[m_OrderBy]).ThenBy(CList["Time"]);
+                qry = qry.OrderBy(CList[m_OrderBy]).ThenBy(CList[Resources.Time]);
 
             List<Observation> list = qry.ToList();
 
@@ -195,7 +196,7 @@ namespace ASCOM.GeminiTelescope
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error writing file: " + ex.Message, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(Resources.ErrorWritingFile + " " + ex.Message, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -210,7 +211,7 @@ namespace ASCOM.GeminiTelescope
         {
             if (gvLog.SelectedRows.Count < 1 || gvLog.SelectedRows.Count > 1)
             {
-                MessageBox.Show("Please select one!", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(Resources.PleaseSelectOne, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
             Observation obs = gvLog.SelectedRows[0].DataBoundItem as Observation;
@@ -236,7 +237,7 @@ namespace ASCOM.GeminiTelescope
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "Goto falied: " + ex.Message, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(this, Resources.GotoFailed + " " + ex.Message, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
 
@@ -308,7 +309,7 @@ namespace ASCOM.GeminiTelescope
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error reading file: " + ex.Message, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(Resources.ErrorReadingFile + " " + ex.Message, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

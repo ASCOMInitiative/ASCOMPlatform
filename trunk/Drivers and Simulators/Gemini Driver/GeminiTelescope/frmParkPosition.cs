@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ASCOM.GeminiTelescope.Properties;
+
 
 namespace ASCOM.GeminiTelescope
 {
@@ -46,14 +48,14 @@ namespace ASCOM.GeminiTelescope
 
             if (!double.TryParse(txtAlt.Text, out alt))
             {
-                MessageBox.Show("Invalid Alt value", SharedResources.TELESCOPE_DRIVER_NAME);
+                MessageBox.Show(Resources.InvalidAltValue, SharedResources.TELESCOPE_DRIVER_NAME);
                 DialogResult = DialogResult.None;
                 return;
             }
 
             if (!double.TryParse(txtAz.Text, out az))
             {
-                MessageBox.Show("Invalid Az value", SharedResources.TELESCOPE_DRIVER_NAME);
+                MessageBox.Show(Resources.InvalidAzValue, SharedResources.TELESCOPE_DRIVER_NAME);
                 DialogResult = DialogResult.None;
                 return;
             }
@@ -63,7 +65,7 @@ namespace ASCOM.GeminiTelescope
                 GeminiHardware.ParkAz  = az;
             } catch (Exception ex)
             {
-                MessageBox.Show("Cannot set park coordinates: " + ex.Message, SharedResources.TELESCOPE_DRIVER_NAME);
+                MessageBox.Show(Resources.CannotSetParkCoordinates + " " + ex.Message, SharedResources.TELESCOPE_DRIVER_NAME);
                 DialogResult = DialogResult.None;
                 return;
             }

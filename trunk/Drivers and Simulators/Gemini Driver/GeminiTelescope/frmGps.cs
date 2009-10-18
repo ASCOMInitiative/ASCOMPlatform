@@ -49,6 +49,7 @@ namespace ASCOM.GeminiTelescope
             {
                 comboBoxComPort.Items.Add(s);
             }
+            buttonQuery.Text = Resources.Query;
         }
 
         private void frmGps_Load(object sender, EventArgs e)
@@ -68,12 +69,12 @@ namespace ASCOM.GeminiTelescope
 
             try
             {
-                labelLatitude.Text = "Latitude: " + GeminiHardware.m_Util.DegreesToDMS(GeminiHardware.m_Util.DMSToDegrees(m_Latitude));
-                labelLongitude.Text = "Longitude: " + GeminiHardware.m_Util.DegreesToDMS(GeminiHardware.m_Util.DMSToDegrees(m_Longitude));
+                labelLatitude.Text = Resources.Latitude + ": " + GeminiHardware.m_Util.DegreesToDMS(GeminiHardware.m_Util.DMSToDegrees(m_Latitude));
+                labelLongitude.Text = Resources.Longitude + ": " + GeminiHardware.m_Util.DegreesToDMS(GeminiHardware.m_Util.DMSToDegrees(m_Longitude));
             }
             catch { }
             
-            if (elevation != SharedResources.INVALID_DOUBLE.ToString()) labelElevation.Text = "Elevation: " + elevation;
+            if (elevation != SharedResources.INVALID_DOUBLE.ToString()) labelElevation.Text = Resources.Elevation + ": " + elevation;
 
             m_Elevation = elevation;
             
@@ -145,7 +146,7 @@ namespace ASCOM.GeminiTelescope
         
         private void buttonQuery_Click(object sender, EventArgs e)
         {
-            if (buttonQuery.Text == "Query")
+            if (buttonQuery.Text == Resources.Query)
             {
                 if (comboBoxComPort.SelectedItem == null) { MessageBox.Show(Resources.SelectCOMPort); return; }
                 try
@@ -154,7 +155,7 @@ namespace ASCOM.GeminiTelescope
                         interpreter.ComPort = comboBoxComPort.SelectedItem.ToString();
                         interpreter.BaudRate = int.Parse(comboBoxBaudRate.SelectedItem.ToString());
                         interpreter.Conneced = true;
-                        buttonQuery.Text = "Stop";
+                        buttonQuery.Text = Resources.Stop;
                    
                 }
                 catch (Exception ex)
@@ -165,7 +166,7 @@ namespace ASCOM.GeminiTelescope
             {
                 try
                 {
-                    buttonQuery.Text = "Query";
+                    buttonQuery.Text = Resources.Query;
                     interpreter.Conneced = false;
                     
                 }
