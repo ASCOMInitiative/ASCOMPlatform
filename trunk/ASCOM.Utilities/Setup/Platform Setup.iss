@@ -75,12 +75,15 @@
 
 ; Updated to RC4 for RC4 release
 ; Created new install options group to handle Profile Explorer and Diagnostics tools
-; Setup Build 12 XX - RC4
+; Setup Build 12 Released - RC4
+
+; Updated to RC5 for RC5 release
+; Setup Build 14 Released to ASCOM Core Group - RC5
 
 [Setup]
 ; Setup program version number - change this each time you change this setup script
-#define Public SetupVersion 12
-#define Public RC "RC4"
+#define Public SetupVersion 14
+#define Public RC "RC5"
 
 #define Public Major 0
 #define Public Minor 0

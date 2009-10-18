@@ -6,6 +6,7 @@ Imports ASCOM.Utilities
 Imports System.IO
 
 Module MigrateProfile
+    Private Const PLATFORM_VERSION As String = "5.5" 'This platform version is set during profile migration
 
     Sub Main()
         Dim args() As String
@@ -40,12 +41,24 @@ Module MigrateProfile
 
             'Find the location of the All Users profile
             BaseFolder = System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) & ASCOM_DIRECTORY
-            Response = MsgBoxResult.Ok ' Inititalise to OK status
+            Response = MsgBoxResult.Ok ' Inititalise to OK status indicating that we are going to migrate the profile
 
             If Not parmForce Then 'Deterine what to do
                 If File.Exists(BaseFolder & "\Profile.xml") Then ' Profile already exists so check whether we really do want to migrate it!
                     If parmMigrateIfNeeded Then 'This is a setup run and profile is already migrated so no need to migrate again
-                        Response = MsgBoxResult.Cancel
+                        'Try and create a profile object, then ensure its platform level is what we require
+                        PR = Nothing
+
+                        Try
+                            PR = New Profile()
+                            PR.MigrateProfile(PLATFORM_VERSION, True) ' Just set the platform version number
+                            Response = MsgBoxResult.Cancel 'All worked OK so set the flag to show we don't need to migrate the profile
+                        Catch ex As Exception
+                            'Ignore errors as this just means that we do need to properly migrate
+                        Finally
+                            Try : PR.Dispose() : Catch : End Try
+                            PR = Nothing
+                        End Try
                     Else 'Manual run by user so ask what to to
                         If parmEraseOnly Then 'Ask the right question...
                             Response = MsgBox("Are you sure that you want to erase your migrated Profile, leaving your registry Profile intact?", MsgBoxStyle.OkCancel Or MsgBoxStyle.Critical, "ASCOM.Utilities")
@@ -55,6 +68,7 @@ Module MigrateProfile
                     End If
                 End If
             End If
+
             If Response = MsgBoxResult.Ok Then 'Migrate the profile; remove curent folder and copy from registry
                 Try : Directory.Delete(BaseFolder, True) : Catch : End Try
                 PR = Nothing 'Initialise to remove a compiler warning
@@ -65,7 +79,7 @@ Module MigrateProfile
                 End Try
 
                 Try
-                    If Not parmEraseOnly Then PR.MigrateProfile()
+                    If Not parmEraseOnly Then PR.MigrateProfile(PLATFORM_VERSION, False) ' Migrate the profile and set platform version
                 Catch Ex2 As Exception
                     MsgBox("MigrateProfile - Unexpected migration exception: " & Ex2.ToString)
                 End Try

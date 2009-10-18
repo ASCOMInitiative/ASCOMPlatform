@@ -7,7 +7,7 @@ Imports ASCOM.Utilities
 #Region "Common Constants"
 
 Module CommonConstants
-    Friend Const PLATFORM_VERSION As String = "5.5" 'This platform version is set during profile migration
+    'NOTE: Platform version number is defined in the MigrateProfile utilitiy
     Friend Const SERIAL_FILE_NAME_VARNAME As String = "SerTraceFile" 'Constant naming the profile trace file variable name
     Friend Const SERIAL_AUTO_FILENAME As String = "C:\SerialTraceAuto.txt" 'Special value to indicate use of automatic trace filenames
     Friend Const SERIAL_DEFAULT_FILENAME As String = "C:\SerialTrace.txt" 'Default manual trace filename
