@@ -39,6 +39,7 @@
             this.linkLabel4 = new System.Windows.Forms.LinkLabel();
             this.labelVersion = new System.Windows.Forms.Label();
             this.labelCopyright = new System.Windows.Forms.Label();
+            this.linkLabel5 = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.GeminiPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ASCOMpictureBox)).BeginInit();
             this.SuspendLayout();
@@ -127,7 +128,7 @@
             this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(21, 223);
+            this.label3.Location = new System.Drawing.Point(13, 204);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(154, 24);
             this.label3.TabIndex = 6;
@@ -139,7 +140,7 @@
             this.linkLabel3.BackColor = System.Drawing.Color.Transparent;
             this.linkLabel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabel3.LinkColor = System.Drawing.Color.Cyan;
-            this.linkLabel3.Location = new System.Drawing.Point(44, 261);
+            this.linkLabel3.Location = new System.Drawing.Point(27, 312);
             this.linkLabel3.Name = "linkLabel3";
             this.linkLabel3.Size = new System.Drawing.Size(133, 24);
             this.linkLabel3.TabIndex = 7;
@@ -152,7 +153,7 @@
             this.linkLabel4.BackColor = System.Drawing.Color.Transparent;
             this.linkLabel4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabel4.LinkColor = System.Drawing.Color.Cyan;
-            this.linkLabel4.Location = new System.Drawing.Point(44, 300);
+            this.linkLabel4.Location = new System.Drawing.Point(27, 275);
             this.linkLabel4.Name = "linkLabel4";
             this.linkLabel4.Size = new System.Drawing.Size(102, 24);
             this.linkLabel4.TabIndex = 8;
@@ -183,6 +184,19 @@
             this.labelCopyright.TabIndex = 11;
             this.labelCopyright.Text = "Copyright © 2009 Paul Kanevsky, Robert Turner";
             // 
+            // linkLabel5
+            // 
+            this.linkLabel5.AutoSize = true;
+            this.linkLabel5.BackColor = System.Drawing.Color.Transparent;
+            this.linkLabel5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabel5.LinkColor = System.Drawing.Color.Cyan;
+            this.linkLabel5.Location = new System.Drawing.Point(27, 237);
+            this.linkLabel5.Name = "linkLabel5";
+            this.linkLabel5.Size = new System.Drawing.Size(128, 24);
+            this.linkLabel5.TabIndex = 12;
+            this.linkLabel5.TabStop = true;
+            this.linkLabel5.Text = "Mark Crossley";
+            // 
             // AboutBox1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -190,6 +204,7 @@
             this.BackgroundImage = global::ASCOM.GeminiTelescope.Properties.Resources.starfield;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(567, 450);
+            this.Controls.Add(this.linkLabel5);
             this.Controls.Add(this.labelCopyright);
             this.Controls.Add(this.labelVersion);
             this.Controls.Add(this.linkLabel4);
@@ -231,6 +246,7 @@
         private System.Windows.Forms.LinkLabel linkLabel4;
         private System.Windows.Forms.Label labelVersion;
         private System.Windows.Forms.Label labelCopyright;
+        private System.Windows.Forms.LinkLabel linkLabel5;
 
     }
 }
