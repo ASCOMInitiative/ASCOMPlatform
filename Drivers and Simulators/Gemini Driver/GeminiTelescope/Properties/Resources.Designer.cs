@@ -185,6 +185,15 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot set park coordinates:.
+        /// </summary>
+        internal static string CannotSetParkCoordinates {
+            get {
+                return ResourceManager.GetString("CannotSetParkCoordinates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This voice may be unusable for announcements. Please try another..
         /// </summary>
         internal static string CannotUseVoice {
@@ -311,6 +320,15 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to DEC.
+        /// </summary>
+        internal static string DEC {
+            get {
+                return ResourceManager.GetString("DEC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Decelerate.
         /// </summary>
         internal static string Decelerate {
@@ -325,6 +343,24 @@ namespace ASCOM.GeminiTelescope.Properties {
         internal static string DecJoystick {
             get {
                 return ResourceManager.GetString("DecJoystick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default profile was not saved!.
+        /// </summary>
+        internal static string DefaultProfileNotSaved {
+            get {
+                return ResourceManager.GetString("DefaultProfileNotSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default profile was saved as &apos;GeminiDefaultProfile.gp&apos;.
+        /// </summary>
+        internal static string DefaultProfileSavedAsGeminiDefaultProfile {
+            get {
+                return ResourceManager.GetString("DefaultProfileSavedAsGeminiDefaultProfile", resourceCulture);
             }
         }
         
@@ -356,6 +392,42 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gemini connection.
+        /// </summary>
+        internal static string discWarning1 {
+            get {
+                return ResourceManager.GetString("discWarning1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to s are.
+        /// </summary>
+        internal static string discWarning2 {
+            get {
+                return ResourceManager.GetString("discWarning2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to is.
+        /// </summary>
+        internal static string discWarning3 {
+            get {
+                return ResourceManager.GetString("discWarning3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to still active..
+        /// </summary>
+        internal static string discWarning4 {
+            get {
+                return ResourceManager.GetString("discWarning4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CENTER.
         /// </summary>
         internal static string dispCENTER {
@@ -365,11 +437,29 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EAST.
+        /// </summary>
+        internal static string dispEAST {
+            get {
+                return ResourceManager.GetString("dispEAST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to LIMIT!.
         /// </summary>
         internal static string dispLIMIT {
             get {
                 return ResourceManager.GetString("dispLIMIT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PARK.
+        /// </summary>
+        internal static string dispPARK {
+            get {
+                return ResourceManager.GetString("dispPARK", resourceCulture);
             }
         }
         
@@ -397,6 +487,15 @@ namespace ASCOM.GeminiTelescope.Properties {
         internal static string dispTRACK {
             get {
                 return ResourceManager.GetString("dispTRACK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WEST.
+        /// </summary>
+        internal static string dispWEST {
+            get {
+                return ResourceManager.GetString("dispWEST", resourceCulture);
             }
         }
         
@@ -470,6 +569,24 @@ namespace ASCOM.GeminiTelescope.Properties {
         internal static string EnterMenu {
             get {
                 return ResourceManager.GetString("EnterMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error reading file.
+        /// </summary>
+        internal static string ErrorReadingFile {
+            get {
+                return ResourceManager.GetString("ErrorReadingFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error writing file:.
+        /// </summary>
+        internal static string ErrorWritingFile {
+            get {
+                return ResourceManager.GetString("ErrorWritingFile", resourceCulture);
             }
         }
         
@@ -555,6 +672,17 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please note that Gemini default East limit of 114° is too aggressive for most G-11.
+        ///
+        ///Would you like to set the East limit to a more conservative 98° instead?.
+        /// </summary>
+        internal static string GeminiG11DefaultSafetyLimitWarning {
+            get {
+                return ResourceManager.GetString("GeminiG11DefaultSafetyLimitWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gemini is .
         /// </summary>
         internal static string GeminiIs {
@@ -578,6 +706,15 @@ namespace ASCOM.GeminiTelescope.Properties {
         internal static string GoHome {
             get {
                 return ResourceManager.GetString("GoHome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Goto failed:.
+        /// </summary>
+        internal static string GotoFailed {
+            get {
+                return ResourceManager.GetString("GotoFailed", resourceCulture);
             }
         }
         
@@ -672,6 +809,24 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid Alt value.
+        /// </summary>
+        internal static string InvalidAltValue {
+            get {
+                return ResourceManager.GetString("InvalidAltValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Az value.
+        /// </summary>
+        internal static string InvalidAzValue {
+            get {
+                return ResourceManager.GetString("InvalidAzValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The following setting(s) are invalid:.
         /// </summary>
         internal static string InvalidSettings {
@@ -686,6 +841,15 @@ namespace ASCOM.GeminiTelescope.Properties {
         internal static string InvalidSite {
             get {
                 return ResourceManager.GetString("InvalidSite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Joystick is not available.
+        /// </summary>
+        internal static string JoystickIsNotAvailable {
+            get {
+                return ResourceManager.GetString("JoystickIsNotAvailable", resourceCulture);
             }
         }
         
@@ -904,6 +1068,15 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Object.
+        /// </summary>
+        internal static string Object {
+            get {
+                return ResourceManager.GetString("Object", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Object below the horizon -- cannot do a meridian flip.
         /// </summary>
         internal static string ObjectBelowHorizon {
@@ -963,6 +1136,15 @@ namespace ASCOM.GeminiTelescope.Properties {
         internal static string ObservationLog {
             get {
                 return ResourceManager.GetString("ObservationLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operation.
+        /// </summary>
+        internal static string Operation {
+            get {
+                return ResourceManager.GetString("Operation", resourceCulture);
             }
         }
         
@@ -1076,6 +1258,15 @@ namespace ASCOM.GeminiTelescope.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to Please select one!.
+        /// </summary>
+        internal static string PleaseSelectOne {
+            get {
+                return ResourceManager.GetString("PleaseSelectOne", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap plus {
             get {
                 object obj = ResourceManager.GetObject("plus", resourceCulture);
@@ -1102,11 +1293,47 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Query.
+        /// </summary>
+        internal static string Query {
+            get {
+                return ResourceManager.GetString("Query", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RA.
+        /// </summary>
+        internal static string RA {
+            get {
+                return ResourceManager.GetString("RA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to reboot Gemini controller?.
         /// </summary>
         internal static string RebootController {
             get {
                 return ResourceManager.GetString("RebootController", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reboot Gemini.
+        /// </summary>
+        internal static string RebootGemini {
+            get {
+                return ResourceManager.GetString("RebootGemini", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Retrieve Gemini Observation Log.
+        /// </summary>
+        internal static string RetrieveGeminiObservationLog {
+            get {
+                return ResourceManager.GetString("RetrieveGeminiObservationLog", resourceCulture);
             }
         }
         
@@ -1138,11 +1365,32 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The new safety limits are more aggressive than the Gemini default.
+        ///
+        ///Incorrect safety limits can result in hardware damage.
+        ///Are you sure you want to use these new values?.
+        /// </summary>
+        internal static string SafetyLimitsAggressive {
+            get {
+                return ResourceManager.GetString("SafetyLimitsAggressive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Safety Limit set to current position.
         /// </summary>
         internal static string SafetyLimitSet {
             get {
                 return ResourceManager.GetString("SafetyLimitSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Safety Limit Warning.
+        /// </summary>
+        internal static string SafetyLimitWarning {
+            get {
+                return ResourceManager.GetString("SafetyLimitWarning", resourceCulture);
             }
         }
         
@@ -1215,6 +1463,15 @@ namespace ASCOM.GeminiTelescope.Properties {
         internal static string SetSlowFocuser {
             get {
                 return ResourceManager.GetString("SetSlowFocuser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [settings from Gemini].
+        /// </summary>
+        internal static string SettingsFromGemini {
+            get {
+                return ResourceManager.GetString("SettingsFromGemini", resourceCulture);
             }
         }
         
@@ -1361,6 +1618,15 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Stop.
+        /// </summary>
+        internal static string Stop {
+            get {
+                return ResourceManager.GetString("Stop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Stop slew.
         /// </summary>
         internal static string StopSlew {
@@ -1418,6 +1684,15 @@ namespace ASCOM.GeminiTelescope.Properties {
             get {
                 object obj = ResourceManager.GetObject("Ticked", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time.
+        /// </summary>
+        internal static string Time {
+            get {
+                return ResourceManager.GetString("Time", resourceCulture);
             }
         }
         

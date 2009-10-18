@@ -29,7 +29,7 @@ namespace ASCOM.GeminiTelescope
 {
     public partial class frmAdvancedSettings : Form
     {
-        const string Cap = "Advanced Gemini Settings";
+        string Cap = Resources.AdvancedSettings;
 
         public frmAdvancedSettings()
         {
@@ -50,7 +50,7 @@ namespace ASCOM.GeminiTelescope
 
 
             if (props.SyncWithGemini(false))    // read all the properties from the mount
-                this.Text = Cap + " [settings from Gemini]";
+                this.Text = Cap + " " + Resources.SettingsFromGemini;
 
             this.geminiPropertiesBindingSource.Add(props);
 
@@ -160,7 +160,7 @@ namespace ASCOM.GeminiTelescope
                     props.Serialize(false, null);   // start with default profile settings
                     props.SyncWithGemini(false);   // read all the properties from the mount
                     geminiPropertiesBindingSource.ResetBindings(false);
-                    this.Text = Cap + " [settings from Gemini]";
+                    this.Text = Cap + " " + Resources.SettingsFromGemini;
                 }
                 catch (Exception ex)
                 {
@@ -243,7 +243,7 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
-                DialogResult res = MessageBox.Show(Resources.RebootController, "Reboot Gemini", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Hand);
+                DialogResult res = MessageBox.Show(Resources.RebootController, Resources.RebootGemini, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Hand);
                 if (res == DialogResult.Yes)
                 {
                     GeminiHardware.DoCommandResult(">65535:", GeminiHardware.MAX_TIMEOUT, false);
@@ -418,9 +418,9 @@ namespace ASCOM.GeminiTelescope
             GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
             if (props.Serialize(true, null))    // save to default profile
             {
-                MessageBox.Show("Default profile was saved as 'GeminiDefaultProfile.gp'", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(Resources.DefaultProfileSavedAsGeminiDefaultProfile, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Information);
             } else
-                MessageBox.Show("Default profile was not saved!", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);            
+                MessageBox.Show(Resources.DefaultProfileNotSaved, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);            
         }
 
         private void pbFromGemini_Click(object sender, EventArgs e)
@@ -438,7 +438,7 @@ namespace ASCOM.GeminiTelescope
                     props.Serialize(false, null);   //read default profile
                     props.SyncWithGemini(false);   // read all the properties from the mount
                     geminiPropertiesBindingSource.ResetBindings(false);
-                    this.Text = Cap + " [settings from Gemini]";
+                    this.Text = Cap + " " + Resources.SettingsFromGemini;
                 }
                 catch (Exception ex)
                 {

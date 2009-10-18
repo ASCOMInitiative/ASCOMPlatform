@@ -163,7 +163,7 @@ namespace ASCOM.GeminiTelescope
                         tmrJoystick.Start();
                     }
                     else
-                        SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME, "Joystick is not available\r\n" + GeminiHardware.JoystickName, ToolTipIcon.Warning);
+                        SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME, Resources.JoystickIsNotAvailable + "\r\n" + GeminiHardware.JoystickName, ToolTipIcon.Warning);
                 }
             }
         }
@@ -608,9 +608,9 @@ namespace ASCOM.GeminiTelescope
                 labelPARK.ForeColor = (GeminiHardware.AtPark ? m_ActiveForeColor : m_InactiveForeColor);
 
                 if (GeminiHardware.AtPark)
-                    labelPARK.Text = "PARK";
+                    labelPARK.Text = Resources.dispPARK;
                 else
-                    labelPARK.Text = GeminiHardware.SideOfPier == "E" ? "EAST" : "WEST";
+                    labelPARK.Text = GeminiHardware.SideOfPier == "E" ? Resources.dispEAST : Resources.dispWEST;
 
                 string prev_label = labelSlew.Text;
 
@@ -1123,7 +1123,7 @@ namespace ASCOM.GeminiTelescope
             m_ExitFormMenuCall = false;
             if (GeminiHardware.Connected && GeminiHardware.Clients > 0)
             {
-                DialogResult res = MessageBox.Show("Gemini connection" + (GeminiHardware.Clients > 1 ? "s are" : " is") + " still active. " + Resources.GeminiConnectionAlive1,
+                DialogResult res = MessageBox.Show(Resources.discWarning1 + (GeminiHardware.Clients > 1 ? Resources.discWarning2 : " " + Resources.discWarning3) + " " + Resources.discWarning4 + Resources.GeminiConnectionAlive1,
                     SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (res != DialogResult.Yes)
                 {

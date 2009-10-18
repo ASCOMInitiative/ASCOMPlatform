@@ -583,4 +583,99 @@ Are you sure you want to do this?</value>
   <data name="Unpark" xml:space="preserve">
     <value>Unpark Gemini</value>
   </data>
+  <data name="CannotSetParkCoordinates" xml:space="preserve">
+    <value>Cannot set park coordinates:</value>
+  </data>
+  <data name="DEC" xml:space="preserve">
+    <value>DEC</value>
+  </data>
+  <data name="DefaultProfileNotSaved" xml:space="preserve">
+    <value>Default profile was not saved!</value>
+  </data>
+  <data name="DefaultProfileSavedAsGeminiDefaultProfile" xml:space="preserve">
+    <value>Default profile was saved as 'GeminiDefaultProfile.gp'</value>
+  </data>
+  <data name="discWarning1" xml:space="preserve">
+    <value>Gemini connection</value>
+  </data>
+  <data name="discWarning2" xml:space="preserve">
+    <value>s are</value>
+  </data>
+  <data name="discWarning3" xml:space="preserve">
+    <value>is</value>
+  </data>
+  <data name="discWarning4" xml:space="preserve">
+    <value>still active.</value>
+  </data>
+  <data name="dispEAST" xml:space="preserve">
+    <value>EAST</value>
+  </data>
+  <data name="dispPARK" xml:space="preserve">
+    <value>PARK</value>
+  </data>
+  <data name="dispWEST" xml:space="preserve">
+    <value>WEST</value>
+  </data>
+  <data name="ErrorReadingFile" xml:space="preserve">
+    <value>Error reading file</value>
+  </data>
+  <data name="ErrorWritingFile" xml:space="preserve">
+    <value>Error writing file:</value>
+  </data>
+  <data name="GeminiG11DefaultSafetyLimitWarning" xml:space="preserve">
+    <value>Please note that Gemini default East limit of 114° is too aggressive for most G-11.
+
+Would you like to set the East limit to a more conservative 98° instead?</value>
+  </data>
+  <data name="GotoFailed" xml:space="preserve">
+    <value>Goto failed:</value>
+  </data>
+  <data name="InvalidAltValue" xml:space="preserve">
+    <value>Invalid Alt value</value>
+  </data>
+  <data name="InvalidAzValue" xml:space="preserve">
+    <value>Invalid Az value</value>
+  </data>
+  <data name="JoystickIsNotAvailable" xml:space="preserve">
+    <value>Joystick is not available</value>
+  </data>
+  <data name="Object" xml:space="preserve">
+    <value>Object</value>
+  </data>
+  <data name="Operation" xml:space="preserve">
+    <value>Operation</value>
+  </data>
+  <data name="PleaseSelectOne" xml:space="preserve">
+    <value>Please select one!</value>
+  </data>
+  <data name="Query" xml:space="preserve">
+    <value>Query</value>
+  </data>
+  <data name="RA" xml:space="preserve">
+    <value>RA</value>
+  </data>
+  <data name="RebootGemini" xml:space="preserve">
+    <value>Reboot Gemini</value>
+  </data>
+  <data name="RetrieveGeminiObservationLog" xml:space="preserve">
+    <value>Retrieve Gemini Observation Log</value>
+  </data>
+  <data name="SafetyLimitsAggressive" xml:space="preserve">
+    <value>The new safety limits are more aggressive than the Gemini default.
+
+Incorrect safety limits can result in hardware damage.
+Are you sure you want to use these new values?</value>
+  </data>
+  <data name="SafetyLimitWarning" xml:space="preserve">
+    <value>Safety Limit Warning</value>
+  </data>
+  <data name="SettingsFromGemini" xml:space="preserve">
+    <value>[settings from Gemini]</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Time</value>
+  </data>
 </root>

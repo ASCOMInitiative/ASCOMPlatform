@@ -21,6 +21,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using ASCOM.GeminiTelescope.Properties;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -28,7 +29,7 @@ namespace ASCOM.GeminiTelescope
     {
         SerializableDictionary<string, object> mBkupProfile;
         const int LosmandyEastDefault = 114;
-        const int G11EastConservative = 99;    //safer value for G11
+        const int G11EastConservative = 98;    //safer value for G11
         const int LosmandyWestDefault = 123;
         const int MI250EastDefault = 92;
         const int MI250WestDefault = 95;
@@ -82,8 +83,8 @@ namespace ASCOM.GeminiTelescope
                     (props.MountTypeSetting == "MI-250" && 
                         (numericUpDown1.Value > MI250EastDefault || numericUpDown2.Value > MI250WestDefault)))
                 {
-                    DialogResult res = MessageBox.Show("The new safety limits are more aggressive than the Gemini default.\r\n\r\nIncorrect safety limits can result in hardware damage.\r\nAre you sure you want to use these new values?",
-                        "Safety Limit Warning", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                    DialogResult res = MessageBox.Show(Resources.SafetyLimitsAggressive,
+                        Resources.SafetyLimitWarning, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                     if (res != DialogResult.Yes)
                     {
                         DialogResult = DialogResult.None;
@@ -124,8 +125,8 @@ namespace ASCOM.GeminiTelescope
 
             if (props.MountTypeSetting == "G-11")
             {
-                DialogResult res = MessageBox.Show("Please note that Gemini default East limit of 114° is too aggressive for most G-11.\r\n\r\nWould you like to set the East limit to a more conservative 99° instead?",
-                    "Safety Limit Warning", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                DialogResult res = MessageBox.Show(Resources.GeminiG11DefaultSafetyLimitWarning,
+                    Resources.SafetyLimitWarning, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                 if (res == DialogResult.Yes)
                 {
                     numericUpDown1.Value = G11EastConservative;
