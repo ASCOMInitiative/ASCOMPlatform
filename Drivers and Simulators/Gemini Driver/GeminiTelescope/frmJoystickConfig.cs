@@ -249,6 +249,9 @@ namespace ASCOM.GeminiTelescope
                     GeminiHardware.JoystickAxisDEC = cmbAxisDEC.SelectedIndex;
                 }
 
+                GeminiHardware.JoystickFlipRA = ckFlipRA.Checked;
+                GeminiHardware.JoystickFlipDEC = ckFlipDec.Checked;
+
                 try
                 {
                     GeminiHardware.JoystickSensitivity = (double)txtSensitivity.Value;
@@ -274,6 +277,9 @@ namespace ASCOM.GeminiTelescope
 
                 if (cmbAxisDEC.Items.Count > GeminiHardware.JoystickAxisDEC)
                     cmbAxisDEC.SelectedIndex = GeminiHardware.JoystickAxisDEC;
+
+                ckFlipRA.Checked = GeminiHardware.JoystickFlipRA;
+                ckFlipDec.Checked = GeminiHardware.JoystickFlipDEC;
 
                 try
                 {

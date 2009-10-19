@@ -176,7 +176,7 @@ namespace ASCOM.GeminiTelescope
         {
             string prop = get_Prop(s);
             double val;
-            if (!double.TryParse(prop, out val)) return 0;
+            if (!double.TryParse(prop, System.Globalization.NumberStyles.Float, GeminiHardware.m_GeminiCulture, out val)) return 0;
             return val;
         }
 
@@ -318,7 +318,7 @@ namespace ASCOM.GeminiTelescope
             {
                 string prop = get_PropAsync("<150:");
                 double rate;
-                if (!double.TryParse(prop, out rate)) return null;
+                if (!double.TryParse(prop, System.Globalization.NumberStyles.Float, GeminiHardware.m_GeminiCulture, out rate)) return null;
                 return rate.ToString("0.0") + "x";
             }
         }
@@ -492,10 +492,13 @@ namespace ASCOM.GeminiTelescope
 
         public string WestSafetyLimit
         {
-            get { return (string)get_Profile("WestSafetyLimit", "Western Safety Limit"); }
+            get {
+                double deg = (double)get_Profile("WestSafetyLimitDegrees", 0);
+                return string.Format("Western Safety Limit: {0:0}°{1:00}", Math.Truncate(deg), Math.Truncate((deg - Math.Truncate(deg)) * 60));            
+            }
             set { mProfile["WestSafetyLimit"] = value; }
         }
-
+/*
         private string WestSafetyLimit_Gemini
         {
             get
@@ -514,14 +517,17 @@ namespace ASCOM.GeminiTelescope
                 return string.Format("Western Safety Limit: {0:0}°{1:00}", d, m);
             }
         }
-
+*/
 
         public string EastSafetyLimit
         {
-            get { return (string)get_Profile("EastSafetyLimit", "Eastern Safety Limit"); }
+            get {
+                double deg = (double)get_Profile("EastSafetyLimitDegrees", 0);
+                return string.Format("Eastern Safety Limit: {0:0}°{1:00}", Math.Truncate(deg), Math.Truncate((deg - Math.Truncate(deg)) * 60));
+            }
             set { mProfile["EastSafetyLimit"] = value; }
         }
-
+/*
         private string EastSafetyLimit_Gemini
         {
             get
@@ -539,7 +545,7 @@ namespace ASCOM.GeminiTelescope
                 return string.Format("Eastern Safety Limit: {0:0}°{1:00}", d, m);
             }
         }
-
+ */
 
         public double WestSafetyLimitDegrees
         {
@@ -843,7 +849,7 @@ namespace ASCOM.GeminiTelescope
         private double GuideSpeed_Gemini
         {
             get { return get_double_Prop("<150:"); }
-            set { GeminiHardware.DoCommandResult(">150:" + value.ToString("0.0"), GeminiHardware.MAX_TIMEOUT, false); }
+            set { GeminiHardware.DoCommandResult(">150:" + value.ToString("0.0",GeminiHardware.m_GeminiCulture), GeminiHardware.MAX_TIMEOUT, false); }
         }
 
         public int SlewSettleTime

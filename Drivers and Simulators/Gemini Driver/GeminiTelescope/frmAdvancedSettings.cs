@@ -308,6 +308,7 @@ namespace ASCOM.GeminiTelescope
         {
             frmSafetyLimits dlg = new frmSafetyLimits((GeminiProperties)this.geminiPropertiesBindingSource[0]);
             DialogResult res = dlg.ShowDialog(this);
+            if (res == DialogResult.OK) this.geminiPropertiesBindingSource.ResetBindings(false);
         }
 
         private void g11DefaultsToolStripMenuItem_Click(object sender, EventArgs e)

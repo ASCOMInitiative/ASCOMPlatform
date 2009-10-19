@@ -79,6 +79,11 @@ namespace ASCOM.GeminiTelescope
         public static int MAXIMUM_ERROR_INTERVAL = 20000;   // in msecs. 
         public static int RECOVER_SLEEP = 3000;         // how long to sleep while waiting to recover from errors
 
+        // slew of 180 degrees at 400x sidereal will take 108 seconds
+        // since Gemini is often unresponsive during a slew, 110 seconds is the longest
+        // interval we'll wait for a response before giving up and disconnecting:
+        public static int MAXIMUM_DISCONNECT_TIME = 110; // (seconds)
+
         public static int DAYS_TO_KEEP_LOGS = 10;     // how many days to keep logs: older logs will be deleted on start-up
 
         private SharedResources() { }							// Prevent creation of instances
