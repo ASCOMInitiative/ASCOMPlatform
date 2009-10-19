@@ -1273,7 +1273,8 @@ namespace ASCOM.GeminiTelescope
                 // save PEC table if requested:
                 if (write)
                 {
-                    PECTable_Gemini = PECTable;
+                    if (PECTable!=null)
+                        PECTable_Gemini = PECTable;
                 }
                 else
                 {

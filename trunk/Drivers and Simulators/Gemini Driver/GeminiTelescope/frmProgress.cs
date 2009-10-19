@@ -19,12 +19,14 @@ namespace ASCOM.GeminiTelescope
 
         private double m_Pos = 0;
 
+        public bool Exponential { get; set; }
+
         public frmProgress()
         {
             InitializeComponent();
         }
 
-        public static void Initialize(int start, int range, string title, CancelDelegate cancel)
+        public static void Initialize(int start, int range, string title, CancelDelegate cancel, bool exponential)
         {
             m_Form = new frmProgress();
             m_Form.progressBar1.Minimum = start;
@@ -34,8 +36,13 @@ namespace ASCOM.GeminiTelescope
             m_Form.label2.Text = title;
             if (cancel == null) m_Form.button1.Enabled = false;
             m_Form.m_CancelDelegate = cancel;
+            m_Form.Exponential = exponential;
         }
 
+        public static void Initialize(int start, int range, string title, CancelDelegate cancel)
+        {
+            Initialize(start, range, title, cancel, false);
+        }
 
         public static void ShowProgress(Form owner)
         {
@@ -68,13 +75,16 @@ namespace ASCOM.GeminiTelescope
 
                 int newpos = (int)(m_Form.m_Pos+0.5);
 
+                if (m_Form.Exponential)
+                {
+                    newpos = (int)(Math.Log10((newpos - m_Form.progressBar1.Minimum + 1)) / 3.0 * (m_Form.progressBar1.Maximum - m_Form.progressBar1.Minimum) + m_Form.progressBar1.Minimum + 0.5);
+                }
                 if (newpos < m_Form.progressBar1.Minimum) newpos = m_Form.progressBar1.Minimum;
                 if (newpos > m_Form.progressBar1.Maximum) newpos = m_Form.progressBar1.Maximum;
+
                 m_Form.progressBar1.Value = newpos;
                 m_Form.label1.Text = (100.0 * ((double)(newpos - m_Form.progressBar1.Minimum)) / ((double)(m_Form.progressBar1.Maximum - m_Form.progressBar1.Minimum))).ToString("0") + "%";
                 if (!string.IsNullOrEmpty(title)) m_Form.label2.Text = title;
-//                m_Form.progressBar1.Update();
-//                m_Form.label2.Update();
                 Application.DoEvents();
             }
         }

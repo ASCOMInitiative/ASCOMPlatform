@@ -1792,12 +1792,10 @@ namespace ASCOM.GeminiTelescope
                 System.Collections.Generic.List<string> l = new System.Collections.Generic.List<string>();
                 DoCommandResult(":OS", MAX_TIMEOUT, false);
                 int cnt = 0;
-                int incr = 5;
+                int incr = 1;
                 do
                 {
                     cnt += incr;
-                    if (incr < 0 && cnt < 70) incr = 5;
-                    else if (cnt >= 100) incr = -5;
 
                     frmProgress.Update(incr, null);
                     string line = DoCommandResult(":OR", MAX_TIMEOUT, false);
