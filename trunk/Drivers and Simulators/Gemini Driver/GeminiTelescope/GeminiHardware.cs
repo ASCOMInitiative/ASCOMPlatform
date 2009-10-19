@@ -159,6 +159,9 @@ namespace ASCOM.GeminiTelescope
         public static ASCOM.Utilities.Util m_Util;
         public static ASCOM.Astrometry.Transform.Transform  m_Transform;
 
+        // culture used to store ASCOM profile data:
+        public static System.Globalization.CultureInfo m_GeminiCulture = new System.Globalization.CultureInfo("en-US");
+
         private static Queue m_CommandQueue; //Queue used for messages to the gemini
         private static System.Threading.Thread m_BackgroundWorker; // Thread to run for communications
 
@@ -247,7 +250,7 @@ namespace ASCOM.GeminiTelescope
             get { return GeminiHardware.m_FocalLength; }
             set {
                 m_Profile.DeviceType = "Telescope";
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "FocalLength", value.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "FocalLength", value.ToString(GeminiHardware.m_GeminiCulture));
                 GeminiHardware.m_FocalLength = value; 
             }
         }
@@ -259,7 +262,7 @@ namespace ASCOM.GeminiTelescope
             get { return GeminiHardware.m_ApertureArea; }
             set {
                 m_Profile.DeviceType = "Telescope";
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureArea", value.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureArea", value.ToString(GeminiHardware.m_GeminiCulture));
                 GeminiHardware.m_ApertureArea = value;
             }
         }
@@ -272,7 +275,7 @@ namespace ASCOM.GeminiTelescope
             get { return GeminiHardware.m_ApertureDiameter; }
             set {
                 m_Profile.DeviceType = "Telescope";
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureDiameter", value.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureDiameter", value.ToString(GeminiHardware.m_GeminiCulture));
                 GeminiHardware.m_ApertureDiameter = value;
             }
         }
@@ -397,8 +400,31 @@ namespace ASCOM.GeminiTelescope
             get { return GeminiHardware.m_JoystickSensitivity; }
             set {
                 m_Profile.DeviceType = "Telescope";
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickSensitivity", value.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickSensitivity", value.ToString(GeminiHardware.m_GeminiCulture));
                 GeminiHardware.m_JoystickSensitivity = value;
+            }
+        }
+
+        private static bool m_JoystickFlipRA = false;
+
+        public static bool JoystickFlipRA
+        {
+            get { return GeminiHardware.m_JoystickFlipRA; }
+            set {
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickFlipRA", value.ToString());
+                GeminiHardware.m_JoystickFlipRA = value;
+            }
+        }
+        private static bool m_JoystickFlipDEC = false;
+
+        public static bool JoystickFlipDEC
+        {
+            get { return GeminiHardware.m_JoystickFlipDEC; }
+            set {
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickFlipDEC", value.ToString());
+                GeminiHardware.m_JoystickFlipDEC = value;
             }
         }
 
@@ -411,7 +437,7 @@ namespace ASCOM.GeminiTelescope
             set { 
                 GeminiHardware.m_ParkAlt = value;
                 m_Profile.DeviceType = "Telescope";
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ParkAlt", value.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ParkAlt", value.ToString(GeminiHardware.m_GeminiCulture));
             }
         }
         private static double m_ParkAz;
@@ -422,7 +448,7 @@ namespace ASCOM.GeminiTelescope
             set { 
                 GeminiHardware.m_ParkAz = value;
                 m_Profile.DeviceType = "Telescope";
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ParkAz", value.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ParkAz", value.ToString(GeminiHardware.m_GeminiCulture));
             }
         }
 
@@ -669,7 +695,7 @@ namespace ASCOM.GeminiTelescope
             tmrReadTimeout.Elapsed += new ElapsedEventHandler(tmrReadTimeout_Elapsed);
 
             GetProfileSettings();
-            Trace.Enter("GeminiHardware", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version, DateTime.Now.ToString());
+            Trace.Enter("GeminiHardware", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version, DateTime.Now.ToString(GeminiHardware.m_GeminiCulture));
 
             m_SerialPort.DataReceived += new SerialDataReceivedEventHandler(m_SerialPort_DataReceived);
             m_DataReceived = new System.Threading.AutoResetEvent(false);
@@ -720,7 +746,7 @@ namespace ASCOM.GeminiTelescope
                 m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "BootMode", "0");
 
             }
-
+                
             //Load up the values from saved
             if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "AdditionalAlign", ""), out m_AdditionalAlign))
                 m_AdditionalAlign = false;
@@ -774,25 +800,25 @@ namespace ASCOM.GeminiTelescope
 
             Trace.Info(2, "Comm Settings", m_ComPort, m_BaudRate, m_DataBits, m_Parity, m_StopBits);
 
-            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Latitude", ""), out m_Latitude))
+            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Latitude", ""), System.Globalization.NumberStyles.Float, m_GeminiCulture, out m_Latitude))
                 m_Latitude = 0.0;
 
-            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Longitude", ""), out m_Longitude))
+            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Longitude", ""), System.Globalization.NumberStyles.Float, m_GeminiCulture, out m_Longitude))
                 m_Longitude = 0.0;
 
-            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Elevation", ""), out m_Elevation))
+            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Elevation", ""), System.Globalization.NumberStyles.Float, m_GeminiCulture, out m_Elevation))
                 m_Elevation = 0.0;
 
             if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "UTCOffset", ""), out m_UTCOffset))
                 m_UTCOffset = -(int)(TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).TotalHours);
 
-            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureArea", ""), out m_ApertureArea))
+            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureArea", ""), System.Globalization.NumberStyles.Float, m_GeminiCulture, out m_ApertureArea))
                 m_ApertureArea = 0.0;
 
-            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureDiameter", ""), out m_ApertureDiameter))
+            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureDiameter", ""), System.Globalization.NumberStyles.Float, m_GeminiCulture, out m_ApertureDiameter))
                 m_ApertureDiameter = 0.0;
 
-            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "FocalLength", ""), out m_FocalLength))
+            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "FocalLength", ""), System.Globalization.NumberStyles.Float, m_GeminiCulture, out m_FocalLength))
                 m_FocalLength = 0.0;
 
 
@@ -822,10 +848,10 @@ namespace ASCOM.GeminiTelescope
 
             Trace.Info(2, "Pass Through Port", m_PassThroughComPort, m_PassThroughBaudRate, m_PassThroughPortEnabled);
 
-            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ParkAlt", ""), out m_ParkAlt))
+            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ParkAlt", ""), System.Globalization.NumberStyles.Float, m_GeminiCulture, out m_ParkAlt))
                 m_ParkAlt= 0.0;
 
-            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ParkAz", ""), out m_ParkAz))
+            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ParkAz", ""), System.Globalization.NumberStyles.Float, m_GeminiCulture, out m_ParkAz))
                 m_ParkAz = 0.0;
 
             int prk = 0;
@@ -848,10 +874,16 @@ namespace ASCOM.GeminiTelescope
             if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickAxisDEC", ""), out m_JoystickAxisDEC))
                 m_JoystickAxisDEC = 1;
 
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickFlipRA", ""), out m_JoystickFlipRA))
+                m_JoystickFlipRA = false;
+
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickFlipDEC", ""), out m_JoystickFlipDEC))
+                m_JoystickFlipDEC = false;
+
             if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickIsAnalog", ""), out m_JoystickIsAnalog))
                 m_JoystickIsAnalog = true;
 
-            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickSensitivity", ""), out m_JoystickSensitivity))
+            if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickSensitivity", ""), System.Globalization.NumberStyles.Float, m_GeminiCulture, out m_JoystickSensitivity))
                 m_JoystickSensitivity = 100;
 
             m_SpeechVoice = m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "SpeechVoice", "");
@@ -1185,7 +1217,7 @@ namespace ASCOM.GeminiTelescope
             {
                 m_Profile.DeviceType = "Telescope";
                 m_Elevation = value;
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Elevation", value.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Elevation", value.ToString(GeminiHardware.m_GeminiCulture));
             }
         }
         /// <summary>
@@ -1201,7 +1233,7 @@ namespace ASCOM.GeminiTelescope
                 if (value < -90 || value > 90) throw new ASCOM.InvalidValueException("Latitude", value.ToString(), "-90..90");
                 m_Profile.DeviceType = "Telescope";
                 m_Latitude = value;
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Latitude", value.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Latitude", value.ToString(GeminiHardware.m_GeminiCulture));
                 m_SouthernHemisphere = (m_Latitude < 0);
                 m_Transform.SiteLatitude = m_Latitude;
                 Trace.Exit("Latitude", value);
@@ -1220,7 +1252,7 @@ namespace ASCOM.GeminiTelescope
                 if (value < -180 || value > 180) throw new ASCOM.InvalidValueException("Longitude", value.ToString(), "-180..180");
                 m_Profile.DeviceType = "Telescope";
                 m_Longitude = value;
-                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Longitude", value.ToString());
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Longitude", value.ToString(GeminiHardware.m_GeminiCulture));
                 m_Transform.SiteLongitude = m_Longitude;
                 Trace.Enter("Longitude", value);
 
@@ -2997,11 +3029,11 @@ namespace ASCOM.GeminiTelescope
 
             if (!Connected || m_BackgroundWorker == null || !m_BackgroundWorker.IsAlive) return;    //not ready yet
 
-            if (Connected && DateTime.Now - m_LastDataTick  > TimeSpan.FromMilliseconds(SharedResources.MAXIMUM_ERROR_INTERVAL))
+            if (Connected && DateTime.Now - m_LastDataTick  > TimeSpan.FromSeconds(SharedResources.MAXIMUM_DISCONNECT_TIME))
             {
-                string msg = "No response from Gemini for " + (SharedResources.MAXIMUM_ERROR_INTERVAL/1000 ).ToString() + " seconds, terminating connection";
-                Trace.Error(msg);
-                GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, msg);
+                string msg = "No response for " + (SharedResources.MAXIMUM_DISCONNECT_TIME).ToString() + " secs";
+                Trace.Error(msg, "Teminating connection!");
+                GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, msg + " Terminating connection!");
                 if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, Resources.TerminatingConnection );
                 while (m_Connected) Disconnect();
                 return;
@@ -3106,7 +3138,8 @@ namespace ASCOM.GeminiTelescope
                 }
 
 //                    System.Threading.Thread.Sleep(0);  //[pk] should instead wait on a waithandle set by serialdatareceived event...
-                m_DataReceived.WaitOne(250);
+                try { m_DataReceived.WaitOne(250); }
+                catch { }
             }
         }
 
@@ -3144,7 +3177,8 @@ namespace ASCOM.GeminiTelescope
                     throw new TimeoutException("ReadNumber");
                 }
 //                    System.Threading.Thread.Sleep(0);   //[pk] should instead wait on a waithandle set by serialdatareceived event...
-                m_DataReceived.WaitOne(250);
+                try { m_DataReceived.WaitOne(250); }
+                catch { }
             }
         }
 

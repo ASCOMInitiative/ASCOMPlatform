@@ -211,8 +211,10 @@ namespace ASCOM.GeminiTelescope
 
                 List<string> cmds = new List<string>();
 
-                if (this.CheckBoxFlipRa.Checked) y = -y;
-                if (this.CheckBoxFlipDec.Checked) x = -x;
+                if (this.CheckBoxFlipRa.Checked) x = -x;
+                if (this.CheckBoxFlipDec.Checked) y = -y;
+                if (GeminiHardware.JoystickFlipRA) x = -x;
+                if (GeminiHardware.JoystickFlipDEC) y = -y;
 
                 string dir, rate;
 

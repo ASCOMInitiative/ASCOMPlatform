@@ -46,14 +46,16 @@
             this.ButtonNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Assignment = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtSensitivity = new System.Windows.Forms.NumericUpDown();
+            this.label4 = new System.Windows.Forms.Label();
             this.rbFixed = new System.Windows.Forms.RadioButton();
             this.rbAnalog = new System.Windows.Forms.RadioButton();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.txtSensitivity = new System.Windows.Forms.NumericUpDown();
+            this.ckFlipRA = new System.Windows.Forms.CheckBox();
+            this.ckFlipDec = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -83,6 +85,8 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.ckFlipDec);
+            this.groupBox3.Controls.Add(this.ckFlipRA);
             this.groupBox3.Controls.Add(this.cmbAxisDEC);
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.cmbAxisRA);
@@ -105,13 +109,13 @@
             this.cmbAxisDEC.FormattingEnabled = true;
             this.cmbAxisDEC.Location = new System.Drawing.Point(237, 47);
             this.cmbAxisDEC.Name = "cmbAxisDEC";
-            this.cmbAxisDEC.Size = new System.Drawing.Size(125, 21);
+            this.cmbAxisDEC.Size = new System.Drawing.Size(92, 21);
             this.cmbAxisDEC.TabIndex = 3;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 50);
+            this.label3.Location = new System.Drawing.Point(10, 50);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(219, 13);
             this.label3.TabIndex = 2;
@@ -125,7 +129,7 @@
             this.cmbAxisRA.FormattingEnabled = true;
             this.cmbAxisRA.Location = new System.Drawing.Point(237, 21);
             this.cmbAxisRA.Name = "cmbAxisRA";
-            this.cmbAxisRA.Size = new System.Drawing.Size(125, 21);
+            this.cmbAxisRA.Size = new System.Drawing.Size(92, 21);
             this.cmbAxisRA.TabIndex = 1;
             // 
             // label2
@@ -240,6 +244,39 @@
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Text = "Joystick Mode";
             // 
+            // txtSensitivity
+            // 
+            this.txtSensitivity.DecimalPlaces = 2;
+            this.txtSensitivity.Location = new System.Drawing.Point(237, 45);
+            this.txtSensitivity.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.txtSensitivity.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.txtSensitivity.Name = "txtSensitivity";
+            this.txtSensitivity.Size = new System.Drawing.Size(76, 20);
+            this.txtSensitivity.TabIndex = 3;
+            this.txtSensitivity.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txtSensitivity.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(40, 47);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(185, 13);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "Sensitivity Adjustment (0.1% to 200%):";
+            // 
             // rbFixed
             // 
             this.rbFixed.AutoSize = true;
@@ -310,38 +347,27 @@
             this.label1.TabIndex = 13;
             this.label1.Text = "HINT: Press a button on the joystick to see it highlited in the list above.";
             // 
-            // label4
+            // ckFlipRA
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(40, 47);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(185, 13);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "Sensitivity Adjustment (0.1% to 200%):";
+            this.ckFlipRA.AutoSize = true;
+            this.ckFlipRA.Location = new System.Drawing.Point(336, 24);
+            this.ckFlipRA.Name = "ckFlipRA";
+            this.ckFlipRA.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.ckFlipRA.Size = new System.Drawing.Size(42, 17);
+            this.ckFlipRA.TabIndex = 4;
+            this.ckFlipRA.Text = "Flip";
+            this.ckFlipRA.UseVisualStyleBackColor = true;
             // 
-            // txtSensitivity
+            // ckFlipDec
             // 
-            this.txtSensitivity.DecimalPlaces = 2;
-            this.txtSensitivity.Location = new System.Drawing.Point(237, 45);
-            this.txtSensitivity.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.txtSensitivity.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.txtSensitivity.Name = "txtSensitivity";
-            this.txtSensitivity.Size = new System.Drawing.Size(76, 20);
-            this.txtSensitivity.TabIndex = 3;
-            this.txtSensitivity.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.txtSensitivity.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
+            this.ckFlipDec.AutoSize = true;
+            this.ckFlipDec.Location = new System.Drawing.Point(336, 50);
+            this.ckFlipDec.Name = "ckFlipDec";
+            this.ckFlipDec.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.ckFlipDec.Size = new System.Drawing.Size(42, 17);
+            this.ckFlipDec.TabIndex = 5;
+            this.ckFlipDec.Text = "Flip";
+            this.ckFlipDec.UseVisualStyleBackColor = true;
             // 
             // frmJoystickConfig
             // 
@@ -399,6 +425,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown txtSensitivity;
+        private System.Windows.Forms.CheckBox ckFlipDec;
+        private System.Windows.Forms.CheckBox ckFlipRA;
 
 
     }

@@ -321,16 +321,17 @@ namespace ASCOM.GeminiTelescope
             BindingSource bs = new BindingSource();
             bs.DataSource = qry;
             gvGeminiCatalog.DataSource = bs;
-            try
-            {
-                gvGeminiCatalog.Columns["RA"].DefaultCellStyle.Format = "0.00";
-                gvGeminiCatalog.Columns["DEC"].DefaultCellStyle.Format = "0.00";
-                gvGeminiCatalog.Columns["RA"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                gvGeminiCatalog.Columns["DEC"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                gvGeminiCatalog.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            if (gvGeminiCatalog.Columns.Count > 0)
+                try
+                {
+                    gvGeminiCatalog.Columns["RA"].DefaultCellStyle.Format = "0.00";
+                    gvGeminiCatalog.Columns["DEC"].DefaultCellStyle.Format = "0.00";
+                    gvGeminiCatalog.Columns["RA"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                    gvGeminiCatalog.Columns["DEC"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                    gvGeminiCatalog.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-            }
-            catch { }
+                }
+                catch { }
         }
 
         private void pbClear_Click(object sender, EventArgs e)
@@ -653,8 +654,8 @@ namespace ASCOM.GeminiTelescope
             try
             {
                 double ra,dec;
-                if (!double.TryParse(sp[1], out ra)) return false;
-                if (!double.TryParse(sp[2], out dec)) return false;
+                if (!double.TryParse(sp[1], System.Globalization.NumberStyles.Float, GeminiHardware.m_GeminiCulture, out ra)) return false;
+                if (!double.TryParse(sp[2], System.Globalization.NumberStyles.Float, GeminiHardware.m_GeminiCulture, out dec)) return false;
 
                 obj = new CatalogObject
                 {

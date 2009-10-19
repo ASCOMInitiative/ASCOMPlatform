@@ -684,7 +684,7 @@ namespace ASCOM.GeminiTelescope
                     double arcSecondsPerStep = 1296000.00 / (double.Parse(wormGearRatio) * double.Parse(spurGearRatio) * double.Parse(encoderResolution));
                     double stepsPerSecond = value / arcSecondsPerStep;
                     int divisor = (int)(22.8881835938 / stepsPerSecond + 0.5);
-                    if (divisor < -65535 || divisor > 65535) throw new InvalidValueException("DeclinationRate", value.ToString(), "Rate cannot be implementated");
+                    if (divisor < -65535 || divisor > 65535) throw new InvalidValueException("DeclinationRate", value.ToString(), "Rate is not implemented");
                     string cmd = ">412:" + divisor.ToString();
                     GeminiHardware.DoCommandResult(cmd, GeminiHardware.MAX_TIMEOUT, false);
                     GeminiHardware.Trace.Exit("IT:DeclinationRate.Set", value);
@@ -830,7 +830,7 @@ namespace ASCOM.GeminiTelescope
 
                 string result = GeminiHardware.DoCommandResult("<150:", GeminiHardware.MAX_TIMEOUT, false);
                 if (result == null) throw new TimeoutException("GuideRateRightAscention");
-                double res = double.Parse(result) * SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0;
+                double res = double.Parse(result, GeminiHardware.m_GeminiCulture) * SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0;
                 GeminiHardware.Trace.Exit("IT:GuideRateRightAscesion.Get", res);
                 return res;
             }
@@ -840,7 +840,7 @@ namespace ASCOM.GeminiTelescope
 
                 double val = value/(SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0) ;
                 if (val < 0.2 || val > 0.8) throw new InvalidValueException("GuideRate", value.ToString(),"");
-                string cmd = ">150:" + val.ToString("0.0");    //internationalization issues?
+                string cmd = ">150:" + val.ToString("0.0", GeminiHardware.m_GeminiCulture);    //internationalization issues?
                 GeminiHardware.DoCommandResult(cmd, GeminiHardware.MAX_TIMEOUT, false);
                 GeminiHardware.Trace.Exit("IT:GuideRateRightAscesion.Set", value);
             }
@@ -1088,7 +1088,7 @@ namespace ASCOM.GeminiTelescope
 
                     int rateDivisor = (int)((1500000 / preScaler) / stepsPerSecond + 0.5);
 
-                    if (rateDivisor < 256 || rateDivisor > 65535) throw new InvalidValueException("RightAscensionRate", value.ToString(), "Rate cannot be implementated");
+                    if (rateDivisor < 256 || rateDivisor > 65535) throw new InvalidValueException("RightAscensionRate", value.ToString(), "Rate cannot be implemented");
 
 
                     string cmd = ">411:" + rateDivisor.ToString();
