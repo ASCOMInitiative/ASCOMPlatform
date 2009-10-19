@@ -77,7 +77,7 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
-                frmProgress.Initialize(0, 100, Resources.RetrieveGeminiObservationLog, null);
+                frmProgress.Initialize(0, 100, Resources.RetrieveGeminiObservationLog, null, true);
                 frmProgress.ShowProgress(this);
 
                 List<string> allobs = GeminiHardware.ObservationLog;
