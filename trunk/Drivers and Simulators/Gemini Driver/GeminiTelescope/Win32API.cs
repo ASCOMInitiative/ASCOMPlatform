@@ -409,6 +409,11 @@ namespace ASCOM.GeminiTelescope
             m_JoyNbr = jnbr;
 
             if (Win32API.joyGetDevCaps(jnbr, ref m_JCAPS, 404) != 0) return false;
+
+            GeminiHardware.Trace.Info(2, "Joystick caps", 
+                "axes="+m_JCAPS.wNumAxes.ToString(), "buttons=" + m_JCAPS.wNumButtons.ToString(),
+                "caps=0x"+m_JCAPS.wCaps.ToString("X"));
+
             if (m_JCAPS.wNumAxes < axisRA )
             {
                 axisRA = 0;

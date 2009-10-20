@@ -84,6 +84,8 @@ namespace ASCOM.GeminiTelescope
         // interval we'll wait for a response before giving up and disconnecting:
         public static int MAXIMUM_DISCONNECT_TIME = 110; // (seconds)
 
+        public static int PULSEGUIDE_POLLING_INTERVAL = 20000; // how often to refresh mount parameters when doing pulse-guiding
+
         public static int DAYS_TO_KEEP_LOGS = 10;     // how many days to keep logs: older logs will be deleted on start-up
 
         private SharedResources() { }							// Prevent creation of instances

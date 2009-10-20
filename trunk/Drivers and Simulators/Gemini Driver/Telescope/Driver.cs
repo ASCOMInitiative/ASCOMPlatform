@@ -235,6 +235,14 @@ namespace ASCOM.GeminiTelescope
 
         private bool m_Connected = false;
 
+
+        // CACHED values for PulseGuide command:
+
+        // last time pulse guide fetched guide speed and
+        // calculated number of ticks per second:
+        DateTime m_LastPulseGuideUpdate = DateTime.MinValue;
+        double m_GuideRateStepsPerMilliSecond = 0;
+        
         //
         // Constructor - Must be public for COM registration!
         //
@@ -622,6 +630,11 @@ namespace ASCOM.GeminiTelescope
                 GeminiHardware.Connected = value;
                 if (value && !GeminiHardware.Connected) throw new ASCOM.Utilities.Exceptions.SerialPortInUseException("Connect");
                 m_Connected = value;
+
+                // reset some state variables so they are 
+                // queried from the mount next time they are needed:
+                m_LastPulseGuideUpdate = DateTime.MinValue;
+                m_GuideRateStepsPerMilliSecond = 0;
                 GeminiHardware.Trace.Exit("IT:Connected.Set", value);                
             }
         }
@@ -958,6 +971,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Trace.Exit("IT:Park");
         }
 
+
         /// <summary>
         /// Send pulse-guide commands to the mount in the required direction, for the required duration
         /// </summary>
@@ -972,37 +986,69 @@ namespace ASCOM.GeminiTelescope
             //if (GeminiHardware.AtPark)
             //    throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
+            // don't update mount parameters each time a guide command is issued: this will slow things down while guiding
+            // do it on a polling interval:
+            if (DateTime.Now - m_LastPulseGuideUpdate > TimeSpan.FromMilliseconds(SharedResources.PULSEGUIDE_POLLING_INTERVAL) ||
+                m_GuideRateStepsPerMilliSecond==0)
+            {
+                string [] mountpar = null;
+                    
+                GeminiHardware.DoCommandResult(new string[] {"<21:", "<23:", "<25:"}, GeminiHardware.MAX_TIMEOUT/2, false, out mountpar);
+
+                if (mountpar != null)
+                {
+                    string wormGearRatio = mountpar[0];
+                    string spurGearRatio = mountpar[1];
+                    string encoderResolution = mountpar[2];
+
+                    if (spurGearRatio != null && wormGearRatio != null && encoderResolution != null)
+                    {
+                        double StepsPerDegree = (Math.Abs(double.Parse(wormGearRatio)) * double.Parse(spurGearRatio) * double.Parse(encoderResolution)) / 360.0;
+                        m_GuideRateStepsPerMilliSecond = StepsPerDegree * GuideRateRightAscension / 1000;  // guide rate in encoder ticks per milli-second
+                        m_LastPulseGuideUpdate = DateTime.Now;
+                    }
+                }
+            }
+
+            if (m_GuideRateStepsPerMilliSecond == 0) // never did get the rate! 
+                throw new ASCOM.DriverException(SharedResources.MSG_INVALID_VALUE, (int)SharedResources.SCODE_INVALID_VALUE);
+              
             string cmd = String.Empty;
 
             switch (Direction)
             {
                 case GuideDirections.guideEast:
-                    cmd = ":Mge";
+                    cmd = ":Mie";
                     break;
                 case GuideDirections.guideNorth:
-                    cmd = ":Mgn";
+                    cmd = ":Min";
                     break;
                 case GuideDirections.guideSouth:
-                    cmd = ":Mgs";
+                    cmd = ":Mis";
                     break;
                 case GuideDirections.guideWest:
-                    cmd = ":Mgw";
+                    cmd = ":Miw";
                     break;
             }
 
-            if (Duration > 10000 || Duration < 0)  // too large or negative...
-                throw new InvalidValueException("PulseGuide" , Duration.ToString(), "0..10000");
+            int totalSteps = (int)(Duration * m_GuideRateStepsPerMilliSecond + 0.5); // total encoder ticks 
+            GeminiHardware.Trace.Info(4, "IT:PulseGuide Ticks", totalSteps);
 
-            string[] cmds = new string[1 + Duration / 256];
+            if (Duration > 30000 || Duration < 0)  // too large or negative...
+                throw new InvalidValueException("PulseGuide" , Duration.ToString(), "0..30000");
 
-            int count = Duration;
+            if (totalSteps <= 0) return;    //too small a move (less than 1 encoder tick)
+
+            int count = totalSteps;
+
             for (int idx = 0; count > 0; ++idx, count -= 255)
             {
                 int d = (count > 255 ? 255 : count);
-                cmds[idx] = cmd + d.ToString();
+                string c = cmd + d.ToString();
+                GeminiHardware.DoCommandResult(c, Duration + GeminiHardware.MAX_TIMEOUT, false);
+                GeminiHardware.WaitForVelocity("TN", Duration + 2000); // shouldn't take much longer than 'Duration', right?
             }
-            GeminiHardware.DoCommandResult(cmds, Duration + GeminiHardware.MAX_TIMEOUT, false);
-            GeminiHardware.Trace.Exit("IT:PulseGuide", Direction, Duration);
+            GeminiHardware.Trace.Exit("IT:PulseGuide", Direction, Duration, totalSteps);
         
         }
 
