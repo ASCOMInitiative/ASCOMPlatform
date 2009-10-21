@@ -137,6 +137,13 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="Anunciator.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Anunciator.Designer.cs">
+      <DependentUpon>Anunciator.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CadencePattern.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -157,6 +164,9 @@
     </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="SettingsProvider.cs" />
+    <EmbeddedResource Include="Anunciator.resx">
+      <DependentUpon>Anunciator.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Chooser.resx">
       <DependentUpon>Chooser.cs</DependentUpon>
       <SubType>Designer</SubType>
