@@ -149,13 +149,15 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "MigrateProfile", "ASCOM.Uti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GACInstall", "GACInstall\GACInstall.csproj", "{68255A7C-76E3-4D51-9475-6CFE21188FF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalServerTemplate", "DriverTemplates\LocalServer Template\LocalServerTemplate.csproj", "{3689A2CB-94C5-4012-A5CF-7E7D1DD27143}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalServer Composite Driver CS", "DriverTemplates\LocalServer Template\LocalServer Composite Driver CS.csproj", "{3689A2CB-94C5-4012-A5CF-7E7D1DD27143}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ASCOM Redirection Policies", "ASCOM Redirection Policies\ASCOM Redirection Policies\ASCOM Redirection Policies.vbproj", "{9EE7C0D0-D2D7-496B-8989-C44ECD53A45A}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ASCOM Diagnostics", "ASCOM.Utilities\ASCOM Diagnostics\ASCOM Diagnostics.vbproj", "{A3C42AFF-E6A0-478E-92DF-DC88234403C2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FusionLib", "ASCOM.Utilities\FusionLib\FusionLib.csproj", "{70FDA2DE-A36D-45A0-812F-E5357AC7A8D2}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "LocalServer Composite Driver VB", "DriverTemplates\LocalServer Composite Driver VB\LocalServer Composite Driver VB.vbproj", "{ABCC46C4-55C3-48A4-AB6F-3FDB0B99269F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -423,6 +425,14 @@ Global
 		{70FDA2DE-A36D-45A0-812F-E5357AC7A8D2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{70FDA2DE-A36D-45A0-812F-E5357AC7A8D2}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
 		{70FDA2DE-A36D-45A0-812F-E5357AC7A8D2}.TeamCity|Any CPU.Build.0 = Release|Any CPU
+		{ABCC46C4-55C3-48A4-AB6F-3FDB0B99269F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABCC46C4-55C3-48A4-AB6F-3FDB0B99269F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABCC46C4-55C3-48A4-AB6F-3FDB0B99269F}.Platform Dependencies|Any CPU.ActiveCfg = Release|Any CPU
+		{ABCC46C4-55C3-48A4-AB6F-3FDB0B99269F}.Platform Dependencies|Any CPU.Build.0 = Release|Any CPU
+		{ABCC46C4-55C3-48A4-AB6F-3FDB0B99269F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABCC46C4-55C3-48A4-AB6F-3FDB0B99269F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABCC46C4-55C3-48A4-AB6F-3FDB0B99269F}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
+		{ABCC46C4-55C3-48A4-AB6F-3FDB0B99269F}.TeamCity|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -476,5 +486,6 @@ Global
 		{64308775-BD4A-469C-BCAB-3ED830B811AF} = {02FC4179-0ADE-45D2-9C78-52F74FF6156C}
 		{71BB4DA7-4092-416D-89FE-97CD15207371} = {02FC4179-0ADE-45D2-9C78-52F74FF6156C}
 		{3689A2CB-94C5-4012-A5CF-7E7D1DD27143} = {02FC4179-0ADE-45D2-9C78-52F74FF6156C}
+		{ABCC46C4-55C3-48A4-AB6F-3FDB0B99269F} = {02FC4179-0ADE-45D2-9C78-52F74FF6156C}
 	EndGlobalSection
 EndGlobal
