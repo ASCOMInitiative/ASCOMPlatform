@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Diagnostics;
+using ASCOM.Conform;
 
 namespace ASCOM.FocVide
 {
@@ -110,8 +111,8 @@ namespace ASCOM.FocVide
         public static void Halt()
         {
             MyLog(eLogKind.LogMove, "HALT requested");
-            //if (!Properties.Settings.Default.sEnableHalt) { throw new MethodNotImplementedException("Halt"); }
-            if (!Properties.Settings.Default.sEnableHalt) { throw new Exception("Device not capable"); }
+            //if (!Properties.Settings.Default.sEnableHalt) { throw new PropertyNotImplementedException("Halt not available",false); }
+            if (!Properties.Settings.Default.sEnableHalt) { throw new MethodNotImplementedException("Halt()"); }
             else { HaltRequested = true; }
         }
         #endregion
@@ -133,7 +134,8 @@ namespace ASCOM.FocVide
                     Properties.Settings.Default.sTempComp = value;
                     Properties.Settings.Default.Save();
                 }
-                else throw new MethodNotImplementedException("TempComp");
+                //else throw new MethodNotImplementedException("TempComp");
+                else throw new PropertyNotImplementedException("TempComp",true);
             }
         }
         #endregion
