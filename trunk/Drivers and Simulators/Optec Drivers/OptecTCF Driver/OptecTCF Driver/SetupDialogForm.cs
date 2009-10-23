@@ -106,8 +106,6 @@ namespace ASCOM.OptecTCF_Driver
                 
         }
         
-        
-
         private void cmdCancel_Click(object sender, EventArgs e)
         {
             Dispose();
@@ -184,11 +182,11 @@ namespace ASCOM.OptecTCF_Driver
                     UpdateControls();
                     DialogResult Result;
                     Result = MessageBox.Show("Could not connect to device.\n" +
-                                "This may result from not selecting the correct COM port.\n" +
+                                "This may result from not selecting the correct COM port.\n" + 
                                 "Would you like to see the exception data?",
                                 "Connection Failed", MessageBoxButtons.YesNo);
                     if (Result == DialogResult.Yes)
-                        MessageBox.Show("Error Message: \n" + Ex.ToString());
+                        MessageBox.Show("Error Message: \n" + Ex.InnerException.InnerException.Message);
                     else
                     {
                         //don't display anything....
