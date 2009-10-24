@@ -1,0 +1,67 @@
+(1) Create a LocalServer with the template, use the device name (e.g. AstroPhysics) as the project name. Select Create Solution folder.
+
+(2) In the local server's project properties, Application tab, change BOTH the AssemblyName and the default assembly name to ASCOM.xxx (e.g., ASCOM.Astrophysics).
+
+(3) Add one or more driver skeleton projects using the in-proc templates. You may use either the C# or VB templates. Project name is not important (not used in ProgID) choose something like AstroPhysicsTelescope. 
+
+(4) Build the LocalServer
+
+(5) Set a reference to the local server PROJECT in each of the driver skeleton projects
+
+(6) In each skeleton driver project:
+
+    (a) Do a Find In Files for the project name of the skeleton driver (e.g., AstroPhysicsTelescope) and change it to match the project name of your local server (e.g. AstroPhysics). You don't have to do this in the ReadMe.html file. Everywhere elas, however, is IMPORTANT. This sets the correct namespace, progID, etc. If you're a bit more brave, you can use Replace in Files.
+
+    (b) In project properties, Application tab, change the assembly name to ASCOM.localserverprojectname.drivertype, (e.g., ASCOM.AstroPhysics.Telescope).
+
+    (c) In project properties, Application tab, click Assembly Information... 
+
+        * Turn OFF Make assembly COM visible
+        * Edit the Product Name to be the "friendly name" of your driver as will be shown in the  Chooser
+
+    (d) In project properties, Build tab, turn OFF Register for COM Interop.
+
+    (e) Modify the driver class declaration to inherit from ReferenceCountedBase. Examples:
+
+        C#:
+            public class Telescope : 
+                ReferenceCountedObjectBase,
+                ITelescope
+
+        VB:
+            Public Class Telescope
+                '==================================
+                Inherits ReferenceCountedObjectBase
+                Implements ITelescope
+                '==================================
+
+    (f) In driver.cs/driver.vb, remove the entire ASCOM Registration region
+
+    (g) In driver.cs/driver.vb, remove the private strings for driver ID and driver description
+
+(7) Unless you're writing a single-type hub, you will have two or more driver types (e.g. Telescope and Focuser) and thus two or more skeleton driver assembly projects added. Presumably, these drivers need to share some resources (e.g. a single COM port via Helper.Serial). A shared serial port is already provided (see LocalServer.cs) as LocalServerName.SharedSerial and it is an ASCOM Helper Serial object. You may wish to define additional shared resources in static member variables with public static accessor properties as is already done for the SharedSerial. Or you can add a singleton class to the local server and access it from your driver assemblies. Unfortunately, if you are a Visual Basic programmer, you will have to write the class in C#.
+
+(8) If you are writing a hub and don't need the serial port, in LocalServer.cs you can remove the public static SharedSerial property as well as the m_SharedSerial member in the private data region.
+
+(9) If you modified the LocalServer in (7) or (8), build it again now. This will refresh the stuff that's visible to the driver skeletons.
+
+(10) Build the driver skeletons to verify that you got all of the namespace and other variable changes in (6a).
+
+(11) The local server dynamically loads the driver assemblies from a subdirectory called <localservername>ServedClasses (e.g. AstroPhysicsServedClasses) which must be a sub-folder of the local server executable. The local server is smart enough to detect that it is running in the Visual Studio IDE and look for this folder just below its SOLUTION folder in that case. It is assumed that the local server project and each served driver assembly project, are in sobfolders below the solution folder. Once deployed, the subfolder will need to be just under the local server executable. At any rate, during development, you'll need to add a post-build task to each your driver assembly projects which puts a copy of the driver assembly into that subfolder. Here is an example:
+
+  copy "$(TargetPath)" "..\..\..\AstroPhysicsServedClasses\$(TargetName).dll"
+
+Note the quotes for possible path elements with spaces in them.
+
+
+
+
+
+Notes:
+=====
+
+* The local server handles all of the registration and unregistration for each of its served driver classes. By activating the server from a command line and giving /register or /unregister as the command line option, it will register or unregister all served classes (respectively).
+
+* The ASCOM registration uses the driver assembly info AssemblyProduct attribute as the friendly name that will show in the chooser.
+
+* If you get a failure to laod assembly error when starting the local server, you either forgot 
