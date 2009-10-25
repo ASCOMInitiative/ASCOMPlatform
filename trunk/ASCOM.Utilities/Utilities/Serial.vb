@@ -143,8 +143,8 @@ End Enum
 ''' Creates a .NET serial port and provides a simple set of commands to use it.
 ''' </summary>
 ''' <remarks>This object provides an easy to use interface to a serial (COM) port. 
-''' It provides ASCII and binary I/O with controllable timeout. It is limited to 8 bit, no parity, 
-''' one stop-bit modes. The interface is callable from any .NET client.</remarks>
+''' It provides ASCII and binary I/O with controllable timeout.
+''' The interface is callable from any .NET client.</remarks>
 ''' <example>
 ''' Example of how to create and use an ASCOM serial port.
 ''' <code lang="vbnet" title="ASCOM Serial Port Example" 
