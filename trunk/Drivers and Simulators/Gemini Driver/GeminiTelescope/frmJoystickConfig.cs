@@ -128,14 +128,22 @@ namespace ASCOM.GeminiTelescope
 
         private void frmJoystickConfig_Load(object sender, EventArgs e)
         {
-            ButtonGrid.Rows.Add(32);
+            ButtonGrid.Rows.Add(36);    // 32 buttons and 4 POV directions
             ButtonGrid.RowHeadersVisible = false;
 
+            string [] dir = new string[] { "Up", "Down", "Left", "Right" };
+
             ButtonGrid.DataError += new DataGridViewDataErrorEventHandler(ButtonGrid_DataError);
-            for (int i = 0; i < 32; ++i)
+            for (int i = 0; i < 36; ++i)
             {
                 DataGridViewTextBoxCell txt = ((DataGridViewTextBoxCell)ButtonGrid.Rows[i].Cells[0]);
-                txt.Value = "Button " + (i + 1).ToString();
+                if (i >= 32)
+                {
+                    txt.Value = "POV " + dir[i - 32];
+
+                } else 
+                    txt.Value = "Button " + (i + 1).ToString();
+
                 txt.Style.BackColor = Color.Black;
                 txt.Style.ForeColor = Color.LightGray;
                 //txt.Frozen = true;
@@ -156,7 +164,6 @@ namespace ASCOM.GeminiTelescope
                 {
                     int idx = cmb.Items.Add(asc);
                 }
-
             }
 
 
@@ -186,23 +193,24 @@ namespace ASCOM.GeminiTelescope
 
                     if (cmbAxisDEC.Items.Count > 1)
                         cmbAxisDEC.SelectedIndex = 1;
+
                 }
             }
 
             PersistProfile(false);  // load all settings from profile
         }
 
-        uint prev_buttons = 0;
+        ulong prev_buttons = 0;
 
         void tmrJoystick_Tick(object sender, EventArgs e)
         {
             double  x = m_JS.PosX;  //need this to poll the joystick!
-            uint buttons = m_JS.ButtonState;
+            ulong buttons = m_JS.ButtonState;
             if (buttons != prev_buttons)
             {
-                uint mask = 1;
+                ulong mask = 1;
 
-                for (int i = 0; i < 32; ++i, mask <<= 1)
+                for (int i = 0; i < 36; ++i, mask <<= 1)
                 {
                     // button changed state to pressed?
                     if ((buttons & mask) != (prev_buttons & mask) && (buttons & mask) != 0)
@@ -213,6 +221,7 @@ namespace ASCOM.GeminiTelescope
                 }
             }
             prev_buttons = buttons;
+
         }
 
         void ButtonGrid_DataError(object sender, DataGridViewDataErrorEventArgs e)
@@ -263,7 +272,7 @@ namespace ASCOM.GeminiTelescope
             else
             {
                 button_mappings = GeminiHardware.JoystickButtonMap;
-
+                if (button_mappings.Length < 36) Array.Resize<UserFunction>(ref button_mappings, 36); // increase to include POV settings for profiles written with an older driver
                 for (int i = 0; i < ButtonGrid.Rows.Count; ++i)
                 {
                     AssignmentClass ac = FindAssignmentClass(button_mappings[i]);

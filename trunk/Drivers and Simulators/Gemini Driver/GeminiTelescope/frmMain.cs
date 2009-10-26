@@ -168,8 +168,8 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        private uint m_PreviousJoystickButtonState = 0;
-        private int[] m_AutoFireCount = new int[32];
+        private ulong m_PreviousJoystickButtonState = 0;
+        private int[] m_AutoFireCount = new int[36];
         
         // joystic position corrresponding to mount G/C/S speeds:
         private double[] joystick_speeds = { 0.251, 0.501, 0.751 };
@@ -185,7 +185,7 @@ namespace ASCOM.GeminiTelescope
                 System.Diagnostics.Trace.WriteLine("JOYSTICK : X = " + x.ToString() + "   Y = " + y.ToString());
 
                 GeminiHardware.Trace.Info(4, "JOYSTICK X,Y:", x.ToString() , y.ToString());
-                uint buttons = m_Joystick.ButtonState;
+                ulong buttons = m_Joystick.ButtonState;
                 
                 ProcessButtonPress(ref buttons, m_PreviousJoystickButtonState);
                 
@@ -297,11 +297,11 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        private void ProcessButtonPress(ref uint buttons, uint prev_buttons)
+        private void ProcessButtonPress(ref ulong buttons, ulong prev_buttons)
         {
-            uint mask = 1;
+            ulong mask = 1;
 
-            for (int i = 0; i < 32; ++i, mask<<=1)
+            for (int i = 0; i < 36; ++i, mask<<=1)
             {
                 // if previously fired this
                 if (m_AutoFireCount[i] > 0 && m_AutoFireCount[i] < 5)
@@ -1337,8 +1337,12 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
-                Speech.SayIt(Resources.ParkHere, Speech.SpeechType.Command);
-                GeminiHardware.DoParkAsync(GeminiHardware.GeminiParkMode.NoSlew);
+                DialogResult res = MessageBox.Show("Do you really want to " + Resources.ParkHere + "?", "Telescope Park", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (res == DialogResult.Yes)
+                {
+                    Speech.SayIt(Resources.ParkHere, Speech.SpeechType.Command);
+                    GeminiHardware.DoParkAsync(GeminiHardware.GeminiParkMode.NoSlew);
+                }
 //                GeminiHardware.DoCommand(":hN", false);
             }
         }
@@ -1347,11 +1351,15 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
-                this.UseWaitCursor = true;
-                Speech.SayIt(Resources.ParkCWD, Speech.SpeechType.Command);
-                GeminiHardware.DoParkAsync(GeminiHardware.GeminiParkMode.SlewCWD);
-//                GeminiHardware.DoCommand(":hC", false);
-                this.UseWaitCursor = false;
+                DialogResult res = MessageBox.Show("Do you really want to " + Resources.ParkCWD+ "?", "Telescope Park", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (res == DialogResult.Yes)
+                {
+                    this.UseWaitCursor = true;
+                    Speech.SayIt(Resources.ParkCWD, Speech.SpeechType.Command);
+                    GeminiHardware.DoParkAsync(GeminiHardware.GeminiParkMode.SlewCWD);
+                    //                GeminiHardware.DoCommand(":hC", false);
+                    this.UseWaitCursor = false;
+                }
             }
         }
 
@@ -1359,11 +1367,16 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
-                this.UseWaitCursor = true;
-                Speech.SayIt(Resources.ParkHome, Speech.SpeechType.Command);
-                GeminiHardware.DoParkAsync(GeminiHardware.GeminiParkMode.SlewHome);
-//                GeminiHardware.DoCommand(":hP", false);
-                this.UseWaitCursor = false;
+                DialogResult res = MessageBox.Show("Do you really want to " + Resources.ParkAtHome+ "?", "Telescope Park", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (res == DialogResult.Yes)
+                {
+
+                    this.UseWaitCursor = true;
+                    Speech.SayIt(Resources.ParkHome, Speech.SpeechType.Command);
+                    GeminiHardware.DoParkAsync(GeminiHardware.GeminiParkMode.SlewHome);
+                    //                GeminiHardware.DoCommand(":hP", false);
+                    this.UseWaitCursor = false;
+                }
             }
         }
 
@@ -1500,8 +1513,26 @@ namespace ASCOM.GeminiTelescope
 
         private void parkAtCustomParkPositionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Speech.SayIt(Resources.Park, Speech.SpeechType.Command); 
-            GeminiHardware.DoParkAsync(GeminiHardware.ParkPosition);
+            if (GeminiHardware.Connected)
+            {
+                string park = "";
+
+                switch (GeminiHardware.ParkPosition)
+                {
+                    case GeminiHardware.GeminiParkMode.NoSlew: park = Resources.ParkAtCurrent; break;
+                    case GeminiHardware.GeminiParkMode.SlewAltAz: park = Resources.ParkAtAltAz; break;
+                    case GeminiHardware.GeminiParkMode.SlewCWD: park = Resources.ParkAtCWD; break;
+                    case GeminiHardware.GeminiParkMode.SlewHome: park = Resources.ParkAtHome; break;
+                    default: park = Resources.Park; break;
+                }
+
+                DialogResult res = MessageBox.Show("Do you really want to " + park + "?", "Telescope Park", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (res == DialogResult.Yes)
+                {
+                    Speech.SayIt(Resources.Park, Speech.SpeechType.Command);
+                    GeminiHardware.DoParkAsync(GeminiHardware.ParkPosition);
+                }
+            }
         }
 
         private void unparkToolStripMenuItem_Click(object sender, EventArgs e)
