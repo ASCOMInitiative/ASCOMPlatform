@@ -705,4 +705,7 @@ Are you sure you want to use these new values?</value>
   <data name="Time" xml:space="preserve">
     <value>Time</value>
   </data>
+  <data name="ParkAtAltAz" xml:space="preserve">
+    <value>Park at Alt/Az coordinates</value>
+  </data>
 </root>
