@@ -65,6 +65,11 @@ namespace ASCOM.GeminiTelescope
         static public string[] HandController_names = { "Visual", "Photo", "All Speeds" };
         static public string[] Brightness_names = { "100%", "53%", "40%", "27%", "20%", "13%", "6.6%" };
 
+        /// <summary>
+        /// true if these properties have not been sync'ed with Gemini yet
+        /// false if no changes since the last sync (to Gemini) or since props were downloaded from Gemini:
+        /// </summary>
+        public bool IsDirty { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -398,7 +403,7 @@ namespace ASCOM.GeminiTelescope
         public string LEDBrightness
         {
             get { return (string)get_Profile("LEDBrightness", Brightness_names[0]); }
-            set { mProfile["LEDBrightness"] = value; }
+            set { mProfile["LEDBrightness"] = value; IsDirty = true;  }
         }
 
         private string LEDBrightness_Gemini
@@ -418,7 +423,7 @@ namespace ASCOM.GeminiTelescope
         public bool SyncDoesAlign
         {
             get { return (bool)get_Profile("SyncDoesAlign", false); }
-            set { mProfile["SyncDoesAlign"] = value; }
+            set { mProfile["SyncDoesAlign"] = value; IsDirty = true; }
         }
 
 
@@ -432,7 +437,7 @@ namespace ASCOM.GeminiTelescope
         public bool DoesPrecession
         {
             get { return (bool) get_Profile("DoesPrecession", false); }
-            set { mProfile["DoesPrecession"] = value; }
+            set { mProfile["DoesPrecession"] = value; IsDirty = true; }
         }
 
         private bool m_Precession;
@@ -447,7 +452,7 @@ namespace ASCOM.GeminiTelescope
         public bool DoesRefraction
         {
             get { return (bool) get_Profile("DoesRefraction", false); }
-            set {mProfile["DoesRefraction"] = value; }
+            set { mProfile["DoesRefraction"] = value; IsDirty = true; }
         }
 
         private bool DoesRefraction_Gemini
@@ -459,7 +464,7 @@ namespace ASCOM.GeminiTelescope
         public DateTime AlarmTime
         {
             get { return (DateTime) get_Profile("AlarmTime", DateTime.Now); }
-            set { mProfile["AlarmTime"] = value; }
+            set { mProfile["AlarmTime"] = value; IsDirty = true; }
         }
 
 
@@ -472,7 +477,7 @@ namespace ASCOM.GeminiTelescope
         public bool AlarmSet
         {
             get { return (bool) get_Profile("AlarmSet", false); }
-            set { mProfile["AlarmSet"] = value; }
+            set { mProfile["AlarmSet"] = value; IsDirty = true; }
         }
 
 
@@ -496,7 +501,7 @@ namespace ASCOM.GeminiTelescope
                 double deg = (double)get_Profile("WestSafetyLimitDegrees", 0);
                 return string.Format("Western Safety Limit: {0:0}°{1:00}", Math.Truncate(deg), Math.Truncate((deg - Math.Truncate(deg)) * 60));            
             }
-            set { mProfile["WestSafetyLimit"] = value; }
+            set { mProfile["WestSafetyLimit"] = value; IsDirty = true; }
         }
 /*
         private string WestSafetyLimit_Gemini
@@ -525,7 +530,7 @@ namespace ASCOM.GeminiTelescope
                 double deg = (double)get_Profile("EastSafetyLimitDegrees", 0);
                 return string.Format("Eastern Safety Limit: {0:0}°{1:00}", Math.Truncate(deg), Math.Truncate((deg - Math.Truncate(deg)) * 60));
             }
-            set { mProfile["EastSafetyLimit"] = value; }
+            set { mProfile["EastSafetyLimit"] = value; IsDirty = true; }
         }
 /*
         private string EastSafetyLimit_Gemini
@@ -550,7 +555,7 @@ namespace ASCOM.GeminiTelescope
         public double WestSafetyLimitDegrees
         {
             get { return (double)get_Profile("WestSafetyLimitDegrees", 0); }
-            set { mProfile["WestSafetyLimitDegrees"] = value; }
+            set { mProfile["WestSafetyLimitDegrees"] = value; IsDirty = true; }
         }
 
         private double WestSafetyLimitDegrees_Gemini
@@ -583,7 +588,7 @@ namespace ASCOM.GeminiTelescope
         public double EastSafetyLimitDegrees
         {
             get { return (double)get_Profile("EastSafetyLimitDegrees", 0); }
-            set { mProfile["EastSafetyLimitDegrees"] = value; }
+            set { mProfile["EastSafetyLimitDegrees"] = value; IsDirty = true; }
         }
 
         private double EastSafetyLimitDegrees_Gemini
@@ -614,7 +619,7 @@ namespace ASCOM.GeminiTelescope
         public double Latitude
         {
             get { return (double)get_Profile("Latitude", 0.0); }
-            set { mProfile["Latitude"] = value; }
+            set { mProfile["Latitude"] = value; IsDirty = true; }
         }
 
         private double Latitude_Gemini
@@ -632,7 +637,7 @@ namespace ASCOM.GeminiTelescope
         public double Longitude
         {
             get { return (double)get_Profile("Longitude", 0.0); }
-            set { mProfile["Longitude"] = value; }
+            set { mProfile["Longitude"] = value; IsDirty = true; }
         }
 
         private double Longitude_Gemini
@@ -650,7 +655,7 @@ namespace ASCOM.GeminiTelescope
         public int UTC_Offset
         {
             get { return (int)get_Profile("UTC_Offset", 0); }
-            set { mProfile["UTC_Offset"] = value; }
+            set { mProfile["UTC_Offset"] = value; IsDirty = true; }
         }
 
         private int UTC_Offset_Gemini
@@ -668,7 +673,7 @@ namespace ASCOM.GeminiTelescope
         public double GotoLimitDegrees
         {
             get { return (double)get_Profile("GotoLimitDegrees", 0.0); }
-            set { mProfile["GotoLimitDegrees"] = value; }
+            set { mProfile["GotoLimitDegrees"] = value; IsDirty = true; }
         }
 
         private double GotoLimitDegrees_Gemini
@@ -699,7 +704,8 @@ namespace ASCOM.GeminiTelescope
         public bool PEC_Is_On
         {
             get { return (bool)get_Profile("PEC_Is_On", false);}
-            set { mProfile["PEC_Is_On"] = value; } 
+            set { mProfile["PEC_Is_On"] = value; IsDirty = true;} 
+
         }
 
         private bool PEC_Is_On_Gemini
@@ -726,7 +732,7 @@ namespace ASCOM.GeminiTelescope
         public string MountTypeSetting
         {
             get { return (string)get_Profile("MountTypeSetting", Mount_names[2]); }
-            set { mProfile["MountTypeSetting"] = value; }
+            set { mProfile["MountTypeSetting"] = value; IsDirty = true; }
         }
 
         private string MountTypeSetting_Gemini
@@ -745,7 +751,7 @@ namespace ASCOM.GeminiTelescope
         public string HandController
         {
             get {return (string)get_Profile("HandController", HandController_names[0]);}
-            set { mProfile["HandController"] = value; }
+            set { mProfile["HandController"] = value; IsDirty = true; }
         }
 
         private string HandController_Gemini
@@ -761,7 +767,7 @@ namespace ASCOM.GeminiTelescope
         public string TrackingRateMode
         {
             get { return (string)get_Profile("TrackingRateMode", TrackingRate_names[0]); }
-            set { mProfile["TrackingRateMode"] = value; }
+            set { mProfile["TrackingRateMode"] = value; IsDirty = true; }
         }
 
         private string TrackingRateMode_Gemini
@@ -777,7 +783,7 @@ namespace ASCOM.GeminiTelescope
         public int TrackingDivisorRA
         {
             get { return (int)get_Profile("TrackingDivisorRA", 56096); }
-            set { mProfile["TrackingDivisorRA"] = value; }
+            set { mProfile["TrackingDivisorRA"] = value; IsDirty = true; }
         }
 
         private int TrackingDivisorRA_Gemini
@@ -792,7 +798,7 @@ namespace ASCOM.GeminiTelescope
         public int TrackingDivisorDEC
         {
             get { return (int)get_Profile("TrackingDivisorDEC", 0); }
-            set { mProfile["TrackingDivisorDEC"] = value; }
+            set { mProfile["TrackingDivisorDEC"] = value; IsDirty = true; }
         }
 
         private int TrackingDivisorDEC_Gemini
@@ -807,7 +813,7 @@ namespace ASCOM.GeminiTelescope
         public int ManualSlewSpeed
         {
             get { return (int)get_Profile("ManualSlewSpeed", 800); }
-            set { mProfile["ManualSlewSpeed"] = value; }
+            set { mProfile["ManualSlewSpeed"] = value; IsDirty = true; }
         }
 
         private int ManualSlewSpeed_Gemini
@@ -819,7 +825,7 @@ namespace ASCOM.GeminiTelescope
         public int GotoSlewSpeed
         {
             get { return (int)get_Profile("GotoSlewSpeed", 800); }
-            set { mProfile["GotoSlewSpeed"] = value; }
+            set { mProfile["GotoSlewSpeed"] = value; IsDirty = true; }
         }
 
         private int GotoSlewSpeed_Gemini
@@ -831,7 +837,7 @@ namespace ASCOM.GeminiTelescope
         public int CenteringSpeed
         {
             get { return (int)get_Profile("CenteringSpeed", 20); }
-            set { mProfile["CenteringSpeed"] = value; }
+            set { mProfile["CenteringSpeed"] = value; IsDirty = true; }
         }
 
         private int CenteringSpeed_Gemini
@@ -843,7 +849,7 @@ namespace ASCOM.GeminiTelescope
         public double GuideSpeed
         {
             get { return (double)get_Profile("GuideSpeed", 0.5); }
-            set { mProfile["GuideSpeed"] = value; }
+            set { mProfile["GuideSpeed"] = value; IsDirty = true; }
         }
 
         private double GuideSpeed_Gemini
@@ -855,20 +861,20 @@ namespace ASCOM.GeminiTelescope
         public int SlewSettleTime
         {
             get { return (int)get_Profile("SlewSettleTime", 0); }
-            set { mProfile["SlewSettleTime"] = value; }
+            set { mProfile["SlewSettleTime"] = value; IsDirty = true; }
         }
 
         private int SlewSettleTime_Gemini
         {
             get { return GeminiHardware.SlewSettleTime; }
-            set { GeminiHardware.SlewSettleTime  = value; }
+            set { GeminiHardware.SlewSettleTime = value; IsDirty = true; }
         }
 
 
         public int WormGearRatioRA
         {
             get { return (int)get_Profile("WormGearRatioRA", 0); }
-            set { mProfile["WormGearRatioRA"] = value; }
+            set { mProfile["WormGearRatioRA"] = value; IsDirty = true; }
         }
 
         private int WormGearRatioRA_Gemini
@@ -882,7 +888,7 @@ namespace ASCOM.GeminiTelescope
         public int WormGearRatioDEC
         {
             get { return (int)get_Profile("WormGearRatioDEC", 0); }
-            set { mProfile["WormGearRatioDEC"] = value; }
+            set { mProfile["WormGearRatioDEC"] = value; IsDirty = true; }
         }
 
         private int WormGearRatioDEC_Gemini
@@ -897,7 +903,7 @@ namespace ASCOM.GeminiTelescope
         public int SpurGearRatioRA
         {
             get { return (int)get_Profile("SpurGearRatioRA", 0); }
-            set { mProfile["SpurGearRatioRA"] = value; }
+            set { mProfile["SpurGearRatioRA"] = value; IsDirty = true; }
         }
 
         private int SpurGearRatioRA_Gemini
@@ -912,7 +918,7 @@ namespace ASCOM.GeminiTelescope
         public int SpurGearRatioDEC
         {
             get { return (int)get_Profile("SpurGearRatioDEC", 0); }
-            set { mProfile["SpurGearRatioDEC"] = value; }
+            set { mProfile["SpurGearRatioDEC"] = value; IsDirty = true; }
         }
 
         private int SpurGearRatioDEC_Gemini
@@ -927,7 +933,7 @@ namespace ASCOM.GeminiTelescope
         public int ServoEncoderResolutionRA
         {
             get { return (int)get_Profile("ServoEncoderResolutionRA", 0); }
-            set { mProfile["ServoEncoderResolutionRA"] = value; }
+            set { mProfile["ServoEncoderResolutionRA"] = value; IsDirty = true; }
         }
 
         private int ServoEncoderResolutionRA_Gemini
@@ -942,7 +948,7 @@ namespace ASCOM.GeminiTelescope
         public int ServoEncoderResolutionDEC
         {
             get { return (int)get_Profile("ServoEncoderResolutionDEC", 0); }
-            set { mProfile["ServoEncoderResolutionDEC"] = value; }
+            set { mProfile["ServoEncoderResolutionDEC"] = value; IsDirty = true; }
         }
 
         private int ServoEncoderResolutionDEC_Gemini
@@ -957,7 +963,7 @@ namespace ASCOM.GeminiTelescope
         public int StepsPerWormRevolutionRA
         {
             get { return (int)get_Profile("StepsPerWormRevolutionRA", 0); }
-            set { mProfile["StepsPerWormRevolutionRA"] = value; }
+            set { mProfile["StepsPerWormRevolutionRA"] = value; IsDirty = true; }
         }
 
         private int StepsPerWormRevolutionRA_Gemini
@@ -973,7 +979,7 @@ namespace ASCOM.GeminiTelescope
         public int StepsPerWormRevolutionDEC
         {
             get { return (int)get_Profile("StepsPerWormRevolutionDEC", 0); }
-            set { mProfile["StepsPerWormRevolutionDEC"] = value; }
+            set { mProfile["StepsPerWormRevolutionDEC"] = value; IsDirty = true; }
         }
 
         private int StepsPerWormRevolutionDEC_Gemini
@@ -989,7 +995,7 @@ namespace ASCOM.GeminiTelescope
         public bool UseEncoders
         {
             get { return (bool)get_Profile("UseEncoders", false); }
-            set { mProfile["UseEncoders"] = value; }
+            set { mProfile["UseEncoders"] = value; IsDirty = true; }
         }
 
 
@@ -1009,7 +1015,7 @@ namespace ASCOM.GeminiTelescope
         public bool UseLimitSwitches
         {
             get { return (bool)get_Profile("UseLimitSwitches", false); }
-            set { mProfile["UseLimitSwitches"] = value; }
+            set { mProfile["UseLimitSwitches"] = value; IsDirty = true; }
         }
 
 
@@ -1028,7 +1034,7 @@ namespace ASCOM.GeminiTelescope
         public int EncoderResolutionRA
         {
             get { return (int)get_Profile("EncoderResolutionRA", 0); }
-            set { mProfile["EncoderResolutionRA"] = value; }
+            set { mProfile["EncoderResolutionRA"] = value; IsDirty = true; }
         }
 
         private int EncoderResolutionRA_Gemini
@@ -1040,7 +1046,7 @@ namespace ASCOM.GeminiTelescope
         public int EncoderResolutionDEC
         {
             get { return (int)get_Profile("EncoderResolutionDEC", 0); }
-            set { mProfile["EncoderResolutionDEC"] = value; }
+            set { mProfile["EncoderResolutionDEC"] = value; IsDirty = true; }
         }
 
         private int EncoderResolutionDEC_Gemini
@@ -1053,7 +1059,7 @@ namespace ASCOM.GeminiTelescope
         public int TVC
         {
             get { return (int)get_Profile("TVC", 0); }
-            set { mProfile["TVC"] = value; }
+            set { mProfile["TVC"] = value; IsDirty = true; }
         }
 
         private int TVC_Gemini
@@ -1065,7 +1071,7 @@ namespace ASCOM.GeminiTelescope
         public int ModelA
         {
             get { return (int)get_Profile("ModelA", 0); }
-            set { mProfile["ModelA"] = value; }
+            set { mProfile["ModelA"] = value; IsDirty = true; }
         }
 
         private int ModelA_Gemini
@@ -1077,7 +1083,7 @@ namespace ASCOM.GeminiTelescope
         public int ModelE
         {
             get { return (int)get_Profile("ModelE", 0); }
-            set { mProfile["ModelE"] = value; }
+            set { mProfile["ModelE"] = value; IsDirty = true; }
         }
 
         private int ModelE_Gemini
@@ -1089,7 +1095,7 @@ namespace ASCOM.GeminiTelescope
         public int ModelNP
         {
             get { return (int)get_Profile("ModelNP", 0); }
-            set { mProfile["ModelNP"] = value; }
+            set { mProfile["ModelNP"] = value; IsDirty = true; }
         }
 
         private int ModelNP_Gemini
@@ -1101,7 +1107,7 @@ namespace ASCOM.GeminiTelescope
         public int ModelNE
         {
             get { return (int)get_Profile("ModelNE", 0); }
-            set { mProfile["ModelNE"] = value; }
+            set { mProfile["ModelNE"] = value; IsDirty = true; }
         }
 
         private int ModelNE_Gemini
@@ -1113,7 +1119,7 @@ namespace ASCOM.GeminiTelescope
         public int ModelIH
         {
             get { return (int)get_Profile("ModelIH", 0); }
-            set { mProfile["ModelIH"] = value; }
+            set { mProfile["ModelIH"] = value; IsDirty = true; }
         }
 
         private int ModelIH_Gemini
@@ -1125,7 +1131,7 @@ namespace ASCOM.GeminiTelescope
         public int ModelID
         {
             get { return (int)get_Profile("ModelID", 0); }
-            set { mProfile["ModelID"] = value; }
+            set { mProfile["ModelID"] = value; IsDirty = true; }
         }
 
         private int ModelID_Gemini
@@ -1137,7 +1143,7 @@ namespace ASCOM.GeminiTelescope
         public int ModelFR
         {
             get { return (int)get_Profile("ModelFR", 0); }
-            set { mProfile["ModelFR"] = value; }
+            set { mProfile["ModelFR"] = value; IsDirty = true; }
         }
 
         private int ModelFR_Gemini
@@ -1149,7 +1155,7 @@ namespace ASCOM.GeminiTelescope
         public int ModelFD
         {
             get { return (int)get_Profile("ModelFD", 0); }
-            set { mProfile["ModelFD"] = value; }
+            set { mProfile["ModelFD"] = value; IsDirty = true; }
         }
 
         private int ModelFD_Gemini
@@ -1161,7 +1167,7 @@ namespace ASCOM.GeminiTelescope
         public int ModelCF
         {
             get { return (int)get_Profile("ModelCF", 0); }
-            set { mProfile["ModelCF"] = value; }
+            set { mProfile["ModelCF"] = value; IsDirty = true; }
         }
 
         private int ModelCF_Gemini
@@ -1173,7 +1179,7 @@ namespace ASCOM.GeminiTelescope
         public int ModelTF
         {
             get { return (int)get_Profile("ModelTF", 0); }
-            set { mProfile["ModelTF"] = value; }
+            set { mProfile["ModelTF"] = value; IsDirty = true; }
         }
 
         private int ModelTF_Gemini
@@ -1187,8 +1193,8 @@ namespace ASCOM.GeminiTelescope
         {
             get { return (bool)get_Profile("SavePEC", false); }
             set
-            { 
-                mProfile["SavePEC"] = value;
+            {
+                mProfile["SavePEC"] = value; IsDirty = true;  
                 if (!value)
                     if (GeminiHardware.Connected && Profile.ContainsKey("PECTable"))
                         Profile.Remove("PECTable"); // delete it: the user doesn't want pec data
@@ -1214,7 +1220,7 @@ namespace ASCOM.GeminiTelescope
         private SerializableDictionary<int, string> PECTable
         {
             get { return SerializableDictionary<int, string>.Parse((string)get_Profile("PECTable", null)); }
-            set { mProfile["PECTable"] = value.ToString(); }
+            set { mProfile["PECTable"] = value.ToString(); IsDirty = true; }
         }
 
         private SerializableDictionary<int, string> PECTable_Gemini
@@ -1291,6 +1297,8 @@ namespace ASCOM.GeminiTelescope
             else if (GeminiHardware.Connected && !write && Profile.ContainsKey("PECTable"))
                 Profile.Remove("PECTable");
 
+            IsDirty = false;    // props are in sync: we downloaded them from Gemini, or uploaded them to Gemini
+
             GeminiHardware.Trace.Exit("GeminiProps:SyncWithGemini", write);
             return true;
         }
@@ -1313,7 +1321,7 @@ namespace ASCOM.GeminiTelescope
                 return false;
             }
 
-            frmProgress.Initialize(0, 100, write ? "Send Settings to Gemini" : "Get Settings from Gemini", null);
+            frmProgress.Initialize(0, 100, write ? "Sending Settings to Gemini" : "Getting Settings from Gemini", null);
             frmProgress.ShowProgress(null);
 
             PropertyInfo[] ps = typeof(GeminiProperties).GetProperties(BindingFlags.Public | BindingFlags.SetProperty | BindingFlags.GetProperty | BindingFlags.Instance);

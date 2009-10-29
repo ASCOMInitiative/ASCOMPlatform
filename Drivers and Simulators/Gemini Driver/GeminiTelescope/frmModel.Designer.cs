@@ -80,7 +80,7 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75.22935F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.77064F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 52F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 59F));
             this.tableLayoutPanel1.Controls.Add(this.numericUpDown10, 1, 9);
             this.tableLayoutPanel1.Controls.Add(this.pbUpdate, 2, 9);
             this.tableLayoutPanel1.Controls.Add(this.numericUpDown9, 1, 8);
@@ -124,7 +124,7 @@
             this.numericUpDown10.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "ModelTF", true));
             this.numericUpDown10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown10.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown10.Location = new System.Drawing.Point(227, 228);
+            this.numericUpDown10.Location = new System.Drawing.Point(222, 228);
             this.numericUpDown10.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -136,7 +136,7 @@
             0,
             -2147483648});
             this.numericUpDown10.Name = "numericUpDown10";
-            this.numericUpDown10.Size = new System.Drawing.Size(68, 20);
+            this.numericUpDown10.Size = new System.Drawing.Size(66, 20);
             this.numericUpDown10.TabIndex = 28;
             // 
             // pbUpdate
@@ -150,10 +150,10 @@
             this.pbUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.pbUpdate.Image = ((System.Drawing.Image)(resources.GetObject("pbUpdate.Image")));
             this.pbUpdate.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.pbUpdate.Location = new System.Drawing.Point(298, 225);
+            this.pbUpdate.Location = new System.Drawing.Point(291, 225);
             this.pbUpdate.Margin = new System.Windows.Forms.Padding(0);
             this.pbUpdate.Name = "pbUpdate";
-            this.pbUpdate.Size = new System.Drawing.Size(53, 28);
+            this.pbUpdate.Size = new System.Drawing.Size(60, 28);
             this.pbUpdate.TabIndex = 38;
             this.pbUpdate.UseVisualStyleBackColor = true;
             this.pbUpdate.Click += new System.EventHandler(this.pbUpdate_Click);
@@ -191,7 +191,7 @@
             this.numericUpDown9.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "ModelCF", true));
             this.numericUpDown9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown9.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown9.Location = new System.Drawing.Point(227, 203);
+            this.numericUpDown9.Location = new System.Drawing.Point(222, 203);
             this.numericUpDown9.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -203,7 +203,7 @@
             0,
             -2147483648});
             this.numericUpDown9.Name = "numericUpDown9";
-            this.numericUpDown9.Size = new System.Drawing.Size(68, 20);
+            this.numericUpDown9.Size = new System.Drawing.Size(66, 20);
             this.numericUpDown9.TabIndex = 27;
             // 
             // numericUpDown8
@@ -212,7 +212,7 @@
             this.numericUpDown8.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "ModelFD", true));
             this.numericUpDown8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown8.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown8.Location = new System.Drawing.Point(227, 178);
+            this.numericUpDown8.Location = new System.Drawing.Point(222, 178);
             this.numericUpDown8.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -224,7 +224,7 @@
             0,
             -2147483648});
             this.numericUpDown8.Name = "numericUpDown8";
-            this.numericUpDown8.Size = new System.Drawing.Size(68, 20);
+            this.numericUpDown8.Size = new System.Drawing.Size(66, 20);
             this.numericUpDown8.TabIndex = 26;
             // 
             // numericUpDown7
@@ -233,7 +233,7 @@
             this.numericUpDown7.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "ModelFR", true));
             this.numericUpDown7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown7.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown7.Location = new System.Drawing.Point(227, 153);
+            this.numericUpDown7.Location = new System.Drawing.Point(222, 153);
             this.numericUpDown7.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -245,7 +245,7 @@
             0,
             -2147483648});
             this.numericUpDown7.Name = "numericUpDown7";
-            this.numericUpDown7.Size = new System.Drawing.Size(68, 20);
+            this.numericUpDown7.Size = new System.Drawing.Size(66, 20);
             this.numericUpDown7.TabIndex = 25;
             // 
             // numericUpDown6
@@ -254,7 +254,7 @@
             this.numericUpDown6.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "ModelID", true));
             this.numericUpDown6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown6.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown6.Location = new System.Drawing.Point(227, 128);
+            this.numericUpDown6.Location = new System.Drawing.Point(222, 128);
             this.numericUpDown6.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -266,7 +266,7 @@
             0,
             -2147483648});
             this.numericUpDown6.Name = "numericUpDown6";
-            this.numericUpDown6.Size = new System.Drawing.Size(68, 20);
+            this.numericUpDown6.Size = new System.Drawing.Size(66, 20);
             this.numericUpDown6.TabIndex = 24;
             // 
             // numericUpDown5
@@ -275,7 +275,7 @@
             this.numericUpDown5.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "ModelIH", true));
             this.numericUpDown5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown5.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown5.Location = new System.Drawing.Point(227, 103);
+            this.numericUpDown5.Location = new System.Drawing.Point(222, 103);
             this.numericUpDown5.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -287,7 +287,7 @@
             0,
             -2147483648});
             this.numericUpDown5.Name = "numericUpDown5";
-            this.numericUpDown5.Size = new System.Drawing.Size(68, 20);
+            this.numericUpDown5.Size = new System.Drawing.Size(66, 20);
             this.numericUpDown5.TabIndex = 23;
             // 
             // numericUpDown4
@@ -296,7 +296,7 @@
             this.numericUpDown4.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "ModelNE", true));
             this.numericUpDown4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown4.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown4.Location = new System.Drawing.Point(227, 78);
+            this.numericUpDown4.Location = new System.Drawing.Point(222, 78);
             this.numericUpDown4.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -308,7 +308,7 @@
             0,
             -2147483648});
             this.numericUpDown4.Name = "numericUpDown4";
-            this.numericUpDown4.Size = new System.Drawing.Size(68, 20);
+            this.numericUpDown4.Size = new System.Drawing.Size(66, 20);
             this.numericUpDown4.TabIndex = 22;
             // 
             // numericUpDown3
@@ -317,7 +317,7 @@
             this.numericUpDown3.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "ModelNP", true));
             this.numericUpDown3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown3.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown3.Location = new System.Drawing.Point(227, 53);
+            this.numericUpDown3.Location = new System.Drawing.Point(222, 53);
             this.numericUpDown3.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -329,7 +329,7 @@
             0,
             -2147483648});
             this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(68, 20);
+            this.numericUpDown3.Size = new System.Drawing.Size(66, 20);
             this.numericUpDown3.TabIndex = 21;
             // 
             // numericUpDown2
@@ -338,7 +338,7 @@
             this.numericUpDown2.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "ModelE", true));
             this.numericUpDown2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown2.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown2.Location = new System.Drawing.Point(227, 28);
+            this.numericUpDown2.Location = new System.Drawing.Point(222, 28);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -350,7 +350,7 @@
             0,
             -2147483648});
             this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(68, 20);
+            this.numericUpDown2.Size = new System.Drawing.Size(66, 20);
             this.numericUpDown2.TabIndex = 20;
             // 
             // label19
@@ -362,7 +362,7 @@
             this.label19.Location = new System.Drawing.Point(10, 225);
             this.label19.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(211, 28);
+            this.label19.Size = new System.Drawing.Size(206, 28);
             this.label19.TabIndex = 18;
             this.label19.Text = "Tube Flexure (TF):";
             this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -376,7 +376,7 @@
             this.label17.Location = new System.Drawing.Point(10, 200);
             this.label17.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(211, 25);
+            this.label17.Size = new System.Drawing.Size(206, 25);
             this.label17.TabIndex = 16;
             this.label17.Text = "Counterweight && RA Axis flexure (CF):";
             this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -390,7 +390,7 @@
             this.label15.Location = new System.Drawing.Point(10, 175);
             this.label15.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(211, 25);
+            this.label15.Size = new System.Drawing.Size(206, 25);
             this.label15.TabIndex = 14;
             this.label15.Text = "Mirror Flop/Gear Play in DEC (FD):";
             this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -404,7 +404,7 @@
             this.label13.Location = new System.Drawing.Point(10, 150);
             this.label13.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(211, 25);
+            this.label13.Size = new System.Drawing.Size(206, 25);
             this.label13.TabIndex = 12;
             this.label13.Text = "Mirror Flop/Gear Play in RA (FR):";
             this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -418,7 +418,7 @@
             this.label11.Location = new System.Drawing.Point(10, 125);
             this.label11.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(211, 25);
+            this.label11.Size = new System.Drawing.Size(206, 25);
             this.label11.TabIndex = 10;
             this.label11.Text = "Index Error in Declination (ID):";
             this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -432,7 +432,7 @@
             this.label9.Location = new System.Drawing.Point(10, 100);
             this.label9.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(211, 25);
+            this.label9.Size = new System.Drawing.Size(206, 25);
             this.label9.TabIndex = 8;
             this.label9.Text = "Index Error in Hour Angle (IH):";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -446,7 +446,7 @@
             this.label7.Location = new System.Drawing.Point(10, 75);
             this.label7.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(211, 25);
+            this.label7.Size = new System.Drawing.Size(206, 25);
             this.label7.TabIndex = 6;
             this.label7.Text = "Axes Non-Perpendicularity at the Equator (NE):";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -460,7 +460,7 @@
             this.label5.Location = new System.Drawing.Point(10, 50);
             this.label5.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(211, 25);
+            this.label5.Size = new System.Drawing.Size(206, 25);
             this.label5.TabIndex = 4;
             this.label5.Text = "Axes Non-Perpendicularity at the Pole (NP):";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -474,7 +474,7 @@
             this.label3.Location = new System.Drawing.Point(10, 25);
             this.label3.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(211, 25);
+            this.label3.Size = new System.Drawing.Size(206, 25);
             this.label3.TabIndex = 2;
             this.label3.Text = "Polar Axis Misalignment in Elevation (E):";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -488,7 +488,7 @@
             this.label1.Location = new System.Drawing.Point(10, 0);
             this.label1.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(211, 25);
+            this.label1.Size = new System.Drawing.Size(206, 25);
             this.label1.TabIndex = 0;
             this.label1.Text = "Polar Axis Misalignment in Azimuth (A):";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -499,7 +499,7 @@
             this.numericUpDown1.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.geminiPropertiesBindingSource, "ModelA", true));
             this.numericUpDown1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericUpDown1.ForeColor = System.Drawing.Color.Lime;
-            this.numericUpDown1.Location = new System.Drawing.Point(227, 3);
+            this.numericUpDown1.Location = new System.Drawing.Point(222, 3);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -511,7 +511,7 @@
             0,
             -2147483648});
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(68, 20);
+            this.numericUpDown1.Size = new System.Drawing.Size(66, 20);
             this.numericUpDown1.TabIndex = 19;
             // 
             // button1
