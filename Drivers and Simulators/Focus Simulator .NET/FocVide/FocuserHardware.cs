@@ -3,6 +3,7 @@ using System.Threading;
 using System.Diagnostics;
 using ASCOM.Conform;
 
+
 namespace ASCOM.FocVide
 {
     public class FocuserHardware
@@ -186,6 +187,7 @@ namespace ASCOM.FocVide
                 {
                     MyLog(eLogKind.LogOther, "No move because T° compensation is ON");
                     return;
+                    //throw new NotImplementedException("Move while tempcomp ON");    // Commented out because actual specs do not impose throwing an exception
                 }
                 else
                 {
