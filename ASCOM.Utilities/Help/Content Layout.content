@@ -30,4 +30,7 @@
     <Topic id="f2211b59-6f8c-46fb-b47e-2afb569f3133" visible="True" />
     <Topic id="0a23ff52-a935-4cd7-a693-9e3b90f7df29" visible="True" />
   </Topic>
+  <Topic id="98b612bf-f22c-428f-af22-7a77e9907b7f" visible="True" noFile="True" title="Developer Information">
+    <Topic id="caf6b21d-755a-4f1c-891f-ce971a9a2f79" visible="True" title="Drivers and Multi-Threading" />
+  </Topic>
 </Topics>

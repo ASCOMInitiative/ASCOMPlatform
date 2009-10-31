@@ -176,11 +176,11 @@ Public Class Serial
     Private TextEncoding As System.Text.Encoding
     Private m_SerTraceFile As String = SERIAL_DEFAULT_FILENAME 'Set the default trace file name
 
-    Private mut As System.Threading.Mutex
+    Private SerSemaphore As System.Threading.Semaphore
 
     Private Const TIMEOUT_NUMBER As Integer = vbObjectError + &H402
     Private Const TIMEOUT_MESSAGE As String = "Timed out waiting for received data"
-    Private Const MUTEX_TIMEOUT As Integer = 1000
+    Private Const SEMAPHORE_TIMEOUT As Integer = 1000
 
     'Serial port parameters
     Private Const SERIALPORT_ENCODING As Integer = 1252
@@ -199,7 +199,7 @@ Public Class Serial
         Dim SerialProfile As XMLAccess = Nothing
         Dim TraceFileName As String = ""
 
-        mut = New System.Threading.Mutex 'Create a new mutex to control access to the serial port
+        SerSemaphore = New System.Threading.Semaphore(1, 1) 'Create a new semaphore to control access to the serial port
 
         m_Connected = False 'Set inital values
         m_PortName = SERIALPORT_DEFAULT_NAME
@@ -258,10 +258,10 @@ Public Class Serial
                 Try : Logger.Dispose() : Catch : End Try
                 Logger = Nothing
             End If
-            If Not mut Is Nothing Then 'Clean up the mutex
-                Try : mut.ReleaseMutex() : Catch : End Try
-                Try : mut.Close() : Catch : End Try
-                mut = Nothing
+            If Not SerSemaphore Is Nothing Then 'Clean up the semaphore
+                Try : SerSemaphore.Release() : Catch : End Try
+                Try : SerSemaphore.Close() : Catch : End Try
+                SerSemaphore = Nothing
             End If
         End If
 
@@ -459,8 +459,16 @@ Public Class Serial
             If (value <= 0) Or (value > 120000) Then Throw New InvalidValueException("ReceiveTimeout", Format(CDbl(value / 1000), "0.0"), "0 to 120 seconds")
             m_ReceiveTimeout = value
             If m_Connected Then
-                m_Port.WriteTimeout = value
-                m_Port.ReadTimeout = value
+                Try
+                    If GetSemaphore() Then
+                        m_Port.WriteTimeout = value
+                        m_Port.ReadTimeout = value
+                    Else
+                        Throw New SerialPortInUseException("Serial:ReceiveTimeout - unable to get serial port semaphore before timeout.")
+                    End If
+                Finally
+                    ReleaseSemaphore()
+                End Try
             End If
             Logger.LogMessage("ReceiveTimeout", "Set to: " & value / 1000 & " seconds")
         End Set
@@ -483,8 +491,16 @@ Public Class Serial
             If (value <= 0) Or (value > 120000) Then Throw New InvalidValueException("ReceiveTimeoutMs", value.ToString, "1 to 120000 milliseconds")
             m_ReceiveTimeout = value
             If m_Connected Then
-                m_Port.WriteTimeout = value
-                m_Port.ReadTimeout = value
+                Try
+                    If GetSemaphore() Then
+                        m_Port.WriteTimeout = value
+                        m_Port.ReadTimeout = value
+                    Else
+                        Throw New SerialPortInUseException("Serial:ReceiveTimeoutMs - unable to get serial port semaphore before timeout.")
+                    End If
+                Finally
+                    ReleaseSemaphore()
+                End Try
             End If
             Logger.LogMessage("ReceiveTimeoutMs", "Set to: " & value.ToString & " mS")
         End Set
@@ -515,15 +531,15 @@ Public Class Serial
     Public Sub ClearBuffers() Implements ISerial.ClearBuffers
         'Clear both comm buffers
         Try
-            If GetMutex() Then
+            If GetSemaphore() Then
                 m_Port.DiscardInBuffer()
                 m_Port.DiscardOutBuffer()
                 Logger.LogMessage("ClearBuffers", "")
             Else
-                Throw New SerialPortInUseException("Serial:Clearbuffers - unable to get serial port mutex before timeout.")
+                Throw New SerialPortInUseException("Serial:Clearbuffers - unable to get serial port semaphore before timeout.")
             End If
-        Finally 'Ensure we release the mutex whatever happens
-            Try : mut.ReleaseMutex() : Catch : End Try
+        Finally 'Ensure we release the semaphore whatever happens
+            ReleaseSemaphore()
         End Try
 
     End Sub
@@ -541,14 +557,14 @@ Public Class Serial
         'Return all characters in the receive buffer
         Dim Received As String = ""
         Try
-            If GetMutex() Then
+            If GetSemaphore() Then
                 Logger.LogStart("Receive", "< ")
                 Received = Chr(m_Port.ReadChar)
                 Received = Received & m_Port.ReadExisting
                 Logger.LogFinish(Received)
                 Return Received
             Else
-                Throw New SerialPortInUseException("Serial:Clearbuffers - unable to get serial port mutex before timeout.")
+                Throw New SerialPortInUseException("Serial:Receive - unable to get serial port semaphore before timeout.")
             End If
         Catch ex As TimeoutException
             Logger.LogFinish(FormatRXSoFar(Received) & "EXCEPTION: " & ex.Message)
@@ -556,8 +572,8 @@ Public Class Serial
         Catch ex As Exception
             Logger.LogFinish(FormatRXSoFar(Received) & "EXCEPTION: " & ex.Message)
             Throw
-        Finally 'Ensure we release the mutex whatever happens
-            Try : mut.ReleaseMutex() : Catch : End Try
+        Finally 'Ensure we release the semaphore whatever happens
+            ReleaseSemaphore()
         End Try
     End Function
 
@@ -572,13 +588,13 @@ Public Class Serial
         'Return a single byte of data
         Try
             Dim RetVal As Byte
-            If GetMutex() Then
+            If GetSemaphore() Then
                 Logger.LogStart("ReceiveByte", "< ")
                 RetVal = CByte(m_Port.ReadByte)
                 Logger.LogFinish(Chr(RetVal), True)
                 Return RetVal
             Else
-                Throw New SerialPortInUseException("Serial:Clearbuffers - unable to get serial port mutex before timeout.")
+                Throw New SerialPortInUseException("Serial:ReceiveByte - unable to get serial port semaphore before timeout.")
             End If
         Catch ex As TimeoutException
             Logger.LogFinish("EXCEPTION: " & ex.Message)
@@ -586,8 +602,8 @@ Public Class Serial
         Catch ex As Exception
             Logger.LogFinish("EXCEPTION: " & ex.Message)
             Throw
-        Finally 'Ensure we release the mutex whatever happens
-            Try : mut.ReleaseMutex() : Catch : End Try
+        Finally 'Ensure we release the semaphore whatever happens
+            ReleaseSemaphore()
         End Try
     End Function
 
@@ -603,7 +619,7 @@ Public Class Serial
         'Return a fixed number of characters
         Dim i As Integer, Received As String = ""
         Try
-            If GetMutex() Then
+            If GetSemaphore() Then
                 Logger.LogStart("ReceiveCounted " & Count.ToString, "< ")
                 For i = 1 To Count
                     Received = Received & Chr(m_Port.ReadByte)
@@ -611,7 +627,7 @@ Public Class Serial
                 Logger.LogFinish(Received)
                 Return Received
             Else
-                Throw New SerialPortInUseException("Serial:Clearbuffers - unable to get serial port mutex before timeout.")
+                Throw New SerialPortInUseException("Serial:ReceiveCounted - unable to get serial port semaphore before timeout.")
             End If
         Catch ex As TimeoutException
             Logger.LogFinish(FormatRXSoFar(Received) & "EXCEPTION: " & ex.Message)
@@ -619,8 +635,8 @@ Public Class Serial
         Catch ex As Exception
             Logger.LogFinish(FormatRXSoFar(Received) & "EXCEPTION: " & ex.Message)
             Throw
-        Finally 'Ensure we release the mutex whatever happens
-            Try : mut.ReleaseMutex() : Catch : End Try
+        Finally 'Ensure we release the semaphore whatever happens
+            ReleaseSemaphore()
         End Try
     End Function
 
@@ -641,7 +657,7 @@ Public Class Serial
         TextEncoding = System.Text.Encoding.GetEncoding(1252)
 
         Try
-            If GetMutex() Then
+            If GetSemaphore() Then
                 Logger.LogStart("ReceiveCountedBinary " & Count.ToString, "< ")
                 For i = 0 To Count - 1
                     ReDim Preserve Received(i)
@@ -650,7 +666,7 @@ Public Class Serial
                 Logger.LogFinish(TextEncoding.GetString(Received), True)
                 Return Received
             Else
-                Throw New SerialPortInUseException("Serial:Clearbuffers - unable to get serial port mutex before timeout.")
+                Throw New SerialPortInUseException("Serial:ReceiveCountedBinary - unable to get serial port semaphore before timeout.")
             End If
         Catch ex As TimeoutException
             Logger.LogFinish(FormatRXSoFar(TextEncoding.GetString(Received)) & "EXCEPTION: " & ex.Message)
@@ -658,8 +674,8 @@ Public Class Serial
         Catch ex As Exception
             Logger.LogFinish(FormatRXSoFar(TextEncoding.GetString(Received)) & "EXCEPTION: " & ex.Message)
             Throw
-        Finally 'Ensure we release the mutex whatever happens
-            Try : mut.ReleaseMutex() : Catch : End Try
+        Finally 'Ensure we release the semaphore whatever happens
+            ReleaseSemaphore()
         End Try
     End Function
 
@@ -675,7 +691,7 @@ Public Class Serial
         'Return all characters up to and including a specified terminator string
         Dim Terminated As Boolean, tLen As Integer, Received As String = ""
         Try
-            If GetMutex() Then
+            If GetSemaphore() Then
                 'Check for bad terminator string
                 If Terminator = "" Then Throw New InvalidValueException("ReceiveTerminated Terminator", "Null or empty string", "Character or character string")
 
@@ -691,7 +707,7 @@ Public Class Serial
                 Logger.LogFinish(Received)
                 Return Received
             Else
-                Throw New SerialPortInUseException("Serial:Clearbuffers - unable to get serial port mutex before timeout.")
+                Throw New SerialPortInUseException("Serial:ReceiveTerminated - unable to get serial port semaphore before timeout.")
             End If
         Catch ex As InvalidValueException
             Logger.LogMessage("ReceiveTerminated", "EXCEPTION - Terminator cannot be a null string")
@@ -702,8 +718,8 @@ Public Class Serial
         Catch ex As Exception
             Logger.LogFinish(FormatRXSoFar(Received) & "EXCEPTION: " & ex.Message)
             Throw
-        Finally 'Ensure we release the mutex whatever happens
-            Try : mut.ReleaseMutex() : Catch : End Try
+        Finally 'Ensure we release the semaphore whatever happens
+            ReleaseSemaphore()
         End Try
     End Function
 
@@ -725,7 +741,7 @@ Public Class Serial
         Terminator = TextEncoding.GetString(TerminatorBytes)
 
         Try
-            If GetMutex() Then
+            If GetSemaphore() Then
                 'Check for bad terminator string
                 If Terminator = "" Then Throw New InvalidValueException("ReceiveTerminatedBinary Terminator", "Null or empty string", "Character or character string")
 
@@ -741,7 +757,7 @@ Public Class Serial
                 Logger.LogFinish(Received, True)
                 Return TextEncoding.GetBytes(Received)
             Else
-                Throw New SerialPortInUseException("Serial:Clearbuffers - unable to get serial port mutex before timeout.")
+                Throw New SerialPortInUseException("Serial:ReceiveTerminatedBinary - unable to get serial port semaphore before timeout.")
             End If
         Catch ex As InvalidValueException
             Logger.LogMessage("ReceiveTerminatedBinary", "EXCEPTION - Terminator cannot be a null string")
@@ -752,8 +768,8 @@ Public Class Serial
         Catch ex As Exception
             Logger.LogFinish(FormatRXSoFar(Received) & "EXCEPTION: " & ex.Message)
             Throw
-        Finally 'Ensure we release the mutex whatever happens
-            Try : mut.ReleaseMutex() : Catch : End Try
+        Finally 'Ensure we release the semaphore whatever happens
+            ReleaseSemaphore()
         End Try
 
     End Function
@@ -767,18 +783,18 @@ Public Class Serial
     Public Sub Transmit(ByVal Data As String) Implements ISerial.Transmit
         'Send provided string to the serial port
         Try
-            If GetMutex() Then
+            If GetSemaphore() Then
                 Logger.LogStart("Transmit", "> " & Data.ToString & " ")
                 m_Port.Write(Data)
                 Logger.LogFinish("")
             Else
-                Throw New SerialPortInUseException("Serial:Clearbuffers - unable to get serial port mutex before timeout.")
+                Throw New SerialPortInUseException("Serial:Transmit - unable to get serial port semaphore before timeout.")
             End If
         Catch ex As Exception
             Logger.LogFinish("Exception: " & ex.Message)
             Throw
-        Finally 'Ensure we release the mutex whatever happens
-            Try : mut.ReleaseMutex() : Catch : End Try
+        Finally 'Ensure we release the semaphore whatever happens
+            ReleaseSemaphore()
         End Try
     End Sub
 
@@ -793,14 +809,18 @@ Public Class Serial
         Dim TxString As String
         Try
             TxString = TextEncoding.GetString(Data)
-            Logger.LogStart("TransmitBinary", "> " & TxString & "  (HEX" & MakeHex(TxString) & ") ")
-            m_Port.Write(Data, 0, Data.Length)
-            Logger.LogFinish("") 'Just append the hex interpretation 
+            If GetSemaphore() Then
+                Logger.LogStart("TransmitBinary", "> " & TxString & "  (HEX" & MakeHex(TxString) & ") ")
+                m_Port.Write(Data, 0, Data.Length)
+                Logger.LogFinish("") 'Just append the hex interpretation 
+            Else
+                Throw New SerialPortInUseException("Serial:TransmitBinary - unable to get serial port semaphore before timeout.")
+            End If
         Catch ex As Exception
             Logger.LogFinish("Exception: " & ex.Message)
             Throw
-        Finally 'Ensure we release the mutex whatever happens
-            Try : mut.ReleaseMutex() : Catch : End Try
+        Finally 'Ensure we release the semaphore whatever happens
+            ReleaseSemaphore()
         End Try
     End Sub
 #End Region
@@ -883,25 +903,33 @@ Public Class Serial
         Return l_Msg
     End Function
 
-    Private Function GetMutex() As Boolean 'Gets the serial control mutex and returns success or failure
-        Dim LoopCount As Integer, GotMutex As Boolean
+    Private Function GetSemaphore() As Boolean 'Gets the serial control semaphore and returns success or failure
+        Dim LoopCount As Integer, GotSemaphore As Boolean
         Try
-            For LoopCount = 1 To 5 'Try up to 5 times to get the mutex
-                GotMutex = mut.WaitOne(0) 'Test whether the mutex is already free
-                If GotMutex Then Return True 'It is free, we have it so return true
+            For LoopCount = 1 To 5 'Try up to 5 times to get the semaphore
+                GotSemaphore = SerSemaphore.WaitOne(0)
+                If GotSemaphore Then Return True 'It is free, we have it so return true
 
-                'Mutex is in use by something else - this should not happen, so log an error message
-                Logger.LogIssue("Serial:GetMutex", "Mutex not available, please see help file. Re-trying...")
-                GotMutex = mut.WaitOne(MUTEX_TIMEOUT) 'Wait for longer this time
-                If GotMutex Then Return True 'It is now free, we have it so return true
+                'Semaphore is in use by something else - this should not happen, so log an error message
+                Logger.LogIssue("Serial:GetSemaphore", "Semaphore not available, please see help file. Re-trying...")
+                GotSemaphore = SerSemaphore.WaitOne(SEMAPHORE_TIMEOUT) 'Wait for longer this time
+                If GotSemaphore Then Return True 'It is now free, we have it so return true
 
             Next 'Try again for up to 5 attempts
         Catch ex As System.Threading.AbandonedMutexException 'Log abandoned mutex exception
             LogMessage("Serial:GetMutex", "Received an abandoned mutex exception, please see help file.")
         End Try
 
-        Return False 'Didn't get the mutex so return false
+        Return False 'Didn't get the semaphore so return false
     End Function
+
+    Private Sub ReleaseSemaphore() 'Release the semaphore if we have it but don't error if there is a problem
+        Try
+            SerSemaphore.Release()
+        Catch ex As System.Threading.SemaphoreFullException
+            LogMessage("Serial:ReleaseSemaphore", "Received a SemaphoreFullException: " & ex.ToString)
+        End Try
+    End Sub
 
     Friend Class PortNameComparer
         Implements IComparer
