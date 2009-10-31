@@ -116,6 +116,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="Developer Information\" />
     <Folder Include="Tools and Features\" />
     <Folder Include="Examples\" />
     <Folder Include="Version History\" />
@@ -127,6 +128,8 @@
       <ImageId>ManufLogos</ImageId>
     </Image>
     <Content Include="Introduction\Acknowledgements.aml" />
+    <None Include="Examples\SerialThreading.aml" />
+    <None Include="Developer Information\MultiThreading.aml" />
     <None Include="Tools and Features\Diagnostics Tool.aml" />
     <None Include="Introduction\Key Changes in 5.5.aml" />
     <None Include="Examples\NOVAS2.aml" />

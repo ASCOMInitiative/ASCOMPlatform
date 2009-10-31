@@ -80,10 +80,13 @@
 ; Updated to RC5 for RC5 release
 ; Setup Build 14 Released to ASCOM Core Group - RC5
 
+; Updated to RC6 for RC6 release
+; Setup Build 15 Released - RC6
+
 [Setup]
 ; Setup program version number - change this each time you change this setup script
-#define Public SetupVersion 14
-#define Public RC "RC5"
+#define Public SetupVersion 15
+#define Public RC "RC6"
 
 #define Public Major 0
 #define Public Minor 0

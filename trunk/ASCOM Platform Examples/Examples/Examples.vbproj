@@ -95,6 +95,7 @@
     <Compile Include="NOVASCOMExamples.vb" />
     <Compile Include="ProfileExamples.vb" />
     <Compile Include="SerialExamples.vb" />
+    <Compile Include="SerialThreadingExamples.vb" />
     <Compile Include="TimerExamples.vb" />
     <Compile Include="TraceLoggerExamples.vb" />
     <Compile Include="TransformExamples.vb" />

@@ -322,8 +322,8 @@ ASCOM.Utilities
  Creates a .NET serial port and provides a simple set of commands to use it.
  </summary>
 	<remarks>This object provides an easy to use interface to a serial (COM) port. 
- It provides ASCII and binary I/O with controllable timeout. It is limited to 8 bit, no parity, 
- one stop-bit modes. The interface is callable from any .NET client.</remarks>
+ It provides ASCII and binary I/O with controllable timeout.
+ The interface is callable from any .NET client.</remarks>
 	<example>
  Example of how to create and use an ASCOM serial port.
  <code lang="vbnet" title="ASCOM Serial Port Example" source="..\..\ASCOM Platform Examples\Examples\SerialExamples.vb"/>
@@ -984,10 +984,12 @@ ASCOM.Utilities
 	<remarks>This is not implemented and returns a MethodNotImplemented exception,
  it will be implemented in a future update. An XML schema will also be made available to support 
  this method.</remarks>
-</member><member name="M:ASCOM.Utilities.Profile.MigrateProfile">
+</member><member name="M:ASCOM.Utilities.Profile.MigrateProfile(System.String,System.Boolean)">
 	<summary>
  Migrate the ASCOM profile from registry to file store
  </summary>
+	<param name="PlatformVersion">The platform version number to be set in the profile store during the migration</param>
+	<param name="JustSetPlatformVersion">Flag indicating whether to migrate the profile or just set the platform version number</param>
 	<remarks></remarks>
 </member><member name="M:ASCOM.Utilities.Profile.DeleteValue(System.String,System.String)">
 	<summary>
@@ -1977,10 +1979,12 @@ ASCOM.Utilities
  Interface to the .NET Profile component
  </summary>
 	<remarks></remarks>
-</member><member name="M:ASCOM.Utilities.Interfaces.IProfileExtra.MigrateProfile">
+</member><member name="M:ASCOM.Utilities.Interfaces.IProfileExtra.MigrateProfile(System.String,System.Boolean)">
 	<summary>
- Migrate the ASCOM profile from registry to filestore
+ Migrate the ASCOM profile from registry to file store
  </summary>
+	<param name="PlatformVersion">The platform version number to be set in the profile store during the migration</param>
+	<param name="JustSetPlatformVersion">Flag indicating whether to migrate the profile or just set the platform version number</param>
 	<remarks></remarks>
 </member><member name="M:ASCOM.Utilities.Interfaces.IProfileExtra.DeleteValue(System.String,System.String)">
 	<summary>
