@@ -890,6 +890,24 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Limit switches off.
+        /// </summary>
+        internal static string LimitOff {
+            get {
+                return ResourceManager.GetString("LimitOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Limit switches on.
+        /// </summary>
+        internal static string LimitOn {
+            get {
+                return ResourceManager.GetString("LimitOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Longitude.
         /// </summary>
         internal static string Longitude {

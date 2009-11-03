@@ -43,14 +43,20 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.chkSavePEC = new System.Windows.Forms.CheckBox();
-            this.geminiPropertiesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.pbModel = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.menuUpdate = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.menuItemGetSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemSendSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.pbFromGemini = new System.Windows.Forms.Button();
+            this.pbSaveDefault = new System.Windows.Forms.Button();
             this.groupBox1 = new Indigo.CollapsibleGroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label21 = new System.Windows.Forms.Label();
+            this.geminiPropertiesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.label2 = new System.Windows.Forms.Label();
-            this.comboBox5 = new System.Windows.Forms.ComboBox();
+            this.cbMountType = new System.Windows.Forms.ComboBox();
             this.label15 = new System.Windows.Forms.Label();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -63,9 +69,6 @@
             this.pbSetSafetyLimit = new System.Windows.Forms.Button();
             this.checkBox7 = new System.Windows.Forms.CheckBox();
             this.pbController = new System.Windows.Forms.Button();
-            this.menuUpdate = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.menuItemGetSettings = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuItemSendSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox2 = new Indigo.CollapsibleGroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.pbTracking = new System.Windows.Forms.Button();
@@ -117,15 +120,13 @@
             this.numericUpDown18 = new System.Windows.Forms.NumericUpDown();
             this.label22 = new System.Windows.Forms.Label();
             this.checkBox5 = new System.Windows.Forms.CheckBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.pbFromGemini = new System.Windows.Forms.Button();
-            this.pbSaveDefault = new System.Windows.Forms.Button();
             this.menuSafetyPopup.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
+            this.menuUpdate.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            this.menuUpdate.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -152,7 +153,6 @@
             this.tableLayoutPanel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown18)).BeginInit();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuSafetyPopup
@@ -294,10 +294,6 @@
             this.chkSavePEC.UseVisualStyleBackColor = false;
             this.chkSavePEC.CheckedChanged += new System.EventHandler(this.SavePEC_CheckedChanged);
             // 
-            // geminiPropertiesBindingSource
-            // 
-            this.geminiPropertiesBindingSource.DataSource = typeof(ASCOM.GeminiTelescope.GeminiProperties);
-            // 
             // pbModel
             // 
             this.pbModel.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
@@ -325,6 +321,75 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(481, 735);
             this.flowLayoutPanel1.TabIndex = 39;
             // 
+            // menuUpdate
+            // 
+            this.menuUpdate.BackColor = System.Drawing.Color.Black;
+            this.menuUpdate.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemGetSettings,
+            this.menuItemSendSettings});
+            this.menuUpdate.Name = "contextMenuStrip1";
+            this.menuUpdate.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.menuUpdate.ShowImageMargin = false;
+            this.menuUpdate.Size = new System.Drawing.Size(185, 48);
+            // 
+            // menuItemGetSettings
+            // 
+            this.menuItemGetSettings.ForeColor = System.Drawing.Color.White;
+            this.menuItemGetSettings.Name = "menuItemGetSettings";
+            this.menuItemGetSettings.Size = new System.Drawing.Size(184, 22);
+            this.menuItemGetSettings.Text = "Get Settings From Gemini";
+            this.menuItemGetSettings.Click += new System.EventHandler(this.menuItemGetSettings_Click);
+            // 
+            // menuItemSendSettings
+            // 
+            this.menuItemSendSettings.ForeColor = System.Drawing.Color.White;
+            this.menuItemSendSettings.Name = "menuItemSendSettings";
+            this.menuItemSendSettings.Size = new System.Drawing.Size(184, 22);
+            this.menuItemSendSettings.Text = "Send Settings To Gemini";
+            this.menuItemSendSettings.Click += new System.EventHandler(this.menuItemSendSettings_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.pbFromGemini);
+            this.panel1.Controls.Add(this.pbSaveDefault);
+            this.panel1.Controls.Add(this.pbOK);
+            this.panel1.Controls.Add(this.pbModel);
+            this.panel1.Controls.Add(this.pbApply);
+            this.panel1.Controls.Add(this.chkSavePEC);
+            this.panel1.Controls.Add(this.button3);
+            this.panel1.Controls.Add(this.pbReboot);
+            this.panel1.Controls.Add(this.pbSave);
+            this.panel1.Controls.Add(this.chkSendSettings);
+            this.panel1.Controls.Add(this.pbLoad);
+            this.panel1.Location = new System.Drawing.Point(3, 615);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(471, 117);
+            this.panel1.TabIndex = 5;
+            // 
+            // pbFromGemini
+            // 
+            this.pbFromGemini.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pbFromGemini.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.pbFromGemini.Location = new System.Drawing.Point(396, 94);
+            this.pbFromGemini.Name = "pbFromGemini";
+            this.pbFromGemini.Size = new System.Drawing.Size(75, 23);
+            this.pbFromGemini.TabIndex = 40;
+            this.pbFromGemini.Text = "From Gemini";
+            this.pbFromGemini.UseVisualStyleBackColor = true;
+            this.pbFromGemini.Click += new System.EventHandler(this.pbFromGemini_Click);
+            // 
+            // pbSaveDefault
+            // 
+            this.pbSaveDefault.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pbSaveDefault.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.pbSaveDefault.Location = new System.Drawing.Point(269, 32);
+            this.pbSaveDefault.Name = "pbSaveDefault";
+            this.pbSaveDefault.Size = new System.Drawing.Size(95, 23);
+            this.pbSaveDefault.TabIndex = 39;
+            this.pbSaveDefault.Text = "Save Default";
+            this.pbSaveDefault.UseVisualStyleBackColor = true;
+            this.pbSaveDefault.Click += new System.EventHandler(this.pbSaveDefault_Click);
+            // 
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
@@ -350,7 +415,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.Controls.Add(this.label21, 2, 4);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 4);
-            this.tableLayoutPanel1.Controls.Add(this.comboBox5, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.cbMountType, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.label15, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.checkBox2, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.label3, 0, 2);
@@ -391,6 +456,10 @@
             this.label21.Text = "West Safety Limit: 000 deg";
             this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // geminiPropertiesBindingSource
+            // 
+            this.geminiPropertiesBindingSource.DataSource = typeof(ASCOM.GeminiTelescope.GeminiProperties);
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -406,19 +475,20 @@
             this.label2.Text = "East Safety Limit: 000 deg";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // comboBox5
+            // cbMountType
             // 
-            this.comboBox5.BackColor = System.Drawing.Color.Black;
-            this.comboBox5.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "MountTypeSetting", true));
-            this.comboBox5.DisplayMember = "name";
-            this.comboBox5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.comboBox5.ForeColor = System.Drawing.Color.Lime;
-            this.comboBox5.FormattingEnabled = true;
-            this.comboBox5.Location = new System.Drawing.Point(113, 3);
-            this.comboBox5.Name = "comboBox5";
-            this.comboBox5.Size = new System.Drawing.Size(104, 21);
-            this.comboBox5.TabIndex = 0;
+            this.cbMountType.BackColor = System.Drawing.Color.Black;
+            this.cbMountType.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.geminiPropertiesBindingSource, "MountTypeSetting", true));
+            this.cbMountType.DisplayMember = "name";
+            this.cbMountType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbMountType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbMountType.ForeColor = System.Drawing.Color.Lime;
+            this.cbMountType.FormattingEnabled = true;
+            this.cbMountType.Location = new System.Drawing.Point(113, 3);
+            this.cbMountType.Name = "cbMountType";
+            this.cbMountType.Size = new System.Drawing.Size(104, 21);
+            this.cbMountType.TabIndex = 0;
+            this.cbMountType.SelectedIndexChanged += new System.EventHandler(this.cbMountType_SelectedIndexChanged);
             // 
             // label15
             // 
@@ -595,33 +665,6 @@
             this.pbController.TabIndex = 35;
             this.pbController.UseVisualStyleBackColor = true;
             this.pbController.Click += new System.EventHandler(this.pbUpdate_Click);
-            // 
-            // menuUpdate
-            // 
-            this.menuUpdate.BackColor = System.Drawing.Color.Black;
-            this.menuUpdate.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuItemGetSettings,
-            this.menuItemSendSettings});
-            this.menuUpdate.Name = "contextMenuStrip1";
-            this.menuUpdate.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.menuUpdate.ShowImageMargin = false;
-            this.menuUpdate.Size = new System.Drawing.Size(185, 48);
-            // 
-            // menuItemGetSettings
-            // 
-            this.menuItemGetSettings.ForeColor = System.Drawing.Color.White;
-            this.menuItemGetSettings.Name = "menuItemGetSettings";
-            this.menuItemGetSettings.Size = new System.Drawing.Size(184, 22);
-            this.menuItemGetSettings.Text = "Get Settings From Gemini";
-            this.menuItemGetSettings.Click += new System.EventHandler(this.menuItemGetSettings_Click);
-            // 
-            // menuItemSendSettings
-            // 
-            this.menuItemSendSettings.ForeColor = System.Drawing.Color.White;
-            this.menuItemSendSettings.Name = "menuItemSendSettings";
-            this.menuItemSendSettings.Size = new System.Drawing.Size(184, 22);
-            this.menuItemSendSettings.Text = "Send Settings To Gemini";
-            this.menuItemSendSettings.Click += new System.EventHandler(this.menuItemSendSettings_Click);
             // 
             // groupBox2
             // 
@@ -1603,48 +1646,6 @@
             this.checkBox5.Text = "Use Encoders:";
             this.checkBox5.UseVisualStyleBackColor = false;
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.pbFromGemini);
-            this.panel1.Controls.Add(this.pbSaveDefault);
-            this.panel1.Controls.Add(this.pbOK);
-            this.panel1.Controls.Add(this.pbModel);
-            this.panel1.Controls.Add(this.pbApply);
-            this.panel1.Controls.Add(this.chkSavePEC);
-            this.panel1.Controls.Add(this.button3);
-            this.panel1.Controls.Add(this.pbReboot);
-            this.panel1.Controls.Add(this.pbSave);
-            this.panel1.Controls.Add(this.chkSendSettings);
-            this.panel1.Controls.Add(this.pbLoad);
-            this.panel1.Location = new System.Drawing.Point(3, 615);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(471, 117);
-            this.panel1.TabIndex = 5;
-            // 
-            // pbFromGemini
-            // 
-            this.pbFromGemini.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.pbFromGemini.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.pbFromGemini.Location = new System.Drawing.Point(396, 94);
-            this.pbFromGemini.Name = "pbFromGemini";
-            this.pbFromGemini.Size = new System.Drawing.Size(75, 23);
-            this.pbFromGemini.TabIndex = 40;
-            this.pbFromGemini.Text = "From Gemini";
-            this.pbFromGemini.UseVisualStyleBackColor = true;
-            this.pbFromGemini.Click += new System.EventHandler(this.pbFromGemini_Click);
-            // 
-            // pbSaveDefault
-            // 
-            this.pbSaveDefault.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.pbSaveDefault.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.pbSaveDefault.Location = new System.Drawing.Point(269, 32);
-            this.pbSaveDefault.Name = "pbSaveDefault";
-            this.pbSaveDefault.Size = new System.Drawing.Size(95, 23);
-            this.pbSaveDefault.TabIndex = 39;
-            this.pbSaveDefault.Text = "Save Default";
-            this.pbSaveDefault.UseVisualStyleBackColor = true;
-            this.pbSaveDefault.Click += new System.EventHandler(this.pbSaveDefault_Click);
-            // 
             // frmAdvancedSettings
             // 
             this.AcceptButton = this.pbOK;
@@ -1667,12 +1668,14 @@
             this.Text = "Advanced Gemini Settings";
             this.Load += new System.EventHandler(this.frmAdvancedSettings_Load);
             this.menuSafetyPopup.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);
+            this.menuUpdate.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            this.menuUpdate.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
@@ -1703,8 +1706,6 @@
             this.tableLayoutPanel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown18)).EndInit();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1779,7 +1780,7 @@
         private System.Windows.Forms.Button pbSave;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
-        private System.Windows.Forms.ComboBox comboBox5;
+        private System.Windows.Forms.ComboBox cbMountType;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.CheckBox chkSavePEC;
         private System.Windows.Forms.NumericUpDown numericUpDown17;

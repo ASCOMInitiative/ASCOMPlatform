@@ -185,6 +185,9 @@ namespace ASCOM.GeminiTelescope
                     if (!keyDown){Cmd(":CM"); Speech.SayIt(Resources.Sync, Speech.SpeechType.Command); return true; }; break;
                 case UserFunction.Align:
                     if (!keyDown) { Cmd(":Cm"); Speech.SayIt(Resources.Align, Speech.SpeechType.Command); return true; }; break;
+                case UserFunction.LimitSwitchOff:
+                    if (keyDown) { Cmd(">15:"); Speech.SayIt(Resources.LimitOff, Speech.SpeechType.Command); return true; }
+                    else { Cmd(">14:"); Speech.SayIt(Resources.LimitOn, Speech.SpeechType.Command); return true; }
             }
             return false;
         }
@@ -223,8 +226,8 @@ namespace ASCOM.GeminiTelescope
         AccelerateSlew=28,
         DecelerateSlew=29,
         Sync=30,
-        Align=31
-
+        Align=31,
+        LimitSwitchOff=32
     }
 
 }

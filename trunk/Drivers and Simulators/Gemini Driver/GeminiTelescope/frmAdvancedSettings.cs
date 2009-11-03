@@ -40,7 +40,7 @@ namespace ASCOM.GeminiTelescope
             comboBox1.Items.AddRange(GeminiProperties.Brightness_names);
             comboBox2.Items.AddRange(GeminiProperties.HandController_names);
             comboBox3.Items.AddRange(GeminiProperties.TrackingRate_names);
-            comboBox5.Items.AddRange(GeminiProperties.Mount_names);
+            cbMountType.Items.AddRange(GeminiProperties.Mount_names);
 
             GeminiProperties props = new GeminiProperties();
 
@@ -65,7 +65,12 @@ namespace ASCOM.GeminiTelescope
 
         private void SetCollapsedGroups()
         {
+            // if not custom mount, close up custom mount settings groupbox by default
+            GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
+
+            
             GeminiHardware.m_Profile.DeviceType = "Telescope";
+            
             foreach (Control gc in this.flowLayoutPanel1.Controls)
             {
                 if (gc is Indigo.CollapsibleGroupBox)
@@ -75,9 +80,12 @@ namespace ASCOM.GeminiTelescope
 
                     string res = GeminiHardware.m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GroupCollapse_" + gb.Text, "");
                     bool.TryParse(res, out bCollapse);
-                    gb.FullSize = gb.Size;
-                    gb.IsCollapsed = bCollapse;
-                    gb.ForeColor = (bCollapse ? Color.Gray : Color.White);
+                    if (!gb.IsCollapsed)
+                    {
+                        gb.FullSize = gb.Size;
+                        gb.IsCollapsed = bCollapse;
+                        gb.ForeColor = (bCollapse ? Color.Gray : Color.White);
+                    }
                 }
             }
         }
@@ -500,6 +508,21 @@ namespace ASCOM.GeminiTelescope
             }
             GeminiHardware.Trace.Enter("Props:pbFromGemini");
 
+        }
+
+        private void cbMountType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // do this only after the dialog has initialized and all the group-boxes
+            // FullSize is set
+            if (groupBox4.FullSize.Height > 20)
+            {
+                if (cbMountType.SelectedItem.ToString().Equals("Custom", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    this.groupBox4.IsCollapsed = false;
+                }
+                else
+                    this.groupBox4.IsCollapsed = true;
+            }
         }
     }
 }
