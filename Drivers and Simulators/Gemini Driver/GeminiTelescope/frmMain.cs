@@ -847,8 +847,6 @@ namespace ASCOM.GeminiTelescope
                 GeminiHardware.SpeechVoice = setupForm.SpeechVoice;
                 GeminiHardware.SpeechFilter = setupForm.SpeechFlags;
 
-                Speech.SpeechInitialize(this.Handle, GeminiHardware.UseSpeech? GeminiHardware.SpeechVoice : null);
-                Speech.Filter = GeminiHardware.SpeechFilter;
                 
                 if (error != "")
                 {
@@ -859,6 +857,9 @@ namespace ASCOM.GeminiTelescope
                 tmrJoystick.Stop();
                 StartJoystick();    //restart if settings have changed
             }
+
+            Speech.SpeechInitialize(this.Handle, GeminiHardware.UseSpeech ? GeminiHardware.SpeechVoice : null);
+            Speech.Filter = GeminiHardware.SpeechFilter;
 
             setupForm.Dispose();
         }

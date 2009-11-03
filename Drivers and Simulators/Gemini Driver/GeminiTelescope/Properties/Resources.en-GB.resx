@@ -678,4 +678,10 @@ Are you sure you want to use these new values?</value>
   <data name="Time" xml:space="preserve">
     <value>Time</value>
   </data>
+  <data name="LimitOff" xml:space="preserve">
+    <value>Limit switches off</value>
+  </data>
+  <data name="LimitOn" xml:space="preserve">
+    <value>Limit switches on</value>
+  </data>
 </root>

@@ -763,7 +763,7 @@ namespace ASCOM.GeminiTelescope
                 m_UseDriverTime = false;
 
             if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "TraceLevel", ""), out m_TraceLevel))
-                m_TraceLevel = 4;
+                m_TraceLevel = 2;
 
             TraceLevel = m_TraceLevel;
 

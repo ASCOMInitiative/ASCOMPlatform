@@ -106,6 +106,7 @@ namespace ASCOM.GeminiTelescope
             new AssignmentClass(Resources.ObjSrch1, UserFunction.Search1),
             new AssignmentClass(Resources.Sync, UserFunction.Sync),
             new AssignmentClass(Resources.Align, UserFunction.Align),
+            new AssignmentClass(Resources.LimitOff, UserFunction.LimitSwitchOff)
         };
 
 
