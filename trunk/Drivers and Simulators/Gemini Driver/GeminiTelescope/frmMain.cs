@@ -1067,26 +1067,42 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        private void SetConnectText(string txt)
+        {
+            ButtonConnect.Text = txt;
+        }
+
+        public static void DoConnectAsync(object stateInfo)
+        {
+            frmMain frm = stateInfo as frmMain;
+
+            try
+            {
+                GeminiHardware.Connected = true;
+            }
+            catch {
+            }
+
+            if (!GeminiHardware.Connected)
+            {
+                MessageBox.Show(Resources.CannotConnect + "\r\n" + frm.m_LastError, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                frm.BeginInvoke(new SetTextCallback(frm.SetConnectText), Resources.Connect);
+            }
+        }
+
         private void ButtonConnect_Click(object sender, EventArgs e)
         {
+            if (GeminiHardware.IsConnecting)
+            {
+                GeminiHardware.IsConnecting = false;
+            }
+            else
             if (!GeminiHardware.Connected)
             {
                 Speech.SayIt(Resources.Connect, Speech.SpeechType.Command);
-
-                ButtonConnect.Enabled = false;
-                ButtonConnect.Text = Resources.Connecting;
-                ButtonConnect.Update();
-                try
-                {
-                    GeminiHardware.Connected = true;
-                }
-                catch { }
-
-                ButtonConnect.Enabled = true;
-                if (!GeminiHardware.Connected)
-                {
-                    MessageBox.Show(Resources.CannotConnect + "\r\n" + m_LastError, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                }
+                ButtonConnect.Text = Resources.Stop;                
+                System.Threading.ThreadPool.QueueUserWorkItem(DoConnectAsync, this);
+                return;
             }
             else
             {
@@ -1108,9 +1124,10 @@ namespace ASCOM.GeminiTelescope
 
                 if (GeminiHardware.Connected != false)
                     MessageBox.Show(Resources.CannotDisconnect, SharedResources.TELESCOPE_DRIVER_NAME);
+
+                UpdateConnectStatus();
             }
 
-            UpdateConnectStatus();
         }
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)

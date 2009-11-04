@@ -329,6 +329,8 @@ namespace ASCOM.GeminiTelescope
         private static System.Threading.AutoResetEvent m_WaitForCommand;
         private static System.Threading.AutoResetEvent m_DataReceived;
 
+        private static System.Threading.ManualResetEvent m_AbortConnect = new System.Threading.ManualResetEvent(false);
+
         private static string m_PolledVariablesString = ":GR#:GD#:GA#:GZ#:Gv#:GS#:Gm#:h?#<99:F#";
         private static string m_ShortPolledVariablesString1 = ":GR#:GD#:GA#:GZ#:Gv#";
         private static string m_ShortPolledVariablesString2 = ":GS#:Gm#:h?#<99:F#";
@@ -1842,10 +1844,30 @@ namespace ASCOM.GeminiTelescope
                 DoCommandResult(":OC", MAX_TIMEOUT, false);
             }
         }
-       
+
+        /// <summary>
+        /// get: true if currently in the middle of executing Connect()
+        /// set: false to abort connection
+        /// </summary>
+        public static bool IsConnecting
+        {
+            get
+            {
+                if (System.Threading.Monitor.TryEnter(m_ConnectLock))
+                {
+                    System.Threading.Monitor.Exit(m_ConnectLock);
+                    return false;
+                }
+                return true;
+            }
+            set
+            {
+                m_AbortConnect.Set();
+            }
+        }
 #endregion
 
-#region Telescope Implementation
+#region Telescope Implementation   
 
         /// <summary>
         /// Establish connection with the mount, open serial port
@@ -1862,6 +1884,8 @@ namespace ASCOM.GeminiTelescope
                 if (!m_SerialPort.IsOpen)
                 {
                     Trace.Info(2, "SerialPort.IsOpen", "false");
+
+                    m_AbortConnect.Reset();
 
                     GetProfileSettings();
 
@@ -2087,6 +2111,11 @@ namespace ASCOM.GeminiTelescope
                 while (sRes == "B" || sRes==null)
                 {
                     Trace.Info(4, "Waiting...");
+                    if (m_AbortConnect.WaitOne(0))
+                    {
+                        return false;
+                    }
+
                     System.Threading.Thread.Sleep(500);
                     Transmit("\x6");
                     ci = new CommandItem("\x6", 3000, true);
@@ -2138,6 +2167,10 @@ namespace ASCOM.GeminiTelescope
             while (sRes == "S" || sRes=="b")
             {
                 Trace.Info(4, "Waiting for completion", sRes);
+                if (m_AbortConnect.WaitOne(0))
+                {
+                    return false;
+                }
                 System.Threading.Thread.Sleep(500);
                 Transmit("\x6");
                 ci = new CommandItem("\x6", 3000, true);
@@ -2179,6 +2212,12 @@ namespace ASCOM.GeminiTelescope
 
                     for (int i = 0; i < rates.Length; ++i)
                     {
+                        // abort signaled, stop now!
+                        if (m_AbortConnect.WaitOne(0))
+                        {
+                            if (OnInfo != null) OnInfo(Resources.SearchForGemini, Resources.Stop);
+                            return false;
+                        }
                         m_SerialPort.PortName = p;
 
                         m_SerialPort.BaudRate = rates[i];
