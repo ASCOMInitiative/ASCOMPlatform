@@ -482,7 +482,11 @@ namespace ASCOM.GeminiTelescope
 
         public string JoystickName
         {
-            get { return cmbJoystick.SelectedItem.ToString(); }
+            get {
+                if (cmbJoystick.SelectedItem!=null)
+                    return cmbJoystick.SelectedItem.ToString();
+                return string.Empty;
+            }
         }
 
         private void btnJoysticConfig_Click(object sender, EventArgs e)
