@@ -2884,6 +2884,22 @@ namespace ASCOM.GeminiTelescope
                             Transmit("\x6");
                             CommandItem ci = new CommandItem("\x6", 1000, true);
                             sRes = GetCommandResult(ci);
+
+                            // if Gemini is booting, up go ahead and
+                            // process the boot start-up sequence, including prompt, if so configured:
+                            if (sRes == "S" || sRes == "b" || sRes == "B")
+                            {
+                                ErrorDelegate temp = OnInfo;
+                                OnInfo = null;  //disable connect notifications, don't want to confuse the user!
+
+                                if (StartGemini())  // got a connection!
+                                {
+                                    OnInfo = temp;
+                                    sRes = "G"; // done
+                                    break;
+                                }
+                                OnInfo = temp;  // nope, false alarm. continue trying to sync.
+                            }
                         }
                         catch (Exception ex)
                         {
