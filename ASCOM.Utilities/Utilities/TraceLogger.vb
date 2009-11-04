@@ -159,15 +159,14 @@ Public Class TraceLogger
         Dim Msg As String = Message
         Try
             mut.WaitOne()
-            If g_LineStarted Then
-                LogFinish("LOGISSUE: LogMessage has been called before LogFinish. Parameters: " & Identifier & " " & Message)
-            Else
-                If g_Enabled Then
-                    If g_LogFile Is Nothing Then Call CreateLogFile()
-                    If HexDump Then Msg = Message & "  (HEX" & MakeHex(Message) & ")"
-                    LogMsgFormatter(Identifier, Msg, True)
-                End If
+            If g_LineStarted Then LogFinish(" ") ' 1/10/09 PWGS Silently close the open line
+
+            If g_Enabled Then
+                If g_LogFile Is Nothing Then Call CreateLogFile()
+                If HexDump Then Msg = Message & "  (HEX" & MakeHex(Message) & ")"
+                LogMsgFormatter(Identifier, Msg, True)
             End If
+
         Finally
             mut.ReleaseMutex()
         End Try
@@ -297,13 +296,10 @@ Public Class TraceLogger
     Public Overloads Sub LogMessage(ByVal Identifier As String, ByVal Message As String) Implements ITraceLoggerExtra.LogMessage
         Try
             mut.WaitOne()
-            If g_LineStarted Then
-                LogFinish("LOGISSUE: LogMessage has been called before LogFinish. Parameters: " & Identifier & " " & Message)
-            Else
-                If g_Enabled Then
-                    If g_LogFile Is Nothing Then Call CreateLogFile()
-                    LogMsgFormatter(Identifier, Message, True)
-                End If
+            If g_LineStarted Then LogFinish(" ") ' 1/10/09 PWGS Made line closure silent
+            If g_Enabled Then
+                If g_LogFile Is Nothing Then Call CreateLogFile()
+                LogMsgFormatter(Identifier, Message, True)
             End If
         Finally
             mut.ReleaseMutex()
