@@ -29,6 +29,7 @@ namespace ASCOM.GeminiTelescope
 {
     public partial class frmAdvancedSettings : Form
     {
+
         string Cap = Resources.AdvancedSettings;
 
         public frmAdvancedSettings()
@@ -58,7 +59,7 @@ namespace ASCOM.GeminiTelescope
 
             OnConnectChange(true, 1);
 
-            GeminiHardware.OnConnect += new ConnectDelegate(OnConnectChange);
+            GeminiHardware.OnConnect += new ConnectDelegate(OnConnectChangeAsync);
 
             this.UseWaitCursor = false;
         }
@@ -118,6 +119,14 @@ namespace ASCOM.GeminiTelescope
                         c.ForeColor = Color.LightGray;
             }
 
+        }
+
+        void OnConnectChangeAsync(bool connect, int clients)
+        {
+            if (this.InvokeRequired)
+                this.BeginInvoke(new ConnectDelegate(OnConnectChange), connect, clients);
+            else
+                OnConnectChange(connect, clients);
         }
 
         void OnConnectChange(bool connect, int clients)

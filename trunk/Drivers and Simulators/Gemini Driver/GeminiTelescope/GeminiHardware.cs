@@ -3825,7 +3825,7 @@ namespace ASCOM.GeminiTelescope
         ///     4: PEC training in progress,
         ///     8: PEC training was just completed,
         ///     16: PEC training will start soon,
-        ///     32: PEC data are available.
+        ///   0xff: failed to get status
         /// </summary>
         public static byte PECStatus
         {
@@ -3833,7 +3833,7 @@ namespace ASCOM.GeminiTelescope
             {
                 string s = DoCommandResult("<509:", 2000, false);
                 byte res = 0;
-                byte.TryParse(s, out res);
+                if (!byte.TryParse(s, out res)) return 0xff;   
                 return res;
             }
             set

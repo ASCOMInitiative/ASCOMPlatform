@@ -18,9 +18,13 @@ namespace ASCOM.GeminiTelescope
 
         delegate void OnConnectDelegate(bool Connected, int Client);
 
-        Timer tmrUpdate = new Timer();
+        delegate void UpdateDisplayDelegate(byte pec);
+
+        //Timer tmrUpdate = new Timer();
         Timer tmrBaloon = new Timer();
         Timer tmrJoystick = new Timer();
+
+        System.Timers.Timer tmrUpdate = new System.Timers.Timer();
 
         string m_LastError = "";
 
@@ -52,7 +56,8 @@ namespace ASCOM.GeminiTelescope
             
             InitializeComponent();
             tmrUpdate.Interval = 2000;
-            tmrUpdate.Tick += new EventHandler(tmrUpdate_Tick);
+//            tmrUpdate.Tick += new EventHandler(tmrUpdate_Tick);
+            tmrUpdate.Elapsed+=new System.Timers.ElapsedEventHandler(tmrUpdate_Tick);
             tmrUpdate.Start();
             GeminiHardware.OnConnect += new ConnectDelegate(OnConnectEvent);
             GeminiHardware.OnError += new ErrorDelegate(OnError);
@@ -469,7 +474,7 @@ namespace ASCOM.GeminiTelescope
         {
             m_LastError = msg;
             if (this.InvokeRequired)
-                this.BeginInvoke(new InfoBaloonDelegate(SetBaloonText), new object[] { from, msg, ToolTipIcon.Error });
+                this.BeginInvoke(new InfoBaloonDelegate(SetBaloonText), from, msg, ToolTipIcon.Error);
             else
                 SetBaloonText(from, msg, ToolTipIcon.Info);
         }
@@ -477,7 +482,7 @@ namespace ASCOM.GeminiTelescope
         void OnInfo(string from, string msg)
         {
             if (this.InvokeRequired)
-                this.BeginInvoke(new InfoBaloonDelegate(SetBaloonText), new object[] { from, msg, ToolTipIcon.Info});
+                this.BeginInvoke(new InfoBaloonDelegate(SetBaloonText), from, msg, ToolTipIcon.Info);
             else 
                 SetBaloonText(from, msg, ToolTipIcon.Info);
         }
@@ -551,6 +556,7 @@ namespace ASCOM.GeminiTelescope
                 labelLst.Text = "00:00:00";
                 labelRa.Text = "00:00:00";
                 labelDec.Text = "+00:00:00";
+                labelLimit.Text = "00:00:00";
                 SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME, Resources.MountIsDisconnected, ToolTipIcon.Info);
                 tmrJoystick.Stop();
             }        
@@ -564,7 +570,7 @@ namespace ASCOM.GeminiTelescope
         void OnConnectEvent(bool Connected, int Clients)
         {
             if (this.InvokeRequired)
-                this.BeginInvoke(new ConnectDelegate(ConnectStateChanged), new object[] { Connected, Clients });
+                this.BeginInvoke(new ConnectDelegate(ConnectStateChanged), Connected, Clients);
             else
                 ConnectStateChanged(Connected, Clients);
         }
@@ -589,17 +595,11 @@ namespace ASCOM.GeminiTelescope
             OnSafetyLimit();
         }
 
-        void tmrUpdate_Tick(object sender, EventArgs e)
+
+        void UpdateDisplay(byte pec)
         {
-
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Connected) 
             {
-                m_UpdateCount++;
-
-                RightAscension = GeminiHardware.RightAscension;
-                Declination = GeminiHardware.Declination;
-                SiderealTime = GeminiHardware.SiderealTime;
-
                 labelSlew.BackColor = (GeminiHardware.Velocity == "S" ? m_ActiveBkColor : m_InactiveBkColor);
 
                 // blink the text while slewing is active:
@@ -632,11 +632,6 @@ namespace ASCOM.GeminiTelescope
                     labelLimit.Text = "00:00:00";
                 }
 
-                // update limit distance every 4th time
-                if ((m_UpdateCount & 3) == 0)
-                {
-                    UpdateTimeToLimit();
-                }
                 pbStop.Visible = (GeminiHardware.Velocity == "S");  //only show Stop! button when slewing
 
                 if (labelSlew.Text != prev_label)
@@ -644,28 +639,30 @@ namespace ASCOM.GeminiTelescope
                     Speech.SayIt(Resources.Mount + " " + labelSlew.Text, Speech.SpeechType.Status);
                 }
 
-                bool prev_pec = checkboxPEC.Checked;
+                if (pec != 0xff)
+                {
+                    bool prev_pec = checkboxPEC.Checked;
 
-                byte pec = GeminiHardware.PECStatus;
-                if ((pec & 1) != 0)
-                {
-                    checkboxPEC.Enabled = true;
-                    checkboxPEC.Checked = true;
-                }
-                else if ((pec & 32) != 0) //data available
-                {
-                    checkboxPEC.Enabled = true;
-                    checkboxPEC.Checked = false;
-                }
-                else
-                {
-                    checkboxPEC.Enabled = false;
-                    checkboxPEC.Checked = false;
-                }
+                    if ((pec & 1) != 0)
+                    {
+                        checkboxPEC.Enabled = true;
+                        checkboxPEC.Checked = true;
+                    }
+                    else if ((pec & 32) != 0) //data available
+                    {
+                        checkboxPEC.Enabled = true;
+                        checkboxPEC.Checked = false;
+                    }
+                    else
+                    {
+                        checkboxPEC.Enabled = false;
+                        checkboxPEC.Checked = false;
+                    }
 
-                if (checkboxPEC.Checked != prev_pec)
-                {
-                    Speech.SayIt("P E C " + (checkboxPEC.Checked? Resources.Enabled : Resources.Disabled), Speech.SpeechType.Status);
+                    if (checkboxPEC.Checked != prev_pec)
+                    {
+                        Speech.SayIt("P E C " + (checkboxPEC.Checked ? Resources.Enabled : Resources.Disabled), Speech.SpeechType.Status);
+                    }
                 }
             }
             else
@@ -698,6 +695,29 @@ namespace ASCOM.GeminiTelescope
 
 
             BalloonIcon.Text = ""; // tooltip;    
+        }
+
+        void tmrUpdate_Tick(object sender, EventArgs e)
+        {
+
+            if (GeminiHardware.Connected)
+            {
+                m_UpdateCount++;
+
+                RightAscension = GeminiHardware.RightAscension;
+                Declination = GeminiHardware.Declination;
+                SiderealTime = GeminiHardware.SiderealTime;
+
+                // update limit distance every 4th time
+                if ((m_UpdateCount & 3) == 0)
+                {
+                    UpdateTimeToLimit();
+                }
+
+                byte pec = GeminiHardware.PECStatus;
+
+                this.BeginInvoke(new UpdateDisplayDelegate(UpdateDisplay), pec);
+            }
         }
 
         private void UpdateTimeToLimit()
@@ -741,11 +761,18 @@ namespace ASCOM.GeminiTelescope
             {
                 double seconds = distance / rate;
                 TimeSpan ts = TimeSpan.FromSeconds(seconds);
-                labelLimit.Text = string.Format("{0:00}:{1:00}:{2:00}", ts.Hours, ts.Minutes, ts.Seconds);
+                string lmt = string.Format("{0:00}:{1:00}:{2:00}", ts.Hours, ts.Minutes, ts.Seconds);
+                if (this.InvokeRequired)
+                    this.BeginInvoke(new SetTextCallback(SetLimitText), lmt);
+                else
+                    labelLimit.Text = lmt;
             }
-
         }
 
+        private void SetLimitText(object val)
+        {
+            labelLimit.Text = (string)val;
+        }
 
         private void _DoSetupTelescopeDialog()
         {
@@ -1405,9 +1432,9 @@ namespace ASCOM.GeminiTelescope
                 checkBoxTrack.Checked = !checkBoxTrack.Checked;
 
                 if (!checkBoxTrack.Checked)
-                    GeminiHardware.DoCommandResult(":hN", GeminiHardware.MAX_TIMEOUT, false);
+                    GeminiHardware.DoCommand(":hN", false);
                 else
-                    GeminiHardware.DoCommandResult(":hW", GeminiHardware.MAX_TIMEOUT, false);
+                    GeminiHardware.DoCommand(":hW", false);
             }
         }
 
@@ -1443,8 +1470,11 @@ namespace ASCOM.GeminiTelescope
             checkboxPEC.Checked = !checkboxPEC.Checked;
             
             byte pec = GeminiHardware.PECStatus;
-            pec =(byte)( (pec & 0xfe) | (checkboxPEC.Checked ? 1 : 0));
-            GeminiHardware.PECStatus = pec;
+            if (pec != 0xff)
+            {
+                pec = (byte)((pec & 0xfe) | (checkboxPEC.Checked ? 1 : 0));
+                GeminiHardware.PECStatus = pec;
+            }
         }
 
 
@@ -1558,7 +1588,7 @@ namespace ASCOM.GeminiTelescope
             if (GeminiHardware.Connected)
             {
                 Speech.SayIt(Resources.Unpark, Speech.SpeechType.Command);
-                GeminiHardware.DoCommandResult(":hW", GeminiHardware.MAX_TIMEOUT, false);
+                GeminiHardware.DoCommand(":hW", false);
             }
         }
 
