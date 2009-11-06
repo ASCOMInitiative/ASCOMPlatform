@@ -14,6 +14,8 @@ namespace ASCOM.FocVide
         public static frmMain Gui = new frmMain();
         public static bool IsTempCompMove = false;
         public static Random xRand;
+        public static System.Windows.Forms.Timer Chrono = new System.Windows.Forms.Timer();
+        public static bool _IsMoving = false;
 
         #endregion
 
@@ -28,9 +30,19 @@ namespace ASCOM.FocVide
             _Link = false;
             HaltRequested = false;
             Properties.Settings.Default.IsMoving = false;
+            _IsMoving = false;
             xRand = new Random();
-
+            Chrono.Enabled = false;
+            Chrono.Interval = 3000;
+            Chrono.Tick += new EventHandler(Chrono_Tick);
             Gui.Show();
+        }
+
+        static void Chrono_Tick(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.IsMoving = false;
+            _IsMoving = false;
+            Chrono.Enabled = false;
         }
         #endregion
 
@@ -112,9 +124,13 @@ namespace ASCOM.FocVide
         public static void Halt()
         {
             MyLog(eLogKind.LogMove, "HALT requested");
-            //if (!Properties.Settings.Default.sEnableHalt) { throw new PropertyNotImplementedException("Halt not available",false); }
             if (!Properties.Settings.Default.sEnableHalt) { throw new MethodNotImplementedException("Halt()"); }
-            else { HaltRequested = true; }
+            else 
+            { 
+                HaltRequested = true;
+                _IsMoving = false;
+                Chrono.Enabled = false;
+            }
         }
         #endregion
 
@@ -171,7 +187,8 @@ namespace ASCOM.FocVide
         #region Focuser.IsMoving property
         public static bool IsMoving
         {
-            get { return Properties.Settings.Default.IsMoving; }
+            //get { return Properties.Settings.Default.IsMoving; }
+            get { return _IsMoving; }
         }
         #endregion
 
@@ -215,41 +232,51 @@ namespace ASCOM.FocVide
                 Properties.Settings.Default.IsMoving = true;
                 int Start = (int)Properties.Settings.Default.sPosition;
                 MyLog(eLogKind.LogIsMoving, "Moving from "+Start.ToString()+" to "+val.ToString());
-                if (val > Properties.Settings.Default.sPosition)  
-                {
-                    for (int i = Start; i < DestPosition; i++)
-                    {
-                        if (HaltRequested) 
-                        { 
-                            Properties.Settings.Default.IsMoving = false; 
-                            HaltRequested = false;
-                            MyLog(eLogKind.LogMove, "Focuser stopped");
-                            Properties.Settings.Default.Save();
-                            return; 
-                        }
-                        FakeMove(1);
-                        Properties.Settings.Default.sPosition ++;
-                    }
-                    
-                }
-                else
-                {
-                    for (int i = Start; i > val; i--)
-                    {
-                        if (HaltRequested) 
-                        { 
-                            Properties.Settings.Default.IsMoving = false; 
-                            HaltRequested = false;
-                            MyLog(eLogKind.LogMove, "Focuser stopped");
-                            Properties.Settings.Default.Save();
-                            return; 
-                        }
-                        FakeMove(-1);
-                        Properties.Settings.Default.sPosition --;
-                    }
-                }
                 
-                Properties.Settings.Default.IsMoving = false;
+                if (Properties.Settings.Default.sIsSynchronous)  // Synchronous moves
+                {
+                    if (val > Properties.Settings.Default.sPosition)
+                    {
+                        for (int i = Start; i < DestPosition; i++)
+                        {
+                            if (HaltRequested)
+                            {
+                                Properties.Settings.Default.IsMoving = false;
+                                HaltRequested = false;
+                                MyLog(eLogKind.LogMove, "Focuser stopped");
+                                Properties.Settings.Default.Save();
+                                return;
+                            }
+                            FakeMove(1);
+                            Properties.Settings.Default.sPosition++;
+                        }
+
+                    }
+                    else
+                    {
+                        for (int i = Start; i > val; i--)
+                        {
+                            if (HaltRequested)
+                            {
+                                Properties.Settings.Default.IsMoving = false;
+                                HaltRequested = false;
+                                MyLog(eLogKind.LogMove, "Focuser stopped");
+                                Properties.Settings.Default.Save();
+                                return;
+                            }
+                            FakeMove(-1);
+                            Properties.Settings.Default.sPosition--;
+                        }
+                    }
+
+                    Properties.Settings.Default.IsMoving = false;
+                }
+                else  // Asynchronous moves
+                {
+                    Properties.Settings.Default.sPosition = val;
+                    _IsMoving = true;
+                    Chrono.Enabled = true;
+                }
                 MyLog(eLogKind.LogIsMoving, "Move done");
             }
             else  // Relative focuser move
