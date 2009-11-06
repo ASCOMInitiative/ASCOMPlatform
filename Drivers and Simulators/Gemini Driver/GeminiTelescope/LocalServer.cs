@@ -615,7 +615,7 @@ namespace ASCOM.GeminiTelescope
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             m_MainForm = new frmMain();
-            if (m_bComStart) m_MainForm.WindowState = FormWindowState.Minimized;
+            if (m_bComStart && !GeminiHardware.ShowHandbox) m_MainForm.WindowState = FormWindowState.Minimized;
 
             // Register the class factories of the served objects
             RegisterClassFactories();
