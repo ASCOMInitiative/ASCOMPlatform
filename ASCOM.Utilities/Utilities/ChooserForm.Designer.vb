@@ -45,6 +45,7 @@
         Me.MenuUseTraceAutoFilenames = New System.Windows.Forms.ToolStripMenuItem
         Me.MenuUseTraceManualFilename = New System.Windows.Forms.ToolStripMenuItem
         Me.MenuSerialTraceEnabled = New System.Windows.Forms.ToolStripMenuItem
+        Me.MenuIncludeSerialTraceDebugInformation = New System.Windows.Forms.ToolStripMenuItem
         Me.MenuProfileTraceEnabled = New System.Windows.Forms.ToolStripMenuItem
         Me.MenuTransformTraceEnabled = New System.Windows.Forms.ToolStripMenuItem
         Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog
@@ -156,7 +157,7 @@
         '
         'MenuTrace
         '
-        Me.MenuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NormallyLeaveTheseDisabledToolStripMenuItem, Me.ToolStripSeparator1, Me.MenuUseTraceAutoFilenames, Me.MenuUseTraceManualFilename, Me.MenuSerialTraceEnabled, Me.MenuProfileTraceEnabled, Me.MenuTransformTraceEnabled})
+        Me.MenuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NormallyLeaveTheseDisabledToolStripMenuItem, Me.ToolStripSeparator1, Me.MenuUseTraceAutoFilenames, Me.MenuUseTraceManualFilename, Me.MenuSerialTraceEnabled, Me.MenuIncludeSerialTraceDebugInformation, Me.MenuProfileTraceEnabled, Me.MenuTransformTraceEnabled})
         Me.MenuTrace.Name = "MenuTrace"
         Me.MenuTrace.Size = New System.Drawing.Size(46, 20)
         Me.MenuTrace.Text = "Trace"
@@ -164,42 +165,48 @@
         'NormallyLeaveTheseDisabledToolStripMenuItem
         '
         Me.NormallyLeaveTheseDisabledToolStripMenuItem.Name = "NormallyLeaveTheseDisabledToolStripMenuItem"
-        Me.NormallyLeaveTheseDisabledToolStripMenuItem.Size = New System.Drawing.Size(263, 22)
+        Me.NormallyLeaveTheseDisabledToolStripMenuItem.Size = New System.Drawing.Size(272, 22)
         Me.NormallyLeaveTheseDisabledToolStripMenuItem.Text = "Normally leave these disabled"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(260, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(269, 6)
         '
         'MenuUseTraceAutoFilenames
         '
         Me.MenuUseTraceAutoFilenames.Name = "MenuUseTraceAutoFilenames"
-        Me.MenuUseTraceAutoFilenames.Size = New System.Drawing.Size(263, 22)
+        Me.MenuUseTraceAutoFilenames.Size = New System.Drawing.Size(272, 22)
         Me.MenuUseTraceAutoFilenames.Text = "Use Automatic Serial Trace Filenames"
         '
         'MenuUseTraceManualFilename
         '
         Me.MenuUseTraceManualFilename.Name = "MenuUseTraceManualFilename"
-        Me.MenuUseTraceManualFilename.Size = New System.Drawing.Size(263, 22)
+        Me.MenuUseTraceManualFilename.Size = New System.Drawing.Size(272, 22)
         Me.MenuUseTraceManualFilename.Text = "Use a Manual Serial Trace Filename"
         '
         'MenuSerialTraceEnabled
         '
         Me.MenuSerialTraceEnabled.Name = "MenuSerialTraceEnabled"
-        Me.MenuSerialTraceEnabled.Size = New System.Drawing.Size(263, 22)
+        Me.MenuSerialTraceEnabled.Size = New System.Drawing.Size(272, 22)
         Me.MenuSerialTraceEnabled.Text = "Serial Trace Enabled"
+        '
+        'MenuIncludeSerialTraceDebugInformation
+        '
+        Me.MenuIncludeSerialTraceDebugInformation.Name = "MenuIncludeSerialTraceDebugInformation"
+        Me.MenuIncludeSerialTraceDebugInformation.Size = New System.Drawing.Size(272, 22)
+        Me.MenuIncludeSerialTraceDebugInformation.Text = "Include Serial Trace Debug Information"
         '
         'MenuProfileTraceEnabled
         '
         Me.MenuProfileTraceEnabled.Name = "MenuProfileTraceEnabled"
-        Me.MenuProfileTraceEnabled.Size = New System.Drawing.Size(263, 22)
+        Me.MenuProfileTraceEnabled.Size = New System.Drawing.Size(272, 22)
         Me.MenuProfileTraceEnabled.Text = "Profile Trace Enabled"
         '
         'MenuTransformTraceEnabled
         '
         Me.MenuTransformTraceEnabled.Name = "MenuTransformTraceEnabled"
-        Me.MenuTransformTraceEnabled.Size = New System.Drawing.Size(263, 22)
+        Me.MenuTransformTraceEnabled.Size = New System.Drawing.Size(272, 22)
         Me.MenuTransformTraceEnabled.Text = "Transform Trace Enabled"
         '
         'ChooserForm
@@ -244,5 +251,6 @@
     Friend WithEvents NormallyLeaveTheseDisabledToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents MenuTransformTraceEnabled As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuIncludeSerialTraceDebugInformation As System.Windows.Forms.ToolStripMenuItem
 #End Region
 End Class

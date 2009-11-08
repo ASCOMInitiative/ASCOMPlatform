@@ -60,7 +60,11 @@ namespace ASCOM
 		/// An error related to settings.
 		/// </summary>
         public static int SettingsProviderError = unchecked((int)0x8004040A);
-		/// <summary>
+        /// <summary>
+        /// Error code to indicate that the requested operation can not be undertaken at this time.
+        /// </summary>
+        public static int InvalidOperationException = unchecked((int)0x8004040B);
+        /// <summary>
 		/// A 'catch-all' error code used when nothing else was specified.
 		/// </summary>
         public static int UnspecifiedError = unchecked((int)0x800404FF);

@@ -107,6 +107,9 @@ Friend Class ChooserForm
             'Set Profile trace checked state on menu item 
             MenuProfileTraceEnabled.Checked = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT)
             MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
+
+            MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
+
             ' Assure window pops up on top of others.
             'Me.BringToFront()
 
@@ -322,4 +325,9 @@ Friend Class ChooserForm
         SetName(TRACE_TRANSFORM, MenuTransformTraceEnabled.Checked.ToString)
     End Sub
 
+   
+    Private Sub MenuIncludeSerialTraceDebugInformation_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuIncludeSerialTraceDebugInformation.Click
+        MenuIncludeSerialTraceDebugInformation.Checked = Not MenuIncludeSerialTraceDebugInformation.Checked 'Invert selection
+        SetName(SERIAL_TRACE_DEBUG, MenuIncludeSerialTraceDebugInformation.Checked.ToString)
+    End Sub
 End Class

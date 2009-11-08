@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InvalidOperationException.cs" />
     <Compile Include="MethodNotImplementedException.cs" />
     <Compile Include="DriverException.cs" />
     <Compile Include="ErrorCodes.cs" />

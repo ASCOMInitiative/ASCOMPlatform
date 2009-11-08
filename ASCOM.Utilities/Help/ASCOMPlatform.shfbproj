@@ -100,7 +100,8 @@
     </PlugInConfigurations>
     <FeedbackEMailAddress>Ascom.Feedback%40yahoo.co.uk</FeedbackEMailAddress>
     <FeedbackEMailLinkText>Send feedback to Peter Simpson</FeedbackEMailLinkText>
-    <HeaderText>This software is beta status</HeaderText>
+    <HeaderText>
+    </HeaderText>
     <VisibleItems>InheritedMembers, InheritedFrameworkMembers</VisibleItems>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="ASCOM.HelperNET.VB6HelperSupport" isDocumented="False" xmlns="" />
