@@ -1,0 +1,94 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=Windows-1252">
+	<title>Focuser.Move() Method</title>
+
+	<style type="text/css">
+		@import url(dc3_hh.css);
+	</style>
+</head>
+<body>
+
+<h1><a name="FocuserFocuserMETHMove"></a>Focuser.Move() Method</h1>
+
+<p>
+<!-- See Also -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:See Also ">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="FocuserFocuserMETHMoveC">
+</object>&nbsp;&nbsp;&nbsp;
+<!-- Example 
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:Example">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="FocuserFocuserMETHMoveX">
+</object>&nbsp;&nbsp;&nbsp; -->
+<!-- parent class -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink">
+<param name="Text" value="Text:Focuser object">
+<param name="Flags" value=",,1">
+<param name="Item1" value="">
+<param name="Item2" value="FocuserCLASSFocuserO">
+</object>
+</p>
+
+<p class=desc>
+</p>
+
+<h2>Syntax</h2>
+
+<p class=indent><code>
+<b>Focuser.Move(</b><i>Position</i><b>)</b></code></p>
+
+<p>
+The method syntax has these parts:</p>
+
+<div class=indent>
+<table border=1 cellpadding=3 cellspacing=0>
+ <tr>
+  <th>Part</th>
+  <th>Description</th>
+ </tr>
+ <tr>
+  <td><i>Position</i>&nbsp;(Long)</td>
+  <td>Step distance or absolute position, depending on the value of the <a href="FocuserFocuserPROPAbsolute.htm">Absolute property</a>.</td>
+ </tr>
+
+ <tr>
+  <td>Return&nbsp;(Nothing)</td>
+  <td>Does not return a value.</td>
+ </tr>
+</table></div><br>
+
+<h2>Remarks</h2>
+
+<p>If the <a href="FocuserFocuserPROPAbsolute.htm">Absolute property</a> is True, then this is an absolute positioning focuser. The Move command tells the focuser to move to an exact step position, and the Position parameter of the Move() method is an integer between 0 and MaxStep.</p>
+
+<p>If the <a href="FocuserFocuserPROPAbsolute.htm">Absolute property</a> is False, then this is a relative positioning focuser. The Move command tells the focuser to move in a relative direction, and the Position parameter of the Move() method (in this case, step distance) is an integer between minus <a href="FocuserFocuserPROPMaxIncrement.htm">MaxIncrement</a> and plus <a href="FocuserFocuserPROPMaxIncrement.htm">MaxIncrement</a>.</p>
+
+
+
+<hr color="silver" size=2>
+<div class=copyright>Copyright &copy; 2002-2007, The ASCOM Initiative</div>
+
+
+
+<object type="application/x-oleobject" 
+	classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+	<param name="ALink Name" value="FocuserCLASSFocuserM">
+</object>
+
+</body>
+</html>
+
