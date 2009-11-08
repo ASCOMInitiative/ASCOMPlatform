@@ -5,7 +5,7 @@ Imports Microsoft.Win32
 
 Module SharedConstants
     Friend Const TRACE_TRANSFORM As String = "Trace Transform", TRACE_TRANSFORM_DEFAULT As Boolean = False
-    Friend Const REGISTRY_CONFORM_FOLDER As String = "Software\ASCOM\Utilities"
+    Friend Const REGISTRY_UTILITIES_FOLDER As String = "Software\ASCOM\Utilities"
 End Module
 
 #Region "Registry Utility Code"
@@ -15,8 +15,8 @@ Module RegistryCommonCode
         Dim m_HKCU, m_SettingsKey As RegistryKey
 
         m_HKCU = Registry.CurrentUser
-        m_HKCU.CreateSubKey(REGISTRY_CONFORM_FOLDER)
-        m_SettingsKey = m_HKCU.OpenSubKey(REGISTRY_CONFORM_FOLDER, True)
+        m_HKCU.CreateSubKey(REGISTRY_UTILITIES_FOLDER)
+        m_SettingsKey = m_HKCU.OpenSubKey(REGISTRY_UTILITIES_FOLDER, True)
 
         Try
             If m_SettingsKey.GetValueKind(p_Name) = RegistryValueKind.String Then ' Value does exist
@@ -43,8 +43,8 @@ Module RegistryCommonCode
         Dim m_HKCU, m_SettingsKey As RegistryKey
 
         m_HKCU = Registry.CurrentUser
-        m_HKCU.CreateSubKey(REGISTRY_CONFORM_FOLDER)
-        m_SettingsKey = m_HKCU.OpenSubKey(REGISTRY_CONFORM_FOLDER, True)
+        m_HKCU.CreateSubKey(REGISTRY_UTILITIES_FOLDER)
+        m_SettingsKey = m_HKCU.OpenSubKey(REGISTRY_UTILITIES_FOLDER, True)
 
         Try
             If m_SettingsKey.GetValueKind(p_Name) = RegistryValueKind.String Then ' Value does exist
@@ -71,8 +71,8 @@ Module RegistryCommonCode
         Dim m_HKCU, m_SettingsKey As RegistryKey
 
         m_HKCU = Registry.CurrentUser
-        m_HKCU.CreateSubKey(REGISTRY_CONFORM_FOLDER)
-        m_SettingsKey = m_HKCU.OpenSubKey(REGISTRY_CONFORM_FOLDER, True)
+        m_HKCU.CreateSubKey(REGISTRY_UTILITIES_FOLDER)
+        m_SettingsKey = m_HKCU.OpenSubKey(REGISTRY_UTILITIES_FOLDER, True)
 
         'LogMsg("GetDouble", GlobalVarsAndCode.MessageLevel.msgDebug, p_Name.ToString & " " & p_DefaultValue.ToString)
         Try
@@ -100,8 +100,8 @@ Module RegistryCommonCode
         Dim m_HKCU, m_SettingsKey As RegistryKey
 
         m_HKCU = Registry.CurrentUser
-        m_HKCU.CreateSubKey(REGISTRY_CONFORM_FOLDER)
-        m_SettingsKey = m_HKCU.OpenSubKey(REGISTRY_CONFORM_FOLDER, True)
+        m_HKCU.CreateSubKey(REGISTRY_UTILITIES_FOLDER)
+        m_SettingsKey = m_HKCU.OpenSubKey(REGISTRY_UTILITIES_FOLDER, True)
 
         Try
             If m_SettingsKey.GetValueKind(p_Name) = RegistryValueKind.String Then ' Value does exist
@@ -127,8 +127,8 @@ Module RegistryCommonCode
         Dim m_HKCU, m_SettingsKey As RegistryKey
 
         m_HKCU = Registry.CurrentUser
-        m_HKCU.CreateSubKey(REGISTRY_CONFORM_FOLDER)
-        m_SettingsKey = m_HKCU.OpenSubKey(REGISTRY_CONFORM_FOLDER, True)
+        m_HKCU.CreateSubKey(REGISTRY_UTILITIES_FOLDER)
+        m_SettingsKey = m_HKCU.OpenSubKey(REGISTRY_UTILITIES_FOLDER, True)
 
         m_SettingsKey.SetValue(p_Name, p_Value.ToString, RegistryValueKind.String)
         m_SettingsKey.Flush() 'Clean up registry keys

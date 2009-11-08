@@ -83,10 +83,13 @@
 ; Updated to RC6 for RC6 release
 ; Setup Build 15 Released - RC6
 
+; Updated to RC6 for RC6 release
+; Setup Build 16 Released - RC7
+
 [Setup]
 ; Setup program version number - change this each time you change this setup script
-#define Public SetupVersion 15
-#define Public RC "RC6"
+#define Public SetupVersion 16
+#define Public RC "RC7"
 
 #define Public Major 0
 #define Public Minor 0

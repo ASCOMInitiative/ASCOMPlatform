@@ -1237,7 +1237,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -1348,7 +1348,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -1439,7 +1439,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -1619,7 +1619,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -1730,7 +1730,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -1880,7 +1880,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ASCOM.FilterWheelSim, Version=5.5.3575.12245, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:ASCOM.FilterWheelSim, Version=5.5.3599.20484, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_DE38208AF37956409C7FB080AA7EFABD"
@@ -2024,7 +2024,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ASCOM.SettingsProvider, Version=5.5.3574.33349, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ASCOM.SettingsProvider, Version=5.5.3599.20482, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_F8D6CDF34EE019017A38848CE3E87D16"
@@ -2273,7 +2273,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ASCOM Platform 5.1 x64"
         "ProductCode" = "8:{63D76CDF-F247-49AD-80E5-9972E8165AE5}"
-        "PackageCode" = "8:{038FE040-AFB7-4D33-B3F9-29E7DCCAC774}"
+        "PackageCode" = "8:{0326FBFA-0586-4BB0-A222-98B9B815F23E}"
         "UpgradeCode" = "8:{5012C928-8EDE-4C36-BA0A-7039AD11B129}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"

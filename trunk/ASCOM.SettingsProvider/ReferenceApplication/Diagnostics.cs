@@ -135,7 +135,7 @@ namespace TiGra
 			foreach (char c in strTrace)
 			{
 				byte b = (byte)c;
-				string strASCII = Enum.GetName(typeof(ASCII), b);
+				string strASCII = Enum.GetName(typeof(ASCIICodes), b);
 				if (strASCII != null)
 					expanded.Append(String.Format("<{0}>", strASCII));
 				else
@@ -148,7 +148,7 @@ namespace TiGra
 	/// <summary>
 	/// RawWord type with enumeration constants for ASCII control codes.
 	/// </summary>
-	public enum ASCII : byte
+	public enum ASCIICodes : byte //Peter 7/11/09 Renamed from ASCII to ASCIICodes to remove compiler type conflict warning
 		{
 		NULL = 0x00, SOH = 0x01, STH = 0x02, ETX = 0x03, EOT = 0x04, ENQ = 0x05, ACK = 0x06, BELL = 0x07,
 		BS = 0x08, HT = 0x09, LF = 0x0A, VT = 0x0B, FF = 0x0C, CR = 0x0D, SO = 0x0E, SI = 0x0F, DC1 = 0x11,
