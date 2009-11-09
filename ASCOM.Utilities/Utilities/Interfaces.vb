@@ -502,6 +502,28 @@ Namespace Interfaces
         ''' <returns> Date in UTC</returns>
         ''' <remarks></remarks>
         <DispId(23)> Function DateLocalToUTC(ByVal LocalDate As Date) As Date
+
+        ''' <summary>
+        ''' Tests whether the current platform version is at least equal to the supplied major and minor 
+        ''' version numbers, returns false if this is not the case
+        ''' </summary>
+        ''' <param name="RequiredMajorVersion">The required major version number</param>
+        ''' <param name="RequiredMinorVersion">The required minor version number</param>
+        ''' <returns>True if the current platform version equals or exceeds the major and minor values provided</returns>
+        ''' <remarks>This function provides a simple way to test for a minimum platform level.
+        ''' If for example, your application requires at least platform version 5.5 then you can use 
+        ''' code such as this to make a test and display information as appropriate.
+        ''' <code>Const Int requiredMajorVersion = 5;
+        ''' Const Int requiredMinorVersion = 5; // Requires Platform version 5.5
+        ''' Bool isOK = ASCOM.Utilities.IsMinimumRequiredVersion(requiredMajorVersion,
+        ''' requiredMinorVersion);
+        ''' If (isOK)
+        ''' // Do the install (or whatever)
+        ''' Else
+        ''' // Abort, throw exception, print an error.
+        ''' </code></remarks>
+        <DispId(24)> Function IsMinimumRequiredVersion(ByVal RequiredMajorVersion As Integer, ByVal RequiredMinorVersion As Integer) As Boolean
+
     End Interface 'Interface to Utilities.Util
 
     ''' <summary>
