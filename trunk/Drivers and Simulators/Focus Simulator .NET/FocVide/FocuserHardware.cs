@@ -92,7 +92,7 @@ namespace ASCOM.FocVide
             {
                 MyLog(eLogKind.LogOther, "Position request");
                 if (Properties.Settings.Default.sAbsolute) return (int)Properties.Settings.Default.sPosition;
-                else throw new PropertyNotImplementedException("Position", false);
+                else throw new ASCOM.InvalidOperationException("Can't get position for a relative focuser.");  // ASCOM-46 issue
             }
         }
         #endregion
@@ -151,7 +151,6 @@ namespace ASCOM.FocVide
                     Properties.Settings.Default.sTempComp = value;
                     Properties.Settings.Default.Save();
                 }
-                //else throw new MethodNotImplementedException("TempComp");
                 else throw new PropertyNotImplementedException("TempComp",true);
             }
         }
@@ -197,14 +196,12 @@ namespace ASCOM.FocVide
         {
             int DestPosition = 0;
 
-            //Properties.Settings.Default.Reload();
             if (!IsTempCompMove)
             {
                 if (Properties.Settings.Default.sTempComp) // No moves when in t° compensation mode
                 {
                     MyLog(eLogKind.LogOther, "No move because T° compensation is ON");
-                    return;
-                    //throw new NotImplementedException("Move while tempcomp ON");    // Commented out because actual specs do not impose throwing an exception
+                    throw new System.InvalidOperationException("Move command is rejected while temperature compensation mode is True.");  // ASCOM-42 and ASCOM-43 issues
                 }
                 else
                 {
