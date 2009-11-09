@@ -1,5 +1,7 @@
 ; ASCOM Install Script for RoboFocus Control Program
 ; Jon Brewster
+; Bob Denny (09-Nov-09) Fix for ASCOM Platform >5, fix uninstall for case
+; where user did not select extra instances. Fix for 64-bit systems.
 
 [Setup]
 #define Ver "5-2-0"
@@ -20,8 +22,8 @@ OutputBaseFilename="RoboFocus {#Ver} Setup"
 Compression=lzma
 SolidCompression=yes
 ; Put there by Platform if Driver Installer Support selected
-WizardImageFile="C:\Program Files\ASCOM\InstallGen\Resources\WizardImage.bmp"
-LicenseFile="C:\Program Files\ASCOM\InstallGen\Resources\CreativeCommons.txt"
+WizardImageFile="C:\Program Files (x86)\ASCOM\InstallGen\Resources\WizardImage.bmp"
+LicenseFile="C:\Program Files (x86)\ASCOM\InstallGen\Resources\CreativeCommons.txt"
 ; {cf}\ASCOM\Uninstall\Focuser folder created by Platform, always
 UninstallFilesDir="{cf}\ASCOM\Uninstall\Focuser\RoboFocus CP"
 
@@ -160,12 +162,20 @@ begin
    begin
      Helper := CreateOleObject('DriverHelper.Profile');
      Helper.DeviceType := 'Focuser';
-     Helper.Unregister('RoboFocusServer.Focuser');
-     Helper.Unregister('RoboFocusServer2.Focuser');
-     Helper.Unregister('RoboFocusServer3.Focuser');
+     Try
+       Helper.Unregister('RoboFocusServer.Focuser');
+       Helper.Unregister('RoboFocusServer2.Focuser');
+       Helper.Unregister('RoboFocusServer3.Focuser');
+     Except
+       ;
+     end;
      Helper.DeviceType := 'Switch';
-     Helper.Unregister('RoboFocusServer.Switch');
-     Helper.Unregister('RoboFocusServer2.Switch');
-     Helper.Unregister('RoboFocusServer3.Switch');
+     Try
+       Helper.Unregister('RoboFocusServer.Switch');
+       Helper.Unregister('RoboFocusServer2.Switch');
+       Helper.Unregister('RoboFocusServer3.Switch');
+     Except
+       ;
+     end;
   end;
 end;
