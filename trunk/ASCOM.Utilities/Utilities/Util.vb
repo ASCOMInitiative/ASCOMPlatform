@@ -794,15 +794,60 @@ Public Class Util
 #Region "Util 2 Implementation"
 
     ''' <summary>
-    ''' Current Platform version in m.n form
+    ''' Current Platform version in Major.Minor form
     ''' </summary>
-    ''' <returns>Current Platform version in m.n form</returns>
-    ''' <remarks></remarks>
+    ''' <returns>Current Platform version in Major.Minor form</returns>
+    ''' <remarks>Please be careful if you wish to convert this string into a number within your application 
+    ''' because the ASCOM Platform is used internationally and some countries use characters other 
+    ''' than point as the decimal separator. 
+    ''' <para>If your application tries to convert 5.5 into a Double value when running on a PC localised to 
+    ''' France, you will get an exception because the French decimal separater is comma and 5.5 is not 
+    ''' a valid representation of a decimal number in that locale.</para>
+    ''' <para>If you still wish to turn the Platform Version into a Double value, you can use an 
+    ''' approach such as this:</para>
+    ''' <code>If Double.Parse(Util.PlatformVersion, CultureInfo.InvariantCulture) &lt; 5.5 Then...</code>
+    ''' <para>If you just wish to test whether the platform is greater than a particular level,
+    ''' you can use the <see cref="IsMinimumRequiredVersion">IsMinimumRequiredVersion</see> method.</para>
+    ''' </remarks>
     Public ReadOnly Property PlatformVersion() As String Implements IUtil.PlatformVersion
         Get
             PlatformVersion = myProfile.GetProfile("", "PlatformVersion")
         End Get
     End Property
+
+    ''' <summary>
+    ''' Tests whether the current platform version is at least equal to the supplied major and minor 
+    ''' version numbers, returns false if this is not the case
+    ''' </summary>
+    ''' <param name="RequiredMajorVersion">The required major version number</param>
+    ''' <param name="RequiredMinorVersion">The required minor version number</param>
+    ''' <returns>True if the current platform version equals or exceeds the major and minor values provided</returns>
+    ''' <remarks>This function provides a simple way to test for a minimum platform level.
+    ''' If for example, your application requires at least platform version 5.5 then you can use 
+    ''' code such as this to make a test and display information as appropriate.
+    ''' <code > Const requiredMajorVersion as Integer = 5
+    ''' Const requiredMinorVersion as Integer = 5 ' Requires Platform version 5.5
+    ''' Dim Utils as New ASCOM.Utilities.Util
+    ''' isOK = Utils.IsMinimumRequiredVersion(requiredMajorVersion, requiredMinorVersion)
+    ''' If Not isOK Then 
+    '''    ' Abort, throw exception, print an error or whatever.
+    '''    End
+    ''' EndIf
+    ''' 
+    ''' </code></remarks>
+    Function IsMinimumRequiredVersion(ByVal RequiredMajorVersion As Integer, ByVal RequiredMinorVersion As Integer) As Boolean Implements IUtil.IsMinimumRequiredVersion
+        Dim PlatformVersion, RequiredVersion As Version
+        'Create a version object from the platform version string
+        PlatformVersion = New Version(myProfile.GetProfile("", "PlatformVersion"))
+        'Create a version object from the supplied major and minor required version numbers
+        RequiredVersion = New Version(RequiredMajorVersion, RequiredMinorVersion)
+
+        If (PlatformVersion.CompareTo(RequiredVersion) >= 0) Then
+            Return True 'Platform version is equal to or greater than the required version
+        Else
+            Return False 'Platform version is less than the required version
+        End If
+    End Function
 
     ''' <summary>
     ''' Change the serial trace file (default C:\SerialTrace.txt)
