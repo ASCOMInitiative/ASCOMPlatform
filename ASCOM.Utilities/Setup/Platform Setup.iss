@@ -83,13 +83,16 @@
 ; Updated to RC6 for RC6 release
 ; Setup Build 15 Released - RC6
 
-; Updated to RC6 for RC6 release
+; Updated to RC7 for RC7 release
 ; Setup Build 16 Released - RC7
+
+; Updated to Final Release
+; Setup Build 17 Released - Final 5.5 release
 
 [Setup]
 ; Setup program version number - change this each time you change this setup script
-#define Public SetupVersion 16
-#define Public RC "RC7"
+#define Public SetupVersion 17
+#define Public RC ""
 
 #define Public Major 0
 #define Public Minor 0
@@ -150,8 +153,8 @@ Name: {cf}\ASCOM\Uninstall\Utilities
 Name: dt; Description: Dekstop Icons;
 Name: dt\diagnostics; Description: Install ASCOM Diagnostics desktop icon ; GroupDescription: Desktop Icons
 Name: dt\profileexplorer; Description: Install ASCOM Profile Explorer desktop icon ; GroupDescription: Desktop Icons
-Name: cleanprofile; Description: Erase Utilities profile store (leaves registry profile intact); GroupDescription: Release Candidate Testing; Flags: unchecked
-Name: desktopicons; Description: Install EraseProfile and MigrateProfile desktop icons; GroupDescription: Release Candidate Testing
+; Name: cleanprofile; Description: Erase Utilities profile store (leaves registry profile intact); GroupDescription: Release Candidate Testing; Flags: unchecked
+; Name: desktopicons; Description: Install EraseProfile and MigrateProfile desktop icons; GroupDescription: Release Candidate Testing
 
 [Files]
 ;Install the ASCOM.Utilities code
@@ -282,8 +285,8 @@ Name: {commonprograms}\ASCOM Platform\Docs\ASCOM Platform Update 5.5; Filename: 
 Name: {commonprograms}\ASCOM Platform\Docs\ASCOM Platform Architecture; Filename: {cf}\ASCOM\Doc\Platform 5.5.pdf
 Name: {commonprograms}\ASCOM Platform\Tools\Profile Explorer; Filename: {pf}\ASCOM\Profile Explorer\ProfileExplorer.exe
 Name: {commonprograms}\ASCOM Platform\Tools\ASCOM Diagnostics; Filename: {app}\ASCOM Diagnostics.exe
-Name: {commondesktop}\Migrate Profile; Filename: {cf32}\ASCOM\Utilities\MigrateProfile.exe; Tasks: desktopicons
-Name: {commondesktop}\Erase Profile; Filename: {cf32}\ASCOM\Utilities\EraseProfile.exe; Tasks: desktopicons
+;Name: {commondesktop}\Migrate Profile; Filename: {cf32}\ASCOM\Utilities\MigrateProfile.exe; Tasks: desktopicons
+;Name: {commondesktop}\Erase Profile; Filename: {cf32}\ASCOM\Utilities\EraseProfile.exe; Tasks: desktopicons
 Name: {commondesktop}\ASCOM Diagnostics; Filename: {app}\ASCOM Diagnostics.exe; Tasks: dt\diagnostics
 Name: {commondesktop}\ASCOM Profile Explorer; Filename: "{pf}\ASCOM\Profile Explorer\ProfileExplorer.exe"; Tasks: dt\profileexplorer
 
@@ -318,7 +321,7 @@ Filename: {app}\GACInstall.exe; Parameters: """{app}\policy.1.0.ASCOM.DriverAcce
 #emit "Filename: {app}\GACInstall.exe; Parameters: policy." + str(Major) + "." + str(Minor) + ".ASCOM.Astrometry.dll; Flags: runhidden; StatusMsg: Installing ASCOM Astrometry policy to the assembly cache"
 
 ; Erase and migrate the profile if needed
-Filename: {cf32}\ASCOM\Utilities\EraseProfile.exe; Tasks: cleanprofile; Flags: runminimized; statusMsg: Erasing Profile
+;Filename: {cf32}\ASCOM\Utilities\EraseProfile.exe; Tasks: cleanprofile; Flags: runminimized; statusMsg: Erasing Profile
 Filename: {cf32}\ASCOM\Utilities\MigrateProfile.exe; Parameters: /MIGRATEIFNEEDED; Flags: runminimized; statusMsg: Migrating Profile if necessary
 
 ; ReadMe file

@@ -54,9 +54,11 @@
   						Any attempts to make concurrent use of the serial port will be noted in the serial log.</listItem>
   						<listItem>Util: The precision of the JulianDate function has be increased, was previously quantised to
   						1 second.</listItem>
+  						<listItem>New IsMinimumRequiredVersion method to test whether the installed platform has at least a 
+  						specified value of major and minor release.</listItem>
   					</list>
   				</listItem>
-  				<listItem>New InvalidValue, ValueNotSet, NotConnected, Parked and Slaved exceptions to support 
+  				<listItem>New InvalidCommand, InvalidValue, ValueNotSet, NotConnected, Parked and Slaved exceptions to support 
   				expected error conditions in drivers.</listItem>
   				<listItem>IConform interface now part of the platform. This allows drivers to communicate device specific
   				commands to Conform for use when testing the Telescope CommandXXX commands.</listItem>

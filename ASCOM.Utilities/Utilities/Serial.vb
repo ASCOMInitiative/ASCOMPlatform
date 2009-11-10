@@ -220,7 +220,6 @@ Public Class Serial
         m_Handshake = SERIALPORT_DEFAULT_HANDSHAKE
         m_Parity = SERIALPORT_DEFAULT_PARITY
         m_StopBits = SERIALPORT_DEFAULT_STOPBITS
-        m_Port = New System.IO.Ports.SerialPort(m_PortName) 'Peter 5.5.RC8 Added this initialisation
 
         TextEncoding = System.Text.Encoding.GetEncoding(SERIALPORT_ENCODING) 'Initialise text encoding for use by transmitbinary
         Try
@@ -419,8 +418,11 @@ Public Class Serial
             If TData.Connecting Then ' Trying to connect
                 If Not m_Connected Then
                     If Not My.Computer.Ports.SerialPortNames.Contains(m_PortName) Then Throw New Exceptions.InvalidValueException("Requested COM Port does not exist: " & m_PortName)
-                    If m_Port Is Nothing Then m_Port = New System.IO.Ports.SerialPort(m_PortName)
-                    m_Port.PortName = m_PortName 'Peter Added in RC7
+                    If m_Port Is Nothing Then
+                        m_Port = New System.IO.Ports.SerialPort(m_PortName)
+                    Else
+                        m_Port.PortName = m_PortName 'Peter Added in RC7
+                    End If
 
                     'Set up serial port
                     m_Port.BaudRate = m_Speed
@@ -682,12 +684,14 @@ Public Class Serial
             If DebugTrace Then Logger.LogMessage("ClearBuffers", FormatIDs(MyTransactionID) & " " & CurrentThread.ManagedThreadId & "Start")
             If GetSemaphore("ClearBuffers", MyTransactionID) Then
                 Try
-                    If m_Port.IsOpen Then 'This test is required to maintain compatibility with the original MSComm32 control
-                        m_Port.DiscardInBuffer()
-                        m_Port.DiscardOutBuffer()
-                        Logger.LogMessage("ClearBuffers", FormatIDs(MyTransactionID) & "Completed")
-                    Else
-                        Logger.LogMessage("ClearBuffers", FormatIDs(MyTransactionID) & "Command ignored as port is not open")
+                    If Not (m_Port Is Nothing) Then 'Ensure that ClearBuffers always succeeds for compatibility with MSCOMM32
+                        If m_Port.IsOpen Then 'This test is required to maintain compatibility with the original MSCOMM32 control
+                            m_Port.DiscardInBuffer()
+                            m_Port.DiscardOutBuffer()
+                            Logger.LogMessage("ClearBuffers", FormatIDs(MyTransactionID) & "Completed")
+                        Else
+                            Logger.LogMessage("ClearBuffers", FormatIDs(MyTransactionID) & "Command ignored as port is not open")
+                        End If
                     End If
                 Catch ex As Exception
                     Logger.LogMessage("ClearBuffers", FormatIDs(MyTransactionID) & "EXCEPTION: " & ex.ToString)

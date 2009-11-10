@@ -117,6 +117,44 @@
             The method that is not implemented
             </summary>
         </member>
+        <member name="T:ASCOM.InvalidOperationException">
+            <summary>
+            This exception should be raised by the driver to reject a command from the client. It is intended to be
+            used for "logical" errors e.g. trying to use a command when the current configuration of the device does
+            not allow it rather than for device errors such as a communications error.
+            <para>Its the error to use when the client attempts something, which at another time would be sensible,
+            but which is not sensible right now. If you expect the condition causing the issue to be short
+            lived, you may choose to stall the request until the condition is cleared rather than thorwing this exception.
+            Clearly, that is a judgement that you can only make given a specific scenario.</para>
+            </summary>
+        </member>
+        <member name="M:ASCOM.InvalidOperationException.#ctor">
+            <summary>
+            Default public constructor for NotConnectedException takes no parameters.
+            </summary>
+        </member>
+        <member name="M:ASCOM.InvalidOperationException.#ctor(System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.InvalidOperationException"/> class
+            from another exception.
+            </summary>
+            <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="M:ASCOM.InvalidOperationException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.InvalidOperationException"/> class
+            with a non-default error message.
+            </summary>
+            <param name="message">A descriptive human-readable message.</param>
+        </member>
+        <member name="M:ASCOM.InvalidOperationException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.InvalidOperationException"/> class
+            based on another exception.
+            </summary>
+            <param name="message">Descriptive text documenting the cause or source of the error.</param>
+            <param name="innerException">The inner exception the led to the throwing of this exception.</param>
+        </member>
         <member name="T:ASCOM.ValueNotSetException">
             <summary>
             Exception to report that no value has yet been set for this property.
@@ -370,44 +408,6 @@
             Initializes a new instance of the <see cref="T:ASCOM.SlavedException"/> class
             with a caught (inner) exception.
             </summary>
-        </member>
-        <member name="T:ASCOM.InvalidOperationException">
-            <summary>
-            This exception should be raised by the driver to reject a command from the client. It is intended to be
-            used for "logical" errors e.g. trying to use a command when the current configuration of the device does
-            not allow it rather than for device errors such as a communications error.
-            <para>Its the error to use when the client attempts something, which at another time would be sensible,
-            but which is not sensible right now. If you expect the condition causing the issue to be short
-            lived, you may choose to stall the request until the condition is cleared rather than thorwing this exception.
-            Clearly, that is a judgement that you can only make given a specific scenario.</para>
-            </summary>
-        </member>
-        <member name="M:ASCOM.InvalidOperationException.#ctor">
-            <summary>
-            Default public constructor for NotConnectedException takes no parameters.
-            </summary>
-        </member>
-        <member name="M:ASCOM.InvalidOperationException.#ctor(System.Exception)">
-            <summary>
-            Initializes a new instance of the <see cref="T:ASCOM.InvalidOperationException"/> class
-            from another exception.
-            </summary>
-            <param name="innerException">The inner exception.</param>
-        </member>
-        <member name="M:ASCOM.InvalidOperationException.#ctor(System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:ASCOM.InvalidOperationException"/> class
-            with a non-default error message.
-            </summary>
-            <param name="message">A descriptive human-readable message.</param>
-        </member>
-        <member name="M:ASCOM.InvalidOperationException.#ctor(System.String,System.Exception)">
-            <summary>
-            Initializes a new instance of the <see cref="T:ASCOM.InvalidOperationException"/> class
-            based on another exception.
-            </summary>
-            <param name="message">Descriptive text documenting the cause or source of the error.</param>
-            <param name="innerException">The inner exception the led to the throwing of this exception.</param>
         </member>
     </members>
 </doc>

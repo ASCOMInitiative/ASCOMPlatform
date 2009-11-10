@@ -19,18 +19,6 @@
 				</list>
    			</content>
    		</section>
-    	
-    	
-  		<section address="ToDo">
-      		<title>ToDo...</title>
-      		<content>
-      			<list class="bullet">
- 			 		<listItem>Help file corrections. - please report these through the "Send Feedback" links.</listItem>
- 			 		<listItem>Help file Code Examples -  translate to C# for inclusion alongside the VB examples. Any offers of help?</listItem>
- 			 		<listItem>Help file Code Examples -  does anyone have useful snippets to include?</listItem>
-	  			</list>
-      		</content>
-    	</section>
-
+   		
 	</developerConceptualDocument>
 </topic>
