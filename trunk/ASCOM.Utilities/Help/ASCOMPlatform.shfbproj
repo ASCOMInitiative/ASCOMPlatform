@@ -154,7 +154,7 @@
     <None Include="Version History\Version Summary.aml" />
     <None Include="Introduction\ASCOM Platform for COM.aml" />
     <None Include="Introduction\ASCOM Platform for .NET.aml" />
-    <None Include="Version History\Version 5.5 RC1.aml" />
+    <None Include="Version History\Version 5.5 Release.aml" />
     <None Include="Introduction\Introduction.aml" />
   </ItemGroup>
   <ItemGroup>
