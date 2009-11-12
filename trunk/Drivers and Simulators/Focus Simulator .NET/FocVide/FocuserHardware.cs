@@ -69,7 +69,7 @@ namespace ASCOM.FocVide
             get 
             {
                 MyLog(eLogKind.LogOther, "MaxIncrement property request");
-                return (int)Properties.Settings.Default.sMaxIncrement; 
+                return (int)Properties.Settings.Default.sMaxIncrement;
             }
         }
         #endregion
@@ -80,7 +80,7 @@ namespace ASCOM.FocVide
             get 
             {
                 MyLog(eLogKind.LogOther, "MaxStep property request");
-                return (int)Properties.Settings.Default.sMaxStep; 
+                return (int)Properties.Settings.Default.sMaxStep;
             }
         }
         #endregion
@@ -92,7 +92,7 @@ namespace ASCOM.FocVide
             {
                 MyLog(eLogKind.LogOther, "Position request");
                 if (Properties.Settings.Default.sAbsolute) return (int)Properties.Settings.Default.sPosition;
-                else throw new ASCOM.InvalidOperationException("Can't get position for a relative focuser.");  // ASCOM-46 issue
+                else throw new ASCOM.DriverException();
             }
         }
         #endregion
@@ -103,7 +103,7 @@ namespace ASCOM.FocVide
             get 
             {
                 MyLog(eLogKind.LogOther, "StepSize property request");
-                if (!Properties.Settings.Default.sIsStepSize) { throw new PropertyNotImplementedException("StepSize", false); }
+                if (!Properties.Settings.Default.sIsStepSize) { throw new ASCOM.DriverException(); }
                 else { return (double)Properties.Settings.Default.sStepSize; }
             }
         }
@@ -124,7 +124,7 @@ namespace ASCOM.FocVide
         public static void Halt()
         {
             MyLog(eLogKind.LogMove, "HALT requested");
-            if (!Properties.Settings.Default.sEnableHalt) { throw new MethodNotImplementedException("Halt()"); }
+            if (!Properties.Settings.Default.sEnableHalt) { throw new ASCOM.DriverException(); }
             else 
             { 
                 HaltRequested = true;
@@ -151,7 +151,7 @@ namespace ASCOM.FocVide
                     Properties.Settings.Default.sTempComp = value;
                     Properties.Settings.Default.Save();
                 }
-                else throw new PropertyNotImplementedException("TempComp",true);
+                else throw new ASCOM.DriverException();
             }
         }
         #endregion
@@ -178,7 +178,7 @@ namespace ASCOM.FocVide
                     // Get a simulated t° near the user specified range
                     return (double)((int)Properties.Settings.Default.sTempMin + 10 * xRand.NextDouble());
                 }
-                else throw new PropertyNotImplementedException("Temperature", false);
+                else throw new ASCOM.DriverException();
             }
         }
         #endregion
@@ -186,7 +186,6 @@ namespace ASCOM.FocVide
         #region Focuser.IsMoving property
         public static bool IsMoving
         {
-            //get { return Properties.Settings.Default.IsMoving; }
             get { return _IsMoving; }
         }
         #endregion
@@ -201,7 +200,7 @@ namespace ASCOM.FocVide
                 if (Properties.Settings.Default.sTempComp) // No moves when in t° compensation mode
                 {
                     MyLog(eLogKind.LogOther, "No move because T° compensation is ON");
-                    throw new System.InvalidOperationException("Move command is rejected while temperature compensation mode is True.");  // ASCOM-42 and ASCOM-43 issues
+                    return;
                 }
                 else
                 {
@@ -215,17 +214,48 @@ namespace ASCOM.FocVide
             HaltRequested = false;
             if (Properties.Settings.Default.sAbsolute)
             {
+                DestPosition = (val > (int)Properties.Settings.Default.sMaxStep ? (int)Properties.Settings.Default.sMaxStep : val);
+
                 if (val == Properties.Settings.Default.sPosition)
                 {
                     MyLog(eLogKind.LogOther, "No move because destination = current");
                     return;
                 }
+                // Focuser's spec is saying :
+                // The Move command tells the focuser to move to an exact step position, and the Position 
+                // parameter of the Move() method is an integer between 0 and MaxStep.
+                //
                 if (val < 0)
                 {
-                    MyLog(eLogKind.LogOther, "No move because destination is < 0");
-                    return;
+                    MyLog(eLogKind.LogOther, "Requested position < 0 : moving to 0");
+                    DestPosition = 0;
                 }
-                DestPosition = (val > (int)Properties.Settings.Default.sMaxStep ? (int)Properties.Settings.Default.sMaxStep : val);
+
+                if (val > (int)Properties.Settings.Default.sMaxStep)
+                {
+                    MyLog(eLogKind.LogOther, "Requested position > MaxStep : moving to MaxStep");
+                    DestPosition = (int)Properties.Settings.Default.sMaxStep;
+                }
+
+                // Focuser's spec is saying :
+                // MaxIncrement : Maximum increment size allowed by the focuser; i.e. the maximum number 
+                // of steps allowed in one move operation.
+                int NbStepsRequired = Math.Abs((int)(Properties.Settings.Default.sPosition - DestPosition));
+                if ( NbStepsRequired > Properties.Settings.Default.sMaxIncrement)
+                {
+                    if (DestPosition < Properties.Settings.Default.sPosition) 
+                    { 
+                        DestPosition = (int)Properties.Settings.Default.sPosition - (int)Properties.Settings.Default.sMaxIncrement;
+                        MyLog(eLogKind.LogOther, "Nb steps required > MaxIncrement : moving to current position - MaxIncrement");
+                    }
+                    else 
+                    { 
+                        DestPosition = (int)Properties.Settings.Default.sPosition + (int)Properties.Settings.Default.sMaxIncrement;
+                        MyLog(eLogKind.LogOther, "Nb steps required > MaxIncrement : moving to current position + MaxIncrement");
+                    }
+                }
+                
+                // Really start moving, now
                 Properties.Settings.Default.IsMoving = true;
                 int Start = (int)Properties.Settings.Default.sPosition;
                 MyLog(eLogKind.LogIsMoving, "Moving from "+Start.ToString()+" to "+val.ToString());
