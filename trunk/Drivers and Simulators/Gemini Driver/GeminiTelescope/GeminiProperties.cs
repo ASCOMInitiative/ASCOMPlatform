@@ -1256,7 +1256,12 @@ namespace ASCOM.GeminiTelescope
                     frmProgress.Update(incr, null);
                     GeminiHardware.DoCommandResult(">511:" + kp.Value.ToString(), GeminiHardware.MAX_TIMEOUT, false);
                 }
-                GeminiHardware.PECStatus = 32+2;      // PEC data is available
+                
+                byte pec = GeminiHardware.PECStatus;
+                if (pec != 0xff)
+                {
+                    GeminiHardware.PECStatus = (byte)(pec | (32 + 2));      // PEC data is available
+                }
                 Cursor.Current = Cursors.Default;
             }
         }
