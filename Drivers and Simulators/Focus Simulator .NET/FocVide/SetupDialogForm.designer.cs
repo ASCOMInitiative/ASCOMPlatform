@@ -30,6 +30,7 @@ namespace ASCOM.FocVide
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetupDialogForm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.IsSynchronous = new System.Windows.Forms.CheckBox();
             this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
             this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
@@ -60,7 +61,7 @@ namespace ASCOM.FocVide
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.CurrentTemp = new System.Windows.Forms.TextBox();
-            this.IsSynchronous = new System.Windows.Forms.CheckBox();
+            this.LinkFailure = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
@@ -77,6 +78,7 @@ namespace ASCOM.FocVide
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.LinkFailure);
             this.groupBox1.Controls.Add(this.IsSynchronous);
             this.groupBox1.Controls.Add(this.numericUpDown3);
             this.groupBox1.Controls.Add(this.label3);
@@ -86,10 +88,22 @@ namespace ASCOM.FocVide
             this.groupBox1.Controls.Add(this.RadioAbsolute);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(263, 93);
+            this.groupBox1.Size = new System.Drawing.Size(263, 113);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Type";
+            // 
+            // IsSynchronous
+            // 
+            this.IsSynchronous.AutoSize = true;
+            this.IsSynchronous.Checked = global::ASCOM.FocVide.Properties.Settings.Default.sIsSynchronous;
+            this.IsSynchronous.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ASCOM.FocVide.Properties.Settings.Default, "sIsSynchronous", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.IsSynchronous.Location = new System.Drawing.Point(6, 65);
+            this.IsSynchronous.Name = "IsSynchronous";
+            this.IsSynchronous.Size = new System.Drawing.Size(120, 17);
+            this.IsSynchronous.TabIndex = 9;
+            this.IsSynchronous.Text = "Synchronous moves";
+            this.IsSynchronous.UseVisualStyleBackColor = true;
             // 
             // numericUpDown3
             // 
@@ -178,7 +192,7 @@ namespace ASCOM.FocVide
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.numericUpDown1);
             this.groupBox2.Controls.Add(this.IsTempCompAvailable);
-            this.groupBox2.Location = new System.Drawing.Point(12, 111);
+            this.groupBox2.Location = new System.Drawing.Point(12, 131);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(263, 143);
             this.groupBox2.TabIndex = 5;
@@ -342,7 +356,7 @@ namespace ASCOM.FocVide
             this.groupBox4.Controls.Add(this.CurrentTemp);
             this.groupBox4.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::ASCOM.FocVide.Properties.Settings.Default, "sTempCompAvailable", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.groupBox4.Enabled = global::ASCOM.FocVide.Properties.Settings.Default.sTempCompAvailable;
-            this.groupBox4.Location = new System.Drawing.Point(12, 260);
+            this.groupBox4.Location = new System.Drawing.Point(12, 280);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(263, 200);
             this.groupBox4.TabIndex = 6;
@@ -492,23 +506,22 @@ namespace ASCOM.FocVide
             this.CurrentTemp.Text = "5°";
             this.CurrentTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // IsSynchronous
+            // LinkFailure
             // 
-            this.IsSynchronous.AutoSize = true;
-            this.IsSynchronous.Checked = global::ASCOM.FocVide.Properties.Settings.Default.sIsSynchronous;
-            this.IsSynchronous.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ASCOM.FocVide.Properties.Settings.Default, "sIsSynchronous", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.IsSynchronous.Location = new System.Drawing.Point(6, 65);
-            this.IsSynchronous.Name = "IsSynchronous";
-            this.IsSynchronous.Size = new System.Drawing.Size(120, 17);
-            this.IsSynchronous.TabIndex = 9;
-            this.IsSynchronous.Text = "Synchronous moves";
-            this.IsSynchronous.UseVisualStyleBackColor = true;
+            this.LinkFailure.AutoSize = true;
+            this.LinkFailure.Enabled = false;
+            this.LinkFailure.Location = new System.Drawing.Point(6, 88);
+            this.LinkFailure.Name = "LinkFailure";
+            this.LinkFailure.Size = new System.Drawing.Size(221, 17);
+            this.LinkFailure.TabIndex = 10;
+            this.LinkFailure.Text = "Enable random \"Change link state\" failure";
+            this.LinkFailure.UseVisualStyleBackColor = true;
             // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(377, 472);
+            this.ClientSize = new System.Drawing.Size(377, 485);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -577,5 +590,6 @@ namespace ASCOM.FocVide
         private System.Windows.Forms.NumericUpDown TempMini;
         private System.Windows.Forms.NumericUpDown TempMaxi;
         private System.Windows.Forms.CheckBox IsSynchronous;
+        private System.Windows.Forms.CheckBox LinkFailure;
     }
 }
