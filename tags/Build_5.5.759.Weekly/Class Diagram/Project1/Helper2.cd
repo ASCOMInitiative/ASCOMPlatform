@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Font Name="Tahoma" Size="8.25" />
+  <Interface Name="ASCOM.Helper2._Util">
+    <Position X="1.25" Y="1" Width="3.25" />
+    <TypeIdentifier />
+  </Interface>
+</ClassDiagram>
