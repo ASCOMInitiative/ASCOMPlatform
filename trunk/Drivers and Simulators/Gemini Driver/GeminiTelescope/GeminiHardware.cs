@@ -2091,7 +2091,7 @@ namespace ASCOM.GeminiTelescope
 
 
             Transmit("\x6");
-            ci = new CommandItem("\x6", 1000, true);
+            ci = new CommandItem("\x6", 2000, true);
             sRes = GetCommandResult(ci);
 
             if (sRes == null)

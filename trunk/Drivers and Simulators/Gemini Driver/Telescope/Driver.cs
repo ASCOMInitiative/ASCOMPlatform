@@ -674,7 +674,8 @@ namespace ASCOM.GeminiTelescope
                     GeminiHardware.Trace.Exit("IT:DeclinationRate.Get", rate);
                     return rate;
                 }
-                throw new TimeoutException("DeclinationRate");
+                else
+                    throw new TimeoutException("DeclinationRate");
             }
 
             set 
@@ -1098,7 +1099,8 @@ namespace ASCOM.GeminiTelescope
                     GeminiHardware.Trace.Exit("IT:RightAscensionRate.Get", offsetRate);
                     return offsetRate;
                 }
-                throw new TimeoutException("RightAscensionRate");
+                else
+                    throw new TimeoutException("RightAscensionRate");
             }
             set 
             {
@@ -1141,7 +1143,7 @@ namespace ASCOM.GeminiTelescope
                     GeminiHardware.DoCommandResult(cmd, GeminiHardware.MAX_TIMEOUT, false);
                     GeminiHardware.Trace.Exit("IT:RightAscensionRate.Set", value);
                 }
-                throw new TimeoutException("RightAscensionRate");
+                else throw new TimeoutException("RightAscensionRate");
             }
         }
 
