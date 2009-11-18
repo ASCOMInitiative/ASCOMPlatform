@@ -1378,7 +1378,7 @@ Public Class Serial
         StartTime = Now 'Save the current start time so we will wait longer than a port timeout before giving up on getting the semaphore
         Try
             If DebugTrace Then Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) & "Entered GetSemaphore ")
-            GotSemaphore = SerSemaphore.WaitOne(m_ReceiveTimeout + 2000)
+            GotSemaphore = SerSemaphore.WaitOne(m_ReceiveTimeout + 2000, False) 'Peter 17/11/09 Converted to use the framework 2.0 rather than 3.5 call
             If DebugTrace Then
                 If GotSemaphore Then
                     Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) & "Got Semaphore OK")

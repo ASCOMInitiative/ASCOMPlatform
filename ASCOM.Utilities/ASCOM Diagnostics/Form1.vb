@@ -6,6 +6,7 @@
 ' Added drive scan, reporting available space
 ' Version 1.0.2.0 - Released 15/10/09 Peter Simpson
 
+Imports System.xml
 Imports ASCOM.Utilities
 Imports Microsoft.Win32
 Imports System.IO
@@ -21,6 +22,8 @@ Public Class Form1
     Private Const Indent As Integer = 3 ' Display indent for recursive loop output
 
     Dim TL As TraceLogger
+    Dim ASCOMXMLAccess As ASCOM.Utilities.XMLAccess
+    Dim RecursionLevel As Integer
 
     'DLL to provide the path to Program Files(x86)\Common Files folder location that is not avialable through the .NET framework
     <DllImport("shell32.dll")> _
@@ -72,6 +75,12 @@ Public Class Form1
                 Next
                 TL.LogMessage("", "")
 
+                ScanFrameworks() 'Report on installed .NET Framework versions
+
+                ScanSerial() 'Report serial port information
+
+                ScanProfile() 'Report profile information
+
                 ScanRegistry() 'Report Com Registration
 
                 'Scan files on 32 and 64bit systems
@@ -106,6 +115,37 @@ Public Class Form1
         Catch ex1 As Exception
             lblResult.Text = "Can't create log: " & ex1.Message
         End Try
+    End Sub
+
+    Sub ScanFrameworks()
+        Dim FrameworkPath, FrameworkFile, FrameworkDirectories() As String
+        Dim PathShell As New System.Text.StringBuilder(260)
+
+        Status("Scanning Frameworks")
+
+        Try
+            SHGetSpecialFolderPath(IntPtr.Zero, PathShell, 36, False)
+            FrameworkPath = PathShell.ToString & "\Microsoft.NET\Framework"
+
+            FrameworkDirectories = Directory.GetDirectories(FrameworkPath)
+            For Each Directory As String In FrameworkDirectories
+                FrameWorkFile = Directory & "\mscorlib.dll"
+                Dim FVInfo As FileVersionInfo, FInfo As FileInfo
+                If File.Exists(FrameworkFile) Then
+
+                    FVInfo = FileVersionInfo.GetVersionInfo(FrameworkFile)
+                    FInfo = Microsoft.VisualBasic.FileIO.FileSystem.GetFileInfo(FrameworkFile)
+
+                    TL.LogMessage("Frameworks", Directory.ToString & " - Version: " & FVInfo.FileMajorPart & "." & FVInfo.FileMinorPart & " " & FVInfo.FileBuildPart & " " & FVInfo.FilePrivatePart)
+
+                Else
+                    TL.LogMessage("Frameworks", Directory.ToString)
+                End If
+            Next
+        Catch ex As Exception
+            TL.LogMessage("Frameworks", "Exception: " & ex.ToString)
+        End Try
+        TL.BlankLine()
     End Sub
 
     Sub ScanLogs()
@@ -432,4 +472,120 @@ Public Class Form1
     Private Sub btnExit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnExit.Click
         End 'Close the program
     End Sub
+
+    Sub ScanSerial()
+        Dim SerialRegKey As RegistryKey, SerialDevices() As String
+
+        'First list out the ports we can see through .NET
+        Status("Scanning Serial Ports")
+        For Each Port As String In System.IO.Ports.SerialPort.GetPortNames
+            TL.LogMessage("Serial Ports (.NET)", Port)
+        Next
+        TL.BlankLine()
+
+        SerialRegKey = Registry.LocalMachine.OpenSubKey("HARDWARE\DEVICEMAP\SERIALCOMM")
+        SerialDevices = SerialRegKey.GetValueNames
+        For Each SerialDevice As String In SerialDevices
+            TL.LogMessage("Serial Ports (Registry)", SerialRegKey.GetValue(SerialDevice).ToString & " - " & SerialDevice)
+        Next
+        TL.BlankLine()
+
+        For i As Integer = 1 To 30
+            Call SerialPortDetails(i)
+        Next
+
+        TL.BlankLine()
+
+    End Sub
+
+    Sub SerialPortDetails(ByVal PortNumber As Integer)
+        'List specific details of a particular serial port
+        Dim PortName As String, SerPort As New System.IO.Ports.SerialPort
+        PortName = "COM" & PortNumber.ToString 'String version of the port name
+
+        Try
+            SerPort.PortName = PortName
+            SerPort.BaudRate = 9600
+            SerPort.Open()
+            SerPort.Close()
+            TL.LogMessage("Serial Port Test ", PortName & " opened OK")
+        Catch ex As Exception
+            TL.LogMessage("Serial Port Test ", ex.Message)
+        End Try
+
+        SerPort.Dispose()
+        SerPort = Nothing
+    End Sub
+
+    Sub ScanProfile()
+
+        Dim ASCOMProfile As New Utilities.Profile, DeviceTypes() As String, Devices As ArrayList
+
+        ASCOMXMLAccess = New ASCOM.Utilities.XMLAccess
+        RecursionLevel = -1 'Initialise recursion level so the first increment makes this zero
+        Status("Scanning Profile")
+
+        DeviceTypes = ASCOMProfile.RegisteredDeviceTypes
+        For Each DeviceType As String In DeviceTypes
+            Devices = ASCOMProfile.RegisteredDevices(DeviceType)
+            TL.LogMessage("Registered Device Type", DeviceType)
+            For Each Device As KeyValuePair In Devices
+                TL.LogMessage("Registered Devices", "   " & Device.Key & " - " & Device.Value)
+            Next
+        Next
+        TL.BlankLine()
+
+        RecurseProfile("\") 'Scan recurively over the profile
+
+        TL.BlankLine()
+
+        ASCOMXMLAccess.Dispose() 'Clean up
+        ASCOMXMLAccess = Nothing
+
+    End Sub
+
+    Sub RecurseProfile(ByVal ASCOMKey As String)
+        Dim SubKeys, Values As New Generic.SortedList(Of String, String)
+        Dim NextKey, DisplayName, DisplayValue As String
+
+        Values = ASCOMXMLAccess.EnumProfile(ASCOMKey)
+        For Each kvp As KeyValuePair(Of String, String) In Values
+            If String.IsNullOrEmpty(kvp.Key) Then
+                DisplayName = "*** Default Value ***"
+            Else
+                DisplayName = kvp.Key
+            End If
+            If String.IsNullOrEmpty(kvp.Value) Then
+                DisplayValue = "*** Not Set ***"
+            Else
+                DisplayValue = kvp.Value
+            End If
+            TL.LogMessage("Profile", Space(3 * (RecursionLevel + 1)) & DisplayName & " = " & DisplayValue)
+        Next
+
+
+        RecursionLevel += 1 'Increment recursion level
+        SubKeys = ASCOMXMLAccess.EnumKeys(ASCOMKey)
+
+        For Each kvp As KeyValuePair(Of String, String) In SubKeys
+            If ASCOMKey = "\" Then
+                NextKey = ""
+            Else
+                NextKey = ASCOMKey
+            End If
+            If String.IsNullOrEmpty(kvp.Value) Then
+                DisplayValue = "*** Not Set ***"
+            Else
+                DisplayValue = kvp.Value
+            End If
+
+            TL.LogMessage("Profile Key", Space(3 * RecursionLevel) & NextKey & "\" & kvp.Key & " - " & DisplayValue)
+            RecurseProfile(NextKey & "\" & kvp.Key)
+        Next
+
+        RecursionLevel -= 1
+
+
+    End Sub
+
 End Class

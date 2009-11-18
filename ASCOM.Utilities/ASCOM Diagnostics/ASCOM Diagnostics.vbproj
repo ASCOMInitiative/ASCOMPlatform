@@ -7,8 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A3C42AFF-E6A0-478E-92DF-DC88234403C2}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>ASCOM.Diagnostics.My.MyApplication</StartupObject>
-    <RootNamespace>ASCOM.Diagnostics</RootNamespace>
+    <StartupObject>ASCOM.Utilities.My.MyApplication</StartupObject>
+    <RootNamespace>ASCOM.Utilities</RootNamespace>
     <AssemblyName>ASCOM Diagnostics</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
@@ -44,6 +44,7 @@
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -55,8 +56,41 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Utilities\AllUsersFileSystemProvider.vb">
+      <Link>AllUsersFileSystemProvider.vb</Link>
+    </Compile>
     <Compile Include="..\Utilities\CommonConstants.vb">
       <Link>CommonConstants.vb</Link>
+    </Compile>
+    <Compile Include="..\Utilities\Exceptions.vb">
+      <Link>Exceptions.vb</Link>
+    </Compile>
+    <Compile Include="..\Utilities\Interfaces.vb">
+      <Link>Interfaces.vb</Link>
+    </Compile>
+    <Compile Include="..\Utilities\KeyValuePair.vb">
+      <Link>KeyValuePair.vb</Link>
+    </Compile>
+    <Compile Include="..\Utilities\Profile.vb">
+      <Link>Profile.vb</Link>
+    </Compile>
+    <Compile Include="..\Utilities\Serial.vb">
+      <Link>Serial.vb</Link>
+    </Compile>
+    <Compile Include="..\Utilities\SharedConstantsAndCode.vb">
+      <Link>SharedConstantsAndCode.vb</Link>
+    </Compile>
+    <Compile Include="..\Utilities\TraceLogger.vb">
+      <Link>TraceLogger.vb</Link>
+    </Compile>
+    <Compile Include="..\Utilities\UtilitiesSettings.vb">
+      <Link>UtilitiesSettings.vb</Link>
+    </Compile>
+    <Compile Include="..\Utilities\VB6Support\VB6COMErrors.vb">
+      <Link>VB6COMErrors.vb</Link>
+    </Compile>
+    <Compile Include="..\Utilities\XMLAccess.vb">
+      <Link>XMLAccess.vb</Link>
     </Compile>
     <Compile Include="Form1.vb">
       <SubType>Form</SubType>
@@ -105,13 +139,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
+      <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
+      <Name>ASCOM.Exceptions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FusionLib\FusionLib.csproj">
       <Project>{70FDA2DE-A36D-45A0-812F-E5357AC7A8D2}</Project>
       <Name>FusionLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Utilities\Utilities.vbproj">
-      <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
-      <Name>Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
