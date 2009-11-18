@@ -1,3 +1,5 @@
 The current platform must be installed, or at least the Exceptions, Helper, Helper2, and Master Interfaces TLBs and PIAs (in GAC) with linkage OK. In other words, the references MUST be good!
 
 If any of these get changed, install the new ones manually into the GAC and then resolve the references here.
+
+See the BUILD_NOTE.txt file in Release also!!!

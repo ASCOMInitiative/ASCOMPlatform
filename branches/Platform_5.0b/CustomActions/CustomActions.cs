@@ -375,7 +375,6 @@ namespace ASCOM.PlatformInstaller
 			RegUnregExe(ascomPath +	"\\Telescope\\POTH.exe",					true);
 			RegUnregExe(ascomPath +	"\\Telescope\\Pipe.exe",					true);
 			RegUnregExe(ascomPath +	"\\Telescope\\Hub.exe",						true);
-			RegUnregExe(ascomPath +	"\\Rotator\\ASCOM.RotatorSimulator.exe",	true);
 			RegUnregExe(ascomPath +	"\\Switch\\SwitchSim.exe",					true);
 
 			//
@@ -387,7 +386,6 @@ namespace ASCOM.PlatformInstaller
 			AddAppID("ScopeSim.Telescope",		"ScopeSim.exe",					"{4597A685-11FD-47ae-A5D2-A8DC54C90CDC}");
 			AddAppID("FocusSim.Focuser",		"FocusSim.exe",					"{289BFF60-3B9E-417c-8DA1-F96773679342}");
 			AddAppID("DomeSim.Dome",			"DomeSim.exe",					"{C47DAA29-5788-464e-BBA7-9711FBC7A01F}");
-			AddAppID("ASCOM.Simulator.Rotator",	"ASCOM.RotatorSimulator.exe",	"{DF2EB077-4D59-4231-9CB4-C61AD4ECB874}");
 			AddAppID("POTH.Telescope",			"POTH.exe",						"{0A21726F-E58B-4461-85A9-9AA739E6E42F}");
 			AddAppID("POTH.Dome",				"",								"{0A21726F-E58B-4461-85A9-9AA739E6E42F}");
 			AddAppID("POTH.Focuser",			"",								"{0A21726F-E58B-4461-85A9-9AA739E6E42F}");
@@ -464,8 +462,7 @@ namespace ASCOM.PlatformInstaller
 		}
 
 		//
-		// Installer entry point for Uninstall phase - Call the Rotator sim to unregister it
-		// then remove all of the AppId stuff. The other sims & tools are self-unregistering.
+		// Installer entry point for Uninstall phase 
 		//
 		// MIRROR CALLS IN COMMIT
 		//
@@ -490,7 +487,6 @@ namespace ASCOM.PlatformInstaller
 			RemAppID("Pipe.exe",					"{080B23A0-3190-45e5-A7C8-53C61F22DFF2}");
 			RemAppID("Hub.exe",                     "{3213D452-2A8F-4624-9D65-E04E175E4CB2}");
 			RemAppID("ASCOMDome.exe",               "{B5863239-0A6E-48d4-A9EA-0DDA4D942390}");
-			RemAppID("ASCOM.RotatorSimulator.exe",	"{DF2EB077-4D59-4231-9CB4-C61AD4ECB874}");
 
 			//
 			// Unregister VB6 simulators for ASCOM
@@ -524,7 +520,6 @@ namespace ASCOM.PlatformInstaller
 			RegUnregExe(ascomPath + "\\Telescope\\POTH.exe", false);
 			RegUnregExe(ascomPath +	"\\Telescope\\Pipe.exe",					false);
 			RegUnregExe(ascomPath +	"\\Telescope\\Hub.exe",						false);
-			RegUnregExe(ascomPath +	"\\Rotator\\ASCOM.RotatorSimulator.exe",	false);
 			RegUnregExe(ascomPath +	"\\Switch\\SwitchSim.exe",					false);
 
 			//
