@@ -28,7 +28,7 @@ Friend Class XMLAccess
     Private FileStore As IFileStoreProvider 'File store containing the new ASCOM XML profile 
     Private disposedValue As Boolean = False        ' To detect redundant calls to IDisposable
 
-    Private KeyCache As Generic.Dictionary(Of String, Generic.SortedList(Of String, String))
+    Shared KeyCache As Generic.Dictionary(Of String, Generic.SortedList(Of String, String))
     Private TL As TraceLogger
 
     Private sw, swSupport As Stopwatch
