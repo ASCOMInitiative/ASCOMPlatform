@@ -8,3 +8,13 @@ C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projec
 C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\CustomActions\obj\Debug\ResolveAssemblyReference.cache
 C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\CustomActions\obj\Debug\Platform5CustomActions.dll
 C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\ASCOM\CustomActions\obj\Debug\Platform5CustomActions.pdb
+D:\dev\astro\ascom-50b\CustomActions\bin\Release\Platform5CustomActions.dll
+D:\dev\astro\ascom-50b\CustomActions\bin\Release\Platform5CustomActions.pdb
+D:\dev\astro\ascom-50b\CustomActions\obj\Release\ResolveAssemblyReference.cache
+D:\dev\astro\ascom-50b\CustomActions\obj\Release\Platform5CustomActions.dll
+D:\dev\astro\ascom-50b\CustomActions\obj\Release\Platform5CustomActions.pdb
+\\Bob\d\dev\astro\ascom-50b\CustomActions\bin\Release\Platform5CustomActions.dll
+\\Bob\d\dev\astro\ascom-50b\CustomActions\bin\Release\Platform5CustomActions.pdb
+\\Bob\d\dev\astro\ascom-50b\CustomActions\obj\Release\ResolveAssemblyReference.cache
+\\Bob\d\dev\astro\ascom-50b\CustomActions\obj\Release\Platform5CustomActions.dll
+\\Bob\d\dev\astro\ascom-50b\CustomActions\obj\Release\Platform5CustomActions.pdb
