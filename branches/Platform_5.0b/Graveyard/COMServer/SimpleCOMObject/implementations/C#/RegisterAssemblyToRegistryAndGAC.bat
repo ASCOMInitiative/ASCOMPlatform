@@ -1,0 +1,6 @@
+echo off
+echo Registering Assembly SimpleCOMObject_CSharpImpl.dll to the Registry...
+regasm .\bin\Debug\SimpleCOMObject_CSharpImpl.dll /tlb
+echo.
+echo Install Assembly SimpleCOMObject_CSharpImpl.dll into the Global Assembly Cache...
+gacutil -i .\bin\Debug\SimpleCOMObject_CSharpImpl.dll

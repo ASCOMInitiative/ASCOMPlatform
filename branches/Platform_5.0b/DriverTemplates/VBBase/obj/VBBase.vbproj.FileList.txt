@@ -1,0 +1,9 @@
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\ASCOM.DeviceName.Resources.resources
+obj\Debug\ASCOM.DeviceName.SetupDialogForm.resources
+obj\Debug\VBBase.vbproj.GenerateResource.Cache
+obj\Debug\Resources.resources
+obj\Debug\SetupDialogForm.resources
+obj\Debug\VBBase.vbproj.ResolveComReference.cache
+obj\Debug\ASCOM.Resources.resources
+obj\Debug\ASCOM.SetupDialogForm.resources

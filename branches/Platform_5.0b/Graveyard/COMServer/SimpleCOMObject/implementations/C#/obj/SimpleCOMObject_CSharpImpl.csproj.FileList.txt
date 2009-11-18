@@ -1,0 +1,8 @@
+bin\Debug\SimpleCOMObject_CSharpImpl.dll
+bin\Debug\SimpleCOMObject_CSharpImpl.pdb
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\COMServer\SimpleCOMObject\implementations\C#\SimpleCOMObject_CSharpImpl\bin\Debug\SimpleCOMObject_CSharpImpl.tlb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\SimpleCOMObject_CSharpImpl.csproj.ResolveComReference.cache
+obj\Debug\SimpleCOMObject_CSharpImpl.dll
+obj\Debug\SimpleCOMObject_CSharpImpl.pdb
+C:\Documents and Settings\Robert B. Denny\My Documents\Visual Studio 2005\Projects\COMServer\SimpleCOMObject\implementations\C#\bin\Debug\SimpleCOMObject_CSharpImpl.tlb
