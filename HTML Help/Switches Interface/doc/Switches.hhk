@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="DC-3 AutoDoc 2.0">
+<!-- Sitemap 1.0 -->
+</HEAD><BODY>
+	<UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Connected property">
+		<param name="Local"  value="SwitchesSwitchesPROPConnected.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Description property">
+		<param name="Local"  value="SwitchesSwitchesPROPDescription.htm">
+		<param name="Local"  value="SwitchesSwitchPROPDescription.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="DriverInfo property">
+		<param name="Local"  value="SwitchesSwitchesPROPDriverInfo.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="DriverVersion property">
+		<param name="Local"  value="SwitchesSwitchesPROPDriverVersion.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="InterfaceVersion property">
+		<param name="Local"  value="SwitchesSwitchesPROPInterfaceVersion.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Name property">
+		<param name="Local"  value="SwitchesSwitchesPROPName.htm">
+		<param name="Local"  value="SwitchesSwitchPROPName.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="SetupDialog method">
+		<param name="Local"  value="SwitchesSwitchesMETHSetupDialog.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="State property">
+		<param name="Local"  value="SwitchesSwitchPROPState.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Switch object">
+		<param name="Local"  value="SwitchesCLASSSwitch.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Switches object">
+		<param name="Local"  value="SwitchesCLASSSwitches.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Switches property">
+		<param name="Local"  value="SwitchesSwitchesPROPSwitches.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Error Codes">
+		<param name="Local"  value="SwitchesERRORS.htm">
+		</OBJECT>
+		<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="80040400">
+			<param name="Local"  value="SwitchesMSG80040400.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Property or method not supported">
+			<param name="Local"  value="SwitchesMSG80040400.htm">
+			</OBJECT>
+		</UL>
+	</UL>
+</BODY></HTML>
