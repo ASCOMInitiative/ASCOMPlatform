@@ -86,13 +86,15 @@
 ; Updated to RC7 for RC7 release
 ; Setup Build 16 Released - RC7
 
-; Updated to Final Release
-; Setup Build 17 Released - Final 5.5 release
+; Added regserver to helper.dll
+; Setup Build 18
+
+
 
 [Setup]
 ; Setup program version number - change this each time you change this setup script
 #define Public SetupVersion 17
-#define Public RC ""
+#define Public RC "Test-19-11-09a"
 
 #define Public Major 0
 #define Public Minor 0
@@ -200,7 +202,7 @@ Source: ..\..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll; DestDir: {cf32}
 Source: ..\..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
 
 ;VB6 Helpers
-Source: ..\VB6Helper\Helper.dll; DestDir: {cf32}\ASCOM; Flags: ignoreversion uninsneveruninstall 32bit
+Source: ..\VB6Helper\Helper.dll; DestDir: {cf32}\ASCOM; Flags: ignoreversion uninsneveruninstall 32bit regserver
 Source: ..\VB6Helper2\Helper2.dll; DestDir: {cf32}\ASCOM; Flags: ignoreversion uninsneveruninstall 32bit
 
 ;Copy the policy files

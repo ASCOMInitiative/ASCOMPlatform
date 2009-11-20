@@ -28,7 +28,10 @@ Friend Class XMLAccess
     Private FileStore As IFileStoreProvider 'File store containing the new ASCOM XML profile 
     Private disposedValue As Boolean = False        ' To detect redundant calls to IDisposable
 
-    Shared KeyCache As Generic.Dictionary(Of String, Generic.SortedList(Of String, String))
+    'Shared KeyCache As Generic.Dictionary(Of String, Generic.SortedList(Of String, String))
+    Private ProfileMutex As System.Threading.Mutex
+    Private GotMutex As Boolean
+
     Private TL As TraceLogger
 
     Private sw, swSupport As Stopwatch
@@ -44,7 +47,7 @@ Friend Class XMLAccess
 
     Sub New(ByVal p_IgnoreTest As Boolean)
         Dim PlatformVersion As String
-        KeyCache = New Generic.Dictionary(Of String, Generic.SortedList(Of String, String))
+        'KeyCache = New Generic.Dictionary(Of String, Generic.SortedList(Of String, String))
 
         TL = New TraceLogger("", "XMLAccess") 'Create a new trace logger
         TL.Enabled = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT) 'Get enabled / disabled state from the user registry
@@ -55,6 +58,8 @@ Friend Class XMLAccess
 
         FileStore = New AllUsersFileSystemProvider
         'FileStore = New IsolatedStorageFileStoreProvider
+
+        ProfileMutex = New System.Threading.Mutex(False, PROFILE_MUTEX_NAME)
 
         ' Bypass test for initial setup by MigrateProfile because the profile isn't yet set up
         If Not p_IgnoreTest Then
@@ -74,7 +79,7 @@ Friend Class XMLAccess
         If Not Me.disposedValue Then
             Try
                 FileStore = Nothing 'Clean up the filestore and keycache
-                KeyCache = Nothing
+                'KeyCache = Nothing
                 TL.Enabled = False 'Clean up the logger
                 TL.Dispose()
                 TL = Nothing
@@ -82,7 +87,8 @@ Friend Class XMLAccess
                 sw = Nothing
                 swSupport.Stop()
                 swSupport = Nothing
-
+                ProfileMutex.Close()
+                ProfileMutex = Nothing
             Catch ex As Exception
                 MsgBox("XMLAccess:Dispose Exception - " & ex.ToString)
             End Try
@@ -113,92 +119,119 @@ Friend Class XMLAccess
         Dim SubKeys(), SubKey As String
         Dim i, j As Integer
 
-        sw.Reset() : sw.Start() 'Start timing this call
-        TL.LogMessage("CreateKey", "SubKey: """ & p_SubKeyName & """")
+        Try
+            GotMutex = ProfileMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, False)
+            If Not GotMutex Then TL.LogMessage("CreateKey", "***** WARNING ***** Timed out waiting for Profile mutex")
 
-        p_SubKeyName = Trim(p_SubKeyName) 'Normalise the string:
-        SubKeys = Split(p_SubKeyName, "\", , Microsoft.VisualBasic.CompareMethod.Text) 'Parse p_SubKeyName into its elements
-        Select Case p_SubKeyName
-            Case ""
-                'Null path so do nothing
-            Case "\"
-                'Root node so just create this
-                'Test whether the key already exists
-                If Not FileStore.Exists("\" & VALUES_FILENAME) Then
-                    TL.LogMessage("  CreateKey", "  Creating root key ""\""")
-                    InitalValues.Clear() 'Now add the file containing the contents of the key
-                    InitalValues.Add(COLLECTION_DEFAULT_VALUE_NAME, COLLECTION_DEFAULT_UNSET_VALUE)
-                    WriteValues("\", InitalValues, False) 'Write the profile file, don't check if it already exists
-                Else
-                    TL.LogMessage("  CreateKey", "  Root key alread exists")
-                End If
-            Case Else
-                'Create the directory and its intermediate directories
-                For i = 0 To SubKeys.Length - 1
-                    SubKey = ""
-                    For j = 0 To i
-                        SubKey = SubKey & "\" & SubKeys(j)
-                    Next
-                    'Logger.'LogMsg("    CreateKey", "    SubKey " & i.ToString & " " & SubKey)
+            sw.Reset() : sw.Start() 'Start timing this call
+            TL.LogMessage("CreateKey", "SubKey: """ & p_SubKeyName & """")
+
+            p_SubKeyName = Trim(p_SubKeyName) 'Normalise the string:
+            SubKeys = Split(p_SubKeyName, "\", , Microsoft.VisualBasic.CompareMethod.Text) 'Parse p_SubKeyName into its elements
+            Select Case p_SubKeyName
+                Case ""
+                    'Null path so do nothing
+                Case "\"
+                    'Root node so just create this
                     'Test whether the key already exists
-                    If Not FileStore.Exists(SubKey & "\" & VALUES_FILENAME) Then
-                        '   Logger.'LogMsg("  CreateKey", "  Creating key """ & SubKey & """")
-                        FileStore.CreateDirectory(SubKey, TL)  'It doesn't exist so create it
+                    If Not FileStore.Exists("\" & VALUES_FILENAME) Then
+                        TL.LogMessage("  CreateKey", "  Creating root key ""\""")
                         InitalValues.Clear() 'Now add the file containing the contents of the key
                         InitalValues.Add(COLLECTION_DEFAULT_VALUE_NAME, COLLECTION_DEFAULT_UNSET_VALUE)
-                        WriteValues(SubKey, InitalValues, False) 'Write the profile file
+                        WriteValues("\", InitalValues, False) 'Write the profile file, don't check if it already exists
                     Else
-                        '  Logger.'LogMsg("  CreateKey", "  Key exists   """ & SubKey & """")
+                        TL.LogMessage("  CreateKey", "  Root key alread exists")
                     End If
-                Next
-        End Select
-        sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
-
+                Case Else
+                    'Create the directory and its intermediate directories
+                    For i = 0 To SubKeys.Length - 1
+                        SubKey = ""
+                        For j = 0 To i
+                            SubKey = SubKey & "\" & SubKeys(j)
+                        Next
+                        'Logger.'LogMsg("    CreateKey", "    SubKey " & i.ToString & " " & SubKey)
+                        'Test whether the key already exists
+                        If Not FileStore.Exists(SubKey & "\" & VALUES_FILENAME) Then
+                            '   Logger.'LogMsg("  CreateKey", "  Creating key """ & SubKey & """")
+                            FileStore.CreateDirectory(SubKey, TL)  'It doesn't exist so create it
+                            InitalValues.Clear() 'Now add the file containing the contents of the key
+                            InitalValues.Add(COLLECTION_DEFAULT_VALUE_NAME, COLLECTION_DEFAULT_UNSET_VALUE)
+                            WriteValues(SubKey, InitalValues, False) 'Write the profile file
+                        Else
+                            '  Logger.'LogMsg("  CreateKey", "  Key exists   """ & SubKey & """")
+                        End If
+                    Next
+            End Select
+            sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
+        Finally
+            ProfileMutex.ReleaseMutex()
+        End Try
     End Sub
 
     Friend Sub DeleteKey(ByVal p_SubKeyName As String) Implements IAccess.DeleteKey
         'Delete a key
 
-        sw.Reset() : sw.Start() 'Start timing this call
-        TL.LogMessage("DeleteKey", "SubKey: """ & p_SubKeyName & """")
+        Try
+            GotMutex = ProfileMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, False)
+            If Not GotMutex Then TL.LogMessage("DeleteKey", "***** WARNING ***** Timed out waiting for Profile mutex")
 
-        Try : FileStore.DeleteDirectory(p_SubKeyName) : Catch ex As Exception : End Try
-        Try : KeyCache.Remove(p_SubKeyName) : Catch : End Try
-        'MsgBox("Removed key " & p_SubKeyName)
-        sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
+            sw.Reset() : sw.Start() 'Start timing this call
+            TL.LogMessage("DeleteKey", "SubKey: """ & p_SubKeyName & """")
+
+            Try : FileStore.DeleteDirectory(p_SubKeyName) : Catch ex As Exception : End Try
+            'Try : KeyCache.Remove(p_SubKeyName) : Catch : End Try
+            'MsgBox("Removed key " & p_SubKeyName)
+            sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
+        Finally
+            ProfileMutex.ReleaseMutex()
+        End Try
     End Sub
 
-    Sub RenameKey(ByVal CurrentSubKeyName As String, ByVal NewSubKeyName As String) Implements IAccess.RenameKey
-        sw.Reset() : sw.Start() 'Start timing this call
-        TL.LogMessage("RenameKey", "Current SubKey: """ & CurrentSubKeyName & """" & " New SubKey: """ & NewSubKeyName & """")
-        FileStore.RenameDirectory(CurrentSubKeyName, NewSubKeyName)
-        Try : KeyCache.Remove(CurrentSubKeyName) : Catch : End Try
-        'MsgBox("Removed key " & p_SubKeyName)
-        sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
+    Friend Sub RenameKey(ByVal CurrentSubKeyName As String, ByVal NewSubKeyName As String) Implements IAccess.RenameKey
+        Try
+            GotMutex = ProfileMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, False)
+            If Not GotMutex Then TL.LogMessage("RenameKey", "***** WARNING ***** Timed out waiting for Profile mutex")
+
+            sw.Reset() : sw.Start() 'Start timing this call
+            TL.LogMessage("RenameKey", "Current SubKey: """ & CurrentSubKeyName & """" & " New SubKey: """ & NewSubKeyName & """")
+            FileStore.RenameDirectory(CurrentSubKeyName, NewSubKeyName)
+            'Try : KeyCache.Remove(CurrentSubKeyName) : Catch : End Try
+            'MsgBox("Removed key " & p_SubKeyName)
+            sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
+        Finally
+            ProfileMutex.ReleaseMutex()
+        End Try
     End Sub
 
     Friend Sub DeleteProfile(ByVal p_SubKeyName As String, ByVal p_ValueName As String) Implements IAccess.DeleteProfile
         'Delete a value from a key
         Dim Values As Generic.SortedList(Of String, String)
 
-        sw.Reset() : sw.Start() 'Start timing this call
-        TL.LogMessage("DeleteProfile", "SubKey: """ & p_SubKeyName & """ Name: """ & p_ValueName & """")
+        Try
+            GotMutex = ProfileMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, False)
+            If Not GotMutex Then TL.LogMessage("DeleteProfile", "***** WARNING ***** Timed out waiting for Profile mutex")
 
-        Values = ReadValues(p_SubKeyName) 'Read current contents of key
-        Try 'Remove value if it exists
-            If p_ValueName = "" Then 'Just set the default name to the unset value
-                Values(COLLECTION_DEFAULT_VALUE_NAME) = COLLECTION_DEFAULT_UNSET_VALUE
-                TL.LogMessage("DeleteProfile", "  Default name was changed to unset value")
-            Else 'Actually delete the value
-                Values.Remove(p_ValueName)
-                TL.LogMessage("DeleteProfile", "  Value was deleted")
-            End If
-        Catch
-            TL.LogMessage("DeleteProfile", "  Value did not exist")
+            sw.Reset() : sw.Start() 'Start timing this call
+            TL.LogMessage("DeleteProfile", "SubKey: """ & p_SubKeyName & """ Name: """ & p_ValueName & """")
+
+            Values = ReadValues(p_SubKeyName) 'Read current contents of key
+            Try 'Remove value if it exists
+                If p_ValueName = "" Then 'Just set the default name to the unset value
+                    Values(COLLECTION_DEFAULT_VALUE_NAME) = COLLECTION_DEFAULT_UNSET_VALUE
+                    TL.LogMessage("DeleteProfile", "  Default name was changed to unset value")
+                Else 'Actually delete the value
+                    Values.Remove(p_ValueName)
+                    TL.LogMessage("DeleteProfile", "  Value was deleted")
+                End If
+            Catch
+                TL.LogMessage("DeleteProfile", "  Value did not exist")
+            End Try
+            WriteValues(p_SubKeyName, Values) 'Write the new list of values back to the key
+            Values = Nothing
+            sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
+        Finally
+            ProfileMutex.ReleaseMutex()
         End Try
-        WriteValues(p_SubKeyName, Values) 'Write the new list of values back to the key
-        Values = Nothing
-        sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
     End Sub
 
     Friend Function EnumKeys(ByVal p_SubKeyName As String) As Collections.Generic.SortedList(Of String, String) Implements IAccess.EnumKeys
@@ -207,21 +240,28 @@ Friend Class XMLAccess
         Dim RetValues As New Generic.SortedList(Of String, String)
         Dim Directories(), DefaultValue As String
 
-        sw.Reset() : sw.Start() 'Start timing this call
-        TL.LogMessage("EnumKeys", "SubKey: """ & p_SubKeyName & """")
+        Try
+            GotMutex = ProfileMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, False)
+            If Not GotMutex Then TL.LogMessage("EnumKeys", "***** WARNING ***** Timed out waiting for Profile mutex")
 
-        Directories = FileStore.GetDirectoryNames(p_SubKeyName) 'Get a list of the keys
-        For Each Directory As String In Directories 'Process each key in trun
-            Try 'If there is an error reading the data don't include in the returned list
-                Values = ReadValues(p_SubKeyName & "\" & Directory) 'Read the values of this key to find the default value
-                DefaultValue = Values.Item(COLLECTION_DEFAULT_VALUE_NAME) 'Save the default value
-                If DefaultValue = COLLECTION_DEFAULT_UNSET_VALUE Then DefaultValue = ""
-                RetValues.Add(Directory, DefaultValue) 'Add the directory name and default value to the hashtable
-            Catch
-            End Try
-            Values = Nothing
-        Next
-        sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
+            sw.Reset() : sw.Start() 'Start timing this call
+            TL.LogMessage("EnumKeys", "SubKey: """ & p_SubKeyName & """")
+
+            Directories = FileStore.GetDirectoryNames(p_SubKeyName) 'Get a list of the keys
+            For Each Directory As String In Directories 'Process each key in trun
+                Try 'If there is an error reading the data don't include in the returned list
+                    Values = ReadValues(p_SubKeyName & "\" & Directory) 'Read the values of this key to find the default value
+                    DefaultValue = Values.Item(COLLECTION_DEFAULT_VALUE_NAME) 'Save the default value
+                    If DefaultValue = COLLECTION_DEFAULT_UNSET_VALUE Then DefaultValue = ""
+                    RetValues.Add(Directory, DefaultValue) 'Add the directory name and default value to the hashtable
+                Catch
+                End Try
+                Values = Nothing
+            Next
+            sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
+        Finally
+            ProfileMutex.ReleaseMutex()
+        End Try
         Return RetValues
     End Function
 
@@ -230,23 +270,30 @@ Friend Class XMLAccess
         Dim Values As Generic.SortedList(Of String, String)
         Dim RetValues As New Generic.SortedList(Of String, String)
 
-        sw.Reset() : sw.Start() 'Start timing this call
-        TL.LogMessage("EnumProfile", "SubKey: """ & p_SubKeyName & """")
+        Try
+            GotMutex = ProfileMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, False)
+            If Not GotMutex Then TL.LogMessage("EnumProfile", "***** WARNING ***** Timed out waiting for Profile mutex")
+            sw.Reset() : sw.Start() 'Start timing this call
+            TL.LogMessage("EnumProfile", "SubKey: """ & p_SubKeyName & """")
 
-        Values = ReadValues(p_SubKeyName) 'Read values from profile XML file
-        For Each kvp As Generic.KeyValuePair(Of String, String) In Values 'Retrieve each key/value  pair in turn
-            If kvp.Key = COLLECTION_DEFAULT_VALUE_NAME Then
-                If kvp.Value = COLLECTION_DEFAULT_UNSET_VALUE Then
-                    'Do nothing if the value is unset
+            Values = ReadValues(p_SubKeyName) 'Read values from profile XML file
+            For Each kvp As Generic.KeyValuePair(Of String, String) In Values 'Retrieve each key/value  pair in turn
+                If kvp.Key = COLLECTION_DEFAULT_VALUE_NAME Then
+                    If kvp.Value = COLLECTION_DEFAULT_UNSET_VALUE Then
+                        'Do nothing if the value is unset
+                    Else
+                        RetValues.Add("", kvp.Value) 'Add any other value to the return value
+                    End If
                 Else
-                    RetValues.Add("", kvp.Value) 'Add any other value to the return value
+                    RetValues.Add(kvp.Key, kvp.Value)
                 End If
-            Else
-                RetValues.Add(kvp.Key, kvp.Value)
-            End If
-        Next
-        Values = Nothing
-        sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
+            Next
+            Values = Nothing
+            sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
+
+        Finally
+            ProfileMutex.ReleaseMutex()
+        End Try
         Return RetValues
     End Function
 
@@ -254,38 +301,47 @@ Friend Class XMLAccess
         'Read a single value from a key
         Dim Values As Generic.SortedList(Of String, String), RetVal As String
 
-        sw.Reset() : sw.Start() 'Start timing this call
-        TL.LogMessage("GetProfile", "SubKey: """ & p_SubKeyName & """ Name: """ & p_ValueName & """" & """ DefaultValue: """ & p_DefaultValue & """")
-
-        RetVal = "" 'Initialise return value to null string
         Try
-            Values = ReadValues(p_SubKeyName) 'Read in the key values
-            If p_ValueName = "" Then 'Requested the default value
-                RetVal = Values.Item(COLLECTION_DEFAULT_VALUE_NAME)
-            Else 'Requested a particular value
-                RetVal = Values.Item(p_ValueName)
-            End If
-        Catch ex As Generic.KeyNotFoundException 'Missing value generates a KeyNotFound exception and should return a null string or the supplied default value
-            If Not (p_DefaultValue Is Nothing) Then 'We have been supplied a default value so set it and then return it
-                WriteProfile(p_SubKeyName, p_ValueName, p_DefaultValue)
-                RetVal = p_DefaultValue
-                TL.LogMessage("GetProfile", "Value not yet set, returning supplied default value: " & p_DefaultValue)
-            Else
-                TL.LogMessage("GetProfile", "Value not yet set and no default value supplied, returning null string")
-            End If
-        Catch ex As Exception 'Any other exception
-            If Not (p_DefaultValue Is Nothing) Then 'We have been supplied a default value so set it and then return it
-                WriteProfile(p_SubKeyName, p_ValueName, p_DefaultValue)
-                RetVal = p_DefaultValue
-                TL.LogMessage("GetProfile", "Key not yet set, returning supplied default value: " & p_DefaultValue)
-            Else
-                TL.LogMessage("GetProfile", "Key not yet set and no default value supplied, throwing exception: " & ex.Message)
-                Throw
-            End If
+            GotMutex = ProfileMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, False)
+            If Not GotMutex Then TL.LogMessage("GetProfile", "***** WARNING ***** Timed out waiting for Profile mutex")
+
+            sw.Reset() : sw.Start() 'Start timing this call
+            TL.LogMessage("GetProfile", "SubKey: """ & p_SubKeyName & """ Name: """ & p_ValueName & """" & """ DefaultValue: """ & p_DefaultValue & """")
+
+            RetVal = "" 'Initialise return value to null string
+            Try
+                Values = ReadValues(p_SubKeyName) 'Read in the key values
+                If p_ValueName = "" Then 'Requested the default value
+                    RetVal = Values.Item(COLLECTION_DEFAULT_VALUE_NAME)
+                Else 'Requested a particular value
+                    RetVal = Values.Item(p_ValueName)
+                End If
+            Catch ex As Generic.KeyNotFoundException 'Missing value generates a KeyNotFound exception and should return a null string or the supplied default value
+                If Not (p_DefaultValue Is Nothing) Then 'We have been supplied a default value so set it and then return it
+                    WriteProfile(p_SubKeyName, p_ValueName, p_DefaultValue)
+                    RetVal = p_DefaultValue
+                    TL.LogMessage("GetProfile", "Value not yet set, returning supplied default value: " & p_DefaultValue)
+                Else
+                    TL.LogMessage("GetProfile", "Value not yet set and no default value supplied, returning null string")
+                End If
+            Catch ex As Exception 'Any other exception
+                If Not (p_DefaultValue Is Nothing) Then 'We have been supplied a default value so set it and then return it
+                    WriteProfile(p_SubKeyName, p_ValueName, p_DefaultValue)
+                    RetVal = p_DefaultValue
+                    TL.LogMessage("GetProfile", "Key not yet set, returning supplied default value: " & p_DefaultValue)
+                Else
+                    TL.LogMessage("GetProfile", "Key not yet set and no default value supplied, throwing exception: " & ex.Message)
+                    Throw
+                End If
+            End Try
+
+            Values = Nothing
+            sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
+
+        Finally
+            ProfileMutex.ReleaseMutex()
         End Try
 
-        Values = Nothing
-        sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
         Return RetVal
     End Function
 
@@ -297,32 +353,40 @@ Friend Class XMLAccess
         'Write a single value to a key
         Dim Values As Generic.SortedList(Of String, String)
 
-        sw.Reset() : sw.Start() 'Start timing this call
-        TL.LogMessage("WriteProfile", "SubKey: """ & p_SubKeyName & """ Name: """ & p_ValueName & """ Value: """ & p_ValueData & """")
+        Try
+            GotMutex = ProfileMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, False)
+            If Not GotMutex Then TL.LogMessage("WriteProfile", "***** WARNING ***** Timed out waiting for Profile mutex")
 
-        'Check if the directory exists
-        If Not FileStore.Exists(p_SubKeyName & "\" & VALUES_FILENAME) Then CreateKey(p_SubKeyName) 'Create the subkey if it doesn't already exist
-        Values = ReadValues(p_SubKeyName) 'Read the key values
+            sw.Reset() : sw.Start() 'Start timing this call
+            TL.LogMessage("WriteProfile", "SubKey: """ & p_SubKeyName & """ Name: """ & p_ValueName & """ Value: """ & p_ValueData & """")
 
-        If p_ValueName = "" Then 'Write the deault value
-            If Values.ContainsKey(COLLECTION_DEFAULT_VALUE_NAME) Then 'Does exist so update it
-                '        Logger.'LogMsg("  WriteProfile", "  Updating existing default value to #" & p_ValueData & "#")
-                Values.Item(COLLECTION_DEFAULT_VALUE_NAME) = p_ValueData 'Update the existing value
-            Else 'Doesn't exist so add it
-                '       Logger.'LogMsg("  WriteProfile", "  Adding new default value")
-                Values.Add(COLLECTION_DEFAULT_VALUE_NAME, p_ValueData) 'Add the new value
+            'Check if the directory exists
+            If Not FileStore.Exists(p_SubKeyName & "\" & VALUES_FILENAME) Then CreateKey(p_SubKeyName) 'Create the subkey if it doesn't already exist
+            Values = ReadValues(p_SubKeyName) 'Read the key values
+
+            If p_ValueName = "" Then 'Write the deault value
+                If Values.ContainsKey(COLLECTION_DEFAULT_VALUE_NAME) Then 'Does exist so update it
+                    '        Logger.'LogMsg("  WriteProfile", "  Updating existing default value to #" & p_ValueData & "#")
+                    Values.Item(COLLECTION_DEFAULT_VALUE_NAME) = p_ValueData 'Update the existing value
+                Else 'Doesn't exist so add it
+                    '       Logger.'LogMsg("  WriteProfile", "  Adding new default value")
+                    Values.Add(COLLECTION_DEFAULT_VALUE_NAME, p_ValueData) 'Add the new value
+                End If
+                '  Logger.'LogMsg("  WriteProfile", "  Writing updated values")
+
+                WriteValues(p_SubKeyName, Values) 'Write the values back to the XML profile
+            Else 'Write a named value
+                ' Logger.'LogMsg("  WriteProfile", "  Updating existing value")
+                If Values.ContainsKey(p_ValueName) Then Values.Remove(p_ValueName) 'Remove old value if it exists
+                Values.Add(p_ValueName, p_ValueData) 'Add the new value
+                WriteValues(p_SubKeyName, Values) 'Write the values back to the XML profile
             End If
-            '  Logger.'LogMsg("  WriteProfile", "  Writing updated values")
+            Values = Nothing
+            sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
 
-            WriteValues(p_SubKeyName, Values) 'Write the values back to the XML profile
-        Else 'Write a named value
-            ' Logger.'LogMsg("  WriteProfile", "  Updating existing value")
-            If Values.ContainsKey(p_ValueName) Then Values.Remove(p_ValueName) 'Remove old value if it exists
-            Values.Add(p_ValueName, p_ValueData) 'Add the new value
-            WriteValues(p_SubKeyName, Values) 'Write the values back to the XML profile
-        End If
-        Values = Nothing
-        sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
+        Finally
+            ProfileMutex.ReleaseMutex()
+        End Try
     End Sub
 
     Sub MigrateProfile() Implements IAccess.MigrateProfile
@@ -376,13 +440,13 @@ Friend Class XMLAccess
         swSupport.Reset() : swSupport.Start() 'Start timing this call
         If Left(p_SubKeyName, 1) <> "\" Then p_SubKeyName = "\" & p_SubKeyName 'Condition to have leading \
 
-        If KeyCache.ContainsKey(p_SubKeyName) Then
-            swSupport.Stop()
-            TL.LogMessage("  ReadValues", "  Found in cache  " & p_SubKeyName & " - " & swSupport.ElapsedMilliseconds & " milliseconds")
-            Return KeyCache.Item(p_SubKeyName)
-        Else
-            TL.LogMessage("  ReadValues", "  Cache miss      " & p_SubKeyName)
-        End If
+        'If KeyCache.ContainsKey(p_SubKeyName) Then
+        ' swSupport.Stop()
+        ' TL.LogMessage("  ReadValues", "  Found in cache  " & p_SubKeyName & " - " & swSupport.ElapsedMilliseconds & " milliseconds")
+        ' Return KeyCache.Item(p_SubKeyName)
+        ' Else
+        TL.LogMessage("  ReadValues", "  Cache miss      " & p_SubKeyName)
+        'End If
 
         Try
             ReaderSettings = New XmlReaderSettings
@@ -412,7 +476,7 @@ Friend Class XMLAccess
 
                 Reader.Close() 'Close the IO readers
             End Using
-            KeyCache.Add(p_SubKeyName, Retval) 'Add the new value to the cache
+            'KeyCache.Add(p_SubKeyName, Retval) 'Add the new value to the cache
             swSupport.Stop()
             TL.LogMessage("  ReadValues", "  added to cache - " & swSupport.ElapsedMilliseconds & " milliseconds")
         Catch ex As Exception
@@ -502,15 +566,15 @@ Friend Class XMLAccess
 
             WriterSettings = Nothing
 
-            If KeyCache.ContainsKey(p_SubKeyName) Then
-                KeyCache.Item(p_SubKeyName) = p_KeyValuePairs 'Update the local cache
-                swSupport.Stop()
-                TL.LogMessage("  WriteValues", "  Updated cache entry " & p_SubKeyName & " - " & swSupport.ElapsedMilliseconds & " milliseconds")
-            Else
-                KeyCache.Add(p_SubKeyName, p_KeyValuePairs) 'Add the new value
-                swSupport.Stop()
-                TL.LogMessage("  WriteValues", "  Created cache entry " & p_SubKeyName & " - " & swSupport.ElapsedMilliseconds & " milliseconds")
-            End If
+            'If KeyCache.ContainsKey(p_SubKeyName) Then
+            ' KeyCache.Item(p_SubKeyName) = p_KeyValuePairs 'Update the local cache
+            'swSupport.Stop()
+            'TL.LogMessage("  WriteValues", "  Updated cache entry " & p_SubKeyName & " - " & swSupport.ElapsedMilliseconds & " milliseconds")
+            'Else
+            'KeyCache.Add(p_SubKeyName, p_KeyValuePairs) 'Add the new value
+            swSupport.Stop()
+            TL.LogMessage("  WriteValues", "  Created cache entry " & p_SubKeyName & " - " & swSupport.ElapsedMilliseconds & " milliseconds")
+            'End If
         Catch ex As Exception
             TL.LogMessage("  WriteValues", "  Exception " & p_SubKeyName & " " & ex.ToString)
             MsgBox("XMLAccess:Writevalues " & p_SubKeyName & " " & ex.ToString)
