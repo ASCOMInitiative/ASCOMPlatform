@@ -523,18 +523,24 @@ Public Class Form1
 
         ASCOMXMLAccess = New ASCOM.Utilities.XMLAccess
         RecursionLevel = -1 'Initialise recursion level so the first increment makes this zero
-        Status("Scanning Profile")
 
-        DeviceTypes = ASCOMProfile.RegisteredDeviceTypes
-        For Each DeviceType As String In DeviceTypes
-            Devices = ASCOMProfile.RegisteredDevices(DeviceType)
-            TL.LogMessage("Registered Device Type", DeviceType)
-            For Each Device As KeyValuePair In Devices
-                TL.LogMessage("Registered Devices", "   " & Device.Key & " - " & Device.Value)
+        Try
+            Status("Scanning Profile")
+
+            DeviceTypes = ASCOMProfile.RegisteredDeviceTypes
+            For Each DeviceType As String In DeviceTypes
+                Devices = ASCOMProfile.RegisteredDevices(DeviceType)
+                TL.LogMessage("Registered Device Type", DeviceType)
+                For Each Device As KeyValuePair In Devices
+                    TL.LogMessage("Registered Devices", "   " & Device.Key & " - " & Device.Value)
+                Next
             Next
-        Next
-        TL.BlankLine()
+            TL.BlankLine()
+        Catch ex As Exception
+            TL.LogMessage("RegisteredDevices", "Exception: " & ex.ToString)
+        End Try
 
+        TL.LogMessage("Profile", "Recusrsing Profile")
         RecurseProfile("\") 'Scan recurively over the profile
 
         TL.BlankLine()
@@ -547,43 +553,51 @@ Public Class Form1
     Sub RecurseProfile(ByVal ASCOMKey As String)
         Dim SubKeys, Values As New Generic.SortedList(Of String, String)
         Dim NextKey, DisplayName, DisplayValue As String
+        Try
+            TL.LogMessage("RecurseProfile", ASCOMKey)
+            Values = ASCOMXMLAccess.EnumProfile(ASCOMKey)
+            For Each kvp As KeyValuePair(Of String, String) In Values
+                If String.IsNullOrEmpty(kvp.Key) Then
+                    DisplayName = "*** Default Value ***"
+                Else
+                    DisplayName = kvp.Key
+                End If
+                If String.IsNullOrEmpty(kvp.Value) Then
+                    DisplayValue = "*** Not Set ***"
+                Else
+                    DisplayValue = kvp.Value
+                End If
+                TL.LogMessage("Profile", Space(3 * (RecursionLevel + 1)) & DisplayName & " = " & DisplayValue)
+            Next
+        Catch ex As Exception
+            TL.LogMessage("Profile 1", "Exception: " & ex.ToString)
+        End Try
 
-        Values = ASCOMXMLAccess.EnumProfile(ASCOMKey)
-        For Each kvp As KeyValuePair(Of String, String) In Values
-            If String.IsNullOrEmpty(kvp.Key) Then
-                DisplayName = "*** Default Value ***"
-            Else
-                DisplayName = kvp.Key
-            End If
-            If String.IsNullOrEmpty(kvp.Value) Then
-                DisplayValue = "*** Not Set ***"
-            Else
-                DisplayValue = kvp.Value
-            End If
-            TL.LogMessage("Profile", Space(3 * (RecursionLevel + 1)) & DisplayName & " = " & DisplayValue)
-        Next
+        Try
+            RecursionLevel += 1 'Increment recursion level
+            SubKeys = ASCOMXMLAccess.EnumKeys(ASCOMKey)
 
+            For Each kvp As KeyValuePair(Of String, String) In SubKeys
+                If ASCOMKey = "\" Then
+                    NextKey = ""
+                Else
+                    NextKey = ASCOMKey
+                End If
+                If String.IsNullOrEmpty(kvp.Value) Then
+                    DisplayValue = "*** Not Set ***"
+                Else
+                    DisplayValue = kvp.Value
+                End If
 
-        RecursionLevel += 1 'Increment recursion level
-        SubKeys = ASCOMXMLAccess.EnumKeys(ASCOMKey)
+                TL.LogMessage("Profile Key", Space(3 * RecursionLevel) & NextKey & "\" & kvp.Key & " - " & DisplayValue)
+                RecurseProfile(NextKey & "\" & kvp.Key)
+            Next
 
-        For Each kvp As KeyValuePair(Of String, String) In SubKeys
-            If ASCOMKey = "\" Then
-                NextKey = ""
-            Else
-                NextKey = ASCOMKey
-            End If
-            If String.IsNullOrEmpty(kvp.Value) Then
-                DisplayValue = "*** Not Set ***"
-            Else
-                DisplayValue = kvp.Value
-            End If
-
-            TL.LogMessage("Profile Key", Space(3 * RecursionLevel) & NextKey & "\" & kvp.Key & " - " & DisplayValue)
-            RecurseProfile(NextKey & "\" & kvp.Key)
-        Next
-
-        RecursionLevel -= 1
+        Catch ex As Exception
+            TL.LogMessage("Profile 2", "Exception: " & ex.ToString)
+        Finally
+            RecursionLevel -= 1
+        End Try
 
 
     End Sub
