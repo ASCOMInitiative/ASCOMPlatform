@@ -1,0 +1,29 @@
+
+      [
+          uuid(C67830E0-D11D-11cf-BD80-00AA00575603),
+          helpstring("VB IObjectSafety Interface"),
+          version(1.0)
+      ]
+      library IObjectSafetyTLB
+      {
+          importlib("stdole2.tlb");
+          [
+              uuid(CB5BDC81-93C1-11cf-8F20-00805F2CD064),
+              helpstring("IObjectSafety Interface"),
+              odl
+          ]
+          interface IObjectSafety:IUnknown {
+              [helpstring("GetInterfaceSafetyOptions")]
+              HRESULT GetInterfaceSafetyOptions(
+                        [in]  long  riid,
+                        [in]  long *pdwSupportedOptions,
+                        [in]  long *pdwEnabledOptions);
+
+              [helpstring("SetInterfaceSafetyOptions")]
+              HRESULT SetInterfaceSafetyOptions(
+                        [in]  long  riid,
+                        [in]  long  dwOptionsSetMask,
+                        [in]  long  dwEnabledOptions);
+           }
+       }
+ 
