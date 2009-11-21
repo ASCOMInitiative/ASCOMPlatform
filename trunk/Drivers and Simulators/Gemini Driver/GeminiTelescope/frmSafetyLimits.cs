@@ -45,13 +45,12 @@ namespace ASCOM.GeminiTelescope
             geminiPropertiesBindingSource.ResetBindings(false);
             SetControlColor(this.groupBox1);
             SetControlColor(this.groupBox2);
+            SetControlColor(this.groupBox3);
+            chkNudge.Checked = GeminiHardware.NudgeFromSafety;
+
             GeminiHardware.OnConnect += new ConnectDelegate(OnConnectChange);
         }
 
-        private void frmSafetyLimits_Load(object sender, EventArgs e)
-        {
-
-        }
 
         void OnConnectChange(bool connect, int clients)
         {
@@ -92,6 +91,7 @@ namespace ASCOM.GeminiTelescope
                     }
                 }
 
+                GeminiHardware.NudgeFromSafety = chkNudge.Checked;
                 DialogResult = DialogResult.OK;
             }
         }
@@ -144,6 +144,21 @@ namespace ASCOM.GeminiTelescope
         {
             numericUpDown1.Value = MI250EastDefault;
             numericUpDown2.Value = MI250WestDefault;
+        }
+
+        private void chkFlip_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chkNudge_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkNudge.Checked)
+            {
+                DialogResult res = MessageBox.Show("This feature bypasses the built-in Gemini slew-disabling mechanism when at safety limit. Do you really want to do this?", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                if (res != DialogResult.Yes)
+                    chkNudge.Checked = false;
+            }
         }
     }
 }
