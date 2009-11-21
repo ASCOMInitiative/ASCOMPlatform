@@ -589,7 +589,22 @@ namespace ASCOM.GeminiTelescope
                 GeminiHardware.m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "KeepMainFormOnTop", value.ToString());
             }
         }
-   
+
+
+
+        private static bool m_NudgeFromSafety = false;
+
+        public static bool NudgeFromSafety
+        {
+            get { return GeminiHardware.m_NudgeFromSafety; }
+            set
+            {
+                GeminiHardware.m_NudgeFromSafety = value;
+                GeminiHardware.m_Profile.DeviceType = "Telescope";
+                GeminiHardware.m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "NudgeFromSafety", value.ToString());
+            }
+        }
+
 
         public enum GeminiBootMode
         {
@@ -697,12 +712,12 @@ namespace ASCOM.GeminiTelescope
             tmrReadTimeout.Elapsed += new ElapsedEventHandler(tmrReadTimeout_Elapsed);
 
             GetProfileSettings();
-            Trace.Enter("GeminiHardware", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version, DateTime.Now.ToString(GeminiHardware.m_GeminiCulture));
+            Trace.Enter(0, "GeminiHardware", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version, DateTime.Now.ToString(GeminiHardware.m_GeminiCulture), "Trace="+m_TraceLevel.ToString());
 
             m_SerialPort.DataReceived += new SerialDataReceivedEventHandler(m_SerialPort_DataReceived);
             m_DataReceived = new System.Threading.AutoResetEvent(false);
 
-            Trace.Exit("GeminiHardware");
+            Trace.Exit(0, "GeminiHardware");
         }
 
         static void m_SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
@@ -765,7 +780,7 @@ namespace ASCOM.GeminiTelescope
                 m_UseDriverTime = false;
 
             if (!int.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "TraceLevel", ""), out m_TraceLevel))
-                m_TraceLevel = 2;
+                m_TraceLevel = 3;
 
             TraceLevel = m_TraceLevel;
 
@@ -901,6 +916,9 @@ namespace ASCOM.GeminiTelescope
 
             if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "KeepMainFormOnTop", ""), out m_KeepMainFormOnTop))
                 m_KeepMainFormOnTop = false;
+
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "NudgeFromSafety", ""), out m_NudgeFromSafety))
+                m_NudgeFromSafety= false;
 
             //Get the Boot Mode from settings
             try
@@ -3367,6 +3385,13 @@ namespace ASCOM.GeminiTelescope
 
             if (!Connected) return;
 
+
+            if (((GeminiParkMode)mode) != GeminiParkMode.NoSlew)
+            {
+                if (GeminiHardware.NudgeFromSafety && GeminiHardware.AtSafetyLimit)
+                    DoNudgeFromSafety();
+            }
+
             bool wait = true;
 
             switch ((GeminiParkMode)mode)
@@ -3665,8 +3690,63 @@ namespace ASCOM.GeminiTelescope
 
         }
 
+        /// <summary>
+        /// Distance from western safety limit, in clusters of 256 encoder ticks
+        /// </summary>
+        /// <returns> null if operation failed, else # of encoder clusters, + means before limit, - means after limit </returns>
+        public static object ClustersFromSafetyLimit()
+        {
+            string safety = GeminiHardware.DoCommandResult("<230:", GeminiHardware.MAX_TIMEOUT, false);
+            string position = GeminiHardware.DoCommandResult("<235:", GeminiHardware.MAX_TIMEOUT, false);
+            string size = GeminiHardware.DoCommandResult("<237:", GeminiHardware.MAX_TIMEOUT, false);
+            if (safety == null || position == null || size == null) return null; //???
+
+            string[] sp = safety.Split(new char[] { ';' });
+            if (sp == null || sp.Length != 2) return null;
+
+            int west_limit = 0;
+
+            // west limit in clusters of 256 motor encoder ticks
+            if (!int.TryParse(sp[1], out west_limit)) return null;
 
 
+            sp = position.Split(new char[] { ';' });
+            if (sp == null || sp.Length != 2) return null;
+            int ra_clusters = 0;
+
+            // current RA position in clusters of 256 motor encoder ticks
+            if (!int.TryParse(sp[0], out ra_clusters)) return null;
+
+            sp = size.Split(new char[] { ';' });
+            if (sp == null || sp.Length != 2) return null;
+            int size_clusters = 0;
+
+            // size of 1/2 a cirlce (180 degrees) in RA in clusters of 256 motor encoder ticks
+            if (!int.TryParse(sp[0], out size_clusters)) return null;
+
+            double rate = SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0; //sidereal rate per second
+
+            // sidereal tracking rate in clusters per second:
+            rate = (double)size_clusters * (SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0) / 180.0;
+
+            return ra_clusters - west_limit;
+        }
+
+
+        static void DoNudgeFromSafety()
+        {
+            if (AtSafetyLimit)
+            {
+                string[] cmds = { ":RS", ":Me"};                
+                if (GeminiHardware.SideOfPier == "E") cmds[1] = ":Mw";
+
+                GeminiHardware.DoCommand(cmds, false);
+                System.Threading.Thread.Sleep(1000);    // move for 1 second at slew speed 
+                GeminiHardware.DoCommandResult(":Q", GeminiHardware.MAX_TIMEOUT, false);
+
+                GeminiHardware.WaitForVelocity("TN", 2000); // shouldn't too long to stop, right?
+            }
+        }
 
         /// <summary>
         /// Slews the mount using Ra and Dec
@@ -3679,6 +3759,9 @@ namespace ASCOM.GeminiTelescope
 
             TargetName = null;
 
+
+            if (GeminiHardware.NudgeFromSafety && GeminiHardware.AtSafetyLimit)
+                DoNudgeFromSafety();
 
             string [] result= null;
 
@@ -3697,6 +3780,7 @@ namespace ASCOM.GeminiTelescope
             if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("Invalid DEC coordinates");
             m_Velocity = "S";   //set the correct velocity until next poll update
         }
+
         /// <summary>
         /// Slews the mount using Ra and Dec
         /// </summary>
@@ -3708,7 +3792,12 @@ namespace ASCOM.GeminiTelescope
 
             TargetName = null;
 
+
+            if (GeminiHardware.NudgeFromSafety && GeminiHardware.AtSafetyLimit)
+                DoNudgeFromSafety();
+
             string[] result = null;
+
 
             DoCommandResult(cmd, MAX_TIMEOUT/2, false, out result);
 
@@ -3778,6 +3867,9 @@ namespace ASCOM.GeminiTelescope
 
             TargetName = null;
 
+            if (GeminiHardware.NudgeFromSafety && GeminiHardware.AtSafetyLimit)
+                DoNudgeFromSafety();
+
             string[] result = null;
 
             DoCommandResult(cmd, MAX_TIMEOUT / 2, false, out result);
@@ -3802,6 +3894,9 @@ namespace ASCOM.GeminiTelescope
                              ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ""), ":MA" };
 
             TargetName = null;
+            if (GeminiHardware.NudgeFromSafety && GeminiHardware.AtSafetyLimit)
+                DoNudgeFromSafety();
+
 
             string[] result = null;
             DoCommandResult(cmd, MAX_TIMEOUT/2, false, out result);
@@ -4044,8 +4139,6 @@ namespace ASCOM.GeminiTelescope
             m_WaitForCommand.Set();     //signal to the background worker that commands are queued up
             return true;
         }
-
-
 
         #endregion
 

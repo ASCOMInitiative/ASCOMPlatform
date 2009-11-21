@@ -756,7 +756,13 @@ namespace ASCOM.GeminiTelescope
             rate = (double)size_clusters * (SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0) / 180.0;
 
             double distance = ra_clusters - west_limit;
-            if (distance <= 0) labelLimit.Text = "00:00:00";
+            if (distance <= 0)
+            {
+                if (this.InvokeRequired)
+                    this.BeginInvoke(new SetTextCallback(SetLimitText), "@ LIMIT");
+                else
+                    labelLimit.Text = "@ LIMIT";
+            }
             else
             {
                 double seconds = distance / rate;
@@ -970,6 +976,13 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        public double HourAngle
+        {
+            get
+            {
+                return GeminiHardware.SiderealTime - GeminiHardware.RightAscension;
+            }        
+        }
 
         public double SiderealTime
         {
@@ -1590,6 +1603,11 @@ namespace ASCOM.GeminiTelescope
                 Speech.SayIt(Resources.Unpark, Speech.SpeechType.Command);
                 GeminiHardware.DoCommand(":hW", false);
             }
+        }
+
+        private void buttonSlew3_Click(object sender, EventArgs e)
+        {
+
         }
 
     
