@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C# Express 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestFocus", "TestFocus.csproj", "{9F8E6EA7-68E9-42DA-AA01-7952A69DCE7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArduinoFocus", "..\ArduinoFocus\ArduinoFocus.csproj", "{91C08B33-E833-4EF8-A987-17A4474F03DB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9F8E6EA7-68E9-42DA-AA01-7952A69DCE7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F8E6EA7-68E9-42DA-AA01-7952A69DCE7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F8E6EA7-68E9-42DA-AA01-7952A69DCE7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F8E6EA7-68E9-42DA-AA01-7952A69DCE7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91C08B33-E833-4EF8-A987-17A4474F03DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91C08B33-E833-4EF8-A987-17A4474F03DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91C08B33-E833-4EF8-A987-17A4474F03DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91C08B33-E833-4EF8-A987-17A4474F03DB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
