@@ -16,10 +16,15 @@ Imports System.Reflection
 Imports System.GAC
 Imports System.Environment
 
-Public Class Form1
+Public Class DiagnosticsForm
 
     Private Const COMPONENT_CATEGORIES = "Component Categories"
     Private Const Indent As Integer = 3 ' Display indent for recursive loop output
+
+    Private Const CSIDL_PROGRAM_FILES As Integer = 38 '0x0026
+    Private Const CSIDL_PROGRAM_FILESX86 As Integer = 42 '0x002a,
+    Private Const CSIDL_WINDOWS As Integer = 36 ' 0x0024,
+    Private Const CSIDL_PROGRAM_FILES_COMMONX86 As Integer = 44 ' 0x002c,
 
     Dim TL As TraceLogger
     Dim ASCOMXMLAccess As ASCOM.Utilities.XMLAccess
@@ -37,6 +42,7 @@ Public Class Form1
         'Initialise form
         lblTitle.Text = lblTitle.Text & " " & Application.ProductVersion
         lblResult.Text = ""
+        lblAction.Text = ""
 
         lblMessage.Text = "Your diagnostic log will be created in:" & vbCrLf & vbCrLf & _
         System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM\Logs " & Format(Now, "yyyy-MM-dd")
@@ -47,10 +53,15 @@ Public Class Form1
         Application.DoEvents()
     End Sub
 
+    Sub Action(ByVal Msg As String)
+        lblAction.Text = Msg
+        Application.DoEvents()
+    End Sub
+
+
     Private Sub btnCOM_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCOM.Click
         Dim ASCOMPath As String
         Dim PathShell As New System.Text.StringBuilder(260)
-        Dim Drives() As String, Drive As DriveInfo
 
         Try
             Status("Diagnostics running...")
@@ -63,17 +74,14 @@ Public Class Form1
 
                 RunningVersions(TL) 'Log diagnostic information
                 TL.LogMessage("", "")
-                Status("Scanning drives")
-                Drives = Directory.GetLogicalDrives
-                For Each DriveName As String In Drives
-                    Drive = New DriveInfo(DriveName)
-                    If Drive.IsReady Then
-                        TL.LogMessage("Drives", "Drive " & DriveName & " available space: " & Format(Drive.AvailableFreeSpace, "#,0.") & " bytes, capacity: " & Format(Drive.TotalSize, "#,0.") & " bytes, format: " & Drive.DriveFormat)
-                    Else
-                        TL.LogMessage("Drives", "Skipping drive " & DriveName & " because it is not ready")
-                    End If
-                Next
-                TL.LogMessage("", "")
+
+                ScanRegistry() 'Scan Old ASCOM Registry Profile
+
+                ScanDrives() 'Scan PC drives and report information
+
+                ScanProgramFiles() 'Search for copies of Helper and Helper2.DLL in the wrong places
+
+                ScanProfileFiles() 'List contents of Profile files
 
                 ScanFrameworks() 'Report on installed .NET Framework versions
 
@@ -81,7 +89,7 @@ Public Class Form1
 
                 ScanProfile() 'Report profile information
 
-                ScanRegistry() 'Report Com Registration
+                ScanCOMRegistration() 'Report Com Registration
 
                 'Scan files on 32 and 64bit systems
                 TL.LogMessage("Files", "")
@@ -89,7 +97,7 @@ Public Class Form1
                 Call ScanFiles(ASCOMPath) 'Scan 32bit files on 32bit OS and 64bit files on 64bit OS
 
                 If System.IntPtr.Size = 8 Then 'We are on a 64bit OS so look in the 32bit locations for files as well
-                    SHGetSpecialFolderPath(IntPtr.Zero, PathShell, 44, False)
+                    SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_PROGRAM_FILES_COMMONX86, False)
                     ASCOMPath = PathShell.ToString & "\ASCOM\"
                     Call ScanFiles(ASCOMPath)
                 End If
@@ -117,19 +125,201 @@ Public Class Form1
         End Try
     End Sub
 
+    Sub ScanRegistry()
+        Dim Key As RegistryKey
+        Try
+            TL.LogMessage("ScanRegistry", "Start")
+            If IntPtr.Size = 8 Then '64bit OS so look in Wow64node
+                Key = Registry.LocalMachine.OpenSubKey("Software\Wow6432Node\ASCOM")
+            Else '32 bit OS
+                Key = Registry.LocalMachine.OpenSubKey("Software\ASCOM")
+            End If
+            TL.LogMessage("Registry Profile", "Profile Root")
+            RecursionLevel = -1
+            RecurseRegistry(Key)
+            TL.BlankLine()
+        Catch ex As Exception
+            TL.LogMessage("ScanRegistry", "Exception: " & ex.ToString)
+        End Try
+    End Sub
+
+    Sub RecurseRegistry(ByVal Key As RegistryKey)
+        Dim ValueNames(), SubKeys(), DisplayName As String
+        Try
+            RecursionLevel += 1
+            ValueNames = Key.GetValueNames
+            For Each ValueName As String In ValueNames
+                If ValueName = "" Then
+                    DisplayName = "*** Default Value ***"
+                Else
+                    DisplayName = ValueName
+                End If
+                TL.LogMessage("Registry Profile", Space(RecursionLevel * 2) & "   " & DisplayName & " = " & Key.GetValue(ValueName))
+            Next
+        Catch ex As Exception
+            TL.LogMessage("RecurseRegistry 1", "Exception: " & ex.ToString)
+        End Try
+        Try
+            SubKeys = Key.GetSubKeyNames
+            For Each SubKey As String In SubKeys
+                TL.LogMessage("Registry Profile Key", Space(RecursionLevel * 2) & SubKey)
+                RecurseRegistry(Key.OpenSubKey(SubKey))
+            Next
+        Catch ex As Exception
+            TL.LogMessage("RecurseRegistry 2", "Exception: " & ex.ToString)
+        End Try
+        RecursionLevel -= 1
+    End Sub
+
+    Sub ScanDrives()
+        Dim Drives() As String, Drive As DriveInfo
+        Try
+            Status("Scanning drives")
+            Drives = Directory.GetLogicalDrives
+            For Each DriveName As String In Drives
+                Drive = New DriveInfo(DriveName)
+                If Drive.IsReady Then
+                    TL.LogMessage("Drives", "Drive " & DriveName & " available space: " & Format(Drive.AvailableFreeSpace, "#,0.") & " bytes, capacity: " & Format(Drive.TotalSize, "#,0.") & " bytes, format: " & Drive.DriveFormat)
+                Else
+                    TL.LogMessage("Drives", "Skipping drive " & DriveName & " because it is not ready")
+                End If
+            Next
+            TL.LogMessage("", "")
+        Catch ex As Exception
+            TL.LogMessage("ScanDrives", "Exception: " & ex.ToString)
+        End Try
+    End Sub
+
+    Sub ScanProgramFiles()
+        Dim BaseDir As String
+        Dim PathShell As New System.Text.StringBuilder(260)
+        Try
+            BaseDir = System.Environment.GetFolderPath(SpecialFolder.ProgramFiles)
+
+            Status("Scanning ProgramFiles Directory for Helper DLLs")
+            TL.LogMessage("ProgramFiles Scan", "Searching for Helper.DLL etc.")
+
+            RecurseProgramFiles(BaseDir) ' This is the 32bit path on a 32bit OS and 64bit path on a 64bit OS
+
+            TL.BlankLine()
+
+            'If on a 64bit OS, now scan the 32bit path
+
+            If IntPtr.Size = 8 Then 'We are on a 64bit OS
+                BaseDir = System.Environment.GetFolderPath(SpecialFolder.ProgramFiles)
+                BaseDir = SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_PROGRAM_FILESX86, False)
+
+                Status("Scanning ProgramFiles(x86) Directory for Helper DLLs")
+                TL.LogMessage("ProgramFiles(x86) Scan", "Searching for Helper.DLL etc. on 32bit path")
+
+                RecurseProgramFiles(PathShell.ToString) ' This is the 32bit path on a 32bit OS and 64bit path on a 64bit OS
+
+                TL.BlankLine()
+            End If
+        Catch ex As Exception
+            TL.LogMessage("ScanProgramFiles", "Exception: " & ex.ToString)
+        End Try
+    End Sub
+
+    Sub RecurseProgramFiles(ByVal Folder As String)
+        Dim Files(), Directories() As String
+
+        'TL.LogMessage("Folder", Folder)
+        'Process files in this directory
+        Try
+            Action(Microsoft.VisualBasic.Left(Folder, 70))
+            Files = Directory.GetFiles(Folder)
+            For Each MyFile As String In Files
+                If MyFile.ToUpper.Contains("\HELPER.DLL") Then
+                    TL.LogMessage("Helper.DLL", MyFile)
+                    FileDetails(Folder & "\", "HELPER.DLL")
+                End If
+                If MyFile.ToUpper.Contains("\HELPER2.DLL") Then
+                    TL.LogMessage("Helper2.DLL", MyFile)
+                    FileDetails(Folder & "\", "HELPER2.DLL")
+                End If
+            Next
+        Catch ex As Exception
+            TL.LogMessage("RecurseProgramFiles 1", "Exception: " & ex.ToString)
+        End Try
+
+        Try
+            Directories = Directory.GetDirectories(Folder)
+            For Each Directory As String In Directories
+                'TL.LogMessage("Directory", Directory)
+                RecurseProgramFiles(Directory)
+            Next
+            Action("")
+        Catch ex As Exception
+            TL.LogMessage("RecurseProgramFiles 2", "Exception: " & ex.ToString)
+        End Try
+    End Sub
+
+    Sub ScanProfileFiles()
+        Dim BaseDir As String
+        Try
+            BaseDir = System.Environment.GetFolderPath(SpecialFolder.CommonApplicationData) & "\ASCOM\Profile"
+
+            Status("Scanning Profile Files")
+            TL.LogMessage("Scanning Profile Files", "")
+
+            RecurseProfileFiles(BaseDir)
+
+            TL.BlankLine()
+        Catch ex As Exception
+            TL.LogMessage("ScanProfileFiles", "Exception: " & ex.ToString)
+        End Try
+    End Sub
+
+    Sub RecurseProfileFiles(ByVal Folder As String)
+        Dim Files(), Directories() As String
+
+        Try
+            'TL.LogMessage("Folder", Folder)
+            'Process files in this directory
+            Files = Directory.GetFiles(Folder)
+            For Each MyFile As String In Files
+                TL.LogMessage("File", MyFile)
+                Using sr As StreamReader = File.OpenText(MyFile)
+                    Dim input As String
+                    input = sr.ReadLine()
+                    While Not input Is Nothing
+                        TL.LogMessage("", "  " & input)
+                        input = sr.ReadLine()
+                    End While
+                    Console.WriteLine("The end of the stream has been reached.")
+                End Using
+
+            Next
+        Catch ex As Exception
+            TL.LogMessage("RecurseProfileFiles 1", "Exception: " & ex.ToString)
+        End Try
+
+        Try
+            Directories = Directory.GetDirectories(Folder)
+            For Each Directory As String In Directories
+                TL.LogMessage("Directory", Directory)
+                RecurseProfileFiles(Directory)
+            Next
+        Catch ex As Exception
+            TL.LogMessage("RecurseProfileFiles 2", "Exception: " & ex.ToString)
+        End Try
+
+    End Sub
+
     Sub ScanFrameworks()
         Dim FrameworkPath, FrameworkFile, FrameworkDirectories() As String
         Dim PathShell As New System.Text.StringBuilder(260)
 
-        Status("Scanning Frameworks")
-
         Try
-            SHGetSpecialFolderPath(IntPtr.Zero, PathShell, 36, False)
+            Status("Scanning Frameworks")
+
+            SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_WINDOWS, False)
             FrameworkPath = PathShell.ToString & "\Microsoft.NET\Framework"
 
             FrameworkDirectories = Directory.GetDirectories(FrameworkPath)
             For Each Directory As String In FrameworkDirectories
-                FrameWorkFile = Directory & "\mscorlib.dll"
+                FrameworkFile = Directory & "\mscorlib.dll"
                 Dim FVInfo As FileVersionInfo, FInfo As FileInfo
                 If File.Exists(FrameworkFile) Then
 
@@ -142,10 +332,10 @@ Public Class Form1
                     TL.LogMessage("Frameworks", Directory.ToString)
                 End If
             Next
+            TL.BlankLine()
         Catch ex As Exception
             TL.LogMessage("Frameworks", "Exception: " & ex.ToString)
         End Try
-        TL.BlankLine()
     End Sub
 
     Sub ScanLogs()
@@ -200,47 +390,51 @@ Public Class Form1
                     End If
                 End Try
             Next
+            TL.BlankLine()
+            TL.LogMessage("SetupFile", "Completed scan")
+            TL.BlankLine()
         Catch ex2 As Exception
             TL.LogMessage("SetupFile", "Exception 2: " & ex2.ToString)
         End Try
-        TL.LogMessage("", "")
-        TL.LogMessage("SetupFile", "Completed scan")
-        TL.LogMessage("", "")
     End Sub
 
-    Sub ScanRegistry()
-        Status("Scanning Registry")
-        TL.LogMessage("COMRegistration", "") 'Report COM registation
-        GetCOMRegistration("DriverHelper.Chooser")
-        GetCOMRegistration("DriverHelper.Profile")
-        GetCOMRegistration("DriverHelper.Serial")
-        GetCOMRegistration("DriverHelper.Timer")
-        GetCOMRegistration("DriverHelper.Util")
-        GetCOMRegistration("DriverHelper2.Util")
+    Sub ScanCOMRegistration()
+        Try
+            Status("Scanning Registry")
+            TL.LogMessage("COMRegistration", "") 'Report COM registation
+            GetCOMRegistration("DriverHelper.Chooser")
+            GetCOMRegistration("DriverHelper.Profile")
+            GetCOMRegistration("DriverHelper.Serial")
+            GetCOMRegistration("DriverHelper.Timer")
+            GetCOMRegistration("DriverHelper.Util")
+            GetCOMRegistration("DriverHelper2.Util")
 
-        GetCOMRegistration("DriverHelper.ChooserSupport")
-        GetCOMRegistration("DriverHelper.ProfileAccess")
-        GetCOMRegistration("DriverHelper.SerialSupport")
-        GetCOMRegistration("ScopeSim.Telescope")
+            GetCOMRegistration("DriverHelper.ChooserSupport")
+            GetCOMRegistration("DriverHelper.ProfileAccess")
+            GetCOMRegistration("DriverHelper.SerialSupport")
+            GetCOMRegistration("ScopeSim.Telescope")
 
-        GetCOMRegistration("ASCOM.Utilities.Chooser")
-        GetCOMRegistration("ASCOM.Utilities.KeyValuePair")
-        GetCOMRegistration("ASCOM.Utilities.Profile")
-        GetCOMRegistration("ASCOM.Utilities.Serial")
-        GetCOMRegistration("ASCOM.Utilities.Timer")
-        GetCOMRegistration("ASCOM.Utilities.TraceLogger")
-        GetCOMRegistration("ASCOM.Utilities.Util")
+            GetCOMRegistration("ASCOM.Utilities.Chooser")
+            GetCOMRegistration("ASCOM.Utilities.KeyValuePair")
+            GetCOMRegistration("ASCOM.Utilities.Profile")
+            GetCOMRegistration("ASCOM.Utilities.Serial")
+            GetCOMRegistration("ASCOM.Utilities.Timer")
+            GetCOMRegistration("ASCOM.Utilities.TraceLogger")
+            GetCOMRegistration("ASCOM.Utilities.Util")
 
-        GetCOMRegistration("ASCOM.Astrometry.Kepler.Ephemeris")
-        GetCOMRegistration("ASCOM.Astrometry.NOVAS.NOVAS2COM")
-        GetCOMRegistration("ASCOM.Astrometry.NOVASCOM.Earth")
-        GetCOMRegistration("ASCOM.Astrometry.NOVASCOM.Planet")
-        GetCOMRegistration("ASCOM.Astrometry.NOVASCOM.PositionVector")
-        GetCOMRegistration("ASCOM.Astrometry.NOVASCOM.Site")
-        GetCOMRegistration("ASCOM.Astrometry.NOVASCOM.Star")
-        GetCOMRegistration("ASCOM.Astrometry.NOVASCOM.VelocityVector")
-        GetCOMRegistration("ASCOM.Astrometry.Transform.Transform")
-        TL.LogMessage("", "")
+            GetCOMRegistration("ASCOM.Astrometry.Kepler.Ephemeris")
+            GetCOMRegistration("ASCOM.Astrometry.NOVAS.NOVAS2COM")
+            GetCOMRegistration("ASCOM.Astrometry.NOVASCOM.Earth")
+            GetCOMRegistration("ASCOM.Astrometry.NOVASCOM.Planet")
+            GetCOMRegistration("ASCOM.Astrometry.NOVASCOM.PositionVector")
+            GetCOMRegistration("ASCOM.Astrometry.NOVASCOM.Site")
+            GetCOMRegistration("ASCOM.Astrometry.NOVASCOM.Star")
+            GetCOMRegistration("ASCOM.Astrometry.NOVASCOM.VelocityVector")
+            GetCOMRegistration("ASCOM.Astrometry.Transform.Transform")
+            TL.LogMessage("", "")
+        Catch ex As Exception
+            TL.LogMessage("ScanCOMRegistration", "Exception: " & ex.ToString)
+        End Try
     End Sub
 
     Sub ScanGac()
@@ -248,83 +442,95 @@ Public Class Form1
         Dim an As IAssemblyName = Nothing
         Dim name As AssemblyName
         Dim ass As Assembly
+        Try
+            Status("Scanning Assemblies")
 
-        Status("Scanning Assemblies")
+            TL.LogMessage("Assemblies", "Assemblies registered in the GAC")
+            ae = AssemblyCache.CreateGACEnum ' Get an enumerator for the GAC assemblies
 
-        TL.LogMessage("Assemblies", "Assemblies registered in the GAC")
-        ae = AssemblyCache.CreateGACEnum ' Get an enumerator for the GAC assemblies
-
-        Do While (AssemblyCache.GetNextAssembly(ae, an) = 0) 'Enumerate the assemblies
-            Try
-                name = GetAssemblyName(an) 'Convert the fusion representation to a standard AssemblyName
-                If InStr(name.FullName, "ASCOM") > 0 Then 'Extra information for ASCOM files
-                    TL.LogMessage("Assemblies", name.Name)
-                    ass = Assembly.Load(name.FullName)
-                    AssemblyInfo(TL, name.Name, ass) ' Get file version and other information
-                Else
-                    TL.LogMessage("Assemblies", name.FullName)
-                End If
-            Catch ex As Exception
-                TL.LogMessage("Assemblies", "Exception: " & ex.ToString)
-            End Try
-        Loop
-        TL.LogMessage("", "")
+            Do While (AssemblyCache.GetNextAssembly(ae, an) = 0) 'Enumerate the assemblies
+                Try
+                    name = GetAssemblyName(an) 'Convert the fusion representation to a standard AssemblyName
+                    If InStr(name.FullName, "ASCOM") > 0 Then 'Extra information for ASCOM files
+                        TL.LogMessage("Assemblies", name.Name)
+                        ass = Assembly.Load(name.FullName)
+                        AssemblyInfo(TL, name.Name, ass) ' Get file version and other information
+                    Else
+                        TL.LogMessage("Assemblies", name.FullName)
+                    End If
+                Catch ex As Exception
+                    TL.LogMessage("Assemblies", "Exception: " & ex.ToString)
+                End Try
+            Loop
+            TL.LogMessage("", "")
+        Catch ex As Exception
+            TL.LogMessage("ScanGac", "Exception: " & ex.ToString)
+        End Try
     End Sub
 
     Private Function GetAssemblyName(ByVal nameRef As IAssemblyName) As AssemblyName
         Dim AssName As New AssemblyName()
-        AssName.Name = AssemblyCache.GetName(nameRef)
-        AssName.Version = AssemblyCache.GetVersion(nameRef)
-        AssName.CultureInfo = AssemblyCache.GetCulture(nameRef)
-        AssName.SetPublicKeyToken(AssemblyCache.GetPublicKeyToken(nameRef))
+        Try
+            AssName.Name = AssemblyCache.GetName(nameRef)
+            AssName.Version = AssemblyCache.GetVersion(nameRef)
+            AssName.CultureInfo = AssemblyCache.GetCulture(nameRef)
+            AssName.SetPublicKeyToken(AssemblyCache.GetPublicKeyToken(nameRef))
+        Catch ex As Exception
+            TL.LogMessage("GetAssemblyName", "Exception: " & ex.ToString)
+        End Try
         Return AssName
     End Function
 
     Sub ScanFiles(ByVal ASCOMPath As String)
         Dim ASCOMPathTel, ASCOMPathInt, ASCOMPathNet, ASCOMPathUtl As String
 
-        Status("Scanning Files")
+        Try
+            Status("Scanning Files")
 
-        ASCOMPathInt = ASCOMPath & "Interface\" 'Create folder paths
-        ASCOMPathTel = ASCOMPath & "Telescope\"
-        ASCOMPathNet = ASCOMPath & ".net\"
-        ASCOMPathUtl = ASCOMPath & "Utilities\"
+            ASCOMPathInt = ASCOMPath & "Interface\" 'Create folder paths
+            ASCOMPathTel = ASCOMPath & "Telescope\"
+            ASCOMPathNet = ASCOMPath & ".net\"
+            ASCOMPathUtl = ASCOMPath & "Utilities\"
 
-        FileDetails(ASCOMPath, "Helper.dll") 'Report on files
-        FileDetails(ASCOMPath, "Helper2.dll")
-        FileDetails(ASCOMPathNet, "ASCOM.Utilities.dll")
-        FileDetails(ASCOMPathUtl, "Helper.dll")
-        FileDetails(ASCOMPathUtl, "Helper2.dll")
+            FileDetails(ASCOMPath, "Helper.dll") 'Report on files
+            FileDetails(ASCOMPath, "Helper2.dll")
+            FileDetails(ASCOMPathNet, "ASCOM.Utilities.dll")
+            FileDetails(ASCOMPathUtl, "Helper.dll")
+            FileDetails(ASCOMPathUtl, "Helper2.dll")
 
-        FileDetails(ASCOMPath, "Astro32.dll")
-        FileDetails(ASCOMPathTel, "ScopeSim.exe")
-        FileDetails(ASCOMPathInt, "Helper.tlb")
-        FileDetails(ASCOMPathInt, "Helper2.tlb")
-        FileDetails(ASCOMPathInt, "ASCOMMasterInterfaces.tlb")
+            FileDetails(ASCOMPath, "Astro32.dll")
+            FileDetails(ASCOMPathTel, "ScopeSim.exe")
+            FileDetails(ASCOMPathInt, "Helper.tlb")
+            FileDetails(ASCOMPathInt, "Helper2.tlb")
+            FileDetails(ASCOMPathInt, "ASCOMMasterInterfaces.tlb")
 
-        FileDetails(ASCOMPathNet, "ASCOM.Astrometry.dll")
-        FileDetails(ASCOMPathNet, "ASCOM.Attributes.dll")
-        FileDetails(ASCOMPathNet, "ASCOM.DriverAccess.dll")
-        FileDetails(ASCOMPathNet, "ASCOM.Exceptions.dll")
-        FileDetails(ASCOMPathNet, "ASCOM.IConform.dll")
-        FileDetails(ASCOMPathNet, "ASCOM.Kepler.dll")
-        FileDetails(ASCOMPathNet, "ASCOM.NOVAS.dll")
-        FileDetails(ASCOMPathNet, "NOVAS-C64.dll")
-        FileDetails(ASCOMPathNet, "NOVAS-C.dll")
-        FileDetails(ASCOMPathNet, "policy.1.0.ASCOM.DriverAccess.dll")
-        FileDetails(ASCOMPathNet, "policy.5.5.ASCOM.Astrometry.dll")
-        FileDetails(ASCOMPathNet, "policy.5.5.ASCOM.Utilities.dll")
-        FileDetails(ASCOMPathUtl, "EraseProfile.exe")
-        FileDetails(ASCOMPathUtl, "MigrateProfile.exe")
+            FileDetails(ASCOMPathNet, "ASCOM.Astrometry.dll")
+            FileDetails(ASCOMPathNet, "ASCOM.Attributes.dll")
+            FileDetails(ASCOMPathNet, "ASCOM.DriverAccess.dll")
+            FileDetails(ASCOMPathNet, "ASCOM.Exceptions.dll")
+            FileDetails(ASCOMPathNet, "ASCOM.IConform.dll")
+            FileDetails(ASCOMPathNet, "ASCOM.Kepler.dll")
+            FileDetails(ASCOMPathNet, "ASCOM.NOVAS.dll")
+            FileDetails(ASCOMPathNet, "NOVAS-C64.dll")
+            FileDetails(ASCOMPathNet, "NOVAS-C.dll")
+            FileDetails(ASCOMPathNet, "policy.1.0.ASCOM.DriverAccess.dll")
+            FileDetails(ASCOMPathNet, "policy.5.5.ASCOM.Astrometry.dll")
+            FileDetails(ASCOMPathNet, "policy.5.5.ASCOM.Utilities.dll")
+            FileDetails(ASCOMPathUtl, "EraseProfile.exe")
+            FileDetails(ASCOMPathUtl, "MigrateProfile.exe")
+        Catch ex As Exception
+            TL.LogMessage("ScanFiles", "Exception: " & ex.ToString)
+        End Try
 
     End Sub
 
     Sub FileDetails(ByVal FPath As String, ByVal FName As String)
         Dim FullPath As String
         Dim Att As FileAttributes, FVInfo As FileVersionInfo, FInfo As FileInfo
-        FullPath = FPath & FName 'Create full filename from path and simple filename
-        TL.LogMessage("FileDetails", FName & " " & FullPath)
+
         Try
+            FullPath = FPath & FName 'Create full filename from path and simple filename
+            TL.LogMessage("FileDetails", FName & " " & FullPath)
             If File.Exists(FullPath) Then
 
                 FVInfo = FileVersionInfo.GetVersionInfo(FullPath)
@@ -356,8 +562,8 @@ Public Class Form1
 
     Sub GetCOMRegistration(ByVal ProgID As String)
         Dim RKey As RegistryKey
-        TL.LogMessage("ProgID", ProgID)
         Try
+            TL.LogMessage("ProgID", ProgID)
             RKey = Registry.ClassesRoot.OpenSubKey(ProgID)
             ProcessSubKey(RKey, 1, "None")
             RKey.Close()
@@ -473,37 +679,49 @@ Public Class Form1
         End 'Close the program
     End Sub
 
+    Private Sub ChooserToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooserToolStripMenuItem1.Click
+        Dim Chooser As Object, Chosen As String
+
+        Chooser = CreateObject("DriverHelper.Chooser")
+        Chooser.DeviceType = "Telescope"
+        Chosen = Chooser.Choose("ScopeSim.Telescope")
+
+    End Sub
+
     Sub ScanSerial()
         Dim SerialRegKey As RegistryKey, SerialDevices() As String
+        Try
+            'First list out the ports we can see through .NET
+            Status("Scanning Serial Ports")
+            For Each Port As String In System.IO.Ports.SerialPort.GetPortNames
+                TL.LogMessage("Serial Ports (.NET)", Port)
+            Next
+            TL.BlankLine()
 
-        'First list out the ports we can see through .NET
-        Status("Scanning Serial Ports")
-        For Each Port As String In System.IO.Ports.SerialPort.GetPortNames
-            TL.LogMessage("Serial Ports (.NET)", Port)
-        Next
-        TL.BlankLine()
+            SerialRegKey = Registry.LocalMachine.OpenSubKey("HARDWARE\DEVICEMAP\SERIALCOMM")
+            SerialDevices = SerialRegKey.GetValueNames
+            For Each SerialDevice As String In SerialDevices
+                TL.LogMessage("Serial Ports (Registry)", SerialRegKey.GetValue(SerialDevice).ToString & " - " & SerialDevice)
+            Next
+            TL.BlankLine()
 
-        SerialRegKey = Registry.LocalMachine.OpenSubKey("HARDWARE\DEVICEMAP\SERIALCOMM")
-        SerialDevices = SerialRegKey.GetValueNames
-        For Each SerialDevice As String In SerialDevices
-            TL.LogMessage("Serial Ports (Registry)", SerialRegKey.GetValue(SerialDevice).ToString & " - " & SerialDevice)
-        Next
-        TL.BlankLine()
+            For i As Integer = 1 To 30
+                Call SerialPortDetails(i)
+            Next
 
-        For i As Integer = 1 To 30
-            Call SerialPortDetails(i)
-        Next
-
-        TL.BlankLine()
+            TL.BlankLine()
+        Catch ex As Exception
+            TL.LogMessage("ScanSerial", ex.ToString)
+        End Try
 
     End Sub
 
     Sub SerialPortDetails(ByVal PortNumber As Integer)
         'List specific details of a particular serial port
         Dim PortName As String, SerPort As New System.IO.Ports.SerialPort
-        PortName = "COM" & PortNumber.ToString 'String version of the port name
 
         Try
+            PortName = "COM" & PortNumber.ToString 'String version of the port name
             SerPort.PortName = PortName
             SerPort.BaudRate = 9600
             SerPort.Open()
@@ -521,10 +739,10 @@ Public Class Form1
 
         Dim ASCOMProfile As New Utilities.Profile, DeviceTypes() As String, Devices As ArrayList
 
-        ASCOMXMLAccess = New ASCOM.Utilities.XMLAccess
-        RecursionLevel = -1 'Initialise recursion level so the first increment makes this zero
-
         Try
+            ASCOMXMLAccess = New ASCOM.Utilities.XMLAccess
+            RecursionLevel = -1 'Initialise recursion level so the first increment makes this zero
+
             Status("Scanning Profile")
 
             DeviceTypes = ASCOMProfile.RegisteredDeviceTypes
@@ -540,8 +758,12 @@ Public Class Form1
             TL.LogMessage("RegisteredDevices", "Exception: " & ex.ToString)
         End Try
 
-        TL.LogMessage("Profile", "Recusrsing Profile")
-        RecurseProfile("\") 'Scan recurively over the profile
+        Try
+            TL.LogMessage("Profile", "Recusrsing Profile")
+            RecurseProfile("\") 'Scan recurively over the profile
+        Catch ex As Exception
+            TL.LogMessage("ScanProfile", ex.Message)
+        End Try
 
         TL.BlankLine()
 
@@ -602,4 +824,17 @@ Public Class Form1
 
     End Sub
 
+    Private Sub ChooserNETToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooserNETToolStripMenuItem.Click
+        Dim Chooser As ASCOM.Utilities.Chooser, Chosen As String
+
+        Chooser = New ASCOM.Utilities.Chooser
+        Chooser.DeviceType = "Telescope"
+        Chosen = Chooser.Choose("ScopeSim.Telescope")
+        Chooser.Dispose()
+
+    End Sub
+
+    Private Sub ConnectToDeviceToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ConnectToDeviceToolStripMenuItem.Click
+        ConnectForm.Visible = True
+    End Sub
 End Class

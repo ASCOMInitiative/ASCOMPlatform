@@ -59,6 +59,17 @@
     <Compile Include="..\Utilities\AllUsersFileSystemProvider.vb">
       <Link>AllUsersFileSystemProvider.vb</Link>
     </Compile>
+    <Compile Include="..\Utilities\Chooser.vb">
+      <Link>Chooser.vb</Link>
+    </Compile>
+    <Compile Include="..\Utilities\ChooserForm.designer.vb">
+      <Link>ChooserForm.designer.vb</Link>
+      <DependentUpon>ChooserForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="..\Utilities\ChooserForm.vb">
+      <Link>ChooserForm.vb</Link>
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="..\Utilities\CommonConstants.vb">
       <Link>CommonConstants.vb</Link>
     </Compile>
@@ -92,11 +103,17 @@
     <Compile Include="..\Utilities\XMLAccess.vb">
       <Link>XMLAccess.vb</Link>
     </Compile>
-    <Compile Include="Form1.vb">
+    <Compile Include="ConnectForm.Designer.vb">
+      <DependentUpon>ConnectForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ConnectForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.vb">
-      <DependentUpon>Form1.vb</DependentUpon>
+    <Compile Include="DiagnosticsForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DiagnosticsForm.Designer.vb">
+      <DependentUpon>DiagnosticsForm.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -116,8 +133,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.vb</DependentUpon>
+    <EmbeddedResource Include="..\Utilities\ChooserForm.resX">
+      <Link>ChooserForm.resX</Link>
+      <DependentUpon>ChooserForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConnectForm.resx">
+      <DependentUpon>ConnectForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DiagnosticsForm.resx">
+      <DependentUpon>DiagnosticsForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

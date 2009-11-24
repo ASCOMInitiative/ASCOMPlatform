@@ -87,14 +87,18 @@
 ; Setup Build 16 Released - RC7
 
 ; Added regserver to helper.dll
-; Setup Build 18
-
-
+; Added InstallerVersion variable to allow installer display version to be set in one place e.g. 5.5.1
+; Setup Build 18 Released 5.5.1
 
 [Setup]
 ; Setup program version number - change this each time you change this setup script
-#define Public SetupVersion 17
-#define Public RC "Test-19-11-09a"
+#define Public SetupVersion 18
+
+;Text description of this update as it appears in the installer UI
+#define Public InstallerVersion "5.5.1"
+
+;Text for release candidate / beta version messages
+#define Public RC ""
 
 #define Public Major 0
 #define Public Minor 0
@@ -108,8 +112,8 @@ AppCopyright=Copyright © 2009 ASCOM Initiative
 ;This value is hard coded in the uninstall code below. If you do change this you must change the corresponding reference in
 ;the [Code] CurStepChanged section
 AppID=ASCOM.Platform.NET.Components
-#emit "AppName=ASCOM Platform 5.5 Update " + RC
-#emit "AppVerName=ASCOM Platform 5.5 Update " + RC + " (" + Appver + ")"
+#emit "AppName=ASCOM Platform " + Installerversion + " Update " + RC
+#emit "AppVerName=ASCOM Platform " + InstallerVersion + " Update " + RC + " (" + Appver + ")"
 #emit "AppVersion=" + AppVer
 AppPublisher=ASCOM Initiative
 AppPublisherURL=http://ascom-standards.org/
@@ -122,7 +126,7 @@ DisableDirPage=true
 DisableProgramGroupPage=true
 OutputDir=.
 PrivilegesRequired=admin
-#emit "OutputBaseFilename=ASCOM Platform " + str(Major) +"." + str(Minor) + " Updater " + RC + " (v" + AppVer +")"
+#emit "OutputBaseFilename=ASCOM Platform " + InstallerVersion + " Updater " + RC + " (v" + AppVer +")"
 Compression=lzma
 SolidCompression=true
 SetupIconFile=..\Utilities\Resources\ASCOM.ico
@@ -409,6 +413,6 @@ end;
 
 [Messages]
 WelcomeLabel1=%n%n[name]%n
-#emit "WelcomeLabel2=This will update your computer to version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
+#emit "WelcomeLabel2=This will install ASCOM Utilities version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
 [_ISToolPreCompile]
 Name: ..\..\ASCOM Redirection Policies\ASCOM Redirection Policies\bin\Release\ASCOM Redirection Policies.exe; Parameters: ; Flags: runminimized abortonerror
