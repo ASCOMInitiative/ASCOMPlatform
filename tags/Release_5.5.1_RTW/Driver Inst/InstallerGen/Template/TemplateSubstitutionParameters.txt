@@ -1,0 +1,29 @@
+; Substitution tokens:
+;   %fnam%    Full descriptive name of driver, as seen by users in the Chooser
+;   %name%    Short name of driver (becomes first half of ProgID), e.g. OptecTCF
+;   %type%    Type of driver's primary (or only) interface (becomes second half of ProgId) e.g., Telescope
+;   %typ2%    Type of driver's secondary interface (becomes second half of ProgId) e.g., Focuser
+;   %file%    File name of driver (e.g., OptecFocuser.dll" (should not have "driver" in it)
+;   %vers%    Version (n.m) of the driver
+;   %rdmf%    File name of ReadMe (.htm, .html, .txt)
+;   %devn%    Full name of driver developer
+;   %deve%    Email address of developer
+;   %date%    Date/time script was generated from template
+;   %gver%    Script generator version
+;   %rgsm%    Path/name to .NET framework 2.0 REGASM.EXE
+;   %srcp%    Path to driver files for installation, including readme.xxx
+;   %rscf%    Path to Resources folder, where trmplate,  wiz bitmap, and license files are located
+;   %rs32%    If driver is COM DLL "AfterInstall: RegASCOM(); Flags: regserver" else ""
+;   %cid1%    CLSID of driver's primary (or only) interface
+;   %cid2%    CLSID of COM local server secondary interface
+;
+;   Special tokens: Appear at beginning of line, if false the line is omitted
+;                   If true token is removed and line is substituted
+;   %coms%    "true" means driver is a COM dll or exe
+;   %cdll%"   "true" means driver is COM DLL (needs regsvr32)
+;   %cexe%    "true" means driver is COM local server (exe) needs run with /regserver and /unregserver 
+;   %cex2%    "true" means driver is COM local server (exe) with a secondary interface (see %typ2% and %cid2%)
+;   %nbth%    "true" means driver is .NET (assembly or local server)
+;   %nasm%    "true" means driver is a .NET assembly (in-proc)
+;   %nlcs%    "true" means driver is a .NET local server (exe)
+;   $srce%    "true" means add option to install driver sources from "Source" subfolder

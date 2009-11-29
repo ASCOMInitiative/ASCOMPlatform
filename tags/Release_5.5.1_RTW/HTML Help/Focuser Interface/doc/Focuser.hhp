@@ -1,0 +1,43 @@
+[OPTIONS]
+Auto Index=Yes
+Compatibility=1.1 or later
+Compiled file=Focuser.chm
+Default Window=main
+Default topic=FocuserHOME.htm
+Display compile progress=No
+Full text search stop list file=Focuser.stp
+Full-text search=Yes
+Index file=Focuser.hhk
+Language=0x409 English (United States)
+Title=ASCOM Focuser Standard
+
+[WINDOWS]
+main="ASCOM Focuser Standard","Focuser.hhc","Focuser.hhk","FocuserHOME.htm","FocuserHOME.htm",,,,,0x23520,,0x384e,[10,10,630,470],0xb0000,,,,,,0
+
+
+[FILES]
+images\important2.gif
+images\ro.gif
+images\rw.gif
+dc3_hh.css
+FocuserRELNOTES.htm
+FocuserERRORS.htm
+FocuserFocuserMETHHalt.htm
+FocuserFocuserMETHMove.htm
+FocuserFocuserMETHSetupDialog.htm
+FocuserFocuserPROPAbsolute.htm
+FocuserFocuserPROPIsMoving.htm
+FocuserFocuserPROPLink.htm
+FocuserFocuserPROPMaxIncrement.htm
+FocuserFocuserPROPMaxStep.htm
+FocuserFocuserPROPPosition.htm
+FocuserFocuserPROPStepSize.htm
+FocuserFocuserPROPTempComp.htm
+FocuserFocuserPROPTempCompAvailable.htm
+FocuserFocuserPROPTemperature.htm
+FocuserHOME.htm
+FocuserCLASSFocuser.htm
+images\Bug72T-sm.jpg
+
+[INFOTYPES]
+
