@@ -30,6 +30,14 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Peter|AnyCPU' ">
+    <OutputPath>bin\Peter\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -58,9 +66,9 @@
     <Content Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ASCOM.Astrometry\Astrometry\Astrometry.vbproj">
+    <ProjectReference Include="..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj">
       <Project>{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3}</Project>
-      <Name>Astrometry</Name>
+      <Name>ASCOM.Astrometry</Name>
     </ProjectReference>
     <ProjectReference Include="..\ASCOM.Attributes\ASCOM.Attributes.csproj">
       <Project>{2C40FAD9-DE75-4360-A0AD-911C4D24D98C}</Project>
@@ -78,9 +86,9 @@
       <Project>{4FFFD202-81D4-4549-880B-09B640D72C1D}</Project>
       <Name>ASCOM.SettingsProvider</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ASCOM.Utilities\Utilities\Utilities.vbproj">
+    <ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
-      <Name>Utilities</Name>
+      <Name>ASCOM.Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\ClientToolbox\ASCOM.DriverAccess.csproj">
       <Project>{35194767-5585-45C3-803F-1BCE74CEAAFC}</Project>

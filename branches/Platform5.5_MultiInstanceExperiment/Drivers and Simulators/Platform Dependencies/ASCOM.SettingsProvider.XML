@@ -4,23 +4,6 @@
         <name>ASCOM.SettingsProvider</name>
     </assembly>
     <members>
-        <member name="T:ASCOM.PropertyNotAttributedException">
-            <summary>
-            Exception thrown when teh SettingsProvider finds a setting that does not have a DeviceID attribute.
-            </summary>
-        </member>
-        <member name="M:ASCOM.PropertyNotAttributedException.#ctor(System.String)">
-            <summary>
-            Constructs a new PropertyNotAttributedException.
-            </summary>
-            <param name="propertyName">The property name</param>
-        </member>
-        <member name="P:ASCOM.PropertyNotAttributedException.PropertyName">
-            <summary>
-            Gets or sets the name of the property that caused teh exception.
-            </summary>
-            <value>The name of the property.</value>
-        </member>
         <member name="T:TiGra.ExtensionMethods.StringExtensions">
             <summary>
             Extension methods for manipulating strings.
@@ -246,6 +229,23 @@
             Gets the name of the driver or application for which settings are being managed.
             This value is set during provider initialization and cannot be changed thereafter.
             </summary>
+        </member>
+        <member name="T:ASCOM.PropertyNotAttributedException">
+            <summary>
+            Exception thrown when teh SettingsProvider finds a setting that does not have a DeviceID attribute.
+            </summary>
+        </member>
+        <member name="M:ASCOM.PropertyNotAttributedException.#ctor(System.String)">
+            <summary>
+            Constructs a new PropertyNotAttributedException.
+            </summary>
+            <param name="propertyName">The property name</param>
+        </member>
+        <member name="P:ASCOM.PropertyNotAttributedException.PropertyName">
+            <summary>
+            Gets or sets the name of the property that caused teh exception.
+            </summary>
+            <value>The name of the property.</value>
         </member>
     </members>
 </doc>

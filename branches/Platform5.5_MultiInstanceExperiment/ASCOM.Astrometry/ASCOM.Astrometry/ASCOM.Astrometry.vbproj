@@ -59,6 +59,16 @@
     <DebugSymbols>true</DebugSymbols>
     <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Peter|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Peter\</OutputPath>
+    <DocumentationFile>ASCOM.Astrometry.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>Full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
@@ -106,7 +116,7 @@
     <Compile Include="NOVASCOM\Deltat.vb" />
     <Compile Include="NOVASCOM\Ephemeris.vb" />
     <Compile Include="NOVASCOM\NOVASCOM.vb" />
-    <Compile Include="..\..\ASCOM.Utilities\Utilities\SharedConstantsAndCode.vb" />
+    <Compile Include="..\..\ASCOM.Utilities\ASCOM.Utilities\SharedConstantsAndCode.vb" />
     <Compile Include="Transform.vb" />
   </ItemGroup>
   <ItemGroup>
@@ -134,9 +144,9 @@
     <Content Include="AstrometryNamespaceDocs.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ASCOM.Utilities\Utilities\Utilities.vbproj">
+    <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
-      <Name>Utilities</Name>
+      <Name>ASCOM.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

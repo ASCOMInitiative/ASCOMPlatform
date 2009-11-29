@@ -40,6 +40,16 @@
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Peter|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Peter\</OutputPath>
+    <DocumentationFile>ASCOM Diagnostics.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>Full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
@@ -56,51 +66,51 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Utilities\AllUsersFileSystemProvider.vb">
+    <Compile Include="..\ASCOM.Utilities\AllUsersFileSystemProvider.vb">
       <Link>AllUsersFileSystemProvider.vb</Link>
     </Compile>
-    <Compile Include="..\Utilities\Chooser.vb">
+    <Compile Include="..\ASCOM.Utilities\Chooser.vb">
       <Link>Chooser.vb</Link>
     </Compile>
-    <Compile Include="..\Utilities\ChooserForm.designer.vb">
+    <Compile Include="..\ASCOM.Utilities\ChooserForm.designer.vb">
       <Link>ChooserForm.designer.vb</Link>
       <DependentUpon>ChooserForm.vb</DependentUpon>
     </Compile>
-    <Compile Include="..\Utilities\ChooserForm.vb">
+    <Compile Include="..\ASCOM.Utilities\ChooserForm.vb">
       <Link>ChooserForm.vb</Link>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="..\Utilities\CommonConstants.vb">
+    <Compile Include="..\ASCOM.Utilities\CommonConstants.vb">
       <Link>CommonConstants.vb</Link>
     </Compile>
-    <Compile Include="..\Utilities\Exceptions.vb">
+    <Compile Include="..\ASCOM.Utilities\Exceptions.vb">
       <Link>Exceptions.vb</Link>
     </Compile>
-    <Compile Include="..\Utilities\Interfaces.vb">
+    <Compile Include="..\ASCOM.Utilities\Interfaces.vb">
       <Link>Interfaces.vb</Link>
     </Compile>
-    <Compile Include="..\Utilities\KeyValuePair.vb">
+    <Compile Include="..\ASCOM.Utilities\KeyValuePair.vb">
       <Link>KeyValuePair.vb</Link>
     </Compile>
-    <Compile Include="..\Utilities\Profile.vb">
+    <Compile Include="..\ASCOM.Utilities\Profile.vb">
       <Link>Profile.vb</Link>
     </Compile>
-    <Compile Include="..\Utilities\Serial.vb">
+    <Compile Include="..\ASCOM.Utilities\Serial.vb">
       <Link>Serial.vb</Link>
     </Compile>
-    <Compile Include="..\Utilities\SharedConstantsAndCode.vb">
+    <Compile Include="..\ASCOM.Utilities\SharedConstantsAndCode.vb">
       <Link>SharedConstantsAndCode.vb</Link>
     </Compile>
-    <Compile Include="..\Utilities\TraceLogger.vb">
+    <Compile Include="..\ASCOM.Utilities\TraceLogger.vb">
       <Link>TraceLogger.vb</Link>
     </Compile>
-    <Compile Include="..\Utilities\UtilitiesSettings.vb">
+    <Compile Include="..\ASCOM.Utilities\UtilitiesSettings.vb">
       <Link>UtilitiesSettings.vb</Link>
     </Compile>
-    <Compile Include="..\Utilities\VB6Support\VB6COMErrors.vb">
+    <Compile Include="..\ASCOM.Utilities\VB6Support\VB6COMErrors.vb">
       <Link>VB6COMErrors.vb</Link>
     </Compile>
-    <Compile Include="..\Utilities\XMLAccess.vb">
+    <Compile Include="..\ASCOM.Utilities\XMLAccess.vb">
       <Link>XMLAccess.vb</Link>
     </Compile>
     <Compile Include="ConnectForm.Designer.vb">
@@ -133,7 +143,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\Utilities\ChooserForm.resX">
+    <EmbeddedResource Include="..\ASCOM.Utilities\ChooserForm.resX">
       <Link>ChooserForm.resX</Link>
       <DependentUpon>ChooserForm.vb</DependentUpon>
     </EmbeddedResource>
