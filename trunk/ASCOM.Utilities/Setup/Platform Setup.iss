@@ -104,7 +104,7 @@
 #define Public Minor 0
 #define Public Release 0
 #define Public Build 0
-#define AppVer ParseVersion("..\Utilities\bin\Release\ASCOM.Utilities.dll", Major ,Minor ,Release ,Build) ; define version variable
+#define AppVer ParseVersion("..\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll", Major ,Minor ,Release ,Build) ; define version variable
 #define AppVer str(Major) + "." + str(Minor) + "." + str(Release) + "." + str(SetupVersion) ; redefine to include setup version
 
 AppCopyright=Copyright © 2009 ASCOM Initiative
@@ -129,7 +129,7 @@ PrivilegesRequired=admin
 #emit "OutputBaseFilename=ASCOM Platform " + InstallerVersion + " Updater " + RC + " (v" + AppVer +")"
 Compression=lzma
 SolidCompression=true
-SetupIconFile=..\Utilities\Resources\ASCOM.ico
+SetupIconFile=..\ASCOM.Utilities\Resources\ASCOM.ico
 ShowLanguageDialog=auto
 WizardImageFile=NewWizardImage.bmp
 WizardSmallImageFile=ASCOMLogo.bmp
@@ -164,15 +164,15 @@ Name: dt\profileexplorer; Description: Install ASCOM Profile Explorer desktop ic
 
 [Files]
 ;Install the ASCOM.Utilities code
-Source: ..\Utilities\bin\Release\ASCOM.Utilities.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\Utilities\bin\Release\ASCOM.Utilities.pdb; DestDir: {app}; Flags: ignoreversion
-Source: ..\Utilities\bin\Release\ASCOM.Utilities.xml; DestDir: {app}; Flags: ignoreversion
+Source: ..\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb; DestDir: {app}; Flags: ignoreversion
+Source: ..\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml; DestDir: {app}; Flags: ignoreversion
 ;Debug symbols to the symbols directory
-Source: ..\Utilities\bin\Release\ASCOM.Utilities.pdb; DestDir: {win}\Symbols\dll; Flags: ignoreversion
+Source: ..\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb; DestDir: {win}\Symbols\dll; Flags: ignoreversion
 ;Install to 32bit directory as well on 64bit systems so that 32bit apps will find Utilities in the place they expect on a 64bit system
-Source: ..\Utilities\bin\Release\ASCOM.Utilities.dll; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
-Source: ..\Utilities\bin\Release\ASCOM.Utilities.pdb; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
-Source: ..\Utilities\bin\Release\ASCOM.Utilities.xml; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
+Source: ..\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
+Source: ..\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
+Source: ..\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
 
 ;Install the Astrometry code
 Source: ..\..\ASCOM.Astrometry\Astrometry\bin\Release\ASCOM.Astrometry.dll; DestDir: {app}; Flags: ignoreversion
@@ -238,7 +238,7 @@ Source: ..\MigrateProfile\bin\Release\MigrateProfile.pdb; DestDir: {cf32}\ASCOM\
 Source: ..\..\GACInstall\bin\Release\GACInstall.exe; DestDir: {app}; Flags: ignoreversion sharedfile
 
 ;ASCOM Icon
-Source: ..\Utilities\Resources\ASCOM.ico; DestDir: {app}; Flags: ignoreversion
+Source: ..\ASCOM.Utilities\Resources\ASCOM.ico; DestDir: {app}; Flags: ignoreversion
 
 ;ASCOM Exceptions - Removed Interfaces as we will use the platform 5a version already installed
 Source: ..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll; DestDir: {app}; Flags: ignoreversion
@@ -291,8 +291,8 @@ Name: {commonprograms}\ASCOM Platform\Docs\ASCOM Platform Update 5.5; Filename: 
 Name: {commonprograms}\ASCOM Platform\Docs\ASCOM Platform Architecture; Filename: {cf}\ASCOM\Doc\Platform 5.5.pdf
 Name: {commonprograms}\ASCOM Platform\Tools\Profile Explorer; Filename: {pf}\ASCOM\Profile Explorer\ProfileExplorer.exe
 Name: {commonprograms}\ASCOM Platform\Tools\ASCOM Diagnostics; Filename: {app}\ASCOM Diagnostics.exe
-;Name: {commondesktop}\Migrate Profile; Filename: {cf32}\ASCOM\Utilities\MigrateProfile.exe; Tasks: desktopicons
-;Name: {commondesktop}\Erase Profile; Filename: {cf32}\ASCOM\Utilities\EraseProfile.exe; Tasks: desktopicons
+;Name: {commondesktop}\Migrate Profile; Filename: {cf32}\ASCOM\ASCOM.Utilities\MigrateProfile.exe; Tasks: desktopicons
+;Name: {commondesktop}\Erase Profile; Filename: {cf32}\ASCOM\ASCOM.Utilities\EraseProfile.exe; Tasks: desktopicons
 Name: {commondesktop}\ASCOM Diagnostics; Filename: {app}\ASCOM Diagnostics.exe; Tasks: dt\diagnostics
 Name: {commondesktop}\ASCOM Profile Explorer; Filename: "{pf}\ASCOM\Profile Explorer\ProfileExplorer.exe"; Tasks: dt\profileexplorer
 
@@ -327,8 +327,8 @@ Filename: {app}\GACInstall.exe; Parameters: """{app}\policy.1.0.ASCOM.DriverAcce
 #emit "Filename: {app}\GACInstall.exe; Parameters: policy." + str(Major) + "." + str(Minor) + ".ASCOM.Astrometry.dll; Flags: runhidden; StatusMsg: Installing ASCOM Astrometry policy to the assembly cache"
 
 ; Erase and migrate the profile if needed
-;Filename: {cf32}\ASCOM\Utilities\EraseProfile.exe; Tasks: cleanprofile; Flags: runminimized; statusMsg: Erasing Profile
-Filename: {cf32}\ASCOM\Utilities\MigrateProfile.exe; Parameters: /MIGRATEIFNEEDED; Flags: runminimized; statusMsg: Migrating Profile if necessary
+;Filename: {cf32}\ASCOM\ASCOM.Utilities\EraseProfile.exe; Tasks: cleanprofile; Flags: runminimized; statusMsg: Erasing Profile
+Filename: {cf32}\ASCOM\ASCOM.Utilities\MigrateProfile.exe; Parameters: /MIGRATEIFNEEDED; Flags: runminimized; statusMsg: Migrating Profile if necessary
 
 ; ReadMe file
 Filename: {app}\ReadMe55.txt; Description: ReadMe file; StatusMsg: Displaying ReadMe file; Flags: shellexec skipifdoesntexist postinstall skipifsilent
@@ -352,7 +352,7 @@ Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\
 Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.Astrometry.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Unregistering 32bit ASCOM.Astrometry type library
 Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.Utilities.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Unregistering 32bit Utilities type library
 
-Filename: {cf32}\ASCOM\Utilities\RestoreOriginalHelpers.cmd; Parameters: """{cf32}\ASCOM\Utilities\*.dll"" ""{cf32}\ASCOM"""; StatusMsg: Restoring helper dlls; Flags: runhidden
+Filename: {cf32}\ASCOM\ASCOM.Utilities\RestoreOriginalHelpers.cmd; Parameters: """{cf32}\ASCOM\ASCOM.Utilities\*.dll"" ""{cf32}\ASCOM"""; StatusMsg: Restoring helper dlls; Flags: runhidden
 
 ;ASCOM Exceptions
 Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Exceptions"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Exceptions from the assembly cache
@@ -365,14 +365,14 @@ Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Exceptions"""; Flags: ru
 #emit "Filename: {app}\GACInstall.exe; Parameters: ""/U """"policy." + str(Major) + "." + str(Minor) + ".ASCOM.Astrometry""""""; Flags: runhidden; StatusMsg: Uninstalling ASCOM Astrometry policy from the assembly cache"
 
 [UninstallDelete]
-Type: files; Name: {cf32}\ASCOM\Utilities\*.*
+Type: files; Name: {cf32}\ASCOM\ASCOM.Utilities\*.*
 Type: dirifempty; Name: {cf32}\ASCOM\Utilities
 Type: files; Name: {cf32}\ASCOM\.net\ASCOM.Utilities.tlb
 Type: files; Name: {cf32}\ASCOM\.net\ASCOM.Astrometry.tlb
 Type: files; Name: {cf32}\ASCOM\.net\ASCOM.IConform.tlb
 Type: dirifempty; Name: {cf32}\ASCOM\Uninstall\Utilities
 
-Type: files; Name: {cf}\ASCOM\Utilities\*.*
+Type: files; Name: {cf}\ASCOM\ASCOM.Utilities\*.*
 Type: dirifempty; Name: {cf}\ASCOM\Utilities
 Type: files; Name: {app}\ASCOM.Utilities.tlb
 Type: files; Name: {app}\ASCOM.Astrometry.tlb

@@ -30,6 +30,14 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Peter|AnyCPU' ">
+    <OutputPath>bin\Peter\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -92,9 +100,9 @@
       <Name>ASCOM.SettingsProvider</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\ASCOM.Utilities\Utilities\Utilities.vbproj">
+    <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
-      <Name>Utilities</Name>
+      <Name>ASCOM.Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\ASCOM.Controls\ASCOM.Controls.csproj">
       <Project>{63AD32E8-98FF-44BB-AA29-ED2E5A5CF026}</Project>

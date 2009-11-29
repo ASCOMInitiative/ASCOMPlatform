@@ -42,6 +42,16 @@
     <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Peter|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Peter\</OutputPath>
+    <DocumentationFile>MigrateProfile.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>Full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -96,9 +106,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Utilities\Utilities.vbproj">
+    <ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
-      <Name>Utilities</Name>
+      <Name>ASCOM.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

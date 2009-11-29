@@ -46,6 +46,15 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\ASCOM.SettingsProvider.XML</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Peter|AnyCPU' ">
+    <OutputPath>bin\Peter\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>bin\Release\ASCOM.SettingsProvider.XML</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -80,9 +89,9 @@
       <Project>{2C40FAD9-DE75-4360-A0AD-911C4D24D98C}</Project>
       <Name>ASCOM.Attributes</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ASCOM.Utilities\Utilities\Utilities.vbproj">
+    <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
-      <Name>Utilities</Name>
+      <Name>ASCOM.Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
       <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
