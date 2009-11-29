@@ -66,9 +66,9 @@
     <Content Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ASCOM.Astrometry\Astrometry\Astrometry.vbproj">
+    <ProjectReference Include="..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj">
       <Project>{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3}</Project>
-      <Name>Astrometry</Name>
+      <Name>ASCOM.Astrometry</Name>
     </ProjectReference>
     <ProjectReference Include="..\ASCOM.Attributes\ASCOM.Attributes.csproj">
       <Project>{2C40FAD9-DE75-4360-A0AD-911C4D24D98C}</Project>
