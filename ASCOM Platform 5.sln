@@ -89,7 +89,7 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Examples", "ASCOM Platform 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Astrometry Projects", "Astrometry Projects", "{E100639A-B65F-4B34-A733-D6344AF2EF46}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Astrometry", "ASCOM.Astrometry\Astrometry\Astrometry.vbproj", "{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ASCOM.Astrometry", "ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj", "{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Profile Explorer", "ASCOM.Utilities\Profile Explorer\Profile Explorer.vbproj", "{2CB726BB-E327-41C8-9AEC-5327E5187147}"
 EndProject
