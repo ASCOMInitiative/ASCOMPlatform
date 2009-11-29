@@ -149,7 +149,7 @@
     <None Include="Examples\Chooser.aml" />
     <None Include="Examples\Profile.aml" />
     <None Include="Examples\Serial.aml" />
-    <None Include="Version History\Version 5.5 RC2.aml" />
+    <None Include="Version History\Version 5.5.1.aml" />
     <None Include="Version History\Version Template.aml" />
     <None Include="Version History\Version Summary.aml" />
     <None Include="Introduction\ASCOM Platform for COM.aml" />
