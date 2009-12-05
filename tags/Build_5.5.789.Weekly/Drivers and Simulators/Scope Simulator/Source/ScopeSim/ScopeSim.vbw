@@ -1,0 +1,14 @@
+Telescope = 98, 64, 949, 723, 
+ErrorConstants = 41, 24, 802, 872, C
+WindowsAPI = 19, 37, 764, 581, C
+Astronomy_Funcs = 22, 22, 554, 666, 
+frmSetup = 0, 0, 723, 644, C, 82, -10, 944, 724, C
+frmHandBox = 89, 63, 811, 727, C, 613, 188, 832, 708, C
+Defines = 28, 9, 1062, 928, C
+frmShow = 13, 7, 705, 587, C, 248, 47, 654, 626, C
+Rate = 83, 53, 900, 856, C
+AxisRates = 11, 18, 1077, 783, C
+TrackingRates = 135, -9, 1038, 912, C
+Globals = 9, 14, 973, 928, 
+Util = 119, 80, 830, 756, 
+Startup = 10, 4, 783, 783, Z
