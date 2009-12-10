@@ -1,6 +1,5 @@
 //tabs=4
 // --------------------------------------------------------------------------------
-// TODO fill in this information for your driver, then remove this line!
 //
 // ASCOM Focuser driver for OptecTCF_Driver
 //
@@ -47,7 +46,7 @@ namespace ASCOM.OptecTCF_Driver
         // Driver ID and descriptive string that shows in the Chooser
         //
         internal static string s_csDriverID = "ASCOM.OptecTCF_Driver.Focuser";
-        private static string s_csDriverDescription = "Optec TCF-S";
+        private static string s_csDriverDescription = "Optec TCF-S BETA1";
 
         //
         // Constructor - Must be public for COM registration!
@@ -159,7 +158,7 @@ namespace ASCOM.OptecTCF_Driver
 
         public int Position
         {
-            get { return DeviceComm.GetPosition(); }
+            get { return DeviceComm.Position; }
         }              //FINISHED
 
         public void SetupDialog()
@@ -186,7 +185,7 @@ namespace ASCOM.OptecTCF_Driver
 
         public double Temperature
         {
-            get { return DeviceComm.GetTemperaterature(); }
+            get { return DeviceComm.Temperature; }
         }        //FINISHED
 
         #endregion

@@ -35,7 +35,7 @@ namespace ASCOM.OptecTCF_Driver
             DelayB
         }
 
-        static DeviceSettings()
+        static DeviceSettings() //Constructor
         {
             try
             {
@@ -101,8 +101,6 @@ namespace ASCOM.OptecTCF_Driver
 
         internal static char GetActiveMode()
         {
-            
-            
             string AorB = Prof.GetValue(Focuser.s_csDriverID, ProfileStrings.AutoMode.ToString(), "", "A");
             if (char.Parse(AorB) != 'A' && char.Parse(AorB) != 'B')
                 throw new InvalidValueException("AorB", AorB.ToString(), "A or B");
@@ -262,9 +260,6 @@ namespace ASCOM.OptecTCF_Driver
             
         }
 
-       
-       
-
         //internal static SlopePoint GetEndPoint(char AorB)
         //{
         //    if (AorB != 'A' && AorB != 'B') throw new InvalidValueException("AorB", AorB.ToString(), "A or B");
@@ -312,10 +307,7 @@ namespace ASCOM.OptecTCF_Driver
         //}
 
         #endregion
-
-
     }
-
 
     class SlopePoint
     {
