@@ -128,6 +128,17 @@ namespace ASCOM.GeminiTelescope
                 }
             }
         }
+        public bool AbsoluteFocuser
+        {
+            get
+            {
+                return checkBoxAbsolute.Checked;
+            }
+            set
+            {
+                checkBoxAbsolute.Checked = value;
+            }
+        }
         #endregion
 
         private void FocuserSetupDialogForm_Load(object sender, EventArgs e)

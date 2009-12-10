@@ -145,6 +145,7 @@ namespace ASCOM.GeminiTelescope
         private void pbExit_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
+            this.Close();
         }
 
         private void pbToFile_Click(object sender, EventArgs e)

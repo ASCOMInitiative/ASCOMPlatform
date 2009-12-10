@@ -98,6 +98,7 @@ namespace ASCOM.GeminiTelescope
             notifyMenu,
             statusMenu,
             new MenuItem("-"),
+            new MenuItem(Resources.HelpMenu, new EventHandler(viewHelpToolStripMenuItem_Click)),
             new MenuItem(Resources.AboutGeminiDriver + "...", new EventHandler(aboutGeminiDriverToolStripMenuItem_Click)),
             new MenuItem(Resources.Exit, new EventHandler(ExitMenu))
             });
@@ -810,6 +811,7 @@ namespace ASCOM.GeminiTelescope
             setupForm.SpeechFlags = GeminiHardware.SpeechFilter;
             setupForm.SpeechVoice = GeminiHardware.SpeechVoice;
             setupForm.Sites = GeminiHardware.Sites;
+            setupForm.AllowPortScan = GeminiHardware.ScanCOMPorts;
 
             setupForm.TraceLevel = GeminiHardware.TraceLevel;
 
@@ -866,6 +868,8 @@ namespace ASCOM.GeminiTelescope
                 catch { error += Resources.GPS + " " + Resources.COMport + ", "; }
                 GeminiHardware.GpsUpdateClock = setupForm.GpsUpdateClock;
 
+                GeminiHardware.ScanCOMPorts = setupForm.AllowPortScan;
+
                 if (setupForm.UseJoystick && !string.IsNullOrEmpty(setupForm.JoystickName))
                 {
                     GeminiHardware.UseJoystick = true;
@@ -909,8 +913,7 @@ namespace ASCOM.GeminiTelescope
             setupForm.BacklashSize = GeminiHardware.BacklashSize;
             setupForm.BacklashDirection = GeminiHardware.BacklashDirection;
             setupForm.Speed = GeminiHardware.Speed;
-
-
+            setupForm.AbsoluteFocuser = GeminiHardware.AbsoluteFocuser;
 
             DialogResult ans = setupForm.ShowDialog();
 
@@ -918,6 +921,7 @@ namespace ASCOM.GeminiTelescope
             {
                 try
                 {
+                    GeminiHardware.AbsoluteFocuser = setupForm.AbsoluteFocuser;
                     GeminiHardware.ComPort = setupForm.ComPort;
                     GeminiHardware.BaudRate = int.Parse(setupForm.BaudRate);
                     GeminiHardware.ReverseDirection = setupForm.ReverseDirection;
@@ -1453,9 +1457,11 @@ namespace ASCOM.GeminiTelescope
 
         private void pbStop_Click(object sender, EventArgs e)
         {
-            //tmrJoystick.Stop();
-            GeminiHardware.DoCommandResult(":Q", GeminiHardware.MAX_TIMEOUT, false);
-            Speech.SayIt(Resources.StopSlew, Speech.SpeechType.Command);
+            if (GeminiHardware.Connected)
+            {
+                GeminiHardware.DoCommandResult(":Q", GeminiHardware.MAX_TIMEOUT, false);
+                Speech.SayIt(Resources.StopSlew, Speech.SpeechType.Command);
+            }
         }
 
         private void frmMain_VisibleChanged(object sender, EventArgs e)
@@ -1552,16 +1558,24 @@ namespace ASCOM.GeminiTelescope
             SetTopMost();
         }
 
+        static frmUserCatalog frmCatalog;
+
         private void configureCatalogsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmUserCatalog frm = new frmUserCatalog();
-            frm.ShowDialog(this);
+            if (frmCatalog==null || frmCatalog.IsDisposed || !frmCatalog.Visible)
+                frmCatalog = new frmUserCatalog();
+            frmCatalog.Visible = false;
+            frmCatalog.Show(this);
         }
+
+        static frmObservationLog frmObservation = null;
 
         private void observationLogToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmObservationLog frm = new frmObservationLog();
-            frm.ShowDialog(this);
+            if (frmObservation==null || frmObservation.IsDisposed || !frmObservation.Visible)
+                frmObservation = new frmObservationLog();
+            frmObservation.Visible = false;
+            frmObservation.Show(this);
         }
 
         private void setCustomParkPositionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1610,6 +1624,76 @@ namespace ASCOM.GeminiTelescope
 
         }
 
+        private void viewHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            System.IO.FileInfo fi = new System.IO.FileInfo(path);
+
+            path = System.IO.Path.Combine(fi.DirectoryName, Resources.HelpFileName);
+            if (System.IO.File.Exists(path))
+            {
+                try
+                {
+                    Cursor.Current = Cursors.WaitCursor;
+                    System.Diagnostics.Process p = System.Diagnostics.Process.Start(path);
+                    if (p != null)
+                        p.WaitForInputIdle();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Cannot launch help file: \r\n" + ex.Message, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                finally
+                {
+                    Cursor.Current = Cursors.Default;
+                }
+            }
+            else
+                MessageBox.Show("Cannot locate help file: \r\n " + path, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+
+        private void frmMain_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Modifiers == Keys.None)
+                switch (e.KeyCode)
+                {
+                    case Keys.F1:
+                        viewHelpToolStripMenuItem_Click(sender, null);  break;
+                    case Keys.Up:
+                        buttonSlew1_MouseDown(sender, null); break;
+                    case Keys.Down:
+                        buttonSlew2_MouseDown(sender, null); break;
+                    case Keys.Left:
+                        buttonSlew3_MouseDown(sender, null); break;
+                    case Keys.Right:
+                        buttonSlew4_MouseDown(sender, null); break;
+                    case Keys.Escape:
+                        pbStop_Click(sender, null); break;
+                    case Keys.G:
+                        RadioButtonGuide.PerformClick(); break;
+                    case Keys.C:
+                        RadioButtonCenter.PerformClick(); break;
+                    case Keys.S:
+                        RadioButtonSlew.PerformClick(); break;
+                }
+        }
+
+        private void frmMain_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Modifiers == Keys.None)
+                switch (e.KeyCode)
+                {
+                    case Keys.Up:
+                        buttonSlew1_MouseUp(sender, null); break;
+                    case Keys.Down:
+                        buttonSlew2_MouseUp(sender, null); break;
+                    case Keys.Left:
+                        buttonSlew3_MouseUp(sender, null); break;
+                    case Keys.Right:
+                        buttonSlew4_MouseUp(sender, null); break;
+                }
+
+        }
     
     }
 }

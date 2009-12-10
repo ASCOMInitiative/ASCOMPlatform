@@ -129,7 +129,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public bool Absolute
         {
-            get { return true; }
+            get { return GeminiHardware.AbsoluteFocuser; }
         }
 
         /// <summary>
@@ -216,7 +216,11 @@ namespace ASCOM.GeminiTelescope
             if (m_State != FocuserState.None) Halt();
 
 
-            val = val*GeminiHardware.StepSize - m_Position; // how far to move from current position
+            if (GeminiHardware.AbsoluteFocuser)
+                val = val * GeminiHardware.StepSize - m_Position; // how far to move from current position
+            else
+                val = val * GeminiHardware.StepSize;
+
             val /= GeminiHardware.StepSize;
 
             // limit the move to max increment setting
@@ -256,7 +260,12 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public int Position
         {
-            get { return m_Position / GeminiHardware.StepSize; }
+            get {
+                if (GeminiHardware.AbsoluteFocuser)
+                    return m_Position / GeminiHardware.StepSize;
+                else
+                    throw new ASCOM.PropertyNotImplementedException("Position", false);
+            }
         }
 
         /// <summary>
@@ -264,11 +273,11 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public void SetupDialog()
         {
-            if (GeminiHardware.Connected)
-            {
-                throw new DriverException("The hardware is connected, cannot do SetupDialog()",
-                                    unchecked(ErrorCodes.DriverBase + 4));
-            }
+            //if (GeminiHardware.Connected)
+            //{
+            //    throw new DriverException("The hardware is connected, cannot do SetupDialog()",
+            //                        unchecked(ErrorCodes.DriverBase + 4));
+            //}
             GeminiTelescope.m_MainForm.DoFocuserSetupDialog(); ;
         }
 

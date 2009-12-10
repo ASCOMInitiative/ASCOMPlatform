@@ -293,6 +293,20 @@ namespace ASCOM.GeminiTelescope
 
         private static string m_PassThroughComPort;
 
+        private static bool m_ScanCOMPorts;
+
+        public static bool ScanCOMPorts
+        {
+            get { return GeminiHardware.m_ScanCOMPorts; }
+            set {
+                m_Profile.DeviceType = "Telescope";
+                m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ScanCOMPorts", value.ToString(GeminiHardware.m_GeminiCulture));                
+                GeminiHardware.m_ScanCOMPorts = value; 
+            }
+        }
+
+
+
         public static string PassThroughComPort
         {
             get { return GeminiHardware.m_PassThroughComPort; }
@@ -650,6 +664,7 @@ namespace ASCOM.GeminiTelescope
         private static frmStatus m_StatusForm = null;
 
         //Focuser Private Data
+        private static bool m_AbsoluteFocuser=true;
         private static int m_MaxIncrement = 0;
         private static int m_MaxStep = 0;
         private static int m_StepSize = 0;
@@ -817,6 +832,12 @@ namespace ASCOM.GeminiTelescope
 
             Trace.Info(2, "Comm Settings", m_ComPort, m_BaudRate, m_DataBits, m_Parity, m_StopBits);
 
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ScanCOMPorts", ""), out m_ScanCOMPorts))
+                m_ScanCOMPorts = true;
+
+            Trace.Info(2, "Scan COM ports", m_ScanCOMPorts);
+
+
             if (!double.TryParse(m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Latitude", ""), System.Globalization.NumberStyles.Float, m_GeminiCulture, out m_Latitude))
                 m_Latitude = 0.0;
 
@@ -979,6 +1000,9 @@ namespace ASCOM.GeminiTelescope
             s = m_Profile.GetValue(SharedResources.FOCUSER_PROGRAM_ID, "StepSize");
             if (!int.TryParse(s, out m_StepSize) || m_StepSize <= 0)
                 m_StepSize = 100;
+
+            if (!bool.TryParse(m_Profile.GetValue(SharedResources.FOCUSER_PROGRAM_ID, "AbsoluteFocuser", ""), out m_AbsoluteFocuser))
+                m_AbsoluteFocuser = true;
 
             s = m_Profile.GetValue(SharedResources.FOCUSER_PROGRAM_ID, "ReverseDirection");
             if (!bool.TryParse(s, out m_ReverseDirection))
@@ -1879,8 +1903,9 @@ namespace ASCOM.GeminiTelescope
                 return true;
             }
             set
-            {
+            {            
                 m_AbortConnect.Set();
+                m_SerialTimeoutExpired.Set();
             }
         }
 #endregion
@@ -1926,7 +1951,7 @@ namespace ASCOM.GeminiTelescope
                     }
                     catch (Exception e)
                     {
-                        if (!HuntForGemini(null))
+                        if (!m_ScanCOMPorts || !HuntForGemini(null))
                         {
                             m_Clients -= 1;
                             Trace.Except(e);
@@ -2107,14 +2132,14 @@ namespace ASCOM.GeminiTelescope
             CommandItem ci = new CommandItem("\x6", 500, true); // quick timeout, don't want to hang up the user for too long
             string sRes = GetCommandResult(ci);
 
-
+            int timeout = (m_ScanCOMPorts ? 2000 : 600000); // if not scanning, wait for 10 minutes (the user can stop it at any time, and this may be needed for bluetooth stack connection)
             Transmit("\x6");
-            ci = new CommandItem("\x6", 2000, true);
+            ci = new CommandItem("\x6", timeout, true);
             sRes = GetCommandResult(ci);
 
             if (sRes == null)
             {
-                if (!HuntForGemini(null)) return false;
+                if (!m_ScanCOMPorts || !HuntForGemini(null)) return false;
                 Transmit("\x6");
                 ci = new CommandItem("\x6", 10000, true);
                 sRes = GetCommandResult(ci);
@@ -3940,6 +3965,19 @@ namespace ASCOM.GeminiTelescope
         #endregion
 
         #region Focuser Implementation
+
+        public static bool AbsoluteFocuser
+        {
+            get { return m_AbsoluteFocuser; }
+            set
+            {
+                m_AbsoluteFocuser = value;
+                m_Profile.DeviceType = "Focuser";
+                m_Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "AbsoluteFocuser", value.ToString(GeminiHardware.m_GeminiCulture));
+            }
+        }
+
+
         /// <summary>
         /// Focuser Reverse Directions
         /// </summary>

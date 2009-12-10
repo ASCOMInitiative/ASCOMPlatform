@@ -65,8 +65,10 @@ namespace ASCOM.GeminiTelescope
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.observationLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configureCatalogsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.viewHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutGeminiDriverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitDriverMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.FuncMenu = new System.Windows.Forms.Button();
             this.contextMenuStrip3 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -415,13 +417,15 @@ namespace ASCOM.GeminiTelescope
             this.toolStripSeparator3,
             this.observationLogToolStripMenuItem,
             this.configureCatalogsToolStripMenuItem,
-            this.toolStripSeparator1,
+            this.toolStripSeparator5,
+            this.viewHelpToolStripMenuItem,
             this.aboutGeminiDriverToolStripMenuItem,
+            this.toolStripSeparator1,
             this.exitDriverMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.contextMenuStrip1.ShowImageMargin = false;
-            this.contextMenuStrip1.Size = new System.Drawing.Size(198, 170);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(198, 198);
             // 
             // setupDialogToolStripMenuItem
             // 
@@ -469,10 +473,18 @@ namespace ASCOM.GeminiTelescope
             this.configureCatalogsToolStripMenuItem.Text = "Manage Catalogs...";
             this.configureCatalogsToolStripMenuItem.Click += new System.EventHandler(this.configureCatalogsToolStripMenuItem_Click);
             // 
-            // toolStripSeparator1
+            // toolStripSeparator5
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(194, 6);
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(194, 6);
+            // 
+            // viewHelpToolStripMenuItem
+            // 
+            this.viewHelpToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.viewHelpToolStripMenuItem.Name = "viewHelpToolStripMenuItem";
+            this.viewHelpToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.viewHelpToolStripMenuItem.Text = global::ASCOM.GeminiTelescope.Properties.Resources.HelpMenu;
+            this.viewHelpToolStripMenuItem.Click += new System.EventHandler(this.viewHelpToolStripMenuItem_Click);
             // 
             // aboutGeminiDriverToolStripMenuItem
             // 
@@ -481,6 +493,11 @@ namespace ASCOM.GeminiTelescope
             this.aboutGeminiDriverToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.aboutGeminiDriverToolStripMenuItem.Text = "About Gemini Driver...";
             this.aboutGeminiDriverToolStripMenuItem.Click += new System.EventHandler(this.aboutGeminiDriverToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(194, 6);
             // 
             // exitDriverMenuItem
             // 
@@ -520,7 +537,7 @@ namespace ASCOM.GeminiTelescope
             this.keepThisWindowOnTopToolStripMenuItem});
             this.contextMenuStrip3.Name = "contextMenuStrip1";
             this.contextMenuStrip3.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.contextMenuStrip3.Size = new System.Drawing.Size(286, 120);
+            this.contextMenuStrip3.Size = new System.Drawing.Size(286, 98);
             // 
             // toolStripMenuItem5
             // 
@@ -703,6 +720,7 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew3.Size = new System.Drawing.Size(64, 64);
             this.buttonSlew3.TabIndex = 2;
             this.buttonSlew3.UseVisualStyleBackColor = true;
+            this.buttonSlew3.Click += new System.EventHandler(this.buttonSlew3_Click);
             this.buttonSlew3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew3_MouseDown);
             this.buttonSlew3.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew3_MouseUp);
             // 
@@ -759,12 +777,15 @@ namespace ASCOM.GeminiTelescope
             this.Controls.Add(this.GroupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "frmMain";
             this.Text = "Gemini";
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.VisibleChanged += new System.EventHandler(this.frmMain_VisibleChanged);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.frmMain_KeyUp);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmMain_KeyDown);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel4.ResumeLayout(false);
@@ -837,6 +858,8 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.ToolStripMenuItem parkAtCustomParkPositionToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem unparkToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem viewHelpToolStripMenuItem;
 
 
     }
