@@ -65,6 +65,7 @@
             this.radioButtonIn = new System.Windows.Forms.RadioButton();
             this.labelTime = new System.Windows.Forms.Label();
             this.labelVersion = new System.Windows.Forms.Label();
+            this.checkBoxAbsolute = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -98,7 +99,7 @@
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cmdCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdCancel.ForeColor = System.Drawing.Color.White;
-            this.cmdCancel.Location = new System.Drawing.Point(386, 342);
+            this.cmdCancel.Location = new System.Drawing.Point(386, 368);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 24);
             this.cmdCancel.TabIndex = 5;
@@ -111,7 +112,7 @@
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.cmdOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdOK.ForeColor = System.Drawing.Color.White;
-            this.cmdOK.Location = new System.Drawing.Point(386, 312);
+            this.cmdOK.Location = new System.Drawing.Point(386, 338);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 4;
@@ -160,7 +161,7 @@
             // comboBoxComPort
             // 
             this.comboBoxComPort.FormattingEnabled = true;
-            this.comboBoxComPort.Location = new System.Drawing.Point(74, 3);
+            this.comboBoxComPort.Location = new System.Drawing.Point(73, 3);
             this.comboBoxComPort.Name = "comboBoxComPort";
             this.comboBoxComPort.Size = new System.Drawing.Size(89, 21);
             this.comboBoxComPort.TabIndex = 22;
@@ -182,7 +183,7 @@
             "9600",
             "19200",
             "38400"});
-            this.comboBoxBaudRate.Location = new System.Drawing.Point(74, 37);
+            this.comboBoxBaudRate.Location = new System.Drawing.Point(73, 37);
             this.comboBoxBaudRate.Name = "comboBoxBaudRate";
             this.comboBoxBaudRate.Size = new System.Drawing.Size(89, 21);
             this.comboBoxBaudRate.TabIndex = 24;
@@ -191,7 +192,7 @@
             // 
             this.groupBox1.Controls.Add(this.tableLayoutPanel1);
             this.groupBox1.ForeColor = System.Drawing.Color.White;
-            this.groupBox1.Location = new System.Drawing.Point(12, 117);
+            this.groupBox1.Location = new System.Drawing.Point(12, 140);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(275, 148);
             this.groupBox1.TabIndex = 23;
@@ -321,7 +322,7 @@
             // 
             this.groupBox3.Controls.Add(this.tableLayoutPanel3);
             this.groupBox3.ForeColor = System.Drawing.Color.White;
-            this.groupBox3.Location = new System.Drawing.Point(12, 271);
+            this.groupBox3.Location = new System.Drawing.Point(12, 294);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(275, 46);
             this.groupBox3.TabIndex = 25;
@@ -433,7 +434,7 @@
             // 
             this.groupBox5.Controls.Add(this.tableLayoutPanel5);
             this.groupBox5.ForeColor = System.Drawing.Color.White;
-            this.groupBox5.Location = new System.Drawing.Point(12, 323);
+            this.groupBox5.Location = new System.Drawing.Point(12, 346);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(275, 46);
             this.groupBox5.TabIndex = 26;
@@ -497,7 +498,7 @@
             this.labelTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTime.AutoSize = true;
             this.labelTime.ForeColor = System.Drawing.Color.White;
-            this.labelTime.Location = new System.Drawing.Point(260, 382);
+            this.labelTime.Location = new System.Drawing.Point(260, 403);
             this.labelTime.Name = "labelTime";
             this.labelTime.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.labelTime.Size = new System.Drawing.Size(185, 13);
@@ -509,18 +510,30 @@
             this.labelVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelVersion.AutoSize = true;
             this.labelVersion.ForeColor = System.Drawing.Color.White;
-            this.labelVersion.Location = new System.Drawing.Point(9, 382);
+            this.labelVersion.Location = new System.Drawing.Point(9, 403);
             this.labelVersion.Name = "labelVersion";
             this.labelVersion.Size = new System.Drawing.Size(120, 13);
             this.labelVersion.TabIndex = 27;
             this.labelVersion.Text = "<run time - version etc.>";
+            // 
+            // checkBoxAbsolute
+            // 
+            this.checkBoxAbsolute.AutoSize = true;
+            this.checkBoxAbsolute.ForeColor = System.Drawing.Color.White;
+            this.checkBoxAbsolute.Location = new System.Drawing.Point(12, 117);
+            this.checkBoxAbsolute.Name = "checkBoxAbsolute";
+            this.checkBoxAbsolute.Size = new System.Drawing.Size(191, 17);
+            this.checkBoxAbsolute.TabIndex = 29;
+            this.checkBoxAbsolute.Text = "Simulate Absolute Position Focuser";
+            this.checkBoxAbsolute.UseVisualStyleBackColor = true;
             // 
             // FocuserSetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
-            this.ClientSize = new System.Drawing.Size(457, 404);
+            this.ClientSize = new System.Drawing.Size(457, 425);
+            this.Controls.Add(this.checkBoxAbsolute);
             this.Controls.Add(this.labelTime);
             this.Controls.Add(this.labelVersion);
             this.Controls.Add(this.groupBox5);
@@ -600,5 +613,6 @@
         private System.Windows.Forms.RadioButton radioButtonIn;
         private System.Windows.Forms.Label labelTime;
         private System.Windows.Forms.Label labelVersion;
+        private System.Windows.Forms.CheckBox checkBoxAbsolute;
     }
 }

@@ -715,11 +715,77 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+#if true
         public PierSide DestinationSideOfPier(double RightAscension, double Declination)
         {
             throw new ASCOM.MethodNotImplementedException("DestinationSideOfPier"); // Was PropertyNotImplementedException
         }
 
+
+#else
+        // PK: this is incomplete and will not work as written
+        public PierSide DestinationSideOfPier(double RightAscension, double Declination)
+        {
+            string res = GeminiHardware.DoCommandResult("<223:", GeminiHardware.MAX_TIMEOUT, false);
+
+            int d = 0, m = 0;
+            try
+            {
+                //<ddd>d<mm>
+                d = int.Parse(res.Substring(0, 3));
+                m = int.Parse(res.Substring(4, 2));
+            }
+            catch { return PierSide.pierUnknown; }
+            double gotolimit = ((double)d) + ((double)m / 60.0);
+
+            int de, me = 0;
+
+            res = GeminiHardware.DoCommandResult("<220:", GeminiHardware.MAX_TIMEOUT, false);
+            try
+            {
+                // east        west
+                //<ddd>d<mm>;<ddd>d<mm>
+                d = int.Parse(res.Substring(7, 3));
+                m = int.Parse(res.Substring(11, 2));
+                de = int.Parse(res.Substring(0, 3));
+                me = int.Parse(res.Substring(4, 2));
+
+            }
+            catch { return PierSide.pierUnknown; }
+
+
+            // if goto limit is set to zero, this means it's 2.5 degrees from west safety limit:
+            if (gotolimit == 0)
+            {
+                gotolimit = ((double)d) + ((double)m / 60.0) - 2.5;
+            }
+            //gotolimit is now number of degrees from cwd position
+            gotolimit -= 90;    // degrees from meridian
+            double east_limit = -(de + (double)me / 60.0);
+
+            double hour_angle;
+
+            hour_angle = (GeminiHardware.SiderealTime) - RightAscension;
+
+            // normalize to -12..12 hours:
+            if (hour_angle < -12) hour_angle = 24 + hour_angle;
+            if (hour_angle > 12) hour_angle = hour_angle - 24;
+
+            hour_angle = hour_angle / 24 * 360; // convert to degrees for comparison with gotolimit
+
+            if (hour_angle >= gotolimit) return PierSide.pierEast;  // past goto limit on the west, flip to the east side
+            if (hour_angle <= east_limit) return PierSide.pierWest; // past east safety limit, must be on the west side
+
+            if (hour_angle >= gotolimit && GeminiHardware.SideOfPier == "W")
+            {
+                return PierSide.pierEast;
+            }
+            //            else if (hour_angle <= east_limit && GeminiHardware.SideOfPier == "E")
+            //                return PierSide.pierWest;
+            else
+                return PierSide.pierEast;
+        }        
+#endif        
         public bool DoesRefraction
         {
             get {
@@ -1160,11 +1226,11 @@ namespace ASCOM.GeminiTelescope
         {
             GeminiHardware.Trace.Enter("IT:SetupDialog");
 
-            if (GeminiHardware.Connected)
-            {
-                throw new DriverException("The hardware is connected, cannot do SetupDialog()",
-                                    unchecked(ErrorCodes.DriverBase + 4));
-            }
+            //if (GeminiHardware.Connected)
+            //{
+            //    throw new DriverException("The hardware is connected, cannot do SetupDialog()",
+            //                        unchecked(ErrorCodes.DriverBase + 4));
+            //}
             GeminiTelescope.m_MainForm.DoTelescopeSetupDialog();
             GeminiHardware.Trace.Exit("IT:SetupDialog");
         }
@@ -1197,7 +1263,12 @@ namespace ASCOM.GeminiTelescope
 
                 if ((value == PierSide.pierEast && GeminiHardware.SideOfPier == "W") || (value == PierSide.pierWest && GeminiHardware.SideOfPier == "E"))
                 {
-                    GeminiHardware.DoCommandResult(":Mf", -1 , false);
+                    string res = GeminiHardware.DoCommandResult(":Mf", -1 , false);
+                    if (res == null) throw new TimeoutException("SideOfPier");
+                    if (res.StartsWith("1")) throw new ASCOM.DriverException("Object below horizon");
+                    if (res.StartsWith("4")) throw new ASCOM.DriverException("Position unreachable");
+                    if (res.StartsWith("3")) throw new ASCOM.DriverException("Manual control");
+
                     GeminiHardware.WaitForVelocity("S", GeminiHardware.MAX_TIMEOUT);
                     GeminiHardware.WaitForVelocity("TN", GeminiHardware.MAX_TIMEOUT);  // shouldn't this be waiting forever??? depends on whether :Mf is synchronous or not: need to check
                 }

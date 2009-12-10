@@ -138,9 +138,9 @@ namespace ASCOM.GeminiTelescope
             SetControlColor(tableLayoutPanel5);
             SetControlColor(this.panel1);
 
-            pbApply.Enabled = GeminiHardware.Connected;
+//            pbApply.Enabled = GeminiHardware.Connected;
             pbReboot.Enabled = GeminiHardware.Connected;
-            pbOK.Enabled = GeminiHardware.Connected;
+//            pbOK.Enabled = GeminiHardware.Connected;
             pbFromGemini.Enabled = GeminiHardware.Connected;
 
             pbButton_EnabledChanged(pbApply, null);
@@ -163,30 +163,38 @@ namespace ASCOM.GeminiTelescope
                 DialogResult res = MessageBox.Show(Resources.OverwriteSettings, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                 if (res != DialogResult.Yes) return;
 
-                this.UseWaitCursor = true;
-
-                try
+                if (GeminiHardware.Connected)
                 {
-                    GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
-                    props.SyncWithGemini(true);    // write all properties from profile to Gemini
+                    this.UseWaitCursor = true;
 
-                    if (GeminiHardware.SendAdvancedSettings)
-                        props.Serialize(true, null);   // save to default profile
+                    try
+                    {
+                        GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
+                        props.SyncWithGemini(true);    // write all properties from profile to Gemini
 
-                    props.ClearProfile();
-                    props.Serialize(false, null);   // start with default profile settings
-                    props.SyncWithGemini(false);   // read all the properties from the mount
-                    geminiPropertiesBindingSource.ResetBindings(false);
-                    this.Text = Cap + " " + Resources.SettingsFromGemini;
+                        if (GeminiHardware.SendAdvancedSettings)
+                            props.Serialize(true, null);   // save to default profile
+
+                        props.ClearProfile();
+                        props.Serialize(false, null);   // start with default profile settings
+                        props.SyncWithGemini(false);   // read all the properties from the mount
+                        geminiPropertiesBindingSource.ResetBindings(false);
+                        this.Text = Cap + " " + Resources.SettingsFromGemini;
+                    }
+                    catch (Exception ex)
+                    {
+                        GeminiHardware.Trace.Except(ex);
+                        MessageBox.Show(Resources.NoProfileSave + "\r\n" + ex.Message);
+                    }
+                    finally
+                    {
+                        this.UseWaitCursor = false;
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    GeminiHardware.Trace.Except(ex);
-                    MessageBox.Show( Resources.NoProfileSave + "\r\n" + ex.Message);
-                }
-                finally
-                {
-                    this.UseWaitCursor = false;
+                    // if disconnected, simply save changes into default profile
+                    pbSaveDefault_Click(sender, e);
                 }
             }
             GeminiHardware.Trace.Exit("AdvancedSettings:pbApply_Click");
@@ -306,6 +314,9 @@ namespace ASCOM.GeminiTelescope
                     {
                         this.UseWaitCursor = false;
                     }
+                } else {    
+                    // if disconnected, simply save changes into default profile
+                    pbSaveDefault_Click(sender, e);
                 }
             }
             GeminiHardware.Trace.Exit("Props:pbOK");

@@ -773,6 +773,24 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gemini Telescope Net Installation and Operation.pdf.
+        /// </summary>
+        internal static string HelpFileName {
+            get {
+                return ResourceManager.GetString("HelpFileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Help!.
+        /// </summary>
+        internal static string HelpMenu {
+            get {
+                return ResourceManager.GetString("HelpMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hide Hand Controller.
         /// </summary>
         internal static string HideHandController {

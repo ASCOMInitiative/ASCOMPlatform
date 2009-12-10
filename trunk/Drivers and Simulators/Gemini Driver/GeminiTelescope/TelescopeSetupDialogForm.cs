@@ -74,6 +74,12 @@ namespace ASCOM.GeminiTelescope
             set { m_SpeechFlags = value; }
         }
 
+        internal bool AllowPortScan
+        {
+            get { return chkPortScan.Checked; }
+            set { chkPortScan.Checked = value; }
+        }
+
         public TelescopeSetupDialogForm()
         {
             m_DoneInitialize = false;

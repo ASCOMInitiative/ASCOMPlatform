@@ -365,6 +365,7 @@ namespace ASCOM.GeminiTelescope
         private void pbExit_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
+            this.Close();
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)

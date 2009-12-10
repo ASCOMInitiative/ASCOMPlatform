@@ -684,4 +684,7 @@ Are you sure you want to use these new values?</value>
   <data name="LimitOn" xml:space="preserve">
     <value>Limit switches on</value>
   </data>
+  <data name="HelpMenu" xml:space="preserve">
+    <value>Help!</value>
+  </data>
 </root>
