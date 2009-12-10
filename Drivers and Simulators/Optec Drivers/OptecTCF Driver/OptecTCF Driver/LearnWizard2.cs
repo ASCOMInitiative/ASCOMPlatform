@@ -50,7 +50,7 @@ namespace ASCOM.OptecTCF_Driver
         private void LearnWizard2_Load(object sender, EventArgs e)
         {
             maxPos = DeviceSettings.GetMaxStep();
-            DesiredPosition = DeviceComm.GetPosition();
+            DesiredPosition = DeviceComm.Position;
             CurrentPosition = DesiredPosition;
             this.Position_LB.Text = DesiredPosition.ToString();
             backgroundWorker1.RunWorkerAsync();
@@ -61,7 +61,7 @@ namespace ASCOM.OptecTCF_Driver
             double temp;
             while (this.Visible)
             {
-                temp = DeviceComm.GetTemperaterature();
+                temp = DeviceComm.Temperature;
                 if (CurrentPosition != DesiredPosition)
                 {
                     lock (this)

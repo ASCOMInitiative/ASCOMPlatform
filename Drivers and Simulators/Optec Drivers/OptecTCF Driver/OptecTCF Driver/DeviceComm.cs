@@ -2,27 +2,50 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace ASCOM.OptecTCF_Driver
 {
     class DeviceComm
     {
-        private static ASCOM.Utilities.Serial ASerialPort;
-
-        //The Following are used when calling the sendCmd method...
+        private static ASCOM.Utilities.Serial ASerialPort =  new ASCOM.Utilities.Serial();
+        private static System.Threading.Thread AutoModeThread;
         private const bool ExpectResponse = true;
         private const bool ExpectNoResponse = false;
+        private static int CurrentPosition = 0;
+        private static double CurrentTemp = 0;
+        enum DeviceModes { Unknown, SerialLoop, AutoModeX, Sleeping }        
+        private static DeviceModes CurrentMode = DeviceModes.Unknown;
 
-        enum DeviceModes { Unknown, MainLoop, SerialLoop, AutoModeX, Sleeping }
-        private static DeviceModes CurrentMode;
-
-#region DeviceComm Constructor
-        static DeviceComm()
+        internal static double Temperature
         {
-            ASerialPort = new ASCOM.Utilities.Serial();
-            CurrentMode = DeviceModes.Unknown;
+            get 
+            {
+                if (CurrentMode == DeviceModes.AutoModeX)
+                {
+                    return CurrentTemp;
+                }
+                else
+                {
+                    return GetTemperaterature();
+                }
+ 
+            }
         }
-#endregion
+        internal static int Position
+        {
+            get
+            {
+                if (CurrentMode == DeviceModes.AutoModeX)
+                {               
+                    return CurrentPosition;   
+                }
+                else
+                {
+                    return GetPosition();
+                }
+            }
+        }
 
 #region DeviceComm Learn Related Methods
 
@@ -321,19 +344,37 @@ namespace ASCOM.OptecTCF_Driver
             }
         }
 
-        internal static int GetPosition()
+        private static int GetPosition()
         {
             try
             {
-                string received = SendCmd( "FPxxxx", 500, ExpectResponse, "P=" );
+                string received = SendCmd("FPxxxx", 500, ExpectResponse, "P=");
                 int i = received.IndexOf("=") + 1;
-                int pos = int.Parse(received.Substring(i,4));
+                int pos = int.Parse(received.Substring(i, 4));
                 return pos;
             }
             catch (Exception Ex)
             {
                 throw new DriverException("\nError retrieving position./n" + Ex.ToString(), Ex);
             }
+        }
+
+        private static double GetTemperaterature()
+        {
+            try
+            {
+                string resp = SendCmd("FTMPRO", 2000, ExpectResponse, "T=");
+                int i = resp.IndexOf("=") + 1;
+                string t = resp.Substring(i, 5);
+                double temp = double.Parse(t);
+                return temp;
+            }
+            catch (Exception Ex)
+            {
+                throw new DriverException("\n Unexpcted Error in GetTemperature method.\n" +
+                    Ex.ToString(), Ex);
+            }
+            
         }
 
         internal static void MoveToCenter()
@@ -429,9 +470,7 @@ namespace ASCOM.OptecTCF_Driver
             {
                 if (Enter)
                 {
-
-                    //char mode = DeviceSettings.GetModeAorB();
-                    char mode = 'A';
+                    char mode = DeviceSettings.GetActiveMode();                
                     switch (mode)
                     {
                         case 'A':
@@ -444,14 +483,32 @@ namespace ASCOM.OptecTCF_Driver
                             throw new ASCOM.InvalidValueException("\nTemp Comp Mode", mode.ToString(), "A or B");
                     }
                     CurrentMode = DeviceModes.AutoModeX;
-                    System.Threading.Thread.Sleep(300);
-                    
+                    CurrentTemp = 0;
+                    CurrentPosition = 0;
+                    ThreadStart ts = new ThreadStart(ReceiveUnsolicited);
+                    AutoModeThread = new Thread(ts);
+                    AutoModeThread.Priority = ThreadPriority.AboveNormal;
+                    AutoModeThread.Start();
+
+                    //Wait for five seconds for a temp and position then throw exception
+                    TimeSpan FiveSec = new TimeSpan(0, 0, 5);
+                    DateTime Start = DateTime.Now;
+                    while (CurrentPosition == 0 || CurrentTemp == 0)
+                    {
+                        if (DateTime.Now - Start > FiveSec)
+                        {
+                            CurrentMode = DeviceModes.Unknown;
+                            //throw new DriverException("Timed out while waiting for data");
+                        }
+                    } 
                 }
 
                 else
                 {
-                    SendCmd("FMxxxx", 500, ExpectResponse, "!");
                     CurrentMode = DeviceModes.SerialLoop;
+                    if (AutoModeThread.ThreadState == ThreadState.Running) AutoModeThread.Abort();
+                    SendCmd("FMxxxx", 500, ExpectResponse, "!");
+                    
                 }
             }
             catch (Exception Ex)
@@ -463,22 +520,7 @@ namespace ASCOM.OptecTCF_Driver
             }
         }
 
-        internal static double GetTemperaterature()
-        {
-            try
-            {
-                string resp = SendCmd("FTMPRO", 2000, ExpectResponse, "T=");
-                int i = resp.IndexOf("=") + 1;
-                string t = resp.Substring(i, 5);
-                double temp = double.Parse(t);
-                return temp;
-            }
-            catch (Exception Ex)
-            {
-                throw new DriverException("\n Unexpcted Error in GetTemperature method.\n" +
-                    Ex.ToString(), Ex);
-            }
-        }
+        
 
         //internal static int GetMaxStep()
         //{
@@ -582,7 +624,39 @@ namespace ASCOM.OptecTCF_Driver
             }
         }
 
-
+        private static void ReceiveUnsolicited()
+        {
+            int pos = 0;
+            string value, rec;
+            ASerialPort.ReceiveTimeout = 5;
+            while (CurrentMode == DeviceModes.AutoModeX)
+            {
+                try
+                {
+                    rec = ASerialPort.ReceiveTerminated("\n");
+                    if (rec.Contains("P="))
+                    {
+                        pos = rec.IndexOf("=") + 1;
+                        value = rec.Substring(pos, rec.Length - 3);
+                        CurrentPosition = Convert.ToInt32(value);
+                    }
+                    else if (rec.Contains("T="))
+                    {
+                        pos = rec.IndexOf("=") + 1;
+                        value = rec.Substring(pos, rec.Length - 3);
+                        CurrentTemp = Convert.ToDouble(value);
+                    }
+                    else continue;
+                }
+                catch(Exception Ex)
+                {
+                    if (CurrentMode == DeviceModes.AutoModeX)
+                    {
+                        MessageBox.Show("Error in ReceiveUnsolicited" + "\n\r" + Ex.ToString());
+                    }
+                } 
+            }
+        }
 #endregion
 
     }   //end of the DeviceComm class

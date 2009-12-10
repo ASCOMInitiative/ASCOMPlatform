@@ -7,11 +7,11 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 //
 // TODO - Add your authorship information here
-[assembly: AssemblyTitle("Optec Focuser Driver")]
-[assembly: AssemblyDescription("ASCOM Focuser Driver for OptecTCF-S")]
+[assembly: AssemblyTitle("Optec Focuser Driver (Beta1)")]
+[assembly: AssemblyDescription("ASCOM Focuser Driver for OptecTCF-S (Beta1)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Optec Inc.")]
-[assembly: AssemblyProduct("Optec TCF-S")]
+[assembly: AssemblyProduct("Optec TCF-S (Beta1)")]
 [assembly: AssemblyCopyright("Optec Inc. 2009 ©")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -35,5 +35,5 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 //
 // TODO - Set your driver's version here
-[assembly: AssemblyVersion("5.0.0.0")]
-[assembly: AssemblyFileVersion("5.0.0.0")]
+[assembly: AssemblyVersion("5.0.1.0")]
+[assembly: AssemblyFileVersion("5.0.1.0")]

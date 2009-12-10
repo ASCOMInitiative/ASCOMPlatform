@@ -66,8 +66,8 @@ namespace ASCOM.OptecTCF_Driver
 
             while (this.Visible)
             {
-                pos = DeviceComm.GetPosition();
-                temp = DeviceComm.GetTemperaterature();
+                pos = DeviceComm.Position;
+                temp = DeviceComm.Temperature;
                 if (this.Visible)
                 {
                     this.BeginInvoke(new ControlUpdateHandler(UpdateControls),

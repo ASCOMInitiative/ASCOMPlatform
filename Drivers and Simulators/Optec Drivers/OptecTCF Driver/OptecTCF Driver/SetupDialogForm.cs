@@ -28,7 +28,6 @@ namespace ASCOM.OptecTCF_Driver
             InAutoMode
         }
         
-
         public SetupDialogForm()
         {
             InitializeComponent();
@@ -70,10 +69,10 @@ namespace ASCOM.OptecTCF_Driver
                         return;
                     }
                     MaxPos = DeviceSettings.GetMaxStep();
-                    int p = DeviceComm.GetPosition();
+                    int p = DeviceComm.Position;
                     CurrentPos = DesiredPos = p;
                     Pos_TB.Text = p.ToString();
-                    double t = DeviceComm.GetTemperaterature();
+                    double t = DeviceComm.Temperature;
                     Temp_TB.Text = t.ToString() + "°C";
                 }
 
@@ -461,7 +460,10 @@ namespace ASCOM.OptecTCF_Driver
                 lock (LockObject)
                 {
                     Timer_Temp.Enabled = false;
-                    DeviceComm.Connect();
+                    if (!ConnectedForControls)
+                    {
+                        DeviceComm.Connect();
+                    }
                     SetStartPtForm SSPFrm = new SetStartPtForm();
                     SSPFrm.ShowDialog();
                     SSPFrm.Dispose();
@@ -484,7 +486,10 @@ namespace ASCOM.OptecTCF_Driver
             {
                 lock(LockObject)
                 {
-                    DeviceComm.Connect();
+                    if (!ConnectedForControls)
+                    {
+                        DeviceComm.Connect();
+                    }
                     Timer_Temp.Enabled = false;
                     SetEndPtForm SEPFrm = new SetEndPtForm();  
                     SEPFrm.ShowDialog();
@@ -529,7 +534,7 @@ namespace ASCOM.OptecTCF_Driver
                     {
                         lock (LockObject)
                         {
-                            temp = DeviceComm.GetTemperaterature();
+                            temp = DeviceComm.Temperature;
                             this.BeginInvoke(new UpdateTempDisplayHandler(UpdateTempDisplay), new Object[] { temp });
                         }
                     }
@@ -654,7 +659,10 @@ namespace ASCOM.OptecTCF_Driver
                 lock (LockObject)
                 {
                     Timer_Temp.Enabled = false;
-                    DeviceComm.Connect();
+                    if (!ConnectedForControls)
+                    {
+                        DeviceComm.Connect();
+                    }
                     SetSlopeForm SSFrm = new SetSlopeForm();
                     SSFrm.ShowDialog();
                     SSFrm.Dispose();
@@ -675,7 +683,10 @@ namespace ASCOM.OptecTCF_Driver
             {
                 lock (LockObject)
                 {
-                    ConnectForSetup();
+                    if (!ConnectedForControls)
+                    {
+                        ConnectForSetup();
+                    }
                     DisplayTempCoEffs Frm = new DisplayTempCoEffs();
                     Frm.ShowDialog();
                     UpdateControls();
@@ -751,6 +762,11 @@ namespace ASCOM.OptecTCF_Driver
             {
                 backgroundWorkerPos.RunWorkerAsync();
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            DeviceComm.EnterTempCompMode(true);
         }
 
        
