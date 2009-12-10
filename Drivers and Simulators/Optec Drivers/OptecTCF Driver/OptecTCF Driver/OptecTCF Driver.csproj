@@ -244,6 +244,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ReadMe.htm" />
+    <Content Include="TCFHelp.htm" />
     <None Include="Optec.snk" />
     <None Include="Resources\Optec Logo-medium png.png" />
     <None Include="Resources\RedLight.png" />
