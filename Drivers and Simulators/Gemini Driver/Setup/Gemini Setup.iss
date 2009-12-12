@@ -15,7 +15,7 @@
 [Setup]
 ; SetupVersion is the installer version number and appears as the fourth digit in the installer version number
 ; Only increment SetupVersion when you make changes to the installer, it does not ned to increment when you make Gemini code changes
-#define Public SetupVersion 7; Setup program version number
+#define Public SetupVersion 0; Setup program version number
 
 ; Determiine the driver version number from the GeminiTelescope executable (only Major, Minor and Release are used
 ; as SetupVersion replaces Build)
@@ -104,6 +104,9 @@ Source: ..\GeminiTelescope\bin\x86\Release\en-GB\ASCOM.GeminiTelescope.resources
 
 Source: ..\GeminiTelescope\bin\x64\Release\ru-RU\ASCOM.GeminiTelescope.resources.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\ru-RU; Check: Is64BitInstallMode; Flags: ignoreversion
 Source: ..\GeminiTelescope\bin\x86\Release\ru-RU\ASCOM.GeminiTelescope.resources.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\ru-RU; Check: NotIs64BitInstallMode; Flags: ignoreversion
+
+;Documentation help file
+Source: ..\GeminiTelescope\Documentation\Gemini Telescope Net Installation and Operation.pdf; DestDir: {cf}\ASCOM\Telescope\Gemini; Flags: ignoreversion
 
 ;Gemini Icon
 Source: ..\GeminiTelescope\bin\Release\GeminiSB32x32.ico; DestDir: {cf}\ASCOM\Telescope\Gemini; Flags: ignoreversion
