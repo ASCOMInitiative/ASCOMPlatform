@@ -1459,7 +1459,7 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiHardware.Connected)
             {
-                GeminiHardware.DoCommandResult(":Q", GeminiHardware.MAX_TIMEOUT, false);
+                GeminiHardware.AbortSlew();
                 Speech.SayIt(Resources.StopSlew, Speech.SpeechType.Command);
             }
         }

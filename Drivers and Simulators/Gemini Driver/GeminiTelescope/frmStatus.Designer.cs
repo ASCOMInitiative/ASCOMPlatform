@@ -65,8 +65,8 @@
             this.txtVersion = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pbPin = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.geminiPropertiesBindingSource)).BeginInit();
             this.panel1.SuspendLayout();
@@ -509,6 +509,13 @@
             this.pbPin.Click += new System.EventHandler(this.pbPin_Click);
             this.pbPin.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbPin_MouseDown);
             // 
+            // imageList1
+            // 
+            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList1.Images.SetKeyName(0, "pinup1.png");
+            this.imageList1.Images.SetKeyName(1, "pindown1.png");
+            // 
             // label1
             // 
             this.label1.ForeColor = System.Drawing.Color.Lime;
@@ -520,13 +527,6 @@
             this.label1.Text = "Gemini Version:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // imageList1
-            // 
-            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList1.Images.SetKeyName(0, "pinup1.png");
-            this.imageList1.Images.SetKeyName(1, "pindown1.png");
-            // 
             // frmStatus
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -534,6 +534,7 @@
             this.ClientSize = new System.Drawing.Size(422, 168);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmStatus";
