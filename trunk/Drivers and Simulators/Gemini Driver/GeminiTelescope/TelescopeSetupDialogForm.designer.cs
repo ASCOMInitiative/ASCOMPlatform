@@ -76,6 +76,7 @@ namespace ASCOM.GeminiTelescope
             this.label9 = new System.Windows.Forms.Label();
             this.comboBoxBaudRate = new System.Windows.Forms.ComboBox();
             this.buttonVirtualPort = new System.Windows.Forms.Button();
+            this.chkPortScan = new System.Windows.Forms.CheckBox();
             this.timerUpdate = new System.Windows.Forms.Timer(this.components);
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
@@ -90,7 +91,6 @@ namespace ASCOM.GeminiTelescope
             this.picASCOM = new System.Windows.Forms.PictureBox();
             this.label11 = new System.Windows.Forms.Label();
             this.cbLogging = new System.Windows.Forms.ComboBox();
-            this.chkPortScan = new System.Windows.Forms.CheckBox();
             buttonGps = new System.Windows.Forms.Button();
             pbGeminiSettings = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
@@ -651,6 +651,18 @@ namespace ASCOM.GeminiTelescope
             this.buttonVirtualPort.UseVisualStyleBackColor = false;
             this.buttonVirtualPort.Click += new System.EventHandler(this.buttonVirtualPort_Click);
             // 
+            // chkPortScan
+            // 
+            this.chkPortScan.AutoSize = true;
+            this.tableLayoutPanel2.SetColumnSpan(this.chkPortScan, 2);
+            this.chkPortScan.Location = new System.Drawing.Point(3, 57);
+            this.chkPortScan.Name = "chkPortScan";
+            this.chkPortScan.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.chkPortScan.Size = new System.Drawing.Size(189, 17);
+            this.chkPortScan.TabIndex = 26;
+            this.chkPortScan.Text = "Auto-detect Gemini on other ports";
+            this.chkPortScan.UseVisualStyleBackColor = true;
+            // 
             // timerUpdate
             // 
             this.timerUpdate.Enabled = true;
@@ -829,18 +841,6 @@ namespace ASCOM.GeminiTelescope
             this.cbLogging.Name = "cbLogging";
             this.cbLogging.Size = new System.Drawing.Size(163, 21);
             this.cbLogging.TabIndex = 36;
-            // 
-            // chkPortScan
-            // 
-            this.chkPortScan.AutoSize = true;
-            this.tableLayoutPanel2.SetColumnSpan(this.chkPortScan, 2);
-            this.chkPortScan.Location = new System.Drawing.Point(3, 57);
-            this.chkPortScan.Name = "chkPortScan";
-            this.chkPortScan.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
-            this.chkPortScan.Size = new System.Drawing.Size(189, 17);
-            this.chkPortScan.TabIndex = 26;
-            this.chkPortScan.Text = "Auto-detect Gemini on other ports";
-            this.chkPortScan.UseVisualStyleBackColor = true;
             // 
             // TelescopeSetupDialogForm
             // 

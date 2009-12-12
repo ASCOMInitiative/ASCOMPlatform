@@ -715,7 +715,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-#if true
+#if false
         public PierSide DestinationSideOfPier(double RightAscension, double Declination)
         {
             throw new ASCOM.MethodNotImplementedException("DestinationSideOfPier"); // Was PropertyNotImplementedException
@@ -723,7 +723,8 @@ namespace ASCOM.GeminiTelescope
 
 
 #else
-        // PK: this is incomplete and will not work as written
+        
+        // PK: southern hemisphere needs testing!
         public PierSide DestinationSideOfPier(double RightAscension, double Declination)
         {
             string res = GeminiHardware.DoCommandResult("<223:", GeminiHardware.MAX_TIMEOUT, false);
@@ -761,31 +762,36 @@ namespace ASCOM.GeminiTelescope
             }
             //gotolimit is now number of degrees from cwd position
             gotolimit -= 90;    // degrees from meridian
-            double east_limit = -(de + (double)me / 60.0);
+            double east_limit = -(de + (double)me / 60.0)+90;
 
-            double hour_angle;
+            east_limit = east_limit / 360 * 24;
+            gotolimit = gotolimit / 360 * 24;
 
-            hour_angle = (GeminiHardware.SiderealTime) - RightAscension;
+            double hour_angle = (GeminiHardware.SiderealTime) - RightAscension;
 
             // normalize to -12..12 hours:
             if (hour_angle < -12) hour_angle = 24 + hour_angle;
             if (hour_angle > 12) hour_angle = hour_angle - 24;
 
-            hour_angle = hour_angle / 24 * 360; // convert to degrees for comparison with gotolimit
+            if ((hour_angle >= east_limit && hour_angle <= 6))
+                return GeminiHardware.SouthernHemisphere? PierSide.pierWest : PierSide.pierEast;
 
-            if (hour_angle >= gotolimit) return PierSide.pierEast;  // past goto limit on the west, flip to the east side
-            if (hour_angle <= east_limit) return PierSide.pierWest; // past east safety limit, must be on the west side
 
-            if (hour_angle >= gotolimit && GeminiHardware.SideOfPier == "W")
-            {
-                return PierSide.pierEast;
-            }
-            //            else if (hour_angle <= east_limit && GeminiHardware.SideOfPier == "E")
-            //                return PierSide.pierWest;
-            else
-                return PierSide.pierEast;
+            if (hour_angle >= 6 && hour_angle <= 12 + gotolimit)
+                return GeminiHardware.SouthernHemisphere? PierSide.pierEast : PierSide.pierWest;
+
+            if (hour_angle < east_limit && hour_angle >= -6)
+                return GeminiHardware.SouthernHemisphere? PierSide.pierEast : PierSide.pierWest;
+
+
+            if (hour_angle < -6 && hour_angle >= -12 + gotolimit)
+                return GeminiHardware.SouthernHemisphere? PierSide.pierWest : PierSide.pierEast;
+                
+            return PierSide.pierUnknown;
         }        
-#endif        
+
+#endif  
+      
         public bool DoesRefraction
         {
             get {

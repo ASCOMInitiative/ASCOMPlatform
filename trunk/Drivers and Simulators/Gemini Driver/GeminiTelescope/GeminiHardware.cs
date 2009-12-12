@@ -225,6 +225,8 @@ namespace ASCOM.GeminiTelescope
         private static string m_ParkState = "";
         private static bool m_ParkWasExecuted = false;
 
+        private static System.Threading.ManualResetEvent m_SlewAborted = new System.Threading.ManualResetEvent(false);
+
         private static bool m_SouthernHemisphere = false;
 
         private static string m_GeminiVersion = "";
@@ -1744,7 +1746,7 @@ namespace ASCOM.GeminiTelescope
             while (System.Environment.TickCount < when && !(Velocity == "S" || Velocity == "C"))
                 System.Threading.Thread.Sleep(500);
 
-            while (Velocity == "S" || Velocity == "C") System.Threading.Thread.Sleep(500);
+            while ((Velocity == "S" || Velocity == "C") && !m_SlewAborted.WaitOne(0)) System.Threading.Thread.Sleep(500);
 
             System.Threading.Thread.Sleep((SlewSettleTime + 2) * 1000);
 
@@ -3400,16 +3402,26 @@ namespace ASCOM.GeminiTelescope
 
 
         /// <summary>
+        /// called when a stop is signaled by the user
+        /// </summary>
+        public static void AbortSlew()
+        {
+            m_SlewAborted.Set();
+            DoCommandResult(":Q", MAX_TIMEOUT, false);
+        }
+
+        /// <summary>
         /// Park using specified park position mode
         /// </summary>
         /// <param name="mode"></param>
         /// <returns></returns>
         public static void DoPark(object mode)
-        {
+        {           
             m_Trace.Enter("DoPark", mode);
 
             if (!Connected) return;
 
+            m_SlewAborted.Reset();
 
             if (((GeminiParkMode)mode) != GeminiParkMode.NoSlew)
             {
@@ -3446,6 +3458,13 @@ namespace ASCOM.GeminiTelescope
             }
 
             if (wait) WaitForSlewToEnd();
+
+            if (m_SlewAborted.WaitOne(0))
+            {
+                m_ParkWasExecuted = false;
+                m_Trace.Exit("DoPark", false);
+                return;
+            }
 
             DoCommandResult(":hN", MAX_TIMEOUT, false);
 
