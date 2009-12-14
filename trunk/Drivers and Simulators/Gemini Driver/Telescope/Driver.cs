@@ -710,7 +710,7 @@ namespace ASCOM.GeminiTelescope
         public string Description
         {
             get {
-                GeminiHardware.Trace.Enter("IT:Descriptoin.Get", SharedResources.TELESCOPE_DRIVER_DESCRIPTION);
+                GeminiHardware.Trace.Enter("IT:Description.Get", SharedResources.TELESCOPE_DRIVER_DESCRIPTION);
                 return SharedResources.TELESCOPE_DRIVER_DESCRIPTION;
             }
         }
@@ -727,7 +727,11 @@ namespace ASCOM.GeminiTelescope
         // PK: southern hemisphere needs testing!
         public PierSide DestinationSideOfPier(double RightAscension, double Declination)
         {
-            string res = GeminiHardware.DoCommandResult("<223:", GeminiHardware.MAX_TIMEOUT, false);
+            string res = "RA: " + RightAscension.ToString() + " Dec: " + Declination.ToString(); 
+            GeminiHardware.Trace.Enter("IT:DestinationSideOfPier", res);
+
+            // Get the Western goto limit
+            res = GeminiHardware.DoCommandResult("<223:", GeminiHardware.MAX_TIMEOUT, false);
 
             int d = 0, m = 0;
             try
@@ -736,11 +740,16 @@ namespace ASCOM.GeminiTelescope
                 d = int.Parse(res.Substring(0, 3));
                 m = int.Parse(res.Substring(4, 2));
             }
-            catch { return PierSide.pierUnknown; }
+            catch
+            {
+                GeminiHardware.Trace.Exit("IT:DestinationSideOfPier", PierSide.pierUnknown, "Error: Unable to get West Goto Limit");
+                return PierSide.pierUnknown;
+            }
             double gotolimit = ((double)d) + ((double)m / 60.0);
 
             int de, me = 0;
 
+            // Get current safety limit
             res = GeminiHardware.DoCommandResult("<220:", GeminiHardware.MAX_TIMEOUT, false);
             try
             {
@@ -752,7 +761,11 @@ namespace ASCOM.GeminiTelescope
                 me = int.Parse(res.Substring(4, 2));
 
             }
-            catch { return PierSide.pierUnknown; }
+            catch
+            {
+                GeminiHardware.Trace.Exit("IT:DestinationSideOfPier", PierSide.pierUnknown, "Error: Unable to get Safety Limits");
+                return PierSide.pierUnknown;
+            }
 
 
             // if goto limit is set to zero, this means it's 2.5 degrees from west safety limit:
@@ -773,21 +786,30 @@ namespace ASCOM.GeminiTelescope
             if (hour_angle < -12) hour_angle = 24 + hour_angle;
             if (hour_angle > 12) hour_angle = hour_angle - 24;
 
-            if ((hour_angle >= east_limit && hour_angle <= 6))
-                return GeminiHardware.SouthernHemisphere? PierSide.pierWest : PierSide.pierEast;
+            // Default is 'we don't know!'
+            PierSide retVal = PierSide.pierUnknown;
 
+            if ((hour_angle >= east_limit && hour_angle <= 6))
+                retVal = PierSide.pierEast;
 
             if (hour_angle >= 6 && hour_angle <= 12 + gotolimit)
-                return GeminiHardware.SouthernHemisphere? PierSide.pierEast : PierSide.pierWest;
+                retVal = PierSide.pierWest;
 
             if (hour_angle < east_limit && hour_angle >= -6)
-                return GeminiHardware.SouthernHemisphere? PierSide.pierEast : PierSide.pierWest;
-
+                retVal = PierSide.pierWest;
 
             if (hour_angle < -6 && hour_angle >= -12 + gotolimit)
-                return GeminiHardware.SouthernHemisphere? PierSide.pierWest : PierSide.pierEast;
+                retVal = PierSide.pierEast;
                 
-            return PierSide.pierUnknown;
+            // Swap sides for Southern Hemisphere
+            if (GeminiHardware.SouthernHemisphere)
+            {
+                GeminiHardware.Trace.Info(4, "IT:DestinationSideOfPier", "Southern Hemisphere");
+                if (retVal == PierSide.pierEast) retVal = PierSide.pierWest;
+                else if (retVal == PierSide.pierWest) retVal = PierSide.pierEast;
+            }
+            GeminiHardware.Trace.Exit("IT:DestinationSideOfPier", retVal);
+            return retVal;
         }        
 
 #endif  
