@@ -1689,11 +1689,22 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        /// <summary>
+        /// Number of connected clients
+        /// </summary>
         public static int Clients
         {
             get { return m_Clients; }
         }
 
+
+        /// <summary>
+        /// Returns number of commands pending in the queue
+        /// </summary>
+        public static int QueueDepth
+        {
+            get { return m_CommandQueue.Count; }
+        }
 
         /// <summary>
         /// Wait for completion of a goto home or park at cwd operation
@@ -2703,7 +2714,9 @@ namespace ASCOM.GeminiTelescope
                 CommandItem command;
 
                 // Gemini gets slow to respond when slewing, so increase timeout if we're in the middle of it:
-                int timeout = (m_Velocity == "S" ? MAX_TIMEOUT*2 : MAX_TIMEOUT);
+//                int timeout = (m_Velocity == "S" ? MAX_TIMEOUT*2 : MAX_TIMEOUT);
+
+                int timeout = 1500; // polling should not hold up the queue for too long
 
                 int level = 0;
                 string vars;
@@ -2727,8 +2740,10 @@ namespace ASCOM.GeminiTelescope
                         vars = m_ShortPolledVariablesString2;
                     }
 
-
+#if DEBUG
                 System.Diagnostics.Trace.Write("Poll commands: " + vars + "\r\n");
+#endif
+
                 Trace.Info(4, "Poll commands", vars);
                 //Get RA and DEC etc
                 DiscardInBuffer(); //clear all received data
@@ -2888,7 +2903,10 @@ namespace ASCOM.GeminiTelescope
 
                 Trace.Info(4, trc);
 
+#if DEBUG
                 System.Diagnostics.Trace.Write("Done polling: " + trc +  "\r\n");
+#endif
+
                 m_LastUpdate = System.DateTime.Now;
             }
             catch (Exception e)
@@ -3740,6 +3758,8 @@ namespace ASCOM.GeminiTelescope
         /// <returns> null if operation failed, else # of encoder clusters, + means before limit, - means after limit </returns>
         public static object ClustersFromSafetyLimit()
         {
+            if (GeminiHardware.QueueDepth > 3) return null;  // Don't queue up if queue is large
+
             string safety = GeminiHardware.DoCommandResult("<230:", GeminiHardware.MAX_TIMEOUT, false);
             string position = GeminiHardware.DoCommandResult("<235:", GeminiHardware.MAX_TIMEOUT, false);
             string size = GeminiHardware.DoCommandResult("<237:", GeminiHardware.MAX_TIMEOUT, false);
@@ -4162,13 +4182,16 @@ namespace ASCOM.GeminiTelescope
             return (char)((chksum & 0x7f) + 0x40);
         }
 
+       
         /// <summary>
         /// Add command item 'ci' to the queue for execution
         /// </summary>
         /// <param name="ci">actual command to queue</param>
         private static bool QueueCommand(CommandItem ci)
         {
+#if DEBUG
             System.Diagnostics.Trace.WriteLine("Queue command..."+ci.m_Command);
+#endif
             lock (m_CommandQueue)
             {
                 if (!m_Connected) return false;
@@ -4184,9 +4207,11 @@ namespace ASCOM.GeminiTelescope
         /// <param name="ci">array of commands to be executed in sequence</param>
         private static bool QueueCommands(CommandItem[] ci)
         {
+#if DEBUG
             System.Diagnostics.Trace.Write("Queue commands...");
             foreach(CommandItem c in ci) System.Diagnostics.Trace.Write(c.m_Command + ", ");
             System.Diagnostics.Trace.WriteLine("");
+#endif
             lock (m_CommandQueue)
             {
                 if (!m_Connected) return false;

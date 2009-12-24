@@ -187,9 +187,9 @@ namespace ASCOM.GeminiTelescope
             {
                 double x = m_Joystick.PosX;
                 double y = m_Joystick.PosY;
-
+#if DEBUG
                 System.Diagnostics.Trace.WriteLine("JOYSTICK : X = " + x.ToString() + "   Y = " + y.ToString());
-
+#endif
                 GeminiHardware.Trace.Info(4, "JOYSTICK X,Y:", x.ToString() , y.ToString());
                 ulong buttons = m_Joystick.ButtonState;
                 
@@ -715,14 +715,19 @@ namespace ASCOM.GeminiTelescope
                     UpdateTimeToLimit();
                 }
 
-                byte pec = GeminiHardware.PECStatus;
+                if (GeminiHardware.QueueDepth <= 3)  //don't keep queuing if queue is large
+                {
+                    byte pec = GeminiHardware.PECStatus;
 
-                this.BeginInvoke(new UpdateDisplayDelegate(UpdateDisplay), pec);
+                    this.BeginInvoke(new UpdateDisplayDelegate(UpdateDisplay), pec);
+                }
             }
         }
 
         private void UpdateTimeToLimit()
         {
+            if (GeminiHardware.QueueDepth > 3) return;  // Don't queue up if queue is large
+
             string safety = GeminiHardware.DoCommandResult("<230:", GeminiHardware.MAX_TIMEOUT, false);
             string position = GeminiHardware.DoCommandResult("<235:", GeminiHardware.MAX_TIMEOUT, false);
             string size = GeminiHardware.DoCommandResult("<237:", GeminiHardware.MAX_TIMEOUT, false);
@@ -1659,14 +1664,6 @@ namespace ASCOM.GeminiTelescope
                 {
                     case Keys.F1:
                         viewHelpToolStripMenuItem_Click(sender, null);  break;
-                    case Keys.Up:
-                        buttonSlew1_MouseDown(sender, null); break;
-                    case Keys.Down:
-                        buttonSlew2_MouseDown(sender, null); break;
-                    case Keys.Left:
-                        buttonSlew3_MouseDown(sender, null); break;
-                    case Keys.Right:
-                        buttonSlew4_MouseDown(sender, null); break;
                     case Keys.Escape:
                         pbStop_Click(sender, null); break;
                     case Keys.G:
@@ -1676,24 +1673,39 @@ namespace ASCOM.GeminiTelescope
                     case Keys.S:
                         RadioButtonSlew.PerformClick(); break;
                 }
+            else if (e.Modifiers == Keys.Control)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.Up:
+                        buttonSlew1_MouseDown(this, null); break ;
+                    case Keys.Down:
+                        buttonSlew2_MouseDown(this, null); break;
+                    case Keys.Left:
+                        buttonSlew3_MouseDown(this, null); break;
+                    case Keys.Right:
+                        buttonSlew4_MouseDown(this, null); break;
+                }
+            }
         }
 
         private void frmMain_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Modifiers == Keys.None)
+            if (e.Modifiers == Keys.Control)
+            {
                 switch (e.KeyCode)
                 {
                     case Keys.Up:
-                        buttonSlew1_MouseUp(sender, null); break;
+                        buttonSlew1_MouseUp(this, null); break ;
                     case Keys.Down:
-                        buttonSlew2_MouseUp(sender, null); break;
+                        buttonSlew2_MouseUp(this, null); break;
                     case Keys.Left:
-                        buttonSlew3_MouseUp(sender, null); break;
+                        buttonSlew3_MouseUp(this, null); break;
                     case Keys.Right:
-                        buttonSlew4_MouseUp(sender, null); break;
+                        buttonSlew4_MouseUp(this, null); break ;
                 }
-
+            }
         }
-    
+
     }
 }
