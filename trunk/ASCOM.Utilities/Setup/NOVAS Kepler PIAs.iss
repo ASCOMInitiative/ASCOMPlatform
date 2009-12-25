@@ -36,7 +36,7 @@ PrivilegesRequired=admin
 #emit "OutputBaseFilename=ASCOM NOVAS Kepler PIAs v" + AppVer +")"
 Compression=lzma
 SolidCompression=true
-SetupIconFile=..\Utilities\Resources\ASCOM.ico
+SetupIconFile=..\ASCOM.Utilities\Resources\ASCOM.ico
 ShowLanguageDialog=auto
 WizardImageFile=NewWizardImage.bmp
 WizardSmallImageFile=ASCOMLogo.bmp
@@ -114,3 +114,4 @@ end;
 [Messages]
 WelcomeLabel1=%n%n[name]%n
 #emit "WelcomeLabel2=This will update your computer to version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
+

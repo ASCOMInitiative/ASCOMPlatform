@@ -3,19 +3,19 @@ Module RedirectPolicy
     Private Const BATCH_FILE_NAME As String = "BuildPolicy1.Cmd"
     Private Const POLICY_FILE_NAME As String = "PublisherPolicy.xml"
     Private Const UTILITIES_ASSEMBLY_NAME As String = "ASCOM.Utilities" ' Don't add .dll
-    Private Const UTILITIES_ASSEMBLY_DIRECTORY As String = "..\..\ASCOM.Utilities\Utilities\Bin\Release\"
+    Private Const UTILITIES_ASSEMBLY_DIRECTORY As String = "..\..\ASCOM.Utilities\ASCOM.Utilities\Bin\Release\"
 
     Private Const ASTROMETRY_ASSEMBLY_NAME As String = "ASCOM.Astrometry" ' Don't add .dll
-    Private Const ASTROMETRY_ASSEMBLY_DIRECTORY As String = "..\..\ASCOM.Astrometry\Astrometry\Bin\Release\"
+    Private Const ASTROMETRY_ASSEMBLY_DIRECTORY As String = "..\..\ASCOM.Astrometry\ASCOM.Astrometry\Bin\Release\"
 
 
     Private Const AL_LINK As String = POLICY_FILE_NAME
     'Private Const AL_OUT As String = "policy.5.0.ASCOM.Utilities.dll"
-    Private Const AL_KEYFILE As String = "..\Utilities\ASCOM.snk "
+    Private Const AL_KEYFILE As String = "..\ASCOM.Utilities\ASCOM.snk "
     'Private Const AL_VERSION As String = "5.0.0.0 "
     'Private Const AL_FILEVERSION As String = "5.0.0.0"
     Private Const AL_COMPANY As String = """ASCOM Initiative"""
-    Private Const AL_PRODUCT As String = "ASCOM.Utilities"
+    Private Const AL_PRODUCT As String = """ASCOM Platform"""
 
 
     Sub Main()

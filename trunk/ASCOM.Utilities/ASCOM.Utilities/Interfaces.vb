@@ -136,6 +136,15 @@ Namespace Interfaces
         ''' <remarks></remarks>
         <DispId(8)> Sub BlankLine()
 
+        ''' <summary>
+        ''' Return the full filename of the log file being created
+        ''' </summary>
+        ''' <value>Full filename of the log file</value>
+        ''' <returns>String filename</returns>
+        ''' <remarks>This call will return an empty string until the first line has been written to the log file
+        ''' as the file is not created until required.</remarks>
+        <DispId(9)> ReadOnly Property LogFileName() As String
+
     End Interface ' Interface to Utilities.TraceLogger
 
     ''' <summary>

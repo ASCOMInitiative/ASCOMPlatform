@@ -30,6 +30,7 @@ Public Class TraceLogger
     Private g_LineStarted As Boolean
     Private g_Enabled As Boolean
     Private g_LogFilePath As String
+    Private g_LogFileActualName As String 'Full name of the log file being created (includes automatic file name)
 
     Private mut As System.Threading.Mutex
 
@@ -275,6 +276,19 @@ Public Class TraceLogger
         g_LogFileType = LogFileType
     End Sub
 
+    ''' <summary>
+    ''' Return the full filename of the log file being created
+    ''' </summary>
+    ''' <value>Full filename of the log file</value>
+    ''' <returns>String filename</returns>
+    ''' <remarks>This call will return an empty string until the first line has been written to the log file
+    ''' as the file is not created until required.</remarks>
+    Public ReadOnly Property LogFileName() As String Implements ITraceLogger.LogFileName
+        Get
+            Return g_LogFileActualName
+        End Get
+    End Property
+
 #End Region
 
 #Region "ITraceLoggerExtra Implementation"
@@ -369,7 +383,7 @@ Public Class TraceLogger
 
 #Region "TraceLogger Support"
     Private Sub CreateLogFile()
-        Dim LogFileName As String = "", FileNameSuffix As Integer = 0
+        Dim FileNameSuffix As Integer = 0
         Select Case g_LogFileName
             'Case "" 'Do nothing - no log required
             '    Throw New HelperException("TRACELOGGER.CREATELOGFILE - Call made but no log filename has been set")
@@ -377,11 +391,10 @@ Public Class TraceLogger
                 If g_LogFileType = "" Then Throw New ValueNotSetException("TRACELOGGER.CREATELOGFILE - Call made but no log filetype has been set")
                 My.Computer.FileSystem.CreateDirectory(g_LogFilePath) 'Create the directory if it doesn't exist
                 Do 'Create a unique log file name based on date, time and required name
-                    LogFileName = g_LogFilePath & "\ASCOM." & g_LogFileType & "." & Format(Now, "HHmm.ssfff") & FileNameSuffix.ToString & ".txt"
+                    g_LogFileActualName = g_LogFilePath & "\ASCOM." & g_LogFileType & "." & Format(Now, "HHmm.ssfff") & FileNameSuffix.ToString & ".txt"
                     FileNameSuffix += 1 'Increment counter that ensures that no logfile can have the same name as any other
-                Loop Until Not File.Exists(LogFileName)
-                g_LogFile = New StreamWriter(LogFileName, False)
-
+                Loop Until Not File.Exists(g_LogFileActualName)
+                g_LogFile = New StreamWriter(g_LogFileActualName, False)
                 g_LogFile.AutoFlush = True
             Case Else 'Create log file based on supplied name
                 Try
