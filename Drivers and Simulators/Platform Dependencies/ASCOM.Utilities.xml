@@ -1962,7 +1962,10 @@ ASCOM.Utilities
  </summary>
 	<value>String array of available serial ports</value>
 	<returns>A string array of available serial ports</returns>
-	<remarks></remarks>
+	<remarks><b>Update in platform 5.5.2.</b> This call uses the .NET Framework to retrieve available 
+ COM ports and this has been found not to return names of some USB serial adapters. Additional 
+ code has now been added to attempt to open all COM ports up to COM32. Any ports that can be 
+ successfully opened are now returned alongside the ports returned by the .NET call.</remarks>
 </member><member name="M:ASCOM.Utilities.Serial.LogMessage(System.String,System.String)">
 	<summary>
  Adds a message to the ASCOM serial trace file

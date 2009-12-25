@@ -33,7 +33,9 @@ Partial Class DiagnosticsForm
         Me.ChooserToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem
         Me.ChooserNETToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.ConnectToDeviceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
+        Me.ListAvailableCOMPortsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.lblAction = New System.Windows.Forms.Label
+        Me.btnLastLog = New System.Windows.Forms.Button
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -102,28 +104,34 @@ Partial Class DiagnosticsForm
         '
         'ChooserToolStripMenuItem
         '
-        Me.ChooserToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ChooserToolStripMenuItem1, Me.ChooserNETToolStripMenuItem, Me.ConnectToDeviceToolStripMenuItem})
+        Me.ChooserToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ChooserToolStripMenuItem1, Me.ChooserNETToolStripMenuItem, Me.ConnectToDeviceToolStripMenuItem, Me.ListAvailableCOMPortsToolStripMenuItem})
         Me.ChooserToolStripMenuItem.Name = "ChooserToolStripMenuItem"
-        Me.ChooserToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
+        Me.ChooserToolStripMenuItem.Size = New System.Drawing.Size(48, 20)
         Me.ChooserToolStripMenuItem.Text = "Tools"
         '
         'ChooserToolStripMenuItem1
         '
         Me.ChooserToolStripMenuItem1.Name = "ChooserToolStripMenuItem1"
-        Me.ChooserToolStripMenuItem1.Size = New System.Drawing.Size(238, 22)
+        Me.ChooserToolStripMenuItem1.Size = New System.Drawing.Size(245, 22)
         Me.ChooserToolStripMenuItem1.Text = "Telescope Chooser (using COM)"
         '
         'ChooserNETToolStripMenuItem
         '
         Me.ChooserNETToolStripMenuItem.Name = "ChooserNETToolStripMenuItem"
-        Me.ChooserNETToolStripMenuItem.Size = New System.Drawing.Size(238, 22)
+        Me.ChooserNETToolStripMenuItem.Size = New System.Drawing.Size(245, 22)
         Me.ChooserNETToolStripMenuItem.Text = "Telescope Chooser (using .NET)"
         '
         'ConnectToDeviceToolStripMenuItem
         '
         Me.ConnectToDeviceToolStripMenuItem.Name = "ConnectToDeviceToolStripMenuItem"
-        Me.ConnectToDeviceToolStripMenuItem.Size = New System.Drawing.Size(238, 22)
+        Me.ConnectToDeviceToolStripMenuItem.Size = New System.Drawing.Size(245, 22)
         Me.ConnectToDeviceToolStripMenuItem.Text = "Connect to Device"
+        '
+        'ListAvailableCOMPortsToolStripMenuItem
+        '
+        Me.ListAvailableCOMPortsToolStripMenuItem.Name = "ListAvailableCOMPortsToolStripMenuItem"
+        Me.ListAvailableCOMPortsToolStripMenuItem.Size = New System.Drawing.Size(245, 22)
+        Me.ListAvailableCOMPortsToolStripMenuItem.Text = "List Available COM Ports"
         '
         'lblAction
         '
@@ -137,6 +145,16 @@ Partial Class DiagnosticsForm
         Me.lblAction.Text = "Label1"
         Me.lblAction.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
+        'btnLastLog
+        '
+        Me.btnLastLog.Enabled = False
+        Me.btnLastLog.Location = New System.Drawing.Point(408, 173)
+        Me.btnLastLog.Name = "btnLastLog"
+        Me.btnLastLog.Size = New System.Drawing.Size(108, 23)
+        Me.btnLastLog.TabIndex = 7
+        Me.btnLastLog.Text = "View Last Log"
+        Me.btnLastLog.UseVisualStyleBackColor = True
+        '
         'DiagnosticsForm
         '
         Me.AcceptButton = Me.btnCOM
@@ -144,6 +162,7 @@ Partial Class DiagnosticsForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnExit
         Me.ClientSize = New System.Drawing.Size(530, 266)
+        Me.Controls.Add(Me.btnLastLog)
         Me.Controls.Add(Me.lblAction)
         Me.Controls.Add(Me.lblResult)
         Me.Controls.Add(Me.lblTitle)
@@ -172,5 +191,7 @@ Partial Class DiagnosticsForm
     Friend WithEvents ChooserNETToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ConnectToDeviceToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents lblAction As System.Windows.Forms.Label
+    Friend WithEvents ListAvailableCOMPortsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents btnLastLog As System.Windows.Forms.Button
 
 End Class

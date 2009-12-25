@@ -1321,17 +1321,64 @@ Public Class Serial
     ''' </summary>
     ''' <value>String array of available serial ports</value>
     ''' <returns>A string array of available serial ports</returns>
-    ''' <remarks></remarks>
+    ''' <remarks><b>Update in platform 5.5.2.</b> This call uses the .NET Framework to retrieve available 
+    ''' COM ports and this has been found not to return names of some USB serial adapters. Additional 
+    ''' code has now been added to attempt to open all COM ports up to COM32. Any ports that can be 
+    ''' successfully opened are now returned alongside the ports returned by the .NET call.</remarks>
     Public ReadOnly Property AvailableCOMPorts() As String() Implements ISerial.AvailableComPorts
         'Returns a list of all available COM ports sorted into ascending COM port number order
         Get
             Dim RetVal() As String
-            Dim myPortNameComparer As PortNameComparer = New PortNameComparer
+            Dim myPortNameComparer As New PortNameComparer
+            Dim PortNumber As Integer, PortName As String = "", SP As New SerialPort, Found As Boolean
+
             RetVal = SerialPort.GetPortNames
+
+            'Some ports aren't returned by the framework method so test for them here
+
+            For PortNumber = 0 To 32
+                Try
+                    PortName = "COM" & PortNumber.ToString
+                    SP.PortName = PortName
+                    SP.Open()
+                    SP.Close()
+                    'If we get here without an exception, the port must exist, so check whether we already have it in the list
+                    Found = False
+                    For Each PName As String In RetVal
+                        If PName = PortName Then Found = True
+                    Next
+                    If Not Found Then 'This is a new COM port
+                        ReDim Preserve RetVal(RetVal.Length) 'Make the array one bigger
+                        RetVal(RetVal.Length - 1) = PortName 'Add the name to the arrau
+                    End If
+
+                Catch ex As System.UnauthorizedAccessException
+                    'Port exists but is in use so check whether we already have it in the list
+                    Found = False
+                    For Each PName As String In RetVal
+                        If PName = PortName Then Found = True
+                    Next
+                    If Not Found Then 'This is a new COM port
+                        ReDim Preserve RetVal(RetVal.Length) 'Make the array one bigger
+                        RetVal(RetVal.Length - 1) = PortName 'Add the name to the arrau
+                    End If
+
+                Catch ex As Exception 'Ignore other exceptions as these indicate port not present or not openable
+                    'Dim state As Boolean
+                    'state = Logger.Enabled
+                    'Logger.Enabled = True
+                    'Logger.LogMessage("AvailableCOMPorts", "Port " & PortNumber.ToString & " Exception: " & ex.ToString)
+                    'Logger.Enabled = state
+                End Try
+            Next
+
             Array.Sort(RetVal, myPortNameComparer) 'Use specialised comparer to get the sort order right
             For Each Port As String In RetVal
                 Logger.LogMessage("AvailableCOMPorts", Port)
             Next
+            SP.Dispose()
+            SP = Nothing
+
             Return RetVal
         End Get
     End Property

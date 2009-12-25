@@ -30,6 +30,8 @@ Public Class DiagnosticsForm
     Dim ASCOMXMLAccess As ASCOM.Utilities.XMLAccess
     Dim RecursionLevel As Integer
 
+    Private LastLogFile As String ' Name of last diagnostics log file
+
     'DLL to provide the path to Program Files(x86)\Common Files folder location that is not avialable through the .NET framework
     <DllImport("shell32.dll")> _
     Shared Function SHGetSpecialFolderPath(ByVal hwndOwner As IntPtr, _
@@ -46,6 +48,8 @@ Public Class DiagnosticsForm
 
         lblMessage.Text = "Your diagnostic log will be created in:" & vbCrLf & vbCrLf & _
         System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM\Logs " & Format(Now, "yyyy-MM-dd")
+
+        btnLastLog.Enabled = False 'Disable last log button
     End Sub
 
     Sub Status(ByVal Msg As String)
@@ -70,24 +74,29 @@ Public Class DiagnosticsForm
             TL.Enabled = True
             TL.LogMessage("Diagnostics", "Version " & Application.ProductVersion & " - starting diagnostic run")
             TL.LogMessage("", "")
+            LastLogFile = TL.LogFileName
             Try
+
+                ScanInstalledPlatform()
 
                 RunningVersions(TL) 'Log diagnostic information
                 TL.LogMessage("", "")
 
-                ScanRegistry() 'Scan Old ASCOM Registry Profile
-
                 ScanDrives() 'Scan PC drives and report information
-
-                ScanProgramFiles() 'Search for copies of Helper and Helper2.DLL in the wrong places
-
-                ScanProfileFiles() 'List contents of Profile files
 
                 ScanFrameworks() 'Report on installed .NET Framework versions
 
                 ScanSerial() 'Report serial port information
 
+                ScanASCOMDrivers() 'Report installed driver versions
+
+                ScanProgramFiles() 'Search for copies of Helper and Helper2.DLL in the wrong places
+
                 ScanProfile() 'Report profile information
+
+                ScanRegistry() 'Scan Old ASCOM Registry Profile
+
+                ScanProfileFiles() 'List contents of Profile files
 
                 ScanCOMRegistration() 'Report Com Registration
 
@@ -120,6 +129,7 @@ Public Class DiagnosticsForm
                 TL.Dispose()
                 TL = Nothing
             End Try
+            btnLastLog.Enabled = True
         Catch ex1 As Exception
             lblResult.Text = "Can't create log: " & ex1.Message
         End Try
@@ -536,8 +546,8 @@ Public Class DiagnosticsForm
                 FVInfo = FileVersionInfo.GetVersionInfo(FullPath)
                 FInfo = Microsoft.VisualBasic.FileIO.FileSystem.GetFileInfo(FullPath)
 
-                TL.LogMessage("FileDetails", "   File Version:    " & FVInfo.FileMajorPart & "." & FVInfo.FileMinorPart & " " & FVInfo.FileBuildPart & " " & FVInfo.FilePrivatePart)
-                TL.LogMessage("FileDetails", "   Product Version: " & FVInfo.ProductMajorPart & "." & FVInfo.ProductMinorPart & " " & FVInfo.ProductBuildPart & " " & FVInfo.ProductPrivatePart)
+                TL.LogMessage("FileDetails", "   File Version:    " & FVInfo.FileMajorPart & "." & FVInfo.FileMinorPart & "." & FVInfo.FileBuildPart & "." & FVInfo.FilePrivatePart)
+                TL.LogMessage("FileDetails", "   Product Version: " & FVInfo.ProductMajorPart & "." & FVInfo.ProductMinorPart & "." & FVInfo.ProductBuildPart & "." & FVInfo.ProductPrivatePart)
 
                 TL.LogMessage("FileDetails", "   Description:     " & FVInfo.FileDescription)
                 TL.LogMessage("FileDetails", "   Company Name:    " & FVInfo.CompanyName)
@@ -836,5 +846,104 @@ Public Class DiagnosticsForm
 
     Private Sub ConnectToDeviceToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ConnectToDeviceToolStripMenuItem.Click
         ConnectForm.Visible = True
+    End Sub
+
+    Private Sub ListAvailableCOMPortsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListAvailableCOMPortsToolStripMenuItem.Click
+        SerialForm.Visible = True
+    End Sub
+
+    Private Sub ScanInstalledPlatform()
+        Dim RegKey As RegistryKey
+
+        RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\microsoft\Windows\Currentversion\uninstall\ASCOM.platform.NET.Components_is1", False)
+
+        TL.LogMessage("Installed Platform", RegKey.GetValue("DisplayName"))
+        TL.LogMessage("Installed Platform", "Inno Setup App Path - " & RegKey.GetValue("Inno Setup: App Path"))
+        TL.LogMessage("Installed Platform", "Inno Setup Version - " & RegKey.GetValue("Inno Setup: Setup Version"))
+        TL.LogMessage("Installed Platform", "Install Date - " & RegKey.GetValue("InstallDate"))
+        TL.LogMessage("Installed Platform", "Install Location - " & RegKey.GetValue("InstallLocation"))
+
+        TL.BlankLine()
+    End Sub
+    Sub ScanASCOMDrivers()
+        Dim BaseDir As String
+        Dim PathShell As New System.Text.StringBuilder(260)
+        Try
+
+            Status("Scanning for ASCOM Drivers")
+            TL.LogMessage("ASCOM Drivers Scan", "Searching for installed drivers")
+
+            If System.IntPtr.Size = 8 Then 'We are on a 64bit OS so look in the 64bit locations for files as well
+                BaseDir = SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_PROGRAM_FILES_COMMONX86, False)
+                BaseDir = PathShell.ToString & "\ASCOM"
+
+                RecurseASCOMDrivers(BaseDir & "\Telescope") 'Check telescope drivers
+                RecurseASCOMDrivers(BaseDir & "\Focuser") 'Check focuser drivers
+                RecurseASCOMDrivers(BaseDir & "\Dome") 'Check telescope drivers
+                RecurseASCOMDrivers(BaseDir & "\Rotator") 'Check focuser drivers
+                RecurseASCOMDrivers(BaseDir & "\Camera") 'Check telescope drivers
+                RecurseASCOMDrivers(BaseDir & "\Switch") 'Check focuser drivers
+
+                BaseDir = Environment.GetFolderPath(SpecialFolder.CommonProgramFiles) & "\ASCOM"
+
+                RecurseASCOMDrivers(BaseDir & "\Telescope") 'Check telescope drivers
+                RecurseASCOMDrivers(BaseDir & "\Focuser") 'Check focuser drivers
+                RecurseASCOMDrivers(BaseDir & "\Dome") 'Check telescope drivers
+                RecurseASCOMDrivers(BaseDir & "\Rotator") 'Check focuser drivers
+                RecurseASCOMDrivers(BaseDir & "\Camera") 'Check telescope drivers
+                RecurseASCOMDrivers(BaseDir & "\Switch") 'Check focuser drivers
+            Else '32 bit OS
+                BaseDir = Environment.GetFolderPath(SpecialFolder.CommonProgramFiles) & "\ASCOM"
+
+                RecurseASCOMDrivers(BaseDir & "\Telescope") 'Check telescope drivers
+                RecurseASCOMDrivers(BaseDir & "\Focuser") 'Check focuser drivers
+                RecurseASCOMDrivers(BaseDir & "\Dome") 'Check telescope drivers
+                RecurseASCOMDrivers(BaseDir & "\Rotator") 'Check focuser drivers
+                RecurseASCOMDrivers(BaseDir & "\Camera") 'Check telescope drivers
+                RecurseASCOMDrivers(BaseDir & "\Switch") 'Check focuser drivers
+            End If
+
+            TL.BlankLine()
+
+        Catch ex As Exception
+            TL.LogMessage("ScanProgramFiles", "Exception: " & ex.ToString)
+        End Try
+    End Sub
+    Sub RecurseASCOMDrivers(ByVal Folder As String)
+        Dim Files(), Directories() As String
+
+        Try
+            Action(Microsoft.VisualBasic.Left(Folder, 70))
+            Files = Directory.GetFiles(Folder)
+            For Each MyFile As String In Files
+                If MyFile.ToUpper.Contains(".EXE") Or MyFile.ToUpper.Contains(".DLL") Then
+                    TL.LogMessage("Driver", MyFile)
+                    'FileDetails(Folder & "\", MyFile)
+                    FileDetails("", MyFile)
+                End If
+            Next
+        Catch ex As DirectoryNotFoundException
+            TL.LogMessage("Driver", "Directory not present: " & Folder)
+            Exit Sub
+        Catch ex As Exception
+            TL.LogMessage("RecurseASCOMDrivers 1", "Exception: " & ex.ToString)
+        End Try
+
+        Try
+            Directories = Directory.GetDirectories(Folder)
+            For Each Directory As String In Directories
+                'TL.LogMessage("Directory", Directory)
+                RecurseASCOMDrivers(Directory)
+            Next
+            Action("")
+        Catch ex As DirectoryNotFoundException
+            TL.LogMessage("Driver", "Directory not present: " & Folder)
+        Catch ex As Exception
+            TL.LogMessage("RecurseASCOMDrivers 2", "Exception: " & ex.ToString)
+        End Try
+    End Sub
+
+    Private Sub btnLastLog_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLastLog.Click
+        Shell("notepad " & LastLogFile, AppWinStyle.NormalFocus)
     End Sub
 End Class
