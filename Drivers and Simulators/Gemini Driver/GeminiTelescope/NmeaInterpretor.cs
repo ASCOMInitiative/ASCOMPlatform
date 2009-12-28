@@ -111,7 +111,7 @@ namespace ASCOM.GeminiTelescope
 
             if (Words[2] != "" & Words[3] != "" &
             Words[4] != "" & Words[5] != "" &
-             Words[9] != "" & Words[10] != "")
+             Words[9] != "" & Words[10] != "" & Words[6] != "0")
             {
                 // Yes. Extract latitude and longitude
                 // Append hours
@@ -143,7 +143,7 @@ namespace ASCOM.GeminiTelescope
             // Do we have enough values to describe 
             //     our location?
             if (Words[3] != "" & Words[4] != "" &
-            Words[5] != "" & Words[6] != "")
+                Words[5] != "" & Words[6] != "" & Words[2] == "A")
             {
                 // Yes. Extract latitude and longitude
                 // Append hours
