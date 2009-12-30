@@ -51,6 +51,7 @@ namespace ASCOM.Simulator
 			RotatorHardware.UpdateInterval = m_iUpdateInterval;
 			tmrMain.Enabled = true;
 			m_bFlasher = false;
+            lblVersion.Text = "Version " + Application.ProductVersion.ToString();
 		}
 
 		private void cmdSetup_Click(object sender, EventArgs e)
