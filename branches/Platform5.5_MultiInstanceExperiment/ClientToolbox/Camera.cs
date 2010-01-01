@@ -1,7 +1,7 @@
 // 10-Jul-08	rbd		1.0.5 - ImageArray returns type object, remove ImageArrayV which
 //						was a Chris Rowland test/experiment. Can cast the object returned
 //						by ImageArray into int[,]. Add COM releasing to Dispose().
-//						
+// 01-Jan-10  	cdr     1.0.6 - Add Camera V2 properties as late bound properties.
 
 using System;
 using System.Collections;
@@ -974,6 +974,313 @@ namespace ASCOM.DriverAccess
                     BindingFlags.Default | BindingFlags.InvokeMethod,
                     null, objCameraLateBound, new object[] {  });
         }
+        #endregion
+
+        #region Camera V2 Properties
+        // the Version 2 properties are late bound only for now,
+        // so only the late bound interface is implemented
+
+        /// <summary>
+        /// Returns the X offset of the Bayer matrix, as defined in Camera.SensorType.
+        /// Value returned must be in the range 0 to M-1, where M is the width of the
+        /// Bayer matrix. The offset is relative to the 0,0 pixel in the sensor array,
+        /// and does not change to reflect subframe settings. 
+        /// </summary>
+        ///<exception cref=" System.Exception">Must throw an exception if the information is not available.</exception>
+        ///<exception cref=" System.Exception">Must throw an exception if not valid. </exception>
+        public short BayerOffsetX
+        {
+            get
+            {
+                return Convert.ToInt16( objTypeCamera.InvokeMember("BayerOffsetX",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// Returns the Y offset of the Bayer matrix, as defined in Camera.SensorType.
+        /// Value returned must be in the range 0 to M-1, where M is the height of the
+        /// Bayer matrix. The offset is relative to the 0,0 pixel in the sensor array,
+        /// and does not change to reflect subframe settings. 
+        /// </summary>
+        ///<exception cref=" System.Exception">Must throw an exception if the information is not available.</exception>
+        ///<exception cref=" System.Exception">Must throw an exception if not valid. </exception>
+        public int BayerOffsetY
+        {
+            get
+            {
+                return Convert.ToInt32( objTypeCamera.InvokeMember("BayerOffsetY",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// If True, the Camera.FastReadout function is available. 
+        /// </summary>
+        public bool CanFastReadout
+        {
+            get
+            {
+                return Convert.ToBoolean( objTypeCamera.InvokeMember("CanFastReadout",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// Returns the maximum exposure time supported by Camera.StartExposure. 
+        /// </summary>
+        public double ExposureMax
+        {
+            get
+            {
+                return Convert.ToDouble(objTypeCamera.InvokeMember("ExposureMax",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// Returns the minimum exposure time supported by Camera.StartExposure. 
+        /// </summary>
+        public double ExposureMin
+        {
+            get
+            {
+                return Convert.ToDouble(objTypeCamera.InvokeMember("ExposureMin",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// Returns the smallest increment of exposure time supported by Camera.StartExposure
+        /// </summary>
+        public double ExposureResolution
+        {
+            get
+            {
+                return Convert.ToDouble(objTypeCamera.InvokeMember("ExposureResolution",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+        }
+        
+        /// <summary>
+        /// Many cameras have a "fast mode" intended for use in focusing.
+        /// When set to True, the camera will operate in Fast mode;
+        /// when set False, the camera will operate normally.
+        /// This property should default to False. 
+        /// </summary>
+        public bool FastReadout
+        {
+            get
+            {
+                return Convert.ToBoolean(objTypeCamera.InvokeMember("FastReadout",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+            set
+            {
+                objTypeCamera.InvokeMember("FastReadout",
+                    BindingFlags.Default | BindingFlags.SetProperty,
+                    null, objCameraLateBound, new object[] { value });
+            }
+        }
+
+        /// <summary>
+        /// Set or get the camera gain. See the documentation for details.
+        /// </summary>
+        public short Gain
+        {
+            get
+            {
+                return Convert.ToInt16(objTypeCamera.InvokeMember("Gain",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+            set
+            {
+                objTypeCamera.InvokeMember("Gain",
+                    BindingFlags.Default | BindingFlags.SetProperty,
+                    null, objCameraLateBound, new object[] { value });
+            }
+        }
+
+        /// <summary>
+        /// When specifying the gain setting with an integer value, Camera.GainMax
+        /// is used in conjunction with Camera.GainMin to specify the range of valid settings.
+        /// </summary>
+        public short GainMax
+        {
+            get
+            {
+                return Convert.ToInt16(objTypeCamera.InvokeMember("GainMax",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// When specifying the gain setting with an integer value, Camera.GainMin
+        /// is used in conjunction with Camera.GainMax to specify the range of valid settings.
+        /// </summary>
+        public short GainMin
+        {
+            get
+            {
+                return Convert.ToInt16(objTypeCamera.InvokeMember("GainMin",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// Gains provides a 0-based array of available gain settings.
+        /// This is often used to specify ISO settings for DSLR cameras.
+        /// Typically the application software will display the available
+        /// gain settings in a drop list. The application will then supply
+        /// the selected index to the driver via the Camera.Gain property. 
+        /// </summary>
+        public string[] Gains
+        {
+            get
+            {
+                return (string[])objTypeCamera.InvokeMember("Gains",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { });
+            }
+        }
+
+        /// <summary>
+        /// The version of this interface. Will return 2 for this version.
+        /// Clients can detect legacy V1 drivers by trying to read ths property.
+        /// If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1. 
+        /// In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver. 
+        /// </summary>
+        public short InterfaceVersion
+        {
+            get
+            {
+                return Convert.ToInt16(objTypeCamera.InvokeMember("InterfaceVersion",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// Returns an integer between 0 and 100, where 0 indicates 0%
+        /// progress (function just started) and 100 indicates 100% progress
+        /// (i.e. completion). 
+        /// </summary>
+        public double PercentCompleted
+        {
+            get
+            {
+                return Convert.ToDouble(objTypeCamera.InvokeMember("PercentCompleted",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// ReadoutMode is an index into the array Camera.ReadoutModes, and selects
+        /// the desired readout mode for the camera.  Defaults to 0 if not set.
+        /// Throws an exception if the selected mode is not available.
+        /// </summary>
+        public short ReadoutMode
+        {
+            get
+            {
+                return Convert.ToInt16(objTypeCamera.InvokeMember("ReadoutMode",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objCameraLateBound, new object[] { }));
+            }
+            set
+            {
+                objTypeCamera.InvokeMember("ReadoutMode",
+                        BindingFlags.Default | BindingFlags.SetProperty,
+                        null, objCameraLateBound, new object[] { value });
+            }
+        }
+
+        /// <summary>
+        /// Return an array of strings, each of which describes an available
+        /// readout mode of the camera.
+        /// </summary>
+        public string[] ReadoutModes
+        {
+            get
+            {
+                return (string[])objTypeCamera.InvokeMember("ReadoutModes",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { });
+            }
+        }
+
+        /// <summary>
+        /// Returns the name (datasheet part number) of the sensor, e.g. ICX285AL.
+        /// </summary>
+        public string SensorName
+        {
+            get
+            {
+                return Convert.ToString(objTypeCamera.InvokeMember("SensorName",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objCameraLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// SensorType returns a value indicating whether the sensor is monochrome,
+        /// or what Bayer matrix it encodes.
+        /// <list type="bullet">
+        ///  <listheader>
+        ///   <description>Value  SensorType      Meaning</description>
+        ///  </listheader>
+        ///  <item>
+        ///   <description>0      Monochrome      Camera produces monochrome array with no Bayer encoding</description>
+        ///  </item>
+        ///  <item>
+        ///   <description>1      Color           Camera produces color image directly,
+        ///   requiring no Bayer decoding</description>
+        ///  </item>
+        ///  <item>
+        ///   <description>2      RGGB            Camera produces RGGB encoded Bayer array images</description>
+        ///  </item>
+        ///  <item>
+        ///   <description>3      CMYG            Camera produces CMYG encoded Bayer array images</description>
+        ///  </item>
+        ///  <item>
+        ///   <description>4      CMYG2           Camera produces CMYG2 encoded Bayer array images</description>
+        ///  </item>
+        ///  <item>
+        ///   <description>5      LRGB            Camera produces Kodak TRUESENSE Bayer LRGB array image</description>
+        ///  </item>
+        ///  <item>
+        ///   <description>5      CameraError     Camera error condition serious enough to prevent
+        ///                        further operations (link fail, etc.).</description>
+        ///  </item>
+        /// </list>
+        /// </summary>
+        public short SensorType
+        {
+            get
+            {
+                return Convert.ToInt16(objTypeCamera.InvokeMember("SensorType",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objCameraLateBound, new object[] { }));
+            }
+            set
+            {
+                objTypeCamera.InvokeMember("SensorType",
+                        BindingFlags.Default | BindingFlags.SetProperty,
+                        null, objCameraLateBound, new object[] { value });
+            }
+        }
+
         #endregion
 
         #region IDisposable Members
