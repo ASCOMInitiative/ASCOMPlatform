@@ -3,7 +3,7 @@ Begin VB.Form frmSetup
    BackColor       =   &H00000000&
    BorderStyle     =   4  'Fixed ToolWindow
    Caption         =   "Camera Simulator Setup"
-   ClientHeight    =   4095
+   ClientHeight    =   5340
    ClientLeft      =   2760
    ClientTop       =   3690
    ClientWidth     =   3495
@@ -11,20 +11,59 @@ Begin VB.Form frmSetup
    LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   4095
+   ScaleHeight     =   5340
    ScaleWidth      =   3495
+   ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin VB.CheckBox chkCanFastReadout 
+      BackColor       =   &H80000008&
+      Caption         =   "Can Fast Readout"
+      ForeColor       =   &H8000000E&
+      Height          =   300
+      Left            =   1700
+      MaskColor       =   &H00000000&
+      TabIndex        =   20
+      Top             =   2640
+      UseMaskColor    =   -1  'True
+      Width           =   1800
+   End
+   Begin VB.TextBox txtBayerOffsetY 
+      Height          =   315
+      Left            =   2500
+      TabIndex        =   18
+      Text            =   "xgY"
+      Top             =   3580
+      Width           =   250
+   End
+   Begin VB.TextBox txtBayerOffsetX 
+      Height          =   315
+      Left            =   1500
+      TabIndex        =   16
+      Text            =   "xgY"
+      Top             =   3580
+      Width           =   250
+   End
+   Begin VB.ComboBox ComboSensorType 
+      Height          =   315
+      ItemData        =   "frmSetup.frx":0000
+      Left            =   1920
+      List            =   "frmSetup.frx":0002
+      Style           =   2  'Dropdown List
+      TabIndex        =   14
+      Top             =   3120
+      Width           =   1335
+   End
    Begin VB.CheckBox chkShowStars 
       BackColor       =   &H80000008&
       Caption         =   "Show Stars"
       ForeColor       =   &H8000000E&
-      Height          =   495
-      Left            =   300
+      Height          =   300
+      Left            =   180
       MaskColor       =   &H00000000&
       TabIndex        =   13
       Top             =   2640
       UseMaskColor    =   -1  'True
-      Width           =   1935
+      Width           =   1200
    End
    Begin VB.Frame frmShutterControl 
       BackColor       =   &H00000000&
@@ -114,7 +153,7 @@ Begin VB.Form frmSetup
       Height          =   345
       Left            =   2265
       TabIndex        =   1
-      Top             =   3330
+      Top             =   4530
       Width           =   990
    End
    Begin VB.CommandButton cmdOK 
@@ -122,8 +161,38 @@ Begin VB.Form frmSetup
       Height          =   345
       Left            =   1020
       TabIndex        =   0
-      Top             =   3330
+      Top             =   4530
       Width           =   990
+   End
+   Begin VB.Label lblBayerOffsetY 
+      BackColor       =   &H00000000&
+      Caption         =   "Y"
+      ForeColor       =   &H00FFFFFF&
+      Height          =   285
+      Left            =   2300
+      TabIndex        =   19
+      Top             =   3650
+      Width           =   250
+   End
+   Begin VB.Label lblBayerOffsetX 
+      BackColor       =   &H00000000&
+      Caption         =   "Bayer Offset:  X"
+      ForeColor       =   &H00FFFFFF&
+      Height          =   285
+      Left            =   300
+      TabIndex        =   17
+      Top             =   3650
+      Width           =   1200
+   End
+   Begin VB.Label LabelSensorType 
+      BackColor       =   &H00000000&
+      Caption         =   "Sensor Type"
+      ForeColor       =   &H00FFFFFF&
+      Height          =   250
+      Left            =   300
+      TabIndex        =   15
+      Top             =   3180
+      Width           =   1500
    End
    Begin VB.Label lblDriverInfo 
       BackColor       =   &H00000000&
@@ -132,7 +201,7 @@ Begin VB.Form frmSetup
       Height          =   240
       Left            =   165
       TabIndex        =   12
-      Top             =   3810
+      Top             =   5010
       Width           =   3150
    End
    Begin VB.Label lblLastModified 
@@ -185,6 +254,7 @@ Attribute VB_Exposed = False
 ' 14-Oct-07 rbd     5.0.1 - Remove dead code, add detector config and
 '                   driver version/last-mod.
 ' 20-July-08 lfw    Added user option to show stars in image
+' 31-Dec-09 cdr     5.5.0 Upgrade to the V2 Camera standard
 '---------------------------------------------------------------------
 
 Option Explicit
@@ -223,6 +293,19 @@ Private Declare Function SetWindowPos Lib "user32.dll" ( _
                 ByVal cy As Long, _
                 ByVal uFLags As Long) As Long
 
+Private Sub ComboSensorType_Click()
+    If ComboSensorType.ListIndex > 1 Then
+        lblBayerOffsetX.Visible = True
+        lblBayerOffsetY.Visible = True
+        txtBayerOffsetX.Visible = True
+        txtBayerOffsetY.Visible = True
+    Else
+        lblBayerOffsetX.Visible = False
+        lblBayerOffsetY.Visible = False
+        txtBayerOffsetX.Visible = False
+        txtBayerOffsetY.Visible = False
+    End If
+End Sub
 
 Private Sub Form_Load()
     Dim fs, F
@@ -230,16 +313,27 @@ Private Sub Form_Load()
     
     m_Cancel = True
     
-    Me.txtDetWidth.Text = m_Profile.GetValue(m_DriverID, "DetectorWidth")
-    If Me.txtDetWidth.Text = "" Then Me.txtDetWidth.Text = "512"
-    Me.txtDetHeight.Text = m_Profile.GetValue(m_DriverID, "DetectorHeight")
-    If Me.txtDetHeight.Text = "" Then Me.txtDetHeight.Text = "512"
-    Me.txtPixWidth.Text = m_Profile.GetValue(m_DriverID, "PixelWidth")
-    If Me.txtPixWidth.Text = "" Then Me.txtPixWidth.Text = "24"
-    Me.txtPixHeight.Text = m_Profile.GetValue(m_DriverID, "PixelHeight")
-    If Me.txtPixHeight.Text = "" Then Me.txtPixHeight.Text = "24"
-    Me.chkShowStars.Value = m_Profile.GetValue(m_DriverID, "ShowStars")             'lfw1
+    Me.txtDetWidth.Text = CStr(ReadProfileInt("DetectorWidth", 512))
+    Me.txtDetHeight.Text = CStr(ReadProfileInt("DetectorHeight", 512))
+    Me.txtPixWidth.Text = CStr(ReadProfileDbl("PixelWidth", 24#))
+    Me.txtPixHeight.Text = CStr(ReadProfileDbl("PixelHeight", 24#))
     
+    Me.chkShowStars.value = ReadProfileInt("ShowStars", 0)             'lfw1
+    
+    ' load the Sensor Type combo
+    With ComboSensorType
+        .Clear
+        .AddItem "Monochrome"
+        .AddItem "Color"
+        .AddItem "RGGB"
+        .AddItem "CMYG"
+        .AddItem "CMYG2"
+        .AddItem "LRGB"
+        .ListIndex = ReadProfileInt("SensorType", 0)
+    End With
+    Me.txtBayerOffsetX.Text = CStr(ReadProfileInt("BayerOffsetX", 0))
+    Me.txtBayerOffsetY.Text = CStr(ReadProfileInt("BayerOffsetY", 0))
+    Me.chkCanFastReadout.value = ReadProfileInt("CanFastReadout", 0)
     '
     ' Assure window pops up on top of others.
     '
@@ -247,27 +341,48 @@ Private Sub Form_Load()
 
     lblDriverInfo = App.FileDescription & " " & _
         App.Major & "." & App.Minor & "." & App.Revision
-        
 End Sub
 
 Private Sub cmdOK_Click()
-
     m_Profile.WriteValue m_DriverID, "DetectorWidth", Me.txtDetWidth.Text
     m_Profile.WriteValue m_DriverID, "DetectorHeight", Me.txtDetHeight.Text
-    m_Profile.WriteValue m_DriverID, "PixelWidth", Me.txtPixWidth.Text
-    m_Profile.WriteValue m_DriverID, "PixelHeight", Me.txtPixHeight.Text
-    m_Profile.WriteValue m_DriverID, "ShowStars", Me.chkShowStars.Value             'lfw1
+    m_Profile.WriteValue m_DriverID, "PixelWidth", Str(Me.txtPixWidth.Text)
+    m_Profile.WriteValue m_DriverID, "PixelHeight", Str(Me.txtPixHeight.Text)
+    m_Profile.WriteValue m_DriverID, "ShowStars", Me.chkShowStars.value             'lfw1
+    m_Profile.WriteValue m_DriverID, "SensorType", Me.ComboSensorType.ListIndex
+    If Me.ComboSensorType.ListIndex > 0 Then
+        m_Profile.WriteValue m_DriverID, "BayerOffsetX", Me.txtBayerOffsetX.Text
+        m_Profile.WriteValue m_DriverID, "BayerOffsetY", Me.txtBayerOffsetY.Text
+    End If
+    m_Profile.WriteValue m_DriverID, "CanFastReadout", Me.chkCanFastReadout.value             'lfw1
     
     m_Cancel = False
-    
     Me.Hide
-    
 End Sub
 
 Private Sub cmdCancel_Click()
-
     Me.Hide
-    
 End Sub
+
+Private Function ReadProfileInt(name As String, default As Integer) As Integer
+    Dim buf As String
+    buf = m_Profile.GetValue(m_DriverID, name)
+    If buf = "" Then
+        ReadProfileInt = default
+    Else
+        ReadProfileInt = CInt(buf)
+    End If
+End Function
+
+Private Function ReadProfileDbl(name As String, default As Double) As Double
+    Dim buf As String
+    buf = m_Profile.GetValue(m_DriverID, name)
+    If buf = "" Then
+        ReadProfileDbl = default
+    Else
+        ReadProfileDbl = Val(buf)
+    End If
+End Function
+
 
 

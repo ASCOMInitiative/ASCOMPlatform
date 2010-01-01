@@ -33,6 +33,7 @@ Attribute VB_Name = "ErrorConstants"
 ' 06-Feb-02 mab     Copied from Meade LX200 driver
 ' 25-Feb-07 mab     Removed unused stuff
 ' 09-05-2008 pwgs   Added additional error messages
+' 31-Dec-09 cdr     5.5.0 Upgrade to the V2 Camera standard
 '---------------------------------------------------------------------
 
 Option Explicit
@@ -65,3 +66,18 @@ Public Const MSG_NO_ERROR = "No errors have occured"
 
 Public Const SCODE_INVALID_DURATION = vbObjectError + &H408 'pwgs Invalid duration requested
 Public Const MSG_INVALID_DURATION = "Requested exposure of less than 0 seconds"
+
+' Camera V2 errors
+
+Public Const SCODE_INVALID_BAYER = vbObjectError + &H409 'cdr Bayer factor not valid
+Public Const MSG_INVALID_BAYER = "Bayer factor not valid"
+
+Public Const SCODE_INVALID_FAST_READOUT = vbObjectError + &H40A
+Public Const MSG_INVALID_FAST_READOUT = "Fast Readout is not available"
+
+Public Const SCODE_INVALID_GAIN = vbObjectError + &H40B
+Public Const MSG_INVALID_GAIN = "Gain value not valid"
+
+Public Const SCODE_INVALID_READOUT_MODE = vbObjectError + &H40C
+Public Const MSG_INVALID_READOUT_MODE = "Gain value not valid"
+
