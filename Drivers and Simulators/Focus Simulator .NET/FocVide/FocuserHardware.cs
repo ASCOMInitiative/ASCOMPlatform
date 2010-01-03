@@ -25,12 +25,13 @@ namespace ASCOM.FocVide
 
         static FocuserHardware()
 		{
-            
-            Properties.Settings.Default.Reload();
+            // Temp renaming of Properties to _Properties
+            _Properties.Settings.Default.Reload();
             _Link = false;
             HaltRequested = false;
             Properties.Settings.Default.IsMoving = false;
             _IsMoving = false;
+            Properties.Settings.Default.Save();
             xRand = new Random();
             Chrono.Enabled = false;
             Chrono.Interval = 3000;
@@ -269,6 +270,7 @@ namespace ASCOM.FocVide
                             if (HaltRequested)
                             {
                                 Properties.Settings.Default.IsMoving = false;
+                                _IsMoving = false;
                                 HaltRequested = false;
                                 MyLog(eLogKind.LogMove, "Focuser stopped");
                                 Properties.Settings.Default.Save();
@@ -286,6 +288,7 @@ namespace ASCOM.FocVide
                             if (HaltRequested)
                             {
                                 Properties.Settings.Default.IsMoving = false;
+                                _IsMoving = false;
                                 HaltRequested = false;
                                 MyLog(eLogKind.LogMove, "Focuser stopped");
                                 Properties.Settings.Default.Save();
@@ -297,6 +300,7 @@ namespace ASCOM.FocVide
                     }
 
                     Properties.Settings.Default.IsMoving = false;
+                    _IsMoving = false;
                 }
                 else  // Asynchronous moves
                 {
@@ -310,13 +314,15 @@ namespace ASCOM.FocVide
             {
                 MyLog(eLogKind.LogMove,"Requested relative move "+val.ToString()+" steps");
                 Properties.Settings.Default.IsMoving = true;
+                _IsMoving = true;
                 MyLog(eLogKind.LogIsMoving, "Moving "+Math.Abs(val)+" steps "+(val >= 0 ? "forward" : "backward"));
                 for (int i = 0; i < Math.Abs(val); i ++)
                 {
                     // Focuser.Halt() was called
                     if (HaltRequested) 
                     { 
-                        Properties.Settings.Default.IsMoving = false; 
+                        Properties.Settings.Default.IsMoving = false;
+                        _IsMoving = false;
                         HaltRequested = false;
                         MyLog(eLogKind.LogMove, "Focuser stopped");
                         Properties.Settings.Default.Save();
@@ -325,6 +331,7 @@ namespace ASCOM.FocVide
                     FakeMove(1);  // Fake move
                 }
                 Properties.Settings.Default.IsMoving = false;
+                _IsMoving = false;
                 MyLog(eLogKind.LogIsMoving, "Relative move done");
             }
             Properties.Settings.Default.Save();
