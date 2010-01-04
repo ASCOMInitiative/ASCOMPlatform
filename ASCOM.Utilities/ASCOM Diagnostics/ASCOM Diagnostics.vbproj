@@ -104,6 +104,9 @@
     <Compile Include="..\ASCOM.Utilities\TraceLogger.vb">
       <Link>TraceLogger.vb</Link>
     </Compile>
+    <Compile Include="..\ASCOM.Utilities\Util.vb">
+      <Link>Util.vb</Link>
+    </Compile>
     <Compile Include="..\ASCOM.Utilities\UtilitiesSettings.vb">
       <Link>UtilitiesSettings.vb</Link>
     </Compile>

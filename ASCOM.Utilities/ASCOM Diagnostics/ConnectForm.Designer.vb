@@ -29,6 +29,8 @@ Partial Class ConnectForm
         Me.txtStatus = New System.Windows.Forms.TextBox
         Me.btnConnect = New System.Windows.Forms.Button
         Me.btnProperties = New System.Windows.Forms.Button
+        Me.btnScript = New System.Windows.Forms.Button
+        Me.Label1 = New System.Windows.Forms.Label
         Me.SuspendLayout()
         '
         'cmbDeviceType
@@ -83,11 +85,31 @@ Partial Class ConnectForm
         Me.btnProperties.Text = "Properties"
         Me.btnProperties.UseVisualStyleBackColor = True
         '
+        'btnScript
+        '
+        Me.btnScript.Location = New System.Drawing.Point(438, 72)
+        Me.btnScript.Name = "btnScript"
+        Me.btnScript.Size = New System.Drawing.Size(75, 23)
+        Me.btnScript.TabIndex = 6
+        Me.btnScript.Text = "Run Script"
+        Me.btnScript.UseVisualStyleBackColor = True
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(519, 77)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(136, 13)
+        Me.Label1.TabIndex = 7
+        Me.Label1.Text = "(Script is for telescope only)"
+        '
         'ConnectForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(794, 442)
+        Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.btnScript)
         Me.Controls.Add(Me.btnProperties)
         Me.Controls.Add(Me.btnConnect)
         Me.Controls.Add(Me.txtStatus)
@@ -107,4 +129,6 @@ Partial Class ConnectForm
     Friend WithEvents txtStatus As System.Windows.Forms.TextBox
     Friend WithEvents btnConnect As System.Windows.Forms.Button
     Friend WithEvents btnProperties As System.Windows.Forms.Button
+    Friend WithEvents btnScript As System.Windows.Forms.Button
+    Friend WithEvents Label1 As System.Windows.Forms.Label
 End Class
