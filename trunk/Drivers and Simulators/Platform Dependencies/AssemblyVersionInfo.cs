@@ -27,6 +27,6 @@
 // For TeamCity builds, this version string may be substitued
 // by the TeamCity build number.
 
-[assembly: AssemblyVersion("5.5.*")]		// .Net Assembly Version
+[assembly: AssemblyVersion("6.0.*")]		// .Net Assembly Version
 //[assembly: AssemblyFileVersion("5.5.0")]	// Win32 File Version
 
