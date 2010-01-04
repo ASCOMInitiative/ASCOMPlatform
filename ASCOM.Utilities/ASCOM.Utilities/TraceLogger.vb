@@ -438,7 +438,7 @@ Public Class TraceLogger
         Try
             p_Test = Left(p_Test & Microsoft.VisualBasic.StrDup(30, " "), 25)
 
-            l_Msg = Format(Now(), "HH:mm:ss.fff") & " " & p_Test & " " & MakePrintable(p_Msg)
+            l_Msg = Format(Now(), "HH:mm:ss.fff") & " " & MakePrintable(p_Test) & " " & MakePrintable(p_Msg)
             If Not g_LogFile Is Nothing Then
                 If p_NewLine Then
                     g_LogFile.WriteLine(l_Msg) 'Update log file with newline terminator
