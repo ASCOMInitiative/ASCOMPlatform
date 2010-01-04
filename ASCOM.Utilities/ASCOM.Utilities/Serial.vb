@@ -181,6 +181,10 @@ Public Class Serial
     Private TextEncoding As System.Text.Encoding
     Private m_SerTraceFile As String = SERIAL_DEFAULT_FILENAME 'Set the default trace file name
 
+    Private SerialProfile As XMLAccess = Nothing
+    Private ForcedCOMPorts As Generic.List(Of String)
+    Private IgnoredCOMPorts As Generic.List(Of String)
+
     Private SerSemaphore As System.Threading.Semaphore
     Private SerPortInUse As Boolean = False
 
@@ -205,7 +209,6 @@ Public Class Serial
 
 #Region "New and IDisposable Support"
     Sub New()
-        Dim SerialProfile As XMLAccess = Nothing
         Dim TraceFileName As String = ""
         Dim WorkerThreads, CompletionThreads As Integer
 
@@ -241,9 +244,6 @@ Public Class Serial
             MsgBox("Serial:New exception " & ex.ToString)
         End Try
 
-        'Clean up
-        Try : SerialProfile.Dispose() : Catch : End Try
-        SerialProfile = Nothing
     End Sub
 
     ' This code added by Visual Basic to correctly implement the disposable pattern.
@@ -270,6 +270,10 @@ Public Class Serial
     ''' <remarks></remarks>
     Protected Overridable Sub Dispose(ByVal disposing As Boolean)
         If Not Me.disposed Then
+            If Not SerialProfile Is Nothing Then 'Clean up the profile accessor
+                Try : SerialProfile.Dispose() : Catch : End Try
+                SerialProfile = Nothing
+            End If
             If Not m_Port Is Nothing Then 'Clean up the port
                 Try : m_Port.Dispose() : Catch : End Try
                 m_Port = Nothing
@@ -303,6 +307,7 @@ Public Class Serial
         End Get
         Set(ByVal NumDataBits As Integer)
             m_DataBits = NumDataBits
+            Logger.LogMessage("DataBits", "Set to: " & NumDataBits.ToString)
         End Set
     End Property
 
@@ -318,6 +323,7 @@ Public Class Serial
         End Get
         Set(ByVal Enabled As Boolean)
             m_DTREnable = Enabled
+            Logger.LogMessage("DTREnable", "Set to: " & Enabled.ToString)
         End Set
     End Property
 
@@ -333,6 +339,7 @@ Public Class Serial
         End Get
         Set(ByVal HandshakeType As SerialHandshake)
             m_Handshake = HandshakeType
+            Logger.LogMessage("HandshakeType", "Set to: " & [Enum].GetName(GetType(SerialHandshake), HandshakeType))
         End Set
     End Property
 
@@ -348,6 +355,7 @@ Public Class Serial
         End Get
         Set(ByVal ParityType As SerialParity)
             m_Parity = ParityType
+            Logger.LogMessage("Parity", "Set to: " & [Enum].GetName(GetType(SerialParity), ParityType))
         End Set
     End Property
 
@@ -363,6 +371,7 @@ Public Class Serial
         End Get
         Set(ByVal NumStopBits As SerialStopBits)
             m_StopBits = NumStopBits
+            Logger.LogMessage("NumStopBits", "Set to: " & [Enum].GetName(GetType(SerialStopBits), NumStopBits))
         End Set
     End Property
 
@@ -380,41 +389,42 @@ Public Class Serial
         End Get
         Set(ByVal Connecting As Boolean)
             Dim TData As New ThreadData
+            Dim SerPorts As String()
             Try
-                If DebugTrace Then Logger.LogMessage("Connected", "Start")
+                Logger.LogMessage("Set Connected To", Connecting.ToString)
+                If Connecting Then 'Log port parameters only if we are connecting
+                    Logger.LogMessage("Set Connected", "Using COM port: " & m_PortName & _
+                                      " Baud rate: " & m_Speed.ToString & _
+                                      " Timeout: " & m_ReceiveTimeout.ToString & _
+                                      " DTR: " & m_DTREnable.ToString & _
+                                      " Handshake: " & m_Handshake.ToString & _
+                                      " Encoding: " & SERIALPORT_ENCODING.ToString)
+                    Logger.LogMessage("Set Connected", "Transmission format - Bits: " & m_DataBits & _
+                                      " Parity: " & [Enum].GetName(m_Parity.GetType, m_Parity) & _
+                                      " Stop bits: " & [Enum].GetName(m_StopBits.GetType, m_StopBits))
+                    SerPorts = AvailableCOMPorts ' This causes a log of available COM port entries to be written on Connect = True
+                End If
+
                 TData.SerialCommand = SerialCommandType.Connected
                 TData.Connecting = Connecting
                 ThreadPool.QueueUserWorkItem(AddressOf ConnectedWorker, TData)
                 WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-                If DebugTrace Then Logger.LogMessage("Connected", "Completed: " & TData.Completed)
+                If DebugTrace Then Logger.LogMessage("Set Connected", "Completed: " & TData.Completed)
                 If Not TData.LastException Is Nothing Then Throw TData.LastException
                 TData = Nothing
 
             Catch ex As Exception
-                Logger.LogMessage("Connected", ex.ToString)
+                Logger.LogMessage("Set Connected", ex.ToString)
                 'Throw New ASCOM.Utilities.Exceptions.SerialPortInUseException("Serial Port Issue", ex)
                 Throw
             End Try
         End Set
     End Property
 
-    Sub ConnectedWorker(ByVal TDataObject As Object)
+    Private Sub ConnectedWorker(ByVal TDataObject As Object)
         Dim TData As ThreadData = DirectCast(TDataObject, ThreadData)
         Try
-            Dim SerPorts As String()
             '5.0.2 added port enumeration to log
-            SerPorts = AvailableCOMPorts ' This causes log entries tobe written
-            Logger.LogMessage("Set Connected", "Using COM port: " & m_PortName & _
-                              " Baud rate: " & m_Speed.ToString & _
-                              " Timeout: " & m_ReceiveTimeout.ToString & _
-                              " DTR: " & m_DTREnable.ToString & _
-                              " Handshake: " & m_Handshake.ToString & _
-                              " Encoding: " & SERIALPORT_ENCODING.ToString)
-            Logger.LogMessage("Set Connected", "Transmission format - Bits: " & m_DataBits & _
-                              " Parity: " & [Enum].GetName(m_Parity.GetType, m_Parity) & _
-                              " Stop bits: " & [Enum].GetName(m_StopBits.GetType, m_StopBits))
-
-            Logger.LogStart("Set Connected", TData.Connecting.ToString & " ")
             If TData.Connecting Then ' Trying to connect
                 If Not m_Connected Then
                     If Not My.Computer.Ports.SerialPortNames.Contains(m_PortName) Then Throw New Exceptions.InvalidValueException("Requested COM Port does not exist: " & m_PortName)
@@ -444,26 +454,26 @@ Public Class Serial
                     'Open port for communication
                     m_Port.Open()
                     m_Connected = True
-                    Logger.LogFinish("OK")
+                    Logger.LogMessage("Set Connected", "OK")
                 Else
-                    Logger.LogFinish("already connected")
+                    Logger.LogMessage("Set Connected", "Already connected")
                 End If
             Else ' Trying to disconnect
                 If m_Connected Then
                     m_Connected = False
                     m_Port.DiscardOutBuffer()
                     m_Port.DiscardInBuffer()
-                    Logger.LogContinue("cleared buffers, ")
+                    Logger.LogStart("Set Connected", "Cleared buffers, ")
                     m_Port.Close()
-                    Logger.LogContinue("closed, ")
+                    Logger.LogContinue("closed port, ")
                     m_Port.Dispose()
                     Logger.LogFinish("disposed OK")
                 Else
-                    Logger.LogFinish("already disconnected")
+                    Logger.LogMessage("Set Connected", "Already disconnected")
                 End If
             End If
         Catch ex As Exception
-            Try : Logger.LogFinish("EXCEPTION: ConnectedWorker - " & ex.Message & ex.ToString) : Catch : End Try
+            Try : Logger.LogMessage("Set Connected", "EXCEPTION: ConnectedWorker - " & ex.Message & " " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
             Try : TData.Completed = True : Catch : End Try
@@ -504,15 +514,19 @@ Public Class Serial
         Set(ByVal value As Integer)
             Dim TData As New ThreadData
             Try
-                If DebugTrace Then Logger.LogMessage("ReceiveTimeout", "Start")
-                TData.SerialCommand = SerialCommandType.ReceiveTimeout
-                TData.TimeoutValue = value
-                ThreadPool.QueueUserWorkItem(AddressOf ReceiveTimeoutWorker, TData)
-                WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-                If DebugTrace Then Logger.LogMessage("ReceiveTimeout", "Completed: " & TData.Completed)
-                If Not (TData.LastException Is Nothing) Then Throw TData.LastException
-                TData = Nothing
-
+                m_ReceiveTimeout = value * 1000 'Save the requested value
+                If m_Connected Then ' Try and set the timeout in flight
+                    If DebugTrace Then Logger.LogMessage("ReceiveTimeout", "Start")
+                    TData.SerialCommand = SerialCommandType.ReceiveTimeout
+                    TData.TimeoutValue = value
+                    ThreadPool.QueueUserWorkItem(AddressOf ReceiveTimeoutWorker, TData)
+                    WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
+                    If DebugTrace Then Logger.LogMessage("ReceiveTimeout", "Completed: " & TData.Completed)
+                    If Not (TData.LastException Is Nothing) Then Throw TData.LastException
+                    TData = Nothing
+                Else 'Just report that the value has been set
+                    Logger.LogMessage("ReceiveTimeout", "Set to: " & value & " seconds")
+                End If
             Catch ex As Exception
                 Logger.LogMessage("ReceiveTimeout", ex.ToString)
                 'Throw New ASCOM.Utilities.Exceptions.SerialPortInUseException("Serial Port Issue", ex)
@@ -521,7 +535,7 @@ Public Class Serial
         End Set
     End Property
 
-    Sub ReceiveTimeoutWorker(ByVal TDataObject As Object)
+    Private Sub ReceiveTimeoutWorker(ByVal TDataObject As Object)
         Dim TData As ThreadData = DirectCast(TDataObject, ThreadData)
         Dim MyTransactionID As Long, Value As Integer
         Try
@@ -551,7 +565,7 @@ Public Class Serial
                     Throw New SerialPortInUseException("Serial:ReceiveTimeout - unable to get serial port semaphore before timeout.")
                 End If
             End If
-            Logger.LogMessage("ReceiveTimeout", FormatIDs(MyTransactionID) & "Set to: " & Value / 1000 & "seconds")
+            Logger.LogMessage("ReceiveTimeout", FormatIDs(MyTransactionID) & "Set to: " & Value / 1000 & " seconds")
         Catch ex As Exception
             Try : Logger.LogMessage("ReceiveTimeout", "Exception: " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
@@ -577,14 +591,19 @@ Public Class Serial
         Set(ByVal value As Integer)
             Dim TData As New ThreadData
             Try
-                If DebugTrace Then Logger.LogMessage("ReceiveTimeoutMs", "Start")
-                TData.SerialCommand = SerialCommandType.ReceiveTimeoutMs
-                TData.TimeoutValueMs = value
-                ThreadPool.QueueUserWorkItem(AddressOf ReceiveTimeoutMsWorker, TData)
-                WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-                If DebugTrace Then Logger.LogMessage("ReceiveTimeoutMs", "Completed: " & TData.Completed)
-                If Not TData.LastException Is Nothing Then Throw TData.LastException
-                TData = Nothing
+                m_ReceiveTimeout = value 'Save the requested value
+                If m_Connected Then ' Try and set the timeout in flight
+                    If DebugTrace Then Logger.LogMessage("ReceiveTimeoutMs", "Start")
+                    TData.SerialCommand = SerialCommandType.ReceiveTimeoutMs
+                    TData.TimeoutValueMs = value
+                    ThreadPool.QueueUserWorkItem(AddressOf ReceiveTimeoutMsWorker, TData)
+                    WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
+                    If DebugTrace Then Logger.LogMessage("ReceiveTimeoutMs", "Completed: " & TData.Completed)
+                    If Not TData.LastException Is Nothing Then Throw TData.LastException
+                    TData = Nothing
+                Else 'Just report that the value has been set
+                    Logger.LogMessage("ReceiveTimeoutMs", "Set to: " & value & " milli-seconds")
+                End If
 
             Catch ex As Exception
                 Logger.LogMessage("ReceiveTimeoutMs", ex.ToString)
@@ -594,7 +613,7 @@ Public Class Serial
         End Set
     End Property
 
-    Sub ReceiveTimeoutMsWorker(ByVal TDataObject As Object)
+    Private Sub ReceiveTimeoutMsWorker(ByVal TDataObject As Object)
         Dim MyTransactionID As Long, Value As Integer
         Dim TData As ThreadData = DirectCast(TDataObject, ThreadData)
         Try
@@ -623,7 +642,7 @@ Public Class Serial
                     Throw New SerialPortInUseException("Serial:ReceiveTimeoutMs - unable to get serial port semaphore before timeout.")
                 End If
             End If
-            Logger.LogMessage("ReceiveTimeoutMs", FormatIDs(MyTransactionID) & "Set to: " & Value.ToString & "mS")
+            Logger.LogMessage("ReceiveTimeoutMs", FormatIDs(MyTransactionID) & "Set to: " & Value.ToString & "ms")
         Catch ex As Exception
             Try : Logger.LogMessage("ReceiveTimeoutMs", "Exception: " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
@@ -645,7 +664,8 @@ Public Class Serial
         End Get
         Set(ByVal value As SerialSpeed)
             m_Speed = value
-            Logger.LogMessage("Speed", "Set to: " & value.ToString)
+            'Logger.LogMessage("Speed", "Set to: " & value.ToString)
+            Logger.LogMessage("Speed", "Set to: " & [Enum].GetName(GetType(SerialSpeed), value))
         End Set
     End Property
 
@@ -657,15 +677,17 @@ Public Class Serial
     Public Sub ClearBuffers() Implements ISerial.ClearBuffers
         Dim TData As New ThreadData
         Try
-            If DebugTrace Then Logger.LogMessage("ClearBuffers", "Start")
-            TData.SerialCommand = SerialCommandType.ClearBuffers
-            ThreadPool.QueueUserWorkItem(AddressOf ClearBuffersWorker, TData)
-            't.Start(TData)
-            WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-            If DebugTrace Then Logger.LogMessage("ClearBuffers", "Completed: " & TData.Completed)
-            If Not TData.LastException Is Nothing Then Throw TData.LastException
-            TData = Nothing
-
+            If m_Connected Then 'Clear buffers as we are connected
+                If DebugTrace Then Logger.LogMessage("ClearBuffers", "Start")
+                TData.SerialCommand = SerialCommandType.ClearBuffers
+                ThreadPool.QueueUserWorkItem(AddressOf ClearBuffersWorker, TData)
+                WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
+                If DebugTrace Then Logger.LogMessage("ClearBuffers", "Completed: " & TData.Completed)
+                If Not TData.LastException Is Nothing Then Throw TData.LastException
+                TData = Nothing
+            Else ' Not connected so ignore
+                Logger.LogMessage("ClearBuffers", "***** Clearbuffers ignored as the port is not connected!")
+            End If
         Catch ex As Exception
             Logger.LogMessage("ClearBuffers", ex.ToString)
             'Throw New ASCOM.Utilities.Exceptions.SerialPortInUseException("Serial Port Issue", ex)
@@ -719,6 +741,7 @@ Public Class Serial
     ''' <returns>The characters received</returns>
     ''' <exception cref="System.TimeoutException">Thrown when a receive timeout occurs.</exception>
     ''' <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
+    ''' <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
     ''' <remarks>This method reads all of the characters currently in the serial receive buffer. It will not return 
     ''' unless it reads at least one character. A timeout will cause a TimeoutException to be raised. Use this for 
     ''' text data, as it returns a String. </remarks>
@@ -726,24 +749,30 @@ Public Class Serial
         'Return all characters in the receive buffer
         Dim Result As String
         Dim TData As New ThreadData
-        Try
-            If DebugTrace Then Logger.LogMessage("Receive", "Start")
-            TData.SerialCommand = SerialCommandType.Receive
-            ThreadPool.QueueUserWorkItem(AddressOf ReceiveWorker, TData)
-            WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-            If DebugTrace Then Logger.LogMessage("Receive", "Completed: " & TData.Completed)
-            If Not (TData.LastException Is Nothing) Then Throw TData.LastException
-            Result = TData.ResultString
-            TData = Nothing
-        Catch ex As Exception
-            Logger.LogMessage("Receive", ex.ToString)
-            'Throw New ASCOM.Utilities.Exceptions.SerialPortInUseException("Serial Port Issue", ex)
-            Throw
-        End Try
+        If m_Connected Then
+            Try
+                If DebugTrace Then Logger.LogMessage("Receive", "Start")
+                TData.SerialCommand = SerialCommandType.Receive
+                ThreadPool.QueueUserWorkItem(AddressOf ReceiveWorker, TData)
+                WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
+                If DebugTrace Then Logger.LogMessage("Receive", "Completed: " & TData.Completed)
+                If Not (TData.LastException Is Nothing) Then Throw TData.LastException
+                Result = TData.ResultString
+                TData = Nothing
+            Catch ex As TimeoutException
+                Logger.LogMessage("Receive", ex.Message)
+                Throw
+            Catch ex As Exception
+                Logger.LogMessage("Receive", ex.ToString)
+                Throw
+            End Try
+        Else 'Not connected so throw an exception
+            Throw New ASCOM.NotConnectedException("Serial port is not connected - you cannot use the Serial.Receive command")
+        End If
         Return Result
     End Function
 
-    Sub ReceiveWorker(ByVal TDataObject As Object)
+    Private Sub ReceiveWorker(ByVal TDataObject As Object)
         Dim TData As ThreadData = DirectCast(TDataObject, ThreadData)
         Try
             Dim Received As String = ""
@@ -788,24 +817,31 @@ Public Class Serial
     ''' <returns>The received byte</returns>
     ''' <exception cref="System.TimeoutException">Thrown when a receive timeout occurs.</exception>
     ''' <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
+    ''' <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
     ''' <remarks>Use this for 8-bit (binary data). If a timeout occurs, a TimeoutException is raised. </remarks>
     Public Function ReceiveByte() As Byte Implements ISerial.ReceiveByte
         Dim TData As New ThreadData, RetVal As Byte
-        Try
-            If DebugTrace Then Logger.LogMessage("ReceiveByte", "Start")
-            TData.SerialCommand = SerialCommandType.Receivebyte
-            ThreadPool.QueueUserWorkItem(AddressOf ReceiveByteWorker, TData)
-            WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-            If DebugTrace Then Logger.LogMessage("ReceiveByte", "Completed: " & TData.Completed)
-            If Not TData.LastException Is Nothing Then Throw TData.LastException
-            RetVal = TData.ResultByte
-            TData = Nothing
-            Return RetVal
-        Catch ex As Exception
-            Logger.LogMessage("ReceiveByte", ex.ToString)
-            'Throw New ASCOM.Utilities.Exceptions.SerialPortInUseException("Serial Port Issue", ex)
-            Throw
-        End Try
+        If m_Connected Then 'Process command
+            Try
+                If DebugTrace Then Logger.LogMessage("ReceiveByte", "Start")
+                TData.SerialCommand = SerialCommandType.Receivebyte
+                ThreadPool.QueueUserWorkItem(AddressOf ReceiveByteWorker, TData)
+                WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
+                If DebugTrace Then Logger.LogMessage("ReceiveByte", "Completed: " & TData.Completed)
+                If Not TData.LastException Is Nothing Then Throw TData.LastException
+                RetVal = TData.ResultByte
+                TData = Nothing
+                Return RetVal
+            Catch ex As TimeoutException
+                Logger.LogMessage("ReceiveByte", ex.Message)
+                Throw
+            Catch ex As Exception
+                Logger.LogMessage("ReceiveByte", ex.ToString)
+                Throw
+            End Try
+        Else 'Not connected so throw an exception
+            Throw New ASCOM.NotConnectedException("Serial port is not connected - you cannot use the Serial.ReceiveByte command")
+        End If
     End Function
 
     Private Sub ReceiveByteWorker(ByVal TDataObject As Object)
@@ -855,25 +891,32 @@ Public Class Serial
     ''' <returns>String of length "Count" characters</returns>
     ''' <exception cref="System.TimeoutException">Thrown when a receive timeout occurs.</exception>
     ''' <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
+    ''' <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
     ''' <remarks>If a timeout occurs a TimeoutException is raised.</remarks>
     Public Function ReceiveCounted(ByVal Count As Integer) As String Implements ISerial.ReceiveCounted
         Dim TData As New ThreadData, RetVal As String
-        Try
-            If DebugTrace Then Logger.LogMessage("ReceiveCounted", "Start")
-            TData.SerialCommand = SerialCommandType.ReceiveCounted
-            TData.Count = Count
-            ThreadPool.QueueUserWorkItem(AddressOf ReceiveCountedWorker, TData)
-            WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-            If DebugTrace Then Logger.LogMessage("ReceiveCounted", "Completed: " & TData.Completed)
-            If Not TData.LastException Is Nothing Then Throw TData.LastException
-            RetVal = TData.ResultString
-            TData = Nothing
-            Return RetVal
-        Catch ex As Exception
-            Logger.LogMessage("ReceiveCounted", ex.ToString)
-            'Throw New ASCOM.Utilities.Exceptions.SerialPortInUseException("Serial Port Issue", ex)
-            Throw
-        End Try
+        If m_Connected Then 'Process command
+            Try
+                If DebugTrace Then Logger.LogMessage("ReceiveCounted", "Start")
+                TData.SerialCommand = SerialCommandType.ReceiveCounted
+                TData.Count = Count
+                ThreadPool.QueueUserWorkItem(AddressOf ReceiveCountedWorker, TData)
+                WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
+                If DebugTrace Then Logger.LogMessage("ReceiveCounted", "Completed: " & TData.Completed)
+                If Not TData.LastException Is Nothing Then Throw TData.LastException
+                RetVal = TData.ResultString
+                TData = Nothing
+                Return RetVal
+            Catch ex As TimeoutException
+                Logger.LogMessage("ReceiveCounted", ex.Message)
+                Throw
+            Catch ex As Exception
+                Logger.LogMessage("ReceiveCounted", ex.ToString)
+                Throw
+            End Try
+        Else 'Not connected so throw an exception
+            Throw New ASCOM.NotConnectedException("Serial port is not connected - you cannot use the Serial.ReceiveCounted command")
+        End If
     End Function
 
     Private Sub ReceiveCountedWorker(ByVal TDataObject As Object)
@@ -925,6 +968,7 @@ Public Class Serial
     ''' <returns>Byte array of size "Count" elements</returns>
     ''' <exception cref="System.TimeoutException">Thrown when a receive timeout occurs.</exception>
     ''' <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
+    ''' <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
     ''' <remarks>
     ''' <para>If a timeout occurs, a TimeoutException is raised. </para>
     ''' <para>This function exists in the COM component but is not documented in the help file.</para>
@@ -932,23 +976,29 @@ Public Class Serial
     Public Function ReceiveCountedBinary(ByVal Count As Integer) As Byte() Implements ISerial.ReceiveCountedBinary
         Dim Result As Byte()
         Dim TData As New ThreadData
-        Try
-            If DebugTrace Then Logger.LogMessage("ReceiveCountedBinary", "Start")
-            TData.SerialCommand = SerialCommandType.ReceiveCountedBinary
-            TData.Count = Count
-            ThreadPool.QueueUserWorkItem(AddressOf ReceiveCountedBinaryWorker, TData)
-            WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-            If DebugTrace Then Logger.LogMessage("ReceiveCountedBinary", "Completed: " & TData.Completed)
-            If Not (TData.LastException Is Nothing) Then Throw TData.LastException
-            Result = TData.ResultByteArray
-            TData = Nothing
-            Return Result
+        If m_Connected Then 'Process command
+            Try
+                If DebugTrace Then Logger.LogMessage("ReceiveCountedBinary", "Start")
+                TData.SerialCommand = SerialCommandType.ReceiveCountedBinary
+                TData.Count = Count
+                ThreadPool.QueueUserWorkItem(AddressOf ReceiveCountedBinaryWorker, TData)
+                WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
+                If DebugTrace Then Logger.LogMessage("ReceiveCountedBinary", "Completed: " & TData.Completed)
+                If Not (TData.LastException Is Nothing) Then Throw TData.LastException
+                Result = TData.ResultByteArray
+                TData = Nothing
+                Return Result
 
-        Catch ex As Exception
-            Logger.LogMessage("ReceiveCountedBinary", ex.ToString)
-            'Throw New ASCOM.Utilities.Exceptions.SerialPortInUseException("Serial Port Issue", ex)
-            Throw
-        End Try
+            Catch ex As TimeoutException
+                Logger.LogMessage("ReceiveCountedBinary", ex.Message)
+                Throw
+            Catch ex As Exception
+                Logger.LogMessage("ReceiveCountedBinary", ex.ToString)
+                Throw
+            End Try
+        Else 'Not connected so throw an exception
+            Throw New ASCOM.NotConnectedException("Serial port is not connected - you cannot use the Serial.ReceiveCountedBinary command")
+        End If
 
     End Function
 
@@ -1008,26 +1058,33 @@ Public Class Serial
     ''' <returns>Received characters including the terminator string</returns>
     ''' <exception cref="System.TimeoutException">Thrown when a receive timeout occurs.</exception>
     ''' <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
+    ''' <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
     ''' <remarks>If a timeout occurs, a TimeoutException is raised.</remarks>
     Public Function ReceiveTerminated(ByVal Terminator As String) As String Implements ISerial.ReceiveTerminated
         Dim TData As New ThreadData, RetVal As String
-        Try
-            If DebugTrace Then Logger.LogMessage("ReceiveTerminated", "Start")
-            TData.SerialCommand = SerialCommandType.ReceiveTerminated
-            TData.Terminator = Terminator
-            ThreadPool.QueueUserWorkItem(AddressOf ReceiveTerminatedWorker, TData)
-            WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-            If DebugTrace Then Logger.LogMessage("ReceiveTerminated", "Completed: " & TData.Completed)
-            If Not TData.LastException Is Nothing Then Throw TData.LastException
-            RetVal = TData.ResultString
-            TData = Nothing
-            Return RetVal
+        If m_Connected Then 'Process command
+            Try
+                If DebugTrace Then Logger.LogMessage("ReceiveTerminated", "Start")
+                TData.SerialCommand = SerialCommandType.ReceiveTerminated
+                TData.Terminator = Terminator
+                ThreadPool.QueueUserWorkItem(AddressOf ReceiveTerminatedWorker, TData)
+                WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
+                If DebugTrace Then Logger.LogMessage("ReceiveTerminated", "Completed: " & TData.Completed)
+                If Not TData.LastException Is Nothing Then Throw TData.LastException
+                RetVal = TData.ResultString
+                TData = Nothing
+                Return RetVal
 
-        Catch ex As Exception
-            Logger.LogMessage("ReceiveTerminated", ex.ToString)
-            'Throw New ASCOM.Utilities.Exceptions.SerialPortInUseException("Serial Port Issue", ex)
-            Throw
-        End Try
+            Catch ex As TimeoutException
+                Logger.LogMessage("ReceiveTerminated", ex.Message)
+                Throw
+            Catch ex As Exception
+                Logger.LogMessage("ReceiveTerminated", ex.ToString)
+                Throw
+            End Try
+        Else 'Not connected so throw an exception
+            Throw New ASCOM.NotConnectedException("Serial port is not connected - you cannot use the Serial.ReceiveTerminated command")
+        End If
 
     End Function
 
@@ -1090,6 +1147,7 @@ Public Class Serial
     ''' <param name="TerminatorBytes">Array of bytes that indicates end of message</param>
     ''' <returns>Byte array of received characters</returns>
     ''' <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
+    ''' <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
     ''' <remarks>
     ''' <para>If a timeout occurs, a TimeoutException is raised.</para>
     ''' <para>This function exists in the COM component but is not documented in the help file.</para>
@@ -1098,23 +1156,29 @@ Public Class Serial
         'Return all characters up to and including a specified terminator string
         Dim Result() As Byte
         Dim TData As New ThreadData
-        Try
-            If DebugTrace Then Logger.LogMessage("ReceiveTerminatedBinary", "Start")
-            TData.SerialCommand = SerialCommandType.ReceiveCounted
-            TData.TerminatorBytes = TerminatorBytes
-            ThreadPool.QueueUserWorkItem(AddressOf ReceiveTerminatedBinaryWorker, TData)
-            WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-            If DebugTrace Then Logger.LogMessage("ReceiveTerminatedBinary", "Completed: " & TData.Completed)
-            If Not (TData.LastException Is Nothing) Then Throw TData.LastException
-            Result = TData.ResultByteArray
-            TData = Nothing
-            Return Result
+        If m_Connected Then 'Process command
+            Try
+                If DebugTrace Then Logger.LogMessage("ReceiveTerminatedBinary", "Start")
+                TData.SerialCommand = SerialCommandType.ReceiveCounted
+                TData.TerminatorBytes = TerminatorBytes
+                ThreadPool.QueueUserWorkItem(AddressOf ReceiveTerminatedBinaryWorker, TData)
+                WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
+                If DebugTrace Then Logger.LogMessage("ReceiveTerminatedBinary", "Completed: " & TData.Completed)
+                If Not (TData.LastException Is Nothing) Then Throw TData.LastException
+                Result = TData.ResultByteArray
+                TData = Nothing
+                Return Result
 
-        Catch ex As Exception
-            Logger.LogMessage("ReceiveTerminatedBinary", ex.ToString)
-            'Throw New ASCOM.Utilities.Exceptions.SerialPortInUseException("Serial Port Issue", ex)
-            Throw
-        End Try
+            Catch ex As TimeoutException
+                Logger.LogMessage("ReceiveTerminatedBinary", ex.Message)
+                Throw
+            Catch ex As Exception
+                Logger.LogMessage("ReceiveTerminatedBinary", ex.ToString)
+                Throw
+            End Try
+        Else 'Not connected so throw an exception
+            Throw New ASCOM.NotConnectedException("Serial port is not connected - you cannot use the Serial.ReceiveTerminatedBinary command")
+        End If
 
     End Function
 
@@ -1182,24 +1246,31 @@ Public Class Serial
     ''' </summary>
     ''' <param name="Data">String to transmit</param>
     ''' <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
+    ''' <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
     ''' <remarks></remarks>
     Public Sub Transmit(ByVal Data As String) Implements ISerial.Transmit
         Dim TData As New ThreadData
-        Try
-            If DebugTrace Then Logger.LogMessage("Transmit", "Start")
-            TData.SerialCommand = SerialCommandType.Transmit
-            TData.TransmitString = Data
-            ThreadPool.QueueUserWorkItem(AddressOf TransmitWorker, TData)
-            WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-            If DebugTrace Then Logger.LogMessage("Transmit", "Completed: " & TData.Completed)
-            If Not TData.LastException Is Nothing Then Throw TData.LastException
-            TData = Nothing
+        If m_Connected Then 'Process command
+            Try
+                If DebugTrace Then Logger.LogMessage("Transmit", "Start")
+                TData.SerialCommand = SerialCommandType.Transmit
+                TData.TransmitString = Data
+                ThreadPool.QueueUserWorkItem(AddressOf TransmitWorker, TData)
+                WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
+                If DebugTrace Then Logger.LogMessage("Transmit", "Completed: " & TData.Completed)
+                If Not TData.LastException Is Nothing Then Throw TData.LastException
+                TData = Nothing
 
-        Catch ex As Exception
-            Logger.LogMessage("Transmit", ex.ToString)
-            'Throw New ASCOM.Utilities.Exceptions.SerialPortInUseException("Serial Port Issue", ex)
-            Throw
-        End Try
+            Catch ex As TimeoutException
+                Logger.LogMessage("Transmit", ex.Message)
+                Throw
+            Catch ex As Exception
+                Logger.LogMessage("Transmit", ex.ToString)
+                Throw
+            End Try
+        Else 'Not connected so throw an exception
+            Throw New ASCOM.NotConnectedException("Serial port is not connected - you cannot use the Serial.Transmit command")
+        End If
     End Sub
 
     Private Sub TransmitWorker(ByVal TDataObject As Object)
@@ -1237,26 +1308,34 @@ Public Class Serial
     ''' </summary>
     ''' <param name="Data">Byte array to transmit</param>
     ''' <exception cref="SerialPortInUseException">Thrown when unable to acquire the serial port</exception>
+    ''' <exception cref="NotConnectedException">Thrown when this command is used before setting Connect = True</exception>
     ''' <remarks></remarks>
     Public Sub TransmitBinary(ByVal Data() As Byte) Implements ISerial.TransmitBinary
         Dim Result As String
         Dim TData As New ThreadData
-        Try
-            If DebugTrace Then Logger.LogMessage("TransmitBinary", "Start")
-            TData.SerialCommand = SerialCommandType.ReceiveCounted
-            TData.TransmitBytes = Data
-            ThreadPool.QueueUserWorkItem(AddressOf TransmitBinaryWorker, TData)
-            WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-            If DebugTrace Then Logger.LogMessage("TransmitBinary", "Completed: " & TData.Completed)
-            If Not (TData.LastException Is Nothing) Then Throw TData.LastException
-            Result = TData.ResultString
-            TData = Nothing
+        If m_Connected Then 'Process command
+            Try
+                If DebugTrace Then Logger.LogMessage("TransmitBinary", "Start")
+                TData.SerialCommand = SerialCommandType.ReceiveCounted
+                TData.TransmitBytes = Data
+                ThreadPool.QueueUserWorkItem(AddressOf TransmitBinaryWorker, TData)
+                WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
+                If DebugTrace Then Logger.LogMessage("TransmitBinary", "Completed: " & TData.Completed)
+                If Not (TData.LastException Is Nothing) Then Throw TData.LastException
+                Result = TData.ResultString
+                TData = Nothing
 
-        Catch ex As Exception
-            Logger.LogMessage("TransmitBinary", ex.ToString)
-            'Throw New ASCOM.Utilities.Exceptions.SerialPortInUseException("Serial Port Issue", ex)
-            Throw
-        End Try
+            Catch ex As TimeoutException
+                Logger.LogMessage("TransmitBinary", ex.Message)
+                Throw
+            Catch ex As Exception
+                Logger.LogMessage("TransmitBinary", ex.ToString)
+                'Throw New ASCOM.Utilities.Exceptions.SerialPortInUseException("Serial Port Issue", ex)
+                Throw
+            End Try
+        Else 'Not connected so throw an exception
+            Throw New ASCOM.NotConnectedException("Serial port is not connected - you cannot use the Serial.TransmitBinary command")
+        End If
 
     End Sub
 
@@ -1328,60 +1407,145 @@ Public Class Serial
     Public ReadOnly Property AvailableCOMPorts() As String() Implements ISerial.AvailableComPorts
         'Returns a list of all available COM ports sorted into ascending COM port number order
         Get
-            Dim RetVal() As String
+            Dim PortNames As Generic.List(Of String)
             Dim myPortNameComparer As New PortNameComparer
-            Dim PortNumber As Integer, PortName As String = "", SP As New SerialPort, Found As Boolean
+            Dim TData As New ThreadData
 
-            RetVal = SerialPort.GetPortNames
+            Try
+                'Get the current lists of forced and ignored COM ports
+                ForcedCOMPorts = New Generic.List(Of String)(SerialProfile.GetProfile("", SERIAL_FORCED_COMPORTS_VARNAME).Split(CChar(", ")))
+                If (ForcedCOMPorts.Count = 1) And String.IsNullOrEmpty(ForcedCOMPorts(0)) Then ForcedCOMPorts.Clear()
+                For i As Integer = 0 To ForcedCOMPorts.Count - 1
+                    ForcedCOMPorts(i) = Trim(ForcedCOMPorts(i))
+                    Logger.LogMessage("AvailableCOMPorts", "Forcing COM port " & ForcedCOMPorts(i) & " to appear")
+                Next
 
-            'Some ports aren't returned by the framework method so test for them here
+                IgnoredCOMPorts = New Generic.List(Of String)(SerialProfile.GetProfile("", SERIAL_IGNORED_COMPORTS_VARNAME).Split(CChar(",")))
+                If (IgnoredCOMPorts.Count = 1) And String.IsNullOrEmpty(IgnoredCOMPorts(0)) Then IgnoredCOMPorts.Clear()
+                For i As Integer = 0 To IgnoredCOMPorts.Count - 1
+                    IgnoredCOMPorts(i) = Trim(IgnoredCOMPorts(i))
+                    Logger.LogMessage("AvailableCOMPorts", "Ignoring COM port " & IgnoredCOMPorts(i))
+                Next
+            Catch ex As Exception
+                Logger.LogMessage("AvailableCOMPorts Profile", ex.ToString)
+            End Try
 
-            For PortNumber = 0 To 32
-                Try
-                    PortName = "COM" & PortNumber.ToString
-                    SP.PortName = PortName
-                    SP.Open()
-                    SP.Close()
-                    'If we get here without an exception, the port must exist, so check whether we already have it in the list
-                    Found = False
-                    For Each PName As String In RetVal
-                        If PName = PortName Then Found = True
-                    Next
-                    If Not Found Then 'This is a new COM port
-                        ReDim Preserve RetVal(RetVal.Length) 'Make the array one bigger
-                        RetVal(RetVal.Length - 1) = PortName 'Add the name to the arrau
-                    End If
+            'Find COM port names from the framework
+            If DebugTrace Then Logger.LogMessage("AvailableCOMPorts", "Entered AvailableCOMPorts")
+            PortNames = New Generic.List(Of String)(SerialPort.GetPortNames)
+            If DebugTrace Then Logger.LogMessage("AvailableCOMPorts", "Retrieved port names using SerialPort.GetPortNames")
 
-                Catch ex As System.UnauthorizedAccessException
-                    'Port exists but is in use so check whether we already have it in the list
-                    Found = False
-                    For Each PName As String In RetVal
-                        If PName = PortName Then Found = True
-                    Next
-                    If Not Found Then 'This is a new COM port
-                        ReDim Preserve RetVal(RetVal.Length) 'Make the array one bigger
-                        RetVal(RetVal.Length - 1) = PortName 'Add the name to the arrau
-                    End If
-
-                Catch ex As Exception 'Ignore other exceptions as these indicate port not present or not openable
-                    'Dim state As Boolean
-                    'state = Logger.Enabled
-                    'Logger.Enabled = True
-                    'Logger.LogMessage("AvailableCOMPorts", "Port " & PortNumber.ToString & " Exception: " & ex.ToString)
-                    'Logger.Enabled = state
-                End Try
+            'Add any forced ports that aren't already in the list
+            For Each PortName As String In ForcedCOMPorts
+                If Not PortNames.Contains(PortName) Then
+                    PortNames.Add(PortName)
+                End If
             Next
 
-            Array.Sort(RetVal, myPortNameComparer) 'Use specialised comparer to get the sort order right
-            For Each Port As String In RetVal
-                Logger.LogMessage("AvailableCOMPorts", Port)
+            'Add any ignored ports that aren't already in the list so that these are not scanned
+            For Each PortName As String In IgnoredCOMPorts
+                If Not PortNames.Contains(PortName) Then
+                    PortNames.Add(PortName)
+                End If
             Next
-            SP.Dispose()
-            SP = Nothing
 
-            Return RetVal
+            'Some ports aren't returned by the framework method so probe for them
+            TData.SerialCommand = SerialCommandType.AvailableCOMPorts
+            Try
+                If DebugTrace Then Logger.LogMessage("AvailableCOMPorts", "Start")
+                TData.AvailableCOMPorts = PortNames
+                ThreadPool.QueueUserWorkItem(AddressOf AvailableCOMPortsWorker, TData)
+                WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
+                If DebugTrace Then Logger.LogMessage("AvailableCOMPorts", "Completed: " & TData.Completed)
+                If Not (TData.LastException Is Nothing) Then Throw TData.LastException
+                PortNames = TData.AvailableCOMPorts
+                TData = Nothing
+            Catch ex As Exception
+                Logger.LogMessage("AvailableCOMPorts", ex.ToString)
+                Throw
+            End Try
+
+            'Now remove the ports that are to be ignored and log the rest
+            For Each PortName As String In IgnoredCOMPorts
+                If PortNames.Contains(PortName) Then PortNames.Remove(PortName)
+            Next
+
+            PortNames.Sort(myPortNameComparer) 'Use specialised comparer to get the sort order right
+
+            For Each PortName As String In PortNames
+                Logger.LogMessage("AvailableCOMPorts", PortName)
+            Next
+            If DebugTrace Then Logger.LogMessage("AvailableCOMPorts", "Finished")
+            Return PortNames.ToArray
         End Get
     End Property
+
+    Private Sub AvailableCOMPortsWorker(ByVal TDataObject As Object)
+        'Test for available COM ports
+        Dim TData As ThreadData = DirectCast(TDataObject, ThreadData), MyTransactionID As Long
+        Dim PortNumber As Integer, PortName As String = "", RetVal As Generic.List(Of String)
+        Dim SWatch As New Stopwatch, SerPort As New SerialPort
+
+        Const SERIAL_TIMEOUT As Integer = 500 'Number of milliseconds to allow for a port to respond to the open command
+        Const SERIAL_TIMEOUT_REPORT_THRESHOLD As Integer = 1000 'Number of milliseconds above which to report a long open time
+        Try
+            MyTransactionID = GetNextTransactionID("AvailableCOMPortsWorker ")
+            If DebugTrace Then Logger.LogMessage("AvailableCOMPortsWorker", "Started")
+
+            Try
+                If DebugTrace Then Logger.LogMessage("AvailableCOMPortsWorker", "Port probe started")
+                RetVal = TData.AvailableCOMPorts
+                SerPort.ReadTimeout = SERIAL_TIMEOUT 'Set low timeouts so the process completes quickly
+                SerPort.WriteTimeout = SERIAL_TIMEOUT
+
+                For PortNumber = 0 To 32
+                    Try
+                        PortName = "COM" & PortNumber.ToString
+                        If Not RetVal.Contains(PortName) Then ' Only test ports we don't yet know about
+                            If DebugTrace Then Logger.LogMessage("AvailableCOMPortsWorker", "Starting to probe port " & PortNumber)
+
+                            SWatch.Reset() 'Reset and start the timer stopwatch
+                            SWatch.Start()
+                            SerPort.PortName = PortName 'Set the port name and attempt to open it
+                            SerPort.Open()
+                            SerPort.Close()
+                            SWatch.Stop() 'Stop the timer
+
+                            'If we get here without an exception, the port must exist, so check whether it took a long time and report if it did
+                            If SWatch.ElapsedMilliseconds >= SERIAL_TIMEOUT_REPORT_THRESHOLD Then Logger.LogMessage("AvailableCOMPortsWorker", "Probing port " & PortName & " took  a long time: " & SWatch.ElapsedMilliseconds & "ms")
+
+                            'Its real so add it to the list, i.e. no exception was generated!
+                            RetVal.Add(PortName)
+                            If DebugTrace Then Logger.LogMessage("AvailableCOMPortsWorker", "Port " & PortNumber & " exists, elapsed time: " & SWatch.ElapsedMilliseconds & "ms")
+                        Else
+                            If DebugTrace Then Logger.LogMessage("AvailableCOMPortsWorker", "Skiping probe as port  " & PortName & " is already known to exist")
+                        End If
+                    Catch ex As System.UnauthorizedAccessException
+                        'Port exists but is in use so add it to the list
+                        RetVal.Add(PortName)
+                        If DebugTrace Then Logger.LogMessage("AvailableCOMPortsWorker", "Port " & PortNumber & " UnauthorisedAccessException, elapsed time: " & SWatch.ElapsedMilliseconds & "ms")
+                    Catch ex As Exception 'Ignore other exceptions as these indicate port not present or not openable
+                        If DebugTrace Then Logger.LogMessage("AvailableCOMPortsWorker", "Port " & PortNumber & " Exception, found is, elapsed time: " & SWatch.ElapsedMilliseconds & "ms " & ex.Message)
+                    End Try
+                Next
+                TData.AvailableCOMPorts = RetVal 'Save updated array for return to the calling thread
+
+                If DebugTrace Then Logger.LogMessage("AvailableCOMPortsWorker ", FormatIDs(MyTransactionID) & "Completed")
+            Catch ex As Exception
+                Logger.LogMessage("AvailableCOMPortsWorker ", "Exception: " & ex.ToString)
+                Throw
+            End Try
+
+        Catch ex As Exception
+            Try : Logger.LogMessage("AvailableCOMPortsWorker", "Exception: " & ex.ToString) : Catch : End Try
+            Try : TData.LastException = ex : Catch : End Try
+        Finally
+            Try : SerPort.Dispose() : Catch : End Try 'Dispose of the COM port
+            Try : SerPort = Nothing : Catch : End Try
+            Try : TData.Completed = True : Catch : End Try
+        End Try
+        'This thread ends here so the calling WaitForThread releases the main thread to continue execution
+    End Sub
 
     ''' <summary>
     ''' Adds a message to the ASCOM serial trace file
@@ -1504,11 +1668,11 @@ Public Class Serial
     End Function
 
     Friend Class PortNameComparer
-        Implements IComparer
+        Implements Collections.Generic.IComparer(Of String)
         'IComparer implementation that compares COM port names based on the numeric port number
         'rather than the whole port name string
 
-        Friend Function Compare(ByVal x As Object, ByVal y As Object) As Integer Implements IComparer.Compare
+        Friend Function Compare(ByVal x As String, ByVal y As String) As Integer Implements Collections.Generic.IComparer(Of String).Compare
             Dim xs, ys As String
             xs = x.ToString 'Make sure we are working with strings
             ys = y.ToString
@@ -1540,17 +1704,10 @@ Public Class Serial
             Loop Until TData.Completed
         End If
 
-        'ts.Reset()
-        'ts.Start()
-
-        '        Do
-
-        '        Loop Until ts.ElapsedMilliseconds > 0
-
-
     End Sub
 
     Private Enum SerialCommandType
+        AvailableCOMPorts
         ClearBuffers
         Connected
         Receive
@@ -1587,6 +1744,9 @@ Public Class Serial
         Public ResultByteArray() As Byte
         Public ResultString As String
         Public ResultChar As Char
+
+        'AvailableCOMPorts value
+        Public AvailableCOMPorts As Generic.List(Of String)
 
         'Control values
         Public SerialCommand As SerialCommandType
