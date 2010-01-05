@@ -210,6 +210,8 @@ namespace ASCOM.GeminiTelescope
             Commands.Add(">511:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
             Commands.Add(">221:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
             Commands.Add(">222:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
+            Commands.Add(">411:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
+
         }
 
     }
