@@ -1141,10 +1141,10 @@ namespace ASCOM.GeminiTelescope
                 int d = (count > 255 ? 255 : count);
                 string c = cmd + d.ToString();
                 GeminiHardware.DoCommandResult(c, Duration + GeminiHardware.MAX_TIMEOUT, false);
+                GeminiHardware.Velocity = "G";
                 GeminiHardware.WaitForVelocity("TN", Duration + 2000); // shouldn't take much longer than 'Duration', right?
             }
             GeminiHardware.Trace.Exit("IT:PulseGuide", Direction, Duration, totalSteps);
-        
         }
 
         public double RightAscension
