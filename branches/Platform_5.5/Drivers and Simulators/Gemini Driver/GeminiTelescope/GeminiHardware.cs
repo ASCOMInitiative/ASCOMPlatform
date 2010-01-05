@@ -2707,6 +2707,7 @@ namespace ASCOM.GeminiTelescope
         /// 
         private static void UpdatePolledVariables(bool UpdateAll)
         {
+            bool err_notify = m_AllowErrorNotify;
 
             Trace.Enter("UpdatePolledVariables", UpdateAll);
             try
@@ -2714,9 +2715,12 @@ namespace ASCOM.GeminiTelescope
                 CommandItem command;
 
                 // Gemini gets slow to respond when slewing, so increase timeout if we're in the middle of it:
-//                int timeout = (m_Velocity == "S" ? MAX_TIMEOUT*2 : MAX_TIMEOUT);
+                //                int timeout = (m_Velocity == "S" ? MAX_TIMEOUT*2 : MAX_TIMEOUT);
 
                 int timeout = 1500; // polling should not hold up the queue for too long
+
+                // don't report errors to end-user while the mount is slewing -- timeouts are likely
+                if (Velocity == "S") GeminiHardware.m_AllowErrorNotify = false;
 
                 int level = 0;
                 string vars;
@@ -2750,7 +2754,7 @@ namespace ASCOM.GeminiTelescope
                 Transmit(vars);
 
                 string trc = "";
-                
+
 
                 if ((level & 1) != 0)
                 {
@@ -2904,7 +2908,7 @@ namespace ASCOM.GeminiTelescope
                 Trace.Info(4, trc);
 
 #if DEBUG
-                System.Diagnostics.Trace.Write("Done polling: " + trc +  "\r\n");
+                System.Diagnostics.Trace.Write("Done polling: " + trc + "\r\n");
 #endif
 
                 m_LastUpdate = System.DateTime.Now;
@@ -2915,6 +2919,11 @@ namespace ASCOM.GeminiTelescope
                 m_SerialPort.DiscardOutBuffer();
                 DiscardInBuffer();
             }
+            finally
+            {
+                m_AllowErrorNotify = err_notify;
+            }
+
             Trace.Exit("UpdatePolledVariables");
         }
 
