@@ -49,6 +49,10 @@ namespace ASCOM.GeminiTelescope
 
         bool m_ExitFormMenuCall = false;
 
+        // last key pressed down (and not let up):
+        Keys m_LastKey = Keys.None;
+        Keys m_LastModifiers = Keys.None;
+
         public frmMain()
         {
 
@@ -1659,6 +1663,11 @@ namespace ASCOM.GeminiTelescope
 
         private void frmMain_KeyDown(object sender, KeyEventArgs e)
         {
+
+            if (e.KeyCode == m_LastKey && e.Modifiers == m_LastModifiers) return;   //auto-repeat, ignore
+            m_LastModifiers = e.Modifiers;
+            m_LastKey = e.KeyCode;
+
             if (e.Modifiers == Keys.None)
                 switch (e.KeyCode)
                 {
@@ -1673,7 +1682,7 @@ namespace ASCOM.GeminiTelescope
                     case Keys.S:
                         RadioButtonSlew.PerformClick(); break;
                 }
-            else if (e.Modifiers == Keys.Control)
+            else if (e.Modifiers == Keys.Control )
             {
                 switch (e.KeyCode)
                 {
@@ -1691,6 +1700,9 @@ namespace ASCOM.GeminiTelescope
 
         private void frmMain_KeyUp(object sender, KeyEventArgs e)
         {
+            m_LastKey = Keys.None;
+            m_LastModifiers = Keys.None;
+
             if (e.Modifiers == Keys.Control)
             {
                 switch (e.KeyCode)
