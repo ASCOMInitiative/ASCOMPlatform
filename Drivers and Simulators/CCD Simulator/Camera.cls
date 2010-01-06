@@ -34,7 +34,7 @@ Attribute VB_Description = "ASCOM Camera driver for CCD Simulator"
 '                   with a runtime error. Change enum constants to
 '                   match ICamera, remove enums here.
 ' 08-May-08 pwgs    5.0.2 Changed ImageArray and ImageArrayVariant to return in format Arr(x,y)
-'                   Added full well apcity constant
+'                   Added full well capacity constant
 '                   Electrons per adu now calculated from full well capacity
 '                   Added check so that imageready is false until first image has been taken
 '                   Added check for binning set to less than 1
@@ -56,6 +56,8 @@ Attribute VB_Description = "ASCOM Camera driver for CCD Simulator"
 ' 28-May-08 pwgs    5.0.4 Sent source to Larry Weber
 ' 20-Jul-08 lfw     5.0.5 Added stars to image with subs GenerateStars and GenerateBackgroundNoise
 ' 09-Aug-08 pwgs    5.0.6 Fixed issue with malformed self generated stars
+' 31-Dec-09 cdr     5.5.0 Upgrade to the V2 Camera standard for the late bound interface only
+'                   Implement cooler power control
 '---------------------------------------------------------------------
 
 Option Explicit
@@ -65,7 +67,7 @@ Implements ICamera      ' Implementation at end, calls public members
 '-----------------
 
 Private Const ID As String = "CCDSimulator.Camera"
-Private Const DESC As String = "ASCOM CCD camera simulator"
+Private Const DESC As String = "ASCOM CCD camera V2 simulator"
 
 Private Const FULL_WELL_CAPACITY As Double = 300000# 'pwgs CCD full well capacity
 Private Const MAX_COOLER_TEMPERATURE As Double = 50# 'pwgs Highest allowable ccd cooler set point
@@ -75,6 +77,9 @@ Private Const PI = 3.14159265358979    'lfw1
 Private m_Util As DriverHelper.Util
 Private m_Profile As DriverHelper.Profile
 Private m_Util2 As DriverHelper2.Util 'pwgs access to helper2 to get UTC time
+
+Private WithEvents m_CoolerTimer As DriverHelper.Timer
+Attribute m_CoolerTimer.VB_VarHelpID = -1
 
 Private m_iBinX As Integer
 Private m_iBinY As Integer
@@ -94,8 +99,13 @@ Private m_iStarImage() As Long   'lfw1
 
 Private m_bConnected As Boolean
 Private m_bCoolerOn As Boolean
+Private m_CoolerPower As Integer
+
 Private m_bLightFrameEnabled As Boolean  'lfw1
 Private m_dSetCCDTemperature As Double
+Private m_CCDTemperature As Double      ' actual temperature
+Private m_AmbientTemperature As Double
+
 Private m_dLastExposureDuration  As Double
 Private m_bTDI As Boolean
 Private m_bFirstImageTaken As Boolean 'pwgs Added to record whether first exposure has occured
@@ -105,6 +115,24 @@ Private m_bShowStars  'True if stars are to be shown  'lfw1
 
 Private m_frmTimer As frmTimer
 
+' V2 variables
+
+Private m_Gain As Integer
+Private m_Gains() As String     ' array of strings defining gain names
+Private m_GainMin As Integer
+Private m_GainMax As Integer
+
+Private m_ReadoutModes() As String
+Private m_ReadoutMode As Integer
+
+Private m_SensorName As String
+Private m_SensorType As SensorTypeEnum
+
+Private m_bayerOffsetX As Integer
+Private m_bayerOffsetY As Integer
+
+Private m_CanFastReadout As Boolean
+Private m_FastReadout As Boolean
 
 'Public Enum CameraStates
 '    stateIdle = 0      ' At idle state, available to start exposure
@@ -126,7 +154,17 @@ Private m_frmTimer As frmTimer
 '    guideWest = 3      ' West (+ right ascension/azimuth)
 'End Enum
 
+' Camera V2 Sensor type enumeration
 
+Public Enum SensorTypeEnum
+    Monochrome = 0  ' Camera produces monochrome array with no Bayer encoding
+    Color = 1       ' Camera produces color image directly, requiring not Bayer decoding
+    RGGB = 2        ' Camera produces RGGB encoded Bayer array images
+    CMYG = 3        ' Camera produces CMYG encoded Bayer array images
+    CMYG2 = 4       ' Camera produces CMYG2 encoded Bayer array images
+    LRGB = 5        ' Camera produces Kodak TRUESENSE Bayer LRGB array images
+End Enum
+ 
 Private Sub Class_Initialize()
 
    Set m_Util = New DriverHelper.Util
@@ -136,6 +174,10 @@ Private Sub Class_Initialize()
    m_Profile.Register ID, DESC
   
    Set m_frmTimer = New frmTimer
+   
+   Set m_CoolerTimer = New DriverHelper.Timer
+   m_CoolerTimer.Interval = 1000
+   m_CoolerTimer.Enabled = True
 
    ReadConfig
     
@@ -158,6 +200,9 @@ Private Sub Class_Initialize()
 
    m_bConnected = False
    m_bCoolerOn = False
+    m_CoolerPower = 0
+    m_AmbientTemperature = 15
+    m_CCDTemperature = 15
     
    m_dSetCCDTemperature = 0
    m_dLastExposureDuration = 0
@@ -165,74 +210,45 @@ Private Sub Class_Initialize()
    m_bTDI = False
    m_frmTimer.m_bExposing = False
    m_bFirstImageTaken = False
-   
-   
 End Sub
 
 Private Sub Class_Terminate()
-    
    On Error Resume Next
    Set m_Util = Nothing
    Set m_Util2 = Nothing 'pwgs Destroy helper2 object
     
    Set m_frmTimer = Nothing
-    
 End Sub
 '
 ' CheckConnected() - Raise an error if the scope is not connected
 '
 Private Sub CheckConnected()
-
     If Not m_bConnected Then
         Err.Raise SCODE_NOT_CONNECTED, _
                     ERR_SOURCE, _
                     MSG_NOT_CONNECTED
     End If
-    
 End Sub
 
 Private Sub ReadConfig()
     Dim buf As String
     
-    buf = m_Profile.GetValue(ID, "DetectorWidth")
-    If buf = "" Then
-        m_iCameraXSize = 512
-    Else
-        m_iCameraXSize = CInt(buf)
-    End If
-    
-    buf = m_Profile.GetValue(ID, "DetectorHeight")
-    If buf = "" Then
-        m_iCameraYSize = 512
-    Else
-        m_iCameraYSize = CInt(buf)
-    End If
+    m_iCameraXSize = ReadProfileInt("DetectorWidth", 512)
+    m_iCameraYSize = ReadProfileInt("DetectorHeight", 512)
 
-    buf = m_Profile.GetValue(ID, "PixelWidth")
-    If buf = "" Then
-        m_dPixelSizeX = 24
-    Else
-        m_dPixelSizeX = CInt(buf)
+    m_dPixelSizeX = ReadProfileDbl("PixelWidth", 24#)
+    m_dPixelSizeY = ReadProfileDbl("PixelHeight", 24#)
+    
+    m_bShowStars = ReadProfileBool("ShowStars", False)                                   'lfw1
+    
+    m_SensorType = ReadProfileInt("SensorType", 0)
+    If m_SensorType <> SensorTypeEnum.Monochrome Then
+        m_bayerOffsetX = ReadProfileInt("BayerOffsetX", 0)
+        m_bayerOffsetY = ReadProfileInt("BayerOffsetY", 0)
     End If
     
-    buf = m_Profile.GetValue(ID, "PixelHeight")
-    If buf = "" Then
-        m_dPixelSizeY = 24
-    Else
-        m_dPixelSizeY = CInt(buf)
-    End If
+    m_SensorName = m_Profile.GetValue(ID, "SensorName")
     
-    buf = m_Profile.GetValue(ID, "ShowStars")                   'lfw1
-    If buf = "" Then                                            'pwgs fix first time usage
-        buf = "0"                                               'pwgs
-        m_Profile.WriteValue ID, "ShowStars", "0"               'pwgs
-    End If                                                      'pwgs
-    If buf = 1 Then                                             'lfw1
-        m_bShowStars = True                                     'lfw1
-    Else                                                        'lfw1
-        m_bShowStars = False                                    'lfw1
-    End If                                                      'lfw1
-   
 End Sub
 
 ' ----------------------------
@@ -240,157 +256,108 @@ End Sub
 ' ----------------------------
 
 Public Property Get BinX() As Integer
-
    CheckConnected
-   
    BinX = m_iBinX
-
 End Property
 
 Public Property Let BinX(ByVal newVal As Integer)
-
    CheckConnected
-
    'pwgs added test for binning < 1
    If (newVal > m_iMaxBinX) Or (newVal < 1) Then
-      Err.Raise SCODE_BINNING_FACTOR_INAPPROPRIATE, ERR_SOURCE, MSG_BINNING_FACTOR_INAPPROPRIATE
+      RaiseError SCODE_BINNING_FACTOR_INAPPROPRIATE, MSG_BINNING_FACTOR_INAPPROPRIATE
    End If
-   
    m_iBinX = newVal
-
 End Property
 
 Public Property Get BinY() As Integer
-
    CheckConnected
-
    BinY = m_iBinY
-    
 End Property
 
 Public Property Let BinY(ByVal newVal As Integer)
-
    CheckConnected
-
    'pwgs added test for binning < 1
    If (newVal > m_iMaxBinY) Or (newVal < 1) Then
-      Err.Raise SCODE_BINNING_FACTOR_INAPPROPRIATE, ERR_SOURCE, MSG_BINNING_FACTOR_INAPPROPRIATE
+      RaiseError SCODE_BINNING_FACTOR_INAPPROPRIATE, MSG_BINNING_FACTOR_INAPPROPRIATE
    End If
-   
    m_iBinY = newVal
- 
 End Property
 
 Public Property Get CameraState() As CameraStates
-
     If m_frmTimer.m_bExposing Then
        CameraState = cameraExposing
     Else
        CameraState = cameraIdle
     End If
-
 End Property
 
 Public Property Get CameraXSize() As Long
-
    CameraXSize = m_iCameraXSize
-    
 End Property
 
 Public Property Get CameraYSize() As Long
-
    CameraYSize = m_iCameraYSize
-
 End Property
 
 Public Property Get CanAbortExposure() As Boolean
-
    CanAbortExposure = True
-
 End Property
 
 Public Property Get CanAsymmetricBin() As Boolean
-
    CanAsymmetricBin = True
-
 End Property
 
 Public Property Get CanGetCoolerPower() As Boolean
-
    CanGetCoolerPower = True
-    
 End Property
 
 Public Property Get CanPulseGuide() As Boolean
-
    CanPulseGuide = False
-
 End Property
 
-
 Public Property Get CanSetCCDTemperature() As Boolean
-
    CanSetCCDTemperature = True
-
 End Property
 
 Public Property Get CanStopExposure() As Boolean
-
    CanStopExposure = True
-
 End Property
 
 Public Property Get CCDTemperature() As Double
    On Error GoTo errhandler
    CheckConnected
-
-   CCDTemperature = m_dSetCCDTemperature + (2 * Rnd) - 1
-
+   CCDTemperature = m_CCDTemperature
    Exit Property
 errhandler:
 End Property
 
 Public Property Let Connected(ByVal newVal As Boolean)
-   
    m_bConnected = newVal
-
 End Property
 
 Public Property Get Connected() As Boolean
-
    Connected = m_bConnected
-
 End Property
 
 Public Property Let CoolerOn(ByVal newVal As Boolean)
-
    CheckConnected
-   
    m_bCoolerOn = newVal
-    
+   If Not m_bCoolerOn Then
+      m_CoolerPower = 0
+   End If
 End Property
 
 Public Property Get CoolerOn() As Boolean
-
-   CheckConnected
-   
-   CoolerOn = m_bCoolerOn
-
+    CheckConnected
+    CoolerOn = m_bCoolerOn
 End Property
 
 ' Returns the present cooler power level, in percent.
 ' Returns zero if CoolerOn is False.
 
 Public Property Get CoolerPower() As Double
-
-   CheckConnected
-   
-   If m_bCoolerOn Then
-      CoolerPower = 100
-   Else
-      CoolerPower = 0
-   End If
-
+    CheckConnected
+    CoolerPower = m_CoolerPower
 End Property
 
 ' Returns a description of the camera model, such as manufacturer and model
@@ -398,10 +365,8 @@ End Property
 ' characters (for compatibility with FITS headers).
 
 Public Property Get Description() As String
-
-    Description = "ASCOM CCD camera simulator - Version " & _
+    Description = "ASCOM CCD camera V2 simulator - Version " & _
                 App.Major & "." & App.Minor & "." & App.Revision
-    
 End Property
 
 ' Returns the gain of the camera in photoelectrons per A/D unit. (Some cameras have
@@ -409,20 +374,16 @@ End Property
 ' static during a session.)
 
 Public Property Get ElectronsPerADU() As Double
-
     'pwgs Changed from value of 0 to value derrived from full well capacity
     ElectronsPerADU = FULL_WELL_CAPACITY / 65535#
-
 End Property
 
 ' Reports the full well capacity of the camera in electrons, at the current camera
 ' settings (binning, SetupDialog settings, etc.)
 
 Public Property Get FullWellCapacity() As Double
-
     'pwgs Changed to FULL_WELL_CAPACITY constant
     FullWellCapacity = FULL_WELL_CAPACITY ' electrons
-
 End Property
 
 ' If True, the camera has a mechanical shutter. If False, the camera does not have
@@ -430,19 +391,15 @@ End Property
 ' Light parameter.
 
 Public Property Get HasShutter() As Boolean
-
    HasShutter = True
-    
 End Property
 
 ' Returns the current heat sink temperature (called "ambient temperature" by some
 ' manufacturers) in degrees Celsius. Only valid if CanControlTemperature is True.
 
 Public Property Get HeatSinkTemperature() As Double
-
     ' todo
-    HeatSinkTemperature = -4.6
-
+    HeatSinkTemperature = m_AmbientTemperature
 End Property
 
 ' Returns a safearray of Long of size NumX * NumY containing the pixel values from
@@ -457,46 +414,35 @@ End Property
 ' just the first plane.
 
 Public Property Get ImageArray() As Variant
-
    CheckConnected
-   
    Dim aImage() As Long
    'pwgs changed next line ReDim Preserve aImage(0 To m_iNumY - 1, 0 To m_iNumX - 1)
    ReDim Preserve aImage(0 To m_iNumX - 1, 0 To m_iNumY - 1)
-   
    'pwgs Added check for loading image array before first image taken
    If Not m_bFirstImageTaken Then
-        Err.Raise SCODE_IMAGE_NOT_TAKEN, ERR_SOURCE, MSG_IMAGE_NOT_TAKEN
+        RaiseError SCODE_IMAGE_NOT_TAKEN, MSG_IMAGE_NOT_TAKEN
    End If
-   
    Randomize
-
    ' dummy background noise
-   
    Const iBackGround As Integer = 4000
    Const iNoiseRange As Integer = 400
-   
-   Dim X, y As Long
-   
+   Dim x As Long, y As Long
    If m_bShowStars = True Then   'Show stars                                'lfw1
      GenerateStars m_dLastExposureDuration, m_iBinX, m_iBinY                'lfw1
-        For X = 0 To m_iNumX - 1                                            'lfw1
+        For x = 0 To m_iNumX - 1                                            'lfw1
             For y = 0 To m_iNumY - 1                                        'lfw1
-                aImage(X, y) = m_iStarImage(X + m_iStartX, y + m_iStartY)   'lfw1
+                aImage(x, y) = m_iStarImage(x + m_iStartX, y + m_iStartY)   'lfw1
             Next                                                            'lfw1
         Next                                                                'lfw1
-   
    Else    'Just show random noise                                          'lfw1
-        For X = 0 To m_iNumX - 1
+        For x = 0 To m_iNumX - 1
             For y = 0 To m_iNumY - 1
       'pwgs Changed next line to swap x and y axes
-                aImage(X, y) = Int(iNoiseRange * Rnd + iBackGround)
+                aImage(x, y) = Int(iNoiseRange * Rnd + iBackGround)
             Next
         Next
    End If                                                                   'lfw1
-   
    ImageArray = aImage
-
 End Property
 
 ' Returns a safearray of Variant of size NumX * NumY containing the pixel values
@@ -512,41 +458,29 @@ End Property
 ' just the first plane.
 
 Public Property Get ImageArrayVariant() As Variant
-
    CheckConnected
-   
    Dim aImage() As Variant
    ReDim Preserve aImage(0 To m_iNumX - 1, 0 To m_iNumY - 1)
-
    Randomize
-
    ' dummy background noise
-   
    Const iBackGround As Integer = 2800
    Const iNoiseRange As Integer = 300
-
-
-   Dim X, y As Long
-   
+   Dim x As Long, y As Long
    If m_bShowStars = True Then   'Show stars                                'lfw1
      GenerateStars m_dLastExposureDuration, m_iBinX, m_iBinY                'lfw1
-        For X = 0 To m_iNumX - 1                                            'lfw1
+        For x = 0 To m_iNumX - 1                                            'lfw1
             For y = 0 To m_iNumY - 1                                        'lfw1
-                aImage(X, y) = m_iStarImage(X + m_iStartX, y + m_iStartY)   'lfw1
+                aImage(x, y) = m_iStarImage(x + m_iStartX, y + m_iStartY)   'lfw1
             Next                                                            'lfw1
         Next                                                                'lfw1
-   
    Else    'Just show random noise                                          'lfw1
-        For X = 0 To m_iNumX - 1
+        For x = 0 To m_iNumX - 1
             For y = 0 To m_iNumY - 1
-                aImage(X, y) = CLng(iNoiseRange * Rnd + iBackGround)
+                aImage(x, y) = CLng(iNoiseRange * Rnd + iBackGround)
             Next
         Next
-
    End If                                                                   'lfw1
-   
    ImageArrayVariant = aImage
-
 End Property
 
 ' If True, there is an image from the camera available. If False, no image
@@ -554,22 +488,16 @@ End Property
 ' exception.
 
 Public Property Get ImageReady() As Boolean
-
    CheckConnected
-
    ImageReady = (Not m_frmTimer.m_bExposing) And m_bFirstImageTaken
-    
 End Property
 
 ' If True, pulse guiding is in progress. Required if the PulseGuide() method
 ' (which is non-blocking) is implemented. See the PulseGuide() method.
 
 Public Property Get IsPulseGuiding() As Boolean
-
    CheckConnected
-
    IsPulseGuiding = False
-
 End Property
 
 ' Reports the last error condition reported by the camera hardware or communications
@@ -577,14 +505,12 @@ End Property
 ' value is cleared the next time any method is called.
 
 Public Property Get LastError() As String
-
    ' pwgs Added last error support
    If m_sLastError <> "" Then ' An error has occured so report it
         LastError = m_sLastError
    Else ' No error so throw an exception
-        Err.Raise SCODE_NO_ERROR, ERR_SOURCE, MSG_NO_ERROR
+        RaiseError SCODE_NO_ERROR, MSG_NO_ERROR
    End If
-
 End Property
 
 ' Reports the actual exposure duration in seconds (i.e. shutter open time).  This
@@ -592,14 +518,12 @@ End Property
 ' precision, etc.
 
 Public Property Get LastExposureDuration() As Double
-
     'pwgs Added code to throw an error if called before first image is taken
     If m_bFirstImageTaken Then 'An image has been taken so return value
          LastExposureDuration = m_dLastExposureDuration
     Else 'No image taken yet so throw an error
-         Err.Raise SCODE_IMAGE_NOT_TAKEN, ERR_SOURCE, MSG_IMAGE_NOT_TAKEN
+         RaiseError SCODE_IMAGE_NOT_TAKEN, MSG_IMAGE_NOT_TAKEN
     End If
-
 End Property
 
 ' Reports the actual exposure start in the FITS-standard
@@ -609,23 +533,19 @@ Public Property Get LastExposureStartTime() As String
 
     ' Reports the actual exposure start in the FITS-standard
     ' CCYY-MM-DDThh:mm:ss[.sss...] format.
-    
         'pwgs Added code to throw an error if called before first image is taken
     If m_bFirstImageTaken Then 'An image has been taken so return value
         'pwgs Updated to read variable not return a null string
         LastExposureStartTime = m_sLastExposureStartTime
     Else 'No image taken yet so throw an error
-        Err.Raise SCODE_IMAGE_NOT_TAKEN, ERR_SOURCE, MSG_IMAGE_NOT_TAKEN
+        RaiseError SCODE_IMAGE_NOT_TAKEN, MSG_IMAGE_NOT_TAKEN
     End If
-
 End Property
 
 ' Reports the maximum ADU value the camera can produce.
 
 Public Property Get MaxADU() As Long
-
     MaxADU = 65535
-
 End Property
 
 ' If AsymmetricBinning = False, returns the maximum allowed binning factor. If
@@ -633,18 +553,14 @@ End Property
 ' axis.
 
 Public Property Get MaxBinX() As Integer
-
    MaxBinX = m_iMaxBinX
-
 End Property
 
 ' If AsymmetricBinning = False, equals MaxBinX. If AsymmetricBinning = True,
 ' returns the maximum allowed binning factor for the Y axis.
 
 Public Property Get MaxBinY() As Integer
-
    MaxBinY = m_iMaxBinY
-
 End Property
 
 ' Sets the subframe width. Also returns the current value.  If binning is active,
@@ -652,19 +568,13 @@ End Property
 ' Should default to CameraXSize.
 
 Public Property Let NumX(ByVal newVal As Long)
-
    CheckConnected
-
    m_iNumX = newVal
-
 End Property
 
 Public Property Get NumX() As Long
-
    CheckConnected
-
    NumX = m_iNumX
-    
 End Property
 
 ' Sets the subframe height. Also returns the current value.  If binning is active,
@@ -672,37 +582,27 @@ End Property
 ' Should default to CameraYSize.
 
 Public Property Let NumY(ByVal newVal As Long)
-
    CheckConnected
-
     m_iNumY = newVal
-
 End Property
 
 Public Property Get NumY() As Long
-
    CheckConnected
-
    NumY = m_iNumY
-    
 End Property
 
 ' Returns the width of the CCD chip pixels in microns, as provided by the camera
 ' driver.
 
 Public Property Get PixelSizeX() As Double
-
    PixelSizeX = m_dPixelSizeX
-
 End Property
 
 ' Returns the height of the CCD chip pixels in microns, as provided by the camera
 ' driver.
 
 Public Property Get PixelSizeY() As Double
-
    PixelSizeY = m_dPixelSizeY
-
 End Property
 
 ' Sets the camera cooler setpoint in degrees Celsius, and returns the current
@@ -712,63 +612,43 @@ End Property
 ' thermal shock and potential damage to the CCD array or cooler stack.
 
 Public Property Get SetCCDTemperature() As Double
-
    CheckConnected
-
    SetCCDTemperature = m_dSetCCDTemperature
-    
 End Property
 
 Public Property Let SetCCDTemperature(ByVal newVal As Double)
-
    CheckConnected
-
    'pwgs Added checks for temperature within allowable limits
    If (newVal < MIN_COOLER_TEMPERATURE) Or (newVal > MAX_COOLER_TEMPERATURE) Then
-      m_sLastError = MSG_SETCCDTEMPERATURE_INAPPROPRIATE & " " & newVal
-      Err.Raise SCODE_SETCCDTEMPERATURE_INAPPROPRIATE, ERR_SOURCE, MSG_SETCCDTEMPERATURE_INAPPROPRIATE & " " & newVal
+      RaiseError SCODE_SETCCDTEMPERATURE_INAPPROPRIATE, MSG_SETCCDTEMPERATURE_INAPPROPRIATE & " " & newVal
    End If
-   
    m_dSetCCDTemperature = newVal
-
 End Property
 
 ' Sets the subframe start position for the X axis (0 based). Also returns the
 ' current value.  If binning is active, value is in binned pixels.
 
 Public Property Let StartX(ByVal newVal As Long)
-
    CheckConnected
-
    m_iStartX = newVal
-
 End Property
 
 Public Property Get StartX() As Long
-
    CheckConnected
-
    StartX = m_iStartX
-    
 End Property
 
 ' Sets the subframe start position for the Y axis (0 based). Also returns the
 ' current value.  If binning is active, value is in binned pixels.
 
 Public Property Let StartY(ByVal newVal As Long)
-
    CheckConnected
-
    m_iStartY = newVal
-
 End Property
 
 Public Property Get StartY() As Long
-
    CheckConnected
-
    StartY = m_iStartY
-
 End Property
 
 ' ----------------------------
@@ -778,9 +658,7 @@ End Property
 ' Aborts the current exposure, if any, and returns the camera to Idle state.
 
 Public Sub AbortExposure()
-   
    StopExposure         ' Same  as StopExposure in this simulator
-
 End Sub
 
 ' This method may return immediately after the move has started, in which case
@@ -788,7 +666,6 @@ End Sub
 ' property to detect when all moves have completed.
 
 Public Sub PulseGuide(ByVal Direction As GuideDirections, ByVal Duration As Long)
-    
     ' todo
     'pwgs reset LastError
     m_sLastError = ""
@@ -797,59 +674,45 @@ Public Sub PulseGuide(ByVal Direction As GuideDirections, ByVal Duration As Long
     If CanPulseGuide Then 'Do it!
         'pwgs Not implemented
     Else ' Throw an error
-        m_sLastError = MSG_NOT_IMPLEMENTED
-        Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, MSG_NOT_IMPLEMENTED
+        RaiseError SCODE_NOT_IMPLEMENTED, MSG_NOT_IMPLEMENTED
     End If
-
 End Sub
 
 ' Launches a configuration dialog box for the driver.  The call will not return
 ' until the user clicks OK or cancel manually.
 
 Public Sub SetupDialog()
-
     '
     ' Must set member vars first, as the lblDriverInfo change
     ' loads for the, executing the OnLoad event, which depends
     ' on the member vars.
     '
-    
     'pwgs reset LastError
     m_sLastError = ""
-    
     Set frmSetup.m_Profile = m_Profile
     frmSetup.m_DriverID = ID                    ' Form uses Helper.Profile methods
     frmSetup.Show 1
     If Not frmSetup.m_Cancel Then ReadConfig
     Unload frmSetup
-
 End Sub
 
 ' Starts an exposure. Use ImageReady to check when the exposure is complete.
 
 Public Sub StartExposure(ByVal Duration As Double, ByVal Light As Boolean)
-
    'pwgs reset LastError
    m_sLastError = ""
-    
    CheckConnected
-   
    'pwgs Added test for negative duration
    If Duration < 0# Then
-        m_sLastError = MSG_INVALID_DURATION
-        Err.Raise SCODE_INVALID_DURATION, ERR_SOURCE, MSG_INVALID_DURATION
+        RaiseError SCODE_INVALID_DURATION, MSG_INVALID_DURATION
    End If
-   
    'pwgs added  binning tests
    If (m_iBinX > m_iMaxBinX) Or (m_iBinX < 1) Then
-      m_sLastError = MSG_BINNING_FACTOR_INAPPROPRIATE & " " & m_iBinX
-      Err.Raise SCODE_BINNING_FACTOR_INAPPROPRIATE, ERR_SOURCE, MSG_BINNING_FACTOR_INAPPROPRIATE & " " & m_iBinX
+      RaiseError SCODE_BINNING_FACTOR_INAPPROPRIATE, MSG_BINNING_FACTOR_INAPPROPRIATE & " " & m_iBinX
    End If
    If (m_iBinY > m_iMaxBinY) Or (m_iBinY < 1) Then
-      m_sLastError = MSG_BINNING_FACTOR_INAPPROPRIATE & " " & m_iBinY
-      Err.Raise SCODE_BINNING_FACTOR_INAPPROPRIATE, ERR_SOURCE, MSG_BINNING_FACTOR_INAPPROPRIATE & " " & m_iBinY
+      RaiseError SCODE_BINNING_FACTOR_INAPPROPRIATE, MSG_BINNING_FACTOR_INAPPROPRIATE & " " & m_iBinY
    End If
-   
    'pwgs Moved next two tests here from property let
    'pwgs changed / to \ in next line for integer division
    'size of binning * size for bin > 1 should always be <= size at bin = 1
@@ -857,34 +720,23 @@ Public Sub StartExposure(ByVal Duration As Double, ByVal Light As Boolean)
   'pwgs changed / to \ in next line for integer division
    'size of binning * size for bin > 1 should always be <= size at bin = 1
    m_iCameraYSizeBinned = m_iCameraYSize \ m_iBinY
-
-   
    'pwgs Moved these checks here from let properties
-   
    'pwgs Added check for size < 1
    If (m_iNumX > (m_iCameraXSizeBinned - m_iStartX)) Or (m_iNumX < 1) Then
-      m_sLastError = MSG_SUBFRAME_INAPPROPRIATE & " " & m_iNumX
-      Err.Raise SCODE_SUBFRAME_INAPPROPRIATE, ERR_SOURCE, MSG_SUBFRAME_INAPPROPRIATE & " " & m_iNumX
+      RaiseError SCODE_SUBFRAME_INAPPROPRIATE, MSG_SUBFRAME_INAPPROPRIATE & " " & m_iNumX
    End If
-   
      'pwgs Added check for size < 1
    If (m_iNumY > (m_iCameraYSizeBinned - m_iStartY)) Or (m_iNumY < 1) Then
-      m_sLastError = MSG_SUBFRAME_INAPPROPRIATE & " " & m_iNumY
-      Err.Raise SCODE_SUBFRAME_INAPPROPRIATE, ERR_SOURCE, MSG_SUBFRAME_INAPPROPRIATE & " " & m_iNumY
+      RaiseError SCODE_SUBFRAME_INAPPROPRIATE, MSG_SUBFRAME_INAPPROPRIATE & " " & m_iNumY
    End If
-
       'pwgs Added check for start < 0
    If (m_iStartX >= m_iCameraXSizeBinned) Or (m_iStartX < 0) Then
-      m_sLastError = MSG_SUBFRAME_INAPPROPRIATE & " " & m_iStartX
-      Err.Raise SCODE_SUBFRAME_INAPPROPRIATE, ERR_SOURCE, MSG_SUBFRAME_INAPPROPRIATE & " " & m_iStartX
+      RaiseError SCODE_SUBFRAME_INAPPROPRIATE, MSG_SUBFRAME_INAPPROPRIATE & " " & m_iStartX
    End If
-
       'pwgs Added check for start < 0
    If (m_iStartY >= m_iCameraYSizeBinned) Or (m_iStartY < 0) Then
-      m_sLastError = MSG_SUBFRAME_INAPPROPRIATE & " " & m_iStartY
-      Err.Raise SCODE_SUBFRAME_INAPPROPRIATE, ERR_SOURCE, MSG_SUBFRAME_INAPPROPRIATE & " " & m_iStartY
+      RaiseError SCODE_SUBFRAME_INAPPROPRIATE, MSG_SUBFRAME_INAPPROPRIATE & " " & m_iStartY
    End If
-
 
    m_bLightFrameEnabled = Light         'lfw1
    m_frmTimer.m_bExposing = True
@@ -896,19 +748,15 @@ Public Sub StartExposure(ByVal Duration As Double, ByVal Light As Boolean)
    'pwgs exposure start time formatting added
    m_sLastExposureStartTime = Format(m_Util2.UTCDate, "yyyy-mm-ddThh:mm:ss")
    m_bFirstImageTaken = True
-   
 End Sub
 
 ' Stops the current exposure, if any.  If an exposure is in progress, the readout
 ' process is initiated.  Ignored if readout is already in process.
 
 Public Sub StopExposure()
-
    CheckConnected
-   
    m_frmTimer.m_bExposing = False
    m_frmTimer.Timer1.Enabled = False
-
 End Sub
 
 '-----------------------------------------------------------
@@ -931,18 +779,188 @@ Public Property Get DriverInfo() As String
         DriverInfo = DriverInfo & vbCrLf & App.LegalCopyright
     If App.Comments <> "" Then _
         DriverInfo = DriverInfo & vbCrLf & App.Comments
-    
 End Property
 
-Public Property Get Name() As String
-        
-   Name = "ASCOM CCD camera simulator"
-
+Public Property Get name() As String
+   name = "ASCOM V2 CCD camera simulator"
 End Property
+
+'---------------------------------------------------------------------------
+' Properties and methods in the Camera V2 specification
+'---------------------------------------------------------------------------
+
+Public Property Get BayerOffsetX() As Integer
+    If m_SensorType <= SensorTypeEnum.Color Then
+        RaiseError SCODE_INVALID_BAYER, MSG_INVALID_BAYER
+    End If
+    BayerOffsetX = m_bayerOffsetX
+End Property
+
+Public Property Get BayerOffsetY() As Integer
+    If m_SensorType <= SensorTypeEnum.Color Then
+        RaiseError SCODE_INVALID_BAYER, MSG_INVALID_BAYER
+    End If
+    BayerOffsetY = m_bayerOffsetY
+End Property
+
+Public Property Get CanFastReadout() As Boolean
+    CanFastReadout = m_CanFastReadout
+End Property
+
+Public Property Get ExposureMax() As Double
+    ExposureMax = 3600#
+End Property
+
+Public Property Get ExposureMin() As Double
+    ExposureMin = 0.001
+End Property
+
+Public Property Get ExposureResolution() As Double
+    ExposureResolution = 0.001
+End Property
+
+Public Property Get FastReadout() As Boolean
+    If Not CanFastReadout Then
+        RaiseError SCODE_INVALID_FAST_READOUT, MSG_INVALID_FAST_READOUT
+    End If
+    FastReadout = m_FastReadout
+End Property
+
+Public Property Let FastReadout(value As Boolean)
+    If Not CanFastReadout Then
+        RaiseError SCODE_INVALID_FAST_READOUT, MSG_INVALID_FAST_READOUT
+    End If
+    m_FastReadout = value
+End Property
+
+Public Property Get Gain() As Integer
+    CheckConnected
+    Gain = m_Gain
+End Property
+
+Public Property Let Gain(value As Integer)
+    CheckConnected
+    If UBound(m_Gains) > 0 Then
+        If value < 0 Or value >= UBound(m_Gains) Then
+            RaiseError SCODE_INVALID_GAIN, MSG_INVALID_GAIN
+        End If
+    Else
+        If value < m_GainMin Or value > m_GainMax Then
+            RaiseError SCODE_INVALID_GAIN, MSG_INVALID_GAIN
+        End If
+    End If
+    m_Gain = value
+End Property
+
+Public Property Get GainMax() As Integer
+    If UBound(m_Gains) > 0 Then
+        RaiseError SCODE_NOT_IMPLEMENTED, MSG_NOT_IMPLEMENTED & " GainMax"
+    End If
+    GainMax = m_GainMax
+End Property
+
+Public Property Get GainMin() As Integer
+    If UBound(m_Gains) > 0 Then
+        RaiseError SCODE_NOT_IMPLEMENTED, MSG_NOT_IMPLEMENTED & " GainMin"
+    End If
+    GainMin = m_GainMin
+End Property
+
+Public Property Get Gains() As String()
+    If UBound(m_Gains) < 1 Then
+        RaiseError SCODE_NOT_IMPLEMENTED, MSG_NOT_IMPLEMENTED & " Gains"
+    End If
+    Gains = m_Gains
+End Property
+
+Public Property Get InterfaceVersion() As Integer
+    InterfaceVersion = 2
+End Property
+
+Public Property Get PercentCompleted() As Integer
+    If CameraState = cameraExposing Then
+    PercentCompleted = 0
+    Else
+        RaiseError SCODE_NOT_IMPLEMENTED, MSG_NOT_IMPLEMENTED & " PercentCompleted"
+    End If
+End Property
+
+Public Property Get ReadoutMode() As Integer
+    If UBound(m_ReadoutModes) < 1 Then
+        RaiseError SCODE_NOT_IMPLEMENTED, MSG_NOT_IMPLEMENTED & " get ReadoutMode"
+    End If
+    ReadoutMode = m_ReadoutMode
+End Property
+
+Public Property Let ReadoutMode(value As Integer)
+    If UBound(m_ReadoutModes) < 1 Then
+        RaiseError SCODE_NOT_IMPLEMENTED, MSG_NOT_IMPLEMENTED & " set ReadoutMode"
+    End If
+    If value < 0 Or value > UBound(m_ReadoutModes) Then
+        RaiseError SCODE_INVALID_READOUT_MODE, MSG_INVALID_READOUT_MODE
+    End If
+    m_ReadoutMode = value
+End Property
+
+Public Property Get ReadoutModes() As String()
+    If UBound(m_ReadoutModes) < 1 Then
+        RaiseError SCODE_NOT_IMPLEMENTED, MSG_NOT_IMPLEMENTED & " ReadoutModes"
+    End If
+    ReadoutModes = m_ReadoutModes
+End Property
+
+Public Property Get SensorName() As String
+    If Len(m_SensorName) = 0 Then
+        RaiseError SCODE_NOT_IMPLEMENTED, MSG_NOT_IMPLEMENTED & " SensorName"
+    End If
+    SensorName = m_SensorName
+End Property
+
+Public Property Get SensorType() As Integer
+    SensorType = m_SensorType
+End Property
+
+'-------------------------------------------------------------------------------------
+' Private methods
+'-------------------------------------------------------------------------------------
+Private Sub RaiseError(Number As Long, Description As String)
+    m_sLastError = Description
+    Err.Raise Number, ERR_SOURCE, Description
+End Sub
+
+Private Function ReadProfileInt(name As String, default As Integer) As Integer
+    Dim buf As String
+    buf = m_Profile.GetValue(ID, name)
+    If buf = "" Then
+        ReadProfileInt = default
+    Else
+        ReadProfileInt = CInt(buf)
+    End If
+End Function
+
+Private Function ReadProfileDbl(name As String, default As Double) As Double
+    Dim buf As String
+    buf = m_Profile.GetValue(ID, name)
+    If buf = "" Then
+        ReadProfileDbl = default
+    Else
+        ReadProfileDbl = CDbl(buf)
+    End If
+End Function
+
+Private Function ReadProfileBool(name As String, default As Boolean) As Boolean
+    Dim buf As String
+    buf = m_Profile.GetValue(ID, name)
+    If buf = "" Then
+        ReadProfileBool = default
+    Else
+        ReadProfileBool = CBool(buf)
+    End If
+End Function
 
 
 Private Sub GenerateStars(ExposureInterval As Double, BinX As Integer, BinY As Integer)       'A new sub   'lfw1
-'This generates an artificial field of 5 gausian stars of varying magnitude
+'This generates an artificial field of 5 gaussian stars of varying magnitude
 'INPUTS:  ExposureInterval in seconds, BinX, BinY
 'OUTPUT: m_iStarImage(x,y) array of size x = 0 to Int(m_iCameraXSize/BinX)-1, y = 0 to Int(m_iCameraYSize/BinY)-1
     
@@ -965,7 +983,7 @@ Private Sub GenerateStars(ExposureInterval As Double, BinX As Integer, BinY As I
     Dim i0 As Double
     Dim intensity As Double
     Dim X0 As Double
-    Dim X As Double
+    Dim x As Double
     Dim Y0 As Double
     Dim y As Double
     Dim s6 As Long
@@ -1013,12 +1031,12 @@ Private Sub GenerateStars(ExposureInterval As Double, BinX As Integer, BinY As I
                 For dy = -s6 To s6
                     ImageRows = m_iCameraYSize
                     ImageColumns = m_iCameraXSize
-                    X = Round(X0 + dx)
+                    x = Round(X0 + dx)
                     y = Round(Y0 + dy)
-                    If (X > s6 And X < (ImageColumns - s6) And y > s6 And y < (ImageRows - s6)) Then
-                        R2 = ((X - X0) * (X - X0) + (y - Y0) * (y - Y0)) ^ 0.5
+                    If (x > s6 And x < (ImageColumns - s6) And y > s6 And y < (ImageRows - s6)) Then
+                        R2 = ((x - X0) * (x - X0) + (y - Y0) * (y - Y0)) ^ 0.5
                         pix = (intensity / (6.28 * R1 * R1)) * Exp(-0.5 * (R2 / R1) * (R2 / R1))
-                        BinnedXIndex = Int((ImageColumns - 1 - X) / BinX)
+                        BinnedXIndex = Int((ImageColumns - 1 - x) / BinX)
                         BinnedYIndex = Int((ImageRows - 1 - y) / BinY)
                         oldpix = m_iStarImage(BinnedXIndex, BinnedYIndex)
                         newpix = oldpix + pix
@@ -1270,4 +1288,18 @@ End Property
 
 Private Sub ICamera_StopExposure()
     StopExposure
+End Sub
+
+Private Sub m_CoolerTimer_Tick()
+    ' handles CCD temperature and power
+    Dim deltaT As Double, errorT As Double
+    
+    deltaT = m_AmbientTemperature - m_CCDTemperature
+    If m_bCoolerOn Then
+        errorT = m_CCDTemperature - m_dSetCCDTemperature
+        m_CoolerPower = errorT * 50     ' gain of cooler power
+        If m_CoolerPower < 0 Then m_CoolerPower = 0
+        If m_CoolerPower > 100 Then m_CoolerPower = 100
+    End If
+    m_CCDTemperature = m_CCDTemperature - m_CoolerPower / 100# + deltaT / 100#
 End Sub
