@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ASCOM.Utilities;
 
 namespace ASCOM.Controls
 	{
@@ -32,6 +33,18 @@ namespace ASCOM.Controls
 			DeviceID = deviceProfileKey.Key;
 			Description = deviceProfileKey.Value;
 			}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeviceDescriptor"/> class
+        /// from a generic <see cref="T:ASCOM.Utilities.KeyValuePair"/>
+		/// These values are typically returned from methods in <see cref="ASCOM.Utilities"/>.
+        /// </summary>
+        /// <param name="deviceProfileKey">The device profile key.</param>
+		public DeviceDescriptor(KeyValuePair deviceProfileKey)
+			{
+			DeviceID = deviceProfileKey.Key;
+			Description = deviceProfileKey.Value;
+			}
+
 		/// <summary>
 		/// Gets or sets the ASCOM DeviceID.
 		/// </summary>

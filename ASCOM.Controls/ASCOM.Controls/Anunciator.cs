@@ -9,8 +9,14 @@ using System.Windows.Forms;
 
 namespace ASCOM.Controls
 {
+    /// <summary>
+    /// Annunciator class
+    /// </summary>
 	public partial class Anunciator : UserControl
 	{
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Anunciator"/> class.
+        /// </summary>
 		public Anunciator()
 		{
 			InitializeComponent();
@@ -101,9 +107,9 @@ namespace ASCOM.Controls
 			}
 		}
 
-		/// <summary>
-		/// Releases all resources used by the <see cref="T:System.ComponentModel.Component"/>.
-		/// </summary>
+        /// <summary>
+        /// Releases all resources used by the <see cref="T:System.ComponentModel.Component"/>.
+        /// </summary>
 		public void Dispose()
 		{
 			this.Dispose(true);	// Allow disposal of both managed and unmanaged resources.
