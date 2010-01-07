@@ -391,6 +391,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ReadMe.htm" />
+    <None Include="Resources\satelite.png" />
+    <None Include="Resources\no satellite.png" />
+    <None Include="Resources\satellite.png" />
     <None Include="Resources\plus.bmp" />
     <None Include="Resources\minus.bmp" />
     <None Include="Resources\diamond1-down.gif" />

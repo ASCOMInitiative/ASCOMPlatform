@@ -40,6 +40,8 @@
             this.buttonQuery = new System.Windows.Forms.Button();
             this.checkBoxUpdateClock = new System.Windows.Forms.CheckBox();
             this.labelElevation = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // labelLatitude
@@ -166,12 +168,23 @@
             this.labelElevation.TabIndex = 29;
             this.labelElevation.Text = "Elevation:";
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox1.Image = global::ASCOM.GeminiTelescope.Properties.Resources.no_satellite;
+            this.pictureBox1.Location = new System.Drawing.Point(258, -1);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(32, 32);
+            this.pictureBox1.TabIndex = 30;
+            this.pictureBox1.TabStop = false;
+            // 
             // frmGps
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
             this.ClientSize = new System.Drawing.Size(292, 202);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.labelElevation);
             this.Controls.Add(this.checkBoxUpdateClock);
             this.Controls.Add(this.buttonQuery);
@@ -191,6 +204,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "GPS";
             this.Load += new System.EventHandler(this.frmGps_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -209,5 +223,6 @@
         private System.Windows.Forms.Button buttonQuery;
         private System.Windows.Forms.CheckBox checkBoxUpdateClock;
         private System.Windows.Forms.Label labelElevation;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

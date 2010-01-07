@@ -56,6 +56,8 @@ namespace ASCOM.GeminiTelescope
         {
             interpreter.PositionReceived += new NmeaInterpreter.PositionReceivedEventHandler(interpreter_PositionReceived);
             interpreter.DateTimeChanged +=new NmeaInterpreter.DateTimeChangedEventHandler(interpreter_DateTimeChanged);
+            interpreter.FixLost += new NmeaInterpreter.FixLostEventHandler(interpreter_FixLost);
+            interpreter.FixObtained += new NmeaInterpreter.FixObtainedEventHandler(interpreter_FixObtained);
         }
         private void ProcessForm(string latitude, string longitude, string elevation)
         {
@@ -196,5 +198,13 @@ namespace ASCOM.GeminiTelescope
             catch { }
         }
 
+        private void interpreter_FixLost()
+        {
+            this.pictureBox1.Image = global::ASCOM.GeminiTelescope.Properties.Resources.no_satellite;
+        }
+        private void interpreter_FixObtained()
+        {
+            this.pictureBox1.Image = global::ASCOM.GeminiTelescope.Properties.Resources.satellite;
+        }
     }
 }

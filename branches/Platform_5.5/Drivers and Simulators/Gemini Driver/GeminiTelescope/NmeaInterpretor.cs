@@ -37,6 +37,8 @@ namespace ASCOM.GeminiTelescope
         public delegate void HDOPReceivedEventHandler(double value);
         public delegate void VDOPReceivedEventHandler(double value);
         public delegate void PDOPReceivedEventHandler(double value);
+
+
         #endregion
         #region Events
         public event PositionReceivedEventHandler PositionReceived;
@@ -50,6 +52,7 @@ namespace ASCOM.GeminiTelescope
         public event HDOPReceivedEventHandler HDOPReceived;
         public event VDOPReceivedEventHandler VDOPReceived;
         public event PDOPReceivedEventHandler PDOPReceived;
+
         #endregion
 
         #region Member Variables
@@ -132,6 +135,21 @@ namespace ASCOM.GeminiTelescope
                 //     change
                 if (PositionReceived != null)
                     PositionReceived(Latitude, Longitude, Elevation);
+            }
+
+            if (Words[6] != "")
+            {
+                switch (Words[6])
+                {
+                    case "0":
+                        if (FixLost != null)
+                            FixLost();
+                        break;
+                    default:
+                        if (FixObtained != null)
+                            FixObtained();
+                        break;
+                }
             }
             return true;
         }
@@ -233,6 +251,7 @@ namespace ASCOM.GeminiTelescope
             }
             // Indicate that the sentence was recogn
             //     ized
+
             return true;
         }
         // Interprets a "Satellites in View" NME
