@@ -114,6 +114,13 @@ namespace ASCOM.GeminiTelescope.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap ASCOM {
+            get {
+                object obj = ResourceManager.GetObject("ASCOM", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to At center speed.
         /// </summary>
