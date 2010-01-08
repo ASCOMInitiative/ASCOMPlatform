@@ -11,6 +11,8 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
+#Const ForV2 = True
+
 Option Explicit
 
 Implements IAscomSample
@@ -52,6 +54,13 @@ Private Function calcDiag() As Double
     calcDiag = Sqr(m_X * m_X + m_Y * m_Y)
 End Function
 
+#If ForV2 Then
+Private Function calcArea() As Double
+    Call checkX
+    Call checkY
+    calcArea = m_X * m_Y
+End Function
+#End If
 '
 ' Implementation of IAscomSample
 '
@@ -91,6 +100,17 @@ Public Property Get Y() As Double
     Y = m_Y
 End Property
 
+#If ForV2 Then
+Public Function CalculateArea(ByVal X As Double, ByVal Y As Double) As Double
+    m_X = X
+    m_Y = Y
+    CalculateArea = calcArea()
+End Function
+
+Public Property Get Area() As Double
+    Area = calcArea()
+End Property
+#End If
 
 '
 ' Public interface just calls the above implementations
@@ -127,3 +147,12 @@ Private Property Get IAscomSample_Y() As Double
     IAscomSample_Y = Y
 End Property
 
+#If ForV2 Then
+Private Function IAscomSample_CalculateArea(ByVal X As Double, ByVal Y As Double) As Double
+    IAscomSample_CalculateArea = CalculateArea(X, Y)
+End Function
+
+Private Property Get IAscomSample_Area() As Double
+    IAscomSample_Area = Area
+End Property
+#End If

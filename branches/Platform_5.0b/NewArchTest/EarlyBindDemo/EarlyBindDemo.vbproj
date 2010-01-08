@@ -37,7 +37,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Import Include="Interop.IAscomSample" />
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="System" />
     <Import Include="System.Collections" />

@@ -15,6 +15,8 @@
 ' The ClassInterface/None addribute prevents an empty interface called
 ' _VBSample from being created and used as the [default] interface
 '
+#Const ForV2 = False
+
 <Guid("E360C957-3E04-4373-AEA9-68E8140A9B84")> _
 <ClassInterface(ClassInterfaceType.None)> _
 Public Class VBSample
@@ -53,6 +55,14 @@ Public Class VBSample
 		checkY()
 		calcDiag = Math.Sqrt(m_X * m_X + m_Y * m_Y)
 	End Function
+
+#If ForV2 Then
+	Private Function calcArea() As Double
+		checkX()
+		checkY()
+		calcArea = m_X * m_Y
+	End Function
+#End If
 
 	'
 	' PUBLIC COM INTERFACE IAscomSample IMPLEMENTATION
@@ -97,4 +107,18 @@ Public Class VBSample
 			m_enumVal = value
 		End Set
 	End Property
+
+#If ForV2 Then
+	ReadOnly Property Area() As Double Implements IAscomSample.Area
+		Get
+			Area = calcArea()
+		End Get
+	End Property
+
+	Function CalculateArea(ByVal X As Double, ByVal Y As Double) As Double Implements IAscomSample.CalculateArea
+		m_X = X
+		m_Y = Y
+		CalculateArea = calcDiag()
+	End Function
+#End If
 End Class

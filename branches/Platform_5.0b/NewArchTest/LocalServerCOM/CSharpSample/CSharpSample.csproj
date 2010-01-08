@@ -19,6 +19,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -46,9 +47,9 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\SampleLocalServer\SampleLocalServer.csproj">
-      <Project>{9AF3EEC9-ACB4-499C-893B-055AAC2AA195}</Project>
-      <Name>SampleLocalServer</Name>
+    <ProjectReference Include="..\LocalServerCOM\LocalServerCOM.csproj">
+      <Project>{3689A2CB-94C5-4012-A5CF-7E7D1DD27143}</Project>
+      <Name>LocalServerCOM</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -1,13 +1,19 @@
+#Const ForV2 = True
+
 Module Program
 
 	Sub Main()
 		Dim ans As String
 		Dim progId As String
 		Dim O As Object
-		Dim S As IAscomSample
+		Dim S As Interop.IAscomSample.IAscomSample
 		Dim isCOM As Boolean
 
-		Console.WriteLine("Early binding to .NET or to COM:")
+#If ForV2 Then
+		Console.WriteLine("Early binding to .NET or to COM (V2 Interface):")
+#Else
+		Console.WriteLine("Early binding to .NET or to COM (V1 Interface):")
+#End If
 		Console.WriteLine("")
 		Do
 			Console.WriteLine("-----------------------------------------------------")
@@ -68,7 +74,12 @@ Module Program
 			Console.WriteLine("Enum test:")
 			S.EnumTest = 1
 			Console.WriteLine("  Enum value is " & S.EnumTest)
-			Console.WriteLine("")
+#If ForV2 Then
+			Console.WriteLine("  X=" & S.X & " Y=" & S.Y & " Diagonal=" & S.Area)
+			Console.WriteLine("Using CalculateArea:")
+			Console.WriteLine("  CalculateArea(4,5)=" & S.CalculateArea(4, 5))
+#End If
+
 
 			S = Nothing
 			If isCOM Then Marshal.ReleaseComObject(O)

@@ -1,9 +1,12 @@
+//#define ForV2
+
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
 using Interop.IAscomSample;
+
 
 namespace ASCOM.InprocServerCOM
 {
@@ -60,6 +63,15 @@ namespace ASCOM.InprocServerCOM
 			return Math.Sqrt(m_X * m_X + m_Y * m_Y);
 		}
 
+#if ForV2
+		protected double calcArea()
+		{
+			checkX();
+			checkY();
+			return m_X * m_Y;
+		}
+#endif
+
 		//
 		// PUBLIC COM INTERFACE IAscomSample IMPLEMENTATION
 		//
@@ -92,5 +104,21 @@ namespace ASCOM.InprocServerCOM
 			get { return m_enumVal; }
 			set { m_enumVal = value; }
 		}
+
+#if ForV2
+		double IAscomSample.Area
+		{
+			get { return calcArea(); }
+		}
+
+		double IAscomSample.CalculateArea(double X, double Y)
+		{
+			m_X = X;
+			m_Y = Y;
+			return calcArea();
+		}
+
+#endif
+
 	}
 }
