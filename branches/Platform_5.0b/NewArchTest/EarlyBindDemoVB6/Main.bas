@@ -47,8 +47,7 @@ Sub Main()
             Exit Sub
         End If
         
-        Console.WriteLine "YoMama"
-        S = CreateObject(progId)
+        Set S = CreateObject(progId)
         Console.WriteLine ("== Using early bound COM in VB6 ==")
         '
         ' Same test routine as in the SimpleTest scripts
@@ -68,7 +67,7 @@ Sub Main()
         Console.WriteLine ("  CalculateArea(4,5)=" & S.CalculateArea(4, 5))
 #End If
 
-        S = Nothing
+        Set S = Nothing
     Loop Until False
     
     Exit Sub
