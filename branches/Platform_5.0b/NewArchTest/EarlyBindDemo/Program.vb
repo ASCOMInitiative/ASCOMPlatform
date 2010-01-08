@@ -52,7 +52,7 @@ Module Program
 				Else
 					Console.WriteLine("== Using native .NET ==")
 				End If
-			Catch
+			Catch ex As Exception
 				Console.WriteLine("Failed to create " + progId)
 				Continue Do
 			End Try

@@ -1,5 +1,5 @@
 Type=OleDll
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\..\..\..\..\..\WINDOWS\system32\stdole2.tlb#OLE Automation
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\WINDOWS\system32\stdole2.tlb#OLE Automation
 Reference=*\G{98C71E63-489C-4C67-9E7F-AFE382FC9AC5}#1.0#0#..\..\SampleInterface\IAscomSample.tlb#IAscomSample 1.0 Interface
 Class=VB6Sample; VB6Sample.cls
 Startup="(None)"

@@ -1,0 +1,60 @@
+// AscomSample.idl : IDL source for AscomSample
+//
+// This file will be processed by the MIDL tool to
+// produce the type library (IAscomSample.tlb)
+//
+// midl /tlb IAscomSample.tlb IAscomSample.idl
+//
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	uuid(98C71E63-489C-4c67-9E7F-AFE382FC9AC5),
+	version(1.0),
+	helpstring("IAscomSample 2.0 Interface")
+]
+library IAscomSampleLib
+{
+	importlib("stdole2.tlb");
+	
+	[
+	    uuid(82ADBC85-B1E3-4f28-AB15-AA0E27DAD76E), 
+	    helpstring("Sample enum type values")
+	]
+    typedef enum SampleEnumType {
+        sampleType1 = 0,
+        sampleType2 = 1,
+        sampleType3 = 2
+    } SampleEnumType;
+
+	[
+		object,
+		uuid(66814F43-DA4B-4094-BF3B-BF0B631352AB),
+		dual,
+		nonextensible,
+		helpstring("IAscomSample Interface"),
+		pointer_default(unique)
+	]
+	interface IAscomSample : IDispatch {
+		[propget, id(1), helpstring("X dimension")] 
+		    HRESULT X([out, retval] double* pVal);
+		[propput, id(1), helpstring("X dimension")] 
+		    HRESULT X([in] double newVal);
+		[propget, id(2), helpstring("Y dimension")] 
+		    HRESULT Y([out, retval] double* pVal);
+		[propput, id(2), helpstring("Y dimension")] 
+		    HRESULT Y([in] double newVal);
+		[propget, id(3), helpstring("Diagonal dimension")] 
+		    HRESULT Diagonal([out, retval] double* pVal);
+		[id(4), helpstring("Given X and Y dimensions, calculates the diagonal dimension")] 
+		    HRESULT CalculateDiagonal([in] double X, [in] double Y, [out, retval] double* pVal);
+		[propget, id(5), helpstring("Enum test property")] 
+		    HRESULT EnumTest([out, retval] SampleEnumType* pVal);
+		[propput, id(5), helpstring("Enum test property")] 
+		    HRESULT EnumTest([in] SampleEnumType newVal);
+		[id(6), helpstring("Given X and Y dimensions, calculates the area of the rectangle")] 
+		    HRESULT CalculateArea([in] double X, [in] double Y, [out, retval] double* pVal);
+		[propget, id(7), helpstring("Area of rectangle")] 
+		    HRESULT Area([out, retval] double* pVal);
+	};
+};

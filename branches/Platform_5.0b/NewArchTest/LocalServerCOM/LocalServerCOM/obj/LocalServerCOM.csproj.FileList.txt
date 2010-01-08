@@ -1,7 +1,0 @@
-obj\Debug\ResolveAssemblyReference.cache
-obj\Debug\LocalServerCOM.csproj.GenerateResource.Cache
-bin\Debug\LocalServerCOM.exe
-bin\Debug\LocalServerCOM.pdb
-obj\Debug\LocalServerCOM.exe
-obj\Debug\LocalServerCOM.pdb
-obj\Debug\ASCOM.LocalServerCOM.frmMain.resources
