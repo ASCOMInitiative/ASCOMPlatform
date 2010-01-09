@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 //
 // TODO - Add your authorship information here
-[assembly: AssemblyTitle("Simulator Camera Driver")]
+[assembly: AssemblyTitle("Simulator Camera V2 Driver")]
 [assembly: AssemblyDescription("ASCOM Camera Driver for Camera Simulator")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCopyright("")]
