@@ -34,6 +34,8 @@ namespace ASCOM.Simulator
             this.label1 = new System.Windows.Forms.Label();
             this.picASCOM = new System.Windows.Forms.PictureBox();
             this.groupBoxCCD = new System.Windows.Forms.GroupBox();
+            this.textBoxCameraYSize = new System.Windows.Forms.TextBox();
+            this.textBoxCameraXSize = new System.Windows.Forms.TextBox();
             this.textBoxMaxBinY = new System.Windows.Forms.TextBox();
             this.textBoxMaxBinX = new System.Windows.Forms.TextBox();
             this.textBoxSensorName = new System.Windows.Forms.TextBox();
@@ -51,14 +53,10 @@ namespace ASCOM.Simulator
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBoxGainSettings = new System.Windows.Forms.GroupBox();
-            this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
-            this.label11 = new System.Windows.Forms.Label();
-            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.textBoxGainMax = new System.Windows.Forms.TextBox();
+            this.textBoxGainMin = new System.Windows.Forms.TextBox();
+            this.radioButtonUseMinAndMax = new System.Windows.Forms.RadioButton();
+            this.radioButtonUseGains = new System.Windows.Forms.RadioButton();
             this.groupBoxCooling = new System.Windows.Forms.GroupBox();
             this.checkBoxHasCooler = new System.Windows.Forms.CheckBox();
             this.checkBoxCanGetCoolerPower = new System.Windows.Forms.CheckBox();
@@ -71,6 +69,9 @@ namespace ASCOM.Simulator
             this.checkBoxCanStopExposure = new System.Windows.Forms.CheckBox();
             this.checkBoxCanAbortExposure = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.textBoxPixelSizeY = new System.Windows.Forms.TextBox();
+            this.textBoxPixelSizeX = new System.Windows.Forms.TextBox();
+            this.textBoxElectronsPerADU = new System.Windows.Forms.TextBox();
             this.textBoxMaxADU = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -80,16 +81,10 @@ namespace ASCOM.Simulator
             this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.cameraBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.textBoxElectronsPerADU = new System.Windows.Forms.TextBox();
-            this.textBoxPixelSizeX = new System.Windows.Forms.TextBox();
-            this.textBoxPixelSizeY = new System.Windows.Forms.TextBox();
-            this.textBoxCameraXSize = new System.Windows.Forms.TextBox();
-            this.textBoxCameraYSize = new System.Windows.Forms.TextBox();
+            this.radioButtonNoGain = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.groupBoxCCD.SuspendLayout();
             this.groupBoxGainSettings.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             this.groupBoxCooling.SuspendLayout();
             this.groupBoxExposure.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -169,6 +164,20 @@ namespace ASCOM.Simulator
             this.groupBoxCCD.TabIndex = 4;
             this.groupBoxCCD.TabStop = false;
             this.groupBoxCCD.Text = "CCD";
+            // 
+            // textBoxCameraYSize
+            // 
+            this.textBoxCameraYSize.Location = new System.Drawing.Point(90, 38);
+            this.textBoxCameraYSize.Name = "textBoxCameraYSize";
+            this.textBoxCameraYSize.Size = new System.Drawing.Size(47, 20);
+            this.textBoxCameraYSize.TabIndex = 28;
+            // 
+            // textBoxCameraXSize
+            // 
+            this.textBoxCameraXSize.Location = new System.Drawing.Point(90, 13);
+            this.textBoxCameraXSize.Name = "textBoxCameraXSize";
+            this.textBoxCameraXSize.Size = new System.Drawing.Size(47, 20);
+            this.textBoxCameraXSize.TabIndex = 27;
             // 
             // textBoxMaxBinY
             // 
@@ -317,111 +326,53 @@ namespace ASCOM.Simulator
             // 
             // groupBoxGainSettings
             // 
-            this.groupBoxGainSettings.Controls.Add(this.numericUpDown4);
-            this.groupBoxGainSettings.Controls.Add(this.label11);
-            this.groupBoxGainSettings.Controls.Add(this.numericUpDown3);
-            this.groupBoxGainSettings.Controls.Add(this.label10);
-            this.groupBoxGainSettings.Controls.Add(this.label9);
-            this.groupBoxGainSettings.Controls.Add(this.comboBox1);
-            this.groupBoxGainSettings.Controls.Add(this.radioButton2);
-            this.groupBoxGainSettings.Controls.Add(this.radioButton1);
+            this.groupBoxGainSettings.Controls.Add(this.radioButtonNoGain);
+            this.groupBoxGainSettings.Controls.Add(this.textBoxGainMax);
+            this.groupBoxGainSettings.Controls.Add(this.textBoxGainMin);
+            this.groupBoxGainSettings.Controls.Add(this.radioButtonUseMinAndMax);
+            this.groupBoxGainSettings.Controls.Add(this.radioButtonUseGains);
             this.groupBoxGainSettings.Location = new System.Drawing.Point(156, 91);
             this.groupBoxGainSettings.Name = "groupBoxGainSettings";
-            this.groupBoxGainSettings.Size = new System.Drawing.Size(161, 143);
+            this.groupBoxGainSettings.Size = new System.Drawing.Size(161, 118);
             this.groupBoxGainSettings.TabIndex = 5;
             this.groupBoxGainSettings.TabStop = false;
             this.groupBoxGainSettings.Text = "Gain Settings";
             // 
-            // numericUpDown4
+            // textBoxGainMax
             // 
-            this.numericUpDown4.Location = new System.Drawing.Point(69, 117);
-            this.numericUpDown4.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown4.Name = "numericUpDown4";
-            this.numericUpDown4.Size = new System.Drawing.Size(43, 20);
-            this.numericUpDown4.TabIndex = 7;
-            this.numericUpDown4.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            this.textBoxGainMax.Location = new System.Drawing.Point(93, 85);
+            this.textBoxGainMax.Name = "textBoxGainMax";
+            this.textBoxGainMax.Size = new System.Drawing.Size(16, 20);
+            this.textBoxGainMax.TabIndex = 28;
             // 
-            // label11
+            // textBoxGainMin
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(27, 119);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(27, 13);
-            this.label11.TabIndex = 6;
-            this.label11.Text = "Max";
+            this.textBoxGainMin.Location = new System.Drawing.Point(48, 85);
+            this.textBoxGainMin.Name = "textBoxGainMin";
+            this.textBoxGainMin.Size = new System.Drawing.Size(16, 20);
+            this.textBoxGainMin.TabIndex = 27;
             // 
-            // numericUpDown3
+            // radioButtonUseMinAndMax
             // 
-            this.numericUpDown3.Location = new System.Drawing.Point(70, 91);
-            this.numericUpDown3.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(43, 20);
-            this.numericUpDown3.TabIndex = 5;
-            this.numericUpDown3.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            this.radioButtonUseMinAndMax.AutoSize = true;
+            this.radioButtonUseMinAndMax.Location = new System.Drawing.Point(6, 62);
+            this.radioButtonUseMinAndMax.Name = "radioButtonUseMinAndMax";
+            this.radioButtonUseMinAndMax.Size = new System.Drawing.Size(108, 17);
+            this.radioButtonUseMinAndMax.TabIndex = 1;
+            this.radioButtonUseMinAndMax.TabStop = true;
+            this.radioButtonUseMinAndMax.Text = "Use Min and Max";
+            this.radioButtonUseMinAndMax.UseVisualStyleBackColor = true;
             // 
-            // label10
+            // radioButtonUseGains
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(28, 93);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(24, 13);
-            this.label10.TabIndex = 4;
-            this.label10.Text = "Min";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(29, 42);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(34, 13);
-            this.label9.TabIndex = 3;
-            this.label9.Text = "Gains";
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(69, 38);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(61, 21);
-            this.comboBox1.TabIndex = 2;
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(6, 68);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(108, 17);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "Use Min and Max";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(6, 19);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(74, 17);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Use Gains";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButtonUseGains.AutoSize = true;
+            this.radioButtonUseGains.Location = new System.Drawing.Point(6, 39);
+            this.radioButtonUseGains.Name = "radioButtonUseGains";
+            this.radioButtonUseGains.Size = new System.Drawing.Size(74, 17);
+            this.radioButtonUseGains.TabIndex = 0;
+            this.radioButtonUseGains.TabStop = true;
+            this.radioButtonUseGains.Text = "Use Gains";
+            this.radioButtonUseGains.UseVisualStyleBackColor = true;
             // 
             // groupBoxCooling
             // 
@@ -549,6 +500,27 @@ namespace ASCOM.Simulator
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Pixel";
             // 
+            // textBoxPixelSizeY
+            // 
+            this.textBoxPixelSizeY.Location = new System.Drawing.Point(88, 35);
+            this.textBoxPixelSizeY.Name = "textBoxPixelSizeY";
+            this.textBoxPixelSizeY.Size = new System.Drawing.Size(42, 20);
+            this.textBoxPixelSizeY.TabIndex = 17;
+            // 
+            // textBoxPixelSizeX
+            // 
+            this.textBoxPixelSizeX.Location = new System.Drawing.Point(88, 13);
+            this.textBoxPixelSizeX.Name = "textBoxPixelSizeX";
+            this.textBoxPixelSizeX.Size = new System.Drawing.Size(42, 20);
+            this.textBoxPixelSizeX.TabIndex = 16;
+            // 
+            // textBoxElectronsPerADU
+            // 
+            this.textBoxElectronsPerADU.Location = new System.Drawing.Point(83, 84);
+            this.textBoxElectronsPerADU.Name = "textBoxElectronsPerADU";
+            this.textBoxElectronsPerADU.Size = new System.Drawing.Size(47, 20);
+            this.textBoxElectronsPerADU.TabIndex = 15;
+            // 
             // textBoxMaxADU
             // 
             this.textBoxMaxADU.Location = new System.Drawing.Point(83, 61);
@@ -627,40 +599,16 @@ namespace ASCOM.Simulator
             // 
             this.cameraBindingSource.DataSource = typeof(ASCOM.Simulator.Camera);
             // 
-            // textBoxElectronsPerADU
+            // radioButtonNoGain
             // 
-            this.textBoxElectronsPerADU.Location = new System.Drawing.Point(83, 84);
-            this.textBoxElectronsPerADU.Name = "textBoxElectronsPerADU";
-            this.textBoxElectronsPerADU.Size = new System.Drawing.Size(47, 20);
-            this.textBoxElectronsPerADU.TabIndex = 15;
-            // 
-            // textBoxPixelSizeX
-            // 
-            this.textBoxPixelSizeX.Location = new System.Drawing.Point(88, 13);
-            this.textBoxPixelSizeX.Name = "textBoxPixelSizeX";
-            this.textBoxPixelSizeX.Size = new System.Drawing.Size(42, 20);
-            this.textBoxPixelSizeX.TabIndex = 16;
-            // 
-            // textBoxPixelSizeY
-            // 
-            this.textBoxPixelSizeY.Location = new System.Drawing.Point(88, 35);
-            this.textBoxPixelSizeY.Name = "textBoxPixelSizeY";
-            this.textBoxPixelSizeY.Size = new System.Drawing.Size(42, 20);
-            this.textBoxPixelSizeY.TabIndex = 17;
-            // 
-            // textBoxCameraXSize
-            // 
-            this.textBoxCameraXSize.Location = new System.Drawing.Point(90, 13);
-            this.textBoxCameraXSize.Name = "textBoxCameraXSize";
-            this.textBoxCameraXSize.Size = new System.Drawing.Size(47, 20);
-            this.textBoxCameraXSize.TabIndex = 27;
-            // 
-            // textBoxCameraYSize
-            // 
-            this.textBoxCameraYSize.Location = new System.Drawing.Point(90, 38);
-            this.textBoxCameraYSize.Name = "textBoxCameraYSize";
-            this.textBoxCameraYSize.Size = new System.Drawing.Size(47, 20);
-            this.textBoxCameraYSize.TabIndex = 28;
+            this.radioButtonNoGain.AutoSize = true;
+            this.radioButtonNoGain.Location = new System.Drawing.Point(6, 19);
+            this.radioButtonNoGain.Name = "radioButtonNoGain";
+            this.radioButtonNoGain.Size = new System.Drawing.Size(99, 17);
+            this.radioButtonNoGain.TabIndex = 29;
+            this.radioButtonNoGain.TabStop = true;
+            this.radioButtonNoGain.Text = "No Gain control";
+            this.radioButtonNoGain.UseVisualStyleBackColor = true;
             // 
             // SetupDialogForm
             // 
@@ -689,8 +637,6 @@ namespace ASCOM.Simulator
             this.groupBoxCCD.PerformLayout();
             this.groupBoxGainSettings.ResumeLayout(false);
             this.groupBoxGainSettings.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
             this.groupBoxCooling.ResumeLayout(false);
             this.groupBoxCooling.PerformLayout();
             this.groupBoxExposure.ResumeLayout(false);
@@ -729,14 +675,8 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox textBoxMaxADU;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.NumericUpDown numericUpDown4;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.NumericUpDown numericUpDown3;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.RadioButton radioButtonUseMinAndMax;
+        private System.Windows.Forms.RadioButton radioButtonUseGains;
         private System.Windows.Forms.ComboBox comboBoxSensorType;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox textBoxMaxBinY;
@@ -763,5 +703,8 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.TextBox textBoxPixelSizeX;
         private System.Windows.Forms.TextBox textBoxCameraYSize;
         private System.Windows.Forms.TextBox textBoxCameraXSize;
+        private System.Windows.Forms.TextBox textBoxGainMax;
+        private System.Windows.Forms.TextBox textBoxGainMin;
+        private System.Windows.Forms.RadioButton radioButtonNoGain;
 	}
 }
