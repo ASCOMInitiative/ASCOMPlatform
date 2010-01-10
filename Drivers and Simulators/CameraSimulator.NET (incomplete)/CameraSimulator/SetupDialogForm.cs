@@ -17,6 +17,8 @@ namespace ASCOM.Simulator
         private const string STR_N2 = "N2";
         private Camera camera;
 
+        internal bool okButtonPressed = false;
+
 		public SetupDialogForm()
 		{
 			InitializeComponent();
@@ -24,12 +26,14 @@ namespace ASCOM.Simulator
 
 		private void cmdOK_Click(object sender, EventArgs e)
 		{
-            SaveToProfile();
+            okButtonPressed = true;
+            SaveProperties();
 			Dispose();
 		}
 
 		private void cmdCancel_Click(object sender, EventArgs e)
 		{
+            okButtonPressed = false;
 			Dispose();
 		}
 
@@ -52,54 +56,97 @@ namespace ASCOM.Simulator
 
         internal void InitProperties(Camera camera)
         {
-            this.textBoxBayerOffsetX.Text = camera.bayerOffsetX.ToString();
-            this.textBoxBayerOffsetY.Text = camera.bayerOffsetY.ToString();
-            this.textBoxMaxADU.Text = camera.maxADU.ToString();
-            this.textBoxMaxBinX.Text = camera.maxBinX.ToString();
-            this.textBoxMaxBinY.Text = camera.maxBinY.ToString();
-            this.textBoxSensorName.Text = camera.sensorName;
-            this.comboBoxSensorType.SelectedIndex = camera.sensorType;
-            this.checkBoxCanAbortExposure.Checked = camera.canAbortExposure;
-            this.checkBoxCanAsymmetricBin.Checked = camera.canAsymmetricBin;
-            this.checkBoxCanGetCoolerPower.Checked = camera.canGetCoolerPower;
-            this.checkBoxCanSetCCDTemperature.Checked = camera.canSetCcdTemperature;
-            this.checkBoxCanStopExposure.Checked = camera.canStopExposure;
-            this.checkBoxHasCooler.Checked = camera.hasCooler;
-            this.checkBoxHasShutter.Checked = camera.hasShutter;
-            this.textBoxCameraXSize.Text = camera.cameraXSize.ToString(STR_N0);
-            this.textBoxCameraYSize.Text = camera.cameraYSize.ToString(STR_N0);
             this.textBoxPixelSizeX.Text = camera.pixelSizeX.ToString(STR_N2);
             this.textBoxPixelSizeY.Text = camera.pixelSizeY.ToString(STR_N2);
+            //this.textBoxFullWellCapacity.Text = camera.fullWellCapacity.ToString();
+            this.textBoxMaxADU.Text = camera.maxADU.ToString();
             this.textBoxElectronsPerADU.Text = camera.electronsPerADU.ToString(STR_N2);
+
+            this.textBoxCameraXSize.Text = camera.cameraXSize.ToString(STR_N0);
+            this.textBoxCameraYSize.Text = camera.cameraYSize.ToString(STR_N0);
+            this.checkBoxCanAsymmetricBin.Checked = camera.canAsymmetricBin;
+            this.textBoxMaxBinX.Text = camera.maxBinX.ToString();
+            this.textBoxMaxBinY.Text = camera.maxBinY.ToString();
+            this.checkBoxHasShutter.Checked = camera.hasShutter;
+            this.textBoxSensorName.Text = camera.sensorName;
+            this.comboBoxSensorType.SelectedIndex = (int)camera.sensorType;
+            this.textBoxBayerOffsetX.Text = camera.bayerOffsetX.ToString();
+            this.textBoxBayerOffsetY.Text = camera.bayerOffsetY.ToString();
+
+            this.checkBoxHasCooler.Checked = camera.hasCooler;
+            this.checkBoxCanSetCCDTemperature.Checked = camera.canSetCcdTemperature;
+            this.checkBoxCanGetCoolerPower.Checked = camera.canGetCoolerPower;
+
+            this.checkBoxCanAbortExposure.Checked = camera.canAbortExposure;
+            this.checkBoxCanStopExposure.Checked = camera.canStopExposure;
+            this.textBoxMinExposure.Text = camera.exposureMax.ToString();
+            this.textBoxMaxExposure.Text = camera.exposureMin.ToString();
+            //this.textboxExposureResolution.Text = camera.exposureResolution.ToString();
+
+            if (camera.gains != null && camera.gains.Length > 0)
+            {
+                radioButtonUseGains.Checked = true;
+            }
+            else if (camera.gainMax > camera.gainMin)
+            {
+                radioButtonUseMinAndMax.Checked = true;
+            }
+            else
+            {
+                radioButtonNoGain.Checked = true;
+            }
+            textBoxGainMin.Text = camera.gainMin.ToString();
+            textBoxGainMax.Text = camera.gainMax.ToString();
 
             this.camera = camera;
         }
 
-        private void SaveToProfile()
+        private void SaveProperties()
         {
-            Profile profile = new Profile();
-            profile.DeviceType = "Camera";
+            camera.pixelSizeX = Convert.ToDouble(this.textBoxPixelSizeX.Text, CultureInfo.InvariantCulture);
+            camera.pixelSizeY = Convert.ToDouble(this.textBoxPixelSizeY.Text, CultureInfo.InvariantCulture);
+            //camera.fullWellCapacity = Convert.ToDouble(this.textBoxFullWellCapacity.Text, CultureInfo.InvariantCulture);
+            camera.maxADU = Convert.ToInt32(this.textBoxMaxADU.Text, CultureInfo.InvariantCulture);
+            camera.electronsPerADU = Convert.ToDouble(this.textBoxElectronsPerADU.Text, CultureInfo.InvariantCulture);
 
-            profile.WriteValue(Camera.s_csDriverID, "BayerOffsetX", this.textBoxBayerOffsetX.Text.ToString(CultureInfo.InvariantCulture));
-            profile.WriteValue(Camera.s_csDriverID, "BayerOffsetY", this.textBoxBayerOffsetY.Text.ToString(CultureInfo.InvariantCulture));
-            profile.WriteValue(Camera.s_csDriverID, "MaxADU", this.textBoxMaxADU.Text.ToString(CultureInfo.InvariantCulture));
-            profile.WriteValue(Camera.s_csDriverID, "MaxBinX", this.textBoxMaxBinX.Text.ToString(CultureInfo.InvariantCulture));
-            profile.WriteValue(Camera.s_csDriverID, "MaxBinY", this.textBoxMaxBinY.Text.ToString(CultureInfo.InvariantCulture));
-            profile.WriteValue(Camera.s_csDriverID, "SensorName", this.textBoxSensorName.Text.ToString(CultureInfo.InvariantCulture));
-            profile.WriteValue(Camera.s_csDriverID, "SensorType", this.comboBoxSensorType.SelectedIndex.ToString(CultureInfo.InvariantCulture));
-            profile.WriteValue(Camera.s_csDriverID, "CanAbortExposure", this.checkBoxCanAbortExposure.Checked.ToString(CultureInfo.InvariantCulture));
-            profile.WriteValue(Camera.s_csDriverID, "CanAsymmetricBin", this.checkBoxCanAsymmetricBin.Checked.ToString(CultureInfo.InvariantCulture));
-            profile.WriteValue(Camera.s_csDriverID, "CanGetCoolerPower", this.checkBoxCanGetCoolerPower.Checked.ToString(CultureInfo.InvariantCulture));
-            profile.WriteValue(Camera.s_csDriverID, "CanSetCCDTemperature", this.checkBoxCanSetCCDTemperature.Checked.ToString(CultureInfo.InvariantCulture));
-            profile.WriteValue(Camera.s_csDriverID, "CanStopExposure", this.checkBoxCanStopExposure.Checked.ToString(CultureInfo.InvariantCulture));
-            profile.WriteValue(Camera.s_csDriverID, "HasCooler", this.checkBoxHasCooler.Checked.ToString(CultureInfo.InvariantCulture));
-            profile.WriteValue(Camera.s_csDriverID, "HasShutter", this.checkBoxHasShutter.Checked.ToString(CultureInfo.InvariantCulture));
-            profile.WriteValue(Camera.s_csDriverID, "CameraXSize", this.textBoxCameraXSize.Text.ToString(CultureInfo.InvariantCulture));
-            profile.WriteValue(Camera.s_csDriverID, "CameraYSize", this.textBoxCameraYSize.Text.ToString(CultureInfo.InvariantCulture));
-            profile.WriteValue(Camera.s_csDriverID, "PixelSizeX", this.textBoxPixelSizeX.Text.ToString(CultureInfo.InvariantCulture));
-            profile.WriteValue(Camera.s_csDriverID, "PixelSizeY", this.textBoxPixelSizeY.Text.ToString(CultureInfo.InvariantCulture));
-            profile.WriteValue(Camera.s_csDriverID, "ElectronsPerADU", this.textBoxElectronsPerADU.Text.ToString(CultureInfo.InvariantCulture));
+            camera.cameraXSize = Convert.ToInt32(this.textBoxCameraXSize.Text, CultureInfo.InvariantCulture);
+            camera.cameraYSize = Convert.ToInt32(this.textBoxCameraYSize.Text, CultureInfo.InvariantCulture);
+            camera.canAsymmetricBin = this.checkBoxCanAsymmetricBin.Checked;
+            camera.maxBinX = Convert.ToInt16(this.textBoxMaxBinX.Text, CultureInfo.InvariantCulture);
+            camera.maxBinY = Convert.ToInt16(this.textBoxMaxBinY.Text, CultureInfo.InvariantCulture);
+            camera.hasShutter = this.checkBoxHasShutter.Checked;
+            camera.sensorName = this.textBoxSensorName.Text;
+            camera.sensorType = (Camera.SensorTypes)this.comboBoxSensorType.SelectedIndex;
+            camera.bayerOffsetX = Convert.ToInt16(this.textBoxBayerOffsetX.Text, CultureInfo.InvariantCulture);
+            camera.bayerOffsetY = Convert.ToInt16(this.textBoxBayerOffsetY.Text, CultureInfo.InvariantCulture);
+
+            camera.hasCooler = this.checkBoxHasCooler.Checked;
+            camera.canSetCcdTemperature = this.checkBoxCanSetCCDTemperature.Checked;
+            camera.canGetCoolerPower = this.checkBoxCanGetCoolerPower.Checked;
+
+            camera.canAbortExposure = this.checkBoxCanAbortExposure.Checked;
+            camera.canStopExposure = this.checkBoxCanStopExposure.Checked;
+            camera.exposureMax = Convert.ToDouble(this.textBoxMinExposure.Text, CultureInfo.InvariantCulture);
+            camera.exposureMin = Convert.ToDouble(this.textBoxMaxExposure.Text, CultureInfo.InvariantCulture);
+            //camera.exposureResolution = Convert.ToDouble(this.textBoxExposureResolution.Text, CultureInfo.InvariantCulture);
+
+            if (this.radioButtonNoGain.Checked)
+            {
+                camera.gainMin = camera.gainMax = 0;
+                camera.gains = null;
+            }
+            else if (this.radioButtonUseGains.Checked)
+            {
+                camera.gains= new string[]{ "ISO 100", "ISO 200", "ISO 400", "ISO 800", "ISO 1600"};
+                camera.gainMin = (short)camera.gains.GetLowerBound(0);
+                camera.gainMax = (short)(camera.gains.GetUpperBound(0));
+            }
+            if (this.radioButtonUseMinAndMax.Checked)
+            {
+                camera.gains = null;
+                camera.gainMin = Convert.ToInt16(textBoxGainMin.Text, CultureInfo.InvariantCulture);
+                camera.gainMax = Convert.ToInt16(textBoxGainMax.Text, CultureInfo.InvariantCulture);
+            }
         }
-
 	}
 }
