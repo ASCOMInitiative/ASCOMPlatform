@@ -47,9 +47,9 @@ namespace ASCOM.FocVide
         private void SetupDialogForm_Load(object sender, EventArgs e)
         {
             Properties.Settings.Default.Reload();
-            HelpTempComp.Text = "If probed temperature is between " + TempMini.Value.ToString() + "° and " +
-                TempMaxi.Value.ToString() + "°, then the focuser will move forward by " +
-                Properties.Settings.Default.sStepPerDeg.ToString() + " steps each time the t° increases by 1° (and move backwards if t° decreases). " +
+            HelpTempComp.Text = "If probed temperature is between " + TempMini.Value.ToString() + " K and " +
+                TempMaxi.Value.ToString() + " K, then the focuser will move forward by " +
+                Properties.Settings.Default.sStepPerDeg.ToString() + " steps each time the temperature increases by 1 K (and move backwards if decreases). " +
                 "Temperature is checked every " + Properties.Settings.Default.sTempCompPeriod.ToString() + " seconds.";
         }
 
@@ -71,9 +71,9 @@ namespace ASCOM.FocVide
 
         void Default_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            HelpTempComp.Text = "If probed temperature is between " + TempMini.Value.ToString() + "° and " +
-                TempMaxi.Value.ToString() + "°, then the focuser will move forward by " +
-                Properties.Settings.Default.sStepPerDeg.ToString() + " steps each time the t° increases by 1° (and move backwards if t° decreases). " +
+            HelpTempComp.Text = "If probed temperature is between " + TempMini.Value.ToString() + " K and " +
+                TempMaxi.Value.ToString() + " K, then the focuser will move forward by " +
+                Properties.Settings.Default.sStepPerDeg.ToString() + " steps each time the temperature increases by 1 K (and move backwards if decreases). " +
                 "Temperature is checked every " + Properties.Settings.Default.sTempCompPeriod.ToString() + " seconds.";
 
         }
