@@ -768,6 +768,7 @@ namespace ASCOM.GeminiTelescope
             }
 
 
+
             // if goto limit is set to zero, this means it's 2.5 degrees from west safety limit:
             if (gotolimit == 0)
             {
@@ -790,17 +791,30 @@ namespace ASCOM.GeminiTelescope
             PierSide retVal = PierSide.pierUnknown;
 
             if ((hour_angle >= east_limit && hour_angle <= 6))
-                retVal = PierSide.pierEast;
+                // if this can also be reached from the west side and the mount is currently there, don't flip:
+                if (12 + hour_angle < 12 + gotolimit && GeminiHardware.SideOfPier == "W")
+                    retVal = PierSide.pierWest;
+                else
+                    retVal = PierSide.pierEast;
 
             if (hour_angle >= 6 && hour_angle <= 12 + gotolimit)
-                retVal = PierSide.pierWest;
+                // if this can also be reached from the east side and the mount is currently on the east, don't flip:
+                if (hour_angle - 12 >= east_limit && GeminiHardware.SideOfPier == "E")
+                    retVal = PierSide.pierEast;
+                else
+                    retVal = PierSide.pierWest;
 
             if (hour_angle < east_limit && hour_angle >= -6)
                 retVal = PierSide.pierWest;
 
             if (hour_angle < -6 && hour_angle >= -12 + gotolimit)
                 retVal = PierSide.pierEast;
-                
+
+            // if the destination can be reached from both, east and west,
+            // and the mount is currently on the west side, don't do a flip:
+            if (12+hour_angle < 12+gotolimit && hour_angle < gotolimit && GeminiHardware.SideOfPier == "W")
+                retVal = PierSide.pierWest;
+
             // Swap sides for Southern Hemisphere
             if (GeminiHardware.SouthernHemisphere)
             {
