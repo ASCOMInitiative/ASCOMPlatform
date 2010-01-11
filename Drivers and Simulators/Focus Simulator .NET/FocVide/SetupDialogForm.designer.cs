@@ -30,6 +30,7 @@ namespace ASCOM.FocVide
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetupDialogForm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.LinkFailure = new System.Windows.Forms.CheckBox();
             this.IsSynchronous = new System.Windows.Forms.CheckBox();
             this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
@@ -61,7 +62,6 @@ namespace ASCOM.FocVide
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.CurrentTemp = new System.Windows.Forms.TextBox();
-            this.LinkFailure = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
@@ -92,6 +92,17 @@ namespace ASCOM.FocVide
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Type";
+            // 
+            // LinkFailure
+            // 
+            this.LinkFailure.AutoSize = true;
+            this.LinkFailure.Enabled = false;
+            this.LinkFailure.Location = new System.Drawing.Point(6, 88);
+            this.LinkFailure.Name = "LinkFailure";
+            this.LinkFailure.Size = new System.Drawing.Size(221, 17);
+            this.LinkFailure.TabIndex = 10;
+            this.LinkFailure.Text = "Enable random \"Change link state\" failure";
+            this.LinkFailure.UseVisualStyleBackColor = true;
             // 
             // IsSynchronous
             // 
@@ -466,9 +477,9 @@ namespace ASCOM.FocVide
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(6, 67);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(56, 13);
+            this.label7.Size = new System.Drawing.Size(52, 13);
             this.label7.TabIndex = 12;
-            this.label7.Text = "Steps / °C";
+            this.label7.Text = "Steps / K";
             // 
             // label6
             // 
@@ -503,19 +514,8 @@ namespace ASCOM.FocVide
             this.CurrentTemp.Name = "CurrentTemp";
             this.CurrentTemp.Size = new System.Drawing.Size(44, 20);
             this.CurrentTemp.TabIndex = 6;
-            this.CurrentTemp.Text = "5°";
+            this.CurrentTemp.Text = "5 K";
             this.CurrentTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // LinkFailure
-            // 
-            this.LinkFailure.AutoSize = true;
-            this.LinkFailure.Enabled = false;
-            this.LinkFailure.Location = new System.Drawing.Point(6, 88);
-            this.LinkFailure.Name = "LinkFailure";
-            this.LinkFailure.Size = new System.Drawing.Size(221, 17);
-            this.LinkFailure.TabIndex = 10;
-            this.LinkFailure.Text = "Enable random \"Change link state\" failure";
-            this.LinkFailure.UseVisualStyleBackColor = true;
             // 
             // SetupDialogForm
             // 
