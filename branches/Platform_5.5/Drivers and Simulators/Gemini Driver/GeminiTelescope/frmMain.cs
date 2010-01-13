@@ -713,24 +713,31 @@ namespace ASCOM.GeminiTelescope
                 Declination = GeminiHardware.Declination;
                 SiderealTime = GeminiHardware.SiderealTime;
 
-                // update limit distance every 4th time
-                if ((m_UpdateCount & 3) == 0)
+                // don't bother with PEC status and
+                // distance to safety while slewing: this is too
+                // much for Gemini to handle
+                if (GeminiHardware.Velocity != "S")
                 {
-                    UpdateTimeToLimit();
+                    // update limit distance every 4th time
+                    if ((m_UpdateCount & 3) == 0)
+                    {
+                        UpdateTimeToLimit();
+                    }
+
+                    if (GeminiHardware.QueueDepth < 3)  //don't keep queuing if queue is large
+                    {
+                        byte pec = GeminiHardware.PECStatus;
+
+                        this.BeginInvoke(new UpdateDisplayDelegate(UpdateDisplay), pec);
+                    }
                 }
 
-                if (GeminiHardware.QueueDepth <= 3)  //don't keep queuing if queue is large
-                {
-                    byte pec = GeminiHardware.PECStatus;
-
-                    this.BeginInvoke(new UpdateDisplayDelegate(UpdateDisplay), pec);
-                }
             }
         }
 
         private void UpdateTimeToLimit()
         {
-            if (GeminiHardware.QueueDepth > 3) return;  // Don't queue up if queue is large
+            if (GeminiHardware.QueueDepth > 2) return;  // Don't queue up if queue is large
 
             string safety = GeminiHardware.DoCommandResult("<230:", GeminiHardware.MAX_TIMEOUT, false);
             string position = GeminiHardware.DoCommandResult("<235:", GeminiHardware.MAX_TIMEOUT, false);
@@ -1056,11 +1063,21 @@ namespace ASCOM.GeminiTelescope
             {
             }
 
+            if (GeminiHardware.MainFormPosition != Point.Empty)
+            {
+                Rectangle rc = new Rectangle(GeminiHardware.MainFormPosition, this.Size);
+                Screen scr = Screen.FromControl(this);
+
+                // only set the recorded position if the window is at all visible on the current screen:
+                if (scr.Bounds.IntersectsWith(rc))
+                    this.Location = GeminiHardware.MainFormPosition;
+            }
+
             SharedResources.SetTopWindow(this);
 
             SetSlewButtons();
             SetTopMost();
-            if (!GeminiHardware.ShowHandbox && GeminiTelescope.m_bComStart) this.Hide();
+            if (!GeminiHardware.ShowHandbox && GeminiTelescope.m_bComStart) this.Hide();           
             
         }
 
@@ -1092,19 +1109,16 @@ namespace ASCOM.GeminiTelescope
 
         private void mountParametersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (true /*GeminiHardware.Connected*/)
+            frmAdvancedSettings parametersForm = new frmAdvancedSettings();
+
+
+            DialogResult ans = parametersForm.ShowDialog(this);
+
+            if (ans == DialogResult.OK)
             {
-                frmAdvancedSettings parametersForm = new frmAdvancedSettings();
 
-
-                DialogResult ans = parametersForm.ShowDialog(this);
-
-                if (ans == DialogResult.OK)
-                {
-
-                }
-                parametersForm.Dispose();
             }
+            parametersForm.Dispose();
         }
 
         private void UpdateConnectStatus()
@@ -1185,6 +1199,8 @@ namespace ASCOM.GeminiTelescope
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
+            GeminiHardware.MainFormPosition = this.Location;
+ 
             //If we hit the close X on the form then hide it. If called from exit menu then exit for real.
             if (!m_ExitFormMenuCall)
             {
@@ -1717,6 +1733,10 @@ namespace ASCOM.GeminiTelescope
                         buttonSlew4_MouseUp(this, null); break ;
                 }
             }
+        }
+
+        private void frmMain_Move(object sender, EventArgs e)
+        {
         }
 
     }

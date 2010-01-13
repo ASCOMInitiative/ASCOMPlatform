@@ -320,7 +320,7 @@ namespace ASCOM.GeminiTelescope
             AssertConnect();
             if (GeminiHardware.AtHome || GeminiHardware.AtPark)              
                 throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
-            GeminiHardware.DoCommandResult(":Q", GeminiHardware.MAX_TIMEOUT, false);
+            GeminiHardware.AbortSlew();
             GeminiHardware.Trace.Exit("IT:AbortSlew");
         }
 
@@ -729,6 +729,8 @@ namespace ASCOM.GeminiTelescope
         {
             string res = "RA: " + RightAscension.ToString() + " Dec: " + Declination.ToString(); 
             GeminiHardware.Trace.Enter("IT:DestinationSideOfPier", res);
+            
+            AssertConnect();
 
             // Get the Western goto limit
             res = GeminiHardware.DoCommandResult("<223:", GeminiHardware.MAX_TIMEOUT, false);
