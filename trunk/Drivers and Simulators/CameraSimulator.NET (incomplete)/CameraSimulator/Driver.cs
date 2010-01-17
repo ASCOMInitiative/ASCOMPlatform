@@ -28,6 +28,7 @@ using ASCOM.Interface;
 using Helper = ASCOM.Utilities;
 using ASCOM.Utilities;
 using System.Globalization;
+using System.Drawing;
 
 namespace ASCOM.Simulator
 {
@@ -40,7 +41,8 @@ namespace ASCOM.Simulator
 	[Guid("12229c31-e7d6-49e8-9c5d-5d7ff05c3bfe")]
 	[ClassInterface(ClassInterfaceType.None)]
 	public class Camera : ICamera
-	{
+    {
+        #region profile string constants
         private const string STR_PixelSizeX = "PixelSizeX";
         private const string STR_PixelSizeY = "PixelSizeY";
         private const string STR_FullWellCapacity = "FullWellCapacity";
@@ -65,6 +67,8 @@ namespace ASCOM.Simulator
         private const string STR_MinExposure = "MinExposure";
         private const string STR_MaxExposure = "MaxExposure";
         private const string STR_ExposureResolution = "ExposureResolution";
+        private const string STR_ImagePath = "ImageFile";
+        #endregion
 
         #region internal properties
 
@@ -129,6 +133,10 @@ namespace ASCOM.Simulator
         private bool fastReadout;
         private short readoutMode;
         internal string[] readoutModes;
+
+        // simulation
+        internal string imagePath;
+        private float[,] imageData;
 
         /// <summary>
         /// SensorType returns a value indicating whether the sensor is monochrome,
@@ -508,6 +516,8 @@ namespace ASCOM.Simulator
 			}
 			set
 			{
+                if (value)
+                    ReadImageFile();
                 this.connected = value;
 			}
 		}
@@ -1059,6 +1069,7 @@ namespace ASCOM.Simulator
             }
 
             // set up the things to do at the start of the exposure
+            this.imageReady = false;
             this.lastExposureStartTime = DateTime.UtcNow.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss");
             // set the image array dimensions
             this.imageArray = new int[this.numX, this.numY];
@@ -1542,6 +1553,7 @@ namespace ASCOM.Simulator
             this.exposureMax = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_MinExposure, string.Empty, "0.001"), CultureInfo.InvariantCulture);
             this.exposureMin = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_MaxExposure, string.Empty, "3600"), CultureInfo.InvariantCulture);
             this.exposureResolution = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_ExposureResolution, string.Empty, "0.001"), CultureInfo.InvariantCulture);
+            this.imagePath = profile.GetValue(s_csDriverID, STR_ImagePath, string.Empty, @"C:\ASCOM Projects\trunk\Drivers and Simulators\CameraSimulator.NET (incomplete)\m42-eos400-ns11.jpg");
 
             // default to min = max && gains = null - no gain control
             this.gainMin = Convert.ToInt16(profile.GetValue(s_csDriverID, "GainMin", string.Empty, "0"), CultureInfo.InvariantCulture);
@@ -1589,6 +1601,7 @@ namespace ASCOM.Simulator
             profile.WriteValue(s_csDriverID, STR_MinExposure, this.exposureMax.ToString(CultureInfo.InvariantCulture));
             profile.WriteValue(s_csDriverID, STR_MaxExposure, this.exposureMin.ToString(CultureInfo.InvariantCulture));
             profile.WriteValue(s_csDriverID, STR_ExposureResolution, this.exposureResolution.ToString(CultureInfo.InvariantCulture));
+            profile.WriteValue(s_csDriverID, STR_ImagePath, this.imagePath);
 
             // entertaining setting the gain options.
             profile.WriteValue(s_csDriverID, "GainMin", this.gainMin.ToString(CultureInfo.InvariantCulture));
@@ -1635,6 +1648,7 @@ namespace ASCOM.Simulator
             this.ccdTemperature = 15;
             this.readoutMode = 0;
             this.fastReadout = false;
+            //this.ReadImageFile();
         }
 
         private void FillImageArray()
@@ -1646,11 +1660,32 @@ namespace ASCOM.Simulator
             // add read noise, should be in quadrature
             darkCurrent += readNoise;
             // fill the array
-            for (int i = 0; i < this.imageArray.GetLength(1); i++)
+            //for (int i = 0; i < this.imageArray.GetLength(1); i++)
+            //{
+            //    for (int j = 0; j < this.imageArray.GetLength(0); j++)
+            //    {
+            //        this.imageArray[j, i] = Poisson(imageData[j,i]* this.lastExposureDuration + darkCurrent);
+            //    }
+            //}
+            // fill the array using binning and image offsets
+            // indexes into the imageData
+            for (int y = 0; y < this.numY; y++)
             {
-                for (int j = 0; j < this.imageArray.GetLength(0); j++)
+                int iy = (y + this.startY) * this.binY;
+                for (int x = 0; x < this.numX; x++)
                 {
-                    this.imageArray[j, i] = Poisson(darkCurrent);
+                    int ix = (x + this.startX) * this.binX;
+                    // sum binX * binY pixels
+                    double s = 0;
+                    for (int k = 0; k < this.binY; k++)
+                    {
+                        for (int l = 0; l < this.binX; l++)
+                        {
+                            s += imageData[l + ix, k + iy];
+                        }
+                    }
+                    s *= this.lastExposureDuration;
+                    this.imageArray[x, y] = Poisson(s + darkCurrent);
                 }
             }
         }
@@ -1670,8 +1705,83 @@ namespace ASCOM.Simulator
             while (p > L);
             return k-1;
         }
+        /// <summary>
+        /// reads image data from a file and puts it into a buffer in a format suitable for
+        /// processing into the ImageArray.  The size of the image must be the same as the
+        /// full frame image data.
+        /// </summary>
+        private void ReadImageFile()
+        {
+            this.imageData = new float[this.cameraXSize, this.cameraYSize];
+            try
+            {
+                Bitmap bmp = (Bitmap)Image.FromFile(this.imagePath);
+                int w = Math.Min(this.cameraXSize, bmp.Width);
+                int h = Math.Min(this.cameraYSize, bmp.Height);
+                int x0 = bayerOffsetX;
+                int x1 = (bayerOffsetX + 1) & 1;
+                int y0 = bayerOffsetY;
+                int y1 = (bayerOffsetY + 1) & 1;
+                switch (this.sensorType)
+                {
+                    case SensorTypes.Monochrome:
+                        for (int i = 0; i < h; i++)
+                        {
+                            for (int j = 0; j < w; j++)
+                            {
+                                imageData[j, i] = (bmp.GetPixel(j, i).GetBrightness() * 255);
+                            }
+                        }
+                        break;
+                    case SensorTypes.RGGB:
+                        for (int i = 0; i < h; i += 2)
+                        {
+                            for (int j = 0; j < w; j += 2)
+                            {
+                                imageData[j+x0, i+y0] = (bmp.GetPixel(j+x0, i+y0).R);
+                                imageData[j + x1, i+y0] = (bmp.GetPixel(j + x1, i+y0).G);
+                                imageData[j+x0, i + y1] = (bmp.GetPixel(j+x0, i + y1).G);
+                                imageData[j + x1, i + y1] = (bmp.GetPixel(j + x1, i + y1).B);
+                            }
+                        }
+                        break;
+                    case SensorTypes.CMYG:
+                        for (int i = 0; i < h; i += 2)
+                        {
+                            for (int j = 0; j < w; j += 2)
+                            {
+                                imageData[j + x0, i + y0] = (bmp.GetPixel(j + x0, i + y0).G + bmp.GetPixel(j + x0, i + y0).B) / 2;      // cyan
+                                imageData[j + x1, i + y0] = (bmp.GetPixel(j + x1, i + y0).R + bmp.GetPixel(j + x1, i + y0).B) / 2;      // magenta
+                                imageData[j + x0, i + y1] = (bmp.GetPixel(j + x0, i + y1).G + bmp.GetPixel(j + x0, i + y1).R) / 2;      // yellow
+                                imageData[j + x1, i + y1] = (bmp.GetPixel(j + x1, i + y1).G);
+                            }
+                        }
+                        break;
+                    case SensorTypes.CMYG2:
+                        break;
+                    case SensorTypes.LRGB:
+                        for (int i = 0; i < h; i += 2)
+                        {
+                            for (int j = 0; j < w; j += 2)
+                            {
+                                imageData[j + x0, i + y0] = (bmp.GetPixel(j + x0, i + y0).GetBrightness() * 255);
+                                imageData[j + x1, i + y0] = (bmp.GetPixel(j + x1, i + y0).R);
+                                imageData[j + x0, i + y1] = (bmp.GetPixel(j + x0, i + y1).G);
+                                imageData[j + x1, i + y1] = (bmp.GetPixel(j + x1, i + y1).B);
+                            }
+                        }
+                        break;
+                    case SensorTypes.Color:
+                        break;
+                    default:
+                        break;
+                }
 
-
+            }
+            catch
+            {
+            }
+        }
         #endregion
     }
 }
