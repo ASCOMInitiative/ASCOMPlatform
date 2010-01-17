@@ -270,15 +270,15 @@ Source: ..\..\ClientToolbox\SimpsonBitsPolicyStuff\PolicyInstaller\driveraccess.
 Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.pdb; DestDir: {win}\Symbols\dll; Flags: ignoreversion
 
 ;NOVAS C DLLs
-Source: ..\NOVAS-C x86-x64\Release\NOVAS-C.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\NOVAS-C x86-x64\Release\NOVAS-C.pdb; DestDir: {app}; Flags: ignoreversion
-Source: ..\NOVAS-C x86-x64\x64\Release\NOVAS-C64.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\NOVAS-C x86-x64\x64\Release\NOVAS-C64.pdb; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\NOVAS\NOVAS-C\Win32\Release\NOVAS-C.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\NOVAS\NOVAS-C\Win32\Release\NOVAS-C.pdb; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\NOVAS\NOVAS-C\x64\Release\NOVAS-C64.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\NOVAS\NOVAS-C\x64\Release\NOVAS-C64.pdb; DestDir: {app}; Flags: ignoreversion
 ;Install to 32bit directory as well on 64bit systems so that 32bit apps will find NOVAS DLLs in the place they expect on a 64bit system
-Source: ..\NOVAS-C x86-x64\Release\NOVAS-C.dll; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
-Source: ..\NOVAS-C x86-x64\Release\NOVAS-C.pdb; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
-Source: ..\NOVAS-C x86-x64\x64\Release\NOVAS-C64.dll; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
-Source: ..\NOVAS-C x86-x64\x64\Release\NOVAS-C64.pdb; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
+Source: ..\..\NOVAS\NOVAS-C\Win32\Release\NOVAS-C.dll; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
+Source: ..\..\NOVAS\NOVAS-C\Win32\Release\NOVAS-C.pdb; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
+Source: ..\..\NOVAS\NOVAS-C\x64\Release\NOVAS-C64.dll; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
+Source: ..\..\NOVAS\NOVAS-C\x64\Release\NOVAS-C64.pdb; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
 
 ;ASCOM Diagnostics
 Source: ..\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe; DestDir: {app}; Flags: ignoreversion
@@ -420,6 +420,7 @@ WelcomeLabel1=%n%n[name]%n
 #emit "WelcomeLabel2=This will install ASCOM Utilities version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
 [_ISToolPreCompile]
 Name: ..\..\ASCOM Redirection Policies\ASCOM Redirection Policies\bin\Release\ASCOM Redirection Policies.exe; Parameters: ; Flags: runminimized abortonerror
+
 
 
 
