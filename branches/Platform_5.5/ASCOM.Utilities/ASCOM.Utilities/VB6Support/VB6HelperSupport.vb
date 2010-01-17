@@ -223,21 +223,35 @@ Namespace VB6HelperSupport 'Tuck this out of the way of the main ASCOM.Utilities
     System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)> _
     Public Class SerialSupport
         Implements ISerialSupport, IDisposable
-
         'Class to support the VB6 Helper serial component
-
         'This exposes a new .Utilities serial port so that it can be accessed through the VB6 helper component
-        Private SerPort As Serial
 
+        Private SerPort As Serial
+        Private SerialProfile As ASCOM.Utilities.XMLAccess = Nothing
+        Private TraceFilename As String, TL As ASCOM.Utilities.TraceLogger, DebugTrace As Boolean
 #Region "New and IDisposable Support"
         Public Sub New()
-            'Create a new instance and instanciate the XMLAccess object to do all the hard work
+            'Create a new instance and instanciate the Serial object to do all the hard work
             MyBase.New()
+
             Try
                 SerPort = New Serial
+
+                SerialProfile = New XMLAccess 'Profile class that can retrieve the value of tracefile
+                TraceFilename = SerialProfile.GetProfile("", SERIAL_FILE_NAME_VARNAME)
+                TL = New TraceLogger(TraceFilename, "VB6Serial")
+                If TraceFilename <> "" Then TL.Enabled = True
+
+                'Get debug trace level on / off
+                DebugTrace = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
             Catch ex As Exception
                 MsgBox("SERIALSUPPORT: " & ex.ToString)
+            Finally
+                'Clean up
+                Try : SerialProfile.Dispose() : Catch : End Try
+                SerialProfile = Nothing
             End Try
+
         End Sub
 
         Private disposedValue As Boolean = False        ' To detect redundant calls
@@ -271,44 +285,67 @@ Namespace VB6HelperSupport 'Tuck this out of the way of the main ASCOM.Utilities
 #Region "SerialSupport Implementation"
 
         Public Sub ClearBuffers() Implements ISerialSupport.ClearBuffers
+            Dim sw As New Stopwatch
+            sw.Start()
             SerPort.ClearBuffers()
+            sw.Stop() : TL.LogMessage("ClearBuffers", Format(sw.ElapsedMilliseconds, "0").PadLeft(4) & "ms")
         End Sub
 
         Public Property Connected() As Boolean Implements ISerialSupport.Connected
             Get
-                Return SerPort.Connected
+                Dim sw As New Stopwatch, RetVal As Boolean
+                sw.Start()
+                RetVal = SerPort.Connected
+                sw.Stop() : TL.LogMessage("Connected Get", Format(sw.ElapsedMilliseconds, "0").PadLeft(4) & "ms " & RetVal.ToString)
+                Return RetVal
             End Get
             Set(ByVal value As Boolean)
+                Dim sw As New Stopwatch
+                sw.Start()
                 SerPort.Connected = value
+                sw.Stop() : TL.LogMessage("Connected Set", Format(sw.ElapsedMilliseconds, "0").PadLeft(4) & "ms " & value.ToString)
             End Set
         End Property
 
         Public Property Port() As Short Implements ISerialSupport.Port
             Get
-                Return CShort(SerPort.Port)
+                Dim sw As New Stopwatch, RetVal As Short
+                sw.Start()
+                RetVal = CShort(SerPort.Port)
+                sw.Stop() : TL.LogMessage("Port Get", Format(sw.ElapsedMilliseconds, "0").PadLeft(4) & "ms " & RetVal)
+                Return RetVal
             End Get
             Set(ByVal value As Short)
+                Dim sw As New Stopwatch
+                sw.Start()
                 SerPort.Port = CInt(value)
+                sw.Stop() : TL.LogMessage("Port Set", Format(sw.ElapsedMilliseconds, "0").PadLeft(4) & "ms " & value)
             End Set
         End Property
 
         Public Property PortSpeed() As Integer Implements ISerialSupport.PortSpeed
             Get
+                Dim sw As New Stopwatch, RetVal As Integer
+                sw.Start()
                 Select Case SerPort.Speed
-                    Case Utilities.SerialSpeed.ps300 : Return 300
-                    Case Utilities.SerialSpeed.ps1200 : Return 1200
-                    Case Utilities.SerialSpeed.ps2400 : Return 2400
-                    Case Utilities.SerialSpeed.ps4800 : Return 4800
-                    Case Utilities.SerialSpeed.ps9600 : Return 9600
-                    Case Utilities.SerialSpeed.ps14400 : Return 14400
-                    Case Utilities.SerialSpeed.ps19200 : Return 19200
-                    Case Utilities.SerialSpeed.ps28800 : Return 28800
-                    Case Utilities.SerialSpeed.ps38400 : Return 38400
-                    Case Utilities.SerialSpeed.ps57600 : Return 57600
-                    Case Utilities.SerialSpeed.ps115200 : Return 115200
+                    Case Utilities.SerialSpeed.ps300 : RetVal = 300
+                    Case Utilities.SerialSpeed.ps1200 : RetVal = 1200
+                    Case Utilities.SerialSpeed.ps2400 : RetVal = 2400
+                    Case Utilities.SerialSpeed.ps4800 : RetVal = 4800
+                    Case Utilities.SerialSpeed.ps9600 : RetVal = 9600
+                    Case Utilities.SerialSpeed.ps14400 : RetVal = 14400
+                    Case Utilities.SerialSpeed.ps19200 : RetVal = 19200
+                    Case Utilities.SerialSpeed.ps28800 : RetVal = 28800
+                    Case Utilities.SerialSpeed.ps38400 : RetVal = 38400
+                    Case Utilities.SerialSpeed.ps57600 : RetVal = 57600
+                    Case Utilities.SerialSpeed.ps115200 : RetVal = 115200
                 End Select
+                sw.Stop() : TL.LogMessage("PortSpeed Get", Format(sw.ElapsedMilliseconds, "0").PadLeft(4) & "ms " & RetVal)
+                Return RetVal
             End Get
             Set(ByVal value As Integer)
+                Dim sw As New Stopwatch
+                sw.Start()
                 Select Case value
                     Case 300 : SerPort.Speed = Utilities.SerialSpeed.ps300
                     Case 1200 : SerPort.Speed = Utilities.SerialSpeed.ps1200
@@ -322,57 +359,106 @@ Namespace VB6HelperSupport 'Tuck this out of the way of the main ASCOM.Utilities
                     Case 57600 : SerPort.Speed = Utilities.SerialSpeed.ps57600
                     Case 115200 : SerPort.Speed = Utilities.SerialSpeed.ps115200
                 End Select
+                sw.Stop() : TL.LogMessage("PortSpeed Set", Format(sw.ElapsedMilliseconds, "0").PadLeft(4) & "ms " & value)
             End Set
         End Property
 
         Public Function Receive() As String Implements ISerialSupport.Receive
-            Return SerPort.Receive
+            Dim sw As New Stopwatch, RetVal As String
+            sw.Start()
+            RetVal = SerPort.Receive
+            sw.Stop() : TL.LogMessage("Receive", Format(sw.ElapsedMilliseconds, "0").PadLeft(4) & "ms " & RetVal)
+            Return RetVal
         End Function
 
         Public Function ReceiveByte() As Byte Implements ISerialSupport.ReceiveByte
-            Return SerPort.ReceiveByte
+            Dim sw As New Stopwatch, RetVal As Byte
+            sw.Start()
+            RetVal = SerPort.ReceiveByte
+            sw.Stop() : TL.LogMessage("ReceiveByte", Format(sw.ElapsedMilliseconds, "0").PadLeft(4) & "ms " & RetVal.ToString)
+            Return RetVal
         End Function
 
         Public Function ReceiveCounted(ByVal p_Count As Short) As String Implements ISerialSupport.ReceiveCounted
-            Return SerPort.ReceiveCounted(CInt(p_Count))
+            Dim sw As New Stopwatch, RetVal As String
+            sw.Start()
+            RetVal = SerPort.ReceiveCounted(CInt(p_Count))
+            sw.Stop() : TL.LogMessage("ReceiveCounted", Format(sw.ElapsedMilliseconds, "0").PadLeft(4) & "ms " & RetVal)
+            Return RetVal
         End Function
 
         Public Function ReceiveCountedBinary(ByVal p_Count As Short) As Byte() Implements ISerialSupport.ReceiveCountedBinary
-            Return SerPort.ReceiveCountedBinary(CInt(p_Count))
+            Dim sw As New Stopwatch, RetVal() As Byte
+            Dim TextEncoding As System.Text.Encoding
+            TextEncoding = System.Text.Encoding.GetEncoding(1252)
+            sw.Start()
+            RetVal = SerPort.ReceiveCountedBinary(CInt(p_Count))
+            sw.Stop() : TL.LogMessage("ReceiveCountedBinary ", Format(sw.ElapsedMilliseconds, "0").PadLeft(4) & "ms " & TextEncoding.GetString(RetVal), True)
+            Return RetVal
         End Function
 
         Public Function ReceiveTerminated(ByVal p_Terminator As String) As String Implements ISerialSupport.ReceiveTerminated
-            Return SerPort.ReceiveTerminated(p_Terminator)
+            Dim sw As New Stopwatch, RetVal As String
+            sw.Start()
+            RetVal = SerPort.ReceiveTerminated(p_Terminator)
+            sw.Stop() : TL.LogMessage("ReceiveTerminated", Format(sw.ElapsedMilliseconds, "0").PadLeft(4) & "ms " & RetVal)
+            Return RetVal
         End Function
 
         Public Function ReceiveTerminatedBinary(ByRef p_Terminator() As Byte) As Byte() Implements ISerialSupport.ReceiveTerminatedBinary
-            Return SerPort.ReceiveTerminatedBinary(p_Terminator)
+            Dim sw As New Stopwatch, RetVal() As Byte, TextEncoding As System.Text.Encoding
+            TextEncoding = System.Text.Encoding.GetEncoding(1252)
+            sw.Start()
+            RetVal = SerPort.ReceiveTerminatedBinary(p_Terminator)
+            sw.Stop() : TL.LogMessage("Port Set", Format(sw.ElapsedMilliseconds, "0").PadLeft(4) & "ms " & TextEncoding.GetString(RetVal))
+            Return RetVal
         End Function
 
         Public Property ReceiveTimeout() As Short Implements ISerialSupport.ReceiveTimeout
             Get
-                Return CShort(SerPort.ReceiveTimeout)
+                Dim sw As New Stopwatch, RetVal As Short
+                sw.Start()
+                RetVal = CShort(SerPort.ReceiveTimeout)
+                sw.Stop() : TL.LogMessage("ReceiveTimeout Get", Format(sw.ElapsedMilliseconds, "0").PadLeft(4) & "ms " & RetVal)
+                Return RetVal
             End Get
             Set(ByVal value As Short)
+                Dim sw As New Stopwatch
+                sw.Start()
                 SerPort.ReceiveTimeout = CInt(value)
+                sw.Stop() : TL.LogMessage("ReceiveTimeout Set", Format(sw.ElapsedMilliseconds, "0").PadLeft(4) & "ms " & value)
             End Set
         End Property
 
         Public Property ReceiveTimeoutMs() As Integer Implements ISerialSupport.ReceiveTimeoutMs
             Get
-                Return SerPort.ReceiveTimeoutMs
+                Dim sw As New Stopwatch, RetVal As Integer
+                sw.Start()
+                RetVal = SerPort.ReceiveTimeoutMs
+                sw.Stop() : TL.LogMessage("ReceiveTimeoutMs Get", Format(sw.ElapsedMilliseconds, "0").PadLeft(4) & "ms " & RetVal)
+                Return RetVal
             End Get
             Set(ByVal value As Integer)
+                Dim sw As New Stopwatch
+                sw.Start()
                 SerPort.ReceiveTimeoutMs = value
+                sw.Stop() : TL.LogMessage("ReceiveTimeoutMs Set", Format(sw.ElapsedMilliseconds, "0").PadLeft(4) & "ms " & value)
             End Set
         End Property
 
         Public Sub Transmit(ByVal p_Data As String) Implements ISerialSupport.Transmit
+            Dim sw As New Stopwatch
+            sw.Start()
             SerPort.Transmit(p_Data)
+            sw.Stop() : TL.LogMessage("Transmit", Format(sw.ElapsedMilliseconds, "0").PadLeft(4) & "ms " & p_Data)
         End Sub
 
         Public Sub TransmitBinary(ByVal p_Data() As Byte) Implements ISerialSupport.TransmitBinary
+            Dim sw As New Stopwatch, TextEncoding As System.Text.Encoding
+            TextEncoding = System.Text.Encoding.GetEncoding(1252)
+            sw.Start()
             SerPort.TransmitBinary(p_Data)
+            sw.Stop() : TL.LogMessage("TransmitBinary", Format(sw.ElapsedMilliseconds, "0").PadLeft(4) & "ms " & TextEncoding.GetString(p_Data))
         End Sub
 #End Region
 
