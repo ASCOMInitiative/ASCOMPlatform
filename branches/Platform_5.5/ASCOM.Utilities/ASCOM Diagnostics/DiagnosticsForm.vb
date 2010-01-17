@@ -26,9 +26,10 @@ Public Class DiagnosticsForm
     Private Const CSIDL_WINDOWS As Integer = 36 ' 0x0024,
     Private Const CSIDL_PROGRAM_FILES_COMMONX86 As Integer = 44 ' 0x002c,
 
-    Dim TL As TraceLogger
-    Dim ASCOMXMLAccess As ASCOM.Utilities.XMLAccess
-    Dim RecursionLevel As Integer
+    Private TL As TraceLogger
+    Private Utl As Util
+    Private ASCOMXMLAccess As ASCOM.Utilities.XMLAccess
+    Private RecursionLevel As Integer
 
     Private LastLogFile As String ' Name of last diagnostics log file
 
@@ -50,6 +51,8 @@ Public Class DiagnosticsForm
         System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM\Logs " & Format(Now, "yyyy-MM-dd")
 
         btnLastLog.Enabled = False 'Disable last log button
+
+        Utl = New Util 'Get an ASCOM Utilities object
     End Sub
 
     Sub Status(ByVal Msg As String)
@@ -856,6 +859,9 @@ Public Class DiagnosticsForm
         Dim RegKey As RegistryKey
 
         RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\microsoft\Windows\Currentversion\uninstall\ASCOM.platform.NET.Components_is1", False)
+
+        TL.LogMessage("Installed Platform", "ASCOM PlatformVersion: " & Utl.PlatformVersion)
+        TL.BlankLine()
 
         TL.LogMessage("Installed Platform", RegKey.GetValue("DisplayName"))
         TL.LogMessage("Installed Platform", "Inno Setup App Path - " & RegKey.GetValue("Inno Setup: App Path"))
