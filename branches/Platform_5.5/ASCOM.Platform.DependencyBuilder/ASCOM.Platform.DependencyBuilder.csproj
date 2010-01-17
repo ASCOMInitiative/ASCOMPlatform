@@ -118,9 +118,9 @@ xcopy "$(SolutionDir)Interfaces\ASCOMExceptions\bin\$(ConfigurationName)\*.*" "$
 xcopy "$(SolutionDir)ASCOM.Attributes\bin\$(ConfigurationName)\*.*" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
 xcopy "$(SolutionDir)Interfaces\Master Interfaces\*.dll" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
 xcopy "$(SolutionDir)Interfaces\Master Interfaces\*.tlb" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
-xcopy "$(SolutionDir)ASCOM.Utilities\NOVAS-C x86-x64\debug\NOVAS-C.dll" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
-xcopy "$(SolutionDir)ASCOM.Utilities\NOVAS-C x86-x64\debug\NOVAS-C.pdb" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
-xcopy "$(SolutionDir)ASCOM.Utilities\NOVAS-C x86-x64\x64\debug\NOVAS-C64.dll" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
-xcopy "$(SolutionDir)ASCOM.Utilities\NOVAS-C x86-x64\x64\debug\NOVAS-C64.pdb" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y</PostBuildEvent>
+xcopy "$(SolutionDir)NOVAS\NOVAS-C\Win32\Release\NOVAS-C.dll" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
+xcopy "$(SolutionDir)NOVAS\NOVAS-C\Win32\Release\NOVAS-C.pdb" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
+xcopy "$(SolutionDir)NOVAS\NOVAS-C\X64\Release\NOVAS-C64.dll" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y
+xcopy "$(SolutionDir)NOVAS\NOVAS-C\X64\Release\NOVAS-C64.pdb" "$(SolutionDir)Drivers and Simulators\Platform Dependencies" /C /I /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>
