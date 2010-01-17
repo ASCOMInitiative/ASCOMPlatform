@@ -12,6 +12,8 @@ Module CommonConstants
     Friend Const SERIAL_AUTO_FILENAME As String = "C:\SerialTraceAuto.txt" 'Special value to indicate use of automatic trace filenames
     Friend Const SERIAL_DEFAULT_FILENAME As String = "C:\SerialTrace.txt" 'Default manual trace filename
     Friend Const SERIAL_DEBUG_TRACE_VARNAME As String = "SerDebugTrace" 'Constant naming the profile trace file variable name
+    Friend Const SERIAL_FORCED_COMPORTS_VARNAME As String = "ForcedCOMPorts" 'Constant listing COM ports that will be forced to be present
+    Friend Const SERIAL_IGNORED_COMPORTS_VARNAME As String = "IgnoredCOMPorts" 'Constant listing COM ports that will be ignored if present
 
     'Utilities configuration constants
     Friend Const TRACE_XMLACCESS As String = "Trace XMLAccess", TRACE_XMLACCESS_DEFAULT As Boolean = False
