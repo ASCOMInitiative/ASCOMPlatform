@@ -1138,22 +1138,7 @@ Namespace NOVAS
                 sun_eph32(jd, ra, dec, dis)
             End If
         End Sub
-        'Public Shared Function solarsystem(ByVal tjd As Double, _
-        '                                      ByVal body As Body, _
-        '                                      ByRef origin As Origin, _
-        '                                      ByRef pos As Double(), _
-        '                                      ByRef vel As Double()) As Short
-        'Dim vpos As New posvector, vvel As New velvector
-        'Dim rc As Short
-        '    If Is64Bit() Then
-        '        rc = solarsystem64(tjd, body, origin, vpos, vvel)
-        '    Else
-        '        rc = solarsystem32(tjd, body, origin, vpos, vvel)
-        '    End If
-        '    PosVecToArr(vpos, pos)
-        '    VelVecToArr(vvel, vel)
-        '    Return rc
-        'End Function
+
 #End Region
 
 #Region "DLL Entry Points (32bit)"
@@ -1460,13 +1445,6 @@ Namespace NOVAS
                                           ByRef dis As Double)
         End Sub
 
-        '  <DllImport(NOVAS32Dll, EntryPoint:="solarsystem")> _
-        '   Private Shared Function solarsystem32(ByVal tjd As Double, _
-        '                                        ByVal body As Body, _
-        '                                        ByRef origin As Integer, _
-        '                                        ByRef pos As posvector, _
-        '                                        ByRef vel As velvector) As Short
-        '  End Function
 #End Region
 
 #Region "DLL Entry Points (64bit)"
@@ -1770,13 +1748,6 @@ Namespace NOVAS
                                           ByRef dis As Double)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="solarsystem")> _
-        Private Shared Function solarsystem64(ByVal tjd As Double, _
-                                              ByVal body As Short, _
-                                              ByRef origin As Integer, _
-                                              ByRef pos As PosVector, _
-                                              ByRef vel As VelVector) As Short
-        End Function
 #End Region
 
 #Region "Support Code"

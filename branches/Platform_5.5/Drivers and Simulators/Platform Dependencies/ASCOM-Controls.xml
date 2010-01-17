@@ -4,41 +4,6 @@
         <name>ASCOM.Controls</name>
     </assembly>
     <members>
-        <member name="T:ASCOM.Controls.CadencePattern">
-            <summary>
-            Cadence patterns for blinking LEDs.
-            </summary>
-        </member>
-        <member name="F:ASCOM.Controls.CadencePattern.SteadyOn">
-            <summary>
-            LED permanently on (when enabled). Appropriate for indication of simple on/off status.
-            </summary>
-        </member>
-        <member name="F:ASCOM.Controls.CadencePattern.SteadyOff">
-            <summary>
-            LED permanently off, even when enabled. Appropriate for indication of simple on/off status.
-            </summary>
-        </member>
-        <member name="F:ASCOM.Controls.CadencePattern.BlinkFast">
-            <summary>
-            Fast blink, appropriate for non-critical ongoing change of state (eg Slewing).
-            </summary>
-        </member>
-        <member name="F:ASCOM.Controls.CadencePattern.BlinkSlow">
-            <summary>
-            Slow blink, appropriate for non-critical persistent conditions (e.g. image exposure in progress).
-            </summary>
-        </member>
-        <member name="F:ASCOM.Controls.CadencePattern.BlinkAlarm">
-            <summary>
-            Very fast blink, appropriate for drawing attention to urgent conditions that require operator intervention.
-            </summary>
-        </member>
-        <member name="F:ASCOM.Controls.CadencePattern.Wink">
-            <summary>
-            Wink (mostly on with occasional short wink-off), appropriate for indicating non-critical ongoing steady state.
-            </summary>
-        </member>
         <member name="T:ASCOM.Controls.Chooser">
             <summary>
             Summary description for Chooser.
@@ -149,10 +114,127 @@
             device, then the value <c>null</c> is returned.
             </summary>
         </member>
+        <member name="F:ASCOM.Controls.Anunciator.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:ASCOM.Controls.Anunciator.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:ASCOM.Controls.Anunciator.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.Anunciator.tmrCadence">
+            <summary>
+            A timer that triggers updates to anunciators to simulate flashing.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.Anunciator.UpdateList">
+            <summary>
+            A list of all the anunciator controls that have been created which need updating
+            when the timer ticks.
+            </summary>
+        </member>
+        <member name="M:ASCOM.Controls.Anunciator.StopTimerUpdates">
+            <summary>
+            Stops the timer updates by removing this instance from the <see cref="F:ASCOM.Controls.Anunciator.UpdateList"/>.
+            </summary>
+        </member>
+        <member name="M:ASCOM.Controls.Anunciator.Dispose">
+            <summary>
+            Releases all resources used by the <see cref="T:System.ComponentModel.Component"/>.
+            </summary>
+        </member>
+        <member name="M:ASCOM.Controls.Anunciator.Finalize">
+            <summary>
+            Releases unmanaged resources and performs other cleanup operations before the
+            <see cref="T:ASCOM.Controls.Anunciator"/> is reclaimed by garbage collection.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Controls.Anunciator.ForeColor">
+            <summary>
+            Gets or sets the foreground color of the control.
+            </summary>
+            <value></value>
+            <returns>
+            The foreground <see cref="T:System.Drawing.Color"/> of the control. The default is the value of the <see cref="P:System.Windows.Forms.Control.DefaultForeColor"/> property.
+            </returns>
+            <PermissionSet>
+            	<IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/>
+            </PermissionSet>
+        </member>
+        <member name="P:ASCOM.Controls.Anunciator.BackColor">
+            <summary>
+            Gets or sets the background color for the control.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that represents the background color of the control. The default is the value of the <see cref="P:System.Windows.Forms.Control.DefaultBackColor"/> property.
+            </returns>
+            <PermissionSet>
+            	<IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/>
+            </PermissionSet>
+        </member>
+        <member name="P:ASCOM.Controls.Anunciator.Cadence">
+            <summary>
+            Gets or sets the cadence.
+            </summary>
+            <value>The cadence pattern.</value>
+        </member>
         <member name="P:ASCOM.Controls.Properties.Settings.ASCOMStandardsURL">
             <summary>
             The URL of the ASCOM Standards web site.
             </summary>
+        </member>
+        <member name="T:ASCOM.Controls.DeviceDescriptor">
+            <summary>
+            This class defines a Device Descriptor for ASCOM devices and is convenient
+            for populating ComboBoxes with lists of ASCOM devices.
+            </summary>
+        </member>
+        <member name="M:ASCOM.Controls.DeviceDescriptor.#ctor(System.String,System.String)">
+            <summary>
+            Initialize a new DeviceDescriptor object.
+            </summary>
+            <param name="s1">DeviceID of the device (Device ID)</param>
+            <param name="s2">Human-readable description</param>
+        </member>
+        <member name="M:ASCOM.Controls.DeviceDescriptor.#ctor(System.Collections.Generic.KeyValuePair{System.String,System.String})">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.Controls.DeviceDescriptor"/> class
+            from a generic <see cref="T:System.Collections.Generic.KeyValuePair{string,string}"/>.
+            These values are typically returned from methods in <see cref="N:ASCOM.Utilities"/>.
+            </summary>
+            <param name="deviceProfileKey">The device profile key.</param>
+        </member>
+        <member name="M:ASCOM.Controls.DeviceDescriptor.ToString">
+            <summary>
+            Returns a <see cref="T:System.String"/> containing a description of the ASCOM device.
+            When this item is added to a <see cref="T:System.Windows.Forms.ComboBox"/> then this
+            method determines what will be displayed in the Combo Box control.
+            </summary>
+            <returns>
+            A <see cref="T:System.String"/> containing a description of the ASCOM device.
+            </returns>
+        </member>
+        <member name="P:ASCOM.Controls.DeviceDescriptor.DeviceID">
+            <summary>
+            Gets or sets the ASCOM DeviceID.
+            </summary>
+            <value>The ASCOM DeviceID (synonymous with the COM ClsId) of the device.</value>
+        </member>
+        <member name="P:ASCOM.Controls.DeviceDescriptor.Description">
+            <summary>
+            Gets or sets the description of the ASCOM device.
+            </summary>
+            <value>The description.</value>
         </member>
         <member name="T:ASCOM.Controls.ChooserMRU">
             <summary>
@@ -178,6 +260,41 @@
             <summary>
             Gets or sets the MRU entry for the current device type (as specified in the
             <see cref="P:ASCOM.Controls.ChooserMRU.MRUType"/> property).
+            </summary>
+        </member>
+        <member name="T:ASCOM.Controls.CadencePattern">
+            <summary>
+            Cadence patterns for blinking LEDs.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.CadencePattern.SteadyOn">
+            <summary>
+            LED permanently on (when enabled). Appropriate for indication of simple on/off status.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.CadencePattern.SteadyOff">
+            <summary>
+            LED permanently off, even when enabled. Appropriate for indication of simple on/off status.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.CadencePattern.BlinkFast">
+            <summary>
+            Fast blink, appropriate for non-critical ongoing change of state (eg Slewing).
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.CadencePattern.BlinkSlow">
+            <summary>
+            Slow blink, appropriate for non-critical persistent conditions (e.g. image exposure in progress).
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.CadencePattern.BlinkAlarm">
+            <summary>
+            Very fast blink, appropriate for drawing attention to urgent conditions that require operator intervention.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.CadencePattern.Wink">
+            <summary>
+            Wink (mostly on with occasional short wink-off), appropriate for indicating non-critical ongoing steady state.
             </summary>
         </member>
         <member name="T:ASCOM.Controls.LEDIndicator">
@@ -373,123 +490,6 @@
             This is used to update the control in a thread-safe manner.
             </summary>
             <param name="ledColour">The desired LED colour.</param>
-        </member>
-        <member name="F:ASCOM.Controls.Anunciator.components">
-            <summary> 
-            Required designer variable.
-            </summary>
-        </member>
-        <member name="M:ASCOM.Controls.Anunciator.Dispose(System.Boolean)">
-            <summary> 
-            Clean up any resources being used.
-            </summary>
-            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        </member>
-        <member name="M:ASCOM.Controls.Anunciator.InitializeComponent">
-            <summary> 
-            Required method for Designer support - do not modify 
-            the contents of this method with the code editor.
-            </summary>
-        </member>
-        <member name="F:ASCOM.Controls.Anunciator.tmrCadence">
-            <summary>
-            A timer that triggers updates to anunciators to simulate flashing.
-            </summary>
-        </member>
-        <member name="F:ASCOM.Controls.Anunciator.UpdateList">
-            <summary>
-            A list of all the anunciator controls that have been created which need updating
-            when the timer ticks.
-            </summary>
-        </member>
-        <member name="M:ASCOM.Controls.Anunciator.StopTimerUpdates">
-            <summary>
-            Stops the timer updates by removing this instance from the <see cref="F:ASCOM.Controls.Anunciator.UpdateList"/>.
-            </summary>
-        </member>
-        <member name="M:ASCOM.Controls.Anunciator.Dispose">
-            <summary>
-            Releases all resources used by the <see cref="T:System.ComponentModel.Component"/>.
-            </summary>
-        </member>
-        <member name="M:ASCOM.Controls.Anunciator.Finalize">
-            <summary>
-            Releases unmanaged resources and performs other cleanup operations before the
-            <see cref="T:ASCOM.Controls.Anunciator"/> is reclaimed by garbage collection.
-            </summary>
-        </member>
-        <member name="P:ASCOM.Controls.Anunciator.ForeColor">
-            <summary>
-            Gets or sets the foreground color of the control.
-            </summary>
-            <value></value>
-            <returns>
-            The foreground <see cref="T:System.Drawing.Color"/> of the control. The default is the value of the <see cref="P:System.Windows.Forms.Control.DefaultForeColor"/> property.
-            </returns>
-            <PermissionSet>
-            	<IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/>
-            </PermissionSet>
-        </member>
-        <member name="P:ASCOM.Controls.Anunciator.BackColor">
-            <summary>
-            Gets or sets the background color for the control.
-            </summary>
-            <value></value>
-            <returns>
-            A <see cref="T:System.Drawing.Color"/> that represents the background color of the control. The default is the value of the <see cref="P:System.Windows.Forms.Control.DefaultBackColor"/> property.
-            </returns>
-            <PermissionSet>
-            	<IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/>
-            </PermissionSet>
-        </member>
-        <member name="P:ASCOM.Controls.Anunciator.Cadence">
-            <summary>
-            Gets or sets the cadence.
-            </summary>
-            <value>The cadence pattern.</value>
-        </member>
-        <member name="T:ASCOM.Controls.DeviceDescriptor">
-            <summary>
-            This class defines a Device Descriptor for ASCOM devices and is convenient
-            for populating ComboBoxes with lists of ASCOM devices.
-            </summary>
-        </member>
-        <member name="M:ASCOM.Controls.DeviceDescriptor.#ctor(System.String,System.String)">
-            <summary>
-            Initialize a new DeviceDescriptor object.
-            </summary>
-            <param name="s1">DeviceID of the device (Device ID)</param>
-            <param name="s2">Human-readable description</param>
-        </member>
-        <member name="M:ASCOM.Controls.DeviceDescriptor.#ctor(System.Collections.Generic.KeyValuePair{System.String,System.String})">
-            <summary>
-            Initializes a new instance of the <see cref="T:ASCOM.Controls.DeviceDescriptor"/> class
-            from a generic <see cref="T:System.Collections.Generic.KeyValuePair{string,string}"/>.
-            These values are typically returned from methods in <see cref="N:ASCOM.Utilities"/>.
-            </summary>
-            <param name="deviceProfileKey">The device profile key.</param>
-        </member>
-        <member name="M:ASCOM.Controls.DeviceDescriptor.ToString">
-            <summary>
-            Returns a <see cref="T:System.String"/> containing a description of the ASCOM device.
-            When this item is added to a <see cref="T:System.Windows.Forms.ComboBox"/> then this
-            method determines what will be displayed in the Combo Box control.
-            </summary>
-            <returns>
-            A <see cref="T:System.String"/> containing a description of the ASCOM device.
-            </returns>
-        </member>
-        <member name="P:ASCOM.Controls.DeviceDescriptor.DeviceID">
-            <summary>
-            Gets or sets the ASCOM DeviceID.
-            </summary>
-            <value>The ASCOM DeviceID (synonymous with the COM ClsId) of the device.</value>
-        </member>
-        <member name="P:ASCOM.Controls.DeviceDescriptor.Description">
-            <summary>
-            Gets or sets the description of the ASCOM device.
-            </summary>
-            <value>The description.</value>
         </member>
     </members>
 </doc>

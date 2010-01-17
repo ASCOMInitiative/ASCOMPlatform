@@ -94,15 +94,18 @@
 ; Accommodated Utiities and Astrometry renaming and location changes
 ; Setup Build 19 Released 5.5.1 AvailableCOMPorts test
 
+; Updated to new location for NOVAS2 DLLs
+; Setup Build 20
+
 [Setup]
 ; Setup program version number - change this each time you change this setup script
-#define Public SetupVersion 19
+#define Public SetupVersion 20
 
 ;Text description of this update as it appears in the installer UI
-#define Public InstallerVersion "5.5.1g"
+#define Public InstallerVersion "5.5.1h"
 
 ;Text for release candidate / beta version messages
-#define Public RC "COMPorts Test 4"
+#define Public RC "(NOVAS Fix Beta)"
 
 #define Public Major 0
 #define Public Minor 0
@@ -420,6 +423,7 @@ WelcomeLabel1=%n%n[name]%n
 #emit "WelcomeLabel2=This will install ASCOM Utilities version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
 [_ISToolPreCompile]
 Name: ..\..\ASCOM Redirection Policies\ASCOM Redirection Policies\bin\Release\ASCOM Redirection Policies.exe; Parameters: ; Flags: runminimized abortonerror
+
 
 
 

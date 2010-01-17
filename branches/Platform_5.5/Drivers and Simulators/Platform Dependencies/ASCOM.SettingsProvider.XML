@@ -4,52 +4,90 @@
         <name>ASCOM.SettingsProvider</name>
     </assembly>
     <members>
-        <member name="T:TiGra.ExtensionMethods.StringExtensions">
+        <member name="T:ASCOM.SettingsProvider">
             <summary>
-            Extension methods for manipulating strings.
+            Provides settings storage for ASCOM device drivers.
+            Settings are persisted in the ASCOM Device Profile store.
+            </summary>
+            <remarks>
+            Original version by Tim Long, March 2009.
+            Copyright © 2009 TiGra Astronomy, all rights reserved.
+            http://www.tigranetworks.co.uk/Astronomy
+            </remarks>
+        </member>
+        <member name="M:ASCOM.SettingsProvider.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.SettingsProvider"/> class.
             </summary>
         </member>
-        <member name="M:TiGra.ExtensionMethods.StringExtensions.Head(System.String,System.Int32)">
+        <member name="F:ASCOM.SettingsProvider.appName">
             <summary>
-            Returns the specified number of characters from the head of a string.
+            Backing store for the ApplicationName property.
             </summary>
-            <param name="source">The source string.</param>
-            <param name="length">The number of characters to be returned, must not be greater than the length of the string.</param>
-            <returns>The specified number of characters from the head of the source string, as a new string.</returns>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown if the requested number of characters exceeds the string length.</exception>
         </member>
-        <member name="M:TiGra.ExtensionMethods.StringExtensions.Tail(System.String,System.Int32)">
+        <member name="M:ASCOM.SettingsProvider.Initialize(System.String,System.Collections.Specialized.NameValueCollection)">
             <summary>
-            Returns the specified number of characters from the tail of a string.
+            Initializes the ASCOM Settings Provider.
             </summary>
-            <param name="source">The source string.</param>
-            <param name="length">The number of characters to be returned, must not be greater than the length of the string.</param>
-            <returns>The specified number of characters from the tail of the source string, as a new string.</returns>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown if the requested number of characters exceeds the string length.</exception>
+            <param name="name">Ignored.</param>
+            <param name="config">Not used.</param>
+            <remarks>
+            The value of <see cref="P:ASCOM.SettingsProvider.ApplicationName"/> is determined here by reflection. This value
+            should correspond to an ASCOM DeviceID and this is passed to the underlying
+            ASCOM Helper assembly when reading and writing settings values.	Determining the correct
+            value for <see cref="P:ASCOM.SettingsProvider.ApplicationName"/> is a tricky procedure as there is a very loose
+            coupling between the settings class and the settings provider.   The way we discover
+            the correct value is to walk up the call stack until we find an assembly name
+            beginning with "ASCOM.".
+            </remarks>
         </member>
-        <member name="M:TiGra.ExtensionMethods.StringExtensions.Clean(System.String,System.String)">
+        <member name="M:ASCOM.SettingsProvider.GetPropertyValues(System.Configuration.SettingsContext,System.Configuration.SettingsPropertyCollection)">
             <summary>
-            Cleans (that is, removes all unwanted characters) from the string.
+            Retrieves a collection of settings values from the underlying ASCOM Profile store.
             </summary>
-            <param name="source">The source string.</param>
-            <param name="allowedCharacters">A list of the allowed characters. All other characters will be removed.</param>
-            <returns>A new string with all of the unwanted characters deleted.</returns>
+            <param name="context">Not used.</param>
+            <param name="collection">The list of properties to be retrieved.</param>
+            <returns>
+            Returns a collection of the retrieved property values as a
+            <see cref="T:System.Configuration.SettingsPropertyValueCollection"/>.
+            </returns>
+            <remarks>
+            If any properties are absent in the underlying store, or if an error occurs while
+            retrieving them, then the property's default value is used.
+            </remarks>
         </member>
-        <member name="M:TiGra.ExtensionMethods.StringExtensions.RemoveHead(System.String,System.Int32)">
+        <member name="M:ASCOM.SettingsProvider.SetPropertyValues(System.Configuration.SettingsContext,System.Configuration.SettingsPropertyValueCollection)">
             <summary>
-            Remove the head of the string, leaving the tail.
+            Persists a collection of settings values to the underlying ASCOM Profile store.
             </summary>
-            <param name="source">The source string.</param>
-            <param name="length">Number of characters to remove from the head.</param>
-            <returns>A new string containing the old string with <see cref="P:length"/> characters removed from the head.</returns>
+            <param name="context"></param>
+            <param name="collection"></param>
         </member>
-        <member name="M:TiGra.ExtensionMethods.StringExtensions.RemoveTail(System.String,System.Int32)">
+        <member name="M:ASCOM.SettingsProvider.EnsureRegistered(ASCOM.Utilities.Profile,System.String)">
             <summary>
-            Remove the tail of the string, leaving the head.
+            Checks whether the driver is registered with ASCOM and, if not, registers it.
             </summary>
-            <param name="source">The source string.</param>
-            <param name="length">Number of characters to remove from the tail.</param>
-            <returns>A new string containing the old string with <see cref="P:length"/> characters removed from the tail.</returns>
+            <param name="ascomProfile">
+            A reference to a <see cref="T:ASCOM.Utilities.Profile"/> object
+            that is used to query the ASCOM Device Profile.
+            </param>
+            <param name="DriverID">The full ASCOM DeviceID to be verified.</param>
+        </member>
+        <member name="P:ASCOM.SettingsProvider.Name">
+            <summary>
+            Returns the provider's friendly name used during configuration.
+            </summary>
+        </member>
+        <member name="P:ASCOM.SettingsProvider.Description">
+            <summary>
+            Gets the provider's friendly description.
+            </summary>
+        </member>
+        <member name="P:ASCOM.SettingsProvider.ApplicationName">
+            <summary>
+            Gets the name of the driver or application for which settings are being managed.
+            This value is set during provider initialization and cannot be changed thereafter.
+            </summary>
         </member>
         <member name="T:TiGra.Diagnostics">
             <summary>
@@ -145,91 +183,6 @@
             RawWord type with enumeration constants for ASCII control codes.
             </summary>
         </member>
-        <member name="T:ASCOM.SettingsProvider">
-            <summary>
-            Provides settings storage for ASCOM device drivers.
-            Settings are persisted in the ASCOM Device Profile store.
-            </summary>
-            <remarks>
-            Original version by Tim Long, March 2009.
-            Copyright © 2009 TiGra Astronomy, all rights reserved.
-            http://www.tigranetworks.co.uk/Astronomy
-            </remarks>
-        </member>
-        <member name="M:ASCOM.SettingsProvider.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:ASCOM.SettingsProvider"/> class.
-            </summary>
-        </member>
-        <member name="F:ASCOM.SettingsProvider.appName">
-            <summary>
-            Backing store for the ApplicationName property.
-            </summary>
-        </member>
-        <member name="M:ASCOM.SettingsProvider.Initialize(System.String,System.Collections.Specialized.NameValueCollection)">
-            <summary>
-            Initializes the ASCOM Settings Provider.
-            </summary>
-            <param name="name">Ignored.</param>
-            <param name="config">Not used.</param>
-            <remarks>
-            The value of <see cref="P:ASCOM.SettingsProvider.ApplicationName"/> is determined here by reflection. This value
-            should correspond to an ASCOM DeviceID and this is passed to the underlying
-            ASCOM Helper assembly when reading and writing settings values.	Determining the correct
-            value for <see cref="P:ASCOM.SettingsProvider.ApplicationName"/> is a tricky procedure as there is a very loose
-            coupling between the settings class and the settings provider.   The way we discover
-            the correct value is to walk up the call stack until we find an assembly name
-            beginning with "ASCOM.".
-            </remarks>
-        </member>
-        <member name="M:ASCOM.SettingsProvider.GetPropertyValues(System.Configuration.SettingsContext,System.Configuration.SettingsPropertyCollection)">
-            <summary>
-            Retrieves a collection of settings values from the underlying ASCOM Profile store.
-            </summary>
-            <param name="context">Not used.</param>
-            <param name="collection">The list of properties to be retrieved.</param>
-            <returns>
-            Returns a collection of the retrieved property values as a
-            <see cref="T:System.Configuration.SettingsPropertyValueCollection"/>.
-            </returns>
-            <remarks>
-            If any properties are absent in the underlying store, or if an error occurs while
-            retrieving them, then the property's default value is used.
-            </remarks>
-        </member>
-        <member name="M:ASCOM.SettingsProvider.SetPropertyValues(System.Configuration.SettingsContext,System.Configuration.SettingsPropertyValueCollection)">
-            <summary>
-            Persists a collection of settings values to the underlying ASCOM Profile store.
-            </summary>
-            <param name="context"></param>
-            <param name="collection"></param>
-        </member>
-        <member name="M:ASCOM.SettingsProvider.EnsureRegistered(ASCOM.Utilities.Profile,System.String)">
-            <summary>
-            Checks whether the driver is registered with ASCOM and, if not, registers it.
-            </summary>
-            <param name="ascomProfile">
-            A reference to a <see cref="T:ASCOM.Utilities.Profile"/> object
-            that is used to query the ASCOM Device Profile.
-            </param>
-            <param name="DriverID">The full ASCOM DeviceID to be verified.</param>
-        </member>
-        <member name="P:ASCOM.SettingsProvider.Name">
-            <summary>
-            Returns the provider's friendly name used during configuration.
-            </summary>
-        </member>
-        <member name="P:ASCOM.SettingsProvider.Description">
-            <summary>
-            Gets the provider's friendly description.
-            </summary>
-        </member>
-        <member name="P:ASCOM.SettingsProvider.ApplicationName">
-            <summary>
-            Gets the name of the driver or application for which settings are being managed.
-            This value is set during provider initialization and cannot be changed thereafter.
-            </summary>
-        </member>
         <member name="T:ASCOM.PropertyNotAttributedException">
             <summary>
             Exception thrown when teh SettingsProvider finds a setting that does not have a DeviceID attribute.
@@ -246,6 +199,53 @@
             Gets or sets the name of the property that caused teh exception.
             </summary>
             <value>The name of the property.</value>
+        </member>
+        <member name="T:TiGra.ExtensionMethods.StringExtensions">
+            <summary>
+            Extension methods for manipulating strings.
+            </summary>
+        </member>
+        <member name="M:TiGra.ExtensionMethods.StringExtensions.Head(System.String,System.Int32)">
+            <summary>
+            Returns the specified number of characters from the head of a string.
+            </summary>
+            <param name="source">The source string.</param>
+            <param name="length">The number of characters to be returned, must not be greater than the length of the string.</param>
+            <returns>The specified number of characters from the head of the source string, as a new string.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown if the requested number of characters exceeds the string length.</exception>
+        </member>
+        <member name="M:TiGra.ExtensionMethods.StringExtensions.Tail(System.String,System.Int32)">
+            <summary>
+            Returns the specified number of characters from the tail of a string.
+            </summary>
+            <param name="source">The source string.</param>
+            <param name="length">The number of characters to be returned, must not be greater than the length of the string.</param>
+            <returns>The specified number of characters from the tail of the source string, as a new string.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown if the requested number of characters exceeds the string length.</exception>
+        </member>
+        <member name="M:TiGra.ExtensionMethods.StringExtensions.Clean(System.String,System.String)">
+            <summary>
+            Cleans (that is, removes all unwanted characters) from the string.
+            </summary>
+            <param name="source">The source string.</param>
+            <param name="allowedCharacters">A list of the allowed characters. All other characters will be removed.</param>
+            <returns>A new string with all of the unwanted characters deleted.</returns>
+        </member>
+        <member name="M:TiGra.ExtensionMethods.StringExtensions.RemoveHead(System.String,System.Int32)">
+            <summary>
+            Remove the head of the string, leaving the tail.
+            </summary>
+            <param name="source">The source string.</param>
+            <param name="length">Number of characters to remove from the head.</param>
+            <returns>A new string containing the old string with <see cref="P:length"/> characters removed from the head.</returns>
+        </member>
+        <member name="M:TiGra.ExtensionMethods.StringExtensions.RemoveTail(System.String,System.Int32)">
+            <summary>
+            Remove the tail of the string, leaving the head.
+            </summary>
+            <param name="source">The source string.</param>
+            <param name="length">Number of characters to remove from the tail.</param>
+            <returns>A new string containing the old string with <see cref="P:length"/> characters removed from the tail.</returns>
         </member>
     </members>
 </doc>
