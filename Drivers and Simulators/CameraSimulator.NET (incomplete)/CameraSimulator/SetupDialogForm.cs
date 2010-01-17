@@ -148,5 +148,12 @@ namespace ASCOM.Simulator
                 camera.gainMax = Convert.ToInt16(textBoxGainMax.Text, CultureInfo.InvariantCulture);
             }
         }
+
+        private void buttonSetImageFile_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.FileName = camera.imagePath;
+            openFileDialog1.ShowDialog();
+            camera.imagePath = openFileDialog1.FileName;
+        }
 	}
 }

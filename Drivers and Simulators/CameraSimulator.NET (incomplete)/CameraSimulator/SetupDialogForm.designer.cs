@@ -53,6 +53,7 @@ namespace ASCOM.Simulator
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBoxGainSettings = new System.Windows.Forms.GroupBox();
+            this.radioButtonNoGain = new System.Windows.Forms.RadioButton();
             this.textBoxGainMax = new System.Windows.Forms.TextBox();
             this.textBoxGainMin = new System.Windows.Forms.TextBox();
             this.radioButtonUseMinAndMax = new System.Windows.Forms.RadioButton();
@@ -81,7 +82,8 @@ namespace ASCOM.Simulator
             this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.cameraBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.radioButtonNoGain = new System.Windows.Forms.RadioButton();
+            this.buttonSetImageFile = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.groupBoxCCD.SuspendLayout();
             this.groupBoxGainSettings.SuspendLayout();
@@ -338,6 +340,17 @@ namespace ASCOM.Simulator
             this.groupBoxGainSettings.TabStop = false;
             this.groupBoxGainSettings.Text = "Gain Settings";
             // 
+            // radioButtonNoGain
+            // 
+            this.radioButtonNoGain.AutoSize = true;
+            this.radioButtonNoGain.Location = new System.Drawing.Point(6, 19);
+            this.radioButtonNoGain.Name = "radioButtonNoGain";
+            this.radioButtonNoGain.Size = new System.Drawing.Size(99, 17);
+            this.radioButtonNoGain.TabIndex = 29;
+            this.radioButtonNoGain.TabStop = true;
+            this.radioButtonNoGain.Text = "No Gain control";
+            this.radioButtonNoGain.UseVisualStyleBackColor = true;
+            // 
             // textBoxGainMax
             // 
             this.textBoxGainMax.Location = new System.Drawing.Point(93, 85);
@@ -566,6 +579,7 @@ namespace ASCOM.Simulator
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.buttonSetImageFile);
             this.groupBox2.Controls.Add(this.checkBox4);
             this.groupBox2.Controls.Add(this.checkBox3);
             this.groupBox2.Location = new System.Drawing.Point(331, 193);
@@ -599,16 +613,20 @@ namespace ASCOM.Simulator
             // 
             this.cameraBindingSource.DataSource = typeof(ASCOM.Simulator.Camera);
             // 
-            // radioButtonNoGain
+            // buttonSetImageFile
             // 
-            this.radioButtonNoGain.AutoSize = true;
-            this.radioButtonNoGain.Location = new System.Drawing.Point(6, 19);
-            this.radioButtonNoGain.Name = "radioButtonNoGain";
-            this.radioButtonNoGain.Size = new System.Drawing.Size(99, 17);
-            this.radioButtonNoGain.TabIndex = 29;
-            this.radioButtonNoGain.TabStop = true;
-            this.radioButtonNoGain.Text = "No Gain control";
-            this.radioButtonNoGain.UseVisualStyleBackColor = true;
+            this.buttonSetImageFile.Location = new System.Drawing.Point(11, 70);
+            this.buttonSetImageFile.Name = "buttonSetImageFile";
+            this.buttonSetImageFile.Size = new System.Drawing.Size(99, 24);
+            this.buttonSetImageFile.TabIndex = 2;
+            this.buttonSetImageFile.Text = "button1";
+            this.buttonSetImageFile.UseVisualStyleBackColor = true;
+            this.buttonSetImageFile.Click += new System.EventHandler(this.buttonSetImageFile_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            this.openFileDialog1.Filter = "Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*";
             // 
             // SetupDialogForm
             // 
@@ -706,5 +724,7 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.TextBox textBoxGainMax;
         private System.Windows.Forms.TextBox textBoxGainMin;
         private System.Windows.Forms.RadioButton radioButtonNoGain;
+        private System.Windows.Forms.Button buttonSetImageFile;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
 	}
 }
