@@ -20,7 +20,9 @@
 */
 
    EXPORT short int solarsystem (double tjd, short int body, short int origin,
-
                           double *pos, double *vel);
+
+   EXPORT void sun_eph (double jd,
+              double *ra, double *dec, double *dis);
 
 #endif
