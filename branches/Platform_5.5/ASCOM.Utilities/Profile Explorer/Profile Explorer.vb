@@ -185,7 +185,9 @@ Public Class frmProfileExplorer
                     KeyValues.CurrentRow.Cells(0).Value = ""
                 End Try
 
-
+                If KeyValues.CurrentCell.Value Is Nothing Then 'Guard against value deleted, in which case create an empty string
+                    KeyValues.CurrentCell.Value = ""
+                End If
                 'Prof.WriteProfile(KeyPath, Values.Keys(e.RowIndex), KeyValues.CurrentCell.Value.ToString)
                 Prof.WriteProfile(KeyPath, KeyValues.CurrentRow.Cells(0).Value.ToString, KeyValues.CurrentCell.Value.ToString)
                 'MsgBox("Value data changed " & e.ColumnIndex.ToString & " " & e.RowIndex.ToString & " " & KeyPath & " " & Values.Keys(e.RowIndex) & " " & KeyValues.CurrentCell.Value.ToString)
