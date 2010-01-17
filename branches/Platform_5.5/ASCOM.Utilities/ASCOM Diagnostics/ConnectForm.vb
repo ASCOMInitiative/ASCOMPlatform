@@ -4,12 +4,13 @@ Public Class ConnectForm
     Private Const DEFAULT_DEVICE_TYPE As String = "Telescope"
     Private Const DEFAULT_DEVICE As String = "ScopeSim.Telescope"
 
-    Private CurrentDevice, CurrentDeviceType As String, Connected As Boolean, Device As Object
+    Private CurrentDevice, CurrentDeviceType As String, Connected As Boolean, Device As Object, Util As ASCOM.Utilities.Util
 
     Private Sub ConnectForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Dim DeviceTypes() As String, Profile As New ASCOM.Utilities.Profile
 
-
+        AddHandler cmbDeviceType.SelectedIndexChanged, AddressOf DevicetypeChangedhandler
+        Util = New ASCOM.Utilities.Util
         DeviceTypes = Profile.RegisteredDeviceTypes
         For Each DeviceType As String In DeviceTypes
             cmbDeviceType.Items.Add(DeviceType)
@@ -20,7 +21,15 @@ Public Class ConnectForm
         btnProperties.Enabled = False
         txtDevice.Text = CurrentDevice
 
+    End Sub
 
+    Private Sub DevicetypeChangedhandler()
+        CurrentDeviceType = cmbDeviceType.SelectedItem.ToString
+        If CurrentDeviceType = "Telescope" Then 'Enable or disable the run script button as appropriate
+            btnScript.Enabled = True
+        Else
+            btnScript.Enabled = False
+        End If
     End Sub
 
     Private Sub btnChoose_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnChoose.Click
@@ -37,7 +46,6 @@ Public Class ConnectForm
         Else
             btnProperties.Enabled = False
         End If
-
 
         txtDevice.Text = CurrentDevice
 
@@ -64,6 +72,7 @@ Public Class ConnectForm
                 btnConnect.Text = "Connect"
                 btnChoose.Enabled = True
                 If CurrentDevice <> "" Then btnProperties.Enabled = True
+                DevicetypeChangedhandler() 'Enable or disable script button according todevice type
             Catch ex As Exception
                 txtStatus.Text = "Connect Failed..." & ex.Message & vbCrLf & vbCrLf & ex.ToString
             End Try
@@ -84,14 +93,12 @@ Public Class ConnectForm
                 btnConnect.Text = "Disconnect"
                 btnChoose.Enabled = False
                 btnProperties.Enabled = False
+                btnScript.Enabled = False
             Catch ex As Exception
                 txtStatus.Text = "Connect Failed..." & ex.Message & vbCrLf & vbCrLf & ex.ToString
             End Try
 
-
         End If
-
-
 
     End Sub
 
@@ -100,5 +107,70 @@ Public Class ConnectForm
         Device.SetupDialog()
         Try : Marshal.ReleaseComObject(Device) : Catch : End Try
         Device = Nothing
+    End Sub
+
+    Private TL As TraceLogger, DeviceObject As Object
+
+    Private Sub btnScript_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnScript.Click
+        txtStatus.Clear()
+        TL = New TraceLogger("", "DiagnosticScript")
+        TL.Enabled = True
+        LogMsg("Script", "Diagnostic Script Started")
+        ExecuteCommand("CreateObject")
+        ExecuteCommand("Connect")
+        ExecuteCommand("Description")
+        ExecuteCommand("DriverInfo")
+        ExecuteCommand("DriverVersion")
+        For i As Integer = 1 To 3
+            ExecuteCommand("RightAscension")
+            ExecuteCommand("Declination")
+        Next
+        ExecuteCommand("Disconnect")
+        ExecuteCommand("DestroyObject")
+        LogMsg("Script", "Diagnostic Script Completed")
+        TL.Enabled = False
+        TL.Dispose()
+    End Sub
+
+    Sub ExecuteCommand(ByVal Command As String)
+        Dim sw As New Stopwatch, StartTime As Date, Result As String = ""
+        Try
+            StartTime = Now
+            sw.Start()
+            LogMsg(Command, "Started")
+
+            Select Case Command
+                Case "CreateObject"
+                    DeviceObject = CreateObject(CurrentDevice)
+                Case "Connect"
+                    DeviceObject.Connected = True
+                Case "DriverInfo"
+                    Result = DeviceObject.DriverInfo
+                Case "Description"
+                    Result = DeviceObject.Description
+                Case "DriverVersion"
+                    Result = DeviceObject.DriverVersion
+                Case "RightAscension"
+                    Result = Util.DegreesToHMS(DeviceObject.RightAscension)
+                Case "Declination"
+                    Result = Util.DegreesToDMS(DeviceObject.Declination, ":", ":", "")
+                Case "Disconnect"
+                    DeviceObject.Connected = False
+                Case "DestroyObject"
+                    Marshal.ReleaseComObject(DeviceObject)
+                    DeviceObject = Nothing
+                Case Else
+                    LogMsg(Command, "***** Unknown command *****")
+            End Select
+            sw.Stop()
+
+            LogMsg(Command, "Finished - Started: " & Format(StartTime, "HH:mm:ss.fff") & " duration: " & sw.ElapsedMilliseconds & " ms - " & Result)
+        Catch ex As Exception
+            LogMsg(Command, "Exception - Started: " & Format(StartTime, "HH:mm:ss.fff") & " duration: " & sw.ElapsedMilliseconds & " ms - Exception: " & ex.ToString)
+        End Try
+    End Sub
+    Sub LogMsg(ByVal Command As String, ByVal Msg As String)
+        TL.LogMessage(Command, Msg)
+        txtStatus.Text = txtStatus.Text & Command & " " & Msg & vbCrLf
     End Sub
 End Class
