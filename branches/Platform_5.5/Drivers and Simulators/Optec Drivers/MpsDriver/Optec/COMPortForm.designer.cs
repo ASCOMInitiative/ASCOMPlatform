@@ -72,6 +72,7 @@
             this.Controls.Add(this.COMPort_CB);
             this.Controls.Add(this.label1);
             this.Name = "COMPortForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "COM Port Setup";
             this.Load += new System.EventHandler(this.COMPortForm_Load);
             this.ResumeLayout(false);

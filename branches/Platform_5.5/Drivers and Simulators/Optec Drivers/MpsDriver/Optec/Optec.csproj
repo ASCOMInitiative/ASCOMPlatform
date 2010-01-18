@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{05BAFAD3-879F-4742-BBBC-D54C319D7826}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -56,6 +56,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\Common Files\ASCOM\.net\ASCOM.Exceptions.dll</HintPath>
     </Reference>
+    <Reference Include="ASCOM.Utilities, Version=5.5.1.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />

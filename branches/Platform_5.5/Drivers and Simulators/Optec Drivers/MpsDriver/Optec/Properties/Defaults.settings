@@ -15,7 +15,7 @@
       <Value Profile="(Default)">Port 4</Value>
     </Setting>
     <Setting Name="COMPort" Type="System.Int16" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="P1FocusOffset" Type="System.Int16" Scope="User">
       <Value Profile="(Default)">0</Value>

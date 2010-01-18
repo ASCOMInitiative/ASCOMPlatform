@@ -53,18 +53,45 @@ namespace ASCOM.Optec
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch (CurrentPosition_CB.SelectedIndex)
+            if (CurrentPosition_CB.SelectedIndex != (DeviceComm.CurrentPosition - 1))
+            {
+                //MOVE TO NEW POS
+                switch (CurrentPosition_CB.SelectedIndex)
+                {
+                    case 0:
+                        DeviceComm.CurrentPosition = 1;
+
+                        break;
+                    case 1:
+                        DeviceComm.CurrentPosition = 2;
+
+                        break;
+                    case 2:
+                        DeviceComm.CurrentPosition = 3;
+
+                        break;
+                    case 3:
+                        DeviceComm.CurrentPosition = 4;
+   
+                        break;
+                }
+            }
+            switch (DeviceComm.CurrentPosition -1)
             {
                 case 0:
+    
                     PortPicture.Image = Properties.Resources.Rotator1;
                     break;
                 case 1:
+                   
                     PortPicture.Image = Properties.Resources.Rotator2;
                     break;
                 case 2:
+                    
                     PortPicture.Image = Properties.Resources.Rotator3;
                     break;
                 case 3:
+                  
                     PortPicture.Image = Properties.Resources.Rotator4;
                     break;
             }
@@ -113,11 +140,13 @@ namespace ASCOM.Optec
                 connectToolStripMenuItem.Enabled = false;
                 disconnectToolStripMenuItem.Enabled = true;
                 CurrentPosition_CB.Enabled = true;
+                CurrentPosition_CB.SelectedIndex = DeviceComm.CurrentPosition - 1;
                 PortPicture.Enabled = true;
                 LED_GB.Enabled = true;
                 LEDOff_RB.Enabled = true;
                 LEDOn_RB.Enabled = true;
                 setupOffsetsToolStripMenuItem.Enabled = true;
+                
             }
             else
             {
@@ -145,6 +174,11 @@ namespace ASCOM.Optec
                 DeviceComm.Disconnect();
                 
             }
+        }
+
+        private void selectCOMPortToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DeviceComm.SelectCOMPort();
         }
 	}
 }

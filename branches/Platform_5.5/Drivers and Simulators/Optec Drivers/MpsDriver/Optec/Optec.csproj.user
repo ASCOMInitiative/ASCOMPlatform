@@ -18,6 +18,6 @@
     <StartAction>Program</StartAction>
     <StartProgram>C:\Windows\SysWOW64\cscript.exe</StartProgram>
     <StartArguments>Test.js</StartArguments>
-    <StartWorkingDirectory>D:\JordansProgramming\ASCOM Repository\Optec Drivers\MpsDriver\Optec\</StartWorkingDirectory>
+    <StartWorkingDirectory>D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\MpsDriver\Optec\</StartWorkingDirectory>
   </PropertyGroup>
 </Project>

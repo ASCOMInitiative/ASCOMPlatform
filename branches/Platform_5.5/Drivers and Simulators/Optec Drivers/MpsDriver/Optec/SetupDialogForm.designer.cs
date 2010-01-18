@@ -40,9 +40,10 @@ namespace ASCOM.Optec
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.operationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.connectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.disconnectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setupOffsetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.disconnectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectCOMPortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LED_GB.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.LEDPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PortPicture)).BeginInit();
@@ -179,7 +180,8 @@ namespace ASCOM.Optec
             this.connectToolStripMenuItem,
             this.disconnectToolStripMenuItem,
             this.setupOffsetsToolStripMenuItem,
-            this.exitToolStripMenuItem});
+            this.exitToolStripMenuItem,
+            this.selectCOMPortToolStripMenuItem});
             this.operationsToolStripMenuItem.Name = "operationsToolStripMenuItem";
             this.operationsToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.operationsToolStripMenuItem.Text = "File";
@@ -187,31 +189,38 @@ namespace ASCOM.Optec
             // connectToolStripMenuItem
             // 
             this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
-            this.connectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.connectToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.connectToolStripMenuItem.Text = "Connect";
             this.connectToolStripMenuItem.Click += new System.EventHandler(this.connectToolStripMenuItem_Click);
+            // 
+            // disconnectToolStripMenuItem
+            // 
+            this.disconnectToolStripMenuItem.Enabled = false;
+            this.disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
+            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.disconnectToolStripMenuItem.Text = "Disconnect";
             // 
             // setupOffsetsToolStripMenuItem
             // 
             this.setupOffsetsToolStripMenuItem.Enabled = false;
             this.setupOffsetsToolStripMenuItem.Name = "setupOffsetsToolStripMenuItem";
-            this.setupOffsetsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.setupOffsetsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.setupOffsetsToolStripMenuItem.Text = "Setup Offsets";
             this.setupOffsetsToolStripMenuItem.Click += new System.EventHandler(this.SetupOffsets);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // disconnectToolStripMenuItem
+            // selectCOMPortToolStripMenuItem
             // 
-            this.disconnectToolStripMenuItem.Enabled = false;
-            this.disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
-            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.disconnectToolStripMenuItem.Text = "Disconnect";
+            this.selectCOMPortToolStripMenuItem.Name = "selectCOMPortToolStripMenuItem";
+            this.selectCOMPortToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.selectCOMPortToolStripMenuItem.Text = "Select COM Port";
+            this.selectCOMPortToolStripMenuItem.Click += new System.EventHandler(this.selectCOMPortToolStripMenuItem_Click);
             // 
             // SetupDialogForm
             // 
@@ -267,5 +276,6 @@ namespace ASCOM.Optec
         private System.Windows.Forms.ToolStripMenuItem disconnectToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setupOffsetsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectCOMPortToolStripMenuItem;
 	}
 }
