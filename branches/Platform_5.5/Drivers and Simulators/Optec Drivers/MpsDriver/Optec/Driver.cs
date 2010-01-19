@@ -55,6 +55,7 @@ namespace ASCOM.Optec
 		string DriverName			{ get; }
 		string Description			{ get; }
 		string DriverInfo			{ get; }
+        string InterfaceVersion     { get; }
 		ArrayList Ports				{ get; }
         void SetupDialog();
 	}

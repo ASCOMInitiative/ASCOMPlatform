@@ -137,6 +137,7 @@
   <ItemGroup>
     <Content Include="ASCOM.png" />
     <Content Include="ReadMe.htm" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="Resources\LEDOn1.jpg" />
     <None Include="Resources\LEDOn.jpg" />
     <None Include="Resources\Rotator111.bmp" />
