@@ -44,6 +44,7 @@ namespace ASCOM.Optec
             this.setupOffsetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectCOMPortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label2 = new System.Windows.Forms.Label();
             this.LED_GB.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.LEDPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PortPicture)).BeginInit();
@@ -143,7 +144,7 @@ namespace ASCOM.Optec
             // 
             this.PortPicture.Enabled = false;
             this.PortPicture.Image = global::ASCOM.Optec.Properties.Resources.Rotator1;
-            this.PortPicture.Location = new System.Drawing.Point(6, 102);
+            this.PortPicture.Location = new System.Drawing.Point(8, 102);
             this.PortPicture.Name = "PortPicture";
             this.PortPicture.Size = new System.Drawing.Size(103, 109);
             this.PortPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -177,11 +178,11 @@ namespace ASCOM.Optec
             // operationsToolStripMenuItem
             // 
             this.operationsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.selectCOMPortToolStripMenuItem,
             this.connectToolStripMenuItem,
             this.disconnectToolStripMenuItem,
             this.setupOffsetsToolStripMenuItem,
-            this.exitToolStripMenuItem,
-            this.selectCOMPortToolStripMenuItem});
+            this.exitToolStripMenuItem});
             this.operationsToolStripMenuItem.Name = "operationsToolStripMenuItem";
             this.operationsToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.operationsToolStripMenuItem.Text = "File";
@@ -222,6 +223,17 @@ namespace ASCOM.Optec
             this.selectCOMPortToolStripMenuItem.Text = "Select COM Port";
             this.selectCOMPortToolStripMenuItem.Click += new System.EventHandler(this.selectCOMPortToolStripMenuItem_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.Red;
+            this.label2.Location = new System.Drawing.Point(14, 136);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(91, 13);
+            this.label2.TabIndex = 12;
+            this.label2.Text = "Port In Motion!";
+            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -235,6 +247,7 @@ namespace ASCOM.Optec
             this.Controls.Add(this.cmdOK);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.label2);
             this.ForeColor = System.Drawing.Color.Black;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MainMenuStrip = this.menuStrip1;
@@ -277,5 +290,6 @@ namespace ASCOM.Optec
         private System.Windows.Forms.ToolStripMenuItem setupOffsetsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem selectCOMPortToolStripMenuItem;
+        private System.Windows.Forms.Label label2;
 	}
 }

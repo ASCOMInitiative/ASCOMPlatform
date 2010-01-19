@@ -14,11 +14,12 @@ namespace ASCOM.Optec
 		public SetupDialogForm()
 		{
 			InitializeComponent();
+
 		}
 
 		private void cmdOK_Click(object sender, EventArgs e)
-		{
-			Dispose();
+        {
+            Dispose();
 		}
 
 		private void cmdCancel_Click(object sender, EventArgs e)
@@ -43,18 +44,16 @@ namespace ASCOM.Optec
 			}
 		}
 
-        private void Connect_Btn_Click(object sender, EventArgs e)
-        {
-            //DeviceComm.Connect();
-            //DeviceComm.ComState = 2;
-            //MessageBox.Show(DeviceComm.ComState.ToString());
-
-        }
-
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (CurrentPosition_CB.SelectedIndex != (DeviceComm.CurrentPosition - 1))
             {
+                PortPicture.Visible = false;
+                CurrentPosition_CB.Enabled = false;
+                PortPicture.Invalidate();
+                CurrentPosition_CB.Invalidate();
+                this.Refresh();
+                this.Update();
                 //MOVE TO NEW POS
                 switch (CurrentPosition_CB.SelectedIndex)
                 {
@@ -95,6 +94,8 @@ namespace ASCOM.Optec
                     PortPicture.Image = Properties.Resources.Rotator4;
                     break;
             }
+            CurrentPosition_CB.Enabled = true;
+            PortPicture.Visible = true;
             
         }
 
@@ -103,10 +104,12 @@ namespace ASCOM.Optec
             if (LEDOn_RB.Checked)
             {
                 LEDPicture.Image = Properties.Resources.LEDOn;
+                DeviceSettings.LEDsON = true;
             }
             if (LEDOff_RB.Checked)
             {
                 LEDPicture.Image = Properties.Resources.LEDOff;
+                DeviceSettings.LEDsON = false; ;
             }
         }
 
@@ -119,6 +122,7 @@ namespace ASCOM.Optec
         {
             
         }
+
         private void SetupOffsets(object sender, EventArgs e)
         {
             OffsetsForm OffsetSetup = new OffsetsForm(1);
@@ -130,8 +134,16 @@ namespace ASCOM.Optec
         {
             DeviceComm.Connect();
             EnableDisableControls();
-
+            if (DeviceSettings.LEDsON)
+            {
+                LEDOn_RB.Checked = true;
+            }
+            else
+            {
+                LEDOn_RB.Checked = false ;
+            }
         }
+
         private void EnableDisableControls()
         {
             if (DeviceComm.ComState == 2)

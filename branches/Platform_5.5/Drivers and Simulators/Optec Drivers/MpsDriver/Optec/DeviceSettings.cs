@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
-using ASCOM.Helper;
 using System.Windows.Forms;
 
 namespace ASCOM.Optec
@@ -13,7 +12,7 @@ namespace ASCOM.Optec
                             // device specific settings stored by the user. It's used
                             // by the driver constructor as well as SetupDialog().
     {
-        private static ASCOM.Helper.Profile ProfileTools = new ASCOM.Helper.Profile();
+        //private static Utilities.Profile ProfileTools = new Utilities.Profile();
 
         static DeviceSettings() {} 
 
@@ -145,6 +144,17 @@ namespace ASCOM.Optec
                     break;
             }
             return Rot_Offset;
+        }
+
+        public static bool LEDsON
+        {
+            get { return Properties.Defaults.Default.LEDsOn; }
+            set 
+            {
+                DeviceComm.SetLEDs(value);
+                Properties.Defaults.Default.LEDsOn = value;
+                Properties.Defaults.Default.Save();   
+            }
         }
 
         //

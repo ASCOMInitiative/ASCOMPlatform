@@ -28,8 +28,6 @@ using System.Text;
 using System.Runtime.InteropServices;
 
 using ASCOM;
-using ASCOM.Helper;
-using ASCOM.Helper2;
 using ASCOM.Interface;
 
 namespace ASCOM.Optec
@@ -88,13 +86,17 @@ namespace ASCOM.Optec
 		internal Port() 
         {
             this.Index = indexCount++;
-            if (indexCount == 4) indexCount = 0;    //this is so I can create multiple MPS's
-        }								    // Prevent creation of this object
+            //Accessing the SetupDialogForm twice in a row will create two instances 
+            //of the MultiPortSelector. The first one will have port numbers 0 through 3
+            //the second will have ports numbers 4 through 7. I'm not sure how to prevent 
+            //that so I added the following line.
+            if (indexCount == MultiPortSelector.s_sNumberOfPorts) indexCount = 0;
+        }								   
         internal int Index
         {
             get;  private set;
         }
-		public string Name									// Port.PortName is redundant, Port.Name seems better?
+		public string Name
 		{
 			get { return _name; }
 			set 
@@ -157,7 +159,7 @@ namespace ASCOM.Optec
 		//
 		internal static string s_csDriverID = "ASCOM.Optec.MultiPortSelector";
 		private static string s_csDriverDescription = "Optec MultiPortSelector";
-        private static short s_sNumberOfPorts = 4;
+        internal static short s_sNumberOfPorts = 4;
 
 		private ArrayList _ports;
 
@@ -178,8 +180,6 @@ namespace ASCOM.Optec
                 P.RotationOffset = DeviceSettings.RotationOffset(i);
                 _ports.Add(P);
             }
-            
-
 		}
 
 		#region ASCOM Registration
@@ -189,8 +189,8 @@ namespace ASCOM.Optec
 		//
 		private static void RegUnregASCOM(bool bRegister)
 		{
-			Helper.Profile P = new Helper.Profile();
-			P.DeviceTypeV = "MultiPortSelector";					//  Requires Helper 5.0.3 or later
+            Utilities.Profile P = new Utilities.Profile();
+            P.DeviceType = "MultiPortSelector";
 			if (bRegister)
 				P.Register(s_csDriverID, s_csDriverDescription);
 			else
@@ -221,6 +221,7 @@ namespace ASCOM.Optec
 		//
 
 		#region IMultiPortSelector Members
+
 		public bool Connected
 		{
 			// TODO Replace this with your implementation

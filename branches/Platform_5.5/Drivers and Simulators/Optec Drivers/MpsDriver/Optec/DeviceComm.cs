@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using ASCOM.Helper;
 using ASCOM.Utilities;
 
 namespace ASCOM.Optec
@@ -13,7 +12,7 @@ namespace ASCOM.Optec
     {
         private static short d_ComState;
         private static short d_CurrentPosition;
-        //private static Helper.Serial SerialTools = new ASCOM.Helper.Serial(); 
+
         private static Utilities.Serial SerialTools = new ASCOM.Utilities.Serial();
         //private static bool PortSelected;
         private static string MPSErrorMsg;
@@ -39,6 +38,23 @@ namespace ASCOM.Optec
             set { SetPosition(value); }
         }
 
+        public static void SetLEDs(bool On)
+        {
+            string cmdToSend = "";
+            string ExpResult = "";
+            if(On)
+            {
+                cmdToSend = "RL0001";
+                ExpResult = "L=1";
+            }
+            else 
+            {
+                cmdToSend = "RL0000";
+                ExpResult = "L=0";
+            }
+            SendCmd_WaitForReturnString(cmdToSend, 1000, ExpResult);
+        }
+
         private static void SetPosition(short value)
         {
 
@@ -53,9 +69,14 @@ namespace ASCOM.Optec
                 try
                 {
                     string cmdstring = "RP000" + value.ToString();
-                    if (SendCmd(cmdstring, 1000).Contains("P=" + value.ToString()))
+                    string ReturnString = "P=" + value.ToString();
+                    if (SendCmd_WaitForReturnString(cmdstring, 4000, ReturnString))
                     {
                         d_CurrentPosition = value;
+                    }
+                    else
+                    {
+                        // Device Never returned
                     }
                 }
                 catch (Exception ex)
@@ -187,7 +208,33 @@ namespace ASCOM.Optec
             return ReturnString;
             
         }
+        private static bool SendCmd_WaitForReturnString(string CMD, int Timeout, string ExpectedResult)
+        {
+            string ReturnString = "DEVICE-ERROR";   //Guilty until proven innocent!
 
+            SerialTools.ClearBuffers();             //Clear any "garbage" in the serial port buffers
+
+            try
+            {
+                do
+                {
+                    SerialTools.Transmit(CMD);          //Send the command 
+                    SerialTools.ReceiveTimeoutMs = Timeout;
+                    ReturnString = SerialTools.ReceiveTerminated("\n\r");  //line feed, carriage return
+                } while (!ReturnString.Contains(ExpectedResult));
+
+                return true;
+            }
+            catch (Exception Ex)
+            {
+                MessageBox.Show("An error occured while attempting to send command: " + CMD +
+                    "\n Error Details: " + Ex.ToString());
+            }
+            
+            return false;
+            
+
+        }
         internal static void Connect()
         {
             //THIS SHOULD GET THE DEVICE IN THE SERIAL LOOP SO WE CAN TALK TO IT

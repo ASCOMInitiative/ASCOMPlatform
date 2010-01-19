@@ -274,5 +274,17 @@ namespace ASCOM.Optec.Properties {
                 this["P4RotationOffset"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool LEDsOn {
+            get {
+                return ((bool)(this["LEDsOn"]));
+            }
+            set {
+                this["LEDsOn"] = value;
+            }
+        }
     }
 }
