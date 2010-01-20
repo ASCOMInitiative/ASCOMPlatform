@@ -12,7 +12,9 @@ namespace ASCOM.Optec
 	public partial class SetupDialogForm : Form
 	{
 		public SetupDialogForm()
-		{
+		
+        
+        {
 			InitializeComponent();
 
 		}

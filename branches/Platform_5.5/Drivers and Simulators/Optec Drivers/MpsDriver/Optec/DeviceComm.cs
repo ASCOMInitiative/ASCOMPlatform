@@ -57,7 +57,7 @@ namespace ASCOM.Optec
 
         private static void SetPosition(short value)
         {
-
+            if (value == d_CurrentPosition) return;
             if (value < 1 || value > 4)
             {
                 throw new InvalidOperationException("Can not move to the position " + value + 
@@ -78,6 +78,7 @@ namespace ASCOM.Optec
                     {
                         // Device Never returned
                     }
+                    System.Threading.Thread.Sleep(1500);
                 }
                 catch (Exception ex)
                 {   

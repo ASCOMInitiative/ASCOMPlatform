@@ -105,13 +105,22 @@ for(i = 0; i<4; i++)
 {
     WScript.Echo(Pts(i).RotationOffset)
 } 
-
-MPS.SetupDialog();
-//MPSnew = new ActiveXObject("MultiPortSelector");
 for(i = 0; i<4; i++)
 {
     WScript.Echo(Pts(i).Name)
-} 
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+WScript.Echo("\nTest Changing Positions...\n");
+WScript.Echo("\nMoving to Position 1...\n");
+MPS.Position = 1;
+WScript.Echo(MPS.Position);
+MPS.Position = 4;
+WScript.Echo(MPS.Position);
+MPS.Position = 3;
+WScript.Echo(MPS.Position);
+MPS.Position = 2;
+WScript.Echo(MPS.Position);
 
 F = null;
 MPS = null;

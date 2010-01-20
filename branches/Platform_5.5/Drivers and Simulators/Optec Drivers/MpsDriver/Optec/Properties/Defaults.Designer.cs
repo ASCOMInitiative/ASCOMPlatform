@@ -25,7 +25,7 @@ namespace ASCOM.Optec.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Port 1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Port 01")]
         public string Port1Name {
             get {
                 return ((string)(this["Port1Name"]));
@@ -37,7 +37,7 @@ namespace ASCOM.Optec.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Port 2")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Port 02")]
         public string Port2Name {
             get {
                 return ((string)(this["Port2Name"]));
@@ -49,7 +49,7 @@ namespace ASCOM.Optec.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Port 3")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Port 03")]
         public string Port3Name {
             get {
                 return ((string)(this["Port3Name"]));
@@ -61,7 +61,7 @@ namespace ASCOM.Optec.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Port 4")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Port 04")]
         public string Port4Name {
             get {
                 return ((string)(this["Port4Name"]));

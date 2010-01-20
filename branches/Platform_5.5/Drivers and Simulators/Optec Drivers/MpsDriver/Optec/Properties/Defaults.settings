@@ -3,16 +3,16 @@
   <Profiles />
   <Settings>
     <Setting Name="Port1Name" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Port 1</Value>
+      <Value Profile="(Default)">Port 01</Value>
     </Setting>
     <Setting Name="Port2Name" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Port 2</Value>
+      <Value Profile="(Default)">Port 02</Value>
     </Setting>
     <Setting Name="Port3Name" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Port 3</Value>
+      <Value Profile="(Default)">Port 03</Value>
     </Setting>
     <Setting Name="Port4Name" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Port 4</Value>
+      <Value Profile="(Default)">Port 04</Value>
     </Setting>
     <Setting Name="COMPort" Type="System.Int16" Scope="User">
       <Value Profile="(Default)">1</Value>

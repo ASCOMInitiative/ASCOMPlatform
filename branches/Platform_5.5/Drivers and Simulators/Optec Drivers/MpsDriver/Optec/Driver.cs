@@ -64,7 +64,7 @@ namespace ASCOM.Optec
 	// Port class - this is what's in the ArrayList 'Ports'.
 	//
 	// The Guid attribute sets the CLSID for ASCOM.Optec.MultiPortSelector
-	// The ClassInterface.None addribute prevents an empty interface called
+	// The ClassInterface.None attribute prevents an empty interface called
 	// _FilterWheel from being created and used as the [default] interface
 	//
 	[Guid("7B6E87C8-CA14-42EC-B6CE-DD8D1063D381")]
@@ -77,21 +77,21 @@ namespace ASCOM.Optec
 		private short _focusOffset;
 		private double _rotationOffset;						// Can't be a Short
 
-        private static int indexCount = 0;
+        //private static int indexCount = 0;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Port"/> class.
         /// Set's the port's index value in strict order of creation.
         /// </summary>
 
-		internal Port() 
+		internal Port(int index) 
         {
-            this.Index = indexCount++;
+            this.Index = index;
             //Accessing the SetupDialogForm twice in a row will create two instances 
             //of the MultiPortSelector. The first one will have port numbers 0 through 3
             //the second will have ports numbers 4 through 7. I'm not sure how to prevent 
             //that so I added the following line.
-            if (indexCount == MultiPortSelector.s_sNumberOfPorts) indexCount = 0;
+            //if (indexCount == MultiPortSelector.s_sNumberOfPorts) indexCount = 0;
         }								   
         internal int Index
         {
@@ -103,7 +103,7 @@ namespace ASCOM.Optec
 			set 
             {  
                 _name = value;
-                DeviceSettings.SetName(this.Index + 1, value);
+                DeviceSettings.SetName(this.Index, value);
             }
 		}
 		public double RightAscensionOffset
@@ -112,7 +112,7 @@ namespace ASCOM.Optec
 			set 
             {
                 _rightAscensionOffset = value;
-                DeviceSettings.SetRightAscensionOffset(this.Index + 1, value);
+                DeviceSettings.SetRightAscensionOffset(this.Index, value);
             }
 		}
 		public double DeclinationOffset
@@ -121,7 +121,7 @@ namespace ASCOM.Optec
 			set 
             { 
                 _declinationOffset = value;
-                DeviceSettings.SetDeclinationOffset(this.Index + 1, value);
+                DeviceSettings.SetDeclinationOffset(this.Index, value);
             }
 		}
 		public short FocusOffset
@@ -130,7 +130,7 @@ namespace ASCOM.Optec
 			set 
             { 
                 _focusOffset = value;
-                DeviceSettings.SetFocusOffset(this.Index + 1, value); 
+                DeviceSettings.SetFocusOffset(this.Index, value); 
             }
 		}
 		public double RotationOffset
@@ -139,7 +139,7 @@ namespace ASCOM.Optec
 			set 
             {
                 _rotationOffset = value;
-                DeviceSettings.SetRotationOffset(this.Index + 1, value);
+                DeviceSettings.SetRotationOffset(this.Index, value);
             }
 		}
 	}
@@ -173,7 +173,7 @@ namespace ASCOM.Optec
 			// Here read config, construct Port objects and add them to _ports.
             for (int i = 1; i <= s_sNumberOfPorts; i++)
             {
-                Port P = new Port();
+                Port P = new Port(i);
                 P.Name = DeviceSettings.Name(i);
                 P.RightAscensionOffset = DeviceSettings.RightAscensionOffset(i);
                 P.DeclinationOffset = DeviceSettings.DeclinationOffset(i);
@@ -283,6 +283,15 @@ namespace ASCOM.Optec
                 return D_Info;
             }
 		}
+
+        public string InterfaceVersion
+        {
+            get
+            {
+                string Iversion = "Version Beta";
+                return Iversion;
+            }
+        }
 
 		public ArrayList Ports
 		{
