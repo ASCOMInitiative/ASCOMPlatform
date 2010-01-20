@@ -1,8 +1,0 @@
-C:\projects\SwitchSimulatorServer\SwitchSimulatorServer\obj\Debug\ResolveAssemblyReference.cache
-C:\projects\SwitchSimulatorServer\SwitchSimulatorServer\obj\Debug\SwitchSimulatorServer.csproj.ResolveComReference.cache
-C:\projects\SwitchSimulatorServer\SwitchSimulatorServer\obj\Debug\SwitchSimulatorServer.csproj.GenerateResource.Cache
-C:\projects\SwitchSimulatorServer\SwitchSimulatorServer\obj\Debug\ASCOM.Simulator.Switch.frmMain.resources
-C:\projects\SwitchSimulatorServer\SwitchSimulatorServer\bin\Debug\ASCOM.Simulator.Switch.exe
-C:\projects\SwitchSimulatorServer\SwitchSimulatorServer\bin\Debug\ASCOM.Simulator.Switch.pdb
-C:\projects\SwitchSimulatorServer\SwitchSimulatorServer\obj\Debug\ASCOM.Simulator.Switch.exe
-C:\projects\SwitchSimulatorServer\SwitchSimulatorServer\obj\Debug\ASCOM.Simulator.Switch.pdb
