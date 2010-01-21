@@ -702,6 +702,9 @@ namespace ASCOM.GeminiTelescope
             BalloonIcon.Text = ""; // tooltip;    
         }
 
+
+        static byte previous_PECStatus = 0xff;
+
         void tmrUpdate_Tick(object sender, EventArgs e)
         {
 
@@ -727,11 +730,11 @@ namespace ASCOM.GeminiTelescope
                     if (GeminiHardware.QueueDepth < 3)  //don't keep queuing if queue is large
                     {
                         byte pec = GeminiHardware.PECStatus;
-
-                        this.BeginInvoke(new UpdateDisplayDelegate(UpdateDisplay), pec);
+                        if (pec != 0xff) previous_PECStatus = pec;
                     }
-                }
 
+                }
+                this.BeginInvoke(new UpdateDisplayDelegate(UpdateDisplay), previous_PECStatus);
             }
         }
 
