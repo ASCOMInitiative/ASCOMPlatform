@@ -1500,6 +1500,8 @@ namespace ASCOM.GeminiTelescope
                         if (GeminiHardware.Connected) StartJoystick();
                      else
                          tmrJoystick.Stop();
+
+            m_BalloonMenu.MenuItems[Resources.Control].Checked = this.Visible;
         }
 
         private void aboutGeminiDriverToolStripMenuItem_Click(object sender, EventArgs e)
