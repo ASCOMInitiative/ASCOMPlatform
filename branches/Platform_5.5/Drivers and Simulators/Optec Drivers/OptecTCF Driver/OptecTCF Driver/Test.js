@@ -21,6 +21,7 @@ j += "Position = " + F.Position + "\n";
 
 j+= "Testing Temp Comp mode.........\n";
 F.TempComp = true;
+F.Move(3200);
 if (F.TempComp == true) j+= "Entered Temperature Mode!\n";
 else j+= "FAILED to enter Temp Comp Mode\n";
 j += "Temperature = " + F.Temperature + "\n";

@@ -16,7 +16,9 @@
 //
 // Date			Who	Vers	Description
 // -----------	---	-----	-------------------------------------------------------
-// 09-23-2009	JTS	5.0.0	Initial edit, from ASCOM Focuser Driver template
+// 01-22-2010   JTS Beta2   Fixed Exception thrown when move is attempted in AutoFocus mode
+// -----------	---	-----	-------------------------------------------------------
+// 09-23-2009	JTS	Beta1	Initial edit, from ASCOM Focuser Driver template
 // --------------------------------------------------------------------------------
 //
 using System;
@@ -46,7 +48,7 @@ namespace ASCOM.OptecTCF_Driver
         // Driver ID and descriptive string that shows in the Chooser
         //
         internal static string s_csDriverID = "ASCOM.OptecTCF_Driver.Focuser";
-        private static string s_csDriverDescription = "Optec TCF-S BETA1";
+        private static string s_csDriverDescription = "Optec TCF-S BETA2";
 
         //
         // Constructor - Must be public for COM registration!
@@ -64,12 +66,12 @@ namespace ASCOM.OptecTCF_Driver
         private static void RegUnregASCOM(bool bRegister)
         {
             Utilities.Profile P = new Utilities.Profile();
-            P.DeviceType = "Focuser";					//  Requires Helper 5.0.3 or later
+            P.DeviceType = "Focuser";					
             if (bRegister)
                 P.Register(s_csDriverID, s_csDriverDescription);
             else
                 P.Unregister(s_csDriverID);
-            try										// In case Helper becomes native .NET
+            try										
             {
                 Marshal.ReleaseComObject(P);
             }
@@ -153,6 +155,11 @@ namespace ASCOM.OptecTCF_Driver
         public void Move(int val)
         {
             // TODO Replace this with your implementation
+            if (DeviceComm.InTempCompMode())
+            {
+                throw new ASCOM.MethodNotImplementedException("Move While in AutoFocus Mode");
+               
+            }
             DeviceComm.MoveFocus(val);
         }        //FINISHED
 

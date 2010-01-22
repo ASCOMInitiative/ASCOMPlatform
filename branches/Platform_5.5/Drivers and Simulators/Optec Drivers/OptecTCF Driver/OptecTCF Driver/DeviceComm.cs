@@ -340,7 +340,8 @@ namespace ASCOM.OptecTCF_Driver
             }
             catch (Exception Ex)
             {
-                throw new ASCOM.DriverException("\nFailed to move focus.\n" + Ex.ToString(), Ex);
+                //throw new ASCOM.DriverException("\nFailed to move focus.\n" + Ex.ToString(), Ex); 
+                throw new ASCOM.DriverException("\nFailed to move focuser.\n" + Ex.ToString(), unchecked ((int)0x80040403));  
             }
         }
 

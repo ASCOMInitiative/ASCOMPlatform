@@ -76,6 +76,7 @@ namespace ASCOM.OptecTCF_Driver
             this.DeviceType_LB = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.errorProviderDT = new System.Windows.Forms.ErrorProvider(this.components);
+            this.label4 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -539,11 +540,23 @@ namespace ASCOM.OptecTCF_Driver
             // 
             this.errorProviderDT.ContainerControl = this;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.Red;
+            this.label4.Location = new System.Drawing.Point(168, 9);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(50, 13);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "BETA 2";
+            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(238, 471);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.DeviceType_LB);
             this.Controls.Add(this.DeviceType_CB);
             this.Controls.Add(this.FocStatusControls);
@@ -628,5 +641,6 @@ namespace ASCOM.OptecTCF_Driver
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ErrorProvider errorProviderDT;
         private System.Windows.Forms.Button Center_Btn;
+        private System.Windows.Forms.Label label4;
     }
 }
