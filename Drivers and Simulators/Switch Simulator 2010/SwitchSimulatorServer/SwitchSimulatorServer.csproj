@@ -96,7 +96,7 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>C:\projects\SwitchSimulatorServer\bin\Debug\ASCOM.SwitchSimulator.Server.exe -unregister
-C:\projects\SwitchSimulatorServer\bin\Debug\ASCOM.SwitchSimulator.Server.exe -register</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
