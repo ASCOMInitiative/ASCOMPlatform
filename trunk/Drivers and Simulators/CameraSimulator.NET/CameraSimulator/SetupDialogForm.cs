@@ -79,8 +79,8 @@ namespace ASCOM.Simulator
 
             this.checkBoxCanAbortExposure.Checked = camera.canAbortExposure;
             this.checkBoxCanStopExposure.Checked = camera.canStopExposure;
-            this.textBoxMinExposure.Text = camera.exposureMax.ToString();
-            this.textBoxMaxExposure.Text = camera.exposureMin.ToString();
+            this.textBoxMaxExposure.Text = camera.exposureMax.ToString();
+            this.textBoxMinExposure.Text = camera.exposureMin.ToString();
             //this.textboxExposureResolution.Text = camera.exposureResolution.ToString();
 
             if (camera.gains != null && camera.gains.Length > 0)
@@ -95,8 +95,9 @@ namespace ASCOM.Simulator
             {
                 radioButtonNoGain.Checked = true;
             }
-            textBoxGainMin.Text = camera.gainMin.ToString();
-            textBoxGainMax.Text = camera.gainMax.ToString();
+            this.textBoxGainMin.Text = camera.gainMin.ToString();
+            this.textBoxGainMax.Text = camera.gainMax.ToString();
+            this.checkBoxApplyNoise.Checked = camera.applyNoise;
 
             this.camera = camera;
         }
