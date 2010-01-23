@@ -34,7 +34,7 @@ Name: {cf}\ASCOM\Uninstall\Camera\Simulator
 [Files]
 Source: C:\ASCOM Projects\trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll; DestDir: {app}
 ; Require a read-me HTML to appear after installation, maybe driver's Help doc
-Source: C:\ASCOM Projects\trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\ReadMe.htm; DestDir: {app}; Flags: isreadme
+Source: C:\ASCOM Projects\trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\ReadMe.txt; DestDir: {app}; Flags: isreadme
 ; TODO: Add other files needed by your driver here (add subfolders above)
 
 ; Only if driver is .NET

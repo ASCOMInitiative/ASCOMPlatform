@@ -127,8 +127,8 @@ namespace ASCOM.Simulator
 
             camera.canAbortExposure = this.checkBoxCanAbortExposure.Checked;
             camera.canStopExposure = this.checkBoxCanStopExposure.Checked;
-            camera.exposureMax = Convert.ToDouble(this.textBoxMinExposure.Text, CultureInfo.InvariantCulture);
-            camera.exposureMin = Convert.ToDouble(this.textBoxMaxExposure.Text, CultureInfo.InvariantCulture);
+            camera.exposureMin = Convert.ToDouble(this.textBoxMinExposure.Text, CultureInfo.InvariantCulture);
+            camera.exposureMax = Convert.ToDouble(this.textBoxMaxExposure.Text, CultureInfo.InvariantCulture);
             //camera.exposureResolution = Convert.ToDouble(this.textBoxExposureResolution.Text, CultureInfo.InvariantCulture);
             camera.applyNoise = this.checkBoxApplyNoise.Checked;
 

@@ -40,7 +40,7 @@ namespace ASCOM.Simulator
 	/// _Camera from being created and used as the [default] interface
     /// </summary>
 	[Guid("12229c31-e7d6-49e8-9c5d-5d7ff05c3bfe")]
-	[ClassInterface(ClassInterfaceType.None)]
+	[ClassInterface(ClassInterfaceType.AutoDispatch)]
 	public class Camera : ICamera
     {
         #region profile string constants
@@ -1012,7 +1012,7 @@ namespace ASCOM.Simulator
             if (!this.connected)
                 throw new NotConnectedException("Can't set StartExposure when not connected");
             // check the duration
-            if (Duration < this.exposureMax || Duration > this.exposureMin)
+            if (Duration > this.exposureMax || Duration < this.exposureMin)
             {
                 this.lastError="Incorrect exposure duration";
                 throw new ASCOM.InvalidValueException("StartExposure Duration",
