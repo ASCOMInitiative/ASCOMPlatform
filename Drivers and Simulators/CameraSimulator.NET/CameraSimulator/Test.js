@@ -6,5 +6,6 @@ F.Connected = true;
 WScript.Echo("Description " + F.Description);
 WScript.Echo("InterfaceVersion " + F.InterfaceVersion);
 WScript.Echo("DriverInfo " + F.DriverInfo);
+F.StartExposure(1, true);
 F = null;
 H = null;
