@@ -167,6 +167,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>Copy "C:\projects\SwitchSimulatorDriver\bin\Debug\ASCOM.SwitchSimulator.Driver.dll"  "C:\projects\SwitchSimulatorServer\SwitchSimulatorServedClasses\"</PostBuildEvent>
+    <PostBuildEvent>Copy "C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Debug\ASCOM.SwitchSimulator.Driver.dll"  "C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorServer\SwitchSimulatorServedClasses\"</PostBuildEvent>
   </PropertyGroup>
 </Project>
