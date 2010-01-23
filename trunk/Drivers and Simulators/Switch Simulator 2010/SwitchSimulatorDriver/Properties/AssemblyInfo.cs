@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("ASCOM.SwitchSimulator driver")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("The ASCOM Initiative")]
-[assembly: AssemblyProduct("ASCOM.SwitchSimulator Driver")]
+[assembly: AssemblyProduct("ASCOM.SwitchSimulator.Driver")]
 [assembly: AssemblyCopyright("Copyright © 2010 The ASCOM Initiative")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
