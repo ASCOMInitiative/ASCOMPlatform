@@ -22,11 +22,11 @@ using ASCOM;
  * the correct device profile.
  * **********************/
 
-namespace ASCOM.SwitchSimulator.Properties
-    {
-    [SettingsProvider(typeof(ASCOM.SettingsProvider))]
-    [ASCOM.DeviceId("ASCOM.SwitchSimulator.Driver")]
-    internal sealed partial class Settings
-        {
-        }
-    }
+//namespace ASCOM.SwitchSimulator.Properties
+//    {
+//    [SettingsProvider(typeof(ASCOM.SettingsProvider))]
+//    [ASCOM.DeviceId("ASCOM.SwitchSimulator.Driver")]
+//    internal sealed partial class Settings
+//        {
+//        }
+//    }
