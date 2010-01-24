@@ -10,6 +10,10 @@
 #ifndef __EPHMAN__
 #define __EPHMAN__
 
+#ifndef __ASCOM__   
+	#include "ascom.h" //PWGS Added ascom.h include
+#endif
+
 #ifndef __MATH__
    #include <math.h>
 #endif
@@ -48,11 +52,11 @@ extern FILE *EPHFILE;
    Function prototypes.
 */
 
-short Ephem_Open (char *Ephem_Name,
+EXPORT short Ephem_Open (char *Ephem_Name,
 
                   double *JD_Begin, double *JD_End);
 
-short Ephem_Close (void);
+EXPORT short Ephem_Close (void);
 
 short Planet_Ephemeris (double tjd[2], short target, short center, 
   

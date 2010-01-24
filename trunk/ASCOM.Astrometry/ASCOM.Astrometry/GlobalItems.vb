@@ -40,7 +40,7 @@ Public Enum BodyType As Integer
 
     ''' <summary>
     ''' Major planet
-    ''' </summary>
+    ''' </summary>wave
     ''' <remarks></remarks>
     MajorPlanet = 0
 
@@ -208,7 +208,7 @@ Public Enum NutationDirection As Integer
 End Enum
 #End Region
 
-#Region "Standard NOVAS C Structures and Constants"
+#Region "Standard NOVAS 2 C Structures and Constants"
 ''' <summary>
 ''' Structure to hold body type, number and name
 ''' </summary>
@@ -436,6 +436,149 @@ StructLayoutAttribute(LayoutKind.Sequential, CharSet:=CharSet.[Ansi])> _
     ''' </summary>
     ''' <remarks></remarks>
     Public Omega As Double
+End Structure
+
+#End Region
+
+#Region "Standard NOVAS 3 C Structures and Constants"
+
+''' <summary>Basic astrometric data for any celestial object located outside the solar system; the catalog data for a star
+''' </summary>
+''' <remarks></remarks>
+<StructLayoutAttribute(LayoutKind.Sequential, CharSet:=CharSet.[Ansi])> _
+Public Structure CatEntry3
+    ''' <summary>
+    ''' Name of celestial object.
+    ''' </summary>
+    ''' <remarks></remarks>
+    <MarshalAsAttribute(UnmanagedType.ByValTStr, SizeConst:=51)> _
+    Public StarName As String
+
+    ''' <summary>
+    ''' 3-character catalog designator. 
+    ''' </summary>
+    ''' <remarks></remarks>
+    <MarshalAsAttribute(UnmanagedType.ByValTStr, SizeConst:=4)> _
+    Public Catalog As String
+
+    ''' <summary>
+    ''' Integer identifier assigned to star.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public StarNumber As Integer
+
+    ''' <summary>
+    ''' ICRS right ascension (hours)
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public RA As Double
+
+    ''' <summary>
+    ''' ICRS declination (degrees)
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Dec As Double
+
+    ''' <summary>
+    ''' ICRS proper motion in right ascension (milliarcseconds/year)
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public ProMoRA As Double
+
+    ''' <summary>
+    ''' ICRS proper motion in declination (milliarcseconds/year)
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public ProMoDec As Double
+
+    ''' <summary>
+    ''' Parallax (milli-arcseconds)
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Parallax As Double
+
+    ''' <summary>
+    ''' Radial velocity (km/s)
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public RadialVelocity As Double
+End Structure
+
+<StructLayoutAttribute(LayoutKind.Sequential, CharSet:=CharSet.Ansi)> _
+Public Structure Object3
+    Public Type As Short
+    Public Number As Short
+    <MarshalAsAttribute(UnmanagedType.ByValTStr, SizeConst:=51)> _
+    Public Name As String
+    Public Star As CatEntry3
+End Structure
+
+<StructLayoutAttribute(LayoutKind.Sequential, CharSet:=CharSet.Ansi)> _
+Public Structure sky_pos
+    <MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst:=3, ArraySubType:=UnmanagedType.R8)> _
+    Public RHat() As Double
+    Public RA As Double
+    Public Dec As Double
+    Public Dis As Double
+    Public RV As Double
+End Structure
+
+<StructLayoutAttribute(LayoutKind.Sequential)> _
+Public Structure InSpace
+    <MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst:=3, ArraySubType:=UnmanagedType.R8)> _
+    Public ScPos() As Double
+    <MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst:=3, ArraySubType:=UnmanagedType.R8)> _
+    Public ScVel() As Double
+End Structure
+
+<StructLayoutAttribute(LayoutKind.Sequential)> _
+Public Structure RAOfCio
+    Public Jd_Tdb As Double
+    Public RACio As Double
+End Structure
+
+<StructLayoutAttribute(LayoutKind.Sequential)> _
+Public Structure OnSurface
+    Public Latitude As Double
+    Public Longitude As Double
+    Public Height As Double
+    Public Temperature As Double
+    Public Pressure As Double
+End Structure
+
+Public Enum ObserverWhere As Short
+    EarthGeoCenter = 0 ': observer at geocenter
+    EarthSurface = 1 ': observer on surface of earth
+    SpaceNearEarth = 2 ': observer on near-earth spacecraft
+End Enum
+
+Public Enum AccuracyValue As Short
+    Full = 0 '... full accuracy
+    Reduced = 1 '... reduced accuracy
+End Enum
+
+Public Enum CoordSys As Short
+    GCRS = 0
+    EquinoxOfDate = 1
+    CIOOfDate = 2
+    Astrometric = 3
+End Enum
+
+Public Enum GstType As Short
+    GreenwichMeanSiderealTime = 0
+    GreenwichApparentSiderealTime = 1
+End Enum
+
+Public Enum Method As Short
+    CIOBased = 0
+    Equinoxbased = 1
+End Enum
+
+<StructLayoutAttribute(LayoutKind.Sequential)> _
+Public Structure Observer
+    Public Where As ObserverWhere
+    Public OnSurf As OnSurface
+    Public NearEarth As InSpace
 End Structure
 
 #End Region

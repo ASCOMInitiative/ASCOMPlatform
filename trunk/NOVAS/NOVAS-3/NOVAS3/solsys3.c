@@ -23,10 +23,11 @@
    Additional function prototype.
 */
 
+/* PWGS Commneted this out and moved to solarsystem.h
 void sun_eph (double jd,
 
               double *ra, double *dec, double *dis);
-
+*/ 
 
 
 /********solarsystem */
@@ -416,7 +417,7 @@ short int solarsystem_hp (double tjd[2], short int body,
          jd = tjd[0] + tjd[1];
          if ((error = solarsystem (jd,body,origin, p,v)) != 0)
          {
-            return (error);
+            return (error + 20000);
          }
           else
          {
@@ -430,7 +431,7 @@ short int solarsystem_hp (double tjd[2], short int body,
 
       case 1:   /* Set an error flag and return.  */
       default:
-         return (error = 3);
+         return (error = 10003);
    }
 
    return (error);

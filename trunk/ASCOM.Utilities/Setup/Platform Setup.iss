@@ -94,15 +94,19 @@
 ; Accommodated Utiities and Astrometry renaming and location changes
 ; Setup Build 19 Released 5.5.1 AvailableCOMPorts test
 
+; Added NOVAS3 installables and JPL ephemeris File
+
+
+
 [Setup]
 ; Setup program version number - change this each time you change this setup script
-#define Public SetupVersion 19
+#define Public SetupVersion 20
 
 ;Text description of this update as it appears in the installer UI
-#define Public InstallerVersion "5.5.1g"
+#define Public InstallerVersion "6.0"
 
 ;Text for release candidate / beta version messages
-#define Public RC "COMPorts Test 4"
+#define Public RC "Alpha 1"
 
 #define Public Major 0
 #define Public Minor 0
@@ -280,6 +284,21 @@ Source: ..\NOVAS-C x86-x64\Release\NOVAS-C.pdb; DestDir: {cf32}\ASCOM\.net; Flag
 Source: ..\NOVAS-C x86-x64\x64\Release\NOVAS-C64.dll; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
 Source: ..\NOVAS-C x86-x64\x64\Release\NOVAS-C64.pdb; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
 
+;NOVAS 3 DLLs
+Source: ..\..\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.pdb; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.pdb; DestDir: {app}; Flags: ignoreversion
+;Install to 32bit directory as well on 64bit systems so that 32bit apps will find NOVAS DLLs in the place they expect on a 64bit system
+Source: ..\..\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.dll; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
+Source: ..\..\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.pdb; DestDir:  {cf32}\ASCOM\.net; Flags: ignoreversion
+Source: ..\..\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.dll; DestDir:  {cf32}\ASCOM\.net; Flags: ignoreversion
+Source: ..\..\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.pdb; DestDir:  {cf32}\ASCOM\.net; Flags: ignoreversion
+
+ ;JPL Ephemeris file
+Source: ..\..\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
+
 ;ASCOM Diagnostics
 Source: ..\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe; DestDir: {app}; Flags: ignoreversion
 Source: ..\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb; DestDir: {app}; Flags: ignoreversion
@@ -420,6 +439,9 @@ WelcomeLabel1=%n%n[name]%n
 #emit "WelcomeLabel2=This will install ASCOM Utilities version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
 [_ISToolPreCompile]
 Name: ..\..\ASCOM Redirection Policies\ASCOM Redirection Policies\bin\Release\ASCOM Redirection Policies.exe; Parameters: ; Flags: runminimized abortonerror
+
+
+
 
 
 
