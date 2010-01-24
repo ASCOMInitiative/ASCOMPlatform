@@ -17,15 +17,15 @@
    Function prototypes
 */
 
-   void iau2000a (double jd_high, double jd_low,
+   EXPORT void iau2000a (double jd_high, double jd_low,
 
                   double *dpsi, double *deps);
 
-   void iau2000b (double jd_high, double jd_low,
+   EXPORT void iau2000b (double jd_high, double jd_low,
 
                   double *dpsi, double *deps);
 
-   void nu2000k (double jd_high, double jd_low,
+   EXPORT void nu2000k (double jd_high, double jd_low,
 
                  double *dpsi, double *deps);
 

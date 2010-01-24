@@ -1865,22 +1865,54 @@ Namespace NOVAS
                                            ByRef dec As Double, _
                                            ByRef dis As Double)
 
-        'Public Shared Function solarsystem(ByVal tjd As Double, _
-        '                                      ByVal body As Body, _
-        '                                      ByRef origin As Origin, _
-        '                                      ByRef pos As Double(), _
-        '                                      ByRef vel As Double()) As Short
-        'Dim vpos As New posvector, vvel As New velvector
-        'Dim rc As Short
-        '    If Is64Bit() Then
-        '        rc = solarsystem64(tjd, body, origin, vpos, vvel)
-        '    Else
-        '        rc = solarsystem32(tjd, body, origin, vpos, vvel)
-        '    End If
-        '    PosVecToArr(vpos, pos)
-        '    VelVecToArr(vvel, vel)
-        '    Return rc
-        'End Function
+    End Interface
+End Namespace
+#End Region
+
+#Region "NOVAS3 Interface"
+Namespace NOVAS
+
+    ''' <summary>
+    ''' Interface to the NOVAS2 component
+    ''' </summary>
+    ''' <remarks>Implemented by the NOVAS2COM component</remarks>
+    <Guid("5EF15982-D79E-42f7-B20B-E83232E2B86B"), _
+        ComVisible(True)> _
+    Public Interface INOVAS3
+        <DispId(1)> Function AstroStar(ByVal JDTT As Double, _
+                                       ByRef Star As CatEntry3, _
+                                       ByVal Accuracy As AccuracyValue, _
+                                       ByRef RA As Double, _
+                                       ByRef Dec As Double) As Short
+        <DispId(2)> Function TopoStar(ByVal JDTT As Double, _
+                                      ByVal DeltaT As Double, _
+                                      ByRef Star As CatEntry3, _
+                                      ByRef position As OnSurface, _
+                                      ByVal Accuracy As AccuracyValue, _
+                                      ByRef RA As Double, _
+                                      ByRef Dec As Double) As Short
+
+        <DispId(3)> Function place(ByVal jd_tt As Double, _
+                                   ByRef cel_object As Object3, _
+                                   ByRef location As Observer, _
+                                   ByVal delta_t As Double, _
+                                   ByVal coord_sys As CoordSys, _
+                                   ByVal accuracy As AccuracyValue, _
+                                   ByRef output As sky_pos) As Short
+
+        <DispId(4)> Function JulianDate(ByVal year As Short, _
+                                        ByVal month As Short, _
+                                        ByVal day As Short, _
+                                        ByVal hour As Double) As Double
+
+        <DispId(5)> Function sidereal_time(ByVal jd_high As Double, _
+                                           ByVal jd_low As Double, _
+                                           ByVal delta_t As Double, _
+                                           ByVal gst_type As GstType, _
+                                           ByVal method As Method, _
+                                           ByVal accuracy As AccuracyValue, _
+                                           ByRef gst As Double) As Short
+
     End Interface
 End Namespace
 #End Region

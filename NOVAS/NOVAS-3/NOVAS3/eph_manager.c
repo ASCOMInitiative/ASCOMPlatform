@@ -183,7 +183,7 @@ short Ephem_Open (char *Ephem_Name,
          case 200:
             record_length = 6608;
             break;
-         case 403: case 405:
+		 case 403: case 405: case 421: // case 421: added by Peter Simpson to deal with JPL DE421 ephemeris
             record_length = 8144;
             break;
          case 404: case 406:
@@ -252,6 +252,7 @@ short Ephem_Close (void)
    {
       error = fclose (EPHFILE);
       free (buffer);
+	  EPHFILE = 0; //Peter Simpson - Added this so that the fclose in Ephem_Open wil not run if the file has been closed
    }
    return error;
 }

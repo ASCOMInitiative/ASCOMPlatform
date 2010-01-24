@@ -19,13 +19,15 @@
    Function prototypes
 */
 
-   short int solarsystem (double tjd, short int body, short int origin,
+   EXPORT short int solarsystem (double tjd, short int body, short int origin,
 
                           double *position, double *velocity);
 
-   short int solarsystem_hp (double tjd[2], short body, short origin,
+   EXPORT short int solarsystem_hp (double tjd[2], short body, short origin,
 
                           double *position, double *velocity);
+
+   EXPORT void sun_eph (double jd, double *ra, double *dec, double *dis); //PWGS Added exported prototype
 
 
 #endif
