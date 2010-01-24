@@ -9,50 +9,19 @@ namespace ASCOM.SwitchSimulator
 {
     class SwitchHardware: SwitchDevice
     {
-        private static bool connected;   //tracking state
-        private static string authorName = "Rob Morgan";
-        private static string authorEmail = "Rob.Morgan.E@Gmail.Com";
-        private static string driverName = "ASCOM Switch Simulator Driver";
-        private static string description = "ASCOM simulator for the switch driver";
-        private static string driverInfo = "Switch Simulator Driver in C#";
-        private static string driverVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-
+        private static bool isConnected;   //tracking state
         static ArrayList switchDevices = new ArrayList();
 
-        public static bool Connected
+        public static bool IsConnected
         {
-            get { return connected; }
-            set { connected = value; }
-        }
-        public static string AuthorName
-        {
-            get { return authorName; }
-            set { authorName = value; }
-        }
-        public static string AuthorEmail
-        {
-            get { return authorEmail; }
-            set { authorEmail = value; }
-        }
-        public static string DriverName
-        {
-            get { return driverName; }
-            set { driverName = value; }
-        }
-        public static string Description
-        {
-            get { return description; }
-            set { description = value; }
-        }
-        public static string DriverInfo
-        {
-            get { return driverInfo; }
-            set { driverInfo = value; }
-        }
-        public static string DriverVersion
-        {
-            get { return driverVersion; }
-            set { driverVersion = value; }
+            get
+            {
+                return isConnected;
+            }
+            set
+            {
+                isConnected = value;
+            }
         }
 
         public static void Add(SwitchDevice switchDevice)
@@ -74,6 +43,12 @@ namespace ASCOM.SwitchSimulator
         public static int Count()
         {
             return switchDevices.Count;
+        }
+        public void SetSwitchOn(int i)
+        {
+        }
+        public void SetSwitchOff(int i)
+        {
         }
     }
 }

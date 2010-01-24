@@ -18,7 +18,6 @@ namespace SwitchConsole
 
             Switch switchA = new Switch();
             SwitchDevice switchDeviceA = new SwitchDevice();
-            switchA.Add(switchDeviceA);
 
             Console.WriteLine("Connected: " + switchA.IsConnected);
             Console.WriteLine("Driver Name: " + switchA.DriverName);
@@ -32,7 +31,11 @@ namespace SwitchConsole
             foreach (SwitchDevice switchDevice in a)
             {
                 Console.WriteLine("Switch Device Name: " + switchDevice.Name);
+                Console.WriteLine("Switch Device State: " + switchDevice.On);
             }
+
+            //switchA.SetupDialog();          
+                
 
             Console.WriteLine("Press any key to exit.");
             Console.ReadLine();

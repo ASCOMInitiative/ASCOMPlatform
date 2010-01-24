@@ -14,6 +14,9 @@ namespace ASCOM.SwitchSimulator
 		public SetupDialogForm()
 		{
 			InitializeComponent();
+
+            Switch switchA = new Switch();
+            this.lb_DriverVersion.Text = "v" + switchA.DriverVersion;
 		}
 
 		private void cmdOK_Click(object sender, EventArgs e)
