@@ -1,22 +1,23 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 
 namespace ASCOM.SwitchSimulator
 {
-    public class SwitchHardware
+    class SwitchHardware: SwitchDevice
     {
         private static bool connected;   //tracking state
-        private static string authorName;
-        private static string authorEmail;
-        private static string description;
-        private static string driverInfo;
-        private static string driverVersion;
-        private static ushort interfaceVersion;
-        private static string name;
-        private static byte id;
-        private static bool state;
+        private static string authorName = "Rob Morgan";
+        private static string authorEmail = "Rob.Morgan.E@Gmail.Com";
+        private static string driverName = "ASCOM Switch Simulator Driver";
+        private static string description = "ASCOM simulator for the switch driver";
+        private static string driverInfo = "Switch Simulator Driver in C#";
+        private static string driverVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+        static ArrayList switchDevices = new ArrayList();
 
         public static bool Connected
         {
@@ -33,6 +34,11 @@ namespace ASCOM.SwitchSimulator
             get { return authorEmail; }
             set { authorEmail = value; }
         }
+        public static string DriverName
+        {
+            get { return driverName; }
+            set { driverName = value; }
+        }
         public static string Description
         {
             get { return description; }
@@ -48,25 +54,26 @@ namespace ASCOM.SwitchSimulator
             get { return driverVersion; }
             set { driverVersion = value; }
         }
-        public static ushort InterfaceVersion
+
+        public static void Add(SwitchDevice switchDevice)
         {
-            get { return interfaceVersion; }
-            set { interfaceVersion = value; }
+            switchDevices.Add(switchDevice);
         }
-        public static string Name
+        public static void Remove(SwitchDevice switchDevice)
         {
-            get { return name; }
-            set { name = value; }
+            switchDevices.Remove(switchDevice);
         }
-        public static byte Id
+        public static SwitchDevice GetSwitchDevice(int i)
         {
-            get { return id; }
-            set { id = value; }
+            return (SwitchDevice)switchDevices[i];
         }
-        public static bool State
+        public static ArrayList GetSwitchDevices()
         {
-            get { return state; }
-            set { state = value; }
+            return switchDevices;
+        }
+        public static int Count()
+        {
+            return switchDevices.Count;
         }
     }
 }

@@ -1,77 +1,86 @@
-//tabs=4
-// --------------------------------------------------------------------------------
-// TODO fill in this information for your driver, then remove this line!
-//
-// ASCOM.SwitchSimulator driver for TEMPLATEDEVICENAME
-//
-// Description:	Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam 
-//				nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam 
-//				erat, sed diam voluptua. At vero eos et accusam et justo duo 
-//				dolores et ea rebum. Stet clita kasd gubergren, no sea takimata 
-//				sanctus est Lorem ipsum dolor sit amet.
-//
-// Implements:	ASCOM.SwitchSimulator interface version: <To be completed by friver developer>
-// Author:		(XXX) Your N. Here <your@email.here>
-//
-// Edit Log:
-//
-// Date			Who	Vers	Description
-// -----------	---	-----	-------------------------------------------------------
-// dd-mmm-yyyy	XXX	5.1.0	Initial edit, created from ASCOM driver template
-// --------------------------------------------------------------------------------
-//
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using System.Runtime.InteropServices;
-
-using ASCOM;
-using ASCOM.Utilities;
-//using ASCOM.Interface;
 
 namespace ASCOM.SwitchSimulator
 {
-	/// <summary>
-    /// ASCOM.SwitchSimulator Driver for Switch.
-	/// </summary>
-	[Guid("28D679BA-2AF1-4557-AE15-C528C5BF91E0")]
-	[ClassInterface(ClassInterfaceType.None)]
-    public class Switch : ReferenceCountedObjectBase, ISwitch
-	{
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Switch"/> class.
-		/// Must be public for COM registration.
-		/// </summary>
-		public Switch()
-		{
-			//TODO: Implement your additional construction here
-		}
-
-		//
-		// PUBLIC COM INTERFACE ISwitch IMPLEMENTATION
-		//
-        #region ISwitch Members
-
-        public byte Id
+    /// <summary>
+    /// Summary description for Switch.
+    /// </summary>
+    public class Switch : SwitchDevice
+    {
+        public Switch()
         {
-            get { return SwitchHardware.Id; }
-            set { SwitchHardware.Id = value; }
+        }
+        public bool IsConnected
+        {
+            get
+            {
+                return SwitchHardware.Connected;
+            }
+            set
+            {
+                SwitchHardware.Connected = value;
+            }
+        }
+        public string Description
+        {
+            get
+            {
+                return SwitchHardware.Description;
+            }
+            set
+            {
+                SwitchHardware.Description = value;
+            }
+        }
+        public string AuthorName
+        {
+            get { return SwitchHardware.AuthorName; }
+            set { SwitchHardware.AuthorName = value; }
+        }
+        public string AuthorEmail
+        {
+            get { return SwitchHardware.AuthorEmail; }
+            set { SwitchHardware.AuthorEmail = value; }
+        }
+        public string DriverName
+        {
+            get { return SwitchHardware.DriverName; }
+            set { SwitchHardware.DriverName = value; }
+        }
+        public string DriverInfo
+        {
+            get { return SwitchHardware.DriverInfo; }
+            set { SwitchHardware.DriverInfo = value; }
+        }
+        public string DriverVersion
+        {
+            get { return SwitchHardware.DriverVersion; }
+            set { SwitchHardware.DriverVersion = value; }
         }
 
-        public string Name
+        public void Add(SwitchDevice switchDevice)
         {
-            get { return SwitchHardware.Name; }
-            set { SwitchHardware.Name = value; }
+            SwitchHardware.Add(switchDevice);
         }
-
-        public bool State
+        public void Remove(SwitchDevice switchDevice)
         {
-            get { return SwitchHardware.State; }
-            set { SwitchHardware.State = value; }
+            SwitchHardware.Remove(switchDevice);
         }
-
-        #endregion
+        public SwitchDevice GetSwitchDevice(int i)
+        {
+            return SwitchHardware.GetSwitchDevice(i);
+        }
+        public ArrayList GetSwitchDevices()
+        {
+            return SwitchHardware.GetSwitchDevices();
+        }
+        public int Count()
+        {
+            return SwitchHardware.Count();
+        }
     }
 }
