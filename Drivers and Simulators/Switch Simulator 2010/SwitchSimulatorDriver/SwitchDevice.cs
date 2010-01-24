@@ -6,23 +6,32 @@ using System.Text;
 
 namespace ASCOM.SwitchSimulator
 {
-    public class SwitchDevice
+    public class SwitchDevice : ISwitchDevice
     {
+        private string name;
+        private string description;
+        private bool on;
+        private int id;
 
         public string Name
         {
-            get { return SwitchHardware.DriverName; }
-            set { SwitchHardware.DriverName = value; }
+            get { return name; }
+            set { name = value; }
         }
         public string Description
         {
-            get { return SwitchHardware.Description; }
-            set { SwitchHardware.Description = value; }
+            get { return description; }
+            set { description = value; }
+        }
+        public int Id
+        {
+            get { return id; }
+            set { id = value; }
         }
         public bool On
         {
-            get { return SwitchHardware.Connected; }
-            set { SwitchHardware.Connected = value; }
+            get { return on; }
+            set { on = value; }
         }
 
     }
