@@ -10,7 +10,7 @@ namespace ASCOM.SwitchSimulator
     /// <summary>
     /// Summary description for Switch.
     /// </summary>
-    public class Switch : SwitchDevice, ISwitch, ASCOM.SwitchSimulator.ISwitch1
+    public class Switch : SwitchDevice, ISwitch, ASCOM.SwitchSimulator.ISwitch1, ASCOM.SwitchSimulator.ISwitch
     {
         private static bool isConnected;   //keeping tracking state
         private static string authorName = "Rob Morgan";
