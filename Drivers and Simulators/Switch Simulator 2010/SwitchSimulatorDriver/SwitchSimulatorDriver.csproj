@@ -96,7 +96,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ISwitch.cs" />
-    <Compile Include="ISwitch1.cs" />
     <Compile Include="ISwitchDevice.cs" />
     <Compile Include="Switch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
