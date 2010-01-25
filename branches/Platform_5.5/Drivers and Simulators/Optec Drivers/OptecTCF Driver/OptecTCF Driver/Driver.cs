@@ -157,7 +157,7 @@ namespace ASCOM.OptecTCF_Driver
             // TODO Replace this with your implementation
             if (DeviceComm.InTempCompMode())
             {
-                throw new ASCOM.MethodNotImplementedException("Move While in AutoFocus Mode");
+                throw new ASCOM.InvalidValueException("Attempted to move while in TempComp Mode", "", "");
                
             }
             DeviceComm.MoveFocus(val);
