@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptecTCF Driver", "OptecTCF Driver.csproj", "{1DD8D600-1E1E-469E-8F57-2CB4BD7AA34C}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "OptecTCFSetup_x64", "..\Installer64\OptecTCFSetup_x64\OptecTCFSetup_x64.vdproj", "{DF4EC6C3-89EE-412D-8693-AC3FFE0B07D0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,12 @@ Global
 		{1DD8D600-1E1E-469E-8F57-2CB4BD7AA34C}.Release|x64.Build.0 = Release|x64
 		{1DD8D600-1E1E-469E-8F57-2CB4BD7AA34C}.Release|x86.ActiveCfg = Release|x86
 		{1DD8D600-1E1E-469E-8F57-2CB4BD7AA34C}.Release|x86.Build.0 = Release|x86
+		{DF4EC6C3-89EE-412D-8693-AC3FFE0B07D0}.Debug|Any CPU.ActiveCfg = Debug
+		{DF4EC6C3-89EE-412D-8693-AC3FFE0B07D0}.Debug|x64.ActiveCfg = Debug
+		{DF4EC6C3-89EE-412D-8693-AC3FFE0B07D0}.Debug|x86.ActiveCfg = Debug
+		{DF4EC6C3-89EE-412D-8693-AC3FFE0B07D0}.Release|Any CPU.ActiveCfg = Release
+		{DF4EC6C3-89EE-412D-8693-AC3FFE0B07D0}.Release|x64.ActiveCfg = Release
+		{DF4EC6C3-89EE-412D-8693-AC3FFE0B07D0}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

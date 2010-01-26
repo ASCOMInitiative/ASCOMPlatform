@@ -503,11 +503,17 @@ namespace ASCOM.OptecTCF_Driver
                         }
                     } 
                 }
-
                 else
                 {
                     CurrentMode = DeviceModes.SerialLoop;
-                    if (AutoModeThread.ThreadState == ThreadState.Running) AutoModeThread.Abort();
+                    if (AutoModeThread != null)
+                    {
+                        if (AutoModeThread.ThreadState == ThreadState.Running)
+                        {
+                            AutoModeThread.Abort();
+                            System.Threading.Thread.Sleep(300);
+                        }
+                    }
                     SendCmd("FMxxxx", 500, ExpectResponse, "!");
                     
                 }
@@ -517,6 +523,7 @@ namespace ASCOM.OptecTCF_Driver
                 string ErrorString = "\nFailed to change Auto Focus Mode ";
                 if (Enter) ErrorString += "while attempting to ENTER Temp Comp Mode.\n";
                 else ErrorString += "while attempting to EXIT Temp Comp Mode.\n";
+                ErrorString += Ex.ToString();
                 throw new ASCOM.DriverException(ErrorString + Ex.ToString() + "\n" , Ex);
             }
         }

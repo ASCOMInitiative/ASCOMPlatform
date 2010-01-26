@@ -29,6 +29,7 @@ using System.Windows.Forms;
 
 using ASCOM;
 using ASCOM.Interface;
+using System.Diagnostics;
 
 
 namespace ASCOM.OptecTCF_Driver
@@ -65,24 +66,36 @@ namespace ASCOM.OptecTCF_Driver
         //
         private static void RegUnregASCOM(bool bRegister)
         {
+            Trace.WriteLine("ASCOM Registration Started");
             Utilities.Profile P = new Utilities.Profile();
-            P.DeviceType = "Focuser";					
+            P.DeviceType = "Focuser";
             if (bRegister)
+            {
                 P.Register(s_csDriverID, s_csDriverDescription);
+                Trace.WriteLine("ASCOM Registration Complete");
+                Debug.WriteLine("ASCOM Registration Complete");
+            }
             else
+            {
                 P.Unregister(s_csDriverID);
+                Trace.WriteLine("ASCOM UNRegistration Complete");
+                Debug.WriteLine("ASCOM UNRegistration Complete");
+            }
             try										
             {
                 Marshal.ReleaseComObject(P);
             }
             catch (Exception) { }
             P = null;
+            
         }
 
         [ComRegisterFunction]
         public static void RegisterASCOM(Type t)
         {
+            Trace.WriteLine("COMRegistration Entered.");
             RegUnregASCOM(true);
+            Trace.WriteLine("Registration Finished.");
         }
 
         [ComUnregisterFunction]
