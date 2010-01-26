@@ -13,7 +13,7 @@ namespace ASCOM
 	/// to determine which settings hive to save the value in when it is passed to 
 	/// <see cref="ASCOM.Utilities.Profile"/>.
 	/// </summary>
-	[global::System.AttributeUsage(AttributeTargets.Class | AttributeTargets.Assembly, Inherited = true, AllowMultiple = false)]
+	[global::System.AttributeUsage(AttributeTargets.Class | AttributeTargets.Assembly | AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
 	public sealed class DeviceIdAttribute : Attribute
 	{
 		/// <summary>
