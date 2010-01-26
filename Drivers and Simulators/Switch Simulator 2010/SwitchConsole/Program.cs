@@ -16,25 +16,6 @@ namespace SwitchConsole
             //chooser.DeviceType = "Switch";
             //chooser.Choose();
 
-            Switch switchA = new Switch();
-            SwitchDevice switchDeviceA = new SwitchDevice();
-
-            Console.WriteLine("Connected: " + switchA.IsConnected);
-            Console.WriteLine("Driver Name: " + switchA.DriverName);
-            Console.WriteLine("Driver Description: " + switchA.Description);
-            Console.WriteLine("Driver Information: " + switchA.DriverInfo);
-            Console.WriteLine("Driver Version: " + switchA.DriverVersion);
-            Console.WriteLine("Author Name: " + switchA.AuthorName);
-            Console.WriteLine("Author Email: " + switchA.AuthorEmail);
-
-            ArrayList a = switchA.GetSwitchDevices();
-            foreach (SwitchDevice switchDevice in a)
-            {
-                Console.WriteLine("Switch Device Name: " + switchDevice.Name);
-                Console.WriteLine("Switch Device State: " + switchDevice.On);
-            }
-
-            //switchA.SetupDialog();          
                 
 
             Console.WriteLine("Press any key to exit.");

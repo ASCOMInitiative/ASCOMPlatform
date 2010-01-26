@@ -48,38 +48,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ASCOM.Astrometry, Version=5.5.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Platform Dependencies\ASCOM.Astrometry.dll</HintPath>
-    </Reference>
-    <Reference Include="ASCOM.Attributes, Version=5.5.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Platform Dependencies\ASCOM.Attributes.dll</HintPath>
-    </Reference>
-    <Reference Include="ASCOM.Controls, Version=6.0.3656.11201, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Platform Dependencies\ASCOM.Controls.dll</HintPath>
-    </Reference>
-    <Reference Include="ASCOM.DriverAccess, Version=1.0.5.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Platform Dependencies\ASCOM.DriverAccess.dll</HintPath>
-    </Reference>
-    <Reference Include="ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Platform Dependencies\ASCOM.Exceptions.dll</HintPath>
-    </Reference>
-    <Reference Include="ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Platform Dependencies\ASCOM.IConform.dll</HintPath>
-    </Reference>
-    <Reference Include="ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Platform Dependencies\ASCOM.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="ASCOM.SettingsProvider, Version=6.0.3656.11200, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Platform Dependencies\ASCOM.SettingsProvider.dll</HintPath>
-    </Reference>
     <Reference Include="ASCOM.Utilities, Version=5.5.2.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Platform Dependencies\ASCOM.Utilities.dll</HintPath>
@@ -95,9 +63,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ISwitch.cs" />
-    <Compile Include="ISwitchDevice.cs" />
-    <Compile Include="Switch.cs" />
+    <Compile Include="Interfaces.cs" />
+    <Compile Include="Driver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -117,8 +84,6 @@
       <DependentUpon>SetupDialogForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SwitchDevice.cs" />
-    <Compile Include="SwitchException.cs" />
-    <Compile Include="SwitchHardware.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -137,7 +102,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="ASCOM.png" />
-    <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram11.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
