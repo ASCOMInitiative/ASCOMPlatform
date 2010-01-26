@@ -27,7 +27,7 @@
 ' The ClassInterface/None addribute prevents an empty interface called
 ' _TEMPLATEDEVICECLASS from being created and used as the [default] interface
 '
-<Guid("28D679BA-2AF1-4557-AE15-C528C5BF91E0")> _
+<Guid("3A02C211-FA08-4747-B0BD-4B00EB159297")> _
 <ClassInterface(ClassInterfaceType.None)> _
 Public Class TEMPLATEDEVICECLASS
     '	==========
