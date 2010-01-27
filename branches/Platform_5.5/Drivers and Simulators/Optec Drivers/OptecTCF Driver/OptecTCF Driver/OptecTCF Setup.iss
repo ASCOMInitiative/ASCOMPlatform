@@ -4,7 +4,7 @@
 ;
 [Setup]
 AppName=ASCOM OptecTCF Focuser Driver
-AppVerName=ASCOM OptecTCF Focuser Driver 5.0.1 Beta2
+AppVerName=ASCOM OptecTCF Focuser Driver 5.0.1 Beta3
 AppVersion=5.0.1
 AppPublisher=Jordan Schaenzle <jordan@optecinc.com>
 AppPublisherURL=mailto:jordan@optecinc.com
@@ -15,7 +15,7 @@ DefaultDirName="{cf}\ASCOM\Focuser"
 DisableDirPage=yes
 DisableProgramGroupPage=yes
 OutputDir="."
-OutputBaseFilename="OptecTCF_Beta2_ Setup"
+OutputBaseFilename="OptecTCF_Beta3_ Setup"
 Compression=lzma
 SolidCompression=yes
 ; Put there by Platform if Driver Installer Support selected

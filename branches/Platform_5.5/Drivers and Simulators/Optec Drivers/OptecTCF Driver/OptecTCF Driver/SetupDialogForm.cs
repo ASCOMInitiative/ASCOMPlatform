@@ -19,6 +19,7 @@ namespace ASCOM.OptecTCF_Driver
         private int CurrentPos;
         private int DesiredPos;
         private int MaxPos;
+
         private enum SDConnectionStates
         {
             Disconnected,
@@ -147,7 +148,8 @@ namespace ASCOM.OptecTCF_Driver
         {
             try
             {
-                ConnectForSetup();     
+                ConnectForSetup();
+                UpdateControls();
             }
             catch(Exception Ex)
             {
@@ -155,10 +157,14 @@ namespace ASCOM.OptecTCF_Driver
                 {
                     MessageBox.Show("Warning: Temperature Probe Not Detected");
                     Timer_Temp.Enabled = false;
+                    DeviceSettings.TempProbePresent = false;
+                    UpdateControls();
                 }
                 else
                 {
-                    //MessageBox.Show(Ex.ToString());
+                    //Do nothing here because we still want the form to open even if
+                    //if is unable to connect. The exception should be displayed if
+                    //connection attempt fails after "Connect" is pressed in the menu.
                 }
             }
 
@@ -169,12 +175,22 @@ namespace ASCOM.OptecTCF_Driver
             try
             {
                 ConnectForSetup();
+                DeviceSettings.TempProbePresent = true;
             }
             catch(Exception Ex)
             {
                 if (Ex.InnerException.Message.Contains("ER=1"))
                 {
-                    MessageBox.Show("Warning: No temperature probe detected.", "No Temp Probe", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    if (DeviceSettings.TempProbePresent)
+                    {
+                        UpdateControls();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Warning: No temperature probe detected.", "No Temp Probe", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        DeviceSettings.TempProbePresent = false;
+                        UpdateControls();
+                    }
                 }
                 else
                 {
@@ -182,7 +198,7 @@ namespace ASCOM.OptecTCF_Driver
                     DialogResult Result;
                     Result = MessageBox.Show("Could not connect to device.\n" +
                                 "This may result from not selecting the correct COM port.\n" + 
-                                "Would you like to see the exception data?",
+                                "Would you like to see the detailed error text?",
                                 "Connection Failed", MessageBoxButtons.YesNo);
                     if (Result == DialogResult.Yes)
                         MessageBox.Show("Error Message: \n" + Ex.InnerException.InnerException.Message);
@@ -201,52 +217,67 @@ namespace ASCOM.OptecTCF_Driver
             {
                 //CONNECTED
                 ConnectedForControls = true;
+                PowerLight.Visible = true;
                 StatusLabel.Text = "Connected successfully!";
                 connectToolStripMenuItem.Enabled = false;
                 disconnectToolStripMenuItem.Enabled = true;
                 string DT = DeviceSettings.GetDeviceType();
-                if (DT == "?")
+                DeviceType_CB.Text = DT;
+                DeviceType_CB.Enabled = false;
+                DeviceType_LB.Enabled = false;
+
+                foreach (Control x in FocStatusControls.Controls)
                 {
-                    DeviceType_CB.Text = "Select Device";
-                    DeviceType_CB.Enabled = true;
-                    DeviceType_LB.Enabled = true;
+                    x.Enabled = true; 
+                }
+                foreach (Control x in TempCompMode_GB.Controls)
+                {
+                    x.Enabled = true;
+                }
+                
+                if (DeviceSettings.TempProbePresent)
+                {
+                    Temp_TB.Enabled = true;
+                    Temp_LBL.Enabled = true;
+                    firstPointToolStripMenuItem.Enabled = true;
+                    endPointToolStripMenuItem.Enabled = true;
                 }
                 else
                 {
-                    DeviceType_CB.Text = DT;
-                    DeviceType_CB.Enabled = false;
-                    DeviceType_LB.Enabled = false;
+                    Temp_TB.Enabled = false;
+                    Temp_LBL.Enabled = false;
+                    firstPointToolStripMenuItem.Enabled = false;
+                    endPointToolStripMenuItem.Enabled = false;
                 }
- 
-                foreach (Control x in FocStatusControls.Controls)
-                {
-                    x.Enabled = true;
-                    PowerLight.Visible = true;
-                }
+                learnToolStripMenuItem.Enabled = true;
             }
             else
             {
                 //NOT CONNECTED
+                PowerLight.Visible = false;
                 ConnectedForControls = false;
                 StatusLabel.Text = "Device is not connected";
                 connectToolStripMenuItem.Enabled = true;
                 disconnectToolStripMenuItem.Enabled = false;
-
                 DeviceType_CB.Text = "Not Connected";
-                DeviceType_CB.Enabled = true;
-                DeviceType_LB.Enabled = true;
+                DeviceType_CB.Enabled = false;
+                DeviceType_LB.Enabled = false;
 
                 foreach (Control x in FocStatusControls.Controls)
                 {
                     x.Enabled = false;
                     PowerLight.Visible = false;
                 }
+                foreach (Control x in TempCompMode_GB.Controls)
+                {
+                    x.Enabled = false;
+                }
+                learnToolStripMenuItem.Enabled = false;
             }
-
             DeviceType_LB.ForeColor = System.Drawing.SystemColors.ControlText;
             DeviceType_LB.BackColor = System.Drawing.SystemColors.Control;
             DeviceType_LB.Font = new Font(DeviceType_LB.Font, FontStyle.Regular);
-
+            
             
          
 
@@ -521,7 +552,6 @@ namespace ASCOM.OptecTCF_Driver
                 ModeAName_TB.ReadOnly = false;
                 ModeBName_TB.ReadOnly = false;
             }
-
         }
 
         private void backgroundWorkerTemp_DoWork(object sender, DoWorkEventArgs e)
@@ -545,12 +575,15 @@ namespace ASCOM.OptecTCF_Driver
                         {
                             if (Ex.InnerException.Message.Contains("ER=1"))
                             {
+                                StatusLabel.Text = "Temp Probe Not Found";
                                 MessageBox.Show("Warning: Temperature Probe Not Detected.");
                                 lock (LockObject)
                                 {
                                     this.BeginInvoke(new UpdateTempDisplayHandler(UpdateTempDisplay), new Object[] { -9999 });
                                 }
                                 Timer_Temp.Enabled = false;
+                                DeviceSettings.TempProbePresent = false;
+                                UpdateControls();
                             }
                             else
                             {
@@ -712,7 +745,36 @@ namespace ASCOM.OptecTCF_Driver
 
         private void DeviceType_CB_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DeviceSettings.SetDeviceType(DeviceType_CB.Text);
+            if (ConnectedForControls)
+            {
+                return;
+            }
+            if (DeviceType_CB.Text != "Cancel")
+            {
+                try
+                {
+                    try
+                    {
+                        DeviceComm.Connect();
+                    }
+                    catch
+                    {
+                        throw new InvalidOperationException("Could not connect to the device");
+                    }
+                    StatusLabel.Text = "Connected To Device";
+                    DeviceSettings.SetDeviceType(DeviceType_CB.Text);
+                    StatusLabel.Text = "Device Type Setting Stored In Software";
+                    DeviceComm.SetDeviceType();
+                    StatusLabel.Text = "Device Type Change Complete!";
+                    DeviceComm.Disconnect();
+                    MessageBox.Show("You must cycle power to the device in order to finish this process.");
+                }
+                catch (Exception Ex)
+                {
+                    MessageBox.Show("Unable to set device type.\n" + Ex.ToString());
+                }
+            }
+
             DeviceType_CB.Enabled = false;
             DeviceType_LB.Enabled = false;
             DeviceType_LB.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -723,16 +785,29 @@ namespace ASCOM.OptecTCF_Driver
 
         private void chooseDeviceTypeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DeviceType_CB.Enabled = true;
-            DeviceType_LB.Enabled = true;
-            DeviceType_LB.ForeColor = Color.Red;
-            DeviceType_LB.BackColor = Color.Blue;
-            DeviceType_LB.Font = new Font(DeviceType_LB.Font, FontStyle.Bold);
-            UpdateControls();
+            if (ConnectedForControls)
+            {
+                MessageBox.Show("You must disconnect from the device before the Device Type can be changed");
+                return;
+            }
+            else
+            {
+                if (DeviceSettings.PortSelected)
+                {
+                    StatusLabel.Text = "Select a Device Type";
+                    DeviceType_CB.Enabled = true;
+                    DeviceType_LB.Enabled = true;
+                    DeviceType_LB.ForeColor = Color.Red;
+                    DeviceType_LB.BackColor = Color.Blue;
+                }
+                else
+                {
+                    MessageBox.Show("You must choose a COM Port first.");
+                }
+            }
             
         }
-
-        
+     
         private void cmdOK_Click(object sender, EventArgs e)
         {
             if (DeviceSettings.GetDeviceType().Contains("TCF") && DeviceSettings.PortSelected) this.Dispose();

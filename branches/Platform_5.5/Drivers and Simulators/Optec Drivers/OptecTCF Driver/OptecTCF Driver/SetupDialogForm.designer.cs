@@ -50,7 +50,7 @@ namespace ASCOM.OptecTCF_Driver
             this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.TempCompMode_GB = new System.Windows.Forms.GroupBox();
             this.EditNames_Btn = new System.Windows.Forms.Button();
             this.ModeBName_TB = new System.Windows.Forms.TextBox();
             this.ModeAName_TB = new System.Windows.Forms.TextBox();
@@ -64,7 +64,7 @@ namespace ASCOM.OptecTCF_Driver
             this.Pos_TB = new System.Windows.Forms.TextBox();
             this.In_BTN = new System.Windows.Forms.Button();
             this.Temp_TB = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.Temp_LBL = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.backgroundWorkerTemp = new System.ComponentModel.BackgroundWorker();
@@ -79,7 +79,7 @@ namespace ASCOM.OptecTCF_Driver
             this.label4 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.TempCompMode_GB.SuspendLayout();
             this.FocStatusControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Increment_NUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PowerLight)).BeginInit();
@@ -136,14 +136,14 @@ namespace ASCOM.OptecTCF_Driver
             // connectToolStripMenuItem
             // 
             this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
-            this.connectToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.connectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.connectToolStripMenuItem.Text = "Connect";
             this.connectToolStripMenuItem.Click += new System.EventHandler(this.connectToolStripMenuItem_Click);
             // 
             // disconnectToolStripMenuItem
             // 
             this.disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
-            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.disconnectToolStripMenuItem.Text = "Disconnect";
             this.disconnectToolStripMenuItem.Click += new System.EventHandler(this.disconnectToolStripMenuItem_Click);
             // 
@@ -231,14 +231,14 @@ namespace ASCOM.OptecTCF_Driver
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem1
             // 
             this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
-            this.helpToolStripMenuItem1.Size = new System.Drawing.Size(107, 22);
+            this.helpToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
             this.helpToolStripMenuItem1.Text = "&Help";
             // 
             // statusStrip1
@@ -257,19 +257,19 @@ namespace ASCOM.OptecTCF_Driver
             this.StatusLabel.Size = new System.Drawing.Size(48, 17);
             this.StatusLabel.Text = "Status...";
             // 
-            // groupBox1
+            // TempCompMode_GB
             // 
-            this.groupBox1.Controls.Add(this.EditNames_Btn);
-            this.groupBox1.Controls.Add(this.ModeBName_TB);
-            this.groupBox1.Controls.Add(this.ModeAName_TB);
-            this.groupBox1.Controls.Add(this.ModeB_RB);
-            this.groupBox1.Controls.Add(this.ModeA_RB);
-            this.groupBox1.Location = new System.Drawing.Point(12, 320);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(216, 87);
-            this.groupBox1.TabIndex = 6;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Temperature Compensation Modes";
+            this.TempCompMode_GB.Controls.Add(this.EditNames_Btn);
+            this.TempCompMode_GB.Controls.Add(this.ModeBName_TB);
+            this.TempCompMode_GB.Controls.Add(this.ModeAName_TB);
+            this.TempCompMode_GB.Controls.Add(this.ModeB_RB);
+            this.TempCompMode_GB.Controls.Add(this.ModeA_RB);
+            this.TempCompMode_GB.Location = new System.Drawing.Point(12, 320);
+            this.TempCompMode_GB.Name = "TempCompMode_GB";
+            this.TempCompMode_GB.Size = new System.Drawing.Size(216, 87);
+            this.TempCompMode_GB.TabIndex = 6;
+            this.TempCompMode_GB.TabStop = false;
+            this.TempCompMode_GB.Text = "Temperature Compensation Modes";
             // 
             // EditNames_Btn
             // 
@@ -332,7 +332,7 @@ namespace ASCOM.OptecTCF_Driver
             this.FocStatusControls.Controls.Add(this.Pos_TB);
             this.FocStatusControls.Controls.Add(this.In_BTN);
             this.FocStatusControls.Controls.Add(this.Temp_TB);
-            this.FocStatusControls.Controls.Add(this.label2);
+            this.FocStatusControls.Controls.Add(this.Temp_LBL);
             this.FocStatusControls.Controls.Add(this.label1);
             this.FocStatusControls.Controls.Add(this.label3);
             this.FocStatusControls.Location = new System.Drawing.Point(12, 134);
@@ -402,7 +402,7 @@ namespace ASCOM.OptecTCF_Driver
             this.Pos_TB.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Pos_TB.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Pos_TB.ForeColor = System.Drawing.Color.Red;
-            this.Pos_TB.Location = new System.Drawing.Point(121, 58);
+            this.Pos_TB.Location = new System.Drawing.Point(121, 30);
             this.Pos_TB.Name = "Pos_TB";
             this.Pos_TB.Size = new System.Drawing.Size(58, 24);
             this.Pos_TB.TabIndex = 6;
@@ -425,27 +425,27 @@ namespace ASCOM.OptecTCF_Driver
             this.Temp_TB.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Temp_TB.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Temp_TB.ForeColor = System.Drawing.Color.Red;
-            this.Temp_TB.Location = new System.Drawing.Point(121, 30);
+            this.Temp_TB.Location = new System.Drawing.Point(121, 58);
             this.Temp_TB.Name = "Temp_TB";
             this.Temp_TB.Size = new System.Drawing.Size(58, 24);
             this.Temp_TB.TabIndex = 3;
             this.Temp_TB.Text = "----°C";
             // 
-            // label2
+            // Temp_LBL
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(37, 33);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(82, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Temperature:";
+            this.Temp_LBL.AutoSize = true;
+            this.Temp_LBL.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Temp_LBL.Location = new System.Drawing.Point(37, 61);
+            this.Temp_LBL.Name = "Temp_LBL";
+            this.Temp_LBL.Size = new System.Drawing.Size(82, 13);
+            this.Temp_LBL.TabIndex = 1;
+            this.Temp_LBL.Text = "Temperature:";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(63, 61);
+            this.label1.Location = new System.Drawing.Point(37, 33);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(56, 13);
             this.label1.TabIndex = 0;
@@ -504,13 +504,14 @@ namespace ASCOM.OptecTCF_Driver
             this.DeviceType_CB.Enabled = false;
             this.DeviceType_CB.FormattingEnabled = true;
             this.DeviceType_CB.Items.AddRange(new object[] {
+            "Cancel",
             "TCF-S",
             "TCF-Si",
             "TCF-S3",
             "TCF-S3i"});
-            this.DeviceType_CB.Location = new System.Drawing.Point(97, 100);
+            this.DeviceType_CB.Location = new System.Drawing.Point(103, 100);
             this.DeviceType_CB.Name = "DeviceType_CB";
-            this.DeviceType_CB.Size = new System.Drawing.Size(94, 21);
+            this.DeviceType_CB.Size = new System.Drawing.Size(111, 21);
             this.DeviceType_CB.TabIndex = 8;
             this.DeviceType_CB.Text = "Not Connected";
             this.DeviceType_CB.Validating += new System.ComponentModel.CancelEventHandler(this.DeviceType_CB_Validating);
@@ -521,7 +522,7 @@ namespace ASCOM.OptecTCF_Driver
             // 
             this.DeviceType_LB.AutoSize = true;
             this.DeviceType_LB.Enabled = false;
-            this.DeviceType_LB.Location = new System.Drawing.Point(20, 103);
+            this.DeviceType_LB.Location = new System.Drawing.Point(16, 103);
             this.DeviceType_LB.Name = "DeviceType_LB";
             this.DeviceType_LB.Size = new System.Drawing.Size(71, 13);
             this.DeviceType_LB.TabIndex = 9;
@@ -549,7 +550,7 @@ namespace ASCOM.OptecTCF_Driver
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(50, 13);
             this.label4.TabIndex = 10;
-            this.label4.Text = "BETA 2";
+            this.label4.Text = "BETA 3";
             // 
             // SetupDialogForm
             // 
@@ -561,7 +562,7 @@ namespace ASCOM.OptecTCF_Driver
             this.Controls.Add(this.DeviceType_CB);
             this.Controls.Add(this.FocStatusControls);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.TempCompMode_GB);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.picASCOM);
             this.Controls.Add(this.cmdCancel);
@@ -579,8 +580,8 @@ namespace ASCOM.OptecTCF_Driver
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.TempCompMode_GB.ResumeLayout(false);
+            this.TempCompMode_GB.PerformLayout();
             this.FocStatusControls.ResumeLayout(false);
             this.FocStatusControls.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Increment_NUD)).EndInit();
@@ -608,7 +609,7 @@ namespace ASCOM.OptecTCF_Driver
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel StatusLabel;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox TempCompMode_GB;
         private System.Windows.Forms.RadioButton ModeB_RB;
         private System.Windows.Forms.RadioButton ModeA_RB;
         private System.Windows.Forms.ToolStripMenuItem learnToolStripMenuItem;
@@ -623,7 +624,7 @@ namespace ASCOM.OptecTCF_Driver
         private System.Windows.Forms.Button EditNames_Btn;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.GroupBox FocStatusControls;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label Temp_LBL;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox Temp_TB;
         private System.Windows.Forms.Button In_BTN;

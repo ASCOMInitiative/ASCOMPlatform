@@ -33,10 +33,14 @@ namespace ASCOM.OptecTCF_Driver
             NameA = DeviceSettings.GetModeName('A');
             NameB = DeviceSettings.GetModeName('B');
 
-            ModeA_TB.Text = "Mode A (" + NameA + ")" + " Temp. Coefficient = " + SignA.ToString() + SlopeA.ToString();
-            ModeB_TB.Text = "Mode B (" + NameB + ")" + " Temp. Coefficient = " + SignB.ToString() + SlopeB.ToString();
+            ModeAName_LBL.Text = NameA;
+            ModeBName_LBL.Text = NameB;
 
+            ModeATempCoEff_LBL.Text = SignA.ToString() + SlopeA.ToString().PadLeft(3, '0');
+            ModeBTempCoEff_LBL.Text = SignB.ToString() + SlopeB.ToString().PadLeft(3, '0');
 
         }
+
+       
     }
 }

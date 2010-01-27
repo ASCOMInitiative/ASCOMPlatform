@@ -15,6 +15,12 @@
 // Edit Log:
 //
 // Date			Who	Vers	Description
+//
+//
+// -----------	---	-----	-------------------------------------------------------
+// 01-27-2010   JTS Beta3   Swapped Temperature and Position DRO's on Setup Dialog
+//                          Setting Device Type now changes the Firmware device type
+//                          Made Device Type Combo Box disabled while disconnected.
 // -----------	---	-----	-------------------------------------------------------
 // 01-22-2010   JTS Beta2   Fixed Exception thrown when move is attempted in AutoFocus mode
 // -----------	---	-----	-------------------------------------------------------
@@ -49,7 +55,7 @@ namespace ASCOM.OptecTCF_Driver
         // Driver ID and descriptive string that shows in the Chooser
         //
         internal static string s_csDriverID = "ASCOM.OptecTCF_Driver.Focuser";
-        private static string s_csDriverDescription = "Optec TCF-S BETA2";
+        private static string s_csDriverDescription = "Optec TCF-S BETA3";
 
         //
         // Constructor - Must be public for COM registration!

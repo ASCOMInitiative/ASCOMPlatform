@@ -604,6 +604,33 @@ namespace ASCOM.OptecTCF_Driver
             }
         }
 
+        internal static void SetDeviceType()
+        {
+            try
+            {
+                string CmdToSend = "FE000";
+                if (DeviceSettings.GetMaxStep() == 7000)
+                {
+                    CmdToSend += "1";
+                }
+                else if (DeviceSettings.GetMaxStep() == 10000)
+                {
+                    CmdToSend += "3";
+                }
+                else
+                {
+                    throw new DriverException("\nUnacceptable Device Type found in DeviceComm.SetDeviceType./n");
+                }
+                string received = SendCmd(CmdToSend, 1000, ExpectResponse, "DONE");
+                return;
+            }
+            catch (Exception Ex)
+            {
+                throw new DriverException("\nError Setting Device Type./n" + Ex.ToString(), Ex);
+            }
+
+        }
+
         internal static void SetDelay(char AorB, double delay)
         {
             try
@@ -658,6 +685,7 @@ namespace ASCOM.OptecTCF_Driver
                 }
                 catch(Exception Ex)
                 {
+
                     if (CurrentMode == DeviceModes.AutoModeX)
                     {
                         MessageBox.Show("Error in ReceiveUnsolicited" + "\n\r" + Ex.ToString());
@@ -667,6 +695,8 @@ namespace ASCOM.OptecTCF_Driver
         }
 #endregion
 
+
+        
     }   //end of the DeviceComm class
 
 

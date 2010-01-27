@@ -40,6 +40,7 @@ namespace ASCOM.OptecTCF_Driver
             try
             {
                 t_PortSelected = false;
+                t_TempProbePresent = true;
                 Prof = new ASCOM.Utilities.Profile(true);
                 Prof.DeviceType = "Focuser";
 
@@ -70,6 +71,13 @@ namespace ASCOM.OptecTCF_Driver
 
         private static bool t_PortSelected;
         private static string t_LastPort;
+        private static bool t_TempProbePresent;
+
+        internal static bool TempProbePresent
+        {
+            get { return t_TempProbePresent; }
+            set { t_TempProbePresent = value; }
+        }
 
         internal static bool PortSelected
         {
@@ -216,8 +224,7 @@ namespace ASCOM.OptecTCF_Driver
         }
 
         internal static string GetDeviceType()
-        {
-            
+        { 
             return Prof.GetValue(Focuser.s_csDriverID, ProfileStrings.DeviceType.ToString(), "", "?");
         }
 

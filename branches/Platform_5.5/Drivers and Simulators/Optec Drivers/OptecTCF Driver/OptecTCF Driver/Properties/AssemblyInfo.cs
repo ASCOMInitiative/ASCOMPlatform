@@ -7,11 +7,11 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 //
 // TODO - Add your authorship information here
-[assembly: AssemblyTitle("Optec Focuser Driver (Beta2)")]
-[assembly: AssemblyDescription("ASCOM Focuser Driver for OptecTCF-S (Beta2)")]
+[assembly: AssemblyTitle("Optec Focuser Driver (Beta3)")]
+[assembly: AssemblyDescription("ASCOM Focuser Driver for OptecTCF-S (Beta3)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Optec Inc.")]
-[assembly: AssemblyProduct("Optec TCF-S (Beta2)")]
+[assembly: AssemblyProduct("Optec TCF-S (Beta3)")]
 [assembly: AssemblyCopyright("Optec Inc. 2009 ©")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
