@@ -93,6 +93,7 @@ namespace ASCOM.OptecTCF_Driver
         [ComRegisterFunction]
         public static void RegisterASCOM(Type t)
         {
+            Debug.WriteLine("Registration Started");
             Trace.WriteLine("COMRegistration Entered.");
             RegUnregASCOM(true);
             Trace.WriteLine("Registration Finished.");
