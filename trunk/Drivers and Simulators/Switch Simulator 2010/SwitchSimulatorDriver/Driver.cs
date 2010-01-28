@@ -8,6 +8,7 @@ using ASCOM.Utilities;
 using ASCOM.Interface;
 using System.Collections;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace ASCOM.SwitchSimulator
 {
@@ -55,8 +56,6 @@ namespace ASCOM.SwitchSimulator
         /// </summary>
         public Switch()
         {
-            for (int i = 0; i < numSwitches; i++)
-            {
                 switchCollection.Add(new SwitchDevice("White Lights"));
                 switchCollection.Add(new SwitchDevice("Red Lights"));
                 switchCollection.Add(new SwitchDevice("Telescope Power"));
@@ -65,7 +64,6 @@ namespace ASCOM.SwitchSimulator
                 switchCollection.Add(new SwitchDevice("Dew Heaters"));
                 switchCollection.Add(new SwitchDevice("Dome Power"));
                 switchCollection.Add(new SwitchDevice("Self Destruct"));
-            }
         }
 
         #region ASCOM Registration
@@ -148,6 +146,7 @@ namespace ASCOM.SwitchSimulator
         }
         #endregion
 
+        #region ISwitch Members
         //
         // PUBLIC COM INTERFACE ISwitch IMPLEMENTATION
         //
@@ -169,7 +168,6 @@ namespace ASCOM.SwitchSimulator
             Properties.Settings.Default.Reload();
         }
 
-        #region ISwitch Members
         // I haven't implemented all these methods because they aren't needed to demonstrate the concept.
 
         /// <summary>
@@ -212,7 +210,11 @@ namespace ASCOM.SwitchSimulator
         /// <value>The driver version.</value>
         public string DriverVersion
         {
-            get { throw new System.NotImplementedException(); }
+            get {
+                // loads the running assembly version, implement your own
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                return assembly.GetName().Version.ToString();
+            }
         }
 
         /// <summary>
@@ -234,7 +236,7 @@ namespace ASCOM.SwitchSimulator
         }
 
         /// <summary>
-        /// Yields a collection of ISwitchController objects.
+        /// Yields a collection of ISwitchDevice objects.
         /// </summary>
         /// <value></value>
         public System.Collections.ArrayList SwitchCollection

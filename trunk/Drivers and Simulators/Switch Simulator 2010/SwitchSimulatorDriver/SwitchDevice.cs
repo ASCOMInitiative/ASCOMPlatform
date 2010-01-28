@@ -16,14 +16,16 @@ namespace ASCOM.SwitchSimulator
     class SwitchDevice : ISwitchDevice
     {
         #region ISwitchController Members
+        private string name;
+        private bool state;
 
         /// <summary>
         /// The name of the switch (human readable).
         /// </summary>
         public string Name
         {
-            get;
-            private set;
+            get { return name; }
+            private set {name = value;}
         }
 
         /// <summary>
@@ -31,8 +33,10 @@ namespace ASCOM.SwitchSimulator
         /// </summary>
         public bool State
         {
+            get { return state; }
             set
             {
+                state = value;
                 // In reality we would go off and tweak some hardware at this point.
                 Trace.WriteLine(String.Format("Switch {0} new state is {1}", this.ID, value));
             }
