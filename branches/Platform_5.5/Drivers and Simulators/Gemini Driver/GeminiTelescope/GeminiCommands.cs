@@ -108,7 +108,7 @@ namespace ASCOM.GeminiTelescope
             Commands.Add(":MF", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0, true));
             Commands.Add(":ML", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
             Commands.Add(":Ml", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
-            Commands.Add(":Mf", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0, true));
+            Commands.Add(":Mf", new GeminiCommand(GeminiCommand.ResultType.ZeroOrHash, 0, true));
             Commands.Add(":MM", new GeminiCommand(GeminiCommand.ResultType.ZeroOrHash, 0, true));
             Commands.Add(":MS", new GeminiCommand(GeminiCommand.ResultType.ZeroOrHash, 0, true));
             Commands.Add(":Me", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0, true));

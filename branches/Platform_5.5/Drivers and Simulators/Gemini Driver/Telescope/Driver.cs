@@ -993,7 +993,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Trace.Enter("IT:MoveAxis", Axis, Rate);
 
             AssertConnect();
-            //if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
 
             string[] cmds = { null, null };
@@ -1094,8 +1094,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Trace.Enter("IT:PulseGuide", Direction, Duration);
 
             AssertConnect();
-            //if (GeminiHardware.AtPark)
-            //    throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             // don't update mount parameters each time a guide command is issued: this will slow things down while guiding
             // do it on a polling interval:
@@ -1307,14 +1306,15 @@ namespace ASCOM.GeminiTelescope
 
                 if ((value == PierSide.pierEast && GeminiHardware.SideOfPier == "W") || (value == PierSide.pierWest && GeminiHardware.SideOfPier == "E"))
                 {
-                    string res = GeminiHardware.DoCommandResult(":Mf", -1 , false);
+                    string res = GeminiHardware.DoMeridianFlip();
+
                     if (res == null) throw new TimeoutException("SideOfPier");
                     if (res.StartsWith("1")) throw new ASCOM.DriverException("Object below horizon");
                     if (res.StartsWith("4")) throw new ASCOM.DriverException("Position unreachable");
                     if (res.StartsWith("3")) throw new ASCOM.DriverException("Manual control");
-
+                   
                     GeminiHardware.WaitForVelocity("S", GeminiHardware.MAX_TIMEOUT);
-                    GeminiHardware.WaitForVelocity("TN", GeminiHardware.MAX_TIMEOUT);  // shouldn't this be waiting forever??? depends on whether :Mf is synchronous or not: need to check
+                    GeminiHardware.WaitForVelocity("TN", -1);  // :Mf is asynchronous, wait until done
                 }
                 GeminiHardware.Trace.Exit("IT:SideOfPier.Set", value);
 
@@ -1410,6 +1410,8 @@ namespace ASCOM.GeminiTelescope
         {
             GeminiHardware.Trace.Enter("IT:SlewToAltAz", Azimuth, Altitude);
             AssertConnect();
+            if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+
             GeminiHardware.TargetAzimuth = Azimuth;
             GeminiHardware.TargetAltitude = Altitude;
             GeminiHardware.Velocity = "S";
@@ -1423,6 +1425,8 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Trace.Enter("IT:SlewToAltAzAsync", Azimuth, Altitude);
 
             AssertConnect();
+            if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+
             GeminiHardware.TargetAzimuth = Azimuth;
             GeminiHardware.TargetAltitude = Altitude;
             if (Slewing) AbortSlew();
@@ -1438,8 +1442,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Trace.Enter("IT:SlewToCoordinates", RightAscension, Declination);
             AssertConnect();
 
-            //if (GeminiHardware.AtHome || GeminiHardware.AtPark)
-            //    throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             GeminiHardware.TargetRightAscension = RightAscension;
             GeminiHardware.TargetDeclination = Declination;
@@ -1456,8 +1459,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Trace.Enter("IT:SlewToCoordinatesAsync", RightAscension, Declination);
             AssertConnect();
 
-            //if (GeminiHardware.AtHome || GeminiHardware.AtPark)
-            //    throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             GeminiHardware.TargetRightAscension = RightAscension;
             GeminiHardware.TargetDeclination = Declination;
@@ -1474,8 +1476,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Trace.Enter("IT:SlewToTarget", GeminiHardware.TargetRightAscension, GeminiHardware.TargetDeclination);
             AssertConnect();
 
-            //if (GeminiHardware.AtHome || GeminiHardware.AtPark)
-            //    throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             if (Slewing) AbortSlew();
             GeminiHardware.Velocity = "S";
@@ -1490,8 +1491,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Trace.Enter("IT:SlewToTargetAsync", GeminiHardware.TargetRightAscension, GeminiHardware.TargetDeclination);
             AssertConnect();
 
-            //if (GeminiHardware.AtHome || GeminiHardware.AtPark)
-            //    throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             if (Slewing) AbortSlew();
             GeminiHardware.Velocity = "S";

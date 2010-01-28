@@ -1979,6 +1979,29 @@ namespace ASCOM.GeminiTelescope
                 m_SerialTimeoutExpired.Set();
             }
         }
+
+
+        public static string DoMeridianFlip()
+        {
+            m_SlewAborted.Reset();
+            GeminiHardware.Velocity = "S";
+            string[] res = null;
+
+            // note that if Gemini executes :Mf successfully, it doesn't return a value at all, 
+            // this is not as documented in the manual. So, in case of a timeout of :Mf# command
+            // we'll get back the result of the '\x6' command instead, (should be 'G')
+
+            GeminiHardware.DoCommandResult(new string[] { ":Mf#", "\x6" }, 2000, true, out res);
+            if (res[0] == "G#")    // no result was returned for :Mf# --> means successful
+                return "0";
+            else
+                if (res[1] == null) return null; // if it's really null, then both commands timed out
+                else
+                {
+                    return res[0].TrimEnd('#'); // else it's an error code from :Mf command, return it
+                }
+        }
+
 #endregion
 
 #region Telescope Implementation   
@@ -2505,7 +2528,7 @@ namespace ASCOM.GeminiTelescope
                         Trace.Info(4, "Command queue depth", m_CommandQueue.Count);
                         // gemini doesn't like too many long commands (buffer size problem?)
                         // remove up to x commands at a time
-                        int cnt = Math.Min(10, m_CommandQueue.Count);
+                        int cnt = Math.Min(5, m_CommandQueue.Count);
 
                         commands = new object[cnt]; // m_CommandQueue.ToArray();
                         for (int i = 0; i < cnt; ++i) commands[i] = m_CommandQueue.Dequeue();
@@ -3891,12 +3914,14 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static void SlewEquatorial()
         {
+
             string[] cmd = { ":Sr" + m_Util.HoursToHMS(TargetRightAscension, ":", ":", ""), 
                              ":ON" + (TargetName??"PC Object"),
                              ":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ""), ":MS"};
 
             TargetName = null;
 
+            m_SlewAborted.Reset();
 
             if (GeminiHardware.NudgeFromSafety && GeminiHardware.AtSafetyLimit)
                 DoNudgeFromSafety();
@@ -3930,6 +3955,7 @@ namespace ASCOM.GeminiTelescope
 
             TargetName = null;
 
+            m_SlewAborted.Reset();
 
             if (GeminiHardware.NudgeFromSafety && GeminiHardware.AtSafetyLimit)
                 DoNudgeFromSafety();
@@ -3962,6 +3988,7 @@ namespace ASCOM.GeminiTelescope
                              ":Sa" + m_Util.DegreesToDMS(altitude, ":", ":", ""), "" };
 
             TargetName = null;
+
 
             if (m_AdditionalAlign)
             {
@@ -4005,6 +4032,8 @@ namespace ASCOM.GeminiTelescope
 
             TargetName = null;
 
+            m_SlewAborted.Reset();
+
             if (GeminiHardware.NudgeFromSafety && GeminiHardware.AtSafetyLimit)
                 DoNudgeFromSafety();
 
@@ -4032,6 +4061,9 @@ namespace ASCOM.GeminiTelescope
                              ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ""), ":MA" };
 
             TargetName = null;
+
+            m_SlewAborted.Reset();
+
             if (GeminiHardware.NudgeFromSafety && GeminiHardware.AtSafetyLimit)
                 DoNudgeFromSafety();
 

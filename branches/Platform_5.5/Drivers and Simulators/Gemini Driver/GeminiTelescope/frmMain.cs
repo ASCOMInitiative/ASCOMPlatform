@@ -562,6 +562,12 @@ namespace ASCOM.GeminiTelescope
                 labelRa.Text = "00:00:00";
                 labelDec.Text = "+00:00:00";
                 labelLimit.Text = "00:00:00";
+                labelSlew.Text = Resources.dispSTOP;
+                labelPARK.Text = Resources.dispPARK;
+                labelSlew.BackColor = m_InactiveBkColor;
+                labelSlew.ForeColor = m_InactiveForeColor;
+                labelPARK.BackColor = m_InactiveBkColor;
+                labelPARK.ForeColor = m_InactiveForeColor;
                 SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME, Resources.MountIsDisconnected, ToolTipIcon.Info);
                 tmrJoystick.Stop();
             }        
@@ -1532,7 +1538,7 @@ namespace ASCOM.GeminiTelescope
             if (GeminiHardware.Connected)
             {
                 Speech.SayIt(Resources.MedidianFlip, Speech.SpeechType.Command);
-                string res = GeminiHardware.DoCommandResult(":Mf", GeminiHardware.MAX_TIMEOUT, false);
+                string res = GeminiHardware.DoMeridianFlip();
                 switch (res)
                 {
                     case "1Object below horizon.":
