@@ -433,6 +433,7 @@ namespace ASCOM.OptecTCF_Driver
                 }
                 
                 if (!ResponseDesired) return "";
+
                 ReadAgain:            
                 
                 received = received + ASerialPort.ReceiveTerminated("\n\r");
