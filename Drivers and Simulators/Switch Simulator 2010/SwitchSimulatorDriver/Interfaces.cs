@@ -37,6 +37,6 @@ namespace ASCOM.Interface
         /// <summary>
         /// Sets the state of the switch. True = on, False = off.
         /// </summary>
-        bool State { set; }
+        bool State { get; set; }
     }
 }

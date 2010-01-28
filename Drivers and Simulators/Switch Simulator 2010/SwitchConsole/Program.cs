@@ -16,10 +16,10 @@ namespace SwitchConsole
             //chooser.DeviceType = "Switch";
             //chooser.Choose();
 
-                
-
-            Console.WriteLine("Press any key to exit.");
-            Console.ReadLine();
+            ASCOM.SwitchSimulator.Switch aSwitch = new Switch();
+            aSwitch.SetupDialog();
+            
+  
 
         }
     }
