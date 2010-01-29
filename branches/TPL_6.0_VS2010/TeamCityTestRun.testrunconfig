@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRunConfiguration name="TeamCityTestRun" id="1e257814-65c5-44e8-b877-a0f81862a538" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Description>Run unit tests on the TeamCity build server</Description>
+  <Timeouts runTimeout="1800000" testTimeout="60000" />
+  <NamingScheme baseName="TeamCity" useDefault="false" />
+  <TestTypeSpecific />
+</TestRunConfiguration>
