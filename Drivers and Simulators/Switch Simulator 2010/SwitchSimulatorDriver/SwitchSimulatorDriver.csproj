@@ -109,6 +109,8 @@
     </None>
     <Content Include="ASCOM.ico" />
     <Content Include="ReadMe.htm" />
+    <EmbeddedResource Include="Resources\RedLED.bmp" />
+    <EmbeddedResource Include="Resources\GreenLED.bmp" />
     <None Include="Resources\ASCOM.bmp" />
   </ItemGroup>
   <ItemGroup>
