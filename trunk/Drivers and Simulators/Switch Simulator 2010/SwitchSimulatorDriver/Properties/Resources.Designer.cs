@@ -73,5 +73,19 @@ namespace ASCOM.SwitchSimulator.Properties {
                 return ((System.Drawing.Icon)(obj));
             }
         }
+        
+        internal static System.Drawing.Bitmap GreenLED {
+            get {
+                object obj = ResourceManager.GetObject("GreenLED", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap RedLED {
+            get {
+                object obj = ResourceManager.GetObject("RedLED", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

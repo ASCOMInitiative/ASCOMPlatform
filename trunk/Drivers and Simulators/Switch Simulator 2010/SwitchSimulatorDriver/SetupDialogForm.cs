@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using System.Reflection;
+using System.IO;
 using ASCOM.Interface;
 
 namespace ASCOM.SwitchSimulator
@@ -15,15 +17,21 @@ namespace ASCOM.SwitchSimulator
 	{
         private static ISwitch switchA = new Switch();
         private static ArrayList switchDevices = switchA.SwitchCollection;
+        Stream redLED;
+        Stream greenLED;
+
         
 		public SetupDialogForm()
 		{
 			InitializeComponent();
 
             this.lb_DriverVersion.Text = "v" + switchA.DriverVersion;
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            string[] names = assembly.GetManifestResourceNames();
+            redLED = assembly.GetManifestResourceStream("ASCOM.SwitchSimulator.Resources.RedLED.bmp");
+            greenLED = assembly.GetManifestResourceStream("ASCOM.SwitchSimulator.Resources.GreenLED.bmp");
+
             DisplaySwitchSettings();
-            
-           
 		    }
 
 		private void cmdOK_Click(object sender, EventArgs e)
@@ -50,38 +58,36 @@ namespace ASCOM.SwitchSimulator
 
         private void DisplaySwitchSettings()
         {
-            int i = 0;
-            int j = 1;
-
+            int i = 1;
             //loop the switch devices
             foreach (SwitchDevice s in switchDevices)
             {
-                //loop the high level form controls
-                foreach (Control c in this.Controls)
+                //loop the first group of text boxes
+                
+                foreach (System.Windows.Forms.Control gbChild in this.groupBox1.Controls)
                 {
-                    //loop the child form controls
-                    foreach (Control childc in c.Controls)
+                    if (gbChild.Name == "textBox" + i)
                     {
-                        if (childc.Name == "textBox" + j)
-                       {
-                          ((TextBox)childc).Text= s.Name;
-                       }
-                        else if (childc.Name == "radioButton" + j)
-                       {
-                          ((RadioButton)childc).Checked = s.State;
-                       }
-                        else if (childc.Name == "checkBox" + j)
-                       {
-                          ((CheckBox)childc).Checked = s.State;
-                       }
-                        else if (childc.Name == "pictureBox" + j)
-                       {
-                          ((PictureBox)childc).Visible = s.State;
-                       }
+                        gbChild.Text = s.Name;
                     }
+                   
                 }
-                i++;
-                j++;
+                foreach (System.Windows.Forms.Control pbChild in this.groupBox2.Controls)
+                {
+                    if (pbChild.Name == "pictureBox" + i)
+                    {
+                        PictureBox pb = (PictureBox)pbChild;
+                        if (s.State)
+                        {
+                            pb.Image = new Bitmap(greenLED);
+                        }
+                        else
+                        {
+                            pb.Image = new Bitmap(redLED);
+                        }
+                    }
+                } 
+              i++;
             }
         }
 
@@ -89,54 +95,54 @@ namespace ASCOM.SwitchSimulator
         {
             SwitchDevice s = (SwitchDevice)switchDevices[i];
 
-            if (s.State == true)
+            if (s.State)
             {
                 s.State = false;
-                p.Visible = false;
+                p.Image = new Bitmap(redLED);
             }
             else
             {
                 s.State = true;
-                p.Visible = true;
+                p.Image = new Bitmap(greenLED);
             }
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void pictureBox1_Click(object sender, EventArgs e)
         {
             UpdateSwitchState(0, pictureBox1);
         }
 
-        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        private void pictureBox2_Click(object sender, EventArgs e)
         {
             UpdateSwitchState(1, pictureBox2);
         }
 
-        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        private void pictureBox3_Click(object sender, EventArgs e)
         {
             UpdateSwitchState(2, pictureBox3);
         }
 
-        private void checkBox4_CheckedChanged(object sender, EventArgs e)
+        private void pictureBox4_Click(object sender, EventArgs e)
         {
             UpdateSwitchState(3, pictureBox4);
         }
 
-        private void checkBox5_CheckedChanged(object sender, EventArgs e)
+        private void pictureBox5_Click(object sender, EventArgs e)
         {
             UpdateSwitchState(4, pictureBox5);
         }
 
-        private void checkBox6_CheckedChanged(object sender, EventArgs e)
+        private void pictureBox6_Click(object sender, EventArgs e)
         {
             UpdateSwitchState(5, pictureBox6);
         }
 
-        private void checkBox7_CheckedChanged(object sender, EventArgs e)
+        private void pictureBox7_Click(object sender, EventArgs e)
         {
             UpdateSwitchState(6, pictureBox7);
         }
 
-        private void checkBox8_CheckedChanged(object sender, EventArgs e)
+        private void pictureBox8_Click(object sender, EventArgs e)
         {
             UpdateSwitchState(7, pictureBox8);
         }
