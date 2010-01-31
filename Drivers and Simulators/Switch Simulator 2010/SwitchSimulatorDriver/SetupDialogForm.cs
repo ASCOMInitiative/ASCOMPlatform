@@ -12,9 +12,7 @@ using ASCOM.Interface;
 
 namespace ASCOM.SwitchSimulator
 {
-	[ComVisible(true)]
-    [Guid("A168E7F7-06C5-4045-9919-CB2E1844B076")]
-    [ClassInterface(ClassInterfaceType.None)]
+	[ComVisible(false)]
 	public partial class SetupDialogForm : Form
 	{
         private static ISwitch switchA = new Switch();
