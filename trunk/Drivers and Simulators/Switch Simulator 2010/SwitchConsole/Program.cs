@@ -12,9 +12,9 @@ namespace SwitchConsole
     {
         static void Main(string[] args)
         {
-            ASCOM.Utilities.Chooser chooser = new ASCOM.Utilities.Chooser();
-            chooser.DeviceType = "Switch";
-            chooser.Choose();
+            //ASCOM.Utilities.Chooser chooser = new ASCOM.Utilities.Chooser();
+            //chooser.DeviceType = "Switch";
+            //chooser.Choose();
 
             ASCOM.SwitchSimulator.Switch aSwitch = new Switch();
             aSwitch.SetupDialog();
