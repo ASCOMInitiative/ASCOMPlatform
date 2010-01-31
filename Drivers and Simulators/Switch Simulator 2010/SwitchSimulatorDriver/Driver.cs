@@ -52,7 +52,7 @@ namespace ASCOM.SwitchSimulator
         /// <summary>
         /// Driver version number
         /// </summary>
-        private static string driverVersion = "1.0";
+        private static string driverVersion = "6.0";
 
         /// <summary>
         /// Backing store for the private switch collection.
@@ -80,6 +80,12 @@ namespace ASCOM.SwitchSimulator
         /// </summary>
         private static Utilities.Profile Profile = new Profile();
 
+        /// <summary>
+        /// Sets up the permenant store for device names
+        /// </summary>
+        private static string[] deviceNames = { "White Lights", "Red Lights", "Telescope Power", "Camera Power", "Focuser Power", "Dew Heaters", "Dome Power", "Self Destruct" };
+
+
         #endregion
 
         #region ISwitch Public Members
@@ -94,16 +100,19 @@ namespace ASCOM.SwitchSimulator
         /// </summary>
         public Switch()
         {
-            switchDevices.Add(new SwitchDevice("White Lights"));
-            switchDevices.Add(new SwitchDevice("Red Lights"));
-            switchDevices.Add(new SwitchDevice("Telescope Power"));
-            switchDevices.Add(new SwitchDevice("Camera Power"));
-            switchDevices.Add(new SwitchDevice("Focuser Power"));
-            switchDevices.Add(new SwitchDevice("Dew Heaters"));
-            switchDevices.Add(new SwitchDevice("Dome Power"));
-            switchDevices.Add(new SwitchDevice("Self Destruct"));
-
-            GetProfileSettings();
+            //new instance so load switches
+            LoadSwitchDevices();
+            //check to see if the profile is ok
+            if (ValidateProfile())
+            {
+                //load profile settings
+                GetProfileSettings();
+            }
+            else
+            {
+                //attempt to save a new profile
+                SaveProfileSettings();
+            }
         }
 
         /// <summary>
@@ -201,30 +210,84 @@ namespace ASCOM.SwitchSimulator
 
         #endregion
 
-        #region ISwitch Private Members
+        #region Switch Private Members
+
+        /// <summary>
+        /// Load the switches and makes sure there is only 8 loaded
+        /// </summary>
+        private static void LoadSwitchDevices()
+        {
+            //each new instance load the switches, make sure this doesn't repeat
+            if (switchDevices.Count != 8)
+            {
+                //too many or not enough found, start over
+                switchDevices.Clear();
+                //load a new set of switch devices
+                foreach (string device in deviceNames)
+                {
+                    switchDevices.Add(new SwitchDevice(device.ToString()));
+                }
+            }
+        }
+
         /// <summary>
         /// Saves all settings to the profile for this driver
         /// </summary>
         private static void GetProfileSettings()
         {
-            Profile.DeviceType = "Switch";
-            //check to see if the driver is registered
-            if (Profile.IsRegistered(s_csDriverID))
+            foreach (SwitchDevice sw in switchDevices)
             {
-                //no easy way to check if the SwitchDevices subkey exist
-                try
+                bool state = System.Convert.ToBoolean(GetProfileSetting(sw.Name, "false"));
+                if (state != sw.State)
                 {
-                    ArrayList ps = Profile.SubKeys(s_csDriverID, "SwitchDevices");
-                    //grab the values if anything is there
-                    foreach(SwitchDevice sw in switchDevices)
+                    sw.State = state;
+                }
+            }
+         }
+
+        /// <summary>
+        /// Validate the profile is in good shape
+        /// </summary>
+        private static bool ValidateProfile()
+        {
+            try
+            {
+                Profile.DeviceType = "Switch";
+                //check profile if the driver id is registered
+                bool chkRegistered = Profile.IsRegistered(s_csDriverID);
+                if (chkRegistered)
+                {
+                    //check proffile to see if the subkey is loaded 
+                    ArrayList pv = Profile.Values(s_csDriverID, "SwitchDevices");
+                    if (pv.Count == 8)
                     {
-                        sw.State = System.Convert.ToBoolean(GetProfileSetting(sw.Name, "false"));
+                        //check profile to see if key each named device exist
+                        foreach (string device in deviceNames)
+                        {
+                            string s = Profile.GetValue(s_csDriverID, device.ToString(), "SwitchDevices");
+                            if (s == "")
+                            {
+                                //found something wrong, delete evertyhing
+                                DeleteProfileSettings();
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
+                    else
+                    {
+                        DeleteProfileSettings();
+                        return false;
                     }
                 }
-                catch(System.IO.DirectoryNotFoundException)
+                else
                 {
-                    SaveProfileSettings();
+                    return false;
                 }
+            }
+            catch(System.IO.DirectoryNotFoundException)
+            {
+                return false;
             }
         }
 
@@ -233,7 +296,6 @@ namespace ASCOM.SwitchSimulator
         /// </summary>
         private static void SaveProfileSettings()
         {
-            DeleteProfileSettings();
             foreach (SwitchDevice sd in switchDevices)
             {
                 Profile.WriteValue(s_csDriverID,sd.Name, sd.State.ToString(), "SwitchDevices");
