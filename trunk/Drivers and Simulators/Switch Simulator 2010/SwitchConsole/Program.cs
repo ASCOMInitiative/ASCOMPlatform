@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ASCOM;
-using ASCOM.SwitchSimulator;
 
 namespace SwitchConsole
 {
@@ -12,12 +11,15 @@ namespace SwitchConsole
     {
         static void Main(string[] args)
         {
-            //ASCOM.Utilities.Chooser chooser = new ASCOM.Utilities.Chooser();
-            //chooser.DeviceType = "Switch";
-            //chooser.Choose();
 
-            ASCOM.SwitchSimulator.Switch aSwitch = new Switch();
-            aSwitch.SetupDialog();
+            //object obj = Activator.CreateInstance(Type.GetTypeFromProgID("ASCOM.Simulator.Switch"));
+
+            ASCOM.Utilities.Chooser chooser = new ASCOM.Utilities.Chooser();
+            chooser.DeviceType = "Switch";
+            chooser.Choose();
+
+            //ASCOM.SwitchSimulator.Switch aSwitch = new Switch();
+            //aSwitch.SetupDialog();
         }
     }
 }

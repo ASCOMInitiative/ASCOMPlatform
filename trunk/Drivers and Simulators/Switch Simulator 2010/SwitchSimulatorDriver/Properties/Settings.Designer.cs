@@ -22,14 +22,5 @@ namespace ASCOM.SwitchSimulator.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("COM1")]
-        public string CommPort {
-            get {
-                return ((string)(this["CommPort"]));
-            }
-        }
     }
 }
