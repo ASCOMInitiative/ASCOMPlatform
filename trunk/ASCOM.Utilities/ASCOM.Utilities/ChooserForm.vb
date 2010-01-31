@@ -41,7 +41,13 @@ Friend Class ChooserForm
         'MsgBox("ChooserformLoad Start")
         Try
             ProfileStore = New XMLAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
-            m_Drivers = ProfileStore.EnumKeys(m_sDeviceType & " Drivers") ' Get Key-Class pairs
+            Try
+                m_Drivers = ProfileStore.EnumKeys(m_sDeviceType & " Drivers") ' Get Key-Class pairs
+            Catch ex1 As Exception
+                'Ignore any exceptions from this call e.g. if there are no devices of that type installed
+                'Just create an empty list
+                m_Drivers = New Generic.SortedList(Of String, String)
+            End Try
             cb = Me.cbDriverSelector ' Handy shortcut
             cb.Items.Clear()
             If m_Drivers.Count = 0 Then
