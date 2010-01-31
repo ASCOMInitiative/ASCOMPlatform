@@ -35,82 +35,157 @@ Module VersionCode
 
         'Get Operating system information
         Dim OS As System.OperatingSystem = System.Environment.OSVersion
-        TL.LogMessage("Versions", "OS Version: " & OS.Platform & ", Service Pack: " & OS.ServicePack & ", Full: " & OS.VersionString)
-        If IsWow64() Then 'Application is under WoW64 so OS must be 64bit
-            TL.LogMessage("Versions", "Operating system is 64bit")
-        Else 'Could be 32bit or 64bit Use IntPtr
+
+        Try 'Make sure this code never throws an exception back to the caller
+            TL.LogMessage("Versions", "OS Version: " & OS.Platform & ", Service Pack: " & OS.ServicePack & ", Full: " & OS.VersionString)
+            If IsWow64() Then 'Application is under WoW64 so OS must be 64bit
+                TL.LogMessage("Versions", "Operating system is 64bit")
+            Else 'Could be 32bit or 64bit Use IntPtr
+                Select Case System.IntPtr.Size
+                    Case 4
+                        TL.LogMessage("Versions", "Operating system is 32bit")
+                    Case 8
+                        TL.LogMessage("Versions", "Operating system is 64bit")
+                    Case Else
+                        TL.LogMessage("Versions", "Operating system is unknown bits, PTR length is: " & System.IntPtr.Size)
+                End Select
+            End If
             Select Case System.IntPtr.Size
                 Case 4
-                    TL.LogMessage("Versions", "Operating system is 32bit")
+                    TL.LogMessage("Versions", "Application is 32bit")
                 Case 8
-                    TL.LogMessage("Versions", "Operating system is 64bit")
+                    TL.LogMessage("Versions", "Application is 64bit")
                 Case Else
-                    TL.LogMessage("Versions", "Operating system is unknown bits, PTR length is: " & System.IntPtr.Size)
+                    TL.LogMessage("Versions", "Application is unknown bits, PTR length is: " & System.IntPtr.Size)
             End Select
-        End If
-        Select Case System.IntPtr.Size
-            Case 4
-                TL.LogMessage("Versions", "Application is 32bit")
-            Case 8
-                TL.LogMessage("Versions", "Application is 64bit")
-            Case Else
-                TL.LogMessage("Versions", "Application is unknown bits, PTR length is: " & System.IntPtr.Size)
-        End Select
-        TL.LogMessage("Versions", "")
+            TL.LogMessage("Versions", "")
 
-        'Get common language runtime version
-        TL.LogMessage("Versions", "CLR version: " & System.Environment.Version.ToString)
+            'Get common language runtime version
+            TL.LogMessage("Versions", "CLR version: " & System.Environment.Version.ToString)
 
-        'Get file system information
-        Dim UserDomainName As String = System.Environment.UserDomainName
-        Dim UserName As String = System.Environment.UserName
-        Dim MachineName As String = System.Environment.MachineName
-        Dim ProcCount As Integer = System.Environment.ProcessorCount
-        Dim SysDir As String = System.Environment.SystemDirectory
-        Dim WorkSet As Long = System.Environment.WorkingSet
-        TL.LogMessage("Versions", "Machine name: " & MachineName & " UserName: " & UserName & " DomainName: " & UserDomainName)
-        TL.LogMessage("Versions", "Number of processors: " & ProcCount & " System directory: " & SysDir & " Working set size: " & WorkSet & " bytes")
-        TL.LogMessage("Versions", "")
+            'Get file system information
+            Dim UserDomainName As String = System.Environment.UserDomainName
+            Dim UserName As String = System.Environment.UserName
+            Dim MachineName As String = System.Environment.MachineName
+            Dim ProcCount As Integer = System.Environment.ProcessorCount
+            Dim SysDir As String = System.Environment.SystemDirectory
+            Dim WorkSet As Long = System.Environment.WorkingSet
+            TL.LogMessage("Versions", "Machine name: " & MachineName & " UserName: " & UserName & " DomainName: " & UserDomainName)
+            TL.LogMessage("Versions", "Number of processors: " & ProcCount & " System directory: " & SysDir & " Working set size: " & WorkSet & " bytes")
+            TL.LogMessage("Versions", "")
 
-        'Get fully qualified paths to particular directories in a non OS specific way
-        'There are many more options in the SpecialFolders Enum than are shown here!
-        TL.LogMessage("Versions", "My Documents:            " & System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
-        TL.LogMessage("Versions", "Application Data:        " & System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData))
-        TL.LogMessage("Versions", "Common Application Data: " & System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData))
-        TL.LogMessage("Versions", "Program Files:           " & System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles))
-        TL.LogMessage("Versions", "Common Files:            " & System.Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles))
-        TL.LogMessage("Versions", "System:                  " & System.Environment.GetFolderPath(Environment.SpecialFolder.System))
-        TL.LogMessage("Versions", "Current:                 " & System.Environment.CurrentDirectory)
-        TL.LogMessage("Versions", "")
+            'Get fully qualified paths to particular directories in a non OS specific way
+            'There are many more options in the SpecialFolders Enum than are shown here!
+            TL.LogMessage("Versions", "My Documents:            " & System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
+            TL.LogMessage("Versions", "Application Data:        " & System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData))
+            TL.LogMessage("Versions", "Common Application Data: " & System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData))
+            TL.LogMessage("Versions", "Program Files:           " & System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles))
+            TL.LogMessage("Versions", "Common Files:            " & System.Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles))
+            TL.LogMessage("Versions", "System:                  " & System.Environment.GetFolderPath(Environment.SpecialFolder.System))
+            TL.LogMessage("Versions", "Current:                 " & System.Environment.CurrentDirectory)
+            TL.LogMessage("Versions", "")
 
-        'Get loaded assemblies
-        Assemblies = AppDom.GetAssemblies 'Get a list of loaded assemblies
-        For Each FoundAssembly As Assembly In Assemblies
-            TL.LogMessage("Versions", "Loaded Assemblies: " & FoundAssembly.GetName.Name & " " & FoundAssembly.GetName.Version.ToString)
-        Next
-        TL.LogMessage("Versions", "")
+            'Get loaded assemblies
+            Assemblies = AppDom.GetAssemblies 'Get a list of loaded assemblies
+            For Each FoundAssembly As Assembly In Assemblies
+                TL.LogMessage("Versions", "Loaded Assemblies: " & FoundAssembly.GetName.Name & " " & FoundAssembly.GetName.Version.ToString)
+            Next
+            TL.LogMessage("Versions", "")
 
-        'Get assembly versions
-        AssemblyInfo(TL, "Executing Assembly", Assembly.GetExecutingAssembly)
-        AssemblyInfo(TL, "Entry Assembly", Assembly.GetEntryAssembly)
-        AssemblyInfo(TL, "Calling Assembly", Assembly.GetCallingAssembly)
-        TL.LogMessage("Versions", "")
-
+            'Get assembly versions
+            AssemblyInfo(TL, "Executing Assembly", Assembly.GetExecutingAssembly)
+            AssemblyInfo(TL, "Entry Assembly", Assembly.GetEntryAssembly)
+            AssemblyInfo(TL, "Calling Assembly", Assembly.GetCallingAssembly)
+            TL.LogMessage("Versions", "")
+        Catch ex As Exception 'Just log the exception, we don't want the caller to know this diagnostic code failed
+            TL.LogMessage("Versions", "Exception: " & ex.ToString)
+        End Try
     End Sub
 
     Sub AssemblyInfo(ByVal TL As TraceLogger, ByVal AssName As String, ByVal Ass As Assembly)
         Dim FileVer As FileVersionInfo
+        Dim AssblyName As AssemblyName, Vers As Version, VerString As String
+        Dim Location, FVer, FName As String
 
         AssName = Left(AssName & ":" & Space(20), 19)
 
         If Not Ass Is Nothing Then
-            TL.LogMessage("Versions", AssName & " AssemblyVersion: " & Ass.GetName.Version.ToString)
-            FileVer = FileVersionInfo.GetVersionInfo(Ass.Location.ToString)
-            TL.LogMessage("Versions", AssName & " FileVersion: " & FileVer.FileVersion.ToString)
-            TL.LogMessage("Versions", AssName & " Name: " & Ass.GetName.FullName.ToString)
-            TL.LogMessage("Versions", AssName & " CodeBase: " & Ass.GetName.CodeBase.ToString)
-            TL.LogMessage("Versions", AssName & " Location: " & Ass.Location.ToString)
-            TL.LogMessage("Versions", AssName & " From GAC: " & Ass.GlobalAssemblyCache.ToString)
+            Try
+                AssblyName = Ass.GetName
+                If AssblyName Is Nothing Then
+                    TL.LogMessage("Versions", AssName & " Assembly name is missing, cannot determine version")
+                Else
+                    Vers = AssblyName.Version
+                    If Vers Is Nothing Then
+                        TL.LogMessage("Versions", AssName & " Assembly version is missing, cannot determine version")
+                    Else
+                        VerString = Vers.ToString
+                        If Not String.IsNullOrEmpty(VerString) Then
+                            TL.LogMessage("Versions", AssName & " AssemblyVersion: " & VerString)
+                        Else
+                            TL.LogMessage("Versions", AssName & " Assembly version string is null or empty, cannot determine assembly version")
+                        End If
+                    End If
+                End If
+            Catch ex As Exception
+                TL.LogMessage("AssemblyInfo", "Exception EX1: " & ex.ToString)
+            End Try
+
+            Try
+                Location = Ass.Location
+                If Location Is Nothing Then
+                    TL.LogMessage("Versions", AssName & "Assembly location is missing, cannot determine file version")
+                Else
+                    FileVer = FileVersionInfo.GetVersionInfo(Location)
+                    If FileVer Is Nothing Then
+                        TL.LogMessage("Versions", AssName & " File version object is null, cannot determine file version number")
+                    Else
+                        FVer = FileVer.FileVersion
+                        If Not String.IsNullOrEmpty(FVer) Then
+                            TL.LogMessage("Versions", AssName & " FileVersion: " & FVer)
+                        Else
+                            TL.LogMessage("Versions", AssName & " File version string is null or empty, cannot determine file version")
+                        End If
+                    End If
+                End If
+            Catch ex As Exception
+                TL.LogMessage("AssemblyInfo", "Exception EX2: " & ex.ToString)
+            End Try
+
+            Try
+                AssblyName = Ass.GetName
+                If AssblyName Is Nothing Then
+                    TL.LogMessage("Versions", AssName & " Assembly name is missing, cannot determine full name")
+                Else
+                    FName = AssblyName.FullName
+                    If Not String.IsNullOrEmpty(FName) Then
+                        TL.LogMessage("Versions", AssName & " Name: " & FName)
+                    Else
+                        TL.LogMessage("Versions", AssName & " Full name string is null or empty, cannot determine full name")
+                    End If
+
+                End If
+            Catch ex As Exception
+                TL.LogMessage("AssemblyInfo", "Exception EX3: " & ex.ToString)
+            End Try
+
+            Try
+                TL.LogMessage("Versions", AssName & " CodeBase: " & Ass.GetName.CodeBase)
+            Catch ex As Exception
+                TL.LogMessage("AssemblyInfo", "Exception EX4: " & ex.ToString)
+            End Try
+
+            Try
+                TL.LogMessage("Versions", AssName & " Location: " & Ass.Location)
+            Catch ex As Exception
+                TL.LogMessage("AssemblyInfo", "Exception EX5: " & ex.ToString)
+            End Try
+
+            Try
+                TL.LogMessage("Versions", AssName & " From GAC: " & Ass.GlobalAssemblyCache.ToString)
+            Catch ex As Exception
+                TL.LogMessage("AssemblyInfo", "Exception EX6: " & ex.ToString)
+            End Try
         Else
             TL.LogMessage("Versions", AssName & " No assembly found")
         End If
