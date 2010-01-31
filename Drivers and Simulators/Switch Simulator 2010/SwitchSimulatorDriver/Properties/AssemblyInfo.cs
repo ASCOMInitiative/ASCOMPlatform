@@ -7,11 +7,11 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 //
 // TODO - Add your authorship information here
-[assembly: AssemblyTitle("ASCOM.SwitchSimulator.Driver")]
-[assembly: AssemblyDescription("ASCOM.SwitchSimulator driver")]
+[assembly: AssemblyTitle("ASCOM.Simulator.Switch")]
+[assembly: AssemblyDescription("ASCOM Switch Simulator Driver")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("The ASCOM Initiative")]
-[assembly: AssemblyProduct("ASCOM.SwitchSimulator.Driver")]
+[assembly: AssemblyProduct("ASCOM Switch Simulator Drive")]
 [assembly: AssemblyCopyright("Copyright © 2010 The ASCOM Initiative")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -35,5 +35,5 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 //
 // TODO - Set your driver's version here
-[assembly: AssemblyVersion("5.1.*")]
-[assembly: AssemblyFileVersion("5.1.0.0")]
+[assembly: AssemblyVersion("6")]
+[assembly: AssemblyFileVersion("6.0.0.0")]

@@ -23,10 +23,10 @@ using ASCOM;
  * **********************/
 
 //namespace ASCOM.SwitchSimulator.Properties
-//    {
+//{
 //    [SettingsProvider(typeof(ASCOM.SettingsProvider))]
 //    [ASCOM.DeviceId("ASCOM.SwitchSimulator.Driver")]
 //    internal sealed partial class Settings
-//        {
-//        }
+//    {
 //    }
+//}

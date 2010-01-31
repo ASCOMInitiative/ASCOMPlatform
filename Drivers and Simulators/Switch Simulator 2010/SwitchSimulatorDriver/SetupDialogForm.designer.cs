@@ -70,7 +70,7 @@ namespace ASCOM.SwitchSimulator
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.cmdOK.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.cmdOK.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.cmdOK.Location = new System.Drawing.Point(229, 207);
+            this.cmdOK.Location = new System.Drawing.Point(233, 206);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 0;
@@ -83,7 +83,7 @@ namespace ASCOM.SwitchSimulator
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cmdCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.cmdCancel.Location = new System.Drawing.Point(229, 237);
+            this.cmdCancel.Location = new System.Drawing.Point(233, 236);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
@@ -96,7 +96,7 @@ namespace ASCOM.SwitchSimulator
             this.picASCOM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picASCOM.Image = global::ASCOM.SwitchSimulator.Properties.Resources.ASCOM;
-            this.picASCOM.Location = new System.Drawing.Point(233, 12);
+            this.picASCOM.Location = new System.Drawing.Point(239, 12);
             this.picASCOM.Name = "picASCOM";
             this.picASCOM.Size = new System.Drawing.Size(48, 56);
             this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -107,6 +107,7 @@ namespace ASCOM.SwitchSimulator
             // 
             // textBox1
             // 
+            this.textBox1.Enabled = false;
             this.textBox1.Location = new System.Drawing.Point(6, 19);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(141, 20);
@@ -124,6 +125,7 @@ namespace ASCOM.SwitchSimulator
             // 
             // textBox2
             // 
+            this.textBox2.Enabled = false;
             this.textBox2.Location = new System.Drawing.Point(6, 45);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(141, 20);
@@ -131,6 +133,7 @@ namespace ASCOM.SwitchSimulator
             // 
             // textBox3
             // 
+            this.textBox3.Enabled = false;
             this.textBox3.Location = new System.Drawing.Point(6, 71);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(141, 20);
@@ -138,6 +141,7 @@ namespace ASCOM.SwitchSimulator
             // 
             // textBox4
             // 
+            this.textBox4.Enabled = false;
             this.textBox4.Location = new System.Drawing.Point(6, 97);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(141, 20);
@@ -145,6 +149,7 @@ namespace ASCOM.SwitchSimulator
             // 
             // textBox5
             // 
+            this.textBox5.Enabled = false;
             this.textBox5.Location = new System.Drawing.Point(6, 123);
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(141, 20);
@@ -152,6 +157,7 @@ namespace ASCOM.SwitchSimulator
             // 
             // textBox6
             // 
+            this.textBox6.Enabled = false;
             this.textBox6.Location = new System.Drawing.Point(6, 149);
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(141, 20);
@@ -159,6 +165,7 @@ namespace ASCOM.SwitchSimulator
             // 
             // textBox7
             // 
+            this.textBox7.Enabled = false;
             this.textBox7.Location = new System.Drawing.Point(6, 175);
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(141, 20);
@@ -186,6 +193,7 @@ namespace ASCOM.SwitchSimulator
             // 
             // textBox8
             // 
+            this.textBox8.Enabled = false;
             this.textBox8.Location = new System.Drawing.Point(6, 201);
             this.textBox8.Name = "textBox8";
             this.textBox8.Size = new System.Drawing.Size(141, 20);
@@ -294,7 +302,7 @@ namespace ASCOM.SwitchSimulator
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(298, 270);
+            this.ClientSize = new System.Drawing.Size(302, 269);
             this.Controls.Add(this.cmdCancel);
             this.Controls.Add(this.cmdOK);
             this.Controls.Add(this.groupBox2);
@@ -323,11 +331,10 @@ namespace ASCOM.SwitchSimulator
             this.ResumeLayout(false);
             this.PerformLayout();
 
-		}
+        }
+        #endregion
 
-		#endregion
-
-		private System.Windows.Forms.Button cmdOK;
+        private System.Windows.Forms.Button cmdOK;
         private System.Windows.Forms.Button cmdCancel;
         private System.Windows.Forms.PictureBox picASCOM;
         private System.Windows.Forms.TextBox textBox1;

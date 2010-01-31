@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ASCOM.Interface;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace ASCOM.SwitchSimulator
 {
@@ -13,9 +14,12 @@ namespace ASCOM.SwitchSimulator
     /// property being written. Our fake implementation simply writes to the debug
     /// window.
     /// </summary>
+    [Guid("B3E5FC9D-4D76-4f4b-8FF5-854A01DF413F")]
+    [ClassInterface(ClassInterfaceType.None)]
     class SwitchDevice : ISwitchDevice
     {
-        #region ISwitchController Members
+        #region ISwitchDevice Members
+
         private string name;
         private bool state;
 
@@ -25,7 +29,7 @@ namespace ASCOM.SwitchSimulator
         public string Name
         {
             get { return name; }
-            private set {name = value;}
+            protected internal set { name = value; }
         }
 
         /// <summary>
@@ -37,6 +41,7 @@ namespace ASCOM.SwitchSimulator
             set
             {
                 state = value;
+                Switch.SaveProfileSetting(this.Name, this.State);
                 // In reality we would go off and tweak some hardware at this point.
                 Trace.WriteLine(String.Format("Switch {0} new state is {1}", this.ID, value));
             }
@@ -70,6 +75,8 @@ namespace ASCOM.SwitchSimulator
         private int ID { get; set; }
         #endregion
 
+        #region Public Switch Methods
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SwitchDevice"/> class.
         /// Assigns each new instance a unique sequential ID.
@@ -90,5 +97,7 @@ namespace ASCOM.SwitchSimulator
             this.ID = SequenceNumber;
             this.Name = label;
         }
+
+        #endregion
     }
 }

@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
-
-using ASCOM;
-using ASCOM.Utilities;
-using ASCOM.Interface;
 using System.Collections;
 using System.Diagnostics;
-using System.Reflection;
+using System.Runtime.InteropServices;
+using ASCOM.Interface;
+using ASCOM.Utilities;
 
 namespace ASCOM.SwitchSimulator
 {
@@ -28,17 +23,52 @@ namespace ASCOM.SwitchSimulator
     [ClassInterface(ClassInterfaceType.None)]
     public class Switch : ISwitch
     {
+        #region Constants
+        /// <summary>
+        /// Stores the state of the connection
+        /// </summary>
+        private static bool connected = false;
+
+        /// <summary>
+        /// Name of the Driver
+        /// </summary>
+        private static string name = "ASCOM.SwitchSimulator.Switch";
+
+        /// <summary>
+        /// Description of the driver
+        /// </summary>
+        private static string description = "ASCOM Switch Simulator Driver";
+
+        /// <summary>
+        /// Driver information
+        /// </summary>
+        private static string driverInfo = "Switch Simulator Driver and collection of Switch devices";
+        
+        /// <summary>
+        /// Driver interface version
+        /// </summary>
+        private static short interfaceVersion = 1;
+
+        /// <summary>
+        /// Driver version number
+        /// </summary>
+        private static string driverVersion = "1.0";
+
+        /// <summary>
+        /// Backing store for the private switch collection.
+        /// </summary>
+        private static ArrayList switchDevices = new ArrayList(numSwitches);
+
         /// <summary>
         /// ASCOM DeviceID (COM ProgID) for this driver.
         /// The DeviceID is used by ASCOM applications to load the driver at runtime.
         /// </summary>
-        private static string s_csDriverID = "ASCOM.SwitchSimulator.Switch";
+        private static string s_csDriverID = "ASCOM.Simulator.Switch";
 
-        // TODO Change the descriptive string for your driver then remove this line
         /// <summary>
         /// Driver description that displays in the ASCOM Chooser.
         /// </summary>
-        private static string s_csDriverDescription = "SwitchSimulator ASCOM Switch Driver.";
+        private static string s_csDriverDescription = "ASCOM Simulator Switch Driver";
 
         /// <summary>
         /// The number of physical switches that this device has.
@@ -46,25 +76,196 @@ namespace ASCOM.SwitchSimulator
         private const int numSwitches = 8;
 
         /// <summary>
-        /// Backing store for the private switch collection.
+        /// Sets up the permenant store for saved settings
         /// </summary>
-        private ArrayList switchCollection = new ArrayList(numSwitches);
+        private static Utilities.Profile Profile = new Profile();
+
+        #endregion
+
+        #region ISwitch Public Members
+
+        //
+        // PUBLIC COM INTERFACE ISwitch IMPLEMENTATION
+        //
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Conceptual"/> class.
+        /// Initializes a new instance of the <see cref="Switch"/> class.
         /// Must be public for COM registration.
         /// </summary>
         public Switch()
         {
-                switchCollection.Add(new SwitchDevice("White Lights"));
-                switchCollection.Add(new SwitchDevice("Red Lights"));
-                switchCollection.Add(new SwitchDevice("Telescope Power"));
-                switchCollection.Add(new SwitchDevice("Camera Power"));
-                switchCollection.Add(new SwitchDevice("Focuser Power"));
-                switchCollection.Add(new SwitchDevice("Dew Heaters"));
-                switchCollection.Add(new SwitchDevice("Dome Power"));
-                switchCollection.Add(new SwitchDevice("Self Destruct"));
+            switchDevices.Add(new SwitchDevice("White Lights"));
+            switchDevices.Add(new SwitchDevice("Red Lights"));
+            switchDevices.Add(new SwitchDevice("Telescope Power"));
+            switchDevices.Add(new SwitchDevice("Camera Power"));
+            switchDevices.Add(new SwitchDevice("Focuser Power"));
+            switchDevices.Add(new SwitchDevice("Dew Heaters"));
+            switchDevices.Add(new SwitchDevice("Dome Power"));
+            switchDevices.Add(new SwitchDevice("Self Destruct"));
+
+            GetProfileSettings();
         }
+
+        /// <summary>
+        /// Displays the Setup Dialog form.
+        /// If the user clicks the OK button to dismiss the form, then
+        /// the new settings are saved, otherwise the old values are reloaded.
+        /// </summary>
+        public void SetupDialog()
+        {
+            SetupDialogForm F = new SetupDialogForm();
+            var result = F.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                Properties.Settings.Default.Save();
+                return;
+            }
+            Properties.Settings.Default.Reload();
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="Switch"/> is connected.
+        /// </summary>
+        /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
+        public bool Connected
+        {
+            get
+            {
+                return connected;
+            }
+            set
+            {
+                connected = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the description.
+        /// </summary>
+        /// <value>The description.</value>
+        public string Description
+        {
+            get { return description; }
+        }
+
+        /// <summary>
+        /// Gets the driver info.
+        /// </summary>
+        /// <value>The driver info.</value>
+        public string DriverInfo
+        {
+            get { return driverInfo; }
+        }
+
+        /// <summary>
+        /// Gets the driver version.
+        /// </summary>
+        /// <value>The driver version.</value>
+        public string DriverVersion
+        {
+            get
+            {
+                return driverVersion;
+            }
+        }
+
+        /// <summary>
+        /// Gets the interface version.
+        /// </summary>
+        /// <value>The interface version.</value>
+        public short InterfaceVersion
+        {
+            get { return interfaceVersion; }
+        }
+
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        /// <value>The name.</value>
+        public string Name
+        {
+            get { return name; }
+        }
+
+        /// <summary>
+        /// Yields a collection of ISwitchDevice objects.
+        /// </summary>
+        /// <value></value>
+        public System.Collections.ArrayList SwitchDevices
+        {
+            get
+            {
+                return switchDevices;
+            }
+        }
+
+        #endregion
+
+        #region ISwitch Private Members
+        /// <summary>
+        /// Saves all settings to the profile for this driver
+        /// </summary>
+        private static void GetProfileSettings()
+        {
+            Profile.DeviceType = "Switch";
+            //check to see if the driver is registered
+            if (Profile.IsRegistered(s_csDriverID))
+            {
+                //no easy way to check if the SwitchDevices subkey exist
+                try
+                {
+                    ArrayList ps = Profile.SubKeys(s_csDriverID, "SwitchDevices");
+                    //grab the values if anything is there
+                    foreach(SwitchDevice sw in switchDevices)
+                    {
+                        sw.State = System.Convert.ToBoolean(GetProfileSetting(sw.Name, "false"));
+                    }
+                }
+                catch(System.IO.DirectoryNotFoundException)
+                {
+                    SaveProfileSettings();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Saves all settings to the profile for this driver
+        /// </summary>
+        private static void SaveProfileSettings()
+        {
+            DeleteProfileSettings();
+            foreach (SwitchDevice sd in switchDevices)
+            {
+                Profile.WriteValue(s_csDriverID,sd.Name, sd.State.ToString(), "SwitchDevices");
+            }
+        }
+
+        /// <summary>
+        /// Loads a specific setting from the profile
+        /// </summary>
+        private static string GetProfileSetting(string Name, string DefValue)
+        {
+            string s = Profile.GetValue(s_csDriverID, Name, "SwitchDevices", "");
+            if (s == "") s = DefValue;
+            return s;
+        }
+
+        /// <summary>
+        /// Delete all settings io the profile for this driver ID
+        /// </summary>
+        private static void DeleteProfileSettings()
+        {
+            Profile.DeleteSubKey(s_csDriverID, "SwitchDevices");
+        }
+
+        /// <summary>
+        /// Saves specific state setting to the profile a switchdevice
+        /// </summary>
+        protected internal static void SaveProfileSetting(string Name, bool State)
+        {
+            Profile.WriteValue(s_csDriverID, Name, State.ToString(), "SwitchDevices");
+        }
+        #endregion
 
         #region ASCOM Registration
         //
@@ -79,7 +280,7 @@ namespace ASCOM.SwitchSimulator
         private static void RegUnregASCOM(bool bRegister)
         {
             var P = new ASCOM.Utilities.Profile();
-            P.DeviceType = "ASCOM.SwitchSimulator.Switch";
+            P.DeviceType = "Switch";
             if (bRegister)
             {
                 P.Register(s_csDriverID, s_csDriverDescription);
@@ -88,12 +289,6 @@ namespace ASCOM.SwitchSimulator
             {
                 P.Unregister(s_csDriverID);
             }
-            // Utilities.Profile is native .NET so no COM interfaces are involved.
-            //try										// In case Helper becomes native .NET
-            //{
-            //    Marshal.ReleaseComObject(P);
-            //}
-            //catch (Exception) { }
             P = null;
         }
 
@@ -144,109 +339,6 @@ namespace ASCOM.SwitchSimulator
             Trace.WriteLine("Unregistering -> {0} with ASCOM Profile", s_csDriverID);
             RegUnregASCOM(false);
         }
-        #endregion
-
-        #region ISwitch Members
-        //
-        // PUBLIC COM INTERFACE ISwitch IMPLEMENTATION
-        //
-
-        /// <summary>
-        /// Displays the Setup Dialog form.
-        /// If the user clicks the OK button to dismiss the form, then
-        /// the new settings are saved, otherwise the old values are reloaded.
-        /// </summary>
-        public void SetupDialog()
-        {
-            SetupDialogForm F = new SetupDialogForm();
-            var result = F.ShowDialog();
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                Properties.Settings.Default.Save();
-                return;
-            }
-            Properties.Settings.Default.Reload();
-        }
-
-        // I haven't implemented all these methods because they aren't needed to demonstrate the concept.
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="Switch"/> is connected.
-        /// </summary>
-        /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
-        public bool Connected
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-
-        /// <summary>
-        /// Gets the description.
-        /// </summary>
-        /// <value>The description.</value>
-        public string Description
-        {
-            get { throw new System.NotImplementedException(); }
-        }
-
-        /// <summary>
-        /// Gets the driver info.
-        /// </summary>
-        /// <value>The driver info.</value>
-        public string DriverInfo
-        {
-            get { throw new System.NotImplementedException(); }
-        }
-
-        /// <summary>
-        /// Gets the driver version.
-        /// </summary>
-        /// <value>The driver version.</value>
-        public string DriverVersion
-        {
-            get {
-                // loads the running assembly version, implement your own
-                Assembly assembly = Assembly.GetExecutingAssembly();
-                return assembly.GetName().Version.ToString();
-            }
-        }
-
-        /// <summary>
-        /// Gets the interface version.
-        /// </summary>
-        /// <value>The interface version.</value>
-        public short InterfaceVersion
-        {
-            get { throw new System.NotImplementedException(); }
-        }
-
-        /// <summary>
-        /// Gets the name.
-        /// </summary>
-        /// <value>The name.</value>
-        public string Name
-        {
-            get { throw new System.NotImplementedException(); }
-        }
-
-        /// <summary>
-        /// Yields a collection of ISwitchDevice objects.
-        /// </summary>
-        /// <value></value>
-        public System.Collections.ArrayList SwitchCollection
-        {
-            get
-            {
-                return switchCollection;
-            }
-        }
-
         #endregion
     }
 }
