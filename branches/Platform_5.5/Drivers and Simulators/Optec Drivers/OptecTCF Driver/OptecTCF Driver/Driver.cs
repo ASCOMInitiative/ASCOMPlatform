@@ -9,7 +9,7 @@
 //				 
 //				
 //
-// Implements:	ASCOM Focuser interface version: 5.0
+// Implements:	ASCOM Focuser interface version: 5.0.1
 // Author:		Jordan Schaenzle <Jordan@optecinc.com>
 //
 // Edit Log:

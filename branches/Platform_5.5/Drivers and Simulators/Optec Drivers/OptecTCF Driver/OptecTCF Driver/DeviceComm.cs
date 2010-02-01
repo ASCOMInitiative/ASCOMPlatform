@@ -247,8 +247,8 @@ namespace ASCOM.OptecTCF_Driver
                 }
                 else if (CurrentMode == DeviceModes.AutoModeX)
                 {
-                    SendCmd("FMxxxx", 1000, ExpectResponse, "END");
-                    SendCmd("FFxxxx", 1000, ExpectResponse, "!");
+                    SendCmd("FMxxxx", 1000, ExpectResponse, "!");
+                    SendCmd("FFxxxx", 1000, ExpectResponse, "END");
                 }
                 else if (CurrentMode == DeviceModes.Sleeping)
                 {
@@ -495,7 +495,8 @@ namespace ASCOM.OptecTCF_Driver
                     //Wait for five seconds for a temp and position then throw exception
                     TimeSpan FiveSec = new TimeSpan(0, 0, 5);
                     DateTime Start = DateTime.Now;
-                    while (CurrentPosition == 0 || CurrentTemp == 0)
+                    
+                    while (CurrentPosition == 0)
                     {
                         if (DateTime.Now - Start > FiveSec)
                         {
