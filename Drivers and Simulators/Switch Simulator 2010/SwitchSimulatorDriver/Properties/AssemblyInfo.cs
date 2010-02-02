@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 //
 // TODO - Add your authorship information here
-[assembly: AssemblyTitle("ASCOM.Simulator.Switch")]
+[assembly: AssemblyTitle("ASCOM.SwitchSimulator")]
 [assembly: AssemblyDescription("ASCOM Switch Simulator Driver")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("The ASCOM Initiative")]
@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(true)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("28D679BA-2AF1-4557-AE15-C528C5BF91E0")]
+[assembly: Guid("41C4BA3C-FC8C-4386-B1DD-8F4A11FC5D16")]
 
 // Version information for an assembly consists of the following four values:
 //

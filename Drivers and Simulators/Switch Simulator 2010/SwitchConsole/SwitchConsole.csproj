@@ -18,6 +18,7 @@
     <ManifestCertificateThumbprint>CB83A88560CDAC649A74286098656EB4C18CC934</ManifestCertificateThumbprint>
     <ManifestKeyFile>SwitchConsole_TemporaryKey.pfx</ManifestKeyFile>
     <StartupObject>SwitchConsole.Program</StartupObject>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -30,7 +31,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -72,7 +72,7 @@
   <ItemGroup>
     <Reference Include="ASCOM.Utilities, Version=5.5.2.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Platform Dependencies\ASCOM.Utilities.dll</HintPath>
+      <HintPath>..\SwitchSimulatorDriver\bin\Debug\ASCOM.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -121,6 +121,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SwitchSimulatorDriver\SwitchSimulatorDriver.csproj">
+      <Project>{64308775-BD4A-469C-BCAB-3ED830B811AF}</Project>
+      <Name>SwitchSimulatorDriver</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
