@@ -63,7 +63,7 @@ namespace ASCOM.SwitchSimulator
         /// ASCOM DeviceID (COM ProgID) for this driver.
         /// The DeviceID is used by ASCOM applications to load the driver at runtime.
         /// </summary>
-        private static string s_csDriverID = "ASCOM.Simulator.Switch";
+        private static string s_csDriverID = "ASCOM.SwitchSimulator.Switch";
 
         /// <summary>
         /// Driver description that displays in the ASCOM Chooser.
