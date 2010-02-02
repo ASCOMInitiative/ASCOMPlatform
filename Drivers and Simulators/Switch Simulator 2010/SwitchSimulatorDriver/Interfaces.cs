@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Runtime.InteropServices;
 
-namespace ASCOM.Interface
+namespace ASCOM.SwitchSimulator
 {
     /// <summary>
     /// Defines the interface for an ASCOM Switch Driver, which exposes

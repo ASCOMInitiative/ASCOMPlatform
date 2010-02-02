@@ -17,7 +17,7 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <ApplicationIcon>ASCOM.ico</ApplicationIcon>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>robtest.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>ASCOM.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -82,8 +82,10 @@
     <Reference Include="ASCOM.Utilities, Version=5.5.2.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces.cs" />
@@ -134,8 +136,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Resources\ASCOM.bmp" />
-    <None Include="rob.snk" />
-    <None Include="robtest.snk" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

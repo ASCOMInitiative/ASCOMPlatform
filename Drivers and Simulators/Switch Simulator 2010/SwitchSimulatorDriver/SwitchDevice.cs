@@ -1,5 +1,4 @@
 ﻿using System;
-using ASCOM.Interface;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
