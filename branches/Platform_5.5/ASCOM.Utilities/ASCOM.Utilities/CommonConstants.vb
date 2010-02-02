@@ -104,8 +104,8 @@ Module VersionCode
 
     Sub AssemblyInfo(ByVal TL As TraceLogger, ByVal AssName As String, ByVal Ass As Assembly)
         Dim FileVer As FileVersionInfo
-        Dim AssblyName As AssemblyName, Vers As Version, VerString As String
-        Dim Location, FVer, FName As String
+        Dim AssblyName As AssemblyName, Vers As Version, VerString, FVer, FName As String
+        Dim Location As String = Nothing
 
         AssName = Left(AssName & ":" & Space(20), 19)
 
@@ -133,7 +133,7 @@ Module VersionCode
 
             Try
                 Location = Ass.Location
-                If Location Is Nothing Then
+                If String.IsNullOrEmpty(Location) Then
                     TL.LogMessage("Versions", AssName & "Assembly location is missing, cannot determine file version")
                 Else
                     FileVer = FileVersionInfo.GetVersionInfo(Location)
@@ -176,7 +176,12 @@ Module VersionCode
             End Try
 
             Try
-                TL.LogMessage("Versions", AssName & " Location: " & Ass.Location)
+                If Not String.IsNullOrEmpty(Location) Then
+                    TL.LogMessage("Versions", AssName & " Location: " & Location)
+                Else
+                    TL.LogMessage("Versions", AssName & " Location is null or empty, cannot display location")
+                End If
+
             Catch ex As Exception
                 TL.LogMessage("AssemblyInfo", "Exception EX5: " & ex.ToString)
             End Try
