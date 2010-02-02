@@ -3,6 +3,7 @@ using System.Collections;
 using ASCOM.SwitchSimulator;
 
 
+
 namespace SwitchConsole
 {
     class Program
@@ -12,16 +13,21 @@ namespace SwitchConsole
 
             Switch obj = (Switch)Activator.CreateInstance(Type.GetTypeFromProgID("ASCOM.SwitchSimulator.Switch"));
 
-            //ArrayList list = obj.SwitchDevices;
+             ArrayList list = obj.SwitchDevices;
+
+             foreach (ASCOM.SwitchSimulator.ISwitchDevice item in list)
+             {
+                 Console.WriteLine("Item name: " + item.Name + " & " + item.State);
+             }
             
-            //string test = obj.DriverInfo;
+            string test = obj.DriverInfo;
+
+           
+            ASCOM.Utilities.Chooser chooser = new ASCOM.Utilities.Chooser();
+            chooser.DeviceType = "Switch";
+            chooser.Choose();
 
             //obj.SetupDialog();
-
-            //ASCOM.Utilities.Chooser chooser = new ASCOM.Utilities.Chooser();
-            //chooser.DeviceType = "Switch";
-            //chooser.Choose();
-
             //ASCOM.SwitchSimulator.Switch aSwitch = new Switch();
             //aSwitch.SetupDialog();
         }

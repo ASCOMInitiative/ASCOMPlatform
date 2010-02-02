@@ -5,7 +5,6 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Reflection;
 using System.IO;
-using ASCOM.Interface;
 
 namespace ASCOM.SwitchSimulator
 {
