@@ -89,6 +89,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
@@ -107,6 +108,9 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InstallerCustomActions.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="PlaceholderInterface.vb" />
     <Compile Include="Driver.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

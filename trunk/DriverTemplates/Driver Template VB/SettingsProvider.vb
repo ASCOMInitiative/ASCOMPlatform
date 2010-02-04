@@ -1,4 +1,6 @@
-﻿Namespace My
+﻿Imports ASCOM
+
+Namespace My
     ' Do not modify this file. Do not delete this empty class definition.
     ' 
     ' The purpose of this code is to attach the two attributes [SettingsProvider] and [DeviceId]
@@ -13,8 +15,8 @@
     ' ASCOM.Utilities.Profile as its underlying storage engine. The [DeviceId] attribute is
     ' used by the SettingsProvider to configure ASCOM.Utilities.Profile to store settings against
     ' the correct device profile.
-    <ASCOM.DeviceId("ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS")> _
-    <SettingsProvider(GetType(ASCOM.SettingsProvider))> _
+    <DeviceIdAttribute("ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS")> _
+    <SettingsProvider(GetType(SettingsProvider))> _
     Partial Friend NotInheritable Class MySettings
     End Class
 End Namespace
