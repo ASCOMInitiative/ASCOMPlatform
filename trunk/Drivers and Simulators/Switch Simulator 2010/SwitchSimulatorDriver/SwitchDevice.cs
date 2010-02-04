@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace ASCOM.SwitchSimulator
+namespace ASCOM.Simulator
 {
     /// <summary>
     /// This class is a conceptual implementation of an individual hardware switch.

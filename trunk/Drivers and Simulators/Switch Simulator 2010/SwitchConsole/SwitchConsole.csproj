@@ -72,7 +72,7 @@
   <ItemGroup>
     <Reference Include="ASCOM.Utilities, Version=5.5.2.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SwitchSimulatorDriver\bin\Debug\ASCOM.Utilities.dll</HintPath>
+      <HintPath>..\..\Platform Dependencies\ASCOM.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
