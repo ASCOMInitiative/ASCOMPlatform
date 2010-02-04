@@ -6,9 +6,9 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.IO;
 
-namespace ASCOM.SwitchSimulator
+namespace ASCOM.Simulator
 {
-	[ComVisible(false)]
+	[ComVisible(true)]
 	public partial class SetupDialogForm : Form
 	{
         private static ISwitch switchA = new Switch();
@@ -54,8 +54,8 @@ namespace ASCOM.SwitchSimulator
         {
             assembly = Assembly.GetExecutingAssembly();
             string[] names = assembly.GetManifestResourceNames();
-            redLED = assembly.GetManifestResourceStream("ASCOM.SwitchSimulator.Resources.RedLED.bmp");
-            greenLED = assembly.GetManifestResourceStream("ASCOM.SwitchSimulator.Resources.GreenLED.bmp");
+            redLED = assembly.GetManifestResourceStream("ASCOM.Simulator.Resources.RedLED.bmp");
+            greenLED = assembly.GetManifestResourceStream("ASCOM.Simulator.Resources.GreenLED.bmp");
         }
 
         /// <summary>

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using ASCOM.SwitchSimulator;
+using ASCOM.Simulator;
 
 
 
@@ -11,15 +11,15 @@ namespace SwitchConsole
         static void Main(string[] args)
         {
 
-            Switch obj = (Switch)Activator.CreateInstance(Type.GetTypeFromProgID("ASCOM.SwitchSimulator.Switch"));
+            Switch obj = (Switch)Activator.CreateInstance(Type.GetTypeFromProgID("ASCOM.Simulator.Switch"));
 
-             ArrayList list = obj.SwitchDevices;
+            ArrayList list = obj.SwitchDevices;
 
-             foreach (ASCOM.SwitchSimulator.ISwitchDevice item in list)
-             {
-                 Console.WriteLine("Item name: " + item.Name + " & " + item.State);
-             }
-            
+            foreach (ASCOM.Simulator.ISwitchDevice item in list)
+            {
+                Console.WriteLine("Item name: " + item.Name + " & " + item.State);
+            }
+
             string test = obj.DriverInfo;
 
            

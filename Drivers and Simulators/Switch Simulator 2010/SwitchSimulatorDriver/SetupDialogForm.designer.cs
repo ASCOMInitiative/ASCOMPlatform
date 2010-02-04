@@ -1,6 +1,11 @@
-namespace ASCOM.SwitchSimulator
+using System;
+
+namespace ASCOM.Simulator
 {
-	partial class SetupDialogForm
+    /// <summary>
+    /// SetupDialogForm
+    /// </summary>
+	partial class SetupDialogForm 
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -95,7 +100,7 @@ namespace ASCOM.SwitchSimulator
             // 
             this.picASCOM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picASCOM.Image = global::ASCOM.SwitchSimulator.Properties.Resources.ASCOM;
+            this.picASCOM.Image = global::ASCOM.Simulator.Properties.Resources.ASCOM;
             this.picASCOM.Location = new System.Drawing.Point(239, 12);
             this.picASCOM.Name = "picASCOM";
             this.picASCOM.Size = new System.Drawing.Size(48, 56);

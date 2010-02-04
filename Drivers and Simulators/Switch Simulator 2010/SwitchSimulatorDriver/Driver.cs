@@ -4,12 +4,12 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using ASCOM.Utilities;
 
-namespace ASCOM.SwitchSimulator
+namespace ASCOM.Simulator
 {
 	//
-    // Your driver's DeviceID is ASCOM.SwitchSimulator.Switch
+    // Your driver's DeviceID is ASCOM.Simulator.Switch
 	//
-    // The Guid attribute sets the CLSID for ASCOM.SwitchSimulator.Switch
+    // The Guid attribute sets the CLSID for ASCOM.Simulator.Switch
 	// The ClassInterface/None addribute prevents an empty interface called
 	// _Conceptual from being created and used as the [default] interface
 	//
@@ -31,7 +31,7 @@ namespace ASCOM.SwitchSimulator
         /// <summary>
         /// Name of the Driver
         /// </summary>
-        private static string name = "ASCOM.SwitchSimulator.Switch";
+        private static string name = "ASCOM.Simulator.Switch";
 
         /// <summary>
         /// Description of the driver
@@ -62,7 +62,7 @@ namespace ASCOM.SwitchSimulator
         /// ASCOM DeviceID (COM ProgID) for this driver.
         /// The DeviceID is used by ASCOM applications to load the driver at runtime.
         /// </summary>
-        private static string s_csDriverID = "ASCOM.SwitchSimulator.Switch";
+        private static string s_csDriverID = "ASCOM.Simulator.Switch";
 
         /// <summary>
         /// Driver description that displays in the ASCOM Chooser.
