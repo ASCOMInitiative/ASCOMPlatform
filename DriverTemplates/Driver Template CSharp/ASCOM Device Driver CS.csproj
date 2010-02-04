@@ -84,6 +84,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -106,6 +107,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="InstallerCustomActions.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="SettingsProvider.cs" />
     <Compile Include="SetupDialogForm.cs">
       <SubType>Form</SubType>
@@ -119,6 +123,9 @@
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InstallerCustomActions.resx">
+      <DependentUpon>InstallerCustomActions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SetupDialogForm.resx">
       <DependentUpon>SetupDialogForm.cs</DependentUpon>
