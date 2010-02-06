@@ -13,7 +13,8 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>rob.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
     <SignManifests>true</SignManifests>
     <ManifestCertificateThumbprint>CB83A88560CDAC649A74286098656EB4C18CC934</ManifestCertificateThumbprint>
     <ManifestKeyFile>SwitchConsole_TemporaryKey.pfx</ManifestKeyFile>
@@ -91,11 +92,6 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
-    <None Include="rob.snk" />
-    <None Include="SwitchConsole_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
