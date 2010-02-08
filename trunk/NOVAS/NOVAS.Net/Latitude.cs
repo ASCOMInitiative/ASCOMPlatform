@@ -23,7 +23,7 @@ namespace TiGra.Astronomy
 		/// <param name="dAngle">Angle used to initialise the lattitude.</param>
 		public Latitude(double dAngle)
 		{
-			m_Angle = MakeOrthogonal(dAngle);
+			m_Angle = Normalize(dAngle);
 		}
 	    /// <summary>
 	    /// Ensures that the supplied argument is in the correct range for a geographic lattitude.
@@ -33,7 +33,7 @@ namespace TiGra.Astronomy
         /// An orthoganal value in the correct range for geographic latitudes
         /// (North positive, range +/- 90 degrees).
         /// </returns>
-		public override double MakeOrthogonal(double dAngle)
+		public override double Normalize(double dAngle)
 		{
 			dAngle %= 180.0;	// Rationalise the angle to the correct hemisphere.
 			if (dAngle > 90.0)
@@ -53,10 +53,10 @@ namespace TiGra.Astronomy
 	    /// <returns>
         /// The geographic Latitude corresponding to the supplied angle, North positive, range +/- 90 degrees.
         /// </returns>
-		public override int MakeOrthogonal(int nDegrees)
+		public override int Normalize(int nDegrees)
 		{
-			// TODO:  Add Lattitude.MakeOrthogonal implementation
-			double dAngle = this.MakeOrthogonal((double)nDegrees);
+			// TODO:  Add Lattitude.Normalize implementation
+			double dAngle = this.Normalize((double)nDegrees);
 			
 			// Truncate towards zero ( 1.5 -> 1.0; -1.5 -> -1.0)
 			if (dAngle >= 0)	// Positive angles

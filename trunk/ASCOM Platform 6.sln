@@ -224,7 +224,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Moq", "Moq", "{D202E935-5AD
 	ProjectSection(SolutionItems) = preProject
 		External Dependencies\Moq\Moq.chm = External Dependencies\Moq\Moq.chm
 		External Dependencies\Moq\Moq.dll = External Dependencies\Moq\Moq.dll
-		External Dependencies\Moq\Moq.pdb = External Dependencies\Moq\Moq.pdb
 		External Dependencies\Moq\Moq.xml = External Dependencies\Moq\Moq.xml
 	EndProjectSection
 EndProject
@@ -694,5 +693,15 @@ Global
 		{3689A2CB-94C5-4012-A5CF-7E7D1DD27143} = {02FC4179-0ADE-45D2-9C78-52F74FF6156C}
 		{ABCC46C4-55C3-48A4-AB6F-3FDB0B99269F} = {02FC4179-0ADE-45D2-9C78-52F74FF6156C}
 		{D202E935-5ADA-4769-A4D8-4A915B4267FA} = {351942DD-A33B-40F1-B71F-224E7D5B4E7B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		Reflector0DestinationAssemblyName = 
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationName = Moq
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0SourceAssemblyName = 
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceName = Moq
+		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
 	EndGlobalSection
 EndGlobal

@@ -22,7 +22,7 @@ namespace TiGra.Astronomy
 		/// <param name="degrees">The angular distance from the zenith, in decimal degrees.</param>
 		public ZenithDistance(double degrees)
 			{
-			this.m_Angle = this.MakeOrthogonal(degrees);
+			this.m_Angle = this.Normalize(degrees);
 			}
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ZenithDistance"/> class by
@@ -41,9 +41,9 @@ namespace TiGra.Astronomy
 		/// <returns>
 		/// Returns the orthogonal zenith distance in the range 0 to +180 degrees.
 		/// </returns>
-		public override double MakeOrthogonal(double dAngle)
+		public override double Normalize(double dAngle)
 			{
-			dAngle = base.MakeOrthogonal(dAngle);	// Range 0 to 360 degrees.
+			dAngle = base.Normalize(dAngle);	// Range 0 to 360 degrees.
 			// Once the bearing from the zenith exceeds 180 degrees,
 			// then the zenith distance begins to decrease as the andle increases.
 			if (dAngle > 180.0)

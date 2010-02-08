@@ -41,7 +41,7 @@ namespace TiGra.Astronomy
 		/// <param name="dAngle">The angle value in decimal degrees.</param>
 		public Bearing(double dAngle)
 		{
-			m_Angle = MakeOrthogonal(dAngle);
+			m_Angle = Normalize(dAngle);
 		}
 		/// <summary>
 		/// Construct a bearing from degrees, minutes and seconds.
@@ -98,7 +98,7 @@ namespace TiGra.Astronomy
 			}
 			set
 			{
-				m_Angle = MakeOrthogonal(value);
+				m_Angle = Normalize(value);
 			}
 		}
 
@@ -121,7 +121,7 @@ namespace TiGra.Astronomy
 			}
 			set
 			{
-				int nDegrees = MakeOrthogonal(value);
+				int nDegrees = Normalize(value);
 				m_Angle = (double)nDegrees + Math.Abs(m_Angle - Bearing.Truncate(m_Angle));
 			}
 		}
@@ -132,7 +132,7 @@ namespace TiGra.Astronomy
 		/// </summary>
 		/// <param name="dAngle">Any double-precision value representing an angle or bearing.</param>
 		/// <returns>Equivalent angle in the range +0.0 to +360.0</returns>
-		public virtual double MakeOrthogonal(double dAngle)
+		public virtual double Normalize(double dAngle)
 		{
 			dAngle %= 360.0;	// All angles are modulo 360 degrees
 			if (dAngle < 0.0)	// -ve angles are subtracted from 360.
@@ -143,11 +143,11 @@ namespace TiGra.Astronomy
 		/// <summary>
 		/// Takes an angle expressed as a signed integer in degrees, and returns the
 		/// equivalent positive angle in the range [0..360].
-		/// <seealso cref="MakeOrthogonal(double)"/>
+		/// <seealso cref="Normalize(double)"/>
 		/// </summary>
 		/// <param name="nDegrees">An angle in degrees</param>
 		/// <returns>Equivalent positive angle in the range [0..360]</returns>
-		public virtual int MakeOrthogonal(int nDegrees)
+		public virtual int Normalize(int nDegrees)
 		{
 			nDegrees %= 360;	// All angles are modulo 360 degrees.
 			if (nDegrees < 0)	// -ve angles are subtracted from 360.
@@ -249,7 +249,7 @@ namespace TiGra.Astronomy
 				dm = -dm;	// negate the minutes...
 				ds = -ds;	// ...and the seconds.
 			}
-			m_Angle = MakeOrthogonal(dd + dm + ds);
+			m_Angle = Normalize(dd + dm + ds);
 		}
 
 		/// <summary>
