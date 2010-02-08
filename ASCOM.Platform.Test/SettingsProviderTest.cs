@@ -1,10 +1,13 @@
-﻿using ASCOM;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Configuration;
+﻿using System;
 using System.Collections.Specialized;
-using Moq;
-using ASCOM.Utilities.Interfaces;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
 using System.Reflection;
+using ASCOM;
+using ASCOM.Utilities.Interfaces;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace ASCOM.Platform.Test
 {
@@ -18,6 +21,10 @@ namespace ASCOM.Platform.Test
 	public class SettingsProviderTest
 		{
 		private const string csUnitTest = "UnitTest";
+		private const string itemName = "Item Name";
+		private readonly Mock<SettingsProperty> mockSettingsProperty = new Mock<SettingsProperty>();
+		private readonly Mock<IProfile> mockProfile = new Mock<IProfile>();
+		private readonly Mock<SettingsContext> mockSettingsContext = new Mock<SettingsContext>();
 
 
 		private TestContext testContextInstance;
@@ -67,6 +74,13 @@ namespace ASCOM.Platform.Test
 		//}
 		//
 		#endregion
+
+		// It is a good idea to have a method that handles the instantiation of the class we want to test
+		// as that gives us only a single line to change if we change something in the class constructor(s).
+		private SettingsProvider CreateSettingsProvider()
+			{
+			return new SettingsProvider(mockProfile.Object);
+			}
 
 
 		/// <summary>
@@ -130,39 +144,84 @@ namespace ASCOM.Platform.Test
 			}
 
 		/// <summary>
-		///A test for GetPropertyValues
-		///</summary>
-		[TestMethod()]
-		public void GetPropertyValues_ShouldReturn_DefaultValue_When_DeviceNotRegistered()
+		/// Verifies that teh SettingsProvider returns default values for settings when the device
+		/// has not been registered with the ASCOM Chooser. This is necessary so that settings 
+		/// work correctly at design-time.
+		/// </summary>
+		[TestMethod]
+		public void GetPropertySettings_Should_Return_Default_Values_When_Device_Not_Registered()
 			{
-			////ARRANGE
-			//SettingsProvider target = new SettingsProvider();
-			//string expected = "DefaultValue";
-			//string settingName = "SettingName";
-			//// SettingsContext just needs a placeholder.
-			//var mockContext = new Mock<SettingsContext>();
-			//var mockAttributes = new Mock<SettingsAttributeDictionary>();
-			//mockAttributes.Setup(a => a[It.Is<bool>(k => k != null)]).Returns<DeviceIdAttribute>(d => new DeviceIdAttribute("ASCOM.SettingsProvider.UnitTest"));
-			//// SettingsProperty
-			//var mockProperty = new Mock<SettingsProperty>();
-			//mockProperty.Setup(p => p.DefaultValue).Returns(expected);
-			//mockProperty.Setup(p => p.Name).Returns(settingName);
-			//mockProperty.Setup(p => p.Attributes).Returns(mockAttributes.Object);
-			//// Mock up a SettingsPropertyCollection
-			//var mockCollection = new Mock<SettingsPropertyCollection>();
-			//mockCollection.Setup(item => item[It.IsAny<string>()]).Returns(mockProperty.Object);
+			const string deviceName = "My.UnitTest";
+			const string deviceType = "Switch";
+			var deviceId = String.Format("{0}.{1}", deviceName, deviceType);
 
-			//// ACT
-			//var values = target.GetPropertyValues(mockContext.Object, mockCollection.Object);
-			//var actual = values[settingName].PropertyValue;
+			// Create our SettingsProvider instance
+			var settingsProvider = CreateSettingsProvider();
 
-			//// ASSERT
-			//Assert.AreEqual(expected, actual);
+			// The first part of the method parses the DeviceId. I would consider isolating this part in one method
+			// to test it independently from the rest of the method. 
+
+			// We con't need to fire up all of System.Configuration just for our test, so we keep this mock
+			var mockItem = new Mock<SettingsProperty>();
+			// Here we instantiate the DeviceIdAttribute and set its DeviceId property explicitely at the same time
+			var deviceAttribute = new ASCOM.DeviceIdAttribute(deviceId);
+			// Now we let the Attributes array property on our itemMock always return the deviceAttribute
+
+			//[TPL] this is where it all goes a bit pear-shaped.
+			var attributes = new SettingsAttributeDictionary();
+			attributes.Add(typeof(DeviceIdAttribute), deviceAttribute);
+			var mockAttributes = new Mock<SettingsAttributeDictionary>();
+			//mockAttributes.SetupGet(g => g.Values).Returns(keys);
+			mockItem.SetupGet(x => x.Attributes[It.IsAny<System.Type>()]).Returns(deviceAttribute);
+
+			// There's no need to mock the collection, but we instantiate it with our itemMock object
+			var propertyCollection = new SettingsPropertyCollection();
+			propertyCollection.Add(mockItem.Object);
+
+			// We wish to log what the device type of our IProfile is set to
+			var setDeviceType = "";
+			mockProfile.SetupSet(x => x.DeviceType).Callback(y => setDeviceType = y);
+
+			// Now comes the interesting part where we call our IProfile - this is where we really need Moq.
+			// Again, it would be easier if we could just write a few dedicated tests that test only this
+			// try-catch part of the method...
+
+			// For this we need to name our itemMock and give it a default value
+			mockItem.SetupGet(x => x.Name).Returns(itemName);
+			var defaultvalue = new Object();
+			mockItem.SetupGet(x => x.DefaultValue).Returns(defaultvalue);
+			// We need to set up the GetValue method. As we know all the expected parameters for it, we can specify
+			// them already and make the mock stronger. In this test case, we test the handling of an empty return.
+			mockProfile.Setup(x => x.GetValue(deviceId, itemName, null, String.Empty)).Returns("");
+
+			// Finally, it is time to call the method we want to test
+			var result = settingsProvider.GetPropertyValues(mockSettingsContext.Object, propertyCollection);
+
+			// Now lets verify that everything went as expected
+
+			// First, let's test that the parsing of DeviceId was as expected: IProvider.DeviceType was set to the expected value
+			Assert.AreEqual(deviceType, setDeviceType);
+			// Then let's test that the methods of IProvider that we mocked were called
+			mockProfile.VerifyAll();
+			// Instead of these two checks, we can use the VerifySet and Verify methods explicitly on our providerMock
+			mockProfile.VerifySet(x => x.DeviceType = deviceType, Times.Once());
+			mockProfile.Verify(x => x.GetValue(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once());
+
+			// With this done, let's turn to the output of the method
+
+			// Firstly, we test that the resulting collection contains exactly one item of the type SettingsPropertyValue
+			Assert.IsTrue(result.Count > 0);
+			Assert.IsTrue(result.OfType<SettingsPropertyValue>().Count() > 0);
+			Assert.AreEqual(1, result.Count);
+			// Then let's inspect the contained SettingsProviderValue further
+			var settingsPropertyValue = result.OfType<SettingsPropertyValue>().First();
+			// The IsDirty flag must never be set
+			Assert.IsFalse(settingsPropertyValue.IsDirty);
+			// The PropertyValue must be the default value we passed in in our itemMock as we set our
+			// IProvider to return an empty value for the specified parameters
+			Assert.AreEqual(defaultvalue, settingsPropertyValue.PropertyValue);
 			}
 
-		/// <summary>
-		///A test for Initialize
-		///</summary>
 		[TestMethod()]
 		public void Initialize_ShouldSet_ApplicationName_Property()
 			{

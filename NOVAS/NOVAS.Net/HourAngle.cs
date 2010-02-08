@@ -38,7 +38,7 @@ namespace TiGra.Astronomy
 		/// <param name="hours">The number of decimal hours and fractions of hours.</param>
 		public HourAngle(double hours)
 			{
-			m_Angle = this.MakeOrthogonal(hours) * Constants.HoursToDegrees;
+			m_Angle = this.Normalize(hours) * Constants.HoursToDegrees;
 			}
 
 		/// <summary>
@@ -46,7 +46,7 @@ namespace TiGra.Astronomy
 		/// </summary>
 		/// <param name="dAngle">Arbitrary hour angle expressed in decimal hours</param>
 		/// <returns>Orthogonal hour angle, positive value modulo 24.0</returns>
-		public override double MakeOrthogonal(double dAngle)
+		public override double Normalize(double dAngle)
 		{
 			dAngle %= 24.0;		// All angles are modulo 24 hours
 			if (dAngle < 0.0)	// -ve angles are subtracted from 24.
@@ -59,7 +59,7 @@ namespace TiGra.Astronomy
 		/// </summary>
 		/// <param name="nHours">Arbitrary hour angle expressed as whole hours</param>
 		/// <returns>Orthogonal hour angle, positive value modulo 24.</returns>
-		public override int MakeOrthogonal(int nHours)
+		public override int Normalize(int nHours)
 		{
 			nHours %= 24;		// All angles are modulo 360 degrees.
 			if (nHours < 0)	// -ve angles are subtracted from 360.
@@ -109,7 +109,7 @@ namespace TiGra.Astronomy
 			}
 			set
 			{
-				this.DecimalDegrees = MakeOrthogonal(value) * Constants.HoursToDegrees;
+				this.DecimalDegrees = Normalize(value) * Constants.HoursToDegrees;
 			}
 		}
 

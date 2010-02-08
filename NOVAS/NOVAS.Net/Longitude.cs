@@ -22,7 +22,7 @@ namespace TiGra.Astronomy
 		/// <param name="dAngle">Arbitrary decimal angle in degrees</param>
 		public Longitude(double dAngle)
 		{
-			m_Angle = MakeOrthogonal(dAngle);
+			m_Angle = Normalize(dAngle);
 		}
 
 		/// <summary>
@@ -31,9 +31,9 @@ namespace TiGra.Astronomy
 		/// </summary>
 		/// <param name="dAngle">Arbitrary angle in decimal degrees</param>
 		/// <returns>Longitude in decimal degrees east or west of the prime meridian at Greenwich</returns>
-		public override double MakeOrthogonal(double dAngle)
+		public override double Normalize(double dAngle)
 		{
-			dAngle = base.MakeOrthogonal(dAngle);	// Convert to positive angle 0..360 degrees
+			dAngle = base.Normalize(dAngle);	// Convert to positive angle 0..360 degrees
 			if (dAngle > 180.0)
 			{
 				dAngle = -180.0 + (dAngle - 180.0);
@@ -47,9 +47,9 @@ namespace TiGra.Astronomy
 		/// </summary>
 		/// <param name="nDegrees">Arbitrary angle in whole degrees</param>
 		/// <returns>Whole degrees east (+ve) or west (-ve) of Greenwich</returns>
-		public override int MakeOrthogonal(int nDegrees)
+		public override int Normalize(int nDegrees)
 		{
-			double dAngle = this.MakeOrthogonal((double)nDegrees);
+			double dAngle = this.Normalize((double)nDegrees);
 			
 			// Truncate towards zero ( 1.5 -> 1.0; -1.5 -> -1.0)
 			if (dAngle >= 0)	// Positive angles

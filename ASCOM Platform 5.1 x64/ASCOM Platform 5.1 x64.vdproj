@@ -1567,7 +1567,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -1678,7 +1678,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -2013,7 +2013,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -2239,7 +2239,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ASCOM Platform 5.1 x64"
         "ProductCode" = "8:{63D76CDF-F247-49AD-80E5-9972E8165AE5}"
-        "PackageCode" = "8:{5BBE24B1-5AD1-4A72-A155-48C63F991579}"
+        "PackageCode" = "8:{3E6FE881-7EA6-4EEA-B7B6-1DB057298AD1}"
         "UpgradeCode" = "8:{5012C928-8EDE-4C36-BA0A-7039AD11B129}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"

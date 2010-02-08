@@ -44,11 +44,11 @@ namespace TiGra.Astronomy
 		/// <returns>
 		/// Returns the orthogonal elevation in the range 0 to +90 degrees.
 		/// </returns>
-		public override double MakeOrthogonal(double dAngle)
+		public override double Normalize(double dAngle)
 			{
 			if (dAngle < 0.0)
 				throw new ArgumentOutOfRangeException("dAngle", "Can't construct an elevation from a negative number");
-			dAngle = base.MakeOrthogonal(dAngle);	// Range 0 to 360 degrees.
+			dAngle = base.Normalize(dAngle);	// Range 0 to 360 degrees.
 			if (dAngle > 180.0)
 				throw new ArgumentOutOfRangeException("dAngle", "Can't construct an elevation from angles greater than 180 degrees");
 			// Once the bearing from the horizon exceeds 90 degrees,
