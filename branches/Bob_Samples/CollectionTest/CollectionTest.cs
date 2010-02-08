@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
+//using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -60,20 +60,29 @@ namespace ASCOMTest
 	public class CollectionTest : ICollectionTest
 	{
 		// Provide generic enumerator to COM and List<Person> enumerator to C#
-		public class PeopleWrapper : IEnumerable, IEnumerable<Person>
+		public class PeopleWrapper : IEnumerable, System.Collections.Generic.IEnumerable<Person>
 		{
-			private List<Person> _list;
+            private System.Collections.Generic.List<Person> _list;
 
-			public PeopleWrapper(List<Person> people) { _list = people; }
+            public PeopleWrapper(System.Collections.Generic.List<Person> people) 
+            { 
+                _list = people; 
+            }
 
-			IEnumerator<Person> IEnumerable<Person>.GetEnumerator() { return _list.GetEnumerator(); }
+            System.Collections.Generic.IEnumerator<Person> System.Collections.Generic.IEnumerable<Person>.GetEnumerator() 
+            { 
+                return _list.GetEnumerator(); 
+            }
 
 			[DispId(-4)]	// COM-known method ID 
-			public IEnumerator GetEnumerator() { return _list.GetEnumerator(); }
+			public IEnumerator GetEnumerator() 
+            { 
+                return _list.GetEnumerator(); 
+            }
 		}
 
 		private ArrayList _al;
-		private List<Person> _people;
+        private System.Collections.Generic.List<Person> _people;
 		private PeopleWrapper _pl;
 
 		public CollectionTest()
@@ -81,7 +90,7 @@ namespace ASCOMTest
 			string[] _names = new string[] { "Tom", "Dick", "Harry" };
 			string[] _roles = new string[] { "manager", "flunky", "manager" };
 			_al = new ArrayList();
-			_people = new List<Person>();
+			_people = new System.Collections.Generic.List<Person>();
 
 			for (int i = 0; i < _names.Length; i++)
 			{
