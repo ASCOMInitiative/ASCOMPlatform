@@ -8,19 +8,22 @@ namespace TiGra.ExtensionMethods
 	/// </summary>
 	public static class StringExtensions
 		{
-/// <summary>
-/// Returns the specified number of characters from the head of a string.
-/// </summary>
-/// <param name="source">The source string.</param>
-/// <param name="length">The number of characters to be returned, must not be greater than the length of the string.</param>
-/// <returns>The specified number of characters from the head of the source string, as a new string.</returns>
-/// <exception cref="ArgumentOutOfRangeException">Thrown if the requested number of characters exceeds the string length.</exception>
-public static string Head(this string source, int length)
-	{
-	if (length > source.Length)
-		throw new ArgumentOutOfRangeException("The specified length is greater than the length of the string.");
-	return source.Substring(0, length);
-	}
+		/// <summary>
+		/// Returns the specified number of characters from the head of a string.
+		/// </summary>
+		/// <param name="source">The source string.</param>
+		/// <param name="length">The number of characters to be returned, must not be greater than the length of the string.</param>
+		/// <returns>The specified number of characters from the head of the source string, as a new string.</returns>
+		/// <exception cref="ArgumentOutOfRangeException">Thrown if the requested number of characters exceeds the string length.</exception>
+		public static string Head(this string source, int length)
+			{
+			if (length > source.Length)
+				{
+				throw new ArgumentOutOfRangeException("The specified length is greater than the length of the string.");
+				}
+			return source.Substring(0, length);
+			}
+
 		/// <summary>
 		/// Returns the specified number of characters from the tail of a string.
 		/// </summary>
@@ -32,7 +35,9 @@ public static string Head(this string source, int length)
 			{
 			int srcLength = source.Length;
 			if (length > srcLength)
+				{
 				throw new ArgumentOutOfRangeException("The specified length is greater than the length of the string.");
+				}
 			return source.Substring(srcLength - length, length);
 			}
 		/// <summary>
@@ -46,7 +51,8 @@ public static string Head(this string source, int length)
 			StringBuilder cleanString = new StringBuilder(source.Length);
 			foreach (char ch in source)
 				{
-				if (allowedCharacters.IndexOf(ch) >= 0) cleanString.Append(ch);
+				if (allowedCharacters.IndexOf(ch) >= 0)
+					cleanString.Append(ch);
 				}
 			return cleanString.ToString();
 			}
@@ -58,7 +64,8 @@ public static string Head(this string source, int length)
 		/// <returns>A new string containing the old string with <see cref="P:length"/> characters removed from the head.</returns>
 		public static string RemoveHead(this string source, int length)
 			{
-			if (length < 1) return source;
+			if (length < 1)
+				return source;
 			return source.Tail(source.Length - length);
 			}
 		/// <summary>
@@ -69,7 +76,8 @@ public static string Head(this string source, int length)
 		/// <returns>A new string containing the old string with <see cref="P:length"/> characters removed from the tail.</returns>
 		public static string RemoveTail(this string source, int length)
 			{
-			if (length < 1) return source;
+			if (length < 1)
+				return source;
 			return source.Head(source.Length - length);
 			}
 		}

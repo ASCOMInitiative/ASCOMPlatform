@@ -16,12 +16,12 @@
 
 
 // Version information for an assembly consists of the following four values:
-//
+////
 //      Major Version
 //      Minor Version 
 //      Build Number
 //      Revision
-//
+////
 // For local builds, the major and minor versions are fixed and the
 // revision and build numbers are set automatically by Visual Studio.
 // For TeamCity builds, this version string may be substitued

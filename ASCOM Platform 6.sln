@@ -6,7 +6,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		ASCOM Platform 6.vsmdi = ASCOM Platform 6.vsmdi
 		Drivers and Simulators\Platform Dependencies\AssemblyVersionInfo.cs = Drivers and Simulators\Platform Dependencies\AssemblyVersionInfo.cs
 		BUILD NOTES.txt = BUILD NOTES.txt
+		Drivers and Simulators\Guidelines for Driver Developers.docx = Drivers and Simulators\Guidelines for Driver Developers.docx
 		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
+		External Dependencies\StyleCop\v4.3\Settings.StyleCop = External Dependencies\StyleCop\v4.3\Settings.StyleCop
 		Drivers and Simulators\Platform Dependencies\SolutionInfo.cs = Drivers and Simulators\Platform Dependencies\SolutionInfo.cs
 		TeamCityTestRun.testrunconfig = TeamCityTestRun.testrunconfig
 	EndProjectSection
@@ -228,6 +230,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Moq", "Moq", "{D202E935-5AD
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.SettingsProviderSample", "ASCOM.SettingsProvider\ASCOM.SettingsProviderSample\ASCOM.SettingsProviderSample.csproj", "{747DBFF8-4265-4C15-9BB4-A13384D971B4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StyleCop", "StyleCop", "{7814C016-C363-4A04-B095-27A5B33AA783}"
+	ProjectSection(SolutionItems) = preProject
+		External Dependencies\StyleCop\v4.3\Microsoft.SourceAnalysis.Targets = External Dependencies\StyleCop\v4.3\Microsoft.SourceAnalysis.Targets
+		External Dependencies\StyleCop\v4.3\Microsoft.StyleCop.CSharp.dll = External Dependencies\StyleCop\v4.3\Microsoft.StyleCop.CSharp.dll
+		External Dependencies\StyleCop\v4.3\Microsoft.StyleCop.CSharp.Rules.dll = External Dependencies\StyleCop\v4.3\Microsoft.StyleCop.CSharp.Rules.dll
+		External Dependencies\StyleCop\v4.3\Microsoft.StyleCop.dll = External Dependencies\StyleCop\v4.3\Microsoft.StyleCop.dll
+		External Dependencies\StyleCop\v4.3\Microsoft.StyleCop.Targets = External Dependencies\StyleCop\v4.3\Microsoft.StyleCop.Targets
+		External Dependencies\StyleCop\v4.3\Settings.StyleCop = External Dependencies\StyleCop\v4.3\Settings.StyleCop
+		External Dependencies\StyleCop\v4.3\StyleCopSettingsEditor.exe = External Dependencies\StyleCop\v4.3\StyleCopSettingsEditor.exe
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{908A13CE-4C6D-4546-AD52-AB958FF46C5B}"
+	ProjectSection(SolutionItems) = preProject
+		External Dependencies\StyleCop\v4.3\Docs\StyleCop.chm = External Dependencies\StyleCop\v4.3\Docs\StyleCop.chm
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -693,15 +711,17 @@ Global
 		{3689A2CB-94C5-4012-A5CF-7E7D1DD27143} = {02FC4179-0ADE-45D2-9C78-52F74FF6156C}
 		{ABCC46C4-55C3-48A4-AB6F-3FDB0B99269F} = {02FC4179-0ADE-45D2-9C78-52F74FF6156C}
 		{D202E935-5ADA-4769-A4D8-4A915B4267FA} = {351942DD-A33B-40F1-B71F-224E7D5B4E7B}
+		{7814C016-C363-4A04-B095-27A5B33AA783} = {351942DD-A33B-40F1-B71F-224E7D5B4E7B}
+		{908A13CE-4C6D-4546-AD52-AB958FF46C5B} = {7814C016-C363-4A04-B095-27A5B33AA783}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0DestinationAssemblyName = 
-		Reflector0DestinationVersion = 4.0.812.4
-		Reflector0DestinationName = Moq
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0SourceAssemblyName = 
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceName = Moq
 		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
+		Reflector0SourceName = Moq
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceAssemblyName = 
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0DestinationName = Moq
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationAssemblyName = 
 	EndGlobalSection
 EndGlobal

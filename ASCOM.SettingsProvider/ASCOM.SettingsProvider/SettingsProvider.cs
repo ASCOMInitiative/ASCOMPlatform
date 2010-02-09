@@ -79,7 +79,7 @@ namespace ASCOM
 		/// Initializes a new instance of the <see cref="SettingsProvider"/> class with the supplied
 		/// Profile Provider. This is useful for injecting a mock profile object during unit testing.
 		/// </summary>
-		/// <param name="profileProvider">The <see cref="ASCOM.Test.IProfileProvider"/> to be used.</param>
+		/// <param name="profileProvider">The <see cref="IProfile"/> to be used.</param>
 		public SettingsProvider(IProfile profileProvider)
 			{
 			ascomProfile = profileProvider;
@@ -237,7 +237,8 @@ namespace ASCOM
 				{
 				if (!item.Property.Attributes.ContainsKey(typeof(DeviceIdAttribute)))
 					{
-					throw new PropertyNotAttributedException(item.Name);
+					//throw new PropertyNotAttributedException(item.Name);
+					continue;	// Silently ignore, per MS documentation.
 					}
 				DeviceIdAttribute idAttribute = item.Property.Attributes[typeof(DeviceIdAttribute)] as DeviceIdAttribute;
 				string deviceId = idAttribute.DeviceId;
@@ -246,18 +247,15 @@ namespace ASCOM
 				int split = deviceId.LastIndexOf('.');
 				string deviceName = deviceId.Head(split);
 				string deviceType = deviceId.RemoveHead(split + 1);
-				using (Profile ascomProfile = new Profile())
+				ascomProfile.DeviceType = deviceType;
+				try
 					{
-					ascomProfile.DeviceType = deviceType;
-					try
-						{
-						Diagnostics.TraceVerbose("Writing ASCOM Profile DeviceID={0}, Key={1}, Value={2}", deviceId, item.Name, item.SerializedValue);
-						ascomProfile.WriteValue(deviceId, item.Name, item.SerializedValue.ToString(), String.Empty);
-						}
-					catch
-						{
-						Diagnostics.TraceError("Failed to persist property Key={0}", item.Name);
-						}
+					Diagnostics.TraceVerbose("Writing ASCOM Profile DeviceID={0}, Key={1}, Value={2}", deviceId, item.Name, item.SerializedValue);
+					ascomProfile.WriteValue(deviceId, item.Name, item.SerializedValue.ToString(), String.Empty);
+					}
+				catch
+					{
+					Diagnostics.TraceError("Failed to persist property Key={0}", item.Name);
 					}
 				}
 			}
