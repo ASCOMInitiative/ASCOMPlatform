@@ -10,21 +10,24 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
 namespace ASCOM.Platform.Test
-{
-    
-    
-    /// <summary>
-    ///This is a test class for SettingsProviderTest and is intended
-    ///to contain all SettingsProviderTest Unit Tests
-    ///</summary>
+	{
+
+
+	/// <summary>
+	///This is a test class for SettingsProviderTest and is intended
+	///to contain all SettingsProviderTest Unit Tests
+	///</summary>
 	[TestClass()]
 	public class SettingsProviderTest
 		{
 		private const string csUnitTest = "UnitTest";
-		private const string itemName = "Item Name";
-		private readonly Mock<SettingsProperty> mockSettingsProperty = new Mock<SettingsProperty>();
-		private readonly Mock<IProfile> mockProfile = new Mock<IProfile>();
-		private readonly Mock<SettingsContext> mockSettingsContext = new Mock<SettingsContext>();
+		private const string ItemName = "Item Name";
+		private const string SettingName = "UnitTestSetting";
+		private const string SettingDefaultValue = "Default";
+		private const string SettingSetValue = "You've Been Set";
+		private const string DeviceName = "My.UnitTest";
+		private const string DeviceType = "Switch";
+
 
 
 		private TestContext testContextInstance;
@@ -75,13 +78,6 @@ namespace ASCOM.Platform.Test
 		//
 		#endregion
 
-		// It is a good idea to have a method that handles the instantiation of the class we want to test
-		// as that gives us only a single line to change if we change something in the class constructor(s).
-		private SettingsProvider CreateSettingsProvider()
-			{
-			return new SettingsProvider(mockProfile.Object);
-			}
-
 
 		/// <summary>
 		///A test for ApplicationName
@@ -125,7 +121,7 @@ namespace ASCOM.Platform.Test
 		///A test for Description
 		///</summary>
 		[TestMethod()]
-		public void DescriptionShouldContainText()
+		public void Description_Should_ContainText()
 			{
 			SettingsProvider target = new SettingsProvider(); // TODO: Initialize to an appropriate value
 			string actual = target.Description;
@@ -136,7 +132,7 @@ namespace ASCOM.Platform.Test
 		///A test for Name
 		///</summary>
 		[TestMethod()]
-		public void NameShouldContainText()
+		public void Name_Should_Contain_Text()
 			{
 			SettingsProvider target = new SettingsProvider();
 			string actual = target.Name;
@@ -151,75 +147,39 @@ namespace ASCOM.Platform.Test
 		[TestMethod]
 		public void GetPropertySettings_Should_Return_Default_Values_When_Device_Not_Registered()
 			{
-			const string deviceName = "My.UnitTest";
-			const string deviceType = "Switch";
-			var deviceId = String.Format("{0}.{1}", deviceName, deviceType);
-
-			// Create our SettingsProvider instance
-			var settingsProvider = CreateSettingsProvider();
-
-			// The first part of the method parses the DeviceId. I would consider isolating this part in one method
-			// to test it independently from the rest of the method. 
-
-			// We con't need to fire up all of System.Configuration just for our test, so we keep this mock
-			var mockItem = new Mock<SettingsProperty>();
-			// Here we instantiate the DeviceIdAttribute and set its DeviceId property explicitely at the same time
+			// ARRANGE
+			var deviceId = String.Format("{0}.{1}", DeviceName, DeviceType);
+			Mock<IProfile> mockProfile = new Mock<IProfile>();
 			var deviceAttribute = new ASCOM.DeviceIdAttribute(deviceId);
-			// Now we let the Attributes array property on our itemMock always return the deviceAttribute
-
-			//[TPL] this is where it all goes a bit pear-shaped.
 			var attributes = new SettingsAttributeDictionary();
-			attributes.Add(typeof(DeviceIdAttribute), deviceAttribute);
-			var mockAttributes = new Mock<SettingsAttributeDictionary>();
-			//mockAttributes.SetupGet(g => g.Values).Returns(keys);
-			mockItem.SetupGet(x => x.Attributes[It.IsAny<System.Type>()]).Returns(deviceAttribute);
-
-			// There's no need to mock the collection, but we instantiate it with our itemMock object
+			attributes.Add(deviceAttribute.GetType(), deviceAttribute);
+			var settingsProperty = new SettingsProperty(SettingName, typeof(string), null, false, SettingDefaultValue, SettingsSerializeAs.String, attributes, true, true);
 			var propertyCollection = new SettingsPropertyCollection();
-			propertyCollection.Add(mockItem.Object);
+			propertyCollection.Add(settingsProperty);
 
-			// We wish to log what the device type of our IProfile is set to
-			var setDeviceType = "";
+			// Expectations:
+			//	- mockProfile must have it's DeviceType set.
+			//	- mockProfile's device type (captured in setDeviceType) must match deviceType.
+			//	- The returned SettingsPropertyValueCollection must not be empty.
+			//	- The returned SettingsPropertyValueCollection must have exactly one entry.
+			//	- The entry must match the value of SettingDefaultValue. 
+			var setDeviceType = String.Empty;
 			mockProfile.SetupSet(x => x.DeviceType).Callback(y => setDeviceType = y);
+			var settingsProvider = new SettingsProvider(mockProfile.Object);
+			var context = new SettingsContext();
 
-			// Now comes the interesting part where we call our IProfile - this is where we really need Moq.
-			// Again, it would be easier if we could just write a few dedicated tests that test only this
-			// try-catch part of the method...
+			// ACT
+			var result = settingsProvider.GetPropertyValues(context, propertyCollection);
 
-			// For this we need to name our itemMock and give it a default value
-			mockItem.SetupGet(x => x.Name).Returns(itemName);
-			var defaultvalue = new Object();
-			mockItem.SetupGet(x => x.DefaultValue).Returns(defaultvalue);
-			// We need to set up the GetValue method. As we know all the expected parameters for it, we can specify
-			// them already and make the mock stronger. In this test case, we test the handling of an empty return.
-			mockProfile.Setup(x => x.GetValue(deviceId, itemName, null, String.Empty)).Returns("");
-
-			// Finally, it is time to call the method we want to test
-			var result = settingsProvider.GetPropertyValues(mockSettingsContext.Object, propertyCollection);
-
-			// Now lets verify that everything went as expected
-
-			// First, let's test that the parsing of DeviceId was as expected: IProvider.DeviceType was set to the expected value
-			Assert.AreEqual(deviceType, setDeviceType);
-			// Then let's test that the methods of IProvider that we mocked were called
+			// ASSERT
+			Assert.AreEqual(DeviceType, setDeviceType);
 			mockProfile.VerifyAll();
-			// Instead of these two checks, we can use the VerifySet and Verify methods explicitly on our providerMock
-			mockProfile.VerifySet(x => x.DeviceType = deviceType, Times.Once());
-			mockProfile.Verify(x => x.GetValue(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once());
-
-			// With this done, let's turn to the output of the method
-
-			// Firstly, we test that the resulting collection contains exactly one item of the type SettingsPropertyValue
 			Assert.IsTrue(result.Count > 0);
-			Assert.IsTrue(result.OfType<SettingsPropertyValue>().Count() > 0);
 			Assert.AreEqual(1, result.Count);
-			// Then let's inspect the contained SettingsProviderValue further
+			Assert.IsTrue(result.OfType<SettingsPropertyValue>().Count() > 0);
 			var settingsPropertyValue = result.OfType<SettingsPropertyValue>().First();
-			// The IsDirty flag must never be set
 			Assert.IsFalse(settingsPropertyValue.IsDirty);
-			// The PropertyValue must be the default value we passed in in our itemMock as we set our
-			// IProvider to return an empty value for the specified parameters
-			Assert.AreEqual(defaultvalue, settingsPropertyValue.PropertyValue);
+			Assert.AreEqual(SettingDefaultValue, settingsPropertyValue.PropertyValue);
 			}
 
 		[TestMethod()]
@@ -238,11 +198,110 @@ namespace ASCOM.Platform.Test
 		[TestMethod()]
 		public void SetPropertyValuesTest()
 			{
-			//SettingsProvider target = new SettingsProvider(); // TODO: Initialize to an appropriate value
-			//SettingsContext context = null; // TODO: Initialize to an appropriate value
-			//SettingsPropertyValueCollection collection = null; // TODO: Initialize to an appropriate value
-			//target.SetPropertyValues(context, collection);
-			//Assert.Inconclusive("A method that does not return a value cannot be verified.");
+			// ARRANGE
+			var deviceId = String.Format("{0}.{1}", DeviceName, DeviceType);
+			var deviceAttribute = new ASCOM.DeviceIdAttribute(deviceId);
+			var attributes = new SettingsAttributeDictionary();
+			attributes.Add(deviceAttribute.GetType(), deviceAttribute);
+			var settingsProperty = new SettingsProperty(SettingName, typeof(string), null, false, SettingDefaultValue, SettingsSerializeAs.String, attributes, true, true);
+			var settingsPropertyValue = new SettingsPropertyValue(settingsProperty);
+			settingsPropertyValue.PropertyValue = SettingSetValue;
+			var settingsPropertyValues = new SettingsPropertyValueCollection();
+			settingsPropertyValues.Add(settingsPropertyValue);
+			var context = new SettingsContext();
+
+			// Expectations:
+			//	- mockProfile must have it's DeviceType set.
+			//	- mockProfile's device type (captured in setDeviceType) must match deviceType.
+			//	- The returned SettingsPropertyValueCollection must not be empty.
+			//	- IProfile.WriteValue should be called with the correct values(deviceId, item.Name, item.SerializedValue.ToString(), String.Empty);
+			var setDeviceType = String.Empty;
+			Mock<IProfile> mockProfile = new Mock<IProfile>();
+			mockProfile.SetupSet(x => x.DeviceType).Callback(y => setDeviceType = y);
+			mockProfile.Setup(x => x.WriteValue(deviceId, SettingName, SettingSetValue, String.Empty));
+			var settingsProvider = new SettingsProvider(mockProfile.Object);
+
+			// ACT
+			settingsProvider.SetPropertyValues(context, settingsPropertyValues);
+
+			// ASSERT
+			Assert.AreEqual(DeviceType, setDeviceType);
+			mockProfile.VerifyAll();
+			}
+
+		/// <summary>
+		/// Verifies that, when setting property values,
+		/// properties not decorated with an <see cref="ASCOM.DeviceIdAttribute"/>
+		/// are silently ignored (per MS documentation) and that no attempt is made to write
+		/// anything to the Profile store.
+		/// </summary>
+		[TestMethod]
+		public void Non_Attributed_Settings_Should_Be_Silently_Ignored_When_Setting()
+			{
+			// ARRANGE
+			var deviceId = String.Format("{0}.{1}", DeviceName, DeviceType);
+			var deviceAttribute = new ASCOM.ServedClassNameAttribute("Dummy");	// Not a Device ID attribute
+			var attributes = new SettingsAttributeDictionary();
+			attributes.Add(deviceAttribute.GetType(), deviceAttribute);
+			var settingsProperty = new SettingsProperty(SettingName, typeof(string), null, false, SettingDefaultValue, SettingsSerializeAs.String, attributes, true, true);
+			var settingsPropertyValue = new SettingsPropertyValue(settingsProperty);
+			settingsPropertyValue.PropertyValue = SettingSetValue;
+			var settingsPropertyValues = new SettingsPropertyValueCollection();
+			settingsPropertyValues.Add(settingsPropertyValue);
+			var context = new SettingsContext();
+
+			// Expectations:
+			//	- mockProfile must NOT have it's DeviceType set.
+			//	- IProfile.WriteValue should NOT be called.
+			var setDeviceType = String.Empty;
+			Mock<IProfile> mockProfile = new Mock<IProfile>();
+			mockProfile.SetupSet(x => x.DeviceType).Callback(y => setDeviceType = y);
+			//mockProfile.Setup(x => x.WriteValue(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+			var settingsProvider = new SettingsProvider(mockProfile.Object);
+
+			// ACT
+			settingsProvider.SetPropertyValues(context, settingsPropertyValues);
+
+			// ASSERT
+			Assert.AreEqual(String.Empty, setDeviceType);
+			mockProfile.Verify(x => x.WriteValue(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+			}
+
+		/// <summary>
+		/// Verifies that, when getting property values,
+		/// properties not decorated with an <see cref="ASCOM.DeviceIdAttribute"/>
+		/// are silently ignored (per MS documentation) and that no attempt is made to write
+		/// anything to the Profile store.
+		/// </summary>
+		[TestMethod]
+		public void Non_Attributed_Settings_Should_Be_Silently_Ignored_When_Getting()
+			{
+			// ARRANGE
+			var deviceId = String.Format("{0}.{1}", DeviceName, DeviceType);
+			var deviceAttribute = new ASCOM.ServedClassNameAttribute("Dummy");	// Not a Device ID attribute
+			var attributes = new SettingsAttributeDictionary();
+			attributes.Add(deviceAttribute.GetType(), deviceAttribute);
+			var settingsProperty = new SettingsProperty(SettingName, typeof(string), null, false, SettingDefaultValue, SettingsSerializeAs.String, attributes, true, true);
+			var settingsProperties = new SettingsPropertyCollection();
+			settingsProperties.Add(settingsProperty);
+			var context = new SettingsContext();
+
+			// Expectations:
+			//	- mockProfile must NOT have it's DeviceType set.
+			//	- IProfile.GetValue() must NOT be called.
+
+			var setDeviceType = String.Empty;
+			Mock<IProfile> mockProfile = new Mock<IProfile>();
+			mockProfile.SetupSet(x => x.DeviceType).Callback(y => setDeviceType = y);
+			//mockProfile.Setup(x => x.WriteValue(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+			var settingsProvider = new SettingsProvider(mockProfile.Object);
+
+			// ACT
+			settingsProvider.GetPropertyValues(context, settingsProperties);
+
+			// ASSERT
+			Assert.AreEqual(String.Empty, setDeviceType);
+			mockProfile.Verify(x => x.GetValue(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never());
 			}
 		}
-}
+	}
