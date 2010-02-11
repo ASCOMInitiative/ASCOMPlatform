@@ -55,6 +55,7 @@ namespace ASCOM.FocVide
         {
             xLog = new TextBoxTraceListener(LogBox);
             Trace.Listeners.Add(xLog);
+            Properties.Settings.Default.IsMoving = false;
             Properties.Settings.Default.PropertyChanged += new PropertyChangedEventHandler(Default_PropertyChanged);
             Properties.Settings.Default.Reload();
             FocuserHardware.MyLog(FocuserHardware.eLogKind.LogOther, "Init...");
