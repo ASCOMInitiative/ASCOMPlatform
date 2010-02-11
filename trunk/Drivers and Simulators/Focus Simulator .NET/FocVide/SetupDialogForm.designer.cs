@@ -62,6 +62,7 @@ namespace ASCOM.FocVide
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.CurrentTemp = new System.Windows.Forms.TextBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
@@ -517,11 +518,22 @@ namespace ASCOM.FocVide
             this.CurrentTemp.Text = "5 K";
             this.CurrentTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(287, 178);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(78, 17);
+            this.checkBox1.TabIndex = 7;
+            this.checkBox1.Text = "checkBox1";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(377, 485);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -591,5 +603,6 @@ namespace ASCOM.FocVide
         private System.Windows.Forms.NumericUpDown TempMaxi;
         private System.Windows.Forms.CheckBox IsSynchronous;
         private System.Windows.Forms.CheckBox LinkFailure;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }

@@ -64,11 +64,6 @@ namespace ASCOM.FocVide
             Properties.Settings.Default.sTempComp = Properties.Settings.Default.sTempCompAvailable;
         }
 
-        private void TempComp_TextChanged(object sender, EventArgs e)
-        {
-            
-        }
-
         void Default_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             HelpTempComp.Text = "If probed temperature is between " + TempMini.Value.ToString() + " K and " +
