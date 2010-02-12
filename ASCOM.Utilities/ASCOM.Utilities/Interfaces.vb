@@ -898,7 +898,6 @@ Namespace Interfaces
         ''' List the devices of a given device type that are registered in the Profile store
         ''' </summary>
         ''' <param name="DeviceType">Type of devices to list</param>
-        ''' <value>List of registered devices</value>
         ''' <returns>An ArrayList of KeyValuePair objects of installed devices and associated device descriptions</returns>
         ''' <exception cref="Exceptions.InvalidValueException">Throw if the supplied DeviceType is empty string or 
         ''' null value.</exception>
@@ -906,8 +905,14 @@ Namespace Interfaces
         ''' Use this to find all the registerd devices of a given type that are in the Profile store.
         ''' <para>If a DeviceType is supplied, where no device of that type has been registered before on this system,
         ''' an empty list will be returned</para>
+        ''' <para><b>Platform 6</b> Profile.RegisteredDevices was introduced in Platform 5.5 as a read only property that took
+        ''' DeviceType as a parameter, which is legal syntax in Visual Basic .NET but is not interpreted correctly in C#. Consequently, 
+        ''' a breaking change has been introduced in Platform 6 that changes the property into a parameterised method which works correctly in 
+        ''' all .NET languages.</para>
+        ''' <para>This change does not require you to alter your source code but you may need to recompile your application under Platform 6
+        ''' to ensure that there are no runtime errors.</para>
         ''' </remarks>
-        <DispId(3)> ReadOnly Property RegisteredDevices(ByVal DeviceType As String) As ArrayList
+        <DispId(3)> Function RegisteredDevices(ByVal DeviceType As String) As ArrayList
 
         ''' <summary>
         ''' Confirms whether a specific driver is registered ort unregistered in the profile store

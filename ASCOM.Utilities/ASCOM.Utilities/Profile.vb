@@ -181,7 +181,6 @@ Public Class Profile
     ''' List the devices of a given device type that are registered in the Profile store
     ''' </summary>
     ''' <param name="DeviceType">Type of devices to list</param>
-    ''' <value>List of registered devices</value>
     ''' <returns>An ArrayList of installed devices and associated device descriptions</returns>
     ''' <exception cref="Exceptions.InvalidValueException">Throw if the supplied DeviceType is empty string or 
     ''' null value.</exception>
@@ -190,28 +189,26 @@ Public Class Profile
     ''' <para>If a DeviceType is supplied, where no device of that type has been registered before on this system,
     ''' an empty list will be returned</para>
     ''' </remarks>
-    Public ReadOnly Property RegisteredDevices(ByVal DeviceType As String) As ArrayList Implements IProfile.RegisteredDevices
-        Get
-            Dim RegDevs As Generic.SortedList(Of String, String) = Nothing
-            Dim RetVal As New ArrayList
-            If String.IsNullOrEmpty(DeviceType) Then ' Null value and empty string are invalid DeviceTypes
-                TL.LogMessage("RegisteredDevices", "Empty string or Nothing supplied as DeviceType")
-                Throw New Exceptions.InvalidValueException("Empty string or Nothing supplied as DeviceType")
-            End If
-            Try
-                RegDevs = ProfileStore.EnumKeys(DeviceType & " Drivers") ' Get Key-Class pairs
-            Catch ex As System.IO.DirectoryNotFoundException 'Catch exception thrown if the Deviceype is an invalid value
-                TL.LogMessage("RegisteredDevices", "WARNING: there are no devices of type: """ & DeviceType & """ registered on this system")
-                RegDevs = New Generic.SortedList(Of String, String) 'Return an empty list
-            End Try
-            TL.LogMessage("RegisteredDevices", "Device type: " & DeviceType & " - found " & RegDevs.Count & " devices")
-            For Each kvp As Generic.KeyValuePair(Of String, String) In RegDevs
-                TL.LogMessage("RegisteredDevices", "  " & kvp.Key & " - " & kvp.Value)
-                RetVal.Add(New KeyValuePair(kvp.Key, kvp.Value))
-            Next
-            Return RetVal
-        End Get
-    End Property
+    Public Function RegisteredDevices(ByVal DeviceType As String) As ArrayList Implements IProfile.RegisteredDevices
+        Dim RegDevs As Generic.SortedList(Of String, String) = Nothing
+        Dim RetVal As New ArrayList
+        If String.IsNullOrEmpty(DeviceType) Then ' Null value and empty string are invalid DeviceTypes
+            TL.LogMessage("RegisteredDevices", "Empty string or Nothing supplied as DeviceType")
+            Throw New Exceptions.InvalidValueException("Empty string or Nothing supplied as DeviceType")
+        End If
+        Try
+            RegDevs = ProfileStore.EnumKeys(DeviceType & " Drivers") ' Get Key-Class pairs
+        Catch ex As System.IO.DirectoryNotFoundException 'Catch exception thrown if the Deviceype is an invalid value
+            TL.LogMessage("RegisteredDevices", "WARNING: there are no devices of type: """ & DeviceType & """ registered on this system")
+            RegDevs = New Generic.SortedList(Of String, String) 'Return an empty list
+        End Try
+        TL.LogMessage("RegisteredDevices", "Device type: " & DeviceType & " - found " & RegDevs.Count & " devices")
+        For Each kvp As Generic.KeyValuePair(Of String, String) In RegDevs
+            TL.LogMessage("RegisteredDevices", "  " & kvp.Key & " - " & kvp.Value)
+            RetVal.Add(New KeyValuePair(kvp.Key, kvp.Value))
+        Next
+        Return RetVal
+    End Function
 
     ''' <summary>
     ''' Confirms whether a specific driver is registered ort unregistered in the profile store
