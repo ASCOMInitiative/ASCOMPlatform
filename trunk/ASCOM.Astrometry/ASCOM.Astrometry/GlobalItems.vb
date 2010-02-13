@@ -514,7 +514,7 @@ Public Structure Object3
 End Structure
 
 <StructLayoutAttribute(LayoutKind.Sequential, CharSet:=CharSet.Ansi)> _
-Public Structure sky_pos
+Public Structure SkyPos
     <MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst:=3, ArraySubType:=UnmanagedType.R8)> _
     Public RHat() As Double
     Public RA As Double
@@ -546,13 +546,20 @@ Public Structure OnSurface
     Public Pressure As Double
 End Structure
 
-Public Enum ObserverWhere As Short
+<StructLayoutAttribute(LayoutKind.Sequential)> _
+Public Structure Observer
+    Public Where As ObserverLocation
+    Public OnSurf As OnSurface
+    Public NearEarth As InSpace
+End Structure
+
+Public Enum ObserverLocation As Short
     EarthGeoCenter = 0 ': observer at geocenter
     EarthSurface = 1 ': observer on surface of earth
     SpaceNearEarth = 2 ': observer on near-earth spacecraft
 End Enum
 
-Public Enum AccuracyValue As Short
+Public Enum Accuracy As Short
     Full = 0 '... full accuracy
     Reduced = 1 '... reduced accuracy
 End Enum
@@ -571,14 +578,61 @@ End Enum
 
 Public Enum Method As Short
     CIOBased = 0
-    Equinoxbased = 1
+    EquinoxBased = 1
 End Enum
 
-<StructLayoutAttribute(LayoutKind.Sequential)> _
-Public Structure Observer
-    Public Where As ObserverWhere
-    Public OnSurf As OnSurface
-    Public NearEarth As InSpace
-End Structure
+Public Enum OutputVectorOption As Short
+    ReferredToGCRSAxes = 0
+    ReferredToEquatorAndEquinoxOfDate = 1
+End Enum
 
+Public Enum PoleOffsetCorrectionType As Short
+    ReferredToMeanEclipticOfDate = 1
+    ReferredToGCRSAxes = 2
+End Enum
+
+Public Enum FrameConversionDirection As Short
+    DynamicalToICRS = -1
+    ICRSToDynamical = 1
+End Enum
+
+Public Enum EarthDeflection As Short
+    NoEarthDeflection = 0
+    AddEarthDeflection = 1
+End Enum
+
+Public Enum ReferenceSystem As Short
+    GCRS = 1
+    TrueEquatorAndEquinoxOfDate = 2
+End Enum
+
+Public Enum EquinoxType As Short
+    MeanEquinox = 0
+    TrueEquinox = 1
+End Enum
+
+Public Enum TransformationOption3 As Integer
+    ''' <summary>
+    ''' Change epoch only
+    ''' </summary>
+    ''' <remarks></remarks>
+    ChangeEpoch = 1
+    ''' <summary>
+    ''' Change equator and equinox
+    ''' </summary>
+    ''' <remarks></remarks>
+    ChangeEquatorAndEquinox = 2
+    ''' <summary>
+    ''' Change equator, equinox and epoch
+    ''' </summary>
+    ''' <remarks></remarks>
+    ChangeEquatorAndEquinoxAndEpoch = 3
+    ChangeEquatorAndEquinoxJ2000ToICRS = 4
+    ChangeICRSToEquatorAndEquinoxOfJ2000 = 5
+End Enum
+Public Enum ObjectType As Short
+    MajorPlanetSunOrMoon = 0
+    MinorPlanet = 1
+    ObjectLocatedOutsideSolarSystem=2
+End Enum
 #End Region
