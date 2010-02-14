@@ -538,6 +538,62 @@ Public Structure RAOfCio
 End Structure
 
 <StructLayoutAttribute(LayoutKind.Sequential)> _
+Public Structure RAOfCioArray
+    Private Const RACIO_DEFAULT_VALUE As Double = Double.NaN
+
+    Public Value1 As RAOfCio
+    Public Value2 As RAOfCio
+    Public Value3 As RAOfCio
+    Public Value4 As RAOfCio
+    Public Value5 As RAOfCio
+    Public Value6 As RAOfCio
+    Public Value7 As RAOfCio
+    Public Value8 As RAOfCio
+    Public Value9 As RAOfCio
+    Public Value10 As RAOfCio
+    Public Value11 As RAOfCio
+    Public Value12 As RAOfCio
+    Public Value13 As RAOfCio
+    Public Value14 As RAOfCio
+    Public Value15 As RAOfCio
+    Public Value16 As RAOfCio
+    Public Value17 As RAOfCio
+    Public Value18 As RAOfCio
+    Public Value19 As RAOfCio
+    Public Value20 As RAOfCio
+
+    Public Sub Initialise()
+        Value1.RACio = RACIO_DEFAULT_VALUE
+        Value2.RACio = RACIO_DEFAULT_VALUE
+        Value3.RACio = RACIO_DEFAULT_VALUE
+        Value4.RACio = RACIO_DEFAULT_VALUE
+        Value5.RACio = RACIO_DEFAULT_VALUE
+        Value6.RACio = RACIO_DEFAULT_VALUE
+        Value7.RACio = RACIO_DEFAULT_VALUE
+        Value8.RACio = RACIO_DEFAULT_VALUE
+        Value9.RACio = RACIO_DEFAULT_VALUE
+        Value10.RACio = RACIO_DEFAULT_VALUE
+        Value11.RACio = RACIO_DEFAULT_VALUE
+        Value12.RACio = RACIO_DEFAULT_VALUE
+        Value13.RACio = RACIO_DEFAULT_VALUE
+        Value14.RACio = RACIO_DEFAULT_VALUE
+        Value15.RACio = RACIO_DEFAULT_VALUE
+        Value16.RACio = RACIO_DEFAULT_VALUE
+        Value17.RACio = RACIO_DEFAULT_VALUE
+        Value18.RACio = RACIO_DEFAULT_VALUE
+        Value19.RACio = RACIO_DEFAULT_VALUE
+        Value20.RACio = RACIO_DEFAULT_VALUE
+    End Sub
+End Structure
+
+<StructLayoutAttribute(LayoutKind.Sequential)> _
+Public Structure JDHighPrecision
+    Public JDPart1 As Double
+    Public JDPart2 As Double
+End Structure
+
+
+<StructLayoutAttribute(LayoutKind.Sequential)> _
 Public Structure OnSurface
     Public Latitude As Double
     Public Longitude As Double
@@ -633,6 +689,6 @@ End Enum
 Public Enum ObjectType As Short
     MajorPlanetSunOrMoon = 0
     MinorPlanet = 1
-    ObjectLocatedOutsideSolarSystem=2
+    ObjectLocatedOutsideSolarSystem = 2
 End Enum
 #End Region
