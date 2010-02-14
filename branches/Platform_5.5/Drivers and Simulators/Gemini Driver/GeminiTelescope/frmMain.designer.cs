@@ -86,12 +86,12 @@ namespace ASCOM.GeminiTelescope
             this.BalloonIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.pbStop = new System.Windows.Forms.Button();
             this.checkboxPEC = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.labelHA = new System.Windows.Forms.Label();
             this.buttonSlew2 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew3 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew4 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew1 = new ASCOM.GeminiTelescope.TButton();
-            this.label5 = new System.Windows.Forms.Label();
-            this.labelHA = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.TableLayoutPanel3.SuspendLayout();
@@ -696,6 +696,28 @@ namespace ASCOM.GeminiTelescope
             this.checkboxPEC.UseVisualStyleBackColor = false;
             this.checkboxPEC.Click += new System.EventHandler(this.checkboxPEC_Clicked);
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.ForeColor = System.Drawing.Color.White;
+            this.label5.Location = new System.Drawing.Point(0, 48);
+            this.label5.Margin = new System.Windows.Forms.Padding(0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(22, 13);
+            this.label5.TabIndex = 14;
+            this.label5.Text = "HA";
+            // 
+            // labelHA
+            // 
+            this.labelHA.AutoSize = true;
+            this.labelHA.Dock = System.Windows.Forms.DockStyle.Right;
+            this.labelHA.ForeColor = System.Drawing.Color.Red;
+            this.labelHA.Location = new System.Drawing.Point(74, 48);
+            this.labelHA.Name = "labelHA";
+            this.labelHA.Size = new System.Drawing.Size(49, 16);
+            this.labelHA.TabIndex = 15;
+            this.labelHA.Text = "00:00:00";
+            // 
             // buttonSlew2
             // 
             this.buttonSlew2.AccessibleDescription = "Slew South";
@@ -761,34 +783,12 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseDown);
             this.buttonSlew1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseUp);
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(0, 48);
-            this.label5.Margin = new System.Windows.Forms.Padding(0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(22, 13);
-            this.label5.TabIndex = 14;
-            this.label5.Text = "HA";
-            // 
-            // labelHA
-            // 
-            this.labelHA.AutoSize = true;
-            this.labelHA.Dock = System.Windows.Forms.DockStyle.Right;
-            this.labelHA.ForeColor = System.Drawing.Color.Red;
-            this.labelHA.Location = new System.Drawing.Point(74, 48);
-            this.labelHA.Name = "labelHA";
-            this.labelHA.Size = new System.Drawing.Size(49, 16);
-            this.labelHA.TabIndex = 15;
-            this.labelHA.Text = "00:00:00";
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(147, 426);
+            this.ClientSize = new System.Drawing.Size(147, 423);
             this.Controls.Add(this.buttonSlew2);
             this.Controls.Add(this.tableLayoutPanel4);
             this.Controls.Add(this.tableLayoutPanel1);
