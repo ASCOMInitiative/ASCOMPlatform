@@ -90,6 +90,8 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew3 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew4 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew1 = new ASCOM.GeminiTelescope.TButton();
+            this.label5 = new System.Windows.Forms.Label();
+            this.labelHA = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.TableLayoutPanel3.SuspendLayout();
@@ -114,7 +116,7 @@ namespace ASCOM.GeminiTelescope
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(0, 18);
+            this.label2.Location = new System.Drawing.Point(0, 16);
             this.label2.Margin = new System.Windows.Forms.Padding(0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(22, 13);
@@ -125,7 +127,7 @@ namespace ASCOM.GeminiTelescope
             // 
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(0, 36);
+            this.label3.Location = new System.Drawing.Point(0, 32);
             this.label3.Margin = new System.Windows.Forms.Padding(0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(27, 13);
@@ -137,8 +139,10 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 37.30159F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 62.69841F));
-            this.tableLayoutPanel1.Controls.Add(this.labelLimit, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.label4, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.labelHA, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.label5, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.labelLimit, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.label4, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.labelDec, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.labelRa, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.labelLst, 1, 0);
@@ -147,12 +151,13 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel1.Controls.Add(this.label3, 0, 2);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 38);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 4;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(126, 72);
+            this.tableLayoutPanel1.RowCount = 5;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(126, 84);
             this.tableLayoutPanel1.TabIndex = 8;
             // 
             // labelLimit
@@ -160,9 +165,9 @@ namespace ASCOM.GeminiTelescope
             this.labelLimit.AutoSize = true;
             this.labelLimit.Dock = System.Windows.Forms.DockStyle.Right;
             this.labelLimit.ForeColor = System.Drawing.Color.Red;
-            this.labelLimit.Location = new System.Drawing.Point(74, 54);
+            this.labelLimit.Location = new System.Drawing.Point(74, 64);
             this.labelLimit.Name = "labelLimit";
-            this.labelLimit.Size = new System.Drawing.Size(49, 18);
+            this.labelLimit.Size = new System.Drawing.Size(49, 20);
             this.labelLimit.TabIndex = 13;
             this.labelLimit.Text = "00:00:00";
             // 
@@ -170,7 +175,7 @@ namespace ASCOM.GeminiTelescope
             // 
             this.label4.AutoSize = true;
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(0, 54);
+            this.label4.Location = new System.Drawing.Point(0, 64);
             this.label4.Margin = new System.Windows.Forms.Padding(0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(44, 13);
@@ -182,9 +187,9 @@ namespace ASCOM.GeminiTelescope
             this.labelDec.AutoSize = true;
             this.labelDec.Dock = System.Windows.Forms.DockStyle.Right;
             this.labelDec.ForeColor = System.Drawing.Color.Red;
-            this.labelDec.Location = new System.Drawing.Point(53, 36);
+            this.labelDec.Location = new System.Drawing.Point(53, 32);
             this.labelDec.Name = "labelDec";
-            this.labelDec.Size = new System.Drawing.Size(70, 18);
+            this.labelDec.Size = new System.Drawing.Size(70, 16);
             this.labelDec.TabIndex = 11;
             this.labelDec.Text = "+00:00:00:00";
             // 
@@ -193,9 +198,9 @@ namespace ASCOM.GeminiTelescope
             this.labelRa.AutoSize = true;
             this.labelRa.Dock = System.Windows.Forms.DockStyle.Right;
             this.labelRa.ForeColor = System.Drawing.Color.Red;
-            this.labelRa.Location = new System.Drawing.Point(59, 18);
+            this.labelRa.Location = new System.Drawing.Point(59, 16);
             this.labelRa.Name = "labelRa";
-            this.labelRa.Size = new System.Drawing.Size(64, 18);
+            this.labelRa.Size = new System.Drawing.Size(64, 16);
             this.labelRa.TabIndex = 10;
             this.labelRa.Text = "00:00:00:00";
             // 
@@ -206,7 +211,7 @@ namespace ASCOM.GeminiTelescope
             this.labelLst.ForeColor = System.Drawing.Color.Red;
             this.labelLst.Location = new System.Drawing.Point(59, 0);
             this.labelLst.Name = "labelLst";
-            this.labelLst.Size = new System.Drawing.Size(64, 18);
+            this.labelLst.Size = new System.Drawing.Size(64, 16);
             this.labelLst.TabIndex = 9;
             this.labelLst.Text = "00:00:00:00";
             // 
@@ -216,7 +221,7 @@ namespace ASCOM.GeminiTelescope
             this.checkBoxTrack.AutoCheck = false;
             this.checkBoxTrack.AutoSize = true;
             this.checkBoxTrack.ForeColor = System.Drawing.Color.White;
-            this.checkBoxTrack.Location = new System.Drawing.Point(7, 336);
+            this.checkBoxTrack.Location = new System.Drawing.Point(7, 342);
             this.checkBoxTrack.Name = "checkBoxTrack";
             this.checkBoxTrack.Size = new System.Drawing.Size(54, 17);
             this.checkBoxTrack.TabIndex = 8;
@@ -276,7 +281,7 @@ namespace ASCOM.GeminiTelescope
             this.TableLayoutPanel3.Controls.Add(this.ButtonConnect, 0, 1);
             this.TableLayoutPanel3.Controls.Add(this.ButtonSetup, 2, 0);
             this.TableLayoutPanel3.Controls.Add(this.FuncMenu, 0, 0);
-            this.TableLayoutPanel3.Location = new System.Drawing.Point(6, 356);
+            this.TableLayoutPanel3.Location = new System.Drawing.Point(6, 362);
             this.TableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
             this.TableLayoutPanel3.Name = "TableLayoutPanel3";
             this.TableLayoutPanel3.RowCount = 2;
@@ -582,7 +587,7 @@ namespace ASCOM.GeminiTelescope
             // 
             this.CheckBoxFlipDec.AccessibleDescription = "Flip Dec Direction";
             this.CheckBoxFlipDec.ForeColor = System.Drawing.Color.White;
-            this.CheckBoxFlipDec.Location = new System.Drawing.Point(95, 257);
+            this.CheckBoxFlipDec.Location = new System.Drawing.Point(95, 263);
             this.CheckBoxFlipDec.Name = "CheckBoxFlipDec";
             this.CheckBoxFlipDec.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.CheckBoxFlipDec.Size = new System.Drawing.Size(46, 30);
@@ -596,7 +601,7 @@ namespace ASCOM.GeminiTelescope
             this.GroupBox1.Controls.Add(this.RadioButtonCenter);
             this.GroupBox1.Controls.Add(this.RadioButtonGuide);
             this.GroupBox1.ForeColor = System.Drawing.Color.White;
-            this.GroupBox1.Location = new System.Drawing.Point(7, 292);
+            this.GroupBox1.Location = new System.Drawing.Point(7, 298);
             this.GroupBox1.Name = "GroupBox1";
             this.GroupBox1.Size = new System.Drawing.Size(135, 38);
             this.GroupBox1.TabIndex = 7;
@@ -645,7 +650,7 @@ namespace ASCOM.GeminiTelescope
             // 
             this.CheckBoxFlipRa.AccessibleDescription = "Flip RA Direction";
             this.CheckBoxFlipRa.ForeColor = System.Drawing.Color.White;
-            this.CheckBoxFlipRa.Location = new System.Drawing.Point(7, 257);
+            this.CheckBoxFlipRa.Location = new System.Drawing.Point(7, 263);
             this.CheckBoxFlipRa.Name = "CheckBoxFlipRa";
             this.CheckBoxFlipRa.Size = new System.Drawing.Size(53, 30);
             this.CheckBoxFlipRa.TabIndex = 5;
@@ -665,7 +670,7 @@ namespace ASCOM.GeminiTelescope
             this.pbStop.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.pbStop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.pbStop.ForeColor = System.Drawing.Color.White;
-            this.pbStop.Location = new System.Drawing.Point(50, 263);
+            this.pbStop.Location = new System.Drawing.Point(50, 269);
             this.pbStop.Margin = new System.Windows.Forms.Padding(1, 3, 0, 3);
             this.pbStop.Name = "pbStop";
             this.pbStop.Size = new System.Drawing.Size(44, 24);
@@ -681,7 +686,7 @@ namespace ASCOM.GeminiTelescope
             this.checkboxPEC.AutoCheck = false;
             this.checkboxPEC.AutoSize = true;
             this.checkboxPEC.ForeColor = System.Drawing.Color.White;
-            this.checkboxPEC.Location = new System.Drawing.Point(94, 336);
+            this.checkboxPEC.Location = new System.Drawing.Point(94, 342);
             this.checkboxPEC.Name = "checkboxPEC";
             this.checkboxPEC.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.checkboxPEC.Size = new System.Drawing.Size(47, 17);
@@ -698,7 +703,7 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSlew2.Font = new System.Drawing.Font("Wingdings 3", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
             this.buttonSlew2.ImageIndex = 0;
-            this.buttonSlew2.Location = new System.Drawing.Point(42, 193);
+            this.buttonSlew2.Location = new System.Drawing.Point(42, 199);
             this.buttonSlew2.Margin = new System.Windows.Forms.Padding(0);
             this.buttonSlew2.Name = "buttonSlew2";
             this.buttonSlew2.Size = new System.Drawing.Size(64, 64);
@@ -714,7 +719,7 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSlew3.Font = new System.Drawing.Font("Wingdings 3", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
             this.buttonSlew3.ImageIndex = 0;
-            this.buttonSlew3.Location = new System.Drawing.Point(6, 159);
+            this.buttonSlew3.Location = new System.Drawing.Point(6, 165);
             this.buttonSlew3.Margin = new System.Windows.Forms.Padding(0);
             this.buttonSlew3.Name = "buttonSlew3";
             this.buttonSlew3.Size = new System.Drawing.Size(64, 64);
@@ -731,7 +736,7 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSlew4.Font = new System.Drawing.Font("Wingdings 3", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
             this.buttonSlew4.ImageIndex = 0;
-            this.buttonSlew4.Location = new System.Drawing.Point(77, 159);
+            this.buttonSlew4.Location = new System.Drawing.Point(77, 165);
             this.buttonSlew4.Margin = new System.Windows.Forms.Padding(0);
             this.buttonSlew4.Name = "buttonSlew4";
             this.buttonSlew4.Size = new System.Drawing.Size(64, 64);
@@ -747,7 +752,7 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSlew1.Font = new System.Drawing.Font("Wingdings 3", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
             this.buttonSlew1.ImageIndex = 0;
-            this.buttonSlew1.Location = new System.Drawing.Point(42, 124);
+            this.buttonSlew1.Location = new System.Drawing.Point(42, 130);
             this.buttonSlew1.Margin = new System.Windows.Forms.Padding(0);
             this.buttonSlew1.Name = "buttonSlew1";
             this.buttonSlew1.Size = new System.Drawing.Size(64, 64);
@@ -756,12 +761,34 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseDown);
             this.buttonSlew1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseUp);
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.ForeColor = System.Drawing.Color.White;
+            this.label5.Location = new System.Drawing.Point(0, 48);
+            this.label5.Margin = new System.Windows.Forms.Padding(0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(22, 13);
+            this.label5.TabIndex = 14;
+            this.label5.Text = "HA";
+            // 
+            // labelHA
+            // 
+            this.labelHA.AutoSize = true;
+            this.labelHA.Dock = System.Windows.Forms.DockStyle.Right;
+            this.labelHA.ForeColor = System.Drawing.Color.Red;
+            this.labelHA.Location = new System.Drawing.Point(74, 48);
+            this.labelHA.Name = "labelHA";
+            this.labelHA.Size = new System.Drawing.Size(49, 16);
+            this.labelHA.TabIndex = 15;
+            this.labelHA.Text = "00:00:00";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(147, 422);
+            this.ClientSize = new System.Drawing.Size(147, 426);
             this.Controls.Add(this.buttonSlew2);
             this.Controls.Add(this.tableLayoutPanel4);
             this.Controls.Add(this.tableLayoutPanel1);
@@ -860,6 +887,8 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.ToolStripMenuItem unparkToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem viewHelpToolStripMenuItem;
+        private System.Windows.Forms.Label labelHA;
+        private System.Windows.Forms.Label label5;
 
 
     }

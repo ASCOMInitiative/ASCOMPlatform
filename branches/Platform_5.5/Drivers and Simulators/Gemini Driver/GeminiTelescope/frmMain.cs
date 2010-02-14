@@ -145,6 +145,7 @@ namespace ASCOM.GeminiTelescope
             toolTip1.SetToolTip(this.labelLst, Resources.MountLST);
             toolTip1.SetToolTip(this.labelRa,  Resources.MountRA);
             toolTip1.SetToolTip(this.labelDec, Resources.MountDEC);
+            toolTip1.SetToolTip(this.labelHA, Resources.MountHA);
 
             toolTip1.SetToolTip(this.checkBoxTrack, Resources.MountStopStart);
             toolTip1.SetToolTip(this.CheckBoxFlipDec, Resources.SwapDEC);
@@ -562,6 +563,7 @@ namespace ASCOM.GeminiTelescope
                 labelRa.Text = "00:00:00";
                 labelDec.Text = "+00:00:00";
                 labelLimit.Text = "00:00:00";
+                labelHA.Text = "00:00:00";
                 labelSlew.Text = Resources.dispSTOP;
                 labelPARK.Text = Resources.dispPARK;
                 labelSlew.BackColor = m_InactiveBkColor;
@@ -721,6 +723,7 @@ namespace ASCOM.GeminiTelescope
                 RightAscension = GeminiHardware.RightAscension;
                 Declination = GeminiHardware.Declination;
                 SiderealTime = GeminiHardware.SiderealTime;
+                HourAngleDisplay = HourAngle; 
 
                 // don't bother with PEC status and
                 // distance to safety while slewing: this is too
@@ -1060,6 +1063,24 @@ namespace ASCOM.GeminiTelescope
                 catch { }
             }
         }
+
+        public double HourAngleDisplay
+        {
+            set
+            {
+                SetTextCallback setText = new SetTextCallback(SetHAText);
+                string text = GeminiHardware.m_Util.HoursToHMS(value, ":", ":", "");
+                try
+                {
+                    if (InvokeRequired)
+                        this.BeginInvoke(setText, text);
+                    else
+                        SetHAText(text);
+                }
+                catch { }
+            }
+        }
+       
         private void frmMain_Load(object sender, EventArgs e)
         {
 
@@ -1102,6 +1123,11 @@ namespace ASCOM.GeminiTelescope
         private void SetDecText(string text)
         {
             labelDec.Text = text;
+        }
+
+        private void SetHAText(string text)
+        {
+            labelHA.Text = text;
         }
 
         #endregion

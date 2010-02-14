@@ -687,4 +687,7 @@ Are you sure you want to use these new values?</value>
   <data name="HelpMenu" xml:space="preserve">
     <value>Help!</value>
   </data>
+  <data name="MountHA" xml:space="preserve">
+    <value>Mount Hour Angle</value>
+  </data>
 </root>
