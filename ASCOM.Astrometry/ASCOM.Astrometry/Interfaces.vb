@@ -2171,7 +2171,7 @@ Namespace NOVAS
                                 ByRef TtJd As Double, _
                                 ByRef SecDiff As Double)
 
-        <DispId(48)> Function Cio_Ra(ByVal JdTt As Double, _
+        <DispId(48)> Function CioRa(ByVal JdTt As Double, _
                                      ByVal Accuracy As Accuracy, _
                                      ByRef RaCio As Double) As Short
 
@@ -2201,7 +2201,7 @@ Namespace NOVAS
                                         ByVal Origin As Origin, _
                                         ByVal Accuracy As Accuracy, _
                                         ByRef Pos() As Double, _
-                                        ByVal Vel() As Double) As Short
+                                        ByRef Vel() As Double) As Short
 
         <DispId(54)> Sub TransformHip(ByVal Hipparcos As CatEntry3, _
                                       ByRef Hip2000 As CatEntry3)
