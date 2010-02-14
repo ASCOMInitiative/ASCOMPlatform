@@ -251,7 +251,7 @@ namespace ASCOM.GeminiTelescope
             this.labelSlew.Padding = new System.Windows.Forms.Padding(1, 2, 1, 1);
             this.labelSlew.Size = new System.Drawing.Size(57, 20);
             this.labelSlew.TabIndex = 3;
-            this.labelSlew.Text = "SLEW";
+            this.labelSlew.Text = "STOP";
             // 
             // labelPARK
             // 
