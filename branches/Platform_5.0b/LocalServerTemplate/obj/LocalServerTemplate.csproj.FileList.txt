@@ -1,4 +1,0 @@
-obj\Debug\ResolveAssemblyReference.cache
-obj\Debug\LocalServerTemplate.csproj.ResolveComReference.cache
-obj\Debug\ASCOM.safeprojectname.frmMain.resources
-obj\Debug\LocalServerTemplate.csproj.GenerateResource.Cache
