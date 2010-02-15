@@ -231,6 +231,8 @@ namespace ASCOM.FocVide
             // HaltButton
             // 
             this.HaltButton.DataBindings.Add(new System.Windows.Forms.Binding("Visible", global::ASCOM.FocVide.Properties.Settings.Default, "sEnableHalt", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.HaltButton.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::ASCOM.FocVide.Properties.Settings.Default, "IsMoving", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.HaltButton.Enabled = global::ASCOM.FocVide.Properties.Settings.Default.IsMoving;
             this.HaltButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.HaltButton.Image = global::ASCOM.FocVide.Properties.Resources.ledred_16x16;
             this.HaltButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;

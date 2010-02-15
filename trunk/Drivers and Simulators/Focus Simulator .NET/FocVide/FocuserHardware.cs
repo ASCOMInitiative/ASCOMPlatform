@@ -15,7 +15,6 @@ namespace ASCOM.FocVide
         public static bool IsTempCompMove = false;
         public static Random xRand;
         public static System.Windows.Forms.Timer Chrono = new System.Windows.Forms.Timer();
-        public static bool _IsMoving = false;
 
         #endregion
 
@@ -26,25 +25,22 @@ namespace ASCOM.FocVide
         static FocuserHardware()
 		{
             // Temporary renamed Properties to _Properties
-            Properties.Settings.Default.Reload();
+            _Properties.Settings.Default.Reload();
             _Link = false;
             HaltRequested = false;
-            //Properties.Settings.Default.IsMoving = false;
-            //Properties.Settings.Default.Save();
-            //_IsMoving = false;
-
+            Properties.Settings.Default.IsMoving = false;
             xRand = new Random();
             Chrono.Enabled = false;
             Chrono.Interval = 3000;
             Chrono.Tick += new EventHandler(Chrono_Tick);
             Gui.Show();
         }
+        #endregion
 
+        #region Asynchronous timer
         static void Chrono_Tick(object sender, EventArgs e)
         {
-            //Properties.Settings.Default.IsMoving = false;
-            //_IsMoving = false;
-            IsMoving = false;
+            Properties.Settings.Default.IsMoving = false;
             Chrono.Enabled = false;
         }
         #endregion
@@ -52,9 +48,7 @@ namespace ASCOM.FocVide
         #region Focuser.SetupDialog() method
         public static void DoSetup()
         {
-            //_IsMoving = false;
             MyLog(eLogKind.LogOther, "Calling SetupDialog()");
-            MyLog(eLogKind.LogOther, "IsMoving : "+IsMoving.ToString());
             SetupDialogForm F = new SetupDialogForm();
             F.ShowDialog();
         }
@@ -133,10 +127,7 @@ namespace ASCOM.FocVide
             else 
             { 
                 HaltRequested = true;
-                IsMoving = false;
-                //_IsMoving = false;
                 Properties.Settings.Default.IsMoving = false;
-                Properties.Settings.Default.Save();
                 Chrono.Enabled = false;
             }
         }
@@ -194,10 +185,7 @@ namespace ASCOM.FocVide
         #region Focuser.IsMoving property
         public static bool IsMoving
         {
-            //get { return _IsMoving; }
-            //get { return Properties.Settings.Default.IsMoving; }
-            get;
-            internal set;
+            get { return Properties.Settings.Default.IsMoving; }
         }
         #endregion
 
@@ -215,7 +203,7 @@ namespace ASCOM.FocVide
                 }
                 else
                 {
-                    MyLog(eLogKind.LogMove, "Move requested, parameter = " + val.ToString());
+                    MyLog(eLogKind.LogMove, "Requested move from " + Properties.Settings.Default.sPosition.ToString() + " to " + val.ToString());
                 }
             }
             else
@@ -267,7 +255,6 @@ namespace ASCOM.FocVide
                 }
                 
                 // Really start moving, now
-                IsMoving = true;
                 Properties.Settings.Default.IsMoving = true;
                 int Start = (int)Properties.Settings.Default.sPosition;
                 MyLog(eLogKind.LogIsMoving, "Moving from "+Start.ToString()+" to "+val.ToString());
@@ -281,7 +268,6 @@ namespace ASCOM.FocVide
                             if (HaltRequested)
                             {
                                 Properties.Settings.Default.IsMoving = false;
-                                IsMoving = false;
                                 HaltRequested = false;
                                 MyLog(eLogKind.LogMove, "Focuser stopped");
                                 Properties.Settings.Default.Save();
@@ -290,7 +276,6 @@ namespace ASCOM.FocVide
                             FakeMove(1);
                             Properties.Settings.Default.sPosition++;
                         }
-
                     }
                     else
                     {
@@ -299,7 +284,6 @@ namespace ASCOM.FocVide
                             if (HaltRequested)
                             {
                                 Properties.Settings.Default.IsMoving = false;
-                                IsMoving = false;
                                 HaltRequested = false;
                                 MyLog(eLogKind.LogMove, "Focuser stopped");
                                 Properties.Settings.Default.Save();
@@ -316,8 +300,6 @@ namespace ASCOM.FocVide
                 {
                     Properties.Settings.Default.sPosition = val;
                     Properties.Settings.Default.IsMoving = true;
-                    //_IsMoving = true;
-                    IsMoving = true;
                     Chrono.Enabled = true;
                 }
                 MyLog(eLogKind.LogIsMoving, "Move done");
@@ -332,8 +314,7 @@ namespace ASCOM.FocVide
                     // Focuser.Halt() was called
                     if (HaltRequested) 
                     { 
-                        Properties.Settings.Default.IsMoving = false;
-                        IsMoving = false;
+                        Properties.Settings.Default.IsMoving = false; 
                         HaltRequested = false;
                         MyLog(eLogKind.LogMove, "Focuser stopped");
                         Properties.Settings.Default.Save();
@@ -342,7 +323,6 @@ namespace ASCOM.FocVide
                     FakeMove(1);  // Fake move
                 }
                 Properties.Settings.Default.IsMoving = false;
-                IsMoving = false;
                 MyLog(eLogKind.LogIsMoving, "Relative move done");
             }
             Properties.Settings.Default.Save();
@@ -358,7 +338,7 @@ namespace ASCOM.FocVide
         /// <param name="pStep">The number of steps.</param>
         private static void FakeMove(int pStep)
         {
-            Thread.Sleep(5);
+            Thread.Sleep(1);
         }
 
 

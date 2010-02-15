@@ -314,7 +314,7 @@ namespace ASCOM.FocVide
             this.picASCOM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picASCOM.Image = global::ASCOM.FocVide.Properties.Resources.ASCOM;
-            this.picASCOM.Location = new System.Drawing.Point(311, 9);
+            this.picASCOM.Location = new System.Drawing.Point(302, 9);
             this.picASCOM.Name = "picASCOM";
             this.picASCOM.Size = new System.Drawing.Size(48, 56);
             this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -329,7 +329,7 @@ namespace ASCOM.FocVide
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cmdCancel.Image = global::ASCOM.FocVide.Properties.Resources.button_cancel;
             this.cmdCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.cmdCancel.Location = new System.Drawing.Point(293, 115);
+            this.cmdCancel.Location = new System.Drawing.Point(284, 115);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(72, 25);
             this.cmdCancel.TabIndex = 1;
@@ -344,7 +344,7 @@ namespace ASCOM.FocVide
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.cmdOK.Image = global::ASCOM.FocVide.Properties.Resources.button_ok;
             this.cmdOK.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.cmdOK.Location = new System.Drawing.Point(293, 85);
+            this.cmdOK.Location = new System.Drawing.Point(284, 85);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(72, 24);
             this.cmdOK.TabIndex = 0;
@@ -532,7 +532,7 @@ namespace ASCOM.FocVide
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(377, 485);
+            this.ClientSize = new System.Drawing.Size(368, 485);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);

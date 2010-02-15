@@ -48,15 +48,16 @@ namespace ASCOM.FocVide
 
         private void button1_Click(object sender, EventArgs e)
         {
+            Properties.Settings.Default.PropertyChanged -= Default_PropertyChanged;
             FocuserHardware.DoSetup();
+            Properties.Settings.Default.PropertyChanged += Default_PropertyChanged;
         }
 
         private void frmMain_Load(object sender, EventArgs e)
         {
             xLog = new TextBoxTraceListener(LogBox);
             Trace.Listeners.Add(xLog);
-            Properties.Settings.Default.IsMoving = false;
-            Properties.Settings.Default.PropertyChanged += new PropertyChangedEventHandler(Default_PropertyChanged);
+            Properties.Settings.Default.PropertyChanged += Default_PropertyChanged;
             Properties.Settings.Default.Reload();
             FocuserHardware.MyLog(FocuserHardware.eLogKind.LogOther, "Init...");
         }
@@ -108,7 +109,7 @@ namespace ASCOM.FocVide
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Properties.Settings.Default.PropertyChanged -= new PropertyChangedEventHandler(Default_PropertyChanged);
+            Properties.Settings.Default.PropertyChanged -= Default_PropertyChanged;
         }
 
         private void pictureBox1_Click_1(object sender, EventArgs e)

@@ -10,20 +10,19 @@ namespace ASCOM.FocVide
         public SetupDialogForm()
         {
             InitializeComponent();
-            Properties.Settings.Default.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(Default_PropertyChanged);
         }
 
         private void cmdOK_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.Save();
-            Properties.Settings.Default.PropertyChanged -= new System.ComponentModel.PropertyChangedEventHandler(Default_PropertyChanged);
+            Properties.Settings.Default.PropertyChanged -= Default_PropertyChanged;
             Dispose();
         }
 
         private void cmdCancel_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.Reload();
-            Properties.Settings.Default.PropertyChanged -= new System.ComponentModel.PropertyChangedEventHandler(Default_PropertyChanged);
+            //Properties.Settings.Default.Reload();
+            Properties.Settings.Default.PropertyChanged -= Default_PropertyChanged;
             Dispose();
         }
 
@@ -46,7 +45,7 @@ namespace ASCOM.FocVide
 
         private void SetupDialogForm_Load(object sender, EventArgs e)
         {
-            Properties.Settings.Default.Reload();
+            Properties.Settings.Default.PropertyChanged += Default_PropertyChanged;
             HelpTempComp.Text = "If probed temperature is between " + TempMini.Value.ToString() + " K and " +
                 TempMaxi.Value.ToString() + " K, then the focuser will move forward by " +
                 Properties.Settings.Default.sStepPerDeg.ToString() + " steps each time the temperature increases by 1 K (and move backwards if decreases). " +
