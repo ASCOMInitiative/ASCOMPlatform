@@ -70,7 +70,7 @@ namespace ASCOM.OptecTCF_Driver
         // Register or unregister driver for ASCOM. This is harmless if already
         // registered or unregistered. 
         //
-        private static void RegUnregASCOM(bool bRegister)
+        public static void RegUnregASCOM(bool bRegister)
         {
             Trace.WriteLine("ASCOM Registration Started");
             Utilities.Profile P = new Utilities.Profile();
@@ -99,6 +99,7 @@ namespace ASCOM.OptecTCF_Driver
         [ComRegisterFunction]
         public static void RegisterASCOM(Type t)
         {
+            MessageBox.Show("ASCOM Registration Started");
             Debug.WriteLine("Registration Started");
             Trace.WriteLine("COMRegistration Entered.");
             RegUnregASCOM(true);
@@ -108,13 +109,14 @@ namespace ASCOM.OptecTCF_Driver
         [ComUnregisterFunction]
         public static void UnregisterASCOM(Type t)
         {
+            MessageBox.Show("ASCOM UnRegistration Started");
             RegUnregASCOM(false);
         }
         #endregion
 
-        //
-        // PUBLIC COM INTERFACE IFocuser IMPLEMENTATION
-        //
+        
+       //  PUBLIC COM INTERFACE IFocuser IMPLEMENTATION
+        
 
         #region IFocuser Members
 
@@ -174,13 +176,20 @@ namespace ASCOM.OptecTCF_Driver
 
         public void Move(int val)
         {
-            // TODO Replace this with your implementation
-            if (DeviceComm.InTempCompMode())
+
+            try
             {
-                throw new ASCOM.InvalidValueException("Attempted to move while in TempComp Mode", "", "");
-               
+                if (DeviceComm.InTempCompMode())
+                {
+                    throw new ASCOM.InvalidValueException("Attempted to move while in TempComp Mode", "", "");
+
+                }
+                DeviceComm.MoveFocus(val);
             }
-            DeviceComm.MoveFocus(val);
+            catch (Exception ex)
+            {
+                throw new DriverException("Move Command Failed.", ex);
+            }
         }        //FINISHED
 
         public int Position
