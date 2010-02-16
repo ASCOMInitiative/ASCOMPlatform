@@ -117,7 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <metadata name="ToolTips.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <data name="HelpTempComp.Text" xml:space="preserve">
-    <value>If probed temperature is between -10 K and 10 K, then the focuser will move forward by X steps each time the temperature increases by 1 K (and move backwards if decreases). Temperature is checked every XX seconds.</value>
+    <value>If probed temperature is between 0 K and 10 K, then the focuser will move forward by X steps each time the temperature increases by 1 K (and move backwards if decreases). Temperature is checked every XX seconds.</value>
+  </data>
+  <data name="IsSynchronous.ToolTip" xml:space="preserve">
+    <value>Enables synchronous moves of the focuser, that is : the focuser keeps control until the complete move is done.
+Otherwise, with an asynchronous move, the move command returns immediately while the focuser hardware is still moving to its destination.</value>
   </data>
 </root>

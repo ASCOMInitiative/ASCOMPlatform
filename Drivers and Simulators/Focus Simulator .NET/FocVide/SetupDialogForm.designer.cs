@@ -28,27 +28,16 @@ namespace ASCOM.FocVide
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetupDialogForm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.LinkFailure = new System.Windows.Forms.CheckBox();
-            this.IsSynchronous = new System.Windows.Forms.CheckBox();
-            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
-            this.label3 = new System.Windows.Forms.Label();
-            this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
-            this.LabelPosition = new System.Windows.Forms.Label();
             this.RadioRelative = new System.Windows.Forms.RadioButton();
-            this.RadioAbsolute = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.IsTemperature = new System.Windows.Forms.CheckBox();
-            this.IsHalt = new System.Windows.Forms.CheckBox();
-            this.IsStepSize = new System.Windows.Forms.CheckBox();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.IsTempCompAvailable = new System.Windows.Forms.CheckBox();
             this.picASCOM = new System.Windows.Forms.PictureBox();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.cmdOK = new System.Windows.Forms.Button();
+            this.ToolTips = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.TempMaxi = new System.Windows.Forms.NumericUpDown();
             this.TempMini = new System.Windows.Forms.NumericUpDown();
@@ -62,19 +51,31 @@ namespace ASCOM.FocVide
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.CurrentTemp = new System.Windows.Forms.TextBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.IsTemperature = new System.Windows.Forms.CheckBox();
+            this.IsHalt = new System.Windows.Forms.CheckBox();
+            this.IsStepSize = new System.Windows.Forms.CheckBox();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.IsTempCompAvailable = new System.Windows.Forms.CheckBox();
+            this.LinkFailure = new System.Windows.Forms.CheckBox();
+            this.IsSynchronous = new System.Windows.Forms.CheckBox();
+            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
+            this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
+            this.LabelPosition = new System.Windows.Forms.Label();
+            this.RadioAbsolute = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TempMaxi)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TempMini)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.UpDownPeriod)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.StepsPerDeg)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -94,82 +95,6 @@ namespace ASCOM.FocVide
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Type";
             // 
-            // LinkFailure
-            // 
-            this.LinkFailure.AutoSize = true;
-            this.LinkFailure.Enabled = false;
-            this.LinkFailure.Location = new System.Drawing.Point(6, 88);
-            this.LinkFailure.Name = "LinkFailure";
-            this.LinkFailure.Size = new System.Drawing.Size(221, 17);
-            this.LinkFailure.TabIndex = 10;
-            this.LinkFailure.Text = "Enable random \"Change link state\" failure";
-            this.LinkFailure.UseVisualStyleBackColor = true;
-            // 
-            // IsSynchronous
-            // 
-            this.IsSynchronous.AutoSize = true;
-            this.IsSynchronous.Checked = global::ASCOM.FocVide.Properties.Settings.Default.sIsSynchronous;
-            this.IsSynchronous.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ASCOM.FocVide.Properties.Settings.Default, "sIsSynchronous", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.IsSynchronous.Location = new System.Drawing.Point(6, 65);
-            this.IsSynchronous.Name = "IsSynchronous";
-            this.IsSynchronous.Size = new System.Drawing.Size(120, 17);
-            this.IsSynchronous.TabIndex = 9;
-            this.IsSynchronous.Text = "Synchronous moves";
-            this.IsSynchronous.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown3
-            // 
-            this.numericUpDown3.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::ASCOM.FocVide.Properties.Settings.Default, "sMaxStep", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.numericUpDown3.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::ASCOM.FocVide.Properties.Settings.Default, "sAbsolute", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.numericUpDown3.Enabled = global::ASCOM.FocVide.Properties.Settings.Default.sAbsolute;
-            this.numericUpDown3.Location = new System.Drawing.Point(194, 44);
-            this.numericUpDown3.Maximum = new decimal(new int[] {
-            2000000,
-            0,
-            0,
-            0});
-            this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(56, 20);
-            this.numericUpDown3.TabIndex = 8;
-            this.numericUpDown3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.numericUpDown3.Value = global::ASCOM.FocVide.Properties.Settings.Default.sMaxStep;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::ASCOM.FocVide.Properties.Settings.Default, "sAbsolute", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.label3.Enabled = global::ASCOM.FocVide.Properties.Settings.Default.sAbsolute;
-            this.label3.Location = new System.Drawing.Point(98, 46);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(90, 13);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "Maximum position";
-            // 
-            // numericUpDown4
-            // 
-            this.numericUpDown4.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::ASCOM.FocVide.Properties.Settings.Default, "sAbsolute", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.numericUpDown4.DataBindings.Add(new System.Windows.Forms.Binding("Maximum", global::ASCOM.FocVide.Properties.Settings.Default, "sMaxStep", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.numericUpDown4.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::ASCOM.FocVide.Properties.Settings.Default, "sPosition", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.numericUpDown4.Enabled = global::ASCOM.FocVide.Properties.Settings.Default.sAbsolute;
-            this.numericUpDown4.Location = new System.Drawing.Point(194, 18);
-            this.numericUpDown4.Maximum = global::ASCOM.FocVide.Properties.Settings.Default.sMaxStep;
-            this.numericUpDown4.Name = "numericUpDown4";
-            this.numericUpDown4.Size = new System.Drawing.Size(56, 20);
-            this.numericUpDown4.TabIndex = 5;
-            this.numericUpDown4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.numericUpDown4.Value = global::ASCOM.FocVide.Properties.Settings.Default.sPosition;
-            // 
-            // LabelPosition
-            // 
-            this.LabelPosition.AutoSize = true;
-            this.LabelPosition.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::ASCOM.FocVide.Properties.Settings.Default, "sAbsolute", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.LabelPosition.Enabled = global::ASCOM.FocVide.Properties.Settings.Default.sAbsolute;
-            this.LabelPosition.Location = new System.Drawing.Point(108, 20);
-            this.LabelPosition.Name = "LabelPosition";
-            this.LabelPosition.Size = new System.Drawing.Size(80, 13);
-            this.LabelPosition.TabIndex = 3;
-            this.LabelPosition.Text = "Current position";
-            // 
             // RadioRelative
             // 
             this.RadioRelative.AutoSize = true;
@@ -180,20 +105,8 @@ namespace ASCOM.FocVide
             this.RadioRelative.TabIndex = 1;
             this.RadioRelative.TabStop = true;
             this.RadioRelative.Text = "Relative";
+            this.ToolTips.SetToolTip(this.RadioRelative, "Defines a relative focuser");
             this.RadioRelative.UseVisualStyleBackColor = true;
-            // 
-            // RadioAbsolute
-            // 
-            this.RadioAbsolute.AutoSize = true;
-            this.RadioAbsolute.Checked = global::ASCOM.FocVide.Properties.Settings.Default.sAbsolute;
-            this.RadioAbsolute.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ASCOM.FocVide.Properties.Settings.Default, "sAbsolute", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.RadioAbsolute.Location = new System.Drawing.Point(6, 19);
-            this.RadioAbsolute.Name = "RadioAbsolute";
-            this.RadioAbsolute.Size = new System.Drawing.Size(66, 17);
-            this.RadioAbsolute.TabIndex = 0;
-            this.RadioAbsolute.TabStop = true;
-            this.RadioAbsolute.Text = "Absolute";
-            this.RadioAbsolute.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
@@ -211,62 +124,6 @@ namespace ASCOM.FocVide
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Capabilities";
             // 
-            // IsTemperature
-            // 
-            this.IsTemperature.AutoSize = true;
-            this.IsTemperature.Checked = global::ASCOM.FocVide.Properties.Settings.Default.sIsTemperature;
-            this.IsTemperature.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.IsTemperature.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ASCOM.FocVide.Properties.Settings.Default, "sIsTemperature", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.IsTemperature.Location = new System.Drawing.Point(6, 73);
-            this.IsTemperature.Name = "IsTemperature";
-            this.IsTemperature.Size = new System.Drawing.Size(129, 17);
-            this.IsTemperature.TabIndex = 11;
-            this.IsTemperature.Text = "Temperature available";
-            this.IsTemperature.UseVisualStyleBackColor = true;
-            this.IsTemperature.Click += new System.EventHandler(this.IsTemperature_Click);
-            // 
-            // IsHalt
-            // 
-            this.IsHalt.AutoSize = true;
-            this.IsHalt.Checked = global::ASCOM.FocVide.Properties.Settings.Default.sEnableHalt;
-            this.IsHalt.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.IsHalt.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ASCOM.FocVide.Properties.Settings.Default, "sEnableHalt", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.IsHalt.Location = new System.Drawing.Point(6, 119);
-            this.IsHalt.Name = "IsHalt";
-            this.IsHalt.Size = new System.Drawing.Size(88, 17);
-            this.IsHalt.TabIndex = 10;
-            this.IsHalt.Text = "Enable HALT";
-            this.IsHalt.UseVisualStyleBackColor = true;
-            // 
-            // IsStepSize
-            // 
-            this.IsStepSize.AutoSize = true;
-            this.IsStepSize.Checked = global::ASCOM.FocVide.Properties.Settings.Default.sIsStepSize;
-            this.IsStepSize.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.IsStepSize.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ASCOM.FocVide.Properties.Settings.Default, "sIsStepSize", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.IsStepSize.Location = new System.Drawing.Point(6, 19);
-            this.IsStepSize.Name = "IsStepSize";
-            this.IsStepSize.Size = new System.Drawing.Size(66, 17);
-            this.IsStepSize.TabIndex = 9;
-            this.IsStepSize.Text = "StepSize";
-            this.IsStepSize.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.IsStepSize.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown2
-            // 
-            this.numericUpDown2.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::ASCOM.FocVide.Properties.Settings.Default, "sMaxIncrement", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.numericUpDown2.Location = new System.Drawing.Point(86, 44);
-            this.numericUpDown2.Maximum = new decimal(new int[] {
-            2000000,
-            0,
-            0,
-            0});
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(53, 20);
-            this.numericUpDown2.TabIndex = 8;
-            this.numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.numericUpDown2.Value = global::ASCOM.FocVide.Properties.Settings.Default.sMaxIncrement;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -275,39 +132,6 @@ namespace ASCOM.FocVide
             this.label2.Size = new System.Drawing.Size(77, 13);
             this.label2.TabIndex = 7;
             this.label2.Text = "Max Increment";
-            // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::ASCOM.FocVide.Properties.Settings.Default, "sStepSize", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.numericUpDown1.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::ASCOM.FocVide.Properties.Settings.Default, "sIsStepSize", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.numericUpDown1.Enabled = global::ASCOM.FocVide.Properties.Settings.Default.sIsStepSize;
-            this.numericUpDown1.Location = new System.Drawing.Point(86, 18);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
-            2000000,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(53, 20);
-            this.numericUpDown1.TabIndex = 6;
-            this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.numericUpDown1.Value = global::ASCOM.FocVide.Properties.Settings.Default.sStepSize;
-            // 
-            // IsTempCompAvailable
-            // 
-            this.IsTempCompAvailable.AutoSize = true;
-            this.IsTempCompAvailable.Checked = global::ASCOM.FocVide.Properties.Settings.Default.sTempCompAvailable;
-            this.IsTempCompAvailable.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.IsTempCompAvailable.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ASCOM.FocVide.Properties.Settings.Default, "sTempCompAvailable", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.IsTempCompAvailable.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::ASCOM.FocVide.Properties.Settings.Default, "sIsTemperature", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.IsTempCompAvailable.Enabled = global::ASCOM.FocVide.Properties.Settings.Default.sIsTemperature;
-            this.IsTempCompAvailable.Location = new System.Drawing.Point(6, 96);
-            this.IsTempCompAvailable.Name = "IsTempCompAvailable";
-            this.IsTempCompAvailable.Size = new System.Drawing.Size(198, 17);
-            this.IsTempCompAvailable.TabIndex = 1;
-            this.IsTempCompAvailable.Text = "Temperature compensation available";
-            this.IsTempCompAvailable.UseVisualStyleBackColor = true;
-            this.IsTempCompAvailable.Click += new System.EventHandler(this.IsTempCompAvailable_Click);
             // 
             // picASCOM
             // 
@@ -381,7 +205,7 @@ namespace ASCOM.FocVide
             this.TempMaxi.DataBindings.Add(new System.Windows.Forms.Binding("Minimum", global::ASCOM.FocVide.Properties.Settings.Default, "sTempMin", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.TempMaxi.Location = new System.Drawing.Point(167, 32);
             this.TempMaxi.Maximum = new decimal(new int[] {
-            50,
+            500,
             0,
             0,
             0});
@@ -398,11 +222,6 @@ namespace ASCOM.FocVide
             this.TempMini.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::ASCOM.FocVide.Properties.Settings.Default, "sTempMin", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.TempMini.Location = new System.Drawing.Point(82, 32);
             this.TempMini.Maximum = global::ASCOM.FocVide.Properties.Settings.Default.sTempMax;
-            this.TempMini.Minimum = new decimal(new int[] {
-            40,
-            0,
-            0,
-            -2147483648});
             this.TempMini.Name = "TempMini";
             this.TempMini.Size = new System.Drawing.Size(53, 20);
             this.TempMini.TabIndex = 18;
@@ -518,22 +337,200 @@ namespace ASCOM.FocVide
             this.CurrentTemp.Text = "5 K";
             this.CurrentTemp.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // checkBox1
+            // IsTemperature
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(287, 178);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(78, 17);
-            this.checkBox1.TabIndex = 7;
-            this.checkBox1.Text = "checkBox1";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.IsTemperature.AutoSize = true;
+            this.IsTemperature.Checked = global::ASCOM.FocVide.Properties.Settings.Default.sIsTemperature;
+            this.IsTemperature.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.IsTemperature.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ASCOM.FocVide.Properties.Settings.Default, "sIsTemperature", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.IsTemperature.Location = new System.Drawing.Point(6, 73);
+            this.IsTemperature.Name = "IsTemperature";
+            this.IsTemperature.Size = new System.Drawing.Size(129, 17);
+            this.IsTemperature.TabIndex = 11;
+            this.IsTemperature.Text = "Temperature available";
+            this.ToolTips.SetToolTip(this.IsTemperature, "Enable/disable internal temperature probe.\r\nIf enabled, then the temperature is r" +
+                    "etrieved every 15sec.\r\n\r\nPlease note that this delay has nothing to do with the " +
+                    "temperature compensation period.");
+            this.IsTemperature.UseVisualStyleBackColor = true;
+            this.IsTemperature.Click += new System.EventHandler(this.IsTemperature_Click);
+            // 
+            // IsHalt
+            // 
+            this.IsHalt.AutoSize = true;
+            this.IsHalt.Checked = global::ASCOM.FocVide.Properties.Settings.Default.sEnableHalt;
+            this.IsHalt.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.IsHalt.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ASCOM.FocVide.Properties.Settings.Default, "sEnableHalt", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.IsHalt.Location = new System.Drawing.Point(6, 119);
+            this.IsHalt.Name = "IsHalt";
+            this.IsHalt.Size = new System.Drawing.Size(88, 17);
+            this.IsHalt.TabIndex = 10;
+            this.IsHalt.Text = "Enable HALT";
+            this.ToolTips.SetToolTip(this.IsHalt, "Enable/disable the Ascom HALT method.");
+            this.IsHalt.UseVisualStyleBackColor = true;
+            // 
+            // IsStepSize
+            // 
+            this.IsStepSize.AutoSize = true;
+            this.IsStepSize.Checked = global::ASCOM.FocVide.Properties.Settings.Default.sIsStepSize;
+            this.IsStepSize.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.IsStepSize.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ASCOM.FocVide.Properties.Settings.Default, "sIsStepSize", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.IsStepSize.Location = new System.Drawing.Point(6, 19);
+            this.IsStepSize.Name = "IsStepSize";
+            this.IsStepSize.Size = new System.Drawing.Size(66, 17);
+            this.IsStepSize.TabIndex = 9;
+            this.IsStepSize.Text = "StepSize";
+            this.IsStepSize.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.IsStepSize.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown2
+            // 
+            this.numericUpDown2.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::ASCOM.FocVide.Properties.Settings.Default, "sMaxIncrement", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.numericUpDown2.Location = new System.Drawing.Point(86, 44);
+            this.numericUpDown2.Maximum = new decimal(new int[] {
+            2000000,
+            0,
+            0,
+            0});
+            this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.Size = new System.Drawing.Size(53, 20);
+            this.numericUpDown2.TabIndex = 8;
+            this.numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.numericUpDown2.Value = global::ASCOM.FocVide.Properties.Settings.Default.sMaxIncrement;
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::ASCOM.FocVide.Properties.Settings.Default, "sStepSize", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.numericUpDown1.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::ASCOM.FocVide.Properties.Settings.Default, "sIsStepSize", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.numericUpDown1.Enabled = global::ASCOM.FocVide.Properties.Settings.Default.sIsStepSize;
+            this.numericUpDown1.Location = new System.Drawing.Point(86, 18);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            2000000,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(53, 20);
+            this.numericUpDown1.TabIndex = 6;
+            this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.numericUpDown1.Value = global::ASCOM.FocVide.Properties.Settings.Default.sStepSize;
+            // 
+            // IsTempCompAvailable
+            // 
+            this.IsTempCompAvailable.AutoSize = true;
+            this.IsTempCompAvailable.Checked = global::ASCOM.FocVide.Properties.Settings.Default.sTempCompAvailable;
+            this.IsTempCompAvailable.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.IsTempCompAvailable.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ASCOM.FocVide.Properties.Settings.Default, "sTempCompAvailable", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.IsTempCompAvailable.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::ASCOM.FocVide.Properties.Settings.Default, "sIsTemperature", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.IsTempCompAvailable.Enabled = global::ASCOM.FocVide.Properties.Settings.Default.sIsTemperature;
+            this.IsTempCompAvailable.Location = new System.Drawing.Point(6, 96);
+            this.IsTempCompAvailable.Name = "IsTempCompAvailable";
+            this.IsTempCompAvailable.Size = new System.Drawing.Size(198, 17);
+            this.IsTempCompAvailable.TabIndex = 1;
+            this.IsTempCompAvailable.Text = "Temperature compensation available";
+            this.ToolTips.SetToolTip(this.IsTempCompAvailable, "Check to make temperature compensation mode available to the application.");
+            this.IsTempCompAvailable.UseVisualStyleBackColor = true;
+            this.IsTempCompAvailable.Click += new System.EventHandler(this.IsTempCompAvailable_Click);
+            // 
+            // LinkFailure
+            // 
+            this.LinkFailure.AutoSize = true;
+            this.LinkFailure.Checked = global::ASCOM.FocVide.Properties.Settings.Default.sEnableLinkFail;
+            this.LinkFailure.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ASCOM.FocVide.Properties.Settings.Default, "sEnableLinkFail", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.LinkFailure.Enabled = false;
+            this.LinkFailure.Location = new System.Drawing.Point(6, 88);
+            this.LinkFailure.Name = "LinkFailure";
+            this.LinkFailure.Size = new System.Drawing.Size(221, 17);
+            this.LinkFailure.TabIndex = 10;
+            this.LinkFailure.Text = "Enable random \"Change link state\" failure";
+            this.LinkFailure.UseVisualStyleBackColor = true;
+            // 
+            // IsSynchronous
+            // 
+            this.IsSynchronous.AutoSize = true;
+            this.IsSynchronous.Checked = global::ASCOM.FocVide.Properties.Settings.Default.sIsSynchronous;
+            this.IsSynchronous.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ASCOM.FocVide.Properties.Settings.Default, "sIsSynchronous", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.IsSynchronous.Location = new System.Drawing.Point(6, 65);
+            this.IsSynchronous.Name = "IsSynchronous";
+            this.IsSynchronous.Size = new System.Drawing.Size(120, 17);
+            this.IsSynchronous.TabIndex = 9;
+            this.IsSynchronous.Text = "Synchronous moves";
+            this.ToolTips.SetToolTip(this.IsSynchronous, resources.GetString("IsSynchronous.ToolTip"));
+            this.IsSynchronous.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown3
+            // 
+            this.numericUpDown3.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::ASCOM.FocVide.Properties.Settings.Default, "sMaxStep", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.numericUpDown3.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::ASCOM.FocVide.Properties.Settings.Default, "sAbsolute", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.numericUpDown3.Enabled = global::ASCOM.FocVide.Properties.Settings.Default.sAbsolute;
+            this.numericUpDown3.Location = new System.Drawing.Point(194, 44);
+            this.numericUpDown3.Maximum = new decimal(new int[] {
+            2000000,
+            0,
+            0,
+            0});
+            this.numericUpDown3.Name = "numericUpDown3";
+            this.numericUpDown3.Size = new System.Drawing.Size(56, 20);
+            this.numericUpDown3.TabIndex = 8;
+            this.numericUpDown3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.ToolTips.SetToolTip(this.numericUpDown3, "Sets the maximum reachable position for the focuser");
+            this.numericUpDown3.Value = global::ASCOM.FocVide.Properties.Settings.Default.sMaxStep;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::ASCOM.FocVide.Properties.Settings.Default, "sAbsolute", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.label3.Enabled = global::ASCOM.FocVide.Properties.Settings.Default.sAbsolute;
+            this.label3.Location = new System.Drawing.Point(98, 46);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(90, 13);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "Maximum position";
+            // 
+            // numericUpDown4
+            // 
+            this.numericUpDown4.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::ASCOM.FocVide.Properties.Settings.Default, "sAbsolute", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.numericUpDown4.DataBindings.Add(new System.Windows.Forms.Binding("Maximum", global::ASCOM.FocVide.Properties.Settings.Default, "sMaxStep", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.numericUpDown4.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::ASCOM.FocVide.Properties.Settings.Default, "sPosition", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.numericUpDown4.Enabled = global::ASCOM.FocVide.Properties.Settings.Default.sAbsolute;
+            this.numericUpDown4.Location = new System.Drawing.Point(194, 18);
+            this.numericUpDown4.Maximum = global::ASCOM.FocVide.Properties.Settings.Default.sMaxStep;
+            this.numericUpDown4.Name = "numericUpDown4";
+            this.numericUpDown4.Size = new System.Drawing.Size(56, 20);
+            this.numericUpDown4.TabIndex = 5;
+            this.numericUpDown4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.ToolTips.SetToolTip(this.numericUpDown4, "Sets the current position of the focuser (0 <= pos <= Maximum position)");
+            this.numericUpDown4.Value = global::ASCOM.FocVide.Properties.Settings.Default.sPosition;
+            // 
+            // LabelPosition
+            // 
+            this.LabelPosition.AutoSize = true;
+            this.LabelPosition.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::ASCOM.FocVide.Properties.Settings.Default, "sAbsolute", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.LabelPosition.Enabled = global::ASCOM.FocVide.Properties.Settings.Default.sAbsolute;
+            this.LabelPosition.Location = new System.Drawing.Point(108, 20);
+            this.LabelPosition.Name = "LabelPosition";
+            this.LabelPosition.Size = new System.Drawing.Size(80, 13);
+            this.LabelPosition.TabIndex = 3;
+            this.LabelPosition.Text = "Current position";
+            // 
+            // RadioAbsolute
+            // 
+            this.RadioAbsolute.AutoSize = true;
+            this.RadioAbsolute.Checked = global::ASCOM.FocVide.Properties.Settings.Default.sAbsolute;
+            this.RadioAbsolute.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ASCOM.FocVide.Properties.Settings.Default, "sAbsolute", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.RadioAbsolute.Location = new System.Drawing.Point(6, 19);
+            this.RadioAbsolute.Name = "RadioAbsolute";
+            this.RadioAbsolute.Size = new System.Drawing.Size(66, 17);
+            this.RadioAbsolute.TabIndex = 0;
+            this.RadioAbsolute.TabStop = true;
+            this.RadioAbsolute.Text = "Absolute";
+            this.ToolTips.SetToolTip(this.RadioAbsolute, "Defines an absolute focuser");
+            this.RadioAbsolute.UseVisualStyleBackColor = true;
             // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(368, 485);
-            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -550,12 +547,8 @@ namespace ASCOM.FocVide
             this.Load += new System.EventHandler(this.SetupDialogForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
@@ -563,6 +556,10 @@ namespace ASCOM.FocVide
             ((System.ComponentModel.ISupportInitialize)(this.TempMini)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.UpDownPeriod)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.StepsPerDeg)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -603,6 +600,6 @@ namespace ASCOM.FocVide
         private System.Windows.Forms.NumericUpDown TempMaxi;
         private System.Windows.Forms.CheckBox IsSynchronous;
         private System.Windows.Forms.CheckBox LinkFailure;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.ToolTip ToolTips;
     }
 }

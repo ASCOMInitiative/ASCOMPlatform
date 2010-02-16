@@ -7,10 +7,12 @@ namespace ASCOM.FocVide
 {
     public partial class frmMain : Form
     {
-        delegate void SetTextCallback(string text);
+        //delegate void SetTextCallback(string text);
 
+        public Random rTest = new Random(30000);
         public TextBoxTraceListener xLog;
         int OldTemp = 999;
+        public static System.Windows.Forms.Timer ChronoTemp = new System.Windows.Forms.Timer();
 
         public frmMain()
         {
@@ -38,9 +40,13 @@ namespace ASCOM.FocVide
             HaltButton.Enabled = Properties.Settings.Default.IsMoving;
             HaltButton.Visible = Properties.Settings.Default.sEnableHalt;
             SetupButton.Enabled = !Properties.Settings.Default.IsMoving;
-            TimerTempComp.Interval = (int)Properties.Settings.Default.sTempCompPeriod * 1000;
-            TimerTempComp.Enabled = Properties.Settings.Default.sTempComp;
-            TextTemp.Visible = Properties.Settings.Default.sIsTemperature;
+            if (e.PropertyName != "sPosition" )
+            {
+                TimerTempComp.Interval = (int)Properties.Settings.Default.sTempCompPeriod * 1000;
+                TimerTempComp.Enabled = Properties.Settings.Default.sTempComp;
+                TextTemp.Visible = Properties.Settings.Default.sIsTemperature;
+                ChronoTemp.Enabled = Properties.Settings.Default.sIsTemperature;
+            }
             Application.DoEvents();
         }
 
@@ -48,9 +54,7 @@ namespace ASCOM.FocVide
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.PropertyChanged -= Default_PropertyChanged;
             FocuserHardware.DoSetup();
-            Properties.Settings.Default.PropertyChanged += Default_PropertyChanged;
         }
 
         private void frmMain_Load(object sender, EventArgs e)
@@ -60,6 +64,19 @@ namespace ASCOM.FocVide
             Properties.Settings.Default.PropertyChanged += Default_PropertyChanged;
             Properties.Settings.Default.Reload();
             FocuserHardware.MyLog(FocuserHardware.eLogKind.LogOther, "Init...");
+            ChronoTemp.Enabled = false;
+            ChronoTemp.Interval = 15000;
+            ChronoTemp.Tick += new EventHandler(ChronoTemp_Tick);
+        }
+
+        private void ChronoTemp_Tick(object sender, EventArgs e)   // Get temperature from focuser probe
+        {
+            try
+            {
+                TextTemp.Text = "T : " + FocuserHardware.Temperature.ToString("F1") + " K";
+                Application.DoEvents();
+            }
+            catch { }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -83,19 +100,20 @@ namespace ASCOM.FocVide
         #region Temperature compensation implementation
         private void TimerTempComp_Tick(object sender, EventArgs e)
         {
+            FocuserHardware.MyLog(FocuserHardware.eLogKind.LogTemp, "Get temperature");
             int Delta;
-            int xTemp = (int)FocuserHardware.Temperature;
-            TextTemp.Text = "T : "+xTemp.ToString() + "°";
+            int xTemp = Properties.Settings.Default.sIsTemperature ? (int)FocuserHardware.Temperature : OldTemp;
+            if (!Properties.Settings.Default.sTempComp) { return; }
             if (OldTemp == 999 || OldTemp == xTemp)
             {
                 OldTemp = xTemp;
-                FocuserHardware.MyLog(FocuserHardware.eLogKind.LogTemp, "First time or same t°. No move.");
+                FocuserHardware.MyLog(FocuserHardware.eLogKind.LogTemp, "First time or same temp. No move.");
                 return;
             }   // First time or same t° : memorise temp & no move
             if ((Properties.Settings.Default.sTempMin > xTemp) || // Probed t° not in the interval (see SetupDialog()) so don't move
                 (xTemp > Properties.Settings.Default.sTempMax))
             {
-                FocuserHardware.MyLog(FocuserHardware.eLogKind.LogTemp, "Probed t° not in range. No move.");
+                FocuserHardware.MyLog(FocuserHardware.eLogKind.LogTemp, "Probed temp. not in range. No move.");
                 return;
             }
             Delta = xTemp - OldTemp;
@@ -128,7 +146,6 @@ namespace ASCOM.FocVide
                 MessageBox.Show(other.Message);
             }
         }
-
     }
 
     #region TextBox TraceListener
