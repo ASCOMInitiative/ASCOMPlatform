@@ -199,6 +199,8 @@ namespace ASCOM.FocVide
             // 
             // TimerTempComp
             // 
+            this.TimerTempComp.Enabled = global::ASCOM.FocVide.Properties.Settings.Default.sTempComp;
+            this.TimerTempComp.Interval = 5000;
             this.TimerTempComp.Tick += new System.EventHandler(this.TimerTempComp_Tick);
             // 
             // TextTemp
@@ -211,7 +213,7 @@ namespace ASCOM.FocVide
             this.TextTemp.Name = "TextTemp";
             this.TextTemp.Size = new System.Drawing.Size(101, 25);
             this.TextTemp.TabIndex = 19;
-            this.TextTemp.Text = "T : 10,5°";
+            this.TextTemp.Text = "T : 210,5 K";
             this.TextTemp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.TextTemp.Visible = global::ASCOM.FocVide.Properties.Settings.Default.sIsTemperature;
             // 

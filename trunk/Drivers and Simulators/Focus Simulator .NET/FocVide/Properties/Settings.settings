@@ -54,12 +54,15 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="sTempMax" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">10</Value>
+      <Value Profile="(Default)">320</Value>
     </Setting>
     <Setting Name="sTempMin" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">-10</Value>
+      <Value Profile="(Default)">200</Value>
     </Setting>
     <Setting Name="sIsSynchronous" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="sEnableLinkFail" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>

@@ -233,7 +233,7 @@ namespace ASCOM.FocVide.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        [global::System.Configuration.DefaultSettingValueAttribute("320")]
         public decimal sTempMax {
             get {
                 return ((decimal)(this["sTempMax"]));
@@ -245,7 +245,7 @@ namespace ASCOM.FocVide.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("-10")]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
         public decimal sTempMin {
             get {
                 return ((decimal)(this["sTempMin"]));
@@ -264,6 +264,18 @@ namespace ASCOM.FocVide.Properties {
             }
             set {
                 this["sIsSynchronous"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool sEnableLinkFail {
+            get {
+                return ((bool)(this["sEnableLinkFail"]));
+            }
+            set {
+                this["sEnableLinkFail"] = value;
             }
         }
     }

@@ -13,12 +13,11 @@ namespace ASCOM.FocVide
         public static bool HaltRequested;
         public static frmMain Gui = new frmMain();
         public static bool IsTempCompMove = false;
-        public static Random xRand;
+        public static Random xRand, xRandFail;
         public static System.Windows.Forms.Timer Chrono = new System.Windows.Forms.Timer();
-
         #endregion
 
-        private static bool _Link;
+        protected static bool _Link;
 
         #region Focuser.Constructor
 
@@ -30,11 +29,14 @@ namespace ASCOM.FocVide
             HaltRequested = false;
             Properties.Settings.Default.IsMoving = false;
             xRand = new Random();
+            xRandFail = new Random(30000);
             Chrono.Enabled = false;
             Chrono.Interval = 3000;
             Chrono.Tick += new EventHandler(Chrono_Tick);
+            
             Gui.Show();
         }
+
         #endregion
 
         #region Asynchronous timer
@@ -144,13 +146,18 @@ namespace ASCOM.FocVide
             }
             set
             {
+                
                 if (Properties.Settings.Default.sTempCompAvailable)
                 {
-                    MyLog(eLogKind.LogTemp, "Setting temperature compensation "+(value ? "ON" : "OFF"));
+                    MyLog(eLogKind.LogTemp, "Setting temperature compensation " + (value ? "ON" : "OFF")+" : OK");
                     Properties.Settings.Default.sTempComp = value;
                     Properties.Settings.Default.Save();
                 }
-                else throw new ASCOM.DriverException();
+                else
+                {
+                    MyLog(eLogKind.LogTemp, "Setting temperature compensation " + (value ? "ON" : "OFF")+" : ERROR");
+                    throw new ASCOM.DriverException();
+                }
             }
         }
         #endregion
@@ -171,13 +178,14 @@ namespace ASCOM.FocVide
         {
             get 
             {
-                MyLog(eLogKind.LogTemp, "Temperature request");
                 if (Properties.Settings.Default.sIsTemperature) 
                 {
-                    // Get a simulated t° near the user specified range
-                    return (double)((int)Properties.Settings.Default.sTempMin + 10 * xRand.NextDouble());
+                    // Get a simulated temperature near the user specified range
+                    double xTemp = (double)((int)Properties.Settings.Default.sTempMin + 10 * xRand.NextDouble());
+                    MyLog(eLogKind.LogTemp, "Temperature request : "+xTemp.ToString("F1"));
+                    return xTemp;
                 }
-                else throw new ASCOM.DriverException();
+                else throw new ASCOM.DriverException();  // Unless otherwise specified in the specs, this excep
             }
         }
         #endregion
@@ -201,10 +209,6 @@ namespace ASCOM.FocVide
                     MyLog(eLogKind.LogOther, "No move because T° compensation is ON");
                     return;
                 }
-                else
-                {
-                    MyLog(eLogKind.LogMove, "Requested move from " + Properties.Settings.Default.sPosition.ToString() + " to " + val.ToString());
-                }
             }
             else
             {
@@ -213,6 +217,7 @@ namespace ASCOM.FocVide
             HaltRequested = false;
             if (Properties.Settings.Default.sAbsolute)
             {
+                MyLog(eLogKind.LogMove, "Requested move from " + Properties.Settings.Default.sPosition.ToString() + " to " + val.ToString());
                 DestPosition = (val > (int)Properties.Settings.Default.sMaxStep ? (int)Properties.Settings.Default.sMaxStep : val);
 
                 if (val == Properties.Settings.Default.sPosition)
@@ -333,9 +338,9 @@ namespace ASCOM.FocVide
         #region private methods
 
         /// <summary>
-        /// Fake move. Use to add some delays between each motor step
+        /// Fake move. Used to add some delays between each motor step
         /// </summary>
-        /// <param name="pStep">The number of steps.</param>
+        /// <param name="pStep">The number of steps. Not meaningful here, of course.</param>
         private static void FakeMove(int pStep)
         {
             Thread.Sleep(1);
