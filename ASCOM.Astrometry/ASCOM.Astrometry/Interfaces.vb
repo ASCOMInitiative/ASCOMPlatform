@@ -1879,28 +1879,36 @@ Namespace NOVAS
     <Guid("5EF15982-D79E-42f7-B20B-E83232E2B86B"), ComVisible(True)> _
     Public Interface INOVAS3
 
-        <DispId(1)> Function ReadEph(ByVal Mp As Integer, _
+        ' PlanetEphemeris, ReadEph, SolarSystem and State relate to reading ephemeris values
+
+        <DispId(1)> Function PlanetEphemeris(ByRef Tjd() As Double, _
+                                             ByVal Target As Target, _
+                                             ByVal Center As Target, _
+                                             ByRef Position() As Double, _
+                                             ByRef Velocity() As Double) As Short
+
+        <DispId(2)> Function ReadEph(ByVal Mp As Integer, _
                                      ByVal Name As String, _
                                      ByVal Jd As Double, _
                                      ByRef Err As Integer) As Double()
 
-        <DispId(2)> Function AppStar(ByVal JdTt As Double, _
-                                     ByVal Star As CatEntry3, _
-                                     ByVal Accuracy As Accuracy, _
-                                     ByRef Ra As Double, _
-                                     ByRef Dec As Double) As Short
+        <DispId(1)> Function SolarSystem(ByVal Tjd As Double, _
+                                         ByVal Body As Body, _
+                                         ByVal Origin As Origin, _
+                                         ByRef Pos() As Double, _
+                                         ByRef Vel() As Double) As Short
 
-        <DispId(3)> Function VirtualStar(ByVal JdTt As Double, _
-                                         ByVal Star As CatEntry3, _
-                                         ByVal Accuracy As Accuracy, _
-                                         ByRef Ra As Double, _
-                                         ByRef Dec As Double) As Short
+        <DispId(3)> Function State(ByRef Jed() As Double, _
+                                   ByVal Target As Target, _
+                                   ByRef TargetPos() As Double, _
+                                   ByRef TargetVel() As Double) As Short
 
-        <DispId(4)> Function AstroStar(ByVal JdTt As Double, _
-                                       ByVal Star As CatEntry3, _
-                                       ByVal Accuracy As Accuracy, _
-                                       ByRef Ra As Double, _
-                                       ByRef Dec As Double) As Short
+        ' The following methods come from NOVAS3
+
+        <DispId(37)> Sub Aberration(ByVal Pos() As Double, _
+                                    ByVal Vel() As Double, _
+                                    ByVal LightTime As Double, _
+                                    ByRef Pos2() As Double)
 
         <DispId(5)> Function AppPlanet(ByVal JdTt As Double, _
                                        ByVal SsBody As Object3, _
@@ -1909,12 +1917,11 @@ Namespace NOVAS
                                        ByRef Dec As Double, _
                                        ByRef Dis As Double) As Short
 
-        <DispId(6)> Function VirtualPlanet(ByVal JdTt As Double, _
-                                           ByVal SsBody As Object3, _
-                                           ByVal Accuracy As Accuracy, _
-                                           ByRef Ra As Double, _
-                                           ByRef Dec As Double, _
-                                           ByRef Dis As Double) As Short
+        <DispId(2)> Function AppStar(ByVal JdTt As Double, _
+                                     ByVal Star As CatEntry3, _
+                                     ByVal Accuracy As Accuracy, _
+                                     ByRef Ra As Double, _
+                                     ByRef Dec As Double) As Short
 
         <DispId(7)> Function AstroPlanet(ByVal JdTt As Double, _
                                          ByVal SsBody As Object3, _
@@ -1923,59 +1930,79 @@ Namespace NOVAS
                                          ByRef Dec As Double, _
                                          ByRef Dis As Double) As Short
 
-        <DispId(8)> Function TopoStar(ByVal JdTt As Double, _
-                                      ByVal DeltaT As Double, _
-                                      ByVal Star As CatEntry3, _
-                                      ByVal Position As OnSurface, _
-                                      ByVal Accuracy As Accuracy, _
-                                      ByRef Ra As Double, _
-                                      ByRef Dec As Double) As Short
-
-        <DispId(9)> Function LocalStar(ByVal JdTt As Double, _
-                                       ByVal DeltaT As Double, _
+        <DispId(4)> Function AstroStar(ByVal JdTt As Double, _
                                        ByVal Star As CatEntry3, _
-                                       ByVal Position As OnSurface, _
                                        ByVal Accuracy As Accuracy, _
                                        ByRef Ra As Double, _
                                        ByRef Dec As Double) As Short
 
-        <DispId(10)> Function TopoPlanet(ByVal JdTt As Double, _
-                                         ByVal SsBody As Object3, _
-                                         ByVal DeltaT As Double, _
-                                         ByVal Position As OnSurface, _
-                                         ByVal Accuracy As Accuracy, _
-                                         ByRef Ra As Double, _
-                                         ByRef Dec As Double, _
-                                         ByRef Dis As Double) As Short
+        <DispId(31)> Sub Bary2Obs(ByVal Pos() As Double, _
+                                  ByVal PosObs() As Double, _
+                                  ByRef Pos2() As Double, _
+                                  ByRef Lighttime As Double)
 
-        <DispId(11)> Function LocalPlanet(ByVal JdTt As Double, _
-                                          ByVal SsBody As Object3, _
-                                          ByVal DeltaT As Double, _
-                                          ByVal Position As OnSurface, _
-                                          ByVal Accuracy As Accuracy, _
-                                          ByRef Ra As Double, _
-                                          ByRef Dec As Double, _
-                                          ByRef Dis As Double) As Short
+        <DispId(59)> Sub CalDate(ByVal Tjd As Double, _
+                                 ByRef Year As Short, _
+                                 ByRef Month As Short, _
+                                 ByRef Day As Short, _
+                                 ByRef Hour As Double)
 
-        <DispId(12)> Function MeanStar(ByVal JdTt As Double, _
-                                       ByVal Ra As Double, _
-                                       ByVal Dec As Double, _
+        <DispId(27)> Function CelPole(ByVal Tjd As Double, _
+                                      ByVal Type As PoleOffsetCorrectionType, _
+                                      ByVal Dpole1 As Double, _
+                                      ByVal Dpole2 As Double) As Short
+
+        <DispId(51)> Function CioArray(ByVal JdTdb As Double, _
+                                       ByVal NPts As Integer, _
+                                       ByRef Cio As ArrayList) As Short
+
+        <DispId(50)> Function CioBasis(ByVal JdTdbEquionx As Double, _
+                                       ByVal RaCioEquionx As Double, _
+                                       ByVal RefSys As ReferenceSystem, _
                                        ByVal Accuracy As Accuracy, _
-                                       ByRef IRa As Double, _
-                                       ByRef IDec As Double) As Short
+                                       ByRef x As Double, _
+                                       ByRef y As Double, _
+                                       ByRef z As Double) As Short
 
-        <DispId(13)> Function Place(ByVal JdTt As Double, _
-                                    ByVal CelObject As Object3, _
-                                    ByVal Location As Observer, _
-                                    ByVal DeltaT As Double, _
-                                    ByVal CoordSys As CoordSys, _
+        <DispId(49)> Function CioLocation(ByVal JdTdb As Double, _
+                                          ByVal Accuracy As Accuracy, _
+                                          ByRef RaCio As Double, _
+                                          ByRef RefSys As ReferenceSystem) As Short
+
+        <DispId(48)> Function CioRa(ByVal JdTt As Double, _
                                     ByVal Accuracy As Accuracy, _
-                                    ByRef Output As SkyPos) As Short
+                                    ByRef RaCio As Double) As Short
 
-        <DispId(14)> Sub Equ2Gal(ByVal RaI As Double, _
-                                 ByVal DecI As Double, _
-                                 ByRef GLon As Double, _
-                                 ByRef GLat As Double)
+        <DispId(34)> Function DLight(ByVal Pos1() As Double, _
+                                     ByVal PosObs() As Double) As Double
+
+        <DispId(28)> Function EeCt(ByVal JdHigh As Double, _
+                                   ByVal JdLow As Double, _
+                                   ByVal Accuracy As Accuracy) As Double
+
+        <DispId(53)> Function Ephemeris(ByVal Jd() As Double, _
+                                        ByVal CelObj As Object3, _
+                                        ByVal Origin As Origin, _
+                                        ByVal Accuracy As Accuracy, _
+                                        ByRef Pos() As Double, _
+                                        ByRef Vel() As Double) As Short
+
+        <DispId(21)> Function Era(ByVal JdHigh As Double, _
+                                  ByVal JdLow As Double) As Double
+
+        <DispId(26)> Sub ETilt(ByVal JdTdb As Double, _
+                               ByVal Accuracy As Accuracy, _
+                               ByRef Mobl As Double, _
+                               ByRef Tobl As Double, _
+                               ByRef Ee As Double, _
+                               ByRef Dpsi As Double, _
+                               ByRef Deps As Double)
+
+        <DispId(17)> Function Ecl2EquVec(ByVal JdTt As Double, _
+                                         ByVal CoordSys As CoordSys, _
+                                         ByVal Accuracy As Accuracy, _
+                                         ByVal Pos1() As Double, _
+                                         ByRef Pos2() As Double) As Short
 
         <DispId(15)> Function Equ2Ecl(ByVal JdTt As Double, _
                                       ByVal CoordSys As CoordSys, _
@@ -1991,11 +2018,10 @@ Namespace NOVAS
                                          ByVal Pos1() As Double, _
                                          ByRef Pos2() As Double) As Short
 
-        <DispId(17)> Function Ecl2EquVec(ByVal JdTt As Double, _
-                                         ByVal CoordSys As CoordSys, _
-                                         ByVal Accuracy As Accuracy, _
-                                         ByVal Pos1() As Double, _
-                                         ByRef Pos2() As Double) As Short
+        <DispId(14)> Sub Equ2Gal(ByVal RaI As Double, _
+                                 ByVal DecI As Double, _
+                                 ByRef GLon As Double, _
+                                 ByRef GLat As Double)
 
         <DispId(18)> Sub Equ2Hor(ByVal Jd_Ut1 As Double, _
                                  ByVal DeltT As Double, _
@@ -2011,6 +2037,13 @@ Namespace NOVAS
                                  ByRef RaR As Double, _
                                  ByRef DecR As Double)
 
+        <DispId(29)> Sub FrameTie(ByVal Pos1() As Double, _
+                                  ByVal Direction As FrameConversionDirection, _
+                                  ByRef Pos2() As Double)
+
+        <DispId(42)> Sub FundArgs(ByVal t As Double, _
+                                  ByRef a() As Double)
+
         <DispId(19)> Function Gcrs2Equ(ByVal JdTt As Double, _
                                        ByVal CoordSys As CoordSys, _
                                        ByVal Accuracy As Accuracy, _
@@ -2019,92 +2052,12 @@ Namespace NOVAS
                                        ByRef Ra As Double, _
                                        ByRef Dec As Double) As Short
 
-        <DispId(20)> Function SiderealTime(ByVal JdHigh As Double, _
-                                           ByVal JdLow As Double, _
-                                           ByVal DeltaT As Double, _
-                                           ByVal GstType As GstType, _
-                                           ByVal Method As Method, _
-                                           ByVal Accuracy As Accuracy, _
-                                           ByRef Gst As Double) As Short
-
-        <DispId(21)> Function Era(ByVal JdHigh As Double, _
-                                  ByVal JdLow As Double) As Double
-
-        <DispId(22)> Function Ter2Cel(ByVal JdHigh As Double, _
-                                      ByVal JdLow As Double, _
-                                      ByVal DeltaT As Double, _
-                                      ByVal Method As Method, _
-                                      ByVal Accuracy As Accuracy, _
-                                      ByVal OutputOption As OutputVectorOption, _
-                                      ByVal x As Double, _
-                                      ByVal y As Double, _
-                                      ByVal VecT() As Double, _
-                                      ByRef VecC() As Double) As Short
-
-        <DispId(23)> Sub Spin(ByVal Angle As Double, _
-                              ByVal Pos1() As Double, _
-                              ByRef Pos2() As Double)
-
-        <DispId(24)> Sub Wobble(ByVal Tjd As Double, _
-                                ByVal x As Double, _
-                                ByVal y As Double, _
-                                ByVal Pos1() As Double, _
-                                ByRef Pos2() As Double)
-
-        <DispId(25)> Sub Terra(ByVal Location As OnSurface, _
-                               ByVal St As Double, _
-                               ByRef Pos() As Double, _
-                               ByRef Vel() As Double)
-
-        <DispId(26)> Sub ETilt(ByVal JdTdb As Double, _
-                               ByVal Accuracy As Accuracy, _
-                               ByRef Mobl As Double, _
-                               ByRef Tobl As Double, _
-                               ByRef Ee As Double, _
-                               ByRef Dpsi As Double, _
-                               ByRef Deps As Double)
-
-        <DispId(27)> Function CelPole(ByVal Tjd As Double, _
-                                      ByVal Type As PoleOffsetCorrectionType, _
-                                      ByVal Dpole1 As Double, _
-                                      ByVal Dpole2 As Double) As Short
-
-        <DispId(28)> Function EeCt(ByVal JdHigh As Double, _
-                                   ByVal JdLow As Double, _
-                                   ByVal Accuracy As Accuracy) As Double
-
-        <DispId(29)> Sub FrameTie(ByVal Pos1() As Double, _
-                                  ByVal Direction As FrameConversionDirection, _
-                                  ByRef Pos2() As Double)
-
-        <DispId(30)> Sub ProperMotion(ByVal JdTdb1 As Double, _
-                                      ByVal Pos() As Double, _
-                                      ByVal Vel() As Double, _
-                                      ByVal JdTdb2 As Double, _
-                                      ByRef Pos2() As Double)
-
-        <DispId(31)> Sub Bary2Obs(ByVal Pos() As Double, _
-                                  ByVal PosObs() As Double, _
-                                  ByRef Pos2() As Double, _
-                                  ByRef Lighttime As Double)
-
         <DispId(32)> Function GeoPosVel(ByVal JdTt As Double, _
                                         ByVal DeltaT As Double, _
                                         ByVal Accuracy As Accuracy, _
-                                        ByVal Obs As ObserverLocation, _
+                                        ByVal Obs As Observer, _
                                         ByRef Pos() As Double, _
                                         ByRef Vel() As Double) As Short
-
-        <DispId(33)> Function LightTime(ByVal JdTdb As Double, _
-                                        ByVal SsObject As Object3, _
-                                        ByVal PosObs() As Double, _
-                                        ByVal TLight0 As Double, _
-                                        ByVal Accuracy As Accuracy, _
-                                        ByRef Pos() As Double, _
-                                        ByRef TLight As Double) As Short
-
-        <DispId(34)> Function DLight(ByVal Pos1() As Double, _
-                                     ByVal PosObs() As Double) As Double
 
         <DispId(35)> Function GravDef(ByVal JdTdb As Double, _
                                       ByVal LocCode As EarthDeflection, _
@@ -2119,121 +2072,44 @@ Namespace NOVAS
                                  ByVal RMass As Double, _
                                  ByRef Pos2() As Double)
 
-        <DispId(37)> Sub Aberration(ByVal Pos() As Double, _
-                                    ByVal Vel() As Double, _
-                                    ByVal LightTime As Double, _
-                                    ByRef Pos2() As Double)
-
-        <DispId(38)> Sub RadVel(ByVal CelObject As Object3, _
-                                ByVal Pos() As Double, _
-                                ByVal Vel() As Double, _
-                                ByVal VelObs() As Double, _
-                                ByVal DObsGeo As Double, _
-                                ByVal DObsSun As Double, _
-                                ByVal DObjSun As Double, _
-                                ByRef Rv As Double)
-
-        <DispId(39)> Function Precession(ByVal JdTdb1 As Double, _
-                                         ByVal Pos1() As Double, _
-                                         ByVal JdTdb2 As Double, _
-                                         ByRef Pos2() As Double) As Short
-
-        <DispId(40)> Sub Nutation(ByVal JdTdb As Double, _
-                                  ByVal Direction As NutationDirection, _
-                                  ByVal Accuracy As Accuracy, _
-                                  ByVal Pos() As Double, _
-                                  ByRef Pos2() As Double)
-
-        <DispId(41)> Sub NutationAngles(ByVal t As Double, _
-                                        ByVal Accuracy As Accuracy, _
-                                        ByRef DPsi As Double, _
-                                        ByRef DEps As Double)
-
-        <DispId(42)> Sub FundArgs(ByVal t As Double, _
-                                  ByRef a() As Double)
-
-        <DispId(43)> Function MeanObliq(ByVal JdTdb As Double) As Double
-
-        <DispId(44)> Function Vector2RaDec(ByVal Pos() As Double, _
-                                           ByRef Ra As Double, _
-                                           ByRef Dec As Double) As Short
-
-        <DispId(45)> Sub RaDec2Vector(ByVal Ra As Double, _
-                                      ByVal Dec As Double, _
-                                      ByVal Dist As Double, _
-                                      ByRef Vector() As Double)
-
-        <DispId(46)> Sub StarVectors(ByVal Star As CatEntry3, _
-                                     ByRef Pos() As Double, _
-                                     ByRef Vel() As Double)
-
-        <DispId(47)> Sub Tdb2Tt(ByVal TdbJd As Double, _
-                                ByRef TtJd As Double, _
-                                ByRef SecDiff As Double)
-
-        <DispId(48)> Function CioRa(ByVal JdTt As Double, _
-                                     ByVal Accuracy As Accuracy, _
-                                     ByRef RaCio As Double) As Short
-
-        <DispId(49)> Function CioLocation(ByVal JdTdb As Double, _
-                                          ByVal Accuracy As Accuracy, _
-                                          ByRef RaCio As Double, _
-                                          ByRef RefSys As ReferenceSystem) As Short
-
-        <DispId(50)> Function CioBasis(ByVal JdTdbEquionx As Double, _
-                                       ByVal RaCioEquionx As Double, _
-                                       ByVal RefSys As ReferenceSystem, _
-                                       ByVal Accuracy As Accuracy, _
-                                       ByRef x As Double, _
-                                       ByRef y As Double, _
-                                       ByRef z As Double) As Short
-
-        <DispId(51)> Function CioArray(ByVal JdTdb As Double, _
-                                       ByVal NPts As Integer, _
-                                       ByRef Cio() As RAOfCio) As Short
-
         <DispId(52)> Function IraEquinox(ByVal JdTdb As Double, _
-                                         ByVal Equinox As EquinoxType, _
-                                         ByVal Accuracy As Accuracy) As Double
-
-        <DispId(53)> Function Ephemeris(ByVal Jd() As Double, _
-                                        ByVal CelObj As Object3, _
-                                        ByVal Origin As Origin, _
-                                        ByVal Accuracy As Accuracy, _
-                                        ByRef Pos() As Double, _
-                                        ByRef Vel() As Double) As Short
-
-        <DispId(54)> Sub TransformHip(ByVal Hipparcos As CatEntry3, _
-                                      ByRef Hip2000 As CatEntry3)
-
-        <DispId(55)> Function TransformCat(ByVal TransformOption As TransformationOption3, _
-                                           ByVal DateInCat As Double, _
-                                           ByVal InCat As CatEntry3, _
-                                           ByVal DateNewCat As Double, _
-                                           ByVal NewCatId As String, _
-                                           ByRef NewCat As CatEntry3) As Short
-
-        <DispId(56)> Sub LimbAngle(ByVal PosObj() As Double, _
-                                   ByVal PosObs() As Double, _
-                                   ByRef LimbAng As Double, _
-                                   ByRef NadirAng As Double)
-
-        <DispId(57)> Function Refract(ByVal Location As OnSurface, _
-                                      ByVal RefOption As RefractionOption, _
-                                      ByVal ZdObs As Double) As Double
+                                        ByVal Equinox As EquinoxType, _
+                                        ByVal Accuracy As Accuracy) As Double
 
         <DispId(58)> Function JulianDate(ByVal Year As Short, _
                                          ByVal Month As Short, _
                                          ByVal Day As Short, _
                                          ByVal Hour As Double) As Double
 
-        <DispId(59)> Sub CalDate(ByVal Tjd As Double, _
-                                 ByRef Year As Short, _
-                                 ByRef Month As Short, _
-                                 ByRef Day As Short, _
-                                 ByRef Hour As Double)
+        <DispId(33)> Function LightTime(ByVal JdTdb As Double, _
+                                        ByVal SsObject As Object3, _
+                                        ByVal PosObs() As Double, _
+                                        ByVal TLight0 As Double, _
+                                        ByVal Accuracy As Accuracy, _
+                                        ByRef Pos() As Double, _
+                                        ByRef TLight As Double) As Short
 
-        <DispId(60)> Function NormAng(ByVal Angle As Double) As Double
+        <DispId(56)> Sub LimbAngle(ByVal PosObj() As Double, _
+                                   ByVal PosObs() As Double, _
+                                   ByRef LimbAng As Double, _
+                                   ByRef NadirAng As Double)
+
+        <DispId(11)> Function LocalPlanet(ByVal JdTt As Double, _
+                                          ByVal SsBody As Object3, _
+                                          ByVal DeltaT As Double, _
+                                          ByVal Position As OnSurface, _
+                                          ByVal Accuracy As Accuracy, _
+                                          ByRef Ra As Double, _
+                                          ByRef Dec As Double, _
+                                          ByRef Dis As Double) As Short
+
+        <DispId(9)> Function LocalStar(ByVal JdTt As Double, _
+                                       ByVal DeltaT As Double, _
+                                       ByVal Star As CatEntry3, _
+                                       ByVal Position As OnSurface, _
+                                       ByVal Accuracy As Accuracy, _
+                                       ByRef Ra As Double, _
+                                       ByRef Dec As Double) As Short
 
         <DispId(61)> Sub MakeCatEntry(ByVal StarName As String, _
                                       ByVal Catalog As String, _
@@ -2245,6 +2121,10 @@ Namespace NOVAS
                                       ByVal Parallax As Double, _
                                       ByVal RadVel As Double, _
                                       ByRef Star As CatEntry3)
+
+        <DispId(68)> Sub MakeInSpace(ByVal ScPos() As Double, _
+                                     ByVal ScVel() As Double, _
+                                     ByRef ObsSpace As InSpace)
 
         <DispId(62)> Function MakeObject(ByVal Type As ObjectType, _
                                          ByVal Number As Short, _
@@ -2259,16 +2139,16 @@ Namespace NOVAS
 
         <DispId(64)> Sub MakeObserverAtGeocenter(ByRef ObsAtGeocenter As Observer)
 
+        <DispId(66)> Sub MakeObserverInSpace(ByVal ScPos() As Double, _
+                                             ByVal ScVel() As Double, _
+                                             ByRef ObsInSpace As Observer)
+
         <DispId(65)> Sub MakeObserverOnSurface(ByVal Latitude As Double, _
                                                ByVal Longitude As Double, _
                                                ByVal Height As Double, _
                                                ByVal Temperature As Double, _
                                                ByVal Pressure As Double, _
                                                ByRef ObsOnSurface As Observer)
-
-        <DispId(66)> Sub MakeObserverInSpace(ByVal ScPos() As Double, _
-                                             ByVal ScVel() As Double, _
-                                             ByRef ObsInSpace As Observer)
 
         <DispId(67)> Sub MakeOnSurface(ByVal Latitude As Double, _
                                        ByVal Longitude As Double, _
@@ -2277,10 +2157,150 @@ Namespace NOVAS
                                        ByVal Pressure As Double, _
                                        ByRef ObsSurface As OnSurface)
 
-        <DispId(68)> Sub MakeInSpace(ByVal ScPos() As Double, _
-                                     ByVal ScVel() As Double, _
-                                     ByRef ObsSpace As InSpace)
+        <DispId(43)> Function MeanObliq(ByVal JdTdb As Double) As Double
 
+        <DispId(12)> Function MeanStar(ByVal JdTt As Double, _
+                                       ByVal Ra As Double, _
+                                       ByVal Dec As Double, _
+                                       ByVal Accuracy As Accuracy, _
+                                       ByRef IRa As Double, _
+                                       ByRef IDec As Double) As Short
+
+        <DispId(60)> Function NormAng(ByVal Angle As Double) As Double
+
+        <DispId(40)> Sub Nutation(ByVal JdTdb As Double, _
+                                  ByVal Direction As NutationDirection, _
+                                  ByVal Accuracy As Accuracy, _
+                                  ByVal Pos() As Double, _
+                                  ByRef Pos2() As Double)
+
+        <DispId(41)> Sub NutationAngles(ByVal t As Double, _
+                                        ByVal Accuracy As Accuracy, _
+                                        ByRef DPsi As Double, _
+                                        ByRef DEps As Double)
+
+        <DispId(13)> Function Place(ByVal JdTt As Double, _
+                                    ByVal CelObject As Object3, _
+                                    ByVal Location As Observer, _
+                                    ByVal DeltaT As Double, _
+                                    ByVal CoordSys As CoordSys, _
+                                    ByVal Accuracy As Accuracy, _
+                                    ByRef Output As SkyPos) As Short
+
+        <DispId(39)> Function Precession(ByVal JdTdb1 As Double, _
+                                         ByVal Pos1() As Double, _
+                                         ByVal JdTdb2 As Double, _
+                                         ByRef Pos2() As Double) As Short
+
+        <DispId(30)> Sub ProperMotion(ByVal JdTdb1 As Double, _
+                                      ByVal Pos() As Double, _
+                                      ByVal Vel() As Double, _
+                                      ByVal JdTdb2 As Double, _
+                                      ByRef Pos2() As Double)
+
+        <DispId(45)> Sub RaDec2Vector(ByVal Ra As Double, _
+                                      ByVal Dec As Double, _
+                                      ByVal Dist As Double, _
+                                      ByRef Vector() As Double)
+
+        <DispId(38)> Sub RadVel(ByVal CelObject As Object3, _
+                                ByVal Pos() As Double, _
+                                ByVal Vel() As Double, _
+                                ByVal VelObs() As Double, _
+                                ByVal DObsGeo As Double, _
+                                ByVal DObsSun As Double, _
+                                ByVal DObjSun As Double, _
+                                ByRef Rv As Double)
+
+        <DispId(57)> Function Refract(ByVal Location As OnSurface, _
+                                      ByVal RefOption As RefractionOption, _
+                                      ByVal ZdObs As Double) As Double
+
+        <DispId(46)> Sub StarVectors(ByVal Star As CatEntry3, _
+                                     ByRef Pos() As Double, _
+                                     ByRef Vel() As Double)
+
+        <DispId(20)> Function SiderealTime(ByVal JdHigh As Double, _
+                                           ByVal JdLow As Double, _
+                                           ByVal DeltaT As Double, _
+                                           ByVal GstType As GstType, _
+                                           ByVal Method As Method, _
+                                           ByVal Accuracy As Accuracy, _
+                                           ByRef Gst As Double) As Short
+
+        <DispId(23)> Sub Spin(ByVal Angle As Double, _
+                              ByVal Pos1() As Double, _
+                              ByRef Pos2() As Double)
+
+        <DispId(47)> Sub Tdb2Tt(ByVal TdbJd As Double, _
+                                ByRef TtJd As Double, _
+                                ByRef SecDiff As Double)
+
+        <DispId(22)> Function Ter2Cel(ByVal JdHigh As Double, _
+                                      ByVal JdLow As Double, _
+                                      ByVal DeltaT As Double, _
+                                      ByVal Method As Method, _
+                                      ByVal Accuracy As Accuracy, _
+                                      ByVal OutputOption As OutputVectorOption, _
+                                      ByVal x As Double, _
+                                      ByVal y As Double, _
+                                      ByVal VecT() As Double, _
+                                      ByRef VecC() As Double) As Short
+
+        <DispId(25)> Sub Terra(ByVal Location As OnSurface, _
+                               ByVal St As Double, _
+                               ByRef Pos() As Double, _
+                               ByRef Vel() As Double)
+
+        <DispId(10)> Function TopoPlanet(ByVal JdTt As Double, _
+                                         ByVal SsBody As Object3, _
+                                         ByVal DeltaT As Double, _
+                                         ByVal Position As OnSurface, _
+                                         ByVal Accuracy As Accuracy, _
+                                         ByRef Ra As Double, _
+                                         ByRef Dec As Double, _
+                                         ByRef Dis As Double) As Short
+
+        <DispId(8)> Function TopoStar(ByVal JdTt As Double, _
+                                      ByVal DeltaT As Double, _
+                                      ByVal Star As CatEntry3, _
+                                      ByVal Position As OnSurface, _
+                                      ByVal Accuracy As Accuracy, _
+                                      ByRef Ra As Double, _
+                                      ByRef Dec As Double) As Short
+
+        <DispId(55)> Function TransformCat(ByVal TransformOption As TransformationOption3, _
+                                           ByVal DateInCat As Double, _
+                                           ByVal InCat As CatEntry3, _
+                                           ByVal DateNewCat As Double, _
+                                           ByVal NewCatId As String, _
+                                           ByRef NewCat As CatEntry3) As Short
+
+        <DispId(54)> Sub TransformHip(ByVal Hipparcos As CatEntry3, _
+                                      ByRef Hip2000 As CatEntry3)
+
+        <DispId(44)> Function Vector2RaDec(ByVal Pos() As Double, _
+                                           ByRef Ra As Double, _
+                                           ByRef Dec As Double) As Short
+
+        <DispId(6)> Function VirtualPlanet(ByVal JdTt As Double, _
+                                           ByVal SsBody As Object3, _
+                                           ByVal Accuracy As Accuracy, _
+                                           ByRef Ra As Double, _
+                                           ByRef Dec As Double, _
+                                           ByRef Dis As Double) As Short
+
+        <DispId(3)> Function VirtualStar(ByVal JdTt As Double, _
+                                         ByVal Star As CatEntry3, _
+                                         ByVal Accuracy As Accuracy, _
+                                         ByRef Ra As Double, _
+                                         ByRef Dec As Double) As Short
+
+        <DispId(24)> Sub Wobble(ByVal Tjd As Double, _
+                                ByVal x As Double, _
+                                ByVal y As Double, _
+                                ByVal Pos1() As Double, _
+                                ByRef Pos2() As Double)
     End Interface
 End Namespace
 #End Region

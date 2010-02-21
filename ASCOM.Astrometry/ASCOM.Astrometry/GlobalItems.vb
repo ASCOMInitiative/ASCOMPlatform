@@ -16,6 +16,8 @@ Module GlobalItems
     Friend Const RAD2SEC As Double = 206264.80624709636 'Angle conversion constants.
     Friend Const DEG2RAD As Double = 0.017453292519943295
     Friend Const RAD2DEG As Double = 57.295779513082323
+
+    Friend Const RACIO_DEFAULT_VALUE As Double = Double.NaN 'Default value that if still present will indicate that this value was not updated
 End Module
 
 #Region "Enums"
@@ -504,14 +506,23 @@ Public Structure CatEntry3
     Public RadialVelocity As Double
 End Structure
 
-<StructLayoutAttribute(LayoutKind.Sequential, CharSet:=CharSet.Ansi)> _
 Public Structure Object3
-    Public Type As Short
+    Public Type As ObjectType
+    Public Number As Body
+    Public Name As String
+    Public Star As CatEntry3
+End Structure
+
+'Internal version of Object3 with correct marshalling hints and type for Number field
+<StructLayoutAttribute(LayoutKind.Sequential, CharSet:=CharSet.Ansi)> _
+Friend Structure Object3Internal
+    Public Type As ObjectType
     Public Number As Short
     <MarshalAsAttribute(UnmanagedType.ByValTStr, SizeConst:=51)> _
     Public Name As String
     Public Star As CatEntry3
 End Structure
+
 
 <StructLayoutAttribute(LayoutKind.Sequential, CharSet:=CharSet.Ansi)> _
 Public Structure SkyPos
@@ -539,7 +550,6 @@ End Structure
 
 <StructLayoutAttribute(LayoutKind.Sequential)> _
 Public Structure RAOfCioArray
-    Private Const RACIO_DEFAULT_VALUE As Double = Double.NaN
 
     Public Value1 As RAOfCio
     Public Value2 As RAOfCio
@@ -608,13 +618,14 @@ Public Structure Observer
     Public OnSurf As OnSurface
     Public NearEarth As InSpace
 End Structure
+#End Region
 
+#Region "NOVAS3 Enums"
 Public Enum ObserverLocation As Short
     EarthGeoCenter = 0 ': observer at geocenter
     EarthSurface = 1 ': observer on surface of earth
     SpaceNearEarth = 2 ': observer on near-earth spacecraft
 End Enum
-
 Public Enum Accuracy As Short
     Full = 0 '... full accuracy
     Reduced = 1 '... reduced accuracy
@@ -667,7 +678,7 @@ Public Enum EquinoxType As Short
     TrueEquinox = 1
 End Enum
 
-Public Enum TransformationOption3 As Integer
+Public Enum TransformationOption3 As Short
     ''' <summary>
     ''' Change epoch only
     ''' </summary>
@@ -690,5 +701,36 @@ Public Enum ObjectType As Short
     MajorPlanetSunOrMoon = 0
     MinorPlanet = 1
     ObjectLocatedOutsideSolarSystem = 2
+End Enum
+
+''' <summary>
+''' Body and location numbering convention used by ephemeris routines. Do not confue with the Body
+''' enum,which is used in most places within NOVAS3.
+''' </summary>
+''' <remarks>The numbering convention for 'target' and'center' is:
+'''             0  =  Mercury           7 = Neptune
+'''             1  =  Venus             8 = Pluto
+'''             2  =  Earth             9 = Moon
+'''             3  =  Mars             10 = Sun
+'''             4  =  Jupiter          11 = Solar system bary.
+'''             5  =  Saturn           12 = Earth-Moon bary.
+'''             6  =  Uranus           13 = Nutations (long. and obliq.)
+'''             (If nutations are desired, set 'target' = 14; 'center' will be ignored on that call.)
+'''</remarks>
+Public Enum Target As Short
+    Mercury = 0
+    Venus = 1
+    Earth = 2
+    Mars = 3
+    Jupiter = 4
+    Saturn = 5
+    Uranus = 6
+    Neptune = 7
+    Pluto = 8
+    Moon = 9
+    Sun = 10
+    SolarSystemBarycentre = 11
+    EarthMoonBarycentre = 12
+    Nutations = 13
 End Enum
 #End Region

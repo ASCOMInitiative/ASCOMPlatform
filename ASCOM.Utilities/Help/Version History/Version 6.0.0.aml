@@ -8,7 +8,8 @@
 				<list class="bullet">
  		 			<listItem>Diagnostics - Now has a menu option to list available COM ports.</listItem>
  		 			<listItem>TraceLogger - Has a new menu option to return the full path name of the log file being created.</listItem>
- 		 			<listItem>ASCOM.Astrometry - Now includes a full presentation of the NOVAS3 library.</listItem>>
+ 		 			<listItem>ASCOM.Astrometry - Now includes a full presentation of the NOVAS3 library including the full table of CIO RAs
+ 		 			and the the most recent JPL DE421 planet ephemeris data.</listItem>>
 	  			</list>
             </content>
 		</section>

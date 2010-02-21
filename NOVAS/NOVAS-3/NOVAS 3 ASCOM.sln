@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NOVAS3", "NOVAS3\NOVAS3.vcproj", "{AC850762-F3A5-4B3D-8FA2-DEF9018281FC}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CioFile", "CioFile\CioFile.vcproj", "{C291C8CE-E2D1-456B-8923-89F3FDADB8D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +21,12 @@ Global
 		{AC850762-F3A5-4B3D-8FA2-DEF9018281FC}.Release|Win32.Build.0 = Release|Win32
 		{AC850762-F3A5-4B3D-8FA2-DEF9018281FC}.Release|x64.ActiveCfg = Release|x64
 		{AC850762-F3A5-4B3D-8FA2-DEF9018281FC}.Release|x64.Build.0 = Release|x64
+		{C291C8CE-E2D1-456B-8923-89F3FDADB8D3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C291C8CE-E2D1-456B-8923-89F3FDADB8D3}.Debug|Win32.Build.0 = Debug|Win32
+		{C291C8CE-E2D1-456B-8923-89F3FDADB8D3}.Debug|x64.ActiveCfg = Debug|Win32
+		{C291C8CE-E2D1-456B-8923-89F3FDADB8D3}.Release|Win32.ActiveCfg = Release|Win32
+		{C291C8CE-E2D1-456B-8923-89F3FDADB8D3}.Release|Win32.Build.0 = Release|Win32
+		{C291C8CE-E2D1-456B-8923-89F3FDADB8D3}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
