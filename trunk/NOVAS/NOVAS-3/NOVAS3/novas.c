@@ -26,6 +26,9 @@
 static double PSI_COR = 0.0;
 static double EPS_COR = 0.0;
 
+//Next line added by Peter Simpson 17th February 2010 to enable routines in this file to access the RACIO_FILE_NAME variable
+//defined in ascom.c
+extern char RACIO_FILE_NAME[255]; //cio_ra.bin
 
 
 /********app_star */
@@ -7156,7 +7159,13 @@ short int cio_location (double jd_tdb, short int accuracy,
 
    if (first_call)
    {
-      if ((cio_file = fopen ("cio_ra.bin", "rb")) == NULL)
+// Peter Simpson 17th February 2010	  
+// Following line has been changed to accomodate the file being in a fixed location in the ASCOM Platform
+// see ascom.c for further information
+
+// Original line: if ((cio_file = fopen ("cio_ra.bin", "rb")) == NULL)
+	  
+	  if ((cio_file = fopen (RACIO_FILE_NAME, "rb")) == NULL)
       {
          use_file = 0;
       }
@@ -7618,7 +7627,13 @@ short int cio_array (double jd_tdb, long int n_pts,
    Open the input (binary, random-access) file.
 */
 
-      if ((cio_file = fopen ("cio_ra.bin", "rb")) == NULL)
+// Peter Simpson 17th February 2010	  
+// Following line has been changed to accomodate the file being in a fixed location in the ASCOM Platform
+// see ascom.c for further information
+
+// Original line: if ((cio_file = fopen ("cio_ra.bin", "rb")) == NULL)
+	  
+	  if ((cio_file = fopen (RACIO_FILE_NAME, "rb")) == NULL)
          return (error = 1);
 
 /*

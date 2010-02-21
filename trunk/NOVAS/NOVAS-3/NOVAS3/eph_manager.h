@@ -7,6 +7,11 @@
    Added Ephem_Close function 11/07
 */
 
+/*
+	Peter Simpson 27th February 2010
+	EXPORT added to relevant routines to planet_ephemeris and state to enable them to be seen outside this DLL
+*/
+
 #ifndef __EPHMAN__
 #define __EPHMAN__
 
@@ -58,11 +63,11 @@ EXPORT short Ephem_Open (char *Ephem_Name,
 
 EXPORT short Ephem_Close (void);
 
-short Planet_Ephemeris (double tjd[2], short target, short center, 
+EXPORT short Planet_Ephemeris (double tjd[2], short target, short center, 
   
                         double *position, double *velocity);
 
-short State (double *jed, short target,
+EXPORT short State (double *jed, short target,
 
              double *target_pos, double *target_vel);
 

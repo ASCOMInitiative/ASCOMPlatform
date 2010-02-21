@@ -95,7 +95,7 @@
 ; Setup Build 19 Released 5.5.1 AvailableCOMPorts test
 
 ; Added NOVAS3 installables and JPL ephemeris File
-
+; Added RA CIO File
 
 
 [Setup]
@@ -295,9 +295,11 @@ Source: ..\..\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.pdb; DestDir:  {cf32}\AS
 Source: ..\..\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.dll; DestDir:  {cf32}\ASCOM\.net; Flags: ignoreversion
 Source: ..\..\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.pdb; DestDir:  {cf32}\ASCOM\.net; Flags: ignoreversion
 
- ;JPL Ephemeris file
+ ;JPL Ephemeris and RA CIO files
 Source: ..\..\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
+Source: ..\..\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion; Check: IsWin64
+Source: ..\..\NOVAS\NOVAS-3\CioFile\cio_ra.bin; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\NOVAS\NOVAS-3\CioFile\cio_ra.bin; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion; Check: IsWin64
 
 ;ASCOM Diagnostics
 Source: ..\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe; DestDir: {app}; Flags: ignoreversion
@@ -439,6 +441,7 @@ WelcomeLabel1=%n%n[name]%n
 #emit "WelcomeLabel2=This will install ASCOM Utilities version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
 [_ISToolPreCompile]
 Name: ..\..\ASCOM Redirection Policies\ASCOM Redirection Policies\bin\Release\ASCOM Redirection Policies.exe; Parameters: ; Flags: runminimized abortonerror
+
 
 
 

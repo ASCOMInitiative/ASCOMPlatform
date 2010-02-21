@@ -13,13 +13,20 @@
    minor planets are not of interest.
 */
 
+// Folling added by Peter Simpson 20 Feb 2010 to ensure the file compiles
+#ifndef _NOVAS_
+   #include "novas.h"
+#endif
+
+
 #include <stdlib.h>
 
 /*
    Function prototype.
 */
 
-   double *readeph (int mp, char *name, double jd,
+// EXPORT Added by Peter Simpson 20 Feb 2010 to make this funciton visible outside the DLL
+   EXPORT double *readeph (int mp, char *name, double jd,
 
                     int *error );
 

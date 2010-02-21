@@ -27,7 +27,4 @@
 
                           double *position, double *velocity);
 
-   EXPORT void sun_eph (double jd, double *ra, double *dec, double *dis); //PWGS Added exported prototype
-
-
 #endif
