@@ -38,6 +38,7 @@
 // Date			Who	Vers	Description
 // -----------	---	-----	-------------------------------------------------------
 // 10-Feb-2010	TPL	6.0.*	Initial edit. Mirrors platform 5.0 PIAs.
+// 21-Feb-2010  cdr 6.0.*   Remove properties and methods already in IAscomDriver
 // --------------------------------------------------------------------------------
 //
 using System;
@@ -74,29 +75,22 @@ namespace ASCOM.Interface.New
 		void CommandBlind(string Command, bool Raw);
 		bool CommandBool(string Command, bool Raw);
 		string CommandString(string Command, bool Raw);
-		bool Connected { get; set; }
 		double Declination { get; }
 		double DeclinationRate { get; set; }
-		string Description { get; }
 		PierSide DestinationSideOfPier(double RightAscension, double Declination);
 		bool DoesRefraction { get; set; }
-		string DriverInfo { get; }
-		string DriverVersion { get; }
 		EquatorialCoordinateType EquatorialSystem { get; }
 		void FindHome();
 		double FocalLength { get; }
 		double GuideRateDeclination { get; set; }
 		double GuideRateRightAscension { get; set; }
-		short InterfaceVersion { get; }
 		bool IsPulseGuiding { get; }
 		void MoveAxis(TelescopeAxes Axis, double Rate);
-		string Name { get; }
 		void Park();
 		void PulseGuide(GuideDirections Direction, int Duration);
 		double RightAscension { get; }
 		double RightAscensionRate { get; set; }
 		void SetPark();
-		void SetupDialog();
 		PierSide SideOfPier { get; set; }
 		double SiderealTime { get; }
 		double SiteElevation { get; set; }
