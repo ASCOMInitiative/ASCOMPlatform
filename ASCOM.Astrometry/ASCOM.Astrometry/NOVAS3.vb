@@ -115,19 +115,29 @@ Namespace NOVAS
         End Function
 
         ''' <summary>
-        ''' Read object ephemeris
+        ''' Produces the Cartesian heliocentric equatorial coordinates of the asteroid for the J2000.0 epoch 
+        ''' coordinate system from a set of Chebyshev polynomials read from a file.
         ''' </summary>
         ''' <param name="Mp">The number of the asteroid for which the position in desired.</param>
         ''' <param name="Name">The name of the asteroid.</param>
         ''' <param name="Jd"> The Julian date on which to find the position and velocity.</param>
-        ''' <param name="Err">Error code; always set equal to 9 (see note below).</param>
-        ''' <returns> 6-element array of double cotaining position and velocity vector values, with all elements set to zero.</returns>
-        ''' <remarks> This is a dummy version of function 'ReadEph'.  It serves as a stub for the "real" 'ReadEph' 
-        ''' (part of the USNO/AE98 minor planet ephemerides) when NOVAS-C is used without the minor planet ephemerides.
+        ''' <param name="Err"><pre>
+        ''' = 0 ( No error )
+        ''' = 1 ( Memory allocation error )
+        ''' = 2 ( Mismatch between asteroid name and number )
+        ''' = 3 ( Julian date out of bounds )
+        ''' = 4 ( Cannot find Chebyshev polynomial file )
+        ''' </pre>
+        ''' </param>
+        ''' <returns> 6-element array of double containing position and velocity vector values.</returns>
+        ''' <remarks>The file name of the asteroid is taken from the name given.  It is	assumed that the name 
+        ''' is all in lower case characters.
         ''' <para>
-        '''  This dummy function is not intended to be called.  It merely serves as a stub for the "real" 'ReadEph' 
-        ''' when NOVAS-C is used without the minor planet ephemerides.  If this function is called, an error of 9 will be returned.
+        ''' This routine will search in the application's current directory for a file of Chebyshev 
+        ''' polynomial coefficients whose name is based on the provided Name parameter: Name.chby 
         ''' </para>
+        ''' <para>Further information on using NOVAS with minor planet data is given here: 
+        ''' http://www.usno.navy.mil/USNO/astronomical-applications/software-products/usnoae98</para>
         ''' </remarks>
         Public Function ReadEph(ByVal Mp As Integer, _
                                         ByVal Name As String, _
@@ -146,14 +156,18 @@ Namespace NOVAS
             Else
                 EphPtr = ReadEph32(Mp, Name, Jd, Err)
             End If
-            ' Safely marshal unmanaged buffer to byte()
-            Marshal.Copy(EphPtr, Bytes, 0, NUM_RETURN_VALUES * DOUBLE_LENGTH)
 
-            ' Convert to double()
-            For i As Integer = 0 To NUM_RETURN_VALUES - 1
-                PosVec(i) = BitConverter.ToDouble(Bytes, i * DOUBLE_LENGTH)
-            Next
+            If Err = 0 Then ' Get the returned values if the call was successful
+                If EphPtr <> IntPtr.Zero Then 'Only copy if the pointer is not NULL
+                    ' Safely marshal unmanaged buffer to byte()
+                    Marshal.Copy(EphPtr, Bytes, 0, NUM_RETURN_VALUES * DOUBLE_LENGTH)
 
+                    ' Convert to double()
+                    For i As Integer = 0 To NUM_RETURN_VALUES - 1
+                        PosVec(i) = BitConverter.ToDouble(Bytes, i * DOUBLE_LENGTH)
+                    Next
+                End If
+            End If
             Return PosVec
         End Function
 
