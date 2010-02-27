@@ -21,6 +21,7 @@ namespace ASCOM
 		/// Initializes a new instance of the <see cref="SlavedException"/> class
 		/// with a caught (inner) exception.
 		/// </summary>
+        /// <param name="inner">Inner exception</param>
 		public SlavedException(Exception inner)
 			: base("Operation not valid while the device is in slave mode.", ErrorCodes.InvalidWhileSlaved, inner)
 		{
