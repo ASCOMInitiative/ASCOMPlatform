@@ -1948,7 +1948,7 @@ Namespace NOVAS
                                  ByRef Hour As Double)
 
         <DispId(27)> Function CelPole(ByVal Tjd As Double, _
-                                      ByVal Type As PoleOffsetCorrectionType, _
+                                      ByVal Type As PoleOffsetCorrection, _
                                       ByVal Dpole1 As Double, _
                                       ByVal Dpole2 As Double) As Short
 
