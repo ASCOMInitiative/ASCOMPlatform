@@ -75,7 +75,7 @@ Namespace NOVAS
         End Sub
 #End Region
 
-#Region "Public Ephemeris Interface"
+#Region "Public NOVAS Interface - Ephemeris Members"
 
         ''' <summary>
         ''' Get position and velocity of target with respect to the centre object. 
@@ -239,7 +239,7 @@ Namespace NOVAS
         End Function
 #End Region
 
-#Region "Public NOVAS Interface"
+#Region "Public NOVAS Interface - NOVAS Members"
         ''' <summary>
         '''  Corrects position vector for aberration of light.  Algorithm includes relativistic terms.
         ''' </summary>
@@ -441,30 +441,6 @@ Namespace NOVAS
         End Function
 
         ''' <summary>
-        ''' Computes the true right ascension of the celestial intermediate origin (CIO) at a given TT Julian date.  This is -(equation of the origins).
-        ''' </summary>
-        ''' <param name="JdTt">TT Julian date</param>
-        ''' <param name="Accuracy">Selection for accuracy</param>
-        ''' <param name="RaCio"> Right ascension of the CIO, with respect to the true equinox of date, in hours (+ or -).</param>
-        ''' <returns>
-        ''' <pre>
-        '''   0  ... everything OK
-        '''   1  ... invalid value of 'Accuracy'
-        ''' > 10 ... 10 + the error code from function 'CioLocation'
-        ''' > 20 ... 20 + the error code from function 'CioBasis'.
-        ''' </pre></returns>
-        ''' <remarks></remarks>
-        Public Function CioRa(ByVal JdTt As Double, _
-                                      ByVal Accuracy As Accuracy, _
-                                      ByRef RaCio As Double) As Short Implements INOVAS3.CioRa
-            If Is64Bit() Then
-                Return CioRa64(JdTt, Accuracy, RaCio)
-            Else
-                Return CioRa32(JdTt, Accuracy, RaCio)
-            End If
-        End Function
-
-        ''' <summary>
         ''' Calaculate an array of CIO RA values around a given date
         ''' </summary>
         ''' <param name="JdTdb">TDB Julian date.</param>
@@ -571,6 +547,30 @@ Namespace NOVAS
                 Return CioLocation64(JdTdb, Accuracy, RaCio, RefSys)
             Else
                 Return CioLocation32(JdTdb, Accuracy, RaCio, RefSys)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' Computes the true right ascension of the celestial intermediate origin (CIO) at a given TT Julian date.  This is -(equation of the origins).
+        ''' </summary>
+        ''' <param name="JdTt">TT Julian date</param>
+        ''' <param name="Accuracy">Selection for accuracy</param>
+        ''' <param name="RaCio"> Right ascension of the CIO, with respect to the true equinox of date, in hours (+ or -).</param>
+        ''' <returns>
+        ''' <pre>
+        '''   0  ... everything OK
+        '''   1  ... invalid value of 'Accuracy'
+        ''' > 10 ... 10 + the error code from function 'CioLocation'
+        ''' > 20 ... 20 + the error code from function 'CioBasis'.
+        ''' </pre></returns>
+        ''' <remarks></remarks>
+        Public Function CioRa(ByVal JdTt As Double, _
+                                      ByVal Accuracy As Accuracy, _
+                                      ByRef RaCio As Double) As Short Implements INOVAS3.CioRa
+            If Is64Bit() Then
+                Return CioRa64(JdTt, Accuracy, RaCio)
+            Else
+                Return CioRa32(JdTt, Accuracy, RaCio)
             End If
         End Function
 
@@ -1081,22 +1081,22 @@ Namespace NOVAS
         ''' <summary>
         ''' Compute the Julian date for a given calendar date (year, month, day, hour).
         ''' </summary>
-        ''' <param name="year">Year number</param>
-        ''' <param name="month">Month number</param>
-        ''' <param name="day">Day number</param>
-        ''' <param name="hour">Fractional hour of the day</param>
+        ''' <param name="Year">Year number</param>
+        ''' <param name="Month">Month number</param>
+        ''' <param name="Day">Day number</param>
+        ''' <param name="Hour">Fractional hour of the day</param>
         ''' <returns>Computed Julian date.</returns>
         ''' <remarks>This function makes no checks for a valid input calendar date. The input calendar date 
         ''' must be Gregorian. The input time value can be based on any UT-like time scale (UTC, UT1, TT, etc.) 
         ''' - output Julian date will have the same basis.</remarks>
-        Public Function JulianDate(ByVal year As Short, _
-                                           ByVal month As Short, _
-                                           ByVal day As Short, _
-                                           ByVal hour As Double) As Double Implements INOVAS3.JulianDate
+        Public Function JulianDate(ByVal Year As Short, _
+                                           ByVal Month As Short, _
+                                           ByVal Day As Short, _
+                                           ByVal Hour As Double) As Double Implements INOVAS3.JulianDate
             If Is64Bit() Then
-                Return JulianDate64(year, month, day, hour)
+                Return JulianDate64(Year, Month, Day, Hour)
             Else
-                Return JulianDate32(year, month, day, hour)
+                Return JulianDate32(Year, Month, Day, Hour)
             End If
         End Function
 
@@ -2179,7 +2179,7 @@ Namespace NOVAS
         End Sub
 #End Region
 
-#Region "DLL Entry Points Ephemeris and RACIOFile (32bit)"
+#Region "DLL Entry Points for Ephemeris and RACIOFile (32bit)"
         <DllImport(NOVAS32Dll, EntryPoint:="set_racio_file")> _
         Private Shared Sub SetRACIOFile32(<MarshalAs(UnmanagedType.LPStr)> ByVal FName As String)
         End Sub
@@ -2759,7 +2759,7 @@ Namespace NOVAS
         End Sub
 #End Region
 
-#Region "DLL Entry Points Ephemeris and RACIOFile (64bit)"
+#Region "DLL Entry Points for Ephemeris and RACIOFile (64bit)"
         <DllImport(NOVAS64Dll, EntryPoint:="set_racio_file")> _
         Private Shared Sub SetRACIOFile64(<MarshalAs(UnmanagedType.LPStr)> ByVal Name As String)
         End Sub
