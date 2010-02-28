@@ -9,7 +9,7 @@
    		<content>
       		<para>
       		<code lang="vbnet" title="ASCOM Transform Examples" 
-      		source="..\..\ASCOM Platform Examples\Examples\TransformExamples.vb" />
+      		source="..\ASCOM Platform Examples\Examples\TransformExamples.vb" />
       		</para>
       	</content>
     </section>

@@ -9,7 +9,7 @@
    		<content>
       		<para>
       		<code lang="vbnet" title="ASCOM Trace Logger Examples" 
-      		source="..\..\ASCOM Platform Examples\Examples\TraceLoggerExamples.vb" />
+      		source="..\ASCOM Platform Examples\Examples\TraceLoggerExamples.vb" />
       		</para>
       	</content>
     </section>

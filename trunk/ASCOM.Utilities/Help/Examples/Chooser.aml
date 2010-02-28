@@ -9,7 +9,7 @@
    		<content>
       		<para>
       		<code lang="vbnet" title="ASCOM Chooser Examples" 
-      		source="..\..\ASCOM Platform Examples\Examples\ChooserExamples.vb" />
+      		source="..\ASCOM Platform Examples\Examples\ChooserExamples.vb" />
       		</para>
       	</content>
     </section>

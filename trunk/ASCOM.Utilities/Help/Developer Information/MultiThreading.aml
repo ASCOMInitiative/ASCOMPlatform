@@ -44,7 +44,7 @@
 		 use synchronisation to ensure that you get the correct response to the command that you sent.</para>
 		
 		<code lang="vbnet" title="ASCOM Serial Threading Examples" 
-      	source="..\..\ASCOM Platform Examples\Examples\SerialThreadingExamples.vb" />
+      	source="..\ASCOM Platform Examples\Examples\SerialThreadingExamples.vb" />
 
 		
       </content>

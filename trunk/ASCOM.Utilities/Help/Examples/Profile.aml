@@ -9,7 +9,7 @@
    		<content>
       		<para>
       		<code lang="vbnet" title="ASCOM Profile Examples" 
-      		source="..\..\ASCOM Platform Examples\Examples\ProfileExamples.vb" />
+      		source="..\ASCOM Platform Examples\Examples\ProfileExamples.vb" />
       		</para>
       	</content>
     </section>

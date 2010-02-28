@@ -9,7 +9,7 @@
    		<content>
       		<para>
       		<code lang="vbnet" title="ASCOM Serial Threading Examples" 
-      		source="..\..\ASCOM Platform Examples\Examples\SerialThreadingExamples.vb" />
+      		source="..\ASCOM Platform Examples\Examples\SerialThreadingExamples.vb" />
       		</para>
       	</content>
     </section>

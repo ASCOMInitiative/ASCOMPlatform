@@ -9,7 +9,7 @@
     	<content>
        		<para>
        		<code lang="vbnet" title="ASCOM NOVAS2 Examples" 
-       	       source="..\..\ASCOM Platform Examples\Examples\NOVAS2Examples.vb" />
+       	       source="..\ASCOM Platform Examples\Examples\NOVAS2Examples.vb" />
        		</para>
        	</content>
     </section>  
