@@ -151,7 +151,7 @@ End Enum
 ''' <example>
 ''' Example of how to create and use an ASCOM serial port.
 ''' <code lang="vbnet" title="ASCOM Serial Port Example" 
-''' source="..\..\ASCOM Platform Examples\Examples\SerialExamples.vb"
+''' source="..\ASCOM Platform Examples\Examples\SerialExamples.vb"
 ''' />
 '''</example>
 <ClassInterface(ClassInterfaceType.None), _
