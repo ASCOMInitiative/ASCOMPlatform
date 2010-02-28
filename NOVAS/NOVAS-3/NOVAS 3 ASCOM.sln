@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NOVAS3", "NOVAS3\NOVAS3.vcp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CioFile", "CioFile\CioFile.vcproj", "{C291C8CE-E2D1-456B-8923-89F3FDADB8D3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MakeEph", "MakeEph\MakeEph.vcproj", "{4A4FC3BD-B445-49AA-87E4-B7A046CA1735}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -27,6 +29,12 @@ Global
 		{C291C8CE-E2D1-456B-8923-89F3FDADB8D3}.Release|Win32.ActiveCfg = Release|Win32
 		{C291C8CE-E2D1-456B-8923-89F3FDADB8D3}.Release|Win32.Build.0 = Release|Win32
 		{C291C8CE-E2D1-456B-8923-89F3FDADB8D3}.Release|x64.ActiveCfg = Release|Win32
+		{4A4FC3BD-B445-49AA-87E4-B7A046CA1735}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4A4FC3BD-B445-49AA-87E4-B7A046CA1735}.Debug|Win32.Build.0 = Debug|Win32
+		{4A4FC3BD-B445-49AA-87E4-B7A046CA1735}.Debug|x64.ActiveCfg = Debug|Win32
+		{4A4FC3BD-B445-49AA-87E4-B7A046CA1735}.Release|Win32.ActiveCfg = Release|Win32
+		{4A4FC3BD-B445-49AA-87E4-B7A046CA1735}.Release|Win32.Build.0 = Release|Win32
+		{4A4FC3BD-B445-49AA-87E4-B7A046CA1735}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

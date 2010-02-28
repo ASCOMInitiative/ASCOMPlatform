@@ -201,7 +201,9 @@ void   generate( int *mp, char* name, double *tol, char *head, int err ) {
 			fscanf( fp, "%s", buf );
 			bigbuf[i][j] = atof( buf );
 		}
+		fprintf( stderr, " BigBuf %f %f %f %f %f %f %f \n", bigbuf[i][0], bigbuf[i][1], bigbuf[i][2], bigbuf[i][3], bigbuf[i][4], bigbuf[i][5], bigbuf[i][6] );
 	}
+	fprintf( stderr, " BigLen %d \n", biglen);
 
 /* Set the initial Julian date. */
 
