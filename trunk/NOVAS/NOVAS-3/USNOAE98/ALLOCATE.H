@@ -18,7 +18,7 @@
 
 
 
-double  *dmalloc ( size_t size, int err );
+double  *dmalloc ( size_t size, int *err);
 /*----------------------------------------------------------------------------
 PURPOSE:
 	Allocate memory for a pointer to double and do error checking.
@@ -54,7 +54,7 @@ NOTES:
 
 
 
-double  **dpmalloc ( size_t size, int err );
+double  **dpmalloc ( size_t size, int *err);
 /*----------------------------------------------------------------------------
 PURPOSE:
 	Allocate memory for a pointer to a pointer to double and do error
@@ -91,7 +91,7 @@ NOTES:
 
 
 
-double  ***dppmalloc ( size_t size, int err );
+double  ***dppmalloc ( size_t size, int *err);
 /*----------------------------------------------------------------------------
 PURPOSE:
 	Allocate memory for a pointer to a pointer to a pointer to double and do
@@ -128,7 +128,7 @@ NOTES:
 
 
 
-char  *cmalloc ( size_t size, int err );
+char  *cmalloc ( size_t size, int *err);
 /*----------------------------------------------------------------------------
 PURPOSE:
 	Allocate memory for a pointer to char and do error checking.
@@ -164,7 +164,7 @@ NOTES:
 
 
 
-char  **cpmalloc ( size_t size, int err );
+char  **cpmalloc ( size_t size, int *err);
 /*----------------------------------------------------------------------------
 PURPOSE:
 	Allocate memory for a pointer to a pointer to char and do error checking.
@@ -200,7 +200,7 @@ NOTES:
 
 
 
-int  *imalloc ( size_t size, int err );
+int  *imalloc ( size_t size, int *err);
 /*----------------------------------------------------------------------------
 PURPOSE:
 	Allocate memory for a pointer to int and do error checking.
@@ -236,7 +236,7 @@ NOTES:
 
 
 
-int  **ipmalloc ( size_t size, int err );
+int  **ipmalloc ( size_t size, int *err);
 /*----------------------------------------------------------------------------
 PURPOSE:
 	Allocate memory for a pointer to a pointer to int and do error checking.
@@ -272,7 +272,7 @@ NOTES:
 
 
 
-long  *lmalloc ( size_t size, int err );
+long  *lmalloc ( size_t size, int *err);
 /*----------------------------------------------------------------------------
 PURPOSE:
 	Allocate memory for a pointer to long and do error checking.
@@ -308,7 +308,7 @@ NOTES:
 
 
 
-long  **lpmalloc ( size_t size, int err );
+long  **lpmalloc ( size_t size, int *err);
 /*----------------------------------------------------------------------------
 PURPOSE:
 	Allocate memory a pointer to a pointer to long and do error checking.
@@ -344,7 +344,7 @@ NOTES:
 
 
 
-FILE  *Fmalloc ( size_t size, int err );
+FILE  *Fmalloc ( size_t size, int *err);
 /*----------------------------------------------------------------------------
 PURPOSE:
 	Allocate memory for a pointer to FILE and do error checking.
@@ -380,7 +380,7 @@ NOTES:
 
 
 
-FILE  **Fpmalloc ( size_t size, int err );
+FILE  **Fpmalloc ( size_t size, int *err);
 /*----------------------------------------------------------------------------
 PURPOSE:
 	Allocate memory for a pointer to a pointer to FILE and do error checking.
@@ -416,7 +416,7 @@ NOTES:
 
 
 
-double  *drealloc ( double *ptr, size_t size, int err );
+double  *drealloc ( double *ptr, size_t size, int *err);
 /*----------------------------------------------------------------------------
 PURPOSE:
 	Reallocate memory for a pointer to double and do error checking.
@@ -453,7 +453,7 @@ NOTES:
 
 
 
-double  **dprealloc ( double **ptr, size_t size, int err );
+double  **dprealloc ( double **ptr, size_t size, int *err);
 /*----------------------------------------------------------------------------
 PURPOSE:
 	Reallocate memory for a pointer to a pointer to double and do error
@@ -491,7 +491,7 @@ NOTES:
 
 
 
-double  ***dpprealloc ( double ***ptr, size_t size, int err );
+double  ***dpprealloc ( double ***ptr, size_t size, int *err);
 /*----------------------------------------------------------------------------
 PURPOSE:
 	Reallocate memory for a pointer to a pointer to a pointer to double and do
@@ -529,7 +529,7 @@ NOTES:
 
 
 
-char  *crealloc ( char *ptr, size_t size, int err );
+char  *crealloc ( char *ptr, size_t size, int *err);
 /*----------------------------------------------------------------------------
 PURPOSE:
 	Reallocate memory for a pointer to char and do error checking.
@@ -566,7 +566,7 @@ NOTES:
 
 
 
-char  **cprealloc ( char **ptr, size_t size, int err );
+char  **cprealloc ( char **ptr, size_t size, int *err);
 /*----------------------------------------------------------------------------
 PURPOSE:
 	Reallocate memory for a pointer to a pointer to char and do error
@@ -604,7 +604,7 @@ NOTES:
 
 
 
-int  *irealloc ( int *ptr, size_t size, int err );
+int  *irealloc ( int *ptr, size_t size, int *err);
 /*----------------------------------------------------------------------------
 PURPOSE:
 	Reallocate memory for a pointer to int and do error checking.
@@ -641,7 +641,7 @@ NOTES:
 
 
 
-int  **iprealloc ( int **ptr, size_t size, int err );
+int  **iprealloc ( int **ptr, size_t size, int *err);
 /*----------------------------------------------------------------------------
 PURPOSE:
 	Reallocate memory for a pointer to a pointer int and do error checking.
@@ -678,7 +678,7 @@ NOTES:
 
 
 
-long  *lrealloc ( long *ptr, size_t size, int err );
+long  *lrealloc ( long *ptr, size_t size, int *err);
 /*----------------------------------------------------------------------------
 PURPOSE:
 	Reallocate memory for a pointer to long and do error checking.
@@ -715,7 +715,7 @@ NOTES:
 
 
 
-long  **lprealloc ( long **ptr, size_t size, int err );
+long  **lprealloc ( long **ptr, size_t size, int *err);
 /*----------------------------------------------------------------------------
 PURPOSE:
 	Reallocate memory for a pointer to a pointer to long and do error
@@ -753,7 +753,7 @@ NOTES:
 
 
 
-FILE  *Frealloc ( FILE *ptr, size_t size, int err );
+FILE  *Frealloc ( FILE *ptr, size_t size, int *err);
 /*----------------------------------------------------------------------------
 PURPOSE:
 	Reallocate memory for a pointer to FILE and do error checking.
@@ -790,7 +790,7 @@ NOTES:
 
 
 
-FILE  **Fprealloc ( FILE **ptr, size_t size, int err );
+FILE  **Fprealloc ( FILE **ptr, size_t size, int *err);
 /*----------------------------------------------------------------------------
 PURPOSE:
 	Reallocate memory for a pointer to a pointer to FILE and do error

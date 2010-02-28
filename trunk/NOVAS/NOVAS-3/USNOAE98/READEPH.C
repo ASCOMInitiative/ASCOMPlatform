@@ -13,7 +13,7 @@ struct fileinfo {
 } astinf;
 
 
-// *err changed to *err in order to return a value by Peter Simpson 27th February 2010
+// err changed to *err in order to return a value by Peter Simpson 27th February 2010
 double *readeph( int mp, char *name, double jd, int *err ) {
 
 /* Given an asteroid number and name along with the Julian Date and origin
@@ -28,11 +28,11 @@ double *readeph( int mp, char *name, double jd, int *err ) {
 	short  stmp;
 
 	*err = 0;
-	result  = dmalloc(  6 * sizeof( double ), *err );
-	spos    = dmalloc(  3 * sizeof( double ), *err );
-	svel    = dmalloc(  3 * sizeof( double ), *err );
-	poscheb = dmalloc( 14 * sizeof( double ), *err );
-	velcheb = dmalloc( 14 * sizeof( double ), *err );
+	result  = dmalloc(  6 * sizeof( double ), err );
+	spos    = dmalloc(  3 * sizeof( double ), err );
+	svel    = dmalloc(  3 * sizeof( double ), err );
+	poscheb = dmalloc( 14 * sizeof( double ), err );
+	velcheb = dmalloc( 14 * sizeof( double ), err );
 	infile  = NULL;
 	head    = NULL;
 	fname   = NULL;
@@ -45,15 +45,15 @@ double *readeph( int mp, char *name, double jd, int *err ) {
 		mpnum = 0;
 		astinf.num     = 1;
 		astinf.mp      = imalloc ( sizeof( int ),
-		                           *err );
+		                           err );
 		astinf.name    = cpmalloc( sizeof( char* ),
-		                           *err );
+		                           err );
 		astinf.fp      = Fpmalloc( sizeof( FILE* ),
-		                           *err );
+		                           err );
 		infile         = cmalloc ( (strlen( name ) + 6) * sizeof( char ),
-		                           *err );
+		                           err );
 		astinf.name[0] = cmalloc ( (strlen( name ) + 1) * sizeof( char ),
-		                           *err );
+		                           err );
 		if( *err != 0 )
 			return NULL;
 		strcpy( astinf.name[0], name );
@@ -72,7 +72,7 @@ double *readeph( int mp, char *name, double jd, int *err ) {
 		fread( &hdrint,           sizeof( int ),    1,       astinf.fp[0] );
 		fread( hdrinfo,           sizeof( char ),   hdrint,  astinf.fp[0] );
 		fread( &headlen,          sizeof( long ),   1,       astinf.fp[0] );
-		head = cmalloc( headlen * sizeof( char ), *err );
+		head = cmalloc( headlen * sizeof( char ), err );
 		if( *err != 0 )
 			return NULL;
 		fread( head,              sizeof( char ),   headlen, astinf.fp[0] );
@@ -85,12 +85,12 @@ double *readeph( int mp, char *name, double jd, int *err ) {
 		fread( &hdrint,           sizeof( int ),    1,       astinf.fp[0] );
 		fread( hdrinfo,           sizeof( char ),   hdrint,  astinf.fp[0] );
 		fread( &namelen,          sizeof( long ),   1,       astinf.fp[0] );
-		fname = cmalloc( namelen * sizeof( char ), *err );
+		fname = cmalloc( namelen * sizeof( char ), err );
 		if( *err != 0 )
 			return NULL;
 		fread( fname,    sizeof( char ), namelen, astinf.fp[0] );
-		astinf.jdi = dmalloc( sizeof( double ), *err );
-		astinf.jdf = dmalloc( sizeof( double ), *err );
+		astinf.jdi = dmalloc( sizeof( double ), err );
+		astinf.jdf = dmalloc( sizeof( double ), err );
 		if( *err != 0 )
 			return NULL;
 		fread( hdrinfo,           sizeof( char ),   6,       astinf.fp[0] );
@@ -101,7 +101,7 @@ double *readeph( int mp, char *name, double jd, int *err ) {
 		fread( &hdrint,           sizeof( int ),    1,       astinf.fp[0] );
 		fread( hdrinfo,           sizeof( char ),   hdrint,  astinf.fp[0] );
 		fread( &astinf.jdf[0],    sizeof( double ), 1,       astinf.fp[0] );
-		astinf.numrec = imalloc( sizeof( int ), *err );
+		astinf.numrec = imalloc( sizeof( int ), err );
 		if( *err != 0 )
 			return NULL;
 		fread( hdrinfo,           sizeof( char ),   6,       astinf.fp[0] );
@@ -112,12 +112,12 @@ double *readeph( int mp, char *name, double jd, int *err ) {
 
 /* Read table of Chebyshev polynomial information. */
 
-		astinf.jd       = dpmalloc( sizeof( double* ),                 *err );
-		astinf.span     = dpmalloc( sizeof( double* ),                 *err );
-		astinf.order    = ipmalloc( sizeof( int* ),                    *err );
-		astinf.jd[0]    = dmalloc ( *astinf.numrec * sizeof( double ), *err );
-		astinf.span[0]  = dmalloc ( *astinf.numrec * sizeof( double ), *err );
-		astinf.order[0] = imalloc ( *astinf.numrec * sizeof( int ),    *err );
+		astinf.jd       = dpmalloc( sizeof( double* ),                 err );
+		astinf.span     = dpmalloc( sizeof( double* ),                 err );
+		astinf.order    = ipmalloc( sizeof( int* ),                    err );
+		astinf.jd[0]    = dmalloc ( *astinf.numrec * sizeof( double ), err );
+		astinf.span[0]  = dmalloc ( *astinf.numrec * sizeof( double ), err );
+		astinf.order[0] = imalloc ( *astinf.numrec * sizeof( int ),    err );
 		if( *err != 0 )
 			return NULL;
 		for( i = 0; i < *astinf.numrec; ++i ){
@@ -131,13 +131,13 @@ double *readeph( int mp, char *name, double jd, int *err ) {
 /* Set up memory for current Chebyshev polynomial and read in the first record
    as the default. */
 
-		astinf.currec     = imalloc  ( sizeof( int ),         *err );
-		astinf.curjd      = dmalloc  ( sizeof( double ),      *err );
-		astinf.curspan    = dmalloc  ( sizeof( double ),      *err );
-		astinf.curorder   = imalloc  ( sizeof( int ),         *err );
-		astinf.coef       = dppmalloc( sizeof( double** ),    *err );
-		astinf.coef[0]    = dpmalloc ( 3 * sizeof( double* ), *err );
-		astinf.coef[0][0] = dmalloc  ( 42 * sizeof( double ), *err );
+		astinf.currec     = imalloc  ( sizeof( int ),         err );
+		astinf.curjd      = dmalloc  ( sizeof( double ),      err );
+		astinf.curspan    = dmalloc  ( sizeof( double ),      err );
+		astinf.curorder   = imalloc  ( sizeof( int ),         err );
+		astinf.coef       = dppmalloc( sizeof( double** ),    err );
+		astinf.coef[0]    = dpmalloc ( 3 * sizeof( double* ), err );
+		astinf.coef[0][0] = dmalloc  ( 42 * sizeof( double ), err );
 		if( *err != 0 )
 			return NULL;
 		astinf.currec[0]  = 0;
@@ -160,15 +160,15 @@ double *readeph( int mp, char *name, double jd, int *err ) {
 		if( mpnum == astinf.num ) {
 			++astinf.num;
 			astinf.mp   = irealloc ( astinf.mp,
-			                         astinf.num * sizeof( int ),   *err );
+			                         astinf.num * sizeof( int ),   err );
 			astinf.name = cprealloc( astinf.name,
-			                         astinf.num * sizeof( char* ), *err );
+			                         astinf.num * sizeof( char* ), err );
 			astinf.fp   = Fprealloc( astinf.fp,
-			                         astinf.num * sizeof( FILE* ), *err );
+			                         astinf.num * sizeof( FILE* ), err );
 			infile             = cmalloc( (strlen( name ) + 6)
-			                              * sizeof( char ), *err );
+			                              * sizeof( char ), err );
 			astinf.name[mpnum] = cmalloc( (strlen( name ) + 1)
-			                              * sizeof( char ), *err );
+			                              * sizeof( char ), err );
 			if( *err != 0 )
 				return NULL;
 			strcpy( astinf.name[mpnum], name );
@@ -187,7 +187,7 @@ double *readeph( int mp, char *name, double jd, int *err ) {
 			fread( &hdrint,  sizeof( int ),  1,      astinf.fp[mpnum] );
 			fread( hdrinfo,  sizeof( char ), hdrint, astinf.fp[mpnum] );
 			fread( &headlen, sizeof( int ),  1,      astinf.fp[mpnum] );
-			head = cmalloc( headlen * sizeof( char ), *err );
+			head = cmalloc( headlen * sizeof( char ), err );
 			if( *err != 0 )
 				return NULL;
 			fread( head,     sizeof( char ), headlen, astinf.fp[mpnum] );
@@ -200,12 +200,12 @@ double *readeph( int mp, char *name, double jd, int *err ) {
 			fread( &hdrint,  sizeof( int ),  1,       astinf.fp[mpnum] );
 			fread( hdrinfo,  sizeof( char ), hdrint,  astinf.fp[mpnum] );
 			fread( &namelen, sizeof( int ),  1,       astinf.fp[mpnum] );
-			fname = cmalloc( namelen * sizeof( char ), *err );
+			fname = cmalloc( namelen * sizeof( char ), err );
 			fread( fname,    sizeof( char ), namelen, astinf.fp[mpnum] );
 			astinf.jdi = drealloc( astinf.jdi, astinf.num * sizeof( double ),
-			                       *err );
+			                       err );
 			astinf.jdf = drealloc( astinf.jdf, astinf.num * sizeof( double ),
-			                       *err );
+			                       err );
 			if( *err != 0 )
 				return NULL;
 			fread( hdrinfo,               sizeof( char ),   6,
@@ -225,7 +225,7 @@ double *readeph( int mp, char *name, double jd, int *err ) {
 			fread( &astinf.jdf[mpnum],    sizeof( double ), 1,
 			       astinf.fp[mpnum] );
 			astinf.numrec = irealloc( astinf.numrec,
-			                          astinf.num * sizeof( int ), *err );
+			                          astinf.num * sizeof( int ), err );
 			if( *err != 0 )
 				return NULL;
 			fread( hdrinfo,               sizeof( char ),   6,
@@ -242,19 +242,19 @@ double *readeph( int mp, char *name, double jd, int *err ) {
 
 			astinf.jd           = dprealloc( astinf.jd,
 			                                 astinf.num * sizeof( double* ),
-			                                 *err );
+			                                 err );
 			astinf.span         = dprealloc( astinf.span,
 			                                 astinf.num * sizeof( double* ),
-			                                 *err );
+			                                 err );
 			astinf.order        = iprealloc( astinf.order,
 			                                 astinf.num * sizeof( int* ),
-			                                 *err );
+			                                 err );
 			astinf.jd[mpnum]    = dmalloc  ( astinf.numrec[mpnum]
-			                                 * sizeof( double ), *err );
+			                                 * sizeof( double ), err );
 			astinf.span[mpnum]  = dmalloc  ( astinf.numrec[mpnum] 
-			                                 * sizeof( double ), *err );
+			                                 * sizeof( double ), err );
 			astinf.order[mpnum] = imalloc  ( astinf.numrec[mpnum]
-			                                 * sizeof( int ),    *err );
+			                                 * sizeof( int ),    err );
 			if( *err != 0 )
 				return NULL;
 			for( i = 0; i < astinf.numrec[mpnum]; ++i ){
@@ -273,21 +273,21 @@ double *readeph( int mp, char *name, double jd, int *err ) {
 
 			astinf.currec   = irealloc  ( astinf.currec,
 			                              astinf.num * sizeof( int ),
-			                              *err );
+			                              err );
 			astinf.curjd    = drealloc  ( astinf.curjd,
 			                              astinf.num * sizeof( double ),
-			                              *err );
+			                              err );
 			astinf.curspan  = drealloc  ( astinf.curspan,
 			                              astinf.num * sizeof( double ),
-			                              *err );
+			                              err );
 			astinf.curorder = irealloc  ( astinf.curorder,
 			                              astinf.num * sizeof( int ),
-			                              *err );
+			                              err );
 			astinf.coef     = dpprealloc( astinf.coef,
 			                              astinf.num * sizeof( double** ),
-			                              *err );
-			astinf.coef[mpnum]    = dpmalloc(  3 * sizeof( double* ), *err );
-			astinf.coef[mpnum][0] = dmalloc ( 42 * sizeof( double ),  *err );
+			                              err );
+			astinf.coef[mpnum]    = dpmalloc(  3 * sizeof( double* ), err );
+			astinf.coef[mpnum][0] = dmalloc ( 42 * sizeof( double ),  err );
 			if( *err != 0 )
 				return NULL;
 			astinf.currec[mpnum]  = 0;
@@ -330,12 +330,14 @@ double *readeph( int mp, char *name, double jd, int *err ) {
 		fprintf( stderr, "\nfile for %i ", astinf.mp[mpnum] );
 		fprintf( stderr, "%s!\n", astinf.name[mpnum] );
 		*err = 3;
+		return NULL;
 	} else if( jd > astinf.jdf[mpnum] ) {
 		fprintf( stderr, "JD = %9.1f is after the first ephemeris ", jd );
 		fprintf( stderr, "date of JD = %9.1f in the\n", astinf.jdi[mpnum] );
 		fprintf( stderr, "file for %i", astinf.mp[mpnum] );
 		fprintf( stderr,  "%s!\n", astinf.name[mpnum] );
 		*err = 3;
+		return NULL;
 	}
 
 /* Search for and read the correct set of Chebyshev polynomials.  If the
@@ -348,15 +350,13 @@ double *readeph( int mp, char *name, double jd, int *err ) {
 			++i;
 		astinf.currec[mpnum] = i;
 		while( astinf.jd[mpnum][i] <= astinf.curjd[mpnum] ) {
-			counter -= ( sizeof( double ) + 2 * sizeof( short ) + 3
-			             * (astinf.order[mpnum][i] + 1) * sizeof( double ) );
+			counter -= ( sizeof( double ) + 2 * sizeof( short ) + 3 * (astinf.order[mpnum][i] + 1) * sizeof( double ) );
 			++i;
 		}
 	} else if( jd > astinf.curjd[mpnum] + astinf.curspan[mpnum] ) {
 		i = astinf.currec[mpnum] + 1;
 		while( astinf.jd[mpnum][i] + astinf.span[mpnum][i] < jd ) {
-			counter += ( sizeof( double ) + 2 * sizeof( short ) + 3
-			             * (astinf.order[mpnum][i] + 1) * sizeof( double ) );
+			counter += ( sizeof( double ) + 2 * sizeof( short ) + 3 * (astinf.order[mpnum][i] + 1) * sizeof( double ) );
 			++i;
 		}
 		astinf.currec[mpnum] = i;
