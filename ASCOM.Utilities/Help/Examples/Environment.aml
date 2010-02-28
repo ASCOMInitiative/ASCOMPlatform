@@ -11,7 +11,7 @@
    		<content>
       		<para>
       		<code lang="vbnet" title="Environment Information Examples" 
-      		source="..\..\ASCOM Platform Examples\Examples\EnvironmentExamples.vb" />
+      		source="..\ASCOM Platform Examples\Examples\EnvironmentExamples.vb" />
       		</para>
       		
       	</content>

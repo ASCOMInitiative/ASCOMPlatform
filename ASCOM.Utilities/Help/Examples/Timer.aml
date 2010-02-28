@@ -9,7 +9,7 @@
    		<content>
       		<para>
       		<code lang="vbnet" title="ASCOM TimerExamples" 
-      		source="..\..\ASCOM Platform Examples\Examples\TimerExamples.vb" />
+      		source="..\ASCOM Platform Examples\Examples\TimerExamples.vb" />
       		</para>
       	</content>
     </section>

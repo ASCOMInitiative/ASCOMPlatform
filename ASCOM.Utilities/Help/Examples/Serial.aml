@@ -9,7 +9,7 @@
    		<content>
       		<para>
       		<code lang="vbnet" title="ASCOM Serial Port Examples" 
-      		source="..\..\ASCOM Platform Examples\Examples\SerialExamples.vb" />
+      		source="..\ASCOM Platform Examples\Examples\SerialExamples.vb" />
       		</para>
       		
       	</content>
