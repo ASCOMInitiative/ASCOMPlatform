@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title>ASCOM Filter Wheel Interface Standard</title>
+  <style type="text/css">
+                @import url(dc3_hh.css);
+  </style>
+</head>
+
+<body>
+<h1><a name="FilterWheelHOME"></a><a href="http://ASCOM-Standards.org/"
+target="browser"><img src="images/Bug72T-sm.jpg" width="48" height="56" alt=""
+border="0" align="left"></a>  Filter Wheel Interface Standard 1.0<br>
+  Programmer's Reference</h1>
+<br clear="all">
+
+
+<div class="note">
+Please conduct discussions regarding this interface and its usage on the <a
+href="http://groups.yahoo.com/group/ASCOM-Talk" target="browser">ASCOM-Talk
+List</a>. 
+
+<p><b><a href="http://groups.yahoo.com/group/ASCOM-Talk/join"
+target="browser">Click here to join ASCOM-Talk</a></b></p>
+</div>
+
+<h2>Introduction</h2>
+
+<p>This document describes the interface used by low-level telescope
+"FilterWheel" components as part of the Astronomy Common Object Model (ASCOM).
+Components that implement this interface can provide way for programs to
+control various filter wheels via a standard set of properties and methods.</p>
+
+<p>This specification covers a simple, low-level filter wheel control interface
+for taking exposures, reading out the image, and accessing common functions
+such as controlling the cooler. It does not provide for accessories such as
+filter wheels. Those sorts of devices have their own interfaces. The
+characteristics of this interface comply with the ASCOM Quality Guidelines,
+assuring consistent behavior and compatibility with the widest possible variety
+of Windows Automation clients.</p>
+
+<p>For a summary of the changes and additions, please refer to the Release
+Notes.</p>
+
+<h2>Implementation and Conventions</h2>
+
+<p>All of the methods and properties specified must be present in any
+conforming driver's interface. However, some methods and properties may not
+actually be implemented; they will raise a "not implemented" error when called
+or accessed.</p>
+
+<h2>Usage</h2>
+
+<p> To control a particular filter wheel type, a program would create an
+instance of the driver for that filter wheel type, then use the standard
+properties and methods described in this document to effect control of that
+filter wheel. Thus any program or script that uses the standard driver
+interface automatically gains access to any filter wheel type for which a
+driver exists. For more information on ASCOM, see the ASCOM Home Page.</p>
+
+<h2>For best results</h2>
+This will display best if you have Internet Explorer 5.5 or 6, and the
+following fonts installed: 
+<ul>
+  <li>Arial </li>
+  <li>Verdana </li>
+  <li>Lucida Console </li>
+</ul>
+<hr color="silver" size="2">
+
+<div class="copyright">
+Copyright © 2001-2009, The ASCOM Initiative</div>
+</body>
+</html>
