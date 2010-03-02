@@ -10,19 +10,23 @@
 //
 // Written by: Robert B. Denny (Version 1.0.1, 29-May-2007)
 //
+// 14-Feb-10 rbd    (1.1.0) Self-elevate for register and unregister
 //
 using System;
-using System.IO;
-using System.Windows.Forms;
-using System.Drawing;
 using System.Collections;
-using System.Runtime.InteropServices;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 using System.Reflection;
-using Microsoft.Win32;
+using System.Runtime.InteropServices;
+using System.Security;
+using System.Security.Principal;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
+using Microsoft.Win32;
 
-namespace TEMPLATENAMESPACE
+namespace ASCOM
 {
 	public class TEMPLATEDEVICENAME
 	{
@@ -261,6 +265,42 @@ namespace TEMPLATENAMESPACE
 
 		#region COM Registration and Unregistration
 		//
+        // Test if running elevated
+        //
+        private static bool IsAdministrator
+        {
+            get
+            {
+                WindowsIdentity i = WindowsIdentity.GetCurrent();
+                WindowsPrincipal p = new WindowsPrincipal(i);
+                return p.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+        }
+
+        //
+        // Elevate by re-running ourselves with elevation dialog
+        //
+        private static void ElevateSelf(string arg)
+        {
+            ProcessStartInfo si = new ProcessStartInfo();
+            si.Arguments = arg;
+            si.WorkingDirectory = Environment.CurrentDirectory;
+            si.FileName = Application.ExecutablePath;
+            si.Verb = "runas";
+            try { Process p = Process.Start(si); }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                MessageBox.Show("The $safeprojectname$ was not " + (arg == "/register" ? "registered" : "unregistered") +
+                    " because you did not allow it.", "$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "$safeprojectname$", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            }
+            return;
+        }
+
+        //
 		// Do everything to register this for COM. Never use REGASM on
 		// this exe assembly! It would create InProcServer32 entries 
 		// which would prevent proper activation!
@@ -277,6 +317,14 @@ namespace TEMPLATENAMESPACE
 			RegistryKey key2 = null;
 			RegistryKey key3 = null;
 
+            if (!IsAdministrator)
+            {
+                ElevateSelf("/register");
+                return;
+            }
+            //
+            // If reached here, we're running elevated
+            //
 			Assembly assy = Assembly.GetExecutingAssembly();
 			Attribute attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyTitleAttribute));
 			string assyTitle = ((AssemblyTitleAttribute)attr).Title;
@@ -410,6 +458,12 @@ namespace TEMPLATENAMESPACE
 		//
 		private static void UnregisterObjects()
 		{
+            if (!IsAdministrator)
+            {
+                ElevateSelf("/unregister");
+                return;
+            }
+
 			//
 			// Local server's DCOM/AppID information
 			//
