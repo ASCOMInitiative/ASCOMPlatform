@@ -1,10 +1,10 @@
 ﻿//tabs=4
 // --------------------------------------------------------------------------------
 // <summary>
-// ASCOM.Interface Camera V2 interface
+// ASCOM.Interface.ITelescope Telescope Interface V2
 // </summary>
 //
-// <copyright company="The ASCOM Initiative" author="Timothy P. Long">
+// <copyright company="TiGra Astronomy" author="Timothy P. Long">
 //	Copyright © 2010 The ASCOM Initiative
 // </copyright>
 //
@@ -30,55 +30,27 @@
 // </license>
 //
 //
-// Defines:	ICamera V2 enumerations
-// Author:		(CDR) Chris Rowland <chris.rowland@dsl.pipex.com>
+// Defines:	ITelescope interfaces
+// Author:		(TPL) Timothy P. Long <Tim@tigranetworks.co.uk>
 //
 // Edit Log:
 //
 // Date			Who	Vers	Description
 // -----------	---	-----	-------------------------------------------------------
-// 21-Feb-2010	CDR	6.0.*	Initial edit.
+// 10-Feb-2010	TPL	6.0.*	Initial edit. Mirrors platform 5.0 PIAs.
+// 21-Feb-2010  cdr 6.0.*   Remove properties and methods already in IAscomDriver
+// 03-Mar-2010	TPL	6.0.*	Renamed to ITelescopeV3, added IDeviceControl
 // --------------------------------------------------------------------------------
-
+//
+using System;
 namespace ASCOM.Interface
 {
-	/// <summary>
-	/// Camera V2 interface is the aggregate of Camera V1
-	/// and the new IAscomDriver and IDeviceControl interfaces.
-	/// </summary>
-    public interface ICameraV2 : IAscomDriver, ICamera, IDeviceControl
-    {
-		// ToDo: add intellisense XML comments to each member.
-        short BayerOffsetX { get; }
-
-        short BayerOffsetY { get; }
-
-        bool CanFastReadout { get; }
-
-        double ExposureMax { get; }
-
-        double ExposureMin { get; }
-
-        double ExposureResolution { get; }
-
-        bool FastReadout { set; get; }
-
-        short Gain { set; get; }
-
-        short GainMax { get; }
-
-        short GainMin { get; }
-
-        string[] Gains { get; }
-
-        short PercentCompleted { get; }
-
-        short ReadoutMode { get; }
-
-        string[] ReadoutModes { get; }
-
-        string SensorName { get; }
-
-        SensorType SensorType { get; }
-    }
+	public interface ITelescopeV3 : IAscomDriver, ITelescope, IDeviceControl
+	{
+		// There is no essential difference between V2 and V3,
+		// other than the addition of IDeviceControl,
+		// therefore no new members are defined here.
+		// This interfaces serves to aggregate the seperate interfaces.
+		// This is what we referred to as "ITelescopeV3Big" in the LiveMeeting.
+	}
 }
