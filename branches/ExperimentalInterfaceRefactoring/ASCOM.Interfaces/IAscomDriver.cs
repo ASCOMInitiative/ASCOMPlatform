@@ -42,11 +42,8 @@
 //
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
-namespace ASCOM.Interface
-	{
 	/// <summary>
 	/// Defines the properties and methods that are common to all ASCOM devices.
 	/// </summary>
@@ -194,4 +191,3 @@ namespace ASCOM.Interface
 		/// </remarks>
 		void SetupDialog();
 		}
-	}

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shfbBuild product="Sandcastle Help File Builder Utilities" version="1.8.0.3" projectFile="C:\Users\Peter\Documents\ASCOM Source\Help\ASCOMPlatform.shfbproj" started="28/02/2010 23:25:03">
+<shfbBuild product="Sandcastle Help File Builder Utilities" version="1.8.0.3" projectFile="C:\Users\Public\Documents\ASCOM Interface\Help\ASCOMPlatform.shfbproj" started="06/03/2010 11:13:01">
 <buildStep step="Initializing">
 Loading and initializing plug-ins...
 Hierarchical Table of Contents Version 1.8.0.3
@@ -13,46 +13,53 @@ Found HTML Help 1 compiler in 'C:\Program Files (x86)\HTML Help Workshop\'
 </buildStep>
 <buildStep step="ValidatingDocumentationSources">
 Validating and copying documentation source information
-Source: C:\Users\Peter\Documents\ASCOM Source\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj
-    Found project 'C:\Users\Peter\Documents\ASCOM Source\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj'
-Source: C:\Users\Peter\Documents\ASCOM Source\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj
-    Found project 'C:\Users\Peter\Documents\ASCOM Source\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj'
-Source: C:\Users\Peter\Documents\ASCOM Source\ASCOM.IConform\ASCOM.IConform\ASCOM.IConform.vbproj
-    Found project 'C:\Users\Peter\Documents\ASCOM Source\ASCOM.IConform\ASCOM.IConform\ASCOM.IConform.vbproj'
-Source: C:\Users\Peter\Documents\ASCOM Source\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj
-    Found project 'C:\Users\Peter\Documents\ASCOM Source\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj'
-Source: C:\Users\Peter\Documents\ASCOM Source\ASCOM.Astrometry\ASCOM.Astrometry\AstrometryNamespaceDocs.xml
-Source: C:\Users\Peter\Documents\ASCOM Source\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml
+Source: C:\Users\Public\Documents\ASCOM Interface\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj
+    Found project 'C:\Users\Public\Documents\ASCOM Interface\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj'
+Source: C:\Users\Public\Documents\ASCOM Interface\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj
+    Found project 'C:\Users\Public\Documents\ASCOM Interface\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj'
+Source: C:\Users\Public\Documents\ASCOM Interface\ASCOM.IConform\ASCOM.IConform\ASCOM.IConform.vbproj
+    Found project 'C:\Users\Public\Documents\ASCOM Interface\ASCOM.IConform\ASCOM.IConform\ASCOM.IConform.vbproj'
+Source: C:\Users\Public\Documents\ASCOM Interface\ASCOM.Interfaces\ASCOM.Interfaces.csproj
+    Found project 'C:\Users\Public\Documents\ASCOM Interface\ASCOM.Interfaces\ASCOM.Interfaces.csproj'
+Source: C:\Users\Public\Documents\ASCOM Interface\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj
+    Found project 'C:\Users\Public\Documents\ASCOM Interface\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj'
+Source: C:\Users\Public\Documents\ASCOM Interface\ASCOM.Astrometry\ASCOM.Astrometry\AstrometryNamespaceDocs.xml
+Source: C:\Users\Public\Documents\ASCOM Interface\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml
 
 Parsing project files
-    Found assembly 'C:\Users\Peter\Documents\ASCOM Source\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll'
-    Found assembly 'C:\Users\Peter\Documents\ASCOM Source\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll'
-    Found assembly 'C:\Users\Peter\Documents\ASCOM Source\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll'
-    Found assembly 'C:\Users\Peter\Documents\ASCOM Source\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll'
+    Found assembly 'C:\Users\Public\Documents\ASCOM Interface\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll'
+    Found assembly 'C:\Users\Public\Documents\ASCOM Interface\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll'
+    Found assembly 'C:\Users\Public\Documents\ASCOM Interface\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll'
+    Found assembly 'C:\Users\Public\Documents\ASCOM Interface\ASCOM.Interfaces\bin\Release\ASCOM.Interfaces.dll'
+    Found assembly 'C:\Users\Public\Documents\ASCOM Interface\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll'
 
 References to use:
+    ASCOM.DriverAccess, Version=1.0.5.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL
     System
+    System.Core
     System.Data
+    System.Data.DataSetExtensions
     System.Drawing
     System.Windows.Forms
     System.Xml
     System.XML
+    System.Xml.Linq
 
 Copying XML comments files
-    C:\Users\Peter\Documents\ASCOM Source\ASCOM.Astrometry\ASCOM.Astrometry\AstrometryNamespaceDocs.xml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\AstrometryNamespaceDocs.xml
-    C:\Users\Peter\Documents\ASCOM Source\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\NamespaceDocumentation.xml
-    C:\Users\Peter\Documents\ASCOM Source\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ASCOM.Astrometry.xml
-    C:\Users\Peter\Documents\ASCOM Source\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.XML -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ASCOM.Exceptions.XML
-    C:\Users\Peter\Documents\ASCOM Source\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.xml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ASCOM.IConform.xml
-    C:\Users\Peter\Documents\ASCOM Source\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ASCOM.Utilities.xml
+    C:\Users\Public\Documents\ASCOM Interface\ASCOM.Astrometry\ASCOM.Astrometry\AstrometryNamespaceDocs.xml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\AstrometryNamespaceDocs.xml
+    C:\Users\Public\Documents\ASCOM Interface\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\NamespaceDocumentation.xml
+    C:\Users\Public\Documents\ASCOM Interface\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ASCOM.Astrometry.xml
+    C:\Users\Public\Documents\ASCOM Interface\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.XML -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ASCOM.Exceptions.XML
+    C:\Users\Public\Documents\ASCOM Interface\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.xml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ASCOM.IConform.xml
+    C:\Users\Public\Documents\ASCOM Interface\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ASCOM.Utilities.xml
 </buildStep>
 <buildStep step="GenerateSharedContent">
 Generating shared content files (en-US, English (United States))...
-    Last step completed in 00:00:00.0360
+    Last step completed in 00:00:00.0470
 </buildStep>
 <buildStep step="GenerateApiFilter">
 Generating API filter for MRefBuilder...
-    Last step completed in 00:00:00.0190
+    Last step completed in 00:00:00.0140
 </buildStep>
 <buildStep step="GenerateReflectionInfo">
 Generating reflection information...
@@ -60,12 +67,12 @@ Generating reflection information...
 GenerateRefInfo:
   MrefBuilder (v2.4.10520.1)
   Copyright &#184; Microsoft 2006
-  Info: Loaded 4 assemblies for reflection and 5 dependency assemblies.
-  Info: Wrote information on 11 namespaces, 109 types, and 1009 members
+  Info: Loaded 5 assemblies for reflection and 9 dependency assemblies.
+  Info: Wrote information on 12 namespaces, 132 types, and 1276 members
   XslTransform (v2.4.10520.1)
   Copyright &#184; Microsoft 2005-2006
   Info: Applying XSL transformation 'C:\Program Files (x86)\Sandcastle\ProductionTransforms\MergeDuplicates.xsl'.
-    Last step completed in 00:00:01.0851
+    Last step completed in 00:00:01.1681
 </buildStep>
 <buildStep step="GenerateNamespaceSummaries">
 Generating namespace summary information...
@@ -73,13 +80,13 @@ Generating namespace summary information...
 </buildStep>
 <buildStep step="ApplyVisibilityProperties">
 Applying visibility properties to reflection information file
-    255 attribute nodes removed
+    262 attribute nodes removed
     0 explicit interface implementations removed
     0 local and base class EII elements removed
     14 protected members noted for removal
     3 protected inherited framework members noted for removal
     Removing previously noted unwanted APIs and elements
-    Last step completed in 00:00:00.1660
+    Last step completed in 00:00:00.1840
 </buildStep>
 <buildStep step="TransformReflectionInfo">
 Transforming reflection output...
@@ -92,7 +99,7 @@ TransformManifest:
   XslTransform (v2.4.10520.1)
   Copyright &#184; Microsoft 2005-2006
   Info: Applying XSL transformation 'C:\Program Files (x86)\Sandcastle\ProductionTransforms\ReflectionToManifest.xsl'.
-    Last step completed in 00:00:01.2401
+    Last step completed in 00:00:01.3791
 </buildStep>
 <buildStep step="ModifyHelpTopicFilenames">
 Modifying help topic filenames in reflection information file
@@ -195,117 +202,117 @@ Modifying help topic filenames in reflection information file
     Unique name M_ASCOM_Utilities_Interfaces_IUtilExtra_HoursToHMS_1 generated for M:ASCOM.Utilities.Interfaces.IUtilExtra.HoursToHMS(System.Double,System.String)
     Unique name M_ASCOM_Utilities_Interfaces_IUtilExtra_HoursToHMS_2 generated for M:ASCOM.Utilities.Interfaces.IUtilExtra.HoursToHMS(System.Double,System.String,System.String)
     Unique name M_ASCOM_Utilities_Interfaces_IUtilExtra_HoursToHMS_3 generated for M:ASCOM.Utilities.Interfaces.IUtilExtra.HoursToHMS(System.Double,System.String,System.String,System.String)
-    Last step completed in 00:00:00.1510
+    Last step completed in 00:00:00.1530
 </buildStep>
 <buildStep step="CopyStandardContent">
 Copying standard help content...
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\adm.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\adm.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\adm_arch.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\adm_arch.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\adm_dev.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\adm_dev.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\adm_dev_arch.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\adm_dev_arch.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\alert_caution.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\alert_caution.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\alert_note.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\alert_note.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\alert_security.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\alert_security.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\arch.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\arch.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\big_adm.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\big_adm.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\big_arch.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\big_arch.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\big_dev.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\big_dev.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\big_kw.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\big_kw.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\box.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\box.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\Caution.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\Caution.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\CFW.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\CFW.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\collall.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\collall.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\collapse.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\collapse.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\collapse_all.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\collapse_all.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\copycode.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\copycode.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\copycodeHighlight.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\copycodeHighlight.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\dev.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\dev.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\dev_arch.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\dev_arch.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\dropdown.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\dropdown.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\dropdownHover.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\dropdownHover.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\drpdown.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\drpdown.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\drpdown_orange.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\drpdown_orange.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\drpdown_orange_up.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\drpdown_orange_up.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\drpup.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\drpup.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\exp.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\exp.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\expall.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\expall.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\expand_all.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\expand_all.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\filter1a.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\filter1a.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\filter1c.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\filter1c.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\footer.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\footer.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\gradient.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\gradient.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\greencheck.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\greencheck.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\greychck.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\greychck.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\header_prev_next.jpg -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\header_prev_next.jpg
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\header_sql_tutorial_blank.jpg -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\header_sql_tutorial_blank.jpg
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\header_sql_tutorial_logo.GIF -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\header_sql_tutorial_logo.GIF
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\kw.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\kw.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\kw_adm.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\kw_adm.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\kw_adm_arch.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\kw_adm_arch.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\kw_adm_dev.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\kw_adm_dev.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\kw_adm_dev_arch.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\kw_adm_dev_arch.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\kw_arch.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\kw_arch.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\kw_dev.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\kw_dev.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\kw_dev_arch.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\kw_dev_arch.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\LastChild.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\LastChild.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\load.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\load.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\load_hover.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\load_hover.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\note.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\note.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pencil.GIF -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\pencil.GIF
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\privclass.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\privclass.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\privdelegate.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\privdelegate.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\privenum.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\privenum.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\privenumeration.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\privenumeration.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\privevent.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\privevent.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\privextension.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\privextension.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\privfield.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\privfield.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\privinterface.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\privinterface.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\privmethod.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\privmethod.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\privproperty.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\privproperty.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\privstructure.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\privstructure.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protclass.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\protclass.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protdelegate.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\protdelegate.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protenum.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\protenum.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protenumeration.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\protenumeration.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protevent.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\protevent.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protextension.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\protextension.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protfield.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\protfield.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protinterface.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\protinterface.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protmethod.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\protmethod.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protoperator.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\protoperator.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protproperty.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\protproperty.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protstructure.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\protstructure.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pubclass.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\pubclass.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pubdelegate.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\pubdelegate.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pubenum.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\pubenum.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pubenumeration.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\pubenumeration.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pubevent.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\pubevent.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pubextension.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\pubextension.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pubfield.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\pubfield.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pubinterface.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\pubinterface.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pubmethod.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\pubmethod.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\puboperator.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\puboperator.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pubproperty.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\pubproperty.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pubstructure.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\pubstructure.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\requirements1a.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\requirements1a.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\requirements1c.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\requirements1c.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\save.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\save.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\save_hover.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\save_hover.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\security.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\security.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\seealso1a.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\seealso1a.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\seealso1c.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\seealso1c.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\static.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\static.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\xna.gif -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\icons\xna.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\scripts\CheckboxMenu.js -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\scripts\CheckboxMenu.js
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\scripts\CommonUtilities.js -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\scripts\CommonUtilities.js
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\scripts\Dropdown.js -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\scripts\Dropdown.js
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\scripts\EventUtilities.js -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\scripts\EventUtilities.js
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\scripts\script_feedBack.js -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\scripts\script_feedBack.js
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\scripts\script_manifold.js -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\scripts\script_manifold.js
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\scripts\SplitScreen.js -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\scripts\SplitScreen.js
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\styles\Presentation.css -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\styles\Presentation.css
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\styles\Whidbey\presentation.css -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\styles\Whidbey\presentation.css
-    Last step completed in 00:00:00.2620
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\adm.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\adm.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\adm_arch.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\adm_arch.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\adm_dev.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\adm_dev.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\adm_dev_arch.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\adm_dev_arch.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\alert_caution.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\alert_caution.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\alert_note.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\alert_note.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\alert_security.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\alert_security.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\arch.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\arch.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\big_adm.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\big_adm.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\big_arch.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\big_arch.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\big_dev.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\big_dev.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\big_kw.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\big_kw.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\box.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\box.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\Caution.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\Caution.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\CFW.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\CFW.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\collall.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\collall.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\collapse.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\collapse.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\collapse_all.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\collapse_all.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\copycode.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\copycode.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\copycodeHighlight.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\copycodeHighlight.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\dev.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\dev.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\dev_arch.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\dev_arch.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\dropdown.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\dropdown.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\dropdownHover.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\dropdownHover.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\drpdown.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\drpdown.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\drpdown_orange.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\drpdown_orange.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\drpdown_orange_up.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\drpdown_orange_up.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\drpup.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\drpup.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\exp.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\exp.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\expall.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\expall.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\expand_all.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\expand_all.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\filter1a.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\filter1a.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\filter1c.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\filter1c.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\footer.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\footer.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\gradient.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\gradient.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\greencheck.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\greencheck.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\greychck.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\greychck.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\header_prev_next.jpg -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\header_prev_next.jpg
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\header_sql_tutorial_blank.jpg -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\header_sql_tutorial_blank.jpg
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\header_sql_tutorial_logo.GIF -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\header_sql_tutorial_logo.GIF
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\kw.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\kw.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\kw_adm.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\kw_adm.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\kw_adm_arch.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\kw_adm_arch.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\kw_adm_dev.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\kw_adm_dev.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\kw_adm_dev_arch.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\kw_adm_dev_arch.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\kw_arch.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\kw_arch.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\kw_dev.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\kw_dev.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\kw_dev_arch.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\kw_dev_arch.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\LastChild.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\LastChild.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\load.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\load.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\load_hover.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\load_hover.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\note.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\note.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pencil.GIF -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\pencil.GIF
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\privclass.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\privclass.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\privdelegate.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\privdelegate.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\privenum.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\privenum.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\privenumeration.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\privenumeration.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\privevent.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\privevent.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\privextension.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\privextension.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\privfield.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\privfield.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\privinterface.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\privinterface.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\privmethod.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\privmethod.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\privproperty.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\privproperty.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\privstructure.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\privstructure.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protclass.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\protclass.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protdelegate.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\protdelegate.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protenum.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\protenum.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protenumeration.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\protenumeration.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protevent.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\protevent.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protextension.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\protextension.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protfield.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\protfield.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protinterface.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\protinterface.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protmethod.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\protmethod.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protoperator.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\protoperator.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protproperty.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\protproperty.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\protstructure.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\protstructure.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pubclass.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\pubclass.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pubdelegate.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\pubdelegate.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pubenum.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\pubenum.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pubenumeration.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\pubenumeration.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pubevent.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\pubevent.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pubextension.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\pubextension.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pubfield.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\pubfield.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pubinterface.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\pubinterface.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pubmethod.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\pubmethod.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\puboperator.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\puboperator.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pubproperty.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\pubproperty.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\pubstructure.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\pubstructure.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\requirements1a.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\requirements1a.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\requirements1c.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\requirements1c.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\save.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\save.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\save_hover.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\save_hover.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\security.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\security.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\seealso1a.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\seealso1a.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\seealso1c.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\seealso1c.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\static.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\static.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\icons\xna.gif -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\icons\xna.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\scripts\CheckboxMenu.js -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\scripts\CheckboxMenu.js
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\scripts\CommonUtilities.js -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\scripts\CommonUtilities.js
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\scripts\Dropdown.js -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\scripts\Dropdown.js
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\scripts\EventUtilities.js -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\scripts\EventUtilities.js
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\scripts\script_feedBack.js -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\scripts\script_feedBack.js
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\scripts\script_manifold.js -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\scripts\script_manifold.js
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\scripts\SplitScreen.js -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\scripts\SplitScreen.js
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\styles\Presentation.css -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\styles\Presentation.css
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\styles\Whidbey\presentation.css -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\styles\Whidbey\presentation.css
+    Last step completed in 00:00:00.3460
 </buildStep>
 <buildStep step="CopyConceptualContent">
 Copying conceptual content...
@@ -313,97 +320,97 @@ Copying standard token shared content file...
 Checking for other token files...
 Checking for code snippets files...
 Copying images and creating the media map file...
-    C:\Users\Peter\Documents\ASCOM Source\Help\Introduction\ManufLogos.png -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Media\ManufLogos.png
+    C:\Users\Public\Documents\ASCOM Interface\Help\Introduction\ManufLogos.png -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Media\ManufLogos.png
 Generating conceptual topic files
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Introduction\Introduction.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Introduction\Introduction.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\7d9253c2-fdfd-4c0d-8225-a96bddb49731.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Introduction\Key Changes in 5.5.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Introduction\Key Changes in 5.5.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\661ad380-12b9-4a1f-b79c-5dde4f5e781b.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Introduction\ASCOM Platform for .NET.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Introduction\ASCOM Platform for .NET.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\3d17234a-c873-4f65-af0f-52f182081a44.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Introduction\ASCOM Platform for COM.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Introduction\ASCOM Platform for COM.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\e7734c14-0562-4010-b0c9-ddb5055cd318.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Introduction\Which NOVAS.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Introduction\Which NOVAS.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\d5ab3afe-60aa-49aa-8dfb-caae4f86a8fc.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Introduction\Acknowledgements.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Introduction\Acknowledgements.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\174fff87-9bd7-442e-98e1-9fe2ac09bac6.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Version History\Version Summary.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Version History\Version Summary.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\bfd53b69-9f13-489b-9a98-50c60d2a633b.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Version History\Version 5.5 Release.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Version History\Version 5.5 Release.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\c904b112-d671-4c56-a6eb-1f8d7c3d4c4b.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Version History\Version 5.5.1.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Version History\Version 5.5.1.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\1fe76099-cb79-4c76-bb26-55d4e7305a3d.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Version History\Version 6.0.0.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Version History\Version 6.0.0.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\6c2d0f0d-6460-494e-9c1f-08545fcff623.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Examples\Chooser.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Examples\Chooser.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\fe14eee4-22ee-4cad-a326-539ec2c00595.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Examples\Profile.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Examples\Profile.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\2d5dac1c-84b4-478d-9236-ca340f0107cd.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Examples\Serial.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Examples\Serial.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\bc48b451-760d-4b25-8596-6591b6474c7b.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Examples\TraceLogger.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Examples\TraceLogger.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\b5422371-8db9-4a8d-a659-04d6ba3878db.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Examples\Util.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Examples\Util.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\0b546b03-9433-4bb8-bddc-adedcd4b751a.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Examples\Timer.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Examples\Timer.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\1ec7d59c-b79d-41ba-8d1f-d04883c77831.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Examples\Environment.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Examples\Environment.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\5b11959b-ead4-4443-b2fc-bb0d781bd42a.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Examples\Transform.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Examples\Transform.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\89c42576-83e8-490f-8e87-1e03874c4aa2.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Examples\NOVASCOM.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Examples\NOVASCOM.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\0044dbc3-3e41-4ebe-b979-a4f50063631f.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Examples\NOVAS2.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Examples\NOVAS2.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\28fe13af-8e51-415d-9d43-af0472b752ef.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Tools and Features\Serial Tracing.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Tools and Features\Serial Tracing.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\5a679e99-87d5-4b72-a86e-88cbf10c52be.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Tools and Features\Profile Explorer.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Tools and Features\Profile Explorer.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\62da8408-c4ed-45d8-9398-9990dcbe8cbd.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Tools and Features\Profile Tracing.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Tools and Features\Profile Tracing.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\f2211b59-6f8c-46fb-b47e-2afb569f3133.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Tools and Features\Diagnostics Tool.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Tools and Features\Diagnostics Tool.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\0a23ff52-a935-4cd7-a693-9e3b90f7df29.xml
-    Parsing topic file 'C:\Users\Peter\Documents\ASCOM Source\Help\Developer Information\MultiThreading.aml'
-    C:\Users\Peter\Documents\ASCOM Source\Help\Developer Information\MultiThreading.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ddueXml\caf6b21d-755a-4f1c-891f-ce971a9a2f79.xml
-    Last step completed in 00:00:00.1450
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Introduction\Introduction.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Introduction\Introduction.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\7d9253c2-fdfd-4c0d-8225-a96bddb49731.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Introduction\Key Changes in 5.5.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Introduction\Key Changes in 5.5.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\661ad380-12b9-4a1f-b79c-5dde4f5e781b.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Introduction\ASCOM Platform for .NET.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Introduction\ASCOM Platform for .NET.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\3d17234a-c873-4f65-af0f-52f182081a44.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Introduction\ASCOM Platform for COM.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Introduction\ASCOM Platform for COM.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\e7734c14-0562-4010-b0c9-ddb5055cd318.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Introduction\Which NOVAS.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Introduction\Which NOVAS.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\d5ab3afe-60aa-49aa-8dfb-caae4f86a8fc.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Introduction\Acknowledgements.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Introduction\Acknowledgements.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\174fff87-9bd7-442e-98e1-9fe2ac09bac6.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Version History\Version Summary.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Version History\Version Summary.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\bfd53b69-9f13-489b-9a98-50c60d2a633b.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Version History\Version 5.5 Release.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Version History\Version 5.5 Release.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\c904b112-d671-4c56-a6eb-1f8d7c3d4c4b.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Version History\Version 5.5.1.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Version History\Version 5.5.1.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\1fe76099-cb79-4c76-bb26-55d4e7305a3d.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Version History\Version 6.0.0.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Version History\Version 6.0.0.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\6c2d0f0d-6460-494e-9c1f-08545fcff623.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Examples\Chooser.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Examples\Chooser.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\fe14eee4-22ee-4cad-a326-539ec2c00595.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Examples\Profile.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Examples\Profile.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\2d5dac1c-84b4-478d-9236-ca340f0107cd.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Examples\Serial.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Examples\Serial.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\bc48b451-760d-4b25-8596-6591b6474c7b.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Examples\TraceLogger.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Examples\TraceLogger.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\b5422371-8db9-4a8d-a659-04d6ba3878db.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Examples\Util.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Examples\Util.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\0b546b03-9433-4bb8-bddc-adedcd4b751a.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Examples\Timer.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Examples\Timer.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\1ec7d59c-b79d-41ba-8d1f-d04883c77831.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Examples\Environment.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Examples\Environment.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\5b11959b-ead4-4443-b2fc-bb0d781bd42a.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Examples\Transform.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Examples\Transform.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\89c42576-83e8-490f-8e87-1e03874c4aa2.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Examples\NOVASCOM.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Examples\NOVASCOM.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\0044dbc3-3e41-4ebe-b979-a4f50063631f.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Examples\NOVAS2.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Examples\NOVAS2.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\28fe13af-8e51-415d-9d43-af0472b752ef.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Tools and Features\Serial Tracing.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Tools and Features\Serial Tracing.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\5a679e99-87d5-4b72-a86e-88cbf10c52be.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Tools and Features\Profile Explorer.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Tools and Features\Profile Explorer.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\62da8408-c4ed-45d8-9398-9990dcbe8cbd.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Tools and Features\Profile Tracing.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Tools and Features\Profile Tracing.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\f2211b59-6f8c-46fb-b47e-2afb569f3133.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Tools and Features\Diagnostics Tool.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Tools and Features\Diagnostics Tool.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\0a23ff52-a935-4cd7-a693-9e3b90f7df29.xml
+    Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Developer Information\MultiThreading.aml'
+    C:\Users\Public\Documents\ASCOM Interface\Help\Developer Information\MultiThreading.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\caf6b21d-755a-4f1c-891f-ce971a9a2f79.xml
+    Last step completed in 00:00:00.1930
 </buildStep>
 <buildStep step="CreateConceptualTopicConfigs">
 Creating conceptual topic configuration files...
     Companion files
     _ContentMetadata_.xml
     ConceptualManifest.xml
-    Last step completed in 00:00:00.0340
+    Last step completed in 00:00:00.0350
 </buildStep>
 <buildStep step="CopyAdditionalContent">
 Copying additional content files...
-C:\Users\Peter\Documents\ASCOM Source\Help\Introduction\Acknowledgements.aml -&gt; C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\Introduction\Acknowledgements.aml
+C:\Users\Public\Documents\ASCOM Interface\Help\Introduction\Acknowledgements.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\Introduction\Acknowledgements.aml
     Last step completed in 00:00:00.0130
 </buildStep>
 <buildStep step="MergeTablesOfContents">
 Merging conceptual and additional tables of contents...
-    Last step completed in 00:00:00.0420
+    Last step completed in 00:00:00.0450
 </buildStep>
 <buildStep step="CreateBuildAssemblerConfigs">
 Creating Sandcastle configuration files...
     sandcastle.config
     conceptual.config
-    Last step completed in 00:00:00.0330
+    Last step completed in 00:00:00.0370
 </buildStep>
 <buildStep step="MergeCustomConfigs">
 Merging custom build component configurations
-C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\sandcastle.config
+C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\sandcastle.config
     Replacing default configuration for 'Post-transform Component' with the custom configuration
     Replaced configuration for 'Microsoft.Ddue.Tools.ResolveReferenceLinksComponent2' (instance 1) with configuration for 'Cached MSDN URL References'
     Replaced configuration for 'Microsoft.Ddue.Tools.CopyFromIndexComponent' (instance 1) with configuration for 'Cached Reflection Index Data'
     Replacing default configuration for 'Code Block Component' with the custom configuration
     No additional help attributes defined.  The 'MS Help 2 Attributes' component was not added.
-C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\conceptual.config
+C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\conceptual.config
     Replacing default configuration for 'Post-transform Component' with the custom configuration
     Replaced configuration for 'Microsoft.Ddue.Tools.ResolveReferenceLinksComponent2' (instance 1) with configuration for 'Cached MSDN URL References'
     Skipping component 'Cached Reflection Index Data', not used in conceptual build
     Replacing default configuration for 'Code Block Component' with the custom configuration
     Removing unused ExampleComponent.
-    Last step completed in 00:00:00.0550
+    Last step completed in 00:00:00.0590
 </buildStep>
 <buildStep step="BuildConceptualTopics">
 Building conceptual help topics...
@@ -419,7 +426,7 @@ BuildConceptualTopics:
   Info: CopyFromIndexComponent: Loaded 0 copy components.
   Info: SharedContentComponent: Instantiating component.
   Info: SharedContentComponent: Searching for files that match 'HelpFileBuilderTokens.tokens'.
-  Info: SharedContentComponent: Loading shared content file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\HelpFileBuilderTokens.tokens'.
+  Info: SharedContentComponent: Loading shared content file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\HelpFileBuilderTokens.tokens'.
   Info: SharedContentComponent: Found 1 files in HelpFileBuilderTokens.tokens.
   Info: SharedContentComponent: Loaded 1 shared content items.
   Info: CopyFromIndexComponent: Instantiating component.
@@ -451,23 +458,23 @@ BuildConceptualTopics:
   Info: SharedContentComponent: Loading shared content file 'C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\content\conceptual_content.xml'.
   Info: SharedContentComponent: Found 1 files in C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\content\conceptual_content.xml.
   Info: SharedContentComponent: Searching for files that match 'SharedBuilderContent.xml'.
-  Info: SharedContentComponent: Loading shared content file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\SharedBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'producttitle' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\SharedBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'copycode' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\SharedBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'locale' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\SharedBuilderContent.xml'.
+  Info: SharedContentComponent: Loading shared content file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\SharedBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'producttitle' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\SharedBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'copycode' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\SharedBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'locale' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\SharedBuilderContent.xml'.
   Info: SharedContentComponent: Found 1 files in SharedBuilderContent.xml.
   Info: SharedContentComponent: Searching for files that match 'PresentationStyleBuilderContent.xml'.
-  Info: SharedContentComponent: Loading shared content file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PresentationStyleBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'header' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PresentationStyleBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'footer' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PresentationStyleBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'fb_alias' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PresentationStyleBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'fb_product' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PresentationStyleBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'fb_body' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PresentationStyleBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'fb_send' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PresentationStyleBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'fb_headerfeedback' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PresentationStyleBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'feedback_alias' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PresentationStyleBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'feedback_product' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PresentationStyleBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'feedback_body' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Loading shared content file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'header' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'footer' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'fb_alias' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'fb_product' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'fb_body' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'fb_send' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'fb_headerfeedback' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'feedback_alias' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'feedback_product' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'feedback_body' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
   Info: SharedContentComponent: Found 1 files in PresentationStyleBuilderContent.xml.
   Info: SharedContentComponent: Loaded 203 shared content items.
   Info: ResolveConceptualLinksComponent: Instantiating component.
@@ -475,8 +482,8 @@ BuildConceptualTopics:
   Info: CachedResolveReferenceLinksComponent: Instantiating component.
   Info: CachedResolveReferenceLinksComponent: Creating MSDN URL resolver.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Program Files (x86)\Sandcastle\Data\Reflection' for targets files of the form '*.xml'.
-  Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working' for targets files of the form 'reflection.xml'.
-  Info: CachedResolveReferenceLinksComponent: Loaded 171494 reference targets.
+  Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working' for targets files of the form 'reflection.xml'.
+  Info: CachedResolveReferenceLinksComponent: Loaded 171826 reference targets.
   Info: CachedResolveReferenceLinksComponent: 
       [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.3]
       Cached Resolve Reference  Links 2 Component.  Copyright &#184; 2006-2010, Eric Woodruff, All Rights Reserved
@@ -509,7 +516,7 @@ BuildConceptualTopics:
   Info: BuildAssembler: Building topic 0a23ff52-a935-4cd7-a693-9e3b90f7df29
   Info: BuildAssembler: Building topic caf6b21d-755a-4f1c-891f-ce971a9a2f79
   Info: Processed 25 topics
-    Last step completed in 00:00:08.5979
+    Last step completed in 00:00:08.9467
 </buildStep>
 <buildStep step="BuildReferenceTopics">
 Building reference help topics...
@@ -521,7 +528,7 @@ BuildReferenceTopics:
   Info: CopyFromFileComponent: Loading data file 'C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\Transforms\skeleton.xml'.
   Info: CachedCopyFromIndexComponent: Instantiating component.
   Info: CachedCopyFromIndexComponent: Searching for files that match 'reflection.xml'.
-  Info: CachedCopyFromIndexComponent: Indexed 1403 elements in 1 files.
+  Info: CachedCopyFromIndexComponent: Indexed 1735 elements in 1 files.
   Info: CachedCopyFromIndexComponent: Loaded 0 copy components.
   Info: CachedCopyFromIndexComponent: 
       [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.3]
@@ -572,13 +579,13 @@ BuildReferenceTopics:
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Windows\Microsoft.NET\Framework\v2.0.50727\en\*.xml'.
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Program Files\Reference Assemblies\Microsoft\Framework\v3.0\*.xml'.
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\*.xml'.
-  Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\AstrometryNamespaceDocs.xml'.
-  Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\NamespaceDocumentation.xml'.
-  Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ASCOM.Astrometry.xml'.
-  Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ASCOM.Exceptions.XML'.
-  Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ASCOM.IConform.xml'.
-  Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\ASCOM.Utilities.xml'.
-  Info: CopyFromIndexComponent: Indexed 82403 elements in 56 files.
+  Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\AstrometryNamespaceDocs.xml'.
+  Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\NamespaceDocumentation.xml'.
+  Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ASCOM.Astrometry.xml'.
+  Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ASCOM.Exceptions.XML'.
+  Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ASCOM.IConform.xml'.
+  Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ASCOM.Utilities.xml'.
+  Info: CopyFromIndexComponent: Indexed 82345 elements in 56 files.
   Info: CopyFromIndexComponent: Loaded 0 copy components.
   Info: ForEachComponent: Instantiating component.
   Info: ForEachComponent: Loading subcomponents.
@@ -626,34 +633,34 @@ BuildReferenceTopics:
   Info: SharedContentComponent: Loading shared content file 'C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\content\feedBack_content.xml'.
   Info: SharedContentComponent: Found 1 files in C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\content\feedback_content.xml.
   Info: SharedContentComponent: Searching for files that match 'SharedBuilderContent.xml'.
-  Info: SharedContentComponent: Loading shared content file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\SharedBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'roottopictitle' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\SharedBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'rootlink' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\SharedBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'runningheadertext' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\SharedBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'locationinformation' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\SharedBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'assemblynameandmodule' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\SharedBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'copycode' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\SharedBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'locale' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\SharedBuilderContent.xml'.
+  Info: SharedContentComponent: Loading shared content file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\SharedBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'roottopictitle' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\SharedBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'rootlink' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\SharedBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'runningheadertext' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\SharedBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'locationinformation' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\SharedBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'assemblynameandmodule' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\SharedBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'copycode' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\SharedBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'locale' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\SharedBuilderContent.xml'.
   Info: SharedContentComponent: Found 1 files in SharedBuilderContent.xml.
   Info: SharedContentComponent: Searching for files that match 'PresentationStyleBuilderContent.xml'.
-  Info: SharedContentComponent: Loading shared content file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PresentationStyleBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'header' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PresentationStyleBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'footer' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PresentationStyleBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'fb_alias' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PresentationStyleBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'fb_product' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PresentationStyleBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'fb_body' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PresentationStyleBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'fb_send' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PresentationStyleBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'fb_headerfeedback' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PresentationStyleBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'feedback_alias' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PresentationStyleBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'feedback_product' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PresentationStyleBuilderContent.xml'.
-  Info: SharedContentComponent: Overriding shared content item 'feedback_body' with value in file 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Loading shared content file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'header' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'footer' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'fb_alias' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'fb_product' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'fb_body' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'fb_send' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'fb_headerfeedback' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'feedback_alias' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'feedback_product' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'feedback_body' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
   Info: SharedContentComponent: Found 1 files in PresentationStyleBuilderContent.xml.
   Info: SharedContentComponent: Loaded 587 shared content items.
   Info: CachedResolveReferenceLinksComponent: Instantiating component.
   Info: CachedResolveReferenceLinksComponent: Creating MSDN URL resolver.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Program Files (x86)\Sandcastle\Data\Reflection' for targets files of the form '*.xml'.
-  Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working' for targets files of the form 'reflection.xml'.
-  Info: CachedResolveReferenceLinksComponent: Loaded 171494 reference targets.
+  Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working' for targets files of the form 'reflection.xml'.
+  Info: CachedResolveReferenceLinksComponent: Loaded 171826 reference targets.
   Info: CachedResolveReferenceLinksComponent: 
       [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.3]
       Cached Resolve Reference  Links 2 Component.  Copyright &#184; 2006-2010, Eric Woodruff, All Rights Reserved
@@ -662,105 +669,229 @@ BuildReferenceTopics:
   Info: SaveComponent: Instantiating component.
   Info: BuildAssembler: Building topic N:ASCOM
   Info: BuildAssembler: Building topic T:ASCOM.DriverException
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.DriverException
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.DriverException
   Info: BuildAssembler: Building topic Methods.T:ASCOM.DriverException
   Info: BuildAssembler: Building topic Properties.T:ASCOM.DriverException
   Info: BuildAssembler: Building topic Overload:ASCOM.DriverException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.DriverException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.DriverException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.DriverException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.DriverException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.DriverException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.DriverException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.DriverException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.DriverException.#ctor(System.String)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.DriverException.#ctor(System.String)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;message&quot;/&gt; documentation for M:ASCOM.DriverException.#ctor(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.DriverException.#ctor(System.String,System.Exception)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.DriverException.#ctor(System.String,System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;message&quot;/&gt; documentation for M:ASCOM.DriverException.#ctor(System.String,System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;innerException&quot;/&gt; documentation for M:ASCOM.DriverException.#ctor(System.String,System.Exception)
   Info: BuildAssembler: Building topic M:ASCOM.DriverException.#ctor(System.String,System.Int32)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.DriverException.#ctor(System.String,System.Int32)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;message&quot;/&gt; documentation for M:ASCOM.DriverException.#ctor(System.String,System.Int32)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;number&quot;/&gt; documentation for M:ASCOM.DriverException.#ctor(System.String,System.Int32)
   Info: BuildAssembler: Building topic M:ASCOM.DriverException.#ctor(System.String,System.Int32,System.Exception)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.DriverException.#ctor(System.String,System.Int32,System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;message&quot;/&gt; documentation for M:ASCOM.DriverException.#ctor(System.String,System.Int32,System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;number&quot;/&gt; documentation for M:ASCOM.DriverException.#ctor(System.String,System.Int32,System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;inner&quot;/&gt; documentation for M:ASCOM.DriverException.#ctor(System.String,System.Int32,System.Exception)
   Info: BuildAssembler: Building topic P:ASCOM.DriverException.Number
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverException.Number
   Info: BuildAssembler: Building topic T:ASCOM.ErrorCodes
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.ErrorCodes
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.ErrorCodes
   Info: BuildAssembler: Building topic Fields.T:ASCOM.ErrorCodes
   Info: BuildAssembler: Building topic F:ASCOM.ErrorCodes.DriverBase
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:ASCOM.ErrorCodes.DriverBase
   Info: BuildAssembler: Building topic F:ASCOM.ErrorCodes.DriverMax
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:ASCOM.ErrorCodes.DriverMax
   Info: BuildAssembler: Building topic F:ASCOM.ErrorCodes.InvalidOperationException
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:ASCOM.ErrorCodes.InvalidOperationException
   Info: BuildAssembler: Building topic F:ASCOM.ErrorCodes.InvalidValue
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:ASCOM.ErrorCodes.InvalidValue
   Info: BuildAssembler: Building topic F:ASCOM.ErrorCodes.InvalidWhileParked
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:ASCOM.ErrorCodes.InvalidWhileParked
   Info: BuildAssembler: Building topic F:ASCOM.ErrorCodes.InvalidWhileSlaved
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:ASCOM.ErrorCodes.InvalidWhileSlaved
   Info: BuildAssembler: Building topic F:ASCOM.ErrorCodes.NotConnected
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:ASCOM.ErrorCodes.NotConnected
   Info: BuildAssembler: Building topic F:ASCOM.ErrorCodes.NotImplemented
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:ASCOM.ErrorCodes.NotImplemented
   Info: BuildAssembler: Building topic F:ASCOM.ErrorCodes.SettingsProviderError
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:ASCOM.ErrorCodes.SettingsProviderError
   Info: BuildAssembler: Building topic F:ASCOM.ErrorCodes.UnspecifiedError
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:ASCOM.ErrorCodes.UnspecifiedError
   Info: BuildAssembler: Building topic F:ASCOM.ErrorCodes.ValueNotSet
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:ASCOM.ErrorCodes.ValueNotSet
   Info: BuildAssembler: Building topic T:ASCOM.InvalidOperationException
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.InvalidOperationException
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.InvalidOperationException
   Info: BuildAssembler: Building topic Methods.T:ASCOM.InvalidOperationException
   Info: BuildAssembler: Building topic Properties.T:ASCOM.InvalidOperationException
   Info: BuildAssembler: Building topic Overload:ASCOM.InvalidOperationException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.InvalidOperationException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.InvalidOperationException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.InvalidOperationException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.InvalidOperationException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.InvalidOperationException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.InvalidOperationException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.InvalidOperationException.#ctor(System.Exception)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.InvalidOperationException.#ctor(System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;innerException&quot;/&gt; documentation for M:ASCOM.InvalidOperationException.#ctor(System.Exception)
   Info: BuildAssembler: Building topic M:ASCOM.InvalidOperationException.#ctor(System.String)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.InvalidOperationException.#ctor(System.String)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;message&quot;/&gt; documentation for M:ASCOM.InvalidOperationException.#ctor(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.InvalidOperationException.#ctor(System.String,System.Exception)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.InvalidOperationException.#ctor(System.String,System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;message&quot;/&gt; documentation for M:ASCOM.InvalidOperationException.#ctor(System.String,System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;innerException&quot;/&gt; documentation for M:ASCOM.InvalidOperationException.#ctor(System.String,System.Exception)
   Info: BuildAssembler: Building topic T:ASCOM.InvalidValueException
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.InvalidValueException
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.InvalidValueException
   Info: BuildAssembler: Building topic Methods.T:ASCOM.InvalidValueException
   Info: BuildAssembler: Building topic Properties.T:ASCOM.InvalidValueException
   Info: BuildAssembler: Building topic Overload:ASCOM.InvalidValueException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.InvalidValueException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.InvalidValueException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strPropertyOrMethod&quot;/&gt; documentation for M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strValue&quot;/&gt; documentation for M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strRange&quot;/&gt; documentation for M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String,System.Exception)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String,System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strPropertyOrMethod&quot;/&gt; documentation for M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String,System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strValue&quot;/&gt; documentation for M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String,System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strRange&quot;/&gt; documentation for M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String,System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;inner&quot;/&gt; documentation for M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String,System.Exception)
   Info: BuildAssembler: Building topic P:ASCOM.InvalidValueException.PropertyOrMethod
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.InvalidValueException.PropertyOrMethod
   Info: BuildAssembler: Building topic P:ASCOM.InvalidValueException.Range
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.InvalidValueException.Range
   Info: BuildAssembler: Building topic P:ASCOM.InvalidValueException.Value
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.InvalidValueException.Value
   Info: BuildAssembler: Building topic T:ASCOM.MethodNotImplementedException
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.MethodNotImplementedException
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.MethodNotImplementedException
   Info: BuildAssembler: Building topic Methods.T:ASCOM.MethodNotImplementedException
   Info: BuildAssembler: Building topic Properties.T:ASCOM.MethodNotImplementedException
   Info: BuildAssembler: Building topic Overload:ASCOM.MethodNotImplementedException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.MethodNotImplementedException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.MethodNotImplementedException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.MethodNotImplementedException.#ctor(System.String)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.MethodNotImplementedException.#ctor(System.String)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strMethod&quot;/&gt; documentation for M:ASCOM.MethodNotImplementedException.#ctor(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.MethodNotImplementedException.#ctor(System.String,System.Exception)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.MethodNotImplementedException.#ctor(System.String,System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strMethod&quot;/&gt; documentation for M:ASCOM.MethodNotImplementedException.#ctor(System.String,System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;inner&quot;/&gt; documentation for M:ASCOM.MethodNotImplementedException.#ctor(System.String,System.Exception)
   Info: BuildAssembler: Building topic P:ASCOM.MethodNotImplementedException.Method
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.MethodNotImplementedException.Method
   Info: BuildAssembler: Building topic T:ASCOM.NotConnectedException
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.NotConnectedException
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.NotConnectedException
   Info: BuildAssembler: Building topic Methods.T:ASCOM.NotConnectedException
   Info: BuildAssembler: Building topic Properties.T:ASCOM.NotConnectedException
   Info: BuildAssembler: Building topic Overload:ASCOM.NotConnectedException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.NotConnectedException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.NotConnectedException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.NotConnectedException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.NotConnectedException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.NotConnectedException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.NotConnectedException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.NotConnectedException.#ctor(System.Exception)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.NotConnectedException.#ctor(System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;innerException&quot;/&gt; documentation for M:ASCOM.NotConnectedException.#ctor(System.Exception)
   Info: BuildAssembler: Building topic M:ASCOM.NotConnectedException.#ctor(System.String)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.NotConnectedException.#ctor(System.String)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;message&quot;/&gt; documentation for M:ASCOM.NotConnectedException.#ctor(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.NotConnectedException.#ctor(System.String,System.Exception)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.NotConnectedException.#ctor(System.String,System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;message&quot;/&gt; documentation for M:ASCOM.NotConnectedException.#ctor(System.String,System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;innerException&quot;/&gt; documentation for M:ASCOM.NotConnectedException.#ctor(System.String,System.Exception)
   Info: BuildAssembler: Building topic T:ASCOM.NotImplementedException
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.NotImplementedException
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.NotImplementedException
   Info: BuildAssembler: Building topic Methods.T:ASCOM.NotImplementedException
   Info: BuildAssembler: Building topic Properties.T:ASCOM.NotImplementedException
   Info: BuildAssembler: Building topic Overload:ASCOM.NotImplementedException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.NotImplementedException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.NotImplementedException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.NotImplementedException.#ctor(System.String)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.NotImplementedException.#ctor(System.String)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strPropertyOrMethod&quot;/&gt; documentation for M:ASCOM.NotImplementedException.#ctor(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.NotImplementedException.#ctor(System.String,System.Exception)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.NotImplementedException.#ctor(System.String,System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strPropertyOrMethod&quot;/&gt; documentation for M:ASCOM.NotImplementedException.#ctor(System.String,System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;inner&quot;/&gt; documentation for M:ASCOM.NotImplementedException.#ctor(System.String,System.Exception)
   Info: BuildAssembler: Building topic P:ASCOM.NotImplementedException.PropertyOrMethod
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.NotImplementedException.PropertyOrMethod
   Info: BuildAssembler: Building topic T:ASCOM.ParkedException
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.ParkedException
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.ParkedException
   Info: BuildAssembler: Building topic Methods.T:ASCOM.ParkedException
   Info: BuildAssembler: Building topic Properties.T:ASCOM.ParkedException
   Info: BuildAssembler: Building topic Overload:ASCOM.ParkedException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.ParkedException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.ParkedException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.ParkedException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.ParkedException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.ParkedException.#ctor(System.Exception)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.ParkedException.#ctor(System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;inner&quot;/&gt; documentation for M:ASCOM.ParkedException.#ctor(System.Exception)
   Info: BuildAssembler: Building topic T:ASCOM.PropertyNotImplementedException
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.PropertyNotImplementedException
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.PropertyNotImplementedException
   Info: BuildAssembler: Building topic Methods.T:ASCOM.PropertyNotImplementedException
   Info: BuildAssembler: Building topic Properties.T:ASCOM.PropertyNotImplementedException
   Info: BuildAssembler: Building topic Overload:ASCOM.PropertyNotImplementedException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.PropertyNotImplementedException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.PropertyNotImplementedException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.PropertyNotImplementedException.#ctor(System.String,System.Boolean)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.PropertyNotImplementedException.#ctor(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strProperty&quot;/&gt; documentation for M:ASCOM.PropertyNotImplementedException.#ctor(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;bAccessorSet&quot;/&gt; documentation for M:ASCOM.PropertyNotImplementedException.#ctor(System.String,System.Boolean)
   Info: BuildAssembler: Building topic M:ASCOM.PropertyNotImplementedException.#ctor(System.String,System.Boolean,System.Exception)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.PropertyNotImplementedException.#ctor(System.String,System.Boolean,System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strProperty&quot;/&gt; documentation for M:ASCOM.PropertyNotImplementedException.#ctor(System.String,System.Boolean,System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;bAccessorSet&quot;/&gt; documentation for M:ASCOM.PropertyNotImplementedException.#ctor(System.String,System.Boolean,System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;inner&quot;/&gt; documentation for M:ASCOM.PropertyNotImplementedException.#ctor(System.String,System.Boolean,System.Exception)
   Info: BuildAssembler: Building topic P:ASCOM.PropertyNotImplementedException.AccessorSet
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.PropertyNotImplementedException.AccessorSet
   Info: BuildAssembler: Building topic P:ASCOM.PropertyNotImplementedException.Property
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.PropertyNotImplementedException.Property
   Info: BuildAssembler: Building topic T:ASCOM.SlavedException
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.SlavedException
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.SlavedException
   Info: BuildAssembler: Building topic Methods.T:ASCOM.SlavedException
   Info: BuildAssembler: Building topic Properties.T:ASCOM.SlavedException
   Info: BuildAssembler: Building topic Overload:ASCOM.SlavedException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.SlavedException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.SlavedException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.SlavedException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.SlavedException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.SlavedException.#ctor(System.Exception)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.SlavedException.#ctor(System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;inner&quot;/&gt; documentation for M:ASCOM.SlavedException.#ctor(System.Exception)
   Info: BuildAssembler: Building topic T:ASCOM.ValueNotSetException
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.ValueNotSetException
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.ValueNotSetException
   Info: BuildAssembler: Building topic Methods.T:ASCOM.ValueNotSetException
   Info: BuildAssembler: Building topic Properties.T:ASCOM.ValueNotSetException
   Info: BuildAssembler: Building topic Overload:ASCOM.ValueNotSetException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.ValueNotSetException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.ValueNotSetException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.ValueNotSetException.#ctor(System.String)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.ValueNotSetException.#ctor(System.String)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strPropertyOrMethod&quot;/&gt; documentation for M:ASCOM.ValueNotSetException.#ctor(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.ValueNotSetException.#ctor(System.String,System.Exception)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.ValueNotSetException.#ctor(System.String,System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strPropertyOrMethod&quot;/&gt; documentation for M:ASCOM.ValueNotSetException.#ctor(System.String,System.Exception)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;inner&quot;/&gt; documentation for M:ASCOM.ValueNotSetException.#ctor(System.String,System.Exception)
   Info: BuildAssembler: Building topic P:ASCOM.ValueNotSetException.PropertyOrMethod
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.ValueNotSetException.PropertyOrMethod
   Info: BuildAssembler: Building topic N:ASCOM.Astrometry
   Info: BuildAssembler: Building topic T:ASCOM.Astrometry.Accuracy
   Info: BuildAssembler: Building topic T:ASCOM.Astrometry.Body
@@ -1573,6 +1704,618 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic P:ASCOM.Conform.IConformErrorNumbers.InvalidValue
   Info: BuildAssembler: Building topic P:ASCOM.Conform.IConformErrorNumbers.NotImplemented
   Info: BuildAssembler: Building topic P:ASCOM.Conform.IConformErrorNumbers.ValueNotSet
+  Info: BuildAssembler: Building topic N:ASCOM.Interface
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for N:ASCOM.Interface
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.AlignmentModes
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.AlignmentModes
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.CameraStates
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.CameraStates
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.DriveRates
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.DriveRates
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.EquatorialCoordinateType
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.EquatorialCoordinateType
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.GuideDirections
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.GuideDirections
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.IAscomDriver
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.IAscomDriver
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.IAscomDriver
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Interface.IAscomDriver
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Interface.IAscomDriver
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IAscomDriver.Connected
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IAscomDriver.Connected
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IAscomDriver.Description
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IAscomDriver.Description
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IAscomDriver.DriverInfo
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IAscomDriver.DriverInfo
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IAscomDriver.DriverVersion
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IAscomDriver.DriverVersion
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IAscomDriver.InterfaceVersion
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IAscomDriver.InterfaceVersion
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IAscomDriver.Name
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IAscomDriver.Name
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IAscomDriver.SetupDialog
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IAscomDriver.SetupDialog
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.IAxisRates
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.IAxisRates
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.IAxisRates
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Interface.IAxisRates
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Interface.IAxisRates
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IAxisRates.Count
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IAxisRates.Count
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IAxisRates.GetEnumerator
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IAxisRates.GetEnumerator
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.IAxisRates.GetEnumerator
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IAxisRates.Item(System.Int32)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IAxisRates.Item(System.Int32)
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.ICamera
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.ICamera
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.ICamera
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Interface.ICamera
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Interface.ICamera
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ICamera.AbortExposure
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ICamera.AbortExposure
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.BinX
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.BinX
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.BinY
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.BinY
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.CameraState
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.CameraState
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.CameraXSize
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.CameraXSize
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.CameraYSize
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.CameraYSize
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.CanAbortExposure
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.CanAbortExposure
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.CanAsymmetricBin
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.CanAsymmetricBin
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.CanGetCoolerPower
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.CanGetCoolerPower
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.CanPulseGuide
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.CanPulseGuide
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.CanSetCCDTemperature
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.CanSetCCDTemperature
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.CanStopExposure
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.CanStopExposure
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.CCDTemperature
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.CCDTemperature
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.Connected
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.Connected
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.CoolerOn
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.CoolerOn
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.CoolerPower
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.CoolerPower
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.Description
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.Description
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.ElectronsPerADU
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.ElectronsPerADU
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.FullWellCapacity
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.FullWellCapacity
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.HasShutter
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.HasShutter
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.HeatSinkTemperature
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.HeatSinkTemperature
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.ImageArray
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.ImageArray
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.ImageArrayVariant
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.ImageArrayVariant
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.ImageReady
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.ImageReady
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.IsPulseGuiding
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.IsPulseGuiding
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.LastError
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.LastError
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.LastExposureDuration
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.LastExposureDuration
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.LastExposureStartTime
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.LastExposureStartTime
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.MaxADU
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.MaxADU
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.MaxBinX
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.MaxBinX
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.MaxBinY
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.MaxBinY
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.NumX
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.NumX
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.NumY
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.NumY
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.PixelSizeX
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.PixelSizeX
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.PixelSizeY
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.PixelSizeY
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ICamera.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ICamera.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Direction&quot;/&gt; documentation for M:ASCOM.Interface.ICamera.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Duration&quot;/&gt; documentation for M:ASCOM.Interface.ICamera.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.SetCCDTemperature
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.SetCCDTemperature
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ICamera.SetupDialog
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ICamera.SetupDialog
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ICamera.StartExposure(System.Double,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ICamera.StartExposure(System.Double,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Duration&quot;/&gt; documentation for M:ASCOM.Interface.ICamera.StartExposure(System.Double,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Light&quot;/&gt; documentation for M:ASCOM.Interface.ICamera.StartExposure(System.Double,System.Boolean)
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.StartX
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.StartX
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.StartY
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.StartY
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ICamera.StopExposure
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ICamera.StopExposure
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.ICameraV2
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.ICameraV2
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.ICameraV2
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Interface.ICameraV2
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Interface.ICameraV2
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.BayerOffsetX
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.BayerOffsetX
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.BayerOffsetY
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.BayerOffsetY
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.CanFastReadout
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.CanFastReadout
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.ExposureMax
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.ExposureMax
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.ExposureMin
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.ExposureMin
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.ExposureResolution
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.ExposureResolution
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.FastReadout
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.FastReadout
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.Gain
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.Gain
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.GainMax
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.GainMax
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.GainMin
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.GainMin
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.Gains
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.Gains
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.PercentCompleted
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.PercentCompleted
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.ReadoutMode
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.ReadoutMode
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.ReadoutModes
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.ReadoutModes
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.SensorName
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.SensorName
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.SensorType
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.SensorType
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.IDeviceControl
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.IDeviceControl
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.IDeviceControl
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Interface.IDeviceControl
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Interface.IDeviceControl
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IDeviceControl.Action(System.String,System.String)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDeviceControl.Action(System.String,System.String)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.IDeviceControl.Action(System.String,System.String)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;ActionName&quot;/&gt; documentation for M:ASCOM.Interface.IDeviceControl.Action(System.String,System.String)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;ActionParameters&quot;/&gt; documentation for M:ASCOM.Interface.IDeviceControl.Action(System.String,System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IDeviceControl.CommandBlind(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDeviceControl.CommandBlind(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Command&quot;/&gt; documentation for M:ASCOM.Interface.IDeviceControl.CommandBlind(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Raw&quot;/&gt; documentation for M:ASCOM.Interface.IDeviceControl.CommandBlind(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IDeviceControl.CommandBool(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDeviceControl.CommandBool(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.IDeviceControl.CommandBool(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Command&quot;/&gt; documentation for M:ASCOM.Interface.IDeviceControl.CommandBool(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Raw&quot;/&gt; documentation for M:ASCOM.Interface.IDeviceControl.CommandBool(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IDeviceControl.CommandString(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDeviceControl.CommandString(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.IDeviceControl.CommandString(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Command&quot;/&gt; documentation for M:ASCOM.Interface.IDeviceControl.CommandString(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Raw&quot;/&gt; documentation for M:ASCOM.Interface.IDeviceControl.CommandString(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDeviceControl.LastResult
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDeviceControl.LastResult
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDeviceControl.SupportedActions
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDeviceControl.SupportedActions
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.IDome
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.IDome
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.IDome
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Interface.IDome
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Interface.IDome
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IDome.AbortSlew
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDome.AbortSlew
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDome.Altitude
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDome.Altitude
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDome.AtHome
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDome.AtHome
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDome.AtPark
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDome.AtPark
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDome.Azimuth
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDome.Azimuth
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDome.CanFindHome
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDome.CanFindHome
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDome.CanPark
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDome.CanPark
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDome.CanSetAltitude
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDome.CanSetAltitude
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDome.CanSetAzimuth
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDome.CanSetAzimuth
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDome.CanSetPark
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDome.CanSetPark
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDome.CanSetShutter
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDome.CanSetShutter
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDome.CanSlave
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDome.CanSlave
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDome.CanSyncAzimuth
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDome.CanSyncAzimuth
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IDome.CloseShutter
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDome.CloseShutter
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IDome.CommandBlind(System.String)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDome.CommandBlind(System.String)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Command&quot;/&gt; documentation for M:ASCOM.Interface.IDome.CommandBlind(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IDome.CommandBool(System.String)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDome.CommandBool(System.String)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.IDome.CommandBool(System.String)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Command&quot;/&gt; documentation for M:ASCOM.Interface.IDome.CommandBool(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IDome.CommandString(System.String)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDome.CommandString(System.String)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.IDome.CommandString(System.String)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Command&quot;/&gt; documentation for M:ASCOM.Interface.IDome.CommandString(System.String)
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDome.Connected
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDome.Connected
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDome.Description
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDome.Description
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDome.DriverInfo
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDome.DriverInfo
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IDome.FindHome
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDome.FindHome
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDome.InterfaceVersion
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDome.InterfaceVersion
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDome.Name
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDome.Name
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IDome.OpenShutter
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDome.OpenShutter
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IDome.Park
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDome.Park
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IDome.SetPark
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDome.SetPark
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IDome.SetupDialog
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDome.SetupDialog
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDome.ShutterStatus
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDome.ShutterStatus
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDome.Slaved
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDome.Slaved
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDome.Slewing
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDome.Slewing
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IDome.SlewToAltitude(System.Double)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDome.SlewToAltitude(System.Double)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Altitude&quot;/&gt; documentation for M:ASCOM.Interface.IDome.SlewToAltitude(System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IDome.SlewToAzimuth(System.Double)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDome.SlewToAzimuth(System.Double)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Azimuth&quot;/&gt; documentation for M:ASCOM.Interface.IDome.SlewToAzimuth(System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IDome.SyncToAzimuth(System.Double)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDome.SyncToAzimuth(System.Double)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Azimuth&quot;/&gt; documentation for M:ASCOM.Interface.IDome.SyncToAzimuth(System.Double)
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.IFilterWheel
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.IFilterWheel
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.IFilterWheel
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Interface.IFilterWheel
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Interface.IFilterWheel
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IFilterWheel.Connected
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IFilterWheel.Connected
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IFilterWheel.FocusOffsets
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IFilterWheel.FocusOffsets
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IFilterWheel.Names
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IFilterWheel.Names
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IFilterWheel.Position
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IFilterWheel.Position
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IFilterWheel.SetupDialog
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IFilterWheel.SetupDialog
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.IFocuser
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.IFocuser
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.IFocuser
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Interface.IFocuser
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Interface.IFocuser
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IFocuser.Absolute
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IFocuser.Absolute
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IFocuser.Halt
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IFocuser.Halt
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IFocuser.IsMoving
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IFocuser.IsMoving
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IFocuser.Link
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IFocuser.Link
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IFocuser.MaxIncrement
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IFocuser.MaxIncrement
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IFocuser.MaxStep
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IFocuser.MaxStep
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IFocuser.Move(System.Int32)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IFocuser.Move(System.Int32)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;val&quot;/&gt; documentation for M:ASCOM.Interface.IFocuser.Move(System.Int32)
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IFocuser.Position
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IFocuser.Position
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IFocuser.SetupDialog
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IFocuser.SetupDialog
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IFocuser.StepSize
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IFocuser.StepSize
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IFocuser.TempComp
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IFocuser.TempComp
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IFocuser.TempCompAvailable
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IFocuser.TempCompAvailable
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IFocuser.Temperature
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IFocuser.Temperature
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.IRate
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.IRate
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.IRate
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Interface.IRate
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IRate.Maximum
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IRate.Maximum
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IRate.Minimum
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IRate.Minimum
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.IRotator
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.IRotator
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.IRotator
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Interface.IRotator
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Interface.IRotator
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IRotator.CanReverse
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IRotator.CanReverse
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IRotator.Connected
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IRotator.Connected
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IRotator.Halt
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IRotator.Halt
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IRotator.IsMoving
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IRotator.IsMoving
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IRotator.Move(System.Single)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IRotator.Move(System.Single)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Position&quot;/&gt; documentation for M:ASCOM.Interface.IRotator.Move(System.Single)
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IRotator.MoveAbsolute(System.Single)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IRotator.MoveAbsolute(System.Single)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Position&quot;/&gt; documentation for M:ASCOM.Interface.IRotator.MoveAbsolute(System.Single)
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IRotator.Position
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IRotator.Position
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IRotator.Reverse
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IRotator.Reverse
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IRotator.SetupDialog
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IRotator.SetupDialog
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IRotator.StepSize
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IRotator.StepSize
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IRotator.TargetPosition
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IRotator.TargetPosition
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.ISwitch
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.ISwitch
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.ISwitch
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Interface.ISwitch
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Interface.ISwitch
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ISwitch.Connected
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ISwitch.Connected
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ISwitch.Description
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ISwitch.Description
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ISwitch.DriverInfo
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ISwitch.DriverInfo
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ISwitch.DriverVersion
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ISwitch.DriverVersion
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ISwitch.GetSwitch(System.Int16)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ISwitch.GetSwitch(System.Int16)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.ISwitch.GetSwitch(System.Int16)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;ID&quot;/&gt; documentation for M:ASCOM.Interface.ISwitch.GetSwitch(System.Int16)
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ISwitch.GetSwitchName(System.Int16)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ISwitch.GetSwitchName(System.Int16)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.ISwitch.GetSwitchName(System.Int16)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;ID&quot;/&gt; documentation for M:ASCOM.Interface.ISwitch.GetSwitchName(System.Int16)
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ISwitch.InterfaceVersion
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ISwitch.InterfaceVersion
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ISwitch.MaxSwitch
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ISwitch.MaxSwitch
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ISwitch.Name
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ISwitch.Name
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ISwitch.SetSwitch(System.Int16,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ISwitch.SetSwitch(System.Int16,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;ID&quot;/&gt; documentation for M:ASCOM.Interface.ISwitch.SetSwitch(System.Int16,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;State&quot;/&gt; documentation for M:ASCOM.Interface.ISwitch.SetSwitch(System.Int16,System.Boolean)
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ISwitch.SetSwitchName(System.Int16,System.String)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ISwitch.SetSwitchName(System.Int16,System.String)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;ID&quot;/&gt; documentation for M:ASCOM.Interface.ISwitch.SetSwitchName(System.Int16,System.String)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;State&quot;/&gt; documentation for M:ASCOM.Interface.ISwitch.SetSwitchName(System.Int16,System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ISwitch.SetupDialog
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ISwitch.SetupDialog
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.ITelescope
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.ITelescope
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.ITelescope
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Interface.ITelescope
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Interface.ITelescope
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.AbortSlew
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.AbortSlew
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.AlignmentMode
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.AlignmentMode
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.Altitude
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.Altitude
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.ApertureArea
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.ApertureArea
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.ApertureDiameter
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.ApertureDiameter
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.AtHome
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.AtHome
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.AtPark
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.AtPark
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.AxisRates(ASCOM.Interface.TelescopeAxes)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.AxisRates(ASCOM.Interface.TelescopeAxes)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.ITelescope.AxisRates(ASCOM.Interface.TelescopeAxes)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Axis&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.AxisRates(ASCOM.Interface.TelescopeAxes)
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.Azimuth
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.Azimuth
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.CanFindHome
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.CanFindHome
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.CanMoveAxis(ASCOM.Interface.TelescopeAxes)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.CanMoveAxis(ASCOM.Interface.TelescopeAxes)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.ITelescope.CanMoveAxis(ASCOM.Interface.TelescopeAxes)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Axis&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.CanMoveAxis(ASCOM.Interface.TelescopeAxes)
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.CanPark
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.CanPark
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.CanPulseGuide
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.CanPulseGuide
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.CanSetDeclinationRate
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.CanSetDeclinationRate
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.CanSetGuideRates
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.CanSetGuideRates
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.CanSetPark
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.CanSetPark
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.CanSetPierSide
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.CanSetPierSide
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.CanSetRightAscensionRate
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.CanSetRightAscensionRate
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.CanSetTracking
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.CanSetTracking
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.CanSlew
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.CanSlew
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.CanSlewAltAz
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.CanSlewAltAz
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.CanSlewAltAzAsync
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.CanSlewAltAzAsync
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.CanSlewAsync
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.CanSlewAsync
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.CanSync
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.CanSync
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.CanSyncAltAz
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.CanSyncAltAz
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.CanUnpark
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.CanUnpark
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.CommandBlind(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.CommandBlind(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Command&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.CommandBlind(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Raw&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.CommandBlind(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.CommandBool(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.CommandBool(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.ITelescope.CommandBool(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Command&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.CommandBool(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Raw&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.CommandBool(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.CommandString(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.CommandString(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.ITelescope.CommandString(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Command&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.CommandString(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Raw&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.CommandString(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.Connected
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.Connected
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.Declination
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.Declination
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.DeclinationRate
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.DeclinationRate
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.Description
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.Description
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.DestinationSideOfPier(System.Double,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.DestinationSideOfPier(System.Double,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.ITelescope.DestinationSideOfPier(System.Double,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;RightAscension&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.DestinationSideOfPier(System.Double,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Declination&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.DestinationSideOfPier(System.Double,System.Double)
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.DoesRefraction
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.DoesRefraction
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.DriverInfo
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.DriverInfo
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.DriverVersion
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.DriverVersion
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.EquatorialSystem
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.EquatorialSystem
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.FindHome
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.FindHome
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.FocalLength
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.FocalLength
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.GuideRateDeclination
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.GuideRateDeclination
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.GuideRateRightAscension
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.GuideRateRightAscension
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.InterfaceVersion
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.InterfaceVersion
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.IsPulseGuiding
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.IsPulseGuiding
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.MoveAxis(ASCOM.Interface.TelescopeAxes,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.MoveAxis(ASCOM.Interface.TelescopeAxes,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Axis&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.MoveAxis(ASCOM.Interface.TelescopeAxes,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Rate&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.MoveAxis(ASCOM.Interface.TelescopeAxes,System.Double)
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.Name
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.Name
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.Park
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.Park
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Direction&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Duration&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.RightAscension
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.RightAscension
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.RightAscensionRate
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.RightAscensionRate
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.SetPark
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.SetPark
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.SetupDialog
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.SetupDialog
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.SideOfPier
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.SideOfPier
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.SiderealTime
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.SiderealTime
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.SiteElevation
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.SiteElevation
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.SiteLatitude
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.SiteLatitude
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.SiteLongitude
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.SiteLongitude
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.Slewing
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.Slewing
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.SlewSettleTime
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.SlewSettleTime
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.SlewToAltAz(System.Double,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToAltAz(System.Double,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Azimuth&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToAltAz(System.Double,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Altitude&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToAltAz(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.SlewToAltAzAsync(System.Double,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToAltAzAsync(System.Double,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Azimuth&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToAltAzAsync(System.Double,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Altitude&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToAltAzAsync(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.SlewToCoordinates(System.Double,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToCoordinates(System.Double,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;RightAscension&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToCoordinates(System.Double,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Declination&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToCoordinates(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.SlewToCoordinatesAsync(System.Double,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToCoordinatesAsync(System.Double,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;RightAscension&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToCoordinatesAsync(System.Double,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Declination&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToCoordinatesAsync(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.SlewToTarget
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToTarget
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.SlewToTargetAsync
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToTargetAsync
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.SyncToAltAz(System.Double,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.SyncToAltAz(System.Double,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Azimuth&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SyncToAltAz(System.Double,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Altitude&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SyncToAltAz(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.SyncToCoordinates(System.Double,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.SyncToCoordinates(System.Double,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;RightAscension&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SyncToCoordinates(System.Double,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Declination&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SyncToCoordinates(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.SyncToTarget
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.SyncToTarget
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.TargetDeclination
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.TargetDeclination
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.TargetRightAscension
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.TargetRightAscension
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.Tracking
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.Tracking
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.TrackingRate
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.TrackingRate
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.TrackingRates
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.TrackingRates
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.Unpark
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.Unpark
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.UTCDate
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.UTCDate
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.ITelescopeV3
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.ITelescopeV3
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.ITelescopeV3
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Interface.ITelescopeV3
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Interface.ITelescopeV3
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.ITrackingRates
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.ITrackingRates
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.ITrackingRates
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Interface.ITrackingRates
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Interface.ITrackingRates
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITrackingRates.Count
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITrackingRates.Count
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITrackingRates.GetEnumerator
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITrackingRates.GetEnumerator
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.ITrackingRates.GetEnumerator
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITrackingRates.Item(System.Int32)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITrackingRates.Item(System.Int32)
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.PierSide
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.PierSide
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.SensorType
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.SensorType
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.ShutterState
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.ShutterState
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.TelescopeAxes
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.TelescopeAxes
   Info: BuildAssembler: Building topic N:ASCOM.Utilities
   Info: BuildAssembler: Building topic T:ASCOM.Utilities.Chooser
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Utilities.Chooser
@@ -1977,9 +2720,11 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtilExtra.HoursToHMS(System.Double,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtilExtra.HoursToHMS(System.Double,System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtilExtra.HoursToHMS(System.Double,System.String,System.String,System.String)
-  Info: Processed 1305 topics
+  Info: Processed 1598 topics
   Info: CachedCopyFromIndexComponent: Used &quot;reflection&quot; cache entries: 2
-    Last step completed in 00:00:21.3471
+  Info: CachedResolveReferenceLinksComponent: MSDN URL cache updated.  Saving new information to C:\Users\Peter\AppData\Local\EWSoftware\Sandcastle Help File Builder\Cache\MsdnUrl.cache
+  Info: CachedResolveReferenceLinksComponent: New cache size: 41 entries
+    Last step completed in 00:00:27.2139
 </buildStep>
 <buildStep step="GenerateIntermediateTableOfContents">
 Generating intermediate table of contents file...
@@ -1991,7 +2736,7 @@ GenerateIntermediateTOC:
 <plugIn name="Hierarchical Table of Contents" behavior="After" priority="1000">
 Retrieving namespace topic title from shared content...
 Creating namespace hierarchy...
-</plugIn>    Last step completed in 00:00:00.3090
+</plugIn>    Last step completed in 00:00:00.3500
 </buildStep>
 <buildStep step="ExtractingHtmlInfo">
 Extracting HTML info for HTML Help 1 and/or website...
@@ -2001,19 +2746,19 @@ Copyright &#184; 2008-2010, Eric Woodruff, All Rights Reserved
 E-Mail: Eric@EWoodruff.us
 
 Using LCID '1033', code page '65001', encoding charset 'UTF-8'.
-Processed 1330 HTML files
+Processed 1623 HTML files
 Sorting keywords and generating See Also indices
-Saving HTML Help 1 keyword index to C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PlatformHelp.hhk
-Saving HTML Help 1 table of contents to C:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\PlatformHelp.hhc
-    Last step completed in 00:00:01.9602
+Saving HTML Help 1 keyword index to C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PlatformHelp.hhk
+Saving HTML Help 1 table of contents to C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PlatformHelp.hhc
+    Last step completed in 00:00:02.6542
 </buildStep>
 <buildStep step="GenerateHelpFormatTableOfContents">
 Generating HTML Help 1 table of contents file...
-    Last step completed in 00:00:00.0090
+    Last step completed in 00:00:00.0100
 </buildStep>
 <buildStep step="UpdateTableOfContents">
 Updating table of contents with additional content items and determining default topic...
-    Last step completed in 00:00:00.0070
+    Last step completed in 00:00:00.0080
 </buildStep>
 <buildStep step="GenerateHelpFileIndex">
 Generating HTML Help 1 index file...
@@ -2021,7 +2766,7 @@ Generating HTML Help 1 index file...
 </buildStep>
 <buildStep step="GenerateHelpProject">
 Generating HTML Help 1 project file...
-    Last step completed in 00:00:00.0140
+    Last step completed in 00:00:00.0160
 </buildStep>
 <buildStep step="CompilingHelpFile">
 Compiling HTML Help 1 file...
@@ -2031,19 +2776,19 @@ Build1xHelpFile:
   
   
   
-  Compiling c:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\PlatformHelp.chm
+  Compiling c:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\PlatformHelp.chm
   
   
   
   
   
-  Compile time: 0 minutes, 10 seconds
+  Compile time: 0 minutes, 12 seconds
   
-  1,332	Topics
+  1,625	Topics
   
-  16,940	Local links
+  21,037	Local links
   
-  10,425	Internet links
+  11,339	Internet links
   
   0	Graphics
   
@@ -2051,19 +2796,19 @@ Build1xHelpFile:
   
   
   
-  Created c:\Users\Peter\Documents\ASCOM Source\Help\Help\Working\Output\PlatformHelp.chm, 2,033,102 bytes
+  Created c:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\PlatformHelp.chm, 2,301,074 bytes
   
-  Compression decreased file by 17,561,709 bytes.
+  Compression decreased file by 21,021,318 bytes.
   
-    Last step completed in 00:00:10.6991
+    Last step completed in 00:00:12.5819
 </buildStep>
 <buildStep step="CleanIntermediates">
 Removing intermediate files...
-    Last step completed in 00:00:00.1960
+    Last step completed in 00:00:00.3200
 </buildStep>
 <buildStep step="Completed">
 
-Build completed successfully at 02/28/2010 11:25 PM.  Total time: 00:00:46.6517
+Build completed successfully at 03/06/2010 11:13 AM.  Total time: 00:00:56.0369
 
 </buildStep>
 </shfbBuild>

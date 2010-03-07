@@ -42,45 +42,45 @@
 //
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace ASCOM.Interface
-	{
-	//[ComImport, TypeLibType((short)0x10c0), Guid("221C0BC0-110B-4129-85A0-18BB28579290")]
-	//public interface IRate
-	//    {
-	//    [DispId(0x65)]
-	//    double Maximum { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(0x65)] get; [param: In] [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(0x65)] set; }
-	//    [DispId(0x66)]
-	//    double Minimum { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(0x66)] get; [param: In] [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(0x66)] set; }
-	//    }
+{
 
-	/// <summary>
-	/// Describes a range of rates supported by the MoveAxis() method (degrees/per second)
-	/// </summary>
-	/// <remarks>
-	/// These are contained within the <see cref="AxisRates"/> collection.
-	/// They serve to describe one or more supported ranges of rates of motion about a mechanical axis.
-	/// <para>
-	/// It is possible that the <see cref="Rate.Maximum"/>  and <see cref="Rate.Minimum"/> properties
-	/// will be equal. In this case, the Rate object expresses a single discrete rate. 
-	/// </para><para>
-	/// Both the <see cref="Rate.Maximum"/> and <see cref="Rate.Minimum"/> properties are always
-	/// expressed in units of degrees per second. 
-	/// </para>
-	/// </remarks>
-	public interface IRate
-		{
-		/// <summary>
-		/// Gets the maximum rate in degrees per second.
-		/// </summary>
-		/// <value>The maximum rate (degrees per second).</value>
-		double Maximum { get; }
-		/// <summary>
-		/// Gets the minimum rate in degrees per second.
-		/// </summary>
-		/// <value>The minimum rate (degrees per second).</value>
-		double Minimum { get; }
-		}
-	}
+    //[ComImport, TypeLibType((short)0x10c0), Guid("221C0BC0-110B-4129-85A0-18BB28579290")]
+    //public interface IRate
+    //    {
+    //    [DispId(0x65)]
+    //    double Maximum { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(0x65)] get; [param: In] [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(0x65)] set; }
+    //    [DispId(0x66)]
+    //    double Minimum { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(0x66)] get; [param: In] [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(0x66)] set; }
+    //    }
+
+    /// <summary>
+    /// Describes a range of rates supported by the MoveAxis() method (degrees/per second)
+    /// </summary>
+    /// <remarks>
+    /// These are contained within the <see cref="AxisRates"/> collection.
+    /// They serve to describe one or more supported ranges of rates of motion about a mechanical axis.
+    /// <para>
+    /// It is possible that the <see cref="Rate.Maximum"/>  and <see cref="Rate.Minimum"/> properties
+    /// will be equal. In this case, the Rate object expresses a single discrete rate. 
+    /// </para><para>
+    /// Both the <see cref="Rate.Maximum"/> and <see cref="Rate.Minimum"/> properties are always
+    /// expressed in units of degrees per second. 
+    /// </para>
+    /// </remarks>
+    public interface IRate
+    {
+        /// <summary>
+        /// Gets the maximum rate in degrees per second.
+        /// </summary>
+        /// <value>The maximum rate (degrees per second).</value>
+        double Maximum { get; }
+        /// <summary>
+        /// Gets the minimum rate in degrees per second.
+        /// </summary>
+        /// <value>The minimum rate (degrees per second).</value>
+        double Minimum { get; }
+    }
+}

@@ -9,11 +9,13 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ASCOM.Interface</RootNamespace>
-    <AssemblyName>ASCOM.Interfaces</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <AssemblyName>ASCOM.Interfaces6</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>ASCOM.snk</AssemblyOriginatorKeyFile>
+    <TargetFrameworkSubset>
+    </TargetFrameworkSubset>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,6 +25,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <DocumentationFile>bin\Debug\ASCOM.Interfaces6.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +35,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <DocumentationFile>bin\Release\ASCOM.Interfaces6.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ASCOM.DriverAccess, Version=1.0.5.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
@@ -38,9 +44,6 @@
       <HintPath>..\Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -51,14 +54,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Drivers and Simulators\Platform Dependencies\AssemblyVersionInfo.cs">
+    <None Include="..\Drivers and Simulators\Platform Dependencies\AssemblyVersionInfo.cs">
       <Link>Properties\AssemblyVersionInfo.cs</Link>
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="..\Drivers and Simulators\Platform Dependencies\SolutionInfo.cs">
+    </None>
+    <None Include="..\Drivers and Simulators\Platform Dependencies\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
+    </None>
+    <Compile Include="IASCOMDriverV1.cs" />
     <Compile Include="ICamera.cs" />
     <Compile Include="CameraEnumerations.cs" />
     <Compile Include="IAscomDriver.cs" />
@@ -69,11 +73,13 @@
     <Compile Include="IRate.cs" />
     <Compile Include="ITelescopeV2.cs" />
     <Compile Include="ITelescopeV3.cs" />
+    <Compile Include="ITelescopeV3a.cs" />
     <Compile Include="ITrackingRates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Telescope.Enumerations.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="ASCOM.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

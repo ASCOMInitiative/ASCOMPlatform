@@ -42,172 +42,171 @@
 //
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace ASCOM.Interface
-	{
-	//[Guid("30D18B61-AECC-4C03-8759-E3EDD246F062")]
-	/// <summary>
-	/// The alignment mode of the mount.
-	/// </summary>
-	public enum AlignmentModes
-		{
-		/// <summary>
-		/// Altitude-Azimuth alignment.
-		/// </summary>
-		algAltAz,
+{
 
-		/// <summary>
-		/// Polar (equatorial) mount other than German equatorial.
-		/// </summary>
-		algPolar,
+    //[Guid("30D18B61-AECC-4C03-8759-E3EDD246F062")]
+    /// <summary>
+    /// The alignment mode of the mount.
+    /// </summary>
+    public enum AlignmentModes
+    {
+        /// <summary>
+        /// Altitude-Azimuth alignment.
+        /// </summary>
+        algAltAz,
 
-		/// <summary>
-		/// German equatorial mount.
-		/// </summary>
-		algGermanPolar
-		}
+        /// <summary>
+        /// Polar (equatorial) mount other than German equatorial.
+        /// </summary>
+        algPolar,
 
-	//[Guid("D9998808-2DF0-4CA1-ADD6-CE592026C663")]
-	/// <summary>
-	/// Well-known telescope tracking rates.
-	/// </summary>
-	public enum DriveRates
-		{
-		/// <summary>
-		/// Sidereal tracking rate (15.0 arcseconds per second).
-		/// </summary>
-		driveSidereal,
+        /// <summary>
+        /// German equatorial mount.
+        /// </summary>
+        algGermanPolar
+    }
 
-		/// <summary>
-		/// Lunar tracking rate (14.685 arcseconds per second).
-		/// </summary>
-		driveLunar,
+    //[Guid("D9998808-2DF0-4CA1-ADD6-CE592026C663")]
+    /// <summary>
+    /// Well-known telescope tracking rates.
+    /// </summary>
+    public enum DriveRates
+    {
+        /// <summary>
+        /// Sidereal tracking rate (15.0 arcseconds per second).
+        /// </summary>
+        driveSidereal,
 
-		/// <summary>
-		/// Solar tracking rate (15.0 arcseconds per second).
-		/// </summary>
-		driveSolar,
+        /// <summary>
+        /// Lunar tracking rate (14.685 arcseconds per second).
+        /// </summary>
+        driveLunar,
 
-		/// <summary>
-		/// King tracking rate (15.0369 arcseconds per second).
-		/// </summary>
-		driveKing
-		}
+        /// <summary>
+        /// Solar tracking rate (15.0 arcseconds per second).
+        /// </summary>
+        driveSolar,
 
-	//[Guid("135265BA-25AC-4F43-95E5-80D0171E48FA")]
-	/// <summary>
-	/// Equatorial coordinate systems used by telescopes.
-	/// </summary>
-	public enum EquatorialCoordinateType
-		{
-		/// <summary>
-		/// Custom or unknown equinox and/or reference frame.
-		/// </summary>
-		equOther,
+        /// <summary>
+        /// King tracking rate (15.0369 arcseconds per second).
+        /// </summary>
+        driveKing
+    }
 
-		/// <summary>
-		/// Local topocentric; this is the most common for amateur telescopes.
-		/// </summary>
-		equLocalTopocentric,
+    //[Guid("135265BA-25AC-4F43-95E5-80D0171E48FA")]
+    /// <summary>
+    /// Equatorial coordinate systems used by telescopes.
+    /// </summary>
+    public enum EquatorialCoordinateType
+    {
+        /// <summary>
+        /// Custom or unknown equinox and/or reference frame.
+        /// </summary>
+        equOther,
 
-		/// <summary>
-		/// J2000 equator/equinox, ICRS reference frame.
-		/// </summary>
-		equJ2000,
+        /// <summary>
+        /// Local topocentric; this is the most common for amateur telescopes.
+        /// </summary>
+        equLocalTopocentric,
 
-		/// <summary>
-		/// J2050 equator/equinox, ICRS reference frame.
-		/// </summary>
-		equJ2050,
+        /// <summary>
+        /// J2000 equator/equinox, ICRS reference frame.
+        /// </summary>
+        equJ2000,
 
-		/// <summary>
-		/// B1950 equinox, FK4 reference frame.
-		/// </summary>
-		equB1950
-		}
+        /// <summary>
+        /// J2050 equator/equinox, ICRS reference frame.
+        /// </summary>
+        equJ2050,
 
-	//[Guid("3613EEEB-5563-47D8-B512-1D36D64CEEBB")]
-	/// <summary>
-	/// The direction in which the guide-rate motion is to be made.
-	/// </summary>
-	public enum GuideDirections
-		{
-		/// <summary>
-		/// North (+ declination/altitude).
-		/// </summary>
-		guideNorth,
+        /// <summary>
+        /// B1950 equinox, FK4 reference frame.
+        /// </summary>
+        equB1950
+    }
 
-		/// <summary>
-		/// South (- declination/altitude).
-		/// </summary>
-		guideSouth,
+    //[Guid("3613EEEB-5563-47D8-B512-1D36D64CEEBB")]
+    /// <summary>
+    /// The direction in which the guide-rate motion is to be made.
+    /// </summary>
+    public enum GuideDirections
+    {
+        /// <summary>
+        /// North (+ declination/altitude).
+        /// </summary>
+        guideNorth,
 
-		/// <summary>
-		/// East (+ right ascension/azimuth).
-		/// </summary>
-		guideEast,
+        /// <summary>
+        /// South (- declination/altitude).
+        /// </summary>
+        guideSouth,
 
-		/// <summary>
-		/// West (- right ascension/azimuth)
-		/// </summary>
-		guideWest
-		}
+        /// <summary>
+        /// East (+ right ascension/azimuth).
+        /// </summary>
+        guideEast,
 
-	//[Guid("BCB5C21D-B0EA-40D1-B36C-272456F44D01")]
-	/// <summary>
-	/// The telescope axes
-	/// </summary>
-	public enum TelescopeAxes
-		{
-		/// <summary>
-		/// Primary axis (e.g., Right Ascension or Azimuth).
-		/// </summary>
-		axisPrimary,
+        /// <summary>
+        /// West (- right ascension/azimuth)
+        /// </summary>
+        guideWest
+    }
 
-		/// <summary>
-		/// Secondary axis (e.g., Declination or Altitude).
-		/// </summary>
-		axisSecondary,
+    //[Guid("BCB5C21D-B0EA-40D1-B36C-272456F44D01")]
+    /// <summary>
+    /// The telescope axes
+    /// </summary>
+    public enum TelescopeAxes
+    {
+        /// <summary>
+        /// Primary axis (e.g., Right Ascension or Azimuth).
+        /// </summary>
+        axisPrimary,
 
-		/// <summary>
-		/// Tertiary axis (e.g. imager rotator/de-rotator).
-		/// </summary>
-		axisTertiary
-		}
+        /// <summary>
+        /// Secondary axis (e.g., Declination or Altitude).
+        /// </summary>
+        axisSecondary,
 
-	//[Guid("ECD99531-A2CF-4B9F-91A0-35FE5D12B043")]
-	/// <summary>
-	/// The side of the pier on which the optical tube assembly is located.
-	/// </summary>
-	/// <remarks>
-	///		<alert class="caution">
-	///			<para>
-	///			<c>Pier side</c> is a GEM-specific term that has historically
-	///			caused much confusion. Do not confuse <c>Pier Side</c>
-	///			with <c>Pointing State</c>.
-	///			</para>
-	///		</alert>
-	/// </remarks>
-	public enum PierSide
-		{
-		/// <summary>
-		/// Mount on East side of pier (looking West)
-		/// </summary>
-		pierEast = 0,
+        /// <summary>
+        /// Tertiary axis (e.g. imager rotator/de-rotator).
+        /// </summary>
+        axisTertiary
+    }
 
-		/// <summary>
-		/// Unknown or indeterminate.
-		/// </summary>
-		pierUnknown = -1,
+    //[Guid("ECD99531-A2CF-4B9F-91A0-35FE5D12B043")]
+    /// <summary>
+    /// The side of the pier on which the optical tube assembly is located.
+    /// </summary>
+    /// <remarks>
+    ///		<alert class="caution">
+    ///			<para>
+    ///			<c>Pier side</c> is a GEM-specific term that has historically
+    ///			caused much confusion. Do not confuse <c>Pier Side</c>
+    ///			with <c>Pointing State</c>.
+    ///			</para>
+    ///		</alert>
+    /// </remarks>
+    public enum PierSide
+    {
+        /// <summary>
+        /// Mount on East side of pier (looking West)
+        /// </summary>
+        pierEast = 0,
 
-		/// <summary>
-		/// Mount on West side of pier (looking East)
-		/// </summary>
-		pierWest = 1
-		}
+        /// <summary>
+        /// Unknown or indeterminate.
+        /// </summary>
+        pierUnknown = -1,
 
+        /// <summary>
+        /// Mount on West side of pier (looking East)
+        /// </summary>
+        pierWest = 1
+    }
+}
  
 
-	}

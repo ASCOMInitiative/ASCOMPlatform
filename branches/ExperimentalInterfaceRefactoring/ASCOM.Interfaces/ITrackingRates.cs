@@ -41,43 +41,42 @@
 // --------------------------------------------------------------------------------
 //
 using System.Collections;
-
 namespace ASCOM.Interface
-	{
-	//[ComImport, TypeLibType((short)0x10c0), Guid("DC98F1DF-315A-43EF-81F6-23F3DD461F58")]
-	//public interface ITrackingRates : IEnumerable
-	//    {
-	//    [DispId(0x65)]
-	//    int Count { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(0x65)] get; }
-	//    [DispId(0)]
-	//    DriveRates this[int Index] { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(0)] get; }
-	//    [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "", MarshalTypeRef = typeof(EnumeratorToEnumVariantMarshaler), MarshalCookie = "")]
-	//    [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), TypeLibFunc((short)0x40), DispId(-4)]
-	//    IEnumerator GetEnumerator();
-	//    }
+{
+    //[ComImport, TypeLibType((short)0x10c0), Guid("DC98F1DF-315A-43EF-81F6-23F3DD461F58")]
+    //public interface ITrackingRates : IEnumerable
+    //    {
+    //    [DispId(0x65)]
+    //    int Count { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(0x65)] get; }
+    //    [DispId(0)]
+    //    DriveRates this[int Index] { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(0)] get; }
+    //    [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "", MarshalTypeRef = typeof(EnumeratorToEnumVariantMarshaler), MarshalCookie = "")]
+    //    [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), TypeLibFunc((short)0x40), DispId(-4)]
+    //    IEnumerator GetEnumerator();
+    //    }
 
-	/// <summary>
-	/// Supplies a collection of <see cref="DriveRate"/> objects that describe the permissible values of
-	/// the <see cref="TrackingRate"/> property for a telescope.
-	/// </summary>
-	public interface ITrackingRates
-		{
-		/// <summary>
-		/// Gets the count of items in the collection.
-		/// </summary>
-		/// <value>The count as an integer.</value>
-		int Count { get; }
+    /// <summary>
+    /// Supplies a collection of <see cref="DriveRate"/> objects that describe the permissible values of
+    /// the <see cref="TrackingRate"/> property for a telescope.
+    /// </summary>
+    public interface ITrackingRates
+    {
+        /// <summary>
+        /// Gets the count of items in the collection.
+        /// </summary>
+        /// <value>The count as an integer.</value>
+        int Count { get; }
 
-		/// <summary>
-		/// Gets the <see cref="ASCOM.Interface.DriveRates"/> at the specified index.
-		/// </summary>
-		/// <value>A <see cref="ASCOM.Interface.DriveRates"/> object.</value>
-		DriveRates this[int Index] { get; }
+        /// <summary>
+        /// Gets the <see cref="ASCOM.Interface.DriveRates"/> at the specified index.
+        /// </summary>
+        /// <value>A <see cref="ASCOM.Interface.DriveRates"/> object.</value>
+        DriveRates this[int Index] { get; }
 
-		/// <summary>
-		/// Gets an enumerator for the collection.
-		/// </summary>
-		/// <returns>An <see cref="IEnumerator"/> object.</returns>
-		IEnumerator GetEnumerator();
-		}
-	}
+        /// <summary>
+        /// Gets an enumerator for the collection.
+        /// </summary>
+        /// <returns>An <see cref="IEnumerator"/> object.</returns>
+        IEnumerator GetEnumerator();
+    }
+}
