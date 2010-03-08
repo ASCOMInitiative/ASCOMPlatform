@@ -16,7 +16,7 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Implements a telescope class to access any registered ASCOM telescope
     /// </summary>
-    [ComVisible(true), Guid("5653BEA4-442F-4bb3-B484-6312DB3DDFCA"), ClassInterface(ClassInterfaceType.AutoDual)] 
+    [ComVisible(true), Guid("5653BEA4-442F-4bb3-B484-6312DB3DDFCA"), ClassInterface(ClassInterfaceType.None)] 
     public class TelescopeV3 : ITelescopeV3a, IDisposable
     {
         object objScopeLateBound;

@@ -77,21 +77,16 @@ Friend Class XMLAccess
     ' IDisposable
     Protected Overridable Sub Dispose(ByVal disposing As Boolean)
         If Not Me.disposedValue Then
-            Try
-                FileStore = Nothing 'Clean up the filestore and keycache
-                'KeyCache = Nothing
-                TL.Enabled = False 'Clean up the logger
-                TL.Dispose()
-                TL = Nothing
-                sw.Stop() 'Clean up the stopwatches
-                sw = Nothing
-                swSupport.Stop()
-                swSupport = Nothing
-                ProfileMutex.Close()
-                ProfileMutex = Nothing
-            Catch ex As Exception
-                MsgBox("XMLAccess:Dispose Exception - " & ex.ToString)
-            End Try
+            Try : FileStore = Nothing : Catch : End Try 'Clean up the filestore and keycache
+            Try : TL.Enabled = False : Catch : End Try 'Clean up the logger
+            Try : TL.Dispose() : Catch : End Try
+            Try : TL = Nothing : Catch : End Try
+            Try : sw.Stop() : Catch : End Try 'Clean up the stopwatches
+            Try : sw = Nothing : Catch : End Try
+            Try : swSupport.Stop() : Catch : End Try
+            Try : swSupport = Nothing : Catch : End Try
+            Try : ProfileMutex.Close() : Catch : End Try
+            Try : ProfileMutex = Nothing : Catch : End Try
         End If
         Me.disposedValue = True
     End Sub
