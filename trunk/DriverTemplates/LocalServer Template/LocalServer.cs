@@ -26,7 +26,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
-namespace ASCOM
+namespace TEMPLATENAMESPACE
 {
 	public class TEMPLATEDEVICENAME
 	{
