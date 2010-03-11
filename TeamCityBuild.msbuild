@@ -1,6 +1,6 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <UsingTask
-    AssemblyFile="External Dependencies\xunit.runner.msbuild.dll"
+    AssemblyFile="External Dependencies\xUnit\xunit.runner.msbuild.dll"
     TaskName="Xunit.Runner.MSBuild.xunit" />
 
   <Target Name="Build">
@@ -9,6 +9,6 @@
       Targets="Build"
       Properties="Configuration=TeamCity" />
 
-    <xunit Assembly="ASCOM.Platform.Test\bin\Debug\ASCOM.Platform.Test.dll" />
+    <xunit Assembly="ASCOM.Platform.Test\bin\Release\ASCOM.Platform.Test.dll" />
   </Target>
 </Project>

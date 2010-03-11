@@ -26,7 +26,7 @@ using Moq;
  */
 
 namespace ASCOM.Platform.Test
-	{
+{
 
 
 	/// <summary>
@@ -34,7 +34,7 @@ namespace ASCOM.Platform.Test
 	///to contain all SettingsProviderTest Unit Tests
 	///</summary>
 	public class SettingsProviderTest
-		{
+	{
 		private const string csUnitTest = "UnitTest";
 		private const string ItemName = "Item Name";
 		private const string SettingName = "UnitTestSetting";
@@ -99,17 +99,17 @@ namespace ASCOM.Platform.Test
 		///</summary>
 		[Fact]
 		public void ApplicationName_ShouldReturn_EmptyString_When_ProviderNotInitialized()
-			{
+		{
 			var mockProfile = new Mock<IProfile>();
-			SettingsProvider_Accessor target = new SettingsProvider_Accessor(mockProfile.Object);
+			SettingsProvider target = new SettingsProvider(mockProfile.Object);
 			string expected = string.Empty;
 			string actual = target.ApplicationName;
 			Assert.Equal(expected, actual);
-			}
+		}
 
 		[Fact]
 		public void ApplicationName_ShouldReturn_AssemblyName_When_ProviderInitializedWith_NullName()
-			{
+		{
 			var mockProfile = new Mock<IProfile>();
 			Assembly assy = Assembly.GetExecutingAssembly();
 			string expected = assy.GetName().Name;
@@ -117,11 +117,11 @@ namespace ASCOM.Platform.Test
 			target.Initialize(null, null);
 			string actual = target.ApplicationName;
 			Assert.Equal(expected, actual);
-			}
+		}
 
 		[Fact]
 		public void ApplicationName_ShouldReturn_Name_When_ProviderInitializedWith_Name()
-			{
+		{
 			var mockProfile = new Mock<IProfile>();
 			Assembly assy = Assembly.GetExecutingAssembly();
 			string expected = csUnitTest;
@@ -129,7 +129,7 @@ namespace ASCOM.Platform.Test
 			target.Initialize(csUnitTest, null);
 			string actual = target.ApplicationName;
 			Assert.Equal(expected, actual);
-			}
+		}
 
 
 		/// <summary>
@@ -137,22 +137,24 @@ namespace ASCOM.Platform.Test
 		///</summary>
 		[Fact]
 		public void Description_Should_ContainText()
-			{
-			SettingsProvider target = new SettingsProvider(); // TODO: Initialize to an appropriate value
+		{
+			var mockProfile = new Mock<IProfile>();
+			SettingsProvider target = new SettingsProvider(mockProfile.Object);
 			string actual = target.Description;
 			Assert.False(string.IsNullOrEmpty(actual));
-			}
+		}
 
 		/// <summary>
 		///A test for Name
 		///</summary>
 		[Fact]
 		public void Name_Should_Contain_Text()
-			{
-			SettingsProvider target = new SettingsProvider();
+		{
+			var mockProfile = new Mock<IProfile>();
+			SettingsProvider target = new SettingsProvider(mockProfile.Object);
 			string actual = target.Name;
 			Assert.False(string.IsNullOrEmpty(actual));
-			}
+		}
 
 		/// <summary>
 		/// Verifies that teh SettingsProvider returns default values for settings when the device
@@ -161,7 +163,7 @@ namespace ASCOM.Platform.Test
 		/// </summary>
 		[Fact]
 		public void GetPropertySettings_Should_Return_Default_Values_When_Device_Not_Registered()
-			{
+		{
 			// ARRANGE
 			var deviceId = String.Format("{0}.{1}", DeviceName, DeviceType);
 			Mock<IProfile> mockProfile = new Mock<IProfile>();
@@ -195,24 +197,25 @@ namespace ASCOM.Platform.Test
 			var settingsPropertyValue = result.OfType<SettingsPropertyValue>().First();
 			Assert.False(settingsPropertyValue.IsDirty);
 			Assert.Equal(SettingDefaultValue, settingsPropertyValue.PropertyValue);
-			}
+		}
 
 		[Fact]
 		public void Initialize_ShouldSet_ApplicationName_Property()
-			{
-			SettingsProvider target = new SettingsProvider(); // TODO: Initialize to an appropriate value
+		{
+			var mockProfile = new Mock<IProfile>();
+			SettingsProvider target = new SettingsProvider(mockProfile.Object);
 			string name = csUnitTest;
 			var mockNameValues = new Mock<NameValueCollection>();
 			target.Initialize(name, mockNameValues.Object);
 			Assert.Equal(target.ApplicationName, name);
-			}
+		}
 
 		/// <summary>
 		///A test for SetPropertyValues
 		///</summary>
 		[Fact]
 		public void SetPropertyValuesTest()
-			{
+		{
 			// ARRANGE
 			var deviceId = String.Format("{0}.{1}", DeviceName, DeviceType);
 			var deviceAttribute = new ASCOM.DeviceIdAttribute(deviceId);
@@ -242,7 +245,7 @@ namespace ASCOM.Platform.Test
 			// ASSERT
 			Assert.Equal(DeviceType, setDeviceType);
 			mockProfile.VerifyAll();
-			}
+		}
 
 		/// <summary>
 		/// Verifies that, when setting property values,
@@ -252,7 +255,7 @@ namespace ASCOM.Platform.Test
 		/// </summary>
 		[Fact]
 		public void Non_Attributed_Settings_Should_Be_Silently_Ignored_When_Setting()
-			{
+		{
 			// ARRANGE
 			var deviceId = String.Format("{0}.{1}", DeviceName, DeviceType);
 			var deviceAttribute = new ASCOM.ServedClassNameAttribute("Dummy");	// Not a Device ID attribute
@@ -280,7 +283,7 @@ namespace ASCOM.Platform.Test
 			// ASSERT
 			Assert.Equal(String.Empty, setDeviceType);
 			mockProfile.Verify(x => x.WriteValue(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never());
-			}
+		}
 
 		/// <summary>
 		/// Verifies that, when getting property values,
@@ -290,7 +293,7 @@ namespace ASCOM.Platform.Test
 		/// </summary>
 		[Fact]
 		public void Non_Attributed_Settings_Should_Be_Silently_Ignored_When_Getting()
-			{
+		{
 			// ARRANGE
 			var deviceId = String.Format("{0}.{1}", DeviceName, DeviceType);
 			var deviceAttribute = new ASCOM.ServedClassNameAttribute("Dummy");	// Not a Device ID attribute
@@ -317,6 +320,6 @@ namespace ASCOM.Platform.Test
 			// ASSERT
 			Assert.Equal(String.Empty, setDeviceType);
 			mockProfile.Verify(x => x.GetValue(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never());
-			}
 		}
 	}
+}
