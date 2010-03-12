@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TemplateWizard;
-using System.Windows.Forms;
-using EnvDTE;
-using EnvDTE80;
+﻿
 
 namespace ASCOM.Setup
 {
+	using System;
+	using System.Collections.Generic;
+	using Microsoft.VisualStudio.TemplateWizard;
+	using System.Windows.Forms;
+	using EnvDTE;
+	using EnvDTE80;
+	using System.IO;
+	using ASCOM.Internal;
+
 	public class DriverWizard : IWizard
 	{
 		private DeviceDriverForm inputForm;
@@ -61,7 +65,38 @@ namespace ASCOM.Setup
 		public void RunFinished()
 		{
 			Diagnostics.Enter();
+			// Remove all device-specific files that do not match the created DeviceClass.
+			List<FileInfo> deviceSpecificFiles = GetDeviceSpecificFiles();
+			foreach (var file in deviceSpecificFiles)
+			{
+				// ToDo: implement this!
+				throw new NotImplementedException();
+			}
 			Diagnostics.Exit();
+		}
+
+		/// <summary>
+		/// Gets a list of the device specific files in the current directory.
+		/// </summary>
+		/// <returns></returns>
+		private List<FileInfo> GetDeviceSpecificFiles()
+		{
+			string[] allFiles = Directory.GetFiles(Directory.GetCurrentDirectory());
+			List<FileInfo> deviceSpecificFiles = new List<FileInfo>(allFiles.Length);
+			foreach (var file in allFiles)
+			{
+				try
+				{
+					var fileInfo = new FileInfo(file);
+					if (fileInfo.IsDeviceSpecific())
+						deviceSpecificFiles.Add(fileInfo);
+				}
+				catch (Exception ex)
+				{
+					Diagnostics.TraceError(ex);
+				}
+			}
+			return deviceSpecificFiles;
 		}
 
 		public void RunStarted(object automationObject,
@@ -93,6 +128,7 @@ namespace ASCOM.Setup
 				replacementsDictionary["$safeprojectname$"] = DeviceId;
 				replacementsDictionary.Add("TEMPLATEDEVICENAME", DeviceName);
 				replacementsDictionary.Add("TEMPLATEDEVICECLASS", DeviceClass);
+				replacementsDictionary.Add("TEMPLATENAMESPACE", Namespace);
 				replacementsDictionary.Add(csTemplateAssemblyGuid, Guid.NewGuid().ToString());
 				replacementsDictionary.Add(csTemplateInterfaceGuid, Guid.NewGuid().ToString());
 			}

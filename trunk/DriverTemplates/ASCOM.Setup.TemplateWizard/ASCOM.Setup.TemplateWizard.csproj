@@ -122,6 +122,12 @@
   <ItemGroup>
     <Content Include="ASCOM.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ASCOM.Internal.Extensions\ASCOM.Internal.Extensions.csproj">
+      <Project>{F9268CC9-3FA4-4DAB-962C-0FF3638E9D9F}</Project>
+      <Name>ASCOM.Internal.Extensions</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\External Dependencies\StyleCop\v4.3\Microsoft.StyleCop.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
