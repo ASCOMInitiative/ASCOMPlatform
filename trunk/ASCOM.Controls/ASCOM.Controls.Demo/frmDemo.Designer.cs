@@ -28,136 +28,209 @@
 		/// </summary>
 		private void InitializeComponent()
 			{
-			this.btnOK = new System.Windows.Forms.Button();
-			this.btnCancel = new System.Windows.Forms.Button();
-			this.ctlCameraChooser = new ASCOM.Controls.Chooser();
-			this.ctlTelescopeChooser = new ASCOM.Controls.Chooser();
-			this.ledTelescopeChosen = new ASCOM.Controls.LEDIndicator();
-			this.ledCameraChosen = new ASCOM.Controls.LEDIndicator();
-			this.ledTelescopeConfigured = new ASCOM.Controls.LEDIndicator();
-			this.ledCameraConfigured = new ASCOM.Controls.LEDIndicator();
-			this.SuspendLayout();
-			// 
-			// btnOK
-			// 
-			this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btnOK.Location = new System.Drawing.Point(203, 331);
-			this.btnOK.Name = "btnOK";
-			this.btnOK.Size = new System.Drawing.Size(75, 23);
-			this.btnOK.TabIndex = 1;
-			this.btnOK.Text = "OK";
-			this.btnOK.UseVisualStyleBackColor = true;
-			this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
-			// 
-			// btnCancel
-			// 
-			this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Location = new System.Drawing.Point(284, 331);
-			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.Size = new System.Drawing.Size(75, 23);
-			this.btnCancel.TabIndex = 2;
-			this.btnCancel.Text = "Cancel";
-			this.btnCancel.UseVisualStyleBackColor = true;
-			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-			// 
-			// ctlCameraChooser
-			// 
-			this.ctlCameraChooser.DeviceClass = "Camera";
-			this.ctlCameraChooser.DeviceID = "";
-			this.ctlCameraChooser.Location = new System.Drawing.Point(12, 122);
-			this.ctlCameraChooser.Name = "ctlCameraChooser";
-			this.ctlCameraChooser.Size = new System.Drawing.Size(344, 104);
-			this.ctlCameraChooser.TabIndex = 3;
-			this.ctlCameraChooser.SelectionChanged += new System.EventHandler(this.ctlCameraChooser_SelectionChanged);
-			// 
-			// ctlTelescopeChooser
-			// 
-			this.ctlTelescopeChooser.DeviceClass = "Telescope";
-			this.ctlTelescopeChooser.DeviceID = "";
-			this.ctlTelescopeChooser.Location = new System.Drawing.Point(12, 12);
-			this.ctlTelescopeChooser.Name = "ctlTelescopeChooser";
-			this.ctlTelescopeChooser.Size = new System.Drawing.Size(344, 104);
-			this.ctlTelescopeChooser.TabIndex = 0;
-			this.ctlTelescopeChooser.SelectionChanged += new System.EventHandler(this.ctlTelescopeChooser_SelectionChanged);
-			// 
-			// ledTelescopeChosen
-			// 
-			this.ledTelescopeChosen.Cadence = ASCOM.Controls.CadencePattern.Wink;
-			this.ledTelescopeChosen.Green = false;
-			this.ledTelescopeChosen.LabelText = "Telescope Chosen";
-			this.ledTelescopeChosen.Location = new System.Drawing.Point(12, 232);
-			this.ledTelescopeChosen.Name = "ledTelescopeChosen";
-			this.ledTelescopeChosen.Red = true;
-			this.ledTelescopeChosen.Size = new System.Drawing.Size(134, 16);
-			this.ledTelescopeChosen.TabIndex = 4;
-			// 
-			// ledCameraChosen
-			// 
-			this.ledCameraChosen.Cadence = ASCOM.Controls.CadencePattern.Wink;
-			this.ledCameraChosen.Green = false;
-			this.ledCameraChosen.LabelText = "Camera Chosen";
-			this.ledCameraChosen.Location = new System.Drawing.Point(12, 254);
-			this.ledCameraChosen.Name = "ledCameraChosen";
-			this.ledCameraChosen.Red = true;
-			this.ledCameraChosen.Size = new System.Drawing.Size(134, 16);
-			this.ledCameraChosen.TabIndex = 4;
-			// 
-			// ledTelescopeConfigured
-			// 
-			this.ledTelescopeConfigured.Cadence = ASCOM.Controls.CadencePattern.Wink;
-			this.ledTelescopeConfigured.Green = false;
-			this.ledTelescopeConfigured.LabelText = "Telescope Configured";
-			this.ledTelescopeConfigured.Location = new System.Drawing.Point(152, 232);
-			this.ledTelescopeConfigured.Name = "ledTelescopeConfigured";
-			this.ledTelescopeConfigured.Red = true;
-			this.ledTelescopeConfigured.Size = new System.Drawing.Size(134, 16);
-			this.ledTelescopeConfigured.TabIndex = 4;
-			// 
-			// ledCameraConfigured
-			// 
-			this.ledCameraConfigured.Cadence = ASCOM.Controls.CadencePattern.Wink;
-			this.ledCameraConfigured.Green = false;
-			this.ledCameraConfigured.LabelText = "Camera Configured";
-			this.ledCameraConfigured.Location = new System.Drawing.Point(152, 254);
-			this.ledCameraConfigured.Name = "ledCameraConfigured";
-			this.ledCameraConfigured.Red = true;
-			this.ledCameraConfigured.Size = new System.Drawing.Size(134, 16);
-			this.ledCameraConfigured.TabIndex = 4;
-			// 
-			// frmDemo
-			// 
-			this.AcceptButton = this.btnOK;
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(371, 366);
-			this.Controls.Add(this.ledCameraConfigured);
-			this.Controls.Add(this.ledCameraChosen);
-			this.Controls.Add(this.ledTelescopeConfigured);
-			this.Controls.Add(this.ledTelescopeChosen);
-			this.Controls.Add(this.ctlCameraChooser);
-			this.Controls.Add(this.btnCancel);
-			this.Controls.Add(this.btnOK);
-			this.Controls.Add(this.ctlTelescopeChooser);
-			this.Name = "frmDemo";
-			this.Text = "ASCOM Common Controls Demo";
-			this.Load += new System.EventHandler(this.frmDemo_Load);
-			this.ResumeLayout(false);
+				this.btnOK = new System.Windows.Forms.Button();
+				this.btnCancel = new System.Windows.Forms.Button();
+				this.anunciatorPanel1 = new ASCOM.Controls.AnunciatorPanel();
+				this.anunciator1 = new ASCOM.Controls.Anunciator();
+				this.anunciator2 = new ASCOM.Controls.Anunciator();
+				this.anunciator3 = new ASCOM.Controls.Anunciator();
+				this.anunciator4 = new ASCOM.Controls.Anunciator();
+				this.anunciator5 = new ASCOM.Controls.Anunciator();
+				this.anunciator7 = new ASCOM.Controls.Anunciator();
+				this.anunciator6 = new ASCOM.Controls.Anunciator();
+				this.anunciator8 = new ASCOM.Controls.Anunciator();
+				this.anunciatorPanel1.SuspendLayout();
+				this.SuspendLayout();
+				// 
+				// btnOK
+				// 
+				this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+				this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
+				this.btnOK.Location = new System.Drawing.Point(203, 331);
+				this.btnOK.Name = "btnOK";
+				this.btnOK.Size = new System.Drawing.Size(75, 23);
+				this.btnOK.TabIndex = 1;
+				this.btnOK.Text = "OK";
+				this.btnOK.UseVisualStyleBackColor = true;
+				this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+				// 
+				// btnCancel
+				// 
+				this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+				this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+				this.btnCancel.Location = new System.Drawing.Point(284, 331);
+				this.btnCancel.Name = "btnCancel";
+				this.btnCancel.Size = new System.Drawing.Size(75, 23);
+				this.btnCancel.TabIndex = 2;
+				this.btnCancel.Text = "Cancel";
+				this.btnCancel.UseVisualStyleBackColor = true;
+				this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+				// 
+				// anunciatorPanel1
+				// 
+				this.anunciatorPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+				this.anunciatorPanel1.Controls.Add(this.anunciator1);
+				this.anunciatorPanel1.Controls.Add(this.anunciator2);
+				this.anunciatorPanel1.Controls.Add(this.anunciator3);
+				this.anunciatorPanel1.Controls.Add(this.anunciator4);
+				this.anunciatorPanel1.Controls.Add(this.anunciator5);
+				this.anunciatorPanel1.Controls.Add(this.anunciator7);
+				this.anunciatorPanel1.Controls.Add(this.anunciator6);
+				this.anunciatorPanel1.Controls.Add(this.anunciator8);
+				this.anunciatorPanel1.Location = new System.Drawing.Point(13, 13);
+				this.anunciatorPanel1.Name = "anunciatorPanel1";
+				this.anunciatorPanel1.Size = new System.Drawing.Size(291, 38);
+				this.anunciatorPanel1.TabIndex = 3;
+				// 
+				// anunciator1
+				// 
+				this.anunciator1.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+				this.anunciator1.AutoSize = true;
+				this.anunciator1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+				this.anunciator1.Font = new System.Drawing.Font("Consolas", 10F);
+				this.anunciator1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+				this.anunciator1.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+				this.anunciator1.Location = new System.Drawing.Point(3, 0);
+				this.anunciator1.Name = "anunciator1";
+				this.anunciator1.Size = new System.Drawing.Size(40, 17);
+				this.anunciator1.TabIndex = 0;
+				this.anunciator1.Text = "SLEW";
+				// 
+				// anunciator2
+				// 
+				this.anunciator2.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+				this.anunciator2.AutoSize = true;
+				this.anunciator2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+				this.anunciator2.Font = new System.Drawing.Font("Consolas", 10F);
+				this.anunciator2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+				this.anunciator2.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+				this.anunciator2.Location = new System.Drawing.Point(49, 0);
+				this.anunciator2.Name = "anunciator2";
+				this.anunciator2.Size = new System.Drawing.Size(64, 17);
+				this.anunciator2.TabIndex = 1;
+				this.anunciator2.Text = "SHUTTER";
+				// 
+				// anunciator3
+				// 
+				this.anunciator3.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+				this.anunciator3.AutoSize = true;
+				this.anunciator3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+				this.anunciator3.Font = new System.Drawing.Font("Consolas", 10F);
+				this.anunciator3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+				this.anunciator3.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+				this.anunciator3.Location = new System.Drawing.Point(119, 0);
+				this.anunciator3.Name = "anunciator3";
+				this.anunciator3.Size = new System.Drawing.Size(40, 17);
+				this.anunciator3.TabIndex = 2;
+				this.anunciator3.Text = "DOME";
+				// 
+				// anunciator4
+				// 
+				this.anunciator4.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+				this.anunciator4.AutoSize = true;
+				this.anunciator4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+				this.anunciator4.Cadence = ASCOM.Controls.CadencePattern.BlinkAlarm;
+				this.anunciator4.Font = new System.Drawing.Font("Consolas", 10F);
+				this.anunciator4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+				this.anunciator4.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+				this.anunciator4.Location = new System.Drawing.Point(165, 0);
+				this.anunciator4.Name = "anunciator4";
+				this.anunciator4.Size = new System.Drawing.Size(48, 17);
+				this.anunciator4.TabIndex = 3;
+				this.anunciator4.Text = "ERROR";
+				// 
+				// anunciator5
+				// 
+				this.anunciator5.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+				this.anunciator5.AutoSize = true;
+				this.anunciator5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+				this.anunciator5.Font = new System.Drawing.Font("Consolas", 10F);
+				this.anunciator5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+				this.anunciator5.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+				this.anunciator5.Location = new System.Drawing.Point(219, 0);
+				this.anunciator5.Name = "anunciator5";
+				this.anunciator5.Size = new System.Drawing.Size(48, 17);
+				this.anunciator5.TabIndex = 4;
+				this.anunciator5.Text = "FOCUS";
+				// 
+				// anunciator7
+				// 
+				this.anunciator7.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+				this.anunciator7.AutoSize = true;
+				this.anunciator7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+				this.anunciator7.Cadence = ASCOM.Controls.CadencePattern.Wink;
+				this.anunciator7.Font = new System.Drawing.Font("Consolas", 10F);
+				this.anunciator7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+				this.anunciator7.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+				this.anunciator7.Location = new System.Drawing.Point(3, 17);
+				this.anunciator7.Name = "anunciator7";
+				this.anunciator7.Size = new System.Drawing.Size(64, 17);
+				this.anunciator7.TabIndex = 6;
+				this.anunciator7.Text = "WEATHER";
+				// 
+				// anunciator6
+				// 
+				this.anunciator6.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+				this.anunciator6.AutoSize = true;
+				this.anunciator6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+				this.anunciator6.Font = new System.Drawing.Font("Consolas", 10F);
+				this.anunciator6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+				this.anunciator6.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+				this.anunciator6.Location = new System.Drawing.Point(73, 17);
+				this.anunciator6.Name = "anunciator6";
+				this.anunciator6.Size = new System.Drawing.Size(72, 17);
+				this.anunciator6.TabIndex = 5;
+				this.anunciator6.Text = "POINTING";
+				// 
+				// anunciator8
+				// 
+				this.anunciator8.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+				this.anunciator8.AutoSize = true;
+				this.anunciator8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+				this.anunciator8.Cadence = ASCOM.Controls.CadencePattern.Strobe;
+				this.anunciator8.Font = new System.Drawing.Font("Consolas", 10F);
+				this.anunciator8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+				this.anunciator8.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+				this.anunciator8.Location = new System.Drawing.Point(151, 17);
+				this.anunciator8.Name = "anunciator8";
+				this.anunciator8.Size = new System.Drawing.Size(40, 17);
+				this.anunciator8.TabIndex = 7;
+				this.anunciator8.Text = "SYNC";
+				// 
+				// frmDemo
+				// 
+				this.AcceptButton = this.btnOK;
+				this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+				this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+				this.AutoSize = true;
+				this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+				this.CancelButton = this.btnCancel;
+				this.ClientSize = new System.Drawing.Size(371, 366);
+				this.Controls.Add(this.anunciatorPanel1);
+				this.Controls.Add(this.btnCancel);
+				this.Controls.Add(this.btnOK);
+				this.Name = "frmDemo";
+				this.Text = "ASCOM Common Controls Demo";
+				this.Load += new System.EventHandler(this.frmDemo_Load);
+				this.anunciatorPanel1.ResumeLayout(false);
+				this.anunciatorPanel1.PerformLayout();
+				this.ResumeLayout(false);
 
 			}
 
 		#endregion
 
-		private Chooser ctlTelescopeChooser;
 		private System.Windows.Forms.Button btnOK;
 		private System.Windows.Forms.Button btnCancel;
-		private Chooser ctlCameraChooser;
-		private LEDIndicator ledTelescopeChosen;
-		private LEDIndicator ledCameraChosen;
-		private LEDIndicator ledTelescopeConfigured;
-		private LEDIndicator ledCameraConfigured;
+		private AnunciatorPanel anunciatorPanel1;
+		private Anunciator anunciator1;
+		private Anunciator anunciator2;
+		private Anunciator anunciator3;
+		private Anunciator anunciator4;
+		private Anunciator anunciator5;
+		private Anunciator anunciator6;
+		private Anunciator anunciator7;
+		private Anunciator anunciator8;
 		}
 	}
 

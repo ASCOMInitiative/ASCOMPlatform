@@ -1,4 +1,4 @@
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.30729</ProductVersion>
@@ -150,12 +150,11 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Compile Include="Anunciator.cs">
-      <SubType>UserControl</SubType>
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Anunciator.Designer.cs">
-      <DependentUpon>Anunciator.cs</DependentUpon>
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    <Compile Include="AnunciatorPanel.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="CadencePattern.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
@@ -224,6 +223,10 @@
     <ProjectReference Include="..\..\ASCOM.Attributes\ASCOM.Attributes.csproj">
       <Project>{2C40FAD9-DE75-4360-A0AD-911C4D24D98C}</Project>
       <Name>ASCOM.Attributes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ASCOM.Internal.Extensions\ASCOM.Internal.Extensions.csproj">
+      <Project>{F9268CC9-3FA4-4DAB-962C-0FF3638E9D9F}</Project>
+      <Name>ASCOM.Internal.Extensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\ASCOM.SettingsProvider.csproj">
       <Project>{4FFFD202-81D4-4549-880B-09B640D72C1D}</Project>

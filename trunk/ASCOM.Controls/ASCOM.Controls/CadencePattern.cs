@@ -10,32 +10,54 @@ namespace ASCOM.Controls
 {
 	/// <summary>
 	/// Cadence patterns for blinking LEDs.
+	/// Cadences are based on 32-bit unsigned integers, such that the ordinal value
+	/// of each item represents a bit mask that can be used directly in an update routine.
 	/// </summary>
-	public enum CadencePattern
+	public enum CadencePattern : uint
 	{
 		/// <summary>
-		/// LED permanently on (when enabled). Appropriate for indication of simple on/off status.
+		/// Permanently off, 
+		/// appropriate for indication of a non-critical inactive state.
 		/// </summary>
-		SteadyOn = 0,
+		SteadyOff = 0x00000000,
+
 		/// <summary>
-		/// LED permanently off, even when enabled. Appropriate for indication of simple on/off status.
+		/// Permanently on,
+		/// appropriate for indication of a non-critical active state.
 		/// </summary>
-		SteadyOff = 1,
+		SteadyOn = 0xFFFFFFFF,
+
 		/// <summary>
-		/// Fast blink, appropriate for non-critical ongoing change of state (eg Slewing).
+		/// Fast blink,
+		/// appropriate for indicating a state of hightened but non-critical alert.
+		/// Usage example: during movement of robotic equipment.
 		/// </summary>
-		BlinkFast = 2,
+		BlinkFast = 0xF0F0F0F0,
+
 		/// <summary>
-		/// Slow blink, appropriate for non-critical persistent conditions (e.g. image exposure in progress).
+		/// Slow blink,
+		/// appropriate for non-critical persistent conditions.
+		/// Usage example: image exposure in progress.
 		/// </summary>
-		BlinkSlow = 3,
+		BlinkSlow = 0xFF00FF00,
+		
 		/// <summary>
-		/// Very fast blink, appropriate for drawing attention to urgent conditions that require operator intervention.
+		/// Very fast blink,
+		/// appropriate for drawing attention to urgent conditions that require operator intervention.
+		/// Usage example: Rain detected
 		/// </summary>
-		BlinkAlarm = 4,
+		BlinkAlarm = 0xCCCCCCCC,
+
 		/// <summary>
-		/// Wink (mostly on with occasional short wink-off), appropriate for indicating non-critical ongoing steady state.
+		/// Strobe is mostly off but with an occasional short blip on,
+		/// appropriate for indicating non-critical ongoing steady idle state.
 		/// </summary>
-		Wink = 5
+		Strobe = 0x00000001,
+
+		/// <summary>
+		/// Wink (mostly on with occasional short wink-off),
+		/// appropriate for indicating non-critical ongoing steady active state.
+		/// </summary>
+		Wink = 0xFFFFFFFE
 	}
 }
