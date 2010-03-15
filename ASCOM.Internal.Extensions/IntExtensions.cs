@@ -30,7 +30,10 @@ namespace ASCOM.Internal
 		/// <returns>A boolean value corresponding to the bit at the specified bit position.</returns>
 		public static bool Bit(this uint register, int bitPosition)
 		{
-			Debug.Assert(bitPosition >= 0 && bitPosition < 16);
+			if (bitPosition < 0 || bitPosition > 31)
+			{
+				throw new ArgumentOutOfRangeException("bitPosition", "Valid bit positions are 0..31");
+			}
 			uint mask = bitMask[bitPosition];
 			uint result = register & mask;
 			return (result > 0 ? true : false);

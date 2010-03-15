@@ -45,7 +45,7 @@ namespace ASCOM.Platform.Test
 		public void IntBit_LsbSet_BitPosition32_ShouldThrow_ArgumentOutOfRange()
 		{
 			uint register = 0x00000001;
-			int bitPosition = 0;
+			int bitPosition = 32;
 			Assert.Throws<System.ArgumentOutOfRangeException>(
 				delegate { IntExtensions.Bit(register, bitPosition); }
 				);
@@ -75,7 +75,7 @@ namespace ASCOM.Platform.Test
 		{
 			uint register = 0x80000000U;
 			int bitPosition = 31;
-			bool expected = false;
+			bool expected = true;
 			bool actual;
 			actual = IntExtensions.Bit(register, bitPosition);
 			Assert.Equal(expected, actual);
