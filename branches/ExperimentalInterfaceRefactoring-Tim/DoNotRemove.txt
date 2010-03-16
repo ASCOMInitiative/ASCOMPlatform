@@ -1,1 +1,0 @@
-Placeholder to keep uninstall folders from being deleted by Inno Setup uninstaller.
