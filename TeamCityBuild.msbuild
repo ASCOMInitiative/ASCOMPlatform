@@ -14,7 +14,7 @@
     <xunit Assembly="ASCOM.Platform.Test\bin\Release\ASCOM.Platform.Test.dll" />
   </Target>
   <Target Name="BuildDocumentation">
-    <!-- Build source code docs -->
-    <Exec Command="%22$(SandCastleHFBCmd)%22 %22$(SandCastleHFBProject)%22" />
+    <MSBuild
+      Projects="Help\ASCOMPlatform.shfbproj" />
   </Target>
 </Project>
