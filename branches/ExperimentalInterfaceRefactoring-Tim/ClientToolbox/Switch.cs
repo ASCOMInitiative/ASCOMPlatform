@@ -13,7 +13,9 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Provides universal access to Switch drivers
     /// </summary>
-    public class Switch : ASCOM.Interface.ISwitch, IDisposable
+	[Guid("063A65E8-C638-49E1-AE82-E7A1B3DA7BB0")]
+	[ClassInterface(ClassInterfaceType.None)]
+	public class Switch : ASCOM.Interface.ISwitch, IDisposable
     {
         object objSwitchLateBound;
 		ASCOM.Interface.ISwitch ISwitch;

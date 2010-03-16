@@ -572,6 +572,7 @@ Global
 		{A6F7ADB8-B812-4BFA-B2BD-DF61CC35A200}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
 		{A6F7ADB8-B812-4BFA-B2BD-DF61CC35A200}.TeamCity|Any CPU.Build.0 = Release|Any CPU
 		{68255A7C-76E3-4D51-9475-6CFE21188FF6}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
+		{68255A7C-76E3-4D51-9475-6CFE21188FF6}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
 		{68255A7C-76E3-4D51-9475-6CFE21188FF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{68255A7C-76E3-4D51-9475-6CFE21188FF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68255A7C-76E3-4D51-9475-6CFE21188FF6}.Peter|Any CPU.ActiveCfg = Peter|Any CPU
@@ -612,6 +613,7 @@ Global
 		{A3C42AFF-E6A0-478E-92DF-DC88234403C2}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
 		{A3C42AFF-E6A0-478E-92DF-DC88234403C2}.TeamCity|Any CPU.Build.0 = Release|Any CPU
 		{70FDA2DE-A36D-45A0-812F-E5357AC7A8D2}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
+		{70FDA2DE-A36D-45A0-812F-E5357AC7A8D2}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
 		{70FDA2DE-A36D-45A0-812F-E5357AC7A8D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{70FDA2DE-A36D-45A0-812F-E5357AC7A8D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70FDA2DE-A36D-45A0-812F-E5357AC7A8D2}.Peter|Any CPU.ActiveCfg = Peter|Any CPU
@@ -738,13 +740,13 @@ Global
 		{908A13CE-4C6D-4546-AD52-AB958FF46C5B} = {7814C016-C363-4A04-B095-27A5B33AA783}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0DestinationAssemblyName = 
-		Reflector0DestinationVersion = 4.0.812.4
-		Reflector0DestinationName = Moq
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0SourceAssemblyName = 
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceName = Moq
 		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
+		Reflector0SourceName = Moq
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceAssemblyName = 
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0DestinationName = Moq
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationAssemblyName = 
 	EndGlobalSection
 EndGlobal

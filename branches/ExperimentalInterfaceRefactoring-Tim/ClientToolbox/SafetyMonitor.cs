@@ -13,7 +13,7 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Provides universal access to SafetyMonitor drivers
     /// </summary>
-    public class SafetyMonitor : ASCOM.Interface.ISafetyMonitor, IDisposable
+    public class SafetyMonitor : ISafetyMonitor, IDisposable
     {
         object objSafetyMonitorLateBound;
         ASCOM.Interface.ISafetyMonitor ISafetyMonitor;

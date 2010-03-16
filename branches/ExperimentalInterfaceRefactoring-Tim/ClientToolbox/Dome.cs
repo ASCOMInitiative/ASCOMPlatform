@@ -13,7 +13,9 @@ namespace ASCOM.DriverAccess
 	/// <summary>
 	/// Provides universal access to ASCOM Dome drivers
 	/// </summary>
-	public class Dome : ASCOM.Interface.IDome, IDisposable
+	[Guid("1BC502DA-E9B4-45B8-A0B3-82226E322188")]
+	[ClassInterface(ClassInterfaceType.None)]
+	public class Dome : IDome, IDisposable
     {
 
         object objDomeLateBound;

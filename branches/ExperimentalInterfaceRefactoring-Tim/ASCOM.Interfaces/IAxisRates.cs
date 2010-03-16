@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Collections;
+using System.Runtime.InteropServices;
 
 namespace ASCOM.Interface
 	{
@@ -18,17 +16,18 @@ namespace ASCOM.Interface
 	//    IEnumerator GetEnumerator();
 	//    }
 
-	/// <summary>
-	/// A collection of <see cref="Rate"/> objects describing the supported rates of motion
-	/// for the <see cref="MoveAxis"/> method.
-	/// </summary>
-	public interface IAxisRates
-		{
-		/// <summary>
-		/// Gets the count.
-		/// </summary>
-		/// <value>The count of items in the collection.</value>
-		int Count { get; }
+    /// <summary>
+    /// A collection of <see cref="Rate"/> objects describing the supported rates of motion
+    /// for the <see cref="MoveAxis"/> method.
+    /// </summary>
+	[Guid("45567800-2725-42BB-8E11-4A48605AD186")]
+    public interface IAxisRates
+    {
+        /// <summary>
+        /// Gets the count.
+        /// </summary>
+        /// <value>The count of items in the collection.</value>
+        int Count { get; }
 
 		/// <summary>
 		/// Gets the <see cref="ASCOM.Interface.IRate"/> at the specified index.

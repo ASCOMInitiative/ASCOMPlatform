@@ -43,13 +43,15 @@
 // --------------------------------------------------------------------------------
 //
 using System;
+using System.Runtime.InteropServices;
+
 namespace ASCOM.Interface
 {
     //    uuid(D95FBC6E-0705-458b-84C0-57E3295DBCCE),
     /// <summary>
     /// ASCOM Camera Driver 1.0 Interface
     /// </summary>
-	
+	[Guid("469976F1-6782-43F3-9D6E-5043D8378A4D")]
 	public interface ICamera
 	{
 		

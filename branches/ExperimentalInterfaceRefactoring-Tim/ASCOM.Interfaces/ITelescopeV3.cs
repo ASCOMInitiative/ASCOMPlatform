@@ -43,9 +43,12 @@
 // --------------------------------------------------------------------------------
 //
 using System;
+using System.Runtime.InteropServices;
+
 namespace ASCOM.Interface
 {
-	public interface ITelescopeV3 : IAscomDriver, ITelescope, IDeviceControl
+	[Guid("1A941FAC-A188-48BB-84BE-5A196D6B5856")]
+	public interface ITelescopeV3 : IAscomDriver, ITelescope , IDeviceControl
 	{
 		// There is no essential difference between V2 and V3,
 		// other than the addition of IDeviceControl,

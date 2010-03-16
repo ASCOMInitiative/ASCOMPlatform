@@ -41,9 +41,8 @@
 // --------------------------------------------------------------------------------
 //
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 
 namespace ASCOM.Interface
 	{
@@ -51,6 +50,7 @@ namespace ASCOM.Interface
 	/// <summary>
 	/// The alignment mode of the mount.
 	/// </summary>
+	[Guid("30D18B61-AECC-4C03-8759-E3EDD246F062")]
 	public enum AlignmentModes
 		{
 		/// <summary>
@@ -70,6 +70,7 @@ namespace ASCOM.Interface
 		}
 
 	//[Guid("D9998808-2DF0-4CA1-ADD6-CE592026C663")]
+    [ComVisible(true), Guid("0C99524B-7319-4571-A0DA-F44729E81967")]
 	/// <summary>
 	/// Well-known telescope tracking rates.
 	/// </summary>
@@ -97,6 +98,7 @@ namespace ASCOM.Interface
 		}
 
 	//[Guid("135265BA-25AC-4F43-95E5-80D0171E48FA")]
+    [ComVisible(true), Guid("D6F46E7F-7A68-400b-B67A-6EF3AC6FA54B")]
 	/// <summary>
 	/// Equatorial coordinate systems used by telescopes.
 	/// </summary>

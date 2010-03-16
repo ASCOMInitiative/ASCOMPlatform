@@ -13,7 +13,9 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Provides universal access to Rotator drivers
     /// </summary>
-    public class Rotator : ASCOM.Interface.IRotator, IDisposable
+	[Guid("1744ECD3-7E79-4E77-B548-D3B107794656")]
+	[ClassInterface(ClassInterfaceType.None)]
+	public class Rotator : IRotator, IDisposable
     {
         object objRotatorLateBound;
         ASCOM.Interface.IRotator IRotator;

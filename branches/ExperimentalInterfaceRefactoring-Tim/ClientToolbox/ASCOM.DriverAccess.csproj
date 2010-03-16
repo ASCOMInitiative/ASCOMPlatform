@@ -41,7 +41,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\ASCOM.DriverAccess.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\ASCOM.DriverAccess.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -50,7 +50,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\ASCOM.DriverAccess.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\ASCOM.DriverAccess.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Peter|AnyCPU' ">
@@ -97,9 +97,11 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
+    <Compile Include="TelescopeV3.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ASCOM.snk" />
+    <None Include="Class and Interface Inheritance.cd" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -147,4 +149,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PostBuildEvent>"C:\Program Files\Microsoft SDKs\Windows\v6.0A\Bin\TlbExp.exe" "$(TargetPath)" /out:"$(TargetDir)$(TargetName).tlb"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

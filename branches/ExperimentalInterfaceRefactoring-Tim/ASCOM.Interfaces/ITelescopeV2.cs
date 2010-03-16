@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
 namespace ASCOM.Interface
 	{
-	
+	[Guid("F9DEEC79-4434-4B25-A9C2-30F4DEEDEDE4")]
 	public interface ITelescope
 	{
 		

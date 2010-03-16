@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Interface Name="ASCOM.Interface.ITelescope">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>xAEAAQCUCFBs0OYJmALc0EaBAAJMTCIQQIIIKwIgCCI=</HashCode>
+      <FileName>ITelescopeV2.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ASCOM.Interface.ITelescopeV3">
+    <Position X="4.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ITelescopeV3.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ASCOM.Interface.IAscomDriver">
+    <Position X="3.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgQAAACAAEAAQAAAAAAAIAAAAAAAAgAAA=</HashCode>
+      <FileName>IAscomDriver.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ASCOM.Interface.IDeviceControl">
+    <Position X="5.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAAIAAAAAAAAAAAAAAgAAAAIAAAAAAAY=</HashCode>
+      <FileName>IDeviceControl.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

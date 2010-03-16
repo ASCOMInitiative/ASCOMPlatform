@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace ASCOM.Interface
 {
@@ -25,6 +25,7 @@ namespace ASCOM.Interface
 	/// case insensitive, so FilterWheel:SelectWheel, filterwheel:selectwheel 
 	/// and FILTERWHEEL:SELECTWHEEL will all refer to the same action. 
 	/// </summary>
+	[Guid("FE263648-3EBB-4D62-8B40-AE55D60849E1")]
 	public interface IDeviceControl
 	{
 		/// <summary>

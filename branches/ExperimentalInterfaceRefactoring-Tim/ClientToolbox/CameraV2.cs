@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using ASCOM.Interface;
 
 /// -----------------------------------------------------------------------------------
@@ -19,7 +17,9 @@ namespace ASCOM.DriverAccess
 	/// Camera V2 adds the additional members negotiated by the camera vendors,
 	/// plus IAscomDriver and IDeviceControl (which are intrinsic to ICameraV2).
 	/// </summary>
-	class CameraV2 : Camera, ASCOM.Interface.ICameraV2
+	[Guid("122A79ED-01FB-4F24-B1C0-90A6584A0E08")]
+	[ClassInterface(ClassInterfaceType.None)]
+	public class CameraV2 : Camera, ICameraV2
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CameraV2"/> class.
@@ -454,6 +454,15 @@ namespace ASCOM.DriverAccess
 		public string CommandString(string Command, bool Raw)
 		{
 			throw new NotImplementedException();
+		}
+
+		#endregion
+
+		#region IDisposable Members
+
+		void Dispose()
+		{
+			base.Dispose();
 		}
 
 		#endregion

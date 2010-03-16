@@ -41,6 +41,7 @@
 // --------------------------------------------------------------------------------
 //
 using System.Collections;
+using System.Runtime.InteropServices;
 
 namespace ASCOM.Interface
 	{
@@ -56,17 +57,18 @@ namespace ASCOM.Interface
 	//    IEnumerator GetEnumerator();
 	//    }
 
-	/// <summary>
-	/// Supplies a collection of <see cref="DriveRate"/> objects that describe the permissible values of
-	/// the <see cref="TrackingRate"/> property for a telescope.
-	/// </summary>
-	public interface ITrackingRates
-		{
-		/// <summary>
-		/// Gets the count of items in the collection.
-		/// </summary>
-		/// <value>The count as an integer.</value>
-		int Count { get; }
+    /// <summary>
+    /// Supplies a collection of <see cref="DriveRate"/> objects that describe the permissible values of
+    /// the <see cref="TrackingRate"/> property for a telescope.
+    /// </summary>
+	[Guid("DC98F1DF-315A-43EF-81F6-23F3DD461F58")]
+    public interface ITrackingRates
+    {
+        /// <summary>
+        /// Gets the count of items in the collection.
+        /// </summary>
+        /// <value>The count as an integer.</value>
+        int Count { get; }
 
 		/// <summary>
 		/// Gets the <see cref="ASCOM.Interface.DriveRates"/> at the specified index.

@@ -40,12 +40,14 @@
 // 21-Feb-2010	CDR	6.0.*	Initial edit.
 // --------------------------------------------------------------------------------
 
+using System.Runtime.InteropServices;
 namespace ASCOM.Interface
 {
 	/// <summary>
 	/// Camera V2 interface is the aggregate of Camera V1
 	/// and the new IAscomDriver and IDeviceControl interfaces.
 	/// </summary>
+	[Guid("36C98042-B769-483D-A40A-77582E2956FC")]
     public interface ICameraV2 : IAscomDriver, ICamera, IDeviceControl
     {
 		// ToDo: add intellisense XML comments to each member.

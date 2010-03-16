@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ASCOM.snk" />
+    <None Include="ITelescope vs ITelescopeV3.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\External Dependencies\StyleCop\v4.3\Microsoft.StyleCop.targets" />

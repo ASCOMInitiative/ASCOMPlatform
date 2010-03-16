@@ -42,14 +42,15 @@
 //
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace ASCOM.Interface
 	{
 	/// <summary>
 	/// Defines the properties and methods that are common to all ASCOM devices.
 	/// </summary>
+	[Guid("6A79C957-C33A-4410-9ED7-09970D873B6B")]
 	public interface IAscomDriver
 		{
 		/// <summary>

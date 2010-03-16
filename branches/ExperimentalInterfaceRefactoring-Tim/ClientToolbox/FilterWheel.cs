@@ -13,6 +13,8 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Provides universal access to FilterWheel drivers
     /// </summary>
+	[Guid("15F0739F-7ED6-4A7E-8AB2-28ACF394DE77")]
+	[ClassInterface(ClassInterfaceType.None)]
     public class FilterWheel : ASCOM.Interface.IFilterWheel, IDisposable
     {
         object objFilterWheelLateBound;
