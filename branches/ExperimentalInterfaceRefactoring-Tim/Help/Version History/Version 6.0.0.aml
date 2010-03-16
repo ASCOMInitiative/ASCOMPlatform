@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="6c2d0f0d-6460-494e-9c1f-08545fcff623" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+        	
+    	<section address="Changes">
+      		<title>Changes</title>
+      		<content>
+				<list class="bullet">
+ 		 			<listItem>Diagnostics - Now has a menu option to list available COM ports.</listItem>
+ 		 			<listItem>TraceLogger - Has a new menu option to return the full path name of the log file being created.</listItem>
+ 		 			<listItem>ASCOM.Astrometry - Now includes a full presentation of the NOVAS3 library including:
+ 		 				<list class="bullet">
+		 		 			<listItem>the the most recent JPL DE421 planet ephemeris data.</listItem>>
+		 		 			<listItem>the full table of CIO RAs</listItem>>
+		 		 			<listItem>the AE98 readeph routine to parse locally held minor planet ephemeris files</listItem>
+		 		 		</list>
+ 		 			</listItem>
+	  			</list>
+            </content>
+		</section>
+          			
+        <section address="IssuesFixed">
+           	<title>Issues Fixed</title>
+            <content>
+      			<list class="bullet">
+ 		 			<listItem>ASCOM.Utilities.Serial - Some installed COM ports were not returned by Serial.AvailableCOMPorts. This has been 
+ 		 			improved to actively test for COM ports rather than simply relying on the list of ports returned by the .NET Framework.</listItem>
+				</list>
+   			</content>
+   		</section>
+
+        <section address="BreakingChanges">
+           	<title>Breaking Changes</title>
+            <content>
+      			<list class="bullet">
+ 		 			<listItem>RegisteredDevices(ByVal DeviceType As String) has been changed from a property to a method to maximise 
+ 		 			compatibility between .NET programming languages.</listItem>
+				</list>
+   			</content>
+   		</section>
+
+  </developerConceptualDocument>
+</topic>
