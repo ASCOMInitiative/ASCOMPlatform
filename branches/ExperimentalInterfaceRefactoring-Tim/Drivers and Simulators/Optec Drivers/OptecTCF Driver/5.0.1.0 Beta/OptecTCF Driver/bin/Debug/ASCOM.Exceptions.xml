@@ -1,0 +1,413 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ASCOM.Exceptions</name>
+    </assembly>
+    <members>
+        <member name="T:ASCOM.PropertyNotImplementedException">
+            <summary>
+            All properties defined by the relevant ASCOM standard interface must exist in each driver. However,
+            those properties do not all have to be <i>implemented</i>. The minimum requirement
+            for each defined property is to throw the ASCOM.PropertyNotImplementedException for each
+            of its accessors. Note that no default constructor is supplied. Throwing this requires both the 
+            property name and unimplemented accessor type to be supplied.
+            </summary>
+        </member>
+        <member name="T:ASCOM.NotImplementedException">
+            <summary>
+            All properties and methods defined by the relevant ASCOM standard interface must exist in each driver. However,
+            those properties and methods do not all have to be <i>implemented</i>. This exception is a base class for
+            PropertyNotImplementedException and MethodNotImplementedException, which drivers should use for throwing
+            the relevant exception(s). This class is intended to be used by clients who wish to catch either of
+            the two specific exceptions in a single catch() clause.
+            </summary>
+        </member>
+        <member name="T:ASCOM.DriverException">
+            <summary>
+            This is the generic driver exception. Drivers are permitted to directly throw this
+            exception as well as any derived exceptions. Note that the Message property is 
+            a member of ApplicationException, the base class of DriverException. The HResult
+            property of ApplicationException is simply renamed to Number.
+            </summary>
+        </member>
+        <member name="M:ASCOM.DriverException.#ctor(System.String,System.Int32)">
+            <summary>
+            Create a new ASCOM exception using the specified text message and error code.
+            </summary>
+            <param name="message">Descriptive text describing the cause of the exception</param>
+            <param name="number">Error code for the exception (80040400 - 80040FFF).</param>
+        </member>
+        <member name="M:ASCOM.DriverException.#ctor(System.String,System.Int32,System.Exception)">
+            <summary>
+            Create a new ASCOM exception based on another exception plus additional descriptive text and error code. This member is 
+            required for a well-behaved exception class. For example, if a driver receives an exception
+            (perhaps a COMException) from some other component yet it wants to report some meaningful
+            error that <i>resulted</i> from the other error, it can package the original error in the
+            InnerException member of the exception <i>it</i> generates.
+            </summary>
+            <param name="message">Descriptive text describing the cause of the exception</param>
+            <param name="number">Error code for the exception (80040400 - 80040FFF).</param>
+            <param name="inner">The inner exception that led to throwing this exception</param>
+        </member>
+        <member name="M:ASCOM.DriverException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.DriverException"/> class.
+            Sets the COM HResult to <see cref="F:ASCOM.ErrorCodes.UnspecifiedError"/>.
+            </summary>
+        </member>
+        <member name="M:ASCOM.DriverException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.DriverException"/> class
+            with a human-readable descriptive message.
+            </summary>
+            <param name="message">The human-readable description of the problem.</param>
+        </member>
+        <member name="M:ASCOM.DriverException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.DriverException"/> class from
+            another caught exception and a human-readable descriptinve message.
+            </summary>
+            <param name="message">The human-readable description of the problem.</param>
+            <param name="innerException">The caught (inner) exception.</param>
+        </member>
+        <member name="P:ASCOM.DriverException.Number">
+            <summary>
+            The error code for this exception (hex 80040400 - 800404FF)
+            </summary>
+        </member>
+        <member name="F:ASCOM.NotImplementedException.csMessage">
+            <summary>
+            A format string used to create the exception's human-readable message.
+            </summary>
+        </member>
+        <member name="M:ASCOM.NotImplementedException.#ctor(System.String)">
+            <summary>
+            Create a new exception object and identify the specified driver property or method as the source.
+            </summary>
+            <param name="strPropertyOrMethod">The name of the driver property/accessor or method that caused the exception</param>
+        </member>
+        <member name="M:ASCOM.NotImplementedException.#ctor(System.String,System.Exception)">
+            <summary>
+            Create a new exception object and identify the specified driver property as the source,
+            and include an inner exception object containing a caught exception.
+            </summary>
+            <param name="strPropertyOrMethod">The name of the driver property/accessor or method that caused the exception</param>
+            <param name="inner">The caught exception</param>
+        </member>
+        <member name="P:ASCOM.NotImplementedException.PropertyOrMethod">
+            <summary>
+            The property/accessor or method that is not implemented
+            </summary>
+        </member>
+        <member name="M:ASCOM.PropertyNotImplementedException.#ctor(System.String,System.Boolean)">
+            <summary>
+            Create a new exception object and identify the specified driver property and accessor as the source.
+            </summary>
+            <param name="strProperty">The name of the driver property that caused the exception.</param>
+            <param name="bAccessorSet">True if the exception is being thrown for the 'set' accessor, else false</param>
+        </member>
+        <member name="M:ASCOM.PropertyNotImplementedException.#ctor(System.String,System.Boolean,System.Exception)">
+            <summary>
+            Create a new exception object and identify the specified driver property as the source,
+            and include an inner exception object containing a caught exception.
+            </summary>
+            <param name="strProperty">The name of the driver property that caused the exception</param>
+            <param name="bAccessorSet">True if the exception is being thrown for the 'set' accessor, else false</param>
+            <param name="inner">The caught exception</param>
+        </member>
+        <member name="P:ASCOM.PropertyNotImplementedException.Property">
+            <summary>
+            The property that is not implemented
+            </summary>
+        </member>
+        <member name="P:ASCOM.PropertyNotImplementedException.AccessorSet">
+            <summary>
+            True if the 'set' accessor is not implemented, else false
+            </summary>
+        </member>
+        <member name="T:ASCOM.ParkedException">
+            <summary>
+            This exception should be used to indicate that movement (or other invalid operation) was attempted
+            while the device was in a parked state.
+            </summary>
+        </member>
+        <member name="M:ASCOM.ParkedException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.ParkedException"/> class
+            using default error text and error codes.
+            </summary>
+        </member>
+        <member name="M:ASCOM.ParkedException.#ctor(System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.ParkedException"/> class
+            with a caught (inner) exception.
+            </summary>
+            <param name="inner">The inner.</param>
+        </member>
+        <member name="T:ASCOM.InvalidOperationException">
+            <summary>
+            This exception should be raised by the driver to reject a command from the client. It is intended to be
+            used for "logical" errors e.g. trying to use a command when the current configuration of the device does
+            not allow it rather than for device errors such as a communications error.
+            <para>Its the error to use when the client attempts something, which at another time would be sensible,
+            but which is not sensible right now. If you expect the condition causing the issue to be short
+            lived, you may choose to stall the request until the condition is cleared rather than thorwing this exception.
+            Clearly, that is a judgement that you can only make given a specific scenario.</para>
+            </summary>
+        </member>
+        <member name="M:ASCOM.InvalidOperationException.#ctor">
+            <summary>
+            Default public constructor for NotConnectedException takes no parameters.
+            </summary>
+        </member>
+        <member name="M:ASCOM.InvalidOperationException.#ctor(System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.InvalidOperationException"/> class
+            from another exception.
+            </summary>
+            <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="M:ASCOM.InvalidOperationException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.InvalidOperationException"/> class
+            with a non-default error message.
+            </summary>
+            <param name="message">A descriptive human-readable message.</param>
+        </member>
+        <member name="M:ASCOM.InvalidOperationException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.InvalidOperationException"/> class
+            based on another exception.
+            </summary>
+            <param name="message">Descriptive text documenting the cause or source of the error.</param>
+            <param name="innerException">The inner exception the led to the throwing of this exception.</param>
+        </member>
+        <member name="T:ASCOM.SlavedException">
+            <summary>
+            This exception should be used to indicate that movement (or other invalid operation) was attempted
+            while the device was in slaved mode. This applies primarily to domes drivers.
+            </summary>
+        </member>
+        <member name="M:ASCOM.SlavedException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.SlavedException"/> class.
+            </summary>
+        </member>
+        <member name="M:ASCOM.SlavedException.#ctor(System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.SlavedException"/> class
+            with a caught (inner) exception.
+            </summary>
+        </member>
+        <member name="T:ASCOM.ErrorCodes">
+            <summary>
+            Error numbers for use by drivers.
+            </summary>
+            <remarks>
+            The range of permitted values falls within the class FACILTY_ITF as 
+            defined by the operating system and COM. These values will never clash with 
+            COM, RPC, or OS error codes.
+            </remarks>
+        </member>
+        <member name="F:ASCOM.ErrorCodes.NotImplemented">
+            <summary>
+            Reserved error number for property or method not implemented.
+            </summary>
+            <remarks>
+            See ASCOM.Exception.NotImplementedException.
+            </remarks>
+        </member>
+        <member name="F:ASCOM.ErrorCodes.InvalidValue">
+            <summary>
+            Reserved error number for reporting an invalid value.
+            </summary>
+            <remarks>
+            See ASCOM.Exception.InvalidValueException.
+            </remarks>
+        </member>
+        <member name="F:ASCOM.ErrorCodes.ValueNotSet">
+            <summary>
+            Reserved error number for reporting that a value has not been set.
+            </summary>
+            <remarks>
+            See ASCOM.Exception.ValueNotSetException.
+            </remarks>
+        </member>
+        <member name="F:ASCOM.ErrorCodes.NotConnected">
+            <summary>
+            Error code used to indicate that the communications channel is not connected.
+            </summary>
+        </member>
+        <member name="F:ASCOM.ErrorCodes.InvalidWhileParked">
+            <summary>
+            Error code used to indicate that the attempted operation is invalid because the mount
+            is currently in a Parked state.
+            </summary>
+        </member>
+        <member name="F:ASCOM.ErrorCodes.InvalidWhileSlaved">
+            <summary>
+            Error code used to indicate that the attempted operation is invalid because the mount
+            is currently in a Slaved state.
+            </summary>
+        </member>
+        <member name="F:ASCOM.ErrorCodes.SettingsProviderError">
+            <summary>
+            An error related to settings.
+            </summary>
+        </member>
+        <member name="F:ASCOM.ErrorCodes.InvalidOperationException">
+            <summary>
+            Error code to indicate that the requested operation can not be undertaken at this time.
+            </summary>
+        </member>
+        <member name="F:ASCOM.ErrorCodes.UnspecifiedError">
+            <summary>
+            A 'catch-all' error code used when nothing else was specified.
+            </summary>
+        </member>
+        <member name="F:ASCOM.ErrorCodes.DriverBase">
+            <summary>
+            The starting value for driver-specific error numbers. 
+            </summary>
+            <remarks>
+            Drivers are free to choose their own numbers starting with
+            DriverBase, up to and including DriverMax.
+            </remarks>
+        </member>
+        <member name="F:ASCOM.ErrorCodes.DriverMax">
+            <summary>
+            Maximum value for driver-specific error numbers. 
+            </summary>
+            <remarks>
+            Drivers are free to choose their own numbers starting with
+            DriverBase, up to and including DriverMax.
+            </remarks>
+        </member>
+        <member name="T:ASCOM.ValueNotSetException">
+            <summary>
+            Exception to report that no value has yet been set for this property.
+            </summary>
+        </member>
+        <member name="M:ASCOM.ValueNotSetException.#ctor(System.String)">
+            <summary>
+            Create a new exception object and identify the specified driver property or method as the source.
+            </summary>
+            <param name="strPropertyOrMethod">The name of the driver property/accessor or method that caused the exception</param>
+        </member>
+        <member name="M:ASCOM.ValueNotSetException.#ctor(System.String,System.Exception)">
+            <summary>
+            Create a new exception object and identify the specified driver property as the source,
+            and include an inner exception object containing a caught exception.
+            </summary>
+            <param name="strPropertyOrMethod">The name of the driver property/accessor or method that caused the exception</param>
+            <param name="inner">The caught exception</param>
+        </member>
+        <member name="P:ASCOM.ValueNotSetException.PropertyOrMethod">
+            <summary>
+            The property/accessor or method that has no value
+            </summary>
+        </member>
+        <member name="T:ASCOM.MethodNotImplementedException">
+            <summary>
+            All methods defined by the relevant ASCOM standard interface must exist in each driver. However,
+            those methods do not all have to be <i>implemented</i>. The minimum requirement
+            for each defined method is to throw the ASCOM.MethodNotImplementedException. Note
+            that no default constructor is supplied. Throwing this requires the the method name. 
+            </summary>
+        </member>
+        <member name="M:ASCOM.MethodNotImplementedException.#ctor(System.String)">
+            <summary>
+            Create a new exception object and identify the specified driver method as the source.
+            </summary>
+            <param name="strMethod">The name of the driver method that caused the exception.</param>
+        </member>
+        <member name="M:ASCOM.MethodNotImplementedException.#ctor(System.String,System.Exception)">
+            <summary>
+            Create a new exception object and identify the specified driver method as the source,
+            and include an inner exception object containing a caught exception.
+            </summary>
+            <param name="strMethod">The name of the driver method that caused the exception</param>
+            <param name="inner">The caught exception</param>
+        </member>
+        <member name="P:ASCOM.MethodNotImplementedException.Method">
+            <summary>
+            The method that is not implemented
+            </summary>
+        </member>
+        <member name="T:ASCOM.NotConnectedException">
+            <summary>
+            This exception should be raised when an operation is attempted that requires communication with the
+            device, but the device is disconnected.
+            </summary>
+        </member>
+        <member name="M:ASCOM.NotConnectedException.#ctor">
+            <summary>
+            Default public constructor for NotConnectedException takes no parameters.
+            </summary>
+        </member>
+        <member name="M:ASCOM.NotConnectedException.#ctor(System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.NotConnectedException"/> class
+            from another exception.
+            </summary>
+            <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="M:ASCOM.NotConnectedException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.NotConnectedException"/> class
+            with a non-default error message.
+            </summary>
+            <param name="message">A descriptive human-readable message.</param>
+        </member>
+        <member name="M:ASCOM.NotConnectedException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.NotConnectedException"/> class
+            based on another exception.
+            </summary>
+            <param name="message">Descriptive text documenting the cause or source of the error.</param>
+            <param name="innerException">The inner exception the led to the throwing of this exception.</param>
+        </member>
+        <member name="T:ASCOM.InvalidValueException">
+            <summary>
+            Exception to report an invalid value supplied to a driver.
+            </summary>
+            <remarks>
+            The most useful way to use this exception is to inform the user which property/method/parameter
+            had the invalid value and also the range of allowed values.
+            </remarks>
+        </member>
+        <member name="M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Create a new exception object and identify the specified driver property or method as the source.
+            </summary>
+            <param name="strPropertyOrMethod">The name of the driver property/accessor or method that caused the exception</param>
+            <param name="strValue">The invalid value that was supplied</param>
+            <param name="strRange">The valid value range</param>
+        </member>
+        <member name="M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String,System.Exception)">
+            <summary>
+            Create a new exception object and identify the specified driver property as the source,
+            and include an inner exception object containing a caught exception.
+            </summary>
+            <param name="strPropertyOrMethod">The name of the driver property/accessor or method that caused the exception</param>
+            <param name="strValue">The invalid value that was supplied</param>
+            <param name="inner">The caught exception</param>
+            <param name="strRange">The valid value range</param>
+        </member>
+        <member name="P:ASCOM.InvalidValueException.PropertyOrMethod">
+            <summary>
+            The property/accessor or method that has an invalid value.
+            </summary>
+        </member>
+        <member name="P:ASCOM.InvalidValueException.Value">
+            <summary>
+            The invalid value.
+            </summary>
+        </member>
+        <member name="P:ASCOM.InvalidValueException.Range">
+            <summary>
+            The valid range for this property.
+            </summary>
+        </member>
+    </members>
+</doc>
