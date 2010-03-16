@@ -2,13 +2,19 @@
   <UsingTask
     AssemblyFile="External Dependencies\xUnit\xunit.runner.msbuild.dll"
     TaskName="Xunit.Runner.MSBuild.xunit" />
-
+  <PropertyGroup>
+    <SandCastleHFBCmd>$(SHFBROOT)SandcastleBuilderConsole.exe</SandCastleHFBCmd>
+    <SandCastleHFBProject>Help\ASCOMPlatform.shfb</SandCastleHFBProject>
+  </PropertyGroup>
   <Target Name="Build">
     <MSBuild
       Projects="ASCOM Platform 6.sln"
       Targets="Build"
       Properties="Configuration=TeamCity" />
-
     <xunit Assembly="ASCOM.Platform.Test\bin\Release\ASCOM.Platform.Test.dll" />
+  </Target>
+  <Target Name="BuildDocumentation">
+    <!-- Build source code docs -->
+    <Exec Command="%22$(SandCastleHFBCmd)%22 %22$(SandCastleHFBProject)%22" />
   </Target>
 </Project>
