@@ -15,6 +15,7 @@
   </Target>
   <Target Name="BuildDocumentation">
     <MSBuild
-      Projects="Help\ASCOMPlatform.shfbproj" />
+      Projects="Help\ASCOMPlatform.shfbproj"
+      Properties="Configuration=Release" />
   </Target>
 </Project>

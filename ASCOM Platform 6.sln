@@ -5,6 +5,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		ASCOM Platform 6.sln.xunit = ASCOM Platform 6.sln.xunit
 		ASCOM Platform 6.vsmdi = ASCOM Platform 6.vsmdi
+		Help\ASCOMPlatform.shfbproj = Help\ASCOMPlatform.shfbproj
 		Drivers and Simulators\Platform Dependencies\AssemblyVersionInfo.cs = Drivers and Simulators\Platform Dependencies\AssemblyVersionInfo.cs
 		BUILD NOTES.txt = BUILD NOTES.txt
 		Drivers and Simulators\Guidelines for Driver Developers.docx = Drivers and Simulators\Guidelines for Driver Developers.docx
@@ -52,31 +53,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Platform.DependencyBu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platform Dependencies", "Platform Dependencies", "{F1D8A6F0-1A98-4430-8DCD-6D1432449765}"
 	ProjectSection(SolutionItems) = preProject
-		Drivers and Simulators\Platform Dependencies\ASCOM-Controls.xml = Drivers and Simulators\Platform Dependencies\ASCOM-Controls.xml
 		Drivers and Simulators\Platform Dependencies\ASCOM.Astrometry.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Astrometry.dll
 		Drivers and Simulators\Platform Dependencies\ASCOM.Astrometry.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.Astrometry.pdb
 		Drivers and Simulators\Platform Dependencies\ASCOM.Astrometry.xml = Drivers and Simulators\Platform Dependencies\ASCOM.Astrometry.xml
-		Drivers and Simulators\Platform Dependencies\ASCOM.Attributes.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Attributes.dll
-		Drivers and Simulators\Platform Dependencies\ASCOM.Attributes.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.Attributes.pdb
 		Drivers and Simulators\Platform Dependencies\ASCOM.Attributes.xml = Drivers and Simulators\Platform Dependencies\ASCOM.Attributes.xml
-		Drivers and Simulators\Platform Dependencies\ASCOM.Controls.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Controls.dll
 		Drivers and Simulators\Platform Dependencies\ASCOM.Controls.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.Controls.pdb
-		Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.dll = Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.dll
-		Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.pdb
-		Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.XML = Drivers and Simulators\Platform Dependencies\ASCOM.DriverAccess.XML
-		Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.dll
-		Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.pdb
-		Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.XML = Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.XML
-		Drivers and Simulators\Platform Dependencies\ASCOM.IConform.dll = Drivers and Simulators\Platform Dependencies\ASCOM.IConform.dll
-		Drivers and Simulators\Platform Dependencies\ASCOM.IConform.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.IConform.pdb
 		Drivers and Simulators\Platform Dependencies\ASCOM.IConform.xml = Drivers and Simulators\Platform Dependencies\ASCOM.IConform.xml
 		Drivers and Simulators\Platform Dependencies\ASCOM.Interfaces.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Interfaces.dll
-		Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.dll = Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.dll
-		Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.pdb
-		Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.XML = Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.XML
-		Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.dll = Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.dll
 		Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.pdb = Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.pdb
-		Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.xml = Drivers and Simulators\Platform Dependencies\ASCOM.Utilities.xml
 		Drivers and Simulators\Platform Dependencies\AscomMasterInterfaces.tlb = Drivers and Simulators\Platform Dependencies\AscomMasterInterfaces.tlb
 		Drivers and Simulators\Platform Dependencies\NOVAS-C.dll = Drivers and Simulators\Platform Dependencies\NOVAS-C.dll
 		Drivers and Simulators\Platform Dependencies\NOVAS-C.pdb = Drivers and Simulators\Platform Dependencies\NOVAS-C.pdb
@@ -655,7 +639,6 @@ Global
 		{ABCC46C4-55C3-48A4-AB6F-3FDB0B99269F}.Platform Dependencies|Any CPU.ActiveCfg = Release|Any CPU
 		{ABCC46C4-55C3-48A4-AB6F-3FDB0B99269F}.Platform Dependencies|Any CPU.Build.0 = Release|Any CPU
 		{ABCC46C4-55C3-48A4-AB6F-3FDB0B99269F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ABCC46C4-55C3-48A4-AB6F-3FDB0B99269F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ABCC46C4-55C3-48A4-AB6F-3FDB0B99269F}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
 		{A7E3ACC3-BBAB-4E30-BAC7-CC490AB4A0F5}.Debug Quick|Any CPU.ActiveCfg = Debug
 		{A7E3ACC3-BBAB-4E30-BAC7-CC490AB4A0F5}.Debug|Any CPU.ActiveCfg = Debug
@@ -664,7 +647,6 @@ Global
 		{A7E3ACC3-BBAB-4E30-BAC7-CC490AB4A0F5}.Platform Dependencies|Any CPU.ActiveCfg = Peter
 		{A7E3ACC3-BBAB-4E30-BAC7-CC490AB4A0F5}.Platform Dependencies|Any CPU.Build.0 = Peter
 		{A7E3ACC3-BBAB-4E30-BAC7-CC490AB4A0F5}.Release|Any CPU.ActiveCfg = Release
-		{A7E3ACC3-BBAB-4E30-BAC7-CC490AB4A0F5}.Release|Any CPU.Build.0 = Release
 		{A7E3ACC3-BBAB-4E30-BAC7-CC490AB4A0F5}.TeamCity|Any CPU.ActiveCfg = Release
 		{A7E3ACC3-BBAB-4E30-BAC7-CC490AB4A0F5}.TeamCity|Any CPU.Build.0 = Release
 		{EB26A3EC-5E15-4EED-B421-E64E4B83F3F6}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
@@ -776,13 +758,13 @@ Global
 		{908A13CE-4C6D-4546-AD52-AB958FF46C5B} = {7814C016-C363-4A04-B095-27A5B33AA783}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
-		Reflector0SourceName = Moq
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceAssemblyName = 
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0DestinationName = Moq
-		Reflector0DestinationVersion = 4.0.812.4
 		Reflector0DestinationAssemblyName = 
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationName = Moq
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0SourceAssemblyName = 
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceName = Moq
+		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
 	EndGlobalSection
 EndGlobal
