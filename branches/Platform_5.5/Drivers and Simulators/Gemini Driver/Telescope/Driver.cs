@@ -1,6 +1,5 @@
 //tabs=4
 // --------------------------------------------------------------------------------
-// TODO fill in this information for your driver, then remove this line!
 //
 // ASCOM Gemini driver for Telescope
 //
@@ -16,6 +15,8 @@
 // -----------	---	-----	-------------------------------------------------------
 // 15-JUL-2009	rbt	1.0.0	Initial edit, from ASCOM Telescope Driver template
 // 08-JUL-2009  pk  1.0.1   Full implementation of ITelescope interface, passing Conform test.
+// 29-MAR-2010  pk  1.0.3   Moved CommandXXX methods to their proper location in the interface specification
+//                          modified TrackingRates private 'pos' field to be non-static
 // --------------------------------------------------------------------------------
 //
 using System;
@@ -151,13 +152,6 @@ public interface IGeminiTelescope
     IAxisRates AxisRates(TelescopeAxes Axis);
     [DispId(403)]
     bool CanMoveAxis(TelescopeAxes Axis);
-    [DispId(421)]
-
-    void CommandBlind(string Command, [DefaultParameterValue(false)] bool Raw);
-    [DispId(422)]
-    bool CommandBool(string Command, [DefaultParameterValue(false)]bool Raw);
-    [DispId(423)]
-    string CommandString(string Command, [DefaultParameterValue(false)]bool Raw);
     [DispId(404)]
     PierSide DestinationSideOfPier(double RightAscension, double Declination);
     [DispId(405)]
@@ -192,6 +186,12 @@ public interface IGeminiTelescope
     void SyncToTarget();
     [DispId(420)]
     void Unpark();
+    [DispId(421)]
+    void CommandBlind(string Command, [DefaultParameterValue(false)] bool Raw);
+    [DispId(422)]
+    bool CommandBool(string Command, [DefaultParameterValue(false)]bool Raw);
+    [DispId(423)]
+    string CommandString(string Command, [DefaultParameterValue(false)]bool Raw);
     [DispId(424)]
     string CommandNative(string Command);
     [DispId(425)]
@@ -1262,6 +1262,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.ParkAlt = GeminiHardware.Altitude;
             GeminiHardware.ParkAz = GeminiHardware.Azimuth;
             GeminiHardware.ParkPosition = GeminiHardware.GeminiParkMode.SlewAltAz;
+            GeminiHardware.Profile = null;
             GeminiHardware.Trace.Exit("IT:SetPark", GeminiHardware.ParkAlt, GeminiHardware.ParkAz);
         }
 
@@ -1888,8 +1889,8 @@ namespace ASCOM.GeminiTelescope
     [ClassInterface(ClassInterfaceType.None)]
     public class TrackingRates : ITrackingRates, IEnumerable, IEnumerator
     {
-        public DriveRates [] m_TrackingRates;
-        private static int _pos = -1;
+        private DriveRates [] m_TrackingRates;
+        private int _pos = -1;
 
         //
         // Default constructor - Internal prevents public creation
