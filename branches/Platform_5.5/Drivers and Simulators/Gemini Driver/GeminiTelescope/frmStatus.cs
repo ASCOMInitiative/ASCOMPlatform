@@ -119,6 +119,7 @@ namespace ASCOM.GeminiTelescope
         private void frmStatus_FormClosed(object sender, FormClosedEventArgs e)
         {
             tmrUpdate.Stop();
+            GeminiHardware.Profile = null;
         }
 
         private void frmStatus_FormClosing(object sender, FormClosingEventArgs e)

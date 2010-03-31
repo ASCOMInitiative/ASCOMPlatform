@@ -1,4 +1,23 @@
-﻿using System;
+﻿//tabs=4
+// --------------------------------------------------------------------------------
+//
+// GPS query window
+//
+// Description:	
+//
+// Author:		(rbt) Robert Turner <robert@robertturnerastro.com>
+//              (pk)  Paul Kanevsky <paul@pk.darkhorizons.org>
+//
+// Edit Log:
+//
+// Date			Who	Vers	Description
+// -----------	---	-----	-------------------------------------------------------
+// 15-JUL-2009	rbt	1.0.0	Initial implementation
+// 29-MAR-2010  pk  1.0.3   Changed GPS Lat/Long/Elevation data to proper local
+//                          decimal separator
+// --------------------------------------------------------------------------------
+//
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -65,6 +84,16 @@ namespace ASCOM.GeminiTelescope
 
             m_Latitude = latitude.Substring(1);
             m_Longitude = longitude.Substring(1);
+
+            // GPS data contains '.' as the decimal separator. To make ASCOM conversion functions work for the current locale,
+            // need to replace '.' with the correct local decimal separator [pk: 2010-03-29]
+            string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            if (sep != ".")
+            {
+                m_Latitude = m_Latitude.Replace(".", sep);
+                m_Longitude = m_Longitude.Replace(".", sep);
+                m_Elevation = m_Elevation.Replace(".", sep);
+            }
 
             if (latitude.Substring(0, 1) == "S") m_Latitude = "-" + m_Latitude;
             if (longitude.Substring(0, 1) == "W") m_Longitude = "-" + m_Longitude;

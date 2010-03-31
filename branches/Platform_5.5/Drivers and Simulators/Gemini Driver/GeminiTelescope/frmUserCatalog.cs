@@ -108,7 +108,7 @@ namespace ASCOM.GeminiTelescope
             double incr =  1;
             if (files.Length != 0) incr = 100.0/files.Length;
 
-            GeminiHardware.m_Profile.DeviceType = "Telescope";
+            GeminiHardware.Profile.DeviceType = "Telescope";
             foreach (System.IO.FileInfo fi in files)
             {
 
@@ -117,7 +117,7 @@ namespace ASCOM.GeminiTelescope
                 if (LoadCatalog(fi.FullName, cn, m_Objects))
                 {
                     int idx = lbCatalogs.Items.Add(cn);
-                    string v = GeminiHardware.m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Catalog " + cn);
+                    string v = GeminiHardware.Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Catalog " + cn);
                     if (!string.IsNullOrEmpty(v))
                     {
                         bool b  = false;
@@ -207,7 +207,7 @@ namespace ASCOM.GeminiTelescope
 
         void PopulateAllObjects(string clicked)
         {
-            GeminiHardware.m_Profile.DeviceType = "Telescope";
+            GeminiHardware.Profile.DeviceType = "Telescope";
 
             string wh = "";
 
@@ -218,7 +218,7 @@ namespace ASCOM.GeminiTelescope
 
                 if (lbCatalogs.Items[i].ToString() == clicked) bChecked = !bChecked;
 
-                GeminiHardware.m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Catalog " + lbCatalogs.Items[i],
+                GeminiHardware.Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Catalog " + lbCatalogs.Items[i],
                     bChecked.ToString());
 
                 if (bChecked) wh = wh + lbCatalogs.Items[i].ToString() + ",";
@@ -586,6 +586,11 @@ namespace ASCOM.GeminiTelescope
                 }
             }
             catch { }
+        }
+
+        private void frmUserCatalog_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            GeminiHardware.Profile = null;
         }
     }
 

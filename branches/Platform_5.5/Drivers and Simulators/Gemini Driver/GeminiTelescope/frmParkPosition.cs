@@ -76,5 +76,10 @@ namespace ASCOM.GeminiTelescope
             if (rbHome.Checked) GeminiHardware.ParkPosition = GeminiHardware.GeminiParkMode.SlewHome;
             DialogResult = DialogResult.OK;
         }
+
+        private void frmParkPosition_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            GeminiHardware.Profile = null;
+        }
     }
 }

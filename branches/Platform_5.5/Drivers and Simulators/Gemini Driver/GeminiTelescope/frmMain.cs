@@ -60,7 +60,7 @@ namespace ASCOM.GeminiTelescope
             
             InitializeComponent();
             tmrUpdate.Interval = 2000;
-//            tmrUpdate.Tick += new EventHandler(tmrUpdate_Tick);
+
             tmrUpdate.Elapsed+=new System.Timers.ElapsedEventHandler(tmrUpdate_Tick);
             tmrUpdate.Start();
             GeminiHardware.OnConnect += new ConnectDelegate(OnConnectEvent);
@@ -716,6 +716,7 @@ namespace ASCOM.GeminiTelescope
         void tmrUpdate_Tick(object sender, EventArgs e)
         {
 
+
             if (GeminiHardware.Connected)
             {
                 m_UpdateCount++;
@@ -723,7 +724,6 @@ namespace ASCOM.GeminiTelescope
                 RightAscension = GeminiHardware.RightAscension;
                 Declination = GeminiHardware.Declination;
                 SiderealTime = GeminiHardware.SiderealTime;
-                HourAngleDisplay = HourAngle; 
 
                 // don't bother with PEC status and
                 // distance to safety while slewing: this is too
@@ -734,6 +734,7 @@ namespace ASCOM.GeminiTelescope
                     if ((m_UpdateCount & 3) == 0)
                     {
                         UpdateTimeToLimit();
+                        HourAngleDisplay = HourAngle; 
                     }
 
                     if (GeminiHardware.QueueDepth < 3)  //don't keep queuing if queue is large
@@ -921,13 +922,16 @@ namespace ASCOM.GeminiTelescope
 
                 tmrJoystick.Stop();
                 StartJoystick();    //restart if settings have changed
+                
             }
 
             Speech.SpeechInitialize(this.Handle, GeminiHardware.UseSpeech ? GeminiHardware.SpeechVoice : null);
             Speech.Filter = GeminiHardware.SpeechFilter;
 
             setupForm.Dispose();
+            GeminiHardware.Profile = null;
         }
+
         private void _DoFocuserSetupDialog()
         {
             Speech.SayIt(Resources.ShowSetupFocuser, Speech.SpeechType.Command);
@@ -967,6 +971,7 @@ namespace ASCOM.GeminiTelescope
             }
 
             setupForm.Dispose();
+            GeminiHardware.Profile = null;
         }
 
 
@@ -1012,7 +1017,8 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                return GeminiHardware.SiderealTime - GeminiHardware.RightAscension;
+                string res = GeminiHardware.DoCommandResult(":GH", 2000, false);               
+                return GeminiHardware.m_Util.HMSToHours(res);
             }        
         }
 
@@ -1107,7 +1113,8 @@ namespace ASCOM.GeminiTelescope
 
             SetSlewButtons();
             SetTopMost();
-            if (!GeminiHardware.ShowHandbox && GeminiTelescope.m_bComStart) this.Hide();           
+            if (!GeminiHardware.ShowHandbox && GeminiTelescope.m_bComStart) this.Hide();
+            GeminiHardware.Profile = null;
             
         }
 
@@ -1154,6 +1161,7 @@ namespace ASCOM.GeminiTelescope
 
             }
             parametersForm.Dispose();
+            GeminiHardware.Profile = null;
         }
 
         private void UpdateConnectStatus()
@@ -1774,6 +1782,11 @@ namespace ASCOM.GeminiTelescope
 
         private void frmMain_Move(object sender, EventArgs e)
         {
+        }
+
+        private void buttonSlew1_Click(object sender, EventArgs e)
+        {
+
         }
 
     }

@@ -37,6 +37,8 @@ namespace ASCOM.GeminiTelescope
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.labelHA = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.labelLimit = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.labelDec = new System.Windows.Forms.Label();
@@ -86,8 +88,6 @@ namespace ASCOM.GeminiTelescope
             this.BalloonIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.pbStop = new System.Windows.Forms.Button();
             this.checkboxPEC = new System.Windows.Forms.CheckBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.labelHA = new System.Windows.Forms.Label();
             this.buttonSlew2 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew3 = new ASCOM.GeminiTelescope.TButton();
             this.buttonSlew4 = new ASCOM.GeminiTelescope.TButton();
@@ -159,6 +159,28 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(126, 84);
             this.tableLayoutPanel1.TabIndex = 8;
+            // 
+            // labelHA
+            // 
+            this.labelHA.AutoSize = true;
+            this.labelHA.Dock = System.Windows.Forms.DockStyle.Right;
+            this.labelHA.ForeColor = System.Drawing.Color.Red;
+            this.labelHA.Location = new System.Drawing.Point(74, 48);
+            this.labelHA.Name = "labelHA";
+            this.labelHA.Size = new System.Drawing.Size(49, 16);
+            this.labelHA.TabIndex = 15;
+            this.labelHA.Text = "00:00:00";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.ForeColor = System.Drawing.Color.White;
+            this.label5.Location = new System.Drawing.Point(0, 48);
+            this.label5.Margin = new System.Windows.Forms.Padding(0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(22, 13);
+            this.label5.TabIndex = 14;
+            this.label5.Text = "HA";
             // 
             // labelLimit
             // 
@@ -696,28 +718,6 @@ namespace ASCOM.GeminiTelescope
             this.checkboxPEC.UseVisualStyleBackColor = false;
             this.checkboxPEC.Click += new System.EventHandler(this.checkboxPEC_Clicked);
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(0, 48);
-            this.label5.Margin = new System.Windows.Forms.Padding(0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(22, 13);
-            this.label5.TabIndex = 14;
-            this.label5.Text = "HA";
-            // 
-            // labelHA
-            // 
-            this.labelHA.AutoSize = true;
-            this.labelHA.Dock = System.Windows.Forms.DockStyle.Right;
-            this.labelHA.ForeColor = System.Drawing.Color.Red;
-            this.labelHA.Location = new System.Drawing.Point(74, 48);
-            this.labelHA.Name = "labelHA";
-            this.labelHA.Size = new System.Drawing.Size(49, 16);
-            this.labelHA.TabIndex = 15;
-            this.labelHA.Text = "00:00:00";
-            // 
             // buttonSlew2
             // 
             this.buttonSlew2.AccessibleDescription = "Slew South";
@@ -780,6 +780,7 @@ namespace ASCOM.GeminiTelescope
             this.buttonSlew1.Size = new System.Drawing.Size(64, 64);
             this.buttonSlew1.TabIndex = 1;
             this.buttonSlew1.UseVisualStyleBackColor = false;
+            this.buttonSlew1.Click += new System.EventHandler(this.buttonSlew1_Click);
             this.buttonSlew1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseDown);
             this.buttonSlew1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseUp);
             // 

@@ -445,6 +445,7 @@
             this.Name = "frmUserCatalog";
             this.Text = "Object Catalog Manager";
             this.Load += new System.EventHandler(this.frmUserCatalog_Load);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmUserCatalog_FormClosed);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
