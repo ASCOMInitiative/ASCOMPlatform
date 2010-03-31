@@ -91,8 +91,8 @@ namespace ASCOM.GeminiTelescope
             if (sep != ".")
             {
                 m_Latitude = m_Latitude.Replace(".", sep);
-                m_Longitude = m_Longitude.Replace(".", sep);
-                m_Elevation = m_Elevation.Replace(".", sep);
+                m_Longitude = m_Longitude.Replace(".", sep);                
+                elevation = elevation.Replace(".", sep);
             }
 
             if (latitude.Substring(0, 1) == "S") m_Latitude = "-" + m_Latitude;
