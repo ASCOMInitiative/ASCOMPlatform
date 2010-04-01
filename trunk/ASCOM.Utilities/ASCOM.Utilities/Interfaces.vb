@@ -1323,6 +1323,7 @@ Namespace Interfaces
         ReadOnly Property BasePath() As String
         Sub Rename(ByVal p_CurrentName As String, ByVal p_NewName As String)
         Sub RenameDirectory(ByVal CurrentName As String, ByVal NewName As String)
+        Sub SetSecurityACLs(ByVal p_TL As TraceLogger)
     End Interface 'Interface that a file store provider must implement to support a store provider
 
     Friend Interface IAccess
@@ -1337,6 +1338,7 @@ Namespace Interfaces
         Sub DeleteKey(ByVal p_SubKeyName As String)
         Sub RenameKey(ByVal CurrentSubKeyName As String, ByVal NewSubKeyName As String)
         Sub MigrateProfile()
+        Sub SetSecurityACLs()
     End Interface 'Interface for a general profile store provider
 
 #End Region

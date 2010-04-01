@@ -455,9 +455,12 @@ Public Class Profile
         TL.Enabled = True 'Force tracing on when migrating a profile
         TL.LogMessage("MigrateProfile", "Migrating profile to platform version: " & PlatformVersion & ", JustSetPlatformVersion is: " & JustSetPlatformVersion.ToString)
         Try
-            If Not JustSetPlatformVersion Then ' We aren't just setting the platform version number so migrate the profile
+            If Not JustSetPlatformVersion Then ' We aren't just setting the platform version number so migrate the profile and set ACLs
                 ProfileStore.MigrateProfile()
                 TL.LogMessage("MigrateProfile", "Successfully migrated Profile")
+            Else ' Set security ACLs on ASCOM root directory only
+                ProfileStore.SetSecurityACLs()
+                TL.LogMessage("MigrateProfile", "Successfully set security ACLs")
             End If
             ProfileStore.WriteProfile("", "PlatformVersion", PlatformVersion) 'Set the platform version in the ASCOM root key
             TL.LogMessage("MigrateProfile", "Successfully set PlatformVersion to: " & PlatformVersion)
