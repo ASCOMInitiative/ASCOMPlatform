@@ -14,7 +14,13 @@
 		 		 			<listItem>the full table of CIO RAs</listItem>>
 		 		 			<listItem>the AE98 readeph routine to parse locally held minor planet ephemeris files</listItem>
 		 		 		</list>
- 		 			</listItem>
+		 		 	</listItem>
+		 		 	<listItem>ASCOM.Utilities
+						<list class="bullet">
+		 		 			<listItem>Profile - improved resilience to tranient operational issues</listItem>>
+		 		 			<listItem>Profile - improved recovery from profile file corruption</listItem>>
+		 		 		</list>
+		 		 	</listItem>
 	  			</list>
             </content>
 		</section>
@@ -25,6 +31,11 @@
       			<list class="bullet">
  		 			<listItem>ASCOM.Utilities.Serial - Some installed COM ports were not returned by Serial.AvailableCOMPorts. This has been 
  		 			improved to actively test for COM ports rather than simply relying on the list of ports returned by the .NET Framework.</listItem>
+					<listItem>MigrateProfile - Now applies the "Full Control" security attribute to the entire ASCOM shared
+					file area where the Profile is stored to remove access control issues seen by some people.</listItem>
+					<listItem>Installer - Now applies required security attributes every time the installer is run,
+					regardless of whether the profile is already migrated. This ensures correct attributes are applied
+					for early adopters whose profile was migrated by an early "HelperNET" install.</listItem>
 				</list>
    			</content>
    		</section>

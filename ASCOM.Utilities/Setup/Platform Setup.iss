@@ -96,7 +96,7 @@
 
 ; Added NOVAS3 installables and JPL ephemeris File
 ; Added RA CIO File
-
+; Moved location of Help files directory from \Utilities to \Help
 
 [Setup]
 ; Setup program version number - change this each time you change this setup script
@@ -106,7 +106,7 @@
 #define Public InstallerVersion "6.0"
 
 ;Text for release candidate / beta version messages
-#define Public RC "Alpha 1"
+#define Public RC "Alpha 2"
 
 #define Public Major 0
 #define Public Minor 0
@@ -228,8 +228,8 @@ Source: ..\OriginalHelpers\Helper2.dll; DestDir: {cf32}\ASCOM\Utilities; Flags: 
 Source: ..\OriginalHelpers\RestoreOriginalHelpers.cmd; DestDir: {cf32}\ASCOM\Utilities; Flags: ignoreversion
 
 ;ASCOM Platform .NET Help files
-Source: ..\Help\Help\PlatformHelp.chm; DestDir: {cf}\ASCOM\Doc; Flags: ignoreversion
-Source: ..\Help\Platform 5.5 Architecture\Platform 5.5.pdf; DestDir: {cf}\ASCOM\Doc; Flags: ignoreversion
+Source: ..\..\Help\Help\PlatformHelp.chm; DestDir: {cf}\ASCOM\Doc; Flags: ignoreversion
+Source: ..\..\Help\Platform Supporting Documents\Platform 5.5.pdf; DestDir: {cf}\ASCOM\Doc; Flags: ignoreversion
 Source: ReadMe55.txt; DestDir: {app}; Flags: ignoreversion
 
 ;Profile Explorer
@@ -441,15 +441,4 @@ WelcomeLabel1=%n%n[name]%n
 #emit "WelcomeLabel2=This will install ASCOM Utilities version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
 [_ISToolPreCompile]
 Name: ..\..\ASCOM Redirection Policies\ASCOM Redirection Policies\bin\Release\ASCOM Redirection Policies.exe; Parameters: ; Flags: runminimized abortonerror
-
-
-
-
-
-
-
-
-
-
-
 

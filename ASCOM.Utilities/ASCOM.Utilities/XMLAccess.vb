@@ -389,7 +389,22 @@ Friend Class XMLAccess
         End Try
     End Sub
 
-    Sub MigrateProfile() Implements IAccess.MigrateProfile
+    Friend Sub SetSecurityACLs() Implements IAccess.SetSecurityACLs
+        Try
+            'Force logging to be enabled for this...
+            TL.Enabled = True
+            RunningVersions(TL) 'Capture date in case logging wasn't initially enabled
+
+            'Set security ACLs on profile root directory
+            TL.LogMessage("SetSecurityACLs", "Setting security ACLs on ASCOM root directory ")
+            FileStore.SetSecurityACLs(TL)
+        Catch ex As Exception
+            TL.LogMessage("SetSecurityACLs", "Exception: " & ex.ToString)
+            Throw
+        End Try
+    End Sub
+
+    Friend Sub MigrateProfile() Implements IAccess.MigrateProfile
         Dim FromKey As RegistryKey
 
         Try
@@ -407,7 +422,12 @@ Friend Class XMLAccess
                 TL.LogMessage("MigrateProfile", "Root directory already exists")
             End If
 
+            'Set security ACLs on profile root directory
+            TL.LogMessage("MigrateProfile", "Setting security ACLs on ASCOM root directory ")
+            FileStore.SetSecurityACLs(TL)
+
             'Get correct registry root key depending on whether we are running as 32 or 64bit
+            TL.LogMessage("MigrateProfile", "Copying Profile from Registry")
             FromKey = Registry.LocalMachine.OpenSubKey(ROOT_KEY_NAME) 'Source to copy from 
             If Not FromKey Is Nothing Then 'Got a key
                 TL.LogMessage("MigrateProfile", "FromKey Opened OK: " & FromKey.Name & ", SubKeyCount: " & FromKey.SubKeyCount.ToString & ", ValueCount: " & FromKey.ValueCount.ToString)
