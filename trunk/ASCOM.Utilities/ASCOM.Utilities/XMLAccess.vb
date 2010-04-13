@@ -25,10 +25,12 @@ Friend Class XMLAccess
 
     Private Const ROOT_KEY_NAME As String = "Software\ASCOM" 'Location of ASCOM profile in HKLM registry hive
 
+    Private Const RETRY_MAX As Integer = 1 'Number of persistence failure retrys
+    Private Const RETRY_INTERVAL As Integer = 200 'Length between persistence failure retrys in milliseconds
+
     Private FileStore As IFileStoreProvider 'File store containing the new ASCOM XML profile 
     Private disposedValue As Boolean = False        ' To detect redundant calls to IDisposable
 
-    'Shared KeyCache As Generic.Dictionary(Of String, Generic.SortedList(Of String, String))
     Private ProfileMutex As System.Threading.Mutex
     Private GotMutex As Boolean
 
@@ -47,7 +49,6 @@ Friend Class XMLAccess
 
     Sub New(ByVal p_IgnoreTest As Boolean)
         Dim PlatformVersion As String
-        'KeyCache = New Generic.Dictionary(Of String, Generic.SortedList(Of String, String))
 
         TL = New TraceLogger("", "XMLAccess") 'Create a new trace logger
         TL.Enabled = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT) 'Get enabled / disabled state from the user registry
@@ -68,7 +69,7 @@ Friend Class XMLAccess
                 PlatformVersion = GetProfile("\", "PlatformVersion")
                 'OK, no exception so assume that we are initialised
             Catch ex As Exception
-                TL.LogMessage("XMLAccess.New Unexpected exception:", ex.ToString)
+                TL.LogMessageCrLf("XMLAccess.New Unexpected exception:", ex.ToString)
                 Throw
             End Try
         End If
@@ -79,7 +80,6 @@ Friend Class XMLAccess
         If Not Me.disposedValue Then
             Try
                 FileStore = Nothing 'Clean up the filestore and keycache
-                'KeyCache = Nothing
                 TL.Enabled = False 'Clean up the logger
                 TL.Dispose()
                 TL = Nothing
@@ -120,21 +120,16 @@ Friend Class XMLAccess
         Dim i, j As Integer
 
         Try
-            GotMutex = ProfileMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, False)
-            If Not GotMutex Then TL.LogMessage("CreateKey", "***** WARNING ***** Timed out waiting for Profile mutex")
-
+            GetProfileMutex("CreateKey", p_SubKeyName)
             sw.Reset() : sw.Start() 'Start timing this call
             TL.LogMessage("CreateKey", "SubKey: """ & p_SubKeyName & """")
 
             p_SubKeyName = Trim(p_SubKeyName) 'Normalise the string:
             SubKeys = Split(p_SubKeyName, "\", , Microsoft.VisualBasic.CompareMethod.Text) 'Parse p_SubKeyName into its elements
             Select Case p_SubKeyName
-                Case ""
-                    'Null path so do nothing
-                Case "\"
-                    'Root node so just create this
-                    'Test whether the key already exists
-                    If Not FileStore.Exists("\" & VALUES_FILENAME) Then
+                Case ""  'Null path so do nothing
+                Case "\" 'Root node so just create this
+                    If Not FileStore.Exists("\" & VALUES_FILENAME) Then 'Test whether the key already exists
                         TL.LogMessage("  CreateKey", "  Creating root key ""\""")
                         InitalValues.Clear() 'Now add the file containing the contents of the key
                         InitalValues.Add(COLLECTION_DEFAULT_VALUE_NAME, COLLECTION_DEFAULT_UNSET_VALUE)
@@ -142,23 +137,17 @@ Friend Class XMLAccess
                     Else
                         TL.LogMessage("  CreateKey", "  Root key alread exists")
                     End If
-                Case Else
-                    'Create the directory and its intermediate directories
+                Case Else 'Create the directory and its intermediate directories
                     For i = 0 To SubKeys.Length - 1
                         SubKey = ""
                         For j = 0 To i
                             SubKey = SubKey & "\" & SubKeys(j)
                         Next
-                        'Logger.'LogMsg("    CreateKey", "    SubKey " & i.ToString & " " & SubKey)
-                        'Test whether the key already exists
                         If Not FileStore.Exists(SubKey & "\" & VALUES_FILENAME) Then
-                            '   Logger.'LogMsg("  CreateKey", "  Creating key """ & SubKey & """")
                             FileStore.CreateDirectory(SubKey, TL)  'It doesn't exist so create it
                             InitalValues.Clear() 'Now add the file containing the contents of the key
                             InitalValues.Add(COLLECTION_DEFAULT_VALUE_NAME, COLLECTION_DEFAULT_UNSET_VALUE)
                             WriteValues(SubKey, InitalValues, False) 'Write the profile file
-                        Else
-                            '  Logger.'LogMsg("  CreateKey", "  Key exists   """ & SubKey & """")
                         End If
                     Next
             End Select
@@ -170,17 +159,12 @@ Friend Class XMLAccess
 
     Friend Sub DeleteKey(ByVal p_SubKeyName As String) Implements IAccess.DeleteKey
         'Delete a key
-
         Try
-            GotMutex = ProfileMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, False)
-            If Not GotMutex Then TL.LogMessage("DeleteKey", "***** WARNING ***** Timed out waiting for Profile mutex")
-
+            GetProfileMutex("DeleteKey", p_SubKeyName)
             sw.Reset() : sw.Start() 'Start timing this call
             TL.LogMessage("DeleteKey", "SubKey: """ & p_SubKeyName & """")
 
-            Try : FileStore.DeleteDirectory(p_SubKeyName) : Catch ex As Exception : End Try
-            'Try : KeyCache.Remove(p_SubKeyName) : Catch : End Try
-            'MsgBox("Removed key " & p_SubKeyName)
+            Try : FileStore.DeleteDirectory(p_SubKeyName) : Catch ex As Exception : End Try 'Remove it if at all possible but don't throw any errors
             sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
         Finally
             ProfileMutex.ReleaseMutex()
@@ -189,14 +173,11 @@ Friend Class XMLAccess
 
     Friend Sub RenameKey(ByVal CurrentSubKeyName As String, ByVal NewSubKeyName As String) Implements IAccess.RenameKey
         Try
-            GotMutex = ProfileMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, False)
-            If Not GotMutex Then TL.LogMessage("RenameKey", "***** WARNING ***** Timed out waiting for Profile mutex")
-
+            GetProfileMutex("RenameKey", CurrentSubKeyName & " " & NewSubKeyName)
             sw.Reset() : sw.Start() 'Start timing this call
             TL.LogMessage("RenameKey", "Current SubKey: """ & CurrentSubKeyName & """" & " New SubKey: """ & NewSubKeyName & """")
+
             FileStore.RenameDirectory(CurrentSubKeyName, NewSubKeyName)
-            'Try : KeyCache.Remove(CurrentSubKeyName) : Catch : End Try
-            'MsgBox("Removed key " & p_SubKeyName)
             sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
         Finally
             ProfileMutex.ReleaseMutex()
@@ -208,9 +189,7 @@ Friend Class XMLAccess
         Dim Values As Generic.SortedList(Of String, String)
 
         Try
-            GotMutex = ProfileMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, False)
-            If Not GotMutex Then TL.LogMessage("DeleteProfile", "***** WARNING ***** Timed out waiting for Profile mutex")
-
+            GetProfileMutex("DeleteProfile", p_SubKeyName & " " & p_ValueName)
             sw.Reset() : sw.Start() 'Start timing this call
             TL.LogMessage("DeleteProfile", "SubKey: """ & p_SubKeyName & """ Name: """ & p_ValueName & """")
 
@@ -241,9 +220,7 @@ Friend Class XMLAccess
         Dim Directories(), DefaultValue As String
 
         Try
-            GotMutex = ProfileMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, False)
-            If Not GotMutex Then TL.LogMessage("EnumKeys", "***** WARNING ***** Timed out waiting for Profile mutex")
-
+            GetProfileMutex("EnumKeys", p_SubKeyName)
             sw.Reset() : sw.Start() 'Start timing this call
             TL.LogMessage("EnumKeys", "SubKey: """ & p_SubKeyName & """")
 
@@ -271,8 +248,7 @@ Friend Class XMLAccess
         Dim RetValues As New Generic.SortedList(Of String, String)
 
         Try
-            GotMutex = ProfileMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, False)
-            If Not GotMutex Then TL.LogMessage("EnumProfile", "***** WARNING ***** Timed out waiting for Profile mutex")
+            GetProfileMutex("EnumProfile", p_SubKeyName)
             sw.Reset() : sw.Start() 'Start timing this call
             TL.LogMessage("EnumProfile", "SubKey: """ & p_SubKeyName & """")
 
@@ -290,7 +266,6 @@ Friend Class XMLAccess
             Next
             Values = Nothing
             sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
-
         Finally
             ProfileMutex.ReleaseMutex()
         End Try
@@ -302,9 +277,7 @@ Friend Class XMLAccess
         Dim Values As Generic.SortedList(Of String, String), RetVal As String
 
         Try
-            GotMutex = ProfileMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, False)
-            If Not GotMutex Then TL.LogMessage("GetProfile", "***** WARNING ***** Timed out waiting for Profile mutex")
-
+            GetProfileMutex("GetProfile", p_SubKeyName & " " & p_ValueName & " " & p_DefaultValue)
             sw.Reset() : sw.Start() 'Start timing this call
             TL.LogMessage("GetProfile", "SubKey: """ & p_SubKeyName & """ Name: """ & p_ValueName & """" & """ DefaultValue: """ & p_DefaultValue & """")
 
@@ -337,7 +310,6 @@ Friend Class XMLAccess
 
             Values = Nothing
             sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
-
         Finally
             ProfileMutex.ReleaseMutex()
         End Try
@@ -354,9 +326,7 @@ Friend Class XMLAccess
         Dim Values As Generic.SortedList(Of String, String)
 
         Try
-            GotMutex = ProfileMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, False)
-            If Not GotMutex Then TL.LogMessage("WriteProfile", "***** WARNING ***** Timed out waiting for Profile mutex")
-
+            GetProfileMutex("WriteProfile", p_SubKeyName & " " & p_ValueName & " " & p_ValueData)
             sw.Reset() : sw.Start() 'Start timing this call
             TL.LogMessage("WriteProfile", "SubKey: """ & p_SubKeyName & """ Name: """ & p_ValueName & """ Value: """ & p_ValueData & """")
 
@@ -366,49 +336,56 @@ Friend Class XMLAccess
 
             If p_ValueName = "" Then 'Write the deault value
                 If Values.ContainsKey(COLLECTION_DEFAULT_VALUE_NAME) Then 'Does exist so update it
-                    '        Logger.'LogMsg("  WriteProfile", "  Updating existing default value to #" & p_ValueData & "#")
                     Values.Item(COLLECTION_DEFAULT_VALUE_NAME) = p_ValueData 'Update the existing value
                 Else 'Doesn't exist so add it
-                    '       Logger.'LogMsg("  WriteProfile", "  Adding new default value")
                     Values.Add(COLLECTION_DEFAULT_VALUE_NAME, p_ValueData) 'Add the new value
                 End If
-                '  Logger.'LogMsg("  WriteProfile", "  Writing updated values")
-
                 WriteValues(p_SubKeyName, Values) 'Write the values back to the XML profile
             Else 'Write a named value
-                ' Logger.'LogMsg("  WriteProfile", "  Updating existing value")
                 If Values.ContainsKey(p_ValueName) Then Values.Remove(p_ValueName) 'Remove old value if it exists
                 Values.Add(p_ValueName, p_ValueData) 'Add the new value
                 WriteValues(p_SubKeyName, Values) 'Write the values back to the XML profile
             End If
             Values = Nothing
             sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
-
         Finally
             ProfileMutex.ReleaseMutex()
         End Try
     End Sub
 
-    Friend Sub SetSecurityACLs() Implements IAccess.SetSecurityACLs
+    Friend Sub SetSecurityACLs()
+        Dim LogEnabled As Boolean
         Try
+            GetProfileMutex("SetSecurityACLs", "")
+            sw.Reset() : sw.Start() 'Start timing this call
+            TL.LogMessage("SetSecurityACLs", "")
+
             'Force logging to be enabled for this...
+            LogEnabled = TL.Enabled 'Save logging state
             TL.Enabled = True
             RunningVersions(TL) 'Capture date in case logging wasn't initially enabled
 
             'Set security ACLs on profile root directory
             TL.LogMessage("SetSecurityACLs", "Setting security ACLs on ASCOM root directory ")
             FileStore.SetSecurityACLs(TL)
+            sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
+            TL.Enabled = LogEnabled 'Restore logging state
         Catch ex As Exception
-            TL.LogMessage("SetSecurityACLs", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("SetSecurityACLs", "Exception: " & ex.ToString)
             Throw
         End Try
     End Sub
 
-    Friend Sub MigrateProfile() Implements IAccess.MigrateProfile
-        Dim FromKey As RegistryKey
+    Friend Sub MigrateProfile(ByVal CurrentPlatformVersion As String) Implements IAccess.MigrateProfile
+        Dim FromKey As RegistryKey, LogEnabled As Boolean
 
         Try
+            GetProfileMutex("MigrateProfile", "")
+            sw.Reset() : sw.Start() 'Start timing this call
+            TL.LogMessage("MigrateProfile", "")
+
             'Force logging to be enabled for this...
+            LogEnabled = TL.Enabled 'Save logging state
             TL.Enabled = True
             RunningVersions(TL) 'Capture date in case logging wasn't initially enabled
 
@@ -426,8 +403,9 @@ Friend Class XMLAccess
             TL.LogMessage("MigrateProfile", "Setting security ACLs on ASCOM root directory ")
             FileStore.SetSecurityACLs(TL)
 
-            'Get correct registry root key depending on whether we are running as 32 or 64bit
             TL.LogMessage("MigrateProfile", "Copying Profile from Registry")
+            'Get the registry root key depending. Success here depends on us running as 32bit as the Platform 5 registry 
+            'is located under HKLM\Software\Wow6432Node!
             FromKey = Registry.LocalMachine.OpenSubKey(ROOT_KEY_NAME) 'Source to copy from 
             If Not FromKey Is Nothing Then 'Got a key
                 TL.LogMessage("MigrateProfile", "FromKey Opened OK: " & FromKey.Name & ", SubKeyCount: " & FromKey.SubKeyCount.ToString & ", ValueCount: " & FromKey.ValueCount.ToString)
@@ -439,8 +417,10 @@ Friend Class XMLAccess
             Else 'Didn't get a key from either location so throw an error
                 Throw New ProfileNotFoundException("Cannot find ASCOM Profile in HKLM\" & ROOT_KEY_NAME & " Is Platform 5 installed?")
             End If
+            sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
+            TL.Enabled = LogEnabled 'Restore logging state
         Catch ex As Exception
-            TL.LogMessage("MigrateProfile", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("MigrateProfile", "Exception: " & ex.ToString)
             Throw
         End Try
     End Sub
@@ -449,61 +429,83 @@ Friend Class XMLAccess
 #Region "Support Functions"
 
     Private Function ReadValues(ByVal p_SubKeyName As String) As Generic.SortedList(Of String, String)
-        'Read all values in a key
-        'SubKey has to be absolute from the profile store root
-        Dim Retval As New Generic.SortedList(Of String, String)
-        Dim ReaderSettings As XmlReaderSettings
-        Dim LastElementName As String = ""
-        Dim NextName As String = ""
-        Dim ValueName As String = ""
+        'Read all values in a key - SubKey has to be absolute from the profile store root
+        Dim Retval As New Generic.SortedList(Of String, String), ReaderSettings As XmlReaderSettings
+        Dim LastElementName As String = "", NextName As String = "", ValueName As String = "", ReadOK As Boolean = False, RetryCount As Integer
+        Dim ErrorOccurred As Boolean = False, ValuesFileName As String 'Name of the profile file from which to read
+        Dim ExistsValues, ExistsValuesOriginal, ExistsValuesNew As Boolean
 
         swSupport.Reset() : swSupport.Start() 'Start timing this call
         If Left(p_SubKeyName, 1) <> "\" Then p_SubKeyName = "\" & p_SubKeyName 'Condition to have leading \
+        TL.LogMessage("  ReadValues", "  SubKeyName: " & p_SubKeyName)
 
-        'If KeyCache.ContainsKey(p_SubKeyName) Then
-        ' swSupport.Stop()
-        ' TL.LogMessage("  ReadValues", "  Found in cache  " & p_SubKeyName & " - " & swSupport.ElapsedMilliseconds & " milliseconds")
-        ' Return KeyCache.Item(p_SubKeyName)
-        ' Else
-        TL.LogMessage("  ReadValues", "  Cache miss      " & p_SubKeyName)
-        'End If
+        ValuesFileName = VALUES_FILENAME ' Initialise to the file holding current values
+        RetryCount = -1 'Initialise to ensure we get RETRY_Max number of retrys
 
-        Try
-            ReaderSettings = New XmlReaderSettings
-            ReaderSettings.IgnoreWhitespace = True
-            Using Reader As XmlReader = XmlReader.Create(FileStore.FullPath(p_SubKeyName & "\" & VALUES_FILENAME), ReaderSettings)
-                Reader.Read() 'Get rid of the version string
-                Reader.Read() 'Read in the Profile name tag
+        'Determine what files exist and handle the case where this key has not yet been created
+        ExistsValues = FileStore.Exists(p_SubKeyName & "\" & VALUES_FILENAME)
+        ExistsValuesOriginal = FileStore.Exists(p_SubKeyName & "\" & VALUES_FILENAME_ORIGINAL)
+        ExistsValuesNew = FileStore.Exists(p_SubKeyName & "\" & VALUES_FILENAME_NEW)
+        If Not ExistsValues And Not ExistsValuesOriginal Then Throw New ProfileNotFoundException("No profile files exist for this key: " & p_SubKeyName)
+        Do
+            RetryCount += 1
+            Try
+                ReaderSettings = New XmlReaderSettings
+                ReaderSettings.IgnoreWhitespace = True
+                Using Reader As XmlReader = XmlReader.Create(FileStore.FullPath(p_SubKeyName & "\" & ValuesFileName), ReaderSettings)
+                    Reader.Read() 'Get rid of the XML version string
+                    Reader.Read() 'Read in the Profile name tag
 
-                'Start reading profile strings
-                While Reader.Read()
-                    Select Case Reader.NodeType
-                        Case XmlNodeType.Element
-                            Select Case Reader.Name
-                                Case DEFAULT_ELEMENT_NAME 'Found default value
-                                    Retval.Add(COLLECTION_DEFAULT_VALUE_NAME, Reader.GetAttribute(VALUE_ATTRIBUTE_NAME))
-                                    TL.LogMessage("    ReadValues", "    found " & COLLECTION_DEFAULT_VALUE_NAME & " = " & Retval.Item(COLLECTION_DEFAULT_VALUE_NAME))
-                                Case VALUE_ELEMENT_NAME 'Fount an element name
-                                    ValueName = Reader.GetAttribute(NAME_ATTRIBUTE_NAME)
-                                    Retval.Add(ValueName, Reader.GetAttribute(VALUE_ATTRIBUTE_NAME))
-                                    TL.LogMessage("    ReadValues", "    found " & ValueName & " = " & Retval.Item(ValueName))
-                                Case Else 'Do nothing
-                                    TL.LogMessage("    ReadValues", "    ## Found unexpected Reader.Name: " & Reader.Name.ToString)
-                            End Select
-                        Case Else 'Do nothing
-                    End Select
-                End While
+                    'Start reading profile strings
+                    While Reader.Read()
+                        Select Case Reader.NodeType
+                            Case XmlNodeType.Element
+                                Select Case Reader.Name
+                                    Case DEFAULT_ELEMENT_NAME 'Found default value
+                                        Retval.Add(COLLECTION_DEFAULT_VALUE_NAME, Reader.GetAttribute(VALUE_ATTRIBUTE_NAME))
+                                        TL.LogMessage("    ReadValues", "    found " & COLLECTION_DEFAULT_VALUE_NAME & " = " & Retval.Item(COLLECTION_DEFAULT_VALUE_NAME))
+                                    Case VALUE_ELEMENT_NAME 'Fount an element name
+                                        ValueName = Reader.GetAttribute(NAME_ATTRIBUTE_NAME)
+                                        Retval.Add(ValueName, Reader.GetAttribute(VALUE_ATTRIBUTE_NAME))
+                                        TL.LogMessage("    ReadValues", "    found " & ValueName & " = " & Retval.Item(ValueName))
+                                    Case Else 'Do nothing
+                                        TL.LogMessage("    ReadValues", "    ## Found unexpected Reader.Name: " & Reader.Name.ToString)
+                                End Select
+                            Case Else 'Do nothing
+                        End Select
+                    End While
 
-                Reader.Close() 'Close the IO readers
-            End Using
-            'KeyCache.Add(p_SubKeyName, Retval) 'Add the new value to the cache
-            swSupport.Stop()
-            TL.LogMessage("  ReadValues", "  added to cache - " & swSupport.ElapsedMilliseconds & " milliseconds")
-        Catch ex As Exception
-            'MsgBox("XMLAccess:ReadValues " & p_SubKeyName & " " & ex.ToString)
-            TL.LogMessage("  ReadValues", " exception: " & ex.ToString)
-            Throw
-        End Try
+                    Reader.Close() 'Close the IO readers
+                End Using
+                swSupport.Stop()
+                TL.LogMessage("  ReadValues", "  added to cache - " & swSupport.ElapsedMilliseconds & " milliseconds")
+                ReadOK = True 'Set the exit flag here when a read has been successful
+            Catch ex As Exception
+                ErrorOccurred = True
+                If RetryCount = RETRY_MAX Then
+                    If ValuesFileName = VALUES_FILENAME Then 'Attempt to recover information from the last good file
+                        ValuesFileName = VALUES_FILENAME_ORIGINAL
+                        RetryCount = -1
+                        LogEvent("XMLAccess:ReadValues", "Error reading profile on final retry - attempting recovery from previous version", EventLogEntryType.Warning, 4, ex.ToString)
+                        TL.LogMessageCrLf("  ReadValues", "Final retry exception - attempting recovery from previous version: " & ex.ToString)
+                    Else 'Recovery not possible so throw exception
+                        LogEvent("XMLAccess:ReadValues", "Error reading profile on final retry", EventLogEntryType.Error, 3, ex.ToString)
+                        TL.LogMessageCrLf("  ReadValues", "Final retry exception: " & ex.ToString)
+                        Throw New ProfilePersistenceException("XMLAccess Exception", ex)
+                    End If
+
+                Else
+                    LogEvent("XMLAccess:ReadValues", "Error reading profile - retry: " & RetryCount, EventLogEntryType.Warning, 2, ex.Message)
+                    TL.LogMessageCrLf("  ReadValues", "Retry " & RetryCount & " exception: " & ex.ToString)
+                End If
+            End Try
+            If ErrorOccurred Then Threading.Thread.Sleep(RETRY_INTERVAL) ' Wait if an error occurred
+        Loop Until ReadOK
+        If ErrorOccurred Then 'Update the logs as we seem to have got round it
+            LogEvent("XMLAccess:ReadValues", "Recovered from read error OK", EventLogEntryType.SuccessAudit, 1, Nothing)
+            TL.LogMessage("  ReadValues", "Recovered from read error OK")
+        End If
+
         Return Retval
     End Function
 
@@ -535,7 +537,10 @@ Friend Class XMLAccess
             WriterSettings.Indent = True
             FName = FileStore.FullPath(p_SubKeyName & "\" & VALUES_FILENAME_NEW)
             Dim Writer As XmlWriter
-            Writer = XmlWriter.Create(FName, WriterSettings)
+            Dim FStream As FileStream
+            FStream = New FileStream(FName, FileMode.Create, FileAccess.Write, FileShare.None, 2048, FileOptions.WriteThrough)
+            Writer = XmlWriter.Create(FStream, WriterSettings)
+            'Writer = XmlWriter.Create(FName, WriterSettings)
             Using Writer
                 Writer.WriteStartDocument()
                 Writer.WriteStartElement(PROFILE_NAME) 'Write the profile element
@@ -561,8 +566,15 @@ Friend Class XMLAccess
                 'Flush and close the writer object to complete writing of the XML file. 
                 Writer.Close() 'Actualy write the XML to a file
             End Using
-            Writer = Nothing
+            Try
+                FStream.Flush()
+                FStream.Close()
+                FStream.Dispose()
+                FStream = Nothing
+            Catch ex As Exception 'Ensure no error occur from this tidying up
+            End Try
 
+            Writer = Nothing
             Try 'New file successfully created so now rename the current file to original and rename the new file to current
                 If p_CheckForCurrentProfileStore Then 'Check for existence for current profile store if required
                     FileStore.Rename(p_SubKeyName & "\" & VALUES_FILENAME, p_SubKeyName & "\" & VALUES_FILENAME_ORIGINAL)
@@ -571,32 +583,28 @@ Friend Class XMLAccess
                     FileStore.Rename(p_SubKeyName & "\" & VALUES_FILENAME_NEW, p_SubKeyName & "\" & VALUES_FILENAME)
                 Catch ex2 As Exception
                     'Attempt to rename new file as current failed so try and restore the original file
+                    TL.Enabled = True
                     TL.LogMessage("XMLAccess:WriteValues", "Unable to rename new profile file to current - " & p_SubKeyName & "\" & VALUES_FILENAME_NEW & "to " & p_SubKeyName & "\" & VALUES_FILENAME & " " & ex2.ToString)
                     Try
                         FileStore.Rename(p_SubKeyName & "\" & VALUES_FILENAME_ORIGINAL, p_SubKeyName & "\" & VALUES_FILENAME)
                     Catch ex3 As Exception
                         'Restoration also failed so no clear recovery from this point
+                        TL.Enabled = True
                         TL.LogMessage("XMLAccess:WriteValues", "Unable to rename original profile file to current - " & p_SubKeyName & "\" & VALUES_FILENAME_ORIGINAL & "to " & p_SubKeyName & "\" & VALUES_FILENAME & " " & ex3.ToString)
                     End Try
                 End Try
             Catch ex1 As Exception
                 'No clear remedial action as the current file rename failed so just leave as is
+                TL.Enabled = True
                 TL.LogMessage("XMLAccess:WriteValues", "Unable to rename current profile file to original - " & p_SubKeyName & "\" & VALUES_FILENAME & "to " & p_SubKeyName & "\" & VALUES_FILENAME_ORIGINAL & " " & ex1.ToString)
             End Try
 
             WriterSettings = Nothing
 
-            'If KeyCache.ContainsKey(p_SubKeyName) Then
-            ' KeyCache.Item(p_SubKeyName) = p_KeyValuePairs 'Update the local cache
-            'swSupport.Stop()
-            'TL.LogMessage("  WriteValues", "  Updated cache entry " & p_SubKeyName & " - " & swSupport.ElapsedMilliseconds & " milliseconds")
-            'Else
-            'KeyCache.Add(p_SubKeyName, p_KeyValuePairs) 'Add the new value
             swSupport.Stop()
             TL.LogMessage("  WriteValues", "  Created cache entry " & p_SubKeyName & " - " & swSupport.ElapsedMilliseconds & " milliseconds")
-            'End If
         Catch ex As Exception
-            TL.LogMessage("  WriteValues", "  Exception " & p_SubKeyName & " " & ex.ToString)
+            TL.LogMessageCrLf("  WriteValues", "  Exception " & p_SubKeyName & " " & ex.ToString)
             MsgBox("XMLAccess:Writevalues " & p_SubKeyName & " " & ex.ToString)
         End Try
     End Sub
@@ -649,6 +657,15 @@ Friend Class XMLAccess
         swLocal = Nothing
     End Sub
 
+    Private Sub GetProfileMutex(ByVal Method As String, ByVal Parameters As String)
+        'Get the profile mutex or log an error and throw an exception that will terminate this profile call and return to the calling application
+        GotMutex = ProfileMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, False)
+        If Not GotMutex Then
+            TL.LogMessage("GetProfileMutex", "***** WARNING ***** Timed out waiting for Profile mutex in " & Method & ", parameters: " & Parameters)
+            LogEvent(Method, "Timed out waiting for Profile mutex in " & Method & ", parameters: " & Parameters, EventLogEntryType.Error, 0, Nothing)
+            Throw New ProfilePersistenceException("Timed out waiting for Profile mutex in " & Method & ", parameters: " & Parameters)
+        End If
+    End Sub
 #End Region
 
 End Class

@@ -28,7 +28,7 @@ Friend Class ChooserForm
     Private m_Drivers As New Generic.SortedList(Of String, String)
 
     Private Sub ChooserForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
-        Dim ProfileStore As XMLAccess
+        Dim ProfileStore As RegistryAccess
         Dim i, iSel As Integer
         Dim cb As System.Windows.Forms.ComboBox
         Dim sDescription As String = ""
@@ -40,7 +40,7 @@ Friend Class ChooserForm
         '
         'MsgBox("ChooserformLoad Start")
         Try
-            ProfileStore = New XMLAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
+            ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
             Try
                 m_Drivers = ProfileStore.EnumKeys(m_sDeviceType & " Drivers") ' Get Key-Class pairs
             Catch ex1 As Exception
@@ -151,13 +151,13 @@ Friend Class ChooserForm
     ' driver and activate its setup dialog.
     '
     Private Sub cmdProperties_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdProperties.Click
-        Dim ProfileStore As XMLAccess
+        Dim ProfileStore As RegistryAccess
         Dim oDrv As Object = Nothing ' The driver
         Dim cb As System.Windows.Forms.ComboBox
         Dim bConnected As Boolean
         Dim sProgID As String = ""
 
-        ProfileStore = New XMLAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
+        ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
         cb = Me.cbDriverSelector ' Convenient shortcut
 
         'Find ProgID corresponding to description
@@ -218,11 +218,11 @@ Friend Class ChooserForm
     End Sub
 
     Private Sub cbDriverSelector_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cbDriverSelector.SelectedIndexChanged
-        Dim ProfileStore As XMLAccess
+        Dim ProfileStore As RegistryAccess
         Dim sProgID As String = ""
         Dim buf As String
 
-        ProfileStore = New XMLAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
+        ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
 
         If Me.cbDriverSelector.SelectedIndex >= 0 Then ' Something selected
             Me.cmdProperties.Enabled = True ' Turn on Properties
@@ -264,8 +264,8 @@ Friend Class ChooserForm
     End Sub
 
     Private Sub MenuAutoTraceFilenames_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuUseTraceAutoFilenames.Click
-        Dim ProfileStore As XMLAccess
-        ProfileStore = New XMLAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
+        Dim ProfileStore As RegistryAccess
+        ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
         'Auto filenames currently disabled, so enable them
         MenuUseTraceAutoFilenames.Checked = True 'Enable the auto tracename flag
         MenuUseTraceAutoFilenames.Enabled = False
@@ -279,10 +279,10 @@ Friend Class ChooserForm
     End Sub
 
     Private Sub MenuSerialTraceFile_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuUseTraceManualFilename.Click
-        Dim ProfileStore As XMLAccess
+        Dim ProfileStore As RegistryAccess
         Dim RetVal As System.Windows.Forms.DialogResult
 
-        ProfileStore = New XMLAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
+        ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
         RetVal = SerialTraceFileName.ShowDialog()
         Select Case RetVal
             Case Windows.Forms.DialogResult.OK
@@ -304,9 +304,9 @@ Friend Class ChooserForm
     End Sub
 
     Private Sub MenuSerialTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuSerialTraceEnabled.Click
-        Dim ProfileStore As XMLAccess
+        Dim ProfileStore As RegistryAccess
 
-        ProfileStore = New XMLAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
+        ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
         MenuSerialTraceEnabled.Checked = False 'Uncheck the enabled flag, make it inaccessible and clear the trace file name
         MenuSerialTraceEnabled.Enabled = False
         ProfileStore.WriteProfile("", SERIAL_FILE_NAME_VARNAME, "")

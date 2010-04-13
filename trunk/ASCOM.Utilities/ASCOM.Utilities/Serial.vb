@@ -181,7 +181,7 @@ Public Class Serial
     Private TextEncoding As System.Text.Encoding
     Private m_SerTraceFile As String = SERIAL_DEFAULT_FILENAME 'Set the default trace file name
 
-    Private SerialProfile As XMLAccess = Nothing
+    Private SerialProfile As registryAccess = Nothing
     Private ForcedCOMPorts As Generic.List(Of String)
     Private IgnoredCOMPorts As Generic.List(Of String)
 
@@ -226,7 +226,7 @@ Public Class Serial
 
         TextEncoding = System.Text.Encoding.GetEncoding(SERIALPORT_ENCODING) 'Initialise text encoding for use by transmitbinary
         Try
-            SerialProfile = New XMLAccess 'Profile class that can retrieve the value of tracefile
+            SerialProfile = New RegistryAccess 'Profile class that can retrieve the value of tracefile
             TraceFileName = SerialProfile.GetProfile("", SERIAL_FILE_NAME_VARNAME)
             Logger = New TraceLogger(TraceFileName, "Serial")
             If TraceFileName <> "" Then Logger.Enabled = True

@@ -27,7 +27,7 @@ Public Class DiagnosticsForm
     Private Const CSIDL_PROGRAM_FILES_COMMONX86 As Integer = 44 ' 0x002c,
 
     Dim TL As TraceLogger
-    Dim ASCOMXMLAccess As ASCOM.Utilities.XMLAccess
+    Dim ASCOMXMLAccess As ASCOM.Utilities.RegistryAccess
     Dim RecursionLevel As Integer
 
     Private LastLogFile As String ' Name of last diagnostics log file
@@ -117,6 +117,9 @@ Public Class DiagnosticsForm
                 'List setup files
                 ScanLogs()
 
+                'Scan event log messages
+                ScanEventLog()
+
                 TL.LogMessage("Diagnostics", "Completed diagnostic run")
                 TL.Enabled = False
                 TL.Dispose()
@@ -124,7 +127,7 @@ Public Class DiagnosticsForm
                 lblResult.Text = "Diagnostic log created OK"
             Catch ex As Exception
                 lblResult.Text = "Diagnostics exception, please see log"
-                TL.LogMessage("DiagException", ex.ToString)
+                TL.LogMessageCrLf("DiagException", ex.ToString)
                 TL.Enabled = False
                 TL.Dispose()
                 TL = Nothing
@@ -132,6 +135,31 @@ Public Class DiagnosticsForm
             btnLastLog.Enabled = True
         Catch ex1 As Exception
             lblResult.Text = "Can't create log: " & ex1.Message
+        End Try
+    End Sub
+
+    Sub ScanEventLog()
+        Dim ELog As EventLog
+        Dim Entries As EventLogEntryCollection
+        Dim EventLogs() As EventLog
+        Try
+            TL.LogMessage("ScanEventLog", "Start")
+            EventLogs = EventLog.GetEventLogs()
+            For Each EventLog As EventLog In EventLogs
+                Try : TL.LogMessage("ScanEventLog", "Found log: " & EventLog.LogDisplayName) : Catch : End Try
+            Next
+            TL.BlankLine()
+
+            TL.LogMessage("ScanEventLog", "ASCOM Log entries")
+            ELog = New EventLog(EVENTLOG_NAME, ".", EVENT_SOURCE)
+            Entries = ELog.Entries
+            For Each Entry As EventLogEntry In Entries
+                TL.LogMessageCrLf("ScanEventLog", Entry.TimeGenerated & " " & Entry.EntryType.ToString & " " & Entry.UserName & " " & Entry.Source & " " & Entry.Message)
+            Next
+            TL.LogMessage("ScanEventLog", "ASCOM Log entries complete")
+            TL.BlankLine()
+        Catch ex As Exception
+            TL.LogMessageCrLf("ScanEventLog", "Exception: " & ex.ToString)
         End Try
     End Sub
 
@@ -149,7 +177,7 @@ Public Class DiagnosticsForm
             RecurseRegistry(Key)
             TL.BlankLine()
         Catch ex As Exception
-            TL.LogMessage("ScanRegistry", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("ScanRegistry", "Exception: " & ex.ToString)
         End Try
     End Sub
 
@@ -167,7 +195,7 @@ Public Class DiagnosticsForm
                 TL.LogMessage("Registry Profile", Space(RecursionLevel * 2) & "   " & DisplayName & " = " & Key.GetValue(ValueName))
             Next
         Catch ex As Exception
-            TL.LogMessage("RecurseRegistry 1", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("RecurseRegistry 1", "Exception: " & ex.ToString)
         End Try
         Try
             SubKeys = Key.GetSubKeyNames
@@ -176,7 +204,7 @@ Public Class DiagnosticsForm
                 RecurseRegistry(Key.OpenSubKey(SubKey))
             Next
         Catch ex As Exception
-            TL.LogMessage("RecurseRegistry 2", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("RecurseRegistry 2", "Exception: " & ex.ToString)
         End Try
         RecursionLevel -= 1
     End Sub
@@ -196,7 +224,7 @@ Public Class DiagnosticsForm
             Next
             TL.LogMessage("", "")
         Catch ex As Exception
-            TL.LogMessage("ScanDrives", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("ScanDrives", "Exception: " & ex.ToString)
         End Try
     End Sub
 
@@ -227,7 +255,7 @@ Public Class DiagnosticsForm
                 TL.BlankLine()
             End If
         Catch ex As Exception
-            TL.LogMessage("ScanProgramFiles", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("ScanProgramFiles", "Exception: " & ex.ToString)
         End Try
     End Sub
 
@@ -250,7 +278,7 @@ Public Class DiagnosticsForm
                 End If
             Next
         Catch ex As Exception
-            TL.LogMessage("RecurseProgramFiles 1", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("RecurseProgramFiles 1", "Exception: " & ex.ToString)
         End Try
 
         Try
@@ -261,7 +289,7 @@ Public Class DiagnosticsForm
             Next
             Action("")
         Catch ex As Exception
-            TL.LogMessage("RecurseProgramFiles 2", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("RecurseProgramFiles 2", "Exception: " & ex.ToString)
         End Try
     End Sub
 
@@ -277,7 +305,7 @@ Public Class DiagnosticsForm
 
             TL.BlankLine()
         Catch ex As Exception
-            TL.LogMessage("ScanProfileFiles", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("ScanProfileFiles", "Exception: " & ex.ToString)
         End Try
     End Sub
 
@@ -302,7 +330,7 @@ Public Class DiagnosticsForm
 
             Next
         Catch ex As Exception
-            TL.LogMessage("RecurseProfileFiles 1", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("RecurseProfileFiles 1", "Exception: " & ex.ToString)
         End Try
 
         Try
@@ -312,7 +340,7 @@ Public Class DiagnosticsForm
                 RecurseProfileFiles(Directory)
             Next
         Catch ex As Exception
-            TL.LogMessage("RecurseProfileFiles 2", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("RecurseProfileFiles 2", "Exception: " & ex.ToString)
         End Try
 
     End Sub
@@ -344,7 +372,7 @@ Public Class DiagnosticsForm
             Next
             TL.BlankLine()
         Catch ex As Exception
-            TL.LogMessage("Frameworks", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("Frameworks", "Exception: " & ex.ToString)
         End Try
     End Sub
 
@@ -392,7 +420,7 @@ Public Class DiagnosticsForm
                     SR.Dispose()
                     SR = Nothing
                 Catch ex1 As Exception
-                    TL.LogMessage("SetupFile", "Exception 1: " & ex1.ToString)
+                    TL.LogMessageCrLf("SetupFile", "Exception 1: " & ex1.ToString)
                     If Not (SR Is Nothing) Then 'Clean up streamreader
                         SR.Close()
                         SR.Dispose()
@@ -404,7 +432,7 @@ Public Class DiagnosticsForm
             TL.LogMessage("SetupFile", "Completed scan")
             TL.BlankLine()
         Catch ex2 As Exception
-            TL.LogMessage("SetupFile", "Exception 2: " & ex2.ToString)
+            TL.LogMessageCrLf("SetupFile", "Exception 2: " & ex2.ToString)
         End Try
     End Sub
 
@@ -443,7 +471,7 @@ Public Class DiagnosticsForm
             GetCOMRegistration("ASCOM.Astrometry.Transform.Transform")
             TL.LogMessage("", "")
         Catch ex As Exception
-            TL.LogMessage("ScanCOMRegistration", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("ScanCOMRegistration", "Exception: " & ex.ToString)
         End Try
     End Sub
 
@@ -469,12 +497,12 @@ Public Class DiagnosticsForm
                         TL.LogMessage("Assemblies", name.FullName)
                     End If
                 Catch ex As Exception
-                    TL.LogMessage("Assemblies", "Exception: " & ex.ToString)
+                    TL.LogMessageCrLf("Assemblies", "Exception: " & ex.ToString)
                 End Try
             Loop
             TL.LogMessage("", "")
         Catch ex As Exception
-            TL.LogMessage("ScanGac", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("ScanGac", "Exception: " & ex.ToString)
         End Try
     End Sub
 
@@ -486,7 +514,7 @@ Public Class DiagnosticsForm
             AssName.CultureInfo = AssemblyCache.GetCulture(nameRef)
             AssName.SetPublicKeyToken(AssemblyCache.GetPublicKeyToken(nameRef))
         Catch ex As Exception
-            TL.LogMessage("GetAssemblyName", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("GetAssemblyName", "Exception: " & ex.ToString)
         End Try
         Return AssName
     End Function
@@ -529,7 +557,7 @@ Public Class DiagnosticsForm
             FileDetails(ASCOMPathUtl, "EraseProfile.exe")
             FileDetails(ASCOMPathUtl, "MigrateProfile.exe")
         Catch ex As Exception
-            TL.LogMessage("ScanFiles", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("ScanFiles", "Exception: " & ex.ToString)
         End Try
 
     End Sub
@@ -564,7 +592,7 @@ Public Class DiagnosticsForm
                 TL.LogMessage("FileDetails", "   ### Unable to find file: " & FullPath)
             End If
         Catch ex As Exception
-            TL.LogMessage("FileDetails", "### Exception: " & ex.ToString)
+            TL.LogMessageCrLf("FileDetails", "### Exception: " & ex.ToString)
         End Try
 
         TL.LogMessage("", "")
@@ -579,7 +607,7 @@ Public Class DiagnosticsForm
             RKey.Close()
             TL.LogMessage("Finished", "")
         Catch ex As Exception
-            TL.LogMessage("Exception", ex.ToString)
+            TL.LogMessageCrLf("Exception", ex.ToString)
         End Try
         TL.LogMessage("", "")
     End Sub
@@ -643,7 +671,7 @@ Public Class DiagnosticsForm
                     End If
                 Next
             Catch ex As Exception
-                TL.LogMessage("ProcessSubKey Exception 1", ex.ToString)
+                TL.LogMessageCrLf("ProcessSubKey Exception 1", ex.ToString)
             End Try
             Try
                 SubKeys = p_Key.GetSubKeyNames
@@ -678,7 +706,7 @@ Public Class DiagnosticsForm
                     RKey.Close()
                 Next
             Catch ex As Exception
-                TL.LogMessage("ProcessSubKey Exception 2", ex.ToString)
+                TL.LogMessageCrLf("ProcessSubKey Exception 2", ex.ToString)
             End Try
             ' TL.LogMessage("End of ProcessSubKey", p_Container & " " & p_Depth)
         End If
@@ -721,7 +749,7 @@ Public Class DiagnosticsForm
 
             TL.BlankLine()
         Catch ex As Exception
-            TL.LogMessage("ScanSerial", ex.ToString)
+            TL.LogMessageCrLf("ScanSerial", ex.ToString)
         End Try
 
     End Sub
@@ -738,7 +766,7 @@ Public Class DiagnosticsForm
             SerPort.Close()
             TL.LogMessage("Serial Port Test ", PortName & " opened OK")
         Catch ex As Exception
-            TL.LogMessage("Serial Port Test ", ex.Message)
+            TL.LogMessageCrLf("Serial Port Test ", ex.Message)
         End Try
 
         SerPort.Dispose()
@@ -747,10 +775,11 @@ Public Class DiagnosticsForm
 
     Sub ScanProfile()
 
-        Dim ASCOMProfile As New Utilities.Profile, DeviceTypes() As String, Devices As ArrayList
+        Dim ASCOMProfile As Utilities.Profile, DeviceTypes() As String, Devices As ArrayList
 
         Try
-            ASCOMXMLAccess = New ASCOM.Utilities.XMLAccess
+            ASCOMProfile = New Utilities.Profile
+            ASCOMXMLAccess = New ASCOM.Utilities.RegistryAccess
             RecursionLevel = -1 'Initialise recursion level so the first increment makes this zero
 
             Status("Scanning Profile")
@@ -765,19 +794,19 @@ Public Class DiagnosticsForm
             Next
             TL.BlankLine()
         Catch ex As Exception
-            TL.LogMessage("RegisteredDevices", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("RegisteredDevices", "Exception: " & ex.ToString)
         End Try
 
         Try
             TL.LogMessage("Profile", "Recusrsing Profile")
             RecurseProfile("\") 'Scan recurively over the profile
         Catch ex As Exception
-            TL.LogMessage("ScanProfile", ex.Message)
+            TL.LogMessageCrLf("ScanProfile", ex.Message)
         End Try
 
         TL.BlankLine()
 
-        ASCOMXMLAccess.Dispose() 'Clean up
+        Try : ASCOMXMLAccess.Dispose() : Catch : End Try 'Clean up
         ASCOMXMLAccess = Nothing
 
     End Sub
@@ -802,7 +831,7 @@ Public Class DiagnosticsForm
                 TL.LogMessage("Profile", Space(3 * (RecursionLevel + 1)) & DisplayName & " = " & DisplayValue)
             Next
         Catch ex As Exception
-            TL.LogMessage("Profile 1", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("Profile 1", "Exception: " & ex.ToString)
         End Try
 
         Try
@@ -826,7 +855,7 @@ Public Class DiagnosticsForm
             Next
 
         Catch ex As Exception
-            TL.LogMessage("Profile 2", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("Profile 2", "Exception: " & ex.ToString)
         Finally
             RecursionLevel -= 1
         End Try
@@ -906,7 +935,7 @@ Public Class DiagnosticsForm
             TL.BlankLine()
 
         Catch ex As Exception
-            TL.LogMessage("ScanProgramFiles", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("ScanProgramFiles", "Exception: " & ex.ToString)
         End Try
     End Sub
     Sub RecurseASCOMDrivers(ByVal Folder As String)
@@ -923,10 +952,10 @@ Public Class DiagnosticsForm
                 End If
             Next
         Catch ex As DirectoryNotFoundException
-            TL.LogMessage("Driver", "Directory not present: " & Folder)
+            TL.LogMessageCrLf("Driver", "Directory not present: " & Folder)
             Exit Sub
         Catch ex As Exception
-            TL.LogMessage("RecurseASCOMDrivers 1", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("RecurseASCOMDrivers 1", "Exception: " & ex.ToString)
         End Try
 
         Try
@@ -939,7 +968,7 @@ Public Class DiagnosticsForm
         Catch ex As DirectoryNotFoundException
             TL.LogMessage("Driver", "Directory not present: " & Folder)
         Catch ex As Exception
-            TL.LogMessage("RecurseASCOMDrivers 2", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("RecurseASCOMDrivers 2", "Exception: " & ex.ToString)
         End Try
     End Sub
 

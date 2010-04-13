@@ -38,22 +38,19 @@ Module VersionCode
 
         Try 'Make sure this code never throws an exception back to the caller
             TL.LogMessage("Versions", "OS Version: " & OS.Platform & ", Service Pack: " & OS.ServicePack & ", Full: " & OS.VersionString)
-            If IsWow64() Then 'Application is under WoW64 so OS must be 64bit
-                TL.LogMessage("Versions", "Operating system is 64bit")
-            Else 'Could be 32bit or 64bit Use IntPtr
-                Select Case System.IntPtr.Size
-                    Case 4
-                        TL.LogMessage("Versions", "Operating system is 32bit")
-                    Case 8
-                        TL.LogMessage("Versions", "Operating system is 64bit")
-                    Case Else
-                        TL.LogMessage("Versions", "Operating system is unknown bits, PTR length is: " & System.IntPtr.Size)
-                End Select
-            End If
-            Select Case System.IntPtr.Size
-                Case 4
+            Select Case OSBits()
+                Case Bitness.Bits32
+                    TL.LogMessage("Versions", "Operating system is 32bit")
+                Case Bitness.Bits64
+                    TL.LogMessage("Versions", "Operating system is 64bit")
+                Case Else
+                    TL.LogMessage("Versions", "Operating system is unknown bits, PTR length is: " & System.IntPtr.Size)
+            End Select
+
+            Select Case ApplicationBits()
+                Case Bitness.Bits32
                     TL.LogMessage("Versions", "Application is 32bit")
-                Case 8
+                Case Bitness.Bits64
                     TL.LogMessage("Versions", "Application is 64bit")
                 Case Else
                     TL.LogMessage("Versions", "Application is unknown bits, PTR length is: " & System.IntPtr.Size)
@@ -101,6 +98,39 @@ Module VersionCode
             TL.LogMessage("Versions", "Exception: " & ex.ToString)
         End Try
     End Sub
+
+    Friend Enum Bitness
+        Bits32
+        Bits64
+        BitsUnknown
+    End Enum
+
+    Friend Function OSBits() As Bitness
+        If IsWow64() Then 'Application is under WoW64 so OS must be 64bit
+            Return Bitness.Bits64
+        Else 'Could be 32bit or 64bit Use IntPtr
+            Select Case System.IntPtr.Size
+                Case 4
+                    Return Bitness.Bits32
+                Case 8
+                    Return Bitness.Bits64
+                Case Else
+                    Return Bitness.BitsUnknown
+            End Select
+        End If
+
+    End Function
+
+    Friend Function ApplicationBits() As Bitness
+        Select Case System.IntPtr.Size
+            Case 4
+                Return Bitness.Bits32
+            Case 8
+                Return Bitness.Bits64
+            Case Else
+                Return Bitness.BitsUnknown
+        End Select
+    End Function
 
     Sub AssemblyInfo(ByVal TL As TraceLogger, ByVal AssName As String, ByVal Ass As Assembly)
         Dim FileVer As FileVersionInfo
@@ -196,6 +226,11 @@ Module VersionCode
         End If
     End Sub
 
+    ''' <summary>
+    ''' Returns true when the application is 32bit and running on a 64bit OS
+    ''' </summary>
+    ''' <returns>True when the application is 32bit and running on a 64bit OS</returns>
+    ''' <remarks></remarks>
     Private Function IsWow64() As Boolean
 
         Dim value As IntPtr
@@ -210,10 +245,21 @@ Module VersionCode
         End If
     End Function
 
+    ''' <summary>
+    ''' Determines whether the specified process is running under WOW64 i.e. is a 32bit application running on a 64bit OS.
+    ''' </summary>
+    ''' <param name="hProcess">A handle to the process. The handle must have the PROCESS_QUERY_INFORMATION or PROCESS_QUERY_LIMITED_INFORMATION access right. 
+    ''' For more information, see Process Security and Access Rights.Windows Server 2003 and Windows XP:  
+    ''' The handle must have the PROCESS_QUERY_INFORMATION access right.</param>
+    ''' <param name="wow64Process">A pointer to a value that is set to TRUE if the process is running under WOW64. If the process is running under 
+    ''' 32-bit Windows, the value is set to FALSE. If the process is a 64-bit application running under 64-bit Windows, the value is also set to FALSE.</param>
+    ''' <returns>If the function succeeds, the return value is a nonzero value. If the function fails, the return value is zero. To get extended 
+    ''' error information, call GetLastError.</returns>
+    ''' <remarks></remarks>
     <DllImport("Kernel32.dll", SetLastError:=True, CallingConvention:=CallingConvention.Winapi)> _
-          Public Function IsWow64Process( _
-          ByVal hProcess As System.IntPtr, _
-          ByRef wow64Process As Boolean) As <MarshalAs(UnmanagedType.Bool)> Boolean
+        Public Function IsWow64Process( _
+              ByVal hProcess As System.IntPtr, _
+              ByRef wow64Process As Boolean) As <MarshalAs(UnmanagedType.Bool)> Boolean
     End Function
 
 End Module

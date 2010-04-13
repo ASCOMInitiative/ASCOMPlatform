@@ -47,14 +47,14 @@ Public Class Util
     Private m_StopWatch As Stopwatch = New Stopwatch 'Create a high resolution timing device
     Private m_SerTraceFile As String = SERIAL_DEFAULT_FILENAME 'Set the default trace file name
 
-    Private myProfile As XMLAccess 'Hold the access object for the ASCOM profile store
+    Private myProfile As RegistryAccess 'Hold the access object for the ASCOM profile store
 
 #Region "New and IDisposable Support"
     Private disposedValue As Boolean = False        ' To detect redundant calls
 
     Public Sub New()
         MyBase.New()
-        myProfile = New XMLAccess
+        myProfile = New RegistryAccess
         WaitForMilliseconds(1) 'Fire off the first instance which always takes longer than the others!
     End Sub
 

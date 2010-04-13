@@ -4,7 +4,7 @@ Public Class frmProfileExplorer
     Private RecursionLevel As Integer
     Private Values As Generic.SortedList(Of String, String) 'Variable to hold current key values
     Private KeyPath As String ' Profile path to the current key
-    Private Prof As XMLAccess
+    Private Prof As RegistryAccess
     Private Settings As UtilitiesSettings
     Private CurrentSubKey As String
 
@@ -25,7 +25,7 @@ Public Class frmProfileExplorer
     Private Sub Form1_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Dim MyAssVer As Version = Assembly.GetExecutingAssembly.GetName.Version
         Me.Text = "Profile Explorer " & MyAssVer.ToString
-        Prof = New XMLAccess()
+        Prof = New RegistryAccess()
         Settings = New UtilitiesSettings 'Read the state of the edit flag
         mnuRootEdit.Checked = Settings.ProfileRootEdit
         Settings.Dispose()

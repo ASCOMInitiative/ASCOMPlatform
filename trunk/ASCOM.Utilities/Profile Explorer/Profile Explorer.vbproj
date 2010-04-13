@@ -88,11 +88,16 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\ASCOM.Utilities\RegistryAccess.vb">
+      <Link>RegistryAccess.vb</Link>
+    </Compile>
+    <Compile Include="..\ASCOM.Utilities\XMLAccess.vb">
+      <Link>XMLAccess.vb</Link>
+    </Compile>
     <Compile Include="Profile Explorer.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\ASCOM.Utilities\UtilitiesSettings.vb" />
-    <Compile Include="..\ASCOM.Utilities\XMLAccess.vb" />
     <Compile Include="..\ASCOM.Utilities\AllUsersFileSystemProvider.vb" />
     <Compile Include="..\ASCOM.Utilities\Interfaces.vb" />
     <Compile Include="..\ASCOM.Utilities\Exceptions.vb" />

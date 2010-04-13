@@ -95,6 +95,9 @@
     <Compile Include="..\ASCOM.Utilities\Profile.vb">
       <Link>Profile.vb</Link>
     </Compile>
+    <Compile Include="..\ASCOM.Utilities\RegistryAccess.vb">
+      <Link>RegistryAccess.vb</Link>
+    </Compile>
     <Compile Include="..\ASCOM.Utilities\Serial.vb">
       <Link>Serial.vb</Link>
     </Compile>

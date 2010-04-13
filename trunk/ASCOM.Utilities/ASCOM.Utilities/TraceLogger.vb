@@ -48,7 +48,7 @@ Public Class TraceLogger
         g_LogFileName = "" 'Set automatic filenames as default
         g_LogFileType = "Default" '"Set an arbitary name inc case someone forgets to call SetTraceLog
         g_LogFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM\Logs " & Format(Now, "yyyy-MM-dd")
-        mut = New System.Threading.Mutex
+        mut = New System.Threading.Mutex(False, "TraceLoggerMutex")
     End Sub
 
     ''' <summary>
@@ -128,8 +128,8 @@ Public Class TraceLogger
             If g_Enabled Then
                 If g_LogFile Is Nothing Then Call CreateLogFile()
                 If g_LineStarted Then g_LogFile.WriteLine()
-                LogMsgFormatter(Identifier, Message, True)
-                If g_LineStarted Then LogMsgFormatter("Continuation", "", False)
+                LogMsgFormatter(Identifier, Message, True, False)
+                If g_LineStarted Then LogMsgFormatter("Continuation", "", False, False)
             End If
         Finally
             mut.ReleaseMutex()
@@ -165,12 +165,37 @@ Public Class TraceLogger
             If g_Enabled Then
                 If g_LogFile Is Nothing Then Call CreateLogFile()
                 If HexDump Then Msg = Message & "  (HEX" & MakeHex(Message) & ")"
-                LogMsgFormatter(Identifier, Msg, True)
+                LogMsgFormatter(Identifier, Msg, True, False)
             End If
 
         Finally
             mut.ReleaseMutex()
         End Try
+    End Sub
+
+    ''' <summary>
+    ''' Displays a message respecting carriage return and linefeed characters
+    ''' </summary>
+    ''' <param name="Identifier">Identifies the meaning of the the message e.g. name of modeule or method logging the message.</param>
+    ''' <param name="Message">The final message to terminate the line</param>
+    ''' <remarks>
+    ''' <para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart.  
+    ''' Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+    ''' </remarks>
+    Public Sub LogMessageCrLf(ByVal Identifier As String, ByVal Message As String) Implements ITraceLogger.LogMessageCrLf
+        Try
+            mut.WaitOne()
+            If g_LineStarted Then LogFinish(" ") ' 1/10/09 PWGS Silently close the open line
+
+            If g_Enabled Then
+                If g_LogFile Is Nothing Then Call CreateLogFile()
+                LogMsgFormatter(Identifier, Message, True, True)
+            End If
+
+        Finally
+            mut.ReleaseMutex()
+        End Try
+
     End Sub
 
     ''' <summary>
@@ -195,7 +220,7 @@ Public Class TraceLogger
                 g_LineStarted = True
                 If g_Enabled Then
                     If g_LogFile Is Nothing Then Call CreateLogFile()
-                    LogMsgFormatter(Identifier, Message, False)
+                    LogMsgFormatter(Identifier, Message, False, False)
                 End If
             End If
         Finally
@@ -313,7 +338,7 @@ Public Class TraceLogger
             If g_LineStarted Then LogFinish(" ") ' 1/10/09 PWGS Made line closure silent
             If g_Enabled Then
                 If g_LogFile Is Nothing Then Call CreateLogFile()
-                LogMsgFormatter(Identifier, Message, True)
+                LogMsgFormatter(Identifier, Message, True, False)
             End If
         Finally
             mut.ReleaseMutex()
@@ -341,7 +366,7 @@ Public Class TraceLogger
             Else
                 If g_Enabled Then
                     If g_LogFile Is Nothing Then Call CreateLogFile()
-                    g_LogFile.Write(MakePrintable(Message)) 'Update log file without newline terminator
+                    g_LogFile.Write(MakePrintable(Message, False)) 'Update log file without newline terminator
                 End If
             End If
         Finally
@@ -371,7 +396,7 @@ Public Class TraceLogger
                 g_LineStarted = False
                 If g_Enabled Then
                     If g_LogFile Is Nothing Then Call CreateLogFile()
-                    g_LogFile.WriteLine(MakePrintable(Message)) 'Update log file with newline terminator
+                    g_LogFile.WriteLine(MakePrintable(Message, False)) 'Update log file with newline terminator
                 End If
             End If
         Finally
@@ -383,19 +408,36 @@ Public Class TraceLogger
 
 #Region "TraceLogger Support"
     Private Sub CreateLogFile()
-        Dim FileNameSuffix As Integer = 0
+        Dim FileNameSuffix As Integer = 0, ok As Boolean = False, FileNameBase As String
         Select Case g_LogFileName
             'Case "" 'Do nothing - no log required
             '    Throw New HelperException("TRACELOGGER.CREATELOGFILE - Call made but no log filename has been set")
             Case "", SERIAL_AUTO_FILENAME
                 If g_LogFileType = "" Then Throw New ValueNotSetException("TRACELOGGER.CREATELOGFILE - Call made but no log filetype has been set")
                 My.Computer.FileSystem.CreateDirectory(g_LogFilePath) 'Create the directory if it doesn't exist
+                FileNameBase = g_LogFilePath & "\ASCOM." & g_LogFileType & "." & Format(Now, "HHmm.ssfff")
                 Do 'Create a unique log file name based on date, time and required name
-                    g_LogFileActualName = g_LogFilePath & "\ASCOM." & g_LogFileType & "." & Format(Now, "HHmm.ssfff") & FileNameSuffix.ToString & ".txt"
+                    g_LogFileActualName = FileNameBase & FileNameSuffix.ToString & ".txt"
                     FileNameSuffix += 1 'Increment counter that ensures that no logfile can have the same name as any other
-                Loop Until Not File.Exists(g_LogFileActualName)
-                g_LogFile = New StreamWriter(g_LogFileActualName, False)
-                g_LogFile.AutoFlush = True
+                Loop Until (Not File.Exists(g_LogFileActualName))
+                Try
+                    g_LogFile = New StreamWriter(g_LogFileActualName, False)
+                    g_LogFile.AutoFlush = True
+                Catch ex As System.IO.IOException
+                    ok = False
+                    Do
+                        Try
+                            g_LogFileActualName = FileNameBase & FileNameSuffix.ToString & ".txt"
+                            g_LogFile = New StreamWriter(g_LogFileActualName, False)
+                            g_LogFile.AutoFlush = True
+                            ok = True
+                        Catch ex1 As System.IO.IOException
+                            'Ignore IO exceptions and try the next filename
+                        End Try
+                        FileNameSuffix += 1
+                    Loop Until (ok Or (FileNameSuffix = 20))
+                    If Not ok Then Throw New ASCOM.Utilities.Exceptions.HelperException("TraceLogger:CreateLogFile - Unable to create log file", ex)
+                End Try
             Case Else 'Create log file based on supplied name
                 Try
                     g_LogFile = New StreamWriter(g_LogFileName & ".txt", False)
@@ -407,16 +449,26 @@ Public Class TraceLogger
         End Select
     End Sub
 
-    Private Function MakePrintable(ByVal p_Msg As String) As String
+    Private Function MakePrintable(ByVal p_Msg As String, ByVal p_RespectCrLf As Boolean) As String
         Dim l_Msg As String = ""
         Dim i, CharNo As Integer
         'Present any unprintable charcters in [0xHH] format
         For i = 1 To Len(p_Msg)
             CharNo = Asc(Mid(p_Msg, i, 1))
+            Select Case CharNo
+                Case 10, 13 ' Either translate or respect CRLf depending on the setting of the respect parameter
+                    If p_RespectCrLf Then
+                        l_Msg = l_Msg & Mid(p_Msg, i, 1)
+                    Else
+                        l_Msg = l_Msg & "[" & Right("00" & Hex(CharNo), 2) & "]"
+                    End If
+                Case 0 - 9, 11, 12, 14 - 31, Is > 126 ' All other non-printables should be translated
+                    l_Msg = l_Msg & "[" & Right("00" & Hex(CharNo), 2) & "]"
+                Case Else'Everything else is printable and should be left as is
+                    l_Msg = l_Msg & Mid(p_Msg, i, 1)
+            End Select
             If CharNo < 32 Or CharNo > 126 Then
-                l_Msg = l_Msg & "[" & Right("00" & Hex(CharNo), 2) & "]"
             Else
-                l_Msg = l_Msg & Mid(p_Msg, i, 1)
             End If
         Next
         Return l_Msg
@@ -433,20 +485,20 @@ Public Class TraceLogger
         Return l_Msg
     End Function
 
-    Private Sub LogMsgFormatter(ByVal p_Test As String, ByVal p_Msg As String, ByVal p_NewLine As Boolean)
+    Private Sub LogMsgFormatter(ByVal p_Test As String, ByVal p_Msg As String, ByVal p_NewLine As Boolean, ByVal p_RespectCrLf As Boolean)
         Dim l_Msg As String = ""
         Try
             p_Test = Left(p_Test & Microsoft.VisualBasic.StrDup(30, " "), 25)
 
-            l_Msg = Format(Now(), "HH:mm:ss.fff") & " " & MakePrintable(p_Test) & " " & MakePrintable(p_Msg)
+            l_Msg = Format(Now(), "HH:mm:ss.fff") & " " & MakePrintable(p_Test, p_RespectCrLf) & " " & MakePrintable(p_Msg, p_RespectCrLf)
             If Not g_LogFile Is Nothing Then
                 If p_NewLine Then
                     g_LogFile.WriteLine(l_Msg) 'Update log file with newline terminator
                 Else
                     g_LogFile.Write(l_Msg) 'Update log file without newline terminator
                 End If
+                g_LogFile.Flush()
             End If
-            g_LogFile.Flush()
         Catch ex As Exception
             MsgBox("LogMsgFormatter exception: " & Len(l_Msg) & " *" & l_Msg & "* " & ex.ToString, MsgBoxStyle.Critical)
         End Try
