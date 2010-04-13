@@ -45,8 +45,9 @@ Public Class Profile
     ' -----------------------------------------------------------------------------
 
     Private m_sDeviceType As String ' Device type specified by user
-    Private ProfileStore As XMLAccess
+    Private ProfileStore As RegistryAccess
     Private TL As TraceLogger
+    Private LastDriverID As String, LastResult As Boolean ' Cache values to improve IsRegistered performance
 
 
 #Region "New and IDisposable Support "
@@ -58,7 +59,7 @@ Public Class Profile
     ''' <remarks></remarks>
     Public Sub New()
         MyBase.New()
-        ProfileStore = New XMLAccess(ERR_SOURCE_PROFILE) 'Get access to the profile store
+        ProfileStore = New RegistryAccess(ERR_SOURCE_PROFILE) 'Get access to the profile store
         m_sDeviceType = "Telescope"
         TL = New TraceLogger("", "Profile")
         TL.Enabled = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT) 'Get enabled / disabled state from the user registry
@@ -72,7 +73,7 @@ Public Class Profile
     ''' <remarks></remarks>
     Public Sub New(ByVal IgnoreExceptions As Boolean)
         MyBase.New()
-        ProfileStore = New XMLAccess(IgnoreExceptions) 'Get access to the profile store
+        ProfileStore = New RegistryAccess(IgnoreExceptions) 'Get access to the profile store
         m_sDeviceType = "Telescope"
         TL = New TraceLogger("", "Profile")
         TL.Enabled = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT) 'Get enabled / disabled state from the user registry
@@ -198,7 +199,7 @@ Public Class Profile
         End If
         Try
             RegDevs = ProfileStore.EnumKeys(DeviceType & " Drivers") ' Get Key-Class pairs
-        Catch ex As System.IO.DirectoryNotFoundException 'Catch exception thrown if the Deviceype is an invalid value
+        Catch ex As System.NullReferenceException 'Catch exception thrown if the Deviceype is an invalid value
             TL.LogMessage("RegisteredDevices", "WARNING: there are no devices of type: """ & DeviceType & """ registered on this system")
             RegDevs = New Generic.SortedList(Of String, String) 'Return an empty list
         End Try
@@ -233,6 +234,7 @@ Public Class Profile
             TL.LogMessage("Register", "Registering " & DriverID)
             ProfileStore.CreateKey(MakeKey(DriverID, ""))
             ProfileStore.WriteProfile(MakeKey(DriverID, ""), "", DescriptiveName)
+            LastDriverID = "" 'Clear this value so that the next next IsRegistered test doesn't use a now invalid cached value
         Else
             TL.LogMessage("Register", DriverID & " already registered")
         End If
@@ -255,6 +257,7 @@ Public Class Profile
         CheckRegistered(DriverID)
         TL.LogMessage("Unregister", "Unregistering " & DriverID)
 
+        LastDriverID = "" 'Clear this value so that the next next IsRegistered test doesn't use a now invalid cached value
         ProfileStore.DeleteKey(MakeKey(DriverID, ""))
     End Sub
 
@@ -305,7 +308,10 @@ Public Class Profile
     Public Overloads Sub WriteValue(ByVal DriverID As String, ByVal Name As String, ByVal Value As String, ByVal SubKey As String) Implements IProfile.WriteValue
         'Create or update a profile value
         TL.LogMessage("WriteValue", "Driver: " & DriverID & " Name: " & Name & " Value: " & Value & " Subkey: """ & SubKey & """")
-        If Value Is Nothing Then TL.LogMessage("WriteProfile", "WARNING - Supplied data value is Nothing, not empty string")
+        If Value Is Nothing Then
+            TL.LogMessage("WriteProfile", "WARNING - Supplied data value is Nothing, not empty string")
+            Value = ""
+        End If
 
         CheckRegistered(DriverID)
         If Name = "" And SubKey = "" Then
@@ -446,31 +452,27 @@ Public Class Profile
     ''' <summary>
     ''' Migrate the ASCOM profile from registry to file store
     ''' </summary>
-    ''' <param name="PlatformVersion">The platform version number to be set in the profile store during the migration</param>
+    ''' <param name="CurrentPlatformVersion">The platform version number of the current profile store beig migrated</param>
+    ''' <param name="NewPlatformVersion">The platform version number to be set in the profile store during the migration</param>
     ''' <param name="JustSetPlatformVersion">Flag indicating whether to migrate the profile or just set the platform version number</param>
     ''' <remarks></remarks>
     <EditorBrowsable(EditorBrowsableState.Never), _
     ComVisible(False)> _
-    Public Sub MigrateProfile(ByVal PlatformVersion As String, ByVal JustSetPlatformVersion As Boolean) Implements IProfileExtra.MigrateProfile
+    Public Sub MigrateProfile(ByVal CurrentPlatformVersion As String, ByVal NewPlatformVersion As String) Implements IProfileExtra.MigrateProfile
         TL.Enabled = True 'Force tracing on when migrating a profile
-        TL.LogMessage("MigrateProfile", "Migrating profile to platform version: " & PlatformVersion & ", JustSetPlatformVersion is: " & JustSetPlatformVersion.ToString)
+        TL.LogMessage("MigrateProfile", "Migrating profile from Platform " & CurrentPlatformVersion & " to Platform " & NewPlatformVersion)
         Try
-            If Not JustSetPlatformVersion Then ' We aren't just setting the platform version number so migrate the profile and set ACLs
-                ProfileStore.MigrateProfile()
-                TL.LogMessage("MigrateProfile", "Successfully migrated Profile")
-            Else ' Set security ACLs on ASCOM root directory only
-                ProfileStore.SetSecurityACLs()
-                TL.LogMessage("MigrateProfile", "Successfully set security ACLs")
-            End If
-            ProfileStore.WriteProfile("", "PlatformVersion", PlatformVersion) 'Set the platform version in the ASCOM root key
-            TL.LogMessage("MigrateProfile", "Successfully set PlatformVersion to: " & PlatformVersion)
+            ProfileStore.MigrateProfile(CurrentPlatformVersion)
+            TL.LogMessage("MigrateProfile", "Successfully migrated Profile")
+            TL.LogMessage("MigrateProfile", "Setting Platform version string to: " & NewPlatformVersion)
+            ProfileStore.WriteProfile("", "PlatformVersion", NewPlatformVersion) 'Set the platform version in the ASCOM root key
+            TL.LogMessage("MigrateProfile", "Successfully set PlatformVersion to: " & NewPlatformVersion)
             TL.LogMessage("MigrateProfile", "Completed migration")
         Catch ex As Exception
-            TL.LogMessage("MigrateProfile", "Exception: " & ex.ToString)
-            Throw
+            TL.LogMessageCrLf("MigrateProfile", "Exception: " & ex.ToString)
+            Throw New ASCOM.Utilities.Exceptions.ProfilePersistenceException("Profile.MigrateProfileException", ex)
         End Try
     End Sub
-
 
     ''' <summary>
     ''' Delete the value from the registry. Name may be an empty string for the unnamed value. 
@@ -581,9 +583,16 @@ Public Class Profile
         'Confirm that the specified driver is registered
         Dim keys As Generic.SortedList(Of String, String)
         Dim IndStr As String = ""
+
         If Indent Then IndStr = "  "
-        IsRegisteredPrv = False ' Assume failure
+
+        If DriverID = LastDriverID Then
+            TL.LogMessage(IndStr & "IsRegistered", IndStr & DriverID.ToString & " - using cached value: " & LastResult)
+            Return LastResult
+        End If
         TL.LogStart(IndStr & "IsRegistered", IndStr & DriverID.ToString & " ")
+
+        IsRegisteredPrv = False ' Assume failure
         If DriverID = "" Then
             TL.LogFinish("Null string so exiting False")
             Exit Function ' Nothing is a failure
@@ -600,7 +609,9 @@ Public Class Profile
         Catch ex As Exception
             TL.LogFinish("Exception: " & ex.ToString)
         End Try
-        Return IsRegisteredPrv
+
+        LastDriverID = DriverID
+        LastResult = IsRegisteredPrv
     End Function
 
 

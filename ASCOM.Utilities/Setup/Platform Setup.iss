@@ -106,7 +106,7 @@
 #define Public InstallerVersion "6.0"
 
 ;Text for release candidate / beta version messages
-#define Public RC "Alpha 2"
+#define Public RC "Alpha 3"
 
 #define Public Major 0
 #define Public Minor 0
@@ -408,8 +408,12 @@ Type: dirifempty; Name: {app}
 ;Type: dirifempty; Name: {cf}\ASCOM
 
 [Code]
-//This funciton is called automatically before install starts and will test whether platform 5 is installed
+//This function is called automatically before install starts and will test whether platform 5 is installed
 function InitializeSetup(): Boolean;
+
+var
+  H2: Variant;
+
 begin
   // Initialise return value
   Result:= True;
@@ -420,6 +424,14 @@ begin
     Result:= False;
   end;
 
+  if Result then begin //Get the current platform version before upgrade so we know how to migrate it later
+    try
+      H2 := CreateOleObject('DriverHelper2.Util');
+      RegWriteStringValue(HKEY_CURRENT_USER, 'Software\ASCOM', 'LastPlatformVersion', H2.PlatformVersion);
+    except
+      RegWriteStringValue(HKEY_CURRENT_USER, 'Software\ASCOM', 'LastPlatformVersion', 'Unknown');
+    end
+  end
 end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
@@ -429,7 +441,9 @@ var
 begin
   if (CurStep = ssInstall) then
 	begin
-      if RegQueryStringValue(HKLM, 'Software\Microsoft\Windows\CurrentVersion\Uninstall\ASCOM.Platform.NET.Components_is1', 'UninstallString', Uninstall) then begin
+    CoFreeUnusedLibraries // This releases the DriverHelper2.Util COM object created in the InitializeSetup funciton. Must do this so that the file can be replaced in the next step
+
+    if RegQueryStringValue(HKLM, 'Software\Microsoft\Windows\CurrentVersion\Uninstall\ASCOM.Platform.NET.Components_is1', 'UninstallString', Uninstall) then begin
       MsgBox('Setup will now remove the previous version.', mbInformation, MB_OK);
       Exec(RemoveQuotes(Uninstall), ' /SILENT', '', SW_SHOWNORMAL, ewWaitUntilTerminated, ResultCode);
     end;
@@ -441,4 +455,6 @@ WelcomeLabel1=%n%n[name]%n
 #emit "WelcomeLabel2=This will install ASCOM Utilities version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
 [_ISToolPreCompile]
 Name: ..\..\ASCOM Redirection Policies\ASCOM Redirection Policies\bin\Release\ASCOM Redirection Policies.exe; Parameters: ; Flags: runminimized abortonerror
+
+
 

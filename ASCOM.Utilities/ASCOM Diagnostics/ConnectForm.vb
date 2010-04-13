@@ -10,17 +10,20 @@ Public Class ConnectForm
         Dim DeviceTypes() As String, Profile As New ASCOM.Utilities.Profile
 
         AddHandler cmbDeviceType.SelectedIndexChanged, AddressOf DevicetypeChangedhandler
-        Util = New ASCOM.Utilities.Util
-        DeviceTypes = Profile.RegisteredDeviceTypes
-        For Each DeviceType As String In DeviceTypes
-            cmbDeviceType.Items.Add(DeviceType)
-        Next
-        CurrentDevice = DEFAULT_DEVICE
-        CurrentDeviceType = DEFAULT_DEVICE_TYPE
-        cmbDeviceType.SelectedItem = CurrentDeviceType
-        btnProperties.Enabled = False
-        txtDevice.Text = CurrentDevice
-
+        Try
+            Util = New ASCOM.Utilities.Util
+            DeviceTypes = Profile.RegisteredDeviceTypes
+            For Each DeviceType As String In DeviceTypes
+                cmbDeviceType.Items.Add(DeviceType)
+            Next
+            CurrentDevice = DEFAULT_DEVICE
+            CurrentDeviceType = DEFAULT_DEVICE_TYPE
+            cmbDeviceType.SelectedItem = CurrentDeviceType
+            btnProperties.Enabled = False
+            txtDevice.Text = CurrentDevice
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        End Try
     End Sub
 
     Private Sub DevicetypeChangedhandler()

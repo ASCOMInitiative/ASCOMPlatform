@@ -72,7 +72,7 @@ Namespace VB6HelperSupport 'Tuck this out of the way of the main ASCOM.Utilities
         'The function and sub signatures below exactly match those provided by the registry toolkit 
         'originally used by the helpers.
 
-        Private Profile As XMLAccess
+        Private Profile As RegistryAccess
         Private TL As TraceLogger
 
 #Region "New and IDisposable Support"
@@ -91,7 +91,7 @@ Namespace VB6HelperSupport 'Tuck this out of the way of the main ASCOM.Utilities
             ' As New() excpet that it allows the calling component to identify itself, this name is used in error messages
             MyBase.New()
             Try
-                Profile = New XMLAccess(ComponentName)
+                Profile = New RegistryAccess(ComponentName)
                 TL = New TraceLogger("", "VB6ProfileSupport")
                 TL.Enabled = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT) 'Get enabled / disabled state from the user registry
                 Call RunningVersions(TL)
@@ -227,7 +227,7 @@ Namespace VB6HelperSupport 'Tuck this out of the way of the main ASCOM.Utilities
         'This exposes a new .Utilities serial port so that it can be accessed through the VB6 helper component
 
         Private SerPort As Serial
-        Private SerialProfile As ASCOM.Utilities.XMLAccess = Nothing
+        Private SerialProfile As ASCOM.Utilities.RegistryAccess = Nothing
         Private TraceFilename As String, TL As ASCOM.Utilities.TraceLogger, DebugTrace As Boolean
 #Region "New and IDisposable Support"
         Public Sub New()
@@ -237,7 +237,7 @@ Namespace VB6HelperSupport 'Tuck this out of the way of the main ASCOM.Utilities
             Try
                 SerPort = New Serial
 
-                SerialProfile = New XMLAccess 'Profile class that can retrieve the value of tracefile
+                SerialProfile = New RegistryAccess 'Profile class that can retrieve the value of tracefile
                 TraceFilename = SerialProfile.GetProfile("", SERIAL_FILE_NAME_VARNAME)
                 TL = New TraceLogger(TraceFilename, "VB6Serial")
                 If TraceFilename <> "" Then TL.Enabled = True

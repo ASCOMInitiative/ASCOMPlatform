@@ -145,6 +145,17 @@ Namespace Interfaces
         ''' as the file is not created until required.</remarks>
         <DispId(9)> ReadOnly Property LogFileName() As String
 
+        ''' <summary>
+        ''' Displays a message respecting carriage return and linefeed characters
+        ''' </summary>
+        ''' <param name="Identifier">Identifies the meaning of the the message e.g. name of modeule or method logging the message.</param>
+        ''' <param name="Message">The final message to terminate the line</param>
+        ''' <remarks>
+        ''' <para>Will create a LOGISSUE message in the log if called before a line has been started with LogStart.  
+        ''' Posible reasons for this are exceptions causing the normal flow of code to be bypassed or logic errors.</para>
+        ''' </remarks>
+        <DispId(10)> Sub LogMessageCrLf(ByVal Identifier As String, ByVal Message As String) ' Append a full hex dump of the supplied string with a new line
+
     End Interface ' Interface to Utilities.TraceLogger
 
     ''' <summary>
@@ -1051,11 +1062,11 @@ Namespace Interfaces
         ''' <summary>
         ''' Migrate the ASCOM profile from registry to file store
         ''' </summary>
-        ''' <param name="PlatformVersion">The platform version number to be set in the profile store during the migration</param>
-        ''' <param name="JustSetPlatformVersion">Flag indicating whether to migrate the profile or just set the platform version number</param>
+        ''' <param name="CurrentPlatformVersion">The platform version number of the current profile store beig migrated</param>
+        ''' <param name="NewPlatformVersion">The platform version number to be set in the profile store during the migration</param>
         ''' <remarks></remarks>
         <EditorBrowsable(EditorBrowsableState.Never)> _
-        Sub MigrateProfile(ByVal PlatformVersion As String, ByVal JustSetPlatformVersion As Boolean)
+        Sub MigrateProfile(ByVal CurrentPlatformVersion As String, ByVal NewPlatformVersion As String)
 
         ''' <summary>
         ''' Delete the value from the registry. Name may be an empty string for the unnamed value. 
@@ -1337,8 +1348,7 @@ Namespace Interfaces
         Function EnumKeys(ByVal p_SubKeyName As String) As Generic.SortedList(Of String, String)
         Sub DeleteKey(ByVal p_SubKeyName As String)
         Sub RenameKey(ByVal CurrentSubKeyName As String, ByVal NewSubKeyName As String)
-        Sub MigrateProfile()
-        Sub SetSecurityACLs()
+        Sub MigrateProfile(ByVal CurrentPlatformVersion As String)
     End Interface 'Interface for a general profile store provider
 
 #End Region
