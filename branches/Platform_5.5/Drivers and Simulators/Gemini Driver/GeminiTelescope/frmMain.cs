@@ -844,6 +844,7 @@ namespace ASCOM.GeminiTelescope
 
             setupForm.TraceLevel = GeminiHardware.TraceLevel;
 
+            setupForm.AsyncPulseGuide = GeminiHardware.AsyncPulseGuide;
 
             DialogResult ans;
             if (this.Visible==false)
@@ -887,6 +888,8 @@ namespace ASCOM.GeminiTelescope
                 GeminiHardware.BootMode = setupForm.BootMode;
 
                 GeminiHardware.TraceLevel = setupForm.TraceLevel;
+
+                GeminiHardware.AsyncPulseGuide = setupForm.AsyncPulseGuide;
 
                 int gpsBaudRate;
                 if (!int.TryParse(setupForm.GpsBaudRate, out gpsBaudRate))

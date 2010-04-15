@@ -58,6 +58,8 @@
             this.pbUnselAll = new System.Windows.Forms.Button();
             this.pbSelAll = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.dtDateTime = new System.Windows.Forms.DateTimePicker();
+            this.chkVisibleOnly = new System.Windows.Forms.CheckBox();
             this.pbClearSearch = new System.Windows.Forms.Button();
             this.textSearch = new System.Windows.Forms.TextBox();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
@@ -79,7 +81,7 @@
             // 
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 311F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 356F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 95F));
             this.tableLayoutPanel1.Controls.Add(this.groupBox1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.panel1, 3, 0);
@@ -96,7 +98,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(681, 664);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(724, 664);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // groupBox1
@@ -105,7 +107,7 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(269, 159);
+            this.groupBox1.Size = new System.Drawing.Size(267, 159);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Available Catalogs";
@@ -118,7 +120,7 @@
             this.lbCatalogs.FormattingEnabled = true;
             this.lbCatalogs.Location = new System.Drawing.Point(3, 16);
             this.lbCatalogs.Name = "lbCatalogs";
-            this.lbCatalogs.Size = new System.Drawing.Size(263, 139);
+            this.lbCatalogs.Size = new System.Drawing.Size(261, 139);
             this.lbCatalogs.Sorted = true;
             this.lbCatalogs.TabIndex = 0;
             // 
@@ -126,7 +128,7 @@
             // 
             this.panel1.Controls.Add(this.pbExit);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(586, 0);
+            this.panel1.Location = new System.Drawing.Point(629, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(95, 165);
@@ -149,7 +151,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(3, 168);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(580, 243);
+            this.groupBox2.Size = new System.Drawing.Size(623, 243);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Objects in selected Catalogs";
@@ -172,7 +174,7 @@
             this.gvAllObjects.ShowCellErrors = false;
             this.gvAllObjects.ShowEditingIcon = false;
             this.gvAllObjects.ShowRowErrors = false;
-            this.gvAllObjects.Size = new System.Drawing.Size(574, 224);
+            this.gvAllObjects.Size = new System.Drawing.Size(617, 224);
             this.gvAllObjects.TabIndex = 0;
             this.gvAllObjects.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvAllObjects_ColumnHeaderMouseClick);
             this.gvAllObjects.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvAllObjects_CellMouseDoubleClick);
@@ -186,7 +188,7 @@
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox3.Location = new System.Drawing.Point(3, 417);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(580, 244);
+            this.groupBox3.Size = new System.Drawing.Size(623, 244);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Objects in Gemini User Calatog";
@@ -203,7 +205,7 @@
             this.gvGeminiCatalog.Name = "gvGeminiCatalog";
             this.gvGeminiCatalog.ReadOnly = true;
             this.gvGeminiCatalog.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.gvGeminiCatalog.Size = new System.Drawing.Size(574, 225);
+            this.gvGeminiCatalog.Size = new System.Drawing.Size(617, 225);
             this.gvGeminiCatalog.TabIndex = 1;
             this.gvGeminiCatalog.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvGeminiCatalog_ColumnHeaderMouseClick);
             // 
@@ -216,7 +218,7 @@
             this.panel2.Controls.Add(this.btnSync);
             this.panel2.Controls.Add(this.btnAddAlign);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(589, 168);
+            this.panel2.Location = new System.Drawing.Point(632, 168);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(89, 243);
             this.panel2.TabIndex = 1;
@@ -290,7 +292,7 @@
             this.panel3.Controls.Add(this.pbDelete);
             this.panel3.Controls.Add(this.pbToGemini);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(589, 417);
+            this.panel3.Location = new System.Drawing.Point(632, 417);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(89, 244);
             this.panel3.TabIndex = 2;
@@ -361,9 +363,9 @@
             this.panel4.Controls.Add(this.pbSelAll);
             this.panel4.Controls.Add(this.groupBox4);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel4.Location = new System.Drawing.Point(278, 3);
+            this.panel4.Location = new System.Drawing.Point(276, 3);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(305, 159);
+            this.panel4.Size = new System.Drawing.Size(350, 159);
             this.panel4.TabIndex = 3;
             // 
             // pbUnselAll
@@ -390,21 +392,49 @@
             // 
             this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox4.Controls.Add(this.dtDateTime);
+            this.groupBox4.Controls.Add(this.chkVisibleOnly);
             this.groupBox4.Controls.Add(this.pbClearSearch);
             this.groupBox4.Controls.Add(this.textSearch);
-            this.groupBox4.Location = new System.Drawing.Point(3, 104);
+            this.groupBox4.Location = new System.Drawing.Point(3, 85);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(299, 51);
+            this.groupBox4.Size = new System.Drawing.Size(344, 70);
             this.groupBox4.TabIndex = 4;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Search";
+            this.groupBox4.Enter += new System.EventHandler(this.groupBox4_Enter);
+            // 
+            // dtDateTime
+            // 
+            this.dtDateTime.CustomFormat = " HH:mm:ss  yyyy-MM-dd";
+            this.dtDateTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtDateTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtDateTime.Location = new System.Drawing.Point(177, 16);
+            this.dtDateTime.MinimumSize = new System.Drawing.Size(4, 22);
+            this.dtDateTime.Name = "dtDateTime";
+            this.dtDateTime.ShowCheckBox = true;
+            this.dtDateTime.ShowUpDown = true;
+            this.dtDateTime.Size = new System.Drawing.Size(161, 22);
+            this.dtDateTime.TabIndex = 9;
+            this.dtDateTime.ValueChanged += new System.EventHandler(this.dtDateTime_ValueChanged);
+            // 
+            // chkVisibleOnly
+            // 
+            this.chkVisibleOnly.AutoSize = true;
+            this.chkVisibleOnly.Location = new System.Drawing.Point(6, 19);
+            this.chkVisibleOnly.Name = "chkVisibleOnly";
+            this.chkVisibleOnly.Size = new System.Drawing.Size(172, 17);
+            this.chkVisibleOnly.TabIndex = 8;
+            this.chkVisibleOnly.Text = "Only objects above the horizon";
+            this.chkVisibleOnly.UseVisualStyleBackColor = true;
+            this.chkVisibleOnly.CheckedChanged += new System.EventHandler(this.chkVisibleOnly_CheckedChanged);
             // 
             // pbClearSearch
             // 
             this.pbClearSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pbClearSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.pbClearSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pbClearSearch.Location = new System.Drawing.Point(261, 19);
+            this.pbClearSearch.Location = new System.Drawing.Point(314, 43);
             this.pbClearSearch.Name = "pbClearSearch";
             this.pbClearSearch.Size = new System.Drawing.Size(25, 20);
             this.pbClearSearch.TabIndex = 1;
@@ -416,9 +446,9 @@
             // 
             this.textSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textSearch.Location = new System.Drawing.Point(6, 19);
+            this.textSearch.Location = new System.Drawing.Point(6, 43);
             this.textSearch.Name = "textSearch";
-            this.textSearch.Size = new System.Drawing.Size(255, 20);
+            this.textSearch.Size = new System.Drawing.Size(302, 20);
             this.textSearch.TabIndex = 0;
             this.textSearch.TextChanged += new System.EventHandler(this.textSearch_TextChanged);
             // 
@@ -439,7 +469,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(681, 664);
+            this.ClientSize = new System.Drawing.Size(724, 664);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmUserCatalog";
@@ -495,5 +525,7 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button pbSendtObject;
+        private System.Windows.Forms.CheckBox chkVisibleOnly;
+        private System.Windows.Forms.DateTimePicker dtDateTime;
     }
 }

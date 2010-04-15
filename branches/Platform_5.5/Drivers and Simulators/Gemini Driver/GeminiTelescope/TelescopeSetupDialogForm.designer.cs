@@ -91,6 +91,7 @@ namespace ASCOM.GeminiTelescope
             this.picASCOM = new System.Windows.Forms.PictureBox();
             this.label11 = new System.Windows.Forms.Label();
             this.cbLogging = new System.Windows.Forms.ComboBox();
+            this.chkAsyncPulseGuide = new System.Windows.Forms.CheckBox();
             buttonGps = new System.Windows.Forms.Button();
             pbGeminiSettings = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
@@ -842,12 +843,25 @@ namespace ASCOM.GeminiTelescope
             this.cbLogging.Size = new System.Drawing.Size(163, 21);
             this.cbLogging.TabIndex = 36;
             // 
+            // chkAsyncPulseGuide
+            // 
+            this.chkAsyncPulseGuide.AutoSize = true;
+            this.chkAsyncPulseGuide.ForeColor = System.Drawing.Color.White;
+            this.chkAsyncPulseGuide.Location = new System.Drawing.Point(263, 281);
+            this.chkAsyncPulseGuide.Name = "chkAsyncPulseGuide";
+            this.chkAsyncPulseGuide.Size = new System.Drawing.Size(153, 17);
+            this.chkAsyncPulseGuide.TabIndex = 37;
+            this.chkAsyncPulseGuide.Text = "Asynchronous Pulse Guide";
+            this.chkAsyncPulseGuide.UseVisualStyleBackColor = true;
+            this.chkAsyncPulseGuide.CheckedChanged += new System.EventHandler(this.chkAsyncPulseGuide_CheckedChanged);
+            // 
             // TelescopeSetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
             this.ClientSize = new System.Drawing.Size(501, 482);
+            this.Controls.Add(this.chkAsyncPulseGuide);
             this.Controls.Add(this.cbLogging);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.chkVoice);
@@ -956,5 +970,6 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.ComboBox cbLogging;
         private System.Windows.Forms.CheckBox chkPortScan;
+        private System.Windows.Forms.CheckBox chkAsyncPulseGuide;
     }
 }

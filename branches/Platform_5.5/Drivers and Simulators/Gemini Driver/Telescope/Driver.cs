@@ -665,11 +665,17 @@ namespace ASCOM.GeminiTelescope
                 string encoderResolution = GeminiHardware.DoCommandResult("<26:", GeminiHardware.MAX_TIMEOUT, false);
                 if (rateDivisor != null && spurGearRatio != null && wormGearRatio != null && encoderResolution !=null)
                 {
-                    
-                    double stepsPerSecond = 22.8881835938 / double.Parse(rateDivisor);
-                    double arcSecondsPerStep = 1296000.00 / (Math.Abs(double.Parse(wormGearRatio)) * double.Parse(spurGearRatio) * double.Parse(encoderResolution));
 
-                    double rate = arcSecondsPerStep * stepsPerSecond;
+                    double rate = 0.0;
+
+                    double rd = double.Parse(rateDivisor);
+                    if (rd != 0)
+                    {
+                        double stepsPerSecond = 22.8881835938 / double.Parse(rateDivisor);
+                        double arcSecondsPerStep = 1296000.00 / (Math.Abs(double.Parse(wormGearRatio)) * double.Parse(spurGearRatio) * double.Parse(encoderResolution));
+
+                        rate = arcSecondsPerStep * stepsPerSecond;
+                    }
 
                     GeminiHardware.Trace.Exit("IT:DeclinationRate.Get", rate);
                     return rate;
@@ -1157,7 +1163,8 @@ namespace ASCOM.GeminiTelescope
                 string c = cmd + d.ToString();
                 GeminiHardware.DoCommandResult(c, Duration + GeminiHardware.MAX_TIMEOUT, false);
                 GeminiHardware.Velocity = "G";
-                GeminiHardware.WaitForVelocity("TN", Duration + 2000); // shouldn't take much longer than 'Duration', right?
+                if (!GeminiHardware.AsyncPulseGuide || count > 255)
+                    GeminiHardware.WaitForVelocity("TN", Duration + 2000); // shouldn't take much longer than 'Duration', right?
             }
             GeminiHardware.Trace.Exit("IT:PulseGuide", Direction, Duration, totalSteps);
         }

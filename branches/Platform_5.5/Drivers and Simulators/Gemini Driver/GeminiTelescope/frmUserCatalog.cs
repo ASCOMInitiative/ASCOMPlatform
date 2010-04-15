@@ -29,7 +29,7 @@ namespace ASCOM.GeminiTelescope
 {
     public partial class frmUserCatalog : Form
     {
-        SerializableDictionary<string, CatalogObject> m_Objects;
+        static SerializableDictionary<string, CatalogObject> m_Objects = null;
         SerializableDictionary<string, CatalogObject> m_GeminiObjects;
 
         string m_OrderBy = "Name";
@@ -60,15 +60,19 @@ namespace ASCOM.GeminiTelescope
             m_DirectionSort.Add("Catalog", false);
             m_DirectionSort.Add("RA", false);
             m_DirectionSort.Add("DEC", false);
+            m_DirectionSort.Add("Visible", false);
             m_GeminiDirectionSort.Add("Name", false);
             m_GeminiDirectionSort.Add("Catalog", false);
             m_GeminiDirectionSort.Add("RA", false);
             m_GeminiDirectionSort.Add("DEC", false);
+            m_GeminiDirectionSort.Add("Visible", false);
+
             m_GeminiObjects = new SerializableDictionary<string, CatalogObject>();
             CList.Add("Name", o => o.Name);
             CList.Add("Catalog", o => o.Catalog);
             CList.Add("RA", o => o.RA);
             CList.Add("DEC", o => o.DEC);
+            CList.Add("Visible", o => o.Visible);
 
             m_GeminiCatalogs.Add("messier", "1");
             m_GeminiCatalogs.Add("ngc", "2");
@@ -81,10 +85,14 @@ namespace ASCOM.GeminiTelescope
 
             gvAllObjects.RowHeadersVisible = false;
             gvGeminiCatalog.RowHeadersVisible = false;
+            dtDateTime.Checked = false;
         }
 
         private void PopulateCatalogs()
         {
+
+            bool bAlreadyLoaded =  (m_Objects != null);  //already loaded
+
             Cursor.Current = Cursors.WaitCursor;
             string path = "";
             try
@@ -100,7 +108,7 @@ namespace ASCOM.GeminiTelescope
 
             path = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\ASCOM\\" + SharedResources.TELESCOPE_DRIVER_NAME + "\\Catalogs";
 
-            m_Objects = new SerializableDictionary<string, CatalogObject>();
+            if (!bAlreadyLoaded) m_Objects = new SerializableDictionary<string, CatalogObject>();
 
             System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(path);
             System.IO.FileInfo[] files = di.GetFiles("*.guc");
@@ -114,7 +122,7 @@ namespace ASCOM.GeminiTelescope
 
                 string cn = fi.Name.Substring(0, fi.Name.Length - 4);
                 frmProgress.Update(incr, "Loading " + cn + "...");
-                if (LoadCatalog(fi.FullName, cn, m_Objects))
+                if (bAlreadyLoaded || LoadCatalog(fi.FullName, cn, m_Objects))
                 {
                     int idx = lbCatalogs.Items.Add(cn);
                     string v = GeminiHardware.Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Catalog " + cn);
@@ -126,13 +134,14 @@ namespace ASCOM.GeminiTelescope
                     } else 
                         lbCatalogs.SetItemChecked(idx, true);
                 }
-                frmProgress.Update(0, "Loading " + cn + "...");
+                frmProgress.Update(0, "Loading " + cn + "...");          
             }
             Cursor.Current = Cursors.Default;
         }
 
         private bool LoadCatalog(string p, string catalog, SerializableDictionary<string, CatalogObject> dict)
         {
+
             System.IO.StreamReader fi = null;
 
             try
@@ -170,10 +179,20 @@ namespace ASCOM.GeminiTelescope
             return true;
         }
 
+        private DateTime GetTime()
+        {
+            if (dtDateTime.Checked) return dtDateTime.Value;
+            else
+                return DateTime.Now;
+        }
+
         private void frmUserCatalog_Load(object sender, EventArgs e)
         {
-            frmProgress.Initialize(0, 100, "Load Catatlogs...", null);
+            frmProgress.Initialize(0, 100, "Load Catalogs...", null);
             frmProgress.ShowProgress(this);
+
+            CatalogObject.SetTransform(GetTime());
+
             PopulateCatalogs();
             PopulateAllObjects("");
             UpdateGeminiCatalog();
@@ -207,44 +226,62 @@ namespace ASCOM.GeminiTelescope
 
         void PopulateAllObjects(string clicked)
         {
-            GeminiHardware.Profile.DeviceType = "Telescope";
 
-            string wh = "";
-
-            // save all the selected catalogs 
-            for (int i = 0; i < lbCatalogs.Items.Count; ++i)
-            {
-                bool bChecked = lbCatalogs.GetItemChecked(i);
-
-                if (lbCatalogs.Items[i].ToString() == clicked) bChecked = !bChecked;
-
-                GeminiHardware.Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Catalog " + lbCatalogs.Items[i],
-                    bChecked.ToString());
-
-                if (bChecked) wh = wh + lbCatalogs.Items[i].ToString() + ",";
-            }
-
-
-            var qry = (from o in m_Objects.Values where (wh.Contains(o.Catalog) && o.Name.ToLower().Contains(m_Search.ToLower())) select o);
-
-            //select o);
-            if (m_DirectionSort[m_OrderBy])
-                qry = qry.OrderByDescending(CList[m_OrderBy]).ThenBy(CList["Name"]);
-            else
-                qry = qry.OrderBy(CList[m_OrderBy]).ThenBy(CList["Name"]);
-
-            BindingSource bs = new BindingSource();
-            bs.DataSource = qry;
             try
             {
-                gvAllObjects.DataSource = bs;
-                gvAllObjects.Columns["RA"].DefaultCellStyle.Format = "0.00";
-                gvAllObjects.Columns["DEC"].DefaultCellStyle.Format = "0.00";
-                gvAllObjects.Columns["RA"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                gvAllObjects.Columns["DEC"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                gvAllObjects.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+                Cursor.Current = Cursors.WaitCursor;
+
+                CatalogObject.SetTransform(GetTime());
+
+                GeminiHardware.Profile.DeviceType = "Telescope";
+
+                string wh = "";
+
+                // save all the selected catalogs 
+                for (int i = 0; i < lbCatalogs.Items.Count; ++i)
+                {
+                    bool bChecked = lbCatalogs.GetItemChecked(i);
+
+                    if (lbCatalogs.Items[i].ToString() == clicked) bChecked = !bChecked;
+
+                    GeminiHardware.Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Catalog " + lbCatalogs.Items[i],
+                        bChecked.ToString());
+
+                    if (bChecked) wh = wh + lbCatalogs.Items[i].ToString() + ",";
+                }
+
+
+                var qry = (from o in m_Objects.Values where (wh.Contains(o.Catalog) && o.Name.IndexOf(m_Search, StringComparison.CurrentCultureIgnoreCase) >= 0) select o);
+
+                if (chkVisibleOnly.Checked)
+                    qry = (from o in m_Objects.Values where (wh.Contains(o.Catalog) && o.Visible && o.Name.IndexOf(m_Search, StringComparison.CurrentCultureIgnoreCase) >= 0) select o);
+
+                if (m_DirectionSort[m_OrderBy])
+                    qry = qry.OrderByDescending(CList[m_OrderBy]).ThenBy(CList["Name"]);
+                else
+                    qry = qry.OrderBy(CList[m_OrderBy]).ThenBy(CList["Name"]);
+
+                BindingSource bs = new BindingSource();
+                bs.DataSource = qry;
+                try
+                {
+                    gvAllObjects.DataSource = bs;
+                    gvAllObjects.Columns["RA"].DefaultCellStyle.Format = "0.00";
+                    gvAllObjects.Columns["DEC"].DefaultCellStyle.Format = "0.00";
+                    gvAllObjects.Columns["RA"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                    gvAllObjects.Columns["DEC"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                    gvAllObjects.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                    gvAllObjects.Columns["RA"].Width = 80;
+                    gvAllObjects.Columns["DEC"].Width = 80;
+                    gvAllObjects.Columns["Visible"].Width = 80;
+                }
+                catch { }
             }
-            catch { }
+            finally
+            {
+                Cursor.Current = Cursors.Default;
+            }
         }
 
         void lbCatalogs_ItemCheck(object sender, ItemCheckEventArgs e)
@@ -312,6 +349,8 @@ namespace ASCOM.GeminiTelescope
 
         private void UpdateGeminiCatalog()
         {
+            CatalogObject.SetTransform(GetTime());
+
             var qry = (from o in m_GeminiObjects.Values select o);
             if (m_GeminiDirectionSort[m_GeminiOrderBy])
                 qry = qry.OrderByDescending(CList[m_GeminiOrderBy]).ThenBy(CList["Name"]);
@@ -329,6 +368,9 @@ namespace ASCOM.GeminiTelescope
                     gvGeminiCatalog.Columns["RA"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                     gvGeminiCatalog.Columns["DEC"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                     gvGeminiCatalog.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                    gvAllObjects.Columns["RA"].Width = 80;
+                    gvAllObjects.Columns["DEC"].Width = 80;
+                    gvAllObjects.Columns["Visible"].Width = 80;
 
                 }
                 catch { }
@@ -468,14 +510,21 @@ namespace ASCOM.GeminiTelescope
                 if (sender == btnGoto)
                     GeminiHardware.SlewEquatorial();
                 else if (sender == btnSync)
+                {
                     GeminiHardware.SyncEquatorial();
+                    GeminiHardware.ReportAlignResult(((Button)sender).Text);
+                }
                 else
+                {                   
                     GeminiHardware.AlignEquatorial();
+                    GeminiHardware.ReportAlignResult(((Button)sender).Text);
+                }
             }
             catch (Exception ex) {
                 MessageBox.Show(this, "Gemini reported an error: " + ex.Message, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
+
 
         private void pbToFile_Click(object sender, EventArgs e)
         {
@@ -592,6 +641,40 @@ namespace ASCOM.GeminiTelescope
         {
             GeminiHardware.Profile = null;
         }
+
+        private void chkVisibleOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            chkVisibleOnly.Refresh();
+            chkVisibleOnly.Update();
+            PopulateAllObjects("");
+        }
+
+        private void groupBox4_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        Timer tm = null;
+
+        private void dtDateTime_ValueChanged(object sender, EventArgs e)
+        {
+            if (tm == null)
+            {
+                tm = new Timer();
+                tm.Tick += new EventHandler(tm_Tick);
+                tm.Interval = 1000;
+            }
+            else
+                tm.Stop();
+
+            tm.Start();
+        }
+
+        void tm_Tick(object sender, EventArgs e)
+        {
+            tm.Stop();
+            PopulateAllObjects("");
+        }
     }
 
     public class CatalogObject
@@ -600,6 +683,11 @@ namespace ASCOM.GeminiTelescope
         public RACoord RA { get; set; }
         public DECCoord DEC { get; set; }
         public string Catalog { get; set; }
+
+        //pre-computed site/date-time variables shared by all instances:
+        private static double LST = 0;
+        private static double lat = 0;
+        private static double lon = 0;
 
         public static bool TryParse(string s, string catalog, out CatalogObject obj)
         {
@@ -645,6 +733,30 @@ namespace ASCOM.GeminiTelescope
 
             ra = GeminiHardware.m_Transform.RATopocentric;
             dec = GeminiHardware.m_Transform.DECTopocentric;
+        }
+
+        public static void SetTransform(DateTime dt)
+        {
+            GeminiHardware.m_Transform.SiteElevation = GeminiHardware.Elevation;
+            GeminiHardware.m_Transform.SiteLatitude = GeminiHardware.Latitude;
+            GeminiHardware.m_Transform.SiteLongitude = GeminiHardware.Longitude;
+
+            // [pk] the following values are pre-computed for the Altitude calculation 
+            // for Visible property:
+            lon = GeminiHardware.Longitude * SharedResources.DEG_RAD;
+            lat = GeminiHardware.Latitude * SharedResources.DEG_RAD;
+            LST = AstronomyFunctions.LocalSiderealTime(GeminiHardware.Longitude, dt) * SharedResources.DEG_RAD;
+        }
+
+        public bool Visible
+        {
+            get
+            {
+                // [pk] SetTransform must been called prior to this to pre-compute values
+                // [pk] I'm ignoring precession from J2000 here, since a few arcminutes difference
+                // isn't going to matter when computing horizon coordinates to determine visibility
+                return AstronomyFunctions.CalculateAltitude(RA.RA / 12 * Math.PI, DEC.DEC * SharedResources.DEG_RAD, lat, lon, LST) > 0;
+            }
         }
 
         public override string ToString()

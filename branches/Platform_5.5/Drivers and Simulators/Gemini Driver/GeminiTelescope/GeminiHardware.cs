@@ -364,6 +364,19 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        private static bool m_AsyncPulseGuide = true;
+
+        public static bool AsyncPulseGuide
+        {
+            get { return GeminiHardware.m_AsyncPulseGuide; }
+            set { 
+                GeminiHardware.m_AsyncPulseGuide = value;
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AsyncPulseGuide", value.ToString());
+            }
+        }
+    
+
         private static System.Threading.AutoResetEvent m_WaitForCommand;
         private static System.Threading.AutoResetEvent m_DataReceived;
 
@@ -850,6 +863,8 @@ namespace ASCOM.GeminiTelescope
 
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "BootMode", "0");
 
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AsyncPulseGuide", true.ToString());
+
             }
                 
             //Load up the values from saved
@@ -932,6 +947,8 @@ namespace ASCOM.GeminiTelescope
             if (!double.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "FocalLength", ""), System.Globalization.NumberStyles.Float, m_GeminiCulture, out m_FocalLength))
                 m_FocalLength = 0.0;
 
+            if (!bool.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "AsyncPulseGuide", ""), out m_AsyncPulseGuide))
+                m_AsyncPulseGuide = true;
 
             Trace.Info(2, "Geo Settings", m_Latitude, m_Longitude, m_Elevation);
 
@@ -2025,6 +2042,22 @@ namespace ASCOM.GeminiTelescope
                 {
                     return res[0].TrimEnd('#'); // else it's an error code from :Mf command, return it
                 }
+        }
+
+
+
+        public static void ReportAlignResult(string op)
+        {
+            string a, e;
+            a = GeminiHardware.DoCommandResult("<201:", GeminiHardware.MAX_TIMEOUT, false);
+            e = GeminiHardware.DoCommandResult("<202:", GeminiHardware.MAX_TIMEOUT, false);
+
+            int a_err, e_err;
+
+            if (!int.TryParse(a, out a_err)) return;
+            if (!int.TryParse(e, out e_err)) return;
+            if (GeminiHardware.OnInfo != null)
+                GeminiHardware.OnInfo(op+ " Result", string.Format("A:{0:0.0}' E:{1:0.0}'", ((double)a_err)/60.0, ((double)e_err)/60.0));
         }
 
 #endregion

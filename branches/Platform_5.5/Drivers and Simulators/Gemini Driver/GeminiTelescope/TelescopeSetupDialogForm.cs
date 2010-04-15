@@ -395,7 +395,13 @@ namespace ASCOM.GeminiTelescope
             get { return checkBoxShowHandbox.Checked; }
             set { checkBoxShowHandbox.Checked = value; }
         }
-        
+
+        public bool AsyncPulseGuide
+        {
+            get { return chkAsyncPulseGuide.Checked; }
+            set { chkAsyncPulseGuide.Checked = value; }
+        }
+
         #endregion
 
         private void TelescopeSetupDialogForm_Load(object sender, EventArgs e)
@@ -586,6 +592,10 @@ namespace ASCOM.GeminiTelescope
                     TZ = -GeminiHardware.UTCOffset;
                 }
 
+        }
+
+        private void chkAsyncPulseGuide_CheckedChanged(object sender, EventArgs e)
+        {
         }
 
     }
