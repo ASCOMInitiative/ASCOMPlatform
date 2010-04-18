@@ -14,11 +14,9 @@ Module MigrateProfile
         Dim args() As String
         Dim PR As Profile
         Dim Response As MsgBoxResult
-        Dim BaseFolder As String
         Dim parmEraseOnly, parmForce, parmMigrateIfNeeded, parmSavePlatformVersion As Boolean
         Dim Utl As Util, Key As RegistryKey, CurrentProfileVersion As String
 
-        Const ASCOM_DIRECTORY As String = "\ASCOM\Profile" 'Root directory within the supplied file system space
         Const ASCOM_KEY As String = "SOFTWARE\ASCOM"
         Const LAST_PROFILE_VALUE_NAME As String = "LastPlatformVersion"
         Try

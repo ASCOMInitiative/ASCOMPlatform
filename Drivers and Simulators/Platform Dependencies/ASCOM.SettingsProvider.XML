@@ -4,23 +4,6 @@
         <name>ASCOM.SettingsProvider</name>
     </assembly>
     <members>
-        <member name="T:ASCOM.PropertyNotAttributedException">
-            <summary>
-            Exception thrown when teh SettingsProvider finds a setting that does not have a DeviceID attribute.
-            </summary>
-        </member>
-        <member name="M:ASCOM.PropertyNotAttributedException.#ctor(System.String)">
-            <summary>
-            Constructs a new PropertyNotAttributedException.
-            </summary>
-            <param name="propertyName">The property name</param>
-        </member>
-        <member name="P:ASCOM.PropertyNotAttributedException.PropertyName">
-            <summary>
-            Gets or sets the name of the property that caused teh exception.
-            </summary>
-            <value>The name of the property.</value>
-        </member>
         <member name="T:TiGra.ExtensionMethods.StringExtensions">
             <summary>
             Extension methods for manipulating strings.
@@ -173,10 +156,25 @@
             http://www.tigranetworks.co.uk/Astronomy
             </remarks>
         </member>
+        <member name="F:ASCOM.SettingsProvider.ascomProfile">
+            <summary>
+            A reference to an ASCOM profile provider. Normally, this will be the default implementation defined in
+            <see cref="T:ASCOM.Utilities.Profile"/>, but unit tests can also use dependency injection to provide
+            a mock provider. This value will be initialized (once) in the constructor.
+            </summary>
+        </member>
         <member name="M:ASCOM.SettingsProvider.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:ASCOM.SettingsProvider"/> class.
+            Initializes a new instance of the <see cref="T:ASCOM.SettingsProvider"/> class with the default
+            profile provider <see cref="T:ASCOM.Utilities.Profile"/>.
             </summary>
+        </member>
+        <member name="M:ASCOM.SettingsProvider.#ctor(ASCOM.Utilities.Interfaces.IProfile)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.SettingsProvider"/> class with the supplied
+            Profile Provider. This is useful for injecting a mock profile object during unit testing.
+            </summary>
+            <param name="profileProvider">The <see cref="T:ASCOM.Utilities.Interfaces.IProfile"/> to be used.</param>
         </member>
         <member name="F:ASCOM.SettingsProvider.appName">
             <summary>
@@ -190,13 +188,11 @@
             <param name="name">Ignored.</param>
             <param name="config">Not used.</param>
             <remarks>
-            The value of <see cref="P:ASCOM.SettingsProvider.ApplicationName"/> is determined here by reflection. This value
-            should correspond to an ASCOM DeviceID and this is passed to the underlying
-            ASCOM Helper assembly when reading and writing settings values.	Determining the correct
-            value for <see cref="P:ASCOM.SettingsProvider.ApplicationName"/> is a tricky procedure as there is a very loose
-            coupling between the settings class and the settings provider.   The way we discover
-            the correct value is to walk up the call stack until we find an assembly name
-            beginning with "ASCOM.".
+            This method is called by <see cref="T:System.Configuration.ApplicationSettingsBase"/> to initialize the settings provider.
+            Normally, this will set the provider's <see cref="P:ASCOM.SettingsProvider.ApplicationName"/> property to the assembly name
+            of the application. This is later used to determine the storage location of each of the settings.
+            However, for ASCOM purposes, we can't use the application name and we need to key off the
+            ASCOM DeviceID of the driver, so in ASCOM.SettingsProvider, the application name is set but never used.
             </remarks>
         </member>
         <member name="M:ASCOM.SettingsProvider.GetPropertyValues(System.Configuration.SettingsContext,System.Configuration.SettingsPropertyCollection)">
@@ -211,8 +207,12 @@
             </returns>
             <remarks>
             If any properties are absent in the underlying store, or if an error occurs while
-            retrieving them, then the property's default value is used.
+            retrieving them, then the property's default value is used.	This will be the case
+            if the driver has never been registered with ASCOM.
             </remarks>
+            <exception cref="T:ASCOM.PropertyNotAttributedException">
+            Thrown if a setting is found that is not decortated with a <see cref="T:ASCOM.DeviceIdAttribute"/>.
+            </exception>
         </member>
         <member name="M:ASCOM.SettingsProvider.SetPropertyValues(System.Configuration.SettingsContext,System.Configuration.SettingsPropertyValueCollection)">
             <summary>
@@ -246,6 +246,23 @@
             Gets the name of the driver or application for which settings are being managed.
             This value is set during provider initialization and cannot be changed thereafter.
             </summary>
+        </member>
+        <member name="T:ASCOM.PropertyNotAttributedException">
+            <summary>
+            Exception thrown when teh SettingsProvider finds a setting that does not have a DeviceID attribute.
+            </summary>
+        </member>
+        <member name="M:ASCOM.PropertyNotAttributedException.#ctor(System.String)">
+            <summary>
+            Constructs a new PropertyNotAttributedException.
+            </summary>
+            <param name="propertyName">The property name</param>
+        </member>
+        <member name="P:ASCOM.PropertyNotAttributedException.PropertyName">
+            <summary>
+            Gets or sets the name of the property that caused teh exception.
+            </summary>
+            <value>The name of the property.</value>
         </member>
     </members>
 </doc>

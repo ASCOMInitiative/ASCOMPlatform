@@ -454,7 +454,6 @@ Public Class Profile
     ''' </summary>
     ''' <param name="CurrentPlatformVersion">The platform version number of the current profile store beig migrated</param>
     ''' <param name="NewPlatformVersion">The platform version number to be set in the profile store during the migration</param>
-    ''' <param name="JustSetPlatformVersion">Flag indicating whether to migrate the profile or just set the platform version number</param>
     ''' <remarks></remarks>
     <EditorBrowsable(EditorBrowsableState.Never), _
     ComVisible(False)> _

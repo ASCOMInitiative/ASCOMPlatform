@@ -12,7 +12,7 @@
     <AssemblyName>ProfileExplorer</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <OptionExplicit>On</OptionExplicit>
     <OptionCompare>Binary</OptionCompare>
     <OptionStrict>On</OptionStrict>
@@ -74,6 +74,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -85,26 +88,13 @@
     <Import Include="System.Collections.Generic" />
     <Import Include="System.Drawing" />
     <Import Include="System.Diagnostics" />
+    <Import Include="System.Linq" />
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\ASCOM.Utilities\RegistryAccess.vb">
-      <Link>RegistryAccess.vb</Link>
-    </Compile>
-    <Compile Include="..\ASCOM.Utilities\XMLAccess.vb">
-      <Link>XMLAccess.vb</Link>
-    </Compile>
     <Compile Include="Profile Explorer.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="..\ASCOM.Utilities\UtilitiesSettings.vb" />
-    <Compile Include="..\ASCOM.Utilities\AllUsersFileSystemProvider.vb" />
-    <Compile Include="..\ASCOM.Utilities\Interfaces.vb" />
-    <Compile Include="..\ASCOM.Utilities\Exceptions.vb" />
-    <Compile Include="..\ASCOM.Utilities\Serial.vb" />
-    <Compile Include="..\ASCOM.Utilities\TraceLogger.vb" />
-    <Compile Include="..\ASCOM.Utilities\CommonConstants.vb" />
-    <Compile Include="..\ASCOM.Utilities\SharedConstantsAndCode.vb" />
     <Compile Include="Profile Explorer.Designer.vb">
       <DependentUpon>Profile Explorer.vb</DependentUpon>
       <SubType>Form</SubType>
@@ -189,6 +179,10 @@
     <ProjectReference Include="..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
       <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
       <Name>ASCOM.Exceptions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities.vbproj">
+      <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
+      <Name>ASCOM.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

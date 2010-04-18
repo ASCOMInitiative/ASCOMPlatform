@@ -31,8 +31,9 @@ Public Class frmProfileExplorer
         Settings.Dispose()
         Settings = Nothing
         RecursionLevel = 0
-        Dim ProfileProvider As New AllUsersFileSystemProvider 'Get a file system provider so it can tell s what the base path is on this system
-        ProcessTree(ProfileProvider.BasePath, ROOT_NAME, Nothing, -1) 'Process the directory tree starting at the base point = root node
+        'Dim ProfileProvider As New AllUsersFileSystemProvider 'Get a file system provider so it can tell s what the base path is on this system
+        'ProcessTree(ProfileProvider.BasePath, ROOT_NAME, Nothing, -1) 'Process the directory tree starting at the base point = root node
+        ProcessTree("", Nothing, -1) 'Process the directory tree starting at the base point = root node
         Dim snd As Object, args As New TreeNodeMouseClickEventArgs(KeyTree.Nodes(0), Windows.Forms.MouseButtons.Left, 1, 0, 0)
         snd = Nothing
         KeyTree.ShowNodeToolTips = True
@@ -41,43 +42,57 @@ Public Class frmProfileExplorer
         KeyTree.TopNode.Expand()
     End Sub
 
-    Sub ProcessTree(ByVal Dir As String, ByVal Name As String, ByVal CurrentNode As TreeNode, ByVal NodeNumber As Integer)
+    'Sub ProcessTree(ByVal Dir As String, ByVal Name As String, ByVal CurrentNode As TreeNode, ByVal NodeNumber As Integer)
+    Sub ProcessTree(ByVal KeyName As String, ByVal CurrentNode As TreeNode, ByVal NodeNumber As Integer)
+        Const MAX_PARTS As Integer = 100 ' Maximum number of string
         Dim DirNum, MyNodeNumber As Integer
-        Dim DirObj As DirectoryInfo
-        Dim Dirs As DirectoryInfo()
-        Dim DirectoryName As DirectoryInfo
+        Dim KeyNameParts() As String
+        Dim SubKeys As New Generic.SortedList(Of String, String)
+
+        'Dim DirObj As DirectoryInfo
+        'Dim Dirs As DirectoryInfo()
+        'Dim DirectoryName As DirectoryInfo
+
         Dim NewNode As New TreeNode
         MyNodeNumber = NodeNumber + 1
         RecursionLevel += 1
         KeyTree.BeginUpdate()
-        If CurrentNode Is Nothing Then
-            NewNode.Name = Name
-            NewNode.Text = Name
+
+        If KeyName = "" Then
+            NewNode.Name = ROOT_NAME
+            NewNode.Text = ROOT_NAME
             NewNode.ToolTipText = "Root node can not be deleted or renamed"
             KeyTree.Nodes.Add(NewNode)
-            'KeyTree.Nodes(0).ForeColor = Color.Gray
         Else
-            NewNode.Name = Name
-            NewNode.Text = Name
+            KeyNameParts = KeyName.Split("\".ToCharArray, MAX_PARTS)
+            NewNode.Name = KeyNameParts(KeyNameParts.GetUpperBound(0))
+            NewNode.Text = KeyNameParts(KeyNameParts.GetUpperBound(0))
             CurrentNode.Nodes.Add(NewNode)
         End If
 
         KeyTree.EndUpdate()
         KeyTree.Refresh()
 
-        DirObj = New DirectoryInfo(Dir)
-        Dirs = DirObj.GetDirectories("*.*")
+        'DirObj = New DirectoryInfo(Dir)
+        'Dirs = DirObj.GetDirectories("*.*")
+        Try
+            'MsgBox("Processing " & KeyName)
+            SubKeys = Prof.EnumKeys(KeyName)
+        Catch ex As Exception
+            MsgBox("Exception: " & ex.ToString)
+        End Try
+
         DirNum = -1
-        For Each DirectoryName In Dirs
+        For Each SubKey As Generic.KeyValuePair(Of String, String) In SubKeys
             Try
                 If CurrentNode Is Nothing Then
-                    ProcessTree(DirectoryName.FullName, DirectoryName.Name, KeyTree.Nodes(0), DirNum)
+                    ProcessTree(SubKey.Key, KeyTree.Nodes(0), DirNum)
                 Else
-                    ProcessTree(DirectoryName.FullName, DirectoryName.Name, CurrentNode.Nodes(MyNodeNumber), DirNum)
+                    ProcessTree(KeyName & "\" & SubKey.Key, CurrentNode.Nodes(MyNodeNumber), DirNum)
                 End If
                 DirNum += 1
-            Catch E As Exception
-                MessageBox.Show("Error accessing " & DirectoryName.FullName)
+            Catch ex As Exception
+                MessageBox.Show("Error accessing " & SubKey.Key & " " & ex.ToString)
             End Try
         Next
         RecursionLevel -= 1
@@ -109,10 +124,11 @@ Public Class frmProfileExplorer
     End Sub
 
     Overloads Sub RefreshKeyValues(ByVal SubKey As String)
-        CurrentSubKey = SubKey 'Safe current value so that the display can be refreshed whenever required
+        CurrentSubKey = SubKey 'Save current value so that the display can be refreshed whenever required
         KeyValues.Rows.Clear()
         KeyPath = Mid(SubKey, Len(ROOT_NAME) + 1)
-        If Microsoft.VisualBasic.Left(KeyPath, 1) <> "\" Then KeyPath = "\" & KeyPath
+        'If Microsoft.VisualBasic.Left(KeyPath, 1) <> "\" Then KeyPath = "\" & KeyPath
+        If Microsoft.VisualBasic.Left(KeyPath, 1) = "\" Then KeyPath = Mid(KeyPath, 2)
         Values = Prof.EnumProfile(KeyPath)
         For Each kvp In Values
             KeyValues.Rows.Add(kvp.Key, kvp.Value)

@@ -97,6 +97,7 @@
 ; Added NOVAS3 installables and JPL ephemeris File
 ; Added RA CIO File
 ; Moved location of Help files directory from \Utilities to \Help
+; Migrated to Inno setup 5.3.9
 
 [Setup]
 ; Setup program version number - change this each time you change this setup script
@@ -455,6 +456,7 @@ WelcomeLabel1=%n%n[name]%n
 #emit "WelcomeLabel2=This will install ASCOM Utilities version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
 [_ISToolPreCompile]
 Name: ..\..\ASCOM Redirection Policies\ASCOM Redirection Policies\bin\Release\ASCOM Redirection Policies.exe; Parameters: ; Flags: runminimized abortonerror
+
 
 
 
