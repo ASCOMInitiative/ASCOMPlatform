@@ -1,28 +1,169 @@
-﻿'Common constants for the ASCOM.Utilities namesapce
+﻿'These items are shared between the ASCOM.Utilities and ASCOM.Astrometry assemblies
 
+Imports Microsoft.Win32
 Imports System.Reflection
 Imports System.Runtime.InteropServices
-Imports ASCOM.Utilities
 
-#Region "Common Constants"
+#Region "Registry Utility Code"
+Module RegistryCommonCode
+    Friend Function GetBool(ByVal p_Name As String, ByVal p_DefaultValue As Boolean) As Boolean
+        Dim l_Value As Boolean
+        Dim m_HKCU, m_SettingsKey As RegistryKey
 
-Module CommonConstants
-    Friend Const PLATFORM_VERSION As String = "6.0" 'This is the master platform version and is set during profile migration
+        m_HKCU = Registry.CurrentUser
+        m_HKCU.CreateSubKey(REGISTRY_UTILITIES_FOLDER)
+        m_SettingsKey = m_HKCU.OpenSubKey(REGISTRY_UTILITIES_FOLDER, True)
 
-    Friend Const SERIAL_FILE_NAME_VARNAME As String = "SerTraceFile" 'Constant naming the profile trace file variable name
-    Friend Const SERIAL_AUTO_FILENAME As String = "C:\SerialTraceAuto.txt" 'Special value to indicate use of automatic trace filenames
-    Friend Const SERIAL_DEFAULT_FILENAME As String = "C:\SerialTrace.txt" 'Default manual trace filename
-    Friend Const SERIAL_DEBUG_TRACE_VARNAME As String = "SerDebugTrace" 'Constant naming the profile trace file variable name
-    Friend Const SERIAL_FORCED_COMPORTS_VARNAME As String = "ForcedCOMPorts" 'Constant listing COM ports that will be forced to be present
-    Friend Const SERIAL_IGNORED_COMPORTS_VARNAME As String = "IgnoredCOMPorts" 'Constant listing COM ports that will be ignored if present
+        Try
+            If m_SettingsKey.GetValueKind(p_Name) = RegistryValueKind.String Then ' Value does exist
+                l_Value = CBool(m_SettingsKey.GetValue(p_Name))
+            End If
+        Catch ex As System.IO.IOException 'Value doesn't exist so create it
+            SetName(p_Name, p_DefaultValue.ToString)
+            l_Value = p_DefaultValue
+        Catch ex As Exception
+            'LogMsg("GetBool", GlobalVarsAndCode.MessageLevel.msgError, "Unexpected exception: " & ex.ToString)
+            l_Value = p_DefaultValue
+        End Try
+        m_SettingsKey.Flush() 'Clean up registry keys
+        m_SettingsKey.Close()
+        m_SettingsKey = Nothing
+        m_HKCU.Flush()
+        m_HKCU.Close()
+        m_HKCU = Nothing
 
-    'Utilities configuration constants
-    Friend Const TRACE_XMLACCESS As String = "Trace XMLAccess", TRACE_XMLACCESS_DEFAULT As Boolean = False
-    Friend Const TRACE_PROFILE As String = "Trace Profile", TRACE_PROFILE_DEFAULT As Boolean = False
-    Friend Const SERIAL_TRACE_DEBUG As String = "Serial Trace Debug", SERIAL_TRACE_DEBUG_DEFAULT As Boolean = False
+        Return l_Value
+    End Function
+    Friend Function GetString(ByVal p_Name As String, ByVal p_DefaultValue As String) As String
+        Dim l_Value As String = ""
+        Dim m_HKCU, m_SettingsKey As RegistryKey
 
-    Friend Const PROFILE_MUTEX_NAME As String = "ASCOMProfileMutex" 'Name and timout value for the Profile mutex than ensures only one profile action happens at a time
-    Friend Const PROFILE_MUTEX_TIMEOUT As Integer = 5000
+        m_HKCU = Registry.CurrentUser
+        m_HKCU.CreateSubKey(REGISTRY_UTILITIES_FOLDER)
+        m_SettingsKey = m_HKCU.OpenSubKey(REGISTRY_UTILITIES_FOLDER, True)
+
+        Try
+            If m_SettingsKey.GetValueKind(p_Name) = RegistryValueKind.String Then ' Value does exist
+                l_Value = m_SettingsKey.GetValue(p_Name).ToString
+            End If
+        Catch ex As System.IO.IOException 'Value doesn't exist so create it
+            SetName(p_Name, p_DefaultValue.ToString)
+            l_Value = p_DefaultValue
+        Catch ex As Exception
+            'LogMsg("GetString", GlobalVarsAndCode.MessageLevel.msgError, "Unexpected exception: " & ex.ToString)
+            l_Value = p_DefaultValue
+        End Try
+        m_SettingsKey.Flush() 'Clean up registry keys
+        m_SettingsKey.Close()
+        m_SettingsKey = Nothing
+        m_HKCU.Flush()
+        m_HKCU.Close()
+        m_HKCU = Nothing
+
+        Return l_Value
+    End Function
+    Friend Function GetDouble(ByVal p_Key As RegistryKey, ByVal p_Name As String, ByVal p_DefaultValue As Double) As Double
+        Dim l_Value As Double
+        Dim m_HKCU, m_SettingsKey As RegistryKey
+
+        m_HKCU = Registry.CurrentUser
+        m_HKCU.CreateSubKey(REGISTRY_UTILITIES_FOLDER)
+        m_SettingsKey = m_HKCU.OpenSubKey(REGISTRY_UTILITIES_FOLDER, True)
+
+        'LogMsg("GetDouble", GlobalVarsAndCode.MessageLevel.msgDebug, p_Name.ToString & " " & p_DefaultValue.ToString)
+        Try
+            If p_Key.GetValueKind(p_Name) = RegistryValueKind.String Then ' Value does exist
+                l_Value = CDbl(p_Key.GetValue(p_Name))
+            End If
+        Catch ex As System.IO.IOException 'Value doesn't exist so create it
+            SetName(p_Name, p_DefaultValue.ToString)
+            l_Value = p_DefaultValue
+        Catch ex As Exception
+            'LogMsg("GetDouble", GlobalVarsAndCode.MessageLevel.msgError, "Unexpected exception: " & ex.ToString)
+            l_Value = p_DefaultValue
+        End Try
+        m_SettingsKey.Flush() 'Clean up registry keys
+        m_SettingsKey.Close()
+        m_SettingsKey = Nothing
+        m_HKCU.Flush()
+        m_HKCU.Close()
+        m_HKCU = Nothing
+
+        Return l_Value
+    End Function
+    Friend Function GetDate(ByVal p_Name As String, ByVal p_DefaultValue As Date) As Date
+        Dim l_Value As Date
+        Dim m_HKCU, m_SettingsKey As RegistryKey
+
+        m_HKCU = Registry.CurrentUser
+        m_HKCU.CreateSubKey(REGISTRY_UTILITIES_FOLDER)
+        m_SettingsKey = m_HKCU.OpenSubKey(REGISTRY_UTILITIES_FOLDER, True)
+
+        Try
+            If m_SettingsKey.GetValueKind(p_Name) = RegistryValueKind.String Then ' Value does exist
+                l_Value = CDate(m_SettingsKey.GetValue(p_Name))
+            End If
+        Catch ex As System.IO.IOException 'Value doesn't exist so create it
+            SetName(p_Name, p_DefaultValue.ToString)
+            l_Value = p_DefaultValue
+        Catch ex As Exception
+            'LogMsg("GetDate", GlobalVarsAndCode.MessageLevel.msgError, "Unexpected exception: " & ex.ToString)
+            l_Value = p_DefaultValue
+        End Try
+        m_SettingsKey.Flush() 'Clean up registry keys
+        m_SettingsKey.Close()
+        m_SettingsKey = Nothing
+        m_HKCU.Flush()
+        m_HKCU.Close()
+        m_HKCU = Nothing
+
+        Return l_Value
+    End Function
+    Friend Sub SetName(ByVal p_Name As String, ByVal p_Value As String)
+        Dim m_HKCU, m_SettingsKey As RegistryKey
+
+        m_HKCU = Registry.CurrentUser
+        m_HKCU.CreateSubKey(REGISTRY_UTILITIES_FOLDER)
+        m_SettingsKey = m_HKCU.OpenSubKey(REGISTRY_UTILITIES_FOLDER, True)
+
+        m_SettingsKey.SetValue(p_Name, p_Value.ToString, RegistryValueKind.String)
+        m_SettingsKey.Flush() 'Clean up registry keys
+        m_SettingsKey.Close()
+        m_SettingsKey = Nothing
+        m_HKCU.Flush()
+        m_HKCU.Close()
+        m_HKCU = Nothing
+
+    End Sub
+End Module
+#End Region
+
+#Region "Windows event log code"
+Module EventLogCode
+    ''' <summary>
+    ''' Add an event record to the ASCOM Windows event log
+    ''' </summary>
+    ''' <param name="Caller">Name of routine creating the event</param>
+    ''' <param name="Msg">Event message</param>
+    ''' <param name="Severity">Event severity</param>
+    ''' <param name="Id">Id number</param>
+    ''' <param name="Except">Initiating exception or Nothing</param>
+    ''' <remarks></remarks>
+    Friend Sub LogEvent(ByVal Caller As String, ByVal Msg As String, ByVal Severity As EventLogEntryType, ByVal Id As Integer, ByVal Except As String)
+        Dim ELog As EventLog, MsgTxt As String
+
+        If Not EventLog.SourceExists(EVENT_SOURCE) Then 'Create the event log of it doesn't exist
+            EventLog.CreateEventSource(EVENT_SOURCE, EVENTLOG_NAME)
+            LogEvent("LogEvent", "Event log created", EventLogEntryType.Information, 0, Nothing) 'Place an initial entry
+        End If
+        ELog = New EventLog(EVENTLOG_NAME, ".", EVENT_SOURCE) 'Create a pointer to the event log
+
+        MsgTxt = Caller & " - " & Msg 'Format the message to be logged
+        If Not Except Is Nothing Then MsgTxt += vbCrLf & Except
+        ELog.WriteEntry(MsgTxt, Severity, Id) 'Write the message to the error log
+        ELog.Close()
+        ELog.Dispose()
+    End Sub
 End Module
 
 #End Region
@@ -133,7 +274,7 @@ Module VersionCode
         End Select
     End Function
 
-    Sub AssemblyInfo(ByVal TL As TraceLogger, ByVal AssName As String, ByVal Ass As Assembly)
+    Friend Sub AssemblyInfo(ByVal TL As TraceLogger, ByVal AssName As String, ByVal Ass As Assembly)
         Dim FileVer As FileVersionInfo
         Dim AssblyName As AssemblyName, Vers As Version, VerString, FVer, FName As String
         Dim Location As String = Nothing
@@ -258,7 +399,7 @@ Module VersionCode
     ''' error information, call GetLastError.</returns>
     ''' <remarks></remarks>
     <DllImport("Kernel32.dll", SetLastError:=True, CallingConvention:=CallingConvention.Winapi)> _
-        Public Function IsWow64Process( _
+        Private Function IsWow64Process( _
               ByVal hProcess As System.IntPtr, _
               ByRef wow64Process As Boolean) As <MarshalAs(UnmanagedType.Bool)> Boolean
     End Function

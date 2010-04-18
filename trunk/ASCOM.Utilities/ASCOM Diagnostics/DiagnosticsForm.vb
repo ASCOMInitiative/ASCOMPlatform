@@ -27,7 +27,7 @@ Public Class DiagnosticsForm
     Private Const CSIDL_PROGRAM_FILES_COMMONX86 As Integer = 44 ' 0x002c,
 
     Dim TL As TraceLogger
-    Dim ASCOMXMLAccess As ASCOM.Utilities.RegistryAccess
+    Dim ASCOMRegistryAccess As ASCOM.Utilities.RegistryAccess
     Dim RecursionLevel As Integer
 
     Private LastLogFile As String ' Name of last diagnostics log file
@@ -40,7 +40,7 @@ Public Class DiagnosticsForm
         ByVal fCreate As Boolean) As Boolean
     End Function
 
-    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+    Private Sub DiagnosticsForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         'Initialise form
         lblTitle.Text = lblTitle.Text & " " & Application.ProductVersion
         lblResult.Text = ""
@@ -62,7 +62,6 @@ Public Class DiagnosticsForm
         Application.DoEvents()
     End Sub
 
-
     Private Sub btnCOM_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCOM.Click
         Dim ASCOMPath As String
         Dim PathShell As New System.Text.StringBuilder(260)
@@ -76,6 +75,7 @@ Public Class DiagnosticsForm
             TL.LogMessage("", "")
             LastLogFile = TL.LogFileName
             Try
+                Try : ASCOMRegistryAccess = New ASCOM.Utilities.RegistryAccess : Catch : End Try 'Try and create a registryaccess object
 
                 ScanInstalledPlatform()
 
@@ -96,7 +96,7 @@ Public Class DiagnosticsForm
 
                 ScanRegistry() 'Scan Old ASCOM Registry Profile
 
-                ScanProfileFiles() 'List contents of Profile files
+                ScanProfile55Files() 'List contents of Profile 5.5 XML files
 
                 ScanCOMRegistration() 'Report Com Registration
 
@@ -131,6 +131,9 @@ Public Class DiagnosticsForm
                 TL.Enabled = False
                 TL.Dispose()
                 TL = Nothing
+            Finally
+                Try : ASCOMRegistryAccess.Dispose() : Catch : End Try 'Clean up registryaccess object
+                ASCOMRegistryAccess = Nothing
             End Try
             btnLastLog.Enabled = True
         Catch ex1 As Exception
@@ -167,14 +170,26 @@ Public Class DiagnosticsForm
         Dim Key As RegistryKey
         Try
             TL.LogMessage("ScanRegistry", "Start")
-            If IntPtr.Size = 8 Then '64bit OS so look in Wow64node
-                Key = Registry.LocalMachine.OpenSubKey("Software\Wow6432Node\ASCOM")
+            If OSBits() = Bitness.Bits64 Then
+                'List the 32bit registry
+                Key = ASCOMRegistryAccess.OpenSubKey(Registry.LocalMachine, RegistryAccess.ROOT_KEY_NAME, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+                TL.LogMessage("ScanRegistry", "Profile Root (64bit OS - 32bit Registry)")
+                RecursionLevel = -1
+                RecurseRegistry(Key)
+                TL.BlankLine()
+
+                'List the 64bit registry
+                Key = ASCOMRegistryAccess.OpenSubKey(Registry.LocalMachine, RegistryAccess.ROOT_KEY_NAME, False, RegistryAccess.RegWow64Options.KEY_WOW64_64KEY)
+                TL.LogMessage("ScanRegistry", "Profile Root (64bit OS - 64bit Registry)")
+                RecursionLevel = -1
+                RecurseRegistry(Key)
             Else '32 bit OS
-                Key = Registry.LocalMachine.OpenSubKey("Software\ASCOM")
+                'List the registry (only one view on a 32bit machine)
+                Key = Registry.LocalMachine.OpenSubKey(RegistryAccess.ROOT_KEY_NAME)
+                TL.LogMessage("ScanRegistry", "Profile Root (32bit OS)")
+                RecursionLevel = -1
+                RecurseRegistry(Key)
             End If
-            TL.LogMessage("Registry Profile", "Profile Root")
-            RecursionLevel = -1
-            RecurseRegistry(Key)
             TL.BlankLine()
         Catch ex As Exception
             TL.LogMessageCrLf("ScanRegistry", "Exception: " & ex.ToString)
@@ -293,23 +308,27 @@ Public Class DiagnosticsForm
         End Try
     End Sub
 
-    Sub ScanProfileFiles()
-        Dim BaseDir As String
+    Sub ScanProfile55Files()
+        Dim ProfileStore As AllUsersFileSystemProvider, Files() As String
         Try
-            BaseDir = System.Environment.GetFolderPath(SpecialFolder.CommonApplicationData) & "\ASCOM\Profile"
+            Status("Scanning Profile 5.5 Files")
+            TL.LogMessage("Scanning Profile 5.5", "")
 
-            Status("Scanning Profile Files")
-            TL.LogMessage("Scanning Profile Files", "")
+            ProfileStore = New AllUsersFileSystemProvider
+            Files = Directory.GetFiles(ProfileStore.BasePath) 'Check that directory exists
 
-            RecurseProfileFiles(BaseDir)
+            RecurseProfile55Files(ProfileStore.BasePath)
 
+            TL.BlankLine()
+        Catch ex As DirectoryNotFoundException
+            TL.LogMessage("ScanProfileFiles", "Profile 5.5 filestore not present")
             TL.BlankLine()
         Catch ex As Exception
             TL.LogMessageCrLf("ScanProfileFiles", "Exception: " & ex.ToString)
         End Try
     End Sub
 
-    Sub RecurseProfileFiles(ByVal Folder As String)
+    Sub RecurseProfile55Files(ByVal Folder As String)
         Dim Files(), Directories() As String
 
         Try
@@ -337,7 +356,7 @@ Public Class DiagnosticsForm
             Directories = Directory.GetDirectories(Folder)
             For Each Directory As String In Directories
                 TL.LogMessage("Directory", Directory)
-                RecurseProfileFiles(Directory)
+                RecurseProfile55Files(Directory)
             Next
         Catch ex As Exception
             TL.LogMessageCrLf("RecurseProfileFiles 2", "Exception: " & ex.ToString)
@@ -779,7 +798,6 @@ Public Class DiagnosticsForm
 
         Try
             ASCOMProfile = New Utilities.Profile
-            ASCOMXMLAccess = New ASCOM.Utilities.RegistryAccess
             RecursionLevel = -1 'Initialise recursion level so the first increment makes this zero
 
             Status("Scanning Profile")
@@ -806,17 +824,14 @@ Public Class DiagnosticsForm
 
         TL.BlankLine()
 
-        Try : ASCOMXMLAccess.Dispose() : Catch : End Try 'Clean up
-        ASCOMXMLAccess = Nothing
-
     End Sub
 
     Sub RecurseProfile(ByVal ASCOMKey As String)
         Dim SubKeys, Values As New Generic.SortedList(Of String, String)
         Dim NextKey, DisplayName, DisplayValue As String
         Try
-            TL.LogMessage("RecurseProfile", ASCOMKey)
-            Values = ASCOMXMLAccess.EnumProfile(ASCOMKey)
+            TL.LogMessage("RecurseProfile", Space(3 * (If(RecursionLevel < 0, 0, RecursionLevel))) & ASCOMKey)
+            Values = ASCOMRegistryAccess.EnumProfile(ASCOMKey)
             For Each kvp As KeyValuePair(Of String, String) In Values
                 If String.IsNullOrEmpty(kvp.Key) Then
                     DisplayName = "*** Default Value ***"
@@ -828,7 +843,7 @@ Public Class DiagnosticsForm
                 Else
                     DisplayValue = kvp.Value
                 End If
-                TL.LogMessage("Profile", Space(3 * (RecursionLevel + 1)) & DisplayName & " = " & DisplayValue)
+                TL.LogMessage("Profile Value", Space(3 * (RecursionLevel + 1)) & DisplayName & " = " & DisplayValue)
             Next
         Catch ex As Exception
             TL.LogMessageCrLf("Profile 1", "Exception: " & ex.ToString)
@@ -836,7 +851,7 @@ Public Class DiagnosticsForm
 
         Try
             RecursionLevel += 1 'Increment recursion level
-            SubKeys = ASCOMXMLAccess.EnumKeys(ASCOMKey)
+            SubKeys = ASCOMRegistryAccess.EnumKeys(ASCOMKey)
 
             For Each kvp As KeyValuePair(Of String, String) In SubKeys
                 If ASCOMKey = "\" Then
