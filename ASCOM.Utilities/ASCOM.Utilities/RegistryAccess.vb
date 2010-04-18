@@ -13,7 +13,7 @@ Imports ASCOM.Utilities.Exceptions
 Friend Class RegistryAccess
     Implements IAccess, IDisposable
 
-    Private Const ROOT_KEY_NAME As String = "SOFTWARE\ASCOM" 'Location of ASCOM profile in HKLM registry hive
+    Friend Const ROOT_KEY_NAME As String = "SOFTWARE\ASCOM" 'Location of ASCOM profile in HKLM registry hive
     Private Const BACKUP_SUBKEY As String = "Platform5Original" 'Location that the original Plartform 5 Profile will be copied to before migrating the 5.5 Profile back to the registry
 
     Private ProfileKey As RegistryKey
@@ -579,7 +579,7 @@ Friend Class RegistryAccess
     'OpenSubKey should be replaced with Microsoft.Win32.RegistryKey.OpenBaseKey method
 
     '<Obsolete("Replace with Microsoft.Win32.RegistryKey.OpenBaseKey method in Framework 4", False)> _
-    Private Function OpenSubKey(ByVal ParentKey As Microsoft.Win32.RegistryKey, ByVal SubKeyName As String, ByVal Writeable As Boolean, ByVal Options As RegWow64Options) As Microsoft.Win32.RegistryKey
+    Friend Function OpenSubKey(ByVal ParentKey As Microsoft.Win32.RegistryKey, ByVal SubKeyName As String, ByVal Writeable As Boolean, ByVal Options As RegWow64Options) As Microsoft.Win32.RegistryKey
         Dim SubKeyHandle As System.Int32
         Dim Result As System.Int32
 
@@ -636,7 +636,7 @@ Friend Class RegistryAccess
         Return Handle.DangerousGetHandle
     End Function
 
-    Private Enum RegWow64Options As System.Int32
+    Friend Enum RegWow64Options As System.Int32
         ' Basis from: http://www.pinvoke.net/default.aspx/advapi32/RegOpenKeyEx.html
         None = 0
         KEY_WOW64_64KEY = &H100
