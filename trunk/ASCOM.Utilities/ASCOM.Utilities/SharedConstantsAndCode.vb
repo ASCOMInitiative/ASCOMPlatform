@@ -4,8 +4,6 @@ Imports Microsoft.Win32
 Imports System.Diagnostics
 
 Module SharedConstants
-    Friend Const PLATFORM_VERSION As String = "6.0" 'This is the master platform version and is set during profile migration
-
     ' Trace settings values, these are used to persist trace values on a per user basis
     Friend Const TRACE_TRANSFORM As String = "Trace Transform", TRACE_TRANSFORM_DEFAULT As Boolean = False
     Friend Const REGISTRY_UTILITIES_FOLDER As String = "Software\ASCOM\Utilities"

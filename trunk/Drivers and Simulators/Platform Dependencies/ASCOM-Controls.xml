@@ -4,6 +4,173 @@
         <name>ASCOM.Controls</name>
     </assembly>
     <members>
+        <member name="T:ASCOM.Controls.CadencePattern">
+            <summary>
+            Cadence patterns for blinking LEDs.
+            Cadences are based on 32-bit unsigned integers, such that the ordinal value
+            of each item represents a bit mask that can be used directly in an update routine.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.CadencePattern.SteadyOff">
+            <summary>
+            Permanently off, 
+            appropriate for indication of a non-critical inactive state.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.CadencePattern.SteadyOn">
+            <summary>
+            Permanently on,
+            appropriate for indication of a non-critical active state.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.CadencePattern.BlinkFast">
+            <summary>
+            Fast blink,
+            appropriate for indicating a state of hightened but non-critical alert.
+            Usage example: during movement of robotic equipment.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.CadencePattern.BlinkSlow">
+            <summary>
+            Slow blink,
+            appropriate for non-critical persistent conditions.
+            Usage example: image exposure in progress.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.CadencePattern.BlinkAlarm">
+            <summary>
+            Very fast blink,
+            appropriate for drawing attention to urgent conditions that require operator intervention.
+            Usage example: Rain detected
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.CadencePattern.Strobe">
+            <summary>
+            Strobe is mostly off but with an occasional short blip on,
+            appropriate for indicating non-critical ongoing steady idle state.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.CadencePattern.Wink">
+            <summary>
+            Wink (mostly on with occasional short wink-off),
+            appropriate for indicating non-critical ongoing steady active state.
+            </summary>
+        </member>
+        <member name="T:ASCOM.Controls.Chooser">
+            <summary>
+            Summary description for Chooser.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.Chooser.cstrPromptLabel">
+            <summary>
+            Format string used to construct the on-screen prompt,
+            which reflects the currently selected device class.
+            </summary>
+        </member>
+        <member name="M:ASCOM.Controls.Chooser.#ctor">
+            <summary>
+            Default public constructor; create a new chooser object and populate the device selection combo box.
+            </summary>
+        </member>
+        <member name="M:ASCOM.Controls.Chooser.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:ASCOM.Controls.Chooser.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.Chooser.m_eDriverClass">
+            <summary>
+            The class of device being chosen. Defaults to "Telescope".
+            </summary>
+        </member>
+        <member name="M:ASCOM.Controls.Chooser.pictureASCOMLogo_Click(System.Object,System.EventArgs)">
+            <summary>
+            Handles a click event on the ASCOM logo image.
+            Starts a web browser and navigates to <see cref="P:ASCOM.Controls.Chooser.URL"/>.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ASCOM.Controls.Chooser.PopulateDeviceList">
+            <summary>
+            Populates the device list by enumerating the entries for devices in the given DriverClass.
+            The DriverClass comes from the DeviceClass property.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.Chooser.m_strDeviceID">
+            <summary>
+            The value of the most-recently-used DeviceID. Set by the user and used to set the default selection.
+            </summary>
+        </member>
+        <member name="M:ASCOM.Controls.Chooser.comboSelectDriver_SelectionChangeCommitted(System.Object,System.EventArgs)">
+            <summary>
+            Handles the SelectionChangeCommitted event from the device selector drop-down.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ASCOM.Controls.Chooser.OnSelectionChanged">
+            <summary>
+            Raise the <see cref="E:ASCOM.Controls.Chooser.SelectionChanged"/> event.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.Chooser.m_MRU">
+            <summary>
+            The most-recently-used devices
+            </summary>
+        </member>
+        <member name="P:ASCOM.Controls.Chooser.DeviceClass">
+            <summary>
+            Get or set the Driver Class (or device type) being chosen, as a string.
+            When this property is changed, the ComboBox is refreshed to reflect the new device type.
+            The selection list is positioned at the most recently used DeviceID, if possible.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Controls.Chooser.URL">
+            <summary>
+            Returns the full URL of the ASCOM-Standards web site, as a string.
+            </summary>
+            <value>The full URL of the ASCOM-Standards web site, as a string.</value>
+        </member>
+        <member name="P:ASCOM.Controls.Chooser.RegistryRoot">
+            <summary>
+            Gets the root key in the registry beneath which ASCOM device profiles are stored,
+            as a RegistryKey object.
+            </summary>
+        </member>
+        <member name="E:ASCOM.Controls.Chooser.SelectionChanged">
+            <summary>
+            This event occurs when the device selection changes.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Controls.Chooser.DeviceID">
+            <summary>
+            Get or Set the DeviceID.
+            Set this property prior to suggest a default selection. The chooser will then attempt
+            to match one of the installed drivers and will preselect it in the combo box if a match is found.
+            If the supplied DeviceID does not match any installed device, it is ignored.
+            Read this property to retrieve the user's device selection. A null reference is returned if
+            there has been no selection, or if there are no installed drivers.
+            This property is reset when the DeviceClass property is set.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Controls.Chooser.SelectedDevice">
+            <summary>
+            Gets the currently selected ASCOM device as a <see cref="T:ASCOM.Controls.DeviceDescriptor"/>.
+            If there is no currently selected device, or if the selected item is not a valid ASCOM
+            device, then the value <c>null</c> is returned.
+            </summary>
+        </member>
+        <member name="P:ASCOM.Controls.Properties.Settings.ASCOMStandardsURL">
+            <summary>
+            The URL of the ASCOM Standards web site.
+            </summary>
+        </member>
         <member name="T:ASCOM.Controls.ChooserMRU">
             <summary>
             Most Recently Used list for the Chooser.
@@ -224,26 +391,37 @@
             </summary>
             <param name="ledColour">The desired LED colour.</param>
         </member>
-        <member name="P:ASCOM.Controls.Properties.Settings.ASCOMStandardsURL">
+        <member name="T:ASCOM.Controls.Anunciator">
             <summary>
-            The URL of the ASCOM Standards web site.
+            Annunciator class
             </summary>
         </member>
-        <member name="F:ASCOM.Controls.Anunciator.components">
-            <summary> 
-            Required designer variable.
+        <member name="M:ASCOM.Controls.Anunciator.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.Controls.Anunciator"/> class.
             </summary>
         </member>
-        <member name="M:ASCOM.Controls.Anunciator.Dispose(System.Boolean)">
-            <summary> 
-            Clean up any resources being used.
+        <member name="M:ASCOM.Controls.Anunciator.Anunciator_ParentChanged(System.Object,System.EventArgs)">
+            <summary>
+            Handles the ParentChanged event of the Anunciator control.
+            Changes the control's background colour to blend in with the parent control.
             </summary>
-            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
         </member>
-        <member name="M:ASCOM.Controls.Anunciator.InitializeComponent">
-            <summary> 
-            Required method for Designer support - do not modify 
-            the contents of this method with the code editor.
+        <member name="M:ASCOM.Controls.Anunciator.tmrCadence_Tick(System.Object,System.EventArgs)">
+            <summary>
+            Handles the Tick event of the tmrCadence control.
+            Computes the new display status for each anunciator control based on its <see cref="P:ASCOM.Controls.Anunciator.Cadence"/>
+            property and requests the anunciator update itself with the new value.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:ASCOM.Controls.Anunciator.CadenceUpdate(System.Boolean)">
+            <summary>
+            Updates the anunciator's display, if it has changed since the last update.
+            this is performed in a thread-safe manner.
             </summary>
         </member>
         <member name="F:ASCOM.Controls.Anunciator.tmrCadence">
@@ -251,10 +429,25 @@
             A timer that triggers updates to anunciators to simulate flashing.
             </summary>
         </member>
+        <member name="F:ASCOM.Controls.Anunciator.cadenceEventHandler">
+            <summary>
+            The delegate that will be used to handle cadence timer events.
+            </summary>
+        </member>
         <member name="F:ASCOM.Controls.Anunciator.UpdateList">
             <summary>
             A list of all the anunciator controls that have been created which need updating
             when the timer ticks.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.Anunciator.cadenceBitPosition">
+            <summary>
+            Indicates the current bit position within the cadence register.
+            </summary>
+        </member>
+        <member name="F:ASCOM.Controls.Anunciator.Active">
+            <summary>
+            A flag that records the anunciator's last known state.
             </summary>
         </member>
         <member name="M:ASCOM.Controls.Anunciator.StopTimerUpdates">
@@ -275,7 +468,8 @@
         </member>
         <member name="P:ASCOM.Controls.Anunciator.ForeColor">
             <summary>
-            Gets or sets the foreground color of the control.
+            Gets or sets the foreground color of the control. There is little point in setting this value
+            directly as it will normally be constantly overwritten at runtime.
             </summary>
             <value></value>
             <returns>
@@ -284,6 +478,24 @@
             <PermissionSet>
             	<IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/>
             </PermissionSet>
+        </member>
+        <member name="P:ASCOM.Controls.Anunciator.InactiveColor">
+            <summary>
+            Gets or sets the color of the anunciator text when inactive.
+            </summary>
+            <value></value>
+            <returns>
+            The foreground <see cref="T:System.Drawing.Color"/> of the control. The default is the value of the <see cref="P:System.Windows.Forms.Control.DefaultForeColor"/> property.
+            </returns>
+            <PermissionSet>
+            	<IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/>
+            </PermissionSet>
+        </member>
+        <member name="P:ASCOM.Controls.Anunciator.ActiveColor">
+            <summary>
+            Gets or sets the color of the anunciator text when active.
+            </summary>
+            <value>The color of the anunciator text when active.</value>
         </member>
         <member name="P:ASCOM.Controls.Anunciator.BackColor">
             <summary>
@@ -303,149 +515,21 @@
             </summary>
             <value>The cadence pattern.</value>
         </member>
-        <member name="T:ASCOM.Controls.Chooser">
+        <member name="T:ASCOM.Controls.Anunciator.CadenceUpdateDelegate">
             <summary>
-            Summary description for Chooser.
+            Defines the signature for the CadenceUpdateDelegate, used in making thread-safe control updates.
             </summary>
         </member>
-        <member name="F:ASCOM.Controls.Chooser.cstrPromptLabel">
+        <member name="T:ASCOM.Controls.AnunciatorPanel">
             <summary>
-            Format string used to construct the on-screen prompt,
-            which reflects the currently selected device class.
+            A panel for grouping and arranging anunciators.
+            This control inherits most of its behaviour from the <see cref="T:System.Windows.Forms.FlowLayoutPanel"/>
+            base class, but provides some default colours.
             </summary>
         </member>
-        <member name="M:ASCOM.Controls.Chooser.#ctor">
+        <member name="M:ASCOM.Controls.AnunciatorPanel.#ctor">
             <summary>
-            Default public constructor; create a new chooser object and populate the device selection combo box.
-            </summary>
-        </member>
-        <member name="M:ASCOM.Controls.Chooser.Dispose(System.Boolean)">
-            <summary> 
-            Clean up any resources being used.
-            </summary>
-        </member>
-        <member name="M:ASCOM.Controls.Chooser.InitializeComponent">
-            <summary> 
-            Required method for Designer support - do not modify 
-            the contents of this method with the code editor.
-            </summary>
-        </member>
-        <member name="F:ASCOM.Controls.Chooser.m_eDriverClass">
-            <summary>
-            The class of device being chosen. Defaults to "Telescope".
-            </summary>
-        </member>
-        <member name="M:ASCOM.Controls.Chooser.pictureASCOMLogo_Click(System.Object,System.EventArgs)">
-            <summary>
-            Handles a click event on the ASCOM logo image.
-            Starts a web browser and navigates to <see cref="P:ASCOM.Controls.Chooser.URL"/>.
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:ASCOM.Controls.Chooser.PopulateDeviceList">
-            <summary>
-            Populates the device list by enumerating the entries for devices in the given DriverClass.
-            The DriverClass comes from the DeviceClass property.
-            </summary>
-        </member>
-        <member name="F:ASCOM.Controls.Chooser.m_strDeviceID">
-            <summary>
-            The value of the most-recently-used DeviceID. Set by the user and used to set the default selection.
-            </summary>
-        </member>
-        <member name="M:ASCOM.Controls.Chooser.comboSelectDriver_SelectionChangeCommitted(System.Object,System.EventArgs)">
-            <summary>
-            Handles the SelectionChangeCommitted event from the device selector drop-down.
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:ASCOM.Controls.Chooser.OnSelectionChanged">
-            <summary>
-            Raise the <see cref="E:ASCOM.Controls.Chooser.SelectionChanged"/> event.
-            </summary>
-        </member>
-        <member name="F:ASCOM.Controls.Chooser.m_MRU">
-            <summary>
-            The most-recently-used devices
-            </summary>
-        </member>
-        <member name="P:ASCOM.Controls.Chooser.DeviceClass">
-            <summary>
-            Get or set the Driver Class (or device type) being chosen, as a string.
-            When this property is changed, the ComboBox is refreshed to reflect the new device type.
-            The selection list is positioned at the most recently used DeviceID, if possible.
-            </summary>
-        </member>
-        <member name="P:ASCOM.Controls.Chooser.URL">
-            <summary>
-            Returns the full URL of the ASCOM-Standards web site, as a string.
-            </summary>
-            <value>The full URL of the ASCOM-Standards web site, as a string.</value>
-        </member>
-        <member name="P:ASCOM.Controls.Chooser.RegistryRoot">
-            <summary>
-            Gets the root key in the registry beneath which ASCOM device profiles are stored,
-            as a RegistryKey object.
-            </summary>
-        </member>
-        <member name="E:ASCOM.Controls.Chooser.SelectionChanged">
-            <summary>
-            This event occurs when the device selection changes.
-            </summary>
-        </member>
-        <member name="P:ASCOM.Controls.Chooser.DeviceID">
-            <summary>
-            Get or Set the DeviceID.
-            Set this property prior to suggest a default selection. The chooser will then attempt
-            to match one of the installed drivers and will preselect it in the combo box if a match is found.
-            If the supplied DeviceID does not match any installed device, it is ignored.
-            Read this property to retrieve the user's device selection. A null reference is returned if
-            there has been no selection, or if there are no installed drivers.
-            This property is reset when the DeviceClass property is set.
-            </summary>
-        </member>
-        <member name="P:ASCOM.Controls.Chooser.SelectedDevice">
-            <summary>
-            Gets the currently selected ASCOM device as a <see cref="T:ASCOM.Controls.DeviceDescriptor"/>.
-            If there is no currently selected device, or if the selected item is not a valid ASCOM
-            device, then the value <c>null</c> is returned.
-            </summary>
-        </member>
-        <member name="T:ASCOM.Controls.CadencePattern">
-            <summary>
-            Cadence patterns for blinking LEDs.
-            </summary>
-        </member>
-        <member name="F:ASCOM.Controls.CadencePattern.SteadyOn">
-            <summary>
-            LED permanently on (when enabled). Appropriate for indication of simple on/off status.
-            </summary>
-        </member>
-        <member name="F:ASCOM.Controls.CadencePattern.SteadyOff">
-            <summary>
-            LED permanently off, even when enabled. Appropriate for indication of simple on/off status.
-            </summary>
-        </member>
-        <member name="F:ASCOM.Controls.CadencePattern.BlinkFast">
-            <summary>
-            Fast blink, appropriate for non-critical ongoing change of state (eg Slewing).
-            </summary>
-        </member>
-        <member name="F:ASCOM.Controls.CadencePattern.BlinkSlow">
-            <summary>
-            Slow blink, appropriate for non-critical persistent conditions (e.g. image exposure in progress).
-            </summary>
-        </member>
-        <member name="F:ASCOM.Controls.CadencePattern.BlinkAlarm">
-            <summary>
-            Very fast blink, appropriate for drawing attention to urgent conditions that require operator intervention.
-            </summary>
-        </member>
-        <member name="F:ASCOM.Controls.CadencePattern.Wink">
-            <summary>
-            Wink (mostly on with occasional short wink-off), appropriate for indicating non-critical ongoing steady state.
+            Initializes a new instance of the <see cref="T:ASCOM.Controls.AnunciatorPanel"/> class.
             </summary>
         </member>
         <member name="T:ASCOM.Controls.DeviceDescriptor">
@@ -465,6 +549,14 @@
             <summary>
             Initializes a new instance of the <see cref="T:ASCOM.Controls.DeviceDescriptor"/> class
             from a generic <see cref="T:System.Collections.Generic.KeyValuePair{string,string}"/>.
+            These values are typically returned from methods in <see cref="N:ASCOM.Utilities"/>.
+            </summary>
+            <param name="deviceProfileKey">The device profile key.</param>
+        </member>
+        <member name="M:ASCOM.Controls.DeviceDescriptor.#ctor(ASCOM.Utilities.KeyValuePair)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASCOM.Controls.DeviceDescriptor"/> class
+            from a generic <see cref="T:ASCOM.Utilities.KeyValuePair"/>
             These values are typically returned from methods in <see cref="N:ASCOM.Utilities"/>.
             </summary>
             <param name="deviceProfileKey">The device profile key.</param>
