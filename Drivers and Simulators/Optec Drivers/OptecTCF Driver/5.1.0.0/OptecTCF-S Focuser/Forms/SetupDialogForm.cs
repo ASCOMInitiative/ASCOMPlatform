@@ -48,7 +48,7 @@ namespace ASCOM.OptecTCF_S
             Application.EnableVisualStyles();
             helpFilePath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFiles);
             if (helpFilePath.Contains("(x86)")) helpFilePath = helpFilePath.Substring(0, helpFilePath.Length - 6);
-            helpFilePath += "\\Optec\\TCF-S\\Help Files\\TCFSHelp5100.chm";
+            helpFilePath += "\\Optec\\TCF-S\\Help Files\\TCFSHelp.chm";
             helpProvider1.HelpNamespace = helpFilePath;
             helpProvider1.SetShowHelp(this, true);
            

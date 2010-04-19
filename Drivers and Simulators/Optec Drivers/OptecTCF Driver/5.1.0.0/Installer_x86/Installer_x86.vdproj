@@ -15,6 +15,12 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_00801027EDEA769888C4ABD1AAD67D30"
+        "OwnerKey" = "8:_C04D2881563B4E57957BF98E482155D9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_12F34995FD1188502C116A04CDA3954F"
         "OwnerKey" = "8:_CD58851FFC742EFCD75216D61D276825"
         "MsmSig" = "8:_UNDEFINED"
@@ -45,7 +51,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_3C75D8A406A44906914D636370846D79"
+        "MsmKey" = "8:_373BC286ED294052ABC988C35C5F1AC9"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -83,12 +89,6 @@
         {
         "MsmKey" = "8:_C04D2881563B4E57957BF98E482155D9"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C3DF140FEC523D3AC02E767915883581"
-        "OwnerKey" = "8:_C04D2881563B4E57957BF98E482155D9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -373,6 +373,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_00801027EDEA769888C4ABD1AAD67D30"
+            {
+            "SourcePath" = "8:ASCOM.OptecTCF_S.Focuser.tlb"
+            "TargetName" = "8:ASCOM.OptecTCF_S.Focuser.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_457D4A4D1CC34C89B63B282A63B7B88C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_12F34995FD1188502C116A04CDA3954F"
             {
             "SourcePath" = "8:AscomMasterInterfaces.tlb"
@@ -455,10 +475,10 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3C75D8A406A44906914D636370846D79"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_373BC286ED294052ABC988C35C5F1AC9"
             {
-            "SourcePath" = "8:..\\OptecTCF-S Focuser\\bin\\Release\\TCFSHelp5100.chm"
-            "TargetName" = "8:TCFSHelp5100.chm"
+            "SourcePath" = "8:..\\OptecTCF-S Focuser\\bin\\Release\\TCFSHelp.chm"
+            "TargetName" = "8:TCFSHelp.chm"
             "Tag" = "8:"
             "Folder" = "8:_0BC184145A704458BBAC20384CB75C86"
             "Condition" = "8:"
@@ -532,26 +552,6 @@
             "TargetName" = "8:ASCOM.Utilities.tlb"
             "Tag" = "8:"
             "Folder" = "8:_BFB3F192ECB04326844F9EAEF8DC7AD5"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C3DF140FEC523D3AC02E767915883581"
-            {
-            "SourcePath" = "8:ASCOM.OptecTCF_S.Focuser.tlb"
-            "TargetName" = "8:ASCOM.OptecTCF_S.Focuser.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_457D4A4D1CC34C89B63B282A63B7B88C"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -889,14 +889,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Optec TCF-S ASCOM Driver (32 Bit)"
-        "ProductCode" = "8:{8EE15B8D-DAAF-4804-BB08-84F12DA69405}"
-        "PackageCode" = "8:{5FCB42A7-85F0-43DD-9829-E0585C0D1A7F}"
-        "UpgradeCode" = "8:{7C6C565F-81D4-4220-81E9-F42C1F9FD836}"
+        "ProductCode" = "8:{00BA9009-1D51-4E7B-ABB1-2EE65144FC69}"
+        "PackageCode" = "8:{AEAC14C0-1127-4501-BA04-11B1337363C6}"
+        "UpgradeCode" = "8:{D13BC22A-7584-428E-BB86-78E43E49252A}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:5.1.0"
+        "ProductVersion" = "8:5.1.1"
         "Manufacturer" = "8:Optec Inc."
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://www.optecinc.com"

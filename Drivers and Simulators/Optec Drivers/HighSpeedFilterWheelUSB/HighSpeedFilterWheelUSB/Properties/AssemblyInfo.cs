@@ -2,25 +2,17 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-// Revision History:
-// Version 5.1.0.1          -Increased timout delay for move command.
-//                          -Added Lock statements around serial communication code
-//                          -Added exception to be thrown if temp comp is set true while
-//                           the temp probe is disabled. (To achieve conformance)
-//                          -
-//                          
-// Version 5.1.0.0          Initial Release Version
-
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly: AssemblyTitle("OptecTCF-S ASCOM Driver")]
-[assembly: AssemblyDescription("ASCOM Driver for Optec TCF-S Focuser")]
+// TODO - Add your authorship information here
+[assembly: AssemblyTitle("HighSpeedFilterWheelUSB FilterWheel Driver")]
+[assembly: AssemblyDescription("ASCOM FilterWheel Driver for HighSpeedFilterWheelUSB")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Optec Inc.")]
-[assembly: AssemblyProduct("Optec TCF-S Focuser")]
-[assembly: AssemblyCopyright("Copyright © Optec Inc. 2010 ")]
+[assembly: AssemblyCompany("ASCOM Initiative")]
+[assembly: AssemblyProduct("")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -30,7 +22,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(true)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("54fe2110-a152-4234-8123-66b6c8e2b922")]
+[assembly: Guid("45edcd41-2b41-4e38-8dd1-411d58555285")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -42,5 +34,6 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 //
-[assembly: AssemblyVersion("5.1.1.0")]
-[assembly: AssemblyFileVersion("5.1.1.0")]
+// TODO - Set your driver's version here
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

@@ -217,7 +217,7 @@ namespace ASCOM.OptecTCF_S
 
                 // Prepare for Move
                 double diff = Math.Abs(_CurrentPosition - NewPos);
-                double t= ((37 * 1000)/7000) * diff * 1.5;
+                double t= ((37 * 1000)/7000) * diff * 4;
                 int TimeOut = Convert.ToInt32(t);
                 if (TimeOut < 2000) TimeOut = 2000;
                 string cmd = "";

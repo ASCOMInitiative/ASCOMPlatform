@@ -224,11 +224,11 @@
   <ItemGroup>
     <Content Include="Resources\ASCOM.png" />
     <Content Include="ReadMe.htm" />
-    <None Include="Resources\TCF.ico">
-    </None>
-    <None Include="I:\Software Development\HelpNDoc\TCF-S\ASCOM\5100\TCFSHelp5100.chm">
-      <Link>TCFSHelp5100.chm</Link>
+    <None Include="I:\Software Development\HelpNDoc\TCF-S\ASCOM\.NET Version\TCFSHelp.chm">
+      <Link>TCFSHelp.chm</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TCF.ico">
     </None>
     <None Include="OptecInc.snk" />
     <None Include="Properties\Settings.settings">
