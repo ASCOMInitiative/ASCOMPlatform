@@ -226,6 +226,10 @@ namespace ASCOM.OptecTCF_S
             {
                 try
                 {
+                    if (!DeviceSettings.TempProbePresent)
+                    {
+                        throw new ASCOM.NotImplementedException("The temperature probe is disabled");
+                    }
                     if (value)
                     {
                         if (OptecFocuser.ConnectionState == OptecFocuser.ConnectionStates.TempCompMode)

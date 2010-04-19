@@ -5,11 +5,12 @@ using System.Diagnostics;
 
 namespace ASCOM.OptecTCF_S
 {
+
     partial class OptecFocuser
     {
         // This part of the class handles the serial communication between the device and PC
         public static SerialPort mySerialPort;
-
+        
         private static void PreparePort(string CmdToSend, int Timeout, int Attempts)
         {
             // Verify the port is open
@@ -35,143 +36,149 @@ namespace ASCOM.OptecTCF_S
 
         private static string SendCommandGetResponse(string CmdToSend, string ExpectedResponse, int Timeout, int Attempts)
         {
-            //Prepare the port and verify correct paramaters
-            try
+            lock (LockObject)
             {
-                Debug.WriteLine("Entered SendCommandGetResponse");
-                PreparePort(CmdToSend, Timeout, Attempts);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-
-            string Received = "";
-
-
-            bool success = false;
-
-
-            for (int i = 0; i < Attempts; i++)
-            {
-                // Send the command
+                //Prepare the port and verify correct paramaters
                 try
                 {
-                    mySerialPort.Write(CmdToSend);
+                    Debug.WriteLine("Entered SendCommandGetResponse");
+                    PreparePort(CmdToSend, Timeout, Attempts);
                 }
                 catch (Exception ex)
-                {
-                    throw new ASCOM.DriverException("Unexpected Problem Sending Data", ex);
-                }
-
-                // Read the Response
-                try
-                {
-                    Debug.WriteLine("Read Attempt: " + i.ToString());
-                    try
-                    {
-                        Received = mySerialPort.ReadLine();
-                        if (!Received.Contains(ExpectedResponse))
-                        {
-                            if (Received.Contains("ER=1"))
-                            {
-                                throw new ER1_DeviceException("ER=1");
-                            }
-                            else
-                            {
-                                throw new TimeoutException();
-                            }
-                        }
-                        else
-                        {
-                            success = true;
-                            break;
-                        }
-                    }
-                    catch (TimeoutException) {/*Do nothing here*/ }
-                    catch (ER1_DeviceException)
-                    {
-                        throw new ER1_DeviceException("ER=1");
-                    }
-                }
-                catch (ER1_DeviceException ex)
                 {
                     throw ex;
                 }
-                catch (Exception ex)
+
+
+                string Received = "";
+
+
+                bool success = false;
+
+
+                for (int i = 0; i < Attempts; i++)
                 {
-                    // An unknown problem occured
-                    throw new ASCOM.DriverException("An Unknown Problem Occured While Waiting For Reponse", ex);
+                    // Send the command
+                    try
+                    {
+                        mySerialPort.Write(CmdToSend);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ASCOM.DriverException("Unexpected Problem Sending Data", ex);
+                    }
+
+                    // Read the Response
+                    try
+                    {
+                        Debug.WriteLine("Read Attempt: " + i.ToString());
+                        try
+                        {
+                            Received = mySerialPort.ReadLine();
+                            if (!Received.Contains(ExpectedResponse))
+                            {
+                                if (Received.Contains("ER=1"))
+                                {
+                                    throw new ER1_DeviceException("ER=1");
+                                }
+                                else
+                                {
+                                    throw new TimeoutException();
+                                }
+                            }
+                            else
+                            {
+                                success = true;
+                                break;
+                            }
+                        }
+                        catch (TimeoutException) {/*Do nothing here*/ }
+                        catch (ER1_DeviceException)
+                        {
+                            throw new ER1_DeviceException("ER=1");
+                        }
+                    }
+                    catch (ER1_DeviceException ex)
+                    {
+                        throw ex;
+                    }
+                    catch (Exception ex)
+                    {
+                        // An unknown problem occured
+                        throw new ASCOM.DriverException("An Unknown Problem Occured While Waiting For Reponse", ex);
+                    }
                 }
+                if (!success)
+                {
+                    throw new TimeoutException("Completed " + Attempts + " attempts without success in 'SendCommandGetResponse'");
+                }
+                else return Received; 
             }
-            if (!success)
-            {
-                throw new TimeoutException("Completed " + Attempts + " attempts without success in 'SendCommandGetResponse'");
-            }
-            else return Received;
         }
 
         private static string SendCommandGetResponse(string CmdToSend, int Timeout, int Attempts)
         {
 
-            //Prepare the port and verify correct paramaters
-            try
+            lock (LockObject)
             {
-                Debug.WriteLine("Entered SendCommandGetResponse");
-                PreparePort(CmdToSend, Timeout, Attempts);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-
-            string Received = "";
-
-
-            bool success = false;
-
-
-            for (int i = 0; i < Attempts; i++)
-            {
-                // Send the command
+                //Prepare the port and verify correct paramaters
                 try
                 {
-                    mySerialPort.Write(CmdToSend);
+                    Debug.WriteLine("Entered SendCommandGetResponse");
+                    PreparePort(CmdToSend, Timeout, Attempts);
                 }
                 catch (Exception ex)
                 {
-                    throw new ASCOM.DriverException("Unexpected Problem Sending Data", ex);
+                    throw ex;
                 }
 
 
-                // Read the Response
-                try
+                string Received = "";
+
+
+                bool success = false;
+
+
+                for (int i = 0; i < Attempts; i++)
                 {
-                    Debug.WriteLine("Read Attempt: " + i.ToString());
+                    // Send the command
                     try
                     {
-                       Received = mySerialPort.ReadLine();
-                       success = true;
-                       break;
+                        mySerialPort.Write(CmdToSend);
                     }
-                    catch (TimeoutException) {/*Do nothing here*/ }
+                    catch (Exception ex)
+                    {
+                        throw new ASCOM.DriverException("Unexpected Problem Sending Data", ex);
+                    }
+
+
+                    // Read the Response
+                    try
+                    {
+                        Debug.WriteLine("Read Attempt: " + i.ToString());
+                        try
+                        {
+                            Received = mySerialPort.ReadLine();
+                            success = true;
+                            break;
+                        }
+                        catch (TimeoutException) {/*Do nothing here*/ }
+                    }
+                    catch (Exception ex)
+                    {
+                        // An unknown problem occured
+                        throw new ASCOM.DriverException("An Unknown Problem Occured While Waiting For Reponse", ex);
+                    }
                 }
-                catch (Exception ex)
+                if (!success)
                 {
-                    // An unknown problem occured
-                    throw new ASCOM.DriverException("An Unknown Problem Occured While Waiting For Reponse", ex);
+                    throw new TimeoutException("Completed " + Attempts + " attempts without success in 'SendCommandGetResponse'");
                 }
+                else return Received;
             }
-            if (!success)
-            {
-                throw new TimeoutException("Completed " + Attempts + " attempts without success in 'SendCommandGetResponse'");
-            }
-            else return Received;
+
+            
         }
-
-
 
     }
 
