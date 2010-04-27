@@ -226,7 +226,7 @@
     <Content Include="ReadMe.htm" />
     <None Include="I:\Software Development\HelpNDoc\TCF-S\ASCOM\.NET Version\TCFSHelp.chm">
       <Link>TCFSHelp.chm</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\TCF.ico">
     </None>
