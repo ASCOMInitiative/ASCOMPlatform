@@ -3,11 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // Revision History:
-// Version 5.1.0.1          -Increased timout delay for move command.
-//                          -Added Lock statements around serial communication code
-//                          -Added exception to be thrown if temp comp is set true while
-//                           the temp probe is disabled. (To achieve conformance)
-//                          -
+
 //                          
 // Version 5.1.0.0          Initial Release Version
 
@@ -42,5 +38,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 //
-[assembly: AssemblyVersion("5.1.1.0")]
-[assembly: AssemblyFileVersion("5.1.1.0")]
+[assembly: AssemblyVersion("5.1.0.0")]
+[assembly: AssemblyFileVersion("5.1.0.0")]
