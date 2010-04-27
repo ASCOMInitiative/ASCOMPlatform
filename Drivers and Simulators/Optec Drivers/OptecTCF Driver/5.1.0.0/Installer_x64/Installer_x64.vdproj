@@ -15,12 +15,6 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_0F04FC19CEAB9FF18366E1BC92C02FC1"
-        "OwnerKey" = "8:_523DAC0C6D9F4AED87E851B958DF490C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_19C8203E72734AC2BBBFF1A0DE82F2C2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -107,6 +101,12 @@
         {
         "MsmKey" = "8:_A2BF1EFD54924C2946A35F43110B06C4"
         "OwnerKey" = "8:_19C8203E72734AC2BBBFF1A0DE82F2C2"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_BB891BC4C8CEAF001DD82296AA31BD34"
+        "OwnerKey" = "8:_523DAC0C6D9F4AED87E851B958DF490C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -373,26 +373,6 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0F04FC19CEAB9FF18366E1BC92C02FC1"
-            {
-            "SourcePath" = "8:ASCOM.OptecTCF_S.Focuser.tlb"
-            "TargetName" = "8:ASCOM.OptecTCF_S.Focuser.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_19ABABE081E74CAF96DD8EE95F2B47CE"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_42BE19284EAFBC1A9751B386F82320B2"
             {
             "AssemblyRegister" = "3:1"
@@ -593,6 +573,26 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BB891BC4C8CEAF001DD82296AA31BD34"
+            {
+            "SourcePath" = "8:ASCOM.OptecTCF_S.Focuser.tlb"
+            "TargetName" = "8:ASCOM.OptecTCF_S.Focuser.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_19ABABE081E74CAF96DD8EE95F2B47CE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
             "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"

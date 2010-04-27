@@ -15,12 +15,6 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_00801027EDEA769888C4ABD1AAD67D30"
-        "OwnerKey" = "8:_C04D2881563B4E57957BF98E482155D9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_12F34995FD1188502C116A04CDA3954F"
         "OwnerKey" = "8:_CD58851FFC742EFCD75216D61D276825"
         "MsmSig" = "8:_UNDEFINED"
@@ -29,6 +23,12 @@
         {
         "MsmKey" = "8:_18369DC377963AA508D6FF4D87D622E1"
         "OwnerKey" = "8:_8CDC4E50589F460F985F8F2681C7FB55"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_27E525EAFDCA9AABC90C1A157D976BA6"
+        "OwnerKey" = "8:_C04D2881563B4E57957BF98E482155D9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -373,26 +373,6 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_00801027EDEA769888C4ABD1AAD67D30"
-            {
-            "SourcePath" = "8:ASCOM.OptecTCF_S.Focuser.tlb"
-            "TargetName" = "8:ASCOM.OptecTCF_S.Focuser.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_457D4A4D1CC34C89B63B282A63B7B88C"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_12F34995FD1188502C116A04CDA3954F"
             {
             "SourcePath" = "8:AscomMasterInterfaces.tlb"
@@ -440,6 +420,26 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_27E525EAFDCA9AABC90C1A157D976BA6"
+            {
+            "SourcePath" = "8:ASCOM.OptecTCF_S.Focuser.tlb"
+            "TargetName" = "8:ASCOM.OptecTCF_S.Focuser.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_457D4A4D1CC34C89B63B282A63B7B88C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
             "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
@@ -889,14 +889,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Optec TCF-S ASCOM Driver (32 Bit)"
-        "ProductCode" = "8:{00BA9009-1D51-4E7B-ABB1-2EE65144FC69}"
-        "PackageCode" = "8:{AEAC14C0-1127-4501-BA04-11B1337363C6}"
+        "ProductCode" = "8:{4FD54080-AB85-437B-B6CB-1F374C5C3CBD}"
+        "PackageCode" = "8:{575F3E60-9CAD-484C-802D-21FD43988208}"
         "UpgradeCode" = "8:{D13BC22A-7584-428E-BB86-78E43E49252A}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:5.1.1"
+        "ProductVersion" = "8:5.1.0"
         "Manufacturer" = "8:Optec Inc."
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://www.optecinc.com"
