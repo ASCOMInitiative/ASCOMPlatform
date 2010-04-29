@@ -4,26 +4,12 @@ Imports System.Xml
 Imports System.IO
 Imports System.Text
 Imports Microsoft.Win32
-Imports System.Collections
+Imports System.Collections.Generic
 Imports ASCOM.Utilities.Interfaces
 Imports ASCOM.Utilities.Exceptions
 
 Friend Class XMLAccess
     Implements IAccess, IDisposable
-
-    Private Const COLLECTION_DEFAULT_VALUE_NAME As String = "***** DefaultValueName *****" 'Name identifier label
-    Private Const COLLECTION_DEFAULT_UNSET_VALUE As String = "===== ***** UnsetValue ***** =====" 'Value identifier label
-    Private Const VALUES_FILENAME As String = "Profile.xml" 'Name of file to contain profile xml information
-    Private Const VALUES_FILENAME_ORIGINAL As String = "ProfileOriginal.xml" 'Name of file to contain original profile xml information
-    Private Const VALUES_FILENAME_NEW As String = "ProfileNew.xml" 'Name of file to contain original profile xml information
-    Private Const PROFILE_NAME As String = "Profile" 'Name of top level XML element
-
-    Private Const DEFAULT_ELEMENT_NAME As String = "DefaultElement" 'Default value label
-    Private Const VALUE_ELEMENT_NAME As String = "Element" 'Profile value element name
-    Private Const NAME_ATTRIBUTE_NAME As String = "Name" 'Profile value name attribute
-    Private Const VALUE_ATTRIBUTE_NAME As String = "Value" 'Profile element value attribute
-
-    Private Const ROOT_KEY_NAME As String = "Software\ASCOM" 'Location of ASCOM profile in HKLM registry hive
 
     Private Const RETRY_MAX As Integer = 1 'Number of persistence failure retrys
     Private Const RETRY_INTERVAL As Integer = 200 'Length between persistence failure retrys in milliseconds
@@ -406,7 +392,7 @@ Friend Class XMLAccess
             TL.LogMessage("MigrateProfile", "Copying Profile from Registry")
             'Get the registry root key depending. Success here depends on us running as 32bit as the Platform 5 registry 
             'is located under HKLM\Software\Wow6432Node!
-            FromKey = Registry.LocalMachine.OpenSubKey(ROOT_KEY_NAME) 'Source to copy from 
+            FromKey = Registry.LocalMachine.OpenSubKey(REGISTRY_ROOT_KEY_NAME) 'Source to copy from 
             If Not FromKey Is Nothing Then 'Got a key
                 TL.LogMessage("MigrateProfile", "FromKey Opened OK: " & FromKey.Name & ", SubKeyCount: " & FromKey.SubKeyCount.ToString & ", ValueCount: " & FromKey.ValueCount.ToString)
                 MigrateKey(FromKey, "") 'Use recursion to copy contents to new tree
@@ -415,7 +401,7 @@ Friend Class XMLAccess
                 'Restore original logging state
                 TL.Enabled = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT) 'Get enabled / disabled state from the user registry
             Else 'Didn't get a key from either location so throw an error
-                Throw New ProfileNotFoundException("Cannot find ASCOM Profile in HKLM\" & ROOT_KEY_NAME & " Is Platform 5 installed?")
+                Throw New ProfileNotFoundException("Cannot find ASCOM Profile in HKLM\" & REGISTRY_ROOT_KEY_NAME & " Is Platform 5 installed?")
             End If
             sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
             TL.Enabled = LogEnabled 'Restore logging state
@@ -424,6 +410,14 @@ Friend Class XMLAccess
             Throw
         End Try
     End Sub
+
+    Friend Function GetProfileXML(ByVal DriverId As String) As ASCOMProfile Implements IAccess.GetProfile
+        Throw New MethodNotImplementedException("XMLAccess:GetProfileXml")
+    End Function
+    Friend Sub SetProfileXML(ByVal DriverId As String, ByVal Profile As ASCOMProfile) Implements IAccess.SetProfile
+        Throw New MethodNotImplementedException("XMLAccess:SetProfileXml")
+    End Sub
+
 #End Region
 
 #Region "Support Functions"

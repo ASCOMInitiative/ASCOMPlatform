@@ -31,6 +31,7 @@ Partial Class ConnectForm
         Me.btnProperties = New System.Windows.Forms.Button
         Me.btnScript = New System.Windows.Forms.Button
         Me.Label1 = New System.Windows.Forms.Label
+        Me.btnGetProfile = New System.Windows.Forms.Button
         Me.SuspendLayout()
         '
         'cmbDeviceType
@@ -60,11 +61,11 @@ Partial Class ConnectForm
         '
         'txtStatus
         '
-        Me.txtStatus.Location = New System.Drawing.Point(12, 122)
+        Me.txtStatus.Location = New System.Drawing.Point(12, 130)
         Me.txtStatus.Multiline = True
         Me.txtStatus.Name = "txtStatus"
         Me.txtStatus.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtStatus.Size = New System.Drawing.Size(770, 253)
+        Me.txtStatus.Size = New System.Drawing.Size(770, 245)
         Me.txtStatus.TabIndex = 3
         '
         'btnConnect
@@ -103,11 +104,21 @@ Partial Class ConnectForm
         Me.Label1.TabIndex = 7
         Me.Label1.Text = "(Script is for telescope only)"
         '
+        'btnGetProfile
+        '
+        Me.btnGetProfile.Location = New System.Drawing.Point(438, 101)
+        Me.btnGetProfile.Name = "btnGetProfile"
+        Me.btnGetProfile.Size = New System.Drawing.Size(75, 23)
+        Me.btnGetProfile.TabIndex = 8
+        Me.btnGetProfile.Text = "GetProfile"
+        Me.btnGetProfile.UseVisualStyleBackColor = True
+        '
         'ConnectForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(794, 442)
+        Me.Controls.Add(Me.btnGetProfile)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.btnScript)
         Me.Controls.Add(Me.btnProperties)
@@ -131,4 +142,5 @@ Partial Class ConnectForm
     Friend WithEvents btnProperties As System.Windows.Forms.Button
     Friend WithEvents btnScript As System.Windows.Forms.Button
     Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents btnGetProfile As System.Windows.Forms.Button
 End Class

@@ -1,22 +1,19 @@
-﻿'Class to read and write profile values in an XML format
+﻿'Class to read and write profile values to the registry
 
-Imports System.Xml
-Imports System.IO
-Imports System.Text
 Imports System.Security.AccessControl
 Imports System.Security.Principal
 Imports Microsoft.Win32
-Imports System.Collections
 Imports ASCOM.Utilities.Interfaces
 Imports ASCOM.Utilities.Exceptions
+Imports System.IO
+Imports System.Xml
+Imports System.Xml.Serialization
+Imports System.Text
 
 Friend Class RegistryAccess
     Implements IAccess, IDisposable
 
-    Friend Const ROOT_KEY_NAME As String = "SOFTWARE\ASCOM" 'Location of ASCOM profile in HKLM registry hive
-    Private Const BACKUP_SUBKEY As String = "Platform5Original" 'Location that the original Plartform 5 Profile will be copied to before migrating the 5.5 Profile back to the registry
-
-    Private ProfileKey As RegistryKey
+    Private ProfileRegKey As RegistryKey
 
     Private ProfileMutex As System.Threading.Mutex
     Private GotMutex As Boolean
@@ -47,15 +44,15 @@ Friend Class RegistryAccess
         ProfileMutex = New System.Threading.Mutex(False, PROFILE_MUTEX_NAME)
 
         Try
-            ProfileKey = OpenSubKey(Registry.LocalMachine, ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_64KEY)
+            ProfileRegKey = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_64KEY)
             PlatformVersion = GetProfile("\", "PlatformVersion")
             'OK, no exception so assume that we are initialised
         Catch ex As System.ComponentModel.Win32Exception 'This occurs when the key does not exist and is OK if we are ignoring checks
             If p_IgnoreChecks Then
-                ProfileKey = Nothing
+                ProfileRegKey = Nothing
             Else
-                TL.LogMessageCrLf("RegistryAccess.New - Profile not found in registry at HKLM\" & ROOT_KEY_NAME, ex.ToString)
-                Throw New ProfilePersistenceException("RegistryAccess.New - Profile not found in registry at HKLM\" & ROOT_KEY_NAME, ex)
+                TL.LogMessageCrLf("RegistryAccess.New - Profile not found in registry at HKLM\" & REGISTRY_ROOT_KEY_NAME, ex.ToString)
+                Throw New ProfilePersistenceException("RegistryAccess.New - Profile not found in registry at HKLM\" & REGISTRY_ROOT_KEY_NAME, ex)
             End If
         Catch ex As Exception
             If p_IgnoreChecks Then ' Ignore all checks
@@ -79,8 +76,8 @@ Friend Class RegistryAccess
             Try : swSupport = Nothing : Catch : End Try
             Try : ProfileMutex.Close() : Catch : End Try
             Try : ProfileMutex = Nothing : Catch : End Try
-            Try : ProfileKey.Close() : Catch : End Try
-            Try : ProfileKey = Nothing : Catch : End Try
+            Try : ProfileRegKey.Close() : Catch : End Try
+            Try : ProfileRegKey = Nothing : Catch : End Try
         End If
         Me.disposedValue = True
     End Sub
@@ -114,8 +111,8 @@ Friend Class RegistryAccess
             Select Case p_SubKeyName
                 Case ""  'Null path so do nothing
                 Case Else 'Create the subkey
-                    ProfileKey.CreateSubKey(CleanSubKey(p_SubKeyName))
-                    ProfileKey.Flush()
+                    ProfileRegKey.CreateSubKey(CleanSubKey(p_SubKeyName))
+                    ProfileRegKey.Flush()
             End Select
             sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
         Finally
@@ -130,7 +127,7 @@ Friend Class RegistryAccess
             sw.Reset() : sw.Start() 'Start timing this call
             TL.LogMessage("DeleteKey", "SubKey: """ & p_SubKeyName & """")
 
-            Try : ProfileKey.DeleteSubKeyTree(CleanSubKey(p_SubKeyName)) : ProfileKey.Flush() : Catch : End Try 'Remove it if at all possible but don't throw any errors
+            Try : ProfileRegKey.DeleteSubKeyTree(CleanSubKey(p_SubKeyName)) : ProfileRegKey.Flush() : Catch : End Try 'Remove it if at all possible but don't throw any errors
             sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
         Finally
             ProfileMutex.ReleaseMutex()
@@ -141,7 +138,7 @@ Friend Class RegistryAccess
         'Rename a key by creating a copy of the original key with the new name then deleting the original key
         'Throw New MethodNotImplementedException("RegistryAccess:RenameKey " & OriginalSubKeyName & " to " & NewSubKeyName)
         Dim SubKey As RegistryKey, Values As Generic.SortedList(Of String, String)
-        SubKey = ProfileKey.OpenSubKey(CleanSubKey(NewSubKeyName))
+        SubKey = ProfileRegKey.OpenSubKey(CleanSubKey(NewSubKeyName))
         If SubKey Is Nothing Then 'Keydoes not exist so create it
             CreateKey(NewSubKeyName)
             Values = EnumProfile(OriginalSubKeyName)
@@ -163,8 +160,8 @@ Friend Class RegistryAccess
             TL.LogMessage("DeleteProfile", "SubKey: """ & p_SubKeyName & """ Name: """ & p_ValueName & """")
 
             Try 'Remove value if it exists
-                ProfileKey.OpenSubKey(CleanSubKey(p_SubKeyName), True).DeleteValue(p_ValueName)
-                ProfileKey.Flush()
+                ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName), True).DeleteValue(p_ValueName)
+                ProfileRegKey.Flush()
             Catch
                 TL.LogMessage("DeleteProfile", "  Value did not exist")
             End Try
@@ -183,16 +180,16 @@ Friend Class RegistryAccess
             sw.Reset() : sw.Start() 'Start timing this call
             TL.LogMessage("EnumKeys", "SubKey: """ & p_SubKeyName & """")
 
-            SubKeys = ProfileKey.OpenSubKey(CleanSubKey(p_SubKeyName)).GetSubKeyNames()
+            SubKeys = ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName)).GetSubKeyNames()
 
             For Each SubKey As String In SubKeys 'Process each key in trun
                 Try 'If there is an error reading the data don't include in the returned list
                     'Create the new subkey and get a handle to it
                     Select Case p_SubKeyName
                         Case "", "\"
-                            Value = ProfileKey.OpenSubKey(CleanSubKey(SubKey)).GetValue("", "").ToString
+                            Value = ProfileRegKey.OpenSubKey(CleanSubKey(SubKey)).GetValue("", "").ToString
                         Case Else
-                            Value = ProfileKey.OpenSubKey(CleanSubKey(p_SubKeyName) & "\" & SubKey).GetValue("", "").ToString
+                            Value = ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName) & "\" & SubKey).GetValue("", "").ToString
                     End Select
                     RetValues.Add(SubKey, Value) 'Add the Key name and default value to the hashtable
                 Catch ex As Exception
@@ -220,9 +217,9 @@ Friend Class RegistryAccess
             sw.Reset() : sw.Start() 'Start timing this call
             TL.LogMessage("EnumProfile", "SubKey: """ & p_SubKeyName & """")
 
-            Values = ProfileKey.OpenSubKey(CleanSubKey(p_SubKeyName)).GetValueNames
+            Values = ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName)).GetValueNames
             For Each Value As String In Values
-                RetValues.Add(Value, ProfileKey.OpenSubKey(CleanSubKey(p_SubKeyName)).GetValue(Value).ToString) 'Add the Key name and default value to the hashtable
+                RetValues.Add(Value, ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName)).GetValue(Value).ToString) 'Add the Key name and default value to the hashtable
             Next
 
             sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
@@ -243,7 +240,7 @@ Friend Class RegistryAccess
 
             RetVal = "" 'Initialise return value to null string
             Try
-                RetVal = ProfileKey.OpenSubKey(CleanSubKey(p_SubKeyName)).GetValue(p_ValueName).ToString
+                RetVal = ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName)).GetValue(p_ValueName).ToString
             Catch ex As NullReferenceException
                 If Not (p_DefaultValue Is Nothing) Then 'We have been supplied a default value so set it and then return it
                     WriteProfile(p_SubKeyName, p_ValueName, p_DefaultValue)
@@ -284,11 +281,11 @@ Friend Class RegistryAccess
             TL.LogMessage("WriteProfile", "SubKey: """ & p_SubKeyName & """ Name: """ & p_ValueName & """ Value: """ & p_ValueData & """")
 
             If p_SubKeyName = "" Then
-                ProfileKey.SetValue(p_ValueName, p_ValueData, RegistryValueKind.String)
+                ProfileRegKey.SetValue(p_ValueName, p_ValueData, RegistryValueKind.String)
             Else
-                ProfileKey.CreateSubKey(CleanSubKey(p_SubKeyName)).SetValue(p_ValueName, p_ValueData, RegistryValueKind.String)
+                ProfileRegKey.CreateSubKey(CleanSubKey(p_SubKeyName)).SetValue(p_ValueName, p_ValueData, RegistryValueKind.String)
             End If
-            ProfileKey.Flush()
+            ProfileRegKey.Flush()
 
             sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
         Catch ex As Exception 'Any other exception
@@ -325,7 +322,7 @@ Friend Class RegistryAccess
                                 Throw New ProfilePersistenceException("MigrateTo6_64Bit - Migration must be carried out in a 64bit application, its actually being carried out in " & [Enum].GetName(GetType(Bitness), ApplicationBits))
                             Else
                                 'Remove any existing information and migrate the Profile
-                                Try : Registry.LocalMachine.DeleteSubKeyTree(ROOT_KEY_NAME) : Catch : End Try
+                                Try : Registry.LocalMachine.DeleteSubKeyTree(REGISTRY_ROOT_KEY_NAME) : Catch : End Try
                                 Call MigrateTo60(CurrentPlatformVersion)
                             End If
                         Case Bitness.BitsUnknown 'Platform 5 unknown bits
@@ -345,7 +342,7 @@ Friend Class RegistryAccess
                                 Throw New ProfilePersistenceException("MigrateTo6_64Bit - Migration must be carried out in a 64bit application, its actually being carried out in " & [Enum].GetName(GetType(Bitness), ApplicationBits))
                             Else
                                 'Remove any existing information and migrate the Profile
-                                Try : Registry.LocalMachine.DeleteSubKeyTree(ROOT_KEY_NAME) : Catch : End Try
+                                Try : Registry.LocalMachine.DeleteSubKeyTree(REGISTRY_ROOT_KEY_NAME) : Catch : End Try
                                 Call MigrateTo60(CurrentPlatformVersion)
                             End If
                         Case Bitness.BitsUnknown 'Platform 5.5 unknown bits
@@ -361,7 +358,7 @@ Friend Class RegistryAccess
             End Select
 
             'Make sure we have a valid key now that we have migrated the profile to the registry
-            ProfileKey = OpenSubKey(Registry.LocalMachine, ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_64KEY)
+            ProfileRegKey = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_64KEY)
 
             'Restore original logging state
             TL.Enabled = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT) 'Get enabled / disabled state from the user registry
@@ -372,9 +369,109 @@ Friend Class RegistryAccess
             Throw New ProfilePersistenceException("RegistryAccess.MigrateProfile exception", ex)
         End Try
     End Sub
+
+    Friend Overloads Function GetProfile(ByVal p_SubKeyName As String) As ASCOMProfile Implements IAccess.GetProfile
+        Dim ProfileContents As New ASCOMProfile
+
+        Try
+            GetProfileMutex("GetProfile", p_SubKeyName)
+            sw.Reset() : sw.Start() 'Start timing this call
+            TL.LogMessage("GetProfile", "SubKey: """ & p_SubKeyName & """")
+
+            GetSubKey(p_SubKeyName, "", ProfileContents) 'Read the requested profile into a ProfileKey object
+            sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds ")
+
+        Finally
+            ProfileMutex.ReleaseMutex()
+        End Try
+
+        Return ProfileContents
+    End Function
+
+    Friend Sub SetProfile(ByVal p_SubKeyName As String, ByVal p_ProfileKey As ASCOMProfile) Implements IAccess.SetProfile
+        Dim SKey As RegistryKey
+        Try
+            GetProfileMutex("SetProfile", p_SubKeyName)
+            sw.Reset() : sw.Start() 'Start timing this call
+            TL.LogMessage("SetProfile", "SubKey: """ & p_SubKeyName & """")
+
+            For Each ProfileSubkey As String In p_ProfileKey.ProfileValues.Keys
+                TL.LogMessage("SetProfile", "Received SubKey: " & ProfileSubkey)
+
+                For Each value As String In p_ProfileKey.ProfileValues.Item(ProfileSubkey).Keys
+                    TL.LogMessage("SetProfile", "  Received value: " & value & " = " & p_ProfileKey.ProfileValues.Item(ProfileSubkey).Item(value))
+                Next
+            Next
+
+            For Each SubKey As String In p_ProfileKey.ProfileValues.Keys
+                If p_SubKeyName = "" Then
+                    If SubKey = "" Then
+                        SKey = ProfileRegKey
+                    Else
+                        SKey = ProfileRegKey.CreateSubKey(CleanSubKey(SubKey))
+                    End If
+                Else
+                    If SubKey = "" Then
+                        SKey = ProfileRegKey.CreateSubKey(p_SubKeyName)
+                    Else
+                        SKey = ProfileRegKey.CreateSubKey(p_SubKeyName & "\" & CleanSubKey(SubKey))
+                    End If
+                End If
+
+                For Each value As String In p_ProfileKey.ProfileValues.Item(SubKey).Keys
+                    SKey.SetValue(value, p_ProfileKey.ProfileValues.Item(SubKey).Item(value), RegistryValueKind.String)
+                Next
+                SKey.Flush()
+            Next
+            ProfileRegKey.Flush()
+
+            sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds ")
+
+        Finally
+            ProfileMutex.ReleaseMutex()
+        End Try
+
+    End Sub
 #End Region
 
 #Region "Support Functions"
+
+    Private Sub GetSubKey(ByVal BaseSubKey As String, ByVal SubKeyOffset As String, ByRef ProfileContents As ASCOMProfile)
+        Dim RetVal As New ASCOMProfile
+        Dim ValueNames(), SubKeyNames(), Value As String
+        Dim SKey As RegistryKey
+
+        BaseSubKey = CleanSubKey(BaseSubKey)
+        SubKeyOffset = CleanSubKey(SubKeyOffset)
+
+        If BaseSubKey = "" Then
+            If SubKeyOffset = "" Then
+                SKey = ProfileRegKey
+            Else
+                SKey = ProfileRegKey.OpenSubKey(SubKeyOffset)
+            End If
+        Else
+            If SubKeyOffset = "" Then
+                SKey = ProfileRegKey.OpenSubKey(BaseSubKey)
+            Else
+                SKey = ProfileRegKey.OpenSubKey(BaseSubKey & "\" & SubKeyOffset)
+            End If
+        End If
+
+        ValueNames = SKey.GetValueNames
+
+        For Each ValueName As String In ValueNames
+            Value = SKey.GetValue(ValueName).ToString
+            ProfileContents.SetValue(ValueName, Value, SubKeyOffset)
+        Next
+
+        SubKeyNames = SKey.GetSubKeyNames
+
+        For Each SubKeyName As String In SubKeyNames
+            GetSubKey(BaseSubKey, SubKeyOffset & "\" & CleanSubKey(SubKeyName), ProfileContents)
+        Next
+    End Sub
+
     Function CleanSubKey(ByVal SubKey As String) As String
         'Remove leading "\" if it exists as this is not logal in a subkey name. "\" in the middle of a subkey name is legal however
         If Left(SubKey, 1) = "\" Then Return Mid(SubKey, 2)
@@ -385,9 +482,9 @@ Friend Class RegistryAccess
         Dim FromKey, ToKey As RegistryKey
         Dim swLocal As Stopwatch
         swLocal = Stopwatch.StartNew
-        FromKey = Registry.LocalMachine.OpenSubKey(ROOT_KEY_NAME, True)
-        ToKey = FromKey.CreateSubKey(BACKUP_SUBKEY)
-        TL.LogMessage("Backup50", "Backing up Profile 5 to " & BACKUP_SUBKEY)
+        FromKey = Registry.LocalMachine.OpenSubKey(REGISTRY_ROOT_KEY_NAME, True)
+        ToKey = FromKey.CreateSubKey(REGISTRY_BACKUP_SUBKEY)
+        TL.LogMessage("Backup50", "Backing up Profile 5 to " & REGISTRY_BACKUP_SUBKEY)
 
         Copy50(FromKey, ToKey)
 
@@ -421,7 +518,7 @@ Friend Class RegistryAccess
         'Now process the keys
         SubKeys = FromKey.GetSubKeyNames
         For Each SubKey As String In SubKeys
-            If SubKey <> BACKUP_SUBKEY Then 'Copy all keys except the backup key itself! Without this we wold have infinite recursion...
+            If SubKey <> REGISTRY_BACKUP_SUBKEY Then 'Copy all keys except the backup key itself! Without this we wold have infinite recursion...
                 Value = FromKey.OpenSubKey(SubKey).GetValue("", "").ToString
                 TL.LogMessage("  Copy50", "  Processing subkey: " & SubKey & " " & Value)
                 NewFromKey = FromKey.OpenSubKey(SubKey) 'Create the new subkey and get a handle to it
@@ -448,7 +545,7 @@ Friend Class RegistryAccess
         swLocal = Stopwatch.StartNew
 
         TL.LogMessage("MigrateTo60", "Creating root key ""\""")
-        Key = Registry.LocalMachine.CreateSubKey(ROOT_KEY_NAME)
+        Key = Registry.LocalMachine.CreateSubKey(REGISTRY_ROOT_KEY_NAME)
 
         'Set a security ACL on the ASCOM Profile key giving the Users group Full Control of the key
         TL.LogMessage("MigrateTo60", "Creating security identifiers")
@@ -476,7 +573,7 @@ Friend Class RegistryAccess
             Case "4", "5"
                 If OSBits() = Bitness.Bits64 Then 'This is a 64bit OS so migrate from the 32 to the 64bit registry keys
                     TL.LogMessage("MigrateTo60", "Opening Profile Registry Key for Platform " & CurrentPlatformVersion)
-                    Prof5 = OpenSubKey(Registry.LocalMachine, ROOT_KEY_NAME, False, RegWow64Options.KEY_WOW64_32KEY)
+                    Prof5 = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegWow64Options.KEY_WOW64_32KEY)
                     TL.LogMessage("MigrateTo60", "Copying Profile 5 to Profile 6")
                     Copy50To60("", Prof5, Key)
                 Else 'This is a 32bit OS so no need to copy as the Profile is already in the correct place

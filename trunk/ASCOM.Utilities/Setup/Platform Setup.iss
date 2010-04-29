@@ -98,6 +98,7 @@
 ; Added RA CIO File
 ; Moved location of Help files directory from \Utilities to \Help
 ; Migrated to Inno setup 5.3.9
+; Removed EraseProfile for Platform 6 as MigrateProfile can do this function
 
 [Setup]
 ; Setup program version number - change this each time you change this setup script
@@ -238,8 +239,8 @@ Source: ..\Profile Explorer\bin\Release\ProfileExplorer.exe; DestDir: {pf}\ASCOM
 Source: ..\Profile Explorer\bin\Release\ProfileExplorer.pdb; DestDir: {pf}\ASCOM\Profile Explorer; Flags: ignoreversion
 
 ;Tools to erase and migrate profile
-Source: ..\EraseProfile\bin\Release\EraseProfile.exe; DestDir: {cf32}\ASCOM\Utilities; Flags: ignoreversion
-Source: ..\EraseProfile\bin\Release\EraseProfile.pdb; DestDir: {cf32}\ASCOM\Utilities; Flags: ignoreversion
+;Source: ..\EraseProfile\bin\Release\EraseProfile.exe; DestDir: {cf32}\ASCOM\Utilities; Flags: ignoreversion
+;Source: ..\EraseProfile\bin\Release\EraseProfile.pdb; DestDir: {cf32}\ASCOM\Utilities; Flags: ignoreversion
 Source: ..\MigrateProfile\bin\Release\MigrateProfile.exe; DestDir: {cf32}\ASCOM\Utilities; Flags: ignoreversion
 Source: ..\MigrateProfile\bin\Release\MigrateProfile.pdb; DestDir: {cf32}\ASCOM\Utilities; Flags: ignoreversion
 
@@ -344,7 +345,7 @@ Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.IConfo
 ;ASCOM Exceptions
 Filename: {app}\GACInstall.exe; Parameters: ASCOM.Exceptions.dll; Flags: runhidden; StatusMsg: Instlling ASCOM.Exceptions to the assembly cache
 
-; ASCOM Client Toolkit 1.0.5         +
+; ASCOM Client Toolkit 1.0.5
 Filename: {app}\GACInstall.exe; Parameters: ASCOM.DriverAccess.dll; Flags: runhidden; StatusMsg: Installing Client Access Toolkit to the assembly cache
 Filename: {app}\GACInstall.exe; Parameters: """{app}\policy.1.0.ASCOM.DriverAccess.dll"""; Flags: runhidden; StatusMsg: Installing Client Access Toolkit Policy to the assembly cache
 
@@ -456,6 +457,7 @@ WelcomeLabel1=%n%n[name]%n
 #emit "WelcomeLabel2=This will install ASCOM Utilities version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
 [_ISToolPreCompile]
 Name: ..\..\ASCOM Redirection Policies\ASCOM Redirection Policies\bin\Release\ASCOM Redirection Policies.exe; Parameters: ; Flags: runminimized abortonerror
+
 
 
 

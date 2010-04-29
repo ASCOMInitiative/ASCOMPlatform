@@ -3,6 +3,7 @@
 Imports System.Runtime.InteropServices
 Imports System.ComponentModel
 Imports ASCOM.Utilities
+Imports System.Collections.Generic
 
 Namespace Interfaces
 
@@ -1038,7 +1039,7 @@ Namespace Interfaces
         ''' <remarks>This is not implemented and returns a MethodNotImplemented exception,
         ''' it will be implemented in a future update. An XML schema will also be made available to support 
         ''' this method.</remarks>
-        <DispId(14)> Function GetProfileXML(ByVal deviceId As String) As String
+        <DispId(14)> Overloads Function GetProfileXML(ByVal deviceId As String) As String
 
         ''' <summary>
         ''' Set an entire device profile
@@ -1049,7 +1050,7 @@ Namespace Interfaces
         ''' <remarks>This is not implemented and returns a MethodNotImplemented exception,
         ''' it will be implemented in a future update. An XML schema will also be made available to support 
         ''' this method.</remarks>
-        <DispId(15)> Sub SetProfileXML(ByVal deviceId As String, ByVal xml As String)
+        <DispId(15)> Overloads Sub SetProfileXML(ByVal deviceId As String, ByVal xml As String)
 
     End Interface 'Interface to Utilities.Profile
 
@@ -1144,12 +1145,27 @@ Namespace Interfaces
         ''' with SubKey set to empty string achieve this effect.
         ''' </remarks>
         Overloads Sub WriteValue(ByVal DriverID As String, ByVal Name As String, ByVal Value As String)
+        ''' <summary>
+        ''' Read an entire device profile and return it as an XML encoded string
+        ''' </summary>
+        ''' <param name="DriverId">The ProgID of the device</param>
+        ''' <returns>Device profile represented as a recusrive class</returns>
+        ''' <remarks>Returns a whole driver profile encoded as an XML string</remarks>
+        Overloads Function GetProfile(ByVal DriverId As String) As ASCOMProfile
+        
+        ''' <summary>
+        ''' Set an entire device profile from an XML encoded string
+        ''' </summary>
+        ''' <param name="DriverId">The ProgID of the device</param>
+        ''' <param name="XmlProfileKey">A class representing the profile</param>
+        ''' <remarks>Set a whole device Profile in one call using a recusrive ProfileKey class</remarks>
+        Sub SetProfile(ByVal DriverId As String, ByVal XmlProfileKey As ASCOMProfile)
     End Interface
 
-    ''' <summary>
-    ''' Interface to the .NET Serial component
-    ''' </summary>
-    ''' <remarks></remarks>
+        ''' <summary>
+        ''' Interface to the .NET Serial component
+        ''' </summary>
+        ''' <remarks></remarks>
     <Guid("8828511A-05C1-43c7-8970-00D23595930A"), _
     ComVisible(True)> _
     Public Interface ISerial
@@ -1161,7 +1177,7 @@ Namespace Interfaces
         ''' <value>String array of available serial ports</value>
         ''' <returns>A string array of available serial ports</returns>
         ''' <remarks></remarks>
-        <DispId(1)> ReadOnly Property AvailableComPorts() As String()
+    <DispId(1)> ReadOnly Property AvailableComPorts() As String()
         ''' <summary>
         ''' Gets or sets the number of data bits in each byte
         ''' </summary>
@@ -1253,13 +1269,13 @@ Namespace Interfaces
         ''' </summary>
         ''' <param name="Data">String to transmit</param>
         ''' <remarks></remarks>
-        <DispId(14)> Sub Transmit(ByVal Data As String)
+    <DispId(14)> Sub Transmit(ByVal Data As String)
         ''' <summary>
         ''' Transmit an array of binary bytes through the ASCOM serial port 
         ''' </summary>
         ''' <param name="Data">Byte array to transmit</param>
         ''' <remarks></remarks>
-        <DispId(15)> Sub TransmitBinary(ByVal Data As Byte())
+    <DispId(15)> Sub TransmitBinary(ByVal Data As Byte())
         ''' <summary>
         ''' Adds a message to the ASCOM serial trace file
         ''' </summary>
@@ -1268,7 +1284,7 @@ Namespace Interfaces
         ''' <remarks>
         ''' <para>This can be called regardless of whether logging is enabled</para>
         ''' </remarks>
-        <DispId(16)> Sub LogMessage(ByVal Caller As String, ByVal Message As String)
+    <DispId(16)> Sub LogMessage(ByVal Caller As String, ByVal Message As String)
         ''' <summary>
         ''' Receive at least one text character from the ASCOM serial port
         ''' </summary>
@@ -1276,20 +1292,20 @@ Namespace Interfaces
         ''' <remarks>This method reads all of the characters currently in the serial receive buffer. It will not return 
         ''' unless it reads at least one character. A timeout will cause a TimeoutException to be raised. Use this for 
         ''' text data, as it returns a String. </remarks>
-        <DispId(17)> Function Receive() As String
+    <DispId(17)> Function Receive() As String
         ''' <summary>
         ''' Receive one binary byte from the ASCOM serial port
         ''' </summary>
         ''' <returns>The received byte</returns>
         ''' <remarks>Use this for 8-bit (binary data). If a timeout occurs, a TimeoutException is raised. </remarks>
-        <DispId(18)> Function ReceiveByte() As Byte
+    <DispId(18)> Function ReceiveByte() As Byte
         ''' <summary>
         ''' Receive exactly the given number of characters from the ASCOM serial port and return as a string
         ''' </summary>
         ''' <param name="Count">The number of characters to return</param>
         ''' <returns>String of length "Count" characters</returns>
         ''' <remarks>If a timeout occurs a TimeoutException is raised.</remarks>
-        <DispId(19)> Function ReceiveCounted(ByVal Count As Integer) As String
+    <DispId(19)> Function ReceiveCounted(ByVal Count As Integer) As String
         ''' <summary>
         ''' Receive exactly the given number of characters from the ASCOM serial port and return as a byte array
         ''' </summary>
@@ -1299,14 +1315,14 @@ Namespace Interfaces
         ''' <para>If a timeout occurs, a TimeoutException is raised. </para>
         ''' <para>This function exists in the COM component but is not documented in the help file.</para>
         ''' </remarks>
-        <DispId(20)> Function ReceiveCountedBinary(ByVal Count As Integer) As Byte()
+    <DispId(20)> Function ReceiveCountedBinary(ByVal Count As Integer) As Byte()
         ''' <summary>
         ''' Receive characters from the ASCOM serial port until the given terminator string is seen
         ''' </summary>
         ''' <param name="Terminator">The character string that indicates end of message</param>
         ''' <returns>Received characters including the terminator string</returns>
         ''' <remarks>If a timeout occurs, a TimeoutException is raised.</remarks>
-        <DispId(21)> Function ReceiveTerminated(ByVal Terminator As String) As String
+    <DispId(21)> Function ReceiveTerminated(ByVal Terminator As String) As String
         ''' <summary>
         ''' Receive characters from the ASCOM serial port until the given terminator bytes are seen, return as a byte array
         ''' </summary>
@@ -1316,7 +1332,7 @@ Namespace Interfaces
         ''' <para>If a timeout occurs, a TimeoutException is raised.</para>
         ''' <para>This function exists in the COM component but is not documented in the help file.</para>
         ''' </remarks>
-        <DispId(22)> Function ReceiveTerminatedBinary(ByVal TerminatorBytes() As Byte) As Byte()
+    <DispId(22)> Function ReceiveTerminatedBinary(ByVal TerminatorBytes() As Byte) As Byte()
     End Interface  'Interface to Utilities.Serial
 
 #End Region
@@ -1349,6 +1365,8 @@ Namespace Interfaces
         Sub DeleteKey(ByVal p_SubKeyName As String)
         Sub RenameKey(ByVal CurrentSubKeyName As String, ByVal NewSubKeyName As String)
         Sub MigrateProfile(ByVal CurrentPlatformVersion As String)
+        Sub SetProfile(ByVal DriverId As String, ByVal XmlProfile As ASCOMProfile)
+        Overloads Function GetProfile(ByVal DriverId As String) As ASCOMProfile
     End Interface 'Interface for a general profile store provider
 
 #End Region
