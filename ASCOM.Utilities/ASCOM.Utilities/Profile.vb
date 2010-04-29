@@ -3,6 +3,10 @@ Option Explicit On
 Imports ASCOM.Utilities.Interfaces
 Imports System.Runtime.InteropServices
 Imports System.ComponentModel
+Imports System.IO
+Imports System.Xml
+Imports System.Xml.Serialization
+Imports System.Text
 
 ''' <summary>
 ''' ASCOM Scope Driver Helper Registry Profile Object
@@ -419,35 +423,83 @@ Public Class Profile
     End Sub
 
     ''' <summary>
-    ''' Read an entire device profile
+    ''' Read an entire device profile and return it as an XML encoded string
     ''' </summary>
-    ''' <param name="deviceId">The ProgID of the device</param>
+    ''' <param name="DriverId">The ProgID of the device</param>
     ''' <returns>Device profile encoded in XML</returns>
-    ''' <exception cref="ASCOM.MethodNotImplementedException">This method will be implemented in a future update</exception>
-    ''' <remarks>This is not implemented and returns a MethodNotImplemented exception,
-    ''' it will be implemented in a future update. An XML schema will also be made available to support 
-    ''' this method.</remarks>
-    Function GetProfileXML(ByVal deviceId As String) As String Implements IProfile.GetProfileXML
-        Throw New MethodNotImplementedException("GetProfileXML will be implemented in a later update")
+    ''' <remarks>Returns a whole driver profile encoded as an XML string</remarks>
+    Public Function GetProfileXML(ByVal DriverId As String) As String Implements IProfile.GetProfileXML
+        Dim RetVal As String, CurrentProfile As ASCOMProfile, XMLProfileBytes() As Byte
+        Dim XMLSer As New XmlSerializer(GetType(ASCOMProfile))
+        Dim UTF8 As New UTF8Encoding
+
+        TL.LogMessage("GetProfileXML", "Driver: " & DriverId)
+        CheckRegistered(DriverId)
+
+        CurrentProfile = ProfileStore.GetProfile(MakeKey(DriverId, ""))
+        Using MemStream As New MemoryStream 'Create a memory stream to receive the serialised ProfileKey
+            XMLSer.Serialize(MemStream, CurrentProfile) 'Serialise the ProfileKey object to XML held in the memory stream
+            XMLProfileBytes = MemStream.ToArray() 'Retrieve the serialised unicode XML characters as a byte array
+            RetVal = UTF8.GetString(XMLProfileBytes) 'Convert the byte array into a UTF8 character string
+        End Using
+
+        TL.LogMessageCrLf("  GetProfileXML", vbCrLf & RetVal)
+        Return RetVal
     End Function
 
     ''' <summary>
-    ''' Set an entire device profile
+    ''' Set an entire device profile from an XML encoded string
     ''' </summary>
-    ''' <param name="deviceId">The ProgID of the device</param>
-    ''' <param name="xml">An XML encoding of the profile</param>
-    ''' <exception cref="ASCOM.MethodNotImplementedException">This method will be implemented in a future update</exception>
-    ''' <remarks>This is not implemented and returns a MethodNotImplemented exception,
-    ''' it will be implemented in a future update. An XML schema will also be made available to support 
-    ''' this method.</remarks>
-    Sub SetProfileXML(ByVal deviceId As String, ByVal xml As String) Implements IProfile.SetProfileXML
-        Throw New MethodNotImplementedException("SetProfileXML will be implemented in a later update")
-    End Sub
+    ''' <param name="DriverId">The ProgID of the device</param>
+    ''' <param name="XmlProfile">An XML encoding of the profile</param>
+    ''' <remarks>Set a whole device Profile in one call using an XML encoding of the Profile</remarks>
+    Public Sub SetProfileXML(ByVal DriverId As String, ByVal XmlProfile As String) Implements IProfile.SetProfileXML
+        Dim NewProfileContents As ASCOMProfile, XMLProfileBytes() As Byte
+        Dim XMLSer As New XmlSerializer(GetType(ASCOMProfile))
+        Dim UTF8 As New UTF8Encoding
 
+        TL.LogMessageCrLf("SetProfileXML", "Driver: " & DriverId & vbCrLf & XmlProfile)
+        CheckRegistered(DriverId)
+
+        XMLProfileBytes = UTF8.GetBytes(XmlProfile) 'Convert the UTF8 XML string into a byte array
+        Using MemStream As New MemoryStream(XMLProfileBytes) 'Present the UTF8 string byte array as a memory stream
+            NewProfileContents = CType(XMLSer.Deserialize(MemStream), ASCOMProfile) 'Deserialise the stream to a ProfileKey object holding the new set of values
+        End Using
+
+        ProfileStore.SetProfile(MakeKey(DriverId, ""), NewProfileContents)
+        TL.LogMessage("  SetProfileXML", "  Complete")
+    End Sub
 
 #End Region
 
 #Region "IProfileExtra Implementation"
+    ''' <summary>
+    ''' Read an entire device profile and return it as an XML encoded string
+    ''' </summary>
+    ''' <param name="DriverId">The ProgID of the device</param>
+    ''' <returns>Device profile represented as a recusrive class</returns>
+    ''' <remarks>Returns a whole driver profile encoded as an XML string</remarks>
+    Public Function GetProfile(ByVal DriverId As String) As ASCOMProfile Implements IProfileExtra.GetProfile
+        Dim RetVal As ASCOMProfile
+        TL.LogMessage("GetProfile", "Driver: " & DriverId)
+        CheckRegistered(DriverId)
+        RetVal = ProfileStore.GetProfile(MakeKey(DriverId, ""))
+        TL.LogMessageCrLf("  GetProfile", "Complete")
+        Return RetVal
+    End Function
+
+    ''' <summary>
+    ''' Set an entire device profile from an XML encoded string
+    ''' </summary>
+    ''' <param name="DriverId">The ProgID of the device</param>
+    ''' <param name="NewProfileKey">A class representing the profile</param>
+    ''' <remarks>Set a whole device Profile in one call using a recusrive ProfileKey class</remarks>
+    Public Sub SetProfile(ByVal DriverId As String, ByVal NewProfileKey As ASCOMProfile) Implements IProfileExtra.SetProfile
+        TL.LogMessage("SetProfile", "Driver: " & DriverId)
+        CheckRegistered(DriverId)
+        ProfileStore.SetProfile(MakeKey(DriverId, ""), NewProfileKey)
+        TL.LogMessage("  SetProfile", "  Complete")
+    End Sub
 
     ''' <summary>
     ''' Migrate the ASCOM profile from registry to file store
@@ -612,7 +664,6 @@ Public Class Profile
         LastDriverID = DriverID
         LastResult = IsRegisteredPrv
     End Function
-
 
     Private Function MakeKey(ByVal BaseKey As String, ByVal SubKey As String) As String
         'Create a full path to a subkey given the driver name and type 

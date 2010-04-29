@@ -26,4 +26,32 @@ Module GlobalConstants
     Friend Const EVENT_SOURCE As String = "ASCOM Platform" 'Name of the the event source
     Friend Const EVENTLOG_NAME As String = "ASCOM" 'Name of the event log as it appears in Windows event viewer
 
+    'RegistryAccess constants
+    Friend Const REGISTRY_ROOT_KEY_NAME As String = "SOFTWARE\ASCOM" 'Location of ASCOM profile in HKLM registry hive
+    Friend Const REGISTRY_BACKUP_SUBKEY As String = "Platform5Original" 'Location that the original Plartform 5 Profile will be copied to before migrating the 5.5 Profile back to the registry
+
+    'XML constants used by XMLAccess and RegistryAccess classes
+    Friend Const COLLECTION_DEFAULT_VALUE_NAME As String = "***** DefaultValueName *****" 'Name identifier label
+    Friend Const COLLECTION_DEFAULT_UNSET_VALUE As String = "===== ***** UnsetValue ***** =====" 'Value identifier label
+    Friend Const VALUES_FILENAME As String = "Profile.xml" 'Name of file to contain profile xml information
+    Friend Const VALUES_FILENAME_ORIGINAL As String = "ProfileOriginal.xml" 'Name of file to contain original profile xml information
+    Friend Const VALUES_FILENAME_NEW As String = "ProfileNew.xml" 'Name of file to contain original profile xml information
+
+    Friend Const PROFILE_NAME As String = "Profile" 'Name of top level XML element
+    Friend Const SUBKEY_NAME As String = "SubKey" 'Profile subkey element name
+    Friend Const DEFAULT_ELEMENT_NAME As String = "DefaultElement" 'Default value label
+    Friend Const VALUE_ELEMENT_NAME As String = "Element" 'Profile value element name
+    Friend Const NAME_ATTRIBUTE_NAME As String = "Name" 'Profile value name attribute
+    Friend Const VALUE_ATTRIBUTE_NAME As String = "Value" 'Profile element value attribute
+
+    'XML constants used by ASCOMProfile class to serialise and de-serialise a profile
+    'These are public so that they can be used by applications to wrok directly with the returned XML
+    Public Const XML_SUBKEYNAME_ELEMENTNAME As String = "SubKeyName"
+    Public Const XML_DEFAULTVALUE_ELEMENTNAME As String = "DefaultValue"
+    Public Const XML_NAME_ELEMENTNAME As String = "Name"
+    Public Const XML_DATA_ELEMENTNAME As String = "Data"
+    Public Const XML_SUBKEY_ELEMENTNAME As String = "SubKey"
+    Public Const XML_VALUE_ELEMENTNAME As String = "Value"
+    Public Const XML_VALUES_ELEMENTNAME As String = "Values"
+
 End Module

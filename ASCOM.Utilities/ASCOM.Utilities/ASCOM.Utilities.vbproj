@@ -105,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AllUsersFileSystemProvider.vb" />
+    <Compile Include="ASCOMProfile.vb" />
     <Compile Include="AssemblyInfo.vb" />
     <Compile Include="Chooser.vb">
       <SubType>Code</SubType>

@@ -176,4 +176,18 @@ Public Class ConnectForm
         TL.LogMessage(Command, Msg)
         txtStatus.Text = txtStatus.Text & Command & " " & Msg & vbCrLf
     End Sub
+
+    Private Sub btnGetProfile_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnGetProfile.Click
+        Dim Prof As New Profile, Result As String = ""
+        txtStatus.Clear()
+        TL = New TraceLogger("", "DiagnosticScript")
+        TL.Enabled = True
+
+        Result = Prof.GetProfileXML(txtDevice.Text)
+        LogMsg("GetProfile", Result)
+        LogMsg("Script", "Diagnostic Script Completed")
+        TL.Enabled = False
+        TL.Dispose()
+
+    End Sub
 End Class

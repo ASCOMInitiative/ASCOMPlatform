@@ -30,6 +30,7 @@ Imports System.Runtime.InteropServices
 <Assembly: GuidAttribute("EC785106-0F00-4e7f-90BA-7CCC9E9740E1")> 
 <Assembly: AssemblyFileVersionAttribute("5.5.27.0")> 
 
+'Permissions for particular assemblies to access internal "Friend" variables and methods of the ASCOM.Utilities assembly
 <Assembly: InternalsVisibleToAttribute("ProfileExplorer, PublicKey= " + _
 "0024000004800000940000000602000000240000525341310004000001000100afa2def19e73b7" + _
 "2a7cf149888c93ec828db75e4d481b5c652aa43417a77689ce9151853ce10278c44bff4aa559b9" + _

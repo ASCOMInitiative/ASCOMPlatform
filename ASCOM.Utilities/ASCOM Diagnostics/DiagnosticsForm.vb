@@ -172,20 +172,20 @@ Public Class DiagnosticsForm
             TL.LogMessage("ScanRegistry", "Start")
             If OSBits() = Bitness.Bits64 Then
                 'List the 32bit registry
-                Key = ASCOMRegistryAccess.OpenSubKey(Registry.LocalMachine, RegistryAccess.ROOT_KEY_NAME, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+                Key = ASCOMRegistryAccess.OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
                 TL.LogMessage("ScanRegistry", "Profile Root (64bit OS - 32bit Registry)")
                 RecursionLevel = -1
                 RecurseRegistry(Key)
                 TL.BlankLine()
 
                 'List the 64bit registry
-                Key = ASCOMRegistryAccess.OpenSubKey(Registry.LocalMachine, RegistryAccess.ROOT_KEY_NAME, False, RegistryAccess.RegWow64Options.KEY_WOW64_64KEY)
+                Key = ASCOMRegistryAccess.OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegistryAccess.RegWow64Options.KEY_WOW64_64KEY)
                 TL.LogMessage("ScanRegistry", "Profile Root (64bit OS - 64bit Registry)")
                 RecursionLevel = -1
                 RecurseRegistry(Key)
             Else '32 bit OS
                 'List the registry (only one view on a 32bit machine)
-                Key = Registry.LocalMachine.OpenSubKey(RegistryAccess.ROOT_KEY_NAME)
+                Key = Registry.LocalMachine.OpenSubKey(REGISTRY_ROOT_KEY_NAME)
                 TL.LogMessage("ScanRegistry", "Profile Root (32bit OS)")
                 RecursionLevel = -1
                 RecurseRegistry(Key)
