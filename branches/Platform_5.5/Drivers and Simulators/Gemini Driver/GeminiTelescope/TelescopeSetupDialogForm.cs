@@ -402,6 +402,12 @@ namespace ASCOM.GeminiTelescope
             set { chkAsyncPulseGuide.Checked = value; }
         }
 
+        public bool ReportPierSide
+        {
+            get { return chkPierSide.Checked; }
+            set { chkPierSide.Checked = value; }
+        }
+
         #endregion
 
         private void TelescopeSetupDialogForm_Load(object sender, EventArgs e)

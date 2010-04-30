@@ -375,7 +375,19 @@ namespace ASCOM.GeminiTelescope
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AsyncPulseGuide", value.ToString());
             }
         }
-    
+
+        private static bool m_ReportPierSide = true;
+
+        public static bool ReportPierSide
+        {
+            get { return GeminiHardware.m_ReportPierSide; }
+            set
+            {
+                GeminiHardware.m_ReportPierSide = value;
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ReportPierSide", value.ToString());
+            }
+        }
 
         private static System.Threading.AutoResetEvent m_WaitForCommand;
         private static System.Threading.AutoResetEvent m_DataReceived;
@@ -864,6 +876,7 @@ namespace ASCOM.GeminiTelescope
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "BootMode", "0");
 
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AsyncPulseGuide", true.ToString());
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ReportPierSide", true.ToString());
 
             }
                 
@@ -949,6 +962,9 @@ namespace ASCOM.GeminiTelescope
 
             if (!bool.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "AsyncPulseGuide", ""), out m_AsyncPulseGuide))
                 m_AsyncPulseGuide = true;
+
+            if (!bool.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ReportPierSide", ""), out m_ReportPierSide))
+                m_ReportPierSide = true;
 
             Trace.Info(2, "Geo Settings", m_Latitude, m_Longitude, m_Elevation);
 

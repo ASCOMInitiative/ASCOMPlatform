@@ -92,6 +92,7 @@ namespace ASCOM.GeminiTelescope
             this.label11 = new System.Windows.Forms.Label();
             this.cbLogging = new System.Windows.Forms.ComboBox();
             this.chkAsyncPulseGuide = new System.Windows.Forms.CheckBox();
+            this.chkPierSide = new System.Windows.Forms.CheckBox();
             buttonGps = new System.Windows.Forms.Button();
             pbGeminiSettings = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
@@ -818,7 +819,7 @@ namespace ASCOM.GeminiTelescope
             // 
             this.label11.AutoSize = true;
             this.label11.ForeColor = System.Drawing.Color.White;
-            this.label11.Location = new System.Drawing.Point(263, 305);
+            this.label11.Location = new System.Drawing.Point(263, 336);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(142, 13);
             this.label11.TabIndex = 35;
@@ -838,7 +839,7 @@ namespace ASCOM.GeminiTelescope
             "4: More Detail",
             "5: Very Detailed",
             "6: All Available"});
-            this.cbLogging.Location = new System.Drawing.Point(263, 324);
+            this.cbLogging.Location = new System.Drawing.Point(263, 355);
             this.cbLogging.Name = "cbLogging";
             this.cbLogging.Size = new System.Drawing.Size(163, 21);
             this.cbLogging.TabIndex = 36;
@@ -855,12 +856,24 @@ namespace ASCOM.GeminiTelescope
             this.chkAsyncPulseGuide.UseVisualStyleBackColor = true;
             this.chkAsyncPulseGuide.CheckedChanged += new System.EventHandler(this.chkAsyncPulseGuide_CheckedChanged);
             // 
+            // chkPierSide
+            // 
+            this.chkPierSide.AutoSize = true;
+            this.chkPierSide.ForeColor = System.Drawing.Color.White;
+            this.chkPierSide.Location = new System.Drawing.Point(263, 304);
+            this.chkPierSide.Name = "chkPierSide";
+            this.chkPierSide.Size = new System.Drawing.Size(103, 17);
+            this.chkPierSide.TabIndex = 38;
+            this.chkPierSide.Text = "Report Pier Side";
+            this.chkPierSide.UseVisualStyleBackColor = true;
+            // 
             // TelescopeSetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
             this.ClientSize = new System.Drawing.Size(501, 482);
+            this.Controls.Add(this.chkPierSide);
             this.Controls.Add(this.chkAsyncPulseGuide);
             this.Controls.Add(this.cbLogging);
             this.Controls.Add(this.label11);
@@ -971,5 +984,6 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.ComboBox cbLogging;
         private System.Windows.Forms.CheckBox chkPortScan;
         private System.Windows.Forms.CheckBox chkAsyncPulseGuide;
+        private System.Windows.Forms.CheckBox chkPierSide;
     }
 }

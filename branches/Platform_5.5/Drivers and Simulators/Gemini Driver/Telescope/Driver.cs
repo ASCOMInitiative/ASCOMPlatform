@@ -242,7 +242,11 @@ namespace ASCOM.GeminiTelescope
         // calculated number of ticks per second:
         DateTime m_LastPulseGuideUpdate = DateTime.MinValue;
         double m_GuideRateStepsPerMilliSecond = 0;
-        
+        double m_GuideRateStepsPerMilliSecondEast = 0;
+        double m_GuideRateStepsPerMilliSecondWest = 0;
+        double m_TrackRate = 0;
+        double m_GuideRA = 0;
+
         //
         // Constructor - Must be public for COM registration!
         //
@@ -733,6 +737,9 @@ namespace ASCOM.GeminiTelescope
         // PK: southern hemisphere needs testing!
         public PierSide DestinationSideOfPier(double RightAscension, double Declination)
         {
+            if (!GeminiHardware.ReportPierSide)
+                throw new ASCOM.MethodNotImplementedException("DestinationSideOfPier"); // Was PropertyNotImplementedException
+
             string res = "RA: " + RightAscension.ToString() + " Dec: " + Declination.ToString(); 
             GeminiHardware.Trace.Enter("IT:DestinationSideOfPier", res);
             
@@ -1117,11 +1124,23 @@ namespace ASCOM.GeminiTelescope
                     string spurGearRatio = mountpar[1];
                     string encoderResolution = mountpar[2];
 
+                    // compute actual tracking rate, including any offset, in arcsecs/second
+                    
+                    m_TrackRate = (this.RightAscensionRate * 0.9972695677 + SharedResources.EARTH_ANG_ROT_DEG_MIN * 60);
+
                     if (spurGearRatio != null && wormGearRatio != null && encoderResolution != null)
                     {
+
                         double StepsPerDegree = (Math.Abs(double.Parse(wormGearRatio)) * double.Parse(spurGearRatio) * double.Parse(encoderResolution)) / 360.0;
-                        m_GuideRateStepsPerMilliSecond = StepsPerDegree * GuideRateRightAscension / 1000;  // guide rate in encoder ticks per milli-second
+                        m_GuideRA = GuideRateRightAscension;
+
+                        m_GuideRateStepsPerMilliSecond = StepsPerDegree * m_GuideRA / 1000;  // guide rate in encoder ticks per milli-second
+
+                        m_GuideRateStepsPerMilliSecondEast = StepsPerDegree * (m_TrackRate/3600 - m_GuideRA) / 1000;
+                        m_GuideRateStepsPerMilliSecondWest = StepsPerDegree * (m_TrackRate/3600 + m_GuideRA) / 1000;
                         m_LastPulseGuideUpdate = DateTime.Now;
+
+                        GeminiHardware.Trace.Info(3, "PulseGuide Param", m_GuideRateStepsPerMilliSecond, m_GuideRateStepsPerMilliSecondEast, m_GuideRateStepsPerMilliSecondWest);
                     }
                 }
             }
@@ -1131,40 +1150,105 @@ namespace ASCOM.GeminiTelescope
               
             string cmd = String.Empty;
 
+            //switch (Direction)
+            //{
+            //    case GuideDirections.guideEast:
+            //        cmd = ":Mie";
+            //        break;
+            //    case GuideDirections.guideNorth:
+            //        cmd = ":Min";
+            //        break;
+            //    case GuideDirections.guideSouth:
+            //        cmd = ":Mis";
+            //        break;
+            //    case GuideDirections.guideWest:
+            //        cmd = ":Miw";
+            //        break;
+            //}
+
+
+            int maxduration = (int)(255 / m_GuideRateStepsPerMilliSecond);
+
+            int prescaler = 1;
+
             switch (Direction)
             {
                 case GuideDirections.guideEast:
-                    cmd = ":Mie";
+                    cmd = ":Mge";
+                    maxduration = (int)(255 / m_GuideRateStepsPerMilliSecondEast);
+                    // perhaps a bug in Gemini: the prescaler value used for East guiding rate 
+                    // needs to be reversed for West guiding rate.
+
+                    // actual divisor:
+                    //prescaler = (int)(1500 / m_GuideRateStepsPerMilliSecondWest);
+
+                    //// prescaler needed to fit into 16 bits:
+                    //prescaler = (prescaler / 65536) + 1;
+
+                    // adjust duration to account for prescaler:
+                    Duration *= prescaler;
                     break;
                 case GuideDirections.guideNorth:
-                    cmd = ":Min";
+                    cmd = ":Mgn";
                     break;
                 case GuideDirections.guideSouth:
-                    cmd = ":Mis";
+                    cmd = ":Mgs";
                     break;
                 case GuideDirections.guideWest:
-                    cmd = ":Miw";
+                    maxduration = (int)(255 / m_GuideRateStepsPerMilliSecondWest);
+                    
+                    // factor is due to different step speed in West direction: (1+g)/(1-g):
+                    double fact = (1 + m_GuideRA / (SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0)) / (1 - m_GuideRA / (SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0));
+
+                    Duration = (int)(Duration/fact);
+
+                    // perhaps a bug in Gemini: the prescaler value used for East guiding rate 
+                    // needs to be reversed for West guiding rate.
+
+                    // actual divisor:
+                    prescaler = (int)(1500 / m_GuideRateStepsPerMilliSecondEast);
+
+                    // prescaler needed to fit into 16 bits:
+                    prescaler = (prescaler / 65536) + 1;
+
+                    // adjust duration to account for prescaler:
+                    Duration *= prescaler;
+                    cmd = ":Mgw";
                     break;
             }
 
+            // max duration is rounded to whole seconds, as per Rene G.:
+            maxduration = ((int)(maxduration / 1000)) * 1000;
+
+            //System.Windows.Forms.MessageBox.Show("Max duration: " + maxduration.ToString() + "\r\n" +
+            //        "Guide Rate: " + (m_GuideRA / (SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0)).ToString() + "\r\n" +
+            //        "East Steps/Sec: " + (m_GuideRateStepsPerMilliSecondEast * 1000).ToString() + "\r\n" +
+            //        "West Steps/Sec: " + (m_GuideRateStepsPerMilliSecondWest * 1000).ToString() + "\r\n" +
+            //        "Prescaler     : " + prescaler.ToString());
+
+
+            GeminiHardware.Trace.Info(3, "PulseGuide MaxDuration", maxduration);
+            
             int totalSteps = (int)(Duration * m_GuideRateStepsPerMilliSecond + 0.5); // total encoder ticks 
             GeminiHardware.Trace.Info(4, "IT:PulseGuide Ticks", totalSteps);
+            GeminiHardware.Trace.Info(4, "IT:PulseGuide MaxDur", maxduration);
 
-            if (Duration > 30000 || Duration < 0)  // too large or negative...
-                throw new InvalidValueException("PulseGuide" , Duration.ToString(), "0..30000");
+            if (Duration > 60000 || Duration < 0)  // too large or negative...
+                throw new InvalidValueException("PulseGuide" , Duration.ToString(), "0..60000");
 
             if (totalSteps <= 0) return;    //too small a move (less than 1 encoder tick)
 
-            int count = totalSteps;
+            int count = Duration;
 
-            for (int idx = 0; count > 0; ++idx, count -= 255)
+            for (int idx = 0; count > 0; ++idx)
             {
-                int d = (count > 255 ? 255 : count);
+                int d = (count > maxduration ? maxduration : count);
                 string c = cmd + d.ToString();
                 GeminiHardware.DoCommandResult(c, Duration + GeminiHardware.MAX_TIMEOUT, false);
                 GeminiHardware.Velocity = "G";
-                if (!GeminiHardware.AsyncPulseGuide || count > 255)
-                    GeminiHardware.WaitForVelocity("TN", Duration + 2000); // shouldn't take much longer than 'Duration', right?
+                count -= d;
+                if (!GeminiHardware.AsyncPulseGuide || count > 0)
+                    GeminiHardware.WaitForVelocity("TN", Duration + GeminiHardware.MAX_TIMEOUT); // shouldn't take much longer than 'Duration', right?
             }
             GeminiHardware.Trace.Exit("IT:PulseGuide", Direction, Duration, totalSteps);
         }
@@ -1291,6 +1375,8 @@ namespace ASCOM.GeminiTelescope
             get 
             {
                 AssertConnect();
+                if (!GeminiHardware.ReportPierSide) return PierSide.pierUnknown;
+
                 if (GeminiHardware.SideOfPier == "E")
                 {
                     GeminiHardware.Trace.Enter("IT:SideOfPier.Get", PierSide.pierEast);

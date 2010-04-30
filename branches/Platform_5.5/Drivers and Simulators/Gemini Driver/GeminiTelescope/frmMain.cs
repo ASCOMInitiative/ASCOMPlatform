@@ -845,6 +845,7 @@ namespace ASCOM.GeminiTelescope
             setupForm.TraceLevel = GeminiHardware.TraceLevel;
 
             setupForm.AsyncPulseGuide = GeminiHardware.AsyncPulseGuide;
+            setupForm.ReportPierSide = GeminiHardware.ReportPierSide;
 
             DialogResult ans;
             if (this.Visible==false)
@@ -890,6 +891,8 @@ namespace ASCOM.GeminiTelescope
                 GeminiHardware.TraceLevel = setupForm.TraceLevel;
 
                 GeminiHardware.AsyncPulseGuide = setupForm.AsyncPulseGuide;
+
+                GeminiHardware.ReportPierSide = setupForm.ReportPierSide;
 
                 int gpsBaudRate;
                 if (!int.TryParse(setupForm.GpsBaudRate, out gpsBaudRate))
@@ -1598,9 +1601,14 @@ namespace ASCOM.GeminiTelescope
         private void buttonSync_Click(object sender, EventArgs e)
         {
             if (GeminiHardware.TargetDeclination != SharedResources.INVALID_DOUBLE || GeminiHardware.TargetRightAscension != SharedResources.INVALID_DOUBLE)
-            { GeminiHardware.SyncEquatorial(); }
+            { 
+                GeminiHardware.SyncEquatorial();
+                GeminiHardware.ReportAlignResult("Sync");
+            }
             else
-            { MessageBox.Show(Resources.NoTarget, SharedResources.TELESCOPE_DRIVER_NAME); }
+            { 
+                MessageBox.Show(Resources.NoTarget, SharedResources.TELESCOPE_DRIVER_NAME); 
+            }
         }
 
         private void FuncMenu_Click(object sender, EventArgs e)
@@ -1611,7 +1619,10 @@ namespace ASCOM.GeminiTelescope
         private void buttonAddlAlign_Click(object sender, EventArgs e)
         {
             if (GeminiHardware.TargetDeclination != SharedResources.INVALID_DOUBLE || GeminiHardware.TargetRightAscension != SharedResources.INVALID_DOUBLE)
-            { GeminiHardware.AlignEquatorial(); }
+            { 
+                GeminiHardware.AlignEquatorial();
+                GeminiHardware.ReportAlignResult("Additional Align");
+            }
             else
             { MessageBox.Show(Resources.NoTarget, SharedResources.TELESCOPE_DRIVER_NAME); }
 
