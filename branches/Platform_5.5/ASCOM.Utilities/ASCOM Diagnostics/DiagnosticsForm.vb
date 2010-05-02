@@ -15,6 +15,8 @@ Imports System.Runtime.InteropServices
 Imports System.Reflection
 Imports System.GAC
 Imports System.Environment
+Imports System.Security.AccessControl
+Imports System.Security.Principal
 
 Public Class DiagnosticsForm
 
@@ -120,6 +122,8 @@ Public Class DiagnosticsForm
                 'List setup files
                 ScanLogs()
 
+                ScanRegistrySecurity()
+
                 TL.LogMessage("Diagnostics", "Completed diagnostic run")
                 TL.Enabled = False
                 TL.Dispose()
@@ -138,9 +142,62 @@ Public Class DiagnosticsForm
         End Try
     End Sub
 
+    Sub ScanRegistrySecurity()
+        Try
+            Status("Scanning Registry Security")
+            TL.LogMessage("RegistrySecurity", "Start")
+
+            ReadRegistryRights(Registry.CurrentUser, "")
+            ReadRegistryRights(Registry.ClassesRoot, "")
+            ReadRegistryRights(Registry.ClassesRoot, "DriverHelper.Util")
+            ReadRegistryRights(Registry.ClassesRoot, "DriverHelper.Util\Clsid")
+
+            ReadRegistryRights(Registry.LocalMachine, "")
+            ReadRegistryRights(Registry.LocalMachine, "SOFTWARE")
+
+            If IntPtr.Size = 8 Then '64bit OS so look in Wow64node
+                ReadRegistryRights(Registry.LocalMachine, "Software\Wow6432Node\ASCOM")
+            Else '32 bit OS
+                ReadRegistryRights(Registry.LocalMachine, "Software\ASCOM")
+            End If
+
+            TL.BlankLine()
+        Catch ex As Exception
+            TL.LogMessage("RegistrySecurity", "Exception: " & ex.ToString)
+        End Try
+    End Sub
+
+    Private Sub ReadRegistryRights(ByVal key As RegistryKey, ByVal SubKey As String)
+        Dim sec As System.Security.AccessControl.RegistrySecurity
+        Dim SKey As RegistryKey
+
+        Try
+            TL.LogMessage("RegistrySecurity", IIf(SubKey = "", key.Name.ToString, key.Name.ToString & "\" & SubKey))
+            If SubKey = "" Then
+                SKey = key.OpenSubKey(SubKey)
+            Else
+                SKey = key
+            End If
+
+            sec = key.GetAccessControl(Security.AccessControl.AccessControlSections.All)
+            For Each ar As RegistryAccessRule In sec.GetAccessRules(True, True, GetType(NTAccount))
+                TL.LogMessage("ReadRegistryRights", "  User: " & ar.IdentityReference.ToString)
+                TL.LogMessage("ReadRegistryRights", "    Type: " & ar.AccessControlType.ToString)
+                TL.LogMessage("ReadRegistryRights", "    Rights: " & ar.RegistryRights.ToString)
+                TL.LogMessage("ReadRegistryRights", "    Inheritance: " & ar.InheritanceFlags.ToString)
+                TL.LogMessage("ReadRegistryRights", "    Propogation: " & ar.PropagationFlags.ToString)
+                TL.LogMessage("ReadRegistryRights", "    Inherited?: " & ar.IsInherited)
+            Next
+        Catch ex As Exception
+            TL.LogMessage("ReadRegistryRights", ex.ToString)
+        End Try
+
+    End Sub
+
     Sub ScanRegistry()
         Dim Key As RegistryKey
         Try
+            Status("Scanning Registry")
             TL.LogMessage("ScanRegistry", "Start")
             If IntPtr.Size = 8 Then '64bit OS so look in Wow64node
                 Key = Registry.LocalMachine.OpenSubKey("Software\Wow6432Node\ASCOM")
