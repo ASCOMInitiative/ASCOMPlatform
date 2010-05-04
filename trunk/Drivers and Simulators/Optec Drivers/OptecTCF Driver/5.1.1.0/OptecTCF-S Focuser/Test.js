@@ -13,6 +13,7 @@ j += "TempComp = " + F.TempComp + "\n";
 j += "Temperature = " + F.Temperature + "\n";
 j += "Position = " + F.Position + "\n";
 F.TempComp = true;
+j += "Focuser Step Size = " + F.StepSize + "\n";
 j += "TempComp = " + F.TempComp + "\n";
 j += "Temperature = " + F.Temperature + "\n";
 j += "Position = " + F.Position + "\n";

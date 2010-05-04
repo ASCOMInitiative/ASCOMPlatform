@@ -210,7 +210,7 @@ namespace ASCOM.OptecTCF_S
 
         public double StepSize
         {
-            get { return DeviceSettings.MaxStep; }
+            get { return DeviceSettings.StepSize; }
         }
 
         public bool TempComp
