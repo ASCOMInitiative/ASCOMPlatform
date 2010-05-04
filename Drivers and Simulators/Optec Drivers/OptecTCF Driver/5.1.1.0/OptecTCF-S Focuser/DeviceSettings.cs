@@ -203,6 +203,20 @@ namespace ASCOM.OptecTCF_S
             }
         }
 
+        internal static double StepSize
+        {
+            get 
+            {
+                if (DeviceType == DeviceTypes.TCF_S3 || DeviceType == DeviceTypes.TCF_S3i || DeviceSettings.DeviceType == DeviceTypes.Unknown)
+                    return 2.5;
+                else if (DeviceType == DeviceTypes.TCF_S || DeviceType == DeviceTypes.TCF_Si)
+                    return 2;
+                else
+                    throw new InvalidValueException("Device Type in GetMaxStep",
+                        DeviceType.ToString(), "TCF_S, TCF_Si, TCF-S3, TCF-S3i, Unknown"); 
+            } 
+        }
+
         internal static SlopePoint StartPoint
         {
             get
