@@ -48,12 +48,17 @@ using System.Runtime.InteropServices;
 namespace ASCOM.Interface
 {
     /// <summary>
-	/// ITelescope V3 inherits IASCOMDriverV1 and ITelesceop
-	/// </summary>
-    [ComVisible(true), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("76DC9EE3-925B-47e3-9419-2AD58A91968F")]
-    public interface ITelescopeV3 : ITelescopeV2
-	{
-        string ANewTelescopeV3Property { get; }
-        void ANewTelescopeV3Method();
-	}
+    /// ITelescope V3 inherits IASCOMDriverV1 and ITelesceop
+    /// </summary>
+    [ComVisible(true), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("06CFB59B-2D9A-4099-9EAB-AA3900CAAF8D")]
+    public interface ITelescopeV4 : ITelescopeV3, IDontKnowYet
+    {
+        // There is no essential difference between V2 and V3,
+        // other than the addition of IDeviceControl,
+        // therefore no new members are defined here.
+        // This interfaces serves to aggregate the seperate interfaces.
+        // This is what we referred to as "ITelescopeV3Big" in the LiveMeeting.
+        string ANewTelescopeV4Property { get; }
+        void ANewTelescopeV4Method(string NewParameter1, double NewParameter2);
+    }
 }

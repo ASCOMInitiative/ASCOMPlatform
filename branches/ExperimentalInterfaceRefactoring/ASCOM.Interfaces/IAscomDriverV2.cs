@@ -1,7 +1,7 @@
 ﻿//tabs=4
 // --------------------------------------------------------------------------------
 // <summary>
-// ASCOM.Interface.ITelescope Telescope Interface V2
+// ASCOM.Interface ASCOM Driver Common Base Interface
 // </summary>
 //
 // <copyright company="TiGra Astronomy" author="Timothy P. Long">
@@ -30,30 +30,33 @@
 // </license>
 //
 //
-// Defines:	ITelescope interfaces
+// Implements:	
 // Author:		(TPL) Timothy P. Long <Tim@tigranetworks.co.uk>
 //
 // Edit Log:
 //
 // Date			Who	Vers	Description
 // -----------	---	-----	-------------------------------------------------------
-// 10-Feb-2010	TPL	6.0.*	Initial edit. Mirrors platform 5.0 PIAs.
-// 21-Feb-2010  cdr 6.0.*   Remove properties and methods already in IAscomDriver
-// 03-Mar-2010	TPL	6.0.*	Renamed to ITelescopeV3, added IDeviceControl
+// 10-Feb-2010	TPL	6.0.*	Initial edit. Based on draft document by Peter Simpson.
 // --------------------------------------------------------------------------------
 //
 using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Runtime.InteropServices;
+using ASCOM.Interface;
 
 namespace ASCOM.Interface
 {
+
     /// <summary>
-	/// ITelescope V3 inherits IASCOMDriverV1 and ITelesceop
-	/// </summary>
-    [ComVisible(true), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("76DC9EE3-925B-47e3-9419-2AD58A91968F")]
-    public interface ITelescopeV3 : ITelescopeV2
-	{
-        string ANewTelescopeV3Property { get; }
-        void ANewTelescopeV3Method();
-	}
+    /// Defines the properties and methods that are common to all ASCOM devices.
+    /// </summary>
+    [ComVisible(true), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("7FC483DC-9203-4a26-8312-19647C564220")]
+    public interface IAscomDriverV2 : IAscomDriver
+    {
+        string ANewIAscomDriverV2Property { get; }
+        void ANewIAscomDriverV2Method(string NewParameter1, double NewParameter2);
+    }
+
 }

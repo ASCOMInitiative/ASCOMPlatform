@@ -40,15 +40,108 @@
 // 21-Feb-2010	CDR	6.0.*	Initial edit.
 // --------------------------------------------------------------------------------
 
+using System.Runtime.InteropServices;
+
 namespace ASCOM.Interface
 {
-	/// <summary>
+    /// <summary>
 	/// Camera V2 interface is the aggregate of Camera V1
 	/// and the new IAscomDriver and IDeviceControl interfaces.
 	/// </summary>
-    public interface ICameraV2 : IAscomDriver, ICamera, IDeviceControl
+    [ComVisible(true), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("4002DD8D-8555-4b36-A9A9-172163F83364")]
+    public interface ICameraV2 : IAscomDriver, IDeviceControl
     {
-		// ToDo: add intellisense XML comments to each member.
+        #region ICamera Members
+        short BinX { get; set; }
+
+        short BinY { get; set; }
+
+        CameraStates CameraState { get; }
+
+        int CameraXSize { get; }
+
+        int CameraYSize { get; }
+
+        bool CanAbortExposure { get; }
+
+        bool CanAsymmetricBin { get; }
+
+        bool CanGetCoolerPower { get; }
+
+        bool CanPulseGuide { get; }
+
+        bool CanSetCCDTemperature { get; }
+
+        bool CanStopExposure { get; }
+
+        double CCDTemperature { get; }
+
+        //bool Connected {  get;   set; }
+
+        bool CoolerOn { get; set; }
+
+        double CoolerPower { get; }
+
+        //string Description {   get; }
+
+        double ElectronsPerADU { get; }
+
+        double FullWellCapacity { get; }
+
+        bool HasShutter { get; }
+
+        double HeatSinkTemperature { get; }
+
+        object ImageArray { get; }
+
+        object ImageArrayVariant { get; }
+
+        bool ImageReady { get; }
+
+        bool IsPulseGuiding { get; }
+
+        string LastError { get; }
+
+        double LastExposureDuration { get; }
+
+        string LastExposureStartTime { get; }
+
+        int MaxADU { get; }
+
+        short MaxBinX { get; }
+
+        short MaxBinY { get; }
+
+        int NumX { get; set; }
+
+        int NumY { get; set; }
+
+        double PixelSizeX { get; }
+
+        double PixelSizeY { get; }
+
+        double SetCCDTemperature { get; set; }
+
+        int StartX { get; set; }
+
+        int StartY { get; set; }
+
+        void AbortExposure();
+
+        void PulseGuide(GuideDirections Direction, int Duration);
+
+        //void SetupDialog();
+
+        void StartExposure(double Duration, bool Light);
+
+        void StopExposure();
+
+
+        #endregion
+
+        #region ICameraV2 additional members
+
+        // ToDo: add intellisense XML comments to each member.
         short BayerOffsetX { get; }
 
         short BayerOffsetY { get; }
@@ -80,5 +173,7 @@ namespace ASCOM.Interface
         string SensorName { get; }
 
         SensorType SensorType { get; }
+
+        #endregion
     }
 }

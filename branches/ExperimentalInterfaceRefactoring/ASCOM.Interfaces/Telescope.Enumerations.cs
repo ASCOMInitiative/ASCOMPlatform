@@ -49,10 +49,10 @@ namespace ASCOM.Interface
 {
 
     //[Guid("30D18B61-AECC-4C03-8759-E3EDD246F062")]
-    [ComVisible(true), Guid("0EA35CD1-51F4-496b-A875-381F834132EE")]
     /// <summary>
     /// The alignment mode of the mount.
     /// </summary>
+    [ComVisible(true), Guid("0EA35CD1-51F4-496b-A875-381F834132EE")]
     public enum AlignmentModes
     {
         /// <summary>
@@ -72,10 +72,10 @@ namespace ASCOM.Interface
     }
 
     //[Guid("D9998808-2DF0-4CA1-ADD6-CE592026C663")]
-    [ComVisible(true), Guid("0C99524B-7319-4571-A0DA-F44729E81967")]
     /// <summary>
     /// Well-known telescope tracking rates.
     /// </summary>
+    [ComVisible(true), Guid("0C99524B-7319-4571-A0DA-F44729E81967")]
     public enum DriveRates
     {
         /// <summary>
@@ -100,10 +100,10 @@ namespace ASCOM.Interface
     }
 
     //[Guid("135265BA-25AC-4F43-95E5-80D0171E48FA")]
-    [ComVisible(true), Guid("D6F46E7F-7A68-400b-B67A-6EF3AC6FA54B")]
     /// <summary>
     /// Equatorial coordinate systems used by telescopes.
     /// </summary>
+    [ComVisible(true), Guid("D6F46E7F-7A68-400b-B67A-6EF3AC6FA54B")]
     public enum EquatorialCoordinateType
     {
         /// <summary>
@@ -134,11 +134,11 @@ namespace ASCOM.Interface
 
     //[Guid("3613EEEB-5563-47D8-B512-1D36D64CEEBB")]
 
-    [ComVisible(true), Guid("3A0658F1-FD51-4c52-AC31-97CA58803352")]
     /// <summary>
     /// The direction in which the guide-rate motion is to be made.
     /// </summary>
-    public enum GuideDirections
+     [ComVisible(true), Guid("3A0658F1-FD51-4c52-AC31-97CA58803352")]
+   public enum GuideDirections
     {
         /// <summary>
         /// North (+ declination/altitude).
@@ -162,10 +162,10 @@ namespace ASCOM.Interface
     }
 
     //[Guid("BCB5C21D-B0EA-40D1-B36C-272456F44D01")]
-    [ComVisible(true), Guid("4089497F-5F2C-45f9-98ED-72A5B844C0ED")]
     /// <summary>
     /// The telescope axes
     /// </summary>
+    [ComVisible(true), Guid("4089497F-5F2C-45f9-98ED-72A5B844C0ED")]
     public enum TelescopeAxes
     {
         /// <summary>
@@ -185,7 +185,6 @@ namespace ASCOM.Interface
     }
 
     //[Guid("ECD99531-A2CF-4B9F-91A0-35FE5D12B043")]
-    [ComVisible(true), Guid("A1794728-B07F-46c8-ACE3-57BF763E9608")]
     /// <summary>
     /// The side of the pier on which the optical tube assembly is located.
     /// </summary>
@@ -198,6 +197,7 @@ namespace ASCOM.Interface
     ///			</para>
     ///		</alert>
     /// </remarks>
+    [ComVisible(true), Guid("A1794728-B07F-46c8-ACE3-57BF763E9608")]
     public enum PierSide
     {
         /// <summary>

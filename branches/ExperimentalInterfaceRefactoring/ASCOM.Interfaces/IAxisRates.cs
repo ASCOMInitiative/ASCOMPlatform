@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Collections;
+using System.Runtime.InteropServices;
 
 namespace ASCOM.Interface
 {
@@ -21,6 +22,7 @@ namespace ASCOM.Interface
     /// A collection of <see cref="Rate"/> objects describing the supported rates of motion
     /// for the <see cref="MoveAxis"/> method.
     /// </summary>
+    [ComVisible(true), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("783A35EB-5437-41f1-869B-9DA8949C8508")]
     public interface IAxisRates
     {
         /// <summary>

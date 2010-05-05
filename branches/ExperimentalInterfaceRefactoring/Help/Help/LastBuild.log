@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shfbBuild product="Sandcastle Help File Builder Utilities" version="1.8.0.3" projectFile="C:\Users\Public\Documents\ASCOM Interface\Help\ASCOMPlatform.shfbproj" started="06/03/2010 11:13:01">
+<shfbBuild product="Sandcastle Help File Builder Utilities" version="1.8.0.3" projectFile="C:\Users\Public\Documents\ASCOM Interface\Help\ASCOMPlatform.shfbproj" started="19/03/2010 14:33:05">
 <buildStep step="Initializing">
 Loading and initializing plug-ins...
 Hierarchical Table of Contents Version 1.8.0.3
@@ -15,6 +15,8 @@ Found HTML Help 1 compiler in 'C:\Program Files (x86)\HTML Help Workshop\'
 Validating and copying documentation source information
 Source: C:\Users\Public\Documents\ASCOM Interface\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj
     Found project 'C:\Users\Public\Documents\ASCOM Interface\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj'
+Source: C:\Users\Public\Documents\ASCOM Interface\ClientToolbox\ASCOM.DriverAccess.csproj
+    Found project 'C:\Users\Public\Documents\ASCOM Interface\ClientToolbox\ASCOM.DriverAccess.csproj'
 Source: C:\Users\Public\Documents\ASCOM Interface\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj
     Found project 'C:\Users\Public\Documents\ASCOM Interface\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj'
 Source: C:\Users\Public\Documents\ASCOM Interface\ASCOM.IConform\ASCOM.IConform\ASCOM.IConform.vbproj
@@ -28,38 +30,38 @@ Source: C:\Users\Public\Documents\ASCOM Interface\ASCOM.Utilities\ASCOM.Utilitie
 
 Parsing project files
     Found assembly 'C:\Users\Public\Documents\ASCOM Interface\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll'
+    Found assembly 'C:\Users\Public\Documents\ASCOM Interface\ClientToolbox\bin\Release\ASCOM.DriverAccess.dll'
     Found assembly 'C:\Users\Public\Documents\ASCOM Interface\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll'
     Found assembly 'C:\Users\Public\Documents\ASCOM Interface\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll'
-    Found assembly 'C:\Users\Public\Documents\ASCOM Interface\ASCOM.Interfaces\bin\Release\ASCOM.Interfaces.dll'
+    Found assembly 'C:\Users\Public\Documents\ASCOM Interface\ASCOM.Interfaces\bin\Release\ASCOM.Interfaces6.dll'
     Found assembly 'C:\Users\Public\Documents\ASCOM Interface\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll'
 
 References to use:
-    ASCOM.DriverAccess, Version=1.0.5.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL
     System
     System.Core
     System.Data
-    System.Data.DataSetExtensions
     System.Drawing
     System.Windows.Forms
     System.Xml
     System.XML
-    System.Xml.Linq
 
 Copying XML comments files
     C:\Users\Public\Documents\ASCOM Interface\ASCOM.Astrometry\ASCOM.Astrometry\AstrometryNamespaceDocs.xml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\AstrometryNamespaceDocs.xml
     C:\Users\Public\Documents\ASCOM Interface\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\NamespaceDocumentation.xml
     C:\Users\Public\Documents\ASCOM Interface\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ASCOM.Astrometry.xml
+    C:\Users\Public\Documents\ASCOM Interface\ClientToolbox\bin\Release\ASCOM.DriverAccess.xml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ASCOM.DriverAccess.xml
     C:\Users\Public\Documents\ASCOM Interface\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.XML -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ASCOM.Exceptions.XML
     C:\Users\Public\Documents\ASCOM Interface\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.xml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ASCOM.IConform.xml
+    C:\Users\Public\Documents\ASCOM Interface\ASCOM.Interfaces\bin\Release\ASCOM.Interfaces6.XML -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ASCOM.Interfaces6.XML
     C:\Users\Public\Documents\ASCOM Interface\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ASCOM.Utilities.xml
 </buildStep>
 <buildStep step="GenerateSharedContent">
 Generating shared content files (en-US, English (United States))...
-    Last step completed in 00:00:00.0470
+    Last step completed in 00:00:00.0040
 </buildStep>
 <buildStep step="GenerateApiFilter">
 Generating API filter for MRefBuilder...
-    Last step completed in 00:00:00.0140
+    Last step completed in 00:00:00.0120
 </buildStep>
 <buildStep step="GenerateReflectionInfo">
 Generating reflection information...
@@ -67,26 +69,24 @@ Generating reflection information...
 GenerateRefInfo:
   MrefBuilder (v2.4.10520.1)
   Copyright &#184; Microsoft 2006
-  Info: Loaded 5 assemblies for reflection and 9 dependency assemblies.
-  Info: Wrote information on 12 namespaces, 132 types, and 1276 members
+  Info: Loaded 6 assemblies for reflection and 6 dependency assemblies.
+  Info: Wrote information on 13 namespaces, 150 types, and 1953 members
   XslTransform (v2.4.10520.1)
   Copyright &#184; Microsoft 2005-2006
   Info: Applying XSL transformation 'C:\Program Files (x86)\Sandcastle\ProductionTransforms\MergeDuplicates.xsl'.
-    Last step completed in 00:00:01.1681
+    Last step completed in 00:00:01.1691
 </buildStep>
 <buildStep step="GenerateNamespaceSummaries">
 Generating namespace summary information...
-    Last step completed in 00:00:00.0130
+    Last step completed in 00:00:00.0080
 </buildStep>
 <buildStep step="ApplyVisibilityProperties">
 Applying visibility properties to reflection information file
-    262 attribute nodes removed
-    0 explicit interface implementations removed
-    0 local and base class EII elements removed
-    14 protected members noted for removal
+    331 attribute nodes removed
+    23 protected members noted for removal
     3 protected inherited framework members noted for removal
     Removing previously noted unwanted APIs and elements
-    Last step completed in 00:00:00.1840
+    Last step completed in 00:00:00.2610
 </buildStep>
 <buildStep step="TransformReflectionInfo">
 Transforming reflection output...
@@ -99,7 +99,7 @@ TransformManifest:
   XslTransform (v2.4.10520.1)
   Copyright &#184; Microsoft 2005-2006
   Info: Applying XSL transformation 'C:\Program Files (x86)\Sandcastle\ProductionTransforms\ReflectionToManifest.xsl'.
-    Last step completed in 00:00:01.3791
+    Last step completed in 00:00:01.6861
 </buildStep>
 <buildStep step="ModifyHelpTopicFilenames">
 Modifying help topic filenames in reflection information file
@@ -136,6 +136,9 @@ Modifying help topic filenames in reflection information file
     Unique name M_ASCOM_Conform_ConformCommandStrings__ctor_1 generated for M:ASCOM.Conform.ConformCommandStrings.#ctor(System.String,System.String,System.String,System.String,System.Boolean)
     Unique name M_ASCOM_Conform_ConformErrorNumbers__ctor_1 generated for M:ASCOM.Conform.ConformErrorNumbers.#ctor(System.Int32,System.Int32,System.Int32,System.Int32)
     Unique name M_ASCOM_Conform_ConformErrorNumbers__ctor_2 generated for M:ASCOM.Conform.ConformErrorNumbers.#ctor(System.Int32[],System.Int32[],System.Int32[])
+    Unique name M_ASCOM_DriverAccess_Camera__ctor_1 generated for M:ASCOM.DriverAccess.Camera.#ctor(System.String)
+    Unique name M_ASCOM_DriverAccess_TelescopeV3__ctor_1 generated for M:ASCOM.DriverAccess.TelescopeV3.#ctor(System.String)
+    Unique name M_ASCOM_DriverAccess_TelescopeV4__ctor_1 generated for M:ASCOM.DriverAccess.TelescopeV4.#ctor(System.String)
     Unique name M_ASCOM_Utilities_Chooser_Choose_1 generated for M:ASCOM.Utilities.Chooser.Choose(System.String)
     Unique name M_ASCOM_Utilities_KeyValuePair__ctor_1 generated for M:ASCOM.Utilities.KeyValuePair.#ctor(System.String,System.String)
     Unique name M_ASCOM_Utilities_Profile__ctor_1 generated for M:ASCOM.Utilities.Profile.#ctor(System.Boolean)
@@ -202,7 +205,7 @@ Modifying help topic filenames in reflection information file
     Unique name M_ASCOM_Utilities_Interfaces_IUtilExtra_HoursToHMS_1 generated for M:ASCOM.Utilities.Interfaces.IUtilExtra.HoursToHMS(System.Double,System.String)
     Unique name M_ASCOM_Utilities_Interfaces_IUtilExtra_HoursToHMS_2 generated for M:ASCOM.Utilities.Interfaces.IUtilExtra.HoursToHMS(System.Double,System.String,System.String)
     Unique name M_ASCOM_Utilities_Interfaces_IUtilExtra_HoursToHMS_3 generated for M:ASCOM.Utilities.Interfaces.IUtilExtra.HoursToHMS(System.Double,System.String,System.String,System.String)
-    Last step completed in 00:00:00.1530
+    Last step completed in 00:00:00.1550
 </buildStep>
 <buildStep step="CopyStandardContent">
 Copying standard help content...
@@ -312,7 +315,7 @@ C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\scripts\script_manif
 C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\scripts\SplitScreen.js -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\scripts\SplitScreen.js
 C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\styles\Presentation.css -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\styles\Presentation.css
 C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\styles\Whidbey\presentation.css -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\styles\Whidbey\presentation.css
-    Last step completed in 00:00:00.3460
+    Last step completed in 00:00:00.4010
 </buildStep>
 <buildStep step="CopyConceptualContent">
 Copying conceptual content...
@@ -372,29 +375,29 @@ Generating conceptual topic files
     C:\Users\Public\Documents\ASCOM Interface\Help\Tools and Features\Diagnostics Tool.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\0a23ff52-a935-4cd7-a693-9e3b90f7df29.xml
     Parsing topic file 'C:\Users\Public\Documents\ASCOM Interface\Help\Developer Information\MultiThreading.aml'
     C:\Users\Public\Documents\ASCOM Interface\Help\Developer Information\MultiThreading.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ddueXml\caf6b21d-755a-4f1c-891f-ce971a9a2f79.xml
-    Last step completed in 00:00:00.1930
+    Last step completed in 00:00:00.1180
 </buildStep>
 <buildStep step="CreateConceptualTopicConfigs">
 Creating conceptual topic configuration files...
     Companion files
     _ContentMetadata_.xml
     ConceptualManifest.xml
-    Last step completed in 00:00:00.0350
+    Last step completed in 00:00:00.0160
 </buildStep>
 <buildStep step="CopyAdditionalContent">
 Copying additional content files...
 C:\Users\Public\Documents\ASCOM Interface\Help\Introduction\Acknowledgements.aml -&gt; C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\Introduction\Acknowledgements.aml
-    Last step completed in 00:00:00.0130
+    Last step completed in 00:00:00.0050
 </buildStep>
 <buildStep step="MergeTablesOfContents">
 Merging conceptual and additional tables of contents...
-    Last step completed in 00:00:00.0450
+    Last step completed in 00:00:00.0530
 </buildStep>
 <buildStep step="CreateBuildAssemblerConfigs">
 Creating Sandcastle configuration files...
     sandcastle.config
     conceptual.config
-    Last step completed in 00:00:00.0370
+    Last step completed in 00:00:00.0070
 </buildStep>
 <buildStep step="MergeCustomConfigs">
 Merging custom build component configurations
@@ -410,7 +413,7 @@ C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\conceptual.config
     Skipping component 'Cached Reflection Index Data', not used in conceptual build
     Replacing default configuration for 'Code Block Component' with the custom configuration
     Removing unused ExampleComponent.
-    Last step completed in 00:00:00.0590
+    Last step completed in 00:00:00.0390
 </buildStep>
 <buildStep step="BuildConceptualTopics">
 Building conceptual help topics...
@@ -476,19 +479,19 @@ BuildConceptualTopics:
   Info: SharedContentComponent: Overriding shared content item 'feedback_product' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
   Info: SharedContentComponent: Overriding shared content item 'feedback_body' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
   Info: SharedContentComponent: Found 1 files in PresentationStyleBuilderContent.xml.
-  Info: SharedContentComponent: Loaded 203 shared content items.
+  Info: SharedContentComponent: Loaded 209 shared content items.
   Info: ResolveConceptualLinksComponent: Instantiating component.
   Info: ResolveConceptualLinksComponent: Collected 1 targets directories.
   Info: CachedResolveReferenceLinksComponent: Instantiating component.
   Info: CachedResolveReferenceLinksComponent: Creating MSDN URL resolver.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Program Files (x86)\Sandcastle\Data\Reflection' for targets files of the form '*.xml'.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working' for targets files of the form 'reflection.xml'.
-  Info: CachedResolveReferenceLinksComponent: Loaded 171826 reference targets.
+  Info: CachedResolveReferenceLinksComponent: Loaded 172570 reference targets.
   Info: CachedResolveReferenceLinksComponent: 
       [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.3]
       Cached Resolve Reference  Links 2 Component.  Copyright &#184; 2006-2010, Eric Woodruff, All Rights Reserved
       http://SHFB.CodePlex.com
-  Info: CachedResolveReferenceLinksComponent: Loaded 38 cached MSDN URL entries
+  Info: CachedResolveReferenceLinksComponent: Loaded 41 cached MSDN URL entries
   Info: SaveComponent: Instantiating component.
   Info: BuildAssembler: Building topic 7d9253c2-fdfd-4c0d-8225-a96bddb49731
   Info: BuildAssembler: Building topic 661ad380-12b9-4a1f-b79c-5dde4f5e781b
@@ -516,7 +519,7 @@ BuildConceptualTopics:
   Info: BuildAssembler: Building topic 0a23ff52-a935-4cd7-a693-9e3b90f7df29
   Info: BuildAssembler: Building topic caf6b21d-755a-4f1c-891f-ce971a9a2f79
   Info: Processed 25 topics
-    Last step completed in 00:00:08.9467
+    Last step completed in 00:00:08.6665
 </buildStep>
 <buildStep step="BuildReferenceTopics">
 Building reference help topics...
@@ -528,7 +531,7 @@ BuildReferenceTopics:
   Info: CopyFromFileComponent: Loading data file 'C:\Program Files (x86)\Sandcastle\Presentation\vs2005 ASCOM\Transforms\skeleton.xml'.
   Info: CachedCopyFromIndexComponent: Instantiating component.
   Info: CachedCopyFromIndexComponent: Searching for files that match 'reflection.xml'.
-  Info: CachedCopyFromIndexComponent: Indexed 1735 elements in 1 files.
+  Info: CachedCopyFromIndexComponent: Indexed 2479 elements in 1 files.
   Info: CachedCopyFromIndexComponent: Loaded 0 copy components.
   Info: CachedCopyFromIndexComponent: 
       [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.3]
@@ -582,10 +585,12 @@ BuildReferenceTopics:
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\AstrometryNamespaceDocs.xml'.
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\NamespaceDocumentation.xml'.
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ASCOM.Astrometry.xml'.
+  Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ASCOM.DriverAccess.xml'.
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ASCOM.Exceptions.XML'.
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ASCOM.IConform.xml'.
+  Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ASCOM.Interfaces6.XML'.
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\ASCOM.Utilities.xml'.
-  Info: CopyFromIndexComponent: Indexed 82345 elements in 56 files.
+  Info: CopyFromIndexComponent: Indexed 82869 elements in 58 files.
   Info: CopyFromIndexComponent: Loaded 0 copy components.
   Info: ForEachComponent: Instantiating component.
   Info: ForEachComponent: Loading subcomponents.
@@ -655,19 +660,29 @@ BuildReferenceTopics:
   Info: SharedContentComponent: Overriding shared content item 'feedback_product' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
   Info: SharedContentComponent: Overriding shared content item 'feedback_body' with value in file 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PresentationStyleBuilderContent.xml'.
   Info: SharedContentComponent: Found 1 files in PresentationStyleBuilderContent.xml.
-  Info: SharedContentComponent: Loaded 587 shared content items.
+  Info: SharedContentComponent: Loaded 623 shared content items.
   Info: CachedResolveReferenceLinksComponent: Instantiating component.
   Info: CachedResolveReferenceLinksComponent: Creating MSDN URL resolver.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Program Files (x86)\Sandcastle\Data\Reflection' for targets files of the form '*.xml'.
   Info: CachedResolveReferenceLinksComponent: Searching directory 'C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working' for targets files of the form 'reflection.xml'.
-  Info: CachedResolveReferenceLinksComponent: Loaded 171826 reference targets.
+  Info: CachedResolveReferenceLinksComponent: Loaded 172570 reference targets.
   Info: CachedResolveReferenceLinksComponent: 
       [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.3]
       Cached Resolve Reference  Links 2 Component.  Copyright &#184; 2006-2010, Eric Woodruff, All Rights Reserved
       http://SHFB.CodePlex.com
-  Info: CachedResolveReferenceLinksComponent: Loaded 38 cached MSDN URL entries
+  Info: CachedResolveReferenceLinksComponent: Loaded 41 cached MSDN URL entries
   Info: SaveComponent: Instantiating component.
   Info: BuildAssembler: Building topic N:ASCOM
+  Info: BuildAssembler: Building topic T:ASCOM.ActionNotImplementedException
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.ActionNotImplementedException
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.ActionNotImplementedException
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.ActionNotImplementedException.#ctor
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.ActionNotImplementedException
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.ActionNotImplementedException
+  Info: BuildAssembler: Building topic M:ASCOM.ActionNotImplementedException.#ctor(System.String)
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.ActionNotImplementedException.#ctor(System.String)
+  Info: BuildAssembler: Building topic P:ASCOM.ActionNotImplementedException.Action
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.ActionNotImplementedException.Action
   Info: BuildAssembler: Building topic T:ASCOM.DriverException
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.DriverException
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.DriverException
@@ -683,26 +698,20 @@ BuildReferenceTopics:
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.DriverException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.DriverException.#ctor(System.String)
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.DriverException.#ctor(System.String)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;message&quot;/&gt; documentation for M:ASCOM.DriverException.#ctor(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.DriverException.#ctor(System.String,System.Exception)
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.DriverException.#ctor(System.String,System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;message&quot;/&gt; documentation for M:ASCOM.DriverException.#ctor(System.String,System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;innerException&quot;/&gt; documentation for M:ASCOM.DriverException.#ctor(System.String,System.Exception)
   Info: BuildAssembler: Building topic M:ASCOM.DriverException.#ctor(System.String,System.Int32)
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.DriverException.#ctor(System.String,System.Int32)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;message&quot;/&gt; documentation for M:ASCOM.DriverException.#ctor(System.String,System.Int32)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;number&quot;/&gt; documentation for M:ASCOM.DriverException.#ctor(System.String,System.Int32)
   Info: BuildAssembler: Building topic M:ASCOM.DriverException.#ctor(System.String,System.Int32,System.Exception)
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.DriverException.#ctor(System.String,System.Int32,System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;message&quot;/&gt; documentation for M:ASCOM.DriverException.#ctor(System.String,System.Int32,System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;number&quot;/&gt; documentation for M:ASCOM.DriverException.#ctor(System.String,System.Int32,System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;inner&quot;/&gt; documentation for M:ASCOM.DriverException.#ctor(System.String,System.Int32,System.Exception)
   Info: BuildAssembler: Building topic P:ASCOM.DriverException.Number
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverException.Number
   Info: BuildAssembler: Building topic T:ASCOM.ErrorCodes
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.ErrorCodes
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.ErrorCodes
   Info: BuildAssembler: Building topic Fields.T:ASCOM.ErrorCodes
+  Info: BuildAssembler: Building topic F:ASCOM.ErrorCodes.ActionNotImplementedException
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:ASCOM.ErrorCodes.ActionNotImplementedException
   Info: BuildAssembler: Building topic F:ASCOM.ErrorCodes.DriverBase
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for F:ASCOM.ErrorCodes.DriverBase
   Info: BuildAssembler: Building topic F:ASCOM.ErrorCodes.DriverMax
@@ -739,14 +748,10 @@ BuildReferenceTopics:
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.InvalidOperationException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.InvalidOperationException.#ctor(System.Exception)
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.InvalidOperationException.#ctor(System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;innerException&quot;/&gt; documentation for M:ASCOM.InvalidOperationException.#ctor(System.Exception)
   Info: BuildAssembler: Building topic M:ASCOM.InvalidOperationException.#ctor(System.String)
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.InvalidOperationException.#ctor(System.String)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;message&quot;/&gt; documentation for M:ASCOM.InvalidOperationException.#ctor(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.InvalidOperationException.#ctor(System.String,System.Exception)
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.InvalidOperationException.#ctor(System.String,System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;message&quot;/&gt; documentation for M:ASCOM.InvalidOperationException.#ctor(System.String,System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;innerException&quot;/&gt; documentation for M:ASCOM.InvalidOperationException.#ctor(System.String,System.Exception)
   Info: BuildAssembler: Building topic T:ASCOM.InvalidValueException
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.InvalidValueException
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.InvalidValueException
@@ -757,15 +762,8 @@ BuildReferenceTopics:
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.InvalidValueException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String)
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strPropertyOrMethod&quot;/&gt; documentation for M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strValue&quot;/&gt; documentation for M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strRange&quot;/&gt; documentation for M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String,System.Exception)
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String,System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strPropertyOrMethod&quot;/&gt; documentation for M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String,System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strValue&quot;/&gt; documentation for M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String,System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strRange&quot;/&gt; documentation for M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String,System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;inner&quot;/&gt; documentation for M:ASCOM.InvalidValueException.#ctor(System.String,System.String,System.String,System.Exception)
   Info: BuildAssembler: Building topic P:ASCOM.InvalidValueException.PropertyOrMethod
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.InvalidValueException.PropertyOrMethod
   Info: BuildAssembler: Building topic P:ASCOM.InvalidValueException.Range
@@ -782,11 +780,8 @@ BuildReferenceTopics:
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.MethodNotImplementedException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.MethodNotImplementedException.#ctor(System.String)
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.MethodNotImplementedException.#ctor(System.String)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strMethod&quot;/&gt; documentation for M:ASCOM.MethodNotImplementedException.#ctor(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.MethodNotImplementedException.#ctor(System.String,System.Exception)
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.MethodNotImplementedException.#ctor(System.String,System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strMethod&quot;/&gt; documentation for M:ASCOM.MethodNotImplementedException.#ctor(System.String,System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;inner&quot;/&gt; documentation for M:ASCOM.MethodNotImplementedException.#ctor(System.String,System.Exception)
   Info: BuildAssembler: Building topic P:ASCOM.MethodNotImplementedException.Method
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.MethodNotImplementedException.Method
   Info: BuildAssembler: Building topic T:ASCOM.NotConnectedException
@@ -803,14 +798,10 @@ BuildReferenceTopics:
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.NotConnectedException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.NotConnectedException.#ctor(System.Exception)
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.NotConnectedException.#ctor(System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;innerException&quot;/&gt; documentation for M:ASCOM.NotConnectedException.#ctor(System.Exception)
   Info: BuildAssembler: Building topic M:ASCOM.NotConnectedException.#ctor(System.String)
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.NotConnectedException.#ctor(System.String)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;message&quot;/&gt; documentation for M:ASCOM.NotConnectedException.#ctor(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.NotConnectedException.#ctor(System.String,System.Exception)
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.NotConnectedException.#ctor(System.String,System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;message&quot;/&gt; documentation for M:ASCOM.NotConnectedException.#ctor(System.String,System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;innerException&quot;/&gt; documentation for M:ASCOM.NotConnectedException.#ctor(System.String,System.Exception)
   Info: BuildAssembler: Building topic T:ASCOM.NotImplementedException
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.NotImplementedException
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.NotImplementedException
@@ -821,11 +812,8 @@ BuildReferenceTopics:
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.NotImplementedException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.NotImplementedException.#ctor(System.String)
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.NotImplementedException.#ctor(System.String)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strPropertyOrMethod&quot;/&gt; documentation for M:ASCOM.NotImplementedException.#ctor(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.NotImplementedException.#ctor(System.String,System.Exception)
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.NotImplementedException.#ctor(System.String,System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strPropertyOrMethod&quot;/&gt; documentation for M:ASCOM.NotImplementedException.#ctor(System.String,System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;inner&quot;/&gt; documentation for M:ASCOM.NotImplementedException.#ctor(System.String,System.Exception)
   Info: BuildAssembler: Building topic P:ASCOM.NotImplementedException.PropertyOrMethod
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.NotImplementedException.PropertyOrMethod
   Info: BuildAssembler: Building topic T:ASCOM.ParkedException
@@ -840,7 +828,6 @@ BuildReferenceTopics:
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.ParkedException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.ParkedException.#ctor(System.Exception)
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.ParkedException.#ctor(System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;inner&quot;/&gt; documentation for M:ASCOM.ParkedException.#ctor(System.Exception)
   Info: BuildAssembler: Building topic T:ASCOM.PropertyNotImplementedException
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.PropertyNotImplementedException
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.PropertyNotImplementedException
@@ -851,13 +838,8 @@ BuildReferenceTopics:
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.PropertyNotImplementedException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.PropertyNotImplementedException.#ctor(System.String,System.Boolean)
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.PropertyNotImplementedException.#ctor(System.String,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strProperty&quot;/&gt; documentation for M:ASCOM.PropertyNotImplementedException.#ctor(System.String,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;bAccessorSet&quot;/&gt; documentation for M:ASCOM.PropertyNotImplementedException.#ctor(System.String,System.Boolean)
   Info: BuildAssembler: Building topic M:ASCOM.PropertyNotImplementedException.#ctor(System.String,System.Boolean,System.Exception)
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.PropertyNotImplementedException.#ctor(System.String,System.Boolean,System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strProperty&quot;/&gt; documentation for M:ASCOM.PropertyNotImplementedException.#ctor(System.String,System.Boolean,System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;bAccessorSet&quot;/&gt; documentation for M:ASCOM.PropertyNotImplementedException.#ctor(System.String,System.Boolean,System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;inner&quot;/&gt; documentation for M:ASCOM.PropertyNotImplementedException.#ctor(System.String,System.Boolean,System.Exception)
   Info: BuildAssembler: Building topic P:ASCOM.PropertyNotImplementedException.AccessorSet
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.PropertyNotImplementedException.AccessorSet
   Info: BuildAssembler: Building topic P:ASCOM.PropertyNotImplementedException.Property
@@ -874,7 +856,6 @@ BuildReferenceTopics:
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.SlavedException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.SlavedException.#ctor(System.Exception)
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.SlavedException.#ctor(System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;inner&quot;/&gt; documentation for M:ASCOM.SlavedException.#ctor(System.Exception)
   Info: BuildAssembler: Building topic T:ASCOM.ValueNotSetException
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.ValueNotSetException
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.ValueNotSetException
@@ -885,11 +866,8 @@ BuildReferenceTopics:
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.ValueNotSetException.#ctor
   Info: BuildAssembler: Building topic M:ASCOM.ValueNotSetException.#ctor(System.String)
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.ValueNotSetException.#ctor(System.String)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strPropertyOrMethod&quot;/&gt; documentation for M:ASCOM.ValueNotSetException.#ctor(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.ValueNotSetException.#ctor(System.String,System.Exception)
   Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.ValueNotSetException.#ctor(System.String,System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;strPropertyOrMethod&quot;/&gt; documentation for M:ASCOM.ValueNotSetException.#ctor(System.String,System.Exception)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;inner&quot;/&gt; documentation for M:ASCOM.ValueNotSetException.#ctor(System.String,System.Exception)
   Info: BuildAssembler: Building topic P:ASCOM.ValueNotSetException.PropertyOrMethod
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.ValueNotSetException.PropertyOrMethod
   Info: BuildAssembler: Building topic N:ASCOM.Astrometry
@@ -1704,6 +1682,828 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic P:ASCOM.Conform.IConformErrorNumbers.InvalidValue
   Info: BuildAssembler: Building topic P:ASCOM.Conform.IConformErrorNumbers.NotImplemented
   Info: BuildAssembler: Building topic P:ASCOM.Conform.IConformErrorNumbers.ValueNotSet
+  Info: BuildAssembler: Building topic N:ASCOM.DriverAccess
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for N:ASCOM.DriverAccess
+  Info: BuildAssembler: Building topic T:ASCOM.DriverAccess.Camera
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.DriverAccess.Camera
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.DriverAccess.Camera
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.DriverAccess.Camera
+  Info: BuildAssembler: Building topic Overload:ASCOM.DriverAccess.Camera.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.DriverAccess.Camera.#ctor
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Camera.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.DriverAccess.Camera.#ctor
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Camera.#ctor(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Camera.AbortExposure
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.BinX
+  Warn: CachedResolveReferenceLinksComponent: Invalid referenceLink element.
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.BinY
+  Warn: CachedResolveReferenceLinksComponent: Invalid referenceLink element.
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.CameraState
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.CameraXSize
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.CameraYSize
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.CanAbortExposure
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.CanAsymmetricBin
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.CanGetCoolerPower
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.CanPulseGuide
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.CanSetCCDTemperature
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.CanStopExposure
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.CCDTemperature
+  Warn: CachedResolveReferenceLinksComponent: Invalid referenceLink element.
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Camera.Choose(System.String)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.Connected
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.CoolerOn
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.CoolerPower
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.Description
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Camera.Dispose
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.ElectronsPerADU
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.FullWellCapacity
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.HasShutter
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.HeatSinkTemperature
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.ImageArray
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.ImageArrayVariant
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.ImageReady
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.IsPulseGuiding
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.LastError
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.LastExposureDuration
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.LastExposureStartTime
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.MaxADU
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.MaxBinX
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.MaxBinY
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.NumX
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.NumY
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.PixelSizeX
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.PixelSizeY
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Camera.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.SetCCDTemperature
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Camera.SetupDialog
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Camera.StartExposure(System.Double,System.Boolean)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.StartX
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Camera.StartY
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Camera.StopExposure
+  Info: BuildAssembler: Building topic T:ASCOM.DriverAccess.CameraV2
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.DriverAccess.CameraV2
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.DriverAccess.CameraV2
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.DriverAccess.CameraV2
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV2.#ctor(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV2.AbortExposure
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV2.Action(System.String,System.String)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV2.Action(System.String,System.String)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.DriverAccess.CameraV2.Action(System.String,System.String)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.BayerOffsetX
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.BayerOffsetY
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.BinX
+  Warn: CachedResolveReferenceLinksComponent: Invalid referenceLink element.
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.BinY
+  Warn: CachedResolveReferenceLinksComponent: Invalid referenceLink element.
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.CameraState
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.CameraXSize
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.CameraYSize
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.CanAbortExposure
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.CanAsymmetricBin
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.CanFastReadout
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.CanGetCoolerPower
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.CanPulseGuide
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.CanSetCCDTemperature
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.CanStopExposure
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.CCDTemperature
+  Warn: CachedResolveReferenceLinksComponent: Invalid referenceLink element.
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV2.Choose(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV2.CommandBlind(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV2.CommandBlind(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV2.CommandBool(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV2.CommandBool(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.DriverAccess.CameraV2.CommandBool(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV2.CommandString(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV2.CommandString(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.DriverAccess.CameraV2.CommandString(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.Configuration
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV2.Configuration
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.Connected
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.CoolerOn
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.CoolerPower
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.Description
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV2.Dispose
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.DriverInfo
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.DriverVersion
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV2.DriverVersion
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.ElectronsPerADU
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.ExposureMax
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.ExposureMin
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.ExposureResolution
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.FastReadout
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.FullWellCapacity
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.Gain
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.GainMax
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.GainMin
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.Gains
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.HasShutter
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.HeatSinkTemperature
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.ImageArray
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.ImageArrayVariant
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.ImageReady
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.InterfaceVersion
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.IsPulseGuiding
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.LastError
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.LastExposureDuration
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.LastExposureStartTime
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.LastResult
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV2.LastResult
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.MaxADU
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.MaxBinX
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.MaxBinY
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.Name
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.NumX
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.NumY
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.PercentCompleted
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.PixelSizeX
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.PixelSizeY
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV2.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.ReadoutMode
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.ReadoutModes
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.SensorName
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.SensorType
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.SetCCDTemperature
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV2.SetupDialog
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV2.StartExposure(System.Double,System.Boolean)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.StartX
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.StartY
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV2.StopExposure
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.SupportedActions
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV2.SupportedActions
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV2.SupportedConfigurations
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV2.SupportedConfigurations
+  Info: BuildAssembler: Building topic T:ASCOM.DriverAccess.CameraV3
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.DriverAccess.CameraV3
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.DriverAccess.CameraV3
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.DriverAccess.CameraV3
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV3.#ctor(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV3.AbortExposure
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV3.Action(System.String,System.String)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV3.Action(System.String,System.String)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.DriverAccess.CameraV3.Action(System.String,System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV3.ANewCameraV3Method
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV3.ANewCameraV3Method
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.ANewCameraV3Property
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV3.ANewCameraV3Property
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV3.ANewIAscomDriverV2Method(System.String,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV3.ANewIAscomDriverV2Method(System.String,System.Double)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.ANewIAscomDriverV2Property
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV3.ANewIAscomDriverV2Property
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV3.ANewICameraV3Method
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV3.ANewICameraV3Method
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.ANewICameraV3Property
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV3.ANewICameraV3Property
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.BayerOffsetX
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.BayerOffsetY
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.BinX
+  Warn: CachedResolveReferenceLinksComponent: Invalid referenceLink element.
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.BinY
+  Warn: CachedResolveReferenceLinksComponent: Invalid referenceLink element.
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.CameraState
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.CameraXSize
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.CameraYSize
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.CanAbortExposure
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.CanAsymmetricBin
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.CanFastReadout
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.CanGetCoolerPower
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.CanPulseGuide
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.CanSetCCDTemperature
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.CanStopExposure
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.CCDTemperature
+  Warn: CachedResolveReferenceLinksComponent: Invalid referenceLink element.
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV3.Choose(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV3.CommandBlind(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV3.CommandBlind(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV3.CommandBool(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV3.CommandBool(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.DriverAccess.CameraV3.CommandBool(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV3.CommandString(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV3.CommandString(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.DriverAccess.CameraV3.CommandString(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.Configuration
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV3.Configuration
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.Connected
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.CoolerOn
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.CoolerPower
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.Description
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV3.Dispose
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.DriverInfo
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.DriverVersion
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV3.DriverVersion
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.ElectronsPerADU
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.ExposureMax
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.ExposureMin
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.ExposureResolution
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.FastReadout
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.FullWellCapacity
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.Gain
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.GainMax
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.GainMin
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.Gains
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.HasShutter
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.HeatSinkTemperature
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.ImageArray
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.ImageArrayVariant
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.ImageReady
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.InterfaceVersion
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.IsPulseGuiding
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.LastError
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.LastExposureDuration
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.LastExposureStartTime
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.LastResult
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV3.LastResult
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.MaxADU
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.MaxBinX
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.MaxBinY
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.Name
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.NumX
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.NumY
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.PercentCompleted
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.PixelSizeX
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.PixelSizeY
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV3.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.ReadoutMode
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.ReadoutModes
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.SensorName
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.SensorType
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.SetCCDTemperature
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV3.SetupDialog
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV3.StartExposure(System.Double,System.Boolean)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.StartX
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.StartY
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV3.StopExposure
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.SupportedActions
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV3.SupportedActions
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV3.SupportedConfigurations
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV3.SupportedConfigurations
+  Info: BuildAssembler: Building topic T:ASCOM.DriverAccess.CameraV4
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.DriverAccess.CameraV4
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.DriverAccess.CameraV4
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.DriverAccess.CameraV4.#ctor
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.DriverAccess.CameraV4
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.DriverAccess.CameraV4
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV4.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:ASCOM.DriverAccess.CameraV4.#ctor
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV4.AbortExposure
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV4.AbortExposure
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV4.Action(System.String,System.String)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV4.Action(System.String,System.String)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.DriverAccess.CameraV4.Action(System.String,System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV4.ADontKnowYetMethod
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV4.ADontKnowYetMethod
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.ADontKnowYetProperty
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.ADontKnowYetProperty
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV4.ANewCameraV3Method
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV4.ANewCameraV3Method
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.ANewCameraV3Property
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.ANewCameraV3Property
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV4.ANewCameraV4Method
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV4.ANewCameraV4Method
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.ANewCameraV4Property
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.ANewCameraV4Property
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.BayerOffsetX
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.BayerOffsetX
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.BayerOffsetY
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.BayerOffsetY
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.BinX
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.BinX
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.BinY
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.BinY
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.CameraState
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.CameraState
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.CameraXSize
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.CameraXSize
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.CameraYSize
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.CameraYSize
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.CanAbortExposure
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.CanAbortExposure
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.CanAsymmetricBin
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.CanAsymmetricBin
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.CanFastReadout
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.CanFastReadout
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.CanGetCoolerPower
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.CanGetCoolerPower
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.CanPulseGuide
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.CanPulseGuide
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.CanSetCCDTemperature
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.CanSetCCDTemperature
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.CanStopExposure
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.CanStopExposure
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.CCDTemperature
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.CCDTemperature
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV4.CommandBlind(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV4.CommandBlind(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV4.CommandBool(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV4.CommandBool(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.DriverAccess.CameraV4.CommandBool(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV4.CommandString(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV4.CommandString(System.String,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.DriverAccess.CameraV4.CommandString(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.Configuration
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.Configuration
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.Connected
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.Connected
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.CoolerOn
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.CoolerOn
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.CoolerPower
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.CoolerPower
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.Description
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.Description
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV4.Dispose
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV4.Dispose
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.DriverInfo
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.DriverInfo
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.DriverVersion
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.DriverVersion
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.ElectronsPerADU
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.ElectronsPerADU
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.ExposureMax
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.ExposureMax
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.ExposureMin
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.ExposureMin
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.ExposureResolution
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.ExposureResolution
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.FastReadout
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.FastReadout
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.FullWellCapacity
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.FullWellCapacity
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.Gain
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.Gain
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.GainMax
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.GainMax
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.GainMin
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.GainMin
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.Gains
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.Gains
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.HasShutter
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.HasShutter
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.HeatSinkTemperature
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.HeatSinkTemperature
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.ImageArray
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.ImageArray
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.ImageArrayVariant
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.ImageArrayVariant
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.ImageReady
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.ImageReady
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.InterfaceVersion
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.InterfaceVersion
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.IsPulseGuiding
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.IsPulseGuiding
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.LastError
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.LastError
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.LastExposureDuration
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.LastExposureDuration
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.LastExposureStartTime
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.LastExposureStartTime
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.LastResult
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.LastResult
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.MaxADU
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.MaxADU
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.MaxBinX
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.MaxBinX
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.MaxBinY
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.MaxBinY
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.Name
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.Name
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.NumX
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.NumX
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.NumY
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.NumY
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.PercentCompleted
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.PercentCompleted
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.PixelSizeX
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.PixelSizeX
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.PixelSizeY
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.PixelSizeY
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV4.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV4.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.ReadoutMode
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.ReadoutMode
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.ReadoutModes
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.ReadoutModes
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.SensorName
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.SensorName
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.SensorType
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.SensorType
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.SetCCDTemperature
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.SetCCDTemperature
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV4.SetupDialog
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV4.SetupDialog
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV4.StartExposure(System.Double,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV4.StartExposure(System.Double,System.Boolean)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.StartX
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.StartX
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.StartY
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.StartY
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.CameraV4.StopExposure
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.CameraV4.StopExposure
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.SupportedActions
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.SupportedActions
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.CameraV4.SupportedConfigurations
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.CameraV4.SupportedConfigurations
+  Info: BuildAssembler: Building topic T:ASCOM.DriverAccess.Dome
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.DriverAccess.Dome
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.DriverAccess.Dome
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.DriverAccess.Dome
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Dome.#ctor(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Dome.AbortSlew
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Dome.Altitude
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Dome.AtHome
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Dome.AtPark
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Dome.Azimuth
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Dome.CanFindHome
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Dome.CanPark
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Dome.CanSetAltitude
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Dome.CanSetAzimuth
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Dome.CanSetPark
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Dome.CanSetShutter
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Dome.CanSlave
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Dome.CanSyncAzimuth
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Dome.Choose(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Dome.CloseShutter
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Dome.CommandBlind(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Dome.CommandBool(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Dome.CommandString(System.String)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Dome.Connected
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Dome.Description
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Dome.Dispose
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Dome.DriverInfo
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Dome.FindHome
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Dome.InterfaceVersion
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Dome.Name
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Dome.OpenShutter
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Dome.Park
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Dome.SetPark
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Dome.SetupDialog
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Dome.ShutterStatus
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Dome.Slaved
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Dome.Slewing
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Dome.SlewToAltitude(System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Dome.SlewToAzimuth(System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Dome.SyncToAzimuth(System.Double)
+  Info: BuildAssembler: Building topic T:ASCOM.DriverAccess.FilterWheel
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.DriverAccess.FilterWheel
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.DriverAccess.FilterWheel
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.DriverAccess.FilterWheel
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.FilterWheel.#ctor(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.FilterWheel.Choose(System.String)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.FilterWheel.Connected
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.FilterWheel.Dispose
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.FilterWheel.FocusOffsets
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.FilterWheel.Names
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.FilterWheel.Position
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.FilterWheel.SetupDialog
+  Info: BuildAssembler: Building topic T:ASCOM.DriverAccess.Focuser
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.DriverAccess.Focuser
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.DriverAccess.Focuser
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.DriverAccess.Focuser
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Focuser.#ctor(System.String)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Focuser.Absolute
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Focuser.Choose(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Focuser.Dispose
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Focuser.Halt
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Focuser.IsMoving
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Focuser.Link
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Focuser.MaxIncrement
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Focuser.MaxStep
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Focuser.Move(System.Int32)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Focuser.Position
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Focuser.SetupDialog
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Focuser.StepSize
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Focuser.TempComp
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Focuser.TempCompAvailable
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Focuser.Temperature
+  Info: BuildAssembler: Building topic T:ASCOM.DriverAccess.Rotator
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.DriverAccess.Rotator
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.DriverAccess.Rotator
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.DriverAccess.Rotator
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Rotator.#ctor(System.String)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Rotator.CanReverse
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Rotator.Choose(System.String)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Rotator.Connected
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Rotator.Dispose
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Rotator.Halt
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Rotator.IsMoving
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Rotator.Move(System.Single)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Rotator.MoveAbsolute(System.Single)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Rotator.Position
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Rotator.Reverse
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Rotator.SetupDialog
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Rotator.StepSize
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Rotator.TargetPosition
+  Info: BuildAssembler: Building topic T:ASCOM.DriverAccess.Switch
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.DriverAccess.Switch
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.DriverAccess.Switch
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.DriverAccess.Switch
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Switch.#ctor(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Switch.Choose(System.String)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Switch.Connected
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Switch.Description
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Switch.Dispose
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Switch.DriverInfo
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Switch.DriverVersion
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Switch.GetSwitch(System.Int16)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Switch.GetSwitchName(System.Int16)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Switch.InterfaceVersion
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Switch.MaxSwitch
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Switch.Name
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Switch.SetSwitch(System.Int16,System.Boolean)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Switch.SetSwitchName(System.Int16,System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Switch.SetupDialog
+  Info: BuildAssembler: Building topic T:ASCOM.DriverAccess.Telescope
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.DriverAccess.Telescope
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.DriverAccess.Telescope
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.DriverAccess.Telescope
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.#ctor(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.AbortSlew
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.Action(System.String,System.String)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.Telescope.Action(System.String,System.String)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.DriverAccess.Telescope.Action(System.String,System.String)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.AlignmentMode
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.Altitude
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.ApertureArea
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.ApertureDiameter
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.AtHome
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.AtPark
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.AxisRates(ASCOM.Interface.TelescopeAxes)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.Azimuth
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.CanFindHome
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.CanMoveAxis(ASCOM.Interface.TelescopeAxes)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.DriverAccess.Telescope.CanMoveAxis(ASCOM.Interface.TelescopeAxes)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.CanPark
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.CanPulseGuide
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.CanSetDeclinationRate
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.CanSetGuideRates
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.CanSetPark
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.CanSetPierSide
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.CanSetRightAscensionRate
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.CanSetTracking
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.CanSlew
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.CanSlewAltAz
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.CanSlewAltAzAsync
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.CanSlewAsync
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.CanSync
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.CanSyncAltAz
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.CanUnpark
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.Choose(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.CommandBlind(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.CommandBool(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.CommandString(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.Configuration
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.Telescope.Configuration
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.Connected
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.Declination
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.DeclinationRate
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.Description
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.DestinationSideOfPier(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.Dispose
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.DoesRefraction
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.DriverInfo
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.DriverVersion
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.EquatorialSystem
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.FindHome
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.FocalLength
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.GuideRateDeclination
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.GuideRateRightAscension
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.InterfaceVersion
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.IsPulseGuiding
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.LastResult
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.Telescope.LastResult
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.MoveAxis(ASCOM.Interface.TelescopeAxes,System.Double)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.Name
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.Park
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.RightAscension
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.RightAscensionRate
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.SetPark
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.Telescope.SetPark
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.SetupDialog
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.SideOfPier
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.SiderealTime
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.SiteElevation
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.SiteLatitude
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.SiteLongitude
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.Slewing
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.SlewSettleTime
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.SlewToAltAz(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.SlewToAltAzAsync(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.SlewToCoordinates(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.SlewToCoordinatesAsync(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.SlewToTarget
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.SlewToTargetAsync
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.SupportedActions
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.Telescope.SupportedActions
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.SupportedConfigurations
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.Telescope.SupportedConfigurations
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.SyncToAltAz(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.SyncToCoordinates(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.SyncToTarget
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.TargetDeclination
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.TargetRightAscension
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.Tracking
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.TrackingRate
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.TrackingRates
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.Telescope.Unpark
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.Telescope.UTCDate
+  Info: BuildAssembler: Building topic T:ASCOM.DriverAccess.TelescopeV3
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.DriverAccess.TelescopeV3
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.DriverAccess.TelescopeV3
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.DriverAccess.TelescopeV3
+  Info: BuildAssembler: Building topic Overload:ASCOM.DriverAccess.TelescopeV3.#ctor
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.#ctor
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.#ctor(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.AbortSlew
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.Action(System.String,System.String)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.DriverAccess.TelescopeV3.Action(System.String,System.String)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.AlignmentMode
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.Altitude
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.ANewTelescopeV3Method
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.TelescopeV3.ANewTelescopeV3Method
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.ANewTelescopeV3Property
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.TelescopeV3.ANewTelescopeV3Property
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.ApertureArea
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.ApertureDiameter
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.AtHome
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.AtPark
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.AxisRates(ASCOM.Interface.TelescopeAxes)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.Azimuth
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.CanFindHome
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.CanMoveAxis(ASCOM.Interface.TelescopeAxes)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.DriverAccess.TelescopeV3.CanMoveAxis(ASCOM.Interface.TelescopeAxes)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.CanPark
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.CanPulseGuide
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.CanSetDeclinationRate
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.CanSetGuideRates
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.CanSetPark
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.CanSetPierSide
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.CanSetRightAscensionRate
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.CanSetTracking
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.CanSlew
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.CanSlewAltAz
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.CanSlewAltAzAsync
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.CanSlewAsync
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.CanSync
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.CanSyncAltAz
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.CanUnpark
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.Choose(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.CommandBlind(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.CommandBool(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.CommandString(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.Configuration
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.TelescopeV3.Configuration
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.Connected
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.Declination
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.DeclinationRate
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.Description
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.DestinationSideOfPier(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.Dispose
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.DoesRefraction
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.DriverInfo
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.DriverVersion
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.EquatorialSystem
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.FindHome
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.FocalLength
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.GuideRateDeclination
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.GuideRateRightAscension
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.InterfaceVersion
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.IsPulseGuiding
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.LastResult
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.MoveAxis(ASCOM.Interface.TelescopeAxes,System.Double)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.Name
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.Park
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.RightAscension
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.RightAscensionRate
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.SetPark
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.TelescopeV3.SetPark
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.SetupDialog
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.SideOfPier
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.SiderealTime
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.SiteElevation
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.SiteLatitude
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.SiteLongitude
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.Slewing
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.SlewSettleTime
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.SlewToAltAz(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.SlewToAltAzAsync(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.SlewToCoordinates(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.SlewToCoordinatesAsync(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.SlewToTarget
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.SlewToTargetAsync
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.SupportedActions
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.SupportedConfigurations
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.SyncToAltAz(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.SyncToCoordinates(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.SyncToTarget
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.TargetDeclination
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.TargetRightAscension
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.Tracking
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.TrackingRate
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.TrackingRates
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV3.Unpark
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV3.UTCDate
+  Info: BuildAssembler: Building topic T:ASCOM.DriverAccess.TelescopeV4
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.DriverAccess.TelescopeV4
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.DriverAccess.TelescopeV4
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.DriverAccess.TelescopeV4
+  Info: BuildAssembler: Building topic Overload:ASCOM.DriverAccess.TelescopeV4.#ctor
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.#ctor
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.#ctor(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.AbortSlew
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.Action(System.String,System.String)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.DriverAccess.TelescopeV4.Action(System.String,System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.ADontKnowYetMethod
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.TelescopeV4.ADontKnowYetMethod
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.ADontKnowYetProperty
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.TelescopeV4.ADontKnowYetProperty
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.AlignmentMode
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.Altitude
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.ANewTelescopeV3Method
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.TelescopeV4.ANewTelescopeV3Method
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.ANewTelescopeV3Property
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.DriverAccess.TelescopeV4.ANewTelescopeV3Property
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.ANewTelescopeV4Method(System.String,System.Double)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.ANewTelescopeV4Property
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.ApertureArea
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.ApertureDiameter
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.AtHome
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.AtPark
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.AxisRates(ASCOM.Interface.TelescopeAxes)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.Azimuth
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.CanFindHome
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.CanMoveAxis(ASCOM.Interface.TelescopeAxes)
+  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.DriverAccess.TelescopeV4.CanMoveAxis(ASCOM.Interface.TelescopeAxes)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.CanPark
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.CanPulseGuide
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.CanSetDeclinationRate
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.CanSetGuideRates
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.CanSetPark
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.CanSetPierSide
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.CanSetRightAscensionRate
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.CanSetTracking
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.CanSlew
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.CanSlewAltAz
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.CanSlewAltAzAsync
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.CanSlewAsync
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.CanSync
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.CanSyncAltAz
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.CanUnpark
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.Choose(System.String)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.CommandBlind(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.CommandBool(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.CommandString(System.String,System.Boolean)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.Configuration
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.Connected
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.Declination
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.DeclinationRate
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.Description
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.DestinationSideOfPier(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.Dispose
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.DoesRefraction
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.DriverInfo
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.DriverVersion
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.EquatorialSystem
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.FindHome
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.FocalLength
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.GuideRateDeclination
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.GuideRateRightAscension
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.InterfaceVersion
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.IsPulseGuiding
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.LastResult
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.MoveAxis(ASCOM.Interface.TelescopeAxes,System.Double)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.Name
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.Park
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.RightAscension
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.RightAscensionRate
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.SetPark
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.DriverAccess.TelescopeV4.SetPark
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.SetupDialog
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.SideOfPier
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.SiderealTime
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.SiteElevation
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.SiteLatitude
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.SiteLongitude
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.Slewing
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.SlewSettleTime
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.SlewToAltAz(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.SlewToAltAzAsync(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.SlewToCoordinates(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.SlewToCoordinatesAsync(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.SlewToTarget
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.SlewToTargetAsync
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.SupportedActions
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.SupportedConfigurations
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.SyncToAltAz(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.SyncToCoordinates(System.Double,System.Double)
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.SyncToTarget
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.TargetDeclination
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.TargetRightAscension
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.Tracking
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.TrackingRate
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.TrackingRates
+  Info: BuildAssembler: Building topic M:ASCOM.DriverAccess.TelescopeV4.Unpark
+  Info: BuildAssembler: Building topic P:ASCOM.DriverAccess.TelescopeV4.UTCDate
   Info: BuildAssembler: Building topic N:ASCOM.Interface
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for N:ASCOM.Interface
   Info: BuildAssembler: Building topic T:ASCOM.Interface.AlignmentModes
@@ -1721,6 +2521,8 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.IAscomDriver
   Info: BuildAssembler: Building topic Methods.T:ASCOM.Interface.IAscomDriver
   Info: BuildAssembler: Building topic Properties.T:ASCOM.Interface.IAscomDriver
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IAscomDriver.Configuration
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IAscomDriver.Configuration
   Info: BuildAssembler: Building topic P:ASCOM.Interface.IAscomDriver.Connected
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IAscomDriver.Connected
   Info: BuildAssembler: Building topic P:ASCOM.Interface.IAscomDriver.Description
@@ -1735,6 +2537,8 @@ BuildReferenceTopics:
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IAscomDriver.Name
   Info: BuildAssembler: Building topic M:ASCOM.Interface.IAscomDriver.SetupDialog
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IAscomDriver.SetupDialog
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IAscomDriver.SupportedConfigurations
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IAscomDriver.SupportedConfigurations
   Info: BuildAssembler: Building topic T:ASCOM.Interface.IAxisRates
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.IAxisRates
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.IAxisRates
@@ -1824,16 +2628,12 @@ BuildReferenceTopics:
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.PixelSizeY
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ICamera.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ICamera.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Direction&quot;/&gt; documentation for M:ASCOM.Interface.ICamera.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Duration&quot;/&gt; documentation for M:ASCOM.Interface.ICamera.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.SetCCDTemperature
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.SetCCDTemperature
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ICamera.SetupDialog
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ICamera.SetupDialog
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ICamera.StartExposure(System.Double,System.Boolean)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ICamera.StartExposure(System.Double,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Duration&quot;/&gt; documentation for M:ASCOM.Interface.ICamera.StartExposure(System.Double,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Light&quot;/&gt; documentation for M:ASCOM.Interface.ICamera.StartExposure(System.Double,System.Boolean)
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.StartX
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICamera.StartX
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ICamera.StartY
@@ -1845,12 +2645,44 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.ICameraV2
   Info: BuildAssembler: Building topic Methods.T:ASCOM.Interface.ICameraV2
   Info: BuildAssembler: Building topic Properties.T:ASCOM.Interface.ICameraV2
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ICameraV2.AbortExposure
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ICameraV2.AbortExposure
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.BayerOffsetX
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.BayerOffsetX
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.BayerOffsetY
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.BayerOffsetY
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.BinX
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.BinX
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.BinY
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.BinY
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.CameraState
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.CameraState
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.CameraXSize
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.CameraXSize
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.CameraYSize
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.CameraYSize
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.CanAbortExposure
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.CanAbortExposure
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.CanAsymmetricBin
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.CanAsymmetricBin
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.CanFastReadout
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.CanFastReadout
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.CanGetCoolerPower
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.CanGetCoolerPower
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.CanPulseGuide
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.CanPulseGuide
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.CanSetCCDTemperature
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.CanSetCCDTemperature
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.CanStopExposure
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.CanStopExposure
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.CCDTemperature
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.CCDTemperature
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.CoolerOn
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.CoolerOn
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.CoolerPower
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.CoolerPower
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.ElectronsPerADU
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.ElectronsPerADU
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.ExposureMax
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.ExposureMax
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.ExposureMin
@@ -1859,6 +2691,8 @@ BuildReferenceTopics:
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.ExposureResolution
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.FastReadout
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.FastReadout
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.FullWellCapacity
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.FullWellCapacity
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.Gain
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.Gain
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.GainMax
@@ -1867,8 +2701,42 @@ BuildReferenceTopics:
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.GainMin
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.Gains
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.Gains
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.HasShutter
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.HasShutter
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.HeatSinkTemperature
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.HeatSinkTemperature
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.ImageArray
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.ImageArray
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.ImageArrayVariant
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.ImageArrayVariant
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.ImageReady
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.ImageReady
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.IsPulseGuiding
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.IsPulseGuiding
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.LastError
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.LastError
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.LastExposureDuration
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.LastExposureDuration
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.LastExposureStartTime
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.LastExposureStartTime
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.MaxADU
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.MaxADU
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.MaxBinX
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.MaxBinX
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.MaxBinY
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.MaxBinY
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.NumX
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.NumX
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.NumY
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.NumY
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.PercentCompleted
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.PercentCompleted
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.PixelSizeX
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.PixelSizeX
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.PixelSizeY
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.PixelSizeY
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ICameraV2.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ICameraV2.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.ReadoutMode
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.ReadoutMode
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.ReadoutModes
@@ -1877,6 +2745,34 @@ BuildReferenceTopics:
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.SensorName
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.SensorType
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.SensorType
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.SetCCDTemperature
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.SetCCDTemperature
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ICameraV2.StartExposure(System.Double,System.Boolean)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ICameraV2.StartExposure(System.Double,System.Boolean)
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.StartX
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.StartX
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV2.StartY
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV2.StartY
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ICameraV2.StopExposure
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ICameraV2.StopExposure
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.ICameraV3
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.ICameraV3
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.ICameraV3
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Interface.ICameraV3
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Interface.ICameraV3
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ICameraV3.ANewCameraV3Method
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ICameraV3.ANewCameraV3Method
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV3.ANewCameraV3Property
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV3.ANewCameraV3Property
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.ICameraV4
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.ICameraV4
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.ICameraV4
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Interface.ICameraV4
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Interface.ICameraV4
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ICameraV4.ANewCameraV4Method
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ICameraV4.ANewCameraV4Method
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ICameraV4.ANewCameraV4Property
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ICameraV4.ANewCameraV4Property
   Info: BuildAssembler: Building topic T:ASCOM.Interface.IDeviceControl
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.IDeviceControl
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.IDeviceControl
@@ -1885,22 +2781,14 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic M:ASCOM.Interface.IDeviceControl.Action(System.String,System.String)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDeviceControl.Action(System.String,System.String)
   Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.IDeviceControl.Action(System.String,System.String)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;ActionName&quot;/&gt; documentation for M:ASCOM.Interface.IDeviceControl.Action(System.String,System.String)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;ActionParameters&quot;/&gt; documentation for M:ASCOM.Interface.IDeviceControl.Action(System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Interface.IDeviceControl.CommandBlind(System.String,System.Boolean)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDeviceControl.CommandBlind(System.String,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Command&quot;/&gt; documentation for M:ASCOM.Interface.IDeviceControl.CommandBlind(System.String,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Raw&quot;/&gt; documentation for M:ASCOM.Interface.IDeviceControl.CommandBlind(System.String,System.Boolean)
   Info: BuildAssembler: Building topic M:ASCOM.Interface.IDeviceControl.CommandBool(System.String,System.Boolean)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDeviceControl.CommandBool(System.String,System.Boolean)
   Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.IDeviceControl.CommandBool(System.String,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Command&quot;/&gt; documentation for M:ASCOM.Interface.IDeviceControl.CommandBool(System.String,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Raw&quot;/&gt; documentation for M:ASCOM.Interface.IDeviceControl.CommandBool(System.String,System.Boolean)
   Info: BuildAssembler: Building topic M:ASCOM.Interface.IDeviceControl.CommandString(System.String,System.Boolean)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDeviceControl.CommandString(System.String,System.Boolean)
   Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.IDeviceControl.CommandString(System.String,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Command&quot;/&gt; documentation for M:ASCOM.Interface.IDeviceControl.CommandString(System.String,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Raw&quot;/&gt; documentation for M:ASCOM.Interface.IDeviceControl.CommandString(System.String,System.Boolean)
   Info: BuildAssembler: Building topic P:ASCOM.Interface.IDeviceControl.LastResult
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDeviceControl.LastResult
   Info: BuildAssembler: Building topic P:ASCOM.Interface.IDeviceControl.SupportedActions
@@ -1940,15 +2828,12 @@ BuildReferenceTopics:
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDome.CloseShutter
   Info: BuildAssembler: Building topic M:ASCOM.Interface.IDome.CommandBlind(System.String)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDome.CommandBlind(System.String)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Command&quot;/&gt; documentation for M:ASCOM.Interface.IDome.CommandBlind(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Interface.IDome.CommandBool(System.String)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDome.CommandBool(System.String)
   Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.IDome.CommandBool(System.String)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Command&quot;/&gt; documentation for M:ASCOM.Interface.IDome.CommandBool(System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Interface.IDome.CommandString(System.String)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDome.CommandString(System.String)
   Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.IDome.CommandString(System.String)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Command&quot;/&gt; documentation for M:ASCOM.Interface.IDome.CommandString(System.String)
   Info: BuildAssembler: Building topic P:ASCOM.Interface.IDome.Connected
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDome.Connected
   Info: BuildAssembler: Building topic P:ASCOM.Interface.IDome.Description
@@ -1977,13 +2862,19 @@ BuildReferenceTopics:
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDome.Slewing
   Info: BuildAssembler: Building topic M:ASCOM.Interface.IDome.SlewToAltitude(System.Double)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDome.SlewToAltitude(System.Double)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Altitude&quot;/&gt; documentation for M:ASCOM.Interface.IDome.SlewToAltitude(System.Double)
   Info: BuildAssembler: Building topic M:ASCOM.Interface.IDome.SlewToAzimuth(System.Double)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDome.SlewToAzimuth(System.Double)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Azimuth&quot;/&gt; documentation for M:ASCOM.Interface.IDome.SlewToAzimuth(System.Double)
   Info: BuildAssembler: Building topic M:ASCOM.Interface.IDome.SyncToAzimuth(System.Double)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDome.SyncToAzimuth(System.Double)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Azimuth&quot;/&gt; documentation for M:ASCOM.Interface.IDome.SyncToAzimuth(System.Double)
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.IDontKnowYet
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.IDontKnowYet
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.IDontKnowYet
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Interface.IDontKnowYet
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Interface.IDontKnowYet
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.IDontKnowYet.ADontKnowYetMethod
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IDontKnowYet.ADontKnowYetMethod
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.IDontKnowYet.ADontKnowYetProperty
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IDontKnowYet.ADontKnowYetProperty
   Info: BuildAssembler: Building topic T:ASCOM.Interface.IFilterWheel
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.IFilterWheel
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.IFilterWheel
@@ -2018,7 +2909,6 @@ BuildReferenceTopics:
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IFocuser.MaxStep
   Info: BuildAssembler: Building topic M:ASCOM.Interface.IFocuser.Move(System.Int32)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IFocuser.Move(System.Int32)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;val&quot;/&gt; documentation for M:ASCOM.Interface.IFocuser.Move(System.Int32)
   Info: BuildAssembler: Building topic P:ASCOM.Interface.IFocuser.Position
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IFocuser.Position
   Info: BuildAssembler: Building topic M:ASCOM.Interface.IFocuser.SetupDialog
@@ -2054,10 +2944,8 @@ BuildReferenceTopics:
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IRotator.IsMoving
   Info: BuildAssembler: Building topic M:ASCOM.Interface.IRotator.Move(System.Single)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IRotator.Move(System.Single)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Position&quot;/&gt; documentation for M:ASCOM.Interface.IRotator.Move(System.Single)
   Info: BuildAssembler: Building topic M:ASCOM.Interface.IRotator.MoveAbsolute(System.Single)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.IRotator.MoveAbsolute(System.Single)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Position&quot;/&gt; documentation for M:ASCOM.Interface.IRotator.MoveAbsolute(System.Single)
   Info: BuildAssembler: Building topic P:ASCOM.Interface.IRotator.Position
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.IRotator.Position
   Info: BuildAssembler: Building topic P:ASCOM.Interface.IRotator.Reverse
@@ -2084,11 +2972,9 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ISwitch.GetSwitch(System.Int16)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ISwitch.GetSwitch(System.Int16)
   Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.ISwitch.GetSwitch(System.Int16)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;ID&quot;/&gt; documentation for M:ASCOM.Interface.ISwitch.GetSwitch(System.Int16)
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ISwitch.GetSwitchName(System.Int16)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ISwitch.GetSwitchName(System.Int16)
   Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.ISwitch.GetSwitchName(System.Int16)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;ID&quot;/&gt; documentation for M:ASCOM.Interface.ISwitch.GetSwitchName(System.Int16)
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ISwitch.InterfaceVersion
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ISwitch.InterfaceVersion
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ISwitch.MaxSwitch
@@ -2097,12 +2983,8 @@ BuildReferenceTopics:
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ISwitch.Name
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ISwitch.SetSwitch(System.Int16,System.Boolean)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ISwitch.SetSwitch(System.Int16,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;ID&quot;/&gt; documentation for M:ASCOM.Interface.ISwitch.SetSwitch(System.Int16,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;State&quot;/&gt; documentation for M:ASCOM.Interface.ISwitch.SetSwitch(System.Int16,System.Boolean)
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ISwitch.SetSwitchName(System.Int16,System.String)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ISwitch.SetSwitchName(System.Int16,System.String)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;ID&quot;/&gt; documentation for M:ASCOM.Interface.ISwitch.SetSwitchName(System.Int16,System.String)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;State&quot;/&gt; documentation for M:ASCOM.Interface.ISwitch.SetSwitchName(System.Int16,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ISwitch.SetupDialog
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ISwitch.SetupDialog
   Info: BuildAssembler: Building topic T:ASCOM.Interface.ITelescope
@@ -2127,7 +3009,6 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.AxisRates(ASCOM.Interface.TelescopeAxes)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.AxisRates(ASCOM.Interface.TelescopeAxes)
   Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.ITelescope.AxisRates(ASCOM.Interface.TelescopeAxes)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Axis&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.AxisRates(ASCOM.Interface.TelescopeAxes)
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.Azimuth
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.Azimuth
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.CanFindHome
@@ -2135,7 +3016,6 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.CanMoveAxis(ASCOM.Interface.TelescopeAxes)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.CanMoveAxis(ASCOM.Interface.TelescopeAxes)
   Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.ITelescope.CanMoveAxis(ASCOM.Interface.TelescopeAxes)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Axis&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.CanMoveAxis(ASCOM.Interface.TelescopeAxes)
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.CanPark
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.CanPark
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.CanPulseGuide
@@ -2166,39 +3046,15 @@ BuildReferenceTopics:
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.CanSyncAltAz
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.CanUnpark
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.CanUnpark
-  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.CommandBlind(System.String,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.CommandBlind(System.String,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Command&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.CommandBlind(System.String,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Raw&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.CommandBlind(System.String,System.Boolean)
-  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.CommandBool(System.String,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.CommandBool(System.String,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.ITelescope.CommandBool(System.String,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Command&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.CommandBool(System.String,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Raw&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.CommandBool(System.String,System.Boolean)
-  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.CommandString(System.String,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.CommandString(System.String,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.ITelescope.CommandString(System.String,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Command&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.CommandString(System.String,System.Boolean)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Raw&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.CommandString(System.String,System.Boolean)
-  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.Connected
-  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.Connected
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.Declination
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.Declination
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.DeclinationRate
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.DeclinationRate
-  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.Description
-  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.Description
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.DestinationSideOfPier(System.Double,System.Double)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.DestinationSideOfPier(System.Double,System.Double)
   Warn: ShowMissingComponent: Missing &lt;returns&gt; documentation for M:ASCOM.Interface.ITelescope.DestinationSideOfPier(System.Double,System.Double)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;RightAscension&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.DestinationSideOfPier(System.Double,System.Double)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Declination&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.DestinationSideOfPier(System.Double,System.Double)
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.DoesRefraction
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.DoesRefraction
-  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.DriverInfo
-  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.DriverInfo
-  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.DriverVersion
-  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.DriverVersion
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.EquatorialSystem
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.EquatorialSystem
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.FindHome
@@ -2209,30 +3065,20 @@ BuildReferenceTopics:
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.GuideRateDeclination
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.GuideRateRightAscension
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.GuideRateRightAscension
-  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.InterfaceVersion
-  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.InterfaceVersion
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.IsPulseGuiding
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.IsPulseGuiding
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.MoveAxis(ASCOM.Interface.TelescopeAxes,System.Double)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.MoveAxis(ASCOM.Interface.TelescopeAxes,System.Double)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Axis&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.MoveAxis(ASCOM.Interface.TelescopeAxes,System.Double)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Rate&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.MoveAxis(ASCOM.Interface.TelescopeAxes,System.Double)
-  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.Name
-  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.Name
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.Park
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.Park
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Direction&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Duration&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.PulseGuide(ASCOM.Interface.GuideDirections,System.Int32)
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.RightAscension
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.RightAscension
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.RightAscensionRate
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.RightAscensionRate
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.SetPark
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.SetPark
-  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.SetupDialog
-  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.SetupDialog
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.SideOfPier
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.SideOfPier
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.SiderealTime
@@ -2249,32 +3095,20 @@ BuildReferenceTopics:
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.SlewSettleTime
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.SlewToAltAz(System.Double,System.Double)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToAltAz(System.Double,System.Double)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Azimuth&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToAltAz(System.Double,System.Double)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Altitude&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToAltAz(System.Double,System.Double)
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.SlewToAltAzAsync(System.Double,System.Double)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToAltAzAsync(System.Double,System.Double)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Azimuth&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToAltAzAsync(System.Double,System.Double)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Altitude&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToAltAzAsync(System.Double,System.Double)
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.SlewToCoordinates(System.Double,System.Double)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToCoordinates(System.Double,System.Double)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;RightAscension&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToCoordinates(System.Double,System.Double)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Declination&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToCoordinates(System.Double,System.Double)
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.SlewToCoordinatesAsync(System.Double,System.Double)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToCoordinatesAsync(System.Double,System.Double)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;RightAscension&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToCoordinatesAsync(System.Double,System.Double)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Declination&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToCoordinatesAsync(System.Double,System.Double)
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.SlewToTarget
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToTarget
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.SlewToTargetAsync
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.SlewToTargetAsync
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.SyncToAltAz(System.Double,System.Double)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.SyncToAltAz(System.Double,System.Double)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Azimuth&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SyncToAltAz(System.Double,System.Double)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Altitude&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SyncToAltAz(System.Double,System.Double)
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.SyncToCoordinates(System.Double,System.Double)
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.SyncToCoordinates(System.Double,System.Double)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;RightAscension&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SyncToCoordinates(System.Double,System.Double)
-  Warn: ShowMissingComponent: Missing &lt;param name=&quot;Declination&quot;/&gt; documentation for M:ASCOM.Interface.ITelescope.SyncToCoordinates(System.Double,System.Double)
   Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescope.SyncToTarget
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.SyncToTarget
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.TargetDeclination
@@ -2291,11 +3125,29 @@ BuildReferenceTopics:
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescope.Unpark
   Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescope.UTCDate
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescope.UTCDate
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.ITelescopeV2
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.ITelescopeV2
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.ITelescopeV2
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Interface.ITelescopeV2
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Interface.ITelescopeV2
   Info: BuildAssembler: Building topic T:ASCOM.Interface.ITelescopeV3
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.ITelescopeV3
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.ITelescopeV3
   Info: BuildAssembler: Building topic Methods.T:ASCOM.Interface.ITelescopeV3
   Info: BuildAssembler: Building topic Properties.T:ASCOM.Interface.ITelescopeV3
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescopeV3.ANewTelescopeV3Method
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescopeV3.ANewTelescopeV3Method
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescopeV3.ANewTelescopeV3Property
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescopeV3.ANewTelescopeV3Property
+  Info: BuildAssembler: Building topic T:ASCOM.Interface.ITelescopeV4
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.ITelescopeV4
+  Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.ITelescopeV4
+  Info: BuildAssembler: Building topic Methods.T:ASCOM.Interface.ITelescopeV4
+  Info: BuildAssembler: Building topic Properties.T:ASCOM.Interface.ITelescopeV4
+  Info: BuildAssembler: Building topic M:ASCOM.Interface.ITelescopeV4.ANewTelescopeV4Method(System.String,System.Double)
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for M:ASCOM.Interface.ITelescopeV4.ANewTelescopeV4Method(System.String,System.Double)
+  Info: BuildAssembler: Building topic P:ASCOM.Interface.ITelescopeV4.ANewTelescopeV4Property
+  Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for P:ASCOM.Interface.ITelescopeV4.ANewTelescopeV4Property
   Info: BuildAssembler: Building topic T:ASCOM.Interface.ITrackingRates
   Warn: ShowMissingComponent: Missing &lt;summary&gt; documentation for T:ASCOM.Interface.ITrackingRates
   Info: BuildAssembler: Building topic AllMembers.T:ASCOM.Interface.ITrackingRates
@@ -2720,11 +3572,9 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtilExtra.HoursToHMS(System.Double,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtilExtra.HoursToHMS(System.Double,System.String,System.String)
   Info: BuildAssembler: Building topic M:ASCOM.Utilities.Interfaces.IUtilExtra.HoursToHMS(System.Double,System.String,System.String,System.String)
-  Info: Processed 1598 topics
+  Info: Processed 2342 topics
   Info: CachedCopyFromIndexComponent: Used &quot;reflection&quot; cache entries: 2
-  Info: CachedResolveReferenceLinksComponent: MSDN URL cache updated.  Saving new information to C:\Users\Peter\AppData\Local\EWSoftware\Sandcastle Help File Builder\Cache\MsdnUrl.cache
-  Info: CachedResolveReferenceLinksComponent: New cache size: 41 entries
-    Last step completed in 00:00:27.2139
+    Last step completed in 00:00:29.1149
 </buildStep>
 <buildStep step="GenerateIntermediateTableOfContents">
 Generating intermediate table of contents file...
@@ -2736,7 +3586,7 @@ GenerateIntermediateTOC:
 <plugIn name="Hierarchical Table of Contents" behavior="After" priority="1000">
 Retrieving namespace topic title from shared content...
 Creating namespace hierarchy...
-</plugIn>    Last step completed in 00:00:00.3500
+</plugIn>    Last step completed in 00:00:00.3540
 </buildStep>
 <buildStep step="ExtractingHtmlInfo">
 Extracting HTML info for HTML Help 1 and/or website...
@@ -2746,15 +3596,15 @@ Copyright &#184; 2008-2010, Eric Woodruff, All Rights Reserved
 E-Mail: Eric@EWoodruff.us
 
 Using LCID '1033', code page '65001', encoding charset 'UTF-8'.
-Processed 1623 HTML files
+Processed 2367 HTML files
 Sorting keywords and generating See Also indices
 Saving HTML Help 1 keyword index to C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PlatformHelp.hhk
 Saving HTML Help 1 table of contents to C:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\PlatformHelp.hhc
-    Last step completed in 00:00:02.6542
+    Last step completed in 00:00:04.2252
 </buildStep>
 <buildStep step="GenerateHelpFormatTableOfContents">
 Generating HTML Help 1 table of contents file...
-    Last step completed in 00:00:00.0100
+    Last step completed in 00:00:00.0020
 </buildStep>
 <buildStep step="UpdateTableOfContents">
 Updating table of contents with additional content items and determining default topic...
@@ -2762,11 +3612,11 @@ Updating table of contents with additional content items and determining default
 </buildStep>
 <buildStep step="GenerateHelpFileIndex">
 Generating HTML Help 1 index file...
-    Last step completed in 00:00:00.0020
+    Last step completed in 00:00:00.0010
 </buildStep>
 <buildStep step="GenerateHelpProject">
 Generating HTML Help 1 project file...
-    Last step completed in 00:00:00.0160
+    Last step completed in 00:00:00.0180
 </buildStep>
 <buildStep step="CompilingHelpFile">
 Compiling HTML Help 1 file...
@@ -2782,13 +3632,13 @@ Build1xHelpFile:
   
   
   
-  Compile time: 0 minutes, 12 seconds
+  Compile time: 0 minutes, 18 seconds
   
-  1,625	Topics
+  2,369	Topics
   
-  21,037	Local links
+  31,911	Local links
   
-  11,339	Internet links
+  14,549	Internet links
   
   0	Graphics
   
@@ -2796,19 +3646,19 @@ Build1xHelpFile:
   
   
   
-  Created c:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\PlatformHelp.chm, 2,301,074 bytes
+  Created c:\Users\Public\Documents\ASCOM Interface\Help\Help\Working\Output\PlatformHelp.chm, 3,438,980 bytes
   
-  Compression decreased file by 21,021,318 bytes.
+  Compression decreased file by 31,971,971 bytes.
   
-    Last step completed in 00:00:12.5819
+    Last step completed in 00:00:19.0882
 </buildStep>
 <buildStep step="CleanIntermediates">
 Removing intermediate files...
-    Last step completed in 00:00:00.3200
+    Last step completed in 00:00:00.3950
 </buildStep>
 <buildStep step="Completed">
 
-Build completed successfully at 03/06/2010 11:13 AM.  Total time: 00:00:56.0369
+Build completed successfully at 03/19/2010 02:34 PM.  Total time: 00:01:05.9932
 
 </buildStep>
 </shfbBuild>

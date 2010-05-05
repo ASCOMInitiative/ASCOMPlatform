@@ -65,6 +65,10 @@ namespace ASCOM
         /// </summary>
         public static int InvalidOperationException = unchecked((int)0x8004040B);
         /// <summary>
+        /// Error code to indicate that the requested device control action is not supported.
+        /// </summary>
+        public static int ActionNotImplementedException = unchecked((int)0x8004040C);
+        /// <summary>
 		/// A 'catch-all' error code used when nothing else was specified.
 		/// </summary>
         public static int UnspecifiedError = unchecked((int)0x800404FF);

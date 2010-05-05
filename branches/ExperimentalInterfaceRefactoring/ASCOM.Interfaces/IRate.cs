@@ -43,6 +43,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace ASCOM.Interface
 {
@@ -70,6 +71,7 @@ namespace ASCOM.Interface
     /// expressed in units of degrees per second. 
     /// </para>
     /// </remarks>
+    [ComVisible(true), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("DB3B407B-6EDD-4d47-9EA1-84CE848AE8B9")]
     public interface IRate
     {
         /// <summary>

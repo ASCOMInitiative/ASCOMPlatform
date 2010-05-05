@@ -1,7 +1,7 @@
 ﻿//tabs=4
 // --------------------------------------------------------------------------------
 // <summary>
-// ASCOM.Interface.ITelescope Telescope Interface V2
+// ASCOM.Interface.ICamera Camera Interface V1
 // </summary>
 //
 // <copyright company="TiGra Astronomy" author="Timothy P. Long">
@@ -30,16 +30,16 @@
 // </license>
 //
 //
-// Defines:	ITelescope interfaces
-// Author:		(TPL) Timothy P. Long <Tim@tigranetworks.co.uk>
+// Defines:	ICamera interfaces
+// Author:		(CDR) Chris Rowland <chris.rowland@dsl.pipex.com>
 //
 // Edit Log:
 //
 // Date			Who	Vers	Description
 // -----------	---	-----	-------------------------------------------------------
-// 10-Feb-2010	TPL	6.0.*	Initial edit. Mirrors platform 5.0 PIAs.
-// 21-Feb-2010  cdr 6.0.*   Remove properties and methods already in IAscomDriver
-// 03-Mar-2010	TPL	6.0.*	Renamed to ITelescopeV3, added IDeviceControl
+// 21-Feb-2010	CDR	6.0.*	Initial edit. Mirrors platform 5.0 PIAs.
+// 03-Mar-2010	TPL	6.0.*	Exact layout produced by .NET Reflector from the PIAs
+//							No new interfaces yet (do that in V2)
 // --------------------------------------------------------------------------------
 //
 using System;
@@ -47,13 +47,20 @@ using System.Runtime.InteropServices;
 
 namespace ASCOM.Interface
 {
+    //    uuid(D95FBC6E-0705-458b-84C0-57E3295DBCCE),
+
     /// <summary>
-	/// ITelescope V3 inherits IASCOMDriverV1 and ITelesceop
-	/// </summary>
-    [ComVisible(true), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("76DC9EE3-925B-47e3-9419-2AD58A91968F")]
-    public interface ITelescopeV3 : ITelescopeV2
-	{
-        string ANewTelescopeV3Property { get; }
-        void ANewTelescopeV3Method();
-	}
+    /// ASCOM Camera Driver 1.0 Interface
+    /// </summary>
+    [ComVisible(true), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("62F242E6-98CD-4a9b-A4FC-5FCCB1BDBA02")]
+    public interface ICameraV1 : IAscomDriver, IDeviceControl, ICamera
+    {
+
+        bool Connected {  get;   set; }
+
+        string Description {   get; }
+
+        void SetupDialog();
+
+    }
 }

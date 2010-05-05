@@ -12,13 +12,14 @@ namespace ASCOM.DriverAccess
 {
 
 	#region Telescope Wrapper
-	/// <summary>
-    /// Implements a telescope class to access any registered ASCOM telescope
+    /// <summary>
+    /// Implements the Platform 5 telescope interface to access any registered ASCOM telescope
     /// </summary>
-    public class Telescope : ASCOM.Interface.ITelescope, IDisposable 
+    [ComVisible(true), Guid("4E4796D1-C8E1-4854-8209-4F56821E37BF"), ClassInterface(ClassInterfaceType.None)]
+    public class Telescope : ASCOM.Interface.ITelescopeV2, IDisposable 
     {
         object objScopeLateBound;
-		ASCOM.Interface.ITelescope ITelescope;
+		ASCOM.Interface.ITelescopeV2 ITelescope;
 		Type objTypeScope;
 
         /// <summary>
@@ -36,7 +37,7 @@ namespace ASCOM.DriverAccess
 			// Try to see if this driver has an ASCOM.Telescope interface
 			try
 			{
-				ITelescope = (ASCOM.Interface.ITelescope)objScopeLateBound;
+				ITelescope = (ASCOM.Interface.ITelescopeV2)objScopeLateBound;
 			}
 			catch (Exception)
 			{
@@ -1704,7 +1705,44 @@ namespace ASCOM.DriverAccess
         }
 
         #endregion
-	}
+
+        #region IDeviceControl Members
+
+
+        public string Configuration
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        public string[] SupportedConfigurations
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        public string Action(string ActionName, string ActionParameters)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public string LastResult
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        public string[] SupportedActions
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        #endregion
+    }
 	#endregion
 
 	#region Rate wrapper

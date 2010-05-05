@@ -41,6 +41,8 @@
 // --------------------------------------------------------------------------------
 //
 using System.Collections;
+using System.Runtime.InteropServices;
+
 namespace ASCOM.Interface
 {
     //[ComImport, TypeLibType((short)0x10c0), Guid("DC98F1DF-315A-43EF-81F6-23F3DD461F58")]
@@ -59,6 +61,7 @@ namespace ASCOM.Interface
     /// Supplies a collection of <see cref="DriveRate"/> objects that describe the permissible values of
     /// the <see cref="TrackingRate"/> property for a telescope.
     /// </summary>
+    [ComVisible(true), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("50CB29A2-C082-4b25-8524-DA26AA6A386D")]
     public interface ITrackingRates
     {
         /// <summary>

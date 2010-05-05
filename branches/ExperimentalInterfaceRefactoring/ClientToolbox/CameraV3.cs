@@ -1,4 +1,4 @@
-// 10-Jul-08	rbd		1.0.5 - ImageArray returns type object, remove ImageArrayV which
+﻿// 10-Jul-08	rbd		1.0.5 - ImageArray returns type object, remove ImageArrayV which
 //						was a Chris Rowland test/experiment. Can cast the object returned
 //						by ImageArray into int[,]. Add COM releasing to Dispose().
 // 01-Jan-10  	cdr     1.0.6 - Add Camera V2 properties as late bound properties.
@@ -12,43 +12,40 @@ using ASCOM.Utilities;
 
 namespace ASCOM.DriverAccess
 {
-	#region Camera Wrapper
     /// <summary>
     /// Implements a camera class to access any registered ASCOM Camera
     /// </summary>
-    [ComVisible(true), Guid("C98894C1-7F10-499f-92AA-B7E5C4211622"), ClassInterface(ClassInterfaceType.None)]
-    public class Camera : ASCOM.Interface.ICamera, IDisposable 
+    [ComVisible(true), Guid("105D1786-695C-48ec-A753-88FF1EA30C80"), ClassInterface(ClassInterfaceType.None)]
+    public class CameraV3 : ICameraV3, IDisposable
     {
         protected object objCameraLateBound;
-		protected ICamera iCamera;
-		protected Type objTypeCamera;
+        protected ICameraV3 iCamera;
+        protected Type objTypeCamera;
 
-        public Camera()
-        {
-        }
-        
+        #region Camera New
         /// <summary>
-        /// Creates an instance of the camera class.
+        /// Initializes a new instance of the <see cref="CameraV2"/> class.
         /// </summary>
-        /// <param name="cameraID">The ProgID for the camera</param>
-        public Camera(string cameraID)
-		{
-			// Get Type Information 
+        /// <param name="cameraID">The COM ProgID of the underlying driver.</param>
+        public CameraV3(string cameraID)
+        {
+            // Get Type Information 
             objTypeCamera = Type.GetTypeFromProgID(cameraID);
-			
-			// Create an instance of the camera object
+
+            // Create an instance of the camera object
             objCameraLateBound = Activator.CreateInstance(objTypeCamera);
 
-			// Try to see if this driver has an ASCOM.Camera interface
-			try
-			{
-				iCamera = (ICamera)objCameraLateBound;
-			}
-			catch (Exception)
-			{
-				iCamera = null;
-			}
-		}
+            // Try to see if this driver has an ASCOM.Camera interface
+            try
+            {
+                iCamera = (ICameraV3)objCameraLateBound;
+            }
+            catch (Exception)
+            {
+                iCamera = null;
+            }
+        }
+        #endregion
 
         /// <summary>
         /// The Choose() method returns the DriverID of the selected driver.
@@ -67,7 +64,7 @@ namespace ASCOM.DriverAccess
             return oChooser.Choose(cameraID);
         }
 
-        #region iCamera Members
+        #region Camera V1 Members
 
         /// <summary>
         /// Aborts the current exposure, if any, and returns the camera to Idle state.
@@ -222,7 +219,7 @@ namespace ASCOM.DriverAccess
                     return iCamera.CameraXSize;
                 else
                 {
-                    return Convert.ToInt32( objTypeCamera.InvokeMember("CameraXSize",
+                    return Convert.ToInt32(objTypeCamera.InvokeMember("CameraXSize",
                         BindingFlags.Default | BindingFlags.GetProperty,
                         null, objCameraLateBound, new object[] { }));
                 }
@@ -242,7 +239,7 @@ namespace ASCOM.DriverAccess
                     return iCamera.CameraYSize;
                 else
                 {
-                    return Convert.ToInt32( objTypeCamera.InvokeMember("CameraYSize",
+                    return Convert.ToInt32(objTypeCamera.InvokeMember("CameraYSize",
                         BindingFlags.Default | BindingFlags.GetProperty,
                         null, objCameraLateBound, new object[] { }));
                 }
@@ -257,14 +254,14 @@ namespace ASCOM.DriverAccess
         /// </value>
         public bool CanAbortExposure
         {
-	        get 
+            get
             {
-				if (iCamera != null)
-					return iCamera.CanAbortExposure;
-				else
-					return Convert.ToBoolean(objTypeCamera.InvokeMember("CanAbortExposure", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objCameraLateBound, new object[] { }));
+                if (iCamera != null)
+                    return iCamera.CanAbortExposure;
+                else
+                    return Convert.ToBoolean(objTypeCamera.InvokeMember("CanAbortExposure",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objCameraLateBound, new object[] { }));
             }
         }
 
@@ -297,7 +294,7 @@ namespace ASCOM.DriverAccess
         /// <value>
         /// 	<c>true</c> if this instance can get cooler power; otherwise, <c>false</c>.
         /// </value>
-        public bool  CanGetCoolerPower
+        public bool CanGetCoolerPower
         {
             get
             {
@@ -376,35 +373,6 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Controls the link between the driver and the camera. Set True to enable the
-        /// link. Set False to disable the link (this does not switch off the cooler).
-        /// You can also read the property to check whether it is connected.
-        /// </summary>
-        /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
-        /// <exception cref=" System.Exception">Must throw exception if unsuccessful.</exception>
-        public bool Connected
-        {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.Connected;
-                else
-                    return Convert.ToBoolean(objTypeCamera.InvokeMember("Connected",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
-            set
-            {
-                if (iCamera != null)
-                    iCamera.Connected = value;
-                else
-                    objTypeCamera.InvokeMember("Connected",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objCameraLateBound, new object[] { value });
-            }
-        }
-
-        /// <summary>
         /// Turns on and off the camera cooler, and returns the current on/off state.
         /// Warning: turning the cooler off when the cooler is operating at high delta-T
         /// (typically &gt;20C below ambient) may result in thermal shock.  Repeated thermal
@@ -414,7 +382,7 @@ namespace ASCOM.DriverAccess
         /// <value><c>true</c> if [cooler on]; otherwise, <c>false</c>.</value>
         /// <exception cref=" System.Exception">not supported</exception>
         /// <exception cref=" System.Exception">an error condition such as link failure is present</exception>
-       public bool CoolerOn
+        public bool CoolerOn
         {
             get
             {
@@ -436,13 +404,13 @@ namespace ASCOM.DriverAccess
             }
         }
 
-       /// <summary>
-       /// Returns the present cooler power level, in percent.  Returns zero if CoolerOn is
-       /// False.
-       /// </summary>
-       /// <value>The cooler power.</value>
-       /// <exception cref=" System.Exception">not supported</exception>
-       /// <exception cref=" System.Exception">an error condition such as link failure is present</exception>
+        /// <summary>
+        /// Returns the present cooler power level, in percent.  Returns zero if CoolerOn is
+        /// False.
+        /// </summary>
+        /// <value>The cooler power.</value>
+        /// <exception cref=" System.Exception">not supported</exception>
+        /// <exception cref=" System.Exception">an error condition such as link failure is present</exception>
         public double CoolerPower
         {
             get
@@ -451,26 +419,6 @@ namespace ASCOM.DriverAccess
                     return iCamera.CoolerPower;
                 else
                     return Convert.ToDouble(objTypeCamera.InvokeMember("CoolerPower",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
-        }
-
-        /// <summary>
-        /// Returns a description of the camera model, such as manufacturer and model
-        /// number. Any ASCII characters may be used. The string shall not exceed 68
-        /// characters (for compatibility with FITS headers).
-        /// </summary>
-        /// <value>The description.</value>
-        /// <exception cref=" System.Exception">Must throw exception if description unavailable</exception>
-        public string Description
-        {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.Description;
-                else
-                    return Convert.ToString(objTypeCamera.InvokeMember("Description",
                         BindingFlags.Default | BindingFlags.GetProperty,
                         null, objCameraLateBound, new object[] { }));
             }
@@ -523,7 +471,7 @@ namespace ASCOM.DriverAccess
         /// <value>
         /// 	<c>true</c> if this instance has shutter; otherwise, <c>false</c>.
         /// </value>
-       public bool HasShutter
+        public bool HasShutter
         {
             get
             {
@@ -536,12 +484,12 @@ namespace ASCOM.DriverAccess
             }
         }
 
-       /// <summary>
-       /// Returns the current heat sink temperature (called "ambient temperature" by some
-       /// manufacturers) in degrees Celsius. Only valid if CanControlTemperature is True.
-       /// </summary>
-       /// <value>The heat sink temperature.</value>
-       /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
+        /// <summary>
+        /// Returns the current heat sink temperature (called "ambient temperature" by some
+        /// manufacturers) in degrees Celsius. Only valid if CanControlTemperature is True.
+        /// </summary>
+        /// <value>The heat sink temperature.</value>
+        /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public double HeatSinkTemperature
         {
             get
@@ -929,7 +877,7 @@ namespace ASCOM.DriverAccess
             else
                 objTypeCamera.InvokeMember("SetupDialog",
                     BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objCameraLateBound, new object[] {  });
+                    null, objCameraLateBound, new object[] { });
         }
 
         /// <summary>
@@ -962,7 +910,7 @@ namespace ASCOM.DriverAccess
                 if (iCamera != null)
                     return iCamera.StartX;
                 else
-                    return Convert.ToInt32( objTypeCamera.InvokeMember("StartX",
+                    return Convert.ToInt32(objTypeCamera.InvokeMember("StartX",
                         BindingFlags.Default | BindingFlags.GetProperty,
                         null, objCameraLateBound, new object[] { }));
             }
@@ -1019,27 +967,636 @@ namespace ASCOM.DriverAccess
             else
                 objTypeCamera.InvokeMember("StopExposure",
                     BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objCameraLateBound, new object[] {  });
+                    null, objCameraLateBound, new object[] { });
         }
+        #endregion
+
+        #region Additional Camera V2 Properties
+        // the Version 2 properties are late bound only for now,
+        // so only the late bound interface is implemented
+
+        /// <summary>
+        /// Returns the X offset of the Bayer matrix, as defined in Camera.SensorType.
+        /// Value returned must be in the range 0 to M-1, where M is the width of the
+        /// Bayer matrix. The offset is relative to the 0,0 pixel in the sensor array,
+        /// and does not change to reflect subframe settings.
+        /// </summary>
+        /// <value>The bayer offset X.</value>
+        /// <exception cref=" System.Exception">Must throw an exception if the information is not available.</exception>
+        /// <exception cref=" System.Exception">Must throw an exception if not valid. </exception>
+        public short BayerOffsetX
+        {
+            get
+            {
+                return Convert.ToInt16(objTypeCamera.InvokeMember("BayerOffsetX",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// Returns the Y offset of the Bayer matrix, as defined in Camera.SensorType.
+        /// Value returned must be in the range 0 to M-1, where M is the height of the
+        /// Bayer matrix. The offset is relative to the 0,0 pixel in the sensor array,
+        /// and does not change to reflect subframe settings.
+        /// </summary>
+        /// <value>The bayer offset Y.</value>
+        /// <exception cref=" System.Exception">Must throw an exception if the information is not available.</exception>
+        /// <exception cref=" System.Exception">Must throw an exception if not valid. </exception>
+        public short BayerOffsetY
+        {
+            get
+            {
+                return Convert.ToInt16(objTypeCamera.InvokeMember("BayerOffsetY",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// If True, the Camera.FastReadout function is available.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance can do fast readout; otherwise, <c>false</c>.
+        /// </value>
+        public bool CanFastReadout
+        {
+            get
+            {
+                return Convert.ToBoolean(objTypeCamera.InvokeMember("CanFastReadout",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// Returns the maximum exposure time in seconds supported by Camera.StartExposure.
+        /// </summary>
+        /// <value>The maximum exposure in seconds.</value>
+        public double ExposureMax
+        {
+            get
+            {
+                return Convert.ToDouble(objTypeCamera.InvokeMember("ExposureMax",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// Returns the minimum exposure time in seconds supported by Camera.StartExposure.
+        /// </summary>
+        /// <value>The minimum exposure in seconds.</value>
+        public double ExposureMin
+        {
+            get
+            {
+                return Convert.ToDouble(objTypeCamera.InvokeMember("ExposureMin",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// Returns the smallest increment of exposure time in seconds supported by Camera.StartExposure
+        /// </summary>
+        /// <value>The exposure resolution in seconds</value>
+        public double ExposureResolution
+        {
+            get
+            {
+                return Convert.ToDouble(objTypeCamera.InvokeMember("ExposureResolution",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// Many cameras have a "fast mode" intended for use in focusing.
+        /// When set to True, the camera will operate in Fast mode;
+        /// when set False, the camera will operate normally.
+        /// This property should default to False.
+        /// </summary>
+        /// <value><c>true</c> if fast readout is possible; otherwise, <c>false</c>.</value>
+        public bool FastReadout
+        {
+            get
+            {
+                return Convert.ToBoolean(objTypeCamera.InvokeMember("FastReadout",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+            set
+            {
+                objTypeCamera.InvokeMember("FastReadout",
+                    BindingFlags.Default | BindingFlags.SetProperty,
+                    null, objCameraLateBound, new object[] { value });
+            }
+        }
+
+        /// <summary>
+        /// Set or get the camera gain. See the documentation for details.
+        /// If <see cref="Gains"/> contains valid values then this provides an index into the array of <see cref="Gains"/> strings,
+        /// otherwise and integer between <see cref="GainMin"/>  and <see cref="GainMax"/>
+        /// </summary>
+        /// <value>The gain.</value>
+        public short Gain
+        {
+            get
+            {
+                return Convert.ToInt16(objTypeCamera.InvokeMember("Gain",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+            set
+            {
+                objTypeCamera.InvokeMember("Gain",
+                    BindingFlags.Default | BindingFlags.SetProperty,
+                    null, objCameraLateBound, new object[] { value });
+            }
+        }
+
+        /// <summary>
+        /// When specifying the gain setting with an integer value, this
+        /// is used in conjunction with <see cref="GainMin"/> to specify the range of valid settings.
+        /// if <see cref="Gains"/> contains valid data this must not be used
+        /// </summary>
+        /// <value>The maximum value of gain</value>
+        public short GainMax
+        {
+            get
+            {
+                return Convert.ToInt16(objTypeCamera.InvokeMember("GainMax",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// When specifying the gain setting with an integer value, this
+        /// is used in conjunction with <see cref="GainMax"/> to specify the range of valid settings.
+        /// if <see cref="Gains"/> contains valid data this must not be used
+        /// </summary>
+        /// <value>The minimum value of gain</value>
+        public short GainMin
+        {
+            get
+            {
+                return Convert.ToInt16(objTypeCamera.InvokeMember("GainMin",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// Gains provides a 0-based array of available gain settings.
+        /// This is often used to specify ISO settings for DSLR cameras.
+        /// Typically the application software will display the available
+        /// gain settings in a drop list. The application will then supply
+        /// the selected index to the driver via the <see cref="Gain"/> property.
+        /// If this is valid <see cref="GainMin"/> and <see cref="GainMax"/> are not.
+        /// </summary>
+        public string[] Gains
+        {
+            get
+            {
+                return (string[])objTypeCamera.InvokeMember("Gains",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { });
+            }
+        }
+
+        /// <summary>
+        /// Returns an integer between 0 and 100, where 0 indicates 0%
+        /// progress (function just started) and 100 indicates 100% progress
+        /// (i.e. completion).
+        /// </summary>
+        /// <value>The percent completed.</value>
+        public short PercentCompleted
+        {
+            get
+            {
+                return Convert.ToInt16(objTypeCamera.InvokeMember("PercentCompleted",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// ReadoutMode is an index into the array <see cref="ReadoutModes"/>., and selects
+        /// the desired readout mode for the camera.  Defaults to 0 if not set.
+        /// Throws an exception if the selected mode is not available.
+        /// </summary>
+        /// <value>The readout mode.</value>
+        public short ReadoutMode
+        {
+            get
+            {
+                return Convert.ToInt16(objTypeCamera.InvokeMember("ReadoutMode",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objCameraLateBound, new object[] { }));
+            }
+            set
+            {
+                objTypeCamera.InvokeMember("ReadoutMode",
+                        BindingFlags.Default | BindingFlags.SetProperty,
+                        null, objCameraLateBound, new object[] { value });
+            }
+        }
+
+        /// <summary>
+        /// Return an array of strings, each of which describes an available
+        /// readout mode of the camera.
+        /// use <see cref="ReadoutMode"/> to set or get the current mode.
+        /// </summary>
+        /// <value>The readout modes.</value>
+        public string[] ReadoutModes
+        {
+            get
+            {
+                return (string[])objTypeCamera.InvokeMember("ReadoutModes",
+                    BindingFlags.Default | BindingFlags.GetProperty,
+                    null, objCameraLateBound, new object[] { });
+            }
+        }
+
+        /// <summary>
+        /// Returns the name (datasheet part number) of the sensor, e.g. ICX285AL.
+        /// </summary>
+        /// <value>The name of the sensor.</value>
+        public string SensorName
+        {
+            get
+            {
+                return Convert.ToString(objTypeCamera.InvokeMember("SensorName",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objCameraLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// SensorType returns a value indicating whether the sensor is monochrome,
+        /// or what Bayer matrix it encodes.
+        /// <list type="bullet">
+        /// 		<listheader>
+        /// 			<description>Value  SensorType      Meaning</description>
+        /// 		</listheader>
+        /// 		<item>
+        /// 			<description>0      Monochrome      Camera produces monochrome array with no Bayer encoding</description>
+        /// 		</item>
+        /// 		<item>
+        /// 			<description>1      Color           Camera produces color image directly,
+        ///													requiring no Bayer decoding</description>
+        /// 		</item>
+        /// 		<item>
+        /// 			<description>2      RGGB            Camera produces RGGB encoded Bayer array images</description>
+        /// 		</item>
+        /// 		<item>
+        /// 			<description>3      CMYG            Camera produces CMYG encoded Bayer array images</description>
+        /// 		</item>
+        /// 		<item>
+        /// 			<description>4      CMYG2           Camera produces CMYG2 encoded Bayer array images</description>
+        /// 		</item>
+        /// 		<item>
+        /// 			<description>5      LRGB            Camera produces Kodak TRUESENSE Bayer LRGB array image</description>
+        /// 		</item>
+        /// 		<item>
+        /// 			<description>5      CameraError     Camera error condition serious enough to prevent
+        /// further operations (link fail, etc.).</description>
+        /// 		</item>
+        /// 	</list>
+        /// </summary>
+        /// <value>The type of the sensor.</value>
+        public SensorType SensorType
+        {
+            get
+            {
+                return (SensorType)objTypeCamera.InvokeMember("SensorType",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objCameraLateBound, new object[] { });
+            }
+            set
+            {
+                objTypeCamera.InvokeMember("SensorType",
+                        BindingFlags.Default | BindingFlags.SetProperty,
+                        null, objCameraLateBound, new object[] { value });
+            }
+        }
+
+        #endregion
+
+        #region IAscomDriverV1 Members
+
+        public string Action(string ActionName, string ActionParameters)
+        {
+            string Result = "";
+            if (iCamera != null)
+            {
+                try { Result = iCamera.Action(ActionName, ActionParameters); }
+                catch (System.MissingMethodException) { throw new MethodNotImplementedException("Action"); }
+            }
+            else
+            {
+                try { Result = Convert.ToString(objTypeCamera.InvokeMember("Action", BindingFlags.InvokeMethod, null, objCameraLateBound, new object[] { ActionParameters })); }
+                catch (System.MissingMethodException) { throw new MethodNotImplementedException("Action"); }
+                catch (System.Runtime.InteropServices.COMException ex)
+                {
+                    if (ex.ErrorCode == -2147352570) { throw new MethodNotImplementedException("Action"); } //0x80020006 Member not found exception 
+                    else { throw; }
+                }
+            }
+            return Result;
+        }
+
+        public void CommandBlind(string Command, bool Raw)
+        {
+            if (iCamera != null)
+            {
+                try { iCamera.CommandBlind(Command, Raw); }
+                catch (System.MissingMethodException) { throw new MethodNotImplementedException("Action"); }
+            }
+            else
+            {
+                try { objTypeCamera.InvokeMember("CommandBlind", BindingFlags.InvokeMethod, null, objCameraLateBound, new object[] { Command, Raw }); }
+                catch (System.MissingMethodException) { throw new MethodNotImplementedException("CommandBlind"); }
+                catch (System.Runtime.InteropServices.COMException ex)
+                {
+                    if (ex.ErrorCode == -2147352570) { throw new MethodNotImplementedException("CommandBlind"); } //0x80020006 Member not found exception 
+                    else { throw; }
+                }
+            }
+        }
+
+        public bool CommandBool(string Command, bool Raw)
+        {
+            bool Result = false;
+            if (iCamera != null)
+            {
+                try { Result = iCamera.CommandBool(Command, Raw); }
+                catch (System.MissingMethodException) { throw new MethodNotImplementedException("CommandBool"); }
+            }
+            else
+            {
+                try { Result = Convert.ToBoolean(objTypeCamera.InvokeMember("CommandBool", BindingFlags.InvokeMethod, null, objCameraLateBound, new object[] { Command, Raw })); }
+                catch (System.MissingMethodException) { throw new MethodNotImplementedException("CommandBool"); }
+                catch (System.Runtime.InteropServices.COMException ex)
+                {
+                    if (ex.ErrorCode == -2147352570) { throw new MethodNotImplementedException("CommandBool"); } //0x80020006 Member not found exception 
+                    else { throw; }
+                }
+            }
+            return Result;
+        }
+
+        public string CommandString(string Command, bool Raw)
+        {
+            string Result = "";
+            if (iCamera != null)
+            {
+                try { Result = iCamera.CommandString(Command, Raw); }
+                catch (System.MissingMethodException) { throw new MethodNotImplementedException("CommandString"); }
+            }
+            else
+            {
+                try { Result = Convert.ToString(objTypeCamera.InvokeMember("CommandString", BindingFlags.InvokeMethod, null, objCameraLateBound, new object[] { Command, Raw })); }
+                catch (System.MissingMethodException) { throw new MethodNotImplementedException("CommandString"); }
+                catch (System.Runtime.InteropServices.COMException ex)
+                {
+                    if (ex.ErrorCode == -2147352570) { throw new MethodNotImplementedException("CommandString"); } //0x80020006 Member not found exception 
+                    else { throw; }
+                }
+            }
+            return Result;
+        }
+
+        public string Configuration
+        {
+            get { throw new PropertyNotImplementedException("Configuration", false); }
+
+            set { throw new PropertyNotImplementedException("Configuration", true); }
+        }
+        /// <summary>
+        /// Controls the link between the driver and the camera. Set True to enable the
+        /// link. Set False to disable the link (this does not switch off the cooler).
+        /// You can also read the property to check whether it is connected.
+        /// </summary>
+        /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
+        /// <exception cref=" System.Exception">Must throw exception if unsuccessful.</exception>
+        public bool Connected
+        {
+            get
+            {
+                if (iCamera != null)
+                    return iCamera.Connected;
+                else
+                    return Convert.ToBoolean(objTypeCamera.InvokeMember("Connected",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objCameraLateBound, new object[] { }));
+            }
+            set
+            {
+                if (iCamera != null)
+                    iCamera.Connected = value;
+                else
+                    objTypeCamera.InvokeMember("Connected",
+                        BindingFlags.Default | BindingFlags.SetProperty,
+                        null, objCameraLateBound, new object[] { value });
+            }
+        }
+
+        /// <summary>
+        /// Returns a description of the camera model, such as manufacturer and model
+        /// number. Any ASCII characters may be used. The string shall not exceed 68
+        /// characters (for compatibility with FITS headers).
+        /// </summary>
+        /// <value>The description.</value>
+        /// <exception cref=" System.Exception">Must throw exception if description unavailable</exception>
+        public string Description
+        {
+            get
+            {
+                if (iCamera != null)
+                    return iCamera.Description;
+                else
+                    return Convert.ToString(objTypeCamera.InvokeMember("Description",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objCameraLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// Descriptive and version information about this ASCOM Camera driver.
+        /// This string may contain line endings and may be hundreds to thousands of characters long.
+        /// It is intended to display detailed information on the ASCOM driver, including version and copyright data.
+        /// See the Description property for descriptive info on the camera itself.
+        /// To get the driver version in a parseable string, use the DriverVersion property.
+        /// </summary>
+        /// <value>The driver info.</value>
+        public string DriverInfo
+        {
+            get
+            {
+                string Result = "DriverInfo not implemented by this driver";
+                try
+                {
+                    if (iCamera != null) Result = iCamera.DriverInfo;
+                    else Result = Convert.ToString(objTypeCamera.InvokeMember("DriverInfo", BindingFlags.GetProperty, null, objCameraLateBound, new object[] { }));
+                }
+                catch (System.MissingFieldException) { } //Do nothing, let the default string value through
+                catch (System.Runtime.InteropServices.COMException ex)
+                {
+                    if (ex.ErrorCode == -2147352570) { } //0x80020006 Member not found exception so just let the default value go through
+                    else { throw; }
+                }
+                return Result;
+            }
+        }
+
+        public string DriverVersion
+        {
+            get { return "0.0"; }
+        }
+
+        private int? interfaceVersion;
+        /// <summary>
+        /// The version of this interface. Will return 2 for this version.
+        /// Clients can detect legacy V1 drivers by trying to read ths property.
+        /// If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1.
+        /// In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver.
+        /// </summary>
+        /// <value>The interface version.</value>
+        public short InterfaceVersion
+        {
+            get
+            {
+                if (this.interfaceVersion != null)
+                    return (short)interfaceVersion;
+                try
+                {
+                    this.interfaceVersion = Convert.ToInt16(objTypeCamera.InvokeMember("InterfaceVersion", BindingFlags.GetProperty, null, objCameraLateBound, new object[] { }));
+                }
+
+                catch (System.Runtime.InteropServices.COMException ex)
+                {
+                    if (ex.ErrorCode == -2147352570) //0x80020006
+                    {
+                        this.interfaceVersion = 1;
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                catch (System.MissingFieldException)
+                {
+                    this.interfaceVersion = 1;
+                }
+
+                return (short)this.interfaceVersion;
+            }
+        }
+
+        public string LastResult
+        {
+            //get { throw new ASCOM.InvalidOperationException("LastResult has been called before an Action"); }
+            get { throw new PropertyNotImplementedException("LastResult", false); }
+
+        }
+
+        /// <summary>
+        /// The short name of the camera, for display purposes
+        /// </summary>
+        /// <value>The name.</value>
+        public string Name
+        {
+            get
+            {
+                try
+                {
+                    if (iCamera != null) return iCamera.Name;
+                    else return (string)objTypeCamera.InvokeMember("Name", BindingFlags.GetProperty, null, objCameraLateBound, new object[] { });
+                }
+                catch (System.MissingFieldException) { } //Do nothing, let the default string value through
+                catch (System.Runtime.InteropServices.COMException ex)
+                {
+                    if (ex.ErrorCode == -2147352570) { } //0x80020006 Member not found exception so just let the default value go through
+                    else { throw; }
+                }
+                return "Name is not implemented by this driver";
+            }
+        }
+
+        public string[] SupportedActions
+        {
+            get { throw new PropertyNotImplementedException("SupportedActions", false); }
+        }
+
+        public string[] SupportedConfigurations
+        {
+            get { throw new PropertyNotImplementedException("SupportedConfigurations", false); }
+        }
+
         #endregion
 
         #region IDisposable Members
         /// <summary>
         /// Dispose the late-bound interface, if needed. Will release it via COM
-		/// if it is a COM object, else if native .NET will just dereference it
-		/// for GC.
+        /// if it is a COM object, else if native .NET will just dereference it
+        /// for GC.
         /// </summary>
         public void Dispose()
         {
             if (this.objCameraLateBound != null)
             {
-				try { Marshal.ReleaseComObject(objCameraLateBound); }
-				catch (Exception) { }
-				objCameraLateBound = null;
+                try { Marshal.ReleaseComObject(objCameraLateBound); }
+                catch (Exception) { }
+                objCameraLateBound = null;
             }
         }
         #endregion
+
+        #region ICameraV3 Members
+
+        public string ANewICameraV3Property
+        {
+            get { throw new ASCOM.PropertyNotImplementedException("ANewICameraV3Property", false); }
+        }
+
+        public void ANewICameraV3Method()
+        {
+            throw new ASCOM.MethodNotImplementedException("ANewICameraV3Method");
+        }
+
+        #endregion
+
+        #region IAscomDriverV2 Members
+
+        public string ANewIAscomDriverV2Property
+        {
+            get { throw new ASCOM.PropertyNotImplementedException("ANewIAscomDriverV2Property", false); }
+        }
+
+        public void ANewIAscomDriverV2Method(string NewParameter1, double NewParameter2)
+        {
+            throw new ASCOM.MethodNotImplementedException("ANewIAscomDriverV2Method");
+        }
+
+        #endregion
+
+        #region ICameraV3 Members
+
+        public string ANewCameraV3Property
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        public void ANewCameraV3Method()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        #endregion
     }
 
-    #endregion
 }

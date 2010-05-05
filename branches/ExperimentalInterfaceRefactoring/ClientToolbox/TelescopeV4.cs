@@ -16,25 +16,25 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Implements a telescope class to access any registered ASCOM telescope
     /// </summary>
-    [ComVisible(true), Guid("5653BEA4-442F-4bb3-B484-6312DB3DDFCA"), ClassInterface(ClassInterfaceType.None)] 
-    public class TelescopeV3 : ITelescopeV3, IDisposable
+    [ComVisible(true), Guid("06B84D09-9882-4067-ACF2-B2100719499E"), ClassInterface(ClassInterfaceType.None)]
+    public class TelescopeV4 : ITelescopeV4, IDisposable
     {
         object objScopeLateBound;
-        ASCOM.Interface.ITelescopeV3 ITelescope;
+        ASCOM.Interface.ITelescopeV4 ITelescope;
         Type objTypeScope;
 
         /// <summary>
         /// Default constructor
         /// </summary>
-        public TelescopeV3()
+        public TelescopeV4()
         {
         }
-        
+
         /// <summary>
         /// Creates an instance of the telescope class.
         /// </summary>
         /// <param name="telescopeID">The ProgID for the telescope</param>
-        public TelescopeV3(string telescopeID)
+        public TelescopeV4(string telescopeID)
         {
             // Get Type Information 
             objTypeScope = Type.GetTypeFromProgID(telescopeID);
@@ -45,7 +45,7 @@ namespace ASCOM.DriverAccess
             // Try to see if this driver has an ASCOM.Telescope interface
             try
             {
-                ITelescope = (ASCOM.Interface.ITelescopeV3)objScopeLateBound;
+                ITelescope = (ASCOM.Interface.ITelescopeV4)objScopeLateBound;
             }
             catch (Exception)
             {
@@ -83,9 +83,9 @@ namespace ASCOM.DriverAccess
             else
                 try
                 {
-                objTypeScope.InvokeMember("AbortSlew",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { });
+                    objTypeScope.InvokeMember("AbortSlew",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -104,9 +104,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (AlignmentModes)objTypeScope.InvokeMember("AlignmentMode",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (AlignmentModes)objTypeScope.InvokeMember("AlignmentMode",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -127,9 +127,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (double)objTypeScope.InvokeMember("Altitude",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (double)objTypeScope.InvokeMember("Altitude",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -150,9 +150,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (double)objTypeScope.InvokeMember("ApertureArea",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (double)objTypeScope.InvokeMember("ApertureArea",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -173,9 +173,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (double)objTypeScope.InvokeMember("ApertureDiameter",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (double)objTypeScope.InvokeMember("ApertureDiameter",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -196,9 +196,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (bool)objTypeScope.InvokeMember("AtHome",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (bool)objTypeScope.InvokeMember("AtHome",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -220,9 +220,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (bool)objTypeScope.InvokeMember("AtPark",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (bool)objTypeScope.InvokeMember("AtPark",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -244,7 +244,7 @@ namespace ASCOM.DriverAccess
             else
                 try
                 {
-                return new _AxisRates(Axis, objTypeScope, objScopeLateBound);
+                    return new _AxisRates(Axis, objTypeScope, objScopeLateBound);
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -263,9 +263,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (double)objTypeScope.InvokeMember("Azimuth",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (double)objTypeScope.InvokeMember("Azimuth",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -310,9 +310,9 @@ namespace ASCOM.DriverAccess
             else
                 try
                 {
-                return (bool)objTypeScope.InvokeMember("CanMoveAxis",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { (int)Axis });
+                    return (bool)objTypeScope.InvokeMember("CanMoveAxis",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { (int)Axis });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -332,9 +332,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (bool)objTypeScope.InvokeMember("CanPark",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (bool)objTypeScope.InvokeMember("CanPark",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -355,9 +355,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (bool)objTypeScope.InvokeMember("CanPulseGuide",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (bool)objTypeScope.InvokeMember("CanPulseGuide",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -379,9 +379,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (bool)objTypeScope.InvokeMember("CanSetDeclinationRate",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (bool)objTypeScope.InvokeMember("CanSetDeclinationRate",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -403,9 +403,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (bool)objTypeScope.InvokeMember("CanSetGuideRates",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (bool)objTypeScope.InvokeMember("CanSetGuideRates",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -427,9 +427,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (bool)objTypeScope.InvokeMember("CanSetPark",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (bool)objTypeScope.InvokeMember("CanSetPark",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -452,9 +452,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (bool)objTypeScope.InvokeMember("CanSetPierSide",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (bool)objTypeScope.InvokeMember("CanSetPierSide",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -476,9 +476,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (bool)objTypeScope.InvokeMember("CanSetRightAscensionRate",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (bool)objTypeScope.InvokeMember("CanSetRightAscensionRate",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -500,9 +500,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (bool)objTypeScope.InvokeMember("CanSetTracking",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (bool)objTypeScope.InvokeMember("CanSetTracking",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -526,9 +526,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (bool)objTypeScope.InvokeMember("CanSlew",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (bool)objTypeScope.InvokeMember("CanSlew",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -552,9 +552,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (bool)objTypeScope.InvokeMember("CanSlewAltAz",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (bool)objTypeScope.InvokeMember("CanSlewAltAz",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -578,9 +578,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (bool)objTypeScope.InvokeMember("CanSlewAltAzAsync",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (bool)objTypeScope.InvokeMember("CanSlewAltAzAsync",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -604,9 +604,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (bool)objTypeScope.InvokeMember("CanSlewAsync",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (bool)objTypeScope.InvokeMember("CanSlewAsync",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -628,9 +628,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (bool)objTypeScope.InvokeMember("CanSync",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (bool)objTypeScope.InvokeMember("CanSync",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -651,11 +651,10 @@ namespace ASCOM.DriverAccess
                     return ITelescope.CanSyncAltAz;
                 else
                     try
-
                     {
-                    return (bool)objTypeScope.InvokeMember("CanSyncAltAz",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (bool)objTypeScope.InvokeMember("CanSyncAltAz",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -678,9 +677,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (bool)objTypeScope.InvokeMember("CanUnpark",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (bool)objTypeScope.InvokeMember("CanUnpark",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -708,9 +707,9 @@ namespace ASCOM.DriverAccess
             else
                 try
                 {
-                objTypeScope.InvokeMember("CommandBlind",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { Command, Raw });
+                    objTypeScope.InvokeMember("CommandBlind",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { Command, Raw });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -741,9 +740,9 @@ namespace ASCOM.DriverAccess
             else
                 try
                 {
-                return (bool)objTypeScope.InvokeMember("CommandBool",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { Command, Raw });
+                    return (bool)objTypeScope.InvokeMember("CommandBool",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { Command, Raw });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -773,9 +772,9 @@ namespace ASCOM.DriverAccess
             else
                 try
                 {
-                return (string)objTypeScope.InvokeMember("CommandString",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { Command, Raw });
+                    return (string)objTypeScope.InvokeMember("CommandString",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { Command, Raw });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -801,9 +800,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (bool)objTypeScope.InvokeMember("Connected",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (bool)objTypeScope.InvokeMember("Connected",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -817,9 +816,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    objTypeScope.InvokeMember("Connected",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objScopeLateBound, new object[] { value });
+                        objTypeScope.InvokeMember("Connected",
+                            BindingFlags.Default | BindingFlags.SetProperty,
+                            null, objScopeLateBound, new object[] { value });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -841,9 +840,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (double)objTypeScope.InvokeMember("Declination",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (double)objTypeScope.InvokeMember("Declination",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -877,9 +876,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (double)objTypeScope.InvokeMember("DeclinationRate",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (double)objTypeScope.InvokeMember("DeclinationRate",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -893,9 +892,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    objTypeScope.InvokeMember("DeclinationRate",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objScopeLateBound, new object[] { value });
+                        objTypeScope.InvokeMember("DeclinationRate",
+                            BindingFlags.Default | BindingFlags.SetProperty,
+                            null, objScopeLateBound, new object[] { value });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -923,9 +922,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (string)objTypeScope.InvokeMember("Description",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (string)objTypeScope.InvokeMember("Description",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -947,9 +946,9 @@ namespace ASCOM.DriverAccess
             else
                 try
                 {
-                return (PierSide)objTypeScope.InvokeMember("DestinationSideOfPier",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { RightAscension, Declination });
+                    return (PierSide)objTypeScope.InvokeMember("DestinationSideOfPier",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { RightAscension, Declination });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -981,9 +980,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (bool)objTypeScope.InvokeMember("DoesRefraction",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (bool)objTypeScope.InvokeMember("DoesRefraction",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -997,9 +996,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    objTypeScope.InvokeMember("DoesRefraction",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objScopeLateBound, new object[] { value });
+                        objTypeScope.InvokeMember("DoesRefraction",
+                            BindingFlags.Default | BindingFlags.SetProperty,
+                            null, objScopeLateBound, new object[] { value });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1024,9 +1023,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (string)objTypeScope.InvokeMember("DriverInfo",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (string)objTypeScope.InvokeMember("DriverInfo",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1049,9 +1048,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (string)objTypeScope.InvokeMember("DriverVersion",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (string)objTypeScope.InvokeMember("DriverVersion",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1082,9 +1081,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (EquatorialCoordinateType)objTypeScope.InvokeMember("EquatorialSystem",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (EquatorialCoordinateType)objTypeScope.InvokeMember("EquatorialSystem",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1106,9 +1105,9 @@ namespace ASCOM.DriverAccess
             else
                 try
                 {
-                objTypeScope.InvokeMember("FindHome",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { });
+                    objTypeScope.InvokeMember("FindHome",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -1129,9 +1128,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (double)objTypeScope.InvokeMember("FocalLength",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (double)objTypeScope.InvokeMember("FocalLength",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1163,9 +1162,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (double)objTypeScope.InvokeMember("GuideRateDeclination",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (double)objTypeScope.InvokeMember("GuideRateDeclination",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1179,9 +1178,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    objTypeScope.InvokeMember("GuideRateDeclination",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objScopeLateBound, new object[] { value });
+                        objTypeScope.InvokeMember("GuideRateDeclination",
+                            BindingFlags.Default | BindingFlags.SetProperty,
+                            null, objScopeLateBound, new object[] { value });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1213,9 +1212,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (double)objTypeScope.InvokeMember("GuideRateRightAscension",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (double)objTypeScope.InvokeMember("GuideRateRightAscension",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1229,9 +1228,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    objTypeScope.InvokeMember("GuideRateRightAscension",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objScopeLateBound, new object[] { value });
+                        objTypeScope.InvokeMember("GuideRateRightAscension",
+                            BindingFlags.Default | BindingFlags.SetProperty,
+                            null, objScopeLateBound, new object[] { value });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1255,9 +1254,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (short)objTypeScope.InvokeMember("InterfaceVersion",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (short)objTypeScope.InvokeMember("InterfaceVersion",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1279,9 +1278,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (bool)objTypeScope.InvokeMember("IsPulseGuiding",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (bool)objTypeScope.InvokeMember("IsPulseGuiding",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1320,9 +1319,9 @@ namespace ASCOM.DriverAccess
             else
                 try
                 {
-                objTypeScope.InvokeMember("MoveAxis",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { Axis, Rate });
+                    objTypeScope.InvokeMember("MoveAxis",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { Axis, Rate });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -1342,9 +1341,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (string)objTypeScope.InvokeMember("Name",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (string)objTypeScope.InvokeMember("Name",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1369,9 +1368,9 @@ namespace ASCOM.DriverAccess
             else
                 try
                 {
-                objTypeScope.InvokeMember("Park",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { });
+                    objTypeScope.InvokeMember("Park",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -1403,9 +1402,9 @@ namespace ASCOM.DriverAccess
             else
                 try
                 {
-                objTypeScope.InvokeMember("PulseGuide",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { (int)Direction, Duration });
+                    objTypeScope.InvokeMember("PulseGuide",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { (int)Direction, Duration });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -1427,9 +1426,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (double)objTypeScope.InvokeMember("RightAscension",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (double)objTypeScope.InvokeMember("RightAscension",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1480,9 +1479,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (double)objTypeScope.InvokeMember("RightAscensionRate",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (double)objTypeScope.InvokeMember("RightAscensionRate",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1496,9 +1495,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    objTypeScope.InvokeMember("RightAscensionRate",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objScopeLateBound, new object[] { value });
+                        objTypeScope.InvokeMember("RightAscensionRate",
+                            BindingFlags.Default | BindingFlags.SetProperty,
+                            null, objScopeLateBound, new object[] { value });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1515,11 +1514,11 @@ namespace ASCOM.DriverAccess
             if (ITelescope != null)
                 ITelescope.SetPark();
             else
-                try 
+                try
                 {
-                objTypeScope.InvokeMember("SetPark",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { });
+                    objTypeScope.InvokeMember("SetPark",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -1539,9 +1538,9 @@ namespace ASCOM.DriverAccess
             else
                 try
                 {
-                objTypeScope.InvokeMember("SetupDialog",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { });
+                    objTypeScope.InvokeMember("SetupDialog",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -1568,9 +1567,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (PierSide)objTypeScope.InvokeMember("SideOfPier",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (PierSide)objTypeScope.InvokeMember("SideOfPier",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1582,16 +1581,16 @@ namespace ASCOM.DriverAccess
                 if (ITelescope != null)
                     ITelescope.SideOfPier = value;
                 else
-                try
-                {
-                    objTypeScope.InvokeMember("SideOfPier",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objScopeLateBound, new object[] { (int)value });
-                }
-                catch (TargetInvocationException ex)
-                {
-                    throw (ex.InnerException);
-                }
+                    try
+                    {
+                        objTypeScope.InvokeMember("SideOfPier",
+                            BindingFlags.Default | BindingFlags.SetProperty,
+                            null, objScopeLateBound, new object[] { (int)value });
+                    }
+                    catch (TargetInvocationException ex)
+                    {
+                        throw (ex.InnerException);
+                    }
             }
         }
 
@@ -1611,9 +1610,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (double)objTypeScope.InvokeMember("SiderealTime",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (double)objTypeScope.InvokeMember("SiderealTime",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1636,9 +1635,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (double)objTypeScope.InvokeMember("SiteElevation",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (double)objTypeScope.InvokeMember("SiteElevation",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1677,9 +1676,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (double)objTypeScope.InvokeMember("SiteLatitude",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (double)objTypeScope.InvokeMember("SiteLatitude",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1693,9 +1692,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    objTypeScope.InvokeMember("SiteLatitude",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objScopeLateBound, new object[] { value });
+                        objTypeScope.InvokeMember("SiteLatitude",
+                            BindingFlags.Default | BindingFlags.SetProperty,
+                            null, objScopeLateBound, new object[] { value });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1719,9 +1718,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (double)objTypeScope.InvokeMember("SiteLongitude",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (double)objTypeScope.InvokeMember("SiteLongitude",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1735,9 +1734,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    objTypeScope.InvokeMember("SiteLongitude",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objScopeLateBound, new object[] { value });
+                        objTypeScope.InvokeMember("SiteLongitude",
+                            BindingFlags.Default | BindingFlags.SetProperty,
+                            null, objScopeLateBound, new object[] { value });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1761,9 +1760,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (short)objTypeScope.InvokeMember("SlewSettleTime",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (short)objTypeScope.InvokeMember("SlewSettleTime",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1777,9 +1776,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    objTypeScope.InvokeMember("SlewSettleTime",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objScopeLateBound, new object[] { value });
+                        objTypeScope.InvokeMember("SlewSettleTime",
+                            BindingFlags.Default | BindingFlags.SetProperty,
+                            null, objScopeLateBound, new object[] { value });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -1807,9 +1806,9 @@ namespace ASCOM.DriverAccess
             else
                 try
                 {
-                objTypeScope.InvokeMember("SlewToAltAz",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { Azimuth, Altitude });
+                    objTypeScope.InvokeMember("SlewToAltAz",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { Azimuth, Altitude });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -1839,9 +1838,9 @@ namespace ASCOM.DriverAccess
             else
                 try
                 {
-                objTypeScope.InvokeMember("SlewToAltAzAsync",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { Azimuth, Altitude });
+                    objTypeScope.InvokeMember("SlewToAltAzAsync",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { Azimuth, Altitude });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -1867,9 +1866,9 @@ namespace ASCOM.DriverAccess
             else
                 try
                 {
-                objTypeScope.InvokeMember("SlewToCoordinates",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { RightAscension, Declination });
+                    objTypeScope.InvokeMember("SlewToCoordinates",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { RightAscension, Declination });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -1898,9 +1897,9 @@ namespace ASCOM.DriverAccess
             else
                 try
                 {
-                objTypeScope.InvokeMember("SlewToCoordinatesAsync",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { RightAscension, Declination });
+                    objTypeScope.InvokeMember("SlewToCoordinatesAsync",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { RightAscension, Declination });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -1923,9 +1922,9 @@ namespace ASCOM.DriverAccess
             else
                 try
                 {
-                objTypeScope.InvokeMember("SlewToTarget",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { });
+                    objTypeScope.InvokeMember("SlewToTarget",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -1953,9 +1952,9 @@ namespace ASCOM.DriverAccess
             else
                 try
                 {
-                objTypeScope.InvokeMember("SlewToTargetAsync",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { });
+                    objTypeScope.InvokeMember("SlewToTargetAsync",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -1983,9 +1982,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (bool)objTypeScope.InvokeMember("Slewing",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (bool)objTypeScope.InvokeMember("Slewing",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -2008,9 +2007,9 @@ namespace ASCOM.DriverAccess
             else
                 try
                 {
-                objTypeScope.InvokeMember("SyncToAltAz",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { Azimuth, Altitude });
+                    objTypeScope.InvokeMember("SyncToAltAz",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { Azimuth, Altitude });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -2030,9 +2029,9 @@ namespace ASCOM.DriverAccess
             else
                 try
                 {
-                objTypeScope.InvokeMember("SyncToCoordinates",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { RightAscension, Declination });
+                    objTypeScope.InvokeMember("SyncToCoordinates",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { RightAscension, Declination });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -2052,9 +2051,9 @@ namespace ASCOM.DriverAccess
             else
                 try
                 {
-                objTypeScope.InvokeMember("SyncToTarget",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { });
+                    objTypeScope.InvokeMember("SyncToTarget",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -2076,9 +2075,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (double)objTypeScope.InvokeMember("TargetDeclination",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (double)objTypeScope.InvokeMember("TargetDeclination",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -2092,9 +2091,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    objTypeScope.InvokeMember("TargetDeclination",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objScopeLateBound, new object[] { value });
+                        objTypeScope.InvokeMember("TargetDeclination",
+                            BindingFlags.Default | BindingFlags.SetProperty,
+                            null, objScopeLateBound, new object[] { value });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -2117,9 +2116,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (double)objTypeScope.InvokeMember("TargetRightAscension",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (double)objTypeScope.InvokeMember("TargetRightAscension",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -2133,9 +2132,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    objTypeScope.InvokeMember("TargetRightAscension",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objScopeLateBound, new object[] { value });
+                        objTypeScope.InvokeMember("TargetRightAscension",
+                            BindingFlags.Default | BindingFlags.SetProperty,
+                            null, objScopeLateBound, new object[] { value });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -2160,9 +2159,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (bool)objTypeScope.InvokeMember("Tracking",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (bool)objTypeScope.InvokeMember("Tracking",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -2176,9 +2175,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    objTypeScope.InvokeMember("Tracking",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objScopeLateBound, new object[] { value });
+                        objTypeScope.InvokeMember("Tracking",
+                            BindingFlags.Default | BindingFlags.SetProperty,
+                            null, objScopeLateBound, new object[] { value });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -2211,9 +2210,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (DriveRates)objTypeScope.InvokeMember("TrackingRate",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (DriveRates)objTypeScope.InvokeMember("TrackingRate",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -2225,10 +2224,11 @@ namespace ASCOM.DriverAccess
                 if (ITelescope != null)
                     ITelescope.TrackingRate = value;
                 else
-                    try{
-                    objTypeScope.InvokeMember("TrackingRate",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objScopeLateBound, new object[] { value });
+                    try
+                    {
+                        objTypeScope.InvokeMember("TrackingRate",
+                            BindingFlags.Default | BindingFlags.SetProperty,
+                            null, objScopeLateBound, new object[] { value });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -2252,7 +2252,7 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return new _TrackingRates(objTypeScope, objScopeLateBound);
+                        return new _TrackingRates(objTypeScope, objScopeLateBound);
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -2281,9 +2281,9 @@ namespace ASCOM.DriverAccess
                 else
                     try
                     {
-                    return (DateTime)objTypeScope.InvokeMember("UTCDate",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                        return (DateTime)objTypeScope.InvokeMember("UTCDate",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objScopeLateBound, new object[] { });
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -2322,9 +2322,9 @@ namespace ASCOM.DriverAccess
             else
                 try
                 {
-                objTypeScope.InvokeMember("Unpark",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { });
+                    objTypeScope.InvokeMember("Unpark",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -2352,7 +2352,7 @@ namespace ASCOM.DriverAccess
 
         #endregion
 
-        #region IASCOMDriverV1 Members
+        #region IASCOMDriver Members
 
         /// <summary>
         /// Action 
@@ -2370,10 +2370,10 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string LastResult
         {
-            get 
-            { 
-               throw  new ASCOM.InvalidOperationException("asd");
-               //return "This is the last result";
+            get
+            {
+                throw new ASCOM.InvalidOperationException("asd");
+                //return "This is the last result";
             }
         }
 
@@ -2383,13 +2383,17 @@ namespace ASCOM.DriverAccess
         /// <value>The supported actions.</value>
         public string[] SupportedActions
         {
-            get { 
-                string[] suppacc = new string[2] {"Action 1","Action 2"} ;
+            get
+            {
+                string[] suppacc = new string[2] { "Action 1", "Action 2" };
                 return suppacc;
-                }
+            }
         }
 
         string CurrentConfiguration = "Default";
+        /// <summary>
+        /// Configuration description
+        /// </summary>
         public string Configuration
         {
             get
@@ -2415,6 +2419,28 @@ namespace ASCOM.DriverAccess
         }
         #endregion
 
+        #region ITelescopeV4 Members
+
+        /// <summary>
+        /// NewTelescopeV4Property
+        /// </summary>
+        public string ANewTelescopeV4Property
+        {
+            get { throw new ASCOM.PropertyNotImplementedException("NewTelescopeV4Property", false); }
+        }
+
+       /// <summary>
+        /// NewTelescopeV4Method
+       /// </summary>
+       /// <param name="NewParameter1">asd</param>
+       /// <param name="NewParameter2">asd</param>
+        public void ANewTelescopeV4Method(string NewParameter1, double NewParameter2)
+        {
+            throw new ASCOM.MethodNotImplementedException("NewTelescopeV4Method");
+        }
+
+        #endregion
+
         #region ITelescopeV3 Members
 
         public string ANewTelescopeV3Property
@@ -2428,8 +2454,20 @@ namespace ASCOM.DriverAccess
         }
 
         #endregion
+
+        #region IDontKnowYet Members
+
+        public string ADontKnowYetProperty
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        public void ADontKnowYetMethod()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        #endregion
     }
     #endregion
-
-
 }

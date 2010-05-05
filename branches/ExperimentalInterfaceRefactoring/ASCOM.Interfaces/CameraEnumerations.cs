@@ -44,10 +44,10 @@ using System.Runtime.InteropServices;
 
 namespace ASCOM.Interface
 {
-    [Guid("D40EB54D-0F0F-406d-B68F-C2A7984235BC")]
     /// <summary>
     /// ASCOM Camera status values.
     /// </summary>
+    [ComVisible(true), Guid("D40EB54D-0F0F-406d-B68F-C2A7984235BC")]
     public enum CameraStates
     {
         cameraIdle = 0,
@@ -62,6 +62,7 @@ namespace ASCOM.Interface
     /// Sensor type, identifies the type of colour sensor
     /// V2 cameras only
     /// </summary>
+    [ComVisible(true), Guid("14B5CAC7-B80B-492e-92F0-956C9881FAAF")]
     public enum SensorType
     {
         /// <summary>

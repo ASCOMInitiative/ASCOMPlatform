@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ASCOM.DriverAccess.Camera" Collapsed="true">
+    <Position X="2.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>FIAADDAgICFgRIACAoABAACygGBBQECAAQAAaKEgBQA=</HashCode>
+      <FileName>Camera.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ASCOM.DriverAccess.CameraV3" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>FoACDDggoClkRKISCoAFAASygGDBYkKAwQIS6aEgBQY=</HashCode>
+      <FileName>CameraV3.cs</FileName>
+      <NewMemberFileName>CameraV2.cs</NewMemberFileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ASCOM.DriverAccess.Telescope" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>xAEAAQCUCHBs0OYJmgLc0EaBAAJMTCIQQKIIKwIgCCI=</HashCode>
+      <FileName>TelescopeV2.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ASCOM.DriverAccess.TelescopeV3" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>xAEAAQCUiHBs0OYZmgLc0EaBAAJMTiIQwKIIKwIgCGY=</HashCode>
+      <FileName>TelescopeV3.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.306" />
+  </Class>
+  <Class Name="ASCOM.DriverAccess.TelescopeV4" Collapsed="true">
+    <Position X="12.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>xEEAAQCUiHBs0OYZmgLc0EaBAALMTiIQwKIIKwIiCGY=</HashCode>
+      <FileName>TelescopeV4.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ASCOM.DriverAccess.CameraV2" Collapsed="true">
+    <Position X="4.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>FoACDDggoClkRKISCoAFAASygGBBYkKAwQIS6aEgBQY=</HashCode>
+      <FileName>CameraV2.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="ASCOM.Interface.IAscomDriverV1">
+    <Position X="6.25" Y="1.25" Width="2" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ASCOM.Interface.ITelescopeCore">
+    <Position X="2.5" Y="1.25" Width="1.75" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ASCOM.Interface.ITelescopeV2">
+    <Position X="0.5" Y="16" Width="1.75" />
+    <InheritanceLine Type="ASCOM.Interface.ITelescopeCore" FixedFromPoint="true">
+      <Path>
+        <Point X="2.938" Y="14.927" />
+        <Point X="2.938" Y="15.625" />
+        <Point X="1.375" Y="15.625" />
+        <Point X="1.375" Y="16" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ASCOM.Interface.ITelescopeV3">
+    <Position X="4.25" Y="16" Width="1.5" />
+    <InheritanceLine Type="ASCOM.Interface.ITelescopeCore" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="3.875" Y="14.927" />
+        <Point X="3.875" Y="15.625" />
+        <Point X="4.688" Y="15.625" />
+        <Point X="4.688" Y="16" />
+      </Path>
+    </InheritanceLine>
+    <InheritanceLine Type="ASCOM.Interface.IAscomDriverV1" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6.5" Y="5.305" />
+        <Point X="6.5" Y="6.189" />
+        <Point X="5.188" Y="6.189" />
+        <Point X="5.188" Y="16" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ASCOM.Interface.ICamera">
+    <Position X="13.5" Y="11.75" Width="1.5" />
+    <InheritanceLine Type="ASCOM.Interface.ICameraCore" FixedFromPoint="true">
+      <Path>
+        <Point X="13.25" Y="9.924" />
+        <Point X="13.25" Y="11.375" />
+        <Point X="14.25" Y="11.375" />
+        <Point X="14.25" Y="11.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ASCOM.Interface.ICameraCore">
+    <Position X="12" Y="1.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ASCOM.Interface.ICameraV2">
+    <Position X="10.75" Y="11.75" Width="1.5" />
+    <InheritanceLine Type="ASCOM.Interface.IAscomDriverV1" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7.938" Y="5.305" />
+        <Point X="7.938" Y="5.772" />
+        <Point X="11.125" Y="5.772" />
+        <Point X="11.125" Y="11.75" />
+      </Path>
+    </InheritanceLine>
+    <InheritanceLine Type="ASCOM.Interface.ICameraCore" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="12.375" Y="9.924" />
+        <Point X="12.375" Y="11.375" />
+        <Point X="11.812" Y="11.375" />
+        <Point X="11.812" Y="11.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ASCOM.Interface.ITelescopeV4">
+    <Position X="6.25" Y="18.75" Width="2" />
+    <InheritanceLine Type="ASCOM.Interface.ITelescopeCore" ManuallyRouted="true" FixedToPoint="true">
+      <Path>
+        <Point X="3.375" Y="14.92" />
+        <Point X="3.375" Y="18.375" />
+        <Point X="6.562" Y="18.375" />
+        <Point X="6.562" Y="18.75" />
+      </Path>
+    </InheritanceLine>
+    <InheritanceLine Type="ASCOM.Interface.IAscomDriverV2" ManuallyRouted="true" FixedToPoint="true">
+      <Path>
+        <Point X="7.25" Y="8.684" />
+        <Point X="7.25" Y="16.521" />
+        <Point X="7.25" Y="16.521" />
+        <Point X="7.25" Y="18.75" />
+      </Path>
+    </InheritanceLine>
+    <InheritanceLine Type="ASCOM.Interface.IAscomDriverV1" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7.562" Y="5.305" />
+        <Point X="7.562" Y="6.191" />
+        <Point X="8.747" Y="6.191" />
+        <Point X="8.747" Y="14.523" />
+        <Point X="7.875" Y="14.523" />
+        <Point X="7.875" Y="18.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ASCOM.Interface.IAscomDriverV2">
+    <Position X="6.25" Y="7" Width="2" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ASCOM.Interface.ICameraV3">
+    <Position X="9.5" Y="18.75" Width="2" />
+    <InheritanceLine Type="ASCOM.Interface.IAscomDriverV2" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7.625" Y="8.684" />
+        <Point X="7.625" Y="18.375" />
+        <Point X="7.792" Y="18.375" Type="JumpStart" />
+        <Point X="7.958" Y="18.375" Type="JumpEnd" />
+        <Point X="10" Y="18.375" />
+        <Point X="10" Y="18.75" />
+      </Path>
+    </InheritanceLine>
+    <InheritanceLine Type="ASCOM.Interface.ICameraV2" ManuallyRouted="true" FixedToPoint="true">
+      <Path>
+        <Point X="11.5" Y="15.997" />
+        <Point X="11.5" Y="17.625" />
+        <Point X="10.833" Y="17.625" />
+        <Point X="10.833" Y="18.75" />
+      </Path>
+    </InheritanceLine>
+    <InheritanceLine Type="ASCOM.Interface.IAscomDriverV1" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7.75" Y="5.305" />
+        <Point X="7.75" Y="5.989" />
+        <Point X="10.375" Y="5.989" />
+        <Point X="10.375" Y="18.75" />
+      </Path>
+    </InheritanceLine>
+    <InheritanceLine Type="ASCOM.Interface.ICameraCore" FixedToPoint="true">
+      <Path>
+        <Point X="12.75" Y="9.92" />
+        <Point X="12.75" Y="18.375" />
+        <Point X="11.25" Y="18.375" />
+        <Point X="11.25" Y="18.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

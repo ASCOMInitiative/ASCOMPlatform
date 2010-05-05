@@ -1,10 +1,10 @@
 ﻿//tabs=4
 // --------------------------------------------------------------------------------
 // <summary>
-// ASCOM.Interface.ITelescope Telescope Interface V2
+// ASCOM.Interface Camera V2 interface
 // </summary>
 //
-// <copyright company="TiGra Astronomy" author="Timothy P. Long">
+// <copyright company="The ASCOM Initiative" author="Timothy P. Long">
 //	Copyright © 2010 The ASCOM Initiative
 // </copyright>
 //
@@ -30,30 +30,28 @@
 // </license>
 //
 //
-// Defines:	ITelescope interfaces
-// Author:		(TPL) Timothy P. Long <Tim@tigranetworks.co.uk>
+// Defines:	ICamera V2 enumerations
+// Author:		(CDR) Chris Rowland <chris.rowland@dsl.pipex.com>
 //
 // Edit Log:
 //
 // Date			Who	Vers	Description
 // -----------	---	-----	-------------------------------------------------------
-// 10-Feb-2010	TPL	6.0.*	Initial edit. Mirrors platform 5.0 PIAs.
-// 21-Feb-2010  cdr 6.0.*   Remove properties and methods already in IAscomDriver
-// 03-Mar-2010	TPL	6.0.*	Renamed to ITelescopeV3, added IDeviceControl
+// 21-Feb-2010	CDR	6.0.*	Initial edit.
 // --------------------------------------------------------------------------------
-//
-using System;
+
 using System.Runtime.InteropServices;
 
 namespace ASCOM.Interface
 {
     /// <summary>
-	/// ITelescope V3 inherits IASCOMDriverV1 and ITelesceop
-	/// </summary>
-    [ComVisible(true), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("76DC9EE3-925B-47e3-9419-2AD58A91968F")]
-    public interface ITelescopeV3 : ITelescopeV2
-	{
-        string ANewTelescopeV3Property { get; }
-        void ANewTelescopeV3Method();
-	}
+    /// Camera V2 interface is the aggregate of Camera V1
+    /// and the new IAscomDriver and IDeviceControl interfaces.
+    /// </summary>
+    [ComVisible(true), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("CD334D8E-4652-4dee-8AF3-3AB518B817A3")]
+    public interface ICameraV4 : ICameraV3, IDontKnowYet
+    {
+        string ANewCameraV4Property { get; }
+        void ANewCameraV4Method();
+    }
 }
