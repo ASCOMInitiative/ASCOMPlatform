@@ -48,7 +48,7 @@ using System.Runtime.InteropServices;
 namespace ASCOM.Interface
 {
     /// <summary>
-	/// ITelescope V3 inherits IASCOMDriverV1 and ITelesceop
+    /// ITelescope V3 inherits ITelescopeV2
 	/// </summary>
     [ComVisible(true), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("76DC9EE3-925B-47e3-9419-2AD58A91968F")]
     public interface ITelescopeV3 : ITelescopeV2
