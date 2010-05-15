@@ -18,8 +18,8 @@ CompatibleMode="2"
 CompatibleEXE32="TheSky Driver-ref.dll"
 VersionCompatible32="1"
 MajorVer=5
-MinorVer=1
-RevisionVer=3
+MinorVer=2
+RevisionVer=1
 AutoIncrementVer=0
 ServerSupportFiles=0
 VersionComments="http://ascom-standards.org/  "
@@ -42,7 +42,8 @@ Retained=0
 ThreadPerObject=0
 MaxNumberOfThreads=1
 ThreadingModel=1
-DebugStartupOption=0
+DebugStartupOption=2
+DebugStartupComponent=C:\Program Files (x86)\ACP Obs Control\acp.exe
 
 [MS Transaction Server]
 AutoRefresh=1

@@ -13,6 +13,12 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
 Attribute VB_Description = "ASCOM Telescope driver for Software Bisque TheSky"
 '---------------------------------------------------------------------
+' This work is licensed under the Creative Commons Attribution-No Derivative Works
+' 3.0 License. To view a copy of this license, visit
+'         http://creativecommons.org/licenses/by-nd/3.0/
+' or send a letter to Creative Commons, 171 Second Street, Suite 300, San Francisco,
+' California, 94105, USA.
+'---------------------------------------------------------------------
 '   =============
 '   TELESCOPE.CLS
 '   =============
@@ -124,7 +130,10 @@ Attribute VB_Description = "ASCOM Telescope driver for Software Bisque TheSky"
 '                   POTH really wants to know what type of mount is in use.
 ' 18-Mar-09 rbd     5.1.2 - Merge Scott Kephart's addition of Alignment Mode. Add code
 '                   in SetupDialog to capture and update AlignmentMode selection.
-' 25-Mar-09 rbd     5.1.3 - Add control for trask offsets
+' 25-Mar-09 rbd     5.1.3 - Add control for track offsets
+' 14-May-10 rbd     5.2.1 - Support for TheSkyX. Fix reloading of settings
+'                   after SetupDialog, 2 settings were missing. Remove
+'                   "experimental" legend from PulseGuide option.
 '---------------------------------------------------------------------
 
 Option Explicit
@@ -148,6 +157,12 @@ Public Enum GuideDirections
     guideWest = 3
 End Enum
 
+Public Enum TheSkyType
+    TheSky5 = 0
+    TheSky6 = 1
+    TheSkyX = 2
+End Enum
+
 Private m_Util As DriverHelper.Util
 Private m_Profile As DriverHelper.Profile
 Private m_iSettleTime As Integer
@@ -165,7 +180,7 @@ Private m_dAlt As Double                        ' Cached coordinates
 Private m_dAz As Double
 Private m_lNextAzAltTix As Long
 Private m_bInhibitSync As Boolean
-Private m_bUseSky6 As Boolean
+Private m_eTheSkyType As TheSkyType
 Private m_bSlewDelay As Boolean
 Private m_bFindHome As Boolean                  ' Find Home on first conn
 Private m_bFirstConn As Boolean                 ' This is True after first conn
@@ -186,29 +201,48 @@ Private Sub Class_Initialize()
     Set m_Profile = New DriverHelper.Profile
     m_Profile.DeviceType = "Telescope"              ' We're a Telescope driver
     m_Profile.Register ID, DESC                     ' Self-register (MUST DO THIS FIRST!)
-    '
-    ' Get the config settings for interface and sync supresssion
-    '
+    
+    buf = m_Profile.GetValue(ID, "TheSkyType")
+    If buf <> "" Then
+        Select Case buf
+            Case "TheSky5": m_eTheSkyType = TheSky5
+            Case "TheSky6": m_eTheSkyType = TheSky6
+            Case "TheSkyX": m_eTheSkyType = TheSkyX
+        End Select
+    Else
+        '
+        ' Read the old registry data (TheSky6 or not)
+        '
+        buf = m_Profile.GetValue(ID, "TheSky6")
+        If buf = "" Then buf = "False"              ' Default to TheSky V5
+        If CBool(buf) Then
+            m_eTheSkyType = TheSky6
+        Else
+            m_eTheSkyType = TheSky5
+        End If
+    End If
+    
     buf = m_Profile.GetValue(ID, "InhibitSync")
     If buf = "" Then buf = "False"                  ' Default to allowing Sync
     m_bInhibitSync = CBool(buf)
-    buf = m_Profile.GetValue(ID, "TheSky6")
-    If buf = "" Then buf = "False"                  ' Default to V5
-    m_bUseSky6 = CBool(buf)
+    
     buf = m_Profile.GetValue(ID, "SlewDelay")
     If buf = "" Then buf = "True"                   ' Default to do delay
     m_bSlewDelay = CBool(buf)
+    
     buf = m_Profile.GetValue(ID, "FindHome")
     If buf = "" Then buf = "False"                  ' Default no FindHome() call!
     m_bFindHome = CBool(buf)
+    
     buf = m_Profile.GetValue(ID, "TrackOffsets")
-    If buf = "" Then buf = "False"                   ' Default to no track offsets
+    If buf = "" Then buf = "False"                  ' Default to no track offsets
     m_bTrackOffsets = CBool(buf)
+    
     buf = m_Profile.GetValue(ID, "PulseGuide")
-    If buf = "" Then buf = "False"                   ' Default to not PulseGuide
+    If buf = "" Then buf = "False"                  ' Default to not PulseGuide
     m_bPulseGuide = CBool(buf)
     
-    buf = m_Profile.GetValue(ID, "AlignmentMode")    ' Default to algUnknown (maybe the default should be GermanPolar, for the Paramount?)
+    buf = m_Profile.GetValue(ID, "AlignmentMode")   ' Default to algUnknown (maybe the default should be GermanPolar, for the Paramount?)
     Select Case buf
         Case "algUnknown"
             m_iAlignmentMode = algUnknown
@@ -349,11 +383,13 @@ Public Property Let Connected(ByVal newVal As Boolean)
     
     If newVal Then
         On Error GoTo NO_SKY
-        If m_bUseSky6 Then
-            Set m_Bisque = CreateObject("TheSky6.RASCOMTele")
-        Else
-            Set m_Bisque = CreateObject("TheSky.RASCOMTele")
-        End If
+        Select Case m_eTheSkyType
+            Case TheSky5: buf = "TheSky.RASCOMTele"
+            Case TheSky6: buf = "TheSky6.RASCOMTele"
+            ' ** NOT WHAT BISQUE SAYS, BUT WORKS! "TheSkyXAdaptor.RASCOMTele" does not!
+            Case TheSkyX: buf = "TheSkyX.sky6RASCOMTele"
+        End Select
+        Set m_Bisque = CreateObject(buf)
         On Error GoTo 0
         m_Bisque.Connect
         m_Bisque.Asynchronous = 1                   ' Need this after Connect()
@@ -370,11 +406,11 @@ Public Property Let Connected(ByVal newVal As Boolean)
     Exit Property
 
 NO_SKY:
-    If m_bUseSky6 Then
-        buf = "V6"
-    Else
-        buf = "V5"
-    End If
+    Select Case m_eTheSkyType
+        Case TheSky5: buf = "5"
+        Case TheSky6: buf = "6"
+        Case TheSkyX: buf = "X"
+    End Select
     MsgBox "TheSky " & buf & " was selected, but it does not appear to be " & _
             "installed or configured for scripting.", _
             (vbOKOnly + vbCritical + vbMsgBoxSetForeground), App.FileDescription
@@ -786,18 +822,47 @@ Public Sub SetupDialog()
     '
     Set m_Profile = New DriverHelper.Profile
     m_Profile.DeviceType = "Telescope"              ' We're a Telescope driver
+    
+    buf = m_Profile.GetValue(ID, "TheSkyType")
+    If buf <> "" Then
+        Select Case buf
+            Case "TheSky5": m_eTheSkyType = TheSky5
+            Case "TheSky6": m_eTheSkyType = TheSky6
+            Case "TheSkyX": m_eTheSkyType = TheSkyX
+        End Select
+    Else
+        '
+        ' Read the old registry data (TheSky6 or not)
+        '
+        buf = m_Profile.GetValue(ID, "TheSky6")
+        If buf = "" Then buf = "False"              ' Default to TheSky V5
+        If CBool(buf) Then
+            m_eTheSkyType = TheSky6
+        Else
+            m_eTheSkyType = TheSky5
+        End If
+    End If
+    
     buf = m_Profile.GetValue(ID, "InhibitSync")
     If buf = "" Then buf = "False"                  ' Default to allowing Sync
     m_bInhibitSync = CBool(buf)
-    buf = m_Profile.GetValue(ID, "TheSky6")
-    If buf = "" Then buf = "False"                  ' Default to V5
-    m_bUseSky6 = CBool(buf)
+    
     buf = m_Profile.GetValue(ID, "SlewDelay")
-    If buf = "" Then buf = "True"                  ' Default to do delay
+    If buf = "" Then buf = "True"                   ' Default to do delay
     m_bSlewDelay = CBool(buf)
+    
+    buf = m_Profile.GetValue(ID, "FindHome")
+    If buf = "" Then buf = "False"                  ' Default no FindHome() call!
+    m_bFindHome = CBool(buf)
+    
+    buf = m_Profile.GetValue(ID, "TrackOffsets")
+    If buf = "" Then buf = "False"                  ' Default to no track offsets
+    m_bTrackOffsets = CBool(buf)
+    
     buf = m_Profile.GetValue(ID, "PulseGuide")
     If buf = "" Then buf = "False"                  ' Default to not PulseGuide
     m_bPulseGuide = CBool(buf)
+    
     buf = m_Profile.GetValue(ID, "AlignmentMode")    ' Default to algUnknown (maybe the default should be GermanPolar, for the Paramount?)
     Select Case buf
         Case "algUnknown"

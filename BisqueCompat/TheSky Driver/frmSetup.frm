@@ -2,7 +2,7 @@ VERSION 5.00
 Begin VB.Form frmSetup 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "ASCOM Driver for TheSky(tm)"
-   ClientHeight    =   5595
+   ClientHeight    =   5835
    ClientLeft      =   90
    ClientTop       =   330
    ClientWidth     =   4335
@@ -10,7 +10,7 @@ Begin VB.Form frmSetup
    LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   5595
+   ScaleHeight     =   5835
    ScaleWidth      =   4335
    ShowInTaskbar   =   0   'False
    StartUpPosition =   3  'Windows Default
@@ -18,8 +18,8 @@ Begin VB.Form frmSetup
       Caption         =   "Enable Tracking Offsets"
       Height          =   300
       Left            =   345
-      TabIndex        =   5
-      Top             =   3300
+      TabIndex        =   6
+      Top             =   3540
       Width           =   3105
    End
    Begin VB.ComboBox cbAlignmentMode 
@@ -27,64 +27,72 @@ Begin VB.Form frmSetup
       ItemData        =   "frmSetup.frx":0000
       Left            =   360
       List            =   "frmSetup.frx":0010
-      TabIndex        =   7
+      TabIndex        =   8
       Text            =   "cbAlignmentMode"
-      Top             =   4200
+      Top             =   4440
       Width           =   2895
    End
    Begin VB.CheckBox chkPulseGuide 
-      Caption         =   "Enable PulseGuide (experimental)"
+      Caption         =   "Enable PulseGuide"
       Height          =   300
       Left            =   345
-      TabIndex        =   6
-      Top             =   3660
+      TabIndex        =   7
+      Top             =   3900
       Width           =   3105
    End
    Begin VB.CheckBox chkInitHome 
       Caption         =   "Find Home on initial connect"
       Height          =   435
       Left            =   345
-      TabIndex        =   3
-      Top             =   2535
+      TabIndex        =   4
+      Top             =   2775
       Width           =   3930
    End
    Begin VB.CheckBox chkSlewStartDelay 
       Caption         =   "Slew-start delay for CPU-hogging cameras"
       Height          =   435
       Left            =   345
-      TabIndex        =   4
-      Top             =   2880
+      TabIndex        =   5
+      Top             =   3120
       Width           =   3930
    End
    Begin VB.CommandButton CmdCancel 
       Caption         =   "&Cancel"
       Height          =   360
       Left            =   2100
-      TabIndex        =   8
-      Top             =   5025
+      TabIndex        =   9
+      Top             =   5265
       Width           =   975
    End
    Begin VB.Frame Frame1 
       Caption         =   "TheSky Version Selector"
-      Height          =   990
+      Height          =   1275
       Left            =   120
-      TabIndex        =   12
+      TabIndex        =   13
       Top             =   1125
       Width           =   4095
+      Begin VB.OptionButton rbSkyX 
+         Caption         =   "TheSky X Pro 10.1.6 or later"
+         Height          =   195
+         Left            =   225
+         TabIndex        =   0
+         Top             =   300
+         Width           =   2895
+      End
       Begin VB.OptionButton rbSky5 
          Caption         =   "TheSky Version 5.0.110 or later"
          Height          =   195
-         Left            =   210
-         TabIndex        =   1
-         Top             =   615
+         Left            =   225
+         TabIndex        =   2
+         Top             =   900
          Width           =   2865
       End
       Begin VB.OptionButton rbSky6 
          Caption         =   "TheSky Version 6.0.0.40 or later"
          Height          =   195
-         Left            =   210
-         TabIndex        =   0
-         Top             =   315
+         Left            =   225
+         TabIndex        =   1
+         Top             =   600
          Width           =   2895
       End
    End
@@ -92,16 +100,16 @@ Begin VB.Form frmSetup
       Caption         =   "Inhibit SYNC to protect TPOINT model"
       Height          =   435
       Left            =   345
-      TabIndex        =   2
-      Top             =   2205
+      TabIndex        =   3
+      Top             =   2445
       Width           =   3930
    End
    Begin VB.CommandButton cmdOK 
       Caption         =   "&OK"
       Height          =   360
       Left            =   3180
-      TabIndex        =   9
-      Top             =   5025
+      TabIndex        =   10
+      Top             =   5265
       Width           =   975
    End
    Begin VB.PictureBox picASCOM 
@@ -114,7 +122,7 @@ Begin VB.Form frmSetup
       Picture         =   "frmSetup.frx":0196
       ScaleHeight     =   840
       ScaleWidth      =   720
-      TabIndex        =   11
+      TabIndex        =   12
       ToolTipText     =   "Click to go to the ASCOM web site"
       Top             =   150
       Width           =   720
@@ -123,15 +131,15 @@ Begin VB.Form frmSetup
       Caption         =   "Mount type:"
       Height          =   255
       Left            =   345
-      TabIndex        =   14
-      Top             =   3990
+      TabIndex        =   15
+      Top             =   4230
       Width           =   1575
    End
    Begin VB.Label Label1 
       Caption         =   "This driver uses the Active Scripting features of TheSky, converting the interface into the ASCOM Standard for telescope control."
       Height          =   930
       Left            =   1020
-      TabIndex        =   13
+      TabIndex        =   14
       Top             =   135
       Width           =   3225
    End
@@ -139,8 +147,8 @@ Begin VB.Form frmSetup
       Caption         =   "<runtime version>"
       Height          =   240
       Left            =   360
-      TabIndex        =   10
-      Top             =   4680
+      TabIndex        =   11
+      Top             =   4920
       Width           =   2655
    End
 End
@@ -152,6 +160,7 @@ Attribute VB_Exposed = False
 ' 26-Dec-05 rbd 4.1.2 - Add FindHome checkbox
 ' 19-Feb-09 bsk 5.1.2 - Add Mount Type combobox
 ' 25-Mar-09 rbd 5.1.3 - Add Tracking Rate checkbox
+' 14-May-10 rbd 5.2.1 - Add support for TheSky X
 
 Option Explicit
 
@@ -177,9 +186,16 @@ Private Const HWND_NOTOPMOST        As Long = -2
 
 Private Const SW_SHOWNORMAL         As Long = 1
 
+'Public Enum TheSkyType
+'    TheSky5 = 0
+'    TheSky6 = 1
+'    TheSkyX = 2
+'End Enum
+    
 Public m_Profile As DriverHelper.Profile
 Public m_DriverID As String
 Public m_bSlewDelay As Boolean
+Public m_eTheSkyType As TheSkyType
 
 Private Declare Function SetWindowPos Lib "user32.dll" ( _
                 ByVal hWnd As Long, _
@@ -199,18 +215,41 @@ Private Declare Function ShellExecute Lib "shell32" Alias "ShellExecuteA" ( _
                 ByVal nShowCmd As Long) As Long
 
 
-
-
-
 Private Sub Form_Load()
     Dim port As Long
     Dim buf As String
     
-    '
-    ' Load checkbox states from config data
-    '
     Set m_Profile = New DriverHelper.Profile
     m_Profile.DeviceType = "Telescope"
+    
+    buf = m_Profile.GetValue(ID, "TheSkyType")
+    If buf <> "" Then
+        Select Case buf
+            Case "TheSky5":
+                m_eTheSkyType = TheSky5
+                Me.rbSky5.Value = True
+            Case "TheSky6":
+                m_eTheSkyType = TheSky6
+                Me.rbSky6.Value = True
+            Case "TheSkyX":
+                m_eTheSkyType = TheSkyX
+                Me.rbSkyX.Value = True
+        End Select
+    Else
+        '
+        ' Read the old registry data (TheSky6 or not)
+        '
+        buf = m_Profile.GetValue(ID, "TheSky6")
+        If buf = "" Then buf = "False"              ' Default to TheSky V5
+        If CBool(buf) Then
+            m_eTheSkyType = TheSky6
+            Me.rbSky6.Value = True
+        Else
+            m_eTheSkyType = TheSky5
+            Me.rbSky5.Value = True
+        End If
+    End If
+    
     buf = m_Profile.GetValue(ID, "InhibitSync")
     If buf = "" Then buf = "False"                  ' Default to allowing Sync
     If CBool(buf) Then
@@ -218,13 +257,7 @@ Private Sub Form_Load()
     Else
         Me.chkTPOINT.Value = 0
     End If
-    buf = m_Profile.GetValue(ID, "TheSky6")
-    If buf = "" Then buf = "False"                  ' Default to TheSky V5
-    If CBool(buf) Then
-        Me.rbSky6.Value = True
-    Else
-        Me.rbSky5.Value = True
-    End If
+    
     buf = m_Profile.GetValue(ID, "SlewDelay")
     If buf = "" Then buf = "True"                   ' Default to slew-start delay
     If CBool(buf) Then
@@ -232,6 +265,7 @@ Private Sub Form_Load()
     Else
         Me.chkSlewStartDelay.Value = 0
     End If
+    
     buf = m_Profile.GetValue(ID, "FindHome")
     If buf = "" Then buf = "False"                  ' Default to not doing Find Home
     If CBool(buf) Then
@@ -239,6 +273,7 @@ Private Sub Form_Load()
     Else
         Me.chkInitHome.Value = 0
     End If
+    
     buf = m_Profile.GetValue(ID, "TrackOffsets")
     If buf = "" Then buf = "False"                   ' Default to no tracking offsets
     If CBool(buf) Then
@@ -246,6 +281,7 @@ Private Sub Form_Load()
     Else
         Me.chkTrackOffs.Value = 0
     End If
+    
     buf = m_Profile.GetValue(ID, "PulseGuide")
     If buf = "" Then buf = "False"                   ' Default to no Pulse Guide
     If CBool(buf) Then
@@ -297,36 +333,43 @@ End Sub
 Private Sub cmdOK_Click()
     Dim buf As String
     
-    '
-    ' Store config from checkboxes
-    '
     Set m_Profile = New DriverHelper.Profile
     m_Profile.DeviceType = "Telescope"
+    '
+    ' Delete old TheSky6 value, will new new TheSkyType now
+    '
+    m_Profile.DeleteValue ID, "TheSky6"
+    Select Case m_eTheSkyType
+        Case TheSky5: buf = "TheSky5"
+        Case TheSky6: buf = "TheSky6"
+        Case TheSkyX: buf = "TheSkyX"
+    End Select
+    m_Profile.WriteValue ID, "TheSkyType", buf
+    
     If Me.chkTPOINT.Value = 1 Then
         m_Profile.WriteValue ID, "InhibitSync", "True"
     Else
         m_Profile.WriteValue ID, "InhibitSync", "False"
     End If
-    If Me.rbSky6.Value Then
-        m_Profile.WriteValue ID, "TheSky6", "True"
-    Else
-        m_Profile.WriteValue ID, "TheSky6", "False"
-    End If
+    
     If Me.chkSlewStartDelay.Value = 1 Then
         m_Profile.WriteValue ID, "SlewDelay", "True"
     Else
         m_Profile.WriteValue ID, "SlewDelay", "False"
     End If
+    
     If Me.chkInitHome.Value = 1 Then
         m_Profile.WriteValue ID, "FindHome", "True"
     Else
         m_Profile.WriteValue ID, "FindHome", "False"
     End If
+    
     If Me.chkTrackOffs.Value = 1 Then
         m_Profile.WriteValue ID, "TrackOffsets", "True"
     Else
         m_Profile.WriteValue ID, "TrackOffsets", "False"
     End If
+    
     If Me.chkPulseGuide.Value = 1 Then
         m_Profile.WriteValue ID, "PulseGuide", "True"
     Else
@@ -362,4 +405,15 @@ Private Sub picASCOM_Click()
     
 End Sub
 
+Private Sub rbSky5_Click()
+    m_eTheSkyType = TheSky5
+End Sub
+
+Private Sub rbSky6_Click()
+    m_eTheSkyType = TheSky6
+End Sub
+
+Private Sub rbSkyX_Click()
+    m_eTheSkyType = TheSkyX
+End Sub
 
