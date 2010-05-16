@@ -1,81 +1,92 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="ASCOM.DriverAccess.Camera" Collapsed="true">
-    <Position X="2.5" Y="0.5" Width="1.5" />
+  <Class Name="ASCOM.DriverAccess.Camera" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>FIAADDAgICFgRIACAoABAACygGBBQECAAQAAaKEgBQA=</HashCode>
+      <HashCode>NIAADDBgICFQBIACIoBBAADygGRBQFCAAYAAaKEgBQE=</HashCode>
       <FileName>Camera.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="ASCOM.DriverAccess.CameraV3" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="6" Y="0.5" Width="1.5" />
+  <Class Name="ASCOM.DriverAccess.Dome" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>FoACDDggoClkRKISCoAHAASygGDBYkKAwQIS6aEgFQY=</HashCode>
-      <FileName>CameraV3.cs</FileName>
-      <NewMemberFileName>CameraV2.cs</NewMemberFileName>
+      <HashCode>cIEACADBICAQEIwBIgJggABAAAQAwBAQAIASAQAyCIE=</HashCode>
+      <FileName>Dome.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ASCOM.DriverAccess.FilterWheel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IIAAgABEACAQAAAgIgDBAABAEAQAQBAAAIAAAAAgAAE=</HashCode>
+      <FileName>FilterWheel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ASCOM.DriverAccess.Focuser" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IIAgAABAAKAQIQAoJgDAAABAAAQgQBEAAIAAQSAkAAE=</HashCode>
+      <FileName>Focuser.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ASCOM.DriverAccess.Rotator" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IIAAAABAAKgQIAAoIhBIAABAAAQAQBEQAIACAAAgIAE=</HashCode>
+      <FileName>Rotator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ASCOM.DriverAccess.Switch" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IIAAggBCICAQAIAAIgBAAABCgAQIQBAAAIAAAAAgAAE=</HashCode>
+      <FileName>Switch.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="ASCOM.DriverAccess.Telescope" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="8.75" Y="0.5" Width="1.5" />
+    <Position X="4" Y="2.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>xAEAAQCUiHBs0OYZmgLc0EaBAAJMTiIQwKIIKwIgCCY=</HashCode>
+      <HashCode>5IEAAQDUCHBckOQJsgLY0ELBAAZMTDIQQKAIKwIgCCM=</HashCode>
       <FileName>Telescope.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="ASCOM.DriverAccess.TelescopeV3" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="10.5" Y="0.5" Width="1.5" />
+  <Class Name="ASCOM.DriverAccess._Rate" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>xEEAAQCUiHBs0OYZmgLc0EaBAAJMTiIQwKIIKwIiCGY=</HashCode>
-      <FileName>TelescopeV3.cs</FileName>
+      <HashCode>gAAAAACAACAAAAAAAAAAAAAAAAAAAAAAAAAAEBAAAAA=</HashCode>
+      <FileName>Telescope.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.306" />
+    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="ASCOM.DriverAccess.TelescopeV4" Collapsed="true">
-    <Position X="12.25" Y="0.5" Width="1.5" />
+  <Class Name="ASCOM.DriverAccess._RateEnumerator" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>xEEAAQCUiHBs0OZZmgLc0EaBAAJMTiIQwKIIKwIiCGY=</HashCode>
-      <FileName>TelescopeV4.cs</FileName>
+      <HashCode>AAAAAAAAACAABAAAAAKAAAACAAEAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Telescope.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="ASCOM.DriverAccess.CameraV2" Collapsed="true">
-    <Position X="4.25" Y="0.5" Width="1.5" />
+  <Class Name="ASCOM.DriverAccess._AxisRates" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>FoACDDggoClkRKISCoAFAASygGBBYkKAwQIS6aEgBQY=</HashCode>
-      <FileName>CameraV2.cs</FileName>
+      <HashCode>AAAAAAAAACAAABAACAIAAAQAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Telescope.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Interface Name="ASCOM.Interface.ITelescopeV2">
-    <Position X="0.5" Y="16" Width="1.75" />
-    <TypeIdentifier />
-  </Interface>
-  <Interface Name="ASCOM.Interface.ITelescopeV3">
-    <Position X="4.25" Y="16" Width="1.5" />
-    <TypeIdentifier />
-  </Interface>
-  <Interface Name="ASCOM.Interface.ICamera">
-    <Position X="13.5" Y="11.75" Width="1.5" />
-    <TypeIdentifier />
-  </Interface>
-  <Interface Name="ASCOM.Interface.ICameraV2">
-    <Position X="10.75" Y="11.75" Width="1.5" />
-    <TypeIdentifier />
-  </Interface>
-  <Interface Name="ASCOM.Interface.ITelescopeV4">
-    <Position X="6.25" Y="18.75" Width="2" />
-    <TypeIdentifier />
-  </Interface>
-  <Interface Name="ASCOM.Interface.IAscomDriverV2">
-    <Position X="6.25" Y="7" Width="2" />
-    <TypeIdentifier />
-  </Interface>
-  <Interface Name="ASCOM.Interface.ICameraV3">
-    <Position X="9.5" Y="18.75" Width="2" />
-    <TypeIdentifier />
-  </Interface>
+  <Class Name="ASCOM.DriverAccess._TrackingRates" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAACAAABAACAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Telescope.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

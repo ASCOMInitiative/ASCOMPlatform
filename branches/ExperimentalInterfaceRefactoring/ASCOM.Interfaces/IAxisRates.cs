@@ -1,46 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Collections;
-using System.Runtime.InteropServices;
-
-namespace ASCOM.Interface
+namespace ASCOM.Interfaces
 {
-    //[ComImport, Guid("2B8FD76E-AF7E-4FAA-9FAC-4029E96129F4"), TypeLibType((short)0x10c0)]
-    //public interface IAxisRates : IEnumerable
-    //    {
-    //    [DispId(0x65)]
-    //    int Count { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(0x65)] get; }
-    //    [DispId(0)]
-    //    IRate this[int Index] { [return: MarshalAs(UnmanagedType.Interface)] [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(0)] get; }
-    //    [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "", MarshalTypeRef = typeof(EnumeratorToEnumVariantMarshaler), MarshalCookie = "")]
-    //    [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(-4), TypeLibFunc((short)0x40)]
-    //    IEnumerator GetEnumerator();
-    //    }
-
-    /// <summary>
-    /// A collection of <see cref="Rate"/> objects describing the supported rates of motion
-    /// for the <see cref="MoveAxis"/> method.
-    /// </summary>
-    [ComVisible(true), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("783A35EB-5437-41f1-869B-9DA8949C8508")]
     public interface IAxisRates
     {
-        /// <summary>
-        /// Gets the count.
-        /// </summary>
-        /// <value>The count of items in the collection.</value>
         int Count { get; }
-
-        /// <summary>
-        /// Gets the <see cref="ASCOM.Interface.IRate"/> at the specified index.
-        /// </summary>
-        /// <value>An <see cref="IRate"/> object.</value>
-        IRate this[int Index] { get; }
-
-        /// <summary>
-        /// Gets an enumerator for the collection.
-        /// </summary>
-        /// <returns>An object that implements <see cref="IEnumerator"/>.</returns>
-        IEnumerator GetEnumerator();
+        void Dispose();
+        System.Collections.IEnumerator GetEnumerator();
+        IRate this[int index] { get; }
     }
 }

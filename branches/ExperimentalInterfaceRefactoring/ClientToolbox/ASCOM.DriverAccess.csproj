@@ -79,9 +79,6 @@
     <Compile Include="Camera.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="CameraV2.cs" />
-    <Compile Include="CameraV3.cs" />
-    <Compile Include="CameraV4.cs" />
     <Compile Include="Dome.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
@@ -103,8 +100,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="TelescopeV3.cs" />
-    <Compile Include="TelescopeV4.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ASCOM.snk" />

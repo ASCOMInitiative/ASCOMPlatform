@@ -5,45 +5,45 @@ using System;
 using System.Collections;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using ASCOM.Interface;
+using ASCOM.Interfaces;
 using ASCOM.Utilities;
 
 namespace ASCOM.DriverAccess
 {
 
-	#region Telescope Wrapper
+    #region Telescope Wrapper
     /// <summary>
-    /// Implements the Platform 5 telescope interface to access any registered ASCOM telescope
+    /// Implements a telescope class to access any registered ASCOM telescope
     /// </summary>
-    [ComVisible(true), Guid("4E4796D1-C8E1-4854-8209-4F56821E37BF"), ClassInterface(ClassInterfaceType.None)]
-    public class Telescope : ASCOM.Interface.ITelescopeV2, IDisposable 
+    [ComVisible(true), Guid("42C57543-0D01-4a4f-8F32-99658F0CA179"), ClassInterface(ClassInterfaceType.None)]
+    public class Telescope : ITelescope, IDisposable, IDeviceControl, IAscomDriver
     {
         object objScopeLateBound;
-		ASCOM.Interface.ITelescopeV2 ITelescope;
-		Type objTypeScope;
+        ASCOM.Interfaces.ITelescope ITelescope;
+        Type objTypeScope;
 
         /// <summary>
         /// Creates an instance of the telescope class.
         /// </summary>
         /// <param name="telescopeID">The ProgID for the telescope</param>
         public Telescope(string telescopeID)
-		{
-			// Get Type Information 
+        {
+            // Get Type Information 
             objTypeScope = Type.GetTypeFromProgID(telescopeID);
-			
-			// Create an instance of the telescope object
+
+            // Create an instance of the telescope object
             objScopeLateBound = Activator.CreateInstance(objTypeScope);
 
-			// Try to see if this driver has an ASCOM.Telescope interface
-			try
-			{
-				ITelescope = (ASCOM.Interface.ITelescopeV2)objScopeLateBound;
-			}
-			catch (Exception)
-			{
-				ITelescope = null;
-			}
-		}
+            // Try to see if this driver has an ASCOM.Telescope interface
+            try
+            {
+                ITelescope = (ASCOM.Interfaces.ITelescope)objScopeLateBound;
+            }
+            catch (Exception)
+            {
+                ITelescope = null;
+            }
+        }
 
         /// <summary>
         /// The Choose() method returns the DriverID of the selected driver.
@@ -55,11 +55,11 @@ namespace ASCOM.DriverAccess
         /// <returns>The DriverID of the user selected telescope. Null if the dialog is canceled.</returns>
         public static string Choose(string telescopeID)
         {
-			Chooser oChooser = new Chooser();
-			oChooser.DeviceType = "Telescope";			// Requires Helper 5.0.3 (May '07)
-			return oChooser.Choose(telescopeID);
+            Chooser oChooser = new Chooser();
+            oChooser.DeviceType = "Telescope";			// Requires Helper 5.0.3 (May '07)
+            return oChooser.Choose(telescopeID);
         }
-        
+
         #region ITelescope Members
         /// <summary>
         /// Stops a slew in progress.
@@ -70,12 +70,12 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void AbortSlew()
         {
-			if (ITelescope != null)
-				ITelescope.AbortSlew();
-			else
-				objTypeScope.InvokeMember("AbortSlew",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { });
+            if (ITelescope != null)
+                ITelescope.AbortSlew();
+            else
+                objTypeScope.InvokeMember("AbortSlew",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { });
         }
         /// <summary>
         /// The alignment mode of the mount.
@@ -84,12 +84,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.AlignmentMode;
-				else
-					return (AlignmentModes)objTypeScope.InvokeMember("AlignmentMode",
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.AlignmentMode;
+                else
+                    return (AlignmentModes)objTypeScope.InvokeMember("AlignmentMode",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -100,13 +100,13 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.Altitude;
-				else
-					return (double)objTypeScope.InvokeMember("Altitude", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
-            } 
+                if (ITelescope != null)
+                    return ITelescope.Altitude;
+                else
+                    return (double)objTypeScope.InvokeMember("Altitude",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
+            }
         }
 
         /// <summary>
@@ -116,12 +116,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.ApertureArea;
-				else
-					return (double)objTypeScope.InvokeMember("ApertureArea", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.ApertureArea;
+                else
+                    return (double)objTypeScope.InvokeMember("ApertureArea",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -132,13 +132,13 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.ApertureDiameter;
-				else
-					return (double)objTypeScope.InvokeMember("ApertureDiameter",
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
-            }   
+                if (ITelescope != null)
+                    return ITelescope.ApertureDiameter;
+                else
+                    return (double)objTypeScope.InvokeMember("ApertureDiameter",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
+            }
         }
 
         /// <summary>
@@ -148,12 +148,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.AtHome;
-				else
-					return (bool)objTypeScope.InvokeMember("AtHome", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.AtHome;
+                else
+                    return (bool)objTypeScope.InvokeMember("AtHome",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -165,12 +165,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.AtPark;
-				else
-					return (bool)objTypeScope.InvokeMember("AtPark", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.AtPark;
+                else
+                    return (bool)objTypeScope.InvokeMember("AtPark",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -178,14 +178,14 @@ namespace ASCOM.DriverAccess
         /// Determine the rates at which the telescope may be moved about the specified axis by the MoveAxis() method.
         /// See the description of MoveAxis() for more information. This method must return an empty collection if MoveAxis is not supported. 
         /// </summary>
-		/// <param name="Axis">The axis about which rate information is desired (TelescopeAxes value)</param>
+        /// <param name="Axis">The axis about which rate information is desired (TelescopeAxes value)</param>
         /// <returns>Collection of Axis Rates</returns>
         public IAxisRates AxisRates(TelescopeAxes Axis)
         {
-			if (ITelescope != null)
-				return ITelescope.AxisRates(Axis);
-			else
-				return new _AxisRates(Axis, objTypeScope, objScopeLateBound);
+            if (ITelescope != null)
+                return ITelescope.AxisRates(Axis);
+            else
+                return new _AxisRates(Axis, objTypeScope, objScopeLateBound);
         }
         /// <summary>
         /// The azimuth at the local horizon of the telescope's current position (degrees, North-referenced, positive East/clockwise).
@@ -194,12 +194,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.Azimuth;
-				else
-					return (double)objTypeScope.InvokeMember("Azimuth", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.Azimuth;
+                else
+                    return (double)objTypeScope.InvokeMember("Azimuth",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
         /// <summary>
@@ -210,12 +210,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.CanFindHome;
-				else
-					return (bool)objTypeScope.InvokeMember("CanFindHome", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.CanFindHome;
+                else
+                    return (bool)objTypeScope.InvokeMember("CanFindHome",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -227,12 +227,12 @@ namespace ASCOM.DriverAccess
         public bool CanMoveAxis(TelescopeAxes Axis)
         {
 
-			if (ITelescope != null)
-				return ITelescope.CanMoveAxis(Axis);
-			else
-				return (bool)objTypeScope.InvokeMember("CanMoveAxis", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] {(int)Axis });
+            if (ITelescope != null)
+                return ITelescope.CanMoveAxis(Axis);
+            else
+                return (bool)objTypeScope.InvokeMember("CanMoveAxis",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { (int)Axis });
         }
         /// <summary>
         /// True if this telescope is capable of programmed parking (Park() method)
@@ -242,12 +242,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.CanPark;
-				else
-					return (bool)objTypeScope.InvokeMember("CanPark", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.CanPark;
+                else
+                    return (bool)objTypeScope.InvokeMember("CanPark",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
         /// <summary>
@@ -258,12 +258,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.CanPulseGuide;
-				else
-					return (bool)objTypeScope.InvokeMember("CanPulseGuide", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.CanPulseGuide;
+                else
+                    return (bool)objTypeScope.InvokeMember("CanPulseGuide",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -275,12 +275,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.CanSetDeclinationRate;
-				else
-					return (bool)objTypeScope.InvokeMember("CanSetDeclinationRate", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.CanSetDeclinationRate;
+                else
+                    return (bool)objTypeScope.InvokeMember("CanSetDeclinationRate",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -292,12 +292,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.CanSetGuideRates;
-				else
-					return (bool)objTypeScope.InvokeMember("CanSetGuideRates", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.CanSetGuideRates;
+                else
+                    return (bool)objTypeScope.InvokeMember("CanSetGuideRates",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -309,12 +309,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.CanSetPark;
-				else
-					return (bool)objTypeScope.InvokeMember("CanSetPark", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.CanSetPark;
+                else
+                    return (bool)objTypeScope.InvokeMember("CanSetPark",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -327,12 +327,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.CanSetPierSide;
-				else
-					return (bool)objTypeScope.InvokeMember("CanSetPierSide", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.CanSetPierSide;
+                else
+                    return (bool)objTypeScope.InvokeMember("CanSetPierSide",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -344,12 +344,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.CanSetRightAscensionRate;
-				else
-					return (bool)objTypeScope.InvokeMember("CanSetRightAscensionRate", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.CanSetRightAscensionRate;
+                else
+                    return (bool)objTypeScope.InvokeMember("CanSetRightAscensionRate",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -361,12 +361,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.CanSetTracking;
-				else
-					return (bool)objTypeScope.InvokeMember("CanSetTracking", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.CanSetTracking;
+                else
+                    return (bool)objTypeScope.InvokeMember("CanSetTracking",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -380,12 +380,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.CanSlew;
-				else
-					return (bool)objTypeScope.InvokeMember("CanSlew", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.CanSlew;
+                else
+                    return (bool)objTypeScope.InvokeMember("CanSlew",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -399,12 +399,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.CanSlewAltAz;
-				else
-					return (bool)objTypeScope.InvokeMember("CanSlewAltAz", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.CanSlewAltAz;
+                else
+                    return (bool)objTypeScope.InvokeMember("CanSlewAltAz",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -418,12 +418,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.CanSlewAltAzAsync;
-				else
-					return (bool)objTypeScope.InvokeMember("CanSlewAltAzAsync", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.CanSlewAltAzAsync;
+                else
+                    return (bool)objTypeScope.InvokeMember("CanSlewAltAzAsync",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -437,12 +437,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.CanSlewAsync;
-				else
-					return (bool)objTypeScope.InvokeMember("CanSlewAsync", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.CanSlewAsync;
+                else
+                    return (bool)objTypeScope.InvokeMember("CanSlewAsync",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -454,12 +454,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.CanSync;
-				else
-					return (bool)objTypeScope.InvokeMember("CanSync", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.CanSync;
+                else
+                    return (bool)objTypeScope.InvokeMember("CanSync",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -471,12 +471,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.CanSyncAltAz;
-				else
-					return (bool)objTypeScope.InvokeMember("CanSyncAltAz", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.CanSyncAltAz;
+                else
+                    return (bool)objTypeScope.InvokeMember("CanSyncAltAz",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -489,117 +489,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.CanUnpark;
-				else
-					return (bool)objTypeScope.InvokeMember("CanUnpark",
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
-            }
-        }
-
-        /// <summary>
-        /// Send a string comand directly to the telescope without expecting response data.
-        /// If the optional Raw parameter is set True, the driver must not insert or append any delimiters;
-        /// this must send the unmodified raw string directly to the device. 
-        /// If the driver cannot support Raw=True, it must raise an error if Raw is set to True. 
-        /// If you use this feature of the Telescope driver interface,
-        /// your application will be dependent on the low-level protocol used by the particular scope you are connected to.
-        /// Thus your application will not work with any arbitrary type of telescope. 
-        /// Raises an error if there is a problem communicating with the telescope. 
-        /// </summary>
-        /// <param name="Command">The command string to be sent to the telescope.</param>
-        /// <param name="Raw">Bypass any delimiters or framing around the command (optional, default = False)</param>
-        public void CommandBlind(string Command, bool Raw)
-        {
-			if (ITelescope != null)
-				ITelescope.CommandBlind(Command, Raw);
-			else
-				objTypeScope.InvokeMember("CommandBlind", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { Command, Raw });
-        }
-
-        /// <summary>
-        /// Send a string comand to the telescope, returning a true/false response
-        /// If the optional Raw parameter is set True, the driver must not insert or append any delimiters;
-        /// this must send the unmodified raw string directly to the device.
-        /// If the driver cannot support Raw=True, it must raise an error if Raw is set to True. 
-        /// If you use this feature of the Telescope driver interface,
-        /// your application will be dependent on the low-level protocol
-        /// used by the particular scope you are connected to.
-        /// Thus your application will not work with any arbitrary type of telescope. 
-        /// Raises an error if there is a problem communicating with the telescope. 
-        /// It is the responsibility of the driver implementing this interface to translate raw response data to True/False values for return.
-        /// If you want to see the raw response string, see CommandString(). 
-        /// </summary>
-        /// <param name="Command">The command string to be sent to the telescope</param>
-        /// <param name="Raw">Bypass any delimiters or framing around the command (optional, default = False)</param>
-        /// <returns>True if the response indicated true or success, else False.</returns>
-        public bool CommandBool(string Command, bool Raw)
-        {
-			if (ITelescope != null)
-				return ITelescope.CommandBool(Command, Raw);
-			else
-				return (bool)objTypeScope.InvokeMember("CommandBool", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { Command, Raw });
-        }
-
-       /// <summary>
-        /// Send a string comand to the telescope, returning a string response
-        /// If the optional Raw parameter is set True, the driver must not insert or append any delimiters;
-        /// this must send the unmodified raw string directly to the device.
-        /// If the driver cannot support Raw=True, it must raise an error if Raw is set to True. 
-        /// If you use this feature of the Telescope driver interface,
-        /// your application will be dependent on the low-level protocol
-        /// used by the particular scope you are connected to.
-        /// Thus your application will not work with any arbitrary type of telescope. 
-        /// Raises an error if there is a problem communicating with the telescope. 
-        /// It is the responsibility of the driver implementing this interface to translate raw response data to True/False values for return.
-        /// </summary>
-        /// <param name="Command">The command string to be sent to the telescope</param>
-        /// <param name="Raw">Bypass any delimiters or framing around the command (optional, default = False)</param>
-        /// <returns>The response data from the telescope resulting from the sent command.</returns>
-        public string CommandString(string Command, bool Raw)
-        {
-			if (ITelescope != null)
-				return ITelescope.CommandString(Command, Raw);
-			else
-				return (string)objTypeScope.InvokeMember("CommandString", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { Command, Raw });
-        }
-
-        /// <summary>
-        /// True if telescope connected, False otherwise
-        /// Set this property to True to connect to the telescope.
-        /// Raises an error if there is a problem connecting. 
-        /// Some Telescope properties and methods will raise errors if the scope is not connected. 
-        /// In V2, setting the Connected property to True does not automatically unpark the telescope,
-        /// nor does it explicitly turn on tracking.
-        /// This may affect clients that use the V1 interface.
-        /// </summary>
-        public bool Connected
-        {
-            get
-            {
-				if (ITelescope != null)
-					return ITelescope.Connected;
-				else
-					return (bool)objTypeScope.InvokeMember("Connected", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
-            }
-            set
-            {
-				if (ITelescope != null)
-					ITelescope.Connected = value;
-				else
-					objTypeScope.InvokeMember("Connected", 
-						BindingFlags.Default | BindingFlags.SetProperty,
-						null, objScopeLateBound, new object[] { value });
-
+                if (ITelescope != null)
+                    return ITelescope.CanUnpark;
+                else
+                    return (bool)objTypeScope.InvokeMember("CanUnpark",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -611,12 +506,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.Declination;
-				else
-					return (double)objTypeScope.InvokeMember("Declination", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.Declination;
+                else
+                    return (double)objTypeScope.InvokeMember("Declination",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -640,44 +535,21 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.DeclinationRate;
-				else
-					return (double)objTypeScope.InvokeMember("DeclinationRate", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.DeclinationRate;
+                else
+                    return (double)objTypeScope.InvokeMember("DeclinationRate",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
             set
             {
-				if (ITelescope != null)
-					ITelescope.DeclinationRate = value;
-				else
-					objTypeScope.InvokeMember("DeclinationRate", 
-						BindingFlags.Default | BindingFlags.SetProperty,
-						null, objScopeLateBound, new object[] { value });
-            }
-        }
-
-        /// <summary>
-        /// The long description of the telescope.
-        /// This string may contain line endings and may be hundreds to thousands of characters long.
-        /// It is intended to display detailed information on the telescope itself.
-        /// See the DriverInfo property for descriptive info on the driver itself.
-        /// NOTE: this string should not be over 1000 characters in length,
-        /// as applications may use popup boxes to display Description.
-        /// Older versions of Windows have string length limitations in (e.g.) MessageBox(),
-        /// which will cause an application failure if the string is too long. 
-        /// </summary>
-        public string Description
-        {
-            get
-            {
-				if (ITelescope != null)
-					return ITelescope.Description;
-				else
-					return (string)objTypeScope.InvokeMember("Description", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    ITelescope.DeclinationRate = value;
+                else
+                    objTypeScope.InvokeMember("DeclinationRate",
+                        BindingFlags.Default | BindingFlags.SetProperty,
+                        null, objScopeLateBound, new object[] { value });
             }
         }
 
@@ -689,12 +561,12 @@ namespace ASCOM.DriverAccess
         /// <returns>The side of the pier on which the telescope would be on if a slew to the given equatorial coordinates is performed at the current instant of time.</returns>
         public PierSide DestinationSideOfPier(double RightAscension, double Declination)
         {
-			if (ITelescope != null)
-				return ITelescope.DestinationSideOfPier(RightAscension, Declination);
-			else
-				return (PierSide)objTypeScope.InvokeMember("DestinationSideOfPier", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] {RightAscension, Declination});
+            if (ITelescope != null)
+                return ITelescope.DestinationSideOfPier(RightAscension, Declination);
+            else
+                return (PierSide)objTypeScope.InvokeMember("DestinationSideOfPier",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { RightAscension, Declination });
         }
 
         /// <summary>
@@ -716,59 +588,21 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.DoesRefraction;
-				else
-					return (bool)objTypeScope.InvokeMember("DoesRefraction", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.DoesRefraction;
+                else
+                    return (bool)objTypeScope.InvokeMember("DoesRefraction",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
             set
             {
-				if (ITelescope != null)
-					ITelescope.DoesRefraction = value;
-				else
-					objTypeScope.InvokeMember("DoesRefraction", 
-						BindingFlags.Default | BindingFlags.SetProperty,
-						null, objScopeLateBound, new object[] { value });
-            }
-        }
-
-        /// <summary>
-        /// Descriptive and version information about this ASCOM Telescope driver.
-        /// This string may contain line endings and may be hundreds to thousands of characters long.
-        /// It is intended to display detailed information on the ASCOM driver, including version and copyright data.
-        /// See the Description property for descriptive info on the telescope itself.
-        /// To get the driver version in a parseable string, use the DriverVersion property.
-        /// </summary>
-        public string DriverInfo
-        {
-            get
-            {
-				if (ITelescope != null)
-					return ITelescope.DriverInfo;
-				else
-					return (string)objTypeScope.InvokeMember("DriverInfo", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
-            }
-        }
-
-        /// <summary>
-        /// A string containing only the major and minor version of the driver.
-        /// This must be in the form "n.n".
-        /// Not to be confused with the InterfaceVersion property, which is the version of this specification supported by the driver (currently 2). 
-        /// </summary>
-        public string DriverVersion
-        {
-            get
-            {
-				if (ITelescope != null)
-					return ITelescope.DriverVersion;
-				else
-					return (string)objTypeScope.InvokeMember("DriverVersion", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    ITelescope.DoesRefraction = value;
+                else
+                    objTypeScope.InvokeMember("DoesRefraction",
+                        BindingFlags.Default | BindingFlags.SetProperty,
+                        null, objScopeLateBound, new object[] { value });
             }
         }
 
@@ -789,12 +623,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.EquatorialSystem;
-				else
-					return (EquatorialCoordinateType)objTypeScope.InvokeMember("EquatorialSystem",
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.EquatorialSystem;
+                else
+                    return (EquatorialCoordinateType)objTypeScope.InvokeMember("EquatorialSystem",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
         /// <summary>
@@ -806,28 +640,28 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void FindHome()
         {
-			if (ITelescope != null)
-				ITelescope.FindHome();
-			else
-				objTypeScope.InvokeMember("FindHome", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] {  });   
+            if (ITelescope != null)
+                ITelescope.FindHome();
+            else
+                objTypeScope.InvokeMember("FindHome",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { });
         }
 
         /// <summary>
-		/// The telescope's focal length, meters
-		/// This property may be used by clients to calculate telescope field of view and plate scale when combined with detector pixel size and geometry. 
+        /// The telescope's focal length, meters
+        /// This property may be used by clients to calculate telescope field of view and plate scale when combined with detector pixel size and geometry. 
         /// </summary>
         public double FocalLength
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.FocalLength;
-				else
-					return (double)objTypeScope.InvokeMember("FocalLength", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.FocalLength;
+                else
+                    return (double)objTypeScope.InvokeMember("FocalLength",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -849,21 +683,21 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.GuideRateDeclination;
-				else
-					return (double)objTypeScope.InvokeMember("GuideRateDeclination", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.GuideRateDeclination;
+                else
+                    return (double)objTypeScope.InvokeMember("GuideRateDeclination",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
             set
             {
-				if (ITelescope != null)
-					ITelescope.GuideRateDeclination = value;
-				else
-					objTypeScope.InvokeMember("GuideRateDeclination", 
-						BindingFlags.Default | BindingFlags.SetProperty,
-						null, objScopeLateBound, new object[] { value });
+                if (ITelescope != null)
+                    ITelescope.GuideRateDeclination = value;
+                else
+                    objTypeScope.InvokeMember("GuideRateDeclination",
+                        BindingFlags.Default | BindingFlags.SetProperty,
+                        null, objScopeLateBound, new object[] { value });
             }
         }
 
@@ -885,42 +719,24 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.GuideRateRightAscension;
-				else
-					return (double)objTypeScope.InvokeMember("GuideRateRightAscension", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.GuideRateRightAscension;
+                else
+                    return (double)objTypeScope.InvokeMember("GuideRateRightAscension",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
             set
             {
-				if (ITelescope != null)
-					ITelescope.GuideRateRightAscension = value;
-				else
-					objTypeScope.InvokeMember("GuideRateRightAscension", 
-						BindingFlags.Default | BindingFlags.SetProperty,
-						null, objScopeLateBound, new object[] { value });
+                if (ITelescope != null)
+                    ITelescope.GuideRateRightAscension = value;
+                else
+                    objTypeScope.InvokeMember("GuideRateRightAscension",
+                        BindingFlags.Default | BindingFlags.SetProperty,
+                        null, objScopeLateBound, new object[] { value });
             }
         }
 
-        /// <summary>
-        /// The version of this interface. Will return 2 for this version.
-        /// Clients can detect legacy V1 drivers by trying to read ths property.
-        /// If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1. 
-        /// In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver. 
-        /// </summary>
-        public short InterfaceVersion
-        {
-            get
-            {
-				if (ITelescope != null)
-					return ITelescope.InterfaceVersion;
-				else
-					return (short)objTypeScope.InvokeMember("InterfaceVersion", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
-            }
-        }
         /// <summary>
         /// True if a PulseGuide() command is in progress, False otherwise
         /// Raises an error if the value of the CanPulseGuide property is false
@@ -930,12 +746,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.IsPulseGuiding;
-				else
-					return (bool)objTypeScope.InvokeMember("IsPulseGuiding", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.IsPulseGuiding;
+                else
+                    return (bool)objTypeScope.InvokeMember("IsPulseGuiding",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -964,28 +780,12 @@ namespace ASCOM.DriverAccess
         /// <param name="Rate">The rate of motion (deg/sec) about the specified axis</param>
         public void MoveAxis(TelescopeAxes Axis, double Rate)
         {
-			if (ITelescope != null)
-				ITelescope.MoveAxis(Axis, Rate);
-			else
-				objTypeScope.InvokeMember("MoveAxis",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { Axis, Rate });
-		}
-
-        /// <summary>
-        /// The short name of the telescope, for display purposes
-        /// </summary>
-        public string Name
-        {
-            get
-            {
-				if (ITelescope != null)
-					return ITelescope.Name;
-				else
-					return (string)objTypeScope.InvokeMember("Name", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
-            }
+            if (ITelescope != null)
+                ITelescope.MoveAxis(Axis, Rate);
+            else
+                objTypeScope.InvokeMember("MoveAxis",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { Axis, Rate });
         }
 
         /// <summary>
@@ -999,12 +799,12 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void Park()
         {
-			if (ITelescope != null)
-				ITelescope.Park();
-			else
-				objTypeScope.InvokeMember("Park", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] {  });   
+            if (ITelescope != null)
+                ITelescope.Park();
+            else
+                objTypeScope.InvokeMember("Park",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { });
         }
 
         /// <summary>
@@ -1026,12 +826,12 @@ namespace ASCOM.DriverAccess
         /// <param name="Duration">The duration of the guide-rate motion (milliseconds)</param>
         public void PulseGuide(GuideDirections Direction, int Duration)
         {
-			if (ITelescope != null)
-				ITelescope.PulseGuide(Direction, Duration);
-			else
-				objTypeScope.InvokeMember("PulseGuide",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { (int)Direction, Duration });  
+            if (ITelescope != null)
+                ITelescope.PulseGuide(Direction, Duration);
+            else
+                objTypeScope.InvokeMember("PulseGuide",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { (int)Direction, Duration });
         }
 
         /// <summary>
@@ -1043,12 +843,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.RightAscension;
-				else
-					return (double)objTypeScope.InvokeMember("RightAscension", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.RightAscension;
+                else
+                    return (double)objTypeScope.InvokeMember("RightAscension",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -1089,21 +889,21 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.RightAscensionRate;
-				else
-					return (double)objTypeScope.InvokeMember("RightAscensionRate", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.RightAscensionRate;
+                else
+                    return (double)objTypeScope.InvokeMember("RightAscensionRate",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
             set
             {
-				if (ITelescope != null)
-					ITelescope.RightAscensionRate = value;
-				else
-					objTypeScope.InvokeMember("RightAscensionRate", 
-						BindingFlags.Default | BindingFlags.SetProperty,
-						null, objScopeLateBound, new object[] { value });
+                if (ITelescope != null)
+                    ITelescope.RightAscensionRate = value;
+                else
+                    objTypeScope.InvokeMember("RightAscensionRate",
+                        BindingFlags.Default | BindingFlags.SetProperty,
+                        null, objScopeLateBound, new object[] { value });
             }
         }
 
@@ -1112,29 +912,13 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void SetPark()
         {
-			if (ITelescope != null)
-				ITelescope.SetPark();
-			else
-				objTypeScope.InvokeMember("SetPark",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { });
-		}
-
-        /// <summary>
-        /// Sets the telescope's park position to be its current position
-        /// Raises an error if there is a problem. 
-        /// 
-        /// </summary>
-        public void SetupDialog()
-        {
-			if (ITelescope != null)
-				ITelescope.SetupDialog();
-			else
-				objTypeScope.InvokeMember("SetupDialog",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { }); 
+            if (ITelescope != null)
+                ITelescope.SetPark();
+            else
+                objTypeScope.InvokeMember("SetPark",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { });
         }
-
 
         /// <summary>
         /// Indicates which side of the pier a German equatorial mount is currently on
@@ -1149,21 +933,21 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.SideOfPier;
-				else
-					return (PierSide)objTypeScope.InvokeMember("SideOfPier", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.SideOfPier;
+                else
+                    return (PierSide)objTypeScope.InvokeMember("SideOfPier",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
             set
             {
-				if (ITelescope != null)
-					ITelescope.SideOfPier = value;
-				else
-					objTypeScope.InvokeMember("SideOfPier", 
-						BindingFlags.Default | BindingFlags.SetProperty,
-						null, objScopeLateBound, new object[] { (int)value });
+                if (ITelescope != null)
+                    ITelescope.SideOfPier = value;
+                else
+                    objTypeScope.InvokeMember("SideOfPier",
+                        BindingFlags.Default | BindingFlags.SetProperty,
+                        null, objScopeLateBound, new object[] { (int)value });
             }
         }
 
@@ -1178,15 +962,15 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.SiderealTime;
-				else
-					return (double)objTypeScope.InvokeMember("SiderealTime", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.SiderealTime;
+                else
+                    return (double)objTypeScope.InvokeMember("SiderealTime",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
-        
+
         /// <summary>
         /// The elevation above mean sea level (meters) of the site at which the telescope is located
         /// Setting this property will raise an error if the given value is outside the range -300 through +10000 metres.
@@ -1196,21 +980,21 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.SiteElevation;
-				else
-					return (double)objTypeScope.InvokeMember("SiteElevation", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.SiteElevation;
+                else
+                    return (double)objTypeScope.InvokeMember("SiteElevation",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
             set
             {
-				if (ITelescope != null)
-					ITelescope.SiteElevation = value;
-				else
-					objTypeScope.InvokeMember("SiteElevation", 
-						BindingFlags.Default | BindingFlags.SetProperty,
-						null, objScopeLateBound, new object[] { value });
+                if (ITelescope != null)
+                    ITelescope.SiteElevation = value;
+                else
+                    objTypeScope.InvokeMember("SiteElevation",
+                        BindingFlags.Default | BindingFlags.SetProperty,
+                        null, objScopeLateBound, new object[] { value });
             }
         }
 
@@ -1223,21 +1007,21 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.SiteLatitude;
-				else
-					return (double)objTypeScope.InvokeMember("SiteLatitude", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.SiteLatitude;
+                else
+                    return (double)objTypeScope.InvokeMember("SiteLatitude",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
             set
             {
-				if (ITelescope != null)
-					ITelescope.SiteLatitude = value;
-				else
-					objTypeScope.InvokeMember("SiteLatitude", 
-						BindingFlags.Default | BindingFlags.SetProperty,
-						null, objScopeLateBound, new object[] { value });
+                if (ITelescope != null)
+                    ITelescope.SiteLatitude = value;
+                else
+                    objTypeScope.InvokeMember("SiteLatitude",
+                        BindingFlags.Default | BindingFlags.SetProperty,
+                        null, objScopeLateBound, new object[] { value });
             }
         }
 
@@ -1251,21 +1035,21 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.SiteLongitude;
-				else
-					return (double)objTypeScope.InvokeMember("SiteLongitude", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.SiteLongitude;
+                else
+                    return (double)objTypeScope.InvokeMember("SiteLongitude",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
             set
             {
-				if (ITelescope != null)
-					ITelescope.SiteLongitude = value;
-				else
-					objTypeScope.InvokeMember("SiteLongitude", 
-						BindingFlags.Default | BindingFlags.SetProperty,
-						null, objScopeLateBound, new object[] { value });
+                if (ITelescope != null)
+                    ITelescope.SiteLongitude = value;
+                else
+                    objTypeScope.InvokeMember("SiteLongitude",
+                        BindingFlags.Default | BindingFlags.SetProperty,
+                        null, objScopeLateBound, new object[] { value });
             }
         }
 
@@ -1279,21 +1063,21 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.SlewSettleTime;
-				else
-					return (short)objTypeScope.InvokeMember("SlewSettleTime", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.SlewSettleTime;
+                else
+                    return (short)objTypeScope.InvokeMember("SlewSettleTime",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
             set
             {
-				if (ITelescope != null)
-					ITelescope.SlewSettleTime = value;
-				else
-					objTypeScope.InvokeMember("SlewSettleTime", 
-						BindingFlags.Default | BindingFlags.SetProperty,
-						null, objScopeLateBound, new object[] { value });
+                if (ITelescope != null)
+                    ITelescope.SlewSettleTime = value;
+                else
+                    objTypeScope.InvokeMember("SlewSettleTime",
+                        BindingFlags.Default | BindingFlags.SetProperty,
+                        null, objScopeLateBound, new object[] { value });
             }
         }
 
@@ -1311,12 +1095,12 @@ namespace ASCOM.DriverAccess
         /// <param name="Altitude">Target altitude (degrees, positive up)</param>
         public void SlewToAltAz(double Azimuth, double Altitude)
         {
-			if (ITelescope != null)
-				ITelescope.SlewToAltAz(Azimuth, Altitude);
-			else
-				objTypeScope.InvokeMember("SlewToAltAz",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { Azimuth, Altitude });
+            if (ITelescope != null)
+                ITelescope.SlewToAltAz(Azimuth, Altitude);
+            else
+                objTypeScope.InvokeMember("SlewToAltAz",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { Azimuth, Altitude });
         }
 
         /// <summary>
@@ -1336,12 +1120,12 @@ namespace ASCOM.DriverAccess
         /// <param name="Altitude"></param>
         public void SlewToAltAzAsync(double Azimuth, double Altitude)
         {
-			if (ITelescope != null)
-				ITelescope.SlewToAltAzAsync(Azimuth, Altitude);
-			else
-				objTypeScope.InvokeMember("SlewToAltAzAsync",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { Azimuth, Altitude });
+            if (ITelescope != null)
+                ITelescope.SlewToAltAzAsync(Azimuth, Altitude);
+            else
+                objTypeScope.InvokeMember("SlewToAltAzAsync",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { Azimuth, Altitude });
         }
 
         /// <summary>
@@ -1357,12 +1141,12 @@ namespace ASCOM.DriverAccess
         /// <param name="Declination">The destination declination (degrees, positive North). Copied to Telescope.TargetDeclination.</param>
         public void SlewToCoordinates(double RightAscension, double Declination)
         {
-			if (ITelescope != null)
-				ITelescope.SlewToCoordinates(RightAscension, Declination);
-			else
-				objTypeScope.InvokeMember("SlewToCoordinates",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { RightAscension, Declination });
+            if (ITelescope != null)
+                ITelescope.SlewToCoordinates(RightAscension, Declination);
+            else
+                objTypeScope.InvokeMember("SlewToCoordinates",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { RightAscension, Declination });
         }
 
         /// <summary>
@@ -1381,12 +1165,12 @@ namespace ASCOM.DriverAccess
         /// <param name="Declination">The destination declination (degrees, positive North). Copied to Telescope.TargetDeclination.</param>
         public void SlewToCoordinatesAsync(double RightAscension, double Declination)
         {
-			if (ITelescope != null)
-				ITelescope.SlewToCoordinatesAsync(RightAscension, Declination);
-			else
-				objTypeScope.InvokeMember("SlewToCoordinatesAsync",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { RightAscension, Declination });
+            if (ITelescope != null)
+                ITelescope.SlewToCoordinatesAsync(RightAscension, Declination);
+            else
+                objTypeScope.InvokeMember("SlewToCoordinatesAsync",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { RightAscension, Declination });
         }
 
         /// <summary>
@@ -1399,12 +1183,12 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void SlewToTarget()
         {
-			if (ITelescope != null)
-				ITelescope.SlewToTarget();
-			else
-				objTypeScope.InvokeMember("SlewToTarget",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { });
+            if (ITelescope != null)
+                ITelescope.SlewToTarget();
+            else
+                objTypeScope.InvokeMember("SlewToTarget",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { });
         }
 
         /// <summary>
@@ -1422,12 +1206,12 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void SlewToTargetAsync()
         {
-			if (ITelescope != null)
-				ITelescope.SlewToTargetAsync();
-			else
-				objTypeScope.InvokeMember("SlewToTargetAsync",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { });
+            if (ITelescope != null)
+                ITelescope.SlewToTargetAsync();
+            else
+                objTypeScope.InvokeMember("SlewToTargetAsync",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { });
         }
 
         /// <summary>
@@ -1445,12 +1229,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.Slewing;
-				else
-					return (bool)objTypeScope.InvokeMember("Slewing", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.Slewing;
+                else
+                    return (bool)objTypeScope.InvokeMember("Slewing",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
         }
 
@@ -1463,12 +1247,12 @@ namespace ASCOM.DriverAccess
         /// <param name="Altitude">Target altitude (degrees, positive up)</param>
         public void SyncToAltAz(double Azimuth, double Altitude)
         {
-			if (ITelescope != null)
-				ITelescope.SyncToAltAz(Azimuth, Altitude);
-			else
-				objTypeScope.InvokeMember("SyncToAltAz",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { Azimuth, Altitude });
+            if (ITelescope != null)
+                ITelescope.SyncToAltAz(Azimuth, Altitude);
+            else
+                objTypeScope.InvokeMember("SyncToAltAz",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { Azimuth, Altitude });
         }
 
         /// <summary>
@@ -1478,12 +1262,12 @@ namespace ASCOM.DriverAccess
         /// <param name="Declination">The corrected declination (degrees, positive North). Copied to the TargetDeclination property.</param>
         public void SyncToCoordinates(double RightAscension, double Declination)
         {
-			if (ITelescope != null)
-				ITelescope.SyncToCoordinates(RightAscension, Declination);
-			else
-				objTypeScope.InvokeMember("SyncToCoordinates",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { RightAscension, Declination });
+            if (ITelescope != null)
+                ITelescope.SyncToCoordinates(RightAscension, Declination);
+            else
+                objTypeScope.InvokeMember("SyncToCoordinates",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { RightAscension, Declination });
         }
 
         /// <summary>
@@ -1493,12 +1277,12 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void SyncToTarget()
         {
-			if (ITelescope != null)
-				ITelescope.SyncToTarget();
-			else
-				objTypeScope.InvokeMember("SyncToTarget",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { });
+            if (ITelescope != null)
+                ITelescope.SyncToTarget();
+            else
+                objTypeScope.InvokeMember("SyncToTarget",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { });
         }
 
         /// <summary>
@@ -1510,21 +1294,21 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.TargetDeclination;
-				else
-					return (double)objTypeScope.InvokeMember("TargetDeclination", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.TargetDeclination;
+                else
+                    return (double)objTypeScope.InvokeMember("TargetDeclination",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
             set
             {
-				if (ITelescope != null)
-					ITelescope.TargetDeclination = value;
-				else
-					objTypeScope.InvokeMember("TargetDeclination", 
-						BindingFlags.Default | BindingFlags.SetProperty,
-						null, objScopeLateBound, new object[] { value });
+                if (ITelescope != null)
+                    ITelescope.TargetDeclination = value;
+                else
+                    objTypeScope.InvokeMember("TargetDeclination",
+                        BindingFlags.Default | BindingFlags.SetProperty,
+                        null, objScopeLateBound, new object[] { value });
             }
         }
 
@@ -1537,21 +1321,21 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.TargetRightAscension;
-				else
-					return (double)objTypeScope.InvokeMember("TargetRightAscension", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.TargetRightAscension;
+                else
+                    return (double)objTypeScope.InvokeMember("TargetRightAscension",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
             set
             {
-				if (ITelescope != null)
-					ITelescope.TargetRightAscension = value;
-				else
-					objTypeScope.InvokeMember("TargetRightAscension", 
-						BindingFlags.Default | BindingFlags.SetProperty,
-						null, objScopeLateBound, new object[] { value });
+                if (ITelescope != null)
+                    ITelescope.TargetRightAscension = value;
+                else
+                    objTypeScope.InvokeMember("TargetRightAscension",
+                        BindingFlags.Default | BindingFlags.SetProperty,
+                        null, objScopeLateBound, new object[] { value });
             }
         }
 
@@ -1566,21 +1350,21 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.Tracking;
-				else
-					return (bool)objTypeScope.InvokeMember("Tracking", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.Tracking;
+                else
+                    return (bool)objTypeScope.InvokeMember("Tracking",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
             set
             {
-				if (ITelescope != null)
-					ITelescope.Tracking = value;
-				else
-					objTypeScope.InvokeMember("Tracking", 
-						BindingFlags.Default | BindingFlags.SetProperty,
-						null, objScopeLateBound, new object[] { value });
+                if (ITelescope != null)
+                    ITelescope.Tracking = value;
+                else
+                    objTypeScope.InvokeMember("Tracking",
+                        BindingFlags.Default | BindingFlags.SetProperty,
+                        null, objScopeLateBound, new object[] { value });
             }
         }
 
@@ -1602,21 +1386,21 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.TrackingRate;
-				else
-					return (DriveRates)objTypeScope.InvokeMember("TrackingRate", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.TrackingRate;
+                else
+                    return (DriveRates)objTypeScope.InvokeMember("TrackingRate",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
             set
             {
-				if (ITelescope != null)
-					ITelescope.TrackingRate = value;
-				else
-					objTypeScope.InvokeMember("TrackingRate", 
-						BindingFlags.Default | BindingFlags.SetProperty,
-						null, objScopeLateBound, new object[] { value });
+                if (ITelescope != null)
+                    ITelescope.TrackingRate = value;
+                else
+                    objTypeScope.InvokeMember("TrackingRate",
+                        BindingFlags.Default | BindingFlags.SetProperty,
+                        null, objScopeLateBound, new object[] { value });
             }
         }
 
@@ -1629,10 +1413,10 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.TrackingRates;
-				else
-					return new _TrackingRates(objTypeScope, objScopeLateBound);
+                if (ITelescope != null)
+                    return ITelescope.TrackingRates;
+                else
+                    return new _TrackingRates(objTypeScope, objScopeLateBound);
             }
 
         }
@@ -1651,21 +1435,21 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-				if (ITelescope != null)
-					return ITelescope.UTCDate;
-				else
-					return (DateTime)objTypeScope.InvokeMember("UTCDate", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
+                if (ITelescope != null)
+                    return ITelescope.UTCDate;
+                else
+                    return (DateTime)objTypeScope.InvokeMember("UTCDate",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
             }
             set
             {
-				if (ITelescope != null)
-					ITelescope.UTCDate = value;
-				else
-					objTypeScope.InvokeMember("UTCDate", 
-						BindingFlags.Default | BindingFlags.SetProperty,
-						null, objScopeLateBound, new object[] { value });
+                if (ITelescope != null)
+                    ITelescope.UTCDate = value;
+                else
+                    objTypeScope.InvokeMember("UTCDate",
+                        BindingFlags.Default | BindingFlags.SetProperty,
+                        null, objScopeLateBound, new object[] { value });
             }
         }
 
@@ -1678,313 +1462,545 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void Unpark()
         {
-			if (ITelescope != null)
-				ITelescope.Unpark();
-			else
-				objTypeScope.InvokeMember("Unpark",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { });
+            if (ITelescope != null)
+                ITelescope.Unpark();
+            else
+                objTypeScope.InvokeMember("Unpark",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { });
         }
 
         #endregion
 
         #region IDisposable Members
-		/// <summary>
-		/// Dispose the late-bound interface, if needed. Will release it via COM
-		/// if it is a COM object, else if native .NET will just dereference it
-		/// for GC.
-		/// </summary>
-		public void Dispose()
+        /// <summary>
+        /// Dispose the late-bound interface, if needed. Will release it via COM
+        /// if it is a COM object, else if native .NET will just dereference it
+        /// for GC.
+        /// </summary>
+        public void Dispose()
         {
             if (this.objScopeLateBound != null)
             {
-				try { Marshal.ReleaseComObject(objScopeLateBound); }
-				catch (Exception) { }
-				objScopeLateBound = null;
+                try { Marshal.ReleaseComObject(objScopeLateBound); }
+                catch (Exception) { }
+                objScopeLateBound = null;
             }
         }
 
+        #endregion
+
+        #region IAscomDriver Members
+
+        /// <summary>
+        /// Set True to enable the
+        /// link. Set False to disable the link (this does not switch off the cooler).
+        /// You can also read the property to check whether it is connected.
+        /// </summary>
+        /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
+        /// <exception cref=" System.Exception">Must throw exception if unsuccessful.</exception>
+        bool IAscomDriver.Connected
+        {
+            get
+            {
+                if (ITelescope != null)
+                    return ITelescope.Connected;
+                else
+                    return Convert.ToBoolean(objTypeScope.InvokeMember("Connected",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { }));
+            }
+            set
+            {
+                if (ITelescope != null)
+                    ITelescope.Connected = value;
+                else
+                    objTypeScope.InvokeMember("Connected",
+                        BindingFlags.Default | BindingFlags.SetProperty,
+                        null, objScopeLateBound, new object[] { value });
+            }
+        }
+        /// <summary>
+        /// Returns a description of the driver, such as manufacturer and model
+        /// number. Any ASCII characters may be used. The string shall not exceed 68
+        /// characters (for compatibility with FITS headers).
+        /// </summary>
+        /// <value>The description.</value>
+        /// <exception cref=" System.Exception">Must throw exception if description unavailable</exception>
+        string IAscomDriver.Description
+        {
+            get
+            {
+                if (ITelescope != null)
+                    return ITelescope.Description;
+                else
+                    return Convert.ToString(objTypeScope.InvokeMember("Description",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { }));
+            }
+        }
+        /// <summary>
+        /// Descriptive and version information about this ASCOM Telescope driver.
+        /// This string may contain line endings and may be hundreds to thousands of characters long.
+        /// It is intended to display detailed information on the ASCOM driver, including version and copyright data.
+        /// See the Description property for descriptive info on the telescope itself.
+        /// To get the driver version in a parseable string, use the DriverVersion property.
+        /// </summary>
+        string IAscomDriver.DriverInfo
+        {
+            get
+            {
+                if (ITelescope != null)
+                    return ITelescope.DriverInfo;
+                else
+                    return (string)objTypeScope.InvokeMember("DriverInfo",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
+            }
+        }
+        /// <summary>
+        /// A string containing only the major and minor version of the driver.
+        /// This must be in the form "n.n".
+        /// Not to be confused with the InterfaceVersion property, which is the version of this specification supported by the driver (currently 2). 
+        /// </summary>
+        string IAscomDriver.DriverVersion
+        {
+            get
+            {
+                if (ITelescope != null)
+                    return ITelescope.DriverVersion;
+                else
+                    return (string)objTypeScope.InvokeMember("DriverVersion",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
+            }
+        }
+        /// <summary>
+        /// The version of this interface. Will return 2 for this version.
+        /// Clients can detect legacy V1 drivers by trying to read ths property.
+        /// If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1. 
+        /// In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver. 
+        /// </summary>
+        short IAscomDriver.InterfaceVersion
+        {
+            get
+            {
+                if (ITelescope != null)
+                    return ITelescope.InterfaceVersion;
+                else
+                    return (short)objTypeScope.InvokeMember("InterfaceVersion",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
+            }
+        }
+
+        /// <summary>
+        /// Gets the last result.
+        /// </summary>
+        /// <value>
+        /// The result of the last executed action, or <see cref="String.Empty"	/>
+        /// if no action has yet been executed.
+        /// </value>
+        string IAscomDriver.LastResult
+        {
+            get
+            {
+                if (ITelescope != null)
+                    return ITelescope.LastResult;
+                else
+                    return Convert.ToString(objTypeScope.InvokeMember("LastResult",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// The short name of the telescope, for display purposes
+        /// </summary>
+        string IAscomDriver.Name
+        {
+            get
+            {
+                if (ITelescope != null)
+                    return ITelescope.Name;
+                else
+                    return (string)objTypeScope.InvokeMember("Name",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
+            }
+        }
+        /// <summary>
+        /// Launches a configuration dialog box for the driver.  The call will not return
+        /// until the user clicks OK or cancel manually.
+        /// </summary>
+        /// <exception cref=" System.Exception">Must throw an exception if Setup dialog is unavailable.</exception>
+        void IAscomDriver.SetupDialog()
+        {
+            if (ITelescope != null)
+                ITelescope.SetupDialog();
+            else
+                objTypeScope.InvokeMember("SetupDialog",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { });
+        }
         #endregion
 
         #region IDeviceControl Members
 
+        /// <summary>
+        /// Invokes the specified device-specific action.
+        /// </summary>
+        /// <param name="ActionName">
+        /// A well known name agreed by interested parties that represents the action
+        /// to be carried out. 
+        /// <example>suppose filter wheels start to appear with automatic wheel changers; new actions could 
+        /// be “FilterWheel:QueryWheels” and “FilterWheel:SelectWheel”. The former returning a 
+        /// formatted list of wheel names and the second taking a wheel name and making the change.
+        /// </example>
+        /// </param>
+        /// <param name="ActionParameters">
+        /// List of required parameters or <see cref="String.Empty"/>  if none are required.
+        /// </param>
+        /// <returns>A string response and sets the <c>IDeviceControl.LastResult</c> property.</returns>
+        string IDeviceControl.Action(string ActionName, string ActionParameters)
+        {
+            if (ITelescope != null)
+                return ITelescope.Action(ActionName, ActionParameters);
+            else
+                return (string)objTypeScope.InvokeMember("Action",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { });
+        }
 
-        public string Configuration
+        /// <summary>
+        /// Gets the supported actions.
+        /// </summary>
+        /// <value>The supported actions.</value>
+        string[] IDeviceControl.SupportedActions
         {
             get
             {
-                throw new System.NotImplementedException();
+                if (ITelescope != null)
+                    return ITelescope.SupportedActions;
+                else
+                    return (string[])(objTypeScope.InvokeMember("SupportedActions",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// Transmits an arbitrary string to the device and does not wait for a response.
+        /// Optionally, protocol framing characters may be added to the string before transmission.
+        /// </summary>
+        /// <param name="Command">The literal command string to be transmitted.</param>
+        /// <param name="Raw">
+        /// if set to <c>true</c> the string is transmitted 'as-is'.
+        /// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
+        /// </param>
+        void IDeviceControl.CommandBlind(string Command, bool Raw)
+        {
+            if (ITelescope != null)
+                ITelescope.CommandBlind(Command, Raw);
+            else
+                objTypeScope.InvokeMember("CommandBlind",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { Command, Raw });
+        }
+
+        /// <summary>
+        /// Transmits an arbitrary string to the device and waits for a boolean response.
+        /// Optionally, protocol framing characters may be added to the string before transmission.
+        /// </summary>
+        /// <param name="Command">The literal command string to be transmitted.</param>
+        /// <param name="Raw">
+        /// if set to <c>true</c> the string is transmitted 'as-is'.
+        /// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
+        /// </param>
+        /// <returns>
+        /// Returns the interpreted boolean response received from the device.
+        /// </returns>
+        bool IDeviceControl.CommandBool(string Command, bool Raw)
+        {
+            if (ITelescope != null)
+                return ITelescope.CommandBool(Command, Raw);
+            else
+                return (bool)objTypeScope.InvokeMember("CommandBool",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { Command, Raw });
+        }
+
+        /// <summary>
+        /// Transmits an arbitrary string to the device and waits for a string response.
+        /// Optionally, protocol framing characters may be added to the string before transmission.
+        /// </summary>
+        /// <param name="Command">The literal command string to be transmitted.</param>
+        /// <param name="Raw">
+        /// if set to <c>true</c> the string is transmitted 'as-is'.
+        /// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
+        /// </param>
+        /// <returns>
+        /// Returns the string response received from the device.
+        /// </returns>
+        string IDeviceControl.CommandString(string Command, bool Raw)
+        {
+            if (ITelescope != null)
+                return ITelescope.CommandString(Command, Raw);
+            else
+                return (string)objTypeScope.InvokeMember("CommandString",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objScopeLateBound, new object[] { Command, Raw });
+        }
+
+        #endregion
+
+    }
+    #endregion
+
+    #region Rate wrapper
+    //
+    // Late bound Rate implementation
+    //
+    /// <summary>
+    /// Describes a range of rates supported by the MoveAxis() method (degrees/per second)
+    /// These are contained within the AxisRates collection. They serve to describe one or more supported ranges of rates of motion about a mechanical axis. 
+    /// It is possible that the Rate.Maximum and Rate.Minimum properties will be equal. In this case, the Rate object expresses a single discrete rate. 
+    /// Both the Rate.Maximum and Rate.Minimum properties are always expressed in units of degrees per second. 
+    /// </summary>
+    [ComVisible(true), Guid("877CD69E-705E-480c-9F3A-C3DF967870F9"), ClassInterface(ClassInterfaceType.None)]
+    class _Rate : IRate
+    {
+        Type objTypeRate;
+        object objRateLateBound;
+
+        public _Rate(int index, Type objTypeAxisRates, object objAxisRatesLateBound)
+        {
+            objRateLateBound = objTypeAxisRates.InvokeMember("Item",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objAxisRatesLateBound, new object[] { index });
+            objTypeRate = objRateLateBound.GetType();
+        }
+
+        public _Rate(object objRateLateBound)
+        {
+            this.objRateLateBound = objRateLateBound;
+            objTypeRate = objRateLateBound.GetType();
+        }
+
+        /// <summary>
+        /// The maximum rate (degrees per second)
+        /// This must always be a positive number. It indicates the maximum rate in either direction about the axis. 
+        /// </summary>
+        public double Maximum
+        {
+            get
+            {
+                return (double)objTypeRate.InvokeMember("Maximum",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objRateLateBound, new object[] { });
             }
             set
             {
-                throw new System.NotImplementedException();
+                objTypeRate.InvokeMember("Maximum",
+                            BindingFlags.Default | BindingFlags.SetProperty,
+                            null, objRateLateBound, new object[] { value });
             }
         }
 
-        public string[] SupportedConfigurations
+        /// <summary>
+        /// The minimum rate (degrees per second)
+        /// This must always be a positive number. It indicates the maximum rate in either direction about the axis. 
+        /// </summary>
+        public double Minimum
         {
-            get { throw new System.NotImplementedException(); }
+            get
+            {
+                return (double)objTypeRate.InvokeMember("Minimum",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objRateLateBound, new object[] { });
+            }
+            set
+            {
+                objTypeRate.InvokeMember("Minimum",
+                            BindingFlags.Default | BindingFlags.SetProperty,
+                            null, objRateLateBound, new object[] { value });
+            }
         }
 
-        public string Action(string ActionName, string ActionParameters)
-        {
-            throw new System.NotImplementedException();
-        }
+        #region IDisposable Members
 
-        public string LastResult
+        public void Dispose()
         {
-            get { throw new System.NotImplementedException(); }
-        }
-
-        public string[] SupportedActions
-        {
-            get { throw new System.NotImplementedException(); }
+            if (this.objRateLateBound != null)
+            {
+                objRateLateBound = null;
+            }
         }
 
         #endregion
     }
-	#endregion
+    #endregion
 
-	#region Rate wrapper
-	//
-	// Late bound Rate implementation
-	//
-	/// <summary>
-	/// Describes a range of rates supported by the MoveAxis() method (degrees/per second)
-	/// These are contained within the AxisRates collection. They serve to describe one or more supported ranges of rates of motion about a mechanical axis. 
-	/// It is possible that the Rate.Maximum and Rate.Minimum properties will be equal. In this case, the Rate object expresses a single discrete rate. 
-	/// Both the Rate.Maximum and Rate.Minimum properties are always expressed in units of degrees per second. 
-	/// </summary>
-	class _Rate : IRate
-	{
-		Type objTypeRate;
-		object objRateLateBound;
+    #region Internal strongly typed collection wrappers
+    //
+    // Strongly typed enumerator for late bound Rate
+    // objects being enumarated
+    //
+    [ComVisible(true), Guid("585D0BE9-C03A-42b3-B6BC-AEFE590898BE"), ClassInterface(ClassInterfaceType.None)]
+    class _RateEnumerator : IEnumerator, IDisposable
+    {
+        IEnumerator objEnumerator;
+        Type objTypeAxisRates;
+        object objAxisRatesLateBound;
 
-		public _Rate(int index, Type objTypeAxisRates, object objAxisRatesLateBound)
-		{
-			objRateLateBound = objTypeAxisRates.InvokeMember("Item",
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objAxisRatesLateBound, new object[] { index });
-			objTypeRate = objRateLateBound.GetType();
-		}
+        public _RateEnumerator(Type objTypeAxisRates, object objAxisRatesLateBound)
+        {
+            this.objTypeAxisRates = objTypeAxisRates;
+            this.objAxisRatesLateBound = objAxisRatesLateBound;
+            objEnumerator = (IEnumerator)objTypeAxisRates.InvokeMember("GetEnumerator",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objAxisRatesLateBound, new object[] { });
+        }
 
-		public _Rate(object objRateLateBound)
-		{
-			this.objRateLateBound = objRateLateBound;
-			objTypeRate = objRateLateBound.GetType();
-		}
+        public void Reset()
+        {
+            objEnumerator.Reset();
+        }
 
-		/// <summary>
-		/// The maximum rate (degrees per second)
-		/// This must always be a positive number. It indicates the maximum rate in either direction about the axis. 
-		/// </summary>
-		public double Maximum
-		{
-			get
-			{
-				return (double)objTypeRate.InvokeMember("Maximum",
-							BindingFlags.Default | BindingFlags.GetProperty,
-							null, objRateLateBound, new object[] { });
-			}
-			set
-			{
-				objTypeRate.InvokeMember("Maximum",
-							BindingFlags.Default | BindingFlags.SetProperty,
-							null, objRateLateBound, new object[] { value });
-			}
-		}
+        public bool MoveNext()
+        {
+            return objEnumerator.MoveNext();
+        }
 
-		/// <summary>
-		/// The minimum rate (degrees per second)
-		/// This must always be a positive number. It indicates the maximum rate in either direction about the axis. 
-		/// </summary>
-		public double Minimum
-		{
-			get
-			{
-				return (double)objTypeRate.InvokeMember("Minimum",
-							BindingFlags.Default | BindingFlags.GetProperty,
-							null, objRateLateBound, new object[] { });
-			}
-			set
-			{
-				objTypeRate.InvokeMember("Minimum",
-							BindingFlags.Default | BindingFlags.SetProperty,
-							null, objRateLateBound, new object[] { value });
-			}
-		}
+        public Object Current
+        {
+            get
+            {
+                return new _Rate(objEnumerator.Current);
+            }
+        }
 
-		#region IDisposable Members
+        #region IDisposable Members
 
-		public void Dispose()
-		{
-			if (this.objRateLateBound != null)
-			{
-				objRateLateBound = null;
-			}
-		}
+        public void Dispose()
+        {
+            if (this.objEnumerator != null)
+            {
+                objEnumerator = null;
+            }
+        }
 
-		#endregion
-	}
-	#endregion
-	
-	#region Internal strongly typed collection wrappers
-	//
-	// Strongly typed enumerator for late bound Rate
-	// objects being enumarated
-	//
-	class _RateEnumerator : IEnumerator, IDisposable
-	{
-		IEnumerator objEnumerator;
-		Type objTypeAxisRates;
-		object objAxisRatesLateBound;
+        #endregion
+    }
 
-		public _RateEnumerator(Type objTypeAxisRates, object objAxisRatesLateBound)
-		{
-			this.objTypeAxisRates = objTypeAxisRates;
-			this.objAxisRatesLateBound = objAxisRatesLateBound;
-			objEnumerator = (IEnumerator)objTypeAxisRates.InvokeMember("GetEnumerator",
-						BindingFlags.Default | BindingFlags.InvokeMethod,
-						null, objAxisRatesLateBound, new object[] { });
-		}
+    //
+    // Late bound Axis Rates implementation.
+    //
+    [ComVisible(true), Guid("EC407F51-AC33-4c01-A703-E1ED8F166930"), ClassInterface(ClassInterfaceType.None)]
+    class _AxisRates : IAxisRates
+    {
+        Type objTypeAxisRates;
+        object objAxisRatesLateBound;
 
-		public void Reset()
-		{
-			objEnumerator.Reset();
-		}
+        public _AxisRates(TelescopeAxes Axis, Type objTypeScope, object objScopeLateBound)
+        {
+            objAxisRatesLateBound = objTypeScope.InvokeMember("AxisRates",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objScopeLateBound, new object[] { (int)Axis });
+            objTypeAxisRates = objAxisRatesLateBound.GetType();
+        }
 
-		public bool MoveNext()
-		{
-			return objEnumerator.MoveNext();
-		}
+        public IRate this[int index]
+        {
+            get
+            {
+                return new _Rate(index, objTypeAxisRates, objAxisRatesLateBound);
+            }
+        }
 
-		public Object Current
-		{
-			get
-			{
-				return new _Rate(objEnumerator.Current);
-			} 
-		}
+        public IEnumerator GetEnumerator()
+        {
+            return new _RateEnumerator(objTypeAxisRates, objAxisRatesLateBound);
+        }
 
-		#region IDisposable Members
+        public int Count
+        {
+            get
+            {
+                return (int)objTypeAxisRates.InvokeMember("Count",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objAxisRatesLateBound, new object[] { });
+            }
+        }
 
-		public void Dispose()
-		{
-			if (this.objEnumerator != null)
-			{
-				objEnumerator = null;
-			}
-		}
+        #region IDisposable Members
 
-		#endregion
-	}
+        public void Dispose()
+        {
+            if (this.objAxisRatesLateBound != null)
+            {
+                objAxisRatesLateBound = null;
+            }
+        }
 
-	//
-	// Late bound Axis Rates implementation.
-	//
-	class _AxisRates : IAxisRates
-	{
-		Type objTypeAxisRates;
-		object objAxisRatesLateBound;
+        #endregion
+    }
 
-		public _AxisRates(TelescopeAxes Axis, Type objTypeScope, object objScopeLateBound)
-		{
-			objAxisRatesLateBound = objTypeScope.InvokeMember("AxisRates",
-						BindingFlags.Default | BindingFlags.InvokeMethod,
-						null, objScopeLateBound, new object[] { (int)Axis });
-			objTypeAxisRates = objAxisRatesLateBound.GetType();
-		}
+    //
+    // Late bound TrackingRates implementation
+    //
+    [ComVisible(true), Guid("A30EF757-D542-4b1c-808B-379432937E69"), ClassInterface(ClassInterfaceType.None)]
+    class _TrackingRates : ITrackingRates
+    {
+        Type objTypeTrackingRates;
+        object objTrackingRatesLateBound;
 
-		public IRate this[int index]
-		{
-			get 
-			{
-				return new _Rate(index, objTypeAxisRates, objAxisRatesLateBound);
-			}
-		}
+        public _TrackingRates(Type objTypeScope, object objScopeLateBound)
+        {
+            objTrackingRatesLateBound = objTypeScope.InvokeMember("TrackingRates",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objScopeLateBound, new object[] { });
+            objTypeTrackingRates = objTrackingRatesLateBound.GetType();
+        }
 
-		public IEnumerator GetEnumerator()
-		{
-			return new _RateEnumerator(objTypeAxisRates, objAxisRatesLateBound);
-		}
+        public DriveRates this[int index]
+        {
+            get
+            {
+                return (DriveRates)objTypeTrackingRates.InvokeMember("Item",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objTrackingRatesLateBound, new object[] { index });
+            }
+        }
 
-		public int Count
-		{
-			get 
-			{
-				return (int)objTypeAxisRates.InvokeMember("Count",
-							BindingFlags.Default | BindingFlags.GetProperty,
-							null, objAxisRatesLateBound, new object[] { });
-			}
-		}
+        public IEnumerator GetEnumerator()
+        {
+            return (IEnumerator)objTypeTrackingRates.InvokeMember("GetEnumerator",
+                        BindingFlags.Default | BindingFlags.InvokeMethod,
+                        null, objTrackingRatesLateBound, new object[] { });
+        }
 
-		#region IDisposable Members
+        public int Count
+        {
+            get
+            {
+                return (int)objTypeTrackingRates.InvokeMember("Count",
+                            BindingFlags.Default | BindingFlags.GetProperty,
+                            null, objTrackingRatesLateBound, new object[] { });
+            }
+        }
 
-		public void Dispose()
-		{
-			if (this.objAxisRatesLateBound != null)
-			{
-				objAxisRatesLateBound = null;
-			}
-		}
+        #region IDisposable Members
 
-		#endregion
-	}
+        public void Dispose()
+        {
+            if (this.objTrackingRatesLateBound != null)
+            {
+                objTrackingRatesLateBound = null;
+            }
+        }
 
-	//
-	// Late bound TrackingRates implementation
-	//
-	class _TrackingRates : ITrackingRates
-	{
-		Type objTypeTrackingRates;
-		object objTrackingRatesLateBound;
-
-		public _TrackingRates(Type objTypeScope, object objScopeLateBound)
-		{
-			objTrackingRatesLateBound = objTypeScope.InvokeMember("TrackingRates",
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objScopeLateBound, new object[] { });
-			objTypeTrackingRates = objTrackingRatesLateBound.GetType();
-		}
-
-		public DriveRates this[int index]
-		{
-			get 
-			{
-				return (DriveRates)objTypeTrackingRates.InvokeMember("Item",
-							BindingFlags.Default | BindingFlags.GetProperty,
-							null, objTrackingRatesLateBound, new object[] { index });
-			}
-		}
-
-		public IEnumerator GetEnumerator()
-		{
-			return (IEnumerator)objTypeTrackingRates.InvokeMember("GetEnumerator",
-						BindingFlags.Default | BindingFlags.InvokeMethod,
-						null, objTrackingRatesLateBound, new object[] { });
-		}
-
-		public int Count
-		{
-			get 
-			{
-				return (int)objTypeTrackingRates.InvokeMember("Count",
-							BindingFlags.Default | BindingFlags.GetProperty,
-							null, objTrackingRatesLateBound, new object[] { });
-			}
-		}
-
-		#region IDisposable Members
-
-		public void Dispose()
-		{
-			if (this.objTrackingRatesLateBound != null)
-			{
-				objTrackingRatesLateBound = null;
-			}
-		}
-
-		#endregion
-	}
-	#endregion
+        #endregion
+    }
+    #endregion
 }

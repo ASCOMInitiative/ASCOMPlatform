@@ -1,169 +1,75 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
-using System.Runtime.CompilerServices;
-
-namespace ASCOM.Interface
-	{
-
-    [ComVisible(true), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("30645150-A4D4-43ca-913A-E98492B5BA01")]
-    public interface ITelescope
-	{
-
-        /// <summary>
-        /// Gets the alignment mode.
-        /// </summary>
-        /// <value>The alignment mode.</value>
-		AlignmentModes AlignmentMode {  get; }
-		
-		double Altitude {  get; }
-		
-		double ApertureArea {  get; }
-		
-		double ApertureDiameter {  get; }
-		
-		bool AtHome {  get; }
-		
-		bool AtPark {  get; }
-		
-		double Azimuth {  get; }
-		
-		bool CanFindHome {  get; }
-		
-		bool CanPark {  get; }
-		
-		bool CanPulseGuide {  get; }
-		
-		bool CanSetDeclinationRate {  get; }
-		
-		bool CanSetGuideRates {  get; }
-		
-		bool CanSetPark {  get; }
-		
-		bool CanSetRightAscensionRate {  get; }
-		
-		bool CanSetPierSide {  get; }
-		
-		bool CanSetTracking {  get; }
-		
-		bool CanSlew {  get; }
-		
-		bool CanSlewAltAz {  get; }
-		
-		bool CanSlewAltAzAsync {  get; }
-		
-		bool CanSlewAsync {  get; }
-		
-		bool CanSync {  get; }
-		
-		bool CanSyncAltAz {  get; }
-		
-		bool CanUnpark {  get; }
-		
-		//bool Connected {  get;   set; }
-		
-		double Declination {  get; }
-		
-		double DeclinationRate {  get;   set; }
-		
-		//string Description {   get; }
-		
-		bool DoesRefraction {  get;   set; }
-		
-		//string DriverInfo {   get; }
-		
-		//string DriverVersion {   get; }
-		
-		EquatorialCoordinateType EquatorialSystem {  get; }
-		
-		double FocalLength {  get; }
-		
-		double GuideRateDeclination {  get;   set; }
-		
-		double GuideRateRightAscension {  get;   set; }
-		
-		//short InterfaceVersion {  get; }
-		
-		bool IsPulseGuiding {  get; }
-		
-		//string Name {   get; }
-		
-		double RightAscension {  get; }
-		
-		double RightAscensionRate {  get;   set; }
-		
-		PierSide SideOfPier {  get;   set; }
-		
-		double SiderealTime {  get; }
-		
-		double SiteElevation {  get;   set; }
-		
-		double SiteLatitude {  get;   set; }
-		
-		double SiteLongitude {  get;   set; }
-		
-		bool Slewing {  get; }
-		
-		short SlewSettleTime {  get;   set; }
-		
-		double TargetDeclination {  get;   set; }
-		
-		double TargetRightAscension {  get;   set; }
-		
-		bool Tracking {  get;   set; }
-		
-		DriveRates TrackingRate {  get;   set; }
-		
-		ITrackingRates TrackingRates {   get; }
-		
-		DateTime UTCDate {  get;   set; }
-		
-		void AbortSlew();
-		
-		
-		IAxisRates AxisRates( TelescopeAxes Axis);
-		
-		bool CanMoveAxis( TelescopeAxes Axis);
-		
-		PierSide DestinationSideOfPier( double RightAscension,  double Declination);
-		
-		void FindHome();
-		
-		void MoveAxis( TelescopeAxes Axis,  double Rate);
-		
-		void Park();
-		
-		void PulseGuide( GuideDirections Direction,  int Duration);
-		
-		void SetPark();
-		
-		//void SetupDialog();
-		
-		void SlewToAltAz( double Azimuth,  double Altitude);
-		
-		void SlewToAltAzAsync( double Azimuth,  double Altitude);
-		
-		void SlewToCoordinates( double RightAscension,  double Declination);
-		
-		void SlewToCoordinatesAsync( double RightAscension,  double Declination);
-		
-		void SlewToTarget();
-		
-		void SlewToTargetAsync();
-		
-		void SyncToAltAz( double Azimuth,  double Altitude);
-		
-		void SyncToCoordinates( double RightAscension,  double Declination);
-		
-		void SyncToTarget();
-		
-		void Unpark();
-		
-	}
-
- 
-
- 
-
-	}
+namespace ASCOM.Interfaces
+{
+    public interface ITelescope : IAscomDriver, IDeviceControl
+    {
+        void AbortSlew();
+        AlignmentModes AlignmentMode { get; }
+        double Altitude { get; }
+        double ApertureArea { get; }
+        double ApertureDiameter { get; }
+        bool AtHome { get; }
+        bool AtPark { get; }
+        IAxisRates AxisRates(TelescopeAxes Axis);
+        double Azimuth { get; }
+        bool CanFindHome { get; }
+        bool CanMoveAxis(TelescopeAxes Axis);
+        bool CanPark { get; }
+        bool CanPulseGuide { get; }
+        bool CanSetDeclinationRate { get; }
+        bool CanSetGuideRates { get; }
+        bool CanSetPark { get; }
+        bool CanSetPierSide { get; }
+        bool CanSetRightAscensionRate { get; }
+        bool CanSetTracking { get; }
+        bool CanSlew { get; }
+        bool CanSlewAltAz { get; }
+        bool CanSlewAltAzAsync { get; }
+        bool CanSlewAsync { get; }
+        bool CanSync { get; }
+        bool CanSyncAltAz { get; }
+        bool CanUnpark { get; }
+        //string Configuration { get; set; }
+        double Declination { get; }
+        double DeclinationRate { get; set; }
+        PierSide DestinationSideOfPier(double RightAscension, double Declination);
+        void Dispose();
+        bool DoesRefraction { get; set; }
+        EquatorialCoordinateType EquatorialSystem { get; }
+        void FindHome();
+        double FocalLength { get; }
+        double GuideRateDeclination { get; set; }
+        double GuideRateRightAscension { get; set; }
+        bool IsPulseGuiding { get; }
+        void MoveAxis(TelescopeAxes Axis, double Rate);
+        void Park();
+        void PulseGuide(GuideDirections Direction, int Duration);
+        double RightAscension { get; }
+        double RightAscensionRate { get; set; }
+        void SetPark();
+        PierSide SideOfPier { get; set; }
+        double SiderealTime { get; }
+        double SiteElevation { get; set; }
+        double SiteLatitude { get; set; }
+        double SiteLongitude { get; set; }
+        bool Slewing { get; }
+        short SlewSettleTime { get; set; }
+        void SlewToAltAz(double Azimuth, double Altitude);
+        void SlewToAltAzAsync(double Azimuth, double Altitude);
+        void SlewToCoordinates(double RightAscension, double Declination);
+        void SlewToCoordinatesAsync(double RightAscension, double Declination);
+        void SlewToTarget();
+        void SlewToTargetAsync();
+        //string[] SupportedConfigurations { get; }
+        void SyncToAltAz(double Azimuth, double Altitude);
+        void SyncToCoordinates(double RightAscension, double Declination);
+        void SyncToTarget();
+        double TargetDeclination { get; set; }
+        double TargetRightAscension { get; set; }
+        bool Tracking { get; set; }
+        DriveRates TrackingRate { get; set; }
+        ITrackingRates TrackingRates { get; }
+        void Unpark();
+        DateTime UTCDate { get; set; }
+    }
+}

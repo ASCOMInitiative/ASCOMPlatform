@@ -1,10 +1,10 @@
-//
+ //
 // 10-Jul-08	rbd		1.0.5 - Release COM on Dispose().
 //
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using ASCOM.Interface;
+using ASCOM.Interfaces;
 using ASCOM.Utilities;
 
 namespace ASCOM.DriverAccess
@@ -13,11 +13,12 @@ namespace ASCOM.DriverAccess
 	/// <summary>
 	/// Provides universal access to ASCOM Dome drivers
 	/// </summary>
-	public class Dome : ASCOM.Interface.IDome, IDisposable
+    [ComVisible(true), Guid("F629E819-E281-4789-A98C-F67F32A5936A"), ClassInterface(ClassInterfaceType.None)]
+	public class Dome : IDome, IDisposable, IDeviceControl, IAscomDriver
     {
 
         object objDomeLateBound;
-		ASCOM.Interface.IDome IDome;
+		IDome IDome;
         Type objTypeDome;
         /// <summary>
         /// Constructor for Dome class. Creates a Dome based on the ProgID in the DomeID string.
@@ -33,7 +34,7 @@ namespace ASCOM.DriverAccess
 
 			// Try to see if this driver has an ASCOM.Dome interface
 			try {
-				IDome = (ASCOM.Interface.IDome)objDomeLateBound;
+				IDome = (IDome)objDomeLateBound;
 			} catch(Exception) {
 				IDome = null;
 			}
@@ -51,6 +52,7 @@ namespace ASCOM.DriverAccess
 			oChooser.DeviceType = "Dome";				// Requires Helper 5.0.3 (May '07)
 			return oChooser.Choose(domeID);
 		}
+
         #region IDome Members
 
         /// <summary>
@@ -278,114 +280,6 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Send a string command directly to the dome without expecting response data.
-        /// Raises an error if not supported or if a communications failure occurs. 
-        /// </summary>
-        /// <param name="Command"></param>
-        public void CommandBlind(string Command)
-        {
-			if (IDome != null)
-				IDome.CommandBlind(Command);
-			else
-				objTypeDome.InvokeMember("CommandString", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objDomeLateBound, new object[] { Command });
-        }
-
-
-        /// <summary>
-        /// Send a string command directly to the dome, returning a True / False response.
-        /// Raises an error if not supported or if a communications failure occurs. 
-        /// </summary>
-        /// <param name="Command">Raw command string to be sent to the dome.</param>
-        /// <returns>True if the response indicated True or success, else False.</returns>
-        public bool CommandBool(string Command)
-        {
-			if (IDome != null)
-				return IDome.CommandBool(Command);
-			else
-				return (bool)objTypeDome.InvokeMember("CommandString", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objDomeLateBound, new object[] { Command });
-        }
-
-        /// <summary>
-        /// Send a string command directly to the dome, returning the response string.
-        /// Raises an error if not supported or if a communications failure occurs. 
-        /// </summary>
-        /// <param name="Command">Raw command string to be sent to the dome.</param>
-        /// <returns>Response string from controller.</returns>
-        public string CommandString(string Command)
-        {
-			if (IDome != null)
-				return IDome.CommandString(Command);
-			else
-				return (string)objTypeDome.InvokeMember("CommandString", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objDomeLateBound, new object[] { Command });
-        }
-
-        /// <summary>
-        /// True if driver has established communication to dome control.
-        /// Set to True to establish the link and set to False to terminate the link.
-        /// Raises an error if connect fails. 
-        /// </summary>
-        public bool Connected
-        {
-            get
-            {
-				if (IDome != null)
-					return IDome.Connected;
-				else
-					return (bool)objTypeDome.InvokeMember("Connected", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objDomeLateBound, new object[] { });
-            }
-            set
-            {
-				if (IDome != null)
-					IDome.Connected = value;
-				else
-					objTypeDome.InvokeMember("Connected", 
-						BindingFlags.Default | BindingFlags.SetProperty,
-						null, objDomeLateBound, new object[] { value });
-
-            }
-        }
-
-        /// <summary>
-        /// A long description of the dome hardware / software or whatever.
-        /// </summary>
-        public string Description
-        {
-            get
-            {
-				if (IDome != null)
-					return IDome.Description;
-				else
-					return (string)objTypeDome.InvokeMember("Description", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objDomeLateBound, new object[] { });
-            }
-        }
-
-        /// <summary>
-        /// Description and version information about this ASCOM dome driver.
-        /// </summary>
-        public string DriverInfo
-        {
-            get
-            {
-				if (IDome != null)
-					return IDome.DriverInfo;
-				else
-					return (string)objTypeDome.InvokeMember("DriverInfo", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objDomeLateBound, new object[] { });
-            }
-        }
-
-        /// <summary>
         /// Description and version information about this ASCOM dome driver.
         /// </summary>
         public void FindHome()
@@ -396,39 +290,6 @@ namespace ASCOM.DriverAccess
 				objTypeDome.InvokeMember("FindHome", 
 					BindingFlags.Default | BindingFlags.InvokeMethod,
                     null, objDomeLateBound, new object[] { });
-        }
-
-        /// <summary>
-        /// The ASCOM Standard interface version supported by this driver.
-        /// Returns 1 for this interface version. 
-        /// </summary>
-        public short InterfaceVersion
-        {
-            get
-            {
-				if (IDome != null)
-					return IDome.InterfaceVersion;
-				else
-					return (short)objTypeDome.InvokeMember("InterfaceVersion", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objDomeLateBound, new object[] { });
-            }
-        }
-
-        /// <summary>
-        /// Short name for the dome.
-        /// </summary>
-        public string Name
-        {
-            get
-            {
-				if (IDome != null)
-					return IDome.Name;
-				else
-					return (string)objTypeDome.InvokeMember("Name", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objDomeLateBound, new object[] { });
-            }     
         }
 
         /// <summary>
@@ -470,19 +331,6 @@ namespace ASCOM.DriverAccess
 				IDome.SetPark();
 			else
 				objTypeDome.InvokeMember("SetPark", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objDomeLateBound, new object[] { });
-        }
-
-        /// <summary>
-        /// Brings up a dialog box for the user to enter in custom setup parameters, such as a COM port selection.
-        /// </summary>
-        public void SetupDialog()
-        {
-			if (IDome != null)
-				IDome.SetupDialog();
-			else
-				objTypeDome.InvokeMember("SetupDialog", 
 					BindingFlags.Default | BindingFlags.InvokeMethod,
                     null, objDomeLateBound, new object[] { });
         }
@@ -619,6 +467,270 @@ namespace ASCOM.DriverAccess
 		}
 
 		#endregion
+
+        #region IAscomDriver Members
+
+        /// <summary>
+        /// Set True to enable the
+        /// link. Set False to disable the link (this does not switch off the cooler).
+        /// You can also read the property to check whether it is connected.
+        /// </summary>
+        /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
+        /// <exception cref=" System.Exception">Must throw exception if unsuccessful.</exception>
+        bool IAscomDriver.Connected
+        {
+            get
+            {
+                if (IDome != null)
+                    return IDome.Connected;
+                else
+                    return Convert.ToBoolean(objTypeDome.InvokeMember("Connected",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objDomeLateBound, new object[] { }));
+            }
+            set
+            {
+                if (IDome != null)
+                    IDome.Connected = value;
+                else
+                    objTypeDome.InvokeMember("Connected",
+                        BindingFlags.Default | BindingFlags.SetProperty,
+                        null, objDomeLateBound, new object[] { value });
+            }
+        }
+        /// <summary>
+        /// Returns a description of the driver, such as manufacturer and model
+        /// number. Any ASCII characters may be used. The string shall not exceed 68
+        /// characters (for compatibility with FITS headers).
+        /// </summary>
+        /// <value>The description.</value>
+        /// <exception cref=" System.Exception">Must throw exception if description unavailable</exception>
+        string IAscomDriver.Description
+        {
+            get
+            {
+                if (IDome != null)
+                    return IDome.Description;
+                else
+                    return Convert.ToString(objTypeDome.InvokeMember("Description",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objDomeLateBound, new object[] { }));
+            }
+        }
+        /// <summary>
+        /// Descriptive and version information about this ASCOM Telescope driver.
+        /// This string may contain line endings and may be hundreds to thousands of characters long.
+        /// It is intended to display detailed information on the ASCOM driver, including version and copyright data.
+        /// See the Description property for descriptive info on the telescope itself.
+        /// To get the driver version in a parseable string, use the DriverVersion property.
+        /// </summary>
+        string IAscomDriver.DriverInfo
+        {
+            get
+            {
+                if (IDome != null)
+                    return IDome.DriverInfo;
+                else
+                    return (string)objTypeDome.InvokeMember("DriverInfo",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objDomeLateBound, new object[] { });
+            }
+        }
+        /// <summary>
+        /// A string containing only the major and minor version of the driver.
+        /// This must be in the form "n.n".
+        /// Not to be confused with the InterfaceVersion property, which is the version of this specification supported by the driver (currently 2). 
+        /// </summary>
+        string IAscomDriver.DriverVersion
+        {
+            get
+            {
+                if (IDome != null)
+                    return IDome.DriverVersion;
+                else
+                    return (string)objTypeDome.InvokeMember("DriverVersion",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objDomeLateBound, new object[] { });
+            }
+        }
+        /// <summary>
+        /// The version of this interface. Will return 2 for this version.
+        /// Clients can detect legacy V1 drivers by trying to read ths property.
+        /// If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1. 
+        /// In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver. 
+        /// </summary>
+        short IAscomDriver.InterfaceVersion
+        {
+            get
+            {
+                if (IDome != null)
+                    return IDome.InterfaceVersion;
+                else
+                    return (short)objTypeDome.InvokeMember("InterfaceVersion",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objDomeLateBound, new object[] { });
+            }
+        }
+
+        /// <summary>
+        /// Gets the last result.
+        /// </summary>
+        /// <value>
+        /// The result of the last executed action, or <see cref="String.Empty"	/>
+        /// if no action has yet been executed.
+        /// </value>
+        string IAscomDriver.LastResult
+        {
+            get
+            {
+                if (IDome != null)
+                    return IDome.LastResult;
+                else
+                    return Convert.ToString(objTypeDome.InvokeMember("LastResult",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objDomeLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// The short name of the telescope, for display purposes
+        /// </summary>
+        string IAscomDriver.Name
+        {
+            get
+            {
+                if (IDome != null)
+                    return IDome.Name;
+                else
+                    return (string)objTypeDome.InvokeMember("Name",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objDomeLateBound, new object[] { });
+            }
+        }
+        /// <summary>
+        /// Launches a configuration dialog box for the driver.  The call will not return
+        /// until the user clicks OK or cancel manually.
+        /// </summary>
+        /// <exception cref=" System.Exception">Must throw an exception if Setup dialog is unavailable.</exception>
+        void IAscomDriver.SetupDialog()
+        {
+            if (IDome != null)
+                IDome.SetupDialog();
+            else
+                objTypeDome.InvokeMember("SetupDialog",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objDomeLateBound, new object[] { });
+        }
+        #endregion
+
+        #region IDeviceControl Members
+
+        /// <summary>
+        /// Invokes the specified device-specific action.
+        /// </summary>
+        /// <param name="ActionName">
+        /// A well known name agreed by interested parties that represents the action
+        /// to be carried out. 
+        /// <example>suppose filter wheels start to appear with automatic wheel changers; new actions could 
+        /// be “FilterWheel:QueryWheels” and “FilterWheel:SelectWheel”. The former returning a 
+        /// formatted list of wheel names and the second taking a wheel name and making the change.
+        /// </example>
+        /// </param>
+        /// <param name="ActionParameters">
+        /// List of required parameters or <see cref="String.Empty"/>  if none are required.
+        /// </param>
+        /// <returns>A string response and sets the <c>IDeviceControl.LastResult</c> property.</returns>
+        string IDeviceControl.Action(string ActionName, string ActionParameters)
+        {
+            if (IDome != null)
+                return IDome.Action(ActionName, ActionParameters);
+            else
+                return (string)objTypeDome.InvokeMember("Action",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objDomeLateBound, new object[] { });
+        }
+
+        /// <summary>
+        /// Gets the supported actions.
+        /// </summary>
+        /// <value>The supported actions.</value>
+        string[] IDeviceControl.SupportedActions
+        {
+            get
+            {
+                if (IDome != null)
+                    return IDome.SupportedActions;
+                else
+                    return (string[])(objTypeDome.InvokeMember("SupportedActions",
+                        BindingFlags.Default | BindingFlags.GetProperty,
+                        null, objDomeLateBound, new object[] { }));
+            }
+        }
+
+        /// <summary>
+        /// Transmits an arbitrary string to the device and does not wait for a response.
+        /// Optionally, protocol framing characters may be added to the string before transmission.
+        /// </summary>
+        /// <param name="Command">The literal command string to be transmitted.</param>
+        /// <param name="Raw">
+        /// if set to <c>true</c> the string is transmitted 'as-is'.
+        /// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
+        /// </param>
+        void IDeviceControl.CommandBlind(string Command, bool Raw)
+        {
+            if (IDome != null)
+                IDome.CommandBlind(Command, Raw);
+            else
+                objTypeDome.InvokeMember("CommandBlind",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objDomeLateBound, new object[] { Command, Raw });
+        }
+
+        /// <summary>
+        /// Transmits an arbitrary string to the device and waits for a boolean response.
+        /// Optionally, protocol framing characters may be added to the string before transmission.
+        /// </summary>
+        /// <param name="Command">The literal command string to be transmitted.</param>
+        /// <param name="Raw">
+        /// if set to <c>true</c> the string is transmitted 'as-is'.
+        /// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
+        /// </param>
+        /// <returns>
+        /// Returns the interpreted boolean response received from the device.
+        /// </returns>
+        bool IDeviceControl.CommandBool(string Command, bool Raw)
+        {
+            if (IDome != null)
+                return IDome.CommandBool(Command, Raw);
+            else
+                return (bool)objTypeDome.InvokeMember("CommandBool",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objDomeLateBound, new object[] { Command, Raw });
+        }
+
+        /// <summary>
+        /// Transmits an arbitrary string to the device and waits for a string response.
+        /// Optionally, protocol framing characters may be added to the string before transmission.
+        /// </summary>
+        /// <param name="Command">The literal command string to be transmitted.</param>
+        /// <param name="Raw">
+        /// if set to <c>true</c> the string is transmitted 'as-is'.
+        /// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
+        /// </param>
+        /// <returns>
+        /// Returns the string response received from the device.
+        /// </returns>
+        string IDeviceControl.CommandString(string Command, bool Raw)
+        {
+            if (IDome != null)
+                return IDome.CommandString(Command, Raw);
+            else
+                return (string)objTypeDome.InvokeMember("CommandString",
+                    BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, objDomeLateBound, new object[] { Command, Raw });
+        }
+
+        #endregion
 	}
 	#endregion
 }

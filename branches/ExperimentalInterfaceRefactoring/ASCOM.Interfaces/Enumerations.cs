@@ -41,18 +41,14 @@
 // --------------------------------------------------------------------------------
 //
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
 
-namespace ASCOM.Interface
+namespace ASCOM.Interfaces
 {
 
     //[Guid("30D18B61-AECC-4C03-8759-E3EDD246F062")]
     /// <summary>
     /// The alignment mode of the mount.
     /// </summary>
-    [ComVisible(true), Guid("0EA35CD1-51F4-496b-A875-381F834132EE")]
     public enum AlignmentModes
     {
         /// <summary>
@@ -75,7 +71,6 @@ namespace ASCOM.Interface
     /// <summary>
     /// Well-known telescope tracking rates.
     /// </summary>
-    [ComVisible(true), Guid("0C99524B-7319-4571-A0DA-F44729E81967")]
     public enum DriveRates
     {
         /// <summary>
@@ -103,7 +98,6 @@ namespace ASCOM.Interface
     /// <summary>
     /// Equatorial coordinate systems used by telescopes.
     /// </summary>
-    [ComVisible(true), Guid("D6F46E7F-7A68-400b-B67A-6EF3AC6FA54B")]
     public enum EquatorialCoordinateType
     {
         /// <summary>
@@ -137,7 +131,6 @@ namespace ASCOM.Interface
     /// <summary>
     /// The direction in which the guide-rate motion is to be made.
     /// </summary>
-     [ComVisible(true), Guid("3A0658F1-FD51-4c52-AC31-97CA58803352")]
    public enum GuideDirections
     {
         /// <summary>
@@ -165,7 +158,6 @@ namespace ASCOM.Interface
     /// <summary>
     /// The telescope axes
     /// </summary>
-    [ComVisible(true), Guid("4089497F-5F2C-45f9-98ED-72A5B844C0ED")]
     public enum TelescopeAxes
     {
         /// <summary>
@@ -197,7 +189,6 @@ namespace ASCOM.Interface
     ///			</para>
     ///		</alert>
     /// </remarks>
-    [ComVisible(true), Guid("A1794728-B07F-46c8-ACE3-57BF763E9608")]
     public enum PierSide
     {
         /// <summary>
@@ -214,6 +205,58 @@ namespace ASCOM.Interface
         /// Mount on West side of pier (looking East)
         /// </summary>
         pierWest = 1
+    }
+    public enum ShutterState
+    {
+        shutterOpen = 0,
+        shutterClosed = 1,
+        shutterOpening = 2,
+        shutterClosing = 3,
+        shutterError = 4,
+    }
+    /// <summary>
+    /// ASCOM Camera status values.
+    /// </summary>
+    public enum CameraStates
+    {
+        cameraIdle = 0,
+        cameraWaiting = 1,
+        cameraExposing = 2,
+        cameraReading = 3,
+        cameraDownload = 4,
+        cameraError = 5
+    }
+
+    /// <summary>
+    /// Sensor type, identifies the type of colour sensor
+    /// V2 cameras only
+    /// </summary>]
+    public enum SensorType
+    {
+        /// <summary>
+        /// Camera produces monochrome array with no Bayer encoding
+        /// </summary>
+        Monochrome = 0,
+        /// <summary>
+        /// Camera produces color image directly, requiring not Bayer decoding
+        /// </summary>
+        Color = 1,
+        /// <summary>
+        /// Camera produces RGGB encoded Bayer array images
+        /// </summary>
+        RGGB = 2,
+        /// <summary>
+        /// Camera produces CMYG encoded Bayer array images
+        /// </summary>
+        CMYG = 3,
+        /// <summary>
+        /// Camera produces CMYG2 encoded Bayer array images
+        /// </summary>
+        CMYG2 = 4,
+        /// <summary>
+        /// Camera produces Kodak TRUESENSE Bayer LRGB array images
+        /// </summary>
+        LRGB = 5
     }
 }
  

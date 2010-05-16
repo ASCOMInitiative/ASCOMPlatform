@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace ASCOM.Interface
+namespace ASCOM.Interfaces
 {
 	/// <summary>
 	/// This interface is intended for use in any current or future device type and to avoid name
@@ -42,15 +40,6 @@ namespace ASCOM.Interface
 		/// </param>
 		/// <returns>A string response and sets the <c>IDeviceControl.LastResult</c> property.</returns>
 		string Action(string ActionName, string ActionParameters);
-
-		/// <summary>
-		/// Gets the last result.
-		/// </summary>
-		/// <value>
-		/// The result of the last executed action, or <see cref="String.Empty"	/>
-		/// if no action has yet been executed.
-		/// </value>
-		string LastResult { get; }
 
 		/// <summary>
 		/// Gets the supported actions.
