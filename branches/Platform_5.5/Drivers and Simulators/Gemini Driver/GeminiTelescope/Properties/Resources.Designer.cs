@@ -455,6 +455,15 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to GUIDE.
+        /// </summary>
+        internal static string dispGUIDE {
+            get {
+                return ResourceManager.GetString("dispGUIDE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to LIMIT!.
         /// </summary>
         internal static string dispLIMIT {
