@@ -217,6 +217,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "GPS";
             this.Load += new System.EventHandler(this.frmGps_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmGps_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

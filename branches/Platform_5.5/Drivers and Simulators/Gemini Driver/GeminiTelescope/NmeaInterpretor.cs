@@ -67,13 +67,18 @@ namespace ASCOM.GeminiTelescope
         private SerialPort comPort = new SerialPort();
         private Timer timeOut;
 
+        private AutoResetEvent m_DataReceivedEvent = new AutoResetEvent(false);
+
+        private Thread m_DataThread = null;
+        private bool m_QuitThread = false;
         #endregion
 
         public NmeaInterpreter()
         {
             comPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(comPort_DataReceived);
-            timeOut = new Timer(new TimerCallback(timeOut_Elapsed));
-         }
+            timeOut = new Timer(new TimerCallback(timeOut_Elapsed),null,  Timeout.Infinite, Timeout.Infinite);
+        }
+
 
         // Processes information from the GPS receiver
         //     
@@ -379,27 +384,44 @@ namespace ASCOM.GeminiTelescope
             get { return m_BaudRate; }
             set { m_BaudRate = value; }
         }
-        void comPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+
+
+        /// <summary>
+        /// Worker thread to process serial port data when available
+        ///  waits on m_DataReceivedEvent
+        ///  exits when m_QuitThread is true
+        ///  [pk: 2010-05-17]
+        /// </summary>        
+        void ProcessDataThread()
         {
-            try
+            for (; !m_QuitThread; m_DataReceivedEvent.WaitOne())
             {
-                MessageDelegate message = new MessageDelegate(ProcessMessage);
-                //read data waiting in the buffer
-                if (comPort.IsOpen)
+                if (m_QuitThread) break;
+                try
                 {
-                    string str = comPort.ReadLine();
-                    message.Invoke(str);
+                    MessageDelegate message = new MessageDelegate(ProcessMessage);
+                    //read data waiting in the buffer
+                    if (comPort.IsOpen)
+                    {
+                        string str = comPort.ReadLine();
+                        message.Invoke(str);
+                    }
+                }
+                catch (TimeoutException)
+                {
+                    //flush the buffer, its probably full of rubbish
+                    if (comPort!=null) comPort.DiscardInBuffer();
+                    timeOut.Change(3000, 0);
+                    if (InvalidData != null)
+                        InvalidData();
                 }
             }
-            catch (TimeoutException)
-            {
-                //flush the buffer, its probably full of rubbish
-                comPort.DiscardInBuffer();
-                timeOut.Change(3000, 0);
-                if (InvalidData != null)
-                    InvalidData();
-            }
+        }
 
+
+        void comPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            m_DataReceivedEvent.Set();
         }
 
         // Called if out data watchdog timer expires - flag lack of data
@@ -417,7 +439,8 @@ namespace ASCOM.GeminiTelescope
             }
             catch { }
         }
-        public bool Conneced
+
+        public bool Connected
         {
             get
             {
@@ -439,18 +462,34 @@ namespace ASCOM.GeminiTelescope
                             comPort.ReadTimeout = 100;
                             comPort.ReceivedBytesThreshold = 100;
 
+                            m_DataReceivedEvent.Reset();
                             comPort.Open();
 
                             comPort.DtrEnable = true;
                             comPort.RtsEnable = true;
 
                             timeOut.Change(3000, 0);
+
+                            m_DataReceivedEvent.Reset();
+                            m_QuitThread = false;
+                            m_DataThread = new Thread(new ThreadStart(ProcessDataThread));
+                            m_DataThread.Start();
+
                     }
                 }
                 else
                 {
                     if (comPort.IsOpen == true) comPort.Close();
+                    if (m_DataThread != null)
+                    {
+                        m_QuitThread = true;
+                        m_DataReceivedEvent.Set();
+                        if (!m_DataThread.Join(1000))
+                            m_DataThread.Abort();
+                        m_DataThread = null;
+                    }
                     timeOut.Change(Timeout.Infinite, Timeout.Infinite);
+
                 }
             }
         }

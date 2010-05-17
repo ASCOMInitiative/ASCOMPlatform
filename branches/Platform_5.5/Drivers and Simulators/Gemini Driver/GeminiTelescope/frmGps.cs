@@ -34,6 +34,7 @@ namespace ASCOM.GeminiTelescope
     
     public delegate void FormDelegate(string latitude, string longitude, string elevation);
     public delegate void StatusDelegate(string status, Boolean blankFields, int icon);
+    public delegate void TimeUpdateDelegate(DateTime tm);
 
     public partial class frmGps : Form
     {
@@ -148,9 +149,9 @@ namespace ASCOM.GeminiTelescope
             }
 
         }
- 
 
-        private void interpreter_DateTimeChanged(System.DateTime dateTime)
+
+        private void setTime(System.DateTime dateTime)
         {
             if (checkBoxUpdateClock.Checked)
             {
@@ -164,6 +165,12 @@ namespace ASCOM.GeminiTelescope
                 Win32SetSystemTime(ref updatedTime);
             }
         }
+
+        private void interpreter_DateTimeChanged(System.DateTime dateTime)
+        {
+            this.BeginInvoke(new TimeUpdateDelegate(setTime), dateTime);
+        }
+
         public double Latitude
         {
             get
@@ -219,7 +226,7 @@ namespace ASCOM.GeminiTelescope
                    
                         interpreter.ComPort = comboBoxComPort.SelectedItem.ToString();
                         interpreter.BaudRate = int.Parse(comboBoxBaudRate.SelectedItem.ToString());
-                        interpreter.Conneced = true;
+                        interpreter.Connected = true;
                         buttonQuery.Text = Resources.Stop;
                         labelStatus.Text = Resources.Status + ": " + Resources.WaitingForData;                  
                 }
@@ -232,7 +239,7 @@ namespace ASCOM.GeminiTelescope
                 try
                 {
                     buttonQuery.Text = Resources.Query;
-                    interpreter.Conneced = false;
+                    interpreter.Connected = false;
                     pictureBox1.Image = global::ASCOM.GeminiTelescope.Properties.Resources.no_satellite;
                     labelStatus.Text = Resources.Status + ": ";
                 }
@@ -245,7 +252,7 @@ namespace ASCOM.GeminiTelescope
             try
             {
 
-                interpreter.Conneced = false;
+                interpreter.Connected = false;
 
             }
             catch { }
@@ -256,7 +263,7 @@ namespace ASCOM.GeminiTelescope
             try
             {
 
-                interpreter.Conneced = false;
+                interpreter.Connected = false;
 
             }
             catch { }
@@ -283,6 +290,13 @@ namespace ASCOM.GeminiTelescope
         {
             StatusDelegate message = new StatusDelegate(ProcessStatus);
             this.BeginInvoke(message, new Object[] { global::ASCOM.GeminiTelescope.Properties.Resources.WaitingForData, true, 1 });
+        }
+
+        private void frmGps_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            interpreter.Connected = false;
+            interpreter = null;
+
         }
 
     }
