@@ -526,9 +526,6 @@ Are you sure you want to do this?</value>
   <data name="GeminiIs" xml:space="preserve">
     <value>Gemini is </value>
   </data>
-  <data name="GPS" xml:space="preserve">
-    <value>GPS</value>
-  </data>
   <data name="Latitude" xml:space="preserve">
     <value>Latitude</value>
   </data>
@@ -689,5 +686,14 @@ Are you sure you want to use these new values?</value>
   </data>
   <data name="MountHA" xml:space="preserve">
     <value>Mount Hour Angle</value>
+  </data>
+  <data name="GPSNoFix" xml:space="preserve">
+    <value>No satellite fix, data possibly invalid</value>
+  </data>
+  <data name="DataOK" xml:space="preserve">
+    <value>Data OK</value>
+  </data>
+  <data name="WaitingForData" xml:space="preserve">
+    <value>Waiting for data...</value>
   </data>
 </root>

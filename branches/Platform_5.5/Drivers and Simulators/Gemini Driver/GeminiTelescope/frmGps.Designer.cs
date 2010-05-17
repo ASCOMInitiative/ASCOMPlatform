@@ -41,6 +41,7 @@
             this.checkBoxUpdateClock = new System.Windows.Forms.CheckBox();
             this.labelElevation = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.labelStatus = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -72,7 +73,7 @@
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cmdCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdCancel.ForeColor = System.Drawing.Color.White;
-            this.cmdCancel.Location = new System.Drawing.Point(221, 161);
+            this.cmdCancel.Location = new System.Drawing.Point(217, 188);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 4;
@@ -86,7 +87,7 @@
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.cmdOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdOK.ForeColor = System.Drawing.Color.White;
-            this.cmdOK.Location = new System.Drawing.Point(221, 131);
+            this.cmdOK.Location = new System.Drawing.Point(217, 158);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 3;
@@ -97,7 +98,7 @@
             // comboBoxComPort
             // 
             this.comboBoxComPort.FormattingEnabled = true;
-            this.comboBoxComPort.Location = new System.Drawing.Point(16, 125);
+            this.comboBoxComPort.Location = new System.Drawing.Point(12, 152);
             this.comboBoxComPort.Name = "comboBoxComPort";
             this.comboBoxComPort.Size = new System.Drawing.Size(89, 21);
             this.comboBoxComPort.TabIndex = 24;
@@ -106,7 +107,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(13, 109);
+            this.label9.Location = new System.Drawing.Point(9, 136);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(53, 13);
             this.label9.TabIndex = 23;
@@ -116,7 +117,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(13, 149);
+            this.label4.Location = new System.Drawing.Point(9, 176);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(61, 13);
             this.label4.TabIndex = 25;
@@ -128,7 +129,7 @@
             this.comboBoxBaudRate.Items.AddRange(new object[] {
             "4800",
             "9600"});
-            this.comboBoxBaudRate.Location = new System.Drawing.Point(16, 165);
+            this.comboBoxBaudRate.Location = new System.Drawing.Point(12, 192);
             this.comboBoxBaudRate.Name = "comboBoxBaudRate";
             this.comboBoxBaudRate.Size = new System.Drawing.Size(89, 21);
             this.comboBoxBaudRate.TabIndex = 26;
@@ -138,7 +139,7 @@
             this.buttonQuery.BackColor = System.Drawing.Color.Black;
             this.buttonQuery.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonQuery.ForeColor = System.Drawing.Color.White;
-            this.buttonQuery.Location = new System.Drawing.Point(112, 161);
+            this.buttonQuery.Location = new System.Drawing.Point(108, 188);
             this.buttonQuery.Name = "buttonQuery";
             this.buttonQuery.Size = new System.Drawing.Size(59, 25);
             this.buttonQuery.TabIndex = 27;
@@ -150,7 +151,7 @@
             // 
             this.checkBoxUpdateClock.AutoSize = true;
             this.checkBoxUpdateClock.ForeColor = System.Drawing.Color.White;
-            this.checkBoxUpdateClock.Location = new System.Drawing.Point(112, 125);
+            this.checkBoxUpdateClock.Location = new System.Drawing.Point(108, 152);
             this.checkBoxUpdateClock.Name = "checkBoxUpdateClock";
             this.checkBoxUpdateClock.Size = new System.Drawing.Size(91, 17);
             this.checkBoxUpdateClock.TabIndex = 28;
@@ -178,12 +179,24 @@
             this.pictureBox1.TabIndex = 30;
             this.pictureBox1.TabStop = false;
             // 
+            // labelStatus
+            // 
+            this.labelStatus.AutoSize = true;
+            this.labelStatus.BackColor = System.Drawing.Color.Transparent;
+            this.labelStatus.ForeColor = System.Drawing.Color.White;
+            this.labelStatus.Location = new System.Drawing.Point(17, 105);
+            this.labelStatus.Name = "labelStatus";
+            this.labelStatus.Size = new System.Drawing.Size(40, 13);
+            this.labelStatus.TabIndex = 31;
+            this.labelStatus.Text = "Status:";
+            // 
             // frmGps
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
-            this.ClientSize = new System.Drawing.Size(292, 202);
+            this.ClientSize = new System.Drawing.Size(292, 227);
+            this.Controls.Add(this.labelStatus);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.labelElevation);
             this.Controls.Add(this.checkBoxUpdateClock);
@@ -224,5 +237,6 @@
         private System.Windows.Forms.CheckBox checkBoxUpdateClock;
         private System.Windows.Forms.Label labelElevation;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label labelStatus;
     }
 }

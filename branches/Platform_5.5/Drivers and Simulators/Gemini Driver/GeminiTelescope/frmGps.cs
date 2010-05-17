@@ -15,6 +15,7 @@
 // 15-JUL-2009	rbt	1.0.0	Initial implementation
 // 29-MAR-2010  pk  1.0.3   Changed GPS Lat/Long/Elevation data to proper local
 //                          decimal separator
+// 16-MAY-2010  mc  1.0.7   Added EventHandlers for InvalidData and DataTimeout
 // --------------------------------------------------------------------------------
 //
 using System;
@@ -32,6 +33,7 @@ namespace ASCOM.GeminiTelescope
 {
     
     public delegate void FormDelegate(string latitude, string longitude, string elevation);
+    public delegate void StatusDelegate(string status, Boolean blankFields);
 
     public partial class frmGps : Form
     {
@@ -61,7 +63,6 @@ namespace ASCOM.GeminiTelescope
         {
             InitializeComponent();
 
-            
 
             comboBoxComPort.Items.Add("");
             foreach (string s in System.IO.Ports.SerialPort.GetPortNames())
@@ -69,6 +70,11 @@ namespace ASCOM.GeminiTelescope
                 comboBoxComPort.Items.Add(s);
             }
             buttonQuery.Text = Resources.Query;
+            labelStatus.Text = Resources.Status + ": ";
+            labelLatitude.Text = Resources.Latitude + ": ";
+            labelLongitude.Text = Resources.Longitude + ": ";
+            labelElevation.Text = Resources.Elevation + ": ";
+
         }
 
         private void frmGps_Load(object sender, EventArgs e)
@@ -77,6 +83,9 @@ namespace ASCOM.GeminiTelescope
             interpreter.DateTimeChanged +=new NmeaInterpreter.DateTimeChangedEventHandler(interpreter_DateTimeChanged);
             interpreter.FixLost += new NmeaInterpreter.FixLostEventHandler(interpreter_FixLost);
             interpreter.FixObtained += new NmeaInterpreter.FixObtainedEventHandler(interpreter_FixObtained);
+            interpreter.InvalidData += new NmeaInterpreter.InvalidDataEventHandler(interpreter_InvalidData);
+            interpreter.DataTimeout += new NmeaInterpreter.DataTimeoutEventHandler(interpreter_DataTimeout);
+
         }
         private void ProcessForm(string latitude, string longitude, string elevation)
         {
@@ -113,9 +122,22 @@ namespace ASCOM.GeminiTelescope
         private void interpreter_PositionReceived(string latitude, string longitude, string elevation)
         {
             FormDelegate message = new FormDelegate(ProcessForm);
-            this.Invoke(message, new Object[] { latitude, longitude, elevation });
-            
+            this.BeginInvoke(message, new Object[] { latitude, longitude, elevation });          
         }
+
+        private void ProcessStatus(string status, Boolean blankFields)
+        {
+            labelStatus.Text = Resources.Status + ": " + status;
+            if (blankFields)
+            {
+                labelLatitude.Text = Resources.Latitude + ": ";
+                labelLongitude.Text = Resources.Longitude + ": ";
+                labelElevation.Text = Resources.Elevation + ": ";
+            }
+
+        }
+ 
+
         private void interpreter_DateTimeChanged(System.DateTime dateTime)
         {
             if (checkBoxUpdateClock.Checked)
@@ -187,7 +209,7 @@ namespace ASCOM.GeminiTelescope
                         interpreter.BaudRate = int.Parse(comboBoxBaudRate.SelectedItem.ToString());
                         interpreter.Conneced = true;
                         buttonQuery.Text = Resources.Stop;
-                   
+                        labelStatus.Text = Resources.Status + ": " + Resources.WaitingForData;                  
                 }
                 catch (Exception ex)
                 { MessageBox.Show(ex.Message); }
@@ -199,7 +221,8 @@ namespace ASCOM.GeminiTelescope
                 {
                     buttonQuery.Text = Resources.Query;
                     interpreter.Conneced = false;
-                    
+                    pictureBox1.Image = global::ASCOM.GeminiTelescope.Properties.Resources.no_satellite;
+                    labelStatus.Text = Resources.Status + ": ";
                 }
                 catch { }
             }
@@ -229,11 +252,30 @@ namespace ASCOM.GeminiTelescope
 
         private void interpreter_FixLost()
         {
-            this.pictureBox1.Image = global::ASCOM.GeminiTelescope.Properties.Resources.no_satellite;
+            this.pictureBox1.Image = global::ASCOM.GeminiTelescope.Properties.Resources.no_fix_satellite;
+            StatusDelegate message = new StatusDelegate(ProcessStatus);
+            this.BeginInvoke(message, new Object[] { global::ASCOM.GeminiTelescope.Properties.Resources.GPSNoFix, true });
         }
         private void interpreter_FixObtained()
         {
             this.pictureBox1.Image = global::ASCOM.GeminiTelescope.Properties.Resources.satellite;
+            StatusDelegate message = new StatusDelegate(ProcessStatus);
+            this.BeginInvoke(message, new Object[] { global::ASCOM.GeminiTelescope.Properties.Resources.DataOK, false });
         }
+
+        private void interpreter_InvalidData()
+        {
+            this.pictureBox1.Image = global::ASCOM.GeminiTelescope.Properties.Resources.no_fix_satellite;
+            StatusDelegate message = new StatusDelegate(ProcessStatus);
+            this.BeginInvoke(message, new Object[] { global::ASCOM.GeminiTelescope.Properties.Resources.InvalidDataReceived, true });
+        }
+
+        private void interpreter_DataTimeout()
+        {
+            this.pictureBox1.Image = global::ASCOM.GeminiTelescope.Properties.Resources.no_satellite;
+            StatusDelegate message = new StatusDelegate(ProcessStatus);
+            this.BeginInvoke(message, new Object[] { global::ASCOM.GeminiTelescope.Properties.Resources.WaitingForData, true });
+        }
+
     }
 }

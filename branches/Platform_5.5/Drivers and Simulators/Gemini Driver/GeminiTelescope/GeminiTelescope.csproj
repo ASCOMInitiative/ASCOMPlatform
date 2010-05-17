@@ -391,8 +391,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ReadMe.htm" />
+    <None Include="Resources\no fix satellite.png" />
     <None Include="Resources\satellite.png" />
-    <None Include="Resources\satelite.png" />
     <None Include="Resources\no satellite.png" />
     <None Include="Resources\plus.bmp" />
     <None Include="Resources\minus.bmp" />
@@ -432,6 +432,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Documentation\GeminiHardware.chm" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
