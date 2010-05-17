@@ -86,6 +86,7 @@ namespace ASCOM.GeminiTelescope
             gvAllObjects.RowHeadersVisible = false;
             gvGeminiCatalog.RowHeadersVisible = false;
             dtDateTime.Checked = false;
+            numHorizon.Value = (decimal)GeminiHardware.HorizonAltitude;
         }
 
         private void PopulateCatalogs()
@@ -191,7 +192,7 @@ namespace ASCOM.GeminiTelescope
             frmProgress.Initialize(0, 100, "Load Catalogs...", null);
             frmProgress.ShowProgress(this);
 
-            CatalogObject.SetTransform(GetTime());
+            CatalogObject.SetTransform(GetTime(), (double)numHorizon.Value);
 
             PopulateCatalogs();
             PopulateAllObjects("");
@@ -232,7 +233,7 @@ namespace ASCOM.GeminiTelescope
 
                 Cursor.Current = Cursors.WaitCursor;
 
-                CatalogObject.SetTransform(GetTime());
+                CatalogObject.SetTransform(GetTime(), (double)numHorizon.Value);
 
                 GeminiHardware.Profile.DeviceType = "Telescope";
 
@@ -349,7 +350,7 @@ namespace ASCOM.GeminiTelescope
 
         private void UpdateGeminiCatalog()
         {
-            CatalogObject.SetTransform(GetTime());
+            CatalogObject.SetTransform(GetTime(), (double)numHorizon.Value);
 
             var qry = (from o in m_GeminiObjects.Values select o);
             if (m_GeminiDirectionSort[m_GeminiOrderBy])
@@ -675,6 +676,21 @@ namespace ASCOM.GeminiTelescope
             tm.Stop();
             PopulateAllObjects("");
         }
+
+        private void numHorizon_ValueChanged(object sender, EventArgs e)
+        {
+            GeminiHardware.HorizonAltitude = (double)numHorizon.Value;
+            if (tm == null)
+            {
+                tm = new Timer();
+                tm.Tick += new EventHandler(tm_Tick);
+                tm.Interval = 1000;
+            }
+            else
+                tm.Stop();
+
+            tm.Start();
+        }
     }
 
     public class CatalogObject
@@ -688,6 +704,7 @@ namespace ASCOM.GeminiTelescope
         private static double LST = 0;
         private static double lat = 0;
         private static double lon = 0;
+        private static double horizon = 0;
 
         public static bool TryParse(string s, string catalog, out CatalogObject obj)
         {
@@ -735,7 +752,7 @@ namespace ASCOM.GeminiTelescope
             dec = GeminiHardware.m_Transform.DECTopocentric;
         }
 
-        public static void SetTransform(DateTime dt)
+        public static void SetTransform(DateTime dt, double horiz)
         {
             GeminiHardware.m_Transform.SiteElevation = GeminiHardware.Elevation;
             GeminiHardware.m_Transform.SiteLatitude = GeminiHardware.Latitude;
@@ -746,6 +763,7 @@ namespace ASCOM.GeminiTelescope
             lon = GeminiHardware.Longitude * SharedResources.DEG_RAD;
             lat = GeminiHardware.Latitude * SharedResources.DEG_RAD;
             LST = AstronomyFunctions.LocalSiderealTime(GeminiHardware.Longitude, dt) * SharedResources.DEG_RAD;
+            horizon = horiz;
         }
 
         public bool Visible
@@ -755,7 +773,7 @@ namespace ASCOM.GeminiTelescope
                 // [pk] SetTransform must been called prior to this to pre-compute values
                 // [pk] I'm ignoring precession from J2000 here, since a few arcminutes difference
                 // isn't going to matter when computing horizon coordinates to determine visibility
-                return AstronomyFunctions.CalculateAltitude(RA.RA / 12 * Math.PI, DEC.DEC * SharedResources.DEG_RAD, lat, lon, LST) > 0;
+                return AstronomyFunctions.CalculateAltitude(RA.RA / 12 * Math.PI, DEC.DEC * SharedResources.DEG_RAD, lat, lon, LST) > horizon;
             }
         }
 

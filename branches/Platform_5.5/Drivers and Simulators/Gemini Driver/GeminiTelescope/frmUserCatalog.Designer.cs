@@ -58,6 +58,8 @@
             this.pbUnselAll = new System.Windows.Forms.Button();
             this.pbSelAll = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.numHorizon = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
             this.dtDateTime = new System.Windows.Forms.DateTimePicker();
             this.chkVisibleOnly = new System.Windows.Forms.CheckBox();
             this.pbClearSearch = new System.Windows.Forms.Button();
@@ -75,6 +77,7 @@
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numHorizon)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -370,7 +373,7 @@
             // 
             // pbUnselAll
             // 
-            this.pbUnselAll.Location = new System.Drawing.Point(3, 45);
+            this.pbUnselAll.Location = new System.Drawing.Point(3, 34);
             this.pbUnselAll.Name = "pbUnselAll";
             this.pbUnselAll.Size = new System.Drawing.Size(75, 23);
             this.pbUnselAll.TabIndex = 7;
@@ -380,7 +383,7 @@
             // 
             // pbSelAll
             // 
-            this.pbSelAll.Location = new System.Drawing.Point(3, 16);
+            this.pbSelAll.Location = new System.Drawing.Point(3, 5);
             this.pbSelAll.Name = "pbSelAll";
             this.pbSelAll.Size = new System.Drawing.Size(75, 23);
             this.pbSelAll.TabIndex = 6;
@@ -392,17 +395,46 @@
             // 
             this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox4.Controls.Add(this.numHorizon);
+            this.groupBox4.Controls.Add(this.label1);
             this.groupBox4.Controls.Add(this.dtDateTime);
             this.groupBox4.Controls.Add(this.chkVisibleOnly);
             this.groupBox4.Controls.Add(this.pbClearSearch);
             this.groupBox4.Controls.Add(this.textSearch);
-            this.groupBox4.Location = new System.Drawing.Point(3, 85);
+            this.groupBox4.Location = new System.Drawing.Point(3, 63);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(344, 70);
+            this.groupBox4.Size = new System.Drawing.Size(344, 92);
             this.groupBox4.TabIndex = 4;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Search";
             this.groupBox4.Enter += new System.EventHandler(this.groupBox4_Enter);
+            // 
+            // numHorizon
+            // 
+            this.numHorizon.Location = new System.Drawing.Point(178, 41);
+            this.numHorizon.Maximum = new decimal(new int[] {
+            90,
+            0,
+            0,
+            0});
+            this.numHorizon.Minimum = new decimal(new int[] {
+            90,
+            0,
+            0,
+            -2147483648});
+            this.numHorizon.Name = "numHorizon";
+            this.numHorizon.Size = new System.Drawing.Size(160, 20);
+            this.numHorizon.TabIndex = 11;
+            this.numHorizon.ValueChanged += new System.EventHandler(this.numHorizon_ValueChanged);
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(24, 38);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(154, 23);
+            this.label1.TabIndex = 10;
+            this.label1.Text = "Horizon is at Altitude (deg):";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // dtDateTime
             // 
@@ -434,7 +466,7 @@
             this.pbClearSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pbClearSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.pbClearSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pbClearSearch.Location = new System.Drawing.Point(314, 43);
+            this.pbClearSearch.Location = new System.Drawing.Point(314, 68);
             this.pbClearSearch.Name = "pbClearSearch";
             this.pbClearSearch.Size = new System.Drawing.Size(25, 20);
             this.pbClearSearch.TabIndex = 1;
@@ -446,7 +478,7 @@
             // 
             this.textSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textSearch.Location = new System.Drawing.Point(6, 43);
+            this.textSearch.Location = new System.Drawing.Point(6, 68);
             this.textSearch.Name = "textSearch";
             this.textSearch.Size = new System.Drawing.Size(302, 20);
             this.textSearch.TabIndex = 0;
@@ -488,6 +520,7 @@
             this.panel4.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numHorizon)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -527,5 +560,7 @@
         private System.Windows.Forms.Button pbSendtObject;
         private System.Windows.Forms.CheckBox chkVisibleOnly;
         private System.Windows.Forms.DateTimePicker dtDateTime;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown numHorizon;
     }
 }

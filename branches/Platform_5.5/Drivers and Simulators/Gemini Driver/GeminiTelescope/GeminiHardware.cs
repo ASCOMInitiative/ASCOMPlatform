@@ -303,7 +303,23 @@ namespace ASCOM.GeminiTelescope
                 GeminiHardware.m_ApertureDiameter = value;
             }
         }
-        
+
+        public static double HorizonAltitude
+        {
+            get
+            {
+                Profile.DeviceType = "Telescope";
+                string v = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "HorizonAltitude", null);
+                double alt = 0;
+                if (double.TryParse(v, out alt) && alt < 90 && alt > -90) return alt;
+                return 0;
+            }
+            set
+            {
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "HorizonAltitude", value.ToString(GeminiHardware.m_GeminiCulture));
+            }
+        }
 
         private static string m_ComPort;
         private static int m_BaudRate;

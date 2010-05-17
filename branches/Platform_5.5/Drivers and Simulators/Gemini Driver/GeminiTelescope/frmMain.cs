@@ -634,6 +634,7 @@ namespace ASCOM.GeminiTelescope
                     case "S": labelSlew.Text = Resources.dispSLEW; break;
                     case "C": labelSlew.Text = Resources.dispCENTER; break;
                     case "N": labelSlew.Text = Resources.dispSTOP; break;
+                    case "G": labelSlew.Text = Resources.dispGUIDE; break;
                     default: labelSlew.Text = Resources.dispTRACK; break;
                 }
                 //add an indicator for a "safety limit alert".
