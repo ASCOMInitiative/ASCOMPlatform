@@ -72,7 +72,6 @@ namespace ASCOM.GeminiTelescope
         public NmeaInterpreter()
         {
             comPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(comPort_DataReceived);
-            comPort.ReadTimeout = 1000;
             timeOut = new Timer(new TimerCallback(timeOut_Elapsed));
          }
 
@@ -392,7 +391,14 @@ namespace ASCOM.GeminiTelescope
                     message.Invoke(str);
                 }
             }
-            catch { }
+            catch (TimeoutException)
+            {
+                //flush the buffer, its probably full of rubbish
+                comPort.DiscardInBuffer();
+                timeOut.Change(3000, 0);
+                if (InvalidData != null)
+                    InvalidData();
+            }
 
         }
 
@@ -430,6 +436,8 @@ namespace ASCOM.GeminiTelescope
                             comPort.Parity = Parity.None;
                             comPort.StopBits = StopBits.One;
                             comPort.Handshake = Handshake.None;
+                            comPort.ReadTimeout = 100;
+                            comPort.ReceivedBytesThreshold = 100;
 
                             comPort.Open();
 

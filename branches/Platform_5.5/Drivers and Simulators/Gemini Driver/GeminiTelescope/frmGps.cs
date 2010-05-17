@@ -33,7 +33,7 @@ namespace ASCOM.GeminiTelescope
 {
     
     public delegate void FormDelegate(string latitude, string longitude, string elevation);
-    public delegate void StatusDelegate(string status, Boolean blankFields);
+    public delegate void StatusDelegate(string status, Boolean blankFields, int icon);
 
     public partial class frmGps : Form
     {
@@ -125,7 +125,7 @@ namespace ASCOM.GeminiTelescope
             this.BeginInvoke(message, new Object[] { latitude, longitude, elevation });          
         }
 
-        private void ProcessStatus(string status, Boolean blankFields)
+        private void ProcessStatus(string status, Boolean blankFields, int icon)
         {
             labelStatus.Text = Resources.Status + ": " + status;
             if (blankFields)
@@ -133,6 +133,18 @@ namespace ASCOM.GeminiTelescope
                 labelLatitude.Text = Resources.Latitude + ": ";
                 labelLongitude.Text = Resources.Longitude + ": ";
                 labelElevation.Text = Resources.Elevation + ": ";
+            }
+            if (icon == 1) //not connected
+            {
+                pictureBox1.Image = Resources.no_satellite;
+            }
+            else if (icon == 2)
+            {
+                pictureBox1.Image = Resources.no_fix_satellite;
+            }
+            else if (icon == 3)
+            {
+                pictureBox1.Image = Resources.satellite;
             }
 
         }
@@ -252,29 +264,25 @@ namespace ASCOM.GeminiTelescope
 
         private void interpreter_FixLost()
         {
-            this.pictureBox1.Image = global::ASCOM.GeminiTelescope.Properties.Resources.no_fix_satellite;
             StatusDelegate message = new StatusDelegate(ProcessStatus);
-            this.BeginInvoke(message, new Object[] { global::ASCOM.GeminiTelescope.Properties.Resources.GPSNoFix, true });
+            this.BeginInvoke(message, new Object[] { global::ASCOM.GeminiTelescope.Properties.Resources.GPSNoFix, true, 2 });
         }
         private void interpreter_FixObtained()
         {
-            this.pictureBox1.Image = global::ASCOM.GeminiTelescope.Properties.Resources.satellite;
             StatusDelegate message = new StatusDelegate(ProcessStatus);
-            this.BeginInvoke(message, new Object[] { global::ASCOM.GeminiTelescope.Properties.Resources.DataOK, false });
+            this.BeginInvoke(message, new Object[] { global::ASCOM.GeminiTelescope.Properties.Resources.DataOK, false, 3 });
         }
 
         private void interpreter_InvalidData()
         {
-            this.pictureBox1.Image = global::ASCOM.GeminiTelescope.Properties.Resources.no_fix_satellite;
             StatusDelegate message = new StatusDelegate(ProcessStatus);
-            this.BeginInvoke(message, new Object[] { global::ASCOM.GeminiTelescope.Properties.Resources.InvalidDataReceived, true });
+            this.BeginInvoke(message, new Object[] { global::ASCOM.GeminiTelescope.Properties.Resources.InvalidDataReceived, true, 2 });
         }
 
         private void interpreter_DataTimeout()
         {
-            this.pictureBox1.Image = global::ASCOM.GeminiTelescope.Properties.Resources.no_satellite;
             StatusDelegate message = new StatusDelegate(ProcessStatus);
-            this.BeginInvoke(message, new Object[] { global::ASCOM.GeminiTelescope.Properties.Resources.WaitingForData, true });
+            this.BeginInvoke(message, new Object[] { global::ASCOM.GeminiTelescope.Properties.Resources.WaitingForData, true, 1 });
         }
 
     }
