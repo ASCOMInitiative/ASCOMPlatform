@@ -16,7 +16,6 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Implements a camera class to access any registered ASCOM Camera
     /// </summary>
-    [ComVisible(true), Guid("C98894C1-7F10-499f-92AA-B7E5C4211622"), ClassInterface(ClassInterfaceType.None)]
     public class Camera : ICamera, IDisposable, IAscomDriver, IDeviceControl
     {
         protected object objCameraLateBound;

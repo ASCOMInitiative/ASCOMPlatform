@@ -13,7 +13,6 @@ namespace ASCOM.DriverAccess
 	/// <summary>
 	/// Provides universal access to Focuser drivers
 	/// </summary>
-    [ComVisible(true), Guid("E92E1FDC-125A-4926-887E-0BFA6D2A3914"), ClassInterface(ClassInterfaceType.None)]
     public class Focuser : IFocuser, IDisposable, IAscomDriver, IDeviceControl
     {
 

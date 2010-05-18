@@ -15,7 +15,6 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Implements a telescope class to access any registered ASCOM telescope
     /// </summary>
-    [ComVisible(true), Guid("42C57543-0D01-4a4f-8F32-99658F0CA179"), ClassInterface(ClassInterfaceType.None)]
     public class Telescope : ITelescope, IDisposable, IDeviceControl, IAscomDriver
     {
         object objScopeLateBound;
@@ -1846,7 +1845,6 @@ namespace ASCOM.DriverAccess
     // Strongly typed enumerator for late bound Rate
     // objects being enumarated
     //
-    [ComVisible(true), Guid("585D0BE9-C03A-42b3-B6BC-AEFE590898BE"), ClassInterface(ClassInterfaceType.None)]
     class _RateEnumerator : IEnumerator, IDisposable
     {
         IEnumerator objEnumerator;
@@ -1896,7 +1894,6 @@ namespace ASCOM.DriverAccess
     //
     // Late bound Axis Rates implementation.
     //
-    [ComVisible(true), Guid("EC407F51-AC33-4c01-A703-E1ED8F166930"), ClassInterface(ClassInterfaceType.None)]
     class _AxisRates : IAxisRates
     {
         Type objTypeAxisRates;
@@ -1949,7 +1946,6 @@ namespace ASCOM.DriverAccess
     //
     // Late bound TrackingRates implementation
     //
-    [ComVisible(true), Guid("A30EF757-D542-4b1c-808B-379432937E69"), ClassInterface(ClassInterfaceType.None)]
     class _TrackingRates : ITrackingRates
     {
         Type objTypeTrackingRates;

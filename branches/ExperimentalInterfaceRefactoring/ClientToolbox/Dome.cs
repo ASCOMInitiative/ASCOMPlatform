@@ -13,7 +13,6 @@ namespace ASCOM.DriverAccess
 	/// <summary>
 	/// Provides universal access to ASCOM Dome drivers
 	/// </summary>
-    [ComVisible(true), Guid("F629E819-E281-4789-A98C-F67F32A5936A"), ClassInterface(ClassInterfaceType.None)]
 	public class Dome : IDome, IDisposable, IDeviceControl, IAscomDriver
     {
 
