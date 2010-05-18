@@ -118,7 +118,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
         /// <exception cref=" System.Exception">Must throw exception if unsuccessful.</exception>
-        bool IAscomDriver.Connected
+        public bool Connected
         {
             get
             {
@@ -146,7 +146,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         /// <value>The description.</value>
         /// <exception cref=" System.Exception">Must throw exception if description unavailable</exception>
-        string IAscomDriver.Description
+        public string Description
         {
             get
             {
@@ -165,7 +165,7 @@ namespace ASCOM.DriverAccess
         /// See the Description property for descriptive info on the telescope itself.
         /// To get the driver version in a parseable string, use the DriverVersion property.
         /// </summary>
-        string IAscomDriver.DriverInfo
+        public string DriverInfo
         {
             get
             {
@@ -182,7 +182,7 @@ namespace ASCOM.DriverAccess
         /// This must be in the form "n.n".
         /// Not to be confused with the InterfaceVersion property, which is the version of this specification supported by the driver (currently 2). 
         /// </summary>
-        string IAscomDriver.DriverVersion
+        public string DriverVersion
         {
             get
             {
@@ -200,7 +200,7 @@ namespace ASCOM.DriverAccess
         /// If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1. 
         /// In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver. 
         /// </summary>
-        short IAscomDriver.InterfaceVersion
+        public short InterfaceVersion
         {
             get
             {
@@ -220,7 +220,7 @@ namespace ASCOM.DriverAccess
         /// The result of the last executed action, or <see cref="String.Empty"	/>
         /// if no action has yet been executed.
         /// </value>
-        string IAscomDriver.LastResult
+        public string LastResult
         {
             get
             {
@@ -236,7 +236,7 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// The short name of the telescope, for display purposes
         /// </summary>
-        string IAscomDriver.Name
+        public string Name
         {
             get
             {
@@ -253,7 +253,7 @@ namespace ASCOM.DriverAccess
         /// until the user clicks OK or cancel manually.
         /// </summary>
         /// <exception cref=" System.Exception">Must throw an exception if Setup dialog is unavailable.</exception>
-        void IAscomDriver.SetupDialog()
+        public void SetupDialog()
         {
             if (ISwitch != null)
                 ISwitch.SetupDialog();
@@ -281,7 +281,7 @@ namespace ASCOM.DriverAccess
         /// List of required parameters or <see cref="String.Empty"/>  if none are required.
         /// </param>
         /// <returns>A string response and sets the <c>IDeviceControl.LastResult</c> property.</returns>
-        string IDeviceControl.Action(string ActionName, string ActionParameters)
+        public string Action(string ActionName, string ActionParameters)
         {
             if (ISwitch != null)
                 return ISwitch.Action(ActionName, ActionParameters);
@@ -295,7 +295,7 @@ namespace ASCOM.DriverAccess
         /// Gets the supported actions.
         /// </summary>
         /// <value>The supported actions.</value>
-        string[] IDeviceControl.SupportedActions
+        public string[] SupportedActions
         {
             get
             {
@@ -317,7 +317,7 @@ namespace ASCOM.DriverAccess
         /// if set to <c>true</c> the string is transmitted 'as-is'.
         /// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
         /// </param>
-        void IDeviceControl.CommandBlind(string Command, bool Raw)
+        public void CommandBlind(string Command, bool Raw)
         {
             if (ISwitch != null)
                 ISwitch.CommandBlind(Command, Raw);
@@ -339,7 +339,7 @@ namespace ASCOM.DriverAccess
         /// <returns>
         /// Returns the interpreted boolean response received from the device.
         /// </returns>
-        bool IDeviceControl.CommandBool(string Command, bool Raw)
+        public bool CommandBool(string Command, bool Raw)
         {
             if (ISwitch != null)
                 return ISwitch.CommandBool(Command, Raw);
@@ -361,7 +361,7 @@ namespace ASCOM.DriverAccess
         /// <returns>
         /// Returns the string response received from the device.
         /// </returns>
-        string IDeviceControl.CommandString(string Command, bool Raw)
+        public string CommandString(string Command, bool Raw)
         {
             if (ISwitch != null)
                 return ISwitch.CommandString(Command, Raw);
