@@ -692,4 +692,19 @@ Are you sure you want to use these new values?</value>
   <data name="dispGUIDE" xml:space="preserve">
     <value>GUIDE</value>
   </data>
+  <data name="DataOK" xml:space="preserve">
+    <value>Data OK</value>
+  </data>
+  <data name="GPSDateTime" xml:space="preserve">
+    <value>GPS Date/Time</value>
+  </data>
+  <data name="GPSNoFix" xml:space="preserve">
+    <value>GPS: No position fix</value>
+  </data>
+  <data name="InvalidDataReceived" xml:space="preserve">
+    <value>Invalid data received</value>
+  </data>
+  <data name="WaitingForData" xml:space="preserve">
+    <value>Waiting for data...</value>
+  </data>
 </root>

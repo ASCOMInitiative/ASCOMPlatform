@@ -42,6 +42,7 @@ namespace ASCOM.GeminiTelescope
         public delegate void DataTimeoutEventHandler();
 
         #endregion
+
         #region Events
         public event PositionReceivedEventHandler PositionReceived;
         public event DateTimeChangedEventHandler DateTimeChanged;
@@ -399,10 +400,10 @@ namespace ASCOM.GeminiTelescope
                 if (m_QuitThread) break;
                 try
                 {
-                    MessageDelegate message = new MessageDelegate(ProcessMessage);
                     //read data waiting in the buffer
-                    if (comPort.IsOpen)
+                    if (comPort.IsOpen & comPort.BytesToRead > 0)
                     {
+                        MessageDelegate message = new MessageDelegate(ProcessMessage);
                         string str = comPort.ReadLine();
                         message.Invoke(str);
                     }
@@ -459,8 +460,8 @@ namespace ASCOM.GeminiTelescope
                             comPort.Parity = Parity.None;
                             comPort.StopBits = StopBits.One;
                             comPort.Handshake = Handshake.None;
-                            comPort.ReadTimeout = 100;
-                            comPort.ReceivedBytesThreshold = 100;
+                            comPort.ReadTimeout = 1000;
+                            comPort.ReceivedBytesThreshold = 20;
 
                             m_DataReceivedEvent.Reset();
                             comPort.Open();
@@ -470,7 +471,7 @@ namespace ASCOM.GeminiTelescope
 
                             timeOut.Change(3000, 0);
 
-                            m_DataReceivedEvent.Reset();
+                            //m_DataReceivedEvent.Reset();
                             m_QuitThread = false;
                             m_DataThread = new Thread(new ThreadStart(ProcessDataThread));
                             m_DataThread.Start();
@@ -479,7 +480,7 @@ namespace ASCOM.GeminiTelescope
                 }
                 else
                 {
-                    if (comPort.IsOpen == true) comPort.Close();
+                    //Must stop the read thread before closing the port
                     if (m_DataThread != null)
                     {
                         m_QuitThread = true;
@@ -488,6 +489,7 @@ namespace ASCOM.GeminiTelescope
                             m_DataThread.Abort();
                         m_DataThread = null;
                     }
+                    if (comPort.IsOpen == true) comPort.Close();
                     timeOut.Change(Timeout.Infinite, Timeout.Infinite);
 
                 }

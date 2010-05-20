@@ -71,10 +71,16 @@ namespace ASCOM.GeminiTelescope
                 comboBoxComPort.Items.Add(s);
             }
             buttonQuery.Text = Resources.Query;
-            labelStatus.Text = Resources.Status + ": ";
-            labelLatitude.Text = Resources.Latitude + ": ";
-            labelLongitude.Text = Resources.Longitude + ": ";
-            labelElevation.Text = Resources.Elevation + ": ";
+            labelStatus.Text = Resources.Status + ":";
+            labelStatusData.Text = "";
+            labelLatitude.Text = Resources.Latitude + ":";
+            labelLatitudeData.Text = "";
+            labelLongitude.Text = Resources.Longitude + ":";
+            labelLongitudeData.Text = "";
+            labelElevation.Text = Resources.Elevation + ":";
+            labelElevationData.Text = "";
+            labelDateTime.Text = Resources.GPSDateTime + ":";
+            labelDateTimeData.Text = "";
 
         }
 
@@ -110,12 +116,12 @@ namespace ASCOM.GeminiTelescope
 
             try
             {
-                labelLatitude.Text = Resources.Latitude + ": " + GeminiHardware.m_Util.DegreesToDMS(GeminiHardware.m_Util.DMSToDegrees(m_Latitude));
-                labelLongitude.Text = Resources.Longitude + ": " + GeminiHardware.m_Util.DegreesToDMS(GeminiHardware.m_Util.DMSToDegrees(m_Longitude));
+                labelLatitudeData.Text = GeminiHardware.m_Util.DegreesToDMS(GeminiHardware.m_Util.DMSToDegrees(m_Latitude));
+                labelLongitudeData.Text = GeminiHardware.m_Util.DegreesToDMS(GeminiHardware.m_Util.DMSToDegrees(m_Longitude));
             }
             catch { }
             
-            if (elevation != SharedResources.INVALID_DOUBLE.ToString()) labelElevation.Text = Resources.Elevation + ": " + elevation;
+            if (elevation != SharedResources.INVALID_DOUBLE.ToString()) labelElevationData.Text = elevation;
 
             m_Elevation = elevation;
             
@@ -128,12 +134,13 @@ namespace ASCOM.GeminiTelescope
 
         private void ProcessStatus(string status, Boolean blankFields, int icon)
         {
-            labelStatus.Text = Resources.Status + ": " + status;
+            labelStatusData.Text = status;
             if (blankFields)
             {
-                labelLatitude.Text = Resources.Latitude + ": ";
-                labelLongitude.Text = Resources.Longitude + ": ";
-                labelElevation.Text = Resources.Elevation + ": ";
+                labelLatitudeData.Text = "";
+                labelLongitudeData.Text = "";
+                labelElevationData.Text = "";
+                labelDateTimeData.Text = "";
             }
             if (icon == 1) //not connected
             {
@@ -153,6 +160,7 @@ namespace ASCOM.GeminiTelescope
 
         private void setTime(System.DateTime dateTime)
         {
+            labelDateTimeData.Text = dateTime.ToString();
             if (checkBoxUpdateClock.Checked)
             {
                 SystemTime updatedTime = new SystemTime();
@@ -228,7 +236,7 @@ namespace ASCOM.GeminiTelescope
                         interpreter.BaudRate = int.Parse(comboBoxBaudRate.SelectedItem.ToString());
                         interpreter.Connected = true;
                         buttonQuery.Text = Resources.Stop;
-                        labelStatus.Text = Resources.Status + ": " + Resources.WaitingForData;                  
+                        labelStatusData.Text = Resources.WaitingForData;                  
                 }
                 catch (Exception ex)
                 { MessageBox.Show(ex.Message); }
@@ -240,8 +248,8 @@ namespace ASCOM.GeminiTelescope
                 {
                     buttonQuery.Text = Resources.Query;
                     interpreter.Connected = false;
-                    pictureBox1.Image = global::ASCOM.GeminiTelescope.Properties.Resources.no_satellite;
-                    labelStatus.Text = Resources.Status + ": ";
+                    pictureBox1.Image = Resources.no_satellite;
+                    labelStatusData.Text = "";
                 }
                 catch { }
             }

@@ -746,7 +746,16 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No satellite fix, data possibly invalid.
+        ///   Looks up a localized string similar to GPS Date/Time.
+        /// </summary>
+        internal static string GPSDateTime {
+            get {
+                return ResourceManager.GetString("GPSDateTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GPS: No position fix.
         /// </summary>
         internal static string GPSNoFix {
             get {
