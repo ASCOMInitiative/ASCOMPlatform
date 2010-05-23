@@ -395,7 +395,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>        
         void ProcessDataThread()
         {
-            for (; !m_QuitThread; m_DataReceivedEvent.WaitOne())
+            while (!m_QuitThread && m_DataReceivedEvent.WaitOne())
             {
                 if (m_QuitThread) break;
                 try
