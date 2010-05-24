@@ -14,10 +14,6 @@ namespace ASCOM.GeminiTelescope
     [ComVisible(false)]					// Form not registered for COM!
     public partial class TelescopeSetupDialogForm : Form
     {
-        private string m_GpsComPort;
-        private string m_GpsBaudRate;
-        private bool m_GpsUpdateClock;
-
         private bool m_DoneInitialize;
 
         private bool m_UseSpeech = false;
@@ -218,22 +214,6 @@ namespace ASCOM.GeminiTelescope
             set { comboBoxBaudRate.SelectedItem = value; }
         }
 
-        public string GpsComPort
-        {
-            get { return m_GpsComPort; }
-            set { m_GpsComPort = value; }
-        }
-        public bool GpsUpdateClock
-        {
-            get { return m_GpsUpdateClock; }
-            set { m_GpsUpdateClock = value; }
-        }
-
-        public string GpsBaudRate
-        {
-            get { return m_GpsBaudRate; }
-            set { m_GpsBaudRate = value; }
-        }
         public double Elevation
         {
             get 
@@ -454,19 +434,26 @@ namespace ASCOM.GeminiTelescope
         {
             frmGps gpsForm = new frmGps();
 
-            gpsForm.ComPort = m_GpsComPort;
-            gpsForm.BaudRate = m_GpsBaudRate;
-            gpsForm.UpdateClock = m_GpsUpdateClock;
+            gpsForm.ComPort = GeminiHardware.GpsComPort;
+            gpsForm.BaudRate = GeminiHardware.GpsBaudRate.ToString();
+            gpsForm.UpdateClock = GeminiHardware.GpsUpdateClock;
 
             DialogResult ans = gpsForm.ShowDialog(this);
             if (ans == DialogResult.OK)
             {
                 try
                 {
-                    m_GpsBaudRate = gpsForm.BaudRate;
-                    m_GpsComPort = gpsForm.ComPort;
-                    m_GpsUpdateClock = gpsForm.UpdateClock;
-                    if (m_GpsUpdateClock) checkBoxUseDriverTime.Checked = false;
+                    string error = "";
+                    int gpsBaudRate;
+                    if (!int.TryParse(gpsForm.BaudRate, out gpsBaudRate))
+                        error += Resources.GPS + " " + Resources.BaudRate + ", ";
+                    else
+                        GeminiHardware.GpsBaudRate = gpsBaudRate;
+                    try { GeminiHardware.GpsComPort = gpsForm.ComPort; }
+                    catch { error += Resources.GPS + " " + Resources.COMport + ", "; }
+                    GeminiHardware.GpsUpdateClock = gpsForm.UpdateClock;
+
+                    if (gpsForm.UpdateClock) checkBoxUseDriverTime.Checked = false;
                     if (gpsForm.Latitude != 0 && gpsForm.Longitude != 0)
                     {
                         Latitude = gpsForm.Latitude;
