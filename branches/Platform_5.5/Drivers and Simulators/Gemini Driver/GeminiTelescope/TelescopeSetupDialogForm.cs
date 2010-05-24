@@ -465,13 +465,13 @@ namespace ASCOM.GeminiTelescope
                 {
                     m_GpsBaudRate = gpsForm.BaudRate;
                     m_GpsComPort = gpsForm.ComPort;
+                    m_GpsUpdateClock = gpsForm.UpdateClock;
+                    if (m_GpsUpdateClock) checkBoxUseDriverTime.Checked = false;
                     if (gpsForm.Latitude != 0 && gpsForm.Longitude != 0)
                     {
                         Latitude = gpsForm.Latitude;
                         Longitude = gpsForm.Longitude;
-                        m_GpsUpdateClock = gpsForm.UpdateClock;
                         checkBoxUseDriverSite.Checked = false;
-                        if (m_GpsUpdateClock) checkBoxUseDriverTime.Checked = false;
                     }
                     if (gpsForm.Elevation != SharedResources.INVALID_DOUBLE.ToString()) Elevation = double.Parse(gpsForm.Elevation);
                 }

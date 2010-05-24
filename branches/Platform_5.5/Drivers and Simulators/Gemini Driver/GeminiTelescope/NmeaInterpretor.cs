@@ -489,7 +489,11 @@ namespace ASCOM.GeminiTelescope
                             m_DataThread.Abort();
                         m_DataThread = null;
                     }
-                    if (comPort.IsOpen == true) comPort.Close();
+                    try //Maybe user unplugged USB COM port?
+                    {
+                        if (comPort.IsOpen == true) comPort.Close();
+                    }
+                    catch { }
                     timeOut.Change(Timeout.Infinite, Timeout.Infinite);
 
                 }
