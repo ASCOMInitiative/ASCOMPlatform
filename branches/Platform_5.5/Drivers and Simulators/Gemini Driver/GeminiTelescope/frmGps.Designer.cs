@@ -136,7 +136,9 @@
             "2400",
             "4800",
             "9600",
+            "14400",
             "19200",
+            "28800",
             "38400"});
             this.comboBoxBaudRate.Location = new System.Drawing.Point(16, 216);
             this.comboBoxBaudRate.Name = "comboBoxBaudRate";
