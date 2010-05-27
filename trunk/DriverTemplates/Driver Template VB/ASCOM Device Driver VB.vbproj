@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -14,9 +14,26 @@
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <OldToolsVersion>2.0</OldToolsVersion>
+    <OldToolsVersion>3.5</OldToolsVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>ASCOMDriverTemplate.snk</AssemblyOriginatorKeyFile>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -26,9 +43,10 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>
     </DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <RegisterForComInterop>true</RegisterForComInterop>
     <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -38,55 +56,68 @@
     <OutputPath>bin\Release\</OutputPath>
     <DocumentationFile>
     </DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <RegisterForComInterop>true</RegisterForComInterop>
     <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Peter|AnyCPU' ">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Peter\</OutputPath>
     <Optimize>true</Optimize>
     <RegisterForComInterop>true</RegisterForComInterop>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.vb</CodeAnalysisModuleSuppressionsFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.vb</CodeAnalysisModuleSuppressionsFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Peter|x86'">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x86\Peter\</OutputPath>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Peter\ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.vb</CodeAnalysisModuleSuppressionsFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ASCOM.Astrometry, Version=5.5.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Drivers and Simulators\Platform Dependencies\ASCOM.Astrometry.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ASCOM.Attributes, Version=5.5.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Drivers and Simulators\Platform Dependencies\ASCOM.Attributes.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ASCOM.Controls, Version=5.1.3524.34951, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Drivers and Simulators\Platform Dependencies\ASCOM.Controls.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ASCOM.Exceptions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Drivers and Simulators\Platform Dependencies\ASCOM.Exceptions.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Drivers and Simulators\Platform Dependencies\ASCOM.IConform.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Drivers and Simulators\Platform Dependencies\ASCOM.Interfaces.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ASCOM.SettingsProvider, Version=5.1.3524.34950, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Drivers and Simulators\Platform Dependencies\ASCOM.SettingsProvider.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Configuration.Install" />
@@ -95,8 +126,6 @@
   </ItemGroup>
   <ItemGroup>
     <Import Include="ASCOM" />
-    <Import Include="ASCOM.Interface" />
-    <Import Include="ASCOM.Utilities" />
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="System" />
     <Import Include="System.Collections" />
@@ -168,9 +197,54 @@
     <Content Include="Test.vbs" />
   </ItemGroup>
   <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj">
+      <Project>{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3}</Project>
+      <Name>ASCOM.Astrometry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ASCOM.Attributes\ASCOM.Attributes.csproj">
+      <Project>{2C40FAD9-DE75-4360-A0AD-911C4D24D98C}</Project>
+      <Name>ASCOM.Attributes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ASCOM.Controls\ASCOM.Controls\ASCOM.Controls.csproj">
+      <Project>{63AD32E8-98FF-44BB-AA29-ED2E5A5CF026}</Project>
+      <Name>ASCOM.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ASCOM.IConform\ASCOM.IConform\ASCOM.IConform.vbproj">
+      <Project>{44999847-A7B6-462D-B663-FE988D98E317}</Project>
+      <Name>ASCOM.IConform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\ASCOM.SettingsProvider.csproj">
+      <Project>{4FFFD202-81D4-4549-880B-09B640D72C1D}</Project>
+      <Name>ASCOM.SettingsProvider</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM Diagnostics\ASCOM Diagnostics.vbproj">
+      <Project>{A3C42AFF-E6A0-478E-92DF-DC88234403C2}</Project>
+      <Name>ASCOM Diagnostics</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
       <Name>ASCOM.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
+      <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
+      <Name>ASCOM.Exceptions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />

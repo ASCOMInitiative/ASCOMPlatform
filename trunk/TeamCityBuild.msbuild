@@ -8,9 +8,9 @@
   </PropertyGroup>
   <Target Name="Build">
     <MSBuild
-      Projects="ASCOM Platform 6.sln"
+      Projects="ASCOM Platform VS2008.sln"
       Targets="Build"
-      Properties="Configuration=TeamCity" />
+      Properties="Configuration=Release" />
     <xunit Assembly="ASCOM.Platform.Test\bin\Release\ASCOM.Platform.Test.dll" />
   </Target>
   <Target Name="BuildDocumentation">

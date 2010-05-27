@@ -1,13 +1,5 @@
 using System;
-using System.Collections;
-using System.IO;
-using System.Text;
-using System.Xml;
-using System.Xml.Serialization;
-using System.Reflection;
-using Microsoft.Win32;
 using System.Diagnostics;
-using Helper = ASCOM.Utilities;
 
 namespace ASCOM.Controls
 	{
@@ -19,26 +11,26 @@ namespace ASCOM.Controls
 	/// is used, the MRU list is updated. This functionality is encapsulated in its own class so that
 	/// In this implementation, the data happens to be stored in the ASCOM registry area.
 	/// </remarks>
-	public class ChooserMRU
+	internal class ChooserMru
 		{
 		const string csChooserMRURegKey = "Software\\ASCOM\\.net\\Chooser\\MRU";
 
 		/// <summary>
 		/// Default public constructor, sets up the default device class.
 		/// </summary>
-		public ChooserMRU()
+		public ChooserMru()
 			{
-			MRUType = "Telescope";	// Set the default DeviceClass to Telescope.
+			MruType = "Telescope";	// Set the default DeviceClass to Telescope.
 			}
 
 		/// <summary>
 		/// Sets the DriverClass that is to be considered. If not set, defaults to "Telescope".
 		/// </summary>
-		public string MRUType   {get; set;}
+		public string MruType   {get; set;}
 
 		/// <summary>
 		/// Gets or sets the MRU entry for the current device type (as specified in the
-		/// <see cref="MRUType"/> property).
+		/// <see cref="MruType"/> property).
 		/// </summary>
 		public string MostRecentlyUsedDeviceID
 			{
@@ -46,7 +38,7 @@ namespace ASCOM.Controls
 				{
 				try
 					{
-					return Properties.Settings.Default[MRUType] as string;
+					return Properties.Settings.Default[MruType] as string;
 					}
 				catch (Exception ex)
 					{
@@ -59,7 +51,7 @@ namespace ASCOM.Controls
 				{
 				try
 					{
-					Properties.Settings.Default[MRUType] = value;
+					Properties.Settings.Default[MruType] = value;
 					}
 				catch (Exception ex)
 					{

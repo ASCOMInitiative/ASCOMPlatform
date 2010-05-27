@@ -1,4 +1,5 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <PublishUrlHistory>
     </PublishUrlHistory>
@@ -24,6 +25,15 @@
     <StartWorkingDirectory>C:\Documents and Settings\Robert Turner\My Documents\Projects\Robert\ASCOM Platform\Telescope Simulator .NET\TelescopeSimulatorServedClasses\</StartWorkingDirectory>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Peter|AnyCPU' ">
+    <StartWorkingDirectory>C:\Documents and Settings\Robert Turner\My Documents\Projects\Robert\ASCOM Platform\Telescope Simulator .NET\TelescopeSimulatorServedClasses\</StartWorkingDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <StartWorkingDirectory>C:\Documents and Settings\Robert Turner\My Documents\Projects\Robert\ASCOM Platform\Telescope Simulator .NET\TelescopeSimulatorServedClasses\</StartWorkingDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <StartWorkingDirectory>C:\Documents and Settings\Robert Turner\My Documents\Projects\Robert\ASCOM Platform\Telescope Simulator .NET\TelescopeSimulatorServedClasses\</StartWorkingDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Peter|x86'">
     <StartWorkingDirectory>C:\Documents and Settings\Robert Turner\My Documents\Projects\Robert\ASCOM Platform\Telescope Simulator .NET\TelescopeSimulatorServedClasses\</StartWorkingDirectory>
   </PropertyGroup>
 </Project>

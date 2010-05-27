@@ -1,4 +1,5 @@
-﻿<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <MyType>Windows</MyType>
@@ -23,8 +24,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <OptionStrict>Off</OptionStrict>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <TargetFrameworkSubset>
-    </TargetFrameworkSubset>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -49,10 +50,11 @@
     <DefineConstants>
     </DefineConstants>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <NoWarn>42017,42018,42019,42032,42036</NoWarn>
+    <NoWarn>42017,42018,42019,42032,42036,42353,42354,42355</NoWarn>
     <DebugType>full</DebugType>
     <RegisterForComInterop>false</RegisterForComInterop>
     <WarningsAsErrors>41999,42016,42020,42021,42022</WarningsAsErrors>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -63,21 +65,72 @@
     <DefineConstants>
     </DefineConstants>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <NoWarn>42017,42018,42019,42032,42036</NoWarn>
+    <NoWarn>42017,42018,42019,42032,42036,42353,42354,42355</NoWarn>
     <DebugType>Full</DebugType>
     <RegisterForComInterop>false</RegisterForComInterop>
     <Optimize>true</Optimize>
     <WarningsAsErrors>41999,42016,42020,42021,42022</WarningsAsErrors>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Peter|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Peter\</OutputPath>
     <DocumentationFile>ASCOM.Utilities.xml</DocumentationFile>
     <Optimize>true</Optimize>
-    <NoWarn>42017,42018,42019,42032,42036</NoWarn>
+    <NoWarn>42017,42018,42019,42032,42036,42353,42354,42355</NoWarn>
     <DebugType>Full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <WarningsAsErrors>41999,42016,42020,42021,42022</WarningsAsErrors>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DocumentationFile>ASCOM.Utilities.xml</DocumentationFile>
+    <NoWarn>42017,42018,42019,42032,42036,42353,42354,42355</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <WarningsAsErrors>41999,42016,42020,42021,42022</WarningsAsErrors>
+    <CodeAnalysisLogFile>bin\Debug\ASCOM.Utilities.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.vb</CodeAnalysisModuleSuppressionsFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DocumentationFile>ASCOM.Utilities.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>42017,42018,42019,42032,42036,42353,42354,42355</NoWarn>
+    <DebugType>Full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <WarningsAsErrors>41999,42016,42020,42021,42022</WarningsAsErrors>
+    <CodeAnalysisLogFile>bin\Release\ASCOM.Utilities.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.vb</CodeAnalysisModuleSuppressionsFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Peter|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Peter\</OutputPath>
+    <DocumentationFile>ASCOM.Utilities.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>42017,42018,42019,42032,42036,42353,42354,42355</NoWarn>
+    <DebugType>Full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <WarningsAsErrors>41999,42016,42020,42021,42022</WarningsAsErrors>
+    <CodeAnalysisLogFile>bin\Peter\ASCOM.Utilities.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.vb</CodeAnalysisModuleSuppressionsFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System">
@@ -171,7 +224,7 @@
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
-      <ProductName>.NET Framework Client Profile</ProductName>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
@@ -196,7 +249,7 @@
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.SQL.Server.Compact.3.5">
       <Visible>False</Visible>
-      <ProductName>SQL Server Compact 3.5</ProductName>
+      <ProductName>SQL Server Compact 3.5 SP2</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
