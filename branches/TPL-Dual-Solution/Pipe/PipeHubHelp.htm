@@ -1,0 +1,146 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Pipe Information</title>
+<style>
+<!--
+div.Section1
+	{page:Section1;}
+h1
+	{margin-right:0in;
+	margin-left:0in;
+	font-size:24.0pt;
+	font-family:"Times New Roman";
+	font-weight:bold}
+p
+	{margin-right:0in;
+	margin-left:0in;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	}
+h3
+	{margin-right:0in;
+	margin-left:0in;
+	font-size:13.5pt;
+	font-family:"Times New Roman";
+	font-weight:bold}
+ li.MsoNormal
+	{mso-style-parent:"";
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	margin-left:0in; margin-right:0in; margin-top:0in}
+span.SpellE
+	{}
+h2
+	{margin-right:0in;
+	margin-left:0in;
+	font-size:18.0pt;
+	font-family:"Times New Roman";
+	font-weight:bold}
+-->
+</style>
+</head>
+
+<body text="#FFFFFF" bgcolor="#000000">
+
+<h1><span lang="en-gb">Pipe And Hub Information</span></h1>
+<p><span lang="en-gb">A &quot;hub&quot; is an ASCOM tool for allowing multiple programs to 
+connect to ASCOM drivers that would otherwise only work with a single program.&nbsp; 
+The &quot;Hub&quot; hub is the simplest such program.&nbsp; Hub goes to a lot of trouble 
+to do nothing but pass through commands exactly as they are given.&nbsp; It just 
+mediates access for multiple programs. </span></p>
+<p><span lang="en-gb">Pipe is also a hub.&nbsp; It can be used instead of the 
+&quot;Hub&quot; hub as an ASCOM linkage debugger.&nbsp; Pipe is a hub that can be 
+inserted in between any two or more ASCOM components so that the traffic between these 
+components can be monitored.&nbsp; Pipe goes to a lot of trouble to do nothing but 
+log traffic and pass through commands exactly as they are given. </span></p>
+<h2><span lang="en-gb">Simple Usage</span></h2>
+<ol>
+	<li><span lang="en-gb">Select &quot;Hub&quot; or &quot;Pipe&quot; from the client chooser</span></li>
+	<li><span lang="en-gb">From the Hub or Pipe setup dialog choose Device(s)</span></li>
+	<li><span lang="en-gb">Close Hub or Pipe setup dialog and connect to devices via the 
+	client programs</span></li>
+</ol>
+
+<h2><span lang="en-gb">What Hub does:</span></h2>
+<ul>
+	<li><span lang="en-gb">It is an ASCOM &quot;hub&quot; for telescope, dome, and focuser 
+connections in any combination.</span></li>
+</ul>
+<h2><span lang="en-gb">What Hub does not do:</span></h2>
+<ul>
+	<li><span lang="en-gb">Hub has no &quot;handset&quot; like GUI window.&nbsp; It is 
+	just a hub.&nbsp; For a handset GUI use POTH.</span></li>
+</ul>
+<h2><span lang="en-gb">What Pipe does:</span></h2>
+<ul>
+	<li><span lang="en-gb">It is an ASCOM &quot;hub&quot; for telescope, dome, and focuser 
+connections in any combination.</span></li>
+	<li><span lang="en-gb">Logs ASCOM commands and responses to a window and a 
+	file for diagnostic evaluation.</span></li>
+	<li><span lang="en-gb">Errors raised from the driver (whatever Pipe is 
+	connected to) will also be displayed and logged, before being passed up to 
+	the client (whatever has connected to Pipe). </span></li>
+</ul>
+<h2><span lang="en-gb">What neither Pipe nor Hub do:</span></h2>
+<ul>
+	<li><span lang="en-gb">They do not precondition commands as they pass 
+	through.</span></li>
+	<li><span lang="en-gb">They do not test for and correct error 
+	conditions.</span></li>
+	<li><span lang="en-gb">They do no dome slaving or focuser temperature 
+	compensation</span></li>
+</ul>
+<h2><span lang="en-gb">More complex things to do with Pipe</span></h2>
+<ul>
+	<li><span lang="en-gb">There are control checkboxes on the main window for 
+	selecting sets of interesting commands.&nbsp; They can be toggled at any 
+	time.</span></li>
+	<li><span lang="en-gb">There are [Connect] buttons for manually connecting 
+	to the desired drivers (as specified in the set-up dialog), or the client 
+	software 
+	can be left to do all connect operations.</span></li>
+	<li><span lang="en-gb">The logged data shows up in a scrolling area of the 
+	main Pipe window.</span></li>
+	<li><span lang="en-gb">There is a [Mark] button for inserting a “Mark” into 
+	the log for later discovery.</span></li>
+	<li><span lang="en-gb">There is a log file kept in the directory that 
+	Pipe.exe is found. By default, this is “C:\Program Files\Common 
+	Files\ASCOM\Telescope”. Each time Pipe is run it copies Pipe.log to Pipe.bak 
+	and restarts Pipe.log at zero length. While the displayed log in the main 
+	window throws away the older entries as it goes, the log file contains the 
+	entire session.</span></li>
+	<li><span lang="en-gb">There is a [Clear] button that will zero the current 
+	log file and clear the logging window. Clear will not copy the existing log 
+	to Pipe.bak. </span></li>
+	<li><span lang="en-gb">There is an Enable/Disable button that allows 
+	temporary suspension of logging.&nbsp; ASCOM commands will still be passing 
+	through.</span></li>
+	<li><span lang="en-gb">If the [Advanced] button in the setup dialog is used to expose the advanced 
+area, and a given driver is connected, then the capabilities area will be filled 
+out for review. This will require Pipe to generate and send a series of requests 
+to the drivers. None of these values can be changed.</span></li>
+</ul>
+<h2>Programmers Information</h2>
+<ul>
+	<li><span lang="en-gb">Errors raised from the driver (whatever Hub or Pipe 
+	is connected to) will also be passed up to the client (whatever is connected to Hub 
+	or Pipe).&nbsp; Pipe will also log the errors.</span></li>
+	<li><span lang="en-gb">Both support early and late binding from clients.&nbsp; 
+	For late bindings, the &quot;Name&quot; property will return &quot;Pipe-&gt;(driver name)&quot;.&nbsp; 
+	For early bindings, the &quot;Name&quot; property will return &quot;I_Pipe-&gt;(driver name)&quot;.&nbsp; 
+	The &quot;I&quot; feature will likely be dropped after sufficient early binding 
+	testing by the ASCOM comunity.</span></li>
+	<li><span lang="en-gb">Both support early and late binding to drivers.&nbsp; 
+	Early binding will be attempted first, classic ASCOM late binding will 
+	attempted as fall back.&nbsp; Late binding can be forced for test purposes 
+	by putting a registry entry into Hub or Pipe's ASCOM registry area as &quot;ForceLate&quot;.&nbsp; 
+	ForceLate would be a string set to &quot;True&quot;.</span></li>
+</ul>
+
+</body>
+
+</html>
