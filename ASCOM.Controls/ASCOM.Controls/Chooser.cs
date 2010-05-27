@@ -34,7 +34,7 @@ namespace ASCOM.Controls
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();
             // Create the Most-Recently-Used list
-            this.m_MRU = new ChooserMRU();
+            this.m_MRU = new ChooserMru();
         }
 
         /// <summary> 
@@ -169,7 +169,7 @@ namespace ASCOM.Controls
             {
                 Trace.WriteLine(String.Format("Chooser device class changing to {0}", value));
                 m_eDriverClass = value;
-                m_MRU.MRUType = value;
+                m_MRU.MruType = value;
                 this.DeviceID = m_MRU.MostRecentlyUsedDeviceID;	// This repopulates the device list.
                 this.labelPrompt.Text = string.Format(cstrPromptLabel, DeviceClass);
             }
@@ -362,7 +362,7 @@ namespace ASCOM.Controls
         /// <summary>
         /// The most-recently-used devices
         /// </summary>
-        private ChooserMRU m_MRU;
+        private ChooserMru m_MRU;
     }
 
     //public enum DriverClass { Telescope, Dome, Camera, Focuser, Filter }
