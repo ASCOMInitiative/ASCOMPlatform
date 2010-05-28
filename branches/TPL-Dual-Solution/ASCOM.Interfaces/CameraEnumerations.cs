@@ -1,7 +1,7 @@
 ﻿//tabs=4
 // --------------------------------------------------------------------------------
 // <summary>
-// ASCOM.Interface.New Camera Enumerations
+// ASCOM.Interface Camera Enumerations
 // </summary>
 //
 // <copyright company="The ASCOM Initiative" author="Timothy P. Long">
@@ -39,15 +39,14 @@
 // -----------	---	-----	-------------------------------------------------------
 // 21-Feb-2010	CDR	6.0.*	Initial edit. Mirrors platform 5.0 PIAs.
 // --------------------------------------------------------------------------------
-using System;
 using System.Runtime.InteropServices;
 
-namespace ASCOM.Interface.New
+namespace ASCOM.Interface
 {
-    [Guid("D40EB54D-0F0F-406d-B68F-C2A7984235BC")]
     /// <summary>
     /// ASCOM Camera status values.
     /// </summary>
+    [Guid("D40EB54D-0F0F-406d-B68F-C2A7984235BC")]
     public enum CameraStates
     {
         cameraIdle = 0,
@@ -62,6 +61,7 @@ namespace ASCOM.Interface.New
     /// Sensor type, identifies the type of colour sensor
     /// V2 cameras only
     /// </summary>
+    [Guid("C9D7FD9C-1F22-47B3-88A3-2E3C5C5E9B94")]
     public enum SensorType
     {
         /// <summary>

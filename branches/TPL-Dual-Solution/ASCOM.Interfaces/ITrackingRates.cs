@@ -1,7 +1,7 @@
 ﻿//tabs=4
 // --------------------------------------------------------------------------------
 // <summary>
-// ASCOM.Interface.New.ITrackingRates interface
+// ASCOM.Interface.ITrackingRates interface
 // </summary>
 //
 // <copyright company="TiGra Astronomy" author="Timothy P. Long">
@@ -42,7 +42,7 @@
 //
 using System.Collections;
 
-namespace ASCOM.Interface.New
+namespace ASCOM.Interface
 	{
 	//[ComImport, TypeLibType((short)0x10c0), Guid("DC98F1DF-315A-43EF-81F6-23F3DD461F58")]
 	//public interface ITrackingRates : IEnumerable
@@ -69,9 +69,9 @@ namespace ASCOM.Interface.New
 		int Count { get; }
 
 		/// <summary>
-		/// Gets the <see cref="ASCOM.Interface.New.DriveRates"/> at the specified index.
+		/// Gets the <see cref="ASCOM.Interface.DriveRates"/> at the specified index.
 		/// </summary>
-		/// <value>A <see cref="ASCOM.Interface.New.DriveRates"/> object.</value>
+		/// <value>A <see cref="ASCOM.Interface.DriveRates"/> object.</value>
 		DriveRates this[int Index] { get; }
 
 		/// <summary>

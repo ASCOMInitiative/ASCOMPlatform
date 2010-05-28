@@ -1,7 +1,7 @@
 ﻿//tabs=4
 // --------------------------------------------------------------------------------
 // <summary>
-// ASCOM.Interface.New ASCOM Driver Common Base Interface
+// ASCOM.Interface ASCOM Driver Common Base Interface
 // </summary>
 //
 // <copyright company="TiGra Astronomy" author="Timothy P. Long">
@@ -40,12 +40,7 @@
 // 10-Feb-2010	TPL	6.0.*	Initial edit. Based on draft document by Peter Simpson.
 // --------------------------------------------------------------------------------
 //
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ASCOM.Interface.New
+namespace ASCOM.Interface
 	{
 	/// <summary>
 	/// Defines the properties and methods that are common to all ASCOM devices.

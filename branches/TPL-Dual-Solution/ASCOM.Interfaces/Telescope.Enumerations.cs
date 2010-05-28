@@ -1,7 +1,7 @@
 ﻿//tabs=4
 // --------------------------------------------------------------------------------
 // <summary>
-// ASCOM.Interface.New Telescope Enumerations
+// ASCOM.Interface Telescope Enumerations
 // </summary>
 //
 // <copyright company="The ASCOM Initiative" author="Timothy P. Long">
@@ -45,7 +45,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ASCOM.Interface.New
+namespace ASCOM.Interface
 	{
 	//[Guid("30D18B61-AECC-4C03-8759-E3EDD246F062")]
 	/// <summary>

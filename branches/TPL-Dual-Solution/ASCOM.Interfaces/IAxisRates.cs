@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 
-namespace ASCOM.Interface.New
+namespace ASCOM.Interface
 	{
 	//[ComImport, Guid("2B8FD76E-AF7E-4FAA-9FAC-4029E96129F4"), TypeLibType((short)0x10c0)]
 	//public interface IAxisRates : IEnumerable
@@ -31,7 +31,7 @@ namespace ASCOM.Interface.New
 		int Count { get; }
 
 		/// <summary>
-		/// Gets the <see cref="ASCOM.Interface.New.IRate"/> at the specified index.
+		/// Gets the <see cref="ASCOM.Interface.IRate"/> at the specified index.
 		/// </summary>
 		/// <value>An <see cref="IRate"/> object.</value>
 		IRate this[int Index] { get; }

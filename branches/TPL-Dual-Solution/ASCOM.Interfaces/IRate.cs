@@ -1,7 +1,7 @@
 ﻿//tabs=4
 // --------------------------------------------------------------------------------
 // <summary>
-// ASCOM.Interface.New.IRate interface
+// ASCOM.Interface.IRate interface
 // </summary>
 //
 // <copyright company="TiGra Astronomy" author="Timothy P. Long">
@@ -45,7 +45,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ASCOM.Interface.New
+namespace ASCOM.Interface
 	{
 	//[ComImport, TypeLibType((short)0x10c0), Guid("221C0BC0-110B-4129-85A0-18BB28579290")]
 	//public interface IRate

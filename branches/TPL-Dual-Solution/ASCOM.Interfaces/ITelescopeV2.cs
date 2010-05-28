@@ -1,7 +1,7 @@
 ﻿//tabs=4
 // --------------------------------------------------------------------------------
 // <summary>
-// ASCOM.Interface.New.ITelescope Telescope Interface V2
+// ASCOM.Interface.ITelescope Telescope Interface V2
 // </summary>
 //
 // <copyright company="TiGra Astronomy" author="Timothy P. Long">
@@ -42,7 +42,7 @@
 // --------------------------------------------------------------------------------
 //
 using System;
-namespace ASCOM.Interface.New
+namespace ASCOM.Interface
 	{
 	interface ITelescope : IAscomDriver
 		{
