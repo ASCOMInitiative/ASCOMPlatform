@@ -39,10 +39,9 @@
 // -----------	---	-----	-------------------------------------------------------
 // 21-Feb-2010	CDR	6.0.*	Initial edit. Mirrors platform 5.0 PIAs.
 // --------------------------------------------------------------------------------
-using System;
 using System.Runtime.InteropServices;
 
-namespace ASCOM.Interface.New
+namespace ASCOM.Interface
 {
     [Guid("D40EB54D-0F0F-406d-B68F-C2A7984235BC")]
     /// <summary>

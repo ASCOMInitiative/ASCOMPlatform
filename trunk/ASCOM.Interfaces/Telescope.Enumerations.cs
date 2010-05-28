@@ -40,12 +40,7 @@
 // 10-Feb-2010	TPL	6.0.*	Initial edit.
 // --------------------------------------------------------------------------------
 //
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ASCOM.Interface.New
+namespace ASCOM.Interface
 	{
 	//[Guid("30D18B61-AECC-4C03-8759-E3EDD246F062")]
 	/// <summary>

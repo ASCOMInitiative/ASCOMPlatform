@@ -20,6 +20,7 @@
 //
 using System;
 using System.Collections;
+using System.Reflection;
 using System.Text;
 using System.Runtime.InteropServices;
 
@@ -1243,7 +1244,41 @@ namespace ASCOM.Simulator
             }
         }
 
-        /// <summary>
+    	/// <summary>
+    	/// Gets the driver version.
+    	/// </summary>
+    	/// <value>A string containing only the major and minor version of the driver. This must be in the form "n.n".</value>
+    	/// <remarks>
+    	/// <alert class="caution">
+    	///   <para>
+    	///   Avoid the temptation to convert this version string into a number.
+    	///   Some locales use a decimal seperator other than a period, converting this value
+    	///   to a number will fail in those locales. If you must convert to a number,
+    	///   be sure to use <see cref="CultureInfo.InvariantCulture"/>.
+    	///   </para>
+    	/// </alert>
+    	/// </remarks>
+    	public string DriverVersion
+    	{
+			get
+			{
+				var assy = Assembly.GetExecutingAssembly();
+				var name = assy.GetName();
+				var version = name.Version;
+				return string.Format("{0}.{1}", version.Major, version.Minor);
+			}
+		}
+
+    	/// <summary>
+    	/// Gets the interface version.
+    	/// </summary>
+    	/// <value>The interface version as a signed 16-bit integer.</value>
+    	short IAscomDriver.InterfaceVersion
+    	{
+			get { return 1; }
+    	}
+
+    	/// <summary>
         /// Returns the maximum exposure time in seconds supported by <see cref="StartExposure"/>. 
         /// </summary>
         /// <value>The max exposure.</value>
