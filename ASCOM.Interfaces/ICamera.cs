@@ -40,14 +40,13 @@
 // 21-Feb-2010	CDR	6.0.*	Initial edit. Mirrors platform 5.0 PIAs.
 // --------------------------------------------------------------------------------
 //
-using System;
-namespace ASCOM.Interface.New
+namespace ASCOM.Interface
 {
     //    uuid(D95FBC6E-0705-458b-84C0-57E3295DBCCE),
     /// <summary>
     /// ASCOM Camera Driver 1.0 Interface
     /// </summary>
-    interface ICamera : IAscomDriver
+    public interface ICamera : IAscomDriver
     {
         //
         // PROPERTIES

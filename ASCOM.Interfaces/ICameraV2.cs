@@ -40,7 +40,7 @@
 // 21-Feb-2010	CDR	6.0.*	Initial edit.
 // --------------------------------------------------------------------------------
 
-namespace ASCOM.Interface.New
+namespace ASCOM.Interface
 {
     interface ICameraV2 : ICamera
     {
