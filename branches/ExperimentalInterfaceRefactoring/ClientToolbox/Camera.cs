@@ -18,13 +18,6 @@ namespace ASCOM.DriverAccess
     {
         #region ICamera constructors
         private MemberFactory memberFactory;
-
-        /// <summary>
-        /// Creates an instance of the camera class.
-        /// </summary>
-        public Camera()
-        {
-        }
         
         /// <summary>
         /// Creates an instance of the camera class.
@@ -596,8 +589,7 @@ namespace ASCOM.DriverAccess
         #region IAscomDriver Members
 
         /// <summary>
-        /// Set True to enable the
-        /// link. Set False to disable the link (this does not switch off the cooler).
+        /// Set True to enable the link. Set False to disable the link.
         /// You can also read the property to check whether it is connected.
         /// </summary>
         /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
@@ -621,7 +613,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Descriptive and version information about this ASCOM Telescope driver.
+        /// Descriptive and version information about this ASCOM driver.
         /// This string may contain line endings and may be hundreds to thousands of characters long.
         /// It is intended to display detailed information on the ASCOM driver, including version and copyright data.
         /// See the Description property for descriptive info on the telescope itself.
@@ -666,7 +658,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// The short name of the telescope, for display purposes
+        /// The short name of the driver, for display purposes
         /// </summary>
         public string Name
         {
@@ -683,7 +675,7 @@ namespace ASCOM.DriverAccess
             memberFactory.CallMember(3, "SetupDialog", new Type[] { }, new object[] { }); 
         }
         #endregion
-
+         
         #region IDeviceControl Members
 
         /// <summary>
@@ -697,8 +689,7 @@ namespace ASCOM.DriverAccess
         /// formatted list of wheel names and the second taking a wheel name and making the change.
         /// </example>
         /// </param>
-        /// <param name="ActionParameters">
-        /// List of required parameters or <see cref="String.Empty"/>  if none are required.
+        /// <param name="ActionParameters">List of required parameters or <see cref="String.Empty"/>  if none are required.
         /// </param>
         /// <returns>A string response and sets the <c>IDeviceControl.LastResult</c> property.</returns>
         public string Action(string ActionName, string ActionParameters)
@@ -707,7 +698,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Gets the supported actions.
+        /// Gets string array of the supported actions.
         /// </summary>
         /// <value>The supported actions.</value>
         public string[] SupportedActions

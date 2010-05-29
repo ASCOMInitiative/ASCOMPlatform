@@ -56,6 +56,22 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
+        /// Returns the instance of the driver
+        /// </summary> 
+        internal object GetLateBoundObject
+        {
+            get { return this.objLateBound ;}
+        }
+
+        /// <summary>
+        /// Returns the driver type
+        /// </summary> 
+        internal Type GetObjType
+        {
+            get { return this.objType; }
+        }
+
+        /// <summary>
         /// Calls a method on an object dynamically. 
         /// 
         /// parameterTypes must match the parameters and in the same order.

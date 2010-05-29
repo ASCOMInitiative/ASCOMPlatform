@@ -1,9 +1,7 @@
- //
 // 10-Jul-08	rbd		1.0.5 - Release COM on Dispose().
+// 29-May-10  	rem     6.0.0 - Added memberFactory.
 //
 using System;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using ASCOM.Interfaces;
 using ASCOM.Utilities;
 
@@ -15,29 +13,17 @@ namespace ASCOM.DriverAccess
 	/// </summary>
 	public class Dome : IDome, IDisposable, IDeviceControl, IAscomDriver
     {
+        #region IDome constructors
 
-        object objDomeLateBound;
-		IDome IDome;
-        Type objTypeDome;
+        private MemberFactory memberFactory;
+
         /// <summary>
         /// Constructor for Dome class. Creates a Dome based on the ProgID in the DomeID string.
         /// </summary>
         /// <param name="domeID">The progID of the dome to be instantiated</param>
         public Dome(string domeID)
 		{
-			// Get Type Information 
-            objTypeDome = Type.GetTypeFromProgID(domeID);
-			
-			// Create an instance of the Focuser object
-            objDomeLateBound = Activator.CreateInstance(objTypeDome);
-
-			// Try to see if this driver has an ASCOM.Dome interface
-			try {
-				IDome = (IDome)objDomeLateBound;
-			} catch(Exception) {
-				IDome = null;
-			}
-
+            memberFactory = new MemberFactory(domeID);
 		}
 
         /// <summary>
@@ -50,7 +36,9 @@ namespace ASCOM.DriverAccess
 			Chooser oChooser = new Chooser();
 			oChooser.DeviceType = "Dome";				// Requires Helper 5.0.3 (May '07)
 			return oChooser.Choose(domeID);
-		}
+        }
+
+        #endregion
 
         #region IDome Members
 
@@ -61,12 +49,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void AbortSlew()
         {
-			if (IDome != null)
-				IDome.AbortSlew();
-			else
-				objTypeDome.InvokeMember("AbortSlew", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objDomeLateBound, new object[] { });
+            memberFactory.CallMember(3, "AbortSlew", new Type[] { }, new object[] { });
         }
 
         /// <summary>
@@ -76,15 +59,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double Altitude
         {
-            get
-            {
-				if (IDome != null)
-					return IDome.Altitude;
-				else
-					return (double)objTypeDome.InvokeMember("Altitude", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objDomeLateBound, new object[] { });
-            }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "Altitude", new Type[] { }, new object[] { })); }
         }
         /// <summary>
         /// True if the dome is in the Home position.
@@ -93,15 +68,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool AtHome
         {
-            get
-            {
-				if (IDome != null)
-					return IDome.AtHome;
-				else
-					return (bool)objTypeDome.InvokeMember("AtHome", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objDomeLateBound, new object[] { });
-            }
+           get { return (bool)memberFactory.CallMember(1, "AtHome", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -111,30 +78,14 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool AtPark
         {
-            get
-            {
-				if (IDome != null)
-					return IDome.AtPark;
-				else
-					return (bool)objTypeDome.InvokeMember("AtPark", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objDomeLateBound, new object[] { });
-            }
+            get { return (bool)memberFactory.CallMember(1, "AtPark", new Type[] { }, new object[] { }); }
         }
         /// <summary>
         /// The dome azimuth (degrees, North zero and increasing clockwise, i.e., 90 East, 180 South, 270 West)
         /// </summary>
         public double Azimuth
         {
-            get
-            {
-				if (IDome != null)
-					return IDome.Azimuth;
-				else
-					return (double)objTypeDome.InvokeMember("Azimuth", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objDomeLateBound, new object[] { });
-            }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "Azimuth", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -142,15 +93,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanFindHome
         {
-            get
-            {
-				if (IDome != null)
-					return IDome.CanFindHome;
-				else
-					return (bool)objTypeDome.InvokeMember("CanFindHome", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objDomeLateBound, new object[] { });
-            }
+            get { return (bool)memberFactory.CallMember(1, "CanFindHome", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -158,15 +101,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanPark
         {
-            get
-            {
-				if (IDome != null)
-					return IDome.CanPark;
-				else
-					return (bool)objTypeDome.InvokeMember("CanPark", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objDomeLateBound, new object[] { });
-            }
+            get { return (bool)memberFactory.CallMember(1, "CanPark", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -174,15 +109,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSetAltitude
         {
-            get
-            {
-				if (IDome != null)
-					return IDome.CanSetAltitude;
-				else
-					return (bool)objTypeDome.InvokeMember("CanSetAltitude", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objDomeLateBound, new object[] { });
-            }
+            get { return (bool)memberFactory.CallMember(1, "CanSetAltitude", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -190,15 +117,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSetAzimuth
         {
-            get
-            {
-				if (IDome != null)
-					return IDome.CanSetAzimuth;
-				else
-					return (bool)objTypeDome.InvokeMember("CanSetAzimuth", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objDomeLateBound, new object[] { });
-            }
+            get { return (bool)memberFactory.CallMember(1, "CanSetAzimuth", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -206,15 +125,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSetPark
         {
-            get
-            {
-				if (IDome != null)
-					return IDome.CanSetPark;
-				else
-					return (bool)objTypeDome.InvokeMember("CanSetPark", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objDomeLateBound, new object[] { });
-            }
+            get { return (bool)memberFactory.CallMember(1, "CanSetPark", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -222,15 +133,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSetShutter
         {
-            get
-            {
-				if (IDome != null)
-					return IDome.CanSetShutter;
-				else
-					return (bool)objTypeDome.InvokeMember("CanSetShutter", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objDomeLateBound, new object[] { });
-            }
+            get { return (bool)memberFactory.CallMember(1, "CanSetShutter", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -238,15 +141,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSlave
         {
-            get
-            {
-				if (IDome != null)
-					return IDome.CanSlave;
-				else
-					return (bool)objTypeDome.InvokeMember("CanSlave", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objDomeLateBound, new object[] { });
-            }
+            get { return (bool)memberFactory.CallMember(1, "CanSlave", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -254,15 +149,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSyncAzimuth
         {
-            get
-            {
-				if (IDome != null)
-					return IDome.CanSyncAzimuth;
-				else
-					return (bool)objTypeDome.InvokeMember("CanSyncAzimuth", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objDomeLateBound, new object[] { });
-            }
+            get { return (bool)memberFactory.CallMember(1, "CanSyncAzimuth", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -270,12 +157,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void CloseShutter()
         {
-			if (IDome != null)
-				IDome.CloseShutter();
-			else
-				objTypeDome.InvokeMember("CloseShutter", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objDomeLateBound, new object[] {  });
+            memberFactory.CallMember(3, "CloseShutter", new Type[] { }, new object[] { });
         }
 
         /// <summary>
@@ -283,12 +165,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void FindHome()
         {
-			if (IDome != null)
-				IDome.FindHome();
-			else
-				objTypeDome.InvokeMember("FindHome", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objDomeLateBound, new object[] { });
+            memberFactory.CallMember(3, "FindHome", new Type[] { }, new object[] { });
         }
 
         /// <summary>
@@ -297,12 +174,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void OpenShutter()
         {
-			if (IDome != null)
-				IDome.OpenShutter();
-			else
-				objTypeDome.InvokeMember("OpenShutter", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objDomeLateBound, new object[] { });
+            memberFactory.CallMember(3, "OpenShutter", new Type[] { }, new object[] { });
         }
 
         /// <summary>
@@ -312,12 +184,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void Park()
         {
-			if (IDome != null)
-				IDome.Park();
-			else
-				objTypeDome.InvokeMember("Park", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objDomeLateBound, new object[] { });
+            memberFactory.CallMember(3, "Park", new Type[] { }, new object[] { });
         }
 
         /// <summary>
@@ -326,12 +193,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void SetPark()
         {
-			if (IDome != null)
-				IDome.SetPark();
-			else
-				objTypeDome.InvokeMember("SetPark", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objDomeLateBound, new object[] { });
+            memberFactory.CallMember(3, "SetPark", new Type[] { }, new object[] { });
         }
 
         /// <summary>
@@ -342,15 +204,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public ShutterState ShutterStatus
         {
-            get
-            {
-				if (IDome != null)
-					return IDome.ShutterStatus;
-				else
-					return (ShutterState)objTypeDome.InvokeMember("ShutterStatus", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objDomeLateBound, new object[] { });
-            }
+             get { return (ShutterState)memberFactory.CallMember(1, "ShutterStatus", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -362,24 +216,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Slaved
         {
-            get
-            {
-				if (IDome != null)
-					return IDome.Slaved;
-				else
-					return (bool)objTypeDome.InvokeMember("Slaved", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objDomeLateBound, new object[] { });
-            }
-            set
-            {
-				if (IDome != null)
-					IDome.Slaved = value;
-				else
-					objTypeDome.InvokeMember("Slaved", 
-						BindingFlags.Default | BindingFlags.SetProperty,
-						null, objDomeLateBound, new object[] { value });
-            }
+            get { return (bool)(memberFactory.CallMember(1, "Slaved", new Type[] { }, new object[] { })); }
+            set { memberFactory.CallMember(2, "Slaved", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -390,12 +228,7 @@ namespace ASCOM.DriverAccess
         /// <param name="Altitude">Target dome altitude (degrees, horizon zero and increasing positive to 90 zenith)</param>
         public void SlewToAltitude(double Altitude)
         {
-			if (IDome != null)
-				IDome.SlewToAltitude(Altitude);
-			else
-				objTypeDome.InvokeMember("SlewToAltitude", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objDomeLateBound, new object[] { Altitude });
+            memberFactory.CallMember(3, "SlewToAltitude", new Type[] { }, new object[] { });
         }
 
         /// <summary>
@@ -406,12 +239,7 @@ namespace ASCOM.DriverAccess
         /// <param name="Azimuth">Target azimuth (degrees, North zero and increasing clockwise. i.e., 90 East, 180 South, 270 West)</param>
         public void SlewToAzimuth(double Azimuth)
         {
-			if (IDome != null)
-				IDome.SlewToAzimuth(Azimuth);
-			else
-				objTypeDome.InvokeMember("SlewToAzimuth", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objDomeLateBound, new object[] { Azimuth });
+            memberFactory.CallMember(3, "SlewToAzimuth", new Type[] { typeof(double) }, new object[] { Azimuth });
         }
 
         /// <summary>
@@ -421,15 +249,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Slewing
         {
-            get
-            {
-				if (IDome != null)
-					return IDome.Slewing;
-				else
-					return (bool)objTypeDome.InvokeMember("Slewing",
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objDomeLateBound, new object[] { });
-            }    
+            get { return (bool)(memberFactory.CallMember(1, "Slewing", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -439,64 +259,39 @@ namespace ASCOM.DriverAccess
         /// <param name="Azimuth">Target azimuth (degrees, North zero and increasing clockwise. i.e., 90 East, 180 South, 270 West)</param>
         public void SyncToAzimuth(double Azimuth)
         {
-			if (IDome != null)
-				IDome.SyncToAzimuth(Azimuth);
-			else
-				objTypeDome.InvokeMember("SyncToAzimuth", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objDomeLateBound, new object[] { });
+            memberFactory.CallMember(3, "SyncToAzimuth", new Type[] { typeof(double) }, new object[] { Azimuth });
         }
 
         #endregion
 
-		#region IDisposable Members
-		/// <summary>
-		/// Dispose the late-bound interface, if needed. Will release it via COM
-		/// if it is a COM object, else if native .NET will just dereference it
-		/// for GC.
-		/// </summary>
-		public void Dispose()
-		{
-			if (this.objDomeLateBound != null)
-			{
-				try { Marshal.ReleaseComObject(objDomeLateBound); }
-				catch (Exception) { }
-				objDomeLateBound = null;
-			}
-		}
+        #region IDisposable Members
 
-		#endregion
+        /// <summary>
+        /// Dispose the late-bound interface, if needed. Will release it via COM
+        /// if it is a COM object, else if native .NET will just dereference it
+        /// for GC.
+        /// </summary>
+        public void Dispose()
+        {
+            memberFactory.Dispose();
+        }
+
+        #endregion
 
         #region IAscomDriver Members
 
         /// <summary>
-        /// Set True to enable the
-        /// link. Set False to disable the link (this does not switch off the cooler).
+        /// Set True to enable the link. Set False to disable the link.
         /// You can also read the property to check whether it is connected.
         /// </summary>
         /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
         /// <exception cref=" System.Exception">Must throw exception if unsuccessful.</exception>
         public bool Connected
         {
-            get
-            {
-                if (IDome != null)
-                    return IDome.Connected;
-                else
-                    return Convert.ToBoolean(objTypeDome.InvokeMember("Connected",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objDomeLateBound, new object[] { }));
-            }
-            set
-            {
-                if (IDome != null)
-                    IDome.Connected = value;
-                else
-                    objTypeDome.InvokeMember("Connected",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objDomeLateBound, new object[] { value });
-            }
+            get { return (bool)memberFactory.CallMember(1, "Connected", new Type[] { }, new object[] { }); }
+            set { memberFactory.CallMember(2, "Connected", new Type[] { }, new object[] { value }); }
         }
+
         /// <summary>
         /// Returns a description of the driver, such as manufacturer and model
         /// number. Any ASCII characters may be used. The string shall not exceed 68
@@ -506,18 +301,11 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if description unavailable</exception>
         public string Description
         {
-            get
-            {
-                if (IDome != null)
-                    return IDome.Description;
-                else
-                    return Convert.ToString(objTypeDome.InvokeMember("Description",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objDomeLateBound, new object[] { }));
-            }
+            get { return (string)memberFactory.CallMember(1, "Description", new Type[] { typeof(string) }, new object[] { }); }
         }
+
         /// <summary>
-        /// Descriptive and version information about this ASCOM Telescope driver.
+        /// Descriptive and version information about this ASCOM driver.
         /// This string may contain line endings and may be hundreds to thousands of characters long.
         /// It is intended to display detailed information on the ASCOM driver, including version and copyright data.
         /// See the Description property for descriptive info on the telescope itself.
@@ -525,16 +313,9 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string DriverInfo
         {
-            get
-            {
-                if (IDome != null)
-                    return IDome.DriverInfo;
-                else
-                    return (string)objTypeDome.InvokeMember("DriverInfo",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objDomeLateBound, new object[] { });
-            }
+            get { return (string)memberFactory.CallMember(1, "DriverInfo", new Type[] { typeof(string) }, new object[] { }); }
         }
+
         /// <summary>
         /// A string containing only the major and minor version of the driver.
         /// This must be in the form "n.n".
@@ -542,16 +323,9 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string DriverVersion
         {
-            get
-            {
-                if (IDome != null)
-                    return IDome.DriverVersion;
-                else
-                    return (string)objTypeDome.InvokeMember("DriverVersion",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objDomeLateBound, new object[] { });
-            }
+            get { return (string)memberFactory.CallMember(1, "DriverVersion", new Type[] { typeof(string) }, new object[] { }); }
         }
+
         /// <summary>
         /// The version of this interface. Will return 2 for this version.
         /// Clients can detect legacy V1 drivers by trying to read ths property.
@@ -560,15 +334,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public short InterfaceVersion
         {
-            get
-            {
-                if (IDome != null)
-                    return IDome.InterfaceVersion;
-                else
-                    return (short)objTypeDome.InvokeMember("InterfaceVersion",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objDomeLateBound, new object[] { });
-            }
+            get { return Convert.ToInt16(memberFactory.CallMember(1, "InterfaceVersion", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -580,32 +346,17 @@ namespace ASCOM.DriverAccess
         /// </value>
         public string LastResult
         {
-            get
-            {
-                if (IDome != null)
-                    return IDome.LastResult;
-                else
-                    return Convert.ToString(objTypeDome.InvokeMember("LastResult",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objDomeLateBound, new object[] { }));
-            }
+            get { return (string)memberFactory.CallMember(1, "LastResult", new Type[] { typeof(string) }, new object[] { }); }
         }
 
         /// <summary>
-        /// The short name of the telescope, for display purposes
+        /// The short name of the driver, for display purposes
         /// </summary>
         public string Name
         {
-            get
-            {
-                if (IDome != null)
-                    return IDome.Name;
-                else
-                    return (string)objTypeDome.InvokeMember("Name",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objDomeLateBound, new object[] { });
-            }
+            get { return (string)memberFactory.CallMember(1, "Name", new Type[] { typeof(string) }, new object[] { }); }
         }
+
         /// <summary>
         /// Launches a configuration dialog box for the driver.  The call will not return
         /// until the user clicks OK or cancel manually.
@@ -613,12 +364,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw an exception if Setup dialog is unavailable.</exception>
         public void SetupDialog()
         {
-            if (IDome != null)
-                IDome.SetupDialog();
-            else
-                objTypeDome.InvokeMember("SetupDialog",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objDomeLateBound, new object[] { });
+            memberFactory.CallMember(3, "SetupDialog", new Type[] { }, new object[] { });
         }
         #endregion
 
@@ -635,35 +381,21 @@ namespace ASCOM.DriverAccess
         /// formatted list of wheel names and the second taking a wheel name and making the change.
         /// </example>
         /// </param>
-        /// <param name="ActionParameters">
-        /// List of required parameters or <see cref="String.Empty"/>  if none are required.
+        /// <param name="ActionParameters">List of required parameters or <see cref="String.Empty"/>  if none are required.
         /// </param>
         /// <returns>A string response and sets the <c>IDeviceControl.LastResult</c> property.</returns>
         public string Action(string ActionName, string ActionParameters)
         {
-            if (IDome != null)
-                return IDome.Action(ActionName, ActionParameters);
-            else
-                return (string)objTypeDome.InvokeMember("Action",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objDomeLateBound, new object[] { });
+            return (string)memberFactory.CallMember(3, "Action", new Type[] { typeof(string), typeof(string) }, new object[] { ActionName, ActionParameters });
         }
 
         /// <summary>
-        /// Gets the supported actions.
+        /// Gets string array of the supported actions.
         /// </summary>
         /// <value>The supported actions.</value>
         public string[] SupportedActions
         {
-            get
-            {
-                if (IDome != null)
-                    return IDome.SupportedActions;
-                else
-                    return (string[])(objTypeDome.InvokeMember("SupportedActions",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objDomeLateBound, new object[] { }));
-            }
+            get { return (string[])memberFactory.CallMember(1, "SupportedActions", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -677,12 +409,7 @@ namespace ASCOM.DriverAccess
         /// </param>
         public void CommandBlind(string Command, bool Raw)
         {
-            if (IDome != null)
-                IDome.CommandBlind(Command, Raw);
-            else
-                objTypeDome.InvokeMember("CommandBlind",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objDomeLateBound, new object[] { Command, Raw });
+            memberFactory.CallMember(3, "CommandBlind", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
         }
 
         /// <summary>
@@ -699,12 +426,7 @@ namespace ASCOM.DriverAccess
         /// </returns>
         public bool CommandBool(string Command, bool Raw)
         {
-            if (IDome != null)
-                return IDome.CommandBool(Command, Raw);
-            else
-                return (bool)objTypeDome.InvokeMember("CommandBool",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objDomeLateBound, new object[] { Command, Raw });
+            return (bool)memberFactory.CallMember(3, "CommandBool", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
         }
 
         /// <summary>
@@ -721,12 +443,7 @@ namespace ASCOM.DriverAccess
         /// </returns>
         public string CommandString(string Command, bool Raw)
         {
-            if (IDome != null)
-                return IDome.CommandString(Command, Raw);
-            else
-                return (string)objTypeDome.InvokeMember("CommandString",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objDomeLateBound, new object[] { Command, Raw });
+            return (string)memberFactory.CallMember(3, "CommandString", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
         }
 
         #endregion

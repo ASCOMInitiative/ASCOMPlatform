@@ -1,9 +1,7 @@
-//
 // 10-Jul-08	rbd		1.0.5 - Release COM on Dispose().
-//
+// 29-May-10  	rem     6.0.0 - Added memberFactory.
+
 using System;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using ASCOM.Interfaces;
 using ASCOM.Utilities;
 
@@ -15,32 +13,16 @@ namespace ASCOM.DriverAccess
 	/// </summary>
     public class Focuser : IFocuser, IDisposable, IAscomDriver, IDeviceControl
     {
+        #region IFocuser constructors
+        private MemberFactory memberFactory;
 
-        object objFocuserLateBound;
-		IFocuser IFocuser;
-		Type objTypeFocuser;
         /// <summary>
         /// Creates a focuser object with the given Prog ID
         /// </summary>
         /// <param name="focuserID"></param>
         public Focuser(string focuserID)
 		{
-			// Get Type Information 
-            objTypeFocuser = Type.GetTypeFromProgID(focuserID);
-			
-			// Create an instance of the Focuser object
-            objFocuserLateBound = Activator.CreateInstance(objTypeFocuser);
-
-			// Try to see if this driver has an ASCOM.Focuser interface
-			try
-			{
-				IFocuser = (IFocuser)objFocuserLateBound;
-			}
-			catch (Exception)
-			{
-				IFocuser = null;
-			}
-
+            memberFactory = new MemberFactory(focuserID);
 		}
 
         /// <summary>
@@ -53,8 +35,9 @@ namespace ASCOM.DriverAccess
 			Chooser oChooser = new Chooser();
 			oChooser.DeviceType = "Focuser";			// Requires Helper 5.0.3 (May '07)
 			return oChooser.Choose(focuserID);
-		}
+        }
 
+        #endregion
 
         #region IFocuser Members
 
@@ -63,15 +46,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Absolute
         {
-            get
-            {
-				if (IFocuser != null)
-					return IFocuser.Absolute;
-				else
-					return (bool)objTypeFocuser.InvokeMember("Absolute", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objFocuserLateBound, new object[] { });
-            }
+            get { return (bool)memberFactory.CallMember(1, "Absolute", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -82,12 +57,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void Halt()
         {
-			if (IFocuser != null)
-				IFocuser.Halt();
-			else
-				objTypeFocuser.InvokeMember("Halt", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objFocuserLateBound, new object[] { });
+            memberFactory.CallMember(3, "Halt", new Type[] { }, new object[] { });
         }
 
         /// <summary>
@@ -95,15 +65,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool IsMoving
         {
-            get
-            {
-				if (IFocuser != null)
-					return IFocuser.IsMoving;
-				else
-					return (bool)objTypeFocuser.InvokeMember("IsMoving", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objFocuserLateBound, new object[] { });
-            }
+            get { return (bool)memberFactory.CallMember(1, "IsMoving", new Type[] { }, new object[] { }); }
         }
         /// <summary>
         /// State of the connection to the focuser.
@@ -113,25 +75,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Link
         {
-            get
-            {
-				if (IFocuser != null)
-					return IFocuser.Link;
-				else
-					return (bool)objTypeFocuser.InvokeMember("Link", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-                    null, objFocuserLateBound, new object[] { });
-            }
-            set
-            {
-				if (IFocuser != null)
-					IFocuser.Link = value;
-				else
-					objTypeFocuser.InvokeMember("Link", 
-						BindingFlags.Default | BindingFlags.SetProperty,
-						null, objFocuserLateBound, new object[] { value });
-
-            }
+            get { return (bool)memberFactory.CallMember(1, "Link", new Type[] { }, new object[] { }); }
+            set { memberFactory.CallMember(2, "Link", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -142,15 +87,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public int MaxIncrement
         {
-            get
-            {
-				if (IFocuser != null)
-					return IFocuser.MaxIncrement;
-				else
-					return (int)objTypeFocuser.InvokeMember("MaxIncrement", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objFocuserLateBound, new object[] { });
-            }
+            get { return Convert.ToInt32(memberFactory.CallMember(1, "MaxIncrement", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -161,15 +98,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public int MaxStep
         {
-            get
-            {
-				if (IFocuser != null)
-					return IFocuser.MaxStep;
-				else
-					return (int)objTypeFocuser.InvokeMember("MaxStep", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objFocuserLateBound, new object[] { }); 
-            }
+            get { return Convert.ToInt32(memberFactory.CallMember(1, "MaxStep", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -179,12 +108,7 @@ namespace ASCOM.DriverAccess
         /// <param name="val"></param>
         public void Move(int val)
         {
-			if (IFocuser != null)
-				IFocuser.Move(val);
-			else
-				objTypeFocuser.InvokeMember("Move", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objFocuserLateBound, new object[] { val });
+            memberFactory.CallMember(3, "Move", new Type[] {typeof(int)}, new object[] { val });
         }
 
         /// <summary>
@@ -194,15 +118,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public int Position
         {
-            get
-            {
-				if (IFocuser != null)
-					return IFocuser.Position;
-				else
-					return (int)objTypeFocuser.InvokeMember("Position", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objFocuserLateBound, new object[] { });
-            }
+            get { return Convert.ToInt32(memberFactory.CallMember(1, "Position", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -213,15 +129,7 @@ namespace ASCOM.DriverAccess
 
         public double StepSize
         {
-            get
-            {
-				if (IFocuser != null)
-					return IFocuser.StepSize;
-				else
-					return (double)objTypeFocuser.InvokeMember("StepSize", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objFocuserLateBound, new object[] { });
-            }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "StepSize", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -234,25 +142,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool TempComp
         {
-            get
-            {
-				if (IFocuser != null)
-					return IFocuser.TempComp;
-				else
-					return (bool)objTypeFocuser.InvokeMember("TempComp", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objFocuserLateBound, new object[] { });
-            }
-            set
-            {
-				if (IFocuser != null)
-					IFocuser.TempComp = value;
-				else
-					objTypeFocuser.InvokeMember("TempComp",
-						BindingFlags.Default | BindingFlags.SetProperty,
-						null, objFocuserLateBound, new object[] { value } );
-
-            }
+            get { return (bool)memberFactory.CallMember(1, "TempComp", new Type[] { }, new object[] { }); }
+            set { memberFactory.CallMember(2, "TempComp", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -261,15 +152,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool TempCompAvailable
         {
-            get
-            {
-				if (IFocuser != null)
-					return IFocuser.TempCompAvailable;
-				else
-					return (bool)objTypeFocuser.InvokeMember("TempCompAvailable", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objFocuserLateBound, new object[] { });
-            }
+            get { return (bool)memberFactory.CallMember(1, "TempCompAvailable", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -279,67 +162,39 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double Temperature
         {
-            get
-            {
-				if (IFocuser != null)
-					return IFocuser.Temperature;
-				else
-					return (double)objTypeFocuser.InvokeMember("Temperature",
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objFocuserLateBound, new object[] { });
-            }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "Temperature", new Type[] { }, new object[] { })); }
         }
 
         #endregion
 
-		#region IDisposable Members
-		/// <summary>
-		/// Dispose the late-bound interface, if needed. Will release it via COM
-		/// if it is a COM object, else if native .NET will just dereference it
-		/// for GC.
-		/// </summary>
-		public void Dispose()
-		{
-			if (this.objFocuserLateBound != null)
-			{
-				try { Marshal.ReleaseComObject(objFocuserLateBound); }
-				catch (Exception) { }
-				objFocuserLateBound = null;
-			}
-		}
+        #region IDisposable Members
 
-		#endregion
+        /// <summary>
+        /// Dispose the late-bound interface, if needed. Will release it via COM
+        /// if it is a COM object, else if native .NET will just dereference it
+        /// for GC.
+        /// </summary>
+        public void Dispose()
+        {
+            memberFactory.Dispose();
+        }
+
+        #endregion
 
         #region IAscomDriver Members
 
         /// <summary>
-        /// Set True to enable the
-        /// link. Set False to disable the link (this does not switch off the cooler).
+        /// Set True to enable the link. Set False to disable the link.
         /// You can also read the property to check whether it is connected.
         /// </summary>
         /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
         /// <exception cref=" System.Exception">Must throw exception if unsuccessful.</exception>
         public bool Connected
         {
-            get
-            {
-                if (IFocuser != null)
-                    return IFocuser.Connected;
-                else
-                    return Convert.ToBoolean(objTypeFocuser.InvokeMember("Connected",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objFocuserLateBound, new object[] { }));
-            }
-            set
-            {
-                if (IFocuser != null)
-                    IFocuser.Connected = value;
-                else
-                    objTypeFocuser.InvokeMember("Connected",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objFocuserLateBound, new object[] { value });
-            }
+            get { return (bool)memberFactory.CallMember(1, "Connected", new Type[] { }, new object[] { }); }
+            set { memberFactory.CallMember(2, "Connected", new Type[] { }, new object[] { value }); }
         }
+
         /// <summary>
         /// Returns a description of the driver, such as manufacturer and model
         /// number. Any ASCII characters may be used. The string shall not exceed 68
@@ -349,18 +204,11 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if description unavailable</exception>
         public string Description
         {
-            get
-            {
-                if (IFocuser != null)
-                    return IFocuser.Description;
-                else
-                    return Convert.ToString(objTypeFocuser.InvokeMember("Description",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objFocuserLateBound, new object[] { }));
-            }
+            get { return (string)memberFactory.CallMember(1, "Description", new Type[] { typeof(string) }, new object[] { }); }
         }
+
         /// <summary>
-        /// Descriptive and version information about this ASCOM Telescope driver.
+        /// Descriptive and version information about this ASCOM driver.
         /// This string may contain line endings and may be hundreds to thousands of characters long.
         /// It is intended to display detailed information on the ASCOM driver, including version and copyright data.
         /// See the Description property for descriptive info on the telescope itself.
@@ -368,16 +216,9 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string DriverInfo
         {
-            get
-            {
-                if (IFocuser != null)
-                    return IFocuser.DriverInfo;
-                else
-                    return (string)objTypeFocuser.InvokeMember("DriverInfo",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objFocuserLateBound, new object[] { });
-            }
+            get { return (string)memberFactory.CallMember(1, "DriverInfo", new Type[] { typeof(string) }, new object[] { }); }
         }
+
         /// <summary>
         /// A string containing only the major and minor version of the driver.
         /// This must be in the form "n.n".
@@ -385,16 +226,9 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string DriverVersion
         {
-            get
-            {
-                if (IFocuser != null)
-                    return IFocuser.DriverVersion;
-                else
-                    return (string)objTypeFocuser.InvokeMember("DriverVersion",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objFocuserLateBound, new object[] { });
-            }
+            get { return (string)memberFactory.CallMember(1, "DriverVersion", new Type[] { typeof(string) }, new object[] { }); }
         }
+
         /// <summary>
         /// The version of this interface. Will return 2 for this version.
         /// Clients can detect legacy V1 drivers by trying to read ths property.
@@ -403,15 +237,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public short InterfaceVersion
         {
-            get
-            {
-                if (IFocuser != null)
-                    return IFocuser.InterfaceVersion;
-                else
-                    return (short)objTypeFocuser.InvokeMember("InterfaceVersion",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objFocuserLateBound, new object[] { });
-            }
+            get { return Convert.ToInt16(memberFactory.CallMember(1, "InterfaceVersion", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -423,32 +249,17 @@ namespace ASCOM.DriverAccess
         /// </value>
         public string LastResult
         {
-            get
-            {
-                if (IFocuser != null)
-                    return IFocuser.LastResult;
-                else
-                    return Convert.ToString(objTypeFocuser.InvokeMember("LastResult",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objFocuserLateBound, new object[] { }));
-            }
+            get { return (string)memberFactory.CallMember(1, "LastResult", new Type[] { typeof(string) }, new object[] { }); }
         }
 
         /// <summary>
-        /// The short name of the telescope, for display purposes
+        /// The short name of the driver, for display purposes
         /// </summary>
         public string Name
         {
-            get
-            {
-                if (IFocuser != null)
-                    return IFocuser.Name;
-                else
-                    return (string)objTypeFocuser.InvokeMember("Name",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objFocuserLateBound, new object[] { });
-            }
+            get { return (string)memberFactory.CallMember(1, "Name", new Type[] { typeof(string) }, new object[] { }); }
         }
+
         /// <summary>
         /// Launches a configuration dialog box for the driver.  The call will not return
         /// until the user clicks OK or cancel manually.
@@ -456,12 +267,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw an exception if Setup dialog is unavailable.</exception>
         public void SetupDialog()
         {
-            if (IFocuser != null)
-                IFocuser.SetupDialog();
-            else
-                objTypeFocuser.InvokeMember("SetupDialog",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objFocuserLateBound, new object[] { });
+            memberFactory.CallMember(3, "SetupDialog", new Type[] { }, new object[] { });
         }
         #endregion
 
@@ -478,35 +284,21 @@ namespace ASCOM.DriverAccess
         /// formatted list of wheel names and the second taking a wheel name and making the change.
         /// </example>
         /// </param>
-        /// <param name="ActionParameters">
-        /// List of required parameters or <see cref="String.Empty"/>  if none are required.
+        /// <param name="ActionParameters">List of required parameters or <see cref="String.Empty"/>  if none are required.
         /// </param>
         /// <returns>A string response and sets the <c>IDeviceControl.LastResult</c> property.</returns>
         public string Action(string ActionName, string ActionParameters)
         {
-            if (IFocuser != null)
-                return IFocuser.Action(ActionName, ActionParameters);
-            else
-                return (string)objTypeFocuser.InvokeMember("Action",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objFocuserLateBound, new object[] { });
+            return (string)memberFactory.CallMember(3, "Action", new Type[] { typeof(string), typeof(string) }, new object[] { ActionName, ActionParameters });
         }
 
         /// <summary>
-        /// Gets the supported actions.
+        /// Gets string array of the supported actions.
         /// </summary>
         /// <value>The supported actions.</value>
         public string[] SupportedActions
         {
-            get
-            {
-                if (IFocuser != null)
-                    return IFocuser.SupportedActions;
-                else
-                    return (string[])(objTypeFocuser.InvokeMember("SupportedActions",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objFocuserLateBound, new object[] { }));
-            }
+            get { return (string[])memberFactory.CallMember(1, "SupportedActions", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -520,12 +312,7 @@ namespace ASCOM.DriverAccess
         /// </param>
         public void CommandBlind(string Command, bool Raw)
         {
-            if (IFocuser != null)
-                IFocuser.CommandBlind(Command, Raw);
-            else
-                objTypeFocuser.InvokeMember("CommandBlind",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objFocuserLateBound, new object[] { Command, Raw });
+            memberFactory.CallMember(3, "CommandBlind", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
         }
 
         /// <summary>
@@ -542,12 +329,7 @@ namespace ASCOM.DriverAccess
         /// </returns>
         public bool CommandBool(string Command, bool Raw)
         {
-            if (IFocuser != null)
-                return IFocuser.CommandBool(Command, Raw);
-            else
-                return (bool)objTypeFocuser.InvokeMember("CommandBool",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objFocuserLateBound, new object[] { Command, Raw });
+            return (bool)memberFactory.CallMember(3, "CommandBool", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
         }
 
         /// <summary>
@@ -564,16 +346,10 @@ namespace ASCOM.DriverAccess
         /// </returns>
         public string CommandString(string Command, bool Raw)
         {
-            if (IFocuser != null)
-                return IFocuser.CommandString(Command, Raw);
-            else
-                return (string)objTypeFocuser.InvokeMember("CommandString",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objFocuserLateBound, new object[] { Command, Raw });
+            return (string)memberFactory.CallMember(3, "CommandString", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
         }
 
         #endregion
-
 	}
 	#endregion
 }
