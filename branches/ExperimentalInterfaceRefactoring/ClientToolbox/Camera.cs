@@ -2,11 +2,9 @@
 //						was a Chris Rowland test/experiment. Can cast the object returned
 //						by ImageArray into int[,]. Add COM releasing to Dispose().
 // 01-Jan-10  	cdr     1.0.6 - Add Camera V2 properties as late bound properties.
+// 29-May-10  	rem     6.0.0 - Added memberFactory.
 
 using System;
-using System.Collections;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using ASCOM.Interfaces;
 using ASCOM.Utilities;
 
@@ -18,10 +16,12 @@ namespace ASCOM.DriverAccess
     /// </summary>
     public class Camera : ICamera, IDisposable, IAscomDriver, IDeviceControl
     {
-        protected object objCameraLateBound;
-		protected ICamera iCamera;
-		protected Type objTypeCamera;
+        #region ICamera constructors
+        private MemberFactory memberFactory;
 
+        /// <summary>
+        /// Creates an instance of the camera class.
+        /// </summary>
         public Camera()
         {
         }
@@ -32,21 +32,7 @@ namespace ASCOM.DriverAccess
         /// <param name="cameraID">The ProgID for the camera</param>
         public Camera(string cameraID)
 		{
-			// Get Type Information 
-            objTypeCamera = Type.GetTypeFromProgID(cameraID);
-			
-			// Create an instance of the camera object
-            objCameraLateBound = Activator.CreateInstance(objTypeCamera);
-
-			// Try to see if this driver has an ASCOM.Camera interface
-			try
-			{
-				iCamera = (ICamera)objCameraLateBound;
-			}
-			catch (Exception)
-			{
-				iCamera = null;
-			}
+            memberFactory = new MemberFactory(cameraID);
 		}
 
         /// <summary>
@@ -66,6 +52,8 @@ namespace ASCOM.DriverAccess
             return oChooser.Choose(cameraID);
         }
 
+        #endregion
+
         #region ICamera Members
 
         /// <summary>
@@ -78,12 +66,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void AbortExposure()
         {
-            if (iCamera != null)
-                iCamera.AbortExposure();
-            else
-                objTypeCamera.InvokeMember("AbortExposure",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objCameraLateBound, new object[] { });
+            memberFactory.CallMember(3, "AbortExposure", new Type[] { }, new object[] { }); 
         }
 
         /// <summary>
@@ -96,24 +79,8 @@ namespace ASCOM.DriverAccess
         /// <exception>Must throw an exception for illegal binning values</exception>
         public short BinX
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.BinX;
-                else
-                    return Convert.ToInt16(objTypeCamera.InvokeMember("BinX",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
-            set
-            {
-                if (iCamera != null)
-                    iCamera.BinX = value;
-                else
-                    objTypeCamera.InvokeMember("BinX",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objCameraLateBound, new object[] { value });
-            }
+           get { return Convert.ToInt16(memberFactory.CallMember(1, "BinX", new Type[] { }, new object[] { })); }
+           set { memberFactory.CallMember(2, "BinX", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -126,24 +93,8 @@ namespace ASCOM.DriverAccess
         /// <exception>Must throw an exception for illegal binning values</exception>
         public short BinY
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.BinY;
-                else
-                    return Convert.ToInt16(objTypeCamera.InvokeMember("BinY",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
-            set
-            {
-                if (iCamera != null)
-                    iCamera.BinY = value;
-                else
-                    objTypeCamera.InvokeMember("BinY",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objCameraLateBound, new object[] { value });
-            }
+           get { return Convert.ToInt16(memberFactory.CallMember(1, "BinY", new Type[] { }, new object[] { })); }
+           set { memberFactory.CallMember(2, "BinY", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -154,15 +105,7 @@ namespace ASCOM.DriverAccess
         /// <exception>Must throw exception if data unavailable.</exception>
         public double CCDTemperature
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.CCDTemperature;
-                else
-                    return Convert.ToDouble(objTypeCamera.InvokeMember("CCDTemperature",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "CCDTemperature", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -197,15 +140,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref="System.Exception">Must return an exception if the camera status is unavailable.</exception>
         public CameraStates CameraState
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.CameraState;
-                else
-                    return (CameraStates)objTypeCamera.InvokeMember("CameraState",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { });
-            }
+            get { return (CameraStates)memberFactory.CallMember(1, "CameraState", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -215,17 +150,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref="System.Exception">Must throw exception if the value is not known</exception>
         public int CameraXSize
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.CameraXSize;
-                else
-                {
-                    return Convert.ToInt32( objTypeCamera.InvokeMember("CameraXSize",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-                }
-            }
+           get { return Convert.ToInt32(memberFactory.CallMember(1, "CameraXSize", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -235,17 +160,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref="System.Exception">Must throw exception if the value is not known</exception>
         public int CameraYSize
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.CameraYSize;
-                else
-                {
-                    return Convert.ToInt32( objTypeCamera.InvokeMember("CameraYSize",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-                }
-            }
+           get { return Convert.ToInt32(memberFactory.CallMember(1, "CameraYSize", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -256,15 +171,7 @@ namespace ASCOM.DriverAccess
         /// </value>
         public bool CanAbortExposure
         {
-	        get 
-            {
-				if (iCamera != null)
-					return iCamera.CanAbortExposure;
-				else
-					return Convert.ToBoolean(objTypeCamera.InvokeMember("CanAbortExposure", 
-						BindingFlags.Default | BindingFlags.GetProperty,
-						null, objCameraLateBound, new object[] { }));
-            }
+            get { return (bool)memberFactory.CallMember(1, "CanAbortExposure", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -279,15 +186,7 @@ namespace ASCOM.DriverAccess
         /// occurs if no link established and camera must be queried)</exception>
         public bool CanAsymmetricBin
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.CanAsymmetricBin;
-                else
-                    return Convert.ToBoolean(objTypeCamera.InvokeMember("CanAsymmetricBin",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+            get { return (bool)memberFactory.CallMember(1, "CanAsymmetricBin", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -298,15 +197,7 @@ namespace ASCOM.DriverAccess
         /// </value>
         public bool  CanGetCoolerPower
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.CanGetCoolerPower;
-                else
-                    return Convert.ToBoolean(objTypeCamera.InvokeMember("CanGetCoolerPower",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+           get { return (bool)memberFactory.CallMember(1, "CanGetCoolerPower", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -319,15 +210,7 @@ namespace ASCOM.DriverAccess
         /// </value>
         public bool CanPulseGuide
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.CanPulseGuide;
-                else
-                    return Convert.ToBoolean(objTypeCamera.InvokeMember("CanPulseGuide",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+            get { return (bool)memberFactory.CallMember(1, "CanPulseGuide", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -340,15 +223,7 @@ namespace ASCOM.DriverAccess
         /// </value>
         public bool CanSetCCDTemperature
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.CanSetCCDTemperature;
-                else
-                    return Convert.ToBoolean(objTypeCamera.InvokeMember("CanSetCCDTemperature",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+           get { return (bool)memberFactory.CallMember(1, "CanSetCCDTemperature", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -363,15 +238,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">an error condition such as link failure is present</exception>
         public bool CanStopExposure
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.CanStopExposure;
-                else
-                    return Convert.ToBoolean(objTypeCamera.InvokeMember("CanStopExposure",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+            get { return (bool)memberFactory.CallMember(1, "CanStopExposure", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -386,24 +253,8 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">an error condition such as link failure is present</exception>
        public bool CoolerOn
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.CoolerOn;
-                else
-                    return Convert.ToBoolean(objTypeCamera.InvokeMember("CoolerOn",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
-            set
-            {
-                if (iCamera != null)
-                    iCamera.CoolerOn = value;
-                else
-                    objTypeCamera.InvokeMember("CoolerOn",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objCameraLateBound, new object[] { value });
-            }
+           get { return (bool)memberFactory.CallMember(1, "CoolerOn", new Type[] { }, new object[] { }); }
+           set { memberFactory.CallMember(2, "CoolerOn", new Type[] { }, new object[] { value }); }
         }
 
        /// <summary>
@@ -415,15 +266,7 @@ namespace ASCOM.DriverAccess
        /// <exception cref=" System.Exception">an error condition such as link failure is present</exception>
         public double CoolerPower
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.CoolerPower;
-                else
-                    return Convert.ToDouble(objTypeCamera.InvokeMember("CoolerPower",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "CoolerPower", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -435,15 +278,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public double ElectronsPerADU
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.ElectronsPerADU;
-                else
-                    return Convert.ToDouble(objTypeCamera.InvokeMember("ElectronsPerADU",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "ElectronsPerADU", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -454,15 +289,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public double FullWellCapacity
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.FullWellCapacity;
-                else
-                    return Convert.ToDouble(objTypeCamera.InvokeMember("FullWellCapacity",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "FullWellCapacity", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -475,15 +302,7 @@ namespace ASCOM.DriverAccess
         /// </value>
        public bool HasShutter
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.HasShutter;
-                else
-                    return Convert.ToBoolean(objTypeCamera.InvokeMember("HasShutter",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+           get { return (bool)memberFactory.CallMember(1, "HasShutter", new Type[] { }, new object[] { }); }
         }
 
        /// <summary>
@@ -494,15 +313,7 @@ namespace ASCOM.DriverAccess
        /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public double HeatSinkTemperature
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.HeatSinkTemperature;
-                else
-                    return Convert.ToDouble(objTypeCamera.InvokeMember("HeatSinkTemperature",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "HeatSinkTemperature", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -520,15 +331,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public object ImageArray
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.ImageArray;
-                else
-                    return (object)objTypeCamera.InvokeMember("ImageArray",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { });
-            }
+            get { return (object)memberFactory.CallMember(1, "ImageArray", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -547,15 +350,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public object ImageArrayVariant
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.ImageArrayVariant;
-                else
-                    return (object)objTypeCamera.InvokeMember("ImageArrayVariant",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { });
-            }
+            get { return (object)memberFactory.CallMember(1, "ImageArrayVariant", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -567,15 +362,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">hardware or communications link error has occurred.</exception>
         public bool ImageReady
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.ImageReady;
-                else
-                    return Convert.ToBoolean(objTypeCamera.InvokeMember("ImageReady",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+            get { return (bool)memberFactory.CallMember(1, "ImageReady", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -588,15 +375,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">hardware or communications link error has occurred.</exception>
         public bool IsPulseGuiding
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.IsPulseGuiding;
-                else
-                    return Convert.ToBoolean(objTypeCamera.InvokeMember("IsPulseGuiding",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+            get { return (bool)memberFactory.CallMember(1, "IsPulseGuiding", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -608,15 +387,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if no error condition.</exception>
         public string LastError
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.LastError;
-                else
-                    return Convert.ToString(objTypeCamera.InvokeMember("LastError",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+            get { return (string)memberFactory.CallMember(1, "LastError", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -628,15 +399,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if not supported or no exposure has been taken</exception>
         public double LastExposureDuration
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.LastExposureDuration;
-                else
-                    return Convert.ToDouble(objTypeCamera.InvokeMember("LastExposureDuration",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "LastExposureDuration", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -647,15 +410,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if not supported or no exposure has been taken</exception>
         public string LastExposureStartTime
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.LastExposureStartTime;
-                else
-                    return Convert.ToString(objTypeCamera.InvokeMember("LastExposureStartTime",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+            get { return (string)memberFactory.CallMember(1, "LastExposureStartTime", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -665,15 +420,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public int MaxADU
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.MaxADU;
-                else
-                    return Convert.ToInt32(objTypeCamera.InvokeMember("MaxADU",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+            get { return Convert.ToInt32(memberFactory.CallMember(1, "MaxADU", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -685,15 +432,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public short MaxBinX
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.MaxBinX;
-                else
-                    return Convert.ToInt16(objTypeCamera.InvokeMember("MaxBinX",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+            get { return Convert.ToInt16(memberFactory.CallMember(1, "MaxBinX", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -704,15 +443,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public short MaxBinY
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.MaxBinY;
-                else
-                    return Convert.ToInt16(objTypeCamera.InvokeMember("MaxBinY",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+            get { return Convert.ToInt16(memberFactory.CallMember(1, "MaxBinY", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -723,24 +454,8 @@ namespace ASCOM.DriverAccess
         /// <value>The num X.</value>
         public int NumX
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.NumX;
-                else
-                    return Convert.ToInt32(objTypeCamera.InvokeMember("NumX",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
-            set
-            {
-                if (iCamera != null)
-                    iCamera.NumX = value;
-                else
-                    objTypeCamera.InvokeMember("NumX",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objCameraLateBound, new object[] { value });
-            }
+            get { return Convert.ToInt32(memberFactory.CallMember(1, "NumX", new Type[] { }, new object[] { })); }
+            set { memberFactory.CallMember(2, "NumX", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -751,24 +466,8 @@ namespace ASCOM.DriverAccess
         /// <value>The num Y.</value>
         public int NumY
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.NumY;
-                else
-                    return Convert.ToInt32(objTypeCamera.InvokeMember("NumY",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
-            set
-            {
-                if (iCamera != null)
-                    iCamera.NumY = value;
-                else
-                    objTypeCamera.InvokeMember("NumY",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objCameraLateBound, new object[] { value });
-            }
+            get { return Convert.ToInt32(memberFactory.CallMember(1, "NumY", new Type[] { }, new object[] { })); }
+            set { memberFactory.CallMember(2, "NumY", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -779,15 +478,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public double PixelSizeX
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.PixelSizeX;
-                else
-                    return Convert.ToDouble(objTypeCamera.InvokeMember("PixelSizeX",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+           get { return Convert.ToDouble(memberFactory.CallMember(1, "PixelSizeX", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -798,15 +489,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public double PixelSizeY
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.PixelSizeY;
-                else
-                    return Convert.ToDouble(objTypeCamera.InvokeMember("PixelSizeY",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "PixelSizeY", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -828,12 +511,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">PulseGuide command is unsuccessful</exception>
         public void PulseGuide(GuideDirections Direction, int Duration)
         {
-            if (iCamera != null)
-                iCamera.PulseGuide(Direction, Duration);
-            else
-                objTypeCamera.InvokeMember("PulseGuide",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objCameraLateBound, new object[] { Direction, Duration });
+            memberFactory.CallMember(3, "PulseGuide", new Type[] { typeof(GuideDirections), typeof(int) }, new object[] { Direction, Duration }); 
         }
 
         /// <summary>
@@ -847,24 +525,8 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if CanSetCCDTemperature is False.</exception>
         public double SetCCDTemperature
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.SetCCDTemperature;
-                else
-                    return Convert.ToDouble(objTypeCamera.InvokeMember("SetCCDTemperature",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
-            set
-            {
-                if (iCamera != null)
-                    iCamera.SetCCDTemperature = value;
-                else
-                    objTypeCamera.InvokeMember("SetCCDTemperature",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objCameraLateBound, new object[] { value });
-            }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "SetCCDTemperature", new Type[] { }, new object[] { })); }
+            set { memberFactory.CallMember(2, "SetCCDTemperature", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -877,12 +539,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">the exposure cannot be started for any reason, such as a hardware or communications error</exception>
         public void StartExposure(double Duration, bool Light)
         {
-            if (iCamera != null)
-                iCamera.StartExposure(Duration, Light);
-            else
-                objTypeCamera.InvokeMember("StartExposure",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objCameraLateBound, new object[] { Duration, Light });
+            memberFactory.CallMember(3, "StartExposure", new Type[] { typeof(double), typeof(bool) }, new object[] { Duration, Light }); 
         }
 
         /// <summary>
@@ -892,24 +549,8 @@ namespace ASCOM.DriverAccess
         /// <value>The start X.</value>
         public int StartX
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.StartX;
-                else
-                    return Convert.ToInt32( objTypeCamera.InvokeMember("StartX",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
-            set
-            {
-                if (iCamera != null)
-                    iCamera.StartX = value;
-                else
-                    objTypeCamera.InvokeMember("StartX",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objCameraLateBound, new object[] { value });
-            }
+            get { return Convert.ToInt32(memberFactory.CallMember(1, "StartX", new Type[] { }, new object[] { })); }
+            set { memberFactory.CallMember(2, "StartX", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -919,24 +560,8 @@ namespace ASCOM.DriverAccess
         /// <value>The start Y.</value>
         public int StartY
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.StartY;
-                else
-                    return Convert.ToInt32(objTypeCamera.InvokeMember("StartY",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
-            set
-            {
-                if (iCamera != null)
-                    iCamera.StartY = value;
-                else
-                    objTypeCamera.InvokeMember("StartY",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objCameraLateBound, new object[] { value });
-            }
+            get { return Convert.ToInt32(memberFactory.CallMember(1, "StartY", new Type[] { }, new object[] { })); }
+            set { memberFactory.CallMember(2, "StartY", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -949,12 +574,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw an exception if for any reason no image readout will be available.</exception>
         public void StopExposure()
         {
-            if (iCamera != null)
-                iCamera.StopExposure();
-            else
-                objTypeCamera.InvokeMember("StopExposure",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objCameraLateBound, new object[] {  });
+            memberFactory.CallMember(3, "StopExposure", new Type[] { }, new object[] { });
         }
 
         #endregion
@@ -968,12 +588,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void Dispose()
         {
-            if (this.objCameraLateBound != null)
-            {
-				try { Marshal.ReleaseComObject(objCameraLateBound); }
-				catch (Exception) { }
-				objCameraLateBound = null;
-            }
+            memberFactory.Dispose();
         }
 
         #endregion
@@ -989,24 +604,8 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if unsuccessful.</exception>
         public bool Connected
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.Connected;
-                else
-                    return Convert.ToBoolean(objTypeCamera.InvokeMember("Connected",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
-            set
-            {
-                if (iCamera != null)
-                    iCamera.Connected = value;
-                else
-                    objTypeCamera.InvokeMember("Connected",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objCameraLateBound, new object[] { value });
-            }
+            get { return (bool)memberFactory.CallMember(1, "Connected", new Type[] { }, new object[] { }); }
+            set { memberFactory.CallMember(2, "Connected", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -1018,15 +617,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if description unavailable</exception>
         public string Description
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.Description;
-                else
-                    return Convert.ToString(objTypeCamera.InvokeMember("Description",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+            get { return (string)memberFactory.CallMember(1, "Description", new Type[] { typeof(string) }, new object[] { }); }
         }
 
         /// <summary>
@@ -1038,15 +629,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string DriverInfo
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.DriverInfo;
-                else
-                    return (string)objTypeCamera.InvokeMember("DriverInfo",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { });
-            }
+            get { return (string)memberFactory.CallMember(1, "DriverInfo", new Type[] { typeof(string) }, new object[] { }); }
         }
 
         /// <summary>
@@ -1056,15 +639,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string DriverVersion
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.DriverVersion;
-                else
-                    return (string)objTypeCamera.InvokeMember("DriverVersion",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { });
-            }
+             get { return (string)memberFactory.CallMember(1, "DriverVersion", new Type[] { typeof(string) }, new object[] { }); }
         }
 
         /// <summary>
@@ -1075,15 +650,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public short InterfaceVersion
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.InterfaceVersion;
-                else
-                    return (short)objTypeCamera.InvokeMember("InterfaceVersion",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { });
-            }
+            get { return Convert.ToInt16(memberFactory.CallMember(1, "InterfaceVersion", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -1095,15 +662,7 @@ namespace ASCOM.DriverAccess
         /// </value>
         public string LastResult
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.LastResult;
-                else
-                    return Convert.ToString(objTypeCamera.InvokeMember("LastResult",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+             get { return (string)memberFactory.CallMember(1, "LastResult", new Type[] { typeof(string) }, new object[] { }); }
         }
 
         /// <summary>
@@ -1111,15 +670,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string Name
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.Name;
-                else
-                    return (string)objTypeCamera.InvokeMember("Name",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { });
-            }
+            get { return (string)memberFactory.CallMember(1, "Name", new Type[] { typeof(string) }, new object[] { }); }
         }
 
         /// <summary>
@@ -1129,14 +680,8 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw an exception if Setup dialog is unavailable.</exception>
         public void SetupDialog()
         {
-            if (iCamera != null)
-                iCamera.SetupDialog();
-            else
-                objTypeCamera.InvokeMember("SetupDialog",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objCameraLateBound, new object[] { });
+            memberFactory.CallMember(3, "SetupDialog", new Type[] { }, new object[] { }); 
         }
-
         #endregion
 
         #region IDeviceControl Members
@@ -1158,12 +703,7 @@ namespace ASCOM.DriverAccess
         /// <returns>A string response and sets the <c>IDeviceControl.LastResult</c> property.</returns>
         public string Action(string ActionName, string ActionParameters)
         {
-            if (iCamera != null)
-                return iCamera.Action(ActionName, ActionParameters);
-            else
-                return (string)objTypeCamera.InvokeMember("Action",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objCameraLateBound, new object[] { });
+            return (string)memberFactory.CallMember(3, "Action", new Type[] { typeof(string), typeof(string) }, new object[] { ActionName, ActionParameters }); 
         }
 
         /// <summary>
@@ -1172,15 +712,7 @@ namespace ASCOM.DriverAccess
         /// <value>The supported actions.</value>
         public string[] SupportedActions
         {
-            get
-            {
-                if (iCamera != null)
-                    return iCamera.SupportedActions;
-                else
-                    return (string[])(objTypeCamera.InvokeMember("SupportedActions",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objCameraLateBound, new object[] { }));
-            }
+             get { return (string[])memberFactory.CallMember(1, "SupportedActions", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -1194,12 +726,7 @@ namespace ASCOM.DriverAccess
         /// </param>
         public void CommandBlind(string Command, bool Raw)
         {
-            if (iCamera != null)
-                iCamera.CommandBlind(Command, Raw);
-            else
-                objTypeCamera.InvokeMember("CommandBlind",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objCameraLateBound, new object[] { Command, Raw });
+            memberFactory.CallMember(3, "CommandBlind", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw }); 
         }
 
         /// <summary>
@@ -1216,12 +743,7 @@ namespace ASCOM.DriverAccess
         /// </returns>
         public bool CommandBool(string Command, bool Raw)
         {
-            if (iCamera != null)
-                return iCamera.CommandBool(Command, Raw);
-            else
-                return (bool)objTypeCamera.InvokeMember("CommandBool",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objCameraLateBound, new object[] { Command, Raw });
+            return (bool)memberFactory.CallMember(3, "CommandBool", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw }); 
         }
 
         /// <summary>
@@ -1238,12 +760,7 @@ namespace ASCOM.DriverAccess
         /// </returns>
         public string CommandString(string Command, bool Raw)
         {
-            if (iCamera != null)
-                return iCamera.CommandString(Command, Raw);
-            else
-                return (string)objTypeCamera.InvokeMember("CommandString",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objCameraLateBound, new object[] { Command, Raw });
+            return (string)memberFactory.CallMember(3, "CommandString", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
         }
 
         #endregion

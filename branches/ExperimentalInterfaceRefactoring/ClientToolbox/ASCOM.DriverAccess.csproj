@@ -88,6 +88,7 @@
     <Compile Include="Focuser.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
+    <Compile Include="MemberFactory.cs" />
     <Compile Include="Rotator.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
