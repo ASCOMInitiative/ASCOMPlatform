@@ -8,15 +8,15 @@
     <ProjectGuid>{68255A7C-76E3-4D51-9475-6CFE21188FF6}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ASCOM.GACInstall</RootNamespace>
-    <AssemblyName>GACInstall</AssemblyName>
+    <RootNamespace>ASCOM.Internal</RootNamespace>
+    <AssemblyName>ASCOM.Internal.GACInstall</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <StartupObject>GACInstall.Program</StartupObject>
+    <StartupObject>ASCOM.Internal.GACInstall.Program</StartupObject>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>ASCOM.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>

@@ -44,7 +44,7 @@
 using System;
 namespace ASCOM.Interface
 	{
-	interface ITelescope : IAscomDriver
+	public interface ITelescope : IAscomDriver
 		{
 		void AbortSlew();
 		AlignmentModes AlignmentMode { get; }

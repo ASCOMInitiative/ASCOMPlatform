@@ -43,6 +43,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <RegisterForComInterop>true</RegisterForComInterop>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -89,14 +90,6 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\AssemblyVersionInfo.cs">
@@ -105,12 +98,18 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="DomeEnumerations.cs" />
     <Compile Include="ICamera.cs" />
     <Compile Include="CameraEnumerations.cs" />
     <Compile Include="IAscomDriver.cs" />
     <Compile Include="IAxisRates.cs" />
     <Compile Include="ICameraV2.cs" />
+    <Compile Include="IDome.cs" />
+    <Compile Include="IFilterWheel.cs" />
+    <Compile Include="IFocuser.cs" />
     <Compile Include="IRate.cs" />
+    <Compile Include="IRotator.cs" />
+    <Compile Include="ISwitch.cs" />
     <Compile Include="ITelescopeV2.cs" />
     <Compile Include="ITrackingRates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -118,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ASCOM.snk" />
+    <None Include="ASCOM.Interfaces.cd" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

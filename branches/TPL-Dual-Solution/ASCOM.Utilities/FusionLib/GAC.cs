@@ -36,7 +36,7 @@ using System.Text;
 using System.Globalization;
 using System.Runtime.InteropServices.ComTypes;
 
-namespace System.GAC
+namespace ASCOM.Internal
 {
 
     #region Flags

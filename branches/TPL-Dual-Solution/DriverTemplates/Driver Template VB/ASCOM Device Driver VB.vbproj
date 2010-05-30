@@ -230,6 +230,10 @@
       <Project>{44999847-A7B6-462D-B663-FE988D98E317}</Project>
       <Name>ASCOM.IConform</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\ASCOM.Interfaces\ASCOM.Interfaces.csproj">
+      <Project>{5A0818BF-F3DD-4262-AF69-FD794832B85C}</Project>
+      <Name>ASCOM.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\ASCOM.SettingsProvider.csproj">
       <Project>{4FFFD202-81D4-4549-880B-09B640D72C1D}</Project>
       <Name>ASCOM.SettingsProvider</Name>
