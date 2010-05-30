@@ -82,6 +82,7 @@
     <Compile Include="Dome.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
+    <Compile Include="ExceptionLogger.cs" />
     <Compile Include="FilterWheel.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
