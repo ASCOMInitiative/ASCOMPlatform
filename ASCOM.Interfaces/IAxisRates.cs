@@ -27,7 +27,7 @@ namespace ASCOM.Interface
 		int Count { get; }
 
 		/// <summary>
-		/// Gets the <see cref="IRate"/> at the specified index.
+		/// Gets the <see cref="ASCOM.Interface.IRate"/> at the specified index.
 		/// </summary>
 		/// <value>An <see cref="IRate"/> object.</value>
 		IRate this[int Index] { get; }

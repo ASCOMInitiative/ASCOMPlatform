@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.GAC;
+
 //// Artinsoft
 //// Author: Mauricio Rojas orellabac@gmail.com mrojas@artinsoft.com
 //// This program uses the undocumented GAC API to perform a simple install of an assembly
@@ -10,7 +10,7 @@ using System.GAC;
 ////                          to uninstall as well as install
 ////                          to provide textual description of uninstall outcome
 
-namespace GACInstall
+namespace ASCOM.Internal.GACInstall
 {
     class Program
     {
@@ -65,7 +65,7 @@ namespace GACInstall
             // We use opaque scheme here
             FUSION_INSTALL_REFERENCE[] installReference = new FUSION_INSTALL_REFERENCE[1];
             installReference[0].dwFlags = 0;
-            installReference[0].guidScheme = System.GAC.AssemblyCache.FUSION_REFCOUNT_OPAQUE_STRING_GUID;
+            installReference[0].guidScheme = AssemblyCache.FUSION_REFCOUNT_OPAQUE_STRING_GUID;
             installReference[0].szIdentifier = "GACInstall";
             installReference[0].szNonCannonicalData= "Installed by Peter Simpson's GACInstall program";
             installReference[0].cbSize = 40;

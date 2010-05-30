@@ -4,10 +4,6 @@
 //							(this is a reference implementation!)
 //
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using ASCOM;
 using Helper = ASCOM.Utilities;
 
 namespace ASCOM.Simulator

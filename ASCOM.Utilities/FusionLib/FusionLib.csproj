@@ -8,8 +8,8 @@
     <ProjectGuid>{70FDA2DE-A36D-45A0-812F-E5357AC7A8D2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FusionLib</RootNamespace>
-    <AssemblyName>FusionLib</AssemblyName>
+    <RootNamespace>ASCOM.Internal</RootNamespace>
+    <AssemblyName>ASCOM.Internal.FusionLib</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
@@ -117,10 +117,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\GACInstall\GAC.cs">
-      <Link>GAC.cs</Link>
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
+    <Compile Include="GAC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>

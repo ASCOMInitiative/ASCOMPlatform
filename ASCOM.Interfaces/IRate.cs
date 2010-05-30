@@ -1,7 +1,7 @@
 ﻿//tabs=4
 // --------------------------------------------------------------------------------
 // <summary>
-// ASCOM.Interface.New.IRate interface
+// ASCOM.Interface.IRate interface
 // </summary>
 //
 // <copyright company="TiGra Astronomy" author="Timothy P. Long">
@@ -40,6 +40,11 @@
 // 10-Feb-2010	TPL	6.0.*	Initial edit, mirrors platform 5.0 PIAs
 // --------------------------------------------------------------------------------
 //
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
 namespace ASCOM.Interface
 	{
 	//[ComImport, TypeLibType((short)0x10c0), Guid("221C0BC0-110B-4129-85A0-18BB28579290")]

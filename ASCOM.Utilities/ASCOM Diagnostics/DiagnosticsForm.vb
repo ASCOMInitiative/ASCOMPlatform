@@ -5,16 +5,13 @@
 ' Added Conform logs to list of retrieved setup logs
 ' Added drive scan, reporting available space
 ' Version 1.0.2.0 - Released 15/10/09 Peter Simpson
-
-Imports System.xml
-Imports ASCOM.Utilities
-Imports Microsoft.Win32
+Imports ASCOM.Internal
 Imports System.IO
 Imports System.Diagnostics
 Imports System.Runtime.InteropServices
 Imports System.Reflection
-Imports System.GAC
 Imports System.Environment
+Imports Microsoft.Win32
 
 Public Class DiagnosticsForm
 

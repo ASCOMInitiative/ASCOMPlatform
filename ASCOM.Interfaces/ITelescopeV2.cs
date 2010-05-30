@@ -1,7 +1,7 @@
 ﻿//tabs=4
 // --------------------------------------------------------------------------------
 // <summary>
-// ASCOM.Interface.New.ITelescope Telescope Interface V2
+// ASCOM.Interface.ITelescope Telescope Interface V2
 // </summary>
 //
 // <copyright company="TiGra Astronomy" author="Timothy P. Long">
@@ -42,10 +42,9 @@
 // --------------------------------------------------------------------------------
 //
 using System;
-
 namespace ASCOM.Interface
 	{
-		public interface ITelescope : IAscomDriver
+	public interface ITelescope : IAscomDriver
 		{
 		void AbortSlew();
 		AlignmentModes AlignmentMode { get; }

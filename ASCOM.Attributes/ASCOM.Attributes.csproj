@@ -170,12 +170,6 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
-      <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
-      <Name>ASCOM.Utilities</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\External Dependencies\StyleCop\v4.3\Microsoft.StyleCop.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
