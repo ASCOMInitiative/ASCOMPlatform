@@ -167,10 +167,6 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Interfaces\Master Interfaces\ASCOM.Interfaces.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -288,6 +284,10 @@
     <ProjectReference Include="..\..\ASCOM.Attributes\ASCOM.Attributes.csproj">
       <Project>{2C40FAD9-DE75-4360-A0AD-911C4D24D98C}</Project>
       <Name>ASCOM.Attributes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ASCOM.Interfaces\ASCOM.Interfaces.csproj">
+      <Project>{5A0818BF-F3DD-4262-AF69-FD794832B85C}</Project>
+      <Name>ASCOM.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ASCOM.Internal.Extensions\ASCOM.Internal.Extensions.csproj">
       <Project>{F9268CC9-3FA4-4DAB-962C-0FF3638E9D9F}</Project>

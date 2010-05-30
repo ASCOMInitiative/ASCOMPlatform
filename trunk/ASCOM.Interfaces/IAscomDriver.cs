@@ -1,7 +1,7 @@
 ﻿//tabs=4
 // --------------------------------------------------------------------------------
 // <summary>
-// ASCOM.Interface.New ASCOM Driver Common Base Interface
+// ASCOM.Interface ASCOM Driver Common Base Interface
 // </summary>
 //
 // <copyright company="TiGra Astronomy" author="Timothy P. Long">

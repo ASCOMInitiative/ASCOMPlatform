@@ -1,7 +1,7 @@
 ﻿//tabs=4
 // --------------------------------------------------------------------------------
 // <summary>
-// ASCOM.Interface.New.ITrackingRates interface
+// ASCOM.Interface.ITrackingRates interface
 // </summary>
 //
 // <copyright company="TiGra Astronomy" author="Timothy P. Long">
@@ -69,9 +69,9 @@ namespace ASCOM.Interface
 		int Count { get; }
 
 		/// <summary>
-		/// Gets the <see cref="DriveRates"/> at the specified index.
+		/// Gets the <see cref="ASCOM.Interface.DriveRates"/> at the specified index.
 		/// </summary>
-		/// <value>A <see cref="DriveRates"/> object.</value>
+		/// <value>A <see cref="ASCOM.Interface.DriveRates"/> object.</value>
 		DriveRates this[int Index] { get; }
 
 		/// <summary>

@@ -30,7 +30,7 @@ namespace ASCOM.Interface
 	//}
 
 	[Guid("49003324-8DE2-4986-BC7D-4D85E1C4CF6B")]
-	public interface IRotator : IAscomDriver
+	public interface IRotator
 	{
 		/// <summary>
 		///   Gets a value indicating whether this driver supports the <see cref = "Reverse" /> property.
@@ -39,6 +39,12 @@ namespace ASCOM.Interface
 		///   <c>true</c> if <see cref = "Reverse" /> is supported; otherwise, <c>false</c>.
 		/// </value>
 		bool CanReverse { get; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="IRotator"/> is connected.
+		/// </summary>
+		/// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
+		bool Connected { get; set; }
 
 		/// <summary>
 		///   Gets a value indicating whether the rotator is moving.
@@ -127,5 +133,10 @@ namespace ASCOM.Interface
 		///   Should be thrown if the supplied <see cref = "Position" /> is not in required range.
 		/// </exception>
 		void MoveAbsolute(float Position);
+
+		/// <summary>
+		/// Displays the ASCOM driver's setup dialog.
+		/// </summary>
+		void SetupDialog();
 	}
 }
