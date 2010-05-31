@@ -12,7 +12,7 @@ namespace ASCOM.Simulator
 	public partial class SetupDialogForm : Form
 	{
         private static ISwitch switchA = new Switch();
-        private static ArrayList switchDevices = switchA.SwitchDevices;
+        private ArrayList switches = switchA.Switches;
         Assembly assembly;
         Stream redLED;
         Stream greenLED;
@@ -80,14 +80,14 @@ namespace ASCOM.Simulator
         {
             int i = 1;
             //loop the switch devices
-            foreach (SwitchDevice s in switchDevices)
+            foreach (string[,] s in switches)
             {
                 //loop group one of text boxes
                 foreach (System.Windows.Forms.Control gbChild in this.groupBox1.Controls)
                 {
                     if (gbChild.Name == String.Format("textBox{0}", i))
                     {
-                        gbChild.Text = s.Name; 
+                        gbChild.Text = s[0,0]; 
                     }
                    
                 }
@@ -97,7 +97,7 @@ namespace ASCOM.Simulator
                     if (pbChild.Name == String.Format("pictureBox{0}", i))
                     {
                         PictureBox pb = (PictureBox)pbChild;
-                        ChangeImageState(pb, s.State);
+                        ChangeImageState(pb, Convert.ToBoolean(s[0,1]));
                     }
                 } 
               i++;
@@ -109,19 +109,22 @@ namespace ASCOM.Simulator
         /// </summary>
         private bool ChangeSwitchState(int i)
         {
-            ISwitchDevice s = (SwitchDevice)switchDevices[i];
+            string[,] s = (string[,])switches[i];
 
-            bool b = s.State;
+            bool b = Convert.ToBoolean(s[0,1]);
             if (b)
             {
-                s.State = false;
+                s[0,1] = "False";
+                switchA.SetSwitch(s[0, 0], Convert.ToBoolean(s[0, 1]));
                 return false;
             }
             else
             {
-                s.State = true;
+                s[0,1] = "True";
+                switchA.SetSwitch(s[0, 0], Convert.ToBoolean(s[0, 1]));
                 return true;
             }
+           
         }
 
         /// <summary>

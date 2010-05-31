@@ -11,6 +11,7 @@ namespace ASCOM.Simulator
     [Guid("7E47D97E-1A41-4897-BAB2-DEA9AD33A9CC")]
     public interface ISwitch
     {
+        #region IAscomDriver
         /// <summary>
         /// Returns the connected state of the driver
         /// </summary>
@@ -36,28 +37,32 @@ namespace ASCOM.Simulator
         /// </summary>
         string Name { get; }
         /// <summary>
+        /// Gets the last result.
+        /// </summary>
+        /// <value>
+        /// The result of the last executed action, or <see cref="String.Empty"	/>
+        /// if no action has yet been executed.
+        /// </value>
+        string LastResult { get; }
+        /// <summary>
         /// Run the setup form for the driver
         /// </summary>
         void SetupDialog();
         /// <summary>
         /// Yields a collection of ISwitchDevices objects.
         /// </summary>
-        ArrayList SwitchDevices { get; }
-    }
+        #endregion
 
-    /// <summary>
-    /// Defines the interface for an individual switch object.
-    /// </summary>
-    [Guid("BC8CCD51-A20A-49cf-9C35-9F75E3E2354F")]
-    public interface ISwitchDevice
-    {
         /// <summary>
-        /// The name of the switch (human readable).
+        /// Yields a collection of string[] objects.
         /// </summary>
-        string Name { get; }
+        /// <value></value>
+        ArrayList Switches { get; }
+
         /// <summary>
-        /// Returns True = on, False = off.
+        /// Flips a switch on or off
         /// </summary>
-        bool State { get; set; }
+        /// <value>name of the switch</value>
+        void SetSwitch(string Name, bool State);
     }
 }
