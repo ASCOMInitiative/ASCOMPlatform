@@ -35,7 +35,6 @@ namespace ASCOM.Simulator
 		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetupDialogForm));
             this.cmdOK = new System.Windows.Forms.Button();
-            this.cmdCancel = new System.Windows.Forms.Button();
             this.picASCOM = new System.Windows.Forms.PictureBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.lb_DriverVersion = new System.Windows.Forms.Label();
@@ -75,26 +74,13 @@ namespace ASCOM.Simulator
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.cmdOK.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.cmdOK.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.cmdOK.Location = new System.Drawing.Point(233, 206);
+            this.cmdOK.Location = new System.Drawing.Point(231, 220);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 0;
             this.cmdOK.Text = "OK";
             this.cmdOK.UseVisualStyleBackColor = true;
             this.cmdOK.Click += new System.EventHandler(this.cmdOK_Click);
-            // 
-            // cmdCancel
-            // 
-            this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.cmdCancel.Location = new System.Drawing.Point(233, 236);
-            this.cmdCancel.Name = "cmdCancel";
-            this.cmdCancel.Size = new System.Drawing.Size(59, 25);
-            this.cmdCancel.TabIndex = 1;
-            this.cmdCancel.Text = "Cancel";
-            this.cmdCancel.UseVisualStyleBackColor = true;
-            this.cmdCancel.Click += new System.EventHandler(this.cmdCancel_Click);
             // 
             // picASCOM
             // 
@@ -308,7 +294,6 @@ namespace ASCOM.Simulator
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(302, 269);
-            this.Controls.Add(this.cmdCancel);
             this.Controls.Add(this.cmdOK);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.lb_DriverVersion);
@@ -340,7 +325,6 @@ namespace ASCOM.Simulator
         #endregion
 
         private System.Windows.Forms.Button cmdOK;
-        private System.Windows.Forms.Button cmdCancel;
         private System.Windows.Forms.PictureBox picASCOM;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label lb_DriverVersion;

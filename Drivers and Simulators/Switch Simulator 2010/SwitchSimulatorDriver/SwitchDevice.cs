@@ -12,7 +12,7 @@ namespace ASCOM.Simulator
     /// </summary>
     [Guid("B3E5FC9D-4D76-4f4b-8FF5-854A01DF413F")]
     [ClassInterface(ClassInterfaceType.None)]
-    class SwitchDevice : ISwitchDevice
+    class SwitchDevice 
     {
         #region ISwitchDevice Members
 
