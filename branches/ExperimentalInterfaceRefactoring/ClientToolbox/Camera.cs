@@ -1,3 +1,6 @@
+//-----------------------------------------------------------------------
+// <summary>Defines the Camera class.</summary>
+//-----------------------------------------------------------------------
 // 10-Jul-08	rbd		1.0.5 - ImageArray returns type object, remove ImageArrayV which
 //						was a Chris Rowland test/experiment. Can cast the object returned
 //						by ImageArray into int[,]. Add COM releasing to Dispose().

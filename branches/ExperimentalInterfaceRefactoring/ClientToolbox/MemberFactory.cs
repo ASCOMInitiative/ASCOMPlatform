@@ -1,28 +1,14 @@
-﻿//tabs=4
-// --------------------------------------------------------------------------------
-//
-// ASCOM Member factory for all drivers
-//
-// Description:	With the progID, creates an instance, seraches for members, invokes members
-//
-// Implements:	IDisposable
-// Author:		Rob Morgan
-//
-// Edit Log:
-//
-// Date			Who	Vers	Description
-// -----------	---	-----	-------------------------------------------------------
-// 27-May-2010	rbd	6.0.0	Initial edit
-// 
-// --------------------------------------------------------------------------------
-//
+﻿//-----------------------------------------------------------------------
+// <summary>Defines the MemberFactory class.</summary>
+//-----------------------------------------------------------------------
+// 29-May-10  	rem     6.0.0 - Added memberFactory.
+
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace ASCOM.DriverAccess
 {
-    
     /// <summary>
     /// A factory class to access any registered driver members
     /// </summary>
@@ -39,7 +25,7 @@ namespace ASCOM.DriverAccess
         /// Constructor, creates an instance of the of the ASCOM driver
         /// 
         /// </summary> 
-        /// <param name="progID">The program ID of the driver</param>  
+        /// <param name="progID">The program ID of the driver</param>
         internal MemberFactory(string progID)
         {
             strProgID = progID;
@@ -63,6 +49,7 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Returns the instance of the driver
         /// </summary> 
+        /// <returns>object</returns>
         internal object GetLateBoundObject
         {
             get { return this.objLateBound ;}
@@ -71,6 +58,7 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Returns the driver type
         /// </summary> 
+        /// <returns>type</returns>
         internal Type GetObjType
         {
             get { return this.objType; }
@@ -138,6 +126,7 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Logs the error to the eventviewer
         /// </summary> 
+        /// <returns>nothing</returns>
         internal void LogError(string error, PropertyInfo propertyInfo, MethodInfo methodInfo)
         {
             ExceptionLogger objLogger = new ExceptionLogger();
@@ -153,6 +142,7 @@ namespace ASCOM.DriverAccess
 		/// if it is a COM object, else if native .NET will just dereference it
 		/// for GC.
         /// </summary>
+        /// <returns>nothing</returns>
         public void Dispose()
         {
             if (objLateBound != null)

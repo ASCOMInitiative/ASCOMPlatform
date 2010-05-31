@@ -1,4 +1,7 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------
+// <summary>Defines the ExceptionLogger class.</summary>
+//-----------------------------------------------------------------------
+using System;
 using System.Text;
 using System.Diagnostics;
 using System.Reflection;

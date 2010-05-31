@@ -1,3 +1,6 @@
+//-----------------------------------------------------------------------
+// <summary>Defines the Switch class.</summary>
+//-----------------------------------------------------------------------
 // 10-Jul-08	rbd		1.0.5 - Release COM on Dispose().
 // 29-May-10  	rem     6.0.0 - Added memberFactory.
 
@@ -14,7 +17,7 @@ namespace ASCOM.DriverAccess
     /// </summary>
     public class Switch : ISwitch, IDisposable, IAscomDriver, IDeviceControl
     {
-        #region ISwitch constructors
+        #region Switch constructors
 
         private MemberFactory memberFactory;
 
@@ -43,9 +46,14 @@ namespace ASCOM.DriverAccess
 
         #region ISwitch Members
 
-        public void SetSwitch(string Name)
+        /// <summary>
+        /// Sets a switch to on or off
+        /// </summary>
+        /// <param name="Name">Name=name of switch to set</param> 
+        /// <param name="State">True=On, False=Off</param> 
+        public void SetSwitch(string Name, bool State)
         {
-            memberFactory.CallMember(3, "SetSwitch", new Type[] { typeof(string) }, new object[] { Name });
+            memberFactory.CallMember(3, "SetSwitch", new Type[] { typeof(string), typeof(bool) }, new object[] { Name, State });
         }
 
         /// <summary>
@@ -56,8 +64,7 @@ namespace ASCOM.DriverAccess
         {
             get { return (ArrayList)memberFactory.CallMember(1, "Switches", new Type[] { }, new object[] { }); }
         }
-
-        
+     
         #endregion
 
         #region IDisposable Members
