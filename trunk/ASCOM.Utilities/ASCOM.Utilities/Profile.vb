@@ -427,7 +427,42 @@ Public Class Profile
     ''' </summary>
     ''' <param name="DriverId">The ProgID of the device</param>
     ''' <returns>Device profile encoded in XML</returns>
-    ''' <remarks>Returns a whole driver profile encoded as an XML string</remarks>
+    ''' <remarks>Please see the code examples in this help file for a description of how to use this method.
+    '''<para>The format of the returned XML is shown below. The SubKey element repeats for as many subkeys as are present while the Value element with its
+    ''' Name and Data memebers repeats as often as there are values in a particular subkey.</para>
+    ''' <para><pre>
+    ''' &lt;?xml version="1.0" encoding="utf-8" ?&gt; 
+    ''' &lt;ASCOMProfileAL&gt;
+    ''' &lt;SubKey&gt;
+    ''' &lt;SubKeyName /&gt; 
+    ''' &lt;DefaultValue&gt;Default text value&lt;/DefaultValue&gt; 
+    '''    &lt;Values&gt;
+    '''      &lt;Value&gt;
+    '''        &lt;Name&gt;Valuename 1&lt;/Name&gt; 
+    '''        &lt;Data&gt;False&lt;/Data&gt; 
+    '''      &lt;/Value&gt;
+    '''      &lt;Value&gt;
+    '''        &lt;Name&gt;Valuename 2&lt;/Name&gt; 
+    '''        &lt;Data&gt;True&lt;/Data&gt; 
+    '''      &lt;/Value&gt;
+    '''    &lt;/Values&gt;
+    '''  &lt;/SubKey&gt;
+    '''  &lt;SubKey&gt;
+    '''    &lt;SubKeyName&gt;Settings&lt;/SubKeyName&gt; 
+    '''    &lt;DefaultValue /&gt; 
+    '''    &lt;Values&gt;
+    '''      &lt;Value&gt;
+    '''        &lt;Name&gt;Valuename 3&lt;/Name&gt; 
+    '''        &lt;Data&gt;1&lt;/Data&gt; 
+    '''      &lt;/Value&gt;
+    '''      &lt;Value&gt;
+    '''        &lt;Name&gt;Valuename 4&lt;/Name&gt; 
+    '''        &lt;Data&gt;53.4217&lt;/Data&gt; 
+    '''      &lt;/Value&gt;
+    '''    &lt;/Values&gt;
+    '''  &lt;/SubKey&gt;
+    ''' &lt;/ASCOMProfileAL>
+    ''' </pre></para></remarks>
     Public Function GetProfileXML(ByVal DriverId As String) As String Implements IProfile.GetProfileXML
         Dim RetVal As String, CurrentProfile As ASCOMProfile, XMLProfileBytes() As Byte
         Dim XMLSer As New XmlSerializer(GetType(ASCOMProfile))
@@ -452,7 +487,8 @@ Public Class Profile
     ''' </summary>
     ''' <param name="DriverId">The ProgID of the device</param>
     ''' <param name="XmlProfile">An XML encoding of the profile</param>
-    ''' <remarks>Set a whole device Profile in one call using an XML encoding of the Profile</remarks>
+    ''' <remarks>Please see the code examples in this help file for a description of how to use this method. See GetProfileXML for a 
+    ''' description of the XML format.</remarks>
     Public Sub SetProfileXML(ByVal DriverId As String, ByVal XmlProfile As String) Implements IProfile.SetProfileXML
         Dim NewProfileContents As ASCOMProfile, XMLProfileBytes() As Byte
         Dim XMLSer As New XmlSerializer(GetType(ASCOMProfile))
@@ -474,11 +510,11 @@ Public Class Profile
 
 #Region "IProfileExtra Implementation"
     ''' <summary>
-    ''' Read an entire device profile and return it as an XML encoded string
+    ''' Read an entire device profile and return it as an ASCOMProfile class instance
     ''' </summary>
     ''' <param name="DriverId">The ProgID of the device</param>
     ''' <returns>Device profile represented as a recusrive class</returns>
-    ''' <remarks>Returns a whole driver profile encoded as an XML string</remarks>
+    ''' <remarks>Please see the code examples in this help file for a description of how to use this method.</remarks>
     Public Function GetProfile(ByVal DriverId As String) As ASCOMProfile Implements IProfileExtra.GetProfile
         Dim RetVal As ASCOMProfile
         TL.LogMessage("GetProfile", "Driver: " & DriverId)
@@ -489,11 +525,11 @@ Public Class Profile
     End Function
 
     ''' <summary>
-    ''' Set an entire device profile from an XML encoded string
+    ''' Set an entire device profile from an ASCOMProfile class instance
     ''' </summary>
     ''' <param name="DriverId">The ProgID of the device</param>
     ''' <param name="NewProfileKey">A class representing the profile</param>
-    ''' <remarks>Set a whole device Profile in one call using a recusrive ProfileKey class</remarks>
+    ''' <remarks>Please see the code examples in this help file for a description of how to use this method.</remarks>
     Public Sub SetProfile(ByVal DriverId As String, ByVal NewProfileKey As ASCOMProfile) Implements IProfileExtra.SetProfile
         TL.LogMessage("SetProfile", "Driver: " & DriverId)
         CheckRegistered(DriverId)
@@ -505,19 +541,18 @@ Public Class Profile
     ''' Migrate the ASCOM profile from registry to file store
     ''' </summary>
     ''' <param name="CurrentPlatformVersion">The platform version number of the current profile store beig migrated</param>
-    ''' <param name="NewPlatformVersion">The platform version number to be set in the profile store during the migration</param>
     ''' <remarks></remarks>
     <EditorBrowsable(EditorBrowsableState.Never), _
     ComVisible(False)> _
-    Public Sub MigrateProfile(ByVal CurrentPlatformVersion As String, ByVal NewPlatformVersion As String) Implements IProfileExtra.MigrateProfile
+    Public Sub MigrateProfile(ByVal CurrentPlatformVersion As String) Implements IProfileExtra.MigrateProfile
         TL.Enabled = True 'Force tracing on when migrating a profile
-        TL.LogMessage("MigrateProfile", "Migrating profile from Platform " & CurrentPlatformVersion & " to Platform " & NewPlatformVersion)
+        TL.LogMessage("MigrateProfile", "Migrating profile from Platform " & CurrentPlatformVersion & " to Platform " & PLATFORM_VERSION)
         Try
             ProfileStore.MigrateProfile(CurrentPlatformVersion)
             TL.LogMessage("MigrateProfile", "Successfully migrated Profile")
-            TL.LogMessage("MigrateProfile", "Setting Platform version string to: " & NewPlatformVersion)
-            ProfileStore.WriteProfile("", "PlatformVersion", NewPlatformVersion) 'Set the platform version in the ASCOM root key
-            TL.LogMessage("MigrateProfile", "Successfully set PlatformVersion to: " & NewPlatformVersion)
+            TL.LogMessage("MigrateProfile", "Setting Platform version string to: " & PLATFORM_VERSION)
+            ProfileStore.WriteProfile("", "PlatformVersion", PLATFORM_VERSION) 'Set the platform version in the ASCOM root key
+            TL.LogMessage("MigrateProfile", "Successfully set PlatformVersion to: " & PLATFORM_VERSION)
             TL.LogMessage("MigrateProfile", "Completed migration")
         Catch ex As Exception
             TL.LogMessageCrLf("MigrateProfile", "Exception: " & ex.ToString)

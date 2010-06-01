@@ -28,12 +28,16 @@
     <CopyrightText>Copyright &amp;#169%3b ASCOM Initiative 2009</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM.Utilities" isExposed="True">
-        <Filter entryType="Class" fullName="ASCOM.Utilities.Profile" filterName="Profile" isExposed="True">
-          <Filter entryType="Method" fullName="ASCOM.Utilities.Profile.MigrateProfile" filterName="MigrateProfile" isExposed="False" />
-        </Filter>
-      </Filter>
-      <Filter entryType="Namespace" fullName="ASCOM.Utilities.VB6HelperSupport" isExposed="False" />
-    </ApiFilter>
+  <Filter entryType="Class" fullName="ASCOM.Utilities.ASCOMProfile" filterName="ASCOMProfile" isExposed="True">
+    <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.GetSchema" filterName="GetSchema" isExposed="False" />
+    <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.ReadXml" filterName="ReadXml" isExposed="False" />
+    <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.WriteXml" filterName="WriteXml" isExposed="False" />
+  </Filter>
+  <Filter entryType="Class" fullName="ASCOM.Utilities.Profile" filterName="Profile" isExposed="True">
+    <Filter entryType="Method" fullName="ASCOM.Utilities.Profile.MigrateProfile" filterName="MigrateProfile" isExposed="False" />
+  </Filter>
+</Filter>
+<Filter entryType="Namespace" fullName="ASCOM.Utilities.VB6HelperSupport" isExposed="False" /></ApiFilter>
     <PresentationStyle>vs2005</PresentationStyle>
     <Preliminary>False</Preliminary>
     <NamingMethod>MemberName</NamingMethod>
@@ -129,6 +133,7 @@
       <ImageId>ManufLogos</ImageId>
     </Image>
     <Content Include="Introduction\Acknowledgements.aml" />
+    <None Include="Examples\ProfileWhole.aml" />
     <None Include="Examples\SerialThreading.aml" />
     <None Include="Developer Information\MultiThreading.aml" />
     <None Include="Tools and Features\Diagnostics Tool.aml" />

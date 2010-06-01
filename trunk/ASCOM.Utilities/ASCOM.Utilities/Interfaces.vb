@@ -1064,10 +1064,9 @@ Namespace Interfaces
         ''' Migrate the ASCOM profile from registry to file store
         ''' </summary>
         ''' <param name="CurrentPlatformVersion">The platform version number of the current profile store beig migrated</param>
-        ''' <param name="NewPlatformVersion">The platform version number to be set in the profile store during the migration</param>
         ''' <remarks></remarks>
         <EditorBrowsable(EditorBrowsableState.Never)> _
-        Sub MigrateProfile(ByVal CurrentPlatformVersion As String, ByVal NewPlatformVersion As String)
+        Sub MigrateProfile(ByVal CurrentPlatformVersion As String)
 
         ''' <summary>
         ''' Delete the value from the registry. Name may be an empty string for the unnamed value. 
