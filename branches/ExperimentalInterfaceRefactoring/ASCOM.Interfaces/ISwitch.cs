@@ -1,9 +1,13 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------
+// <summary>Defines the ISwitch Interface</summary>
+//-----------------------------------------------------------------------
+
+using System;
 using System.Collections;
 namespace ASCOM.Interfaces
 {
     /// <summary>
-    /// Defines the properties and methods that are common to switch.
+    /// Defines the ISwitch Interface
     /// </summary> 
     public interface ISwitch : IDeviceControl, IAscomDriver
     {

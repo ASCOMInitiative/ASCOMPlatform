@@ -1,4 +1,7 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------
+// <summary>Defines the ICamera Interface</summary>
+//-----------------------------------------------------------------------
+using System;
 namespace ASCOM.Interfaces
 {
     public interface ICamera : IAscomDriver, IDeviceControl

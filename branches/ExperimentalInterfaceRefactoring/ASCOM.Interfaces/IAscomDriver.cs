@@ -49,13 +49,66 @@ namespace ASCOM.Interfaces
     /// </summary> 
     public interface IAscomDriver
     {
+        /// <summary>
+        /// Set True to enable the link. Set False to disable the link.
+        /// You can also read the property to check whether it is connected.
+        /// </summary>
+        /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
+        /// <exception cref=" System.Exception">Must throw exception if unsuccessful.</exception>
         bool Connected { get; set; }
+
+        /// <summary>
+        /// Returns a description of the driver, such as manufacturer and model
+        /// number. Any ASCII characters may be used. The string shall not exceed 68
+        /// characters (for compatibility with FITS headers).
+        /// </summary>
+        /// <value>The description.</value>
+        /// <exception cref=" System.Exception">Must throw exception if description unavailable</exception>
         string Description { get; }
+
+        /// <summary>
+        /// Descriptive and version information about this ASCOM driver.
+        /// This string may contain line endings and may be hundreds to thousands of characters long.
+        /// It is intended to display detailed information on the ASCOM driver, including version and copyright data.
+        /// See the Description property for descriptive info on the telescope itself.
+        /// To get the driver version in a parseable string, use the DriverVersion property.
+        /// </summary>
         string DriverInfo { get; }
+
+        /// <summary>
+        /// A string containing only the major and minor version of the driver.
+        /// This must be in the form "n.n".
+        /// Not to be confused with the InterfaceVersion property, which is the version of this specification supported by the driver (currently 2). 
+        /// </summary>
         string DriverVersion { get; }
+
+        /// <summary>
+        /// The version of this interface. Will return 2 for this version.
+        /// Clients can detect legacy V1 drivers by trying to read ths property.
+        /// If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1. 
+        /// In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver. 
+        /// </summary>
         short InterfaceVersion { get; }
+
+        /// <summary>
+        /// Gets the last result.
+        /// </summary>
+        /// <value>
+        /// The result of the last executed action, or <see cref="String.Empty"	/>
+        /// if no action has yet been executed.
+        /// </value>
         string LastResult { get; }
+
+        /// <summary>
+        /// The short name of the driver, for display purposes
+        /// </summary>
         string Name { get; }
+
+        /// <summary>
+        /// Launches a configuration dialog box for the driver.  The call will not return
+        /// until the user clicks OK or cancel manually.
+        /// </summary>
+        /// <exception cref=" System.Exception">Must throw an exception if Setup dialog is unavailable.</exception>
         void SetupDialog();
     }
 
