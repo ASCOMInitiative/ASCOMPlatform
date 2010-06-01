@@ -5,13 +5,18 @@
 ' Added Conform logs to list of retrieved setup logs
 ' Added drive scan, reporting available space
 ' Version 1.0.2.0 - Released 15/10/09 Peter Simpson
+
 Imports ASCOM.Internal
+Imports ASCOM.Utilities
+Imports ASCOM.Utilities.Exceptions
+Imports Microsoft.Win32
 Imports System.IO
 Imports System.Diagnostics
 Imports System.Runtime.InteropServices
 Imports System.Reflection
 Imports System.Environment
-Imports Microsoft.Win32
+Imports System.Security.AccessControl
+Imports System.Security.Principal
 
 Public Class DiagnosticsForm
 
@@ -114,6 +119,9 @@ Public Class DiagnosticsForm
                 'List setup files
                 ScanLogs()
 
+                'Scan registry security rights
+                ScanRegistrySecurity()
+
                 'Scan event log messages
                 ScanEventLog()
 
@@ -163,34 +171,113 @@ Public Class DiagnosticsForm
         End Try
     End Sub
 
+    Sub ScanRegistrySecurity()
+        Try
+            Status("Scanning Registry Security")
+            TL.LogMessage("RegistrySecurity", "Start")
+
+            ReadRegistryRights(Registry.CurrentUser, "")
+            ReadRegistryRights(Registry.ClassesRoot, "")
+            ReadRegistryRights(Registry.ClassesRoot, "DriverHelper.Util")
+            ReadRegistryRights(Registry.ClassesRoot, "DriverHelper.Util\Clsid")
+
+            ReadRegistryRights(Registry.LocalMachine, "")
+            ReadRegistryRights(Registry.LocalMachine, "SOFTWARE")
+
+            If IntPtr.Size = 8 Then '64bit OS so look in Wow64node
+                ReadRegistryRights(Registry.LocalMachine, "Software\Wow6432Node\ASCOM")
+            Else '32 bit OS
+                ReadRegistryRights(Registry.LocalMachine, "Software\ASCOM")
+            End If
+
+            TL.BlankLine()
+        Catch ex As Exception
+            TL.LogMessage("RegistrySecurity", "Exception: " & ex.ToString)
+        End Try
+    End Sub
+
+    Private Sub ReadRegistryRights(ByVal key As RegistryKey, ByVal SubKey As String)
+        Dim sec As System.Security.AccessControl.RegistrySecurity
+        Dim SKey As RegistryKey
+
+        Try
+            TL.LogMessage("RegistrySecurity", IIf(SubKey = "", key.Name.ToString, key.Name.ToString & "\" & SubKey))
+            If SubKey = "" Then
+                SKey = key.OpenSubKey(SubKey)
+            Else
+                SKey = key
+            End If
+
+            sec = key.GetAccessControl(Security.AccessControl.AccessControlSections.All)
+            For Each ar As RegistryAccessRule In sec.GetAccessRules(True, True, GetType(NTAccount))
+                TL.LogMessage("ReadRegistryRights", "  User: " & ar.IdentityReference.ToString)
+                TL.LogMessage("ReadRegistryRights", "    Type: " & ar.AccessControlType.ToString)
+                TL.LogMessage("ReadRegistryRights", "    Rights: " & ar.RegistryRights.ToString)
+                TL.LogMessage("ReadRegistryRights", "    Inheritance: " & ar.InheritanceFlags.ToString)
+                TL.LogMessage("ReadRegistryRights", "    Propogation: " & ar.PropagationFlags.ToString)
+                TL.LogMessage("ReadRegistryRights", "    Inherited?: " & ar.IsInherited)
+            Next
+        Catch ex As Exception
+            TL.LogMessage("ReadRegistryRights", ex.ToString)
+        End Try
+
+    End Sub
+
     Sub ScanRegistry()
         Dim Key As RegistryKey
-        Try
-            TL.LogMessage("ScanRegistry", "Start")
-            If OSBits() = Bitness.Bits64 Then
+        Status("Scanning Registry")
+        TL.LogMessage("ScanRegistry", "Start")
+        If OSBits() = Bitness.Bits64 Then
+            Try
                 'List the 32bit registry
+                TL.LogMessage("ScanRegistry", "Machine Profile Root (64bit OS - 32bit Registry)")
                 Key = ASCOMRegistryAccess.OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
-                TL.LogMessage("ScanRegistry", "Profile Root (64bit OS - 32bit Registry)")
                 RecursionLevel = -1
                 RecurseRegistry(Key)
-                TL.BlankLine()
-
-                'List the 64bit registry
-                Key = ASCOMRegistryAccess.OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegistryAccess.RegWow64Options.KEY_WOW64_64KEY)
-                TL.LogMessage("ScanRegistry", "Profile Root (64bit OS - 64bit Registry)")
-                RecursionLevel = -1
-                RecurseRegistry(Key)
-            Else '32 bit OS
-                'List the registry (only one view on a 32bit machine)
-                Key = Registry.LocalMachine.OpenSubKey(REGISTRY_ROOT_KEY_NAME)
-                TL.LogMessage("ScanRegistry", "Profile Root (32bit OS)")
-                RecursionLevel = -1
-                RecurseRegistry(Key)
-            End If
+            Catch ex As Exception
+                TL.LogMessageCrLf("ScanRegistry", "Exception: " & ex.ToString)
+            End Try
             TL.BlankLine()
+
+            Try
+                'List the 64bit registry
+                TL.LogMessage("ScanRegistry", "Machine Profile Root (64bit OS - 64bit Registry)")
+                Key = ASCOMRegistryAccess.OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegistryAccess.RegWow64Options.KEY_WOW64_64KEY)
+                RecursionLevel = -1
+                RecurseRegistry(Key)
+            Catch ex As ProfilePersistenceException
+                If InStr(ex.Message, "0x2") > 0 Then
+                    TL.LogMessage("ScanRegistry", "Key not found")
+                Else
+                    TL.LogMessageCrLf("ScanRegistry", "ProfilePersistenceException: " & ex.ToString)
+                End If
+            Catch ex As Exception
+                TL.LogMessageCrLf("ScanRegistry", "Exception: " & ex.ToString)
+            End Try
+        Else '32 bit OS
+            Try
+                'List the registry (only one view on a 32bit machine)
+                TL.LogMessage("ScanRegistry", "Machine Profile Root (32bit OS)")
+                Key = Registry.LocalMachine.OpenSubKey(REGISTRY_ROOT_KEY_NAME)
+                RecursionLevel = -1
+                RecurseRegistry(Key)
+            Catch ex As Exception
+                TL.LogMessageCrLf("ScanRegistry", "Exception: " & ex.ToString)
+            End Try
+        End If
+        TL.BlankLine()
+
+        Try
+            'List the user registry
+            TL.LogMessage("ScanRegistry", "User Profile Root")
+            Key = Registry.CurrentUser.OpenSubKey(REGISTRY_ROOT_KEY_NAME)
+            RecursionLevel = -1
+            RecurseRegistry(Key)
         Catch ex As Exception
             TL.LogMessageCrLf("ScanRegistry", "Exception: " & ex.ToString)
         End Try
+        TL.BlankLine()
+
     End Sub
 
     Sub RecurseRegistry(ByVal Key As RegistryKey)

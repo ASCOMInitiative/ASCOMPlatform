@@ -3,6 +3,12 @@ Imports System.Xml.Serialization
 Imports System.Collections.Generic
 Imports System.Runtime.InteropServices
 
+''' <summary>
+''' Class that can read and write a whole device Profile with a set of methods for for manipulating the Profile contents
+''' </summary>
+''' <remarks>
+''' This class is used by the Profile.GetProfile and Profile.SetProfile methods.
+''' </remarks>
 <ComVisible(True), Guid("43325B3A-8B34-48db-8028-9D8CED9FA9E2"), ClassInterface(ClassInterfaceType.None)> _
 Public Class ASCOMProfile
     Implements IXmlSerializable
@@ -82,7 +88,8 @@ Public Class ASCOMProfile
     ''' <param name="Name">Name of the value to set</param>
     ''' <param name="Value">Value to be set</param>
     ''' <param name="SubKeyName">"Subkey continaining the value</param>
-    ''' <remarks></remarks>
+    ''' <remarks>Changing a value with this method does NOT change the underlying profile store, only the value in this class.
+    ''' In order to persist the new value, the class should be written back to the profile store through Profile.SetProfile.</remarks>
     Public Overloads Sub SetValue(ByVal Name As String, ByVal Value As String, ByVal SubKeyName As String)
 
         If Subkey.ContainsKey(SubKeyName) Then
@@ -142,12 +149,12 @@ Public Class ASCOMProfile
 #End Region
 
 #Region "IXMLSerialisable Implementation"
-    <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Advanced)> _
+    <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)> _
     Public Function GetSchema() As System.Xml.Schema.XmlSchema Implements System.Xml.Serialization.IXmlSerializable.GetSchema
         Return (Nothing)
     End Function
 
-    <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Advanced)> _
+    <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)> _
     Public Sub ReadXml(ByVal reader As System.Xml.XmlReader) Implements System.Xml.Serialization.IXmlSerializable.ReadXml
         Dim CurrentSubKey As String = "", CurrentName As String = ""
         Subkey.Clear() 'Make sure we are starting with an empty collection in case the user has already played with this object
@@ -167,7 +174,7 @@ Public Class ASCOMProfile
         Loop
     End Sub
 
-    <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Advanced)> _
+    <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)> _
     Public Sub WriteXml(ByVal writer As System.Xml.XmlWriter) Implements System.Xml.Serialization.IXmlSerializable.WriteXml
         For Each key As String In Subkey.Keys
             writer.WriteStartElement(XML_SUBKEY_ELEMENTNAME) 'Start the SubKey element

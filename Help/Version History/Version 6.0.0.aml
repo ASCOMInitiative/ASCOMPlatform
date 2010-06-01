@@ -22,6 +22,10 @@
  		 			<listItem>Profile - Improved recovery from profile file corruption</listItem>>
  		 			<listItem>Utilities - ASCOM event log introduced to record serious Platform code failures,
  		 			improving fault diagnosis, leading to better Platform stability.</listItem>
+ 		 			<listItem>Profile - Implemented four new methods to retrieve and set all values in a device
+ 		 			profile in one operation. GetProfileXML and SetProfileXML work with an XML encoding of the profile
+ 		 			while GetProfile and SetProfile work with the new ASCOMProfile object that contains all 
+ 		 			entries in the profile and provides simple methods to read and set values.</listItem>
 	  			</list>
             </content>
 		</section>

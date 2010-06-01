@@ -164,6 +164,7 @@
     <Compile Include="TraceLoggerExamples.vb" />
     <Compile Include="TransformExamples.vb" />
     <Compile Include="UtilExamples.vb" />
+    <Compile Include="WholeProfileExamples.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Form1.resx">

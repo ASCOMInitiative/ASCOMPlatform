@@ -123,7 +123,7 @@ namespace ASCOM.Simulator
         internal double exposureResolution;
         private double lastExposureDuration;
         private string lastExposureStartTime;
-        private short percentCompleted;
+        // private short percentCompleted;
 
         private DateTime exposureStartTime;
         private double exposureDuration;
@@ -1482,7 +1482,10 @@ namespace ASCOM.Simulator
                 if (!this.connected)
                     throw new NotConnectedException("Can't get ReadoutModes when not connected");
                 if (this.readoutModes == null || this.readoutModes.Length < 1)
+                {
+                    this.readoutModes = null;
                     throw new ASCOM.PropertyNotImplementedException("ReadoutModes", false);
+                }
                 return this.readoutModes;
             }
         }
@@ -1649,6 +1652,9 @@ namespace ASCOM.Simulator
             this.ccdTemperature = 15;
             this.readoutMode = 0;
             this.fastReadout = false;
+            this.canFastReadout = false;
+            this.applyNoise = false;
+            this.applyStars = false;
             //this.ReadImageFile();
         }
 

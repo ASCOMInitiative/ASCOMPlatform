@@ -44,7 +44,7 @@ Friend Class RegistryAccess
         ProfileMutex = New System.Threading.Mutex(False, PROFILE_MUTEX_NAME)
 
         Try
-            ProfileRegKey = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_64KEY)
+            ProfileRegKey = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
             PlatformVersion = GetProfile("\", "PlatformVersion")
             'OK, no exception so assume that we are initialised
         Catch ex As System.ComponentModel.Win32Exception 'This occurs when the key does not exist and is OK if we are ignoring checks
@@ -298,6 +298,8 @@ Friend Class RegistryAccess
 
     Friend Sub MigrateProfile(ByVal CurrentPlatformVersion As String) Implements IAccess.MigrateProfile
         Dim LogEnabled As Boolean
+        Dim Prof55 As XMLAccess
+        Dim Key As RegistryKey
 
         Try
             GetProfileMutex("MigrateProfile", "")
@@ -312,53 +314,28 @@ Friend Class RegistryAccess
 
             Select Case CurrentPlatformVersion
                 Case "4", "5" 'Currently on Platform 4 or 5 so Profile is in 32bit registry
-                    Select Case OSBits()
-                        Case Bitness.Bits32 'Platform 5 32bit
-                            'Profile is already in correct place so leave as is and just set the security ACL
-                            MigrateTo60(CurrentPlatformVersion)
-                        Case Bitness.Bits64 'Platform 5 64bit
-                            'Copy from 32 bit to 64bit registry
-                            If Not ApplicationBits() = Bitness.Bits64 Then ' Confirm that the calling app is also 64bit in case it gets changed by someone!
-                                Throw New ProfilePersistenceException("MigrateTo6_64Bit - Migration must be carried out in a 64bit application, its actually being carried out in " & [Enum].GetName(GetType(Bitness), ApplicationBits))
-                            Else
-                                'Remove any existing information and migrate the Profile
-                                Try : Registry.LocalMachine.DeleteSubKeyTree(REGISTRY_ROOT_KEY_NAME) : Catch : End Try
-                                Call MigrateTo60(CurrentPlatformVersion)
-                            End If
-                        Case Bitness.BitsUnknown 'Platform 5 unknown bits
-                            Throw New ProfilePersistenceException("Unable to determine whether the OS is 32 or 64bit, PlatformVersion: " & CurrentPlatformVersion)
-                        Case Else 'Unexpected bitness value
-                            Throw New ProfilePersistenceException("OS has an unknown bit size: " & [Enum].GetName(GetType(Bitness), OSBits()) & ", PlatformVersion: " & CurrentPlatformVersion)
-                    End Select
+                    'Profile is already in correct place so leave as is and just set the security ACL
+                    Call SetRegistryACL(CurrentPlatformVersion)
+                    TL.LogMessage("MigrateProfile", "The Profile is already in the correct place from Platform " & CurrentPlatformVersion)
                 Case "5.5" 'Currently on Platform 5.5 so migrate Profile is in file system
-                    Select Case OSBits()
-                        Case Bitness.Bits32 'Platform 5.5 32bit
-                            'Backup old 5.0 Profile and Copy 5.5 Profile to registry
-                            Call Backup50()
-                            Call MigrateTo60(CurrentPlatformVersion)
-                        Case Bitness.Bits64 'Platform 5.5 64bit
-                            'Copy 5.5 Profile to registry
-                            If Not ApplicationBits() = Bitness.Bits64 Then
-                                Throw New ProfilePersistenceException("MigrateTo6_64Bit - Migration must be carried out in a 64bit application, its actually being carried out in " & [Enum].GetName(GetType(Bitness), ApplicationBits))
-                            Else
-                                'Remove any existing information and migrate the Profile
-                                Try : Registry.LocalMachine.DeleteSubKeyTree(REGISTRY_ROOT_KEY_NAME) : Catch : End Try
-                                Call MigrateTo60(CurrentPlatformVersion)
-                            End If
-                        Case Bitness.BitsUnknown 'Platform 5.5 unknown bits
-                            Throw New ProfilePersistenceException("Unable to determine whether the OS is 32 or 64bit, PlatformVersion: " & CurrentPlatformVersion)
-                        Case Else 'Unexpected bitness value
-                            Throw New ProfilePersistenceException("OS has an unknown bit size: " & [Enum].GetName(GetType(Bitness), OSBits()) & ", PlatformVersion: " & CurrentPlatformVersion)
-                    End Select
+                    'Backup old 5.0 Profile and Copy 5.5 Profile to registry
+                    Call Backup50()
+                    Call SetRegistryACL(CurrentPlatformVersion)
+                    TL.LogMessage("MigrateProfile", "Creating Profile 5.5 XMLAccess object")
+                    Prof55 = New XMLAccess()
+                    TL.LogMessage("MigrateProfile", "OPening " & REGISTRY_ROOT_KEY_NAME & " Registry Key")
+                    Key = Registry.LocalMachine.OpenSubKey(REGISTRY_ROOT_KEY_NAME, True)
+                    TL.LogMessage("MigrateProfile", "Copying Profile 5.5 to Profile 6")
+                    Copy55To60("", Prof55, Key)
                 Case "Unknown", "" ' Don't know current platform
-                    Throw New ProfilePersistenceException("Unable to determine Platform version: """ & CurrentPlatformVersion & """ - " & "OS has bit size: " & [Enum].GetName(GetType(Bitness), OSBits()))
+                    Throw New ProfilePersistenceException("Unable to determine current Platform version: """ & CurrentPlatformVersion & """ - " & "OS has bit size: " & [Enum].GetName(GetType(Bitness), OSBits()))
                 Case Else '6.0 or above, leave as is!
                     'Do nothing as Profile is already in the Registry
-                    TL.LogMessage("MigrateProfile", "Profile reports Platform " & CurrentPlatformVersion & " - no migration required")
+                    TL.LogMessage("MigrateProfile", "Profile reports previous Platform as " & CurrentPlatformVersion & " - no migration required")
             End Select
 
             'Make sure we have a valid key now that we have migrated the profile to the registry
-            ProfileRegKey = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_64KEY)
+            ProfileRegKey = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
 
             'Restore original logging state
             TL.Enabled = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT) 'Get enabled / disabled state from the user registry
@@ -472,7 +449,7 @@ Friend Class RegistryAccess
         Next
     End Sub
 
-    Function CleanSubKey(ByVal SubKey As String) As String
+    Private Function CleanSubKey(ByVal SubKey As String) As String
         'Remove leading "\" if it exists as this is not logal in a subkey name. "\" in the middle of a subkey name is legal however
         If Left(SubKey, 1) = "\" Then Return Mid(SubKey, 2)
         Return SubKey
@@ -482,21 +459,22 @@ Friend Class RegistryAccess
         Dim FromKey, ToKey As RegistryKey
         Dim swLocal As Stopwatch
         swLocal = Stopwatch.StartNew
-        FromKey = Registry.LocalMachine.OpenSubKey(REGISTRY_ROOT_KEY_NAME, True)
-        ToKey = FromKey.CreateSubKey(REGISTRY_BACKUP_SUBKEY)
-        TL.LogMessage("Backup50", "Backing up Profile 5 to " & REGISTRY_BACKUP_SUBKEY)
 
+        FromKey = Registry.LocalMachine.OpenSubKey(REGISTRY_ROOT_KEY_NAME, True)
+        ToKey = Registry.CurrentUser.CreateSubKey(REGISTRY_ROOT_KEY_NAME & "\" & REGISTRY_BACKUP_SUBKEY)
+
+        TL.LogMessage("Backup50", "Backing up Profile 5 to " & REGISTRY_BACKUP_SUBKEY)
         Copy50(FromKey, ToKey)
 
         FromKey.Close() 'Close the key after migration
         ToKey.Close()
 
-        swLocal.Stop() : TL.LogMessage("MigrateTo6", "ElapsedTime " & swLocal.ElapsedMilliseconds & " milliseconds")
+        swLocal.Stop() : TL.LogMessage("Backup50", "ElapsedTime " & swLocal.ElapsedMilliseconds & " milliseconds")
         swLocal = Nothing
     End Sub
 
     Private Sub Copy50(ByVal FromKey As RegistryKey, ByVal ToKey As RegistryKey)
-        'Subroutine used to recursively copy copy the 5.0 registry Profile to new 64bit registry Profile
+        'Subroutine used to recursively copy copy the 5.0 registry Profile from one place to another
         Dim Value, ValueNames(), SubKeys() As String
         Dim swLocal As Stopwatch
         Dim NewFromKey, NewToKey As RegistryKey
@@ -518,7 +496,7 @@ Friend Class RegistryAccess
         'Now process the keys
         SubKeys = FromKey.GetSubKeyNames
         For Each SubKey As String In SubKeys
-            If SubKey <> REGISTRY_BACKUP_SUBKEY Then 'Copy all keys except the backup key itself! Without this we wold have infinite recursion...
+            If SubKey <> REGISTRY_BACKUP_SUBKEY Then 'Copy all keys except the backup key itself! Without this we would have infinite recursion...
                 Value = FromKey.OpenSubKey(SubKey).GetValue("", "").ToString
                 TL.LogMessage("  Copy50", "  Processing subkey: " & SubKey & " " & Value)
                 NewFromKey = FromKey.OpenSubKey(SubKey) 'Create the new subkey and get a handle to it
@@ -534,13 +512,12 @@ Friend Class RegistryAccess
         swLocal = Nothing
     End Sub
 
-    Private Sub MigrateTo60(ByVal CurrentPlatformVersion As String)
+    Private Sub SetRegistryACL(ByVal CurrentPlatformVersion As String)
         'Subroutine to control the migration of a Platform 5.5 profile to Platform 6
         Dim Values As New Generic.SortedList(Of String, String)
         Dim swLocal As Stopwatch
         Dim Key As RegistryKey, KeySec As RegistrySecurity, RegAccessRule As RegistryAccessRule
         Dim DomainSid, Ident As SecurityIdentifier
-        Dim Prof55 As XMLAccess, Prof5 As RegistryKey
 
         swLocal = Stopwatch.StartNew
 
@@ -548,7 +525,7 @@ Friend Class RegistryAccess
         Key = Registry.LocalMachine.CreateSubKey(REGISTRY_ROOT_KEY_NAME)
 
         'Set a security ACL on the ASCOM Profile key giving the Users group Full Control of the key
-        TL.LogMessage("MigrateTo60", "Creating security identifiers")
+        TL.LogMessage("MigrateTo60", "Creating security identifier")
         DomainSid = New SecurityIdentifier("S-1-0-0") 'Create a starting point domain SID
         Ident = New SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, DomainSid) 'Create a security Identifier for the BuiltinUsers Group to be passed to the new accessrule
 
@@ -568,64 +545,11 @@ Friend Class RegistryAccess
 
         TL.LogMessage("MigrateTo60", "Flushing key")
         Key.Flush() 'Flush the key to make sure the permission is committed
-
-        Select Case CurrentPlatformVersion
-            Case "4", "5"
-                If OSBits() = Bitness.Bits64 Then 'This is a 64bit OS so migrate from the 32 to the 64bit registry keys
-                    TL.LogMessage("MigrateTo60", "Opening Profile Registry Key for Platform " & CurrentPlatformVersion)
-                    Prof5 = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegWow64Options.KEY_WOW64_32KEY)
-                    TL.LogMessage("MigrateTo60", "Copying Profile 5 to Profile 6")
-                    Copy50To60("", Prof5, Key)
-                Else 'This is a 32bit OS so no need to copy as the Profile is already in the correct place
-                    TL.LogMessage("MigrateTo60", "This is a 32bit OS so the Profile is already in the correct place from Platform " & CurrentPlatformVersion)
-                End If
-            Case "5.5"
-                TL.LogMessage("MigrateTo60", "Creating Profile 5.5 XMLAccess object")
-                Prof55 = New XMLAccess()
-                TL.LogMessage("MigrateTo60", "Copying Profile 5.5 to Profile 6")
-                Copy55To60("", Prof55, Key)
-        End Select
-
+        TL.LogMessage("MigrateTo60", "Closing key")
         Key.Close() 'Close the key after migration
 
         swLocal.Stop() : TL.LogMessage("MigrateTo60", "ElapsedTime " & swLocal.ElapsedMilliseconds & " milliseconds")
         swLocal = Nothing
-    End Sub
-
-    Private Sub Copy50To60(ByVal CurrentSubKey As String, ByVal Prof5 As RegistryKey, ByVal Prof6 As RegistryKey)
-        'Subroutine used to recursively copy copy the 5.0 registry Profile to new 64bit registry Profile
-        Dim Value, ValueNames(), SubKeys() As String
-        Dim swLocal As Stopwatch
-        Dim NewKey5, NewKey6 As RegistryKey
-        Static RecurseDepth As Integer
-
-        RecurseDepth += 1 'Increment the recursion depth indicator
-
-        swLocal = Stopwatch.StartNew
-        TL.LogMessage("Copy50To60 " & RecurseDepth.ToString, "Starting key: " & CurrentSubKey)
-
-        'First copy values from the from key to the to key
-        ValueNames = Prof5.GetValueNames()
-        For Each ValueName As String In ValueNames
-            Value = Prof5.GetValue(ValueName, "").ToString
-            Prof6.SetValue(ValueName, Value)
-            TL.LogMessage("  Copy50To60", "  Key: " & CurrentSubKey & " - """ & ValueName & """  """ & Value & """")
-        Next
-
-        'Now process the keys
-        SubKeys = Prof5.GetSubKeyNames
-        For Each SubKey As String In SubKeys
-            Value = Prof5.OpenSubKey(SubKey).GetValue("", "").ToString
-            TL.LogMessage("  Copy50To60", "  Processing subkey: " & SubKey & " " & Value)
-            NewKey5 = Prof5.OpenSubKey(SubKey) 'Create the new subkey and get a handle to it
-            NewKey6 = Prof6.CreateSubKey(SubKey) 'Create the new subkey and get a handle to it
-            If Not Value = "" Then NewKey6.SetValue("", Value) 'Set the default value if present
-            Copy50To60(CurrentSubKey & "\" & SubKey, NewKey5, NewKey6) 'Recursively process each key
-        Next
-        swLocal.Stop() : TL.LogMessage("  Copy50To60", "  Completed subkey: " & CurrentSubKey & " " & RecurseDepth.ToString & ",  Elapsed time: " & swLocal.ElapsedMilliseconds & " milliseconds")
-        RecurseDepth -= 1 'Decrement the recursion depth counter
-        swLocal = Nothing
-
     End Sub
 
     Private Sub Copy55To60(ByVal CurrentSubKey As String, ByVal Prof55 As XMLAccess, ByVal Prof6 As RegistryKey)
@@ -681,7 +605,7 @@ Friend Class RegistryAccess
         Dim Result As System.Int32
 
         If ParentKey Is Nothing OrElse GetRegistryKeyHandle(ParentKey).Equals(System.IntPtr.Zero) Then
-            Throw New System.Exception("OpenSubKey: Parent key is not open")
+            Throw New ProfilePersistenceException("OpenSubKey: Parent key is not open")
         End If
 
         Dim Rights As System.Int32 = RegistryRights.ReadKey ' Or RegistryRights.EnumerateSubKeys Or RegistryRights.QueryValues Or RegistryRights.Notify
@@ -690,11 +614,20 @@ Friend Class RegistryAccess
         End If
 
         Result = RegOpenKeyEx(GetRegistryKeyHandle(ParentKey), SubKeyName, 0, Rights Or Options, SubKeyHandle)
+
+        Select Case Result
+            Case 0 'All OK so return result
+                Return PointerToRegistryKey(CType(SubKeyHandle, System.IntPtr), Writeable, False)
+            Case 2 'Key not found so return nothing
+                Throw New ProfilePersistenceException("Cannot open key " & SubKeyName & " as it does not exist - Result: 0x" & Hex(Result))
+            Case Else 'Some other error so throw an error
+                Throw New System.ComponentModel.Win32Exception(Result, "OpenSubKey: Exception encountered opening key - Result: 0x" & Hex(Result))
+        End Select
+
+
         If Result <> 0 Then
-            Throw New System.ComponentModel.Win32Exception(Result, "OpenSubKey: Exception encountered opening key - Result: 0x" & Hex(Result))
         End If
 
-        Return PointerToRegistryKey(CType(SubKeyHandle, System.IntPtr), Writeable, False)
     End Function
 
     Private Function PointerToRegistryKey(ByVal hKey As System.IntPtr, ByVal writable As Boolean, ByVal ownsHandle As Boolean) As Microsoft.Win32.RegistryKey

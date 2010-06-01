@@ -504,17 +504,6 @@ Public Class TraceLogger
         End Try
     End Sub
 
-
-
-
-
-
-
-
-
-
-
-
 #End Region
 
 End Class

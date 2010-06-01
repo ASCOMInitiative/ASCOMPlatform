@@ -282,7 +282,7 @@ namespace ASCOM.Controls
         /// <summary>
         /// Releases all resources used by the <see cref="T:System.ComponentModel.Component"/>.
         /// </summary>
-		public void Dispose()
+		public new void Dispose()
 		{
 			this.StopTimerUpdates();
 			this.Dispose(true);	// Allow disposal of both managed and unmanaged resources.

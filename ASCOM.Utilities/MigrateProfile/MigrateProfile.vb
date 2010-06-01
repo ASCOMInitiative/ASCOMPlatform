@@ -13,14 +13,15 @@ Module MigrateProfile
     Sub Main()
         Dim args() As String
         Dim PR As Profile
-        Dim Response As MsgBoxResult
         Dim parmEraseOnly, parmForce, parmMigrateIfNeeded, parmSavePlatformVersion As Boolean
         Dim Utl As Util, Key As RegistryKey, CurrentProfileVersion As String
 
-        Const ASCOM_KEY As String = "SOFTWARE\ASCOM"
         Const LAST_PROFILE_VALUE_NAME As String = "LastPlatformVersion"
         Try
+            'Test whether we are a 32bit application. If not then migration will fail so throw an error!
+            If Not ApplicationBits() = Bitness.Bits32 Then Throw New ASCOM.Utilities.Exceptions.ProfilePersistenceException("The MigrateProfile application must be compiled as 32bit, but it appears not to be. Please report this to the ASCOM Platform team")
 
+            'Process command line arguments if supplied
             args = System.Environment.GetCommandLineArgs
 
             'Initialise default values
@@ -48,7 +49,7 @@ Module MigrateProfile
             If parmSavePlatformVersion Then ' Just save the platform version
                 Utl = New Util 'Get a Util object
 
-                Key = Registry.CurrentUser.CreateSubKey(ASCOM_KEY) 'Create or open a registry key in which to save the value, use HKCU so we do have write accesto it by default
+                Key = Registry.CurrentUser.CreateSubKey(REGISTRY_ROOT_KEY_NAME) 'Create or open a registry key in which to save the value, use HKCU so we do have write accesto it by default
                 Key.SetValue(LAST_PROFILE_VALUE_NAME, Utl.PlatformVersion, RegistryValueKind.String) ' Save the value
                 Key.Close() 'flush the value to disk and close the key
 
@@ -57,14 +58,10 @@ Module MigrateProfile
                 Utl = Nothing
             Else 'Migrate the Profile if required
                 'Get the version of the Profile last in use
-                Key = Registry.CurrentUser.CreateSubKey(ASCOM_KEY) 'Create or open a registry key in which to save the value, use HKCU so we do have write accesto it by default
+                Key = Registry.CurrentUser.CreateSubKey(REGISTRY_ROOT_KEY_NAME) 'Create or open a registry key in which to save the value, use HKCU so we do have write accesto it by default
                 CurrentProfileVersion = Key.GetValue(LAST_PROFILE_VALUE_NAME, "Unknown") ' Read the value
                 Key.Close() 'flush the value to disk and close the key
                 Key = Nothing
-
-                'Find the location of the All Users profile
-                'BaseFolder = System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) & ASCOM_DIRECTORY
-                Response = MsgBoxResult.Ok ' Inititalise to OK status indicating that we are going to migrate the profile
 
                 PR = Nothing 'Initialise to remove a compiler warning
                 Try
@@ -74,7 +71,7 @@ Module MigrateProfile
                 End Try
 
                 Try
-                    If Not parmEraseOnly Then PR.MigrateProfile(CurrentProfileVersion, PLATFORM_VERSION) ' Migrate the profile and set platform version
+                    If Not parmEraseOnly Then PR.MigrateProfile(CurrentProfileVersion) ' Migrate the profile and set platform version
                 Catch Ex2 As Exception
                     MsgBox("MigrateProfile - Unexpected migration exception: " & Ex2.ToString)
                 End Try
