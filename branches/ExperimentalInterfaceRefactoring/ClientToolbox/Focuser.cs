@@ -129,7 +129,6 @@ namespace ASCOM.DriverAccess
         /// Raises an exception if the focuser does not intrinsically know what the step size is. 
         /// 
         /// </summary>
-
         public double StepSize
         {
             get { return Convert.ToDouble(memberFactory.CallMember(1, "StepSize", new Type[] { }, new object[] { })); }

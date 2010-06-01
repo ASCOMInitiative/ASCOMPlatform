@@ -1174,10 +1174,10 @@ namespace ASCOM.DriverAccess
     #endregion
 
     #region Internal strongly typed collection wrappers
-    //
+    //<summary>
     // Strongly typed enumerator for late bound Rate
     // objects being enumarated
-    //
+    //</summary>
     class _RateEnumerator : IEnumerator, IDisposable
     {
         IEnumerator objEnumerator;
@@ -1224,9 +1224,9 @@ namespace ASCOM.DriverAccess
         #endregion
     }
 
-    //
+    //<summary>
     // Late bound Axis Rates implementation.
-    //
+    //</summary>
     class _AxisRates : IAxisRates
     {
         Type objTypeAxisRates;
@@ -1276,9 +1276,9 @@ namespace ASCOM.DriverAccess
         #endregion
     }
 
-    //
+    //<summary>
     // Late bound TrackingRates implementation
-    //
+    //</summary>
     class _TrackingRates : ITrackingRates
     {
         Type objTypeTrackingRates;
