@@ -86,9 +86,9 @@ namespace ASCOM.DriverAccess
                         }
                         else
                         {
-                            propertyGetInfo = null;
                             string error = "Check Driver: Failed call to driver property " + memberName + " in " + strProgID;
                             LogError(error, propertyGetInfo, null);
+                            propertyGetInfo = null;
                             throw new Exception(error);
                         }
                     case 2:
@@ -100,9 +100,9 @@ namespace ASCOM.DriverAccess
                         }
                         else
                         {
-                            propertyGetInfo = null;
                             string error = "Check Driver: Failed call to driver property " + memberName + " in " + strProgID;
                             LogError(error, propertySetInfo, null);
+                            propertyGetInfo = null;
                             throw new Exception(error);
                         }
                     case 3:

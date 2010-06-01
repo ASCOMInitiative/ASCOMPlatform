@@ -64,6 +64,7 @@ namespace ASCOM.DriverAccess
         {
             get { return Convert.ToDouble(memberFactory.CallMember(1, "Altitude", new Type[] { }, new object[] { })); }
         }
+
         /// <summary>
         /// True if the dome is in the Home position.
         /// Set only following a Dome.FindHome operation and reset with any azimuth slew operation.
@@ -83,6 +84,7 @@ namespace ASCOM.DriverAccess
         {
             get { return (bool)memberFactory.CallMember(1, "AtPark", new Type[] { }, new object[] { }); }
         }
+
         /// <summary>
         /// The dome azimuth (degrees, North zero and increasing clockwise, i.e., 90 East, 180 South, 270 West)
         /// </summary>
