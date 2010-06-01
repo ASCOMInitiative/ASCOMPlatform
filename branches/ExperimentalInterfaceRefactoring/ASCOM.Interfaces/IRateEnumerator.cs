@@ -4,6 +4,10 @@
 using System;
 namespace ASCOM.Interfaces
 {
+    ///<summary>
+    /// Strongly typed enumerator for late bound Rate
+    /// objects being enumarated
+    ///</summary>
     public interface IRateEnumerator
     {
         object Current { get; }

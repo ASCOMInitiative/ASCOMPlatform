@@ -4,6 +4,9 @@
 using System;
 namespace ASCOM.Interfaces
 {
+    /// <summary>
+    /// Defines the ITelescope Interface
+    /// </summary>
     public interface ITelescope : IAscomDriver, IDeviceControl
     {
         /// <summary>

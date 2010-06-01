@@ -45,7 +45,6 @@ using System;
 namespace ASCOM.Interfaces
 {
 
-    //[Guid("30D18B61-AECC-4C03-8759-E3EDD246F062")]
     /// <summary>
     /// The alignment mode of the mount.
     /// </summary>
@@ -67,7 +66,6 @@ namespace ASCOM.Interfaces
         algGermanPolar
     }
 
-    //[Guid("D9998808-2DF0-4CA1-ADD6-CE592026C663")]
     /// <summary>
     /// Well-known telescope tracking rates.
     /// </summary>
@@ -94,7 +92,6 @@ namespace ASCOM.Interfaces
         driveKing
     }
 
-    //[Guid("135265BA-25AC-4F43-95E5-80D0171E48FA")]
     /// <summary>
     /// Equatorial coordinate systems used by telescopes.
     /// </summary>
@@ -126,8 +123,6 @@ namespace ASCOM.Interfaces
         equB1950
     }
 
-    //[Guid("3613EEEB-5563-47D8-B512-1D36D64CEEBB")]
-
     /// <summary>
     /// The direction in which the guide-rate motion is to be made.
     /// </summary>
@@ -154,7 +149,6 @@ namespace ASCOM.Interfaces
         guideWest
     }
 
-    //[Guid("BCB5C21D-B0EA-40D1-B36C-272456F44D01")]
     /// <summary>
     /// The telescope axes
     /// </summary>
@@ -176,7 +170,6 @@ namespace ASCOM.Interfaces
         axisTertiary
     }
 
-    //[Guid("ECD99531-A2CF-4B9F-91A0-35FE5D12B043")]
     /// <summary>
     /// The side of the pier on which the optical tube assembly is located.
     /// </summary>
@@ -206,24 +199,62 @@ namespace ASCOM.Interfaces
         /// </summary>
         pierWest = 1
     }
+
+    /// <summary>
+    /// ASCOM Camera ShutterState status values.
+    /// </summary>
     public enum ShutterState
     {
+        /// <summary>
+        /// Camera shutter status open
+        /// </summary>
         shutterOpen = 0,
+        /// <summary>
+        /// Camera shutter status closed
+        /// </summary>
         shutterClosed = 1,
+        /// <summary>
+        /// Camera shutter status opening
+        /// </summary>
         shutterOpening = 2,
+        /// <summary>
+        /// Camera shutter status closing
+        /// </summary>
         shutterClosing = 3,
+        /// <summary>
+        /// Camera shutter status error
+        /// </summary>
         shutterError = 4,
     }
+
     /// <summary>
     /// ASCOM Camera status values.
     /// </summary>
     public enum CameraStates
     {
+        /// <summary>
+        /// Camera status idle
+        /// </summary>
         cameraIdle = 0,
+        /// <summary>
+        /// Camera status waiting
+        /// </summary>
         cameraWaiting = 1,
+        /// <summary>
+        /// Camera status exposing
+        /// </summary>
         cameraExposing = 2,
+        /// <summary>
+        /// Camera status reading
+        /// </summary>
         cameraReading = 3,
+        /// <summary>
+        /// Camera status download
+        /// </summary>
         cameraDownload = 4,
+        /// <summary>
+        /// Camera status error
+        /// </summary>
         cameraError = 5
     }
 
