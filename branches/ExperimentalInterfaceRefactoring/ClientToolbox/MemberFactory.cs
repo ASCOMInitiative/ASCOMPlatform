@@ -21,6 +21,7 @@ namespace ASCOM.DriverAccess
         private String strProgID;
         private ExceptionLogger objLogger;
 
+
         /// <summary>
         /// Constructor, creates an instance of the of the ASCOM driver
         /// 
@@ -29,21 +30,31 @@ namespace ASCOM.DriverAccess
         internal MemberFactory(string progID)
         {
             strProgID = progID;
-            try
-            {
-                // Get Type Information 
-                objType = Type.GetTypeFromProgID(progID);
 
+            // Get Type Information 
+            objType = Type.GetTypeFromProgID(progID);
+
+            //check to see if it found the type information
+            if (objType != null)
+            {
                 // Create an instance of the object
                 objLateBound = Activator.CreateInstance(objType);
+
+                //no instance found throw error
+                if (objLateBound == null)
+                {
+                    string error = "Check Driver: cannot create driver isntance of progID: " + strProgID;
+                    LogError(error);
+                    throw new Exception(error);
+                }
             }
-            catch(Exception e)
+            else
             {
-                Dispose();
-                string error = "ASCOM: cannot create driver instance of progID: " + strProgID;
-                objLogger.LogException(e);
+                //no type information found throw error
+                string error = "Check Driver: cannot create object type of progID: " + strProgID;
+                LogError(error);
                 throw new Exception(error);
-            }
+            } 
         }
 
         /// <summary>
@@ -81,15 +92,26 @@ namespace ASCOM.DriverAccess
                     case 1:
                         PropertyInfo propertyGetInfo = objType.GetProperty(memberName);
                         if (propertyGetInfo != null)
-                        {
+                         {
+                            //run the .net object
                             return propertyGetInfo.GetValue(objLateBound, null);
                         }
                         else
                         {
-                            string error = "Check Driver: Failed call to driver property " + memberName + " in " + strProgID;
-                            LogError(error, propertyGetInfo, null);
-                            propertyGetInfo = null;
-                            throw new Exception(error);
+                            //check the type to see if it's a COM object
+                            if (objType.IsCOMObject)
+                            {
+                                //run the COM object property
+                                return (objType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.GetProperty, null, objLateBound, new object[] { }));
+                            }
+                            else
+                            {
+                                //evertyhing failed so log the error and throw an exception
+                                string error = "Check Driver: Failed call to driver property " + memberName + " in " + strProgID;
+                                LogError(error);
+                                propertyGetInfo = null;
+                                throw new Exception(error);
+                            }
                         }
                     case 2:
                         PropertyInfo propertySetInfo = objType.GetProperty(memberName);
@@ -100,10 +122,20 @@ namespace ASCOM.DriverAccess
                         }
                         else
                         {
-                            string error = "Check Driver: Failed call to driver property " + memberName + " in " + strProgID;
-                            LogError(error, propertySetInfo, null);
-                            propertyGetInfo = null;
-                            throw new Exception(error);
+                            //check the type to see if it's a COM object
+                            if (objType.IsCOMObject)
+                            {
+                                //run the COM object property
+                                objType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.SetProperty, null, objLateBound, parms);
+                                return null;
+                            }
+                            else
+                            {
+                                string error = "Check Driver: Failed call to driver property " + memberName + " in " + strProgID;
+                                LogError(error);
+                                propertyGetInfo = null;
+                                throw new Exception(error);
+                            }
                         }
                     case 3:
                         MethodInfo methodInfo = objType.GetMethod(memberName, parameterTypes);
@@ -113,10 +145,19 @@ namespace ASCOM.DriverAccess
                         }
                         else
                         {
-                            string error = "Check Driver: Failed call to driver method " + memberName + " in " + strProgID;
-                            LogError(error, null, methodInfo);
-                            methodInfo = null;
-                            throw new Exception(error);
+                            //check the type to see if it's a COM object
+                            if (objType.IsCOMObject)
+                            {
+                                //run the COM object method
+                                return objType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.InvokeMethod, null, objLateBound, parms);
+                            }
+                            else
+                            {
+                                string error = "Check Driver: Failed call to driver method " + memberName + " in " + strProgID;
+                                LogError(error);
+                                methodInfo = null;
+                                throw new Exception(error);
+                            }
                         }
                     default:
                         return null;
@@ -127,12 +168,11 @@ namespace ASCOM.DriverAccess
         /// Logs the error to the eventviewer
         /// </summary> 
         /// <returns>nothing</returns>
-        internal void LogError(string error, PropertyInfo propertyInfo, MethodInfo methodInfo)
+        internal void LogError(string error)
         {
             ExceptionLogger objLogger = new ExceptionLogger();
-            objLogger.LogError(error, strProgID, propertyInfo, methodInfo);
+            objLogger.LogError(error, strProgID);
             objLogger = null;
-            throw new Exception(error);
         }
 
         #region IDisposable Members

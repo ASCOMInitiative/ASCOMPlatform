@@ -33,17 +33,17 @@ namespace ASCOM.DriverAccess
                 return;
             }
         }
-
+        
         /// <summary>
         /// Logs error from the memberfactory calls to driver properties and methods
         /// in just about all cases the propertyinfo and methodinfo should be null
         /// meaning it was not found in the driver. 
         /// </summary> 
-        public void LogError(string strError, string strProgID, PropertyInfo propertyInfo, MethodInfo methodInfo)
+        public void LogError(string strError, string strProgID)
         {
             EventLog log = new EventLog(logName);
             log.Source = a.FullName;
-            strError = BuildError(strError, strProgID, propertyInfo, methodInfo);
+            strError = BuildError(strError, strProgID);
             log.WriteEntry(strError, EventLogEntryType.Warning);
         }
 
@@ -68,10 +68,12 @@ namespace ASCOM.DriverAccess
             log.WriteEntry(error.ToString(), EventLogEntryType.Error);
         }
 
+  
+        
         /// <summary>
         /// Buils the string for the error
         /// </summary> 
-        public string BuildError(string strError, string strProgID, PropertyInfo propertyInfo, MethodInfo methodInfo)
+        public string BuildError(string strError, string strProgID)
         {
             StringBuilder error = new StringBuilder();
 
@@ -81,20 +83,6 @@ namespace ASCOM.DriverAccess
             error.AppendLine("OS:                " + Environment.OSVersion.ToString());
             error.AppendLine("Culture:           " + CultureInfo.CurrentCulture.Name);
  
-            if (propertyInfo != null)
-            {
-                error.AppendLine("Property Info       ");
-                error.AppendLine("Name:               " + propertyInfo.Name);
-                error.AppendLine("Can Read:           " + propertyInfo.CanRead.ToString());
-                error.AppendLine("Can Write:          " + propertyInfo.CanWrite);
-            }
-            if (methodInfo != null)
-            {
-                error.AppendLine("Method Info         ");
-                error.AppendLine("Name:               " + methodInfo.Name);
-                error.AppendLine("Is Public:          " + methodInfo.IsPublic.ToString());
-                error.AppendLine("Is Static:          " + methodInfo.IsStatic.ToString());
-            }
             return error.ToString();
         }
 
