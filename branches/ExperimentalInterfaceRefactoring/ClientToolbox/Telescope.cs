@@ -880,8 +880,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public DateTime UTCDate
         {
-            get { return (DateTime)memberFactory.CallMember(1, "TrackingRate", new Type[] { }, new object[] { }); }
-            set { memberFactory.CallMember(2, "TrackingRate", new Type[] { }, new object[] { value }); }
+            get { return (DateTime)memberFactory.CallMember(1, "UTCDate", new Type[] { }, new object[] { }); }
+            set { memberFactory.CallMember(2, "UTCDate", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
