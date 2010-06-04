@@ -6,6 +6,7 @@
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Globalization;
 using ASCOM;
 
 namespace ASCOM.DriverAccess
@@ -109,6 +110,12 @@ namespace ASCOM.DriverAccess
                                     //run the COM object property
                                     return (objType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.GetProperty, null, objLateBound, new object[] { }));
                                 }
+                                catch (System.Runtime.InteropServices.COMException e)
+                                {
+                                    propertyGetInfo = null;
+                                    if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber)) throw new ASCOM.PropertyNotImplementedException(strProgID + " " + memberName, false);
+                                    else throw;
+                                }
                                 catch (Exception e)
                                 {
                                     throw e.InnerException;
@@ -146,6 +153,12 @@ namespace ASCOM.DriverAccess
                                     objType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.SetProperty, null, objLateBound, parms);
                                     return null;
                                 }
+                                catch (System.Runtime.InteropServices.COMException e)
+                                {
+                                    propertySetInfo = null;
+                                    if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber)) throw new ASCOM.PropertyNotImplementedException(strProgID + " " + memberName, true);
+                                    else throw;
+                                }
                                 catch (Exception e)
                                 {
                                     throw e.InnerException;
@@ -179,6 +192,12 @@ namespace ASCOM.DriverAccess
                                 {
                                     //run the COM object method
                                     return objType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.InvokeMethod, null, objLateBound, parms);
+                                }
+                                catch (System.Runtime.InteropServices.COMException e)
+                                {
+                                    propertyGetInfo = null;
+                                    if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber)) throw new ASCOM.MethodNotImplementedException(strProgID + " " + memberName);
+                                    else throw;
                                 }
                                 catch (Exception e)
                                 {
