@@ -134,6 +134,9 @@ Attribute VB_Description = "ASCOM Telescope driver for Software Bisque TheSky"
 ' 14-May-10 rbd     5.2.1 - Support for TheSkyX. Fix reloading of settings
 '                   after SetupDialog, 2 settings were missing. Remove
 '                   "experimental" legend from PulseGuide option.
+' 04-Jun-10 rbd     5.2.2 - For TheSkyX, Tracking control does not work at present,
+'                   and GetLastSLewError() sporadically raises a "not implemented"
+'                   error.
 '---------------------------------------------------------------------
 
 Option Explicit
@@ -340,7 +343,11 @@ End Property
 
 Public Property Get CanSetTracking() As Boolean
 
-    CanSetTracking = True
+    If m_eTheSkyType = TheSkyX Then                 ' Hopefully temporary!!!
+        CanSetTracking = False
+    Else
+        CanSetTracking = True
+    End If
 
 End Property
 
@@ -387,6 +394,7 @@ Public Property Let Connected(ByVal newVal As Boolean)
             Case TheSky5: buf = "TheSky.RASCOMTele"
             Case TheSky6: buf = "TheSky6.RASCOMTele"
             ' ** NOT WHAT BISQUE SAYS, BUT WORKS! "TheSkyXAdaptor.RASCOMTele" does not!
+            'Case TheSkyX: buf = "TheSkyXAdaptor.RASCOMTele"
             Case TheSkyX: buf = "TheSkyX.sky6RASCOMTele"
         End Select
         Set m_Bisque = CreateObject(buf)
@@ -584,9 +592,10 @@ End Property
 
 Public Property Get Slewing() As Boolean
     Dim lLastSlewError As Long
+    Dim slewComplete As Boolean
     
     CheckConnected
-    If (Not m_bAbortSlew) And (Not m_Bisque.IsSlewComplete = 1) Then
+    If (Not m_bAbortSlew) And (Not (m_Bisque.IsSlewComplete = 1)) Then
         '
         ' This adds settle time after we see that the scope has
         ' not moved one arcmin.
@@ -603,7 +612,24 @@ Public Property Get Slewing() As Boolean
             Slewing = False
             If Not m_bSlewCompleted Then
                 m_bSlewCompleted = True
+                '
+                ' The following sleaze is required for TheSKy X 10.1.6, which sporadically
+                ' fails with a "not implemented" error on its GetLastSlewError() function
+                ' at the end of a "long" slew. Some sort of timing bug in TheSKy X.
+                ' Lacking any better info, we ignore that error (and any possible slew
+                ' error!), and assume the slew was successful.
+                '
+                ' *** THIS REALLY NEEDS FIXING IN THESKY X ***
+                '
+                If m_eTheSkyType = TheSkyX Then On Error Resume Next
                 lLastSlewError = m_Bisque.GetLastSlewError
+                If m_eTheSkyType = TheSkyX Then
+                    If Err.Number <> 0 Then lLastSlewError = 0      ' *** TOTALLY BOGUS!!! **
+                    On Error GoTo 0
+                End If
+                '
+                '
+                '
                 If lLastSlewError <> 0 Then
                     Err.Raise SCODE_SLEW_FAILURE, ERR_SOURCE, _
                         MSG_SLEW_FAILURE & lLastSlewError
@@ -666,10 +692,14 @@ End Property
 Public Property Get Tracking() As Boolean
 
     CheckConnected
-    If m_Bisque.IsTracking = 0 Then
-        Tracking = False
-    Else
+    If m_eTheSkyType = TheSkyX Then                 ' Hopefully temporary!!!
         Tracking = True
+    Else
+        If m_Bisque.IsTracking = 0 Then
+            Tracking = False
+        Else
+            Tracking = True
+        End If
     End If
    
 End Property
@@ -678,12 +708,14 @@ Public Property Let Tracking(ByVal newVal As Boolean)
     Dim t As Long
     
     CheckConnected
-    If newVal Then
-        t = 1&
-    Else
-        t = 0&
+    If m_eTheSkyType = TheSkyX Then                 ' Hopefully temporary!!!
+        If newVal Then
+            t = 1&
+        Else
+            t = 0&
+        End If
+        m_Bisque.SetTracking t, 1&, 0#, 0#
     End If
-    m_Bisque.SetTracking t, 1&, 0#, 0#
     
 End Property
 
