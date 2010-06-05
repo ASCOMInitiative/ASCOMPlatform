@@ -338,7 +338,7 @@ namespace ASCOM.DriverAccess
         /// <returns>The side of the pier on which the telescope would be on if a slew to the given equatorial coordinates is performed at the current instant of time.</returns>
         public PierSide DestinationSideOfPier(double RightAscension, double Declination)
         {
-            return (PierSide)memberFactory.CallMember(3, "CanMoveAxis", new Type[] { typeof(double), typeof(double) }, new object[] { RightAscension, Declination });
+            return (PierSide)memberFactory.CallMember(3, "DestinationSideOfPier", new Type[] { typeof(double), typeof(double) }, new object[] { RightAscension, Declination });
         }
 
         /// <summary>
@@ -783,7 +783,7 @@ namespace ASCOM.DriverAccess
         /// <param name="Declination">The corrected declination (degrees, positive North). Copied to the TargetDeclination property.</param>
         public void SyncToCoordinates(double RightAscension, double Declination)
         {
-            memberFactory.CallMember(3, "SyncToAltAz", new Type[] { typeof(double), typeof(double) }, new object[] { RightAscension, Declination });
+            memberFactory.CallMember(3, "SyncToCoordinates", new Type[] { typeof(double), typeof(double) }, new object[] { RightAscension, Declination });
         }
 
         /// <summary>
