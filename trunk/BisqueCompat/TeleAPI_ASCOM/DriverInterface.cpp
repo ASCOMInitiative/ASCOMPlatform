@@ -40,6 +40,11 @@
 // 21-Aug-03	rbd		Disconnect before releasing the driver.
 // 25-Nov-04	rbd		4.0.1 Unpark and turn on tracking (if supported) 
 //						when connecting to the scope.
+// 04-Jun-10	rbd		5.0.1 - For TheSky X, need to remarshal the 
+//						interface to the scope between threads. When 
+//						disconnecting the scope, the call to AbortSlew()
+//						comes in on the main thread, while other calls 
+//						come in on a worker thread. 
 //========================================================================
 
 /* #include "AscomScope.h" */
@@ -54,9 +59,12 @@ static double get_double(OLECHAR *name);
 static void set_double(OLECHAR *name, double val);
 static bool get_bool(OLECHAR *name);
 static void set_bool(OLECHAR *name, bool val);
+static void switchThreadIf();
 
 static IDispatch *_p_DrvDisp = NULL;		// [sentinel]
+static LPSTREAM _p_MarshalStream;			// Marshaled interface as stream (via CoMarshalInterThreadInterfaceInStream())
 static bool bSyncSlewing = false;			// True if scope is doing a sync slew
+static DWORD dCurrIntfcThreadId;			// ID of thread on which the interface is currently marshalled
 
 // -------------
 // InitDrivers()
@@ -169,6 +177,15 @@ short InitScope(void)
 		}
 
 		//
+		// Get the marshalled interface pointer for later possible thread switching
+		//
+		dCurrIntfcThreadId = GetCurrentThreadId();
+		if(FAILED(CoMarshalInterThreadInterfaceInStream(IID_IDispatch, _p_DrvDisp, &_p_MarshalStream)))
+			drvFail(
+				"Failed to get cross-thread marshal stream.",
+				NULL, true);
+
+		//
 		// We now need to connect the scope. To do this, we set the 
 		// Connected property to TRUE.
 		//
@@ -263,13 +280,16 @@ void TermScope(void)
 	VARIANTARG rgvarg[1];
 	EXCEPINFO excep;
 	VARIANT vRes;
-	short iRes = 0;				// Assume success (our retval)
+	short iRes = 0;						// Assume success (our retval)
 	HRESULT hr;
+
 	if(_p_DrvDisp != NULL)				// Just in case! (see termPlugin())
 	{
+		switchThreadIf();
+
 		//
-		// We now need to connect the scope. To do this, we set the 
-		// Connected property to TRUE. Property-put calls employ a hack
+		// We now need to unconnect the scope. To do this, we set the 
+		// Connected property to FALSE. Property-put calls employ a hack
 		// as described in Brockschmidt. Don't ask...
 		//
 		if(FAILED(_p_DrvDisp->GetIDsOfNames(
@@ -433,6 +453,8 @@ char *GetName(void)
 	EXCEPINFO excep;
 	VARIANT vRes;
 
+	switchThreadIf();
+
 	//
 	// Get our dispatch ID
 	//
@@ -486,6 +508,8 @@ bool IsSlewing(void)
 
 	if(!_bScopeCanSlewAsync)		// If can't do async slew, or never slewed
 		return(bSyncSlewing);		// Use our sync slewing flag (never slewed = false)
+
+	switchThreadIf();
 
 	//
 	// We can do async slews, assume driver supports Slewing.
@@ -559,6 +583,8 @@ short SlewScope(double dRA, double dDec)
 	__try
 	{
 
+		switchThreadIf();
+
 		//
 		// Get our dispatch ID
 		//
@@ -625,6 +651,8 @@ void AbortSlew(void)
 	EXCEPINFO excep;
 	VARIANT vRes;
 
+	switchThreadIf();
+
 	//
 	// Get our dispatch ID
 	//
@@ -683,6 +711,8 @@ short SyncScope(double dRA, double dDec)
 
 	__try
 		{
+			switchThreadIf();
+
 			//
 			// Get our dispatch ID
 			//
@@ -742,6 +772,8 @@ void UnparkScope(void)
 	DISPPARAMS dispparms;
 	EXCEPINFO excep;
 	VARIANT vRes;
+
+	switchThreadIf();
 
 	//
 	// Get our dispatch ID
@@ -959,6 +991,8 @@ static double get_double(OLECHAR *name)
 	char *cp;
 	char buf[256];
 
+	switchThreadIf();
+
 	//
 	// Get our dispatch ID
 	//
@@ -1029,6 +1063,8 @@ static void set_double(OLECHAR *name, double val)
 	char *cp;
 	char buf[256];
 
+	switchThreadIf();
+
 	//
 	// Get our dispatch ID
 	//
@@ -1097,6 +1133,8 @@ static bool get_bool(OLECHAR *name)
 	EXCEPINFO excep;
 	char *cp;
 	char buf[256];
+
+	switchThreadIf();
 
 	//
 	// Get our dispatch ID
@@ -1170,6 +1208,11 @@ static void set_bool(OLECHAR *name, bool val)
 	char buf[256];
 	HRESULT hr;
 
+	switchThreadIf();
+
+	//
+	// Get our dispatch ID
+	//
 	if(FAILED(hr = _p_DrvDisp->GetIDsOfNames(
 		IID_NULL, 
 		&name, 
@@ -1210,6 +1253,36 @@ static void set_bool(OLECHAR *name, bool val)
 			delete[] cp;
 			drvFail(buf, &excep, true);
 		}
+	}
+
+}
+
+//
+// Gets the IDispatch interface on a new thread from a previously obtained
+// marshal stream, then gets a new interface marskaling stream on the new
+// thread (remembering the thread on which the interface is currently
+// marshaled). This may be repeatedly called to wsitch the IDispatch to
+// the scope from one thread to another. 
+//
+static void switchThreadIf()
+{
+	if (GetCurrentThreadId() != dCurrIntfcThreadId)
+	{
+		LPVOID ppv;
+
+		if(FAILED(CoGetInterfaceAndReleaseStream(_p_MarshalStream, IID_IDispatch, &ppv)))
+			drvFail(
+				"Failed to marshal driver interface to new thread.",
+				NULL, true);
+
+		_p_DrvDisp = (IDispatch *)ppv;
+
+		dCurrIntfcThreadId = GetCurrentThreadId();
+		if(FAILED(CoMarshalInterThreadInterfaceInStream(IID_IDispatch, _p_DrvDisp, &_p_MarshalStream)))
+			drvFail(
+				"Failed to get new cross-thread marshal stream.",
+				NULL, true);
+
 	}
 
 }

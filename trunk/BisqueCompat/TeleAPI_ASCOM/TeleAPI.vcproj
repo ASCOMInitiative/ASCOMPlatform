@@ -76,7 +76,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="C:\Program Files\Common Files\System\TeleAPI.dll"
+				OutputFile="C:\Program Files (x86)\Common Files\System\TeleAPI.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				ModuleDefinitionFile=".\TeleAPI.def"
