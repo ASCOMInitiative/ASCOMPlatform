@@ -21,6 +21,7 @@ namespace ASCOM.DriverAccess
         private object objLateBound;
         private Type objType;
         private String strProgID;
+        private bool isCOMObject;
 
 
         /// <summary>
@@ -38,6 +39,9 @@ namespace ASCOM.DriverAccess
             //check to see if it found the type information
             if (objType != null)
             {
+                //setup the property
+                isCOMObject = objType.IsCOMObject;
+
                 // Create an instance of the object
                 objLateBound = Activator.CreateInstance(objType);
 
@@ -61,6 +65,15 @@ namespace ASCOM.DriverAccess
         internal object GetLateBoundObject
         {
             get { return this.objLateBound ;}
+        }
+
+        /// <summary>
+        /// Returns true is the driver is COM based
+        /// </summary> 
+        /// <returns>object</returns>
+        internal bool IsCOMObject
+        {
+            get { return this.objType.IsCOMObject; }
         }
 
         /// <summary>
@@ -97,13 +110,13 @@ namespace ASCOM.DriverAccess
                              }
                              catch (Exception e)
                              {
-                                 throw e.InnerException;
+                                 throw e;
                              }
                         }
                         else
                         {
                             //check the type to see if it's a COM object
-                            if (objType.IsCOMObject)
+                            if (isCOMObject)
                             {
                                 try
                                 {
@@ -118,7 +131,7 @@ namespace ASCOM.DriverAccess
                                 }
                                 catch (Exception e)
                                 {
-                                    throw e.InnerException;
+                                    throw e;
                                 }
                             }
                             else
@@ -139,13 +152,13 @@ namespace ASCOM.DriverAccess
                             }
                             catch (Exception e)
                             {
-                                 throw e.InnerException;
+                                 throw e;
                             }
                         }
                         else
                         {
                             //check the type to see if it's a COM object
-                            if (objType.IsCOMObject)
+                            if (isCOMObject)
                             {
                                 try
                                 {
@@ -161,7 +174,7 @@ namespace ASCOM.DriverAccess
                                 }
                                 catch (Exception e)
                                 {
-                                    throw e.InnerException;
+                                    throw e;
                                 }
                             }
                             else
@@ -180,13 +193,13 @@ namespace ASCOM.DriverAccess
                             }
                             catch (Exception e)
                             {
-                                 throw e.InnerException;
+                                 throw e;
                             }
                         }
                         else
                         {
                             //check the type to see if it's a COM object
-                            if (objType.IsCOMObject)
+                            if (isCOMObject)
                             {
                                 try
                                 {
@@ -201,7 +214,7 @@ namespace ASCOM.DriverAccess
                                 }
                                 catch (Exception e)
                                 {
-                                    throw e.InnerException;
+                                    throw e;
                                 }
                             }
                             else

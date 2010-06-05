@@ -121,7 +121,7 @@ namespace ASCOM.DriverAccess
         /// <returns>Collection of Axis Rates</returns>
         public IAxisRates AxisRates(TelescopeAxes Axis)
         {
-            if (ITelescope != null)
+            if (!memberFactory.IsCOMObject)
                 return ITelescope.AxisRates(Axis);
             else
                 return new _AxisRates(Axis, memberFactory.GetObjType, memberFactory.GetLateBoundObject);
@@ -476,7 +476,7 @@ namespace ASCOM.DriverAccess
         /// <param name="Rate">The rate of motion (deg/sec) about the specified axis</param>
         public void MoveAxis(TelescopeAxes Axis, double Rate)
         {
-            memberFactory.CallMember(3, "MoveAxis", new Type[] { typeof(TelescopeAxes), typeof(double) }, new object[] { Axis, Rate });
+             memberFactory.CallMember(3, "MoveAxis", new Type[] { typeof(TelescopeAxes), typeof(double) }, new object[] { Axis, Rate });
         }
 
         /// <summary>
@@ -860,7 +860,7 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-                if (ITelescope != null)
+                if (!memberFactory.IsCOMObject)
                     return ITelescope.TrackingRates;
                 else
                     return new _TrackingRates(memberFactory.GetObjType, memberFactory.GetLateBoundObject);
