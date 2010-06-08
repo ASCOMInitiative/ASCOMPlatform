@@ -131,7 +131,7 @@ namespace ASCOM.DriverAccess
                                 }
                                 catch (Exception e)
                                 {
-                                    throw e;
+                                    throw e.InnerException;
                                 }
                             }
                             else
@@ -152,7 +152,7 @@ namespace ASCOM.DriverAccess
                             }
                             catch (Exception e)
                             {
-                                 throw e;
+                                throw e;
                             }
                         }
                         else
@@ -174,7 +174,7 @@ namespace ASCOM.DriverAccess
                                 }
                                 catch (Exception e)
                                 {
-                                    throw e;
+                                    throw e.InnerException;
                                 }
                             }
                             else
@@ -214,7 +214,7 @@ namespace ASCOM.DriverAccess
                                 }
                                 catch (Exception e)
                                 {
-                                    throw e;
+                                    throw e.InnerException;
                                 }
                             }
                             else
@@ -227,7 +227,6 @@ namespace ASCOM.DriverAccess
                         return null;
                 }
         }
-
 
         #region IDisposable Members
 
