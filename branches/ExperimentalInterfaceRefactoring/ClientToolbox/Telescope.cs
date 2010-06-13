@@ -860,9 +860,9 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-                if (!memberFactory.IsCOMObject)
-                    return ITelescope.TrackingRates;
-                else
+               /* if (!memberFactory.IsCOMObject)
+                    return memberFactory.TrackingRates;
+                else*/
                     return new _TrackingRates(memberFactory.GetObjType, memberFactory.GetLateBoundObject);
             }
 
