@@ -122,7 +122,7 @@ namespace ASCOM.DriverAccess
         public IAxisRates AxisRates(TelescopeAxes Axis)
         {
             if (!memberFactory.IsCOMObject)
-                return ITelescope.AxisRates(Axis);
+                return (IAxisRates)memberFactory.CallMember(3, "AxisRates", new Type[] { typeof(TelescopeAxes) }, new object[] {Axis});
             else
                 return new _AxisRates(Axis, memberFactory.GetObjType, memberFactory.GetLateBoundObject);
         }
@@ -860,9 +860,12 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-               /* if (!memberFactory.IsCOMObject)
-                    return memberFactory.TrackingRates;
-                else*/
+                if (!memberFactory.IsCOMObject)
+                {
+                   ITrackingRates trackingRates = memberFactory.CallMember(1, "TrackingRates", new Type[] { }, new object[] { }) as ITrackingRates;
+                   return trackingRates;
+                }
+                else
                     return new _TrackingRates(memberFactory.GetObjType, memberFactory.GetLateBoundObject);
             }
 
