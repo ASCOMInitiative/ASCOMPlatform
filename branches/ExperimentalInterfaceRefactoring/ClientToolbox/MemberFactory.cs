@@ -61,7 +61,7 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Returns the instance of the driver
         /// </summary> 
-        /// <returns>object</returns>
+        /// <returns>object</returns> 
         internal object GetLateBoundObject
         {
             get { return this.objLateBound ;}
@@ -110,7 +110,7 @@ namespace ASCOM.DriverAccess
                              }
                              catch (Exception e)
                              {
-                                 throw e;
+                                 throw e.InnerException;
                              }
                         }
                         else
@@ -152,7 +152,7 @@ namespace ASCOM.DriverAccess
                             }
                             catch (Exception e)
                             {
-                                throw e;
+                                throw e.InnerException;
                             }
                         }
                         else
@@ -193,7 +193,7 @@ namespace ASCOM.DriverAccess
                             }
                             catch (Exception e)
                             {
-                                 throw e;
+                                throw e.InnerException;
                             }
                         }
                         else
