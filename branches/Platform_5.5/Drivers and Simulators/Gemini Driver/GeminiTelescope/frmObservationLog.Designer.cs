@@ -252,7 +252,7 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmObservationLog";
-            this.Text = "Gemini Observation Log";
+            this.Text = "Gemini " + global::ASCOM.GeminiTelescope.Properties.Resources.ObservationLog;
             this.Load += new System.EventHandler(this.frmObservationLog_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);

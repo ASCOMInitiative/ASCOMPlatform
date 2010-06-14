@@ -3929,10 +3929,10 @@ namespace ASCOM.GeminiTelescope
             string[] result = null;
             DoCommandResult(cmd, MAX_TIMEOUT / 2, false, out result);
             if (result == null || result[0] == null || result[2] == null || result[3] == null)
-                throw new TimeoutException((m_AdditionalAlign ? "Align to" : "Sync to ") + "RA/DEC");
+                throw new TimeoutException((!m_AdditionalAlign ? "Align to" : "Sync to ") + "RA/DEC");
             if (result[0] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("RA value is invalid");
             if (result[2] != "1") throw new ASCOM.Utilities.Exceptions.InvalidValueException("DEC value is invalid");
-            if (result[3] == "No object!") throw new ASCOM.Utilities.Exceptions.InvalidValueException((m_AdditionalAlign ? "Align to" : "Sync to ") + "RA/DEC");
+            if (result[3] == "No object!") throw new ASCOM.Utilities.Exceptions.InvalidValueException((!m_AdditionalAlign ? "Align to" : "Sync to ") + "RA/DEC");
 
             m_RightAscension = ra;// Update state machine variables with new RA and DEC.
             m_Declination = dec;

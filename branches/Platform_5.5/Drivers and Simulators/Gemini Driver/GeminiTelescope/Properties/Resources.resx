@@ -341,7 +341,7 @@ It can be accessed from this icon</value>
     <value>Decelerate Joystick Fixed Speed</value>
   </data>
   <data name="SetupTelescope" xml:space="preserve">
-    <value>Setup telescope window</value>
+    <value>Gemini Telescope Setup</value>
   </data>
   <data name="HC_RT" xml:space="preserve">
     <value>Hand Controller Right button</value>
@@ -749,5 +749,52 @@ Are you sure you want to use these new values?</value>
   </data>
   <data name="WaitingForData" xml:space="preserve">
     <value>Waiting for data...</value>
+  </data>
+  <data name="AdditionalAlignAtCoordinates" xml:space="preserve">
+    <value>Additional Align at current coordinates</value>
+  </data>
+  <data name="KeepWindowOnTop" xml:space="preserve">
+    <value>Keep this window On Top</value>
+  </data>
+  <data name="ManageCatalogs" xml:space="preserve">
+    <value>Manage Catalogs</value>
+  </data>
+  <data name="SetupFocuser" xml:space="preserve">
+    <value>Gemini Focuser Setup</value>
+  </data>
+  <data name="SyncAtCoordinates" xml:space="preserve">
+    <value>Sync at current coordinates</value>
+  </data>
+  <data name="ObjectCoordinates" xml:space="preserve">
+    <value>Object and Coordinates</value>
+  </data>
+  <data name="Catalog" xml:space="preserve">
+    <value>Catalog</value>
+  </data>
+  <data name="CoordinatesJ2000" xml:space="preserve">
+    <value>Coordinates are J2000</value>
+  </data>
+  <data name="GeminiSettings" xml:space="preserve">
+    <value>Gemini Settings</value>
+  </data>
+  <data name="GPSSettings" xml:space="preserve">
+    <value>GPS Settings</value>
+  </data>
+  <data name="LoggingOptions" xml:space="preserve">
+    <value>Logging/Diagnostic Options</value>
+  </data>
+  <data name="ObjectName" xml:space="preserve">
+    <value>Object Name</value>
+  </data>
+  <data name="RevDec" xml:space="preserve">
+    <value>Rev
+Dec</value>
+  </data>
+  <data name="RevRA" xml:space="preserve">
+    <value>Rev
+RA</value>
+  </data>
+  <data name="Track" xml:space="preserve">
+    <value>Track</value>
   </data>
 </root>

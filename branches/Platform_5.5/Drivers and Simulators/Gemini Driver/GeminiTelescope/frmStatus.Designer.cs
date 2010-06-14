@@ -541,7 +541,7 @@
             this.Opacity = 0.9;
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "Gemini Status";
+            this.Text = "Gemini " + global::ASCOM.GeminiTelescope.Properties.Resources.Status;
             this.Load += new System.EventHandler(this.frmStatus_Load);
             this.VisibleChanged += new System.EventHandler(this.frmStatus_VisibleChanged);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmStatus_FormClosed);

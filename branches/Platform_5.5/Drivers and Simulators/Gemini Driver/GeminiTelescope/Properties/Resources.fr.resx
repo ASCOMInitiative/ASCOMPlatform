@@ -118,350 +118,346 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutGeminiDriver" xml:space="preserve">
-    <value>About Gemini Driver</value>
+    <value>Concernant le pilote Gemini</value>
   </data>
   <data name="Accelerate" xml:space="preserve">
-    <value>Accelerate</value>
+    <value>Accelère</value>
   </data>
   <data name="AdvancedSettings" xml:space="preserve">
-    <value>Advanced Gemini Settings</value>
+    <value>Paramètres avancés de Gemini</value>
   </data>
   <data name="AllSpeedsMode" xml:space="preserve">
-    <value>All Speeds Mode</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ASCOM" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\ASCOM.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>Mode toutes les vitesses</value>
   </data>
   <data name="AtCenterSpeed" xml:space="preserve">
-    <value>At center speed</value>
+    <value>Vitesse de centrage</value>
   </data>
   <data name="AtGuideSpeed" xml:space="preserve">
-    <value>At guide speed</value>
+    <value>Vitesse de guidage</value>
   </data>
   <data name="AtSlewSpeed" xml:space="preserve">
-    <value>At slew speed</value>
+    <value>Vitesse de déplacement</value>
   </data>
   <data name="CannotConnect" xml:space="preserve">
-    <value>Cannot connect to Gemini!</value>
+    <value>Ne peut pas se connecter au Gemini!</value>
   </data>
   <data name="CannotDisconnect" xml:space="preserve">
-    <value>Cannot disconnect from telescope</value>
+    <value>Ne peut pas se déconnecter du télescope</value>
   </data>
   <data name="CannotUseVoice" xml:space="preserve">
-    <value>This voice may be unusable for announcements. Please try another.</value>
+    <value>Cette voie ne peut être utilisée pour la voie. Merci d'en essayer une autre.</value>
   </data>
   <data name="ConfigureFocuser" xml:space="preserve">
-    <value>Configure Focuser</value>
+    <value>Configuration du porte oculaire</value>
   </data>
   <data name="ConfigureTelescope" xml:space="preserve">
-    <value>Configure Telescope</value>
+    <value>Configuration du Télescope</value>
   </data>
   <data name="Connect" xml:space="preserve">
-    <value>Connect</value>
+    <value>Connecter</value>
   </data>
   <data name="Decelerate" xml:space="preserve">
-    <value>Decelerate</value>
+    <value>Décélérer</value>
   </data>
   <data name="Disconnect" xml:space="preserve">
-    <value>Disconnect</value>
+    <value>Déconnecter</value>
   </data>
   <data name="DisconnectWarning" xml:space="preserve">
-    <value>Other programs are still connected. Are you sure you want to disconnect from the mount?</value>
+    <value>D'autres programmes sont encore connectés. Etes-vous sûr de vouloir vous déconnecter de la monture ?</value>
   </data>
   <data name="DownButton" xml:space="preserve">
-    <value>Down Button</value>
+    <value>Bouton du bas</value>
   </data>
   <data name="DownKey" xml:space="preserve">
-    <value>Down Key</value>
+    <value>Touche du bas</value>
   </data>
   <data name="DriverMinimized" xml:space="preserve">
-    <value>Gemini Controller was minimised</value>
+    <value>Le controleur Gemini a été minimisé</value>
   </data>
   <data name="DriverRunning" xml:space="preserve">
-    <value>Gemini ASCOM controller is still running.
-It can be accessed from this icon</value>
+    <value>La platforme Ascom Gemini est toujours en service.
+Elle peut être accessible via cet icône</value>
   </data>
   <data name="EnterMenu" xml:space="preserve">
-    <value>Enter Menu</value>
+    <value>Entrée du menu</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Exit</value>
+    <value>Sortie</value>
   </data>
   <data name="ExitMenu" xml:space="preserve">
-    <value>Exit Menu</value>
+    <value>Menu de sortie</value>
   </data>
   <data name="FailedSetTime" xml:space="preserve">
-    <value>Failed to set Gemini time</value>
+    <value>Echec de mise à l'heure du Gemini</value>
   </data>
   <data name="FocuserFast" xml:space="preserve">
-    <value>Focuser Fast Speed</value>
+    <value>Vitesse rapide du porte oculaire</value>
   </data>
   <data name="FocuserIn" xml:space="preserve">
-    <value>Focuser In</value>
+    <value>Direction de rentrée du porte oculaire</value>
   </data>
   <data name="FocuserMedium" xml:space="preserve">
-    <value>Focuser Medium Speed</value>
+    <value>Vitesse moyenne du porte oculaire</value>
   </data>
   <data name="FocuserOut" xml:space="preserve">
-    <value>Focuser Out</value>
+    <value>Direction de sortie du porte oculaire</value>
   </data>
   <data name="FocuserSlow" xml:space="preserve">
-    <value>Focuser Slow Speed</value>
+    <value>Vitesse lente du porte oculaire</value>
   </data>
   <data name="GeminiConnectionAlive1" xml:space="preserve">
-    <value>Are you sure you want to disconnect and exit?</value>
+    <value>Etes-vous certain de vouloir vous déconnecter et sortir ? </value>
   </data>
   <data name="GoHome" xml:space="preserve">
-    <value>Go Home</value>
+    <value>Maison</value>
   </data>
   <data name="HideHandController" xml:space="preserve">
-    <value>Hide Hand Controller</value>
+    <value>Cacher le controleur manuel</value>
   </data>
   <data name="HideNotifications" xml:space="preserve">
-    <value>Hide Notifications</value>
+    <value>Cacher les notifications</value>
   </data>
   <data name="InvalidSettings" xml:space="preserve">
-    <value>The following setting(s) are invalid:</value>
+    <value>Les réglages suivants sont invalides :</value>
   </data>
   <data name="InvalidSite" xml:space="preserve">
-    <value>Invalid Site Settings</value>
+    <value>Paramètres du lieu incorrects</value>
   </data>
   <data name="JoystickStop" xml:space="preserve">
-    <value>Joystick stop</value>
+    <value>Joystick arrêté</value>
   </data>
   <data name="LeftButton" xml:space="preserve">
-    <value>Left Button</value>
+    <value>Gauche</value>
   </data>
   <data name="LeftKey" xml:space="preserve">
-    <value>Left Key</value>
+    <value>Touche de gauche</value>
   </data>
   <data name="MedidianFlip" xml:space="preserve">
-    <value>Meridian Flip</value>
+    <value>Retournement au méridien</value>
   </data>
   <data name="MoveJoystick" xml:space="preserve">
-    <value>Move Joystick</value>
+    <value>Mouvement avec le joystic</value>
   </data>
   <data name="NoProfileLoad" xml:space="preserve">
-    <value>Unable to load profile:</value>
+    <value>Lecture du profile impossible:</value>
   </data>
   <data name="NoProfileSave" xml:space="preserve">
-    <value>Unable to save profile:</value>
+    <value>Sauvegarde du profile impossible:</value>
   </data>
   <data name="ObjectBelowHorizon" xml:space="preserve">
-    <value>Object below the horizon -- cannot do a meridian flip</value>
+    <value>Objet sous l'horizon – ne peut procéder à un retournement au méridien</value>
   </data>
   <data name="ObjectSearch1" xml:space="preserve">
-    <value>Object Search One degree</value>
+    <value>Recherche de l'objet dans 1 degré</value>
   </data>
   <data name="ObjectSearch2" xml:space="preserve">
-    <value>Object Search Two degrees</value>
+    <value>Recherche de l'objet dans 2 degrés </value>
   </data>
   <data name="ObjectUnreachable" xml:space="preserve">
-    <value>Cannot perform a meridian flip: object is unreachable from the other side</value>
+    <value>Retournement au méridien impossible : l'objet est indétectable de l'autre côté</value>
   </data>
   <data name="OverwriteSettings" xml:space="preserve">
-    <value>You are about to write advanced settings to Gemini.
+    <value>Vous êtes sur le point d'écrire les paramètres avancé dans le Gemini.
     
-Are you sure you want to do this?</value>
+Etes-vous certains d'effectuer cette manipulation ?</value>
   </data>
   <data name="ParkAtCurrent" xml:space="preserve">
-    <value>Park at Current Mount Position</value>
+    <value>Parquer la monture dans cette position</value>
   </data>
   <data name="ParkAtCWD" xml:space="preserve">
-    <value>Park at Start-up Position (CWD)</value>
+    <value>Parquer la monture en mode démarrage (contre-poids en bas)</value>
   </data>
   <data name="ParkAtHome" xml:space="preserve">
-    <value>Park at Home Position</value>
+    <value>Parquer en position parking</value>
   </data>
   <data name="ParkCWD" xml:space="preserve">
-    <value>Park at C W D</value>
+    <value>Parque contre-poids en bas</value>
   </data>
   <data name="ParkHere" xml:space="preserve">
-    <value>Park Here</value>
+    <value>Parque dans cette position</value>
   </data>
   <data name="ParkHome" xml:space="preserve">
-    <value>Park at Home</value>
+    <value>Parque vers la position maison</value>
   </data>
   <data name="PhotoMode" xml:space="preserve">
-    <value>Photo Mode</value>
+    <value>Mode photo</value>
   </data>
   <data name="PTPDisabled" xml:space="preserve">
-    <value>Pass-through port will be disabled</value>
+    <value>Le mode de port Pass-through port sera désactivé</value>
   </data>
   <data name="PTPInvalid" xml:space="preserve">
-    <value>Gemini Pass-Through port # is invalid:</value>
+    <value>Le port Pass-Through du Gemini est invalide:</value>
   </data>
   <data name="RebootController" xml:space="preserve">
-    <value>Are you sure you want to reboot Gemini controller?</value>
+    <value>Etes-vous certain de vouloir rebooter le système Gemini ?</value>
   </data>
   <data name="RightButton" xml:space="preserve">
-    <value>Right Button</value>
+    <value>Bouton droiteRight Button</value>
   </data>
   <data name="RightKey" xml:space="preserve">
-    <value>Right Key</value>
+    <value>Touche droite</value>
   </data>
   <data name="SafetyLimitSet" xml:space="preserve">
-    <value>Safety Limit set to current position</value>
+    <value>Les limites de sécurité sont définies pour cette position</value>
   </data>
   <data name="SelectCOMPort" xml:space="preserve">
-    <value>Please select Com Port</value>
+    <value>Merci de sélectionner un port Com</value>
   </data>
   <data name="Setup" xml:space="preserve">
-    <value>Setup</value>
+    <value>Configuration</value>
   </data>
   <data name="SetupTelescope" xml:space="preserve">
-    <value>Gemini Telescope Setup</value>
+    <value>Panneau de configuration du télescope</value>
   </data>
   <data name="ShowHandController" xml:space="preserve">
-    <value>Show Hand Controller</value>
+    <value>Montrer la raquette manuelle</value>
   </data>
   <data name="ShowNotifications" xml:space="preserve">
-    <value>Show Notifications</value>
+    <value>Afficher les notifications</value>
   </data>
   <data name="ShowSetupFocuser" xml:space="preserve">
-    <value>Show setup focuser window</value>
+    <value>Afficher le panneau de configuration du porte oculaire</value>
   </data>
   <data name="SomeInvalidSettings" xml:space="preserve">
-    <value>Some settings are invalid!</value>
+    <value>Certains paramètres sont erronés!</value>
   </data>
   <data name="StartTracking" xml:space="preserve">
-    <value>Start Tracking</value>
+    <value>Démarrage du suivi</value>
   </data>
   <data name="StopSlew" xml:space="preserve">
-    <value>Stop slew</value>
+    <value>Arrêt de la rotation</value>
   </data>
   <data name="StopTracking" xml:space="preserve">
-    <value>Stop Tracking</value>
+    <value>Arrêt du suivi</value>
   </data>
   <data name="UpButton" xml:space="preserve">
-    <value>Up Button</value>
+    <value>Bouton direction haut</value>
   </data>
   <data name="UpKey" xml:space="preserve">
-    <value>Up Key</value>
+    <value>Touche direction haut</value>
   </data>
   <data name="VisualMode" xml:space="preserve">
-    <value>Visual Mode</value>
+    <value>Mode visuel</value>
   </data>
   <data name="CannotOpenPTP" xml:space="preserve">
-    <value>Cannot open pass-through port:</value>
+    <value>Ne peut ouvrir le port pass-through:</value>
   </data>
   <data name="CheckPort" xml:space="preserve">
-    <value>Checking serial port</value>
+    <value>Vérifie le port série...</value>
   </data>
   <data name="Connecting" xml:space="preserve">
-    <value>Connecting...</value>
+    <value>Connection...</value>
   </data>
   <data name="ConnectingToGemini" xml:space="preserve">
-    <value>Connecting to Gemini on </value>
+    <value>Connection au Gemini établie </value>
   </data>
   <data name="ConnectionFailed" xml:space="preserve">
-    <value>Connection Failed:</value>
+    <value>Echec de la connection:</value>
   </data>
   <data name="GeminiNotResponding" xml:space="preserve">
-    <value>Gemini is not responding. Please check that it's connected.</value>
+    <value>Gemini ne répond pas. Merci de vérifier la connection.</value>
   </data>
   <data name="SearchForGemini" xml:space="preserve">
-    <value>Searching for Gemini</value>
+    <value>Recherche du Gemini</value>
   </data>
   <data name="SerialError" xml:space="preserve">
-    <value>Serial port communication error</value>
+    <value>Erreur de communication du port série</value>
   </data>
   <data name="SerialTimeout" xml:space="preserve">
-    <value>Serial port timed out!</value>
+    <value>Temps dépassé pour la détection du port série!</value>
   </data>
   <data name="TerminatingConnection" xml:space="preserve">
-    <value>Gemini is not responding! Terminating connection.</value>
+    <value>Gemini ne répond pas! Fin de la connection.</value>
   </data>
   <data name="TooManyErrors" xml:space="preserve">
-    <value>Too many serial port errors! Please check Gemini.</value>
+    <value>Trop d'erreurs sur le port série! Merci de vérifier le Gemini.</value>
   </data>
   <data name="AccJoystick" xml:space="preserve">
-    <value>Accelerate Joystick Fixed Speed</value>
+    <value>Augmenter la vitesse fixée par le joystic</value>
   </data>
   <data name="ConnectToGemini" xml:space="preserve">
-    <value>Connect to Gemini</value>
+    <value>Connection au Gemini</value>
   </data>
   <data name="DecJoystick" xml:space="preserve">
-    <value>Decelerate Joystick Fixed Speed</value>
+    <value>Décélerer la vitesse fixée par le joystick</value>
   </data>
   <data name="EnablePEC" xml:space="preserve">
-    <value>Enable/Disable Periodic Error Correction (PEC)</value>
+    <value>Activer/Désactiver la correction de l'erreur périodique (PEC)</value>
   </data>
   <data name="HC_DN" xml:space="preserve">
-    <value>Hand Controller Down button</value>
+    <value>Flèche du bas de la raquette de commande</value>
   </data>
   <data name="HC_LF" xml:space="preserve">
-    <value>Hand Controller Left button</value>
+    <value>Flèche de gauche de la raquette de commande</value>
   </data>
   <data name="HC_MENU" xml:space="preserve">
-    <value>Hand Controller Menu button</value>
+    <value>Touche Menu de la raquette de commande</value>
   </data>
   <data name="HC_RT" xml:space="preserve">
-    <value>Hand Controller Right button</value>
+    <value>Flèche de droite de la raquette de commande</value>
   </data>
   <data name="HC_UP" xml:space="preserve">
-    <value>Hand Controller Up button</value>
+    <value>Flèche du haut de la raquette de commande</value>
   </data>
   <data name="HintJoystick" xml:space="preserve">
-    <value>HINT: Press a button on the joystick to see it highlited in the list above.</value>
+    <value>Valider : Appuyer sur une touche sur le joystick pour le voir s'illuminer dans la liste ci-dessous.</value>
   </data>
   <data name="MeridianFlip" xml:space="preserve">
-    <value>Perform Meridian Flip</value>
+    <value>Effectuer un retournement au méridien</value>
   </data>
   <data name="MountDEC" xml:space="preserve">
-    <value>Mount Declination</value>
+    <value>Déclination de la monture</value>
   </data>
   <data name="MountLST" xml:space="preserve">
-    <value>Mount Local Sidereal Time</value>
+    <value>Temps sidéral de la monture</value>
   </data>
   <data name="MountRA" xml:space="preserve">
-    <value>Mount Right Ascension</value>
+    <value>Ascension droite de la monture</value>
   </data>
   <data name="MountStopStart" xml:space="preserve">
-    <value>Stop/Start Tracking</value>
+    <value>Arrêt/démarrage du suivi</value>
   </data>
   <data name="MoveFocusIn" xml:space="preserve">
-    <value>Move Focuser In</value>
+    <value>Faire rentrer le porte oculaire</value>
   </data>
   <data name="MoveFocusOut" xml:space="preserve">
-    <value>Move Focuser Out</value>
+    <value>Faire sortir le porte oculaire</value>
   </data>
   <data name="ObjSrch1" xml:space="preserve">
-    <value>Object Search 1 Degree</value>
+    <value>Recherche d'objet dans 1 degré</value>
   </data>
   <data name="ObjSrch2" xml:space="preserve">
-    <value>Object Search 2 Degrees</value>
+    <value>Recherche d'objet dans 2 degrés</value>
   </data>
   <data name="ParkMount" xml:space="preserve">
-    <value>Park mount</value>
+    <value>Parquer la monture</value>
   </data>
   <data name="PERF_FLIP" xml:space="preserve">
-    <value>Perform Meridian Flip</value>
+    <value>Effectue un retournement au méridien</value>
   </data>
   <data name="SetFastFocuser" xml:space="preserve">
-    <value>Set Fast Focuser Speed</value>
+    <value>Active la vitesse rapide du porte oculaire</value>
   </data>
   <data name="SetMediumFocuser" xml:space="preserve">
-    <value>Set Medium Focuser Speed</value>
+    <value>Active la vitesse moyenne du porte oculaire</value>
   </data>
   <data name="SetSlowFocuser" xml:space="preserve">
-    <value>Set Slow Focuser Speed</value>
+    <value>Active la vitesse lente du porte oculaire</value>
   </data>
   <data name="SetupDriver" xml:space="preserve">
-    <value>Setup Driver and Gemini</value>
+    <value>Paramètre des pilotes et du Gemini</value>
   </data>
   <data name="SlewDECM" xml:space="preserve">
-    <value>Slew DEC-</value>
+    <value>Mouvement en DEC-</value>
   </data>
   <data name="SlewDECP" xml:space="preserve">
-    <value>Slew DEC+</value>
+    <value>Mouvement en DEC+</value>
   </data>
   <data name="SlewRAM" xml:space="preserve">
-    <value>Slew RA-</value>
+    <value>Mouvement en RA-</value>
   </data>
   <data name="SlewRAP" xml:space="preserve">
-    <value>Slew RA+</value>
+    <value>Mouvement en RA+</value>
   </data>
   <data name="SwapDEC" xml:space="preserve">
     <value>Swap DEC buttons</value>
@@ -470,61 +466,61 @@ Are you sure you want to do this?</value>
     <value>Swap RA buttons</value>
   </data>
   <data name="ToggleFocuserSpeed" xml:space="preserve">
-    <value>Toggle Focuser Speed: Slow/Medium/Fast</value>
+    <value>Bascule la vitesse du porte oculaire: Lente/Moyenne/Rapide</value>
   </data>
   <data name="ToggleVAP" xml:space="preserve">
-    <value>Toggle between Visual, All Speed, and Photo modes</value>
+    <value>Bascule entre Vitesse Visuelle, Toutes vitesses disponibles, et Photo </value>
   </data>
   <data name="UseCenter" xml:space="preserve">
-    <value>Use Centering speed</value>
+    <value>Utiliser la vitesse de centrage</value>
   </data>
   <data name="UseGuide" xml:space="preserve">
-    <value>Use Guiding speed</value>
+    <value>Utiliser la vitesse de guidage</value>
   </data>
   <data name="UseSlew" xml:space="preserve">
-    <value>Use Slew speed</value>
+    <value>Utiliser la vitesse de mouvement</value>
   </data>
   <data name="SameAxis" xml:space="preserve">
-    <value>RA and DEC are assigned to the same controller axis! Please select different axes.</value>
+    <value>L'ascension droite et la déclinaison sont définis pour le même axe! Merci de sélectionner des axes différents.</value>
   </data>
   <data name="BaudRate" xml:space="preserve">
-    <value>Baud Rate</value>
+    <value>Vitesse de transfer</value>
   </data>
   <data name="COMport" xml:space="preserve">
-    <value>COM port</value>
+    <value>Port COM</value>
   </data>
   <data name="Connected" xml:space="preserve">
-    <value>connected</value>
+    <value>Connecté</value>
   </data>
   <data name="Control" xml:space="preserve">
-    <value>Control</value>
+    <value>Contrôle</value>
   </data>
   <data name="Disabled" xml:space="preserve">
-    <value>Disabled</value>
+    <value>Non disponible</value>
   </data>
   <data name="dispCENTER" xml:space="preserve">
-    <value>CENTER</value>
+    <value>Centrer</value>
   </data>
   <data name="dispLIMIT" xml:space="preserve">
-    <value>LIMIT!</value>
+    <value>Limite!</value>
   </data>
   <data name="dispSLEW" xml:space="preserve">
-    <value>SLEW</value>
+    <value>Mouvement</value>
   </data>
   <data name="dispSTOP" xml:space="preserve">
-    <value>STOP</value>
+    <value>Stop</value>
   </data>
   <data name="dispTRACK" xml:space="preserve">
-    <value>TRACK</value>
+    <value>En suivi</value>
   </data>
   <data name="Elevation" xml:space="preserve">
-    <value>Elevation</value>
+    <value>Altitude</value>
   </data>
   <data name="Enabled" xml:space="preserve">
-    <value>Enabled</value>
+    <value>Disponible</value>
   </data>
   <data name="GeminiIs" xml:space="preserve">
-    <value>Gemini is </value>
+    <value>Gemini activé </value>
   </data>
   <data name="GPS" xml:space="preserve">
     <value>GPS</value>
@@ -536,159 +532,159 @@ Are you sure you want to do this?</value>
     <value>Longitude</value>
   </data>
   <data name="Mount" xml:space="preserve">
-    <value>Mount</value>
+    <value>Monture</value>
   </data>
   <data name="MountIsConnected" xml:space="preserve">
-    <value>Mount is connected</value>
+    <value>La monture est connectée</value>
   </data>
   <data name="MountIsDisconnected" xml:space="preserve">
-    <value>Mount is disconnected</value>
+    <value>La monture est déconnectée</value>
   </data>
   <data name="MountStopped" xml:space="preserve">
-    <value>Mount stopped</value>
+    <value>La monture est arrêtée</value>
   </data>
   <data name="NoTarget" xml:space="preserve">
-    <value>No Target!</value>
+    <value>Pas de cible!</value>
   </data>
   <data name="NotConnected" xml:space="preserve">
-    <value>not connected</value>
+    <value>Pas connecté</value>
   </data>
   <data name="Notifications" xml:space="preserve">
-    <value>Notifications</value>
+    <value>Avertissements</value>
   </data>
   <data name="SafetyLimitReached" xml:space="preserve">
-    <value>Safety limit reached!</value>
+    <value>La limite de sécurité est dépassée!</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Status</value>
+    <value>Etat</value>
   </data>
   <data name="ConfigureCatalogs" xml:space="preserve">
-    <value>Manage Catalogues</value>
+    <value>Gestion des Catalogues</value>
   </data>
   <data name="Align" xml:space="preserve">
-    <value>Additional Align</value>
+    <value>Alignement additionnel</value>
   </data>
   <data name="ConfigurePark" xml:space="preserve">
-    <value>Configure Park Position</value>
+    <value>Configurer la position parking</value>
   </data>
   <data name="ObservationLog" xml:space="preserve">
-    <value>Observation Log</value>
+    <value>Fichier de la sessions d'observation</value>
   </data>
   <data name="Park" xml:space="preserve">
-    <value>Park Gemini</value>
+    <value>Parquer Gemini</value>
   </data>
   <data name="Sync" xml:space="preserve">
-    <value>Synchronize</value>
+    <value>Synchroniser</value>
   </data>
   <data name="Unpark" xml:space="preserve">
-    <value>Unpark Gemini</value>
+    <value>Sortir du mode parking</value>
   </data>
   <data name="CannotSetParkCoordinates" xml:space="preserve">
-    <value>Cannot set park coordinates:</value>
+    <value>Ne peut assigner ces coordonnées de parking:</value>
   </data>
   <data name="DEC" xml:space="preserve">
     <value>DEC</value>
   </data>
   <data name="DefaultProfileNotSaved" xml:space="preserve">
-    <value>Default profile was not saved!</value>
+    <value>Le profil par défaut n'a pas été sauvegardé!</value>
   </data>
   <data name="DefaultProfileSavedAsGeminiDefaultProfile" xml:space="preserve">
-    <value>Default profile was saved as 'GeminiDefaultProfile.gp'</value>
+    <value>Le profil par défaut a été sauvegardé dans 'GeminiDefaultProfile.gp'</value>
   </data>
   <data name="discWarning1" xml:space="preserve">
-    <value>Gemini connection</value>
+    <value>Connection au Gemini</value>
   </data>
   <data name="discWarning2" xml:space="preserve">
-    <value>s are</value>
+    <value>sont</value>
   </data>
   <data name="discWarning3" xml:space="preserve">
-    <value>is</value>
+    <value>est</value>
   </data>
   <data name="discWarning4" xml:space="preserve">
-    <value>still active.</value>
+    <value>encore en activité.</value>
   </data>
   <data name="dispEAST" xml:space="preserve">
-    <value>EAST</value>
+    <value>EST</value>
   </data>
   <data name="dispPARK" xml:space="preserve">
     <value>PARK</value>
   </data>
   <data name="dispWEST" xml:space="preserve">
-    <value>WEST</value>
+    <value>OUEST</value>
   </data>
   <data name="ErrorReadingFile" xml:space="preserve">
-    <value>Error reading file</value>
+    <value>Erreur de lecture du fichier</value>
   </data>
   <data name="ErrorWritingFile" xml:space="preserve">
-    <value>Error writing file:</value>
+    <value>Error d'écriture du fichier:</value>
   </data>
   <data name="GeminiG11DefaultSafetyLimitWarning" xml:space="preserve">
-    <value>Please note that Gemini default East limit of 114° is too aggressive for most G-11.
+    <value>Remarque : Par défaut, la limite Est est de 114° est trop élevée pour la plupart de G-11.
 
-Would you like to set the East limit to a more conservative 98° instead?</value>
+Voulez-vous la fixer à 98° pour plus de sécurité ?</value>
   </data>
   <data name="GotoFailed" xml:space="preserve">
-    <value>Goto failed:</value>
+    <value>Echec du Goto:</value>
   </data>
   <data name="InvalidAltValue" xml:space="preserve">
-    <value>Invalid Alt value</value>
+    <value>Valeur d'altitude invalide</value>
   </data>
   <data name="InvalidAzValue" xml:space="preserve">
-    <value>Invalid Az value</value>
+    <value>Valeur d'Azimute invalide</value>
   </data>
   <data name="JoystickIsNotAvailable" xml:space="preserve">
-    <value>Joystick is not available</value>
+    <value>Le joystick n'est pas disponible</value>
   </data>
   <data name="Object" xml:space="preserve">
-    <value>Object</value>
+    <value>Objet</value>
   </data>
   <data name="Operation" xml:space="preserve">
-    <value>Operation</value>
+    <value>Opération</value>
   </data>
   <data name="PleaseSelectOne" xml:space="preserve">
-    <value>Please select one!</value>
+    <value>Merci d'en sélectionner un!</value>
   </data>
   <data name="Query" xml:space="preserve">
-    <value>Query</value>
+    <value>Requêtte</value>
   </data>
   <data name="RA" xml:space="preserve">
     <value>RA</value>
   </data>
   <data name="RebootGemini" xml:space="preserve">
-    <value>Reboot Gemini</value>
+    <value>Redémarrer Gemini</value>
   </data>
   <data name="RetrieveGeminiObservationLog" xml:space="preserve">
-    <value>Retrieve Gemini Observation Log</value>
+    <value>Résultat de la session d'observation</value>
   </data>
   <data name="SafetyLimitsAggressive" xml:space="preserve">
-    <value>The new safety limits are more aggressive than the Gemini default.
+    <value>Les limites de sécurité ainsi définies sont au-delà des limites par défaut.
 
-Incorrect safety limits can result in hardware damage.
-Are you sure you want to use these new values?</value>
+Des limites de sécurité incorrectes peuvent endommager votre matériel.
+Etes-vous certain de vouloir utiliser ces paramètres ?</value>
   </data>
   <data name="SafetyLimitWarning" xml:space="preserve">
-    <value>Safety Limit Warning</value>
+    <value>Alarme de limites de sécurité</value>
   </data>
   <data name="SettingsFromGemini" xml:space="preserve">
-    <value>[settings from Gemini]</value>
+    <value>[Paramètres depuis Gemini]</value>
   </data>
   <data name="Stop" xml:space="preserve">
     <value>Stop</value>
   </data>
   <data name="Time" xml:space="preserve">
-    <value>Time</value>
+    <value>Temps</value>
   </data>
   <data name="LimitOff" xml:space="preserve">
-    <value>Limit switches off</value>
+    <value>Limites non utilisées</value>
   </data>
   <data name="LimitOn" xml:space="preserve">
-    <value>Limit switches on</value>
+    <value>Limites utilisées</value>
   </data>
   <data name="HelpMenu" xml:space="preserve">
-    <value>Help!</value>
+    <value>Au secours!</value>
   </data>
   <data name="MountHA" xml:space="preserve">
-    <value>Mount Hour Angle</value>
+    <value>Angle horaire de la monture</value>
   </data>
   <data name="dispGUIDE" xml:space="preserve">
     <value>GUIDE</value>
@@ -707,5 +703,49 @@ Are you sure you want to use these new values?</value>
   </data>
   <data name="WaitingForData" xml:space="preserve">
     <value>Waiting for data...</value>
+  </data>
+  <data name="AdditionalAlignAtCoordinates" xml:space="preserve">
+    <value>Alignement Additionnel aux coordonnées actuelles</value>
+  </data>
+  <data name="KeepWindowOnTop" xml:space="preserve">
+    <value>Garder cette fenêtre au premier plan</value>
+  </data>
+  <data name="ManageCatalogs" xml:space="preserve">
+    <value>Gestion du Catalogue</value>
+  </data>
+  <data name="SetupFocuser" xml:space="preserve">
+    <value>Paramètres du focuser GEMINI</value>
+  </data>
+  <data name="SyncAtCoordinates" xml:space="preserve">
+    <value>Synchroniser à la position actuelle</value>
+  </data>
+  <data name="Catalog" xml:space="preserve">
+    <value>Catalogue</value>
+  </data>
+  <data name="CoordinatesJ2000" xml:space="preserve">
+    <value>Coordonnées en J2000</value>
+  </data>
+  <data name="GeminiSettings" xml:space="preserve">
+    <value>Configuration du GEMINI</value>
+  </data>
+  <data name="GPSSettings" xml:space="preserve">
+    <value>Configuration du GPS</value>
+  </data>
+  <data name="LoggingOptions" xml:space="preserve">
+    <value>Options du journal d’exploitation</value>
+  </data>
+  <data name="ObjectName" xml:space="preserve">
+    <value>Nom de l’Objet</value>
+  </data>
+  <data name="RevDEC" xml:space="preserve">
+    <value>Inv
+DEC</value>
+  </data>
+  <data name="RevRA" xml:space="preserve">
+    <value>Inv
+RA</value>
+  </data>
+  <data name="Track" xml:space="preserve">
+    <value>Suivi</value>
   </data>
 </root>

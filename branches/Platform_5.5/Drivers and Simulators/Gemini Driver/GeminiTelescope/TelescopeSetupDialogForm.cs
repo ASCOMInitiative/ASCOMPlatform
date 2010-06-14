@@ -80,7 +80,8 @@ namespace ASCOM.GeminiTelescope
         {
             m_DoneInitialize = false;
 
-            InitializeComponent();           
+            InitializeComponent();
+            InitializeLocal();
 
             foreach (string s in System.IO.Ports.SerialPort.GetPortNames())
             {
@@ -589,6 +590,16 @@ namespace ASCOM.GeminiTelescope
 
         private void chkAsyncPulseGuide_CheckedChanged(object sender, EventArgs e)
         {
+        }
+
+        private void chkPortScan_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
         }
 
     }

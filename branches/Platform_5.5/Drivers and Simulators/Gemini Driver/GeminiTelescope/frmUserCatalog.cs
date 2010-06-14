@@ -29,7 +29,7 @@ namespace ASCOM.GeminiTelescope
 {
     public partial class frmUserCatalog : Form
     {
-        static SerializableDictionary<string, CatalogObject> m_Objects = null;
+        public static SerializableDictionary<string, CatalogObject> m_Objects = null;
         SerializableDictionary<string, CatalogObject> m_GeminiObjects;
 
         string m_OrderBy = "Name";
@@ -89,7 +89,7 @@ namespace ASCOM.GeminiTelescope
             numHorizon.Value = (decimal)GeminiHardware.HorizonAltitude;
         }
 
-        private void PopulateCatalogs()
+        public void PopulateCatalogs()
         {
 
             bool bAlreadyLoaded =  (m_Objects != null);  //already loaded
@@ -112,6 +112,16 @@ namespace ASCOM.GeminiTelescope
             if (!bAlreadyLoaded) m_Objects = new SerializableDictionary<string, CatalogObject>();
 
             System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(path);
+#if false
+            if (!System.IO.File.Exists(di.FullName + "\\Custom.guc"))
+            {
+                try
+                {
+                    System.IO.File.WriteAllText(di.FullName + "\\Custom.guc", "");
+                }
+                catch { }
+            }
+#endif   
             System.IO.FileInfo[] files = di.GetFiles("*.guc");
 
             double incr =  1;
@@ -137,6 +147,8 @@ namespace ASCOM.GeminiTelescope
                 }
                 frmProgress.Update(0, "Loading " + cn + "...");          
             }
+
+  
             Cursor.Current = Cursors.Default;
         }
 
@@ -690,6 +702,87 @@ namespace ASCOM.GeminiTelescope
                 tm.Stop();
 
             tm.Start();
+        }
+
+        public static string AddCustom(string name, double ra, double dec)
+        {
+            int idx;
+
+            string k;
+
+            if (string.IsNullOrEmpty(name)) name = "Custom Object";
+            if (m_Objects.ContainsKey(name))
+                for (idx = 1; m_Objects.ContainsKey(k = string.Format("Custom Object {0}", idx)); ++idx) ;
+            else
+                k = name;
+            m_Objects.Add(k, new CatalogObject
+            {
+                Catalog = "Custom",
+                Name = k,
+                RA = new RACoord(ra),
+                DEC = new DECCoord(dec)
+            });
+
+            return k;
+        }
+
+        public static bool SaveCustom()
+        {
+
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\ASCOM\\" + SharedResources.TELESCOPE_DRIVER_NAME + "\\Catalogs";
+
+            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(path);
+
+
+            var qry = (from o in m_Objects.Values where o.Catalog=="Custom" select o);
+            List<CatalogObject> list = qry.ToList();
+
+            try
+            {
+                System.IO.StreamWriter fi = System.IO.File.CreateText(di.FullName + "\\Custom.guc");
+                foreach (CatalogObject obj in list)
+                {
+                    fi.Write(obj.ToString() + "\n");
+                }
+                fi.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error writing custom catalog file: " + ex.Message, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            return true;
+        }
+
+        private void btnCustom_Click(object sender, EventArgs e)
+        {
+#if false
+            frmRA_DEC frm = new frmRA_DEC();
+            frm.ShowDialog(this);
+
+            return;
+
+            BindingSource bs = (BindingSource)gvAllObjects.DataSource;
+
+            int idx;
+            string k;
+            for(idx=1; m_Objects.ContainsKey(k=string.Format("Custom Object {0}",idx)); ++idx);
+
+
+            m_Objects.Add(k, new CatalogObject {                    
+                    Catalog = "Custom", Name = k, 
+                    RA = new RACoord(GeminiHardware.m_Util.HMSToHours("00:00:00")), 
+                    DEC = new DECCoord(GeminiHardware.m_Util.DMSToDegrees("00:00:00")) });
+
+            foreach (int cat in lbCatalogs.CheckedIndices)
+                lbCatalogs.SetItemCheckState(cat, ((string)lbCatalogs.Items[cat] == "Custom"? CheckState.Checked : CheckState.Unchecked));
+            PopulateAllObjects("");
+            gvAllObjects.BeginEdit(true);
+            //int row  = gvAllObjects.Rows.Add("[Custom Object]", "00:00:00", "00:00:00");
+            //gvAllObjects.Rows[row].Selected = true;
+            //gvAllObjects.BeginEdit(true);
+#endif
         }
     }
 

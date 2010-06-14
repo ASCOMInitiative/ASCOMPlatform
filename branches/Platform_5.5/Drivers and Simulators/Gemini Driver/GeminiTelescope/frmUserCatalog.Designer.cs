@@ -161,7 +161,6 @@
             // 
             // gvAllObjects
             // 
-            this.gvAllObjects.AllowUserToAddRows = false;
             this.gvAllObjects.AllowUserToDeleteRows = false;
             this.gvAllObjects.AllowUserToResizeRows = false;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
@@ -170,6 +169,7 @@
             this.gvAllObjects.BackgroundColor = System.Drawing.SystemColors.Window;
             this.gvAllObjects.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gvAllObjects.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gvAllObjects.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.gvAllObjects.Location = new System.Drawing.Point(3, 16);
             this.gvAllObjects.Name = "gvAllObjects";
             this.gvAllObjects.ReadOnly = true;
@@ -194,7 +194,7 @@
             this.groupBox3.Size = new System.Drawing.Size(623, 244);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Objects in Gemini User Calatog";
+            this.groupBox3.Text = "Objects in Gemini User Catalog";
             // 
             // gvGeminiCatalog
             // 

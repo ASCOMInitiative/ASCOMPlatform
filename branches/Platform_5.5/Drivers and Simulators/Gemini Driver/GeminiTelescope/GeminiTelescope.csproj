@@ -204,6 +204,12 @@
     <Compile Include="frmProgress.Designer.cs">
       <DependentUpon>frmProgress.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmRA_DEC.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRA_DEC.Designer.cs">
+      <DependentUpon>frmRA_DEC.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmSafetyLimits.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -290,6 +296,9 @@
     <EmbeddedResource Include="AboutBox\AboutBox1.resx">
       <DependentUpon>AboutBox1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmMain.fr.resx">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmObservationLog.resx">
       <DependentUpon>frmObservationLog.cs</DependentUpon>
     </EmbeddedResource>
@@ -298,6 +307,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmProgress.resx">
       <DependentUpon>frmProgress.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmRA_DEC.fr.resx">
+      <DependentUpon>frmRA_DEC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmRA_DEC.resx">
+      <DependentUpon>frmRA_DEC.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmSafetyLimits.resx">
       <DependentUpon>frmSafetyLimits.cs</DependentUpon>
@@ -349,7 +364,13 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.en-GB.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.ru-RU.resx" />
+    <EmbeddedResource Include="Properties\Resources.ru.resx" />
+    <EmbeddedResource Include="Properties\Resources.fr.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TelescopeSetupDialogForm.fr.resx">
+      <DependentUpon>TelescopeSetupDialogForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TelescopeSetupDialogForm.resx">
       <DependentUpon>TelescopeSetupDialogForm.cs</DependentUpon>
     </EmbeddedResource>

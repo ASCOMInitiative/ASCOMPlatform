@@ -84,6 +84,9 @@ namespace ASCOM.GeminiTelescope
             controlMenu.Name = Resources.Control;
             controlMenu.Checked = this.Visible;
 
+            string s = global::ASCOM.GeminiTelescope.Properties.Resources.ConfigureTelescope;
+            string s2 = Resources.ConfigureTelescope;
+
             m_BalloonMenu.MenuItems.AddRange(new MenuItem[] { 
                 connectMenu,
 
@@ -1588,14 +1591,25 @@ namespace ASCOM.GeminiTelescope
 
         private void buttonSync_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.TargetDeclination != SharedResources.INVALID_DOUBLE || GeminiHardware.TargetRightAscension != SharedResources.INVALID_DOUBLE)
-            { 
-                GeminiHardware.SyncEquatorial();
-                GeminiHardware.ReportAlignResult("Sync");
-            }
-            else
-            { 
-                MessageBox.Show(Resources.NoTarget, SharedResources.TELESCOPE_DRIVER_NAME); 
+            if (GeminiHardware.Connected)
+            {
+
+                if (GeminiHardware.TargetDeclination != SharedResources.INVALID_DOUBLE || GeminiHardware.TargetRightAscension != SharedResources.INVALID_DOUBLE)
+                {
+                    try
+                    {
+                        GeminiHardware.SyncEquatorial();
+                        GeminiHardware.ReportAlignResult("Sync");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Gemini reported error: " + ex.Message, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(Resources.NoTarget, SharedResources.TELESCOPE_DRIVER_NAME);
+                }
             }
         }
 
@@ -1606,14 +1620,23 @@ namespace ASCOM.GeminiTelescope
 
         private void buttonAddlAlign_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.TargetDeclination != SharedResources.INVALID_DOUBLE || GeminiHardware.TargetRightAscension != SharedResources.INVALID_DOUBLE)
-            { 
-                GeminiHardware.AlignEquatorial();
-                GeminiHardware.ReportAlignResult("Additional Align");
+            if (GeminiHardware.Connected)
+            {
+                if (GeminiHardware.TargetDeclination != SharedResources.INVALID_DOUBLE || GeminiHardware.TargetRightAscension != SharedResources.INVALID_DOUBLE)
+                {
+                    try
+                    {
+                        GeminiHardware.AlignEquatorial();
+                        GeminiHardware.ReportAlignResult("Additional Align");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Gemini reported error: " + ex.Message, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                }
+                else
+                { MessageBox.Show(Resources.NoTarget, SharedResources.TELESCOPE_DRIVER_NAME); }
             }
-            else
-            { MessageBox.Show(Resources.NoTarget, SharedResources.TELESCOPE_DRIVER_NAME); }
-
         }
 
         private void SetTopMost()
@@ -1631,6 +1654,11 @@ namespace ASCOM.GeminiTelescope
         }
 
         static frmUserCatalog frmCatalog;
+
+        public void DoCatalogManagerDialog()
+        {
+            configureCatalogsToolStripMenuItem_Click(null, null);
+        }
 
         private void configureCatalogsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1789,6 +1817,28 @@ namespace ASCOM.GeminiTelescope
         private void buttonSlew1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        frmRA_DEC frmObject = null;
+
+        private void objectAndCoordinatesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            if (frmObject == null || frmObject.IsDisposed || !frmObject.Visible)
+                frmObject = new frmRA_DEC();
+            frmObject.Visible = false;
+
+
+            frmObject.Left = this.Right;
+            frmObject.Top = Cursor.Position.Y - frmObject.Height / 2;
+            if (frmObject.Left + frmObject.Width / 2 > Screen.FromControl(this).WorkingArea.Width)
+                frmObject.Left = Screen.FromControl(this).WorkingArea.Width - frmObject.Width;
+            frmObject.Show(this);
         }
 
     }
