@@ -102,8 +102,11 @@ Source: ..\Focuser\bin\x86\Release\ASCOM.GeminiTelescope.Focuser.pdb; DestDir: {
 Source: ..\GeminiTelescope\bin\x64\Release\en-GB\ASCOM.GeminiTelescope.resources.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\en-GB; Check: Is64BitInstallMode; Flags: ignoreversion
 Source: ..\GeminiTelescope\bin\x86\Release\en-GB\ASCOM.GeminiTelescope.resources.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\en-GB; Check: NotIs64BitInstallMode; Flags: ignoreversion
 
-Source: ..\GeminiTelescope\bin\x64\Release\ru-RU\ASCOM.GeminiTelescope.resources.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\ru-RU; Check: Is64BitInstallMode; Flags: ignoreversion
-Source: ..\GeminiTelescope\bin\x86\Release\ru-RU\ASCOM.GeminiTelescope.resources.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\ru-RU; Check: NotIs64BitInstallMode; Flags: ignoreversion
+Source: ..\GeminiTelescope\bin\x64\Release\ru\ASCOM.GeminiTelescope.resources.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\ru; Check: Is64BitInstallMode; Flags: ignoreversion
+Source: ..\GeminiTelescope\bin\x86\Release\ru\ASCOM.GeminiTelescope.resources.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\ru; Check: NotIs64BitInstallMode; Flags: ignoreversion
+
+Source: ..\GeminiTelescope\bin\x64\Release\fr\ASCOM.GeminiTelescope.resources.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\fr; Check: Is64BitInstallMode; Flags: ignoreversion
+Source: ..\GeminiTelescope\bin\x86\Release\fr\ASCOM.GeminiTelescope.resources.dll; DestDir: {cf}\ASCOM\Telescope\Gemini\fr; Check: NotIs64BitInstallMode; Flags: ignoreversion
 
 ;Documentation help file
 Source: ..\GeminiTelescope\Documentation\Gemini Telescope Net Installation and Operation.pdf; DestDir: {cf}\ASCOM\Telescope\Gemini; Flags: ignoreversion
