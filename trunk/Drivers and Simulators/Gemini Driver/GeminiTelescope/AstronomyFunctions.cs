@@ -165,6 +165,108 @@ namespace ASCOM.GeminiTelescope
 
         }
 
+
+        //----------------------------------------------------------------------------------------
+        // Current Local Apparent Sidereal Time for Longitude
+        //----------------------------------------------------------------------------------------
+
+        public static double LocalSiderealTime(double longitude, DateTime dt)
+        {
+            double days_since_j_2000 = DateUtcToJulian(dt.ToUniversalTime()) - 2451545.0;
+            double t = days_since_j_2000 / 36525;
+            double l1mst = 280.46061837 + 360.98564736629 * days_since_j_2000 + longitude;
+            if (l1mst < 0)
+            {
+                while (l1mst < 0)
+                {
+                    l1mst = l1mst + 360;
+                }
+            }
+            else
+            {
+                while (l1mst > 360)
+                {
+                    l1mst = l1mst - 360;
+                }
+            }
+            //calculate OM
+            double om1 = 125.04452 - 1934.136261 * t;
+            if (om1 < 0)
+            {
+                while (om1 < 0)
+                {
+                    om1 = om1 + 360;
+                }
+            }
+            else
+            {
+                while (om1 > 360)
+                {
+                    om1 = om1 - 360;
+                }
+            }
+            //calculat L
+            double La = 280.4665 + 36000.7698 * t;
+            if (La < 0)
+            {
+                while (La < 0)
+                {
+                    La = La + 360;
+                }
+            }
+            else
+            {
+                while (La > 360)
+                {
+                    La = La - 360;
+                }
+            }
+            //calculate L1
+            double L11 = 218.3165 + 481267.8813 * t;
+            if (L11 < 0)
+            {
+                while (L11 < 0)
+                {
+                    L11 = L11 + 360;
+                }
+            }
+            else
+            {
+                while (L11 > 360)
+                {
+                    L11 = L11 - 360;
+                }
+            }
+            //calculate e
+            double ea1 = 23.439 - 0.0000004 * t;
+            if (ea1 < 0)
+            {
+                while (ea1 < 0)
+                {
+                    ea1 = ea1 + 360;
+                }
+            }
+            else
+            {
+                while (ea1 > 360)
+                {
+                    ea1 = ea1 - 360;
+                }
+            }
+
+
+            double dp1 = (-172.2 * (Math.Sin(om1))) - (1.32 * (Math.Sin(2 * La))) + (0.21 * Math.Sin(2 * om1));
+            double de1 = (9.2 * (Math.Cos(om1))) + (0.57 * (Math.Cos(2 * La))) + (0.1 * (Math.Cos(2 * La))) - (0.09 * (Math.Cos(2 * om1)));
+            double eps1 = ea1 + de1;
+            double correction1 = (dp1 * Math.Cos(ea1)) / 3600;
+            //l1mst = l1mst + correction1;
+
+            return l1mst;
+
+        }
+
+
+
         //----------------------------------------------------------------------------------------
         // Convert Double Angle to Hour Minute Second Display 
         //----------------------------------------------------------------------------------------
@@ -237,6 +339,18 @@ namespace ASCOM.GeminiTelescope
             return Math.Asin(Math.Sin(Declination) * Math.Sin(Latitude) + Math.Cos(Declination) * Math.Cos(ha) * Math.Cos(Latitude)) * SharedResources.RAD_DEG;
 
         }
+
+
+        //----------------------------------------------------------------------------------------
+        // Calculate Altitude and Azimuth From Ra/Dec and Site
+        //----------------------------------------------------------------------------------------
+        public static double CalculateAltitude(double RightAscension, double Declination, double Latitude, double Longitude, double lst)
+        {
+            double ha = lst  - RightAscension;
+            return Math.Asin(Math.Sin(Declination) * Math.Sin(Latitude) + Math.Cos(Declination) * Math.Cos(ha) * Math.Cos(Latitude)) * SharedResources.RAD_DEG;
+
+        }
+
         public static double CalculateAzimuth(double RightAscension, double Declination, double Latitude, double Longitude)
         {
             double lst = LocalSiderealTime(Longitude * SharedResources.RAD_DEG);

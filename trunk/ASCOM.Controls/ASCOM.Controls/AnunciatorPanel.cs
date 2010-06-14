@@ -1,26 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Drawing;
 using System.Windows.Forms;
-using System.Drawing;
 
 namespace ASCOM.Controls
 {
 	/// <summary>
-	/// A panel for grouping and arranging anunciators.
-	/// This control inherits most of its behaviour from the <see cref="FlowLayoutPanel"/>
-	/// base class, but provides some default colours.
+	///   A panel control for grouping and arranging <see cref = "Anunciator" /> controls.
+	///   This control inherits most of its behaviour from the <see cref = "FlowLayoutPanel" />
+	///   base class, but provides some defaults that are appropriate for use with ASCOM.
 	/// </summary>
-	public class AnunciatorPanel : FlowLayoutPanel
+	public sealed class AnunciatorPanel : FlowLayoutPanel
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="AnunciatorPanel"/> class.
+		///   Initializes a new instance of the <see cref = "AnunciatorPanel" /> class.
 		/// </summary>
 		public AnunciatorPanel()
-			: base()
 		{
-			this.BackColor = Color.FromArgb(64, 0, 0);
+			BackColor = Color.FromArgb(64, 0, 0);
 		}
 	}
 }

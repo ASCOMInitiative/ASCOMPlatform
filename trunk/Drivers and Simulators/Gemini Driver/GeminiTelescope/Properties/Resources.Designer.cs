@@ -320,6 +320,15 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data OK.
+        /// </summary>
+        internal static string DataOK {
+            get {
+                return ResourceManager.GetString("DataOK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to DEC.
         /// </summary>
         internal static string DEC {
@@ -442,6 +451,15 @@ namespace ASCOM.GeminiTelescope.Properties {
         internal static string dispEAST {
             get {
                 return ResourceManager.GetString("dispEAST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GUIDE.
+        /// </summary>
+        internal static string dispGUIDE {
+            get {
+                return ResourceManager.GetString("dispGUIDE", resourceCulture);
             }
         }
         
@@ -728,6 +746,24 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to GPS Date/Time.
+        /// </summary>
+        internal static string GPSDateTime {
+            get {
+                return ResourceManager.GetString("GPSDateTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GPS: No position fix.
+        /// </summary>
+        internal static string GPSNoFix {
+            get {
+                return ResourceManager.GetString("GPSNoFix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hand Controller Down button.
         /// </summary>
         internal static string HC_DN {
@@ -841,6 +877,15 @@ namespace ASCOM.GeminiTelescope.Properties {
         internal static string InvalidAzValue {
             get {
                 return ResourceManager.GetString("InvalidAzValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid data received.
+        /// </summary>
+        internal static string InvalidDataReceived {
+            get {
+                return ResourceManager.GetString("InvalidDataReceived", resourceCulture);
             }
         }
         
@@ -978,6 +1023,15 @@ namespace ASCOM.GeminiTelescope.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mount Hour Angle.
+        /// </summary>
+        internal static string MountHA {
+            get {
+                return ResourceManager.GetString("MountHA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mount is connected.
         /// </summary>
         internal static string MountIsConnected {
@@ -1055,6 +1109,20 @@ namespace ASCOM.GeminiTelescope.Properties {
         internal static string MoveJoystick {
             get {
                 return ResourceManager.GetString("MoveJoystick", resourceCulture);
+            }
+        }
+        
+        internal static System.Drawing.Bitmap no_fix_satellite {
+            get {
+                object obj = ResourceManager.GetObject("no_fix_satellite", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap no_satellite {
+            get {
+                object obj = ResourceManager.GetObject("no_satellite", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -1448,6 +1516,13 @@ namespace ASCOM.GeminiTelescope.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap satellite {
+            get {
+                object obj = ResourceManager.GetObject("satellite", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to Searching for Gemini.
         /// </summary>
@@ -1835,6 +1910,15 @@ namespace ASCOM.GeminiTelescope.Properties {
         internal static string VisualMode {
             get {
                 return ResourceManager.GetString("VisualMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Waiting for data....
+        /// </summary>
+        internal static string WaitingForData {
+            get {
+                return ResourceManager.GetString("WaitingForData", resourceCulture);
             }
         }
     }

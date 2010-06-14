@@ -70,7 +70,7 @@ namespace ASCOM.GeminiTelescope
             GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
 
             
-            GeminiHardware.m_Profile.DeviceType = "Telescope";
+            GeminiHardware.Profile.DeviceType = "Telescope";
             
             foreach (Control gc in this.flowLayoutPanel1.Controls)
             {
@@ -79,7 +79,7 @@ namespace ASCOM.GeminiTelescope
                     Indigo.CollapsibleGroupBox gb = gc as Indigo.CollapsibleGroupBox;
                     bool bCollapse = false;
 
-                    string res = GeminiHardware.m_Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GroupCollapse_" + gb.Text, "");
+                    string res = GeminiHardware.Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GroupCollapse_" + gb.Text, "");
                     bool.TryParse(res, out bCollapse);
                     if (!gb.IsCollapsed)
                     {
@@ -396,8 +396,8 @@ namespace ASCOM.GeminiTelescope
             else
                 gb.ForeColor = Color.White;
 
-            GeminiHardware.m_Profile.DeviceType = "Telescope";
-            GeminiHardware.m_Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GroupCollapse_" + gb.Text, gb.IsCollapsed.ToString());
+            GeminiHardware.Profile.DeviceType = "Telescope";
+            GeminiHardware.Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GroupCollapse_" + gb.Text, gb.IsCollapsed.ToString());
         }
 
         private void frmAdvancedSettings_Load(object sender, EventArgs e)
