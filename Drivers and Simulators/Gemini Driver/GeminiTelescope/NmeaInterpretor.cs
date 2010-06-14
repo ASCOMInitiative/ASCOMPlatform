@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO.Ports;
+using System.Threading;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -37,7 +38,11 @@ namespace ASCOM.GeminiTelescope
         public delegate void HDOPReceivedEventHandler(double value);
         public delegate void VDOPReceivedEventHandler(double value);
         public delegate void PDOPReceivedEventHandler(double value);
+        public delegate void InvalidDataEventHandler();
+        public delegate void DataTimeoutEventHandler();
+
         #endregion
+
         #region Events
         public event PositionReceivedEventHandler PositionReceived;
         public event DateTimeChangedEventHandler DateTimeChanged;
@@ -50,6 +55,9 @@ namespace ASCOM.GeminiTelescope
         public event HDOPReceivedEventHandler HDOPReceived;
         public event VDOPReceivedEventHandler VDOPReceived;
         public event PDOPReceivedEventHandler PDOPReceived;
+        public event InvalidDataEventHandler InvalidData;
+        public event DataTimeoutEventHandler DataTimeout;
+
         #endregion
 
         #region Member Variables
@@ -58,46 +66,61 @@ namespace ASCOM.GeminiTelescope
         private int m_BaudRate;
 
         private SerialPort comPort = new SerialPort();
+        private Timer timeOut;
+
+        private AutoResetEvent m_DataReceivedEvent = new AutoResetEvent(false);
+
+        private Thread m_DataThread = null;
+        private bool m_QuitThread = false;
         #endregion
 
         public NmeaInterpreter()
         {
             comPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(comPort_DataReceived);
-            comPort.ReadTimeout = 1000;
+            timeOut = new Timer(new TimerCallback(timeOut_Elapsed),null,  Timeout.Infinite, Timeout.Infinite);
         }
 
-        // Processes information from the GPS re
-        //     ceiver
+
+        // Processes information from the GPS receiver
+        //     
         public bool Parse(string sentence)
         {
             // Discard the sentence if its checksum 
             //     does not match our 
             // calculated checksum
  //           if (!IsValid(sentence)) return false;
-            // Look at the first word to decide wher
-            //     e to go next
+
+            // Look at the first character, if it is $ then we are receiving data
+            if (sentence.Substring(0,1) != "$")
+            {
+                // Flag invalid data from port
+                if (InvalidData != null)
+                    InvalidData();
+                return false;
+            }
+            // Reset the timeout timer to stop it expiring
+            timeOut.Change(3000,0);
+
+            // Look at the first word to decide where to go next
+            //     
             switch (GetWords(sentence)[0])
             {
                 case "$GPRMC":
-                    // A "Recommended Minimum" sentence was 
-                    //     found!
+                    // A "Recommended Minimum" sentence was found!
                     return ParseGPRMC(sentence);
                 case "$GPGSV":
-                    // A "Satellites in View" sentence was r
-                    //     ecieved
+                    // A "Satellites in View" sentence was recieved
                     return ParseGPGSV(sentence);
                 case "$GPGSA":
                     return ParseGPGSA(sentence);
                 case "$GPGGA":
                     return ParseGPGGA(sentence);
                 default:
-                    // Indicate that the sentence was not re
-                    //     cognized
+                    // Indicate that the sentence was not recognized
                     return false;
             }
         }
-        // Divides a sentence into individual wo
-        //     rds
+        // Divides a sentence into individual words
         public string[] GetWords(string sentence)
         {
             return sentence.Split(',');
@@ -128,10 +151,24 @@ namespace ASCOM.GeminiTelescope
 
                 string Elevation = Words[9];
 
-                // Notify the calling application of the
-                //     change
+                // Notify the calling application of the change
                 if (PositionReceived != null)
                     PositionReceived(Latitude, Longitude, Elevation);
+            }
+
+            if (Words[6] != "")
+            {
+                switch (Words[6])
+                {
+                    case "0":
+                        if (FixLost != null)
+                            FixLost();
+                        break;
+                    default:
+                        if (FixObtained != null)
+                            FixObtained();
+                        break;
+                }
             }
             return true;
         }
@@ -162,9 +199,9 @@ namespace ASCOM.GeminiTelescope
                 if (PositionReceived != null)
                     PositionReceived(Latitude, Longitude, SharedResources.INVALID_DOUBLE.ToString());
             }
-            // Do we have enough values to parse sat
-            //     ellite-derived time?
-            if (Words[1] != "")
+            // Do we have enough values to parse satellite-derived time?
+            //     
+            if (Words[1] != "" & Words[2] == "A")
             {
                 // Yes. Extract hours, minutes, seconds 
                 //     and milliseconds
@@ -172,29 +209,26 @@ namespace ASCOM.GeminiTelescope
                 int UtcMinutes = Convert.ToInt32(Words[1].Substring(2, 2));
                 int UtcSeconds = Convert.ToInt32(Words[1].Substring(4, 2));
                 int UtcMilliseconds = 0;
-                // Extract milliseconds if it is availab
-                //     le
+                // Extract milliseconds if it is available
                 if (Words[1].Length > 7)
                 {
                     UtcMilliseconds = Convert.ToInt32(Words[1].Substring(7));
                 }
-                // Now build a DateTime object with all 
-                //     values
+                // Now build a DateTime object with all  values
                 System.DateTime Today = System.DateTime.Now.ToUniversalTime();
                 System.DateTime SatelliteTime = new System.DateTime(Today.Year,
                 Today.Month, Today.Day, UtcHours, UtcMinutes, UtcSeconds,
                 UtcMilliseconds);
-                // Notify of the new time, adjusted to t
-                //     he local time zone
+                // Notify of the new time, adjusted to the
+                // local time zone
                 if (DateTimeChanged != null)
                     DateTimeChanged(SatelliteTime.ToLocalTime());
             }
-            // Do we have enough information to extr
-            //     act the current speed?
+            // Do we have enough information to extract
+            // the current speed?
             if (Words[7] != "")
             {
-                // Yes. Parse the speed and convert it t
-                //     o MPH
+                // Yes. Parse the speed and convert it to MPH
                 double Speed = double.Parse(Words[7], NmeaCultureInfo) *
                 MPHPerKnot;
                 // Notify of the new speed
@@ -205,18 +239,15 @@ namespace ASCOM.GeminiTelescope
                     if (SpeedLimitReached != null)
                         SpeedLimitReached();
             }
-            // Do we have enough information to extr
-            //     act bearing?
+            // Do we have enough information to extract bearing?
             if (Words[8] != "")
             {
-                // Indicate that the sentence was recogn
-                //     ized
+                // Indicate that the sentence was recognized
                 double Bearing = double.Parse(Words[8], NmeaCultureInfo);
                 if (BearingReceived != null)
                     BearingReceived(Bearing);
             }
-            // Does the device currently have a sate
-            //     llite fix?
+            // Does the device currently have a satellite fix?
             if (Words[2] != "")
             {
                 switch (Words[2])
@@ -231,12 +262,11 @@ namespace ASCOM.GeminiTelescope
                         break;
                 }
             }
-            // Indicate that the sentence was recogn
-            //     ized
+            // Indicate that the sentence was recognized
             return true;
         }
-        // Interprets a "Satellites in View" NME
-        //     A sentence
+        // Interprets a "Satellites in View" NMEA sentence
+        //     
         public bool ParseGPGSV(string sentence)
         {
             int PseudoRandomCode = 0;
@@ -247,41 +277,35 @@ namespace ASCOM.GeminiTelescope
             string[] Words = GetWords(sentence);
             // Each sentence contains four blocks of
             //     satellite information. 
-            // Read each block and report each satel
-            //     lite's information
+            // Read each block and report each satellite's
+            //     information
             int Count = 0;
             for (Count = 1; Count <= 4; Count++)
             {
-                // Does the sentence have enough words t
-                //     o analyze?
+                // Does the sentence have enough words to analyze?  
                 if ((Words.Length - 1) >= (Count * 4 + 3))
                 {
                     // Yes. Proceed with analyzing the block
-                    //     . 
                     // Does it contain any information?
                     if (Words[Count * 4] != "" & Words[Count * 4 + 1] != ""
                     & Words[Count * 4 + 2] != "" & Words[Count * 4 + 3] != "")
                     {
-                        // Yes. Extract satellite information an
-                        //     d report it
+                        // Yes. Extract satellite information and report it
                         PseudoRandomCode = System.Convert.ToInt32(Words[Count * 4]);
                         Elevation = Convert.ToInt32(Words[Count * 4 + 1]);
                         Azimuth = Convert.ToInt32(Words[Count * 4 + 2]);
                         SignalToNoiseRatio = Convert.ToInt32(Words[Count * 4 + 2]);
-                        // Notify of this satellite's informatio
-                        //     n
+                        // Notify of this satellite's information
                         if (SatelliteReceived != null)
                             SatelliteReceived(PseudoRandomCode, Azimuth,
                             Elevation, SignalToNoiseRatio);
                     }
                 }
             }
-            // Indicate that the sentence was recogn
-            //     ized
+            // Indicate that the sentence was recognized   
             return true;
         }
-        // Interprets a "Fixed Satellites and DO
-        //     P" NMEA sentence
+        // Interprets a "Fixed Satellites and DOP" NMEA sentence
         public bool ParseGPGSA(string sentence)
         {
             // Divide the sentence into words
@@ -304,22 +328,20 @@ namespace ASCOM.GeminiTelescope
             }
             return true;
         }
-        // Returns True if a sentence's checksum
-        //     matches the 
+        // Returns True if a sentence's checksum matches the 
         // calculated checksum
         public bool IsValid(string sentence)
         {
-            // Compare the characters after the aste
-            //     risk to the calculation
+            // Compare the characters after the asterisk
+            // to the calculation
             return sentence.Substring(sentence.IndexOf("*") + 1) ==
             GetChecksum(sentence);
         }
-        // Calculates the checksum for a sentenc
-        //     e
+        // Calculates the checksum for a sentence
         public string GetChecksum(string sentence)
         {
-            // Loop through all chars to get a check
-            //     sum
+            // Loop through all chars to get a checksum
+            //     
             int Checksum = 0;
             foreach (char Character in sentence)
             {
@@ -349,8 +371,7 @@ namespace ASCOM.GeminiTelescope
                     }
                 }
             }
-            // Return the checksum formatted as a tw
-            //     o-character hexadecimal
+            // Return the checksum formatted as a two-character hexadecimal
             return Checksum.ToString("X2");
         }
         public string ComPort
@@ -364,21 +385,53 @@ namespace ASCOM.GeminiTelescope
             get { return m_BaudRate; }
             set { m_BaudRate = value; }
         }
-        void comPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+
+
+        /// <summary>
+        /// Worker thread to process serial port data when available
+        ///  waits on m_DataReceivedEvent
+        ///  exits when m_QuitThread is true
+        ///  [pk: 2010-05-17]
+        /// </summary>        
+        void ProcessDataThread()
         {
+            while (!m_QuitThread && m_DataReceivedEvent.WaitOne())
+            {
+                if (m_QuitThread) break;
             try
             {
-                MessageDelegate message = new MessageDelegate(ProcessMessage);
                 //read data waiting in the buffer
-                if (comPort.IsOpen)
+                    if (comPort.IsOpen & comPort.BytesToRead > 0)
                 {
+                        MessageDelegate message = new MessageDelegate(ProcessMessage);
                     string str = comPort.ReadLine();
                     message.Invoke(str);
                 }
             }
-            catch { }
-
+                catch (TimeoutException)
+                {
+                    //flush the buffer, its probably full of rubbish
+                    if (comPort!=null) comPort.DiscardInBuffer();
+                    timeOut.Change(3000, 0);
+                    if (InvalidData != null)
+                        InvalidData();
+                }
+            }
         }
+
+
+        void comPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            m_DataReceivedEvent.Set();
+        }
+
+        // Called if out data watchdog timer expires - flag lack of data
+        private void timeOut_Elapsed(object state)
+        {
+            if (DataTimeout != null)
+                DataTimeout();
+        }
+
         private void ProcessMessage(string message)
         {
             try
@@ -387,7 +440,8 @@ namespace ASCOM.GeminiTelescope
             }
             catch { }
         }
-        public bool Conneced
+
+        public bool Connected
         {
             get
             {
@@ -406,21 +460,44 @@ namespace ASCOM.GeminiTelescope
                             comPort.Parity = Parity.None;
                             comPort.StopBits = StopBits.One;
                             comPort.Handshake = Handshake.None;
+                            comPort.ReadTimeout = 1000;
+                            comPort.ReceivedBytesThreshold = 20;
 
-
-
+                            m_DataReceivedEvent.Reset();
                             comPort.Open();
 
                             comPort.DtrEnable = true;
                             comPort.RtsEnable = true;
-                        
+
+                            timeOut.Change(3000, 0);
+
+                            //m_DataReceivedEvent.Reset();
+                            m_QuitThread = false;
+                            m_DataThread = new Thread(new ThreadStart(ProcessDataThread));
+                            m_DataThread.Start();
+
                     }
                 }
                 else
                 {
+                    //Must stop the read thread before closing the port
+                    if (m_DataThread != null)
+                    {
+                        m_QuitThread = true;
+                        m_DataReceivedEvent.Set();
+                        if (!m_DataThread.Join(1000))
+                            m_DataThread.Abort();
+                        m_DataThread = null;
+                    }
+                    try //Maybe user unplugged USB COM port?
+                    {
                     if (comPort.IsOpen == true) comPort.Close();
                 }
+                    catch { }
+                    timeOut.Change(Timeout.Infinite, Timeout.Infinite);
+
             }
         }
+    }
     }
 }

@@ -268,6 +268,8 @@ namespace ASCOM.GeminiTelescope
                 }
                 catch { }
 
+                GeminiHardware.Profile = null;
+
                 return true;
             }
             else
@@ -299,6 +301,8 @@ namespace ASCOM.GeminiTelescope
                 {
                     txtSensitivity.Value = 100;
                 }
+
+                GeminiHardware.Profile = null;
                 return true;
             }
 

@@ -87,6 +87,7 @@
 				this.anunciator1.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
 				this.anunciator1.AutoSize = true;
 				this.anunciator1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+				this.anunciator1.Mute = false;
 				this.anunciator1.Font = new System.Drawing.Font("Consolas", 10F);
 				this.anunciator1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
 				this.anunciator1.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
@@ -101,6 +102,7 @@
 				this.anunciator2.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
 				this.anunciator2.AutoSize = true;
 				this.anunciator2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+				this.anunciator2.Mute = false;
 				this.anunciator2.Font = new System.Drawing.Font("Consolas", 10F);
 				this.anunciator2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
 				this.anunciator2.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
@@ -115,6 +117,7 @@
 				this.anunciator3.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
 				this.anunciator3.AutoSize = true;
 				this.anunciator3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+				this.anunciator3.Mute = false;
 				this.anunciator3.Font = new System.Drawing.Font("Consolas", 10F);
 				this.anunciator3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
 				this.anunciator3.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
@@ -130,6 +133,7 @@
 				this.anunciator4.AutoSize = true;
 				this.anunciator4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
 				this.anunciator4.Cadence = ASCOM.Controls.CadencePattern.BlinkAlarm;
+				this.anunciator4.Mute = false;
 				this.anunciator4.Font = new System.Drawing.Font("Consolas", 10F);
 				this.anunciator4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
 				this.anunciator4.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
@@ -144,6 +148,7 @@
 				this.anunciator5.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
 				this.anunciator5.AutoSize = true;
 				this.anunciator5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+				this.anunciator5.Mute = false;
 				this.anunciator5.Font = new System.Drawing.Font("Consolas", 10F);
 				this.anunciator5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
 				this.anunciator5.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
@@ -159,6 +164,7 @@
 				this.anunciator7.AutoSize = true;
 				this.anunciator7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
 				this.anunciator7.Cadence = ASCOM.Controls.CadencePattern.Wink;
+				this.anunciator7.Mute = false;
 				this.anunciator7.Font = new System.Drawing.Font("Consolas", 10F);
 				this.anunciator7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
 				this.anunciator7.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
@@ -173,6 +179,7 @@
 				this.anunciator6.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
 				this.anunciator6.AutoSize = true;
 				this.anunciator6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+				this.anunciator6.Mute = false;
 				this.anunciator6.Font = new System.Drawing.Font("Consolas", 10F);
 				this.anunciator6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
 				this.anunciator6.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
@@ -188,6 +195,7 @@
 				this.anunciator8.AutoSize = true;
 				this.anunciator8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
 				this.anunciator8.Cadence = ASCOM.Controls.CadencePattern.Strobe;
+				this.anunciator8.Mute = false;
 				this.anunciator8.Font = new System.Drawing.Font("Consolas", 10F);
 				this.anunciator8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
 				this.anunciator8.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
