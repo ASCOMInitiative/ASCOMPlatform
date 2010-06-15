@@ -200,11 +200,11 @@
     <Compile Include="..\..\SolutionInfo.cs">
       <Link>SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="Anunciator.cs">
+    <Compile Include="Annunciator.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="AnunciatorPanel.cs">
+    <Compile Include="AnnunciatorPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="CadencePattern.cs">
@@ -241,8 +241,8 @@
     <Compile Include="SettingsProvider.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
-    <EmbeddedResource Include="Anunciator.resx">
-      <DependentUpon>Anunciator.cs</DependentUpon>
+    <EmbeddedResource Include="Annunciator.resx">
+      <DependentUpon>Annunciator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Chooser.resx">
       <DependentUpon>Chooser.cs</DependentUpon>
