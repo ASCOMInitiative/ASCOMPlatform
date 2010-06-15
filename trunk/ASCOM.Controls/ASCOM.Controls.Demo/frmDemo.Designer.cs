@@ -30,15 +30,15 @@
 			{
                 this.btnOK = new System.Windows.Forms.Button();
                 this.btnCancel = new System.Windows.Forms.Button();
-                this.anunciatorPanel1 = new ASCOM.Controls.AnunciatorPanel();
-                this.anunciator1 = new ASCOM.Controls.Anunciator();
-                this.anunciator2 = new ASCOM.Controls.Anunciator();
-                this.anunciator3 = new ASCOM.Controls.Anunciator();
-                this.anunciator4 = new ASCOM.Controls.Anunciator();
-                this.anunciator5 = new ASCOM.Controls.Anunciator();
-                this.anunciator7 = new ASCOM.Controls.Anunciator();
-                this.anunciator6 = new ASCOM.Controls.Anunciator();
-                this.anunciator8 = new ASCOM.Controls.Anunciator();
+                this.anunciatorPanel1 = new ASCOM.Controls.AnnunciatorPanel();
+                this.anunciator1 = new ASCOM.Controls.Annunciator();
+                this.anunciator2 = new ASCOM.Controls.Annunciator();
+                this.anunciator3 = new ASCOM.Controls.Annunciator();
+                this.anunciator4 = new ASCOM.Controls.Annunciator();
+                this.anunciator5 = new ASCOM.Controls.Annunciator();
+                this.anunciator7 = new ASCOM.Controls.Annunciator();
+                this.anunciator6 = new ASCOM.Controls.Annunciator();
+                this.anunciator8 = new ASCOM.Controls.Annunciator();
                 this.anunciatorPanel1.SuspendLayout();
                 this.SuspendLayout();
                 // 
@@ -230,15 +230,15 @@
 
 		private System.Windows.Forms.Button btnOK;
 		private System.Windows.Forms.Button btnCancel;
-		private AnunciatorPanel anunciatorPanel1;
-		private Anunciator anunciator1;
-		private Anunciator anunciator2;
-		private Anunciator anunciator3;
-		private Anunciator anunciator4;
-		private Anunciator anunciator5;
-		private Anunciator anunciator6;
-		private Anunciator anunciator7;
-        private Anunciator anunciator8;
+		private AnnunciatorPanel anunciatorPanel1;
+		private Annunciator anunciator1;
+		private Annunciator anunciator2;
+		private Annunciator anunciator3;
+		private Annunciator anunciator4;
+		private Annunciator anunciator5;
+		private Annunciator anunciator6;
+		private Annunciator anunciator7;
+        private Annunciator anunciator8;
 		}
 	}
 
