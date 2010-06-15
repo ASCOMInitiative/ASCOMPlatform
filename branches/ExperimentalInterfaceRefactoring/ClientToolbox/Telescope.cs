@@ -32,6 +32,18 @@ namespace ASCOM.DriverAccess
         public Telescope(string telescopeID)
         {
             memberFactory = new MemberFactory(telescopeID);
+
+            // Try to see if this driver has an ASCOM.Telescope interface
+            try
+            {
+                ITelescope = (ASCOM.Interfaces.ITelescope)memberFactory.GetLateBoundObject;
+            }
+            catch (Exception)
+            {
+                ITelescope = null;
+            }
+
+
         }
 
         /// <summary>
@@ -121,16 +133,11 @@ namespace ASCOM.DriverAccess
         /// <returns>Collection of Axis Rates</returns>
         public IAxisRates AxisRates(TelescopeAxes Axis)
         {
-            //if (!memberFactory.IsCOMObject)
-            //{
-            //    IAxisRates axisRates = memberFactory.CallMember(3, "AxisRates", new Type[] { typeof(TelescopeAxes) }, new object[] { Axis }) as IAxisRates;
-            //    if (axisRates == null)
-            //    {
-            //        return new _AxisRates(Axis, memberFactory.GetObjType, memberFactory.GetLateBoundObject);
-            //    }
-            //    return axisRates;
-            //}
-            //else
+            if (!memberFactory.IsCOMObject)
+            {
+                return ITelescope.AxisRates(Axis);
+            }
+            else
                 return new _AxisRates(Axis, memberFactory.GetObjType, memberFactory.GetLateBoundObject);
         }
 
@@ -869,12 +876,7 @@ namespace ASCOM.DriverAccess
             {
                 if (!memberFactory.IsCOMObject)
                 {
-                   ITrackingRates trackingRates = memberFactory.CallMember(1, "TrackingRates", new Type[] { }, new object[] { }) as ITrackingRates;
-                   if (trackingRates == null)
-                   {
-                       return new _TrackingRates(memberFactory.GetObjType, memberFactory.GetLateBoundObject);
-                   }
-                   return trackingRates;
+                    return ITelescope.TrackingRates;
                 }
                 else
                     return new _TrackingRates(memberFactory.GetObjType, memberFactory.GetLateBoundObject);

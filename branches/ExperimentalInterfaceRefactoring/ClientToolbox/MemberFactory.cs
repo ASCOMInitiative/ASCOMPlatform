@@ -59,33 +59,6 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Returns the instance of the driver
-        /// </summary> 
-        /// <returns>object</returns> 
-        internal object GetLateBoundObject
-        {
-            get { return this.objLateBound ;}
-        }
-
-        /// <summary>
-        /// Returns true is the driver is COM based
-        /// </summary> 
-        /// <returns>object</returns>
-        internal bool IsCOMObject
-        {
-            get { return this.objType.IsCOMObject; }
-        }
-
-        /// <summary>
-        /// Returns the driver type
-        /// </summary> 
-        /// <returns>type</returns>
-        internal Type GetObjType
-        {
-            get { return this.objType; }
-        }
-
-        /// <summary>
         /// Calls a method on an object dynamically. 
         /// 
         /// parameterTypes must match the parameters and in the same order.
@@ -226,6 +199,43 @@ namespace ASCOM.DriverAccess
                     default:
                         return null;
                 }
+        }
+                   
+        /// <summary>
+        /// Returns the instance of the driver
+        /// </summary> 
+        /// <returns>object</returns> 
+        internal object GetLateBoundObject
+        {
+            get { return this.objLateBound ;}
+        }
+
+        /// <summary>
+        /// Returns the driver type
+        /// </summary> 
+        /// <returns>type</returns>
+        internal Type GetObjType
+        {
+            get { return this.objType; }
+        }       
+        
+        /// <summary>
+        /// Returns true if the interface name is found in the driver type object
+        /// </summary> 
+        /// <param name="interfaceName">interface name to search</param>
+        /// <returns>bool</returns>
+        internal bool HasInterface(string interfaceName)
+        {
+                return objType.GetInterface(interfaceName,true)!= null ;
+        }        
+        
+        /// <summary>
+        /// Returns true is the driver is COM based
+        /// </summary> 
+        /// <returns>object</returns>
+        internal bool IsCOMObject
+        {
+            get { return this.objType.IsCOMObject; }
         }
 
         #region IDisposable Members
