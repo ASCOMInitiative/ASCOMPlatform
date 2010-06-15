@@ -447,6 +447,16 @@
     </Content>
     <Content Include="ReadMe.htm" />
     <None Include="app.config" />
+    <None Include="Documentation\Gemini Telescope Net Installation and Operation.docx">
+      <Generator>Docx2UnitTest</Generator>
+      <LastGenOutput>Gemini Telescope Net Installation and Operation.log</LastGenOutput>
+    </None>
+    <None Include="Documentation\Gemini Telescope Net Installation and Operation.log">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Gemini Telescope Net Installation and Operation.docx</DependentUpon>
+    </None>
+    <None Include="Documentation\Gemini Telescope Net Installation and Operation.pdf" />
     <None Include="Resources\no fix satellite.png" />
     <None Include="Resources\satellite.png" />
     <None Include="Resources\no satellite.png" />

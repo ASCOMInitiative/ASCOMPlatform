@@ -1,6 +1,5 @@
 //tabs=4
 // --------------------------------------------------------------------------------
-// TODO fill in this information for your driver, then remove this line!
 //
 // ASCOM Gemini driver for Telescope
 //
@@ -16,6 +15,8 @@
 // -----------	---	-----	-------------------------------------------------------
 // 15-JUL-2009	rbt	1.0.0	Initial edit, from ASCOM Telescope Driver template
 // 08-JUL-2009  pk  1.0.1   Full implementation of ITelescope interface, passing Conform test.
+// 29-MAR-2010  pk  1.0.3   Moved CommandXXX methods to their proper location in the interface specification
+//                          modified TrackingRates private 'pos' field to be non-static
 // --------------------------------------------------------------------------------
 //
 using System;
@@ -151,13 +152,6 @@ public interface IGeminiTelescope
     IAxisRates AxisRates(TelescopeAxes Axis);
     [DispId(403)]
     bool CanMoveAxis(TelescopeAxes Axis);
-    [DispId(421)]
-
-    void CommandBlind(string Command, [DefaultParameterValue(false)] bool Raw);
-    [DispId(422)]
-    bool CommandBool(string Command, [DefaultParameterValue(false)]bool Raw);
-    [DispId(423)]
-    string CommandString(string Command, [DefaultParameterValue(false)]bool Raw);
     [DispId(404)]
     PierSide DestinationSideOfPier(double RightAscension, double Declination);
     [DispId(405)]
@@ -192,6 +186,12 @@ public interface IGeminiTelescope
     void SyncToTarget();
     [DispId(420)]
     void Unpark();
+    [DispId(421)]
+    void CommandBlind(string Command, [DefaultParameterValue(false)] bool Raw);
+    [DispId(422)]
+    bool CommandBool(string Command, [DefaultParameterValue(false)]bool Raw);
+    [DispId(423)]
+    string CommandString(string Command, [DefaultParameterValue(false)]bool Raw);
     [DispId(424)]
     string CommandNative(string Command);
     [DispId(425)]
@@ -242,7 +242,11 @@ namespace ASCOM.GeminiTelescope
         // calculated number of ticks per second:
         DateTime m_LastPulseGuideUpdate = DateTime.MinValue;
         double m_GuideRateStepsPerMilliSecond = 0;
-        
+        double m_GuideRateStepsPerMilliSecondEast = 0;
+        double m_GuideRateStepsPerMilliSecondWest = 0;
+        double m_TrackRate = 0;
+        double m_GuideRA = 0;
+
         //
         // Constructor - Must be public for COM registration!
         //
@@ -320,7 +324,7 @@ namespace ASCOM.GeminiTelescope
             AssertConnect();
             if (GeminiHardware.AtHome || GeminiHardware.AtPark)              
                 throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
-            GeminiHardware.DoCommandResult(":Q", GeminiHardware.MAX_TIMEOUT, false);
+            GeminiHardware.AbortSlew();
             GeminiHardware.Trace.Exit("IT:AbortSlew");
         }
 
@@ -665,11 +669,17 @@ namespace ASCOM.GeminiTelescope
                 string encoderResolution = GeminiHardware.DoCommandResult("<26:", GeminiHardware.MAX_TIMEOUT, false);
                 if (rateDivisor != null && spurGearRatio != null && wormGearRatio != null && encoderResolution !=null)
                 {
-                    
+
+                    double rate = 0.0;
+
+                    double rd = double.Parse(rateDivisor);
+                    if (rd != 0)
+                    {
                     double stepsPerSecond = 22.8881835938 / double.Parse(rateDivisor);
                     double arcSecondsPerStep = 1296000.00 / (Math.Abs(double.Parse(wormGearRatio)) * double.Parse(spurGearRatio) * double.Parse(encoderResolution));
 
-                    double rate = arcSecondsPerStep * stepsPerSecond;
+                        rate = arcSecondsPerStep * stepsPerSecond;
+                    }
 
                     GeminiHardware.Trace.Exit("IT:DeclinationRate.Get", rate);
                     return rate;
@@ -727,8 +737,13 @@ namespace ASCOM.GeminiTelescope
         // PK: southern hemisphere needs testing!
         public PierSide DestinationSideOfPier(double RightAscension, double Declination)
         {
+            if (!GeminiHardware.ReportPierSide)
+                throw new ASCOM.MethodNotImplementedException("DestinationSideOfPier"); // Was PropertyNotImplementedException
+
             string res = "RA: " + RightAscension.ToString() + " Dec: " + Declination.ToString(); 
             GeminiHardware.Trace.Enter("IT:DestinationSideOfPier", res);
+            
+            AssertConnect();
 
             // Get the Western goto limit
             res = GeminiHardware.DoCommandResult("<223:", GeminiHardware.MAX_TIMEOUT, false);
@@ -768,6 +783,7 @@ namespace ASCOM.GeminiTelescope
             }
 
 
+
             // if goto limit is set to zero, this means it's 2.5 degrees from west safety limit:
             if (gotolimit == 0)
             {
@@ -790,9 +806,17 @@ namespace ASCOM.GeminiTelescope
             PierSide retVal = PierSide.pierUnknown;
 
             if ((hour_angle >= east_limit && hour_angle <= 6))
+                // if this can also be reached from the west side and the mount is currently there, don't flip:
+                if (12 + hour_angle < 12 + gotolimit && GeminiHardware.SideOfPier == "W")
+                    retVal = PierSide.pierWest;
+                else
                 retVal = PierSide.pierEast;
 
             if (hour_angle >= 6 && hour_angle <= 12 + gotolimit)
+                // if this can also be reached from the east side and the mount is currently on the east, don't flip:
+                if (hour_angle - 12 >= east_limit && GeminiHardware.SideOfPier == "E")
+                    retVal = PierSide.pierEast;
+                else
                 retVal = PierSide.pierWest;
 
             if (hour_angle < east_limit && hour_angle >= -6)
@@ -800,7 +824,12 @@ namespace ASCOM.GeminiTelescope
 
             if (hour_angle < -6 && hour_angle >= -12 + gotolimit)
                 retVal = PierSide.pierEast;
-                
+
+            // if the destination can be reached from both, east and west,
+            // and the mount is currently on the west side, don't do a flip:
+            if (12+hour_angle < 12+gotolimit && hour_angle < gotolimit && GeminiHardware.SideOfPier == "W")
+                retVal = PierSide.pierWest;
+
             // Swap sides for Southern Hemisphere
             if (GeminiHardware.SouthernHemisphere)
             {
@@ -977,7 +1006,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Trace.Enter("IT:MoveAxis", Axis, Rate);
 
             AssertConnect();
-            //if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
 
             string[] cmds = { null, null };
@@ -1078,8 +1107,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Trace.Enter("IT:PulseGuide", Direction, Duration);
 
             AssertConnect();
-            //if (GeminiHardware.AtPark)
-            //    throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             // don't update mount parameters each time a guide command is issued: this will slow things down while guiding
             // do it on a polling interval:
@@ -1096,11 +1124,23 @@ namespace ASCOM.GeminiTelescope
                     string spurGearRatio = mountpar[1];
                     string encoderResolution = mountpar[2];
 
+                    // compute actual tracking rate, including any offset, in arcsecs/second
+                    
+                    m_TrackRate = (this.RightAscensionRate * 0.9972695677 + SharedResources.EARTH_ANG_ROT_DEG_MIN * 60);
+
                     if (spurGearRatio != null && wormGearRatio != null && encoderResolution != null)
                     {
+
                         double StepsPerDegree = (Math.Abs(double.Parse(wormGearRatio)) * double.Parse(spurGearRatio) * double.Parse(encoderResolution)) / 360.0;
-                        m_GuideRateStepsPerMilliSecond = StepsPerDegree * GuideRateRightAscension / 1000;  // guide rate in encoder ticks per milli-second
+                        m_GuideRA = GuideRateRightAscension;
+
+                        m_GuideRateStepsPerMilliSecond = StepsPerDegree * m_GuideRA / 1000;  // guide rate in encoder ticks per milli-second
+
+                        m_GuideRateStepsPerMilliSecondEast = StepsPerDegree * (m_TrackRate/3600 - m_GuideRA) / 1000;
+                        m_GuideRateStepsPerMilliSecondWest = StepsPerDegree * (m_TrackRate/3600 + m_GuideRA) / 1000;
                         m_LastPulseGuideUpdate = DateTime.Now;
+
+                        GeminiHardware.Trace.Info(3, "PulseGuide Param", m_GuideRateStepsPerMilliSecond, m_GuideRateStepsPerMilliSecondEast, m_GuideRateStepsPerMilliSecondWest);
                     }
                 }
             }
@@ -1110,41 +1150,107 @@ namespace ASCOM.GeminiTelescope
               
             string cmd = String.Empty;
 
+            //switch (Direction)
+            //{
+            //    case GuideDirections.guideEast:
+            //        cmd = ":Mie";
+            //        break;
+            //    case GuideDirections.guideNorth:
+            //        cmd = ":Min";
+            //        break;
+            //    case GuideDirections.guideSouth:
+            //        cmd = ":Mis";
+            //        break;
+            //    case GuideDirections.guideWest:
+            //        cmd = ":Miw";
+            //        break;
+            //}
+
+
+            int maxduration = (int)(255 / m_GuideRateStepsPerMilliSecond);
+
+            int prescaler = 1;
+
             switch (Direction)
             {
                 case GuideDirections.guideEast:
-                    cmd = ":Mie";
+                    cmd = ":Mge";
+                    maxduration = (int)(255 / m_GuideRateStepsPerMilliSecondEast);
+                    // perhaps a bug in Gemini: the prescaler value used for East guiding rate 
+                    // needs to be reversed for West guiding rate.
+
+                    // actual divisor:
+                    //prescaler = (int)(1500 / m_GuideRateStepsPerMilliSecondWest);
+
+                    //// prescaler needed to fit into 16 bits:
+                    //prescaler = (prescaler / 65536) + 1;
+
+                    // adjust duration to account for prescaler:
+                    Duration *= prescaler;
                     break;
                 case GuideDirections.guideNorth:
-                    cmd = ":Min";
+                    cmd = ":Mgn";
                     break;
                 case GuideDirections.guideSouth:
-                    cmd = ":Mis";
+                    cmd = ":Mgs";
                     break;
                 case GuideDirections.guideWest:
-                    cmd = ":Miw";
+                    maxduration = (int)(255 / m_GuideRateStepsPerMilliSecondWest);
+                    
+                    // factor is due to different step speed in West direction: (1+g)/(1-g):
+                    double fact = (1 + m_GuideRA / (SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0)) / (1 - m_GuideRA / (SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0));
+
+                    Duration = (int)(Duration/fact);
+
+                    // perhaps a bug in Gemini: the prescaler value used for East guiding rate 
+                    // needs to be reversed for West guiding rate.
+
+                    // actual divisor:
+                    prescaler = (int)(1500 / m_GuideRateStepsPerMilliSecondEast);
+
+                    // prescaler needed to fit into 16 bits:
+                    prescaler = (prescaler / 65536) + 1;
+
+                    // adjust duration to account for prescaler:
+                    Duration *= prescaler;
+                    cmd = ":Mgw";
                     break;
             }
 
+            // max duration is rounded to whole seconds, as per Rene G.:
+            maxduration = ((int)(maxduration / 1000)) * 1000;
+
+            //System.Windows.Forms.MessageBox.Show("Max duration: " + maxduration.ToString() + "\r\n" +
+            //        "Guide Rate: " + (m_GuideRA / (SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0)).ToString() + "\r\n" +
+            //        "East Steps/Sec: " + (m_GuideRateStepsPerMilliSecondEast * 1000).ToString() + "\r\n" +
+            //        "West Steps/Sec: " + (m_GuideRateStepsPerMilliSecondWest * 1000).ToString() + "\r\n" +
+            //        "Prescaler     : " + prescaler.ToString());
+
+
+            GeminiHardware.Trace.Info(3, "PulseGuide MaxDuration", maxduration);
+            
             int totalSteps = (int)(Duration * m_GuideRateStepsPerMilliSecond + 0.5); // total encoder ticks 
             GeminiHardware.Trace.Info(4, "IT:PulseGuide Ticks", totalSteps);
+            GeminiHardware.Trace.Info(4, "IT:PulseGuide MaxDur", maxduration);
 
-            if (Duration > 30000 || Duration < 0)  // too large or negative...
-                throw new InvalidValueException("PulseGuide" , Duration.ToString(), "0..30000");
+            if (Duration > 60000 || Duration < 0)  // too large or negative...
+                throw new InvalidValueException("PulseGuide" , Duration.ToString(), "0..60000");
 
             if (totalSteps <= 0) return;    //too small a move (less than 1 encoder tick)
 
-            int count = totalSteps;
+            int count = Duration;
 
-            for (int idx = 0; count > 0; ++idx, count -= 255)
+            for (int idx = 0; count > 0; ++idx)
             {
-                int d = (count > 255 ? 255 : count);
+                int d = (count > maxduration ? maxduration : count);
                 string c = cmd + d.ToString();
                 GeminiHardware.DoCommandResult(c, Duration + GeminiHardware.MAX_TIMEOUT, false);
-                GeminiHardware.WaitForVelocity("TN", Duration + 2000); // shouldn't take much longer than 'Duration', right?
+                GeminiHardware.Velocity = "G";
+                count -= d;
+                if (!GeminiHardware.AsyncPulseGuide || count > 0)
+                    GeminiHardware.WaitForVelocity("TN", Duration + GeminiHardware.MAX_TIMEOUT); // shouldn't take much longer than 'Duration', right?
             }
             GeminiHardware.Trace.Exit("IT:PulseGuide", Direction, Duration, totalSteps);
-        
         }
 
         public double RightAscension
@@ -1247,6 +1353,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.ParkAlt = GeminiHardware.Altitude;
             GeminiHardware.ParkAz = GeminiHardware.Azimuth;
             GeminiHardware.ParkPosition = GeminiHardware.GeminiParkMode.SlewAltAz;
+            GeminiHardware.Profile = null;
             GeminiHardware.Trace.Exit("IT:SetPark", GeminiHardware.ParkAlt, GeminiHardware.ParkAz);
         }
 
@@ -1268,6 +1375,8 @@ namespace ASCOM.GeminiTelescope
             get 
             {
                 AssertConnect();
+                if (!GeminiHardware.ReportPierSide) return PierSide.pierUnknown;
+
                 if (GeminiHardware.SideOfPier == "E")
                 {
                     GeminiHardware.Trace.Enter("IT:SideOfPier.Get", PierSide.pierEast);
@@ -1291,14 +1400,15 @@ namespace ASCOM.GeminiTelescope
 
                 if ((value == PierSide.pierEast && GeminiHardware.SideOfPier == "W") || (value == PierSide.pierWest && GeminiHardware.SideOfPier == "E"))
                 {
-                    string res = GeminiHardware.DoCommandResult(":Mf", -1 , false);
+                    string res = GeminiHardware.DoMeridianFlip();
+
                     if (res == null) throw new TimeoutException("SideOfPier");
                     if (res.StartsWith("1")) throw new ASCOM.DriverException("Object below horizon");
                     if (res.StartsWith("4")) throw new ASCOM.DriverException("Position unreachable");
                     if (res.StartsWith("3")) throw new ASCOM.DriverException("Manual control");
-
+                   
                     GeminiHardware.WaitForVelocity("S", GeminiHardware.MAX_TIMEOUT);
-                    GeminiHardware.WaitForVelocity("TN", GeminiHardware.MAX_TIMEOUT);  // shouldn't this be waiting forever??? depends on whether :Mf is synchronous or not: need to check
+                    GeminiHardware.WaitForVelocity("TN", -1);  // :Mf is asynchronous, wait until done
                 }
                 GeminiHardware.Trace.Exit("IT:SideOfPier.Set", value);
 
@@ -1394,6 +1504,8 @@ namespace ASCOM.GeminiTelescope
         {
             GeminiHardware.Trace.Enter("IT:SlewToAltAz", Azimuth, Altitude);
             AssertConnect();
+            if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+
             GeminiHardware.TargetAzimuth = Azimuth;
             GeminiHardware.TargetAltitude = Altitude;
             GeminiHardware.Velocity = "S";
@@ -1407,6 +1519,8 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Trace.Enter("IT:SlewToAltAzAsync", Azimuth, Altitude);
 
             AssertConnect();
+            if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+
             GeminiHardware.TargetAzimuth = Azimuth;
             GeminiHardware.TargetAltitude = Altitude;
             if (Slewing) AbortSlew();
@@ -1422,8 +1536,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Trace.Enter("IT:SlewToCoordinates", RightAscension, Declination);
             AssertConnect();
 
-            //if (GeminiHardware.AtHome || GeminiHardware.AtPark)
-            //    throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             GeminiHardware.TargetRightAscension = RightAscension;
             GeminiHardware.TargetDeclination = Declination;
@@ -1440,8 +1553,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Trace.Enter("IT:SlewToCoordinatesAsync", RightAscension, Declination);
             AssertConnect();
 
-            //if (GeminiHardware.AtHome || GeminiHardware.AtPark)
-            //    throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             GeminiHardware.TargetRightAscension = RightAscension;
             GeminiHardware.TargetDeclination = Declination;
@@ -1458,8 +1570,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Trace.Enter("IT:SlewToTarget", GeminiHardware.TargetRightAscension, GeminiHardware.TargetDeclination);
             AssertConnect();
 
-            //if (GeminiHardware.AtHome || GeminiHardware.AtPark)
-            //    throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             if (Slewing) AbortSlew();
             GeminiHardware.Velocity = "S";
@@ -1474,8 +1585,7 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Trace.Enter("IT:SlewToTargetAsync", GeminiHardware.TargetRightAscension, GeminiHardware.TargetDeclination);
             AssertConnect();
 
-            //if (GeminiHardware.AtHome || GeminiHardware.AtPark)
-            //    throw new ASCOM.DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+            if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             if (Slewing) AbortSlew();
             GeminiHardware.Velocity = "S";
@@ -1872,8 +1982,8 @@ namespace ASCOM.GeminiTelescope
     [ClassInterface(ClassInterfaceType.None)]
     public class TrackingRates : ITrackingRates, IEnumerable, IEnumerator
     {
-        public DriveRates [] m_TrackingRates;
-        private static int _pos = -1;
+        private DriveRates [] m_TrackingRates;
+        private int _pos = -1;
 
         //
         // Default constructor - Internal prevents public creation
