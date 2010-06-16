@@ -146,6 +146,11 @@ Attribute VB_Description = "ASCOM Telescope driver for Software Bisque TheSky"
 '                   problem in TheSky X.
 ' 14-Jun-10 rbd     5.2.4 - Back to TheSkyXAdaptor, working now. Upgrade driver
 '                   to Telescope V2. Implement LST, Lat, Long (read only)
+' 15-Jun-10 rbd     5.2.4 - Multiple Conform errors, missing members.
+' 16-Jun-10 rbd     5.2.4 - Raise error on read before initial write to
+'                   TargetXxx. AxisRates() returns empty Collection not error.
+'                   Conform test passed, but Tracking and Tracking offsets
+'                   not tested.
 '---------------------------------------------------------------------
 
 Option Explicit
@@ -518,6 +523,11 @@ Public Property Let Connected(ByVal newVal As Boolean)
         m_SkyTele.Connect
         m_SkyTele.Asynchronous = 1                   ' Need this after Connect()
         '
+        ' Sentinels for "not set yet"
+        '
+        m_dTgtRA = -1#
+        m_dTgtDec = -1#
+        '
         ' Test SetTracking to see if the connected mount supports it
         '
         m_bCanSetTracking = True                    ' Assume we have tracking control (needed for Let Tracking used below)
@@ -853,6 +863,9 @@ End Property
 Public Property Get TargetDeclination() As Double
 
     CheckConnected
+    If m_dTgtDec = -1# Then _
+        Err.Raise SCODE_NOT_SET, ERR_SOURCE, _
+            "Property TargetDeclination " & MSG_NOT_SET
     TargetDeclination = m_dTgtDec
     
 End Property
@@ -869,6 +882,9 @@ End Property
 Public Property Get TargetRightAscension() As Double
 
     CheckConnected
+    If m_dTgtRA = -1# Then _
+        Err.Raise SCODE_NOT_SET, ERR_SOURCE, _
+            "Property TargetRightAscension " & MSG_NOT_SET
     TargetRightAscension = m_dTgtRA
     
 End Property
@@ -951,10 +967,9 @@ Public Sub AbortSlew()
     
 End Sub
 
-Public Function AxisRates() As Collection
+Public Function AxisRates(ByVal Axis As TelescopeAxes) As Collection
 
-    Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
-                "Method AxisRates()" & MSG_NOT_IMPLEMENTED
+    Set AxisRates = New Collection
 
 End Function
 

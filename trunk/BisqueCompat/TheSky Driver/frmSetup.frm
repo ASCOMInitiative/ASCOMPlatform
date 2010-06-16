@@ -2,7 +2,7 @@ VERSION 5.00
 Begin VB.Form frmSetup 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "ASCOM Driver for TheSky(tm)"
-   ClientHeight    =   5835
+   ClientHeight    =   5805
    ClientLeft      =   90
    ClientTop       =   330
    ClientWidth     =   4335
@@ -10,7 +10,7 @@ Begin VB.Form frmSetup
    LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   5835
+   ScaleHeight     =   5805
    ScaleWidth      =   4335
    ShowInTaskbar   =   0   'False
    StartUpPosition =   3  'Windows Default
@@ -19,6 +19,7 @@ Begin VB.Form frmSetup
       Height          =   300
       Left            =   345
       TabIndex        =   6
+      ToolTipText     =   "Enables tracking of solar system objects of mount supports it"
       Top             =   3540
       Width           =   3105
    End
@@ -37,6 +38,7 @@ Begin VB.Form frmSetup
       Height          =   300
       Left            =   345
       TabIndex        =   7
+      ToolTipText     =   "Uses tracking offsets for guide motions"
       Top             =   3900
       Width           =   3105
    End
@@ -45,6 +47,7 @@ Begin VB.Form frmSetup
       Height          =   435
       Left            =   345
       TabIndex        =   4
+      ToolTipText     =   "Useful for Paramount to start in known state"
       Top             =   2775
       Width           =   3930
    End
@@ -53,6 +56,7 @@ Begin VB.Form frmSetup
       Height          =   435
       Left            =   345
       TabIndex        =   5
+      ToolTipText     =   "Enable this is slews fail after downlooading an image"
       Top             =   3120
       Width           =   3930
    End
@@ -101,6 +105,7 @@ Begin VB.Form frmSetup
       Height          =   435
       Left            =   345
       TabIndex        =   3
+      ToolTipText     =   "Avoids ""sync into model"" which can degrade TPOINT model"
       Top             =   2445
       Width           =   3930
    End
@@ -161,6 +166,7 @@ Attribute VB_Exposed = False
 ' 19-Feb-09 bsk 5.1.2 - Add Mount Type combobox
 ' 25-Mar-09 rbd 5.1.3 - Add Tracking Rate checkbox
 ' 14-May-10 rbd 5.2.1 - Add support for TheSky X
+' 16-Jun-10 rbd 5.2.4 - Disable PulseGuide if Tracking Offsets disabled
 
 Option Explicit
 
@@ -240,7 +246,7 @@ Private Sub Form_Load()
         ' Read the old registry data (TheSky6 or not)
         '
         buf = m_Profile.GetValue(ID, "TheSky6")
-        If buf = "" Then buf = "False"              ' Default to TheSky V5
+        If buf = "" Then buf = "False"                  ' Default to TheSky V5
         If CBool(buf) Then
             m_eTheSkyType = TheSky6
             Me.rbSky6.Value = True
@@ -251,7 +257,7 @@ Private Sub Form_Load()
     End If
     
     buf = m_Profile.GetValue(ID, "InhibitSync")
-    If buf = "" Then buf = "False"                  ' Default to allowing Sync
+    If buf = "" Then buf = "False"                      ' Default to allowing Sync
     If CBool(buf) Then
         Me.chkTPOINT.Value = 1
     Else
@@ -259,7 +265,7 @@ Private Sub Form_Load()
     End If
     
     buf = m_Profile.GetValue(ID, "SlewDelay")
-    If buf = "" Then buf = "True"                   ' Default to slew-start delay
+    If buf = "" Then buf = "True"                       ' Default to slew-start delay
     If CBool(buf) Then
         Me.chkSlewStartDelay.Value = 1
     Else
@@ -267,7 +273,7 @@ Private Sub Form_Load()
     End If
     
     buf = m_Profile.GetValue(ID, "FindHome")
-    If buf = "" Then buf = "False"                  ' Default to not doing Find Home
+    If buf = "" Then buf = "False"                      ' Default to not doing Find Home
     If CBool(buf) Then
         Me.chkInitHome.Value = 1
     Else
@@ -275,19 +281,24 @@ Private Sub Form_Load()
     End If
     
     buf = m_Profile.GetValue(ID, "TrackOffsets")
-    If buf = "" Then buf = "False"                   ' Default to no tracking offsets
+    If buf = "" Then buf = "False"                      ' Default to no tracking offsets
     If CBool(buf) Then
         Me.chkTrackOffs.Value = 1
     Else
         Me.chkTrackOffs.Value = 0
     End If
     
-    buf = m_Profile.GetValue(ID, "PulseGuide")
-    If buf = "" Then buf = "False"                   ' Default to no Pulse Guide
-    If CBool(buf) Then
-        Me.chkPulseGuide.Value = 1
+    If Me.chkTrackOffs.Value = 1 Then                   ' No Pulse Guide if no Track Offsets
+        buf = m_Profile.GetValue(ID, "PulseGuide")
+        If buf = "" Then buf = "False"                  ' Default to no Pulse Guide
+        If CBool(buf) Then
+            Me.chkPulseGuide.Value = 1
+        Else
+            Me.chkPulseGuide.Value = 0
+        End If
     Else
         Me.chkPulseGuide.Value = 0
+        Me.chkPulseGuide.Enabled = False
     End If
     
     buf = m_Profile.GetValue(ID, "AlignmentMode")
@@ -416,4 +427,14 @@ End Sub
 Private Sub rbSkyX_Click()
     m_eTheSkyType = TheSkyX
 End Sub
+
+Private Sub chkTrackOffs_Click()
+    If Me.chkTrackOffs.Value = 0 Then
+        Me.chkPulseGuide.Value = 0
+        Me.chkPulseGuide.Enabled = False
+    Else
+        Me.chkPulseGuide.Enabled = True
+    End If
+End Sub
+
 
