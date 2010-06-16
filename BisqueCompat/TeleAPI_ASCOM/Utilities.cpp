@@ -149,10 +149,8 @@ void drvFail(char *msg, EXCEPINFO *ei, bool bFatal)
 	if(!handled)
 		MessageBox(NULL, msg, _szAlertTitle, (MB_OK & MB_ICONSTOP | MB_SETFOREGROUND));
 
-	if(bFatal)										// If was a fatal error, 
-		TermScope();								// shut ourselves down
-
-	// SetForegroundWindow(_hWndMain);					// Bring ourself to the front
+	if(bFatal)													// If was a fatal error, 
+		TermScope(true);										// shut ourselves down
 
 	ABORT;
 }

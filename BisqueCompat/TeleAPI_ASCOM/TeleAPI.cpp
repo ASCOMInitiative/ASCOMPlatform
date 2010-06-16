@@ -33,8 +33,10 @@ HWND _hWndMain = NULL;							// For bringing to front after slew
 //
 //Do not alter this function,  
 //201 Added tapiPulseFocuser and tapiSettings
-//202 Explicitly added TELEAPIEXPORT and CALLBACK to all fuctions
+//202 Explicitly added TELEAPIEXPORT and CALLBACK to all functions
 //As of January 19, 1999 the version is 2.02
+//In June 2010 Matt Bisque gave me (rbd) "the latest" and it is 
+//all the same 2.02...
 //
 #define nTeleAPIVersion 202
 #define sTeleAPIVersion "2.02"
@@ -48,16 +50,21 @@ TELEAPIEXPORT int CALLBACK tapiGetDLLVersion(void)
 //Do any initialization here
 TELEAPIEXPORT int CALLBACK tapiEstablishLink(void)
 {
-	(void) InitDrivers();
-	(void) InitScope();
-	return(_bScopeActive ? OK : TS_E_STARTFAIL);
+	int iRes = OK;
+
+	__try {
+		InitScope();
+	} __except(EXCEPTION_EXECUTE_HANDLER) {
+		iRes = TS_E_STARTFAIL;
+	}
+	return iRes;
 }
 
 //Called when Telescope, Link, Terminate is selected
 //Do any clean up here
 TELEAPIEXPORT int CALLBACK tapiTerminateLink(void)
 {
-	TermScope();
+	TermScope(false);
 	return 0;
 }
 
@@ -187,11 +194,12 @@ BOOL WINAPI DllMain (HANDLE hDLL, DWORD dwReason, LPVOID lpReserved)
     if (dwReason == DLL_PROCESS_ATTACH)
 	{			
 		DisableThreadLibraryCalls((HINSTANCE)hDLL);	// No thread att/det calls
+		InitDrivers();
 		return TRUE;
 	}
     else if (dwReason == DLL_PROCESS_DETACH)
     {
-	    TermScope();
+	    TermScope(false);
 	    return TRUE;
     }
     return TRUE;   // ok
