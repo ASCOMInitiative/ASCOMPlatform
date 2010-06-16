@@ -99,7 +99,7 @@ Attribute VB_Description = "ASCOM Telescope driver for Software Bisque TheSky"
 '                   property so TheSky doesn't start when using the
 '                   SetupDialog method, thus avoiding a chicken and
 '                   egg problem with interface selection. Safety
-'                   Connected = False by testing validity of m_Bisque
+'                   Connected = False by testing validity of m_SkyTele
 '                   object before calling disconnect().
 ' 08-Aug-03 rbd     2.3.3 - Remove the "Use Orchestrate" checkbox and
 '                   always use TheSky.RASCOMTele.
@@ -137,6 +137,15 @@ Attribute VB_Description = "ASCOM Telescope driver for Software Bisque TheSky"
 ' 04-Jun-10 rbd     5.2.2 - For TheSkyX, Tracking control does not work at present,
 '                   and GetLastSLewError() sporadically raises a "not implemented"
 '                   error.
+' 09-Jun-10 rbd     5.2.3 - Test RASCOM.SetTracking() on connect, note whether
+'                   it succeeds or fails, then set up CanSetTracking and Let
+'                   Tracking accordingly. TheSky X will raise an error is the
+'                   mount to which it is connected doesn't support tracking
+'                   control (per Matt Bisque). Wait 500ms after slew completes
+'                   in the hope that it will minimize LastSlewError timing
+'                   problem in TheSky X.
+' 14-Jun-10 rbd     5.2.4 - Back to TheSkyXAdaptor, working now. Upgrade driver
+'                   to Telescope V2. Implement LST, Lat, Long (read only)
 '---------------------------------------------------------------------
 
 Option Explicit
@@ -153,11 +162,37 @@ Public Enum AlignmentModes
     algGermanPolar = 2
 End Enum
 
+Public Enum EquatorialSystem
+    equOther = 0
+    equLocalTopocentric = 1
+    equJ2000 = 2
+    equJ2050 = 3
+    equB1950 = 4
+End Enum
+    
 Public Enum GuideDirections
     guideNorth = 0
     guideSouth = 1
     guideEast = 2
     guideWest = 3
+End Enum
+
+Public Enum DriveRates
+    driveSidereal = 0
+    driveLunar = 1
+    driveSolar = 2
+    driveKing = 3
+End Enum
+
+Public Enum TelescopeAxes
+    axisPrimary = 0
+    axisSecondary = 1
+    axisTertiary = 2
+End Enum
+
+Public Enum PierSide
+    pierEast = 0
+    pierWest = 1
 End Enum
 
 Public Enum TheSkyType
@@ -171,7 +206,9 @@ Private m_Profile As DriverHelper.Profile
 Private m_iSettleTime As Integer
 Private m_bAbortSlew As Boolean
 Private m_lAsyncEndTix As Long
-Private m_Bisque As Object
+Private m_SkyChart As Object
+Private m_SkyTele As Object
+Private m_SkyUtil As Object
 Private m_lNextRaDecTix As Long
 Private m_dRA As Double                         ' Cached/corrected coordinates
 Private m_dDec As Double
@@ -190,6 +227,7 @@ Private m_bFirstConn As Boolean                 ' This is True after first conn
 Private m_bSlewCompleted As Boolean             ' Flag used to get LastSlewError after asnyc slew
 Private m_bTrackOffsets As Boolean
 Private m_bPulseGuide As Boolean
+Private m_bCanSetTracking As Boolean
 Private m_iAlignmentMode As AlignmentModes
 
 Private Declare Function GetTickCount Lib "kernel32" () As Long
@@ -262,7 +300,7 @@ Private Sub Class_Initialize()
     Set m_Profile = Nothing                         ' Release Profile
     
     
-    Set m_Bisque = Nothing                          ' [sentinel]
+    Set m_SkyTele = Nothing                          ' [sentinel]
     m_bFirstConn = False                            ' Loading driver defines "first conn" epoch
     m_bSlewCompleted = True                         ' Initialize this crazy flag
     m_dTgtRA = 0#                                   ' Start with defined values
@@ -272,6 +310,7 @@ Private Sub Class_Initialize()
     m_iSettleTime = 0                               ' Default 0 slew settle time
     m_lNextRaDecTix = 0&                            ' Force first RA/Dec poll
     m_lNextAzAltTix = 0&                            ' Force first Az/Alt poll
+    m_bCanSetTracking = True                        ' Assume tracking till we connect
     m_Util.LoadDLL App.Path & "\astro32.dll"        ' Assure this is loaded and available
 
 End Sub
@@ -279,7 +318,7 @@ End Sub
 Private Sub Class_Terminate()
     
     On Error Resume Next
-    m_Bisque.Disconnect
+    m_SkyTele.Disconnect
     
 End Sub
 
@@ -303,11 +342,49 @@ Public Property Get Altitude() As Double
     
 End Property
 
+Public Property Get ApertureArea() As Double
+
+    Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+                "Property ApertureArea" & MSG_NOT_IMPLEMENTED
+
+End Property
+
 Public Property Get ApertureDiameter() As Double
 
     Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
                 "Property ApertureDiameter" & MSG_NOT_IMPLEMENTED
 
+End Property
+
+Public Property Get AtHome() As Boolean
+
+'    Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+'                "Property AtHome" & MSG_NOT_IMPLEMENTED
+    '
+    ' Conform Requirement
+    '
+    ' Must be implemented if CanFindHome = True. We have no way to
+    ' see if the mount is at home, so we report False.
+    '
+    CheckConnected
+    AtHome = False
+    
+End Property
+
+Public Property Get AtPark() As Boolean
+
+'    Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+'                "Property AtPark" & MSG_NOT_IMPLEMENTED
+    '
+    ' Conform Requirement
+    '
+    ' Must be implemented if CanPark = True, but we have no
+    ' way to tell as parking disconnects. If we're connected
+    ' then we can't be parked.
+    '
+    CheckConnected
+    AtPark = False
+    
 End Property
 
 Public Property Get Azimuth() As Double
@@ -335,25 +412,57 @@ Public Property Get CanPulseGuide() As Boolean
     
 End Property
 
+Public Property Get CanSetDeclinationRate() As Boolean
+
+    CanSetDeclinationRate = m_bTrackOffsets
+
+End Property
+
+Public Property Get CanSetGuideRates() As Boolean
+
+    CanSetGuideRates = False
+
+End Property
+
 Public Property Get CanSetPark() As Boolean
 
     CanSetPark = True
 
 End Property
 
+Public Property Get CanSetPierSide() As Boolean
+
+    CanSetPierSide = False
+
+End Property
+
+Public Property Get CanSetRightAscensionRate() As Boolean
+
+    CanSetRightAscensionRate = m_bTrackOffsets
+
+End Property
+
 Public Property Get CanSetTracking() As Boolean
 
-    If m_eTheSkyType = TheSkyX Then                 ' Hopefully temporary!!!
-        CanSetTracking = False
-    Else
-        CanSetTracking = True
-    End If
+    CanSetTracking = m_bCanSetTracking
 
 End Property
 
 Public Property Get CanSlew() As Boolean
 
     CanSlew = True
+
+End Property
+
+Public Property Get CanSlewAltAz() As Boolean
+
+    CanSlewAltAz = False
+
+End Property
+
+Public Property Get CanSlewAltAzAsync() As Boolean
+
+    CanSlewAltAzAsync = False
 
 End Property
 
@@ -369,6 +478,12 @@ Public Property Get CanSync() As Boolean
 
 End Property
 
+Public Property Get CanSyncAltAz() As Boolean
+
+    CanSyncAltAz = False
+
+End Property
+
 Public Property Get CanUnpark() As Boolean
 
     CanUnpark = False
@@ -377,7 +492,7 @@ End Property
 
 Public Property Get Connected() As Boolean
 
-    If m_Bisque.IsConnected = 1 Then
+    If m_SkyTele.IsConnected = 1 Then
         Connected = True
     Else
         Connected = False
@@ -386,29 +501,44 @@ Public Property Get Connected() As Boolean
 End Property
 
 Public Property Let Connected(ByVal newVal As Boolean)
-    Dim buf
+    Dim buf As String
+    Dim wasTracking As Boolean
     
     If newVal Then
         On Error GoTo NO_SKY
         Select Case m_eTheSkyType
-            Case TheSky5: buf = "TheSky.RASCOMTele"
-            Case TheSky6: buf = "TheSky6.RASCOMTele"
-            ' ** NOT WHAT BISQUE SAYS, BUT WORKS! "TheSkyXAdaptor.RASCOMTele" does not!
-            'Case TheSkyX: buf = "TheSkyXAdaptor.RASCOMTele"
-            Case TheSkyX: buf = "TheSkyX.sky6RASCOMTele"
+            Case TheSky5: buf = "TheSky"
+            Case TheSky6: buf = "TheSky6"
+            Case TheSkyX: buf = "TheSkyXAdaptor"
         End Select
-        Set m_Bisque = CreateObject(buf)
+        Set m_SkyChart = CreateObject(buf & ".StarChart")
+        Set m_SkyTele = CreateObject(buf & ".RASCOMTele")
+        Set m_SkyUtil = CreateObject(buf & ".Utils")
         On Error GoTo 0
-        m_Bisque.Connect
-        m_Bisque.Asynchronous = 1                   ' Need this after Connect()
+        m_SkyTele.Connect
+        m_SkyTele.Asynchronous = 1                   ' Need this after Connect()
+        '
+        ' Test SetTracking to see if the connected mount supports it
+        '
+        m_bCanSetTracking = True                    ' Assume we have tracking control (needed for Let Tracking used below)
+        wasTracking = Me.Tracking                   ' Remember initial tracking state
+        On Error Resume Next
+        Me.Tracking = Not wasTracking               ' Try to change tracking state
+        If Err.Number = 0 Then                      ' Success!
+            m_Util.WaitForMilliseconds 1000         ' Wait a bit for the mount to settle
+            Me.Tracking = wasTracking               ' Restore initial tracking state
+        Else
+            m_bCanSetTracking = False               ' We do not have tracking control
+        End If
+        On Error GoTo 0                             ' Error control off
         '
         ' If find home selected and first connection then call FindHome()
         '
-        If m_bFindHome And Not m_bFirstConn Then m_Bisque.FindHome
+        If m_bFindHome And Not m_bFirstConn Then m_SkyTele.FindHome
         m_bFirstConn = True                         ' We've connected once...
     Else
-        If Not m_Bisque Is Nothing Then m_Bisque.Disconnect
-''        Set m_Bisque = Nothing
+        If Not m_SkyTele Is Nothing Then m_SkyTele.Disconnect
+''        Set m_SkyTele = Nothing
     End If
     
     Exit Property
@@ -439,8 +569,7 @@ Public Property Get DeclinationRate() As Double
         CheckConnected
         DeclinationRate = m_dDecDeltaRate
     Else
-        Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
-                "Property DeclinationRate" & MSG_NOT_IMPLEMENTED
+        DeclinationRate = 0#
     End If
     
 End Property
@@ -454,13 +583,13 @@ Public Property Let DeclinationRate(ByVal newVal As Double)
         CheckConnected
         m_dDecDeltaRate = newVal
         
-        m_Bisque.SetTracking m_Bisque.IsTracking, 0&, _
+        m_SkyTele.SetTracking m_SkyTele.IsTracking, 0&, _
                 (m_dRADeltaRate * 15# / SIDRATE), _
                 newVal
         m_Util.WaitForMilliseconds 2000                 ' Paramount requires this
     Else
         Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
-                "Property DeclinationRate" & MSG_NOT_IMPLEMENTED
+                "Property Let DeclinationRate" & MSG_NOT_IMPLEMENTED
     End If
 
 End Property
@@ -470,6 +599,20 @@ Public Property Get Description() As String
     Description = "Telescope controlled by TheSky"
     
 End Property
+
+Public Property Get DoesRefraction() As Boolean
+
+    DoesRefraction = True
+    
+End Property
+
+Public Property Let DoesRefraction(ByVal newVal As Boolean)
+
+    Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+            "Property Let DoesRefraction" & MSG_NOT_IMPLEMENTED
+    
+End Property
+
 
 Public Property Get DriverInfo() As String
 
@@ -490,11 +633,56 @@ Public Property Get DriverInfo() As String
         
 End Property
 
+Public Property Get DriverVersion() As String
+
+    DriverVersion = App.Major & "." & App.Minor
+    
+End Property
+
+Public Property Get EquatorialSystem() As EquatorialSystem
+
+    EquatorialSystem = equLocalTopocentric
+    
+End Property
+
 Public Property Get FocalLength() As Double
 
     Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
                 "Property FocalLength" & MSG_NOT_IMPLEMENTED
 
+End Property
+
+Public Property Get GuideRateDeclination() As Double
+
+    Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+                "Property GuideRateDeclination" & MSG_NOT_IMPLEMENTED
+
+End Property
+
+Public Property Get GuideRateRightAscension() As Double
+
+    Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+                "Property GuideRateRightAscension" & MSG_NOT_IMPLEMENTED
+
+End Property
+
+Public Property Get InterfaceVersion() As Integer
+
+    InterfaceVersion = 2
+    
+End Property
+
+Public Property Get IsPulseGuiding() As Boolean
+
+    If Not m_bPulseGuide Then
+        Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+                    "Property IsPulseGuiding" & MSG_NOT_IMPLEMENTED
+    Else
+        IsPulseGuiding = False                                        ' PulseGuide() is synchronous
+    End If
+
+
+    
 End Property
 
 Public Property Get Name() As String
@@ -516,8 +704,7 @@ Public Property Get RightAscensionRate() As Double
         CheckConnected
         RightAscensionRate = m_dRADeltaRate
     Else
-        Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
-                "Property RightAscensionRate" & MSG_NOT_IMPLEMENTED
+        RightAscensionRate = 0#
     End If
     
 End Property
@@ -530,28 +717,33 @@ Public Property Let RightAscensionRate(ByVal newVal As Double)
     If m_bTrackOffsets Then
         CheckConnected
         m_dRADeltaRate = newVal
-        m_Bisque.SetTracking m_Bisque.IsTracking, 0&, _
+        m_SkyTele.SetTracking m_SkyTele.IsTracking, 0&, _
                 (newVal * 15# / SIDRATE), _
                 m_dDecDeltaRate
-        m_Util.WaitForMilliseconds 5000                 ' Paramount requires this
+        m_Util.WaitForMilliseconds 5000                                 ' Paramount requires this
     Else
         Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
-                "Property RightAscensionRate" & MSG_NOT_IMPLEMENTED
+                "Property Let RightAscensionRate" & MSG_NOT_IMPLEMENTED
     End If
 
 End Property
 
-Public Property Get SiderealTime() As Double
+Public Property Get SideOfPier() As PierSide
 
     Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
-                "Property SiderealTIme" & MSG_NOT_IMPLEMENTED
+                "Property PierSide" & MSG_NOT_IMPLEMENTED
+    
+End Property
+
+Public Property Get SiderealTime() As Double
+
+    SiderealTime = m_SkyUtil.ComputeLocalSiderealTime
     
 End Property
 
 Public Property Get SiteElevation() As Double
 
-    Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
-                "Property SiteElevation" & MSG_NOT_IMPLEMENTED
+    SiteElevation = m_SkyChart.DocumentProperty(3)                          ' skDocProp_ElevationInMeters
 
 End Property
 
@@ -564,8 +756,7 @@ End Property
 
 Public Property Get SiteLatitude() As Double
 
-    Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
-                "Property SiteLatitude" & MSG_NOT_IMPLEMENTED
+    SiteLatitude = m_SkyChart.DocumentProperty(0)                           ' skDocProp_Latitude
     
 End Property
 
@@ -578,8 +769,7 @@ End Property
 
 Public Property Get SiteLongitude() As Double
 
-    Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
-                "Property SiteLongitude" & MSG_NOT_IMPLEMENTED
+    SiteLongitude = -m_SkyChart.DocumentProperty(1)                          ' skDocProp_ElevationInMeters
     
 End Property
 
@@ -595,7 +785,7 @@ Public Property Get Slewing() As Boolean
     Dim slewComplete As Boolean
     
     CheckConnected
-    If (Not m_bAbortSlew) And (Not (m_Bisque.IsSlewComplete = 1)) Then
+    If (Not m_bAbortSlew) And (Not (m_SkyTele.IsSlewComplete = 1)) Then
         '
         ' This adds settle time after we see that the scope has
         ' not moved one arcmin.
@@ -621,8 +811,11 @@ Public Property Get Slewing() As Boolean
                 '
                 ' *** THIS REALLY NEEDS FIXING IN THESKY X ***
                 '
-                If m_eTheSkyType = TheSkyX Then On Error Resume Next
-                lLastSlewError = m_Bisque.GetLastSlewError
+                If m_eTheSkyType = TheSkyX Then
+                    m_Util.WaitForMilliseconds 500                  ' Wild guess, may help this timing problem
+                    On Error Resume Next
+                End If
+                lLastSlewError = m_SkyTele.GetLastSlewError
                 If m_eTheSkyType = TheSkyX Then
                     If Err.Number <> 0 Then lLastSlewError = 0      ' *** TOTALLY BOGUS!!! **
                     On Error GoTo 0
@@ -692,14 +885,10 @@ End Property
 Public Property Get Tracking() As Boolean
 
     CheckConnected
-    If m_eTheSkyType = TheSkyX Then                 ' Hopefully temporary!!!
-        Tracking = True
+    If m_SkyTele.IsTracking = 0 Then
+        Tracking = False
     Else
-        If m_Bisque.IsTracking = 0 Then
-            Tracking = False
-        Else
-            Tracking = True
-        End If
+        Tracking = True
     End If
    
 End Property
@@ -708,14 +897,36 @@ Public Property Let Tracking(ByVal newVal As Boolean)
     Dim t As Long
     
     CheckConnected
-    If m_eTheSkyType = TheSkyX Then                 ' Hopefully temporary!!!
-        If newVal Then
-            t = 1&
-        Else
-            t = 0&
-        End If
-        m_Bisque.SetTracking t, 1&, 0#, 0#
+    If Not m_bCanSetTracking Then
+        Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+                    "Property Set Tracking" & MSG_NOT_IMPLEMENTED
     End If
+    If newVal Then
+        t = 1&
+    Else
+        t = 0&
+    End If
+    m_SkyTele.SetTracking t, 1&, 0#, 0#
+    
+End Property
+
+Public Property Get TrackingRate() As DriveRates
+
+    TrackingRate = driveSidereal
+
+End Property
+
+Public Property Let TrackingRate(ByVal newVal As DriveRates)
+
+    If newVal <> driveSidereal Then _
+        Err.Raise SCODE_PROP_RANGE_ERROR, ERR_SOURCE, MSG_PROP_RANGE_ERROR
+        
+End Property
+
+Public Property Get TrackingRates() As Collection
+
+    Set TrackingRates = New Collection
+    TrackingRates.Add (DriveRates.driveSidereal)
     
 End Property
 
@@ -736,9 +947,22 @@ Public Sub AbortSlew()
     
     CheckConnected
     m_bAbortSlew = True
-    m_Bisque.Abort
+    m_SkyTele.Abort
     
 End Sub
+
+Public Function AxisRates() As Collection
+
+    Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+                "Method AxisRates()" & MSG_NOT_IMPLEMENTED
+
+End Function
+
+Public Function CanMoveAxis(ByVal Axis As TelescopeAxes)
+
+    CanMoveAxis = False
+    
+End Function
 
 Public Sub CommandBlind(ByVal Command As String)
 
@@ -761,11 +985,26 @@ Public Function CommandString(ByVal Command As String) As String
 
 End Function
 
+Public Function DestinationSideOfPier(ByVal RightAscension As Double, _
+                                        ByVal Declination As Double) As PierSide
+
+    Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+                "Method DestinationSideOfPier()" & MSG_NOT_IMPLEMENTED
+
+End Function
+
 Public Sub FindHome()
 
     CheckConnected
-    m_Bisque.FindHome
+    m_SkyTele.FindHome
     
+End Sub
+
+Public Sub MoveAxis(ByVal Axis As TelescopeAxes, ByVal Rate As Double)
+
+    Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+                "Method MoveAxis()" & MSG_NOT_IMPLEMENTED
+
 End Sub
 
 Public Sub Park()
@@ -781,9 +1020,9 @@ Public Sub Park()
     ' but that seems like shaky ground.
     '
     CheckConnected
-    m_Bisque.Park
+    m_SkyTele.Park
     On Error GoTo PARK_DONE
-    Do While m_Bisque.IsConnected = 1 And m_Bisque.IsSlewComplete = 0
+    Do While m_SkyTele.IsConnected = 1 And m_SkyTele.IsSlewComplete = 0
         m_Util.WaitForMilliseconds 1000
     Loop
 PARK_DONE:
@@ -794,46 +1033,46 @@ Public Sub PulseGuide(ByVal Direction As GuideDirections, _
                                             ByVal Duration As Long)
 
     If Not m_bPulseGuide Then
-    Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
-                "Method PulseGuide()" & MSG_NOT_IMPLEMENTED
+        Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+                    "Method PulseGuide()" & MSG_NOT_IMPLEMENTED
     End If
     ' cdr try to implement pulseguide by using the SetTracking command
     CheckConnected
     If Duration > 10 Then
         Dim RaRate As Double, DecRate As Double
-        Dim rate As Double, dur As Long
+        Dim Rate As Double, dur As Long
         ' avoid short guide times by setting the guide time to 100 millisecs and reducing the rate
         ' try a maximum rate of 50% sidereal
         If Duration < 100 Then
             dur = 100
-            rate = 0.075 * Duration
+            Rate = 0.075 * Duration
         Else
             dur = Duration
-            rate = 7.5
+            Rate = 7.5
         End If
         Select Case Direction
         Case GuideDirections.guideNorth
-            DecRate = rate   ' in arc sec per sec
+            DecRate = Rate   ' in arc sec per sec
         Case GuideDirections.guideSouth
-            DecRate = -rate
+            DecRate = -Rate
         Case GuideDirections.guideEast
-            RaRate = rate      ' in arc sec per sec
+            RaRate = Rate      ' in arc sec per sec
         Case GuideDirections.guideWest
-            RaRate = -rate
+            RaRate = -Rate
         End Select
-        m_Bisque.SetTracking m_Bisque.IsTracking, 0&, RaRate, DecRate
+        m_SkyTele.SetTracking m_SkyTele.IsTracking, 0&, RaRate, DecRate
         SleepEx dur, True
         Select Case Direction
         Case GuideDirections.guideNorth, GuideDirections.guideSouth
             ' set rate to 0
-            m_Bisque.SetTracking m_Bisque.IsTracking, 0&, 0&, 0&
+            m_SkyTele.SetTracking m_SkyTele.IsTracking, 0&, 0&, 0&
         Case GuideDirections.guideEast, GuideDirections.guideWest
             ' turn tracking on
-            m_Bisque.SetTracking m_Bisque.IsTracking, 1&, 0&, 0&
+            m_SkyTele.SetTracking m_SkyTele.IsTracking, 1&, 0&, 0&
         End Select
     Else
-        ' turn guiding off
-        m_Bisque.SetTracking m_Bisque.IsTracking, 1&, 0&, 0&
+        ' turn guiding off (rbd ???)
+        m_SkyTele.SetTracking m_SkyTele.IsTracking, 1&, 0&, 0&
     End If
 
 End Sub
@@ -841,7 +1080,7 @@ End Sub
 Public Sub SetPark()
 
     CheckConnected
-    m_Bisque.SetParkPosition                ' Docs are incorrect
+    m_SkyTele.SetParkPosition                ' Docs are incorrect
 
 End Sub
 
@@ -912,6 +1151,20 @@ Public Sub SetupDialog()
     
 End Sub
 
+Public Sub SlewToAltAz(ByVal Azimuth As Double, ByVal Altitude As Double)
+
+    Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+                "Method SlewToAltAz()" & MSG_NOT_IMPLEMENTED
+    
+End Sub
+
+Public Sub SlewToAltAzAsync(ByVal Azimuth As Double, ByVal Altitude As Double)
+
+    Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+                "Method SlewToAltAzAsync()" & MSG_NOT_IMPLEMENTED
+    
+End Sub
+
 Public Sub SlewToCoordinates(ByVal RightAscension As Double, _
                                     ByVal Declination As Double)
 
@@ -937,12 +1190,12 @@ Public Sub SlewToTarget()
     
     CheckConnected
     m_bSlewCompleted = False
-    m_Bisque.SlewToRaDec m_dTgtRA, m_dTgtDec, "ASCOM target"
-    Do While Not m_Bisque.IsSlewComplete = 1
+    m_SkyTele.SlewToRaDec m_dTgtRA, m_dTgtDec, "ASCOM target"
+    Do While Not m_SkyTele.IsSlewComplete = 1
         m_Util.WaitForMilliseconds 1000
     Loop
     m_bSlewCompleted = True
-    lLastSlewError = m_Bisque.GetLastSlewError
+    lLastSlewError = m_SkyTele.GetLastSlewError
     If lLastSlewError <> 0 Then
         Err.Raise SCODE_SLEW_FAILURE, ERR_SOURCE, _
             MSG_SLEW_FAILURE & lLastSlewError
@@ -966,8 +1219,15 @@ Public Sub SlewToTargetAsync()
     CheckConnected
     m_bSlewCompleted = False
     m_lAsyncEndTix = GetTickCount() + (CLng(m_iSettleTime) * 1000&)
-    m_Bisque.SlewToRaDec m_dTgtRA, m_dTgtDec, "ASCOM target"
+    m_SkyTele.SlewToRaDec m_dTgtRA, m_dTgtDec, "ASCOM target"
     If m_bSlewDelay Then WaitNoEvents 4000              ' (see note above)
+    
+End Sub
+
+Public Sub SyncToAltAz(ByVal Azimuth As Double, ByVal Altitude As Double)
+
+    Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+                "Method SyncToAltAz()" & MSG_NOT_IMPLEMENTED
     
 End Sub
 
@@ -985,7 +1245,7 @@ Public Sub SyncToTarget()
     If m_bInhibitSync Then Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
                 "Cannot sync because TPOINT is in use."
     CheckConnected
-    m_Bisque.Sync m_dTgtRA, m_dTgtDec, "ASCOM target"
+    m_SkyTele.Sync m_dTgtRA, m_dTgtDec, "ASCOM target"
 
 End Sub
 
@@ -1005,7 +1265,7 @@ End Sub
 '
 Private Sub CheckConnected()
 
-    If Not m_Bisque.IsConnected = 1 Then _
+    If Not m_SkyTele.IsConnected = 1 Then _
         Err.Raise SCODE_NOT_CONNECTED, _
                     ERR_SOURCE, _
                     MSG_NOT_CONNECTED
@@ -1017,11 +1277,11 @@ Private Sub GetAltAz()
     CheckConnected
     t = GetTickCount()
     If t > m_lNextAzAltTix Then
-        Call m_Bisque.GetAzAlt
+        Call m_SkyTele.GetAzAlt
         m_lNextAzAltTix = t + POLL_TIX
     End If
-    m_dAz = m_Bisque.dAz
-    m_dAlt = m_Bisque.dAlt
+    m_dAz = m_SkyTele.dAz
+    m_dAlt = m_SkyTele.dAlt
     
 End Sub
 
@@ -1045,10 +1305,10 @@ Private Sub GetAndFixRaDec()
         '
         ' Poll TheSky
         '
-        Call m_Bisque.GetRaDec
+        Call m_SkyTele.GetRaDec
         m_lNextRaDecTix = t + POLL_TIX
-        m_dRA = m_Bisque.dRA
-        m_dDec = m_Bisque.dDec
+        m_dRA = m_SkyTele.dRA
+        m_dDec = m_SkyTele.dDec
         '
         ' Patch crazy coordinates
         '

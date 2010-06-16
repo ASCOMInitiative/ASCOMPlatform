@@ -1,12 +1,16 @@
 //========================================================================
 //
-// TITLE:		DRIVERINTERFACE.CPP
+// TITLE:		DriverInterface.cpp
 //
-// FACILITY:	StarryNight V3Plug-In DLL ASCOM Telescope Control
+// FACILITY:	Telescope API for TheSky 5/6/X
 //
-// ABSTRACT:	
+// ABSTRACT:	Provides COM calls to the Telescope driver, and various COM
+//				related functions. This is "ATL-free" for lightness of
+//				weight, so you see "bare-metal COM" here. This was a 
+//				conscious design choice.
 //
-// USING:		
+// USING:		Global Interface Table to marshal driver interface across 
+//				threads. See http://msdn.microsoft.com/en-us/library/ms678517
 //
 // ENVIRONMENT:	Microsoft Windows Windows 95/98/NT/2000
 //				Developed under Microsoft Visual C++ Version 6.0
@@ -45,6 +49,10 @@
 //						disconnecting the scope, the call to AbortSlew()
 //						comes in on the main thread, while other calls 
 //						come in on a worker thread. 
+// 10-Jun-10	rbd		5.0.2 - Can't get the driver to release! Switch
+//						to using the Global Interface Table as a cleaner
+//						way to marshal across threads. Prevent recursive
+//						errors in TermScope() which is called by drvFail().
 //========================================================================
 
 /* #include "AscomScope.h" */
@@ -61,10 +69,11 @@ static bool get_bool(OLECHAR *name);
 static void set_bool(OLECHAR *name, bool val);
 static void switchThreadIf();
 
-static IDispatch *_p_DrvDisp = NULL;		// [sentinel]
-static LPSTREAM _p_MarshalStream;			// Marshaled interface as stream (via CoMarshalInterThreadInterfaceInStream())
-static bool bSyncSlewing = false;			// True if scope is doing a sync slew
-static DWORD dCurrIntfcThreadId;			// ID of thread on which the interface is currently marshalled
+static IDispatch *_p_DrvDisp = NULL;							// [sentinel] Pointer to driver interface
+static IGlobalInterfaceTable *_p_GIT;							// Pointer to Global Interface Table interface
+static DWORD dwIntfcCookie;										// Driver interface cookie for GIT
+static DWORD dCurrIntfcThreadId;								// ID of thread on which the interface is currently marshalled
+static bool bSyncSlewing = false;								// True if scope is doing a sync slew
 
 // -------------
 // InitDrivers()
@@ -76,7 +85,7 @@ bool InitDrivers(void)
 {
 	DWORD dwVer;
 	bool bResult = true;
-	static bool bInitDone = false;			// Exec this only once
+	static bool bInitDone = false;								// Exec this only once
 
 	if(!bInitDone)
 	{
@@ -88,6 +97,12 @@ bool InitDrivers(void)
 				drvFail("Wrong version of OLE", NULL, true);
 			if(FAILED(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED)))
 				drvFail("Failed to start OLE", NULL, true);
+			if(FAILED(CoCreateInstance(CLSID_StdGlobalInterfaceTable,
+						NULL,
+						CLSCTX_INPROC_SERVER,
+						IID_IGlobalInterfaceTable,
+						(void **)&_p_GIT)))
+				drvFail("Failed to connect to Global Interface Table", NULL, true);
 			bInitDone = true;
 		}
 		__except(EXCEPTION_EXECUTE_HANDLER)
@@ -118,7 +133,7 @@ short InitScope(void)
 	DWORD dwType;
 
 	__try {
-		_bScopeActive = false;						// Assume failure
+		_bScopeActive = false;									// Assume failure
 
 		//
 		// Retrieve the ProgID of the driver we're to use. Get it into 
@@ -180,27 +195,29 @@ short InitScope(void)
 		// Get the marshalled interface pointer for later possible thread switching
 		//
 		dCurrIntfcThreadId = GetCurrentThreadId();
-		if(FAILED(CoMarshalInterThreadInterfaceInStream(IID_IDispatch, _p_DrvDisp, &_p_MarshalStream)))
-			drvFail(
-				"Failed to get cross-thread marshal stream.",
-				NULL, true);
-
+		if(FAILED(_p_GIT->RegisterInterfaceInGlobal(
+				_p_DrvDisp,
+				IID_IDispatch,
+				&dwIntfcCookie)))
+			drvFail("Failed to register driver interface in GIT", NULL, true);
 		//
 		// We now need to connect the scope. To do this, we set the 
 		// Connected property to TRUE.
 		//
 		set_bool(L"Connected", true);
-
+// THIS WORKS
+//dCurrIntfcThreadId = 0;
+//TermScope(false);
 		//
 		// At this point we should be able to call into the ASCOM scope
 		// driver through its IDIspatch. Check to see if things are OK. 
 		// We call GetName, because the driver MUST support that, then
 		// grab the capabilities we need (these also MUST be supported).
 		//
-		_szScopeName = GetName();					// Indicator label/name
-		_bScopeCanSync = GetCanSync();				// Can it sync?
-		_bScopeCanSlew = GetCanSlew();				// Can it slew at all?	
-		_bScopeCanSlewAsync = GetCanSlewAsync();	// Can it slew asynchronously?
+		_szScopeName = GetName();								// Indicator label/name
+		_bScopeCanSync = GetCanSync();							// Can it sync?
+		_bScopeCanSlew = GetCanSlew();							// Can it slew at all?	
+		_bScopeCanSlewAsync = GetCanSlewAsync();				// Can it slew asynchronously?
 
 		//
 		// Now we verify that there is a scope out there. We first try to
@@ -211,19 +228,19 @@ short InitScope(void)
 		// support it. 
 		//
 		__try {
-			_bScopeHasEqu = false;		// Assume we cannot get RA/Dec
+			_bScopeHasEqu = false;								// Assume we cannot get RA/Dec
 			GetRightAscension();
-			_bScopeHasEqu = true;		// We can get RA/Dec
+			_bScopeHasEqu = true;								// We can get RA/Dec
 		}
 		__except(EXCEPTION_EXECUTE_HANDLER)
 		{
 			if(GetExceptionCode() != EXCEP_NOTIMPL)
-				ABORT;		// Some real error, has been alerted
+				ABORT;											// Some real error, has been alerted
 		}
-		if(!_bScopeHasEqu)			// If we don't have Equatorial
+		if(!_bScopeHasEqu)										// If we don't have Equatorial
 		{
 			__try {
-				GetAzimuth();		// Then we must have Alt/Az!
+				GetAzimuth();									// Then we must have Alt/Az!
 			}
 			__except(EXCEPTION_EXECUTE_HANDLER)
 			{
@@ -235,7 +252,7 @@ short InitScope(void)
 						   "The selected telescope does not support either RA/Dec or Alt/Az readout. Cannot continue.",
 						   _szAlertTitle,  (MB_OK | MB_ICONSTOP | MB_SETFOREGROUND));
 
-				ABORT;		// We've had it in any case
+				ABORT;											// We've had it in any case
 
 			}
 		}
@@ -256,7 +273,7 @@ short InitScope(void)
 		//
 		// Done!
 		//
-		_bScopeActive = true;			// We're off and running!
+		_bScopeActive = true;									// We're off and running!
 	}
 	__except(EXCEPTION_EXECUTE_HANDLER)
 	{
@@ -271,7 +288,7 @@ short InitScope(void)
 // TermScope
 // ---------
 //
-void TermScope(void)
+void TermScope(bool fatal)
 {
 	OLECHAR *name = L"Connected";
 	DISPID dispid;
@@ -280,17 +297,19 @@ void TermScope(void)
 	VARIANTARG rgvarg[1];
 	EXCEPINFO excep;
 	VARIANT vRes;
-	short iRes = 0;						// Assume success (our retval)
+	short iRes = 0;												// Assume success (our retval)
 	HRESULT hr;
 
-	if(_p_DrvDisp != NULL)				// Just in case! (see termPlugin())
+	if(_p_DrvDisp != NULL)										// Just in case! (see termPlugin())
 	{
 		switchThreadIf();
 
 		//
 		// We now need to unconnect the scope. To do this, we set the 
-		// Connected property to FALSE. Property-put calls employ a hack
-		// as described in Brockschmidt. Don't ask...
+		// Connected property to FALSE. THe use of !fatal in the calls
+		// to drvFail assues that drvFail() will not recursively call 
+		// US because its call to TermScope() passses true, while all
+		// others pass false.
 		//
 		if(FAILED(_p_DrvDisp->GetIDsOfNames(
 			IID_NULL, 
@@ -300,13 +319,13 @@ void TermScope(void)
 			&dispid)))
 			drvFail(
 				"The ASCOM scope driver is missing the Connected property.",
-				NULL, true);
+				NULL, !fatal);
 
 		rgvarg[0].vt = VT_BOOL;
 		rgvarg[0].boolVal = VARIANT_FALSE;
 		dispParms.cArgs = 1;
 		dispParms.rgvarg = rgvarg;
-		dispParms.cNamedArgs = 1;					// PropPut kludge
+		dispParms.cNamedArgs = 1;								// PropPut kludge
 		dispParms.rgdispidNamedArgs = &didPut;
 		if(FAILED(hr = _p_DrvDisp->Invoke(
 			dispid,
@@ -316,14 +335,16 @@ void TermScope(void)
 			&dispParms, 
 			&vRes,
 			&excep, NULL)))
-			drvFail("the Connected = False failed internally.", &excep, true);
+			drvFail("the Connected = False failed internally.", &excep, !fatal);
 
-		_p_DrvDisp->Release();			// Release instance of the Driver
-		_p_DrvDisp = NULL;				// So won't happen again in PROCESS_DETACH
+		_p_GIT->RevokeInterfaceFromGlobal(dwIntfcCookie);		// We're done with this driver/object
+
+		_p_DrvDisp->Release();									// Release instance of the driver
+		_p_DrvDisp = NULL;										// So won't happen again in PROCESS_DETACH
 	}
 	if(_szScopeName != NULL)
-		delete[] _szScopeName;			// Free this string
-	_szScopeName = NULL;				// [sentinel]
+		delete[] _szScopeName;									// Free this string
+	_szScopeName = NULL;										// [sentinel]
 	_bScopeActive = false;
 
 }
@@ -503,11 +524,11 @@ bool IsSlewing(void)
 	EXCEPINFO excep;
 	VARIANT vRes;
 
-	if(!_bScopeActive)			// If scope not even active
-		return(false);			// Can't be slewing
+	if(!_bScopeActive)											// If scope not even active
+		return(false);											// Can't be slewing
 
-	if(!_bScopeCanSlewAsync)		// If can't do async slew, or never slewed
-		return(bSyncSlewing);		// Use our sync slewing flag (never slewed = false)
+	if(!_bScopeCanSlewAsync)									// If can't do async slew, or never slewed
+		return(bSyncSlewing);									// Use our sync slewing flag (never slewed = false)
 
 	switchThreadIf();
 
@@ -563,13 +584,13 @@ short SlewScope(double dRA, double dDec)
 	VARIANTARG rgvarg[2];
 	EXCEPINFO excep;
 	VARIANT vRes;
-	short iRes = 0;				// Assume success (our retval)
+	short iRes = 0;												// Assume success (our retval)
 	HRESULT hr;
 
-	if(!_bScopeActive)			// No scope hookup?
+	if(!_bScopeActive)											// No scope hookup?
 	{
-		bSyncSlewing = false;		// Cannot be sync-slewing!
-		return(-1);			// Forget this
+		bSyncSlewing = false;									// Cannot be sync-slewing!
+		return(-1);												// Forget this
 	}
 
 	//
@@ -603,7 +624,7 @@ short SlewScope(double dRA, double dDec)
 		//
 		// Start the slew.
 		//
-		rgvarg[0].vt = VT_R8;	// Arg order is R->L
+		rgvarg[0].vt = VT_R8;									// Arg order is R->L
 		rgvarg[0].dblVal = dDec;
 		rgvarg[1].vt = VT_R8;
 		rgvarg[1].dblVal = dRA;
@@ -611,7 +632,7 @@ short SlewScope(double dRA, double dDec)
 		dispParms.rgvarg = rgvarg;
 		dispParms.cNamedArgs = 0;
 		dispParms.rgdispidNamedArgs =NULL;
-		if(!_bScopeCanSlewAsync) bSyncSlewing = true;	// Internal flag
+		if(!_bScopeCanSlewAsync) bSyncSlewing = true;			// Internal flag
 		if(FAILED(hr = _p_DrvDisp->Invoke(
 			dispid,
 			IID_NULL, 
@@ -703,11 +724,11 @@ short SyncScope(double dRA, double dDec)
 	VARIANTARG rgvarg[2];
 	EXCEPINFO excep;
 	VARIANT vRes;
-	short iRes = 0;					// Assume success (our retval)
+	short iRes = 0;												// Assume success (our retval)
 	HRESULT hr;
 
-	if(!_bScopeActive)				// No scope hookup?
-		return(-1);				// Forget this
+	if(!_bScopeActive)											// No scope hookup?
+		return(-1);												// Forget this
 
 	__try
 		{
@@ -825,16 +846,16 @@ short ConfigScope(void)
 	DISPID dispid;
 	DISPPARAMS dispParms;
 	EXCEPINFO excep;
-	VARIANTARG rgvarg[1];		// Chooser.Choose(ProgID)
+	VARIANTARG rgvarg[1];										// Chooser.Choose(ProgID)
 	VARIANT vRes;
 	HRESULT hr;
 	DWORD dwDisp, dwType, dwSize;
 	char szProgID[256];
-	short iRes = 0;				// Assume success (our retval)
-	IDispatch *pChsrDsp = NULL;		// [sentinel]
-	char *cp = NULL;			// [sentinel]
-	HKEY hKey = (HKEY)INVALID_HANDLE_VALUE;	// [sentinel]
-	BSTR bsProgID = NULL;			// [sentinel]
+	short iRes = 0;												// Assume success (our retval)
+	IDispatch *pChsrDsp = NULL;									// [sentinel]
+	char *cp = NULL;											// [sentinel]
+	HKEY hKey = (HKEY)INVALID_HANDLE_VALUE;						// [sentinel]
+	BSTR bsProgID = NULL;										// [sentinel]
 
 	__try {
 		
@@ -876,7 +897,7 @@ short ConfigScope(void)
 		// If there, call the chooser to start with that driver initially
 		// selected in its list.
 		//
-		bsProgID = SysAllocString(L"");				// Assume no current ProgID
+		bsProgID = SysAllocString(L"");							// Assume no current ProgID
 		if(RegOpenKeyEx(OUR_REGISTRY_BASE, 
 				OUR_REGISTRY_AREA,
 				0,
@@ -896,7 +917,7 @@ short ConfigScope(void)
 			}
 			RegCloseKey(hKey);
 		}
-		hKey = (HKEY)INVALID_HANDLE_VALUE;			// [sentinel]
+		hKey = (HKEY)INVALID_HANDLE_VALUE;						// [sentinel]
 
 			//
 			// Call the Choose() method with our ProgID string
@@ -930,9 +951,9 @@ short ConfigScope(void)
 		// Now write the chosen driver's ProgID into our registry area.
 		// This creates the registry area if needed.
 		//
-		if(SysStringLen(vRes.bstrVal) > 0)		// Chooser dialog not cancelled
+		if(SysStringLen(vRes.bstrVal) > 0)						// Chooser dialog not cancelled
 		{
-			cp = uni_to_ansi(vRes.bstrVal);	// Get ProgID in ANSI
+			cp = uni_to_ansi(vRes.bstrVal);						// Get ProgID in ANSI
 
 			if(RegCreateKeyEx(OUR_REGISTRY_BASE, 
 					  OUR_REGISTRY_AREA,
@@ -1029,8 +1050,8 @@ static double get_double(OLECHAR *name)
 				     &excep, 
 				     NULL)))
 	{
-		if(excep.scode == EXCEP_NOTIMPL)			// Optional
-			NOTIMPL;								// Resignal silently
+		if(excep.scode == EXCEP_NOTIMPL)						// Optional
+			NOTIMPL;											// Resignal silently
 		else
 		{
 			cp = uni_to_ansi(name);
@@ -1041,7 +1062,7 @@ static double get_double(OLECHAR *name)
 		}
 	}
 
-	return(result.dblVal);							// Return long result
+	return(result.dblVal);										// Return long result
 }
 
 // ------------
@@ -1104,8 +1125,8 @@ static void set_double(OLECHAR *name, double val)
 				     &excep, 
 				     NULL)))
 	{
-		if(excep.scode == EXCEP_NOTIMPL)			// Optional
-			NOTIMPL;								// Resignal silently
+		if(excep.scode == EXCEP_NOTIMPL)						// Optional
+			NOTIMPL;											// Resignal silently
 		else
 		{
 			cp = uni_to_ansi(name);
@@ -1172,8 +1193,8 @@ static bool get_bool(OLECHAR *name)
 				     &excep, 
 				     NULL)))
 	{
-		if(excep.scode == EXCEP_NOTIMPL)	// Optional
-			NOTIMPL;			// Resignal silently
+		if(excep.scode == EXCEP_NOTIMPL)						// Optional
+			NOTIMPL;											// Resignal silently
 		else
 		{
 			cp = uni_to_ansi(name);
@@ -1184,7 +1205,7 @@ static bool get_bool(OLECHAR *name)
 		}
 	}
 
-	return(result.boolVal == VARIANT_TRUE);			// Return C++ bool result
+	return(result.boolVal == VARIANT_TRUE);						// Return C++ bool result
 }
 
 
@@ -1232,7 +1253,7 @@ static void set_bool(OLECHAR *name, bool val)
 	dispparms.cArgs = 1;
 	dispparms.rgvarg = rgvarg;
 	ppdispid[0] = DISPID_PROPERTYPUT;
-	dispparms.cNamedArgs = 1;						// PropPut kludge
+	dispparms.cNamedArgs = 1;									// PropPut kludge
 	dispparms.rgdispidNamedArgs = ppdispid;
 	if(FAILED(_p_DrvDisp->Invoke(
 			dispid,
@@ -1243,8 +1264,8 @@ static void set_bool(OLECHAR *name, bool val)
 			&result,
 			&excep, NULL)))
 	{
-		if(excep.scode == EXCEP_NOTIMPL)			// Optional
-			NOTIMPL;								// Resignal silently
+		if(excep.scode == EXCEP_NOTIMPL)						// Optional
+			NOTIMPL;											// Resignal silently
 		else
 		{
 			cp = uni_to_ansi(name);
@@ -1259,7 +1280,7 @@ static void set_bool(OLECHAR *name, bool val)
 
 //
 // Gets the IDispatch interface on a new thread from a previously obtained
-// marshal stream, then gets a new interface marskaling stream on the new
+// marshal stream, then gets a new interface marshaling stream on the new
 // thread (remembering the thread on which the interface is currently
 // marshaled). This may be repeatedly called to wsitch the IDispatch to
 // the scope from one thread to another. 
@@ -1268,21 +1289,14 @@ static void switchThreadIf()
 {
 	if (GetCurrentThreadId() != dCurrIntfcThreadId)
 	{
-		LPVOID ppv;
-
-		if(FAILED(CoGetInterfaceAndReleaseStream(_p_MarshalStream, IID_IDispatch, &ppv)))
-			drvFail(
-				"Failed to marshal driver interface to new thread.",
-				NULL, true);
-
-		_p_DrvDisp = (IDispatch *)ppv;
+		IDispatch *pTemp;
 
 		dCurrIntfcThreadId = GetCurrentThreadId();
-		if(FAILED(CoMarshalInterThreadInterfaceInStream(IID_IDispatch, _p_DrvDisp, &_p_MarshalStream)))
-			drvFail(
-				"Failed to get new cross-thread marshal stream.",
-				NULL, true);
-
+		if(FAILED(_p_GIT->GetInterfaceFromGlobal(dwIntfcCookie, 
+						IID_IDispatch, 
+						(void **)&pTemp)))
+			drvFail("Failed to get interface from GIT in new thread", NULL, true);
+		//_p_DrvDisp->Release();									// Required to prevent refcount buildup
+		_p_DrvDisp = pTemp;
 	}
-
 }

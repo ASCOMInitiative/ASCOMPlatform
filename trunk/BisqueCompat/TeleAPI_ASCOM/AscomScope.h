@@ -29,7 +29,7 @@ extern bool _bScopeCanSlewAsync;
 extern bool _bScopeCanSync;
 extern bool InitDrivers(void);
 extern short InitScope(void);
-extern void TermScope(void);
+extern void TermScope(bool);
 extern short ConfigScope(void);
 extern bool GetCanSlew(void);
 extern bool GetCanSlewAsync(void);
