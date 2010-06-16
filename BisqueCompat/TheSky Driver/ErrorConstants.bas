@@ -28,6 +28,7 @@ Attribute VB_Name = "ErrorConstants"
 ' 27-Jun-00 rbd     Initial edit
 ' 13-Jan-01 rbd     Changed not implemented message
 ' 09-Aug-03 rbd     Removed references to RAS from messages.
+' 16-Jun-10 rbd     Add ?not yet set" message (Target Coordinates)
 '---------------------------------------------------------------------
 
 Option Explicit
@@ -43,7 +44,10 @@ Public Const MSG_PROP_RANGE_ERROR As String = _
 Public Const SCODE_NOT_CONNECTED As Long = vbObjectError + &H402
 Public Const MSG_NOT_CONNECTED As String = _
     "Not connected to TheSky."
-Public Const SCODE_SLEW_FAILURE As Long = vbObjectError + &H403
+Public Const SCODE_NOT_SET As Long = vbObjectError + &H403
+Public Const MSG_NOT_SET As String = _
+    " has not yet been set."""
+Public Const SCODE_SLEW_FAILURE As Long = vbObjectError + &H404
 Public Const MSG_SLEW_FAILURE As String = _
     "TheSky reports slew failure code "
 
