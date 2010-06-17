@@ -346,10 +346,7 @@ Private Sub cmdOK_Click()
     
     Set m_Profile = New DriverHelper.Profile
     m_Profile.DeviceType = "Telescope"
-    '
-    ' Delete old TheSky6 value, will new new TheSkyType now
-    '
-    m_Profile.DeleteValue ID, "TheSky6"
+    
     Select Case m_eTheSkyType
         Case TheSky5: buf = "TheSky5"
         Case TheSky6: buf = "TheSky6"

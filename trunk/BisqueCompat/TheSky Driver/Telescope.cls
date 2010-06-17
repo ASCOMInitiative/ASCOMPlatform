@@ -151,6 +151,8 @@ Attribute VB_Description = "ASCOM Telescope driver for Software Bisque TheSky"
 '                   TargetXxx. AxisRates() returns empty Collection not error.
 '                   Conform test passed, but Tracking and Tracking offsets
 '                   not tested.
+' 17-Jun-10 rbd     5.2.4 - Fix disconnect by calling the unsupported LocalServer
+'                   member on TheSkyX.exe. Temporary fix!
 '---------------------------------------------------------------------
 
 Option Explicit
@@ -508,6 +510,7 @@ End Property
 Public Property Let Connected(ByVal newVal As Boolean)
     Dim buf As String
     Dim wasTracking As Boolean
+    Dim unsupSkyTele As Object
     
     If newVal Then
         On Error GoTo NO_SKY
@@ -547,8 +550,19 @@ Public Property Let Connected(ByVal newVal As Boolean)
         If m_bFindHome And Not m_bFirstConn Then m_SkyTele.FindHome
         m_bFirstConn = True                         ' We've connected once...
     Else
-        If Not m_SkyTele Is Nothing Then m_SkyTele.Disconnect
-''        Set m_SkyTele = Nothing
+        If Not m_SkyTele Is Nothing Then
+'' --------------- TEMPORARY FIX FOR BROKEN DISCONNECT IN ADAPTOR --------------------
+            If m_eTheSkyType = TheSkyX Then
+                Set unsupSkyTele = CreateObject("TheSkyX.sky6RASCOMTele")
+                unsupSkyTele.Disconnect
+                m_Util.WaitForMilliseconds 1000
+                Set unsupSkyTele = Nothing
+            Else
+'' -----------------------------------------------------------------------------------
+                m_SkyTele.Disconnect
+            End If
+        End If
+''      Set m_SkyTele = Nothing
     End If
     
     Exit Property
@@ -1034,13 +1048,26 @@ Public Sub Park()
     ' I suppose I could rely on just waiting for IsConnected to go to 0,
     ' but that seems like shaky ground.
     '
+    ' But this is different in TheSkyX. It stays connected but you cannot
+    ' tell if it is really parked. So, to prevent surprises to clients who
+    ' expect the behavior to stay the same, we'll disconnect after it
+    ' stops slewing, with some waiting for good measure.
+    '
     CheckConnected
     m_SkyTele.Park
-    On Error GoTo PARK_DONE
-    Do While m_SkyTele.IsConnected = 1 And m_SkyTele.IsSlewComplete = 0
-        m_Util.WaitForMilliseconds 1000
-    Loop
+    If m_eTheSkyType = TheSkyX Then
+        m_Util.WaitForMilliseconds 5000
+        While Me.Slewing
+            m_Util.WaitForMilliseconds 5000
+        Wend
+        Me.Connected = False
+    Else
+        On Error GoTo PARK_DONE
+        Do While m_SkyTele.IsConnected = 1 And m_SkyTele.IsSlewComplete = 0
+            m_Util.WaitForMilliseconds 1000
+        Loop
 PARK_DONE:
+    End If
 
 End Sub
 
