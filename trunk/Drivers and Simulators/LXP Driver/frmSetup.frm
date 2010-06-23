@@ -182,6 +182,7 @@ Attribute VB_Exposed = False
 ' 07-Mar-03 rbd     2.2.0 - Add encoder resolution items
 ' 05-Jan-04 rbd     3.0.2 - Add dynamic COM port discovery to selector
 ' 24-Nov-04 rbd     4.0.2 - COM Ports to 16
+' 24-Jun-10 fq      5.5.0 - Fix COM port handling
 '---------------------------------------------------------------------
 
 
@@ -209,6 +210,8 @@ Private Const HWND_TOPMOST          As Long = -1
 Private Const HWND_NOTOPMOST        As Long = -2
 
 Private Const SW_SHOWNORMAL         As Long = 1
+
+Private Const COM_MAXPORTS          As Long = 16
 
 Public m_Profile As DriverHelper.Profile
 Public m_DriverID As String
@@ -264,16 +267,27 @@ Private Declare Function GetDefaultCommConfig Lib "kernel32" Alias "GetDefaultCo
                 lpCC As COMMCONFIG, _
                 lpdwSize As Long) As Long
 
-
 Private Sub Form_Load()
     Dim port As Long
     Dim buf As String
+    Dim I As Long
     
+    ' Get current port
     buf = m_Profile.GetValue(m_DriverID, "COM Port")
-    If buf = "" Then buf = "1"              ' Default COM1
+    If buf = "" Then buf = "1"                         ' Default COM1
     port = CInt(buf)
-    lbPort.ListIndex = port - 1             ' Select current port
     
+    ' Populate listbox
+    lbPort.Clear
+    For I = 1 To COM_MAXPORTS
+        If PortExists("COM" & I) Then
+            lbPort.AddItem "COM" & I
+            If I = port Then
+                lbPort.ListIndex = lbPort.NewIndex     ' Select current port
+            End If
+        End If
+    Next I
+
     Me.Caption = App.Title & " Setup"
     lblDriverInfo = "Version " & App.Major & "." & _
                 App.Minor & "." & App.Revision
@@ -290,20 +304,10 @@ Private Sub Form_Load()
 
 End Sub
 
-Private Sub lbPort_DropDown()
-     Dim I As Long
-     lbPort.Clear
-     For I = 1 To 16
-         If PortExists("COM" & I) Then
-            lbPort.AddItem "COM" & I
-         End If
-     Next I
-End Sub
-
 Private Sub cmdOK_Click()
     Dim buf As String
     
-    m_Profile.WriteValue m_DriverID, "COM Port", CStr(lbPort.ListIndex + 1)
+    m_Profile.WriteValue m_DriverID, "COM Port", Mid(lbPort.Text, 4)
     m_Profile.WriteValue m_DriverID, "RA Resolution", txtRARes.Text
     m_Profile.WriteValue m_DriverID, "Dec Resolution", txtDecRes.Text
     
