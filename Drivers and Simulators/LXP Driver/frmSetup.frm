@@ -182,7 +182,7 @@ Attribute VB_Exposed = False
 ' 07-Mar-03 rbd     2.2.0 - Add encoder resolution items
 ' 05-Jan-04 rbd     3.0.2 - Add dynamic COM port discovery to selector
 ' 24-Nov-04 rbd     4.0.2 - COM Ports to 16
-' 24-Jun-10 fq      5.5.0 - Fix COM port handling
+' 24-Jun-10 fq      5.5.1 - Fix COM port handling
 '---------------------------------------------------------------------
 
 
