@@ -10,7 +10,6 @@ HelpFile=""
 NoControlUpgrade=1
 Title="LXP Driver"
 ExeName32="LXP Driver.dll"
-Path32="obj"
 Command32=""
 Name="LXP"
 HelpContextID="0"

@@ -4,8 +4,8 @@
 ;
 [Setup]
 AppName=ASCOM LXP Telescope Driver
-AppVerName=ASCOM LXP Telescope Driver 5.0.1
-AppVersion=5.0.1
+AppVerName=ASCOM LXP Telescope Driver 5.5.1
+AppVersion=5.5.1
 AppPublisher=Bob Denny <rdenny@dc3.com>
 AppPublisherURL=mailto:rdenny@dc3.com
 AppSupportURL=http://tech.groups.yahoo.com/group/ASCOM-Talk/
@@ -37,9 +37,9 @@ Name: source; Description: Install the Source files; Flags: unchecked
 
 [Files]
 ; regserver flag only if native COM, not .NET
-Source: "D:\Astro Projects\ASCOM Platform 5 Drivers\LXP Driver\LXP Driver.dll"; DestDir: "{app}" ;AfterInstall: RegASCOM(); Flags: regserver
+Source: "LXP Driver.dll"; DestDir: "{app}" ;AfterInstall: RegASCOM(); Flags: regserver
 ; Optional source files (COM and .NET aware)
-Source: "D:\Astro Projects\ASCOM Platform 5 Drivers\LXP Driver\*"; Excludes: *.zip,*.exe,*.dll, \bin\*, \obj\*; DestDir: "{app}\Source\LXP Driver"; Tasks: source; Flags: recursesubdirs
+Source: "*"; Excludes: *.exe, *.exp, *.lib, LXP Driver.dll; DestDir: "{app}\Source\LXP Driver"; Tasks: source; Flags: recursesubdirs
 ; TODO: Add other files needed by your driver here (add subfolders above)
 
 [CODE]
@@ -57,7 +57,7 @@ begin
    try               // Will catch all errors including missing reg data
       H := CreateOLEObject('DriverHelper.Util');  // Assure both are available
       H2 := CreateOleObject('DriverHelper2.Util');
-      if ((H2.PlatformVersion >= 5.0) and (H2.PlatformVersion < 6.0)) then
+      if (Copy(H2.PlatformVersion, 1, 1) = '5') then
          Result := TRUE;
    except
    end;
