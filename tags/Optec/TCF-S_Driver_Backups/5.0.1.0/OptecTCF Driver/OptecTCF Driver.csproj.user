@@ -1,0 +1,14 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <StartAction>Program</StartAction>
+    <StartProgram>C:\Windows\SysWOW64\wscript.exe</StartProgram>
+    <StartArguments>Test.js</StartArguments>
+    <StartWorkingDirectory>D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\OptecTCF Driver\OptecTCF Driver\</StartWorkingDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <StartProgram>C:\Windows\SysWOW64\wscript.exe</StartProgram>
+    <StartWorkingDirectory>D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\OptecTCF Driver\OptecTCF Driver\</StartWorkingDirectory>
+    <StartArguments>Test.js</StartArguments>
+    <StartAction>Program</StartAction>
+  </PropertyGroup>
+</Project>
