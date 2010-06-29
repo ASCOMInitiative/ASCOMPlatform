@@ -2,7 +2,7 @@
 // <summary>Defines the ITrackingRates Interface</summary>
 //-----------------------------------------------------------------------
 using System;
-namespace ASCOM.Interfaces
+namespace ASCOM.Interface
 {
     /// <summary>
     /// Defines the ITrackingRates Interface
@@ -12,6 +12,6 @@ namespace ASCOM.Interfaces
         int Count { get; }
         void Dispose();
         System.Collections.IEnumerator GetEnumerator();
-        ASCOM.Interfaces.DriveRates this[int index] { get; }
+        ASCOM.Interface.DriveRates this[int index] { get; }
     }
 }

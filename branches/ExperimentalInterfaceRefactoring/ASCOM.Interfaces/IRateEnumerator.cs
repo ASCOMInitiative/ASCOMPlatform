@@ -2,7 +2,7 @@
 // <summary>Defines the IRateEnumerator Interface</summary>
 //-----------------------------------------------------------------------
 using System;
-namespace ASCOM.Interfaces
+namespace ASCOM.Interface
 {
     ///<summary>
     /// Strongly typed enumerator for late bound Rate

@@ -5,9 +5,10 @@
 // 29-May-10  	rem     6.0.0 - Added memberFactory.
 
 using System;
-using ASCOM.Interfaces;
+using ASCOM.Interface;
 using ASCOM.Utilities;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -133,9 +134,19 @@ namespace ASCOM.DriverAccess
         /// <returns>Collection of Axis Rates</returns>
         public IAxisRates AxisRates(TelescopeAxes Axis)
         {
+            object obj;
+            __AxisRates axr = new __AxisRates(Axis);
+
             if (!memberFactory.IsCOMObject)
             {
-                return ITelescope.AxisRates(Axis);
+                obj = memberFactory.CallMember(3, "AxisRates", new Type[] { typeof(TelescopeAxes) }, new object[] { Axis });//ITelescope.AxisRates(Axis);
+                foreach (Rate r in (IEnumerable) obj)
+                {
+                }
+
+
+                return (IAxisRates)axr;
+            }
             }
             else
                 return new _AxisRates(Axis, memberFactory.GetObjType, memberFactory.GetLateBoundObject);
@@ -165,7 +176,7 @@ namespace ASCOM.DriverAccess
         /// <returns></returns>
         public bool CanMoveAxis(TelescopeAxes Axis)
         {
-            return (bool)memberFactory.CallMember(3, "CanMoveAxis", new Type[] {typeof(TelescopeAxes) }, new object[] {(int)Axis }); 
+            return (bool)memberFactory.CallMember(3, "CanMoveAxis", new Type[] { typeof(TelescopeAxes) }, new object[] { Axis });
         }
 
         /// <summary>
@@ -192,7 +203,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSetDeclinationRate
         {
-             get { return (bool)memberFactory.CallMember(1, "CanSetDeclinationRate", new Type[] { }, new object[] { }); }
+            get { return (bool)memberFactory.CallMember(1, "CanSetDeclinationRate", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -319,7 +330,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double Declination
         {
-             get { return Convert.ToDouble(memberFactory.CallMember(1, "Declination", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "Declination", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -490,7 +501,7 @@ namespace ASCOM.DriverAccess
         /// <param name="Rate">The rate of motion (deg/sec) about the specified axis</param>
         public void MoveAxis(TelescopeAxes Axis, double Rate)
         {
-             memberFactory.CallMember(3, "MoveAxis", new Type[] { typeof(TelescopeAxes), typeof(double) }, new object[] { Axis, Rate });
+            memberFactory.CallMember(3, "MoveAxis", new Type[] { typeof(TelescopeAxes), typeof(double) }, new object[] { Axis, Rate });
         }
 
         /// <summary>
@@ -655,8 +666,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public short SlewSettleTime
         {
-           get { return Convert.ToInt16(memberFactory.CallMember(1, "SlewSettleTime", new Type[] { }, new object[] { })); }
-           set { memberFactory.CallMember(2, "SlewSettleTime", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToInt16(memberFactory.CallMember(1, "SlewSettleTime", new Type[] { }, new object[] { })); }
+            set { memberFactory.CallMember(2, "SlewSettleTime", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -874,12 +885,10 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-                if (!memberFactory.IsCOMObject)
-                {
-                    return ITelescope.TrackingRates;
-                }
-                else
-                    return new _TrackingRates(memberFactory.GetObjType, memberFactory.GetLateBoundObject);
+                /* if (!memberFactory.IsCOMObject)
+                     return memberFactory.TrackingRates;
+                 else*/
+                return new _TrackingRates(memberFactory.GetObjType, memberFactory.GetLateBoundObject);
             }
         }
 
@@ -1347,4 +1356,83 @@ namespace ASCOM.DriverAccess
         #endregion
     }
     #endregion
+
+public class __AxisRates : ASCOM.Interface.__IAxisRates
+{
+
+    ASCOM.Interface.TelescopeAxes m_Axis;
+    List<Rate> m_Rates = new List<Rate>();        //' Empty array, but an array nonetheless
+
+    //'
+    //' Constructor - Friend prevents public creation
+    //' of instances. Returned by Telescope.AxisRates.
+    
+    internal __AxisRates(ASCOM.Interface.TelescopeAxes Axis)
+    {
+        m_Axis = Axis;    
+    }
+
+#region IAxisRates Members
+
+    public int Count
+    {
+        get{ return m_Rates.Count;}
+    }
+
+    public IEnumerator GetEnumerator()
+    {       
+       return m_Rates.GetEnumerator();
+    }
+
+    public IRate this[int index]
+    {
+        get{return new Rate(m_Rates[index].Minimum,m_Rates[index].Maximum);}
+    }
+
+    public void Add(double Minimum, double Maximum)
+    {
+        m_Rates.Add(new Rate(Minimum, Maximum));
+    }
+
+
+#endregion
+
+}
+
+    public class Rate : IRate
+    {
+
+    double m_dMaximumR = 0;
+    double m_dMinimumR = 0;
+
+    //'
+    //' Default constructor - Internal prevents public creation
+    //' of instances. These are values for AxisRates.
+    
+    internal Rate(double Minimum, double Maximum )
+    {
+        m_dMaximumR = Maximum;
+        m_dMinimumR = Minimum;
+    }
+
+#region IRate Members
+
+    public double Maximum
+    {
+        get{return m_dMaximumR;}
+        set{m_dMaximumR = value;}
+    }
+
+    public double Minimum
+    {
+        get{return m_dMinimumR;}
+        set{m_dMinimumR = value;}
+    }
+    public void Dispose()
+    {
+    }
+
+#endregion
+    }
+
 }

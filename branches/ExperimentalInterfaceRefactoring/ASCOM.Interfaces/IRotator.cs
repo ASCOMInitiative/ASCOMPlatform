@@ -2,7 +2,7 @@
 // <summary>Defines the IRotator Interface</summary>
 //-----------------------------------------------------------------------
 using System;
-namespace ASCOM.Interfaces
+namespace ASCOM.Interface
 {
     /// <summary>
     /// Defines the IRotator Interface

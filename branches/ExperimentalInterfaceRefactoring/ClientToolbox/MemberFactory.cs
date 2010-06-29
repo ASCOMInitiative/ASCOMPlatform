@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Globalization;
 using ASCOM;
+using ASCOM.Utilities;
 
 namespace ASCOM.DriverAccess
 {
@@ -22,6 +23,7 @@ namespace ASCOM.DriverAccess
         private Type objType;
         private String strProgID;
         private bool isCOMObject;
+        private TraceLogger TL ;
 
 
         /// <summary>
@@ -45,6 +47,23 @@ namespace ASCOM.DriverAccess
                 // Create an instance of the object
                 objLateBound = Activator.CreateInstance(objType);
 
+                TL = new TraceLogger("","MemberFactory");
+                TL.Enabled=true;
+
+                MemberInfo[] Members = objType.GetMembers();
+                foreach (MemberInfo mi in Members)
+                {
+                    TL.LogMessage("Member", Enum.GetName(typeof(MemberTypes), mi.MemberType) + " " + mi.Name);
+                    if (mi.MemberType == MemberTypes.Method)
+                    {
+                        foreach (ParameterInfo pi in ((MethodInfo) mi).GetParameters())
+                        {
+                            TL.LogMessage("Parameter", "  " + pi.Name + " " + pi.ParameterType.Name + " " + pi.ParameterType.AssemblyQualifiedName );
+                        }
+                    }
+
+                }
+                
                 //no instance found throw error
                 if (objLateBound == null)
                 {
@@ -56,6 +75,33 @@ namespace ASCOM.DriverAccess
                 //no type information found throw error
                 throw new Exception("Check Driver: cannot create object type of progID: " + strProgID);
             } 
+        }
+
+        /// <summary>
+        /// Returns the instance of the driver
+        /// </summary> 
+        /// <returns>object</returns>
+        internal object GetLateBoundObject
+        {
+            get { return this.objLateBound ;}
+        }
+
+        /// <summary>
+        /// Returns true is the driver is COM based
+        /// </summary> 
+        /// <returns>object</returns>
+        internal bool IsCOMObject
+        {
+            get { return isCOMObject; }
+        }
+
+        /// <summary>
+        /// Returns the driver type
+        /// </summary> 
+        /// <returns>type</returns>
+        internal Type GetObjType
+        {
+            get { return this.objType; }
         }
 
         /// <summary>
@@ -81,9 +127,13 @@ namespace ASCOM.DriverAccess
                                  //run the .net object
                                  return propertyGetInfo.GetValue(objLateBound, null);
                              }
+                             catch (TargetInvocationException e)
+                             {
+                                 throw new ASCOM.PropertyNotImplementedException(memberName + " is not implemented in this driver", false,e.InnerException);
+                             }
                              catch (Exception e)
                              {
-                                 throw e.InnerException;
+                                 throw e;
                              }
                         }
                         else
@@ -123,9 +173,13 @@ namespace ASCOM.DriverAccess
                                 propertySetInfo.SetValue(objLateBound, parms[0], null);
                                 return null;
                             }
+                            catch (TargetInvocationException e)
+                            {
+                                throw new ASCOM.PropertyNotImplementedException(memberName + " is not implemented in this driver", true, e.InnerException);
+                            }
                             catch (Exception e)
                             {
-                                throw e.InnerException;
+                                throw e;
                             }
                         }
                         else
@@ -157,23 +211,63 @@ namespace ASCOM.DriverAccess
                             }
                         }
                     case 3:
-                        MethodInfo methodInfo = objType.GetMethod(memberName, parameterTypes);
+                        TL.LogMessage(memberName, "Start");
+                        foreach (Type t in parameterTypes)
+                        {
+                            TL.LogMessage(memberName, "  Parameter: " + t.FullName);
+                        }
+
+
+                        MethodInfo methodInfo = objType.GetMethod(memberName);//, parameterTypes); //Peter: Had to take parameterTypes out to get CanMoveAxis to work with .NET drivers
                         if (methodInfo != null)
                         {
+                            TL.LogMessage(memberName, "  Got MethodInfo");
+
+                            ParameterInfo[] pars = methodInfo.GetParameters();
+                            foreach (ParameterInfo p in pars)
+                            {
+                                TL.LogMessage(memberName, "  Parameter: " + p.ParameterType.ToString());
+                                TL.LogMessage(memberName, "    AssemblyQualifiedName: " + p.ParameterType.AssemblyQualifiedName);
+                                TL.LogMessage(memberName, "    AssemblyQualifiedName: " + parameterTypes[0].AssemblyQualifiedName);
+                                TL.LogMessage(memberName, "    FullName: " + p.ParameterType.FullName);
+                                TL.LogMessage(memberName, "    FullName: " + parameterTypes[0].FullName);
+                                TL.LogMessage(memberName, "    AssemblyFullName: " + p.ParameterType.Assembly.FullName);
+                                TL.LogMessage(memberName, "    AssemblyFullName: " + parameterTypes[0].Assembly.FullName);
+                                TL.LogMessage(memberName, "    AssemblyCodeBase: " + p.ParameterType.Assembly.CodeBase);
+                                TL.LogMessage(memberName, "    AssemblyCodeBase: " + parameterTypes[0].Assembly.CodeBase);
+                                TL.LogMessage(memberName, "    AssemblyLocation: " + p.ParameterType.Assembly.Location);
+                                TL.LogMessage(memberName, "    AssemblyLocation: " + parameterTypes[0].Assembly.Location);
+                                TL.LogMessage(memberName, "    AssemblyGlobalAssemblyCache: " + p.ParameterType.Assembly.GlobalAssemblyCache.ToString());
+                                TL.LogMessage(memberName, "    AssemblyGlobalAssemblyCache: " + parameterTypes[0].Assembly.GlobalAssemblyCache.ToString());
+                            }
+ 
+
+
+
                             try
                             {
-                                return methodInfo.Invoke(objLateBound, parms);
+                                object result = methodInfo.Invoke(objLateBound, parms);
+                                TL.LogMessage(memberName, "  Successfully called method");
+                                return result;
+                            }
+                            catch (TargetInvocationException e)
+                            {
+                                TL.LogMessage(memberName, "  ***** TargetInvocationException: " + e.ToString());
+                                throw new ASCOM.MethodNotImplementedException(strProgID + " " + memberName, e.InnerException);
                             }
                             catch (Exception e)
                             {
-                                throw e.InnerException;
+                                TL.LogMessage(memberName, "  ***** Exception: " + e.ToString());
+                                 throw e;
                             }
                         }
                         else
                         {
+                            TL.LogMessage(memberName, "  Didn't Get MethodInfo");
                             //check the type to see if it's a COM object
                             if (isCOMObject)
                             {
+                                TL.LogMessage(memberName, "  It is a COM object");
                                 try
                                 {
                                     //run the COM object method
@@ -192,6 +286,7 @@ namespace ASCOM.DriverAccess
                             }
                             else
                             {
+                                TL.LogMessage(memberName, "  It is NOT a COM object");
                                 methodInfo = null;
                                 throw new ASCOM.MethodNotImplementedException(strProgID + " " + memberName);
                             }
@@ -199,43 +294,6 @@ namespace ASCOM.DriverAccess
                     default:
                         return null;
                 }
-        }
-                   
-        /// <summary>
-        /// Returns the instance of the driver
-        /// </summary> 
-        /// <returns>object</returns> 
-        internal object GetLateBoundObject
-        {
-            get { return this.objLateBound ;}
-        }
-
-        /// <summary>
-        /// Returns the driver type
-        /// </summary> 
-        /// <returns>type</returns>
-        internal Type GetObjType
-        {
-            get { return this.objType; }
-        }       
-        
-        /// <summary>
-        /// Returns true if the interface name is found in the driver type object
-        /// </summary> 
-        /// <param name="interfaceName">interface name to search</param>
-        /// <returns>bool</returns>
-        internal bool HasInterface(string interfaceName)
-        {
-                return objType.GetInterface(interfaceName,true)!= null ;
-        }        
-        
-        /// <summary>
-        /// Returns true is the driver is COM based
-        /// </summary> 
-        /// <returns>object</returns>
-        internal bool IsCOMObject
-        {
-            get { return this.objType.IsCOMObject; }
         }
 
         #region IDisposable Members

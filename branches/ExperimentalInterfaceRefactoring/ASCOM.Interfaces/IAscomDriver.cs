@@ -41,7 +41,7 @@
 // --------------------------------------------------------------------------------
 //
 using System;
-namespace ASCOM.Interfaces
+namespace ASCOM.Interface
 {
 
     /// <summary>

@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ASCOM.Interfaces.New")]
+[assembly: AssemblyTitle("ASCOM.Interface.New")]
 [assembly: AssemblyDescription("Defines the standard ASCOM device interfaces")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCopyright("Copyright © 2010 The ASCOM Intiative")]
@@ -17,5 +17,5 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: AssemblyFileVersionAttribute("6.0.0.0")]
-[assembly: AssemblyVersionAttribute("6.0.0.0")]
+[assembly: AssemblyFileVersionAttribute("1.0.0.1")]
+[assembly: AssemblyVersionAttribute("1.0.0.1")]

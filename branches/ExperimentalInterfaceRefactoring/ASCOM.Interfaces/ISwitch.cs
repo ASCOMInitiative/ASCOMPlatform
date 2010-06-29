@@ -4,7 +4,7 @@
 
 using System;
 using System.Collections;
-namespace ASCOM.Interfaces
+namespace ASCOM.Interface
 {
     /// <summary>
     /// Defines the ISwitch Interface

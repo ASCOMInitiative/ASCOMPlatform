@@ -3,7 +3,7 @@
 //-----------------------------------------------------------------------
 using System;
 
-namespace ASCOM.Interfaces
+namespace ASCOM.Interface
 {
     /// <summary>
     /// Provides universal access to Focuser drivers

@@ -3,7 +3,7 @@
 //-----------------------------------------------------------------------
 using System;
 
-namespace ASCOM.Interfaces
+namespace ASCOM.Interface
 {
 	/// <summary>
 	/// This interface is intended for use in any current or future device type and to avoid name

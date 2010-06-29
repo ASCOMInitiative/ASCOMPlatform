@@ -109,7 +109,7 @@
 #define Public InstallerVersion "6.0"
 
 ;Text for release candidate / beta version messages
-#define Public RC "Alpha Interfaces 2"
+#define Public RC "Alpha Interfaces 3"
 
 #define Public Major 0
 #define Public Minor 0
@@ -259,10 +259,10 @@ Source: ..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll; DestD
 Source: ..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.XML; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
 
 ; ASCOM Platform 6 interfaces
-Source: ..\..\ASCOM.Interfaces\bin\Release\ASCOM.Interfaces6.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\ASCOM.Interfaces\bin\Release\ASCOM.Interfaces6.pdb; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\ASCOM.Interfaces\bin\Release\ASCOM.Interfaces6.dll; DestDir: {{cf32}\ASCOM\.net}; Flags: ignoreversion
-Source: ..\..\ASCOM.Interfaces\bin\Release\ASCOM.Interfaces6.pdb; DestDir: {{cf32}\ASCOM\.net}; Flags: ignoreversion
+Source: ..\..\ASCOM.Interfaces\bin\Release\ASCOM.Interfaces.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\ASCOM.Interfaces\bin\Release\ASCOM.Interfaces.pdb; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\ASCOM.Interfaces\bin\Release\ASCOM.Interfaces.dll; DestDir: {{cf32}\ASCOM\.net}; Flags: ignoreversion
+Source: ..\..\ASCOM.Interfaces\bin\Release\ASCOM.Interfaces.pdb; DestDir: {{cf32}\ASCOM\.net}; Flags: ignoreversion
 
 ;Client toolbox 1.0.5, in case it isn't already installed
 ;Source: Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.dll; DestDir: {app}; Flags: ignoreversion
@@ -347,7 +347,7 @@ Filename: {app}\GACInstall.exe; Parameters: ASCOM.Utilities.dll; Flags: runhidde
 Filename: {app}\GACInstall.exe; Parameters: ASCOM.Astrometry.dll; Flags: runhidden; StatusMsg: Installing ASCOM.Astrometry to the assembly cache
 Filename: {app}\GACInstall.exe; Parameters: ASCOM.IConform.dll; Flags: runhidden; StatusMsg: Installing ASCOM.IConform to the assembly cache
 Filename: {app}\GACInstall.exe; Parameters: ASCOM.Attributes.dll; Flags: runhidden; StatusMsg: Installing ASCOM.Attributes to the assembly cache
-Filename: {app}\GACInstall.exe; Parameters: ASCOM.Interfaces6.dll; Flags: runhidden; StatusMsg: Installing ASCOM.Interface6 to the assembly cache
+Filename: {app}\GACInstall.exe; Parameters: ASCOM.Interfaces.dll; Flags: runhidden; StatusMsg: Installing ASCOM.Interface6 to the assembly cache
 Filename: {dotnet20}\regasm.exe; Parameters: "/TLB ""{app}\ASCOM.Utilities.dll"""; Flags: runhidden; StatusMsg: Registering Utilities type library for COM
 Filename: {dotnet20}\regasm.exe; Parameters: "/TLB ""{app}\ASCOM.Astrometry.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.Astrometry type library for COM
 Filename: {dotnet20}\regasm.exe; Parameters: "/TLB ""{app}\ASCOM.IConform.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.IConform type library for COM
@@ -385,7 +385,7 @@ Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Astrometry"""; Flags: ru
 Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Utilities"""; Flags: runhidden; StatusMsg: Uninstalling Utilities from the assembly cache
 Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.IConform"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.IConform from the assembly cache
 Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Attributes"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Attributes from the assembly cache
-Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Interfaces6"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Interface6 from the assembly cache
+Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Interfaces"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Interface6 from the assembly cache
 Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister ""{app}\ASCOM.Astrometry.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.Astrometry for COM
 Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister ""{app}\ASCOM.Utilities.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.Utilities for COM
 Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister ""{app}\ASCOM.IConform.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.IConform for COM
@@ -463,6 +463,9 @@ WelcomeLabel1=%n%n[name]%n
 #emit "WelcomeLabel2=This will install ASCOM Utilities version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
 [_ISToolPreCompile]
 Name: ..\..\ASCOM Redirection Policies\ASCOM Redirection Policies\bin\Release\ASCOM Redirection Policies.exe; Parameters: ; Flags: runminimized abortonerror
+
+
+
 
 
 

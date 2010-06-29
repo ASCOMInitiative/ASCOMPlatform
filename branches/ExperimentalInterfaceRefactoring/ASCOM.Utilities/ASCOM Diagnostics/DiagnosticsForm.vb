@@ -224,7 +224,7 @@ Public Class DiagnosticsForm
 
                 RecurseProgramFiles(PathShell.ToString) ' This is the 32bit path on a 32bit OS and 64bit path on a 64bit OS
 
-                TL.BlankLine()
+                'TL.BlankLine()
             End If
         Catch ex As Exception
             TL.LogMessage("ScanProgramFiles", "Exception: " & ex.ToString)
@@ -423,6 +423,9 @@ Public Class DiagnosticsForm
             GetCOMRegistration("DriverHelper.ProfileAccess")
             GetCOMRegistration("DriverHelper.SerialSupport")
             GetCOMRegistration("ScopeSim.Telescope")
+            GetCOMRegistration("ASCOM.MI250.Telescope")
+            GetCOMRegistration("ASCOM.MI250SA.Telescope")
+            GetCOMRegistration("ASCOM.GeminiTelescope.Telescope")
 
             GetCOMRegistration("ASCOM.Utilities.Chooser")
             GetCOMRegistration("ASCOM.Utilities.KeyValuePair")
@@ -754,6 +757,7 @@ Public Class DiagnosticsForm
             RecursionLevel = -1 'Initialise recursion level so the first increment makes this zero
 
             Status("Scanning Profile")
+            TL.LogMessage("Scanning Registered Devices", "")
 
             DeviceTypes = ASCOMProfile.RegisteredDeviceTypes
             For Each DeviceType As String In DeviceTypes

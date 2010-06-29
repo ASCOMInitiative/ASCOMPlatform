@@ -2,7 +2,7 @@
 // <summary>Defines the IRate Interface</summary>
 //-----------------------------------------------------------------------
 using System;
-namespace ASCOM.Interfaces
+namespace ASCOM.Interface
 {
     /// <summary>
     /// Describes a range of rates supported by the MoveAxis() method (degrees/per second)

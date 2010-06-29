@@ -95,7 +95,7 @@ Public Class ConnectForm
                 btnProperties.Enabled = False
                 btnScript.Enabled = False
             Catch ex As Exception
-                txtStatus.Text = "Connect Failed..." & ex.Message & vbCrLf & vbCrLf & ex.ToString
+                txtStatus.Text = "Connect Failed..." & ex.ToString & vbCrLf & vbCrLf & ex.ToString
             End Try
 
         End If
