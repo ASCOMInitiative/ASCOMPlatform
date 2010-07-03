@@ -19,12 +19,12 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Implements a telescope class to access any registered ASCOM telescope
     /// </summary>
-    public class Telescope : ITelescope, IDisposable, IDeviceControl, IAscomDriver
+    public class Telescope : ITelescopeV2
     {
         #region ITelescope constructors
 
         private MemberFactory memberFactory;
-        ITelescope ITelescope;
+        ITelescopeV2 ITelescope;
 
         /// <summary>
         /// Creates an instance of the telescope class.
@@ -37,7 +37,7 @@ namespace ASCOM.DriverAccess
             // Try to see if this driver has an ASCOM.Telescope interface
             try
             {
-                ITelescope = (ASCOM.Interfaces.ITelescope)memberFactory.GetLateBoundObject;
+                ITelescope = (ASCOM.Interface.ITelescopeV2)memberFactory.GetLateBoundObject;
             }
             catch (Exception)
             {
@@ -134,19 +134,9 @@ namespace ASCOM.DriverAccess
         /// <returns>Collection of Axis Rates</returns>
         public IAxisRates AxisRates(TelescopeAxes Axis)
         {
-            object obj;
-            __AxisRates axr = new __AxisRates(Axis);
-
             if (!memberFactory.IsCOMObject)
             {
-                obj = memberFactory.CallMember(3, "AxisRates", new Type[] { typeof(TelescopeAxes) }, new object[] { Axis });//ITelescope.AxisRates(Axis);
-                foreach (Rate r in (IEnumerable) obj)
-                {
-                }
-
-
-                return (IAxisRates)axr;
-            }
+                return (IAxisRates)memberFactory.CallMember(3, "AxisRates", new Type[] { typeof(TelescopeAxes) }, new object[] { Axis });//ITelescope.AxisRates(Axis);
             }
             else
                 return new _AxisRates(Axis, memberFactory.GetObjType, memberFactory.GetLateBoundObject);
@@ -885,9 +875,9 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-                /* if (!memberFactory.IsCOMObject)
-                     return memberFactory.TrackingRates;
-                 else*/
+                if (!memberFactory.IsCOMObject)
+                    return (ITrackingRates)memberFactory.CallMember(1, "TrackingRates", new Type[] { }, new object[] { }); 
+                else
                 return new _TrackingRates(memberFactory.GetObjType, memberFactory.GetLateBoundObject);
             }
         }
@@ -1119,7 +1109,7 @@ namespace ASCOM.DriverAccess
     /// It is possible that the Rate.Maximum and Rate.Minimum properties will be equal. In this case, the Rate object expresses a single discrete rate. 
     /// Both the Rate.Maximum and Rate.Minimum properties are always expressed in units of degrees per second. 
     /// </summary>
-    class _Rate : IRate
+    class _Rate : IRatev2
     {
         Type objTypeRate;
         object objRateLateBound;
@@ -1303,7 +1293,7 @@ namespace ASCOM.DriverAccess
     //<summary>
     // Late bound TrackingRates implementation
     //</summary>
-    class _TrackingRates : ITrackingRates
+    class _TrackingRates : ITrackingRatesv2
     {
         Type objTypeTrackingRates;
         object objTrackingRatesLateBound;
@@ -1384,7 +1374,7 @@ public class __AxisRates : ASCOM.Interface.__IAxisRates
        return m_Rates.GetEnumerator();
     }
 
-    public IRate this[int index]
+    public IRatev2 this[int index]
     {
         get{return new Rate(m_Rates[index].Minimum,m_Rates[index].Maximum);}
     }
@@ -1399,7 +1389,7 @@ public class __AxisRates : ASCOM.Interface.__IAxisRates
 
 }
 
-    public class Rate : IRate
+    public class Rate : IRatev2
     {
 
     double m_dMaximumR = 0;

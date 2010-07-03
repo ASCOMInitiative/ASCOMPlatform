@@ -58,26 +58,33 @@
     </None>
     <Compile Include="Enumerations.cs" />
     <Compile Include="IAscomDriver.cs" />
-    <Compile Include="IAxisRates.cs" />
-    <Compile Include="ICamera.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="IAxisRatesv2.cs" />
+    <Compile Include="ICameraV2.cs" />
     <Compile Include="IDeviceControl.cs" />
-    <Compile Include="IDome.cs" />
-    <Compile Include="IFilterWheel.cs" />
-    <Compile Include="IFocuser.cs" />
-    <Compile Include="IRate.cs" />
+    <Compile Include="IDomeV2.cs" />
+    <Compile Include="IFilterWheelV2.cs" />
+    <Compile Include="IFocuserV2.cs" />
+    <Compile Include="IRatev2.cs" />
     <Compile Include="IRateEnumerator.cs" />
-    <Compile Include="IRotator.cs" />
-    <Compile Include="ISwitch.cs" />
-    <Compile Include="ITelescope.cs" />
-    <Compile Include="ITrackingRates.cs" />
+    <Compile Include="IRotatorv2.cs" />
+    <Compile Include="ISwitchV2.cs" />
+    <Compile Include="ITelescopeV2.cs" />
+    <Compile Include="ITrackingRatesv2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="ASCOM.snk" />
-    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="ASCOM.Interface">
+      <Guid>{76618F90-032F-4424-A680-802467A55742}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\External Dependencies\StyleCop\v4.3\Microsoft.StyleCop.targets" />

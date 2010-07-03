@@ -9,7 +9,7 @@ namespace ASCOM.Interface
     /// <summary>
     /// Defines the ISwitch Interface
     /// </summary> 
-    public interface ISwitch : IDeviceControl, IAscomDriver
+    public interface ISwitchV2 : IDeviceControl, IAscomDriver
     {
         /// <summary>
         /// Dispose the late-bound interface, if needed. Will release it via COM

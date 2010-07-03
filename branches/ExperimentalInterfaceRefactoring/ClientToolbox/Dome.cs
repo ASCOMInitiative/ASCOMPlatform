@@ -14,7 +14,7 @@ namespace ASCOM.DriverAccess
 	/// <summary>
 	/// Provides universal access to ASCOM Dome drivers
 	/// </summary>
-	public class Dome : IDome, IDisposable, IDeviceControl, IAscomDriver
+	public class Dome : IDome
     {
         #region IDome constructors
 
@@ -412,9 +412,9 @@ namespace ASCOM.DriverAccess
         /// if set to <c>true</c> the string is transmitted 'as-is'.
         /// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
         /// </param>
-        public void CommandBlind(string Command, bool Raw)
+        public void CommandBlind(string Command)
         {
-            memberFactory.CallMember(3, "CommandBlind", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
+            memberFactory.CallMember(3, "CommandBlind", new Type[] { typeof(string), typeof(bool) }, new object[] { Command});
         }
 
         /// <summary>
@@ -429,9 +429,9 @@ namespace ASCOM.DriverAccess
         /// <returns>
         /// Returns the interpreted boolean response received from the device.
         /// </returns>
-        public bool CommandBool(string Command, bool Raw)
+        public bool CommandBool(string Command)
         {
-            return (bool)memberFactory.CallMember(3, "CommandBool", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
+            return (bool)memberFactory.CallMember(3, "CommandBool", new Type[] { typeof(string), typeof(bool) }, new object[] { Command });
         }
 
         /// <summary>
@@ -446,9 +446,9 @@ namespace ASCOM.DriverAccess
         /// <returns>
         /// Returns the string response received from the device.
         /// </returns>
-        public string CommandString(string Command, bool Raw)
+        public string CommandString(string Command)
         {
-            return (string)memberFactory.CallMember(3, "CommandString", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
+            return (string)memberFactory.CallMember(3, "CommandString", new Type[] { typeof(string), typeof(bool) }, new object[] { Command});
         }
 
         #endregion

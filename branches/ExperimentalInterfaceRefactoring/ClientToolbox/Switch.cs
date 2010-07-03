@@ -15,7 +15,7 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Provides universal access to Switch drivers
     /// </summary>
-    public class Switch : ISwitch, IDisposable, IAscomDriver, IDeviceControl
+    public class Switch : ISwitchV2, IDisposable, IAscomDriver, IDeviceControl
     {
         #region Switch constructors
 

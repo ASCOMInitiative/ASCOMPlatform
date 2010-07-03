@@ -48,7 +48,7 @@ namespace ASCOM.Interface
     /// <summary>
     /// The alignment mode of the mount.
     /// </summary>
-    public enum AlignmentModes
+    public enum AlignmentModesOLD
     {
         /// <summary>
         /// Altitude-Azimuth alignment.
@@ -69,7 +69,7 @@ namespace ASCOM.Interface
     /// <summary>
     /// Well-known telescope tracking rates.
     /// </summary>
-    public enum DriveRates
+    public enum DriveRatesOLD
     {
         /// <summary>
         /// Sidereal tracking rate (15.0 arcseconds per second).
@@ -95,7 +95,7 @@ namespace ASCOM.Interface
     /// <summary>
     /// Equatorial coordinate systems used by telescopes.
     /// </summary>
-    public enum EquatorialCoordinateType
+    public enum EquatorialCoordinateTypeOLD
     {
         /// <summary>
         /// Custom or unknown equinox and/or reference frame.
@@ -126,7 +126,7 @@ namespace ASCOM.Interface
     /// <summary>
     /// The direction in which the guide-rate motion is to be made.
     /// </summary>
-   public enum GuideDirections
+   public enum GuideDirectionsOLD
     {
         /// <summary>
         /// North (+ declination/altitude).
@@ -152,7 +152,7 @@ namespace ASCOM.Interface
     /// <summary>
     /// The telescope axes
     /// </summary>
-    public enum TelescopeAxes
+    public enum TelescopeAxesOLD
     {
         /// <summary>
         /// Primary axis (e.g., Right Ascension or Azimuth).
@@ -182,7 +182,7 @@ namespace ASCOM.Interface
     ///			</para>
     ///		</alert>
     /// </remarks>
-    public enum PierSide
+    public enum PierSideOLD
     {
         /// <summary>
         /// Mount on East side of pier (looking West)
@@ -203,7 +203,7 @@ namespace ASCOM.Interface
     /// <summary>
     /// ASCOM Camera ShutterState status values.
     /// </summary>
-    public enum ShutterState
+    public enum ShutterStateOLD
     {
         /// <summary>
         /// Camera shutter status open
@@ -230,7 +230,7 @@ namespace ASCOM.Interface
     /// <summary>
     /// ASCOM Camera status values.
     /// </summary>
-    public enum CameraStates
+    public enum CameraStatesOLD
     {
         /// <summary>
         /// Camera status idle
@@ -262,7 +262,7 @@ namespace ASCOM.Interface
     /// Sensor type, identifies the type of colour sensor
     /// V2 cameras only
     /// </summary>]
-    public enum SensorType
+    public enum SensorTypeOLD
     {
         /// <summary>
         /// Camera produces monochrome array with no Bayer encoding
