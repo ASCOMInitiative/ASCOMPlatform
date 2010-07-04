@@ -19,7 +19,7 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Implements a telescope class to access any registered ASCOM telescope
     /// </summary>
-    public class Telescope : ITelescopeV2
+    public class Telescope : IAscomDriver, IDeviceControl, ITelescopeV2, IDisposable
     {
         #region ITelescope constructors
 
