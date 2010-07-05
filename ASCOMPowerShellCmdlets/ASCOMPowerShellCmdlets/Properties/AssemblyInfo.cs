@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ASCOM PowerShell cmdlets")]
 [assembly: AssemblyDescription("Cmdlets for creating ASCOM driver objects in PowerShell")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("ASCOM Initiative (Mark Crossley)")]
+[assembly: AssemblyCompany("ASCOM")]
 [assembly: AssemblyProduct("ASCOM PowerShell cmdlets")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
