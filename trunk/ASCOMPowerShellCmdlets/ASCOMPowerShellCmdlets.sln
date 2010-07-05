@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOMPowerShellCmdlets", "ASCOMPowerShellCmdlets\ASCOMPowerShellCmdlets.csproj", "{03E45323-63A5-4B49-838D-7A13368F2036}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.PowerShell.Cmdlets", "ASCOMPowerShellCmdlets\ASCOM.PowerShell.Cmdlets.csproj", "{03E45323-63A5-4B49-838D-7A13368F2036}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "AsomPowerShellSnapinSetup", "AsomPowerShellSnapinSetup\AsomPowerShellSnapinSetup.vdproj", "{E46CFD10-7EFC-49ED-BB81-C269764C96ED}"
 EndProject

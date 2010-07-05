@@ -1,7 +1,7 @@
 ﻿using System.Management.Automation;
 using ASCOM.DriverAccess;
 
-namespace ASCOMPowerShellCmdlets
+namespace ASCOM.PowerShell.Cmdlets
 {
     [Cmdlet(VerbsCommon.New, "Switch")]
     public class AscomSwitch : Cmdlet

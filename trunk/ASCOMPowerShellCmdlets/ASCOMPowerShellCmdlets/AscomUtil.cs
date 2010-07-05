@@ -1,7 +1,7 @@
 ﻿using System.Management.Automation;
 using ASCOM.Utilities;
 
-namespace ASCOMPowerShellCmdlets
+namespace ASCOM.PowerShell.Cmdlets
 {
     [Cmdlet(VerbsCommon.New, "Util")]
     public class AscomUtil : Cmdlet
