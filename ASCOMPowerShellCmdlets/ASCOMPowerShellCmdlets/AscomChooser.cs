@@ -2,7 +2,7 @@
 using ASCOM.Utilities;
 
 
-namespace ASCOMPowerShellCmdlets
+namespace ASCOM.PowerShell.Cmdlets
 {
     [Cmdlet(VerbsCommon.Show, "Chooser")]
     public class AscomChooser : Cmdlet

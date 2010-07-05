@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 
-namespace ASCOMPowerShellCmdlets
+namespace ASCOM.PowerShell.Cmdlets
 {
     [RunInstaller(true)]
     public class AscomCmdletSnapIn : CustomPSSnapIn
