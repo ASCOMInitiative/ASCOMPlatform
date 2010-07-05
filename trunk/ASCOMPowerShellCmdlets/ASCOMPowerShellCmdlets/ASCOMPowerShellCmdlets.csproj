@@ -61,7 +61,6 @@
   <ItemGroup>
     <Content Include="ASCOM.ico" />
     <Content Include="ASCOMPowerShellCmdlets.dll-Help.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
