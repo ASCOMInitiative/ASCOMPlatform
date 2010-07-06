@@ -187,6 +187,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencie
 		ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.DriverAccess.dll = ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.DriverAccess.dll
 		ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.DriverAccess.pdb = ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.DriverAccess.pdb
 		ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.DriverAccess.XML = ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.DriverAccess.XML
+		ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.Interfaces.dll = ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.Interfaces.dll
+		ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.Utilities.dll = ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.Utilities.dll
+		ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.Utilities.pdb = ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.Utilities.pdb
+		ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.Utilities.xml = ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.Utilities.xml
 	EndProjectSection
 EndProject
 Global
