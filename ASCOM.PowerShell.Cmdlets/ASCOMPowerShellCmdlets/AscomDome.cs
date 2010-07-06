@@ -35,12 +35,8 @@ namespace ASCOM.PowerShell.Cmdlets
 
         protected override void ProcessRecord()
         {
-            try
-            {
-                m_dome = new Dome(m_deviceId);
-                WriteObject(m_dome);
-            }
-            catch (System.Exception) { }
+            m_dome = new Dome(m_deviceId);
+            WriteObject(m_dome);
         }
 
         #endregion protected overrides

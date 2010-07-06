@@ -34,12 +34,8 @@ namespace ASCOM.PowerShell.Cmdlets
 
         protected override void ProcessRecord()
         {
-            try
-            {
-                m_rotator = new Rotator(m_driverId);
-                WriteObject(m_rotator);
-            }
-            catch (System.Exception) { }
+            m_rotator = new Rotator(m_driverId);
+            WriteObject(m_rotator);
         }
 
         #endregion protected overrides

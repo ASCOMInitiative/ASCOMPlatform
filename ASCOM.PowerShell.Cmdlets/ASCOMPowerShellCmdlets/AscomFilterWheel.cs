@@ -34,12 +34,8 @@ namespace ASCOM.PowerShell.Cmdlets
 
         protected override void ProcessRecord()
         {
-            try
-            {
-                m_filterWheel = new FilterWheel(m_driverId);
-                WriteObject(m_filterWheel);
-            }
-            catch (System.Exception) { }
+            m_filterWheel = new FilterWheel(m_driverId);
+            WriteObject(m_filterWheel);
         }
 
         #endregion protected overrides

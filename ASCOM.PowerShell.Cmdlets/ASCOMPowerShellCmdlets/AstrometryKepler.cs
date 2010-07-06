@@ -1,15 +1,14 @@
 ﻿using System.Management.Automation;
-using ASCOM.Utilities;
+using ASCOM.Astrometry.Kepler;
 
 namespace ASCOM.PowerShell.Cmdlets
 {
-    [Cmdlet(VerbsCommon.New, "Util")]
-    public class AscomUtil : Cmdlet
+    [Cmdlet(VerbsCommon.New, "Kepler")]
+    public class AstrometryKepler : Cmdlet
     {
-
         #region private fields
 
-        private Util m_util;
+        private  Ephemeris m_kepler;
 
         #endregion private fields
 
@@ -21,8 +20,8 @@ namespace ASCOM.PowerShell.Cmdlets
 
         protected override void ProcessRecord()
         {
-            m_util = new Util();
-            WriteObject(m_util);
+            m_kepler = new Ephemeris();
+            WriteObject(m_kepler);
         }
 
         #endregion protected overrides

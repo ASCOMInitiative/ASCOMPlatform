@@ -34,12 +34,8 @@ namespace ASCOM.PowerShell.Cmdlets
 
         protected override void ProcessRecord()
         {
-            try
-            {
-                m_focuser = new Focuser(m_driverId);
-                WriteObject(m_focuser);
-            }
-            catch (System.Exception) { }
+            m_focuser = new Focuser(m_driverId);
+            WriteObject(m_focuser);
         }
 
         #endregion protected overrides

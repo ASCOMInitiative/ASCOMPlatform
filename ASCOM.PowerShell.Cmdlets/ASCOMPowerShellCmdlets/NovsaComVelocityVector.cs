@@ -1,15 +1,14 @@
 ﻿using System.Management.Automation;
-using ASCOM.Utilities;
+using ASCOM.Astrometry.NOVASCOM;
 
 namespace ASCOM.PowerShell.Cmdlets
 {
-    [Cmdlet(VerbsCommon.New, "Util")]
-    public class AscomUtil : Cmdlet
+    [Cmdlet(VerbsCommon.New, "VelocityVector")]
+    public class NovsaComVelocityVector : Cmdlet
     {
-
         #region private fields
 
-        private Util m_util;
+        private VelocityVector m_velvec;
 
         #endregion private fields
 
@@ -21,8 +20,8 @@ namespace ASCOM.PowerShell.Cmdlets
 
         protected override void ProcessRecord()
         {
-            m_util = new Util();
-            WriteObject(m_util);
+            m_velvec = new VelocityVector();
+            WriteObject(m_velvec);
         }
 
         #endregion protected overrides
