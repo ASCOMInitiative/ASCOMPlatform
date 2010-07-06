@@ -34,12 +34,8 @@ namespace ASCOM.PowerShell.Cmdlets
 
         protected override void ProcessRecord()
         {
-            try
-            {
-                m_camera = new Camera(m_driverId);
-                WriteObject(m_camera);
-            }
-            catch (System.Exception) { }
+            m_camera = new Camera(m_driverId);
+            WriteObject(m_camera);
         }
 
         #endregion protected overrides

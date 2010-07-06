@@ -1,15 +1,14 @@
 ﻿using System.Management.Automation;
-using ASCOM.Utilities;
+using ASCOM.Astrometry.NOVASCOM;
 
 namespace ASCOM.PowerShell.Cmdlets
 {
-    [Cmdlet(VerbsCommon.New, "Util")]
-    public class AscomUtil : Cmdlet
+    [Cmdlet(VerbsCommon.New, "Planet")]
+    public class NovasComPlanet : Cmdlet
     {
-
         #region private fields
 
-        private Util m_util;
+        private Planet m_planet;
 
         #endregion private fields
 
@@ -21,8 +20,8 @@ namespace ASCOM.PowerShell.Cmdlets
 
         protected override void ProcessRecord()
         {
-            m_util = new Util();
-            WriteObject(m_util);
+            m_planet = new Planet();
+            WriteObject(m_planet);
         }
 
         #endregion protected overrides

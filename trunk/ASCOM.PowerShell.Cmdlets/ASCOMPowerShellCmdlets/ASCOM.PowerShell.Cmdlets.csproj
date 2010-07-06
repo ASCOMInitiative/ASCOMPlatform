@@ -8,7 +8,7 @@
     <ProjectGuid>{03E45323-63A5-4B49-838D-7A13368F2036}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ASCOMPowerShellCmdlets</RootNamespace>
+    <RootNamespace>ASCOM.PowerShell.Cmdlets</RootNamespace>
     <AssemblyName>ASCOMPowerShellCmdlets</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -85,6 +85,7 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ASCOM.Astrometry, Version=5.5.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
     <Reference Include="ASCOM.DriverAccess, Version=1.0.5.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\ASCOM.DriverAccess.dll</HintPath>
@@ -101,6 +102,8 @@
     <Reference Include="System.Management.Automation" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AstrometryEnum.cs" />
+    <Compile Include="AstrometryKepler.cs" />
     <Compile Include="AscomCamera.cs" />
     <Compile Include="AscomCmdletSnapIn.cs">
       <SubType>Component</SubType>
@@ -112,6 +115,15 @@
     <Compile Include="AscomSwitch.cs" />
     <Compile Include="AscomTelescope.cs" />
     <Compile Include="AscomUtil.cs" />
+    <Compile Include="AstrometryStruct.cs" />
+    <Compile Include="AstrometryTransform.cs" />
+    <Compile Include="Novas2.cs" />
+    <Compile Include="NovasComEarth.cs" />
+    <Compile Include="NovasComPlanet.cs" />
+    <Compile Include="NovasComPositionVector.cs" />
+    <Compile Include="NovasComSite.cs" />
+    <Compile Include="NovasComStar.cs" />
+    <Compile Include="NovsaComVelocityVector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AscomChooser.cs" />
   </ItemGroup>
@@ -119,6 +131,7 @@
     <Content Include="ASCOM.ico" />
     <Content Include="ASCOMPowerShellCmdlets.dll-Help.xml">
     </Content>
+    <Content Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="ASCOM.Interface">

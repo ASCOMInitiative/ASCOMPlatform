@@ -59,6 +59,28 @@ namespace ASCOM.PowerShell.Cmdlets
                      ("New-Rotator", typeof(AscomRotator), "ASCOMPowerShellCmdlets.dll-Help.xml"));
                     _cmdlets.Add(new CmdletConfigurationEntry
                      ("New-Switch", typeof(AscomSwitch), "ASCOMPowerShellCmdlets.dll-Help.xml"));
+                    _cmdlets.Add(new CmdletConfigurationEntry
+                     ("New-Kepler", typeof(AstrometryKepler), "ASCOMPowerShellCmdlets.dll-Help.xml"));
+                    _cmdlets.Add(new CmdletConfigurationEntry
+                     ("New-NOVAS2", typeof(AstrometryNovas2), "ASCOMPowerShellCmdlets.dll-Help.xml"));
+                    _cmdlets.Add(new CmdletConfigurationEntry
+                     ("New-Earth", typeof(NovasComEarth), "ASCOMPowerShellCmdlets.dll-Help.xml"));
+                    _cmdlets.Add(new CmdletConfigurationEntry
+                     ("New-Planet", typeof(NovasComPlanet), "ASCOMPowerShellCmdlets.dll-Help.xml"));
+                    _cmdlets.Add(new CmdletConfigurationEntry
+                     ("New-PositionVector", typeof(NovasComPositionVector), "ASCOMPowerShellCmdlets.dll-Help.xml"));
+                    _cmdlets.Add(new CmdletConfigurationEntry
+                     ("New-Site", typeof(NovasComSite), "ASCOMPowerShellCmdlets.dll-Help.xml"));
+                    _cmdlets.Add(new CmdletConfigurationEntry
+                     ("New-Star", typeof(NovasComStar), "ASCOMPowerShellCmdlets.dll-Help.xml"));
+                    _cmdlets.Add(new CmdletConfigurationEntry
+                     ("New-VelocityVector", typeof(NovsaComVelocityVector), "ASCOMPowerShellCmdlets.dll-Help.xml"));
+                    _cmdlets.Add(new CmdletConfigurationEntry
+                     ("New-Transform", typeof(AstrometryTransform), "ASCOMPowerShellCmdlets.dll-Help.xml"));
+                    _cmdlets.Add(new CmdletConfigurationEntry
+                     ("Get-AstrometryStruct", typeof(AstrometryStruct), "ASCOMPowerShellCmdlets.dll-Help.xml"));
+                    _cmdlets.Add(new CmdletConfigurationEntry
+                     ("Get-AstrometryEnum", typeof(AstrometryEnum), "ASCOMPowerShellCmdlets.dll-Help.xml"));
                 }
                 return _cmdlets;
             }

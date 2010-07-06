@@ -34,12 +34,8 @@ namespace ASCOM.PowerShell.Cmdlets
 
         protected override void ProcessRecord()
         {
-            try
-            {
-                m_switch = new Switch(m_driverId);
-                WriteObject(m_switch);
-            }
-            catch (System.Exception){}
+            m_switch = new Switch(m_driverId);
+            WriteObject(m_switch);
         }
 
         #endregion protected overrides
