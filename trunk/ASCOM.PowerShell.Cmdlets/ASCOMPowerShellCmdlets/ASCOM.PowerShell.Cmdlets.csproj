@@ -86,9 +86,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ASCOM.Astrometry, Version=5.5.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-     <SpecificVersion>False</SpecificVersion>
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\ASCOM.Astrometry.dll</HintPath>
-    </Reference>	
+    </Reference>
     <Reference Include="ASCOM.DriverAccess, Version=1.0.5.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\ASCOM.DriverAccess.dll</HintPath>
