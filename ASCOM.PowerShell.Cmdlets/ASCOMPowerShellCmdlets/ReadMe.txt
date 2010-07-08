@@ -273,7 +273,16 @@ Converted to PowerShell (just the start of Sub Example, to give a flavour)...
     > $NOVAS2.StarVectors($StarStruct, $POS, $VEL)
     ...
     > $Body.Name = "Mars"
-    > $Body.Type = Get-AstrometryEnum BodyType Mars
+    > $Body.Type = Get-AstrometryEnum BodyType MajorPlanet
     > $Body.Number = Get-AstrometryEnum Body Mars
     >...
     etc
+    
+Note that you could use the ASCOM.Astrometry enumerations directly...
+
+    > [void] [System.Reflection.Assembly]::LoadWithPartialName("ASCOM.Astrometry")
+    > $Body.Type = [ASCOM.Astrometry.BodyType]::MajorPlanet.value__
+
+But the whole point of these cmdlets is to remove all that guff!    
+
+
