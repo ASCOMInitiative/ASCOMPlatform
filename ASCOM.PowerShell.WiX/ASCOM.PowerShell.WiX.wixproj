@@ -1,5 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- [TPL] Use WiX tools from the svn repository instead of those which may or may not be locally installed -->
+  <PropertyGroup>
+    <WixToolPath>..\External Dependencies\WiX\3.5.1811\</WixToolPath>
+    <WixTargetsPath>$(WixToolPath)Wix.targets</WixTargetsPath> <!--[TPL] Relative to this .wixproj file -->
+    <WixTasksPath>wixtasks.dll</WixTasksPath> <!--[TPL] relative to Wix.targets, usually in same directory -->
+  </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
