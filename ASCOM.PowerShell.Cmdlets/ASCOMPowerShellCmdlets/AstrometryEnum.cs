@@ -8,9 +8,9 @@ namespace ASCOM.PowerShell.Cmdlets
     public class AstrometryEnum : Cmdlet
     {
 
-        private static T StringToEnum<T>(string name)
+        private static int StringToEnum<T>(string name)
         {
-            return (T)Enum.Parse(typeof(T), name);
+            return (int)Enum.Parse(typeof(T), name, true);
         }
         
         #region private fields
