@@ -99,17 +99,18 @@
 ; Setup build 20 released
 
 ; Added updated Client toolkit files
-
+; Switched to using ASCOM.InterfacesVB
+; Setup build 22
 
 [Setup]
 ; Setup program version number - change this each time you change this setup script
-#define Public SetupVersion 21
+#define Public SetupVersion 22
 
 ;Text description of this update as it appears in the installer UI
 #define Public InstallerVersion "6.0"
 
 ;Text for release candidate / beta version messages
-#define Public RC "Alpha Interfaces 4"
+#define Public RC "Alpha Interfaces 3"
 
 #define Public Major 0
 #define Public Minor 0
@@ -259,25 +260,25 @@ Source: ..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll; DestD
 Source: ..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.XML; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
 
 ; ASCOM Platform 6 interfaces
-Source: ..\..\ASCOM.Interfaces\bin\Release\ASCOM.Interfaces.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\ASCOM.Interfaces\bin\Release\ASCOM.Interfaces.pdb; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\ASCOM.Interfaces\bin\Release\ASCOM.Interfaces.dll; DestDir: {{cf32}\ASCOM\.net}; Flags: ignoreversion
-Source: ..\..\ASCOM.Interfaces\bin\Release\ASCOM.Interfaces.pdb; DestDir: {{cf32}\ASCOM\.net}; Flags: ignoreversion
+Source: ..\..\ASCOM.InterfacesVB\bin\Release\ASCOM.DeviceInterfaces.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\ASCOM.InterfacesVB\bin\Release\ASCOM.DeviceInterfaces.pdb; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\ASCOM.InterfacesVB\bin\Release\ASCOM.DeviceInterfaces.dll; DestDir: {{cf32}\ASCOM\.net}; Flags: ignoreversion
+Source: ..\..\ASCOM.InterfacesVB\bin\Release\ASCOM.DeviceInterfaces.pdb; DestDir: {{cf32}\ASCOM\.net}; Flags: ignoreversion
 
 ;Client toolbox 1.0.5, in case it isn't already installed
-;Source: Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.dll; DestDir: {app}; Flags: ignoreversion
-;Source: Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.pdb; DestDir: {app}; Flags: ignoreversion
-;Source: Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.XML; DestDir: {app}; Flags: ignoreversion
+Source: Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.dll; DestDir: {app}\Toolkit105; Flags: ignoreversion
+Source: Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.pdb; DestDir: {app}\Toolkit105; Flags: ignoreversion
+Source: Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.XML; DestDir: {app}\Toolkit105; Flags: ignoreversion
 ;Debug symbols to the symbols directory
-;Source: Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.pdb; DestDir: {win}\Symbols\dll; Flags: ignoreversion
+Source: Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.pdb; DestDir: {win}\Symbols\dll; Flags: ignoreversion
 ;32bit directories
-;Source: Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.dll; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
-;Source: Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.pdb; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
-;Source: Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.XML; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
+Source: Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.dll; DestDir: {cf32}\ASCOM\.net\Toolkit105; Flags: ignoreversion
+Source: Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.pdb; DestDir: {cf32}\ASCOM\.net\Toolkit105; Flags: ignoreversion
+Source: Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.XML; DestDir: {cf32}\ASCOM\.net\Toolkit105; Flags: ignoreversion
 
 ;Policy file to redirect to 1.0.5
-;Source: ..\..\ClientToolbox\SimpsonBitsPolicyStuff\PolicyInstaller\policy.1.0.ASCOM.DriverAccess.dll; DestDir: {app}; Flags: ignoreversion
-;Source: ..\..\ClientToolbox\SimpsonBitsPolicyStuff\PolicyInstaller\driveraccess.config; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\ClientToolbox\SimpsonBitsPolicyStuff\PolicyInstaller\policy.1.0.ASCOM.DriverAccess.dll; DestDir: {app}\Toolkit105; Flags: ignoreversion
+Source: ..\..\ClientToolbox\SimpsonBitsPolicyStuff\PolicyInstaller\driveraccess.config; DestDir: {app}\Toolkit105; Flags: ignoreversion
 
 ;Client Toolbox 6
 Source: ..\..\ClientToolbox\bin\Release\ASCOM.DriverAccess.dll; DestDir: {app}; Flags: ignoreversion
@@ -347,7 +348,6 @@ Filename: {app}\GACInstall.exe; Parameters: ASCOM.Utilities.dll; Flags: runhidde
 Filename: {app}\GACInstall.exe; Parameters: ASCOM.Astrometry.dll; Flags: runhidden; StatusMsg: Installing ASCOM.Astrometry to the assembly cache
 Filename: {app}\GACInstall.exe; Parameters: ASCOM.IConform.dll; Flags: runhidden; StatusMsg: Installing ASCOM.IConform to the assembly cache
 Filename: {app}\GACInstall.exe; Parameters: ASCOM.Attributes.dll; Flags: runhidden; StatusMsg: Installing ASCOM.Attributes to the assembly cache
-Filename: {app}\GACInstall.exe; Parameters: ASCOM.Interfaces.dll; Flags: runhidden; StatusMsg: Installing ASCOM.Interface6 to the assembly cache
 Filename: {dotnet20}\regasm.exe; Parameters: "/TLB ""{app}\ASCOM.Utilities.dll"""; Flags: runhidden; StatusMsg: Registering Utilities type library for COM
 Filename: {dotnet20}\regasm.exe; Parameters: "/TLB ""{app}\ASCOM.Astrometry.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.Astrometry type library for COM
 Filename: {dotnet20}\regasm.exe; Parameters: "/TLB ""{app}\ASCOM.IConform.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.IConform type library for COM
@@ -361,12 +361,23 @@ Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.Utilit
 Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.Astrometry.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering ASCOM.Astrometry for 32bit COM
 Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.IConform.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering ASCOM.IConform for 32bit COM
 
+; ASCOM DeviceInterfaces
+Filename: {app}\GACInstall.exe; Parameters: ASCOM.DeviceInterfaces.dll; Flags: runhidden; StatusMsg: Installing ASCOM.Interface6 to the assembly cache
+Filename: {dotnet20}\regasm.exe; Parameters: "/TLB ""{app}\ASCOM.DeviceInterfaces.dll"""; Flags: runhidden; StatusMsg: Registering Utilities type library for COM
+Filename: {dotnet2032}\regasm.exe; Parameters: "/TLB ""{cf32}\ASCOM\.net\ASCOM.DeviceInterfaces.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering Utilities type library for 32bit COM
+Filename: {dotnet20}\regasm.exe; Parameters: """{app}\ASCOM.DeviceInterfaces.dll"""; Flags: runhidden; StatusMsg: Registering Utilities for COM
+Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.DeviceInterfaces.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering Utilities for 32bit COM
+
 ;ASCOM Exceptions
 Filename: {app}\GACInstall.exe; Parameters: ASCOM.Exceptions.dll; Flags: runhidden; StatusMsg: Instlling ASCOM.Exceptions to the assembly cache
 
-; ASCOM Client Toolkit 1.0.5         +
+; ASCOM Client Toolkit 1.0.5
+Filename: {app}\GACInstall.exe; Parameters: Toolkit105\ASCOM.DriverAccess.dll; Flags: runhidden; StatusMsg: Installing Client Access Toolkit 1.0.5 to the assembly cache
+Filename: {app}\GACInstall.exe; Parameters: """{app}\Toolkit105\policy.1.0.ASCOM.DriverAccess.dll"""; Flags: runhidden; StatusMsg: Installing Client Access Toolkit 1.0.5 Policy to the assembly cache
+
+; ASCOM Client Toolkit 6
 Filename: {app}\GACInstall.exe; Parameters: ASCOM.DriverAccess.dll; Flags: runhidden; StatusMsg: Installing Client Access Toolkit to the assembly cache
-Filename: {app}\GACInstall.exe; Parameters: """{app}\policy.1.0.ASCOM.DriverAccess.dll"""; Flags: runhidden; StatusMsg: Installing Client Access Toolkit Policy to the assembly cache
+;Filename: {app}\GACInstall.exe; Parameters: """{app}\policy.1.0.ASCOM.DriverAccess.dll"""; Flags: runhidden; StatusMsg: Installing Client Access Toolkit 6 Policy to the assembly cache
 
 ;Publisher policies for Astrometry and Utilities
 #emit "Filename: {app}\GACInstall.exe; Parameters: policy." + str(Major) + "." + str(Minor) + ".ASCOM.Utilities.dll; Flags: runhidden; StatusMsg: Installing ASCOM Utilities policy to the assembly cache"
@@ -385,7 +396,6 @@ Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Astrometry"""; Flags: ru
 Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Utilities"""; Flags: runhidden; StatusMsg: Uninstalling Utilities from the assembly cache
 Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.IConform"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.IConform from the assembly cache
 Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Attributes"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Attributes from the assembly cache
-Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.Interfaces"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Interface6 from the assembly cache
 Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister ""{app}\ASCOM.Astrometry.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.Astrometry for COM
 Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister ""{app}\ASCOM.Utilities.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.Utilities for COM
 Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister ""{app}\ASCOM.IConform.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.IConform for COM
@@ -398,6 +408,13 @@ Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister /TLB ""{app}\ASCOM.ICo
 Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.IConform.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Unregistering 32bit ASCOM.IConform type library
 Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.Astrometry.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Unregistering 32bit ASCOM.Astrometry type library
 Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.Utilities.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Unregistering 32bit Utilities type library
+
+; ASCOM DeviceInterfaces
+Filename: {app}\GACInstall.exe; Parameters: "/U ""ASCOM.DeviceInterfaces"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Interface6 from the assembly cache
+Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister ""{app}\ASCOM.DeviceInterfaces.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.Astrometry for COM
+Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister ""{cf32}\ASCOM\.net\ASCOM.DeviceInterfaces.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Unregistering ASCOM.IConform from COM
+Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister /TLB ""{app}\ASCOM.DeviceInterfaces.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.Astrometry type library
+Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.DeviceInterfaces.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Unregistering 32bit ASCOM.IConform type library
 
 Filename: {cf32}\ASCOM\ASCOM.Utilities\RestoreOriginalHelpers.cmd; Parameters: """{cf32}\ASCOM\ASCOM.Utilities\*.dll"" ""{cf32}\ASCOM"""; StatusMsg: Restoring helper dlls; Flags: runhidden
 
@@ -463,6 +480,7 @@ WelcomeLabel1=%n%n[name]%n
 #emit "WelcomeLabel2=This will install ASCOM Utilities version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
 [_ISToolPreCompile]
 Name: ..\..\ASCOM Redirection Policies\ASCOM Redirection Policies\bin\Release\ASCOM Redirection Policies.exe; Parameters: ; Flags: runminimized abortonerror
+
 
 
 

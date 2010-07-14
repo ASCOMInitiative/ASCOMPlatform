@@ -5,7 +5,7 @@
 // 29-May-10  	rem     6.0.0 - Added memberFactory.
 
 using System;
-using ASCOM.Interface;
+using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using System.Collections;
 

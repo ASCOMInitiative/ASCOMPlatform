@@ -5,7 +5,7 @@
 // 29-May-10  	rem     6.0.0 - Added memberFactory.
 
 using System;
-using ASCOM.Interface;
+using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,12 +19,14 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Implements a telescope class to access any registered ASCOM telescope
     /// </summary>
-    public class Telescope : IAscomDriver, IDeviceControl, ITelescopeV2, IDisposable
+    public class Telescope : ITelescope, IDisposable, IDeviceControl, IAscomDriver
     {
         #region ITelescope constructors
 
         private MemberFactory memberFactory;
-        ITelescopeV2 ITelescope;
+        private ITelescope ITelescope;
+        private bool isTelescopeV2 = false;
+        private bool isTelescopePIA = false;
 
         /// <summary>
         /// Creates an instance of the telescope class.
@@ -37,13 +39,33 @@ namespace ASCOM.DriverAccess
             // Try to see if this driver has an ASCOM.Telescope interface
             try
             {
-                ITelescope = (ASCOM.Interface.ITelescopeV2)memberFactory.GetLateBoundObject;
+                ITelescope = (ASCOM.DeviceInterface.ITelescope)memberFactory.GetLateBoundObject;
             }
             catch (Exception)
             {
                 ITelescope = null;
             }
 
+            foreach (Type objInterface in memberFactory.GetInterfaces)
+            {
+                if (objInterface.Equals(typeof(ITelescope))) isTelescopeV2 = true; //If the type matches the V2 type flag this
+                if (objInterface.Equals(typeof(ASCOM.Interface.ITelescope))) isTelescopePIA = true; //If the type matches the PIA type flag this
+                //global::System.Windows.Forms.MessageBox.Show("Interfaces " + objInterface.AssemblyQualifiedName.ToString());
+
+                //if (objInterface.Name.Contains("ITelescope")) //Just check out the ITelescope interfaces
+                //{
+                    // Get the version of the executing assembly (that is, this assembly).
+                    // AssemblyName assemName = objInterface.Assembly.GetName();
+                    //Version ver = assemName.Version;
+                    //global::System.Windows.Forms.MessageBox.Show("Interface Version " + ver.ToString());
+
+                    //if (ver == new Version(1, 0, 0, 0)) isTelescopePIA = true;
+                    //if (ver == new Version(1, 0, 0, 2)) isTelescopeV2 = true;
+
+
+                    //else isTelescopePIA = true;
+                //}
+            }
 
         }
 
@@ -132,14 +154,35 @@ namespace ASCOM.DriverAccess
         /// </summary>
         /// <param name="Axis">The axis about which rate information is desired (TelescopeAxes value)</param>
         /// <returns>Collection of Axis Rates</returns>
-        public IAxisRates AxisRates(TelescopeAxes Axis)
+        public IAxisRates AxisRates(ASCOM.DeviceInterface.TelescopeAxes Axis)
         {
+            object obj;
+            AxisRates ReturnValue = new AxisRates();
+
             if (!memberFactory.IsCOMObject)
             {
-                return (IAxisRates)memberFactory.CallMember(3, "AxisRates", new Type[] { typeof(TelescopeAxes) }, new object[] { Axis });//ITelescope.AxisRates(Axis);
+                obj = memberFactory.CallMember(3, "AxisRates", new Type[] { typeof(TelescopeAxes) }, new object[] { Axis });//ITelescope.AxisRates(Axis);
+
+                global::System.Windows.Forms.MessageBox.Show("TelescopePIA " + isTelescopePIA.ToString() + ", TelescopeV2 " + isTelescopeV2.ToString());
+                if (isTelescopeV2)
+                {
+                    return (IAxisRates)obj;
+                }
+
+                if (isTelescopePIA)
+                {
+                    ASCOM.Interface.IAxisRates PIAAxisRates = (ASCOM.Interface.IAxisRates)obj;
+
+                    foreach (ASCOM.Interface.IRate r in PIAAxisRates)
+                    {
+                        ReturnValue.Add(r.Minimum, r.Maximum);
+                    }
+                }
+                return ReturnValue;
+
             }
-            else
-                return new _AxisRates(Axis, memberFactory.GetObjType, memberFactory.GetLateBoundObject);
+
+            else return new _AxisRates(Axis, memberFactory.GetObjType, memberFactory.GetLateBoundObject);
         }
 
         /// <summary>
@@ -875,9 +918,9 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-                if (!memberFactory.IsCOMObject)
-                    return (ITrackingRates)memberFactory.CallMember(1, "TrackingRates", new Type[] { }, new object[] { }); 
-                else
+                /* if (!memberFactory.IsCOMObject)
+                     return memberFactory.TrackingRates;
+                 else*/
                 return new _TrackingRates(memberFactory.GetObjType, memberFactory.GetLateBoundObject);
             }
         }
@@ -1109,7 +1152,7 @@ namespace ASCOM.DriverAccess
     /// It is possible that the Rate.Maximum and Rate.Minimum properties will be equal. In this case, the Rate object expresses a single discrete rate. 
     /// Both the Rate.Maximum and Rate.Minimum properties are always expressed in units of degrees per second. 
     /// </summary>
-    class _Rate : IRatev2
+    class _Rate : IRate
     {
         Type objTypeRate;
         object objRateLateBound;
@@ -1293,7 +1336,7 @@ namespace ASCOM.DriverAccess
     //<summary>
     // Late bound TrackingRates implementation
     //</summary>
-    class _TrackingRates : ITrackingRatesv2
+    class _TrackingRates : ITrackingRates
     {
         Type objTypeTrackingRates;
         object objTrackingRatesLateBound;
@@ -1347,49 +1390,44 @@ namespace ASCOM.DriverAccess
     }
     #endregion
 
-public class __AxisRates : ASCOM.Interface.__IAxisRates
-{
 
-    ASCOM.Interface.TelescopeAxes m_Axis;
-    List<Rate> m_Rates = new List<Rate>();        //' Empty array, but an array nonetheless
-
-    //'
-    //' Constructor - Friend prevents public creation
-    //' of instances. Returned by Telescope.AxisRates.
-    
-    internal __AxisRates(ASCOM.Interface.TelescopeAxes Axis)
+    public class AxisRates : ASCOM.DeviceInterface.IAxisRates
     {
-        m_Axis = Axis;    
+        ASCOM.DeviceInterface.TelescopeAxes m_Axis;
+        List<Rate> m_Rates = new List<Rate>();        //' Empty array, but an array nonetheless
+        
+        #region IAxisRates Members
+
+        public int Count
+        {
+            get {return m_Rates.Count; }
+        }
+
+        public void Dispose()
+        {
+            // throw new System.NotImplementedException(); Nothing to dispose in this class
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return m_Rates.GetEnumerator();
+        }
+
+        public IRate this[int index]
+        {
+            get { return new Rate(m_Rates[index].Minimum, m_Rates[index].Maximum); }
+        }
+
+        #endregion
+
+        public void Add(double Minimum, double Maximum)
+        {
+            m_Rates.Add(new Rate(Minimum, Maximum));
+        }
+
     }
 
-#region IAxisRates Members
-
-    public int Count
-    {
-        get{ return m_Rates.Count;}
-    }
-
-    public IEnumerator GetEnumerator()
-    {       
-       return m_Rates.GetEnumerator();
-    }
-
-    public IRatev2 this[int index]
-    {
-        get{return new Rate(m_Rates[index].Minimum,m_Rates[index].Maximum);}
-    }
-
-    public void Add(double Minimum, double Maximum)
-    {
-        m_Rates.Add(new Rate(Minimum, Maximum));
-    }
-
-
-#endregion
-
-}
-
-    public class Rate : IRatev2
+    public class Rate : IRate
     {
 
     double m_dMaximumR = 0;

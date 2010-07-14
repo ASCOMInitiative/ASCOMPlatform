@@ -256,6 +256,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Patterns and Practices", "P
 		Patterns and Practices\Sandcastle MAML Guide.chm = Patterns and Practices\Sandcastle MAML Guide.chm
 	EndProjectSection
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ASCOM.InterfacesVB", "ASCOM.InterfacesVB\ASCOM.InterfacesVB.vbproj", "{872EF2D6-AC89-4C15-AC84-6C69B040A843}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = ASCOM Platform 6.vsmdi
@@ -605,6 +607,16 @@ Global
 		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
 		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.TeamCity|Any CPU.Build.0 = Release|Any CPU
+		{872EF2D6-AC89-4C15-AC84-6C69B040A843}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
+		{872EF2D6-AC89-4C15-AC84-6C69B040A843}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
+		{872EF2D6-AC89-4C15-AC84-6C69B040A843}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{872EF2D6-AC89-4C15-AC84-6C69B040A843}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{872EF2D6-AC89-4C15-AC84-6C69B040A843}.Platform Dependencies|Any CPU.ActiveCfg = Release|Any CPU
+		{872EF2D6-AC89-4C15-AC84-6C69B040A843}.Platform Dependencies|Any CPU.Build.0 = Release|Any CPU
+		{872EF2D6-AC89-4C15-AC84-6C69B040A843}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{872EF2D6-AC89-4C15-AC84-6C69B040A843}.Release|Any CPU.Build.0 = Release|Any CPU
+		{872EF2D6-AC89-4C15-AC84-6C69B040A843}.TeamCity|Any CPU.ActiveCfg = Release|Any CPU
+		{872EF2D6-AC89-4C15-AC84-6C69B040A843}.TeamCity|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -628,6 +640,7 @@ Global
 		{2C40FAD9-DE75-4360-A0AD-911C4D24D98C} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{44999847-A7B6-462D-B663-FE988D98E317} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{5A0818BF-F3DD-4262-AF69-FD794832B85C} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
+		{872EF2D6-AC89-4C15-AC84-6C69B040A843} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{D1A5A486-8C9C-4421-91AB-508F63B684C2} = {3EDC5136-4922-4F53-92FB-ADB89CCFBF26}
 		{63AD32E8-98FF-44BB-AA29-ED2E5A5CF026} = {3EDC5136-4922-4F53-92FB-ADB89CCFBF26}
 		{4FFFD202-81D4-4549-880B-09B640D72C1D} = {6BEFC49D-C3F3-4119-9ACD-B8133E14E2D6}
@@ -665,13 +678,13 @@ Global
 		{908A13CE-4C6D-4546-AD52-AB958FF46C5B} = {7814C016-C363-4A04-B095-27A5B33AA783}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
-		Reflector0SourceName = Moq
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceAssemblyName = 
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0DestinationName = Moq
-		Reflector0DestinationVersion = 4.0.812.4
 		Reflector0DestinationAssemblyName = 
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationName = Moq
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0SourceAssemblyName = 
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceName = Moq
+		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
 	EndGlobalSection
 EndGlobal

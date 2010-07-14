@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Globalization;
 using ASCOM;
 using ASCOM.Utilities;
+using System.Collections.Generic;
 
 namespace ASCOM.DriverAccess
 {
@@ -24,6 +25,7 @@ namespace ASCOM.DriverAccess
         private String strProgID;
         private bool isCOMObject;
         private TraceLogger TL ;
+        private List<Type> objInterfaceList;
 
 
         /// <summary>
@@ -34,6 +36,7 @@ namespace ASCOM.DriverAccess
         internal MemberFactory(string progID)
         {
             strProgID = progID;
+            objInterfaceList=new List<Type>();
 
             // Get Type Information 
             objType = Type.GetTypeFromProgID(progID);
@@ -41,14 +44,23 @@ namespace ASCOM.DriverAccess
             //check to see if it found the type information
             if (objType != null)
             {
+                TL = new TraceLogger("","MemberFactory");
+                TL.Enabled=true;
+
                 //setup the property
                 isCOMObject = objType.IsCOMObject;
 
                 // Create an instance of the object
                 objLateBound = Activator.CreateInstance(objType);
 
-                TL = new TraceLogger("","MemberFactory");
-                TL.Enabled=true;
+                // Get list of interfaces
+                Type[] objInterfaces = objType.GetInterfaces();
+
+                foreach (Type objInterface in objInterfaces)
+                {
+                        objInterfaceList.Add(objInterface);
+                        TL.LogMessage("Interface", objInterface.AssemblyQualifiedName.ToString());
+                }
 
                 MemberInfo[] Members = objType.GetMembers();
                 foreach (MemberInfo mi in Members)
@@ -103,6 +115,12 @@ namespace ASCOM.DriverAccess
         {
             get { return this.objType; }
         }
+
+        internal List<Type> GetInterfaces
+        {
+            get { return this.objInterfaceList; }
+        }
+
 
         /// <summary>
         /// Calls a method on an object dynamically. 
@@ -253,7 +271,11 @@ namespace ASCOM.DriverAccess
                             catch (TargetInvocationException e)
                             {
                                 TL.LogMessage(memberName, "  ***** TargetInvocationException: " + e.ToString());
-                                throw new ASCOM.MethodNotImplementedException(strProgID + " " + memberName, e.InnerException);
+                                if (e.InnerException is ASCOM.DriverException)
+                                {
+                                    throw e.InnerException;
+                                }
+                                else throw new ASCOM.MethodNotImplementedException(strProgID + " " + memberName, e.InnerException);
                             }
                             catch (Exception e)
                             {
