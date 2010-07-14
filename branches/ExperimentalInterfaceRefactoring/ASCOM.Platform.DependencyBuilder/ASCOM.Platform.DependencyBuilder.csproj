@@ -96,7 +96,7 @@
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
       <Name>ASCOM.Utilities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ClientToolbox\ASCOM.DriverAccess.csproj">
+    <ProjectReference Include="..\ASCOM.DriverAccess\ASCOM.DriverAccess.csproj">
       <Project>{35194767-5585-45C3-803F-1BCE74CEAAFC}</Project>
       <Name>ASCOM.DriverAccess</Name>
     </ProjectReference>

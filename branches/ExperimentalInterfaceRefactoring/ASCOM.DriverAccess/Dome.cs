@@ -412,7 +412,7 @@ namespace ASCOM.DriverAccess
         /// if set to <c>true</c> the string is transmitted 'as-is'.
         /// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
         /// </param>
-        public void CommandBlind(string Command)
+        public void CommandBlind(string Command, bool Raw)
         {
             memberFactory.CallMember(3, "CommandBlind", new Type[] { typeof(string), typeof(bool) }, new object[] { Command});
         }
@@ -429,7 +429,7 @@ namespace ASCOM.DriverAccess
         /// <returns>
         /// Returns the interpreted boolean response received from the device.
         /// </returns>
-        public bool CommandBool(string Command)
+        public bool CommandBool(string Command, bool Raw)
         {
             return (bool)memberFactory.CallMember(3, "CommandBool", new Type[] { typeof(string), typeof(bool) }, new object[] { Command });
         }
@@ -446,7 +446,7 @@ namespace ASCOM.DriverAccess
         /// <returns>
         /// Returns the string response received from the device.
         /// </returns>
-        public string CommandString(string Command)
+        public string CommandString(string Command, bool Raw)
         {
             return (string)memberFactory.CallMember(3, "CommandString", new Type[] { typeof(string), typeof(bool) }, new object[] { Command});
         }
