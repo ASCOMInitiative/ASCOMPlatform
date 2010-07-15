@@ -106,6 +106,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SolutionVersion.cs">
+      <Link>Properties\SolutionVersion.cs</Link>
+    </Compile>
     <Compile Include="Forms\AboutBox1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -226,7 +229,7 @@
     <Content Include="ReadMe.htm" />
     <None Include="I:\Software Development\HelpNDoc\TCF-S\ASCOM\.NET Version\TCFSHelp.chm">
       <Link>TCFSHelp.chm</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\TCF.ico">
     </None>
@@ -235,9 +238,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <Content Include="ReadMe.rtf">
+    <None Include="ReadMe.rtf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
     <None Include="Resources\TCF-S3_TCF-S_1_Medium.jpg" />
     <None Include="Resources\RedLight.png" />
     <None Include="Resources\Optec Logo-medium png.png" />
