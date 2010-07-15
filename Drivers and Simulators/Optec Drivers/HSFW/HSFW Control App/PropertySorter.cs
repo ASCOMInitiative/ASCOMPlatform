@@ -5,7 +5,7 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 
-namespace WindowsFormsApplication1
+namespace HSFWControlApp
 {
     public class PropertySorter : ExpandableObjectConverter
     {

@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using OptecHID_FilterWheelAPI;
 
-namespace WindowsFormsApplication1
+namespace HSFWControlApp
 {
     public partial class Form1 : Form
     {

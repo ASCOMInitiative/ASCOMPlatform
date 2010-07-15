@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace WindowsFormsApplication1
+namespace HSFWControlApp
 {
     partial class AboutBox1 : Form
     {
