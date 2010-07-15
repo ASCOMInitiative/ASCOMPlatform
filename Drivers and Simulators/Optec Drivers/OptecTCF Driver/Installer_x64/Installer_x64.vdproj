@@ -15,32 +15,26 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_0F04FC19CEAB9FF18366E1BC92C02FC1"
-        "OwnerKey" = "8:_523DAC0C6D9F4AED87E851B958DF490C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_19C8203E72734AC2BBBFF1A0DE82F2C2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_42BE19284EAFBC1A9751B386F82320B2"
+        "MsmKey" = "8:_4B557CD7DC652B6B4BAB8826DCC76609"
         "OwnerKey" = "8:_19C8203E72734AC2BBBFF1A0DE82F2C2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_42BE19284EAFBC1A9751B386F82320B2"
+        "MsmKey" = "8:_4B557CD7DC652B6B4BAB8826DCC76609"
         "OwnerKey" = "8:_523DAC0C6D9F4AED87E851B958DF490C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_42BE19284EAFBC1A9751B386F82320B2"
-        "OwnerKey" = "8:_75C424544CFF94C945CD28619C06BD07"
+        "MsmKey" = "8:_4B557CD7DC652B6B4BAB8826DCC76609"
+        "OwnerKey" = "8:_512691FEEE44FD2D2273EE07019B65F4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -52,13 +46,25 @@
         "Entry"
         {
         "MsmKey" = "8:_51026018C239D899723A857465B9E708"
-        "OwnerKey" = "8:_A2BF1EFD54924C2946A35F43110B06C4"
+        "OwnerKey" = "8:_97777C102AAF2FCC7B85BEB87C33B915"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_51026018C239D899723A857465B9E708"
         "OwnerKey" = "8:_19C8203E72734AC2BBBFF1A0DE82F2C2"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_512691FEEE44FD2D2273EE07019B65F4"
+        "OwnerKey" = "8:_19C8203E72734AC2BBBFF1A0DE82F2C2"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_512691FEEE44FD2D2273EE07019B65F4"
+        "OwnerKey" = "8:_523DAC0C6D9F4AED87E851B958DF490C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -69,20 +75,14 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_6EE0E9E0494424D072C947C5D22E03CD"
+        "OwnerKey" = "8:_523DAC0C6D9F4AED87E851B958DF490C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_7120A22B27627D6F37005CE9D52FA8C6"
         "OwnerKey" = "8:_51026018C239D899723A857465B9E708"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_75C424544CFF94C945CD28619C06BD07"
-        "OwnerKey" = "8:_19C8203E72734AC2BBBFF1A0DE82F2C2"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_75C424544CFF94C945CD28619C06BD07"
-        "OwnerKey" = "8:_523DAC0C6D9F4AED87E851B958DF490C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -99,14 +99,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_9CD72123E02764A179E094FF19DE74C4"
-        "OwnerKey" = "8:_75C424544CFF94C945CD28619C06BD07"
+        "MsmKey" = "8:_97777C102AAF2FCC7B85BEB87C33B915"
+        "OwnerKey" = "8:_19C8203E72734AC2BBBFF1A0DE82F2C2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_A2BF1EFD54924C2946A35F43110B06C4"
-        "OwnerKey" = "8:_19C8203E72734AC2BBBFF1A0DE82F2C2"
+        "MsmKey" = "8:_BD0F8988CC26BACB09AD0366ACA27795"
+        "OwnerKey" = "8:_512691FEEE44FD2D2273EE07019B65F4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -124,7 +124,7 @@
         "Entry"
         {
         "MsmKey" = "8:_C9FC3F1990CEAA543D364D79F6EA29AA"
-        "OwnerKey" = "8:_A2BF1EFD54924C2946A35F43110B06C4"
+        "OwnerKey" = "8:_97777C102AAF2FCC7B85BEB87C33B915"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -160,19 +160,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_75C424544CFF94C945CD28619C06BD07"
+        "OwnerKey" = "8:_512691FEEE44FD2D2273EE07019B65F4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_42BE19284EAFBC1A9751B386F82320B2"
+        "OwnerKey" = "8:_4B557CD7DC652B6B4BAB8826DCC76609"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_A2BF1EFD54924C2946A35F43110B06C4"
+        "OwnerKey" = "8:_97777C102AAF2FCC7B85BEB87C33B915"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -373,34 +373,14 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0F04FC19CEAB9FF18366E1BC92C02FC1"
-            {
-            "SourcePath" = "8:ASCOM.OptecTCF_S.Focuser.tlb"
-            "TargetName" = "8:ASCOM.OptecTCF_S.Focuser.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_19ABABE081E74CAF96DD8EE95F2B47CE"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_42BE19284EAFBC1A9751B386F82320B2"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4B557CD7DC652B6B4BAB8826DCC76609"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_42BE19284EAFBC1A9751B386F82320B2"
+                    "_4B557CD7DC652B6B4BAB8826DCC76609"
                     {
                     "Name" = "8:ASCOM.Exceptions.dll"
                     "Attributes" = "3:512"
@@ -455,34 +435,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7120A22B27627D6F37005CE9D52FA8C6"
-            {
-            "SourcePath" = "8:AscomMasterInterfaces.tlb"
-            "TargetName" = "8:AscomMasterInterfaces.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_E18A983983FD41AD96CF5BED37D290DE"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_75C424544CFF94C945CD28619C06BD07"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_512691FEEE44FD2D2273EE07019B65F4"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:ASCOM.Utilities, Version=5.5.1.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_75C424544CFF94C945CD28619C06BD07"
+                    "_512691FEEE44FD2D2273EE07019B65F4"
                     {
                     "Name" = "8:ASCOM.Utilities.dll"
                     "Attributes" = "3:512"
@@ -502,6 +462,46 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6EE0E9E0494424D072C947C5D22E03CD"
+            {
+            "SourcePath" = "8:ASCOM.OptecTCF_S.Focuser.tlb"
+            "TargetName" = "8:ASCOM.OptecTCF_S.Focuser.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_1C4CC00E43EE4C97B813519D0660D7F6"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7120A22B27627D6F37005CE9D52FA8C6"
+            {
+            "SourcePath" = "8:AscomMasterInterfaces.tlb"
+            "TargetName" = "8:AscomMasterInterfaces.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_E18A983983FD41AD96CF5BED37D290DE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
             "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
@@ -546,34 +546,14 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9CD72123E02764A179E094FF19DE74C4"
-            {
-            "SourcePath" = "8:ASCOM.Utilities.tlb"
-            "TargetName" = "8:ASCOM.Utilities.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_E18A983983FD41AD96CF5BED37D290DE"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A2BF1EFD54924C2946A35F43110B06C4"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_97777C102AAF2FCC7B85BEB87C33B915"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:ASCOM.DriverAccess, Version=1.0.5.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_A2BF1EFD54924C2946A35F43110B06C4"
+                    "_97777C102AAF2FCC7B85BEB87C33B915"
                     {
                     "Name" = "8:ASCOM.DriverAccess.dll"
                     "Attributes" = "3:512"
@@ -593,6 +573,26 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BD0F8988CC26BACB09AD0366ACA27795"
+            {
+            "SourcePath" = "8:ASCOM.Utilities.tlb"
+            "TargetName" = "8:ASCOM.Utilities.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_E18A983983FD41AD96CF5BED37D290DE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
             "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
@@ -753,7 +753,7 @@
             }
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_E18A983983FD41AD96CF5BED37D290DE"
             {
-            "DefaultLocation" = "8:[ProgramFiles64Folder][Manufacturer]\\[ProductName]"
+            "DefaultLocation" = "8:[ProgramFiles64Folder]\\Optec\\TCF-S"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -761,6 +761,17 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_1C4CC00E43EE4C97B813519D0660D7F6"
+                    {
+                    "Name" = "8:ASCOM Executables"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_998B65BDCED74E44BA1E46E34CCF6BCC"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
             "{1525181F-901A-416C-8A58-119130FE478E}:_FA1260E7D9534C3EA66E6D3657BF5D90"
@@ -790,28 +801,6 @@
                             "Property" = "8:_B924483C1DBD446CA53455B73585A4D3"
                                 "Folders"
                                 {
-                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_0AC33F74DF424D7189F7A9D00FE9E4D6"
-                                    {
-                                    "Name" = "8:Wizard"
-                                    "AlwaysCreate" = "11:FALSE"
-                                    "Condition" = "8:"
-                                    "Transitive" = "11:FALSE"
-                                    "Property" = "8:_CB5B42B7497C484A801E7E373A2ACF67"
-                                        "Folders"
-                                        {
-                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_46BB07CEC1A14A28A36FB77CE31FFC45"
-                                            {
-                                            "Name" = "8:1.0.0.0"
-                                            "AlwaysCreate" = "11:FALSE"
-                                            "Condition" = "8:"
-                                            "Transitive" = "11:FALSE"
-                                            "Property" = "8:_C26C0C5D830E4FFD9E6F4FE16DE8B430"
-                                                "Folders"
-                                                {
-                                                }
-                                            }
-                                        }
-                                    }
                                     "{9EF0B969-E518-4E46-987F-47570745A589}:_4AE3ED8F70B04CB6960970E5E48F1F72"
                                     {
                                     "Name" = "8:Help Files"
@@ -889,14 +878,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Optec TCF-S ASCOM Driver (64 Bit)"
-        "ProductCode" = "8:{2E58337A-79D8-402C-AD99-BB137D66462F}"
-        "PackageCode" = "8:{4417F457-5BE2-4121-BAF6-9EFD2165C74A}"
+        "ProductCode" = "8:{A24A6F1D-607D-40E2-82DF-DE0A4371429C}"
+        "PackageCode" = "8:{CBAA2149-5529-450E-8C68-613F4736FB85}"
         "UpgradeCode" = "8:{DF502D19-C0EE-487E-A73B-CB13D898853D}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:5.1.1"
+        "ProductVersion" = "8:5.2.0"
         "Manufacturer" = "8:Optec Inc"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://www.optecinc.com"
@@ -906,7 +895,7 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:ASCOM driver for Optec TCF-S Focuser (64 bit)"
         "ARPURLINFOABOUT" = "8:www.optecinc.com"
-        "ARPPRODUCTICON" = "8:"
+        "ARPPRODUCTICON" = "8:_C5FEEA750A254F028580152F5C7CE0F4"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
@@ -1009,7 +998,7 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_72E827F4C50947CEB5DF6A5D0D7CC1B7"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_470E94C98E264D96A40B5B5BE8F3D66D"
             {
             "Name" = "8:Temperature Coefficient Wizard"
             "Arguments" = "8:"
@@ -1019,8 +1008,8 @@
             "Transitive" = "11:FALSE"
             "Target" = "8:_19C8203E72734AC2BBBFF1A0DE82F2C2"
             "Folder" = "8:_0EE987582AC542FC8157218EE4800100"
-            "WorkingFolder" = "8:"
-            "Icon" = "8:_C5FEEA750A254F028580152F5C7CE0F4"
+            "WorkingFolder" = "8:_1C4CC00E43EE4C97B813519D0660D7F6"
+            "Icon" = "8:"
             "Feature" = "8:"
             }
         }
@@ -1464,7 +1453,7 @@
             "SourcePath" = "8:..\\LearnTemperatureCoefficients\\LearnTemperatureCoefficients\\obj\\Release\\TempCoeffWizard.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_46BB07CEC1A14A28A36FB77CE31FFC45"
+            "Folder" = "8:_1C4CC00E43EE4C97B813519D0660D7F6"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1489,10 +1478,10 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_523DAC0C6D9F4AED87E851B958DF490C"
             {
-            "SourcePath" = "8:..\\OptecTCF-S Focuser\\obj\\Release\\ASCOM.OptecTCF_S.Focuser.dll"
+            "SourcePath" = "8:..\\OptecTCF-S Focuser\\obj\\Release With Install\\ASCOM.OptecTCF_S.Focuser.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_19ABABE081E74CAF96DD8EE95F2B47CE"
+            "Folder" = "8:_1C4CC00E43EE4C97B813519D0660D7F6"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
