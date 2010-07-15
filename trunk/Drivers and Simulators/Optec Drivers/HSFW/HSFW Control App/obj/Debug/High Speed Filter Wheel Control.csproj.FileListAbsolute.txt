@@ -1,0 +1,23 @@
+C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
+C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.manifest
+C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.application
+C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
+C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
+C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\bin\Debug\OptecHID_FilterWheelAPI.dll
+C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\bin\Debug\OptecHIDTools.dll
+C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\bin\Debug\OptecHID_FilterWheelAPI.pdb
+C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\bin\Debug\OptecHIDTools.pdb
+C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\obj\Debug\ResolveAssemblyReference.cache
+C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.AboutBox1.resources
+C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
+C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.ProcessingForm.resources
+C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
+C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.SetupForm.resources
+C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\obj\Debug\High Speed Filter Wheel Control.csproj.GenerateResource.Cache
+C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe.manifest
+C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.application
+C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
+C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\bin\Debug\WindowsFormsApplication1.exe.config
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\obj\Debug\WindowsFormsApplication1.exe
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\obj\Debug\WindowsFormsApplication1.pdb
