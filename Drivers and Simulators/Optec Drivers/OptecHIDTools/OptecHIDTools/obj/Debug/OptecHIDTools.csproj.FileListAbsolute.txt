@@ -1,0 +1,18 @@
+\\Zeta\User Folders\Jordan\My Documents\Programming\Jordans Programs\OptecHIDTools\OptecHIDTools\bin\Debug\OptecHIDTools.dll
+\\Zeta\User Folders\Jordan\My Documents\Programming\Jordans Programs\OptecHIDTools\OptecHIDTools\bin\Debug\OptecHIDTools.pdb
+\\Zeta\User Folders\Jordan\My Documents\Programming\Jordans Programs\OptecHIDTools\OptecHIDTools\obj\Debug\ResolveAssemblyReference.cache
+\\Zeta\User Folders\Jordan\My Documents\Programming\Jordans Programs\OptecHIDTools\OptecHIDTools\obj\Debug\OptecHIDTools.dll
+\\Zeta\User Folders\Jordan\My Documents\Programming\Jordans Programs\OptecHIDTools\OptecHIDTools\obj\Debug\OptecHIDTools.pdb
+C:\Users\Jordan.OPTECINC\Desktop\OptecHIDTools\OptecHIDTools\bin\Debug\OptecHIDTools.dll
+C:\Users\Jordan.OPTECINC\Desktop\OptecHIDTools\OptecHIDTools\bin\Debug\OptecHIDTools.pdb
+C:\Users\Jordan.OPTECINC\Desktop\OptecHIDTools\OptecHIDTools\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Jordan.OPTECINC\Desktop\OptecHIDTools\OptecHIDTools\obj\Debug\OptecHIDTools.dll
+C:\Users\Jordan.OPTECINC\Desktop\OptecHIDTools\OptecHIDTools\obj\Debug\OptecHIDTools.pdb
+C:\Jordans Programs (Working Copy)\OptecHIDTools\OptecHIDTools\bin\Debug\OptecHIDTools.dll
+C:\Jordans Programs (Working Copy)\OptecHIDTools\OptecHIDTools\bin\Debug\OptecHIDTools.pdb
+C:\Jordans Programs (Working Copy)\OptecHIDTools\OptecHIDTools\bin\Debug\OptecHIDTools.tlb
+C:\Jordans Programs (Working Copy)\OptecHIDTools\OptecHIDTools\obj\Debug\ResolveAssemblyReference.cache
+C:\Jordans Programs (Working Copy)\OptecHIDTools\OptecHIDTools\obj\Debug\OptecHIDTools.DeviceChangeNotifier.resources
+C:\Jordans Programs (Working Copy)\OptecHIDTools\OptecHIDTools\obj\Debug\OptecHIDTools.csproj.GenerateResource.Cache
+C:\Jordans Programs (Working Copy)\OptecHIDTools\OptecHIDTools\obj\Debug\OptecHIDTools.dll
+C:\Jordans Programs (Working Copy)\OptecHIDTools\OptecHIDTools\obj\Debug\OptecHIDTools.pdb

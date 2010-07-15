@@ -1,0 +1,20 @@
+C:\Jordans Programs (Working Copy)\OptecHIDTools\TestOptecHID\bin\Release\TestOptecHID.exe
+C:\Jordans Programs (Working Copy)\OptecHIDTools\TestOptecHID\bin\Release\TestOptecHID.pdb
+C:\Jordans Programs (Working Copy)\OptecHIDTools\TestOptecHID\bin\Release\OptecHIDTools.dll
+C:\Jordans Programs (Working Copy)\OptecHIDTools\TestOptecHID\bin\Release\OptecHIDTools.pdb
+C:\Jordans Programs (Working Copy)\OptecHIDTools\TestOptecHID\obj\Release\ResolveAssemblyReference.cache
+C:\Jordans Programs (Working Copy)\OptecHIDTools\TestOptecHID\obj\Release\TestOptecHID.Form1.resources
+C:\Jordans Programs (Working Copy)\OptecHIDTools\TestOptecHID\obj\Release\TestOptecHID.Properties.Resources.resources
+C:\Jordans Programs (Working Copy)\OptecHIDTools\TestOptecHID\obj\Release\TestOptecHID.csproj.GenerateResource.Cache
+C:\Jordans Programs (Working Copy)\OptecHIDTools\TestOptecHID\obj\Release\TestOptecHID.exe
+C:\Jordans Programs (Working Copy)\OptecHIDTools\TestOptecHID\obj\Release\TestOptecHID.pdb
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\OptecHIDTools\TestOptecHID\obj\Release\TestOptecHID.exe
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\OptecHIDTools\TestOptecHID\obj\Release\TestOptecHID.pdb
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\OptecHIDTools\TestOptecHID\bin\Release\TestOptecHID.exe
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\OptecHIDTools\TestOptecHID\bin\Release\TestOptecHID.pdb
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\OptecHIDTools\TestOptecHID\bin\Release\OptecHIDTools.dll
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\OptecHIDTools\TestOptecHID\bin\Release\OptecHIDTools.pdb
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\OptecHIDTools\TestOptecHID\obj\Release\ResolveAssemblyReference.cache
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\OptecHIDTools\TestOptecHID\obj\Release\TestOptecHID.Form1.resources
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\OptecHIDTools\TestOptecHID\obj\Release\TestOptecHID.Properties.Resources.resources
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\OptecHIDTools\TestOptecHID\obj\Release\TestOptecHID.csproj.GenerateResource.Cache
