@@ -1,4 +1,4 @@
-﻿namespace WindowsFormsApplication1
+﻿namespace HSFWControlApp
 {
     partial class Form1
     {

@@ -8,8 +8,8 @@
     <ProjectGuid>{D2936A77-5E35-4F18-B92E-5BE0F53E3D95}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WindowsFormsApplication1</RootNamespace>
-    <AssemblyName>WindowsFormsApplication1</AssemblyName>
+    <RootNamespace>HSFWControlApp</RootNamespace>
+    <AssemblyName>HSFWControlApp</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -51,6 +51,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="OptecHID_FilterWheelAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\HSFW API\bin\Release\OptecHID_FilterWheelAPI.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -129,17 +133,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OptecHID_FilterWheelAPI\OptecHID_FilterWheelAPI.csproj">
-      <Project>{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}</Project>
-      <Name>OptecHID_FilterWheelAPI</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="High Speed Filter Wheel Control_TemporaryKey.pfx" />
-    <None Include="I:\Software Development\HelpNDoc\HSFW Control\HSFW Control Help.chm">
-      <Link>Resources\HSFW Control Help.chm</Link>
+    <Content Include="I:\Software Development\HelpNDoc\HSFW Control\HSFW Control Help.chm">
+      <Link>Help Files\HSFW Control Help.chm</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="Resources\Optec Logo-medium png.png" />
   </ItemGroup>
   <ItemGroup>

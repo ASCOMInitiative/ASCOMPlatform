@@ -12,7 +12,7 @@ using System.Reflection;
 using System.Diagnostics;
 
 
-namespace WindowsFormsApplication1
+namespace HSFWControlApp
 {
     
     public partial class SetupForm : Form

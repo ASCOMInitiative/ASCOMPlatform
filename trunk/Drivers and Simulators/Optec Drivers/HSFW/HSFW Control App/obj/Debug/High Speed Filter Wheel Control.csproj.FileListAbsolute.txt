@@ -18,6 +18,24 @@ C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplicati
 C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.application
 C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
 C:\Jordans Programs (Working Copy)\OptecHID_FilterWheelAPI\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
-D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\bin\Debug\WindowsFormsApplication1.exe.config
-D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\obj\Debug\WindowsFormsApplication1.exe
-D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\obj\Debug\WindowsFormsApplication1.pdb
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\bin\Debug\Resources\HSFW Control Help.chm
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\bin\Debug\HSFWControlApp.exe.config
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\bin\Debug\HSFWControlApp.exe.manifest
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\bin\Debug\HSFWControlApp.application
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\bin\Debug\HSFWControlApp.exe
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\bin\Debug\HSFWControlApp.pdb
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\bin\Debug\OptecHID_FilterWheelAPI.dll
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\bin\Debug\OptecHIDTools.dll
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\bin\Debug\OptecHID_FilterWheelAPI.pdb
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\bin\Debug\OptecHIDTools.pdb
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\obj\Debug\ResolveAssemblyReference.cache
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\obj\Debug\HSFWControlApp.AboutBox1.resources
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\obj\Debug\HSFWControlApp.Form1.resources
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\obj\Debug\HSFWControlApp.ProcessingForm.resources
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\obj\Debug\HSFWControlApp.Properties.Resources.resources
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\obj\Debug\HSFWControlApp.SetupForm.resources
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\obj\Debug\High Speed Filter Wheel Control.csproj.GenerateResource.Cache
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\obj\Debug\HSFWControlApp.exe.manifest
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\obj\Debug\HSFWControlApp.application
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\obj\Debug\HSFWControlApp.exe
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\obj\Debug\HSFWControlApp.pdb
