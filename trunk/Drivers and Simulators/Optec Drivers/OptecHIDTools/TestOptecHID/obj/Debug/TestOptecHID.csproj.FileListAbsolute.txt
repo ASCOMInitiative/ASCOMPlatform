@@ -1,0 +1,30 @@
+\\Zeta\User Folders\Jordan\My Documents\Programming\Jordans Programs\OptecHIDTools\TestOptecHID\obj\Debug\ResolveAssemblyReference.cache
+\\Zeta\User Folders\Jordan\My Documents\Programming\Jordans Programs\OptecHIDTools\TestOptecHID\obj\Debug\TestOptecHID.Form1.resources
+\\Zeta\User Folders\Jordan\My Documents\Programming\Jordans Programs\OptecHIDTools\TestOptecHID\obj\Debug\TestOptecHID.Properties.Resources.resources
+\\Zeta\User Folders\Jordan\My Documents\Programming\Jordans Programs\OptecHIDTools\TestOptecHID\obj\Debug\TestOptecHID.csproj.GenerateResource.Cache
+\\Zeta\User Folders\Jordan\My Documents\Programming\Jordans Programs\OptecHIDTools\TestOptecHID\bin\Debug\TestOptecHID.exe
+\\Zeta\User Folders\Jordan\My Documents\Programming\Jordans Programs\OptecHIDTools\TestOptecHID\bin\Debug\TestOptecHID.pdb
+\\Zeta\User Folders\Jordan\My Documents\Programming\Jordans Programs\OptecHIDTools\TestOptecHID\bin\Debug\OptecHIDTools.dll
+\\Zeta\User Folders\Jordan\My Documents\Programming\Jordans Programs\OptecHIDTools\TestOptecHID\bin\Debug\OptecHIDTools.pdb
+\\Zeta\User Folders\Jordan\My Documents\Programming\Jordans Programs\OptecHIDTools\TestOptecHID\obj\Debug\TestOptecHID.exe
+\\Zeta\User Folders\Jordan\My Documents\Programming\Jordans Programs\OptecHIDTools\TestOptecHID\obj\Debug\TestOptecHID.pdb
+C:\Users\Jordan.OPTECINC\Desktop\OptecHIDTools\TestOptecHID\bin\Debug\TestOptecHID.exe
+C:\Users\Jordan.OPTECINC\Desktop\OptecHIDTools\TestOptecHID\bin\Debug\TestOptecHID.pdb
+C:\Users\Jordan.OPTECINC\Desktop\OptecHIDTools\TestOptecHID\bin\Debug\OptecHIDTools.dll
+C:\Users\Jordan.OPTECINC\Desktop\OptecHIDTools\TestOptecHID\bin\Debug\OptecHIDTools.pdb
+C:\Users\Jordan.OPTECINC\Desktop\OptecHIDTools\TestOptecHID\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Jordan.OPTECINC\Desktop\OptecHIDTools\TestOptecHID\obj\Debug\TestOptecHID.Form1.resources
+C:\Users\Jordan.OPTECINC\Desktop\OptecHIDTools\TestOptecHID\obj\Debug\TestOptecHID.Properties.Resources.resources
+C:\Users\Jordan.OPTECINC\Desktop\OptecHIDTools\TestOptecHID\obj\Debug\TestOptecHID.csproj.GenerateResource.Cache
+C:\Users\Jordan.OPTECINC\Desktop\OptecHIDTools\TestOptecHID\obj\Debug\TestOptecHID.exe
+C:\Users\Jordan.OPTECINC\Desktop\OptecHIDTools\TestOptecHID\obj\Debug\TestOptecHID.pdb
+C:\Jordans Programs (Working Copy)\OptecHIDTools\TestOptecHID\bin\Debug\TestOptecHID.exe
+C:\Jordans Programs (Working Copy)\OptecHIDTools\TestOptecHID\bin\Debug\TestOptecHID.pdb
+C:\Jordans Programs (Working Copy)\OptecHIDTools\TestOptecHID\bin\Debug\OptecHIDTools.dll
+C:\Jordans Programs (Working Copy)\OptecHIDTools\TestOptecHID\bin\Debug\OptecHIDTools.pdb
+C:\Jordans Programs (Working Copy)\OptecHIDTools\TestOptecHID\obj\Debug\ResolveAssemblyReference.cache
+C:\Jordans Programs (Working Copy)\OptecHIDTools\TestOptecHID\obj\Debug\TestOptecHID.Form1.resources
+C:\Jordans Programs (Working Copy)\OptecHIDTools\TestOptecHID\obj\Debug\TestOptecHID.Properties.Resources.resources
+C:\Jordans Programs (Working Copy)\OptecHIDTools\TestOptecHID\obj\Debug\TestOptecHID.csproj.GenerateResource.Cache
+C:\Jordans Programs (Working Copy)\OptecHIDTools\TestOptecHID\obj\Debug\TestOptecHID.exe
+C:\Jordans Programs (Working Copy)\OptecHIDTools\TestOptecHID\obj\Debug\TestOptecHID.pdb
