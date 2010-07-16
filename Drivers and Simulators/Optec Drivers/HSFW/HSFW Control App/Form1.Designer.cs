@@ -40,6 +40,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.VersionCheckerBGWorker = new System.ComponentModel.BackgroundWorker();
+            this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -104,8 +105,9 @@
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutToolStripMenuItem,
             this.productDocumentationToolStripMenuItem,
-            this.aboutToolStripMenuItem});
+            this.checkForUpdatesToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
             this.helpToolStripMenuItem.Text = "Help";
@@ -140,6 +142,13 @@
             // VersionCheckerBGWorker
             // 
             this.VersionCheckerBGWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.VersionCheckerBGWorker_DoWork);
+            // 
+            // checkForUpdatesToolStripMenuItem
+            // 
+            this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
+            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.checkForUpdatesToolStripMenuItem.Text = "Check For Updates";
+            this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdatesToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -178,6 +187,7 @@
         private System.Windows.Forms.ToolStripMenuItem refreshDevicesToolStripMenuItem;
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.ComponentModel.BackgroundWorker VersionCheckerBGWorker;
+        private System.Windows.Forms.ToolStripMenuItem checkForUpdatesToolStripMenuItem;
 
 
     }
