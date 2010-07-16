@@ -111,6 +111,7 @@ namespace HSFWControlApp
             }
             catch (Exception)
             {
+                throw;
             }
             finally
             {
