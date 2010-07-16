@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "High Speed Filter Wheel Con
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HSFW_x86", "Installers\HSFW_x86\HSFW_x86\HSFW_x86.vdproj", "{2852C0B7-DDBB-431A-B584-2870A0D75C63}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HSFW_x64", "Installers\HSFW_x64\HSFW_x64.vdproj", "{13275727-082C-4FE9-82A4-3D840FE875F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,8 @@ Global
 		{2852C0B7-DDBB-431A-B584-2870A0D75C63}.Debug|Any CPU.Build.0 = Debug
 		{2852C0B7-DDBB-431A-B584-2870A0D75C63}.Release|Any CPU.ActiveCfg = Release
 		{2852C0B7-DDBB-431A-B584-2870A0D75C63}.Release|Any CPU.Build.0 = Release
+		{13275727-082C-4FE9-82A4-3D840FE875F4}.Debug|Any CPU.ActiveCfg = Debug
+		{13275727-082C-4FE9-82A4-3D840FE875F4}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
