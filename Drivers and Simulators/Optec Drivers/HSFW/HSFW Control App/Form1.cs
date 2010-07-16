@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using OptecHID_FilterWheelAPI;
+using System.Reflection;
 
 namespace HSFWControlApp
 {
@@ -401,7 +402,25 @@ namespace HSFWControlApp
         {
             string appPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             helpProvider1.HelpNamespace = System.IO.Path.Combine(appPath, "Resources\\HSFW Control Help.chm");
-            
+            VersionCheckerBGWorker.RunWorkerAsync();
+        }
+
+        private void VersionCheckerBGWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            //Check For A newer verison of the driver
+            if (NewVersionChecker.CheckLatestVerisonNumber(NewVersionChecker.ProductType.HSFWControl))
+            {
+                //Found a VersionNumber, now check if it's newer
+                Assembly asm = Assembly.GetExecutingAssembly();
+                AssemblyName asmName = asm.GetName();
+                NewVersionChecker.CompareToLatestVersion(asmName.Version);
+                if (NewVersionChecker.NewerVersionAvailable)
+                {
+                    NewVersionFrm nvf = new NewVersionFrm(asmName.Version.ToString(),
+                        NewVersionChecker.NewerVersionNumber, NewVersionChecker.NewerVersionURL);
+                    nvf.ShowDialog();
+                }
+            }
         }
 
 

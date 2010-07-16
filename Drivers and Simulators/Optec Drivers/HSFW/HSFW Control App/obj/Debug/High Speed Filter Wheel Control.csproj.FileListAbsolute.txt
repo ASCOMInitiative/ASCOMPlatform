@@ -47,3 +47,5 @@ D:\ASCOM REPO\Drivers and Simulators\Optec Drivers2\HSFW\HSFW Control App\obj\De
 D:\ASCOM REPO\Drivers and Simulators\Optec Drivers2\HSFW\HSFW Control App\obj\Debug\HSFWControlApp.Properties.Resources.resources
 D:\ASCOM REPO\Drivers and Simulators\Optec Drivers2\HSFW\HSFW Control App\obj\Debug\HSFWControlApp.SetupForm.resources
 D:\ASCOM REPO\Drivers and Simulators\Optec Drivers2\HSFW\HSFW Control App\obj\Debug\High Speed Filter Wheel Control.csproj.GenerateResource.Cache
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\obj\Debug\ASCOM.OptecTCF_S.NewVersionFrm.resources
+D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\HSFW\HSFW Control App\obj\Debug\HSFWControlApp.NewVersionFrm.resources
