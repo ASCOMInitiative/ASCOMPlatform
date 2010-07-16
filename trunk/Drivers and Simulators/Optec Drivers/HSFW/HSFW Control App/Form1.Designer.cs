@@ -39,6 +39,7 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+            this.VersionCheckerBGWorker = new System.ComponentModel.BackgroundWorker();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -136,6 +137,10 @@
             this.tabControl1.TabIndex = 0;
             this.tabControl1.TabStop = false;
             // 
+            // VersionCheckerBGWorker
+            // 
+            this.VersionCheckerBGWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.VersionCheckerBGWorker_DoWork);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -172,6 +177,7 @@
         private System.Windows.Forms.ToolStripMenuItem productDocumentationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem refreshDevicesToolStripMenuItem;
         private System.Windows.Forms.HelpProvider helpProvider1;
+        private System.ComponentModel.BackgroundWorker VersionCheckerBGWorker;
 
 
     }

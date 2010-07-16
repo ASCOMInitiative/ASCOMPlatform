@@ -80,6 +80,13 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="NewVersionChecker.cs" />
+    <Compile Include="NewVersionFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewVersionFrm.designer.cs">
+      <DependentUpon>NewVersionFrm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProcessingForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,6 +100,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewVersionFrm.resx">
+      <DependentUpon>NewVersionFrm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProcessingForm.resx">
       <DependentUpon>ProcessingForm.cs</DependentUpon>
