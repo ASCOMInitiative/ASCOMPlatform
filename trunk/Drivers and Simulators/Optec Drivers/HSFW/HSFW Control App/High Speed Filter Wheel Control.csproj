@@ -140,10 +140,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="High Speed Filter Wheel Control_TemporaryKey.pfx" />
-    <Content Include="I:\Software Development\HelpNDoc\HSFW Control\HSFW Control Help.chm">
-      <Link>Help Files\HSFW Control Help.chm</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Resources\Optec Logo-medium png.png" />
   </ItemGroup>
   <ItemGroup>
@@ -179,10 +175,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Dependencies\HSFW%2520API\OptecHID_FilterWheelAPI.csproj">
+    <ProjectReference Include="..\HSFW API\OptecHID_FilterWheelAPI.csproj">
       <Project>{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}</Project>
       <Name>OptecHID_FilterWheelAPI</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Help Files\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
