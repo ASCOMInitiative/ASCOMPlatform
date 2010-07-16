@@ -68,10 +68,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram3.cd" />
-    <Content Include="I:\Software Development\HelpNDoc\USB FilterWheel DLL\USB_FilterWheel_DLL.chm">
-      <Link>Help Files\USB_FilterWheel_DLL.chm</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Optec.snk" />
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +75,9 @@
       <Project>{9786A9B9-97B9-4B23-AF39-4514AF45DEED}</Project>
       <Name>OptecHIDTools</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Help Files\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

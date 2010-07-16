@@ -15,32 +15,20 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_99477D9C1C5C21CBB8D6DF3A5AFD0683"
-        "OwnerKey" = "8:_D5E5F14DA40642E591CA79CA4A9BE8C5"
+        "MsmKey" = "8:_28F314E3869F45119E652E7BBBDD2779"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_99477D9C1C5C21CBB8D6DF3A5AFD0683"
+        "MsmKey" = "8:_76A2E82C3A5EDB95FF9A70086AEA98A5"
+        "OwnerKey" = "8:_A114B0B31FE5189D9C597810687ED81C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A114B0B31FE5189D9C597810687ED81C"
         "OwnerKey" = "8:_AC139A147BBC43918D39A5B23B5F0EC9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_99477D9C1C5C21CBB8D6DF3A5AFD0683"
-        "OwnerKey" = "8:_A8042D8B779F17BD51B1A8EC21DFBB9C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9B10F7956CA69B56A95FA02FC0E315A1"
-        "OwnerKey" = "8:_AC139A147BBC43918D39A5B23B5F0EC9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A8042D8B779F17BD51B1A8EC21DFBB9C"
-        "OwnerKey" = "8:_D5E5F14DA40642E591CA79CA4A9BE8C5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -51,30 +39,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_ADD3910135056EB6E12020E9BAB232A0"
-        "OwnerKey" = "8:_99477D9C1C5C21CBB8D6DF3A5AFD0683"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_D4CF83649F7ABBECF5CEE17BC50A079F"
-        "OwnerKey" = "8:_A8042D8B779F17BD51B1A8EC21DFBB9C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_D5E5F14DA40642E591CA79CA4A9BE8C5"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_D5E5F14DA40642E591CA79CA4A9BE8C5"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_AC139A147BBC43918D39A5B23B5F0EC9"
         "MsmSig" = "8:_UNDEFINED"
@@ -82,13 +46,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_A8042D8B779F17BD51B1A8EC21DFBB9C"
+        "OwnerKey" = "8:_28F314E3869F45119E652E7BBBDD2779"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_99477D9C1C5C21CBB8D6DF3A5AFD0683"
+        "OwnerKey" = "8:_A114B0B31FE5189D9C597810687ED81C"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -109,6 +73,27 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5.SP1"
+                    {
+                    "Name" = "8:.NET Framework 3.5 SP1"
+                    "ProductCode" = "8:Microsoft.Net.Framework.3.5.SP1"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -125,6 +110,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -154,89 +147,7 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_99477D9C1C5C21CBB8D6DF3A5AFD0683"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:OptecHIDTools, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_99477D9C1C5C21CBB8D6DF3A5AFD0683"
-                    {
-                    "Name" = "8:OptecHIDTools.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:OptecHIDTools.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_0C696CF2BF9145CD87AEF144A19CCA6C"
-            "Condition" = "8:CONTROL_CB"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9B10F7956CA69B56A95FA02FC0E315A1"
-            {
-            "SourcePath" = "8:OptecHID_FilterWheelAPI.tlb"
-            "TargetName" = "8:OptecHID_FilterWheelAPI.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_F878880896494648B05AC421A9EF59C3"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A8042D8B779F17BD51B1A8EC21DFBB9C"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:OptecHID_FilterWheelAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_A8042D8B779F17BD51B1A8EC21DFBB9C"
-                    {
-                    "Name" = "8:OptecHID_FilterWheelAPI.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:OptecHID_FilterWheelAPI.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_0C696CF2BF9145CD87AEF144A19CCA6C"
-            "Condition" = "8:CONTROL_CB"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ADD3910135056EB6E12020E9BAB232A0"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_76A2E82C3A5EDB95FF9A70086AEA98A5"
             {
             "SourcePath" = "8:OptecHIDTools.tlb"
             "TargetName" = "8:OptecHIDTools.tlb"
@@ -256,10 +167,21 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D4CF83649F7ABBECF5CEE17BC50A079F"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A114B0B31FE5189D9C597810687ED81C"
             {
-            "SourcePath" = "8:OptecHID_FilterWheelAPI.tlb"
-            "TargetName" = "8:OptecHID_FilterWheelAPI.tlb"
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:OptecHIDTools, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_A114B0B31FE5189D9C597810687ED81C"
+                    {
+                    "Name" = "8:OptecHIDTools.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:OptecHIDTools.dll"
+            "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_0C696CF2BF9145CD87AEF144A19CCA6C"
             "Condition" = "8:CONTROL_CB"
@@ -271,7 +193,7 @@
             "Permanent" = "11:FALSE"
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
-            "Register" = "3:2"
+            "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
@@ -388,7 +310,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HSFW_x86"
         "ProductCode" = "8:{F894C985-400F-468A-8F20-9F5F21143704}"
-        "PackageCode" = "8:{FC2C9E5C-FACA-4AC8-BBCC-1704A7801CC1}"
+        "PackageCode" = "8:{A9C2C27C-3D5B-42B9-A5BA-9C60169D9833}"
         "UpgradeCode" = "8:{E1763E55-3148-4B6E-8AA7-EB9B1447F516}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
@@ -1105,12 +1027,12 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_24FE529D770E4A08AD64584CC196562A"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_28F314E3869F45119E652E7BBBDD2779"
             {
-            "SourcePath" = "8:"
+            "SourcePath" = "8:..\\..\\..\\HSFW Control App\\obj\\Debug\\HSFWControlApp.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_5A18F658427A42C8BB805A6027437C80"
+            "Folder" = "8:_2C7D8F0E59344FC4B58796832096F3E1"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1126,8 +1048,8 @@
             "IsolateTo" = "8:"
             "ProjectOutputGroupRegister" = "3:1"
             "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:ContentFiles"
-            "OutputProjectGuid" = "8:{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{D2936A77-5E35-4F18-B92E-5BE0F53E3D95}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {
@@ -1189,13 +1111,13 @@
                 {
                 }
             }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_D5E5F14DA40642E591CA79CA4A9BE8C5"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_F23B13C3FC3749ECBE4C43A45687EDD6"
             {
-            "SourcePath" = "8:..\\..\\..\\HSFW Control App\\obj\\Debug\\HSFWControlApp.exe"
+            "SourcePath" = "8:"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_0C696CF2BF9145CD87AEF144A19CCA6C"
-            "Condition" = "8:CONTROL_CB"
+            "Folder" = "8:_2C7D8F0E59344FC4B58796832096F3E1"
+            "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -1210,8 +1132,8 @@
             "IsolateTo" = "8:"
             "ProjectOutputGroupRegister" = "3:1"
             "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{D2936A77-5E35-4F18-B92E-5BE0F53E3D95}"
+            "OutputGroupCanonicalName" = "8:ContentFiles"
+            "OutputProjectGuid" = "8:{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {
