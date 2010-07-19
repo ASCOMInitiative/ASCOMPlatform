@@ -13,30 +13,46 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HSFW_x86", "Installers\HSFW
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HSFW_x64", "Installers\HSFW_x64\HSFW_x64.vdproj", "{13275727-082C-4FE9-82A4-3D840FE875F4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HSFW_ASCOM_Driver", "HSFW_ASCOM_Driver\HSFW_ASCOM_Driver.csproj", "{A4083C6B-4D48-4DAD-8E9D-5E6D72D7AFE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		ASCOM Driver Debug|Any CPU = ASCOM Driver Debug|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}.ASCOM Driver Debug|Any CPU.ActiveCfg = ASCOM Driver Debug|Any CPU
+		{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}.ASCOM Driver Debug|Any CPU.Build.0 = ASCOM Driver Debug|Any CPU
 		{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9786A9B9-97B9-4B23-AF39-4514AF45DEED}.ASCOM Driver Debug|Any CPU.ActiveCfg = ASCOM Driver Debug|Any CPU
+		{9786A9B9-97B9-4B23-AF39-4514AF45DEED}.ASCOM Driver Debug|Any CPU.Build.0 = ASCOM Driver Debug|Any CPU
 		{9786A9B9-97B9-4B23-AF39-4514AF45DEED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9786A9B9-97B9-4B23-AF39-4514AF45DEED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9786A9B9-97B9-4B23-AF39-4514AF45DEED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9786A9B9-97B9-4B23-AF39-4514AF45DEED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2936A77-5E35-4F18-B92E-5BE0F53E3D95}.ASCOM Driver Debug|Any CPU.ActiveCfg = ASCOM Driver Debug|Any CPU
 		{D2936A77-5E35-4F18-B92E-5BE0F53E3D95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D2936A77-5E35-4F18-B92E-5BE0F53E3D95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2936A77-5E35-4F18-B92E-5BE0F53E3D95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2936A77-5E35-4F18-B92E-5BE0F53E3D95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2852C0B7-DDBB-431A-B584-2870A0D75C63}.ASCOM Driver Debug|Any CPU.ActiveCfg = ASCOM Driver Debug
 		{2852C0B7-DDBB-431A-B584-2870A0D75C63}.Debug|Any CPU.ActiveCfg = Debug
-		{2852C0B7-DDBB-431A-B584-2870A0D75C63}.Debug|Any CPU.Build.0 = Debug
 		{2852C0B7-DDBB-431A-B584-2870A0D75C63}.Release|Any CPU.ActiveCfg = Release
 		{2852C0B7-DDBB-431A-B584-2870A0D75C63}.Release|Any CPU.Build.0 = Release
+		{13275727-082C-4FE9-82A4-3D840FE875F4}.ASCOM Driver Debug|Any CPU.ActiveCfg = ASCOM Driver Debug
 		{13275727-082C-4FE9-82A4-3D840FE875F4}.Debug|Any CPU.ActiveCfg = Debug
+		{13275727-082C-4FE9-82A4-3D840FE875F4}.Debug|Any CPU.Build.0 = Debug
 		{13275727-082C-4FE9-82A4-3D840FE875F4}.Release|Any CPU.ActiveCfg = Release
+		{A4083C6B-4D48-4DAD-8E9D-5E6D72D7AFE0}.ASCOM Driver Debug|Any CPU.ActiveCfg = ASCOM Driver Debug|Any CPU
+		{A4083C6B-4D48-4DAD-8E9D-5E6D72D7AFE0}.ASCOM Driver Debug|Any CPU.Build.0 = ASCOM Driver Debug|Any CPU
+		{A4083C6B-4D48-4DAD-8E9D-5E6D72D7AFE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4083C6B-4D48-4DAD-8E9D-5E6D72D7AFE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4083C6B-4D48-4DAD-8E9D-5E6D72D7AFE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4083C6B-4D48-4DAD-8E9D-5E6D72D7AFE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
