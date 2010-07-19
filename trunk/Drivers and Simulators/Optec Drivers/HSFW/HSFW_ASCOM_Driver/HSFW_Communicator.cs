@@ -5,19 +5,19 @@ using OptecHID_FilterWheelAPI;
 
 namespace ASCOM.HSFW_ASCOM_Driver
 {
-    class HSFW_Communicator
+    class HSFW_Handler
     {
-        private static HSFW_Communicator myHSFW;
+        private static HSFW_Handler myHSFW;
         private Utilities.Profile myProfile;
         private enum ProfileStrings { PreferredSN }
         private FilterWheels fws;
         private string PreferredSN = "0";
 
-        private HSFW_Communicator()
+        private HSFW_Handler()
         {
        
             // Create instance of Profile
-            myProfile = new ASCOM.Utilities.Profile(true);
+            myProfile = new ASCOM.Utilities.Profile();
             myProfile.DeviceType = "FilterWheel";					//  Requires Helper 5.0.3 or later
             // Check if there is a preferred Serial Number
             PreferredSN = myProfile.GetValue(FilterWheel.s_csDriverID, ProfileStrings.PreferredSN.ToString(), "", "0");
@@ -28,11 +28,11 @@ namespace ASCOM.HSFW_ASCOM_Driver
 
         #region Public Methods
 
-        public static HSFW_Communicator GetInstance()
+        public static HSFW_Handler GetInstance()
         {
             if (myHSFW == null)
             {
-                myHSFW = new HSFW_Communicator();
+                myHSFW = new HSFW_Handler();
                 return myHSFW;
             }
             else return myHSFW;
@@ -69,6 +69,10 @@ namespace ASCOM.HSFW_ASCOM_Driver
             }
         }
 
+        public string PreferredSerialNumber
+        {
+            get { return PreferredSN; }
+        }
 
 
         
