@@ -712,6 +712,7 @@ namespace OptecHID_FilterWheelAPI
                         sendData);
                     // Process the report
                     this.selectedDevice.ProcessFeatureReport(GetWheelNamesReport);
+
                     for (int j = 0; j < ExpectedResponse.Length; j++)
                     {
                         if (ExpectedResponse[j] != GetWheelNamesReport.Response1[j])

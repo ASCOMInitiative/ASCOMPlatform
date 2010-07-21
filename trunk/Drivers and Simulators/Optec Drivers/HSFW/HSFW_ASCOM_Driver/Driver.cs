@@ -45,15 +45,18 @@ namespace ASCOM.HSFW_ASCOM_Driver
         // Driver ID and descriptive string that shows in the Chooser
         //
         internal static string s_csDriverID = "ASCOM.HSFW_ASCOM_Driver.FilterWheel";
-        // TODO Change the descriptive string for your driver then remove this line
-        private static string s_csDriverDescription = "HSFW_ASCOM_Driver FilterWheel";
+
+        private static string s_csDriverDescription = "Optec High Speed Filter Wheel";
+        private HSFW_Handler myHandler;
+        private bool connected;
 
         //
         // Constructor - Must be public for COM registration!
         //
         public FilterWheel()
         {
-            // TODO Implement your additional construction here
+            myHandler = HSFW_Handler.GetInstance();
+            connected = false;
         }
 
         #region ASCOM Registration
@@ -95,30 +98,43 @@ namespace ASCOM.HSFW_ASCOM_Driver
         //
 
         #region IFilterWheel Members
+
         public bool Connected
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Connected", false); }
-            set { throw new PropertyNotImplementedException("Connected", true); }
+            get 
+            { 
+                return connected;
+            }
+            set 
+            {
+                if (!value) connected = false;
+                else
+                {
+                    if (myHandler.myDevice.IsAttached)
+                    {
+                        connected = true;
+                    }
+                    else throw new ApplicationException("The specifed device is not attached.");
+                }
+            }
         }
 
         public short Position
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Position", false); }
-            set { throw new PropertyNotImplementedException("Position", true); }
+            get { return myHandler.myDevice.CurrentPosition; }
+            set { myHandler.myDevice.CurrentPosition = value; }
         }
 
         public int[] FocusOffsets
         {
-            // TODO Replace this with your implementation
             get { throw new PropertyNotImplementedException("FocusOfsets", false); }
         }
 
         public string[] Names
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("FocusOfsets", false); }
+            get { return myHandler.myDevice.GetFilterNames(myHandler.myDevice.WheelID); }
+
         }
 
         public void SetupDialog()
