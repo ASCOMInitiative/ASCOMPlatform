@@ -253,10 +253,8 @@ namespace HSFWControlApp
         {
             Button b = (Button)sender;
             FilterWheel fw = (FilterWheel)FilterWheelManager.FilterWheelList[int.Parse(b.Name)];
-            ProcessingForm pf = new ProcessingForm();
-            SetupForm s = new SetupForm(fw, pf);
+            SetupForm s = new SetupForm(fw);
             s.ShowDialog();
-            pf.Close();
             ConstructTabs();
         }
 

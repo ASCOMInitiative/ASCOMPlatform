@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="FocusOffsets" targetNamespace="http://tempuri.org/FocusOffsets.xsd" xmlns:mstns="http://tempuri.org/FocusOffsets.xsd" xmlns="http://tempuri.org/FocusOffsets.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="FocusOffsets" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="FocusOffsets" msprop:Generator_DataSetName="FocusOffsets" msprop:EnableTableAdapterManager="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="FocusOffsetsTable" msprop:Generator_UserTableName="FocusOffsetsTable" msprop:Generator_RowDeletedName="FocusOffsetsTableRowDeleted" msprop:Generator_RowChangedName="FocusOffsetsTableRowChanged" msprop:Generator_RowClassName="FocusOffsetsTableRow" msprop:Generator_RowChangingName="FocusOffsetsTableRowChanging" msprop:Generator_RowEvArgName="FocusOffsetsTableRowChangeEvent" msprop:Generator_RowEvHandlerName="FocusOffsetsTableRowChangeEventHandler" msprop:Generator_TableClassName="FocusOffsetsTableDataTable" msprop:Generator_TableVarName="tableFocusOffsetsTable" msprop:Generator_RowDeletingName="FocusOffsetsTableRowDeleting" msprop:Generator_TablePropName="FocusOffsetsTable">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SerialNumber" msprop:Generator_UserColumnName="SerialNumber" msprop:Generator_ColumnVarNameInTable="columnSerialNumber" msprop:Generator_ColumnPropNameInRow="SerialNumber" msprop:Generator_ColumnPropNameInTable="SerialNumberColumn" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="Filter" msprop:Generator_UserColumnName="Filter" msprop:Generator_ColumnVarNameInTable="columnFilter" msprop:Generator_ColumnPropNameInRow="Filter" msprop:Generator_ColumnPropNameInTable="FilterColumn" type="xs:short" default="0" minOccurs="0" />
+              <xs:element name="Wheel" msprop:Generator_UserColumnName="Wheel" msprop:Generator_ColumnVarNameInTable="columnWheel" msprop:Generator_ColumnPropNameInRow="Wheel" msprop:Generator_ColumnPropNameInTable="WheelColumn" default="A" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:length value="1" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Offset" msprop:Generator_UserColumnName="Offset" msprop:Generator_ColumnVarNameInTable="columnOffset" msprop:Generator_ColumnPropNameInRow="Offset" msprop:Generator_ColumnPropNameInTable="OffsetColumn" type="xs:int" default="0" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
