@@ -15,6 +15,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "64Bit Installers", "64Bit I
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HSFW ASCOM Driver Setup", "64Bit Installers\HSFW ASCOM Driver Setup\HSFW ASCOM Driver Setup.vdproj", "{69917D60-8CF3-40BF-AA87-6D2512076615}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ASCOM Platform", "ASCOM Platform", "{6F15CB55-2EEA-4361-9AB8-ED85DF354D3D}"
+	ProjectSection(SolutionItems) = preProject
+		Dependencies\ASCOMPlatformDependencies\ASCOM.Astrometry.dll = Dependencies\ASCOMPlatformDependencies\ASCOM.Astrometry.dll
+		Dependencies\ASCOMPlatformDependencies\ASCOM.Attributes.dll = Dependencies\ASCOMPlatformDependencies\ASCOM.Attributes.dll
+		Dependencies\ASCOMPlatformDependencies\ASCOM.Controls.dll = Dependencies\ASCOMPlatformDependencies\ASCOM.Controls.dll
+		Dependencies\ASCOMPlatformDependencies\ASCOM.DriverAccess.dll = Dependencies\ASCOMPlatformDependencies\ASCOM.DriverAccess.dll
+		Dependencies\ASCOMPlatformDependencies\ASCOM.Exceptions.dll = Dependencies\ASCOMPlatformDependencies\ASCOM.Exceptions.dll
+		Dependencies\ASCOMPlatformDependencies\ASCOM.IConform.dll = Dependencies\ASCOMPlatformDependencies\ASCOM.IConform.dll
+		Dependencies\ASCOMPlatformDependencies\ASCOM.Interfaces.dll = Dependencies\ASCOMPlatformDependencies\ASCOM.Interfaces.dll
+		Dependencies\ASCOMPlatformDependencies\ASCOM.SettingsProvider.dll = Dependencies\ASCOMPlatformDependencies\ASCOM.SettingsProvider.dll
+		Dependencies\ASCOMPlatformDependencies\ASCOM.Utilities.dll = Dependencies\ASCOMPlatformDependencies\ASCOM.Utilities.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		ASCOM Driver Debug|Any CPU = ASCOM Driver Debug|Any CPU
@@ -57,6 +70,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9786A9B9-97B9-4B23-AF39-4514AF45DEED} = {B9CEE0E9-C6B5-4D67-9167-E72B9629D31D}
+		{6F15CB55-2EEA-4361-9AB8-ED85DF354D3D} = {B9CEE0E9-C6B5-4D67-9167-E72B9629D31D}
 		{69917D60-8CF3-40BF-AA87-6D2512076615} = {BD9CF658-DD68-44FC-A940-F301BFB24975}
 	EndGlobalSection
 EndGlobal
