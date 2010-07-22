@@ -42,17 +42,19 @@ namespace ASCOM.HSFW_ASCOM_Driver
             this.label6 = new System.Windows.Forms.Label();
             this.CurrentFilter_CB = new System.Windows.Forms.ComboBox();
             this.SettingsBTN = new System.Windows.Forms.Button();
-            this.picASCOM = new System.Windows.Forms.PictureBox();
+            this.ReHome_Btn = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
+            this.picASCOM = new System.Windows.Forms.PictureBox();
+            this.NewVersionCheckerBGW = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.SuspendLayout();
             // 
             // cmdOK
             // 
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdOK.Location = new System.Drawing.Point(259, 270);
+            this.cmdOK.Location = new System.Drawing.Point(259, 314);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 0;
@@ -64,7 +66,7 @@ namespace ASCOM.HSFW_ASCOM_Driver
             // 
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(259, 300);
+            this.cmdCancel.Location = new System.Drawing.Point(259, 344);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
@@ -130,7 +132,7 @@ namespace ASCOM.HSFW_ASCOM_Driver
             this.Status_LBL.Multiline = true;
             this.Status_LBL.Name = "Status_LBL";
             this.Status_LBL.ReadOnly = true;
-            this.Status_LBL.Size = new System.Drawing.Size(160, 47);
+            this.Status_LBL.Size = new System.Drawing.Size(160, 78);
             this.Status_LBL.TabIndex = 11;
             this.Status_LBL.Text = "Status Message...";
             // 
@@ -182,13 +184,35 @@ namespace ASCOM.HSFW_ASCOM_Driver
             // 
             // SettingsBTN
             // 
-            this.SettingsBTN.Location = new System.Drawing.Point(19, 282);
+            this.SettingsBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.SettingsBTN.Location = new System.Drawing.Point(19, 326);
             this.SettingsBTN.Name = "SettingsBTN";
             this.SettingsBTN.Size = new System.Drawing.Size(149, 23);
             this.SettingsBTN.TabIndex = 6;
             this.SettingsBTN.Text = "Advanced Settings...";
             this.SettingsBTN.UseVisualStyleBackColor = true;
             this.SettingsBTN.Click += new System.EventHandler(this.SettingsBTN_Click);
+            // 
+            // ReHome_Btn
+            // 
+            this.ReHome_Btn.Location = new System.Drawing.Point(19, 248);
+            this.ReHome_Btn.Name = "ReHome_Btn";
+            this.ReHome_Btn.Size = new System.Drawing.Size(100, 23);
+            this.ReHome_Btn.TabIndex = 13;
+            this.ReHome_Btn.Text = "Refresh Device";
+            this.ReHome_Btn.UseVisualStyleBackColor = true;
+            this.ReHome_Btn.Visible = false;
+            this.ReHome_Btn.Click += new System.EventHandler(this.ReHome_Btn_Click);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::ASCOM.HSFW_ASCOM_Driver.Properties.Resources.Optec_Logo_medium_png;
+            this.pictureBox1.Location = new System.Drawing.Point(12, 9);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(125, 39);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 7;
+            this.pictureBox1.TabStop = false;
             // 
             // picASCOM
             // 
@@ -204,21 +228,16 @@ namespace ASCOM.HSFW_ASCOM_Driver
             this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
             this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
             // 
-            // pictureBox1
+            // NewVersionCheckerBGW
             // 
-            this.pictureBox1.Image = global::ASCOM.HSFW_ASCOM_Driver.Properties.Resources.Optec_Logo_medium_png;
-            this.pictureBox1.Location = new System.Drawing.Point(12, 9);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(125, 39);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 7;
-            this.pictureBox1.TabStop = false;
+            this.NewVersionCheckerBGW.DoWork += new System.ComponentModel.DoWorkEventHandler(this.NewVersionCheckerBGW_DoWork);
             // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(328, 333);
+            this.ClientSize = new System.Drawing.Size(328, 377);
+            this.Controls.Add(this.ReHome_Btn);
             this.Controls.Add(this.CurrentFilter_CB);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.CurrWheName_LBL);
@@ -243,8 +262,9 @@ namespace ASCOM.HSFW_ASCOM_Driver
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "High Speed Filter Wheel Setup Dialog";
             this.Shown += new System.EventHandler(this.SetupDialogForm_Shown);
-            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SetupDialogForm_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -268,5 +288,7 @@ namespace ASCOM.HSFW_ASCOM_Driver
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox Status_LBL;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button ReHome_Btn;
+        private System.ComponentModel.BackgroundWorker NewVersionCheckerBGW;
     }
 }

@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using System.Data;
+using System.Reflection;
 
 namespace ASCOM.HSFW_ASCOM_Driver
 {
@@ -22,45 +23,61 @@ namespace ASCOM.HSFW_ASCOM_Driver
             
         }
 
-        private void DisplayNoFWs()
+        private bool CheckAtLeastOneDevice()
         {
-            this.AttDev_CB.Items.Clear();
-            this.AttDev_CB.Text = "None";
-            this.AttDev_CB.Enabled = false;
-
-          
-            this.CurrWheName_LBL.Enabled = false;
-            this.CurrentWheelID_LBL.Enabled = false;    
-            this.CurrentWheelID_LBL.Text = "--";
-            this.CurrWheName_LBL.Text = "--";
-            this.CurrentFilter_CB.Items.Clear();
-            this.CurrentFilter_CB.Text = "--";
-            this.CurrentFilter_CB.Enabled = false;
-            Application.DoEvents();
+            if (myHandler.myDevice == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         private void UpdateDisplay()
         {
-            if (myHandler.AttachedDeviceCount == 0) DisplayNoFWs();
-            else DisplayFWAttached();
+            if (CheckAtLeastOneDevice())
+                {
+                    if (myHandler.myDevice.ErrorState == 0) UpdateDisplay_GoodFW();
+                    else UpdateDisplay_ErroredFW();
+                }
+                else
+                {
+                    UpdateDisplay_NoFW();
+                    MessageBox.Show("No High Speed Filter Wheels are connected to this machine.");
+                }
         }
 
-        private void DisplayFWAttached()
+        private void SetupDialogForm_Shown(object sender, EventArgs e)
         {
-            if (myHandler.myDevice.ErrorState != 0)
-                throw new ApplicationException("Device is errored");
+            try
+            {
+                this.NewVersionCheckerBGW.RunWorkerAsync();
+                myHandler = HSFW_Handler.GetInstance();
+                UpdateDisplay();
+                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
 
+        private void UpdateDisplay_GoodFW()
+        {
             this.AttDev_CB.DataSource = myHandler.AttachedDeviceList;
             this.AttDev_CB.Enabled = true;
+            this.SettingsBTN.Enabled = true;
+            this.CurrentWheelID_LBL.Enabled = true;
+            this.CurrWheName_LBL.Enabled = true;
+            this.ReHome_Btn.Visible = true;
 
-       
             this.CurrWheName_LBL.Text = myHandler.myDevice.
                 GetWheelNames()[myHandler.myDevice.WheelID - 'A'].ToString();
-            this.CurrentWheelID_LBL.Text = myHandler.myDevice.WheelID.ToString(); ;
-            this.CurrentFilter_CB.Items.Clear();
-            this.CurrentFilter_CB.Text = "--";
-            this.CurrentFilter_CB.Enabled = true;
-            this.CurrentFilter_CB.Items.Clear();
+            this.CurrentWheelID_LBL.Text = myHandler.myDevice.WheelID.ToString(); 
+            this.ReHome_Btn.Text = "Home Device";
+            this.Status_LBL.Text = "Device is functioning properly and ready for action!";
             // Update the filter names
             for (int i = 0; i < myHandler.myDevice.NumberOfFilters; i++)
             {
@@ -72,9 +89,48 @@ namespace ASCOM.HSFW_ASCOM_Driver
             Application.DoEvents();
         }
 
+        private void UpdateDisplay_ErroredFW()
+        {
+            RefreshAttachedDevice_CB();
+            this.AttDev_CB.Enabled = true;
+            this.SettingsBTN.Enabled = false;
+            this.CurrWheName_LBL.Enabled = false;
+            this.CurrentWheelID_LBL.Enabled = false;
+            this.CurrentWheelID_LBL.Text = "--";
+            this.CurrWheName_LBL.Text = "--";
+            this.CurrentFilter_CB.Items.Clear();
+            this.CurrentFilter_CB.Text = "--";
+            this.CurrentFilter_CB.Enabled = false;
+            this.ReHome_Btn.Visible = true;
+            this.ReHome_Btn.Text = "Refresh Device";
+            this.Status_LBL.Text = "An Error has occurred in the selected device. \n Error Message: " + 
+                myHandler.myDevice.GetErrorMessage(myHandler.myDevice.ErrorState);
+            Application.DoEvents();
+        }
+
+        private void UpdateDisplay_NoFW()
+        {
+            this.AttDev_CB.Items.Clear();
+            this.AttDev_CB.Text = "None";
+            this.AttDev_CB.Enabled = false;
+            this.SettingsBTN.Enabled = false;
+
+            this.CurrWheName_LBL.Enabled = false;
+            this.CurrentWheelID_LBL.Enabled = false;
+            this.CurrentWheelID_LBL.Text = "--";
+            this.CurrWheName_LBL.Text = "--";
+            this.CurrentFilter_CB.Items.Clear();
+            this.CurrentFilter_CB.Text = "--";
+            this.CurrentFilter_CB.Enabled = false;
+            this.ReHome_Btn.Visible = false;
+            this.Status_LBL.Text = "No Devices Found";
+            Application.DoEvents();
+        }
+
         private void cmdOK_Click(object sender, EventArgs e)
         {
             Dispose();
+            this.Close();
         }
 
         private void cmdCancel_Click(object sender, EventArgs e)
@@ -98,7 +154,6 @@ namespace ASCOM.HSFW_ASCOM_Driver
                 MessageBox.Show(other.Message);
             }
         }
-
 
         private void RefreshAttachedDevice_CB()
         {
@@ -125,24 +180,44 @@ namespace ASCOM.HSFW_ASCOM_Driver
             MessageBox.Show(msg, "Available Devices Help",MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void SetupDialogForm_Shown(object sender, EventArgs e)
+        private void ReHome_Btn_Click(object sender, EventArgs e)
+        {
+            myHandler.myDevice.ClearErrorState();
+            myHandler.myDevice.HomeDevice();
+            UpdateDisplay();
+        }
+
+        private void SetupDialogForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            HSFW_Handler.DeleteInstance();
+            
+        }
+
+        private void NewVersionCheckerBGW_DoWork(object sender, DoWorkEventArgs e)
         {
             try
             {
-                myHandler = HSFW_Handler.GetInstance();
-                UpdateDisplay();
-                RefreshAttachedDevice_CB();
-                if (myHandler.myDevice == null)
+                //Check For A newer verison of the driver
+                if (NewVersionChecker.CheckLatestVerisonNumber(NewVersionChecker.ProductType.HSFW_ASCOM_Driver))
                 {
-                    MessageBox.Show("No High Speed Filter Wheels are connected to this machine.");
+                    //Found a VersionNumber, now check if it's newer
+                    Assembly asm = Assembly.GetExecutingAssembly();
+                    AssemblyName asmName = asm.GetName();
+                    NewVersionChecker.CompareToLatestVersion(asmName.Version);
+                    if (NewVersionChecker.NewerVersionAvailable)
+                    {
+                        NewVersionFrm nvf = new NewVersionFrm(asmName.Version.ToString(),
+                            NewVersionChecker.NewerVersionNumber, NewVersionChecker.NewerVersionURL);
+                        nvf.ShowDialog();
+                    }
                 }
-                this.Status_LBL.Text = "No Devices Found";
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            catch { } // Just ignore all errors. They mean the computer isn't connected to internet.
         }
+
+       
+
+        
 
     }
 }

@@ -1,6 +1,5 @@
 //tabs=4
 // --------------------------------------------------------------------------------
-// TODO fill in this information for your driver, then remove this line!
 //
 // ASCOM FilterWheel driver for HSFW_ASCOM_Driver
 //
@@ -11,13 +10,13 @@
 //				sanctus est Lorem ipsum dolor sit amet.
 //
 // Implements:	ASCOM FilterWheel interface version: 1.0
-// Author:		(XXX) Your N. Here <your@email.here>
+// Author:		Jordan T. Schaenzle <jordan@optecinc.com>
 //
 // Edit Log:
 //
 // Date			Who	Vers	Description
 // -----------	---	-----	-------------------------------------------------------
-// dd-mmm-yyyy	XXX	1.0.0	Initial edit, from ASCOM FilterWheel Driver template
+// 07-22-2010	JTS	1.0.0	Initial edit, from ASCOM FilterWheel Driver template
 // --------------------------------------------------------------------------------
 //
 using System;
@@ -101,7 +100,6 @@ namespace ASCOM.HSFW_ASCOM_Driver
 
         public bool Connected
         {
-            // TODO Replace this with your implementation
             get 
             { 
                 return connected;
