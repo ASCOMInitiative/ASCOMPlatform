@@ -25,7 +25,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 
 using ASCOM;
-using ASCOM.Interface;
+using ASCOM.Interfaces;
 
 namespace ASCOM.HSFW_ASCOM_Driver
 {
