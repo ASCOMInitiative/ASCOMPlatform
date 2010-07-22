@@ -15,68 +15,152 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_09072B1B922C55B5837D8A6C3E9BCC28"
+        "OwnerKey" = "8:_9B20F73B2EF5473A94AFDBB5856AAE4F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3BF4749BBDABAEAAF504CA51D8FC45FE"
+        "OwnerKey" = "8:_D9BED703C9448E2799CF2E0DCE4DE4B7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_6B485AF8A815409DA34D1363B9B607C4"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_7C2EA702A40A3311E062396C8434FDF4"
+        "MsmKey" = "8:_71E2330ACCC1917F2B3BB72CE29E3E18"
         "OwnerKey" = "8:_6B485AF8A815409DA34D1363B9B607C4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_7C2EA702A40A3311E062396C8434FDF4"
-        "OwnerKey" = "8:_FA9B2618E4D782211B5EF811B97DC4E0"
+        "MsmKey" = "8:_7C978CB8E236A2148B08133775FA204C"
+        "OwnerKey" = "8:_9B20F73B2EF5473A94AFDBB5856AAE4F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_7C2EA702A40A3311E062396C8434FDF4"
-        "OwnerKey" = "8:_C890B94426E641C1B4E79D8DC107C0C4"
+        "MsmKey" = "8:_7C978CB8E236A2148B08133775FA204C"
+        "OwnerKey" = "8:_97C8E56076E54879A5BEF457E341BA9C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_9B10F7956CA69B56A95FA02FC0E315A1"
+        "MsmKey" = "8:_8D4CBD389FE5BFFB3EA7554545C4B38F"
         "OwnerKey" = "8:_6B485AF8A815409DA34D1363B9B607C4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_9B10F7956CA69B56A95FA02FC0E315A1"
-        "OwnerKey" = "8:_FA9B2618E4D782211B5EF811B97DC4E0"
+        "MsmKey" = "8:_8D4CBD389FE5BFFB3EA7554545C4B38F"
+        "OwnerKey" = "8:_97C8E56076E54879A5BEF457E341BA9C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_C890B94426E641C1B4E79D8DC107C0C4"
+        "MsmKey" = "8:_8D4CBD389FE5BFFB3EA7554545C4B38F"
+        "OwnerKey" = "8:_9B20F73B2EF5473A94AFDBB5856AAE4F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8D4CBD389FE5BFFB3EA7554545C4B38F"
+        "OwnerKey" = "8:_7C978CB8E236A2148B08133775FA204C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_97C8E56076E54879A5BEF457E341BA9C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_F825A1F954480C09CF1EFE01A2B55123"
-        "OwnerKey" = "8:_7C2EA702A40A3311E062396C8434FDF4"
+        "MsmKey" = "8:_9B20F73B2EF5473A94AFDBB5856AAE4F"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_FA9B2618E4D782211B5EF811B97DC4E0"
-        "OwnerKey" = "8:_C890B94426E641C1B4E79D8DC107C0C4"
+        "MsmKey" = "8:_A822A6B24E6A324BF310F7033F6C55E1"
+        "OwnerKey" = "8:_9B20F73B2EF5473A94AFDBB5856AAE4F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A822A6B24E6A324BF310F7033F6C55E1"
+        "OwnerKey" = "8:_09072B1B922C55B5837D8A6C3E9BCC28"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AFA61F9AAF3944FCBBED1099F0578436"
+        "OwnerKey" = "8:_9B20F73B2EF5473A94AFDBB5856AAE4F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C0D9168497A88B9C465123021A46F914"
+        "OwnerKey" = "8:_7C978CB8E236A2148B08133775FA204C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D9BED703C9448E2799CF2E0DCE4DE4B7"
+        "OwnerKey" = "8:_9B20F73B2EF5473A94AFDBB5856AAE4F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_DC0851FC4F414D6E6D427F47C0B7E929"
+        "OwnerKey" = "8:_09072B1B922C55B5837D8A6C3E9BCC28"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E05EE6D75CB2ED7BD7D0B91C0714552F"
+        "OwnerKey" = "8:_8D4CBD389FE5BFFB3EA7554545C4B38F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C890B94426E641C1B4E79D8DC107C0C4"
+        "OwnerKey" = "8:_9B20F73B2EF5473A94AFDBB5856AAE4F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_FA9B2618E4D782211B5EF811B97DC4E0"
+        "OwnerKey" = "8:_97C8E56076E54879A5BEF457E341BA9C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_D9BED703C9448E2799CF2E0DCE4DE4B7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_09072B1B922C55B5837D8A6C3E9BCC28"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_A822A6B24E6A324BF310F7033F6C55E1"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_7C978CB8E236A2148B08133775FA204C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -88,7 +172,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7C2EA702A40A3311E062396C8434FDF4"
+        "OwnerKey" = "8:_8D4CBD389FE5BFFB3EA7554545C4B38F"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -233,23 +317,23 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7C2EA702A40A3311E062396C8434FDF4"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_09072B1B922C55B5837D8A6C3E9BCC28"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:OptecHIDTools, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ASCOM.Utilities, Version=5.5.1.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_7C2EA702A40A3311E062396C8434FDF4"
+                    "_09072B1B922C55B5837D8A6C3E9BCC28"
                     {
-                    "Name" = "8:OptecHIDTools.dll"
+                    "Name" = "8:ASCOM.Utilities.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:OptecHIDTools.dll"
+            "SourcePath" = "8:ASCOM.Utilities.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_0C696CF2BF9145CD87AEF144A19CCA6C"
+            "Folder" = "8:_4B35A5C6FA8743398C35B06D215F9C46"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -260,17 +344,37 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9B10F7956CA69B56A95FA02FC0E315A1"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3BF4749BBDABAEAAF504CA51D8FC45FE"
+            {
+            "SourcePath" = "8:AscomMasterInterfaces.tlb"
+            "TargetName" = "8:AscomMasterInterfaces.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_4B35A5C6FA8743398C35B06D215F9C46"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_71E2330ACCC1917F2B3BB72CE29E3E18"
             {
             "SourcePath" = "8:OptecHID_FilterWheelAPI.tlb"
             "TargetName" = "8:OptecHID_FilterWheelAPI.tlb"
             "Tag" = "8:"
-            "Folder" = "8:_0C696CF2BF9145CD87AEF144A19CCA6C"
-            "Condition" = "8:"
+            "Folder" = "8:_F878880896494648B05AC421A9EF59C3"
+            "Condition" = "8:DLL_CB"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -284,34 +388,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F825A1F954480C09CF1EFE01A2B55123"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7C978CB8E236A2148B08133775FA204C"
             {
-            "SourcePath" = "8:OptecHIDTools.tlb"
-            "TargetName" = "8:OptecHIDTools.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_0C696CF2BF9145CD87AEF144A19CCA6C"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_FA9B2618E4D782211B5EF811B97DC4E0"
-            {
-            "AssemblyRegister" = "3:1"
+            "AssemblyRegister" = "3:2"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:OptecHID_FilterWheelAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_FA9B2618E4D782211B5EF811B97DC4E0"
+                    "_7C978CB8E236A2148B08133775FA204C"
                     {
                     "Name" = "8:OptecHID_FilterWheelAPI.dll"
                     "Attributes" = "3:512"
@@ -321,6 +405,68 @@
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_0C696CF2BF9145CD87AEF144A19CCA6C"
+            "Condition" = "8:CONTROL_CB"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8D4CBD389FE5BFFB3EA7554545C4B38F"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:OptecHIDTools, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_8D4CBD389FE5BFFB3EA7554545C4B38F"
+                    {
+                    "Name" = "8:OptecHIDTools.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:OptecHIDTools.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_0C696CF2BF9145CD87AEF144A19CCA6C"
+            "Condition" = "8:CONTROL_CB"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A822A6B24E6A324BF310F7033F6C55E1"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_A822A6B24E6A324BF310F7033F6C55E1"
+                    {
+                    "Name" = "8:ASCOM.Exceptions.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:ASCOM.Exceptions.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_4B35A5C6FA8743398C35B06D215F9C46"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -331,6 +477,117 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AFA61F9AAF3944FCBBED1099F0578436"
+            {
+            "SourcePath" = "8:ASCOM.HSFW_ASCOM_Driver.FilterWheel.tlb"
+            "TargetName" = "8:ASCOM.HSFW_ASCOM_Driver.FilterWheel.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_4B35A5C6FA8743398C35B06D215F9C46"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C0D9168497A88B9C465123021A46F914"
+            {
+            "SourcePath" = "8:OptecHID_FilterWheelAPI.tlb"
+            "TargetName" = "8:OptecHID_FilterWheelAPI.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_0C696CF2BF9145CD87AEF144A19CCA6C"
+            "Condition" = "8:CONTROL_CB"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D9BED703C9448E2799CF2E0DCE4DE4B7"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:TRUE"
+            "AssemblyAsmDisplayName" = "8:ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_D9BED703C9448E2799CF2E0DCE4DE4B7"
+                    {
+                    "Name" = "8:ASCOM.Interfaces.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:ASCOM.Interfaces.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_4B35A5C6FA8743398C35B06D215F9C46"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DC0851FC4F414D6E6D427F47C0B7E929"
+            {
+            "SourcePath" = "8:ASCOM.Utilities.tlb"
+            "TargetName" = "8:ASCOM.Utilities.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_4B35A5C6FA8743398C35B06D215F9C46"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E05EE6D75CB2ED7BD7D0B91C0714552F"
+            {
+            "SourcePath" = "8:OptecHIDTools.tlb"
+            "TargetName" = "8:OptecHIDTools.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_0C696CF2BF9145CD87AEF144A19CCA6C"
+            "Condition" = "8:CONTROL_CB"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
@@ -445,9 +702,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:HSFW_x86"
+        "ProductName" = "8:Optec_HSFW_x86"
         "ProductCode" = "8:{F894C985-400F-468A-8F20-9F5F21143704}"
-        "PackageCode" = "8:{8B668311-3476-4AA4-B6B0-87CED7C2B047}"
+        "PackageCode" = "8:{332B1D27-718C-452B-84E7-4B82C06D628B}"
         "UpgradeCode" = "8:{E1763E55-3148-4B6E-8AA7-EB9B1447F516}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
@@ -1222,11 +1479,11 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_6B485AF8A815409DA34D1363B9B607C4"
             {
-            "SourcePath" = "8:..\\..\\..\\HSFW API\\obj\\ASCOM Driver Debug\\OptecHID_FilterWheelAPI.dll"
+            "SourcePath" = "8:..\\..\\..\\HSFW API\\obj\\Release\\OptecHID_FilterWheelAPI.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F878880896494648B05AC421A9EF59C3"
-            "Condition" = "8:"
+            "Condition" = "8:DLL_CB"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -1248,9 +1505,9 @@
                 {
                 }
             }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C890B94426E641C1B4E79D8DC107C0C4"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_97C8E56076E54879A5BEF457E341BA9C"
             {
-            "SourcePath" = "8:..\\..\\..\\HSFW Control App\\obj\\ASCOM Driver Debug\\HSFWControlApp.exe"
+            "SourcePath" = "8:..\\..\\..\\HSFW Control App\\obj\\Release\\HSFWControlApp.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_0C696CF2BF9145CD87AEF144A19CCA6C"
@@ -1271,6 +1528,34 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
             "OutputProjectGuid" = "8:{D2936A77-5E35-4F18-B92E-5BE0F53E3D95}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_9B20F73B2EF5473A94AFDBB5856AAE4F"
+            {
+            "SourcePath" = "8:..\\..\\..\\HSFW_ASCOM_Driver\\obj\\Release\\ASCOM.HSFW_ASCOM_Driver.FilterWheel.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_4B35A5C6FA8743398C35B06D215F9C46"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:2"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{A4083C6B-4D48-4DAD-8E9D-5E6D72D7AFE0}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {

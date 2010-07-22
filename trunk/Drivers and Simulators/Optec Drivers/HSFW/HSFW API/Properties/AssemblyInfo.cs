@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("OptecHID_FilterWheelAPI")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("API for controlling Optec High Speed Filter Wheels")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Optec Inc.")]
 [assembly: AssemblyProduct("OptecHID_FilterWheelAPI")]
