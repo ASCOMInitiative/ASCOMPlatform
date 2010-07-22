@@ -8,21 +8,22 @@ using System.Linq;
 
 namespace ASCOM.HSFW_ASCOM_Driver
 {
-    class HSFW_Handler
+    sealed class HSFW_Handler
     {
         private static HSFW_Handler myHSFW;
-        private Utilities.Profile myProfile;
-        private OptecHID_FilterWheelAPI.FilterWheel mydevice;
+        private static Utilities.Profile myProfile;
+        private static OptecHID_FilterWheelAPI.FilterWheel mydevice;
+        private static FilterWheels fws;
         private enum ProfileStrings { PreferredSN }
-        private FilterWheels fws;
-        private string PreferredSN = "0";
-        private const string XmlFilename = "DriverSettings.xml";
         private static FocusOffsets FocusOffsetData;
+
+        private static string PreferredSN = "0";
+        private const string XmlFilename = "DriverSettings.xml";
+        
 
         private HSFW_Handler()
         {
             
-       
             // Create instance of Profile
             myProfile = new ASCOM.Utilities.Profile();
             myProfile.DeviceType = "FilterWheel";					//  Requires Helper 5.0.3 or later
@@ -36,8 +37,11 @@ namespace ASCOM.HSFW_ASCOM_Driver
             {
                 if (fw.SerialNumber == PreferredSerialNumber)
                 {
-                    mydevice = fw;
-                    break;
+                    if (fw.IsAttached)
+                    {
+                        mydevice = fw;
+                        break;
+                    }
                 }
             }
 
@@ -46,6 +50,15 @@ namespace ASCOM.HSFW_ASCOM_Driver
 
         }
 
+        public static void DeleteInstance()
+        {
+            myHSFW = null;
+            fws = null;
+            myProfile = null;
+            FocusOffsetData = null;
+            mydevice = null;
+        }
+        
         
         #region Public Methods
 

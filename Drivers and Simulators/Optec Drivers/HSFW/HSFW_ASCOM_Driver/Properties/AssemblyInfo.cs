@@ -6,7 +6,6 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-// TODO - Add your authorship information here
 [assembly: AssemblyTitle("HSFW_ASCOM_Driver FilterWheel Driver")]
 [assembly: AssemblyDescription("ASCOM FilterWheel Driver for HSFW_ASCOM_Driver")]
 [assembly: AssemblyConfiguration("")]
@@ -34,6 +33,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 //
-// TODO - Set your driver's version here
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
