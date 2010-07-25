@@ -137,9 +137,12 @@ namespace ASCOM.DriverAccess
                 switch (memberCode)
                 {
                     case 1:
+                        TL.LogMessage("PropertyGet", memberName);
+
                         PropertyInfo propertyGetInfo = objType.GetProperty(memberName);
                         if (propertyGetInfo != null)
                          {
+                             TL.LogMessage("PropertyGet", "propertyGetInfo is not null");
                              try
                              {
                                  //run the .net object
@@ -147,18 +150,23 @@ namespace ASCOM.DriverAccess
                              }
                              catch (TargetInvocationException e)
                              {
+                                 TL.LogMessage("PropertyGetEx1", e.ToString());
                                  throw new ASCOM.PropertyNotImplementedException(memberName + " is not implemented in this driver", false,e.InnerException);
                              }
                              catch (Exception e)
                              {
+                                 TL.LogMessage("PropertyGetEx2", e.ToString());
                                  throw e;
                              }
                         }
                         else
                         {
+                            TL.LogMessage("PropertyGet", "propertyGetInfo is null");
                             //check the type to see if it's a COM object
                             if (isCOMObject)
                             {
+                                TL.LogMessage("PropertyGet", "propertyGetInfo is COM Object");
+
                                 try
                                 {
                                     //run the COM object property
@@ -166,12 +174,15 @@ namespace ASCOM.DriverAccess
                                 }
                                 catch (System.Runtime.InteropServices.COMException e)
                                 {
+                                    TL.LogMessage("PropertyGetEx3", e.ToString());
                                     propertyGetInfo = null;
                                     if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber)) throw new ASCOM.PropertyNotImplementedException(strProgID + " " + memberName, false);
                                     else throw;
                                 }
                                 catch (Exception e)
                                 {
+                                    TL.LogMessage("PropertyGetEx4", e.ToString());
+
                                     throw e.InnerException;
                                 }
                             }
@@ -179,13 +190,16 @@ namespace ASCOM.DriverAccess
                             {
                                 //evertyhing failed so throw an exception
                                 propertyGetInfo = null;
+                                TL.LogMessage("PropertyGet", "propertyGetInfo is .NET object");
                                 throw new ASCOM.PropertyNotImplementedException(strProgID + " " + memberName, false);
                             }
                         }
                     case 2:
+                        TL.LogMessage("PropertySet", memberName);
                         PropertyInfo propertySetInfo = objType.GetProperty(memberName);
                         if (propertySetInfo != null)
                         {
+                            TL.LogMessage("PropertySet", "propertyGetInfo is not null");
                             try
                             {
                                 propertySetInfo.SetValue(objLateBound, parms[0], null);
@@ -193,18 +207,22 @@ namespace ASCOM.DriverAccess
                             }
                             catch (TargetInvocationException e)
                             {
+                                TL.LogMessage("PropertySetEx1", e.ToString());
                                 throw new ASCOM.PropertyNotImplementedException(memberName + " is not implemented in this driver", true, e.InnerException);
                             }
                             catch (Exception e)
                             {
+                                TL.LogMessage("PropertySetEx1", e.ToString());
                                 throw e;
                             }
                         }
                         else
                         {
+                            TL.LogMessage("PropertySet", "propertyGetInfo is null");
                             //check the type to see if it's a COM object
                             if (isCOMObject)
                             {
+                                TL.LogMessage("PropertySet", "propertyGetInfo is COM Object");
                                 try
                                 {
                                     //run the COM object property
@@ -213,18 +231,21 @@ namespace ASCOM.DriverAccess
                                 }
                                 catch (System.Runtime.InteropServices.COMException e)
                                 {
+                                    TL.LogMessage("PropertySetEx3", e.ToString());
                                     propertySetInfo = null;
                                     if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber)) throw new ASCOM.PropertyNotImplementedException(strProgID + " " + memberName, true);
                                     else throw;
                                 }
                                 catch (Exception e)
                                 {
+                                    TL.LogMessage("PropertySetEx4", e.ToString());
                                     throw e.InnerException;
                                 }
                             }
                             else
                             {
                                 propertySetInfo = null;
+                                TL.LogMessage("PropertySet", "propertyGetInfo is .NET object");
                                 throw new ASCOM.PropertyNotImplementedException(strProgID + " " + memberName, true);
                             }
                         }

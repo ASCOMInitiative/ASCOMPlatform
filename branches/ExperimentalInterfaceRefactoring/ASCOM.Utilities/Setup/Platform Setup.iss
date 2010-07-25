@@ -104,13 +104,13 @@
 
 [Setup]
 ; Setup program version number - change this each time you change this setup script
-#define Public SetupVersion 22
+#define Public SetupVersion 23
 
 ;Text description of this update as it appears in the installer UI
 #define Public InstallerVersion "6.0"
 
 ;Text for release candidate / beta version messages
-#define Public RC "Alpha Interfaces 3"
+#define Public RC "Alpha Interfaces 4"
 
 #define Public Major 0
 #define Public Minor 0
@@ -480,6 +480,7 @@ WelcomeLabel1=%n%n[name]%n
 #emit "WelcomeLabel2=This will install ASCOM Utilities version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
 [_ISToolPreCompile]
 Name: ..\..\ASCOM Redirection Policies\ASCOM Redirection Policies\bin\Release\ASCOM Redirection Policies.exe; Parameters: ; Flags: runminimized abortonerror
+
 
 
 
