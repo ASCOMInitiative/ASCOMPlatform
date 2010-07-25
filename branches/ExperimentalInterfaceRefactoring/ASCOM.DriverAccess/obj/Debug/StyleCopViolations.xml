@@ -1,3 +1,0 @@
-<StyleCopViolations>
-  <Violation LineNumber="1" Source="TelescopeV3.cs" RuleNamespace="Microsoft.StyleCop.CSharp.DocumentationRules" Rule="FileHeaderMustHaveSummary" RuleId="SA1639">The file header must contain a non-empty summary tag.</Violation>
-</StyleCopViolations>
