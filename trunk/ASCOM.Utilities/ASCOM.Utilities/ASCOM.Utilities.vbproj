@@ -258,7 +258,9 @@
     <None Include="Resources\ASCOM.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="NamespaceDocumentation.xml" />
+    <Content Include="NamespaceDocumentation.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">

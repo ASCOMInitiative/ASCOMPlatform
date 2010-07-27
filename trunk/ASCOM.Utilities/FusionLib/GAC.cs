@@ -1,7 +1,11 @@
+//-----------------------------------------------------------------------
+// <summary>GAC Utilities Class.</summary>
+//-----------------------------------------------------------------------
+
 // Source: Microsoft KB Article KB317540
 
 /*
-SUMMARY
+
 The native code application programming interfaces (APIs) that allow you to interact with the Global Assembly Cache (GAC) are not documented 
 in the .NET Framework Software Development Kit (SDK) documentation. 
 
