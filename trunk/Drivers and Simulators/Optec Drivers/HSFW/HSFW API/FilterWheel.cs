@@ -29,8 +29,8 @@ namespace OptecHID_FilterWheelAPI
         private bool isHoming = false;
         private bool isMoving = false;
         private short currentPosition = 0;
-        private sbyte centeringOffset = 0;
-        private ushort errorState = 0;
+        private short centeringOffset = 0;
+        private short errorState = 0;
         private string firmwareVersion = "";
         private short numberOfFilters = 0;
         private char wheelID = '?';
@@ -136,13 +136,13 @@ namespace OptecHID_FilterWheelAPI
             }
         }
 
-        public ushort ErrorState
+        public short ErrorState
         {
             get { return errorState; }
             set { errorState = value; }
         }
 
-        public sbyte CenteringOffset
+        public short CenteringOffset
         {
             get { return centeringOffset; }
             set 
@@ -214,7 +214,7 @@ namespace OptecHID_FilterWheelAPI
                 short rIsHoming = 0;
                 short rIsMoving = 0;
                 short rCurrentPosition = 0;
-                ushort rErrorState = 0;
+                short rErrorState = 0;
 
                 // Check that at least one byte of data was received.
                 if (reveicedReport.ReceivedData.Length < 6) throw new ApplicationException("Device Status Not Received");
@@ -225,7 +225,7 @@ namespace OptecHID_FilterWheelAPI
                 rIsHoming = Convert.ToInt16(reveicedReport.ReceivedData[2]);
                 rIsMoving = Convert.ToInt16(reveicedReport.ReceivedData[3]);
                 rCurrentPosition = Convert.ToInt16(reveicedReport.ReceivedData[4]);
-                rErrorState = Convert.ToUInt16(reveicedReport.ReceivedData[5]);
+                rErrorState = Convert.ToInt16(reveicedReport.ReceivedData[5]);
 
                 // Verify the ReportID is correct
                 if (rReportID != FilterWheels.REPORTID_INPUT_STATUS)
@@ -309,7 +309,7 @@ namespace OptecHID_FilterWheelAPI
                 short rFirmwareVerRevision = 0;
                 short rNumberFilters = 0;
                 byte rWheelID = 0;
-                sbyte rCenteringOffset = 0;
+                short rCenteringOffset = 0;
 
                 // Check that at least one byte of data was received.
                 if (reveicedReport.ReceivedData.Length < 6) throw new ApplicationException("Device Status Not Received");
@@ -321,7 +321,7 @@ namespace OptecHID_FilterWheelAPI
                 rFirmwareVerRevision = Convert.ToInt16(reveicedReport.ReceivedData[3]);
                 rNumberFilters = Convert.ToInt16(reveicedReport.ReceivedData[4]);
                 rWheelID = reveicedReport.ReceivedData[5];
-                rCenteringOffset = (sbyte)reveicedReport.ReceivedData[6];
+                rCenteringOffset = (short)reveicedReport.ReceivedData[6];
 
                 // Verify the ReportID is correct
                 if (rReportID != FilterWheels.REPORTID_INPUT_DESCRIPTION)
@@ -356,7 +356,7 @@ namespace OptecHID_FilterWheelAPI
 
         }
 
-        private void UpdateCenteringOffset(sbyte NewValue)
+        private void UpdateCenteringOffset(short NewValue)
         {
             try
             {
@@ -422,7 +422,7 @@ namespace OptecHID_FilterWheelAPI
                 //Verify the second response, the error state, is zero;
                 if (HomeReport.Response2[0] != FilterWheels.REPORT_FALSE)
                 {
-                    ushort errorstate = Convert.ToUInt16(HomeReport.Response2[0]);
+                    short errorstate = Convert.ToInt16(HomeReport.Response2[0]);
                     string msg = GetErrorMessage(errorstate);
                     throw new FirmwareException("An Error State Has Been Set In the Device Firmware. \n" +
                         msg);
@@ -491,7 +491,7 @@ namespace OptecHID_FilterWheelAPI
                 //Verify the second response, the error state, is zero;
                 if (HomeReport.Response2[0] != FilterWheels.REPORT_FALSE)
                 {
-                    ushort errorstate = Convert.ToUInt16(HomeReport.Response2[0]);
+                    short errorstate = Convert.ToInt16(HomeReport.Response2[0]);
                     string msg = GetErrorMessage(errorstate);
                     throw new FirmwareException("An Error State Has Been Set In the Device Firmware. \n" +
                         msg);
@@ -896,7 +896,7 @@ namespace OptecHID_FilterWheelAPI
 
         //}
 
-        public string GetErrorMessage(ushort ErrorState)
+        public string GetErrorMessage(short ErrorState)
         {
             try
             {

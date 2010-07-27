@@ -18,7 +18,6 @@ Global
 		{F607076F-CC2F-432F-B983-337971DE1C4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F607076F-CC2F-432F-B983-337971DE1C4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F607076F-CC2F-432F-B983-337971DE1C4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F607076F-CC2F-432F-B983-337971DE1C4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -164,7 +164,7 @@ namespace HSFWControlApp
             "will cause the wheel to travel further counter-clockwise.\n"+
             "Minimum value: -128\n" + 
             " Maximum value: 127")]
-        public sbyte CenteringOffset
+        public short CenteringOffset
         {
             get { return Device.CenteringOffset; }
             set { Device.CenteringOffset = value; }

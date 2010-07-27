@@ -28,6 +28,7 @@ namespace ASCOM.HSFW_ASCOM_Driver
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetupDialogForm));
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -162,6 +163,7 @@ namespace ASCOM.HSFW_ASCOM_Driver
             this.AttDev_CB.Name = "AttDev_CB";
             this.AttDev_CB.Size = new System.Drawing.Size(92, 21);
             this.AttDev_CB.TabIndex = 8;
+            this.AttDev_CB.SelectionChangeCommitted += new System.EventHandler(this.AttDev_CB_SelectionChangeCommitted);
             // 
             // label6
             // 
@@ -255,12 +257,14 @@ namespace ASCOM.HSFW_ASCOM_Driver
             this.Controls.Add(this.label1);
             this.Controls.Add(this.AttDev_CB);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SetupDialogForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "High Speed Filter Wheel Setup Dialog";
+            this.Load += new System.EventHandler(this.SetupDialogForm_Load);
             this.Shown += new System.EventHandler(this.SetupDialogForm_Shown);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SetupDialogForm_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
