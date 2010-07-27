@@ -207,7 +207,7 @@ Namespace TEMPLATENAMESPACE
                 '
                 ' Oops, some interface that the class doesn't implement
                 '
-                Throw New COMException("No interface", DirectCast(&H80004002, Integer))
+                Throw New COMException("No interface", &H80004002)
             End If
         End Sub
 

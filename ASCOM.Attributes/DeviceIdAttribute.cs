@@ -11,7 +11,7 @@ namespace ASCOM
 	/// down to each of the settings properties. When the setting is passed to the
 	/// ASCOM.SettingsProvider class at runtime, the settings provider looks for this attribute
 	/// to determine which settings hive to save the value in when it is passed to 
-	/// <see cref="ASCOM.Utilities.Profile"/>.
+	/// <see cref="T:ASCOM.Utilities.Profile"/>.
 	/// </summary>
 	[global::System.AttributeUsage(AttributeTargets.Class | AttributeTargets.Assembly | AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
 	public sealed class DeviceIdAttribute : Attribute

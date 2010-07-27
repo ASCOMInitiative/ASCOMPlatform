@@ -25,7 +25,6 @@ using System.Runtime.InteropServices;
 
 using ASCOM;
 using ASCOM.Interface;
-using ASCOM.Interface;
 using Helper = ASCOM.Utilities;
 using ASCOM.Utilities;
 using System.Globalization;
