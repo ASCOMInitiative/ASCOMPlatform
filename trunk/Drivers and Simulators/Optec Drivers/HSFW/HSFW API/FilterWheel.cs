@@ -146,7 +146,9 @@ namespace OptecHID_FilterWheelAPI
         {
             get { return centeringOffset; }
             set 
-            { 
+            {
+                if (value > 127) value = 127;
+                if (value < -128) value = -128;
                 UpdateCenteringOffset(value);
                 centeringOffset = value;
                 

@@ -11,7 +11,7 @@ namespace OptecHIDTools
     public class Setup_API_Wrappers
     {
         // Used when registering for device notifications
-      //  [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
         [Guid("3E01A38C-63DB-4f5f-A73E-0375E1F5F6C0")]
         public class DeviceBroadcastInterface
         {
