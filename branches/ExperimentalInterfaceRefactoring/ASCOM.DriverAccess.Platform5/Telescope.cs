@@ -3,6 +3,7 @@
 //
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using ASCOM.Interface;
@@ -17,9 +18,9 @@ namespace ASCOM.DriverAccess
     /// </summary>
     public class Telescope : ASCOM.Interface.ITelescope, IDisposable 
     {
-        object objScopeLateBound;
-		ASCOM.Interface.ITelescope ITelescope;
-		Type objTypeScope;
+        //object objScopeLateBound;
+		//ASCOM.Interface.ITelescope ITelescope;
+		//Type objTypeScope;
         private MemberFactory memberFactory;
         private bool isPlatform6Telescope = false;
         private bool isPlatform5Telescope = false;
@@ -36,24 +37,24 @@ namespace ASCOM.DriverAccess
 
             foreach (Type objInterface in memberFactory.GetInterfaces)
             {
-                if (objInterface.Equals(typeof(ITelescope))) isPlatform6Telescope = true; //If the type matches the V2 type flag this
-                if (objInterface.Equals(typeof(ASCOM.Interface.ITelescope))) isPlatform5Telescope = true; //If the type matches the PIA type flag this
+                if (objInterface.Equals(typeof(ASCOM.DeviceInterface.ITelescope))) isPlatform6Telescope = true; //If the type matches the V2 type flag this
+                if (objInterface.Equals(typeof(ITelescope))) isPlatform5Telescope = true; //If the type matches the PIA type flag this
             }
 			// Get Type Information 
-            objTypeScope = Type.GetTypeFromProgID(telescopeID);
+            //objTypeScope = Type.GetTypeFromProgID(telescopeID);
 			
 			// Create an instance of the telescope object
-            objScopeLateBound = memberFactory.GetLateBoundObject;//Activator.CreateInstance(objTypeScope);
+            //objScopeLateBound = memberFactory.GetLateBoundObject;//Activator.CreateInstance(objTypeScope);
 
 			// Try to see if this driver has an ASCOM.Telescope interface
-			try
+			/*try
 			{
 				ITelescope = (ASCOM.Interface.ITelescope)objScopeLateBound;
 			}
 			catch (Exception)
 			{
 				ITelescope = null;
-			}
+			}*/
 		}
 
         /// <summary>
@@ -83,12 +84,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void AbortSlew()
         {
-			if (ITelescope != null)
-				ITelescope.AbortSlew();
-			else
-				objTypeScope.InvokeMember("AbortSlew",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { });
+            memberFactory.CallMember(3, "AbortSlew", new Type[] { }, new object[] { });
         }
         /// <summary>
         /// The alignment mode of the mount.
@@ -147,10 +143,33 @@ namespace ASCOM.DriverAccess
         /// <returns>Collection of Axis Rates</returns>
         public IAxisRates AxisRates(TelescopeAxes Axis)
         {
-			if (ITelescope != null)
-				return ITelescope.AxisRates(Axis);
-			else
-				return new _AxisRates(Axis, objTypeScope, objScopeLateBound);
+            object obj;
+            AxisRates ReturnValue = new AxisRates();
+
+            if (!memberFactory.IsCOMObject)
+            {
+                obj = memberFactory.CallMember(3, "AxisRates", new Type[] { typeof(TelescopeAxes) }, new object[] { Axis });//ITelescope.AxisRates(Axis);
+
+                //global::System.Windows.Forms.MessageBox.Show("TelescopeP5 " + isPlatform5Telescope.ToString() + ", TelescopeP6 " + isPlatform6Telescope.ToString());
+                if (isPlatform5Telescope)
+                {
+                    return (IAxisRates)obj;
+                }
+
+                if (isPlatform6Telescope)
+                {
+                    ASCOM.DeviceInterface.IAxisRates P6AxisRates = (ASCOM.DeviceInterface.IAxisRates)obj;
+
+                    foreach (ASCOM.DeviceInterface.IRate r in P6AxisRates)
+                    {
+                        ReturnValue.Add(r.Minimum, r.Maximum);
+                    }
+                }
+                return ReturnValue;
+            }
+
+            else return new _AxisRates(Axis, memberFactory.GetObjType, memberFactory.GetLateBoundObject);
+
         }
         /// <summary>
         /// The azimuth at the local horizon of the telescope's current position (degrees, North-referenced, positive East/clockwise).
@@ -341,12 +360,7 @@ namespace ASCOM.DriverAccess
         /// <param name="Raw">Bypass any delimiters or framing around the command (optional, default = False)</param>
         public void CommandBlind(string Command, bool Raw)
         {
-			if (ITelescope != null)
-				ITelescope.CommandBlind(Command, Raw);
-			else
-				objTypeScope.InvokeMember("CommandBlind", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { Command, Raw });
+            memberFactory.CallMember(3, "CommandBlind", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
         }
 
         /// <summary>
@@ -367,12 +381,7 @@ namespace ASCOM.DriverAccess
         /// <returns>True if the response indicated true or success, else False.</returns>
         public bool CommandBool(string Command, bool Raw)
         {
-			if (ITelescope != null)
-				return ITelescope.CommandBool(Command, Raw);
-			else
-				return (bool)objTypeScope.InvokeMember("CommandBool", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { Command, Raw });
+            return (bool)memberFactory.CallMember(3, "CommandBool", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
         }
 
        /// <summary>
@@ -392,12 +401,7 @@ namespace ASCOM.DriverAccess
         /// <returns>The response data from the telescope resulting from the sent command.</returns>
         public string CommandString(string Command, bool Raw)
         {
-			if (ITelescope != null)
-				return ITelescope.CommandString(Command, Raw);
-			else
-				return (string)objTypeScope.InvokeMember("CommandString", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] { Command, Raw });
+            return (string)memberFactory.CallMember(3, "CommandString", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
         }
 
         /// <summary>
@@ -562,12 +566,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void FindHome()
         {
-			if (ITelescope != null)
-				ITelescope.FindHome();
-			else
-				objTypeScope.InvokeMember("FindHome", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] {  });   
+            memberFactory.CallMember(3, "FindHome", new Type[] { }, new object[] { });
         }
 
         /// <summary>
@@ -664,13 +663,8 @@ namespace ASCOM.DriverAccess
         /// <param name="Rate">The rate of motion (deg/sec) about the specified axis</param>
         public void MoveAxis(TelescopeAxes Axis, double Rate)
         {
-			if (ITelescope != null)
-				ITelescope.MoveAxis(Axis, Rate);
-			else
-				objTypeScope.InvokeMember("MoveAxis",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { Axis, Rate });
-		}
+            memberFactory.CallMember(3, "MoveAxis", new Type[] { typeof(TelescopeAxes), typeof(double) }, new object[] { Axis, Rate });
+        }
 
         /// <summary>
         /// The short name of the telescope, for display purposes
@@ -691,12 +685,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void Park()
         {
-			if (ITelescope != null)
-				ITelescope.Park();
-			else
-				objTypeScope.InvokeMember("Park", 
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objScopeLateBound, new object[] {  });   
+            memberFactory.CallMember(3, "Park", new Type[] { }, new object[] { });
         }
 
         /// <summary>
@@ -718,12 +707,7 @@ namespace ASCOM.DriverAccess
         /// <param name="Duration">The duration of the guide-rate motion (milliseconds)</param>
         public void PulseGuide(GuideDirections Direction, int Duration)
         {
-			if (ITelescope != null)
-				ITelescope.PulseGuide(Direction, Duration);
-			else
-				objTypeScope.InvokeMember("PulseGuide",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { (int)Direction, Duration });  
+            memberFactory.CallMember(3, "PulseGuide", new Type[] { typeof(GuideDirections), typeof(int) }, new object[] { (int)Direction, Duration });
         }
 
         /// <summary>
@@ -798,13 +782,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void SetPark()
         {
-			if (ITelescope != null)
-				ITelescope.SetPark();
-			else
-				objTypeScope.InvokeMember("SetPark",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { });
-		}
+            memberFactory.CallMember(3, "SetPark", new Type[] { }, new object[] { });
+        }
 
         /// <summary>
         /// Sets the telescope's park position to be its current position
@@ -813,12 +792,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void SetupDialog()
         {
-			if (ITelescope != null)
-				ITelescope.SetupDialog();
-			else
-				objTypeScope.InvokeMember("SetupDialog",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { }); 
+            memberFactory.CallMember(3, "SetupDialog", new Type[] { }, new object[] { });
         }
 
 
@@ -909,12 +883,7 @@ namespace ASCOM.DriverAccess
         /// <param name="Altitude">Target altitude (degrees, positive up)</param>
         public void SlewToAltAz(double Azimuth, double Altitude)
         {
-			if (ITelescope != null)
-				ITelescope.SlewToAltAz(Azimuth, Altitude);
-			else
-				objTypeScope.InvokeMember("SlewToAltAz",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { Azimuth, Altitude });
+            memberFactory.CallMember(3, "SlewToAltAz", new Type[] { typeof(double), typeof(double) }, new object[] { Azimuth, Altitude });
         }
 
         /// <summary>
@@ -934,12 +903,7 @@ namespace ASCOM.DriverAccess
         /// <param name="Altitude"></param>
         public void SlewToAltAzAsync(double Azimuth, double Altitude)
         {
-			if (ITelescope != null)
-				ITelescope.SlewToAltAzAsync(Azimuth, Altitude);
-			else
-				objTypeScope.InvokeMember("SlewToAltAzAsync",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { Azimuth, Altitude });
+            memberFactory.CallMember(3, "SlewToAltAzAsync", new Type[] { typeof(double), typeof(double) }, new object[] { Azimuth, Altitude });
         }
 
         /// <summary>
@@ -955,12 +919,7 @@ namespace ASCOM.DriverAccess
         /// <param name="Declination">The destination declination (degrees, positive North). Copied to Telescope.TargetDeclination.</param>
         public void SlewToCoordinates(double RightAscension, double Declination)
         {
-			if (ITelescope != null)
-				ITelescope.SlewToCoordinates(RightAscension, Declination);
-			else
-				objTypeScope.InvokeMember("SlewToCoordinates",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { RightAscension, Declination });
+            memberFactory.CallMember(3, "SlewToCoordinates", new Type[] { typeof(double), typeof(double) }, new object[] { RightAscension, Declination });
         }
 
         /// <summary>
@@ -979,12 +938,7 @@ namespace ASCOM.DriverAccess
         /// <param name="Declination">The destination declination (degrees, positive North). Copied to Telescope.TargetDeclination.</param>
         public void SlewToCoordinatesAsync(double RightAscension, double Declination)
         {
-			if (ITelescope != null)
-				ITelescope.SlewToCoordinatesAsync(RightAscension, Declination);
-			else
-				objTypeScope.InvokeMember("SlewToCoordinatesAsync",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { RightAscension, Declination });
+            memberFactory.CallMember(3, "SlewToCoordinatesAsync", new Type[] { typeof(double), typeof(double) }, new object[] { RightAscension, Declination });
         }
 
         /// <summary>
@@ -997,12 +951,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void SlewToTarget()
         {
-			if (ITelescope != null)
-				ITelescope.SlewToTarget();
-			else
-				objTypeScope.InvokeMember("SlewToTarget",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { });
+            memberFactory.CallMember(3, "SlewToTarget", new Type[] { }, new object[] { });
         }
 
         /// <summary>
@@ -1020,12 +969,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void SlewToTargetAsync()
         {
-			if (ITelescope != null)
-				ITelescope.SlewToTargetAsync();
-			else
-				objTypeScope.InvokeMember("SlewToTargetAsync",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { });
+            memberFactory.CallMember(3, "SlewToTargetAsync", new Type[] { }, new object[] { });
         }
 
         /// <summary>
@@ -1053,12 +997,7 @@ namespace ASCOM.DriverAccess
         /// <param name="Altitude">Target altitude (degrees, positive up)</param>
         public void SyncToAltAz(double Azimuth, double Altitude)
         {
-			if (ITelescope != null)
-				ITelescope.SyncToAltAz(Azimuth, Altitude);
-			else
-				objTypeScope.InvokeMember("SyncToAltAz",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { Azimuth, Altitude });
+            memberFactory.CallMember(3, "SyncToAltAz", new Type[] { typeof(double), typeof(double) }, new object[] { Azimuth, Altitude });
         }
 
         /// <summary>
@@ -1068,12 +1007,7 @@ namespace ASCOM.DriverAccess
         /// <param name="Declination">The corrected declination (degrees, positive North). Copied to the TargetDeclination property.</param>
         public void SyncToCoordinates(double RightAscension, double Declination)
         {
-			if (ITelescope != null)
-				ITelescope.SyncToCoordinates(RightAscension, Declination);
-			else
-				objTypeScope.InvokeMember("SyncToCoordinates",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { RightAscension, Declination });
+            memberFactory.CallMember(3, "SyncToCoordinates", new Type[] { typeof(double), typeof(double) }, new object[] { RightAscension, Declination });
         }
 
         /// <summary>
@@ -1083,12 +1017,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void SyncToTarget()
         {
-			if (ITelescope != null)
-				ITelescope.SyncToTarget();
-			else
-				objTypeScope.InvokeMember("SyncToTarget",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { });
+            memberFactory.CallMember(3, "SyncToTarget", new Type[] { }, new object[] { });
         }
 
         /// <summary>
@@ -1153,14 +1082,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public ITrackingRates TrackingRates
         {
-            get
-            {
-				if (ITelescope != null)
-					return ITelescope.TrackingRates;
-				else
-					return new _TrackingRates(objTypeScope, objScopeLateBound);
-            }
-
+            get { return new _TrackingRates(memberFactory.GetObjType, memberFactory.GetLateBoundObject); }
         }
 
         /// <summary>
@@ -1188,12 +1110,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void Unpark()
         {
-			if (ITelescope != null)
-				ITelescope.Unpark();
-			else
-				objTypeScope.InvokeMember("Unpark",
-					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, objScopeLateBound, new object[] { });
+            memberFactory.CallMember(3, "Unpark", new Type[] { }, new object[] { });
         }
 
         #endregion
@@ -1206,11 +1123,10 @@ namespace ASCOM.DriverAccess
 		/// </summary>
 		public void Dispose()
         {
-            if (this.objScopeLateBound != null)
+            if (memberFactory != null)
             {
-				try { Marshal.ReleaseComObject(objScopeLateBound); }
-				catch (Exception) { }
-				objScopeLateBound = null;
+                memberFactory.Dispose();
+                memberFactory = null;
             }
         }
 
@@ -1460,4 +1376,78 @@ namespace ASCOM.DriverAccess
 		#endregion
 	}
 	#endregion
+
+    public class AxisRates : ASCOM.Interface.IAxisRates
+    {
+        //ASCOM.Interface.TelescopeAxes m_Axis;
+        List<Rate> m_Rates = new List<Rate>();        //' Empty array, but an array nonetheless
+
+        #region IAxisRates Members
+
+        public int Count
+        {
+            get { return m_Rates.Count; }
+        }
+
+        public void Dispose()
+        {
+            // throw new System.NotImplementedException(); Nothing to dispose in this class
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return m_Rates.GetEnumerator();
+        }
+
+        public IRate this[int index]
+        {
+            get { return new Rate(m_Rates[index].Minimum, m_Rates[index].Maximum); }
+        }
+
+        #endregion
+
+        public void Add(double Minimum, double Maximum)
+        {
+            m_Rates.Add(new Rate(Minimum, Maximum));
+        }
+
+    }
+
+    public class Rate : IRate
+    {
+
+        double m_dMaximumR = 0;
+        double m_dMinimumR = 0;
+
+        //'
+        //' Default constructor - Internal prevents public creation
+        //' of instances. These are values for AxisRates.
+
+        internal Rate(double Minimum, double Maximum)
+        {
+            m_dMaximumR = Maximum;
+            m_dMinimumR = Minimum;
+        }
+
+        #region IRate Members
+
+        public double Maximum
+        {
+            get { return m_dMaximumR; }
+            set { m_dMaximumR = value; }
+        }
+
+        public double Minimum
+        {
+            get { return m_dMinimumR; }
+            set { m_dMinimumR = value; }
+        }
+        public void Dispose()
+        {
+        }
+
+        #endregion
+    }
+
+
 }
