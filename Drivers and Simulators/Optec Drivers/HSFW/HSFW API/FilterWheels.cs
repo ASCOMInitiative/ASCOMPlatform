@@ -44,6 +44,9 @@ namespace OptecHID_FilterWheelAPI
 
         public FilterWheels()
         {
+#if DEBUG
+            System.Windows.Forms.MessageBox.Show("Creating FilterWheels");
+#endif
             Trace.WriteLine("*******************************************************************");
             Trace.WriteLine("**************FilterWheel API IS IN USE****************************");
             HIDMonitor.HIDAttached += new EventHandler(HIDMonitor_HIDAttached);
@@ -166,7 +169,7 @@ namespace OptecHID_FilterWheelAPI
             
         }
 
-        public string GetErrorMessage(ushort ErrorState)
+        public string GetErrorMessage(short ErrorState)
         {
             string ErrorName = "ErrorState_" + ErrorState.ToString();
             string x = Resource1.ResourceManager.GetString(ErrorName);

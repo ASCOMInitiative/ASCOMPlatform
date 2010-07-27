@@ -67,6 +67,13 @@ namespace ASCOM.HSFW_ASCOM_Driver.Properties {
             }
         }
         
+        internal static System.Drawing.Icon FilterWheelIcon2010 {
+            get {
+                object obj = ResourceManager.GetObject("FilterWheelIcon2010", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Optec_Logo_medium_png {
             get {
                 object obj = ResourceManager.GetObject("Optec_Logo_medium_png", resourceCulture);

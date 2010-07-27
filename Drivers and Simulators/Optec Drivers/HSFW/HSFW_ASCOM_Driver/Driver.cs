@@ -54,6 +54,9 @@ namespace ASCOM.HSFW_ASCOM_Driver
         //
         public FilterWheel()
         {
+#if DEBUG
+            System.Windows.Forms.MessageBox.Show("Attach Process Here if Necessary");
+#endif
             myHandler = HSFW_Handler.GetInstance();
             connected = false;
         }
@@ -126,7 +129,16 @@ namespace ASCOM.HSFW_ASCOM_Driver
 
         public int[] FocusOffsets
         {
-            get { throw new PropertyNotImplementedException("FocusOfsets", false); }
+            get 
+            {
+                int[] offsets = new int[8];
+                for (int i = 0; i < 8; i++)
+                {
+                    offsets[i] = HSFW_Handler.GetFocusOffset(myHandler.myDevice.SerialNumber,
+                        myHandler.myDevice.WheelID, (short)(i + 1));
+                }
+                return offsets;    
+            }
         }
 
         public string[] Names

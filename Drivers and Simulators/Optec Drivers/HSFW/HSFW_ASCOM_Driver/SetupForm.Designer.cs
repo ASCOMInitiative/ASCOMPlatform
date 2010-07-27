@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetupForm));
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.RestDefaults_Btn = new System.Windows.Forms.Button();
             this.OK_Btn = new System.Windows.Forms.Button();
@@ -76,6 +77,7 @@
             this.Controls.Add(this.OK_Btn);
             this.Controls.Add(this.RestDefaults_Btn);
             this.Controls.Add(this.propertyGrid1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SetupForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Advanced HSFW Settings";

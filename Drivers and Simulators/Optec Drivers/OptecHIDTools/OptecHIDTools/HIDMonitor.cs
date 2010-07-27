@@ -259,7 +259,7 @@ namespace OptecHIDTools
                         // Mark the device at attached
                         NewDevice.DeviceIsAttached = true;
                         //Now check if the device is a new one or being reattached.
-                        bool MatchFound = false;
+                       // bool MatchFound = false;
                         // Add the device to the list
                         _DetectedHIDs.Add(NewDevice);
                         Trace.WriteLine("New Device Added To List: " + NewDevice.PID_Hex + " " + NewDevice.SerialNumber);

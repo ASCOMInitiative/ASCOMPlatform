@@ -15,7 +15,6 @@ namespace ASCOM.HSFW_ASCOM_Driver
     public partial class SetupDialogForm : Form
     {
         private HSFW_Handler myHandler;
-      
         
         public SetupDialogForm()
         {
@@ -23,9 +22,10 @@ namespace ASCOM.HSFW_ASCOM_Driver
             
         }
 
+        
         private bool CheckAtLeastOneDevice()
         {
-            if (myHandler.myDevice == null)
+            if (myHandler.AttachedDeviceCount == 0)
             {
                 return false;
             }
@@ -34,13 +34,21 @@ namespace ASCOM.HSFW_ASCOM_Driver
                 return true;
             }
         }
-
+    
         private void UpdateDisplay()
         {
             if (CheckAtLeastOneDevice())
                 {
-                    if (myHandler.myDevice.ErrorState == 0) UpdateDisplay_GoodFW();
-                    else UpdateDisplay_ErroredFW();
+                    if (myHandler.myDevice == null)
+                    {
+                        UpdateDisplay_NoFW();
+                        this.AttDev_CB.Enabled = true;
+                    }
+                    else
+                    {
+                        if (myHandler.myDevice.ErrorState == 0) UpdateDisplay_GoodFW();
+                        else UpdateDisplay_ErroredFW();
+                    }
                 }
                 else
                 {
@@ -55,6 +63,7 @@ namespace ASCOM.HSFW_ASCOM_Driver
             {
                 this.NewVersionCheckerBGW.RunWorkerAsync();
                 myHandler = HSFW_Handler.GetInstance();
+                myHandler.DeviceListChanged += new EventHandler(myHandler_DeviceListChanged);
                 UpdateDisplay();
                 
             }
@@ -64,9 +73,21 @@ namespace ASCOM.HSFW_ASCOM_Driver
             }
         }
 
+        private delegate void UI_Update();
+        void myHandler_DeviceListChanged(object sender, EventArgs e)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new UI_Update(UpdateDisplay));
+            }
+            else UpdateDisplay();
+        }
+
+
+
         private void UpdateDisplay_GoodFW()
         {
-            this.AttDev_CB.DataSource = myHandler.AttachedDeviceList;
+            UpdateAttachedDevice_CB();
             this.AttDev_CB.Enabled = true;
             this.SettingsBTN.Enabled = true;
             this.CurrentWheelID_LBL.Enabled = true;
@@ -87,6 +108,15 @@ namespace ASCOM.HSFW_ASCOM_Driver
 
 
             Application.DoEvents();
+        }
+
+        private void UpdateAttachedDevice_CB()
+        {
+            AttDev_CB.Items.Clear();
+            foreach (string s in myHandler.AttachedDeviceList)
+            {
+                AttDev_CB.Items.Add(s);
+            }
         }
 
         private void UpdateDisplay_ErroredFW()
@@ -110,7 +140,8 @@ namespace ASCOM.HSFW_ASCOM_Driver
 
         private void UpdateDisplay_NoFW()
         {
-            this.AttDev_CB.Items.Clear();
+            this.AttDev_CB.DataSource = myHandler.AttachedDeviceList;
+            this.AttDev_CB.Refresh();
             this.AttDev_CB.Text = "None";
             this.AttDev_CB.Enabled = false;
             this.SettingsBTN.Enabled = false;
@@ -213,6 +244,18 @@ namespace ASCOM.HSFW_ASCOM_Driver
                 }
             }
             catch { } // Just ignore all errors. They mean the computer isn't connected to internet.
+        }
+
+
+        private void AttDev_CB_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            string newSN = AttDev_CB.Text;
+            myHandler.ChangeMyDevice(newSN);
+        }
+
+        private void SetupDialogForm_Load(object sender, EventArgs e)
+        {
+
         }
 
        

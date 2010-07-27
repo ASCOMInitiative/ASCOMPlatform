@@ -61,6 +61,15 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'API Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\API Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -75,6 +84,7 @@
       <HintPath>..\Dependencies\ASCOMPlatformDependencies\ASCOM.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -85,19 +95,17 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Driver.cs" />
-    <Compile Include="FocusOffsets.cs">
-      <DependentUpon>FocusOffsets.xsd</DependentUpon>
+    <Compile Include="HSFW_Handler.cs" />
+    <Compile Include="InstallerCustomActions.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="FocusOffsets.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FocusOffsets.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="HSFW_Handler.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="NewVersionChecker.cs" />
     <Compile Include="NewVersionFrm.cs">
       <SubType>Form</SubType>
@@ -143,27 +151,16 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="FocusOffsets.xsc">
-      <DependentUpon>FocusOffsets.xsd</DependentUpon>
-    </None>
-    <None Include="FocusOffsets.xsd">
-      <SubType>Designer</SubType>
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>FocusOffsets.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="FocusOffsets.xss">
-      <DependentUpon>FocusOffsets.xsd</DependentUpon>
-    </None>
     <None Include="Test.js" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ASCOM.png" />
-    <None Include="DriverSettings.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <Content Include="ReadMe.htm" />
+    <None Include="Resources\ASCOM.png" />
+    <Content Include="FocusOffsets.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\FilterWheelIcon2010.ico" />
+    <None Include="ReadMe.htm" />
     <None Include="Resources\Optec Logo-medium png.png" />
-    <None Include="Resources\Optec Logo-medium.jpg" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
