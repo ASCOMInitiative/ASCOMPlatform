@@ -60,8 +60,7 @@ Client Toolkit
 	<!-- #BeginEditable "MainContent" -->
 	<div class="article">
 	<h3>.NET Client Toolkit (recommended) </h3>
-	<p class="note">NOTICE (July 2008) - The ASCOM .NET Client Toolkit included in the Platform 5.0 was not rebuilt for a late change to the ICamera interface. Applications that use the Client Toolkit in Platform 5.0 will not run.  Thus, it is required that both you <span class="underline">and your customers</span> install the <a href="../Downloads/PlatformUpdates.htm">.NET Client Toolkit Update 1.0.5</a>. We sincerely apologize for this. </p>
-	<p class="note">NOTICE (February 2010) - Client Toolokit 1.0.5 is included in the ASCOM Platform 5.5 update, so you do not need to install it separately if you have installed the 5.5 update.</p>
+	<p class="note">NOTICE - The latest Client Toolkit is included in the ASCOM Platform 5.5 update. Make sure you start with at least Platform 5.5 installed!</p>
 	<p>The ASCOM Platform includes a .NET assembly that provides high-level simplified access to ASCOM drivers. Astronomy software developers wishing to use ASCOM drivers from .NET applications are encouraged to use this library, as it provides not only simplified access to drivers, but also automatic switching between the preferred early-binding interfaces and, for older drivers that don't support it, late-binding. If late binding is needed, the Client Toolkit hides all of the ugly details of calling a driver via its late-bound interface. Your code will always use native .NET class/object syntax.</p>
 	<h4>Background</h4>
 	<p>The Client Toolkit is an assembly that is <i>always</i> installed into the .NET Global Assembly Cache. Thus, everyone who installs the ASCOM Platform 5 will have the Client Toolkit installed. You do not need to include the Client Toolkit assembly in your software's distribution, and you <span class="underline">must not do so</span>. </p>
@@ -118,7 +117,7 @@ Dim T As Telescope = New Telescope(progID)</pre>
 	</div>
 	<!-- #EndEditable --></div>
 <div id="footer">
-	Copyright © 1998-2009, The ASCOM Initiative. 
+	Copyright © 1998-2010, The ASCOM Initiative. 
 	All rights reserved. </div>
 
 </body>

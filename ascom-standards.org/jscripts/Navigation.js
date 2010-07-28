@@ -5,6 +5,7 @@
 // Many more edits (Bob Denny 05-Jan-08)
 // More and more... (Bob Denny 07-Jan-08)
 // Case sensitivity for Unix/A2 (Bob Denny 13-May-08)
+// Developer Getting Started (Bob Denny 28-Jul-10)
 //
 //* Initialize globals
 
@@ -178,6 +179,7 @@ function writesubmenu() {
     case 5: // Developers
         SubMenuOutput += "<h3>Application Development</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
+		SubMenuOutput += "<li><a href=\"AppStart.htm\">Getting Started</a></li>";
 		SubMenuOutput += "<li><a href=\"ClientToolkit.htm\">.NET Client Toolkit</a></li>";
  	    SubMenuOutput += "</ul>";
         SubMenuOutput += "<h3>Driver Design Principles</h3>";
