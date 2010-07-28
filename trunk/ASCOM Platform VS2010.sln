@@ -748,7 +748,6 @@ Global
 		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Peter|x86.ActiveCfg = Peter|x86
 		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Release|Mixed Platforms.Build.0 = Release|x86
 		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Release|x64.ActiveCfg = Release|Any CPU
 		{64308775-BD4A-469C-BCAB-3ED830B811AF}.Release|x86.ActiveCfg = Release|x86
 		{71BB4DA7-4092-416D-89FE-97CD15207371}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
@@ -768,7 +767,6 @@ Global
 		{71BB4DA7-4092-416D-89FE-97CD15207371}.Peter|x86.ActiveCfg = Peter|x86
 		{71BB4DA7-4092-416D-89FE-97CD15207371}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71BB4DA7-4092-416D-89FE-97CD15207371}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{71BB4DA7-4092-416D-89FE-97CD15207371}.Release|Mixed Platforms.Build.0 = Release|x86
 		{71BB4DA7-4092-416D-89FE-97CD15207371}.Release|x64.ActiveCfg = Release|Any CPU
 		{71BB4DA7-4092-416D-89FE-97CD15207371}.Release|x86.ActiveCfg = Release|x86
 		{A6F7ADB8-B812-4BFA-B2BD-DF61CC35A200}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
@@ -1151,8 +1149,8 @@ Global
 		{03E45323-63A5-4B49-838D-7A13368F2036}.Peter|x86.ActiveCfg = Release|Any CPU
 		{03E45323-63A5-4B49-838D-7A13368F2036}.Release|Any CPU.ActiveCfg = Release|x86
 		{03E45323-63A5-4B49-838D-7A13368F2036}.Release|Any CPU.Build.0 = Release|x86
-		{03E45323-63A5-4B49-838D-7A13368F2036}.Release|Mixed Platforms.ActiveCfg = Release|x64
-		{03E45323-63A5-4B49-838D-7A13368F2036}.Release|Mixed Platforms.Build.0 = Release|x64
+		{03E45323-63A5-4B49-838D-7A13368F2036}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{03E45323-63A5-4B49-838D-7A13368F2036}.Release|Mixed Platforms.Build.0 = Release|x86
 		{03E45323-63A5-4B49-838D-7A13368F2036}.Release|x64.ActiveCfg = Release|Any CPU
 		{03E45323-63A5-4B49-838D-7A13368F2036}.Release|x64.Build.0 = Release|Any CPU
 		{03E45323-63A5-4B49-838D-7A13368F2036}.Release|x86.ActiveCfg = Release|x86
@@ -1320,13 +1318,13 @@ Global
 		{1DCE9D1C-572B-4C79-96D0-A1748CAC7C6C} = {C9395FDC-73CC-48C4-B8CA-CE7B85EDC1BA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
-		Reflector0SourceName = Moq
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceAssemblyName = 
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0DestinationName = Moq
-		Reflector0DestinationVersion = 4.0.812.4
 		Reflector0DestinationAssemblyName = 
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationName = Moq
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0SourceAssemblyName = 
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceName = Moq
+		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
 	EndGlobalSection
 EndGlobal
