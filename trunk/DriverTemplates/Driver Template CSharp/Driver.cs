@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
 
 using ASCOM;
 using ASCOM.Utilities;
-using ASCOM.Interface;
+using ASCOM.DeviceInterface;
 
 namespace ASCOM.TEMPLATEDEVICENAME
 {
