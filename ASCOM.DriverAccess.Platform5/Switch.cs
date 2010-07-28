@@ -13,7 +13,7 @@ namespace ASCOM.DriverAccess
 	/// <summary>
 	///   Provides universal access to Switch drivers
 	/// </summary>
-	public class Switch : ISwitch, IDisposable
+	public class Switch //: ISwitch, IDisposable
 	{
 		private readonly ISwitch ISwitch;
 		private readonly Type objTypeSwitch;
@@ -76,14 +76,14 @@ namespace ASCOM.DriverAccess
 		{
 			get
 			{
-				if (ISwitch != null)
-					return ISwitch.SwitchCollection;
-				else
-				{
-					return (ArrayList) (objTypeSwitch.InvokeMember("SwitchCollection",
-					                                               BindingFlags.Default | BindingFlags.GetProperty,
-					                                               null, objSwitchLateBound, new object[] {}));
-				}
+                if (ISwitch != null)
+                    return null; //ISwitch.SwitchCollection;
+                else
+                {
+                    return (ArrayList)(objTypeSwitch.InvokeMember("SwitchCollection",
+                                                                   BindingFlags.Default | BindingFlags.GetProperty,
+                                                                   null, objSwitchLateBound, new object[] { }));
+                }
 			}
 		}
 
