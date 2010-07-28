@@ -1,19 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptecHID_FilterWheelAPI", "HSFW API\OptecHID_FilterWheelAPI.csproj", "{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{B9CEE0E9-C6B5-4D67-9167-E72B9629D31D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptecHIDTools", "Dependencies\OptecHID\OptecHIDTools.csproj", "{9786A9B9-97B9-4B23-AF39-4514AF45DEED}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "High Speed Filter Wheel Control", "HSFW Control App\High Speed Filter Wheel Control.csproj", "{D2936A77-5E35-4F18-B92E-5BE0F53E3D95}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HSFW_ASCOM_Driver", "HSFW_ASCOM_Driver\HSFW_ASCOM_Driver.csproj", "{A4083C6B-4D48-4DAD-8E9D-5E6D72D7AFE0}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "64Bit Installers", "64Bit Installers", "{BD9CF658-DD68-44FC-A940-F301BFB24975}"
-EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HSFW ASCOM Driver Setup", "64Bit Installers\HSFW ASCOM Driver Setup\HSFW ASCOM Driver Setup.vdproj", "{69917D60-8CF3-40BF-AA87-6D2512076615}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ASCOM Platform", "ASCOM Platform", "{6F15CB55-2EEA-4361-9AB8-ED85DF354D3D}"
 	ProjectSection(SolutionItems) = preProject
@@ -30,7 +20,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ASCOM Platform", "ASCOM Pla
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "32Bit Installers", "32Bit Installers", "{F423B20A-FE51-4C39-96FB-5F7FAD61C7C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptecHID_FilterWheelAPI", "HSFW API\OptecHID_FilterWheelAPI.csproj", "{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptecHIDTools", "Dependencies\OptecHID\OptecHIDTools.csproj", "{9786A9B9-97B9-4B23-AF39-4514AF45DEED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "High Speed Filter Wheel Control", "HSFW Control App\High Speed Filter Wheel Control.csproj", "{D2936A77-5E35-4F18-B92E-5BE0F53E3D95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HSFW_ASCOM_Driver", "HSFW_ASCOM_Driver\HSFW_ASCOM_Driver.csproj", "{A4083C6B-4D48-4DAD-8E9D-5E6D72D7AFE0}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HSFW ASCOM Driver Setup", "64Bit Installers\HSFW ASCOM Driver Setup\HSFW ASCOM Driver Setup.vdproj", "{69917D60-8CF3-40BF-AA87-6D2512076615}"
+EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Custom Driver Tools", "64Bit Installers\Custom Driver Tools\Custom Driver Tools.vdproj", "{5B86D2E2-0FAC-41AA-855E-906FE78B7D73}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HSFW Control", "64Bit Installers\HSFW Control\HSFW Control.vdproj", "{5C2E381A-0E8B-4DC2-9A01-165BFA0DD749}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,7 @@ Global
 		{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9786A9B9-97B9-4B23-AF39-4514AF45DEED}.API Debug|Any CPU.ActiveCfg = API Debug|Any CPU
+		{9786A9B9-97B9-4B23-AF39-4514AF45DEED}.API Debug|Any CPU.Build.0 = API Debug|Any CPU
 		{9786A9B9-97B9-4B23-AF39-4514AF45DEED}.ASCOM Driver Debug|Any CPU.ActiveCfg = ASCOM Driver Debug|Any CPU
 		{9786A9B9-97B9-4B23-AF39-4514AF45DEED}.ASCOM Driver Debug|Any CPU.Build.0 = ASCOM Driver Debug|Any CPU
 		{9786A9B9-97B9-4B23-AF39-4514AF45DEED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -83,14 +86,20 @@ Global
 		{5B86D2E2-0FAC-41AA-855E-906FE78B7D73}.Debug|Any CPU.Build.0 = Debug
 		{5B86D2E2-0FAC-41AA-855E-906FE78B7D73}.Release|Any CPU.ActiveCfg = Release
 		{5B86D2E2-0FAC-41AA-855E-906FE78B7D73}.Release|Any CPU.Build.0 = Release
+		{5C2E381A-0E8B-4DC2-9A01-165BFA0DD749}.API Debug|Any CPU.ActiveCfg = Debug
+		{5C2E381A-0E8B-4DC2-9A01-165BFA0DD749}.ASCOM Driver Debug|Any CPU.ActiveCfg = Debug
+		{5C2E381A-0E8B-4DC2-9A01-165BFA0DD749}.Debug|Any CPU.ActiveCfg = Debug
+		{5C2E381A-0E8B-4DC2-9A01-165BFA0DD749}.Release|Any CPU.ActiveCfg = Release
+		{5C2E381A-0E8B-4DC2-9A01-165BFA0DD749}.Release|Any CPU.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{9786A9B9-97B9-4B23-AF39-4514AF45DEED} = {B9CEE0E9-C6B5-4D67-9167-E72B9629D31D}
 		{6F15CB55-2EEA-4361-9AB8-ED85DF354D3D} = {B9CEE0E9-C6B5-4D67-9167-E72B9629D31D}
+		{9786A9B9-97B9-4B23-AF39-4514AF45DEED} = {B9CEE0E9-C6B5-4D67-9167-E72B9629D31D}
 		{69917D60-8CF3-40BF-AA87-6D2512076615} = {BD9CF658-DD68-44FC-A940-F301BFB24975}
 		{5B86D2E2-0FAC-41AA-855E-906FE78B7D73} = {BD9CF658-DD68-44FC-A940-F301BFB24975}
+		{5C2E381A-0E8B-4DC2-9A01-165BFA0DD749} = {BD9CF658-DD68-44FC-A940-F301BFB24975}
 	EndGlobalSection
 EndGlobal

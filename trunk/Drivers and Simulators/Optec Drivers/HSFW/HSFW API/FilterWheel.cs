@@ -904,7 +904,7 @@ namespace OptecHID_FilterWheelAPI
             {
                 string ErrorName = "ErrorState_" + ErrorState.ToString();
                 string x = Resource1.ResourceManager.GetString(ErrorName);
-                object y = Resource1.ResourceManager.GetObject(ErrorName);
+               
                 if (x == null) x = "No Error Message Available for: " + ErrorName;
                 return x;
             }
