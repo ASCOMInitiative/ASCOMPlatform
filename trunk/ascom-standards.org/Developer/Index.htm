@@ -58,8 +58,9 @@
 	<p>The ASCOM Platform includes <i>simulators </i> for each of the devices covered by an ASCOM standard. These simulators provide a convenient tool for application software developers to test their programs with known good drivers under controlled conditions. The simulators also serve driver developers as <i>reference implementations </i> of the driver standards. If there is a question about the behavior of a property or method, the behavior of the appropriate simulator serves as the reference. </p>
 	
 	<h3>Application Developer Resources</h3>
-	<p>Using ASCOM drivers differs in detail depending on the language you are using for your application. Over 20 languages on Windows can use drivers, so it's beyond the scope of this document to describe the details for each. The place to start is the documentation for your language that covers &quot;COM Automation&quot; or &quot;ActiveX&quot;. Visual Basic 6 has this built-in and is the simplest to use, however it has been de-supported by Microsoft. C++ is by far the most difficult language from which to use ASCOM drivers (or for that matter, any Windows Object), especially for older drivers that do not implement the standard early-binding interface. And until <i>all</i> drivers do support early binding, you're left with no choice but to implement the complex IDispatch based code to call them. The ActiveX Template Library can be a great help, but it's still really difficult. </p>
-	<p>If you are developing in one of the .NET languages, the situation is much better. The <a href="ClientToolkit.htm">ASCOM Client Toolkit</a> is an assembly that greatly simplifies using drivers from .NET. Astronomy software developers wishing to use ASCOM drivers from .NET applications are encouraged to use this library, as it provides not only simplified access to drivers, but also automatic switching between the preferred early-binding interfaces and, for older drivers that don't support it, late-binding. If late binding is needed, the Client Toolkit hides all of the ugly details of calling a driver via its late-bound interface. Your code will always use native .NET class/object syntax.</p>
+	<p>If you're new to ASCOM, and you're an application developer (as opposed to a driver developer), check out the <a href="AppStart.htm">Getting Started</a> information. Then, if you are developing your application in one of the Microsoft .NET languages, learn about the <a href="ClientToolkit.htm">.NET Client Toolkit</a>.</p>
+	
+	
 	<h3>Driver Developer Resources</h3>
 	<p class="note">NOTE: An update to the .NET driver templates, with a correction for 64-bit systems, is available in the <a href="../Downloads/PlatformUpdates.htm">Platform Updates</a> section of the download center.</p>
 	<p>Most of the driver developer tools are contained within the ASCOM Platform 2008 as optionally installed components or as Developer Downloads in the <a href="../Downloads/Index.htm">Download Center</a>. Driver developers are strongly encouraged to use those tools. This is particularly true for driver developers who write in C# or VB.NET. The Platform contains templates for all driver types in both C# and VB.NET. </p>
@@ -71,7 +72,7 @@
 	</div>
 &nbsp;<!-- #EndEditable --></div>
 <div id="footer">
-	Copyright © 1998-2009, The ASCOM Initiative. 
+	Copyright © 1998-2010, The ASCOM Initiative. 
 	All rights reserved. </div>
 
 </body>
