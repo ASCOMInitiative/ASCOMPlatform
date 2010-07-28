@@ -1382,7 +1382,6 @@ namespace ASCOM.DriverAccess
 
     public class AxisRates : ASCOM.DeviceInterface.IAxisRates
     {
-        ASCOM.DeviceInterface.TelescopeAxes m_Axis;
         List<Rate> m_Rates = new List<Rate>();        //' Empty array, but an array nonetheless
         
         #region IAxisRates Members
