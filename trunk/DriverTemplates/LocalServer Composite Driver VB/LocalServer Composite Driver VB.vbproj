@@ -218,10 +218,6 @@
       <Project>{2C40FAD9-DE75-4360-A0AD-911C4D24D98C}</Project>
       <Name>ASCOM.Attributes</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ASCOM.Interfaces\ASCOM.Interfaces.csproj">
-      <Project>{5A0818BF-F3DD-4262-AF69-FD794832B85C}</Project>
-      <Name>ASCOM.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
       <Name>ASCOM.Utilities</Name>
