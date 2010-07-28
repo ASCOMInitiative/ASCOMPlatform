@@ -16,7 +16,7 @@ namespace OptecHID_FilterWheelAPI
     {
         private ArrayList DetectedFilterWheels = new ArrayList { };
 
-        public static Dictionary<char, short> FiltersPerWheel = new Dictionary<char, short>();
+        public Dictionary<char, short> FiltersPerWheel = new Dictionary<char, short>();
         private int attachedDeviceCount = 0;
         private Thread ListRefreshThread;
         public event EventHandler FilterWheelRemoved;
@@ -96,7 +96,7 @@ namespace OptecHID_FilterWheelAPI
         // execution of that handler to a new thread. This ensures that 
         // if the handler executs a long running operation, the class can 
         // still continue to function normally.
-        private static void TriggerAnEvent(EventHandler EH)
+        private void TriggerAnEvent(EventHandler EH)
         {
             if (EH == null) return;
             var EventListeners = EH.GetInvocationList();
