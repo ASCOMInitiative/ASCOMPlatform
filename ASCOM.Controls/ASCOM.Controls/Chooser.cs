@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
 using Microsoft.Win32;
-using ASCOM.DriverAccess;
+//using ASCOM.DriverAccess;
 using System.Collections.Generic;
 using ASCOM.Utilities;
 using System.Diagnostics;
