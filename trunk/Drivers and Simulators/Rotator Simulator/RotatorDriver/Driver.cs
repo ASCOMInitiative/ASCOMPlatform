@@ -47,11 +47,22 @@ namespace ASCOM.Simulator
 
 		//
 		// PUBLIC COM INTERFACE IRotator IMPLEMENTATION
-		//
+        //
+        #region IDeviceControl Members
+        public void Action(string cmd,string parms)
+        {
+            throw new MethodNotImplementedException("Action");
+        }
 
-		#region IRotator Members
+        public string[] SupportedActions()
+        {
+            throw new MethodNotImplementedException("SupportedActions");
+        }
+        #endregion
 
-		public bool CanReverse
+        #region IRotator Members
+
+        public bool CanReverse
 		{
 			get { return RotatorHardware.CanReverse; }
 		}
