@@ -34,6 +34,8 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HSFW Control Setup", "64Bit
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HSFW Custom Driver Tools Setup", "64Bit Installers\HSFW Custom Driver Tools Setup\HSFW Custom Driver Tools Setup.vdproj", "{1B8EFCC5-28CF-48AB-884F-2FAFA952EF3E}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HSFW Control Setup (x86)", "32Bit Installers\HSFW Control Setup (x86)\HSFW Control Setup (x86).vdproj", "{D6057DEE-CA5A-4392-8EBA-04A6F8776852}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		API Debug|Any CPU = API Debug|Any CPU
@@ -86,6 +88,10 @@ Global
 		{1B8EFCC5-28CF-48AB-884F-2FAFA952EF3E}.Debug|Any CPU.ActiveCfg = Debug
 		{1B8EFCC5-28CF-48AB-884F-2FAFA952EF3E}.Release|Any CPU.ActiveCfg = Release
 		{1B8EFCC5-28CF-48AB-884F-2FAFA952EF3E}.Release|Any CPU.Build.0 = Release
+		{D6057DEE-CA5A-4392-8EBA-04A6F8776852}.API Debug|Any CPU.ActiveCfg = Debug
+		{D6057DEE-CA5A-4392-8EBA-04A6F8776852}.ASCOM Driver Debug|Any CPU.ActiveCfg = Debug
+		{D6057DEE-CA5A-4392-8EBA-04A6F8776852}.Debug|Any CPU.ActiveCfg = Debug
+		{D6057DEE-CA5A-4392-8EBA-04A6F8776852}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -96,5 +102,6 @@ Global
 		{AF6913EF-3E58-4EE6-A20D-ED497FE736F4} = {BD9CF658-DD68-44FC-A940-F301BFB24975}
 		{34D67565-D825-457F-B6B5-0E0E9A959BB6} = {BD9CF658-DD68-44FC-A940-F301BFB24975}
 		{1B8EFCC5-28CF-48AB-884F-2FAFA952EF3E} = {BD9CF658-DD68-44FC-A940-F301BFB24975}
+		{D6057DEE-CA5A-4392-8EBA-04A6F8776852} = {F423B20A-FE51-4C39-96FB-5F7FAD61C7C9}
 	EndGlobalSection
 EndGlobal

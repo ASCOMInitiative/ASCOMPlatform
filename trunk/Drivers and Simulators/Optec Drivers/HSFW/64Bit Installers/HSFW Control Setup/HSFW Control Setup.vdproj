@@ -128,7 +128,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                "FrameworkVersion" = "8:.NETFramework,Version=v3.5"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=131000"
                 }
@@ -348,7 +348,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HSFW Control Setup"
         "ProductCode" = "8:{C35F1377-85EF-42C5-AE01-4B2FE61A4A6E}"
-        "PackageCode" = "8:{2734ABDC-5A98-4536-BE75-01E3DB233159}"
+        "PackageCode" = "8:{E70BEC37-C3D8-425E-A6D3-A9097C570446}"
         "UpgradeCode" = "8:{B920DFA1-D26D-4421-9F47-115CE2966649}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
