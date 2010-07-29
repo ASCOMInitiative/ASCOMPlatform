@@ -160,7 +160,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\FilterWheelIcon2010.ico" />
-    <None Include="ReadMe.htm" />
     <None Include="Resources\Optec Logo-medium png.png" />
   </ItemGroup>
   <ItemGroup>
