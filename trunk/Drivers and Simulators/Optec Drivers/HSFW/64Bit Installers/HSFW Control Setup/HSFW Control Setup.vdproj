@@ -3,7 +3,7 @@
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
 "IsWebType" = "8:FALSE"
-"ProjectName" = "8:HSFW ASCOM Driver Setup"
+"ProjectName" = "8:HSFW Control Setup"
 "LanguageId" = "3:1033"
 "CodePage" = "3:1252"
 "UILanguageId" = "3:1033"
@@ -15,110 +15,62 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_5AA423C2D23E3B3AD17220A1FD1605CD"
-        "OwnerKey" = "8:_71BBFE5D4BC046B4A7D5AF962604CCD3"
+        "MsmKey" = "8:_1D35E21FB99FEB8A19D9A21D84D5E517"
+        "OwnerKey" = "8:_6D923C96B40C4A66BBCF82832D76D6E3"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_5CD74790511188F639A30CFEB36CC114"
-        "OwnerKey" = "8:_71BBFE5D4BC046B4A7D5AF962604CCD3"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_66FC1F91288470A1D4CEDF52EA6AC9BA"
-        "OwnerKey" = "8:_DAFBEA40AFEBBEEDA7907A46B1E66B28"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_71BBFE5D4BC046B4A7D5AF962604CCD3"
+        "MsmKey" = "8:_3EBCBFBCE04B46FDB1AC49526BBC0889"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_837EF0DAB9F963D347ECC07FFD3E739C"
-        "OwnerKey" = "8:_71BBFE5D4BC046B4A7D5AF962604CCD3"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_837EF0DAB9F963D347ECC07FFD3E739C"
-        "OwnerKey" = "8:_5CD74790511188F639A30CFEB36CC114"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9DC5CF67ACE74E9EB8F0F896175E8B14"
+        "MsmKey" = "8:_6D923C96B40C4A66BBCF82832D76D6E3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_BA3CA30F8BA597AFE7E016CBFFC654AF"
-        "OwnerKey" = "8:_E4AB35C8BFB264FC6511F0BAD9F3E832"
+        "MsmKey" = "8:_A18B9BFEBBD2E8EEA8F5BF5CBB6398AE"
+        "OwnerKey" = "8:_D8043894C8C3D45F00EFA8391A790A57"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_DAFBEA40AFEBBEEDA7907A46B1E66B28"
-        "OwnerKey" = "8:_71BBFE5D4BC046B4A7D5AF962604CCD3"
+        "MsmKey" = "8:_C2D00641B345CCDE5DC164CF565CCC3F"
+        "OwnerKey" = "8:_1D35E21FB99FEB8A19D9A21D84D5E517"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_DAFBEA40AFEBBEEDA7907A46B1E66B28"
-        "OwnerKey" = "8:_E4AB35C8BFB264FC6511F0BAD9F3E832"
+        "MsmKey" = "8:_D8043894C8C3D45F00EFA8391A790A57"
+        "OwnerKey" = "8:_6D923C96B40C4A66BBCF82832D76D6E3"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_E4AB35C8BFB264FC6511F0BAD9F3E832"
-        "OwnerKey" = "8:_71BBFE5D4BC046B4A7D5AF962604CCD3"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F2E0FEEFF08F9F5418CB0898D7B6757B"
-        "OwnerKey" = "8:_71BBFE5D4BC046B4A7D5AF962604CCD3"
+        "MsmKey" = "8:_D8043894C8C3D45F00EFA8391A790A57"
+        "OwnerKey" = "8:_1D35E21FB99FEB8A19D9A21D84D5E517"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_837EF0DAB9F963D347ECC07FFD3E739C"
+        "OwnerKey" = "8:_D8043894C8C3D45F00EFA8391A790A57"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_71BBFE5D4BC046B4A7D5AF962604CCD3"
+        "OwnerKey" = "8:_6D923C96B40C4A66BBCF82832D76D6E3"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E4AB35C8BFB264FC6511F0BAD9F3E832"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_DAFBEA40AFEBBEEDA7907A46B1E66B28"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_5CD74790511188F639A30CFEB36CC114"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_F2E0FEEFF08F9F5418CB0898D7B6757B"
+        "OwnerKey" = "8:_1D35E21FB99FEB8A19D9A21D84D5E517"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -129,7 +81,7 @@
         "DisplayName" = "8:Debug"
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:Debug\\HSFW ASCOM Driver Setup.msi"
+        "OutputFilename" = "8:Debug\\HSFW Control Setup.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -145,7 +97,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\HSFW ASCOM Driver Setup.msi"
+        "OutputFilename" = "8:Release\\HSFW Control Setup.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -172,7 +124,7 @@
         {
             "LaunchCondition"
             {
-                "{A06ECF26-33A3-4562-8140-9B0E340D4F24}:_DE2444305B514A81804134C8D67DE0FF"
+                "{A06ECF26-33A3-4562-8140-9B0E340D4F24}:_A8A002A376D54DE4896FA0AB13892C43"
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
@@ -184,43 +136,23 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5AA423C2D23E3B3AD17220A1FD1605CD"
-            {
-            "SourcePath" = "8:ASCOM.HSFW_ASCOM_Driver.FilterWheel.tlb"
-            "TargetName" = "8:ASCOM.HSFW_ASCOM_Driver.FilterWheel.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_BE350053B5514EB9BA7DF55E36A72A7E"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5CD74790511188F639A30CFEB36CC114"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_1D35E21FB99FEB8A19D9A21D84D5E517"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ASCOM.Utilities, Version=5.5.1.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:OptecHID_FilterWheelAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_5CD74790511188F639A30CFEB36CC114"
+                    "_1D35E21FB99FEB8A19D9A21D84D5E517"
                     {
-                    "Name" = "8:ASCOM.Utilities.dll"
+                    "Name" = "8:OptecHID_FilterWheelAPI.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:ASCOM.Utilities.dll"
+            "SourcePath" = "8:OptecHID_FilterWheelAPI.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_BE350053B5514EB9BA7DF55E36A72A7E"
+            "Folder" = "8:_F83777A6D727421887C23E5B1F2AAA37"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -231,67 +163,16 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_66FC1F91288470A1D4CEDF52EA6AC9BA"
-            {
-            "SourcePath" = "8:OptecHIDTools.tlb"
-            "TargetName" = "8:OptecHIDTools.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_BE350053B5514EB9BA7DF55E36A72A7E"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_837EF0DAB9F963D347ECC07FFD3E739C"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_837EF0DAB9F963D347ECC07FFD3E739C"
-                    {
-                    "Name" = "8:ASCOM.Exceptions.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:ASCOM.Exceptions.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_BE350053B5514EB9BA7DF55E36A72A7E"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9DC5CF67ACE74E9EB8F0F896175E8B14"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3EBCBFBCE04B46FDB1AC49526BBC0889"
             {
             "SourcePath" = "8:I:\\Software Development\\ICONS\\FilterWheelIcon2010.ico"
             "TargetName" = "8:FilterWheelIcon2010.ico"
             "Tag" = "8:"
-            "Folder" = "8:_BE350053B5514EB9BA7DF55E36A72A7E"
+            "Folder" = "8:_F83777A6D727421887C23E5B1F2AAA37"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -306,12 +187,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BA3CA30F8BA597AFE7E016CBFFC654AF"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A18B9BFEBBD2E8EEA8F5BF5CBB6398AE"
             {
-            "SourcePath" = "8:OptecHID_FilterWheelAPI.tlb"
-            "TargetName" = "8:OptecHID_FilterWheelAPI.tlb"
+            "SourcePath" = "8:OptecHIDTools.tlb"
+            "TargetName" = "8:OptecHIDTools.tlb"
             "Tag" = "8:"
-            "Folder" = "8:_BE350053B5514EB9BA7DF55E36A72A7E"
+            "Folder" = "8:_F83777A6D727421887C23E5B1F2AAA37"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -326,14 +207,34 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_DAFBEA40AFEBBEEDA7907A46B1E66B28"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C2D00641B345CCDE5DC164CF565CCC3F"
+            {
+            "SourcePath" = "8:OptecHID_FilterWheelAPI.tlb"
+            "TargetName" = "8:OptecHID_FilterWheelAPI.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_F83777A6D727421887C23E5B1F2AAA37"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D8043894C8C3D45F00EFA8391A790A57"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:OptecHIDTools, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_DAFBEA40AFEBBEEDA7907A46B1E66B28"
+                    "_D8043894C8C3D45F00EFA8391A790A57"
                     {
                     "Name" = "8:OptecHIDTools.dll"
                     "Attributes" = "3:512"
@@ -342,7 +243,7 @@
             "SourcePath" = "8:OptecHIDTools.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_BE350053B5514EB9BA7DF55E36A72A7E"
+            "Folder" = "8:_F83777A6D727421887C23E5B1F2AAA37"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -354,68 +255,6 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E4AB35C8BFB264FC6511F0BAD9F3E832"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:OptecHID_FilterWheelAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_E4AB35C8BFB264FC6511F0BAD9F3E832"
-                    {
-                    "Name" = "8:OptecHID_FilterWheelAPI.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:OptecHID_FilterWheelAPI.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_BE350053B5514EB9BA7DF55E36A72A7E"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F2E0FEEFF08F9F5418CB0898D7B6757B"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_F2E0FEEFF08F9F5418CB0898D7B6757B"
-                    {
-                    "Name" = "8:ASCOM.Interfaces.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:ASCOM.Interfaces.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_BE350053B5514EB9BA7DF55E36A72A7E"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -425,18 +264,7 @@
         }
         "Folder"
         {
-            "{1525181F-901A-416C-8A58-119130FE478E}:_5D06EA3543D645FBA54C7B78948C9738"
-            {
-            "Name" = "8:#1919"
-            "AlwaysCreate" = "11:FALSE"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Property" = "8:ProgramMenuFolder"
-                "Folders"
-                {
-                }
-            }
-            "{1525181F-901A-416C-8A58-119130FE478E}:_B7943FFAB6D1465282986D02CBF31BDB"
+            "{1525181F-901A-416C-8A58-119130FE478E}:_26FA60A9AAED455B9785210935F18A20"
             {
             "Name" = "8:#1916"
             "AlwaysCreate" = "11:FALSE"
@@ -447,9 +275,42 @@
                 {
                 }
             }
-            "{3C67513D-01DD-4637-8A68-80971EB9504F}:_BE350053B5514EB9BA7DF55E36A72A7E"
+            "{1525181F-901A-416C-8A58-119130FE478E}:_2D8D74EFF18249C6824C11243B8C47E6"
             {
-            "DefaultLocation" = "8:[ProgramFiles64Folder]Optec\\HSFW\\ASCOM"
+            "Name" = "8:#1919"
+            "AlwaysCreate" = "11:FALSE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:ProgramMenuFolder"
+                "Folders"
+                {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_C01BAB482C3547F499739532717BDDC5"
+                    {
+                    "Name" = "8:Optec"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_9CB0584A23824C48913E3814C276673D"
+                        "Folders"
+                        {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_5C596E9057DB4CBD952A420FD611F7E1"
+                            {
+                            "Name" = "8:HSFW"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_9916A8D747874E3CBA1FF8AB423BE8C9"
+                                "Folders"
+                                {
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            "{3C67513D-01DD-4637-8A68-80971EB9504F}:_F83777A6D727421887C23E5B1F2AAA37"
+            {
+            "DefaultLocation" = "8:[ProgramFiles64Folder]Optec\\HSFW\\Control"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -457,6 +318,17 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_6A5DCE02A43049078C1A111B164DF023"
+                    {
+                    "Name" = "8:Help Files"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_E8074840A9A640248AC720F87AC2D047"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
         }
@@ -474,10 +346,10 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:HSFW ASCOM Driver"
-        "ProductCode" = "8:{3E22BD59-F86D-4E0A-B4C3-F5C02A065EBE}"
-        "PackageCode" = "8:{0C913B27-A301-4F39-9077-586871EFDD30}"
-        "UpgradeCode" = "8:{7B31CC61-32B9-4904-B7D0-E2A14EF45AF5}"
+        "ProductName" = "8:HSFW Control Setup"
+        "ProductCode" = "8:{C35F1377-85EF-42C5-AE01-4B2FE61A4A6E}"
+        "PackageCode" = "8:{2734ABDC-5A98-4536-BE75-01E3DB233159}"
+        "UpgradeCode" = "8:{B920DFA1-D26D-4421-9F47-115CE2966649}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -487,13 +359,13 @@
         "Manufacturer" = "8:Optec"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:HSFW ASCOM Driver Setup"
+        "Title" = "8:HSFW Control Setup"
         "Subject" = "8:"
-        "ARPCONTACT" = "8:Jordan Schaenzle"
-        "Keywords" = "8:"
-        "ARPCOMMENTS" = "8:ASCOM Driver for Optec HSFW"
+        "ARPCONTACT" = "8:Optec"
+        "Keywords" = "8:Optec"
+        "ARPCOMMENTS" = "8:Control Application for Optec HSFW"
         "ARPURLINFOABOUT" = "8:"
-        "ARPPRODUCTICON" = "8:_9DC5CF67ACE74E9EB8F0F896175E8B14"
+        "ARPPRODUCTICON" = "8:_3EBCBFBCE04B46FDB1AC49526BBC0889"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
@@ -508,7 +380,7 @@
             {
                 "Keys"
                 {
-                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_9ADA993B4B2C4641967A9D3CE9AB41A4"
+                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_551D9CF7DB3B424F8B99843B79FABA2C"
                     {
                     "Name" = "8:Software"
                     "Condition" = "8:"
@@ -517,7 +389,7 @@
                     "Transitive" = "11:FALSE"
                         "Keys"
                         {
-                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_C65D58F2AD5641E6B9A4EED63AF20802"
+                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_86F0A72E1A5943488DB5BDFE66FD1FCD"
                             {
                             "Name" = "8:[Manufacturer]"
                             "Condition" = "8:"
@@ -542,7 +414,7 @@
             {
                 "Keys"
                 {
-                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_5CC992C428DA479892971D8EAACF2709"
+                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_4D96567AAFEF4281A74C99D70B9A07EC"
                     {
                     "Name" = "8:Software"
                     "Condition" = "8:"
@@ -551,7 +423,7 @@
                     "Transitive" = "11:FALSE"
                         "Keys"
                         {
-                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_63C0DE5C26024141877AE674856008F0"
+                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_592E0BE3B773448F951A68089DE7FDE2"
                             {
                             "Name" = "8:[Manufacturer]"
                             "Condition" = "8:"
@@ -596,23 +468,51 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_A15D892DF38945149F81671ACEEF23BD"
+            {
+            "Name" = "8:Optec HSFW Control"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_6D923C96B40C4A66BBCF82832D76D6E3"
+            "Folder" = "8:_26FA60A9AAED455B9785210935F18A20"
+            "WorkingFolder" = "8:_F83777A6D727421887C23E5B1F2AAA37"
+            "Icon" = "8:_3EBCBFBCE04B46FDB1AC49526BBC0889"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_E172D55EDAD1492CB74E2FB3CF52C24C"
+            {
+            "Name" = "8:Optec HSFW Control"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_6D923C96B40C4A66BBCF82832D76D6E3"
+            "Folder" = "8:_5C596E9057DB4CBD952A420FD611F7E1"
+            "WorkingFolder" = "8:_F83777A6D727421887C23E5B1F2AAA37"
+            "Icon" = "8:_3EBCBFBCE04B46FDB1AC49526BBC0889"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {
-            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_0E2EDF69561B46A6A58C23B577ACFDC6"
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_06D3E9791A5B419296696A3BA81A0EA2"
             {
-            "Name" = "8:#1902"
-            "Sequence" = "3:1"
-            "Attributes" = "3:3"
+            "Name" = "8:#1901"
+            "Sequence" = "3:2"
+            "Attributes" = "3:2"
                 "Dialogs"
                 {
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_12E2501FFDC24F7DB62B3A23932B5716"
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_80B877213CB0432DB0F3F392811BEE2D"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:Finished"
+                    "DisplayName" = "8:Progress"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
-                    "SourcePath" = "8:<VsdDialogDir>\\VsdFinishedDlg.wid"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdAdminProgressDlg.wid"
                         "Properties"
                         {
                             "BannerBitmap"
@@ -626,31 +526,122 @@
                             "Setting" = "3:1"
                             "UsePlugInResources" = "11:TRUE"
                             }
-                            "UpdateText"
+                            "ShowProgress"
                             {
-                            "Name" = "8:UpdateText"
-                            "DisplayName" = "8:#1058"
-                            "Description" = "8:#1158"
-                            "Type" = "3:15"
-                            "ContextData" = "8:"
+                            "Name" = "8:ShowProgress"
+                            "DisplayName" = "8:#1009"
+                            "Description" = "8:#1109"
+                            "Type" = "3:5"
+                            "ContextData" = "8:1;True=1;False=0"
                             "Attributes" = "3:0"
-                            "Setting" = "3:1"
-                            "Value" = "8:#1258"
-                            "DefaultValue" = "8:#1258"
+                            "Setting" = "3:0"
+                            "Value" = "3:1"
+                            "DefaultValue" = "3:1"
                             "UsePlugInResources" = "11:TRUE"
                             }
                         }
                     }
                 }
             }
-            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_1BCE9C9408364CC3BA1181725AB847AF"
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_1846D10B64614FF0A06C4B0CF9D89553"
+            {
+            "Name" = "8:#1901"
+            "Sequence" = "3:1"
+            "Attributes" = "3:2"
+                "Dialogs"
+                {
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_641BDD8DB3C644D6B57D05E18DBE9E8C"
+                    {
+                    "Sequence" = "3:100"
+                    "DisplayName" = "8:Progress"
+                    "UseDynamicProperties" = "11:TRUE"
+                    "IsDependency" = "11:FALSE"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdProgressDlg.wid"
+                        "Properties"
+                        {
+                            "BannerBitmap"
+                            {
+                            "Name" = "8:BannerBitmap"
+                            "DisplayName" = "8:#1001"
+                            "Description" = "8:#1101"
+                            "Type" = "3:8"
+                            "ContextData" = "8:Bitmap"
+                            "Attributes" = "3:4"
+                            "Setting" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "ShowProgress"
+                            {
+                            "Name" = "8:ShowProgress"
+                            "DisplayName" = "8:#1009"
+                            "Description" = "8:#1109"
+                            "Type" = "3:5"
+                            "ContextData" = "8:1;True=1;False=0"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:0"
+                            "Value" = "3:1"
+                            "DefaultValue" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                        }
+                    }
+                }
+            }
+            "{2479F3F5-0309-486D-8047-8187E2CE5BA0}:_193E7D3F427348C2AEE962C5EE5D2DCF"
+            {
+            "UseDynamicProperties" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "SourcePath" = "8:<VsdDialogDir>\\VsdUserInterface.wim"
+            }
+            "{2479F3F5-0309-486D-8047-8187E2CE5BA0}:_25A9DE8F704146D285B9DB2C6A83FE3B"
+            {
+            "UseDynamicProperties" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "SourcePath" = "8:<VsdDialogDir>\\VsdBasicDialogs.wim"
+            }
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_3216220716164E5D844B970CD490D18E"
             {
             "Name" = "8:#1900"
             "Sequence" = "3:1"
             "Attributes" = "3:1"
                 "Dialogs"
                 {
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_1E9F9BCEEF244BCF8F85BD97EA5A48EF"
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_0535DBB8D20943298430C2485724D859"
+                    {
+                    "Sequence" = "3:200"
+                    "DisplayName" = "8:Installation Folder"
+                    "UseDynamicProperties" = "11:TRUE"
+                    "IsDependency" = "11:FALSE"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdFolderDlg.wid"
+                        "Properties"
+                        {
+                            "BannerBitmap"
+                            {
+                            "Name" = "8:BannerBitmap"
+                            "DisplayName" = "8:#1001"
+                            "Description" = "8:#1101"
+                            "Type" = "3:8"
+                            "ContextData" = "8:Bitmap"
+                            "Attributes" = "3:4"
+                            "Setting" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "InstallAllUsersVisible"
+                            {
+                            "Name" = "8:InstallAllUsersVisible"
+                            "DisplayName" = "8:#1059"
+                            "Description" = "8:#1159"
+                            "Type" = "3:5"
+                            "ContextData" = "8:1;True=1;False=0"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:0"
+                            "Value" = "3:1"
+                            "DefaultValue" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                        }
+                    }
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_612F7AFF50BB4619950C71FA31BA0EEF"
                     {
                     "Sequence" = "3:300"
                     "DisplayName" = "8:Confirm Installation"
@@ -672,7 +663,7 @@
                             }
                         }
                     }
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_441529B56C5E4802AB62A0FE3861E5C7"
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_E54576CF9D94446C98B35B3FBE75ED3F"
                     {
                     "Sequence" = "3:100"
                     "DisplayName" = "8:Welcome"
@@ -722,51 +713,14 @@
                     }
                 }
             }
-            "{2479F3F5-0309-486D-8047-8187E2CE5BA0}:_72487F40A1CB4A8AAC5F39C4B5A421C9"
-            {
-            "UseDynamicProperties" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "SourcePath" = "8:<VsdDialogDir>\\VsdBasicDialogs.wim"
-            }
-            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_7F6627D0F94A4E44808567E43E905BFA"
-            {
-            "Name" = "8:#1902"
-            "Sequence" = "3:2"
-            "Attributes" = "3:3"
-                "Dialogs"
-                {
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_8EBDB9A85A24437EA91D52077CA6218A"
-                    {
-                    "Sequence" = "3:100"
-                    "DisplayName" = "8:Finished"
-                    "UseDynamicProperties" = "11:TRUE"
-                    "IsDependency" = "11:FALSE"
-                    "SourcePath" = "8:<VsdDialogDir>\\VsdAdminFinishedDlg.wid"
-                        "Properties"
-                        {
-                            "BannerBitmap"
-                            {
-                            "Name" = "8:BannerBitmap"
-                            "DisplayName" = "8:#1001"
-                            "Description" = "8:#1101"
-                            "Type" = "3:8"
-                            "ContextData" = "8:Bitmap"
-                            "Attributes" = "3:4"
-                            "Setting" = "3:1"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                        }
-                    }
-                }
-            }
-            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_93381300F1EA449B9BACBB589E25FB00"
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_4DEB69D51EC04CDAA4EA18D5BEA0B8C7"
             {
             "Name" = "8:#1900"
             "Sequence" = "3:2"
             "Attributes" = "3:1"
                 "Dialogs"
                 {
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_36EA7EB651B0408CA33176D5180AA6CD"
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_51A22DA515BC4D06BB4C8E444F06A68F"
                     {
                     "Sequence" = "3:200"
                     "DisplayName" = "8:Installation Folder"
@@ -788,7 +742,7 @@
                             }
                         }
                     }
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_86C357C5476F489DB5D353B7A11BBACE"
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_CC58846FA50740E18CF3C65B23D7E91E"
                     {
                     "Sequence" = "3:100"
                     "DisplayName" = "8:Welcome"
@@ -836,7 +790,7 @@
                             }
                         }
                     }
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_9340654A54604593B77B0C41271ED126"
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_EE1777A1A721481DA5DFE1C3A47F5D24"
                     {
                     "Sequence" = "3:300"
                     "DisplayName" = "8:Confirm Installation"
@@ -860,20 +814,20 @@
                     }
                 }
             }
-            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_AE1F44C584E64F90A6C3AD76788C669F"
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_9A32144BE2B44A57A4A91BDB7196CC97"
             {
-            "Name" = "8:#1901"
+            "Name" = "8:#1902"
             "Sequence" = "3:1"
-            "Attributes" = "3:2"
+            "Attributes" = "3:3"
                 "Dialogs"
                 {
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_7BA9CE5097304AD58270763067B0E1ED"
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_79CEFC781A6E400A8DC0AE3224389A41"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:Progress"
+                    "DisplayName" = "8:Finished"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
-                    "SourcePath" = "8:<VsdDialogDir>\\VsdProgressDlg.wid"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdFinishedDlg.wid"
                         "Properties"
                         {
                             "BannerBitmap"
@@ -887,43 +841,37 @@
                             "Setting" = "3:1"
                             "UsePlugInResources" = "11:TRUE"
                             }
-                            "ShowProgress"
+                            "UpdateText"
                             {
-                            "Name" = "8:ShowProgress"
-                            "DisplayName" = "8:#1009"
-                            "Description" = "8:#1109"
-                            "Type" = "3:5"
-                            "ContextData" = "8:1;True=1;False=0"
+                            "Name" = "8:UpdateText"
+                            "DisplayName" = "8:#1058"
+                            "Description" = "8:#1158"
+                            "Type" = "3:15"
+                            "ContextData" = "8:"
                             "Attributes" = "3:0"
-                            "Setting" = "3:0"
-                            "Value" = "3:1"
-                            "DefaultValue" = "3:1"
+                            "Setting" = "3:1"
+                            "Value" = "8:#1258"
+                            "DefaultValue" = "8:#1258"
                             "UsePlugInResources" = "11:TRUE"
                             }
                         }
                     }
                 }
             }
-            "{2479F3F5-0309-486D-8047-8187E2CE5BA0}:_E5F8755D2639439B915FA4D1B8A854A6"
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_F96A7778561D4E1CB1EFD646A445F942"
             {
-            "UseDynamicProperties" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "SourcePath" = "8:<VsdDialogDir>\\VsdUserInterface.wim"
-            }
-            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_F7D8831744164A14A94137A035B2A3B8"
-            {
-            "Name" = "8:#1901"
+            "Name" = "8:#1902"
             "Sequence" = "3:2"
-            "Attributes" = "3:2"
+            "Attributes" = "3:3"
                 "Dialogs"
                 {
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_AEABB1244147483482DC73059ADD4BC6"
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_742FE3ED1BB64471A630B27BE011B70D"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:Progress"
+                    "DisplayName" = "8:Finished"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
-                    "SourcePath" = "8:<VsdDialogDir>\\VsdAdminProgressDlg.wid"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdAdminFinishedDlg.wid"
                         "Properties"
                         {
                             "BannerBitmap"
@@ -935,19 +883,6 @@
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
                             "Setting" = "3:1"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                            "ShowProgress"
-                            {
-                            "Name" = "8:ShowProgress"
-                            "DisplayName" = "8:#1009"
-                            "Description" = "8:#1109"
-                            "Type" = "3:5"
-                            "ContextData" = "8:1;True=1;False=0"
-                            "Attributes" = "3:0"
-                            "Setting" = "3:0"
-                            "Value" = "3:1"
-                            "DefaultValue" = "3:1"
                             "UsePlugInResources" = "11:TRUE"
                             }
                         }
@@ -960,12 +895,12 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_71BBFE5D4BC046B4A7D5AF962604CCD3"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_6D923C96B40C4A66BBCF82832D76D6E3"
             {
-            "SourcePath" = "8:..\\..\\HSFW_ASCOM_Driver\\obj\\Release\\ASCOM.HSFW_ASCOM_Driver.FilterWheel.dll"
+            "SourcePath" = "8:..\\..\\HSFW Control App\\obj\\Release\\HSFWControlApp.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_BE350053B5514EB9BA7DF55E36A72A7E"
+            "Folder" = "8:_F83777A6D727421887C23E5B1F2AAA37"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -979,10 +914,38 @@
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:2"
+            "ProjectOutputGroupRegister" = "3:1"
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{A4083C6B-4D48-4DAD-8E9D-5E6D72D7AFE0}"
+            "OutputProjectGuid" = "8:{D2936A77-5E35-4F18-B92E-5BE0F53E3D95}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B0DCA2D3A5754CF9985E3A13FF051AF8"
+            {
+            "SourcePath" = "8:"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_6A5DCE02A43049078C1A111B164DF023"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:ContentFiles"
+            "OutputProjectGuid" = "8:{D2936A77-5E35-4F18-B92E-5BE0F53E3D95}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {
