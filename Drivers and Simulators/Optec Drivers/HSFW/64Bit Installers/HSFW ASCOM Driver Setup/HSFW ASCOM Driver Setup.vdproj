@@ -176,7 +176,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                "FrameworkVersion" = "8:.NETFramework,Version=v3.5"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=131000"
                 }
@@ -476,7 +476,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HSFW ASCOM Driver"
         "ProductCode" = "8:{3E22BD59-F86D-4E0A-B4C3-F5C02A065EBE}"
-        "PackageCode" = "8:{0C913B27-A301-4F39-9077-586871EFDD30}"
+        "PackageCode" = "8:{00842B0D-6555-45F8-AA34-CC9643A21358}"
         "UpgradeCode" = "8:{7B31CC61-32B9-4904-B7D0-E2A14EF45AF5}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
