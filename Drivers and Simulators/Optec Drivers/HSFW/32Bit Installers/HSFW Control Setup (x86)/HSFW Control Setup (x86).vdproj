@@ -143,6 +143,11 @@
             "AssemblyAsmDisplayName" = "8:OptecHIDTools, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
+                    "_15E5D0A15B0BB862B53EA3F48F945B0F"
+                    {
+                    "Name" = "8:OptecHIDTools.dll"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:OptecHIDTools.dll"
             "TargetName" = "8:"
@@ -229,6 +234,11 @@
             "AssemblyAsmDisplayName" = "8:OptecHID_FilterWheelAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
+                    "_79873CD7AAD399294C6142E238B37670"
+                    {
+                    "Name" = "8:OptecHID_FilterWheelAPI.dll"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:OptecHID_FilterWheelAPI.dll"
             "TargetName" = "8:"
@@ -308,17 +318,6 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_4D8BF81533084C88AC7CA348EA6E0D91"
-                    {
-                    "Name" = "8:Help Files"
-                    "AlwaysCreate" = "11:FALSE"
-                    "Condition" = "8:"
-                    "Transitive" = "11:FALSE"
-                    "Property" = "8:_CC1065763F544D6E86DB16B9290EB748"
-                        "Folders"
-                        {
-                        }
-                    }
                 }
             }
         }
@@ -883,7 +882,7 @@
             "SourcePath" = "8:"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_4D8BF81533084C88AC7CA348EA6E0D91"
+            "Folder" = "8:_9FDA29E962C34067A6DF4A9D246B7907"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
