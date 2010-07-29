@@ -101,10 +101,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Example Files\HSFW_JavaScript_Example.js" />
+    <Content Include="Example Files\HSFW_VBScript_Example.vbs" />
     <Content Include="I:\Software Development\HelpNDoc\USB FilterWheel DLL\USB_FilterWheel_DLL.chm">
       <Link>Help Files\USB_FilterWheel_DLL.chm</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Example Files\HSFW_MicrosoftExcel_Example.xls" />
     <None Include="Optec.snk" />
   </ItemGroup>
   <ItemGroup>

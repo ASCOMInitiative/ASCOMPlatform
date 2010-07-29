@@ -129,9 +129,9 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
-    <None Include="I:\Software Development\HelpNDoc\HSFW Control\HSFW Control Help.chm">
+    <Content Include="I:\Software Development\HelpNDoc\HSFW Control\HSFW Control Help.chm">
       <Link>Help Files\HSFW Control Help.chm</Link>
-    </None>
+    </Content>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

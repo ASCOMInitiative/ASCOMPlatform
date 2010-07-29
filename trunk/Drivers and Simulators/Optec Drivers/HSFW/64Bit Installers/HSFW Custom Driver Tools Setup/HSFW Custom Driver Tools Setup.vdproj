@@ -247,17 +247,6 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_542D7FA6FF4746459A91C0AE85C96D24"
-                    {
-                    "Name" = "8:Help Files"
-                    "AlwaysCreate" = "11:FALSE"
-                    "Condition" = "8:"
-                    "Transitive" = "11:FALSE"
-                    "Property" = "8:_F275AD7587184104A7A737361392BF35"
-                        "Folders"
-                        {
-                        }
-                    }
                 }
             }
         }
@@ -277,7 +266,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HSFW Custom Driver Tools"
         "ProductCode" = "8:{0721BD22-EE54-48CF-B81E-63401847837D}"
-        "PackageCode" = "8:{187794CF-ADC7-4291-BAF7-EBD1A7F82AE8}"
+        "PackageCode" = "8:{7D69D8EE-F605-46F8-B4E7-8FD53E177452}"
         "UpgradeCode" = "8:{67A4C930-2263-4881-91D1-8ACE1AA6A8C3}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -796,12 +785,12 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_4732BC0220B546E8A202297017CD1A21"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B827CD3607F74862ABC34FFE311C604C"
             {
             "SourcePath" = "8:"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_542D7FA6FF4746459A91C0AE85C96D24"
+            "Folder" = "8:_8D06C4F8F2DB4CEB83981CA305CB651B"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"

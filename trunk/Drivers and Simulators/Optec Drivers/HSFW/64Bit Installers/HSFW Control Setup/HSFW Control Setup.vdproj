@@ -318,17 +318,6 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_6A5DCE02A43049078C1A111B164DF023"
-                    {
-                    "Name" = "8:Help Files"
-                    "AlwaysCreate" = "11:FALSE"
-                    "Condition" = "8:"
-                    "Transitive" = "11:FALSE"
-                    "Property" = "8:_E8074840A9A640248AC720F87AC2D047"
-                        "Folders"
-                        {
-                        }
-                    }
                 }
             }
         }
@@ -348,7 +337,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HSFW Control"
         "ProductCode" = "8:{C35F1377-85EF-42C5-AE01-4B2FE61A4A6E}"
-        "PackageCode" = "8:{0EF83D65-680E-4800-91B9-E42BE079B02C}"
+        "PackageCode" = "8:{C9CBEFBC-8215-4BE5-9895-0DFD25E810F2}"
         "UpgradeCode" = "8:{B920DFA1-D26D-4421-9F47-115CE2966649}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -893,7 +882,7 @@
             "SourcePath" = "8:"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_6A5DCE02A43049078C1A111B164DF023"
+            "Folder" = "8:_F83777A6D727421887C23E5B1F2AAA37"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
