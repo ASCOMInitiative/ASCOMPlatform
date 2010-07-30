@@ -1377,6 +1377,15 @@ namespace ASCOM.DriverAccess
 	}
 	#endregion
 
+    //<summary>
+    // Axis Rates implementation.
+    //</summary>
+    /// <summary>
+    /// Describes a range of rates supported by the MoveAxis() method (degrees/per second)
+    /// These are contained within the AxisRates collection. They serve to describe one or more supported ranges of rates of motion about a mechanical axis. 
+    /// It is possible that the Rate.Maximum and Rate.Minimum properties will be equal. In this case, the Rate object expresses a single discrete rate. 
+    /// Both the Rate.Maximum and Rate.Minimum properties are always expressed in units of degrees per second. 
+    /// </summary>
     public class AxisRates : ASCOM.Interface.IAxisRates
     {
         //ASCOM.Interface.TelescopeAxes m_Axis;
@@ -1384,21 +1393,36 @@ namespace ASCOM.DriverAccess
 
         #region IAxisRates Members
 
+        /// <summary>
+        /// Returns the number of rate entries
+        /// </summary>
         public int Count
         {
             get { return m_Rates.Count; }
         }
 
+        /// <summary>
+        /// Disposes the object
+        /// </summary>
         public void Dispose()
         {
             // throw new System.NotImplementedException(); Nothing to dispose in this class
         }
 
+        /// <summary>
+        /// Returns an enumerator to allow the collection to be accessed
+        /// </summary>
+        /// <returns>IEnumerator</returns>
         public IEnumerator GetEnumerator()
         {
             return m_Rates.GetEnumerator();
         }
 
+        /// <summary>
+        /// Returns the rate selected by the provided index number
+        /// </summary>
+        /// <param name="index">1 based integer inex representing the required rate.</param>
+        /// <returns>IRate object</returns>
         public IRate this[int index]
         {
             get { return new Rate(m_Rates[index].Minimum, m_Rates[index].Maximum); }
@@ -1406,6 +1430,11 @@ namespace ASCOM.DriverAccess
 
         #endregion
 
+        /// <summary>
+        /// Adds a new rate to the collection
+        /// </summary>
+        /// <param name="Minimum">The lowest value in the rate range</param>
+        /// <param name="Maximum">The highest value in the rate range</param>
         public void Add(double Minimum, double Maximum)
         {
             m_Rates.Add(new Rate(Minimum, Maximum));
@@ -1413,6 +1442,12 @@ namespace ASCOM.DriverAccess
 
     }
 
+    /// <summary>
+    /// Describes a range of rates supported by the MoveAxis() method (degrees/per second)
+    /// These are contained within the AxisRates collection. They serve to describe one or more supported ranges of rates of motion about a mechanical axis. 
+    /// It is possible that the Rate.Maximum and Rate.Minimum properties will be equal. In this case, the Rate object expresses a single discrete rate. 
+    /// Both the Rate.Maximum and Rate.Minimum properties are always expressed in units of degrees per second. 
+    /// </summary>
     public class Rate : IRate
     {
 
@@ -1431,17 +1466,27 @@ namespace ASCOM.DriverAccess
 
         #region IRate Members
 
+        /// <summary>
+        /// Returns the maximum rate value
+        /// </summary>
         public double Maximum
         {
             get { return m_dMaximumR; }
             set { m_dMaximumR = value; }
         }
 
+        /// <summary>
+        /// Returns the minimum rate value
+        /// </summary>
         public double Minimum
         {
             get { return m_dMinimumR; }
             set { m_dMinimumR = value; }
         }
+        
+        /// <summary>
+        /// DIsposes of any external resources acquired by the object
+        /// </summary>
         public void Dispose()
         {
         }
