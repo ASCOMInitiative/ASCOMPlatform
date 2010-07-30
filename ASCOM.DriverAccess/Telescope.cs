@@ -1380,27 +1380,45 @@ namespace ASCOM.DriverAccess
     #endregion
 
 
+    ///<summary>
+    /// Axis Rates implementation.
+    ///</summary>
     public class AxisRates : ASCOM.DeviceInterface.IAxisRates
     {
         List<Rate> m_Rates = new List<Rate>();        //' Empty array, but an array nonetheless
         
         #region IAxisRates Members
 
+        /// <summary>
+        /// Returns the number of rate objects in the collection
+        /// </summary>
         public int Count
         {
             get {return m_Rates.Count; }
         }
 
+        /// <summary>
+        /// Disposes of any external resources acquired by the object
+        /// </summary>
         public void Dispose()
         {
             // throw new System.NotImplementedException(); Nothing to dispose in this class
         }
 
+        /// <summary>
+        /// Returns an enumerator to provide access to the collection members
+        /// </summary>
+        /// <returns>IEnumerator object</returns>
         public IEnumerator GetEnumerator()
         {
             return m_Rates.GetEnumerator();
         }
 
+        /// <summary>
+        /// Retuns a rate object identified by its index value
+        /// </summary>
+        /// <param name="index">1 based index value identifying the member required</param>
+        /// <returns>IRate object</returns>
         public IRate this[int index]
         {
             get { return new Rate(m_Rates[index].Minimum, m_Rates[index].Maximum); }
@@ -1408,6 +1426,11 @@ namespace ASCOM.DriverAccess
 
         #endregion
 
+        /// <summary>
+        /// Adds a new rate to the collection
+        /// </summary>
+        /// <param name="Minimum">The minimum value of this rate range</param>
+        /// <param name="Maximum">The maximum value of this rate range</param>
         public void Add(double Minimum, double Maximum)
         {
             m_Rates.Add(new Rate(Minimum, Maximum));
@@ -1415,6 +1438,9 @@ namespace ASCOM.DriverAccess
 
     }
 
+    /// <summary>
+    /// Single rate range value
+    /// </summary>
     public class Rate : IRate
     {
 
@@ -1433,17 +1459,27 @@ namespace ASCOM.DriverAccess
 
 #region IRate Members
 
+    /// <summary>
+    /// Maximu value of the rate range
+    /// </summary>
     public double Maximum
     {
         get{return m_dMaximumR;}
         set{m_dMaximumR = value;}
     }
 
+    /// <summary>
+    /// Minimum value of the rate range
+    /// </summary>
     public double Minimum
     {
         get{return m_dMinimumR;}
         set{m_dMinimumR = value;}
     }
+    
+    /// <summary>
+    /// Disposes of any external resources acquired by the rate object
+    /// </summary>
     public void Dispose()
     {
     }

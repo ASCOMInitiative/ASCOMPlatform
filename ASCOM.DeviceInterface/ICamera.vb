@@ -27,7 +27,7 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' upon StartExposure.
     ''' </summary>
     ''' <value>BinX sets/gets the X binning value</value>
-    ''' <exception>Must throw an exception for illegal binning values</exception>
+    ''' <exception cref="ASCOM.InvalidValueException">Must throw an exception for illegal binning values</exception>
     Property BinX() As Short
 
     ''' <summary>
@@ -37,7 +37,7 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' upon StartExposure.
     ''' </summary>
     ''' <value>The bin Y.</value>
-    ''' <exception>Must throw an exception for illegal binning values</exception>
+    ''' <exception cref="ASCOM.InvalidValueException">Must throw an exception for illegal binning values</exception>
     Property BinY() As Short
 
     ''' <summary>
@@ -151,7 +151,7 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' CanControlTemperature is True.
     ''' </summary>
     ''' <value>The CCD temperature.</value>
-    ''' <exception>Must throw exception if data unavailable.</exception>
+    ''' <exception cref="ASCOM.InvalidValueException">Must throw exception if data unavailable.</exception>
     ReadOnly Property CCDTemperature() As Double
 
     ''' <summary>
