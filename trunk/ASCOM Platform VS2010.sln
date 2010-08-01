@@ -5,8 +5,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		ASCOM Platform 6.sln.xunit = ASCOM Platform 6.sln.xunit
 		Help\ASCOMPlatform.shfbproj = Help\ASCOMPlatform.shfbproj
+		AssemblyVersionInfo.cs = AssemblyVersionInfo.cs
 		BUILD NOTES.txt = BUILD NOTES.txt
 		External Dependencies\StyleCop\v4.3\Settings.StyleCop = External Dependencies\StyleCop\v4.3\Settings.StyleCop
+		SolutionInfo.cs = SolutionInfo.cs
 		TeamCityBuild.msbuild = TeamCityBuild.msbuild
 		TeamCityDocumentationBuild.msbuild = TeamCityDocumentationBuild.msbuild
 	EndProjectSection
