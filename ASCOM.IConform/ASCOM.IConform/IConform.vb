@@ -112,7 +112,7 @@ ComVisible(True), _
 ClassInterface(ClassInterfaceType.None)> _
 Public Class ConformErrorNumbers
     Implements IConformErrorNumbers
-    Private errNotImplemented, errInvalidValue, errValueNotSet As Integer()
+    Private errNotImplemented(), errInvalidValue(), errValueNotSet() As Integer
 
     ''' <summary>
     ''' Creates a new instance of the error numbers class.
@@ -133,10 +133,11 @@ Public Class ConformErrorNumbers
     ''' "value not set" error codes. If you have more than this number of distinct error numbers,
     ''' use the other nethods in the class to set them.</remarks>
     Sub New(ByVal NotImplemented As Integer, ByVal InvalidValue1 As Integer, ByVal InvalidValue2 As Integer, ByVal ValueNotSet As Integer)
-        Me.NotImplemented(0) = NotImplemented
-        Me.InvalidValue(0) = InvalidValue1
-        Me.InvalidValue(1) = InvalidValue2
-        Me.ValueNotSet(0) = ValueNotSet
+        ReDim errNotImplemented(0), errInvalidValue(1), errValueNotSet(0)
+        errNotImplemented(0) = NotImplemented
+        errInvalidValue(0) = InvalidValue1
+        errInvalidValue(1) = InvalidValue2
+        errValueNotSet(0) = ValueNotSet
     End Sub
 
     ''' <summary>
