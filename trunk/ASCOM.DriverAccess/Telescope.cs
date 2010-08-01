@@ -152,7 +152,7 @@ namespace ASCOM.DriverAccess
             {
                 obj = memberFactory.CallMember(3, "AxisRates", new Type[] { typeof(TelescopeAxes) }, new object[] { Axis });//ITelescope.AxisRates(Axis);
 
-                global::System.Windows.Forms.MessageBox.Show("TelescopePIA " + isPlatform5Telescope.ToString() + ", TelescopeV2 " + isPlatform6Telescope.ToString());
+                //global::System.Windows.Forms.MessageBox.Show("TelescopePIA " + isPlatform5Telescope.ToString() + ", TelescopeV2 " + isPlatform6Telescope.ToString());
                 if (isPlatform6Telescope)
                 {
                     return (IAxisRates)obj;
