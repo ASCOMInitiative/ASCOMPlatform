@@ -11,7 +11,10 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-
+ * 
+ * This information is isolated in a seperate file to facilitate a future integration with the build server,
+ * where the buils server will generate this file updated with the correct build number. Therefore,
+ * this file should contain ONLY the global version number and no other settings.
  * ***/
 
 

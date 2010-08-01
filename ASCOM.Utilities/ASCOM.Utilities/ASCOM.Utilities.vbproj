@@ -20,7 +20,7 @@
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>ASCOM.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\ASCOM.snk</AssemblyOriginatorKeyFile>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <OptionStrict>Off</OptionStrict>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
@@ -214,7 +214,9 @@
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
     </EmbeddedResource>
-    <None Include="ASCOM.snk" />
+    <None Include="..\..\ASCOM.snk">
+      <Link>ASCOM.snk</Link>
+    </None>
     <None Include="My Project\Settings.settings">
       <CustomToolNamespace>My</CustomToolNamespace>
       <Generator>SettingsSingleFileGenerator</Generator>

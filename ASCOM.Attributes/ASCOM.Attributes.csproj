@@ -13,7 +13,7 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>ASCOM.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\ASCOM.snk</AssemblyOriginatorKeyFile>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -138,8 +138,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\ASCOM.snk">
+      <Link>ASCOM.snk</Link>
+    </None>
     <None Include="app.config" />
-    <None Include="ASCOM.snk" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

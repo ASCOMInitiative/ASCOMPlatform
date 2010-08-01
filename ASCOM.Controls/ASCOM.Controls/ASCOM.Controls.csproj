@@ -18,7 +18,7 @@
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>ASCOM.Controls</AssemblyName>
-    <AssemblyOriginatorKeyFile>ASCOM.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\ASCOM.snk</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -188,8 +188,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\ASCOM.snk">
+      <Link>ASCOM.snk</Link>
+    </None>
     <None Include="app.config" />
-    <None Include="ASCOM.snk" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
