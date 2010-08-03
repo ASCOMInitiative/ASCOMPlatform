@@ -21,6 +21,7 @@ namespace ASCOM.DriverAccess
     {
         #region ICamera constructors
         private MemberFactory memberFactory;
+        private short DriverInterfaceVersion;
         
         /// <summary>
         /// Creates an instance of the camera class.
@@ -29,6 +30,7 @@ namespace ASCOM.DriverAccess
         public Camera(string cameraID)
 		{
             memberFactory = new MemberFactory(cameraID);
+            DriverInterfaceVersion = this.InterfaceVersion;
 		}
 
         /// <summary>
@@ -575,6 +577,148 @@ namespace ASCOM.DriverAccess
 
         #endregion
 
+        #region ICameraV2 members
+        /// <summary>
+        /// Bayer X offset index
+        /// </summary>
+        public short BayerOffsetX 
+        {
+            get { return Convert.ToInt16(memberFactory.CallMember(1, "BayerOffsetX", new Type[] { }, new object[] { })); }
+        }
+
+        /// <summary>
+        /// Bayer Y offset index
+        /// </summary>
+        public short BayerOffsetY 
+        {
+            get { return Convert.ToInt16(memberFactory.CallMember(1, "BayerOffsetY", new Type[] { }, new object[] { })); }
+        }
+
+        /// <summary>
+        /// Camera has a fast readout mode
+        /// </summary>
+        public bool CanFastReadout 
+        {
+            get 
+            {
+                if (DriverInterfaceVersion > 1)
+                {
+                    return (bool) memberFactory.CallMember(1, "CanFastReadout", new Type[] { }, new object[] { });
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Maximum exposure time
+        /// </summary>
+        public double ExposureMax 
+        {
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "ExposureMax", new Type[] { }, new object[] { })); }
+        }
+
+        /// <summary>
+        /// Minimium exposure time
+        /// </summary>
+        public double ExposureMin 
+        {
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "ExposureMin", new Type[] { }, new object[] { })); }
+        }
+
+        /// <summary>
+        /// Exposure resolution
+        /// </summary>
+        public double ExposureResolution 
+        {
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "ExposureResolution", new Type[] { }, new object[] { })); }
+        }
+
+        /// <summary>
+        /// Fast readout mode
+        /// </summary>
+        public bool FastReadout 
+        {
+            set { memberFactory.CallMember(2, "FastReadout", new Type[] { }, new object[] { value }); }
+            get { return (bool)memberFactory.CallMember(1, "FastReadout", new Type[] { }, new object[] { }); }
+        }
+
+        /// <summary>
+        /// Gain - Needs explanation!!
+        /// </summary>
+        public short Gain 
+        {
+            set { memberFactory.CallMember(2, "Gain", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToInt16(memberFactory.CallMember(1, "Gain", new Type[] { }, new object[] { })); }
+        }
+
+        /// <summary>
+        /// Maximum value of gain
+        /// </summary>
+        public short GainMax 
+        {
+            get { return Convert.ToInt16(memberFactory.CallMember(1, "GainMax", new Type[] { }, new object[] { })); }
+        }
+
+        /// <summary>
+        /// Minimum value of gain
+        /// </summary>
+        public short GainMin 
+        {
+            get { return Convert.ToInt16(memberFactory.CallMember(1, "GainMin", new Type[] { }, new object[] { })); }
+        }
+
+        /// <summary>
+        /// Gains supported by the camera
+        /// </summary>
+        public string[] Gains 
+        {
+            get { return (string[])memberFactory.CallMember(1, "Gains", new Type[] { }, new object[] { }); } 
+        }
+
+        /// <summary>
+        /// Percent conpleted
+        /// </summary>
+        public short PercentCompleted 
+        {
+            get { return Convert.ToInt16(memberFactory.CallMember(1, "PercentCompleted", new Type[] { }, new object[] { })); }
+        }
+
+        /// <summary>
+        /// Readout mode
+        /// </summary>
+        public short ReadoutMode 
+        {
+            get { return Convert.ToInt16(memberFactory.CallMember(1, "ReadoutMode", new Type[] { }, new object[] { })); }
+        }
+
+        /// <summary>
+        /// List of available readout modes
+        /// </summary>
+        public string[] ReadoutModes
+        {
+            get { return (string[])memberFactory.CallMember(1, "ReadoutModes", new Type[] { }, new object[] { }); }
+        }
+
+        /// <summary>
+        /// Sensor name
+        /// </summary>
+        public string SensorName 
+        {
+            get { return (string)memberFactory.CallMember(1, "SensorName", new Type[] { }, new object[] { }); }
+        }
+
+        /// <summary>
+        /// Sensor type
+        /// </summary>
+        public SensorType SensorType 
+        { 
+            get { return (SensorType)memberFactory.CallMember(1, "SensorName", new Type[] { }, new object[] { }); }
+        }
+        #endregion
+
         #region IDisposable Members
 
         /// <summary>
@@ -634,7 +778,17 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string DriverVersion
         {
-             get { return (string)memberFactory.CallMember(1, "DriverVersion", new Type[] { typeof(string) }, new object[] { }); }
+             get 
+             {
+                 if (DriverInterfaceVersion > 1) // This member should exist
+                 { 
+                     return (string)memberFactory.CallMember(1, "DriverVersion", new Type[] { typeof(string) }, new object[] { }); 
+                 }
+                 else //This member doesnt exist so fake it with an unreal value
+                 { 
+                     return "0.0";
+                 }
+             }
         }
 
         /// <summary>
@@ -645,7 +799,14 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public short InterfaceVersion
         {
-            get { return Convert.ToInt16(memberFactory.CallMember(1, "InterfaceVersion", new Type[] { }, new object[] { })); }
+            get 
+            {
+                try { return Convert.ToInt16(memberFactory.CallMember(1, "InterfaceVersion", new Type[] { }, new object[] { })); }
+                catch //Return version 1 for any exception 
+                { 
+                    return 1;
+                }
+            }
         }
 
         /// <summary>
