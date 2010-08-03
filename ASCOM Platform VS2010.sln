@@ -174,23 +174,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Focuser", "Drivers and Simu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telescope", "Drivers and Simulators\Gemini Driver\Telescope\Telescope.csproj", "{12633CA2-397C-4924-B924-5BCC119B9077}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ASCOM.PowerShell", "ASCOM.PowerShell", "{C9395FDC-73CC-48C4-B8CA-CE7B85EDC1BA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.PowerShell.Cmdlets", "ASCOM.PowerShell.Cmdlets\ASCOMPowerShellCmdlets\ASCOM.PowerShell.Cmdlets.csproj", "{03E45323-63A5-4B49-838D-7A13368F2036}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{6829CC57-B624-49E8-BBF7-671E2E9395DB}"
-	ProjectSection(SolutionItems) = preProject
-		ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.DriverAccess.dll = ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.DriverAccess.dll
-		ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.DriverAccess.pdb = ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.DriverAccess.pdb
-		ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.DriverAccess.XML = ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.DriverAccess.XML
-		ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.Interfaces.dll = ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.Interfaces.dll
-		ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.Utilities.dll = ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.Utilities.dll
-		ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.Utilities.pdb = ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.Utilities.pdb
-		ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.Utilities.xml = ASCOM.PowerShell.Cmdlets\Dependencies\ASCOM.Utilities.xml
-	EndProjectSection
-EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "ASCOM.PowerShell.WiX", "ASCOM.PowerShell.WiX\ASCOM.PowerShell.WiX.wixproj", "{1DCE9D1C-572B-4C79-96D0-A1748CAC7C6C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.DriverAccess.Platform5", "ASCOM.DriverAccess.Platform5\ASCOM.DriverAccess.Platform5.csproj", "{96FE4339-269D-4908-A161-47F8F7DF838B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.DriverAccess", "ASCOM.DriverAccess\ASCOM.DriverAccess.csproj", "{3B6C23F5-C590-4385-86BB-98B604B565BA}"
@@ -697,34 +680,6 @@ Global
 		{12633CA2-397C-4924-B924-5BCC119B9077}.Release|Any CPU.Build.0 = Release|Any CPU
 		{12633CA2-397C-4924-B924-5BCC119B9077}.Release|x86.ActiveCfg = Release|x86
 		{12633CA2-397C-4924-B924-5BCC119B9077}.Release|x86.Build.0 = Release|x86
-		{03E45323-63A5-4B49-838D-7A13368F2036}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
-		{03E45323-63A5-4B49-838D-7A13368F2036}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
-		{03E45323-63A5-4B49-838D-7A13368F2036}.Debug Quick|x86.ActiveCfg = Debug|x86
-		{03E45323-63A5-4B49-838D-7A13368F2036}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{03E45323-63A5-4B49-838D-7A13368F2036}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{03E45323-63A5-4B49-838D-7A13368F2036}.Debug|x86.ActiveCfg = Debug|x86
-		{03E45323-63A5-4B49-838D-7A13368F2036}.Debug|x86.Build.0 = Debug|x86
-		{03E45323-63A5-4B49-838D-7A13368F2036}.Peter|Any CPU.ActiveCfg = Release|Any CPU
-		{03E45323-63A5-4B49-838D-7A13368F2036}.Peter|Any CPU.Build.0 = Release|Any CPU
-		{03E45323-63A5-4B49-838D-7A13368F2036}.Peter|x86.ActiveCfg = Release|Any CPU
-		{03E45323-63A5-4B49-838D-7A13368F2036}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{03E45323-63A5-4B49-838D-7A13368F2036}.Release|Any CPU.Build.0 = Release|Any CPU
-		{03E45323-63A5-4B49-838D-7A13368F2036}.Release|x86.ActiveCfg = Release|x86
-		{03E45323-63A5-4B49-838D-7A13368F2036}.Release|x86.Build.0 = Release|x86
-		{1DCE9D1C-572B-4C79-96D0-A1748CAC7C6C}.Debug Quick|Any CPU.ActiveCfg = Debug|x86
-		{1DCE9D1C-572B-4C79-96D0-A1748CAC7C6C}.Debug Quick|x86.ActiveCfg = Debug|x86
-		{1DCE9D1C-572B-4C79-96D0-A1748CAC7C6C}.Debug Quick|x86.Build.0 = Debug|x86
-		{1DCE9D1C-572B-4C79-96D0-A1748CAC7C6C}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{1DCE9D1C-572B-4C79-96D0-A1748CAC7C6C}.Debug|Any CPU.Build.0 = Debug|x86
-		{1DCE9D1C-572B-4C79-96D0-A1748CAC7C6C}.Debug|x86.ActiveCfg = Debug|x86
-		{1DCE9D1C-572B-4C79-96D0-A1748CAC7C6C}.Debug|x86.Build.0 = Debug|x86
-		{1DCE9D1C-572B-4C79-96D0-A1748CAC7C6C}.Peter|Any CPU.ActiveCfg = Release|x86
-		{1DCE9D1C-572B-4C79-96D0-A1748CAC7C6C}.Peter|x86.ActiveCfg = Release|x86
-		{1DCE9D1C-572B-4C79-96D0-A1748CAC7C6C}.Peter|x86.Build.0 = Release|x86
-		{1DCE9D1C-572B-4C79-96D0-A1748CAC7C6C}.Release|Any CPU.ActiveCfg = Release|x86
-		{1DCE9D1C-572B-4C79-96D0-A1748CAC7C6C}.Release|Any CPU.Build.0 = Release|x86
-		{1DCE9D1C-572B-4C79-96D0-A1748CAC7C6C}.Release|x86.ActiveCfg = Release|x86
-		{1DCE9D1C-572B-4C79-96D0-A1748CAC7C6C}.Release|x86.Build.0 = Release|x86
 		{96FE4339-269D-4908-A161-47F8F7DF838B}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
 		{96FE4339-269D-4908-A161-47F8F7DF838B}.Debug Quick|x86.ActiveCfg = Debug|x86
 		{96FE4339-269D-4908-A161-47F8F7DF838B}.Debug Quick|x86.Build.0 = Debug|x86
@@ -827,9 +782,6 @@ Global
 		{6DD9248B-EB0E-4076-9F50-1B206B695AFB} = {DB708C00-E3FC-48C9-9091-275181312CBB}
 		{47E68B0F-EE59-4204-9055-2B9C33E47537} = {DB708C00-E3FC-48C9-9091-275181312CBB}
 		{12633CA2-397C-4924-B924-5BCC119B9077} = {DB708C00-E3FC-48C9-9091-275181312CBB}
-		{03E45323-63A5-4B49-838D-7A13368F2036} = {C9395FDC-73CC-48C4-B8CA-CE7B85EDC1BA}
-		{6829CC57-B624-49E8-BBF7-671E2E9395DB} = {C9395FDC-73CC-48C4-B8CA-CE7B85EDC1BA}
-		{1DCE9D1C-572B-4C79-96D0-A1748CAC7C6C} = {C9395FDC-73CC-48C4-B8CA-CE7B85EDC1BA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
