@@ -414,4 +414,134 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <exception cref=" System.Exception">Must throw an exception if for any reason no image readout will be available.</exception>
     Sub StopExposure()
 
+    'ICameraV2 members
+
+    ''' <summary>
+    ''' Bayer X offset index
+    ''' </summary>
+    ''' <value>Sets the X offset of a Bayer colour matrix in pixels</value>
+    ''' <returns>The Bayer colour matrix X offset.</returns>
+    ''' <remarks></remarks>
+    ReadOnly Property BayerOffsetX As Short
+
+    ''' <summary>
+    ''' Bayer Y offset index
+    ''' </summary>
+    ''' <value>Sets the Y offset of a Bayer colour matrix in pixels</value>
+    ''' <returns>The Bayer colour matrix X offset.</returns>
+    ''' <remarks></remarks>
+    ReadOnly Property BayerOffsetY As Short
+
+    ''' <summary>
+    ''' Camera has a fast readout mode
+    ''' </summary>
+    ''' <value>Boolean true / false</value>
+    ''' <returns>True when the camera supports a fast readout mode</returns>
+    ''' <remarks></remarks>
+    ReadOnly Property CanFastReadout As Boolean
+
+    ''' <summary>
+    ''' Maximum exposure time
+    ''' </summary>
+    ''' <value>Double value in seconds</value>
+    ''' <returns>The maximum exposure time, in seconds, that the camera supports</returns>
+    ''' <remarks></remarks>
+    ReadOnly Property ExposureMax As Double
+
+    ''' <summary>
+    ''' Minimium exposure time
+    ''' </summary>
+    ''' <value>Double value in seconds</value>
+    ''' <returns>The minimum exposure time, in seconds, that the camera supports</returns>
+    ''' <remarks></remarks>
+    ReadOnly Property ExposureMin As Double
+
+    ''' <summary>
+    ''' Exposure resolution
+    ''' </summary>
+    ''' <value>Double value in seconds</value>
+    ''' <returns>The smallest increment in exposure time that the camera recognises</returns>
+    ''' <remarks></remarks>
+    ReadOnly Property ExposureResolution As Double
+
+    ''' <summary>
+    ''' Fast readout mode
+    ''' </summary>
+    ''' <value>True sets fast readout mode, false sets normal mode</value>
+    ''' <returns>True when the current readout mode is fast and false when the readout mode is normal.</returns>
+    ''' <remarks></remarks>
+    Property FastReadout As Boolean
+
+    ''' <summary>
+    ''' Gain - Needs explanation!!
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Property Gain As Short
+
+    ''' <summary>
+    ''' Maximum value of gain
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>The maximum gain value that this camera supports</returns>
+    ''' <remarks></remarks>
+    ReadOnly Property GainMax As Short
+
+    ''' <summary>
+    ''' Minimum value of gain
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>The minimum gain value that this camera supports</returns>
+    ''' <remarks></remarks>
+    ReadOnly Property GainMin As Short
+
+    ''' <summary>
+    ''' Gains supported by the camera
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>String array of gain names </returns>
+    ''' <remarks></remarks>
+    ReadOnly Property Gains As String()
+
+    ''' <summary>
+    ''' Percent conpleted
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>A value between 0 and 100% indicating the completeness of this operation</returns>
+    ''' <remarks></remarks>
+    ReadOnly Property PercentCompleted As Short
+
+    ''' <summary>
+    ''' Readout mode
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>Short integer index into the ReadoutModes array of string readout mode names indicating the camera's current readout mode.</returns>
+    ''' <remarks></remarks>
+    ReadOnly Property ReadoutMode As Short
+
+    ''' <summary>
+    ''' List of available readout modes
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>A string array of readout mode names</returns>
+    ''' <remarks></remarks>
+    ReadOnly Property ReadoutModes As String()
+
+    ''' <summary>
+    ''' Sensor name
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>The name of sensor used within the camera</returns>
+    ''' <remarks></remarks>
+    ReadOnly Property SensorName As String
+
+    ''' <summary>
+    ''' Sensor type
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>The SensorType enum value of the camera sensor</returns>
+    ''' <remarks></remarks>
+    ReadOnly Property SensorType As SensorType
+
 End Interface

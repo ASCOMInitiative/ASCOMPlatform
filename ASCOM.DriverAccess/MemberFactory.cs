@@ -151,7 +151,22 @@ namespace ASCOM.DriverAccess
                              catch (TargetInvocationException e)
                              {
                                  TL.LogMessage("PropertyGetEx1", e.ToString());
-                                 throw new ASCOM.PropertyNotImplementedException(memberName + " is not implemented in this driver", false,e.InnerException);
+                                 if (e.InnerException.GetType() == typeof(ASCOM.PropertyNotImplementedException))
+                                 {
+                                     throw new ASCOM.PropertyNotImplementedException(memberName + " is not implemented in this driver", true, e.InnerException);
+                                 }
+                                 else if (e.InnerException.GetType() == typeof(ASCOM.InvalidValueException))
+                                 {
+                                     throw new ASCOM.InvalidValueException(e.InnerException.Message,"","",e.InnerException);
+                                 }
+                                 else if (e.InnerException.GetType() == typeof(ASCOM.DriverException))
+                                 {
+                                     throw new ASCOM.DriverException(e.InnerException.Message, e.InnerException);
+                                 }
+                                 else
+                                 {
+                                     throw e.InnerException;
+                                 }
                              }
                              catch (Exception e)
                              {

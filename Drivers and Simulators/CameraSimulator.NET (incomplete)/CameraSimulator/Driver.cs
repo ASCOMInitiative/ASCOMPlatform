@@ -24,7 +24,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 
 using ASCOM;
-using ASCOM.Interface;
+using ASCOM.DeviceInterface;
 using Helper = ASCOM.Utilities;
 using ASCOM.Utilities;
 using System.Globalization;
@@ -89,7 +89,7 @@ namespace ASCOM.Simulator
         internal short binY;
         internal bool hasShutter;
         internal string sensorName;
-        internal SensorTypes sensorType;    // TODO make an Enum
+        internal ASCOM.DeviceInterface.SensorType sensorType;    // TODO make an Enum
         internal short bayerOffsetX;
         internal short bayerOffsetY;
 
@@ -184,7 +184,7 @@ namespace ASCOM.Simulator
 
         private Timer exposureTimer;
         private Timer coolerTimer;
-
+        private bool LastResultCalled = false;
 
         #endregion
 
@@ -244,6 +244,49 @@ namespace ASCOM.Simulator
         //
 		// PUBLIC COM INTERFACE ICamera IMPLEMENTATION
 		//
+
+        #region IAscomDriver
+        public string DriverVersion
+        {
+            get { return "2.0"; }
+        }
+        #endregion
+
+        #region IDeviceControl
+        public string[] SupportedActions
+        {
+            get { return new string[] { "CameraTest1", "CameraTest2" }; }
+        }
+
+        public string CommandString(string Command, bool Raw)
+        {
+            return "";
+        }
+
+        public bool CommandBool(string Command, bool Raw)
+        {
+            return true;
+        }
+
+        public void CommandBlind(string Command, bool Raw)
+        {
+        }
+
+        public string Action(string Action, string Parameters)
+        {
+            return "ok";
+        }
+
+        public string LastResult
+        {
+            get {
+                if (LastResultCalled) return "";
+                else throw new InvalidOperationException("No action has yet been completed");
+            }
+        }
+
+
+        #endregion
 
 		#region ICamera Members
 
@@ -760,7 +803,7 @@ namespace ASCOM.Simulator
 		/// <exception cref=" System.Exception">hardware or communications link error has occurred.</exception>
 		public bool IsPulseGuiding
 		{
-			get { throw new System.Exception("The method or operation is not implemented."); }
+			get { throw new PropertyNotImplementedException("The method or operation is not implemented.",false); }
 		}
 
 		/// <summary>
@@ -1222,7 +1265,7 @@ namespace ASCOM.Simulator
             {
                 if (!this.connected)
                     throw new NotConnectedException("Can't read CanFastReadout when not connected");
-                return this.CanFastReadout;
+                return this.canFastReadout;
             }
         }
 
@@ -1396,7 +1439,7 @@ namespace ASCOM.Simulator
         /// Reports the version of this interface. Will return 2 for this version.
         /// </summary>
         /// <value>The interface version.</value>
-        public int InterfaceVersion
+        public short InterfaceVersion
         {
             get { return 2; }
         }
@@ -1510,7 +1553,7 @@ namespace ASCOM.Simulator
         /// or what Bayer matrix it encodes. 
         /// </summary>
         /// <value>The type of the sensor.</value>
-        private SensorTypes SensorType
+        public ASCOM.DeviceInterface.SensorType SensorType
         {
             get
             {
@@ -1520,6 +1563,9 @@ namespace ASCOM.Simulator
             }
         }
 
+        public void Dispose()
+        {
+        }
         #endregion
 
         #region private
@@ -1542,7 +1588,7 @@ namespace ASCOM.Simulator
             this.maxBinY = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_MaxBinY, string.Empty, "4"), CultureInfo.InvariantCulture);
             this.hasShutter = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_HasShutter, string.Empty, "false"), CultureInfo.InvariantCulture);
             this.sensorName = profile.GetValue(s_csDriverID, STR_SensorName, string.Empty, "");
-            this.sensorType = (Camera.SensorTypes)Convert.ToInt32(profile.GetValue(s_csDriverID, STR_SensorType, string.Empty, "0"), CultureInfo.InvariantCulture);
+            this.sensorType = (ASCOM.DeviceInterface.SensorType)Convert.ToInt32(profile.GetValue(s_csDriverID, STR_SensorType, string.Empty, "0"), CultureInfo.InvariantCulture);
             this.bayerOffsetX = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_BayerOffsetX, string.Empty, "0"), CultureInfo.InvariantCulture);
             this.bayerOffsetY = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_BayerOffsetY, string.Empty, "0"), CultureInfo.InvariantCulture);
 
@@ -1730,7 +1776,7 @@ namespace ASCOM.Simulator
                 int y1 = (bayerOffsetY + 1) & 1;
                 switch (this.sensorType)
                 {
-                    case SensorTypes.Monochrome:
+                    case SensorType.Monochrome:
                         for (int i = 0; i < h; i++)
                         {
                             for (int j = 0; j < w; j++)
@@ -1739,7 +1785,7 @@ namespace ASCOM.Simulator
                             }
                         }
                         break;
-                    case SensorTypes.RGGB:
+                    case SensorType.RGGB:
                         for (int i = 0; i < h; i += 2)
                         {
                             for (int j = 0; j < w; j += 2)
@@ -1751,7 +1797,7 @@ namespace ASCOM.Simulator
                             }
                         }
                         break;
-                    case SensorTypes.CMYG:
+                    case SensorType.CMYG:
                         for (int i = 0; i < h; i += 2)
                         {
                             for (int j = 0; j < w; j += 2)
@@ -1763,9 +1809,9 @@ namespace ASCOM.Simulator
                             }
                         }
                         break;
-                    case SensorTypes.CMYG2:
+                    case SensorType.CMYG2:
                         break;
-                    case SensorTypes.LRGB:
+                    case SensorType.LRGB:
                         for (int i = 0; i < h; i += 2)
                         {
                             for (int j = 0; j < w; j += 2)
@@ -1777,7 +1823,7 @@ namespace ASCOM.Simulator
                             }
                         }
                         break;
-                    case SensorTypes.Color:
+                    case SensorType.Color:
                         break;
                     default:
                         break;

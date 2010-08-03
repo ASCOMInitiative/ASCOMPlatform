@@ -116,7 +116,7 @@ namespace ASCOM.Simulator
             camera.maxBinY = Convert.ToInt16(this.textBoxMaxBinY.Text, CultureInfo.InvariantCulture);
             camera.hasShutter = this.checkBoxHasShutter.Checked;
             camera.sensorName = this.textBoxSensorName.Text;
-            camera.sensorType = (Camera.SensorTypes)this.comboBoxSensorType.SelectedIndex;
+            camera.sensorType = (ASCOM.DeviceInterface.SensorType)this.comboBoxSensorType.SelectedIndex;
             camera.bayerOffsetX = Convert.ToInt16(this.textBoxBayerOffsetX.Text, CultureInfo.InvariantCulture);
             camera.bayerOffsetY = Convert.ToInt16(this.textBoxBayerOffsetY.Text, CultureInfo.InvariantCulture);
 
