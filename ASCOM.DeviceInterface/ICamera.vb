@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.InteropServices
+Imports ASCOM
 
 '-----------------------------------------------------------------------
 ' <summary>Defines the ICamera Interface</summary>
@@ -10,6 +11,8 @@
 Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     Inherits IAscomDriver
     Inherits IDeviceControl
+
+#Region "Camera V1 methods"
     ''' <summary>
     ''' Aborts the current exposure, if any, and returns the camera to Idle state.
     ''' Must throw exception if camera is not idle and abort is
@@ -69,21 +72,21 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' 	</list>
     ''' </summary>
     ''' <value>The state of the camera.</value>
-    ''' <exception cref="System.Exception">Must return an exception if the camera status is unavailable.</exception>
+    ''' <exception cref="ASCOM.NotConnectedException">Must return an exception if the camera status is unavailable.</exception>
     ReadOnly Property CameraState() As CameraStates
 
     ''' <summary>
     ''' Returns the width of the CCD camera chip in unbinned pixels.
     ''' </summary>
     ''' <value>The size of the camera X.</value>
-    ''' <exception cref="System.Exception">Must throw exception if the value is not known</exception>
+    ''' <exception cref="ASCOM.NotConnectedException">Must throw exception if the value is not known</exception>
     ReadOnly Property CameraXSize() As Integer
 
     ''' <summary>
     ''' Returns the height of the CCD camera chip in unbinned pixels.
     ''' </summary>
     ''' <value>The size of the camera Y.</value>
-    ''' <exception cref="System.Exception">Must throw exception if the value is not known</exception>
+    ''' <exception cref="ASCOM.NotConnectedException">Must throw exception if the value is not known</exception>
     ReadOnly Property CameraYSize() As Integer
 
     ''' <summary>
@@ -102,7 +105,7 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <value>
     ''' 	<c>true</c> if this instance can asymmetric bin; otherwise, <c>false</c>.
     ''' </value>
-    ''' <exception cref="System.Exception">Must throw exception if the value is not known (n.b. normally only
+    ''' <exception cref="ASCOM.NotConnectedException">Must throw exception if the value is not known (n.b. normally only
     ''' occurs if no link established and camera must be queried)</exception>
     ReadOnly Property CanAsymmetricBin() As Boolean
 
@@ -142,8 +145,8 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <value>
     ''' 	<c>true</c> if the camera can stop the exposure; otherwise, <c>false</c>.
     ''' </value>
-    ''' <exception cref=" System.Exception">not supported</exception>
-    ''' <exception cref=" System.Exception">an error condition such as link failure is present</exception>
+    ''' <exception cref=" ASCOM.PropertyNotImplementedException">not supported</exception>
+    ''' <exception cref=" ASCOM.NotConnectedException">an error condition such as link failure is present</exception>
     ReadOnly Property CanStopExposure() As Boolean
 
     ''' <summary>
@@ -162,8 +165,8 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' documentation supplied with the camera for further information.
     ''' </summary>
     ''' <value><c>true</c> if [cooler on]; otherwise, <c>false</c>.</value>
-    ''' <exception cref=" System.Exception">not supported</exception>
-    ''' <exception cref=" System.Exception">an error condition such as link failure is present</exception>
+    ''' <exception cref=" ASCOM.PropertyNotImplementedException">not supported</exception>
+    ''' <exception cref=" ASCOM.NotConnectedException">an error condition such as link failure is present</exception>
     Property CoolerOn() As Boolean
 
     ''' <summary>
@@ -171,8 +174,8 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' False.
     ''' </summary>
     ''' <value>The cooler power.</value>
-    ''' <exception cref=" System.Exception">not supported</exception>
-    ''' <exception cref=" System.Exception">an error condition such as link failure is present</exception>
+    ''' <exception cref=" ASCOM.PropertyNotImplementedException">not supported</exception>
+    ''' <exception cref=" ASCOM.NotConnectedException">an error condition such as link failure is present</exception>
     ReadOnly Property CoolerPower() As Double
 
     ''' <summary>
@@ -188,7 +191,7 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' static during a session.)
     ''' </summary>
     ''' <value>The electrons per ADU.</value>
-    ''' <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
+    ''' <exception cref=" ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
     ReadOnly Property ElectronsPerADU() As Double
 
     ''' <summary>
@@ -196,7 +199,7 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' settings (binning, SetupDialog settings, etc.)
     ''' </summary>
     ''' <value>The full well capacity.</value>
-    ''' <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
+    ''' <exception cref=" ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
     ReadOnly Property FullWellCapacity() As Double
 
     ''' <summary>
@@ -214,7 +217,7 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' manufacturers) in degrees Celsius. Only valid if CanControlTemperature is True.
     ''' </summary>
     ''' <value>The heat sink temperature.</value>
-    ''' <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
+    ''' <exception cref=" ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
     ReadOnly Property HeatSinkTemperature() As Double
 
     ''' <summary>
@@ -229,7 +232,7 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' just the first plane.
     ''' </summary>
     ''' <value>The image array.</value>
-    ''' <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
+    ''' <exception cref=" ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
     ReadOnly Property ImageArray() As Object
 
     ''' <summary>
@@ -245,7 +248,7 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' just the first plane.
     ''' </summary>
     ''' <value>The image array variant.</value>
-    ''' <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
+    ''' <exception cref=" ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
     ReadOnly Property ImageArrayVariant() As Object
 
     ''' <summary>
@@ -254,7 +257,7 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' exception.
     ''' </summary>
     ''' <value><c>true</c> if [image ready]; otherwise, <c>false</c>.</value>
-    ''' <exception cref=" System.Exception">hardware or communications link error has occurred.</exception>
+    ''' <exception cref=" ASCOM.NotConnectedException">hardware or communications link error has occurred.</exception>
     ReadOnly Property ImageReady() As Boolean
 
     ''' <summary>
@@ -264,7 +267,7 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <value>
     ''' 	<c>true</c> if this instance is pulse guiding; otherwise, <c>false</c>.
     ''' </value>
-    ''' <exception cref=" System.Exception">hardware or communications link error has occurred.</exception>
+    ''' <exception cref=" ASCOM.NotConnectedException">hardware or communications link error has occurred.</exception>
     ReadOnly Property IsPulseGuiding() As Boolean
 
     ''' <summary>
@@ -273,7 +276,6 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' value is cleared the next time any method is called.
     ''' </summary>
     ''' <value>The last error.</value>
-    ''' <exception cref=" System.Exception">Must throw exception if no error condition.</exception>
     ReadOnly Property LastError() As String
 
 
@@ -283,7 +285,8 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' precision, etc.
     ''' </summary>
     ''' <value>The last duration of the exposure.</value>
-    ''' <exception cref=" System.Exception">Must throw exception if not supported or no exposure has been taken</exception>
+    ''' <exception cref="ASCOM.PropertyNotImplementedException">Must throw an exception if not supported</exception>
+    ''' <exception cref="ASCOM.InvalidOperationException">If called before any exposure has been taken</exception>
     ReadOnly Property LastExposureDuration() As Double
 
     ''' <summary>
@@ -291,14 +294,15 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' CCYY-MM-DDThh:mm:ss[.sss...] format.
     ''' </summary>
     ''' <value>The last exposure start time.</value>
-    ''' <exception cref=" System.Exception">Must throw exception if not supported or no exposure has been taken</exception>
+    ''' <exception cref="ASCOM.PropertyNotImplementedException">Must throw an exception if not supported</exception>
+    ''' <exception cref="ASCOM.InvalidOperationException">If called before any exposure has been taken</exception>
     ReadOnly Property LastExposureStartTime() As String
 
     ''' <summary>
     ''' Reports the maximum ADU value the camera can produce.
     ''' </summary>
     ''' <value>The max ADU.</value>
-    ''' <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
+    ''' <exception cref="ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
     ReadOnly Property MaxADU() As Integer
 
     ''' <summary>
@@ -307,7 +311,7 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' axis.
     ''' </summary>
     ''' <value>The max bin X.</value>
-    ''' <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
+    ''' <exception cref="ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
     ReadOnly Property MaxBinX() As Short
 
     ''' <summary>
@@ -315,7 +319,7 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' returns the maximum allowed binning factor for the Y axis.
     ''' </summary>
     ''' <value>The max bin Y.</value>
-    ''' <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
+    ''' <exception cref="ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
     ReadOnly Property MaxBinY() As Short
 
     ''' <summary>
@@ -339,7 +343,7 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' driver.
     ''' </summary>
     ''' <value>The pixel size X.</value>
-    ''' <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
+    ''' <exception cref="ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
     ReadOnly Property PixelSizeX() As Double
 
     ''' <summary>
@@ -347,7 +351,7 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' driver.
     ''' </summary>
     ''' <value>The pixel size Y.</value>
-    ''' <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
+    ''' <exception cref="ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
     ReadOnly Property PixelSizeY() As Double
 
     ''' <summary>
@@ -365,8 +369,8 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' </summary>
     ''' <param name="Direction">The direction.</param>
     ''' <param name="Duration">The duration.</param>
-    ''' <exception cref=" System.Exception">PulseGuide command is unsupported</exception>
-    ''' <exception cref=" System.Exception">PulseGuide command is unsuccessful</exception>
+    ''' <exception cref="ascom.MethodNotImplementedException">PulseGuide command is unsupported</exception>
+    ''' <exception cref=" ASCOM.DriverException">PulseGuide command is unsuccessful</exception>
     Sub PulseGuide(ByVal Direction As GuideDirections, ByVal Duration As Integer)
 
     ''' <summary>
@@ -376,8 +380,8 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' thermal shock and potential damage to the CCD array or cooler stack.
     ''' </summary>
     ''' <value>The set CCD temperature.</value>
-    ''' <exception cref=" System.Exception">Must throw exception if command not successful.</exception>
-    ''' <exception cref=" System.Exception">Must throw exception if CanSetCCDTemperature is False.</exception>
+    ''' <exception cref="ASCOM.DriverException">Must throw exception if command not successful.</exception>
+    ''' <exception cref="ascom.PropertyNotImplementedException">Must throw exception if CanSetCCDTemperature is False.</exception>
     Property SetCCDTemperature() As Double
 
     ''' <summary>
@@ -385,9 +389,9 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' </summary>
     ''' <param name="Duration">Duration of exposure in seconds</param>
     ''' <param name="Light">True for light frame, False for dark frame (ignored if no shutter)</param>
-    ''' <exception cref=" System.Exception">NumX, NumY, XBin, YBin, StartX, StartY, or Duration parameters are invalid.</exception>
-    ''' <exception cref=" System.Exception">CanAsymmetricBin is False and BinX != BinY</exception>
-    ''' <exception cref=" System.Exception">the exposure cannot be started for any reason, such as a hardware or communications error</exception>
+    ''' <exception cref=" ASCOM.InvalidValueException">NumX, NumY, XBin, YBin, StartX, StartY, or Duration parameters are invalid.</exception>
+    ''' <exception cref=" ASCOM.InvalidOperationException">CanAsymmetricBin is False and BinX != BinY</exception>
+    ''' <exception cref="ASCOM.NotConnectedException">the exposure cannot be started for any reason, such as a hardware or communications error</exception>
     Sub StartExposure(ByVal Duration As Double, ByVal Light As Boolean)
 
     ''' <summary>
@@ -408,60 +412,89 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' Stops the current exposure, if any.  If an exposure is in progress, the readout
     ''' process is initiated.  Ignored if readout is already in process.
     ''' </summary>
-    ''' <exception cref=" System.Exception">Must throw an exception if CanStopExposure is False</exception>
-    ''' <exception cref=" System.Exception">Must throw an exception if no exposure is in progress</exception>
-    ''' <exception cref=" System.Exception">Must throw an exception if the camera or link has an error condition</exception>
-    ''' <exception cref=" System.Exception">Must throw an exception if for any reason no image readout will be available.</exception>
+    ''' <exception cref="ASCOM.PropertyNotImplementedException">Must throw an exception if CanStopExposure is False</exception>
+    ''' <exception cref="ASCOM.InvalidOperationException">Must throw an exception if no exposure is in progress</exception>
+    ''' <exception cref="ASCOM.NotConnectedException">Must throw an exception if the camera or link has an error condition</exception>
+    ''' <exception cref="ASCOM.DriverException">Must throw an exception if for any reason no image readout will be available.</exception>
     Sub StopExposure()
+#End Region
 
+#Region "ICameraV2 methods"
     'ICameraV2 members
 
     ''' <summary>
     ''' Bayer X offset index
     ''' </summary>
-    ''' <value>Sets the X offset of a Bayer colour matrix in pixels</value>
     ''' <returns>The Bayer colour matrix X offset.</returns>
-    ''' <remarks></remarks>
+    ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
+    ''' active connection in order to retrieve necessary information from the camera.)</exception>
+    ''' <exception cref="InvalidValueException">Must throw an exception if not valid.</exception>
+    ''' <remarks>Returns the X offset of the Bayer matrix, as defined in Camera.SensorType. Value returned must be in the range 0 to M-1, 
+    ''' where M is the width of the Bayer matrix. The offset is relative to the 0,0 pixel in the sensor array, and does not change to 
+    ''' reflect subframe settings.</remarks>
     ReadOnly Property BayerOffsetX As Short
 
     ''' <summary>
-    ''' Bayer Y offset index
+    ''' Returns the Y offset of the Bayer matrix, as defined in Camera.SensorType.
     ''' </summary>
-    ''' <value>Sets the Y offset of a Bayer colour matrix in pixels</value>
-    ''' <returns>The Bayer colour matrix X offset.</returns>
-    ''' <remarks></remarks>
+    ''' <returns>The Bayer colour matrix Y offset.</returns>
+    ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
+    ''' active connection in order to retrieve necessary information from the camera.)</exception>
+    ''' <exception cref="InvalidValueException">Must throw an exception if not valid.</exception>
+    ''' <remarks>The offset is relative to the 0,0 pixel in the sensor array, and does not change to reflect subframe settings. 
+    ''' <para>It is recommended that this function be called only after a connection is established with the camera hardware, to ensure 
+    ''' that the driver is aware of the capabilities of the specific camera model.</para></remarks>
     ReadOnly Property BayerOffsetY As Short
 
     ''' <summary>
     ''' Camera has a fast readout mode
     ''' </summary>
-    ''' <value>Boolean true / false</value>
+    ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
+    ''' active connection in order to retrieve necessary information from the camera.)</exception>
     ''' <returns>True when the camera supports a fast readout mode</returns>
-    ''' <remarks></remarks>
+    ''' <remarks>It is recommended that this function be called only after a connection is established with the camera hardware, to 
+    ''' ensure that the driver is aware of the capabilities of the specific camera model.</remarks>
     ReadOnly Property CanFastReadout As Boolean
 
     ''' <summary>
-    ''' Maximum exposure time
+    ''' Returns the maximum exposure time supported by Camera.StartExposure
     ''' </summary>
-    ''' <value>Double value in seconds</value>
     ''' <returns>The maximum exposure time, in seconds, that the camera supports</returns>
-    ''' <remarks></remarks>
+    ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
+    ''' active connection in order to retrieve necessary information from the camera.)</exception>
+    ''' <exception cref="InvalidValueException">Must throw an exception if not valid.</exception>
+    ''' <remarks>It is recommended that this function be called only after 
+    ''' a connection is established with the camera hardware, to ensure that the driver is aware of the capabilities of the 
+    ''' specific camera model.</remarks>
     ReadOnly Property ExposureMax As Double
 
     ''' <summary>
     ''' Minimium exposure time
     ''' </summary>
-    ''' <value>Double value in seconds</value>
-    ''' <returns>The minimum exposure time, in seconds, that the camera supports</returns>
-    ''' <remarks></remarks>
+    ''' <returns>The minimum exposure time, in seconds, that the camera supports through Camera.StartExposure</returns>
+    ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
+    ''' active connection in order to retrieve necessary information from the camera.)</exception>
+    ''' <exception cref="InvalidValueException">Must throw an exception if not valid.</exception>
+    ''' <remarks>This must be a non-zero number representing the shortest possible exposure time supported by the camera model.
+    ''' <para>Please note that for bias frame acquisition an even shorter exposure may be possible; please see Camera.StartExposure 
+    ''' for more information.</para>
+    ''' <para>It is recommended that this function be called only after a connection is established with the camera hardware, to ensure 
+    ''' that the driver is aware of the capabilities of the specific camera model.</para></remarks>
     ReadOnly Property ExposureMin As Double
 
     ''' <summary>
     ''' Exposure resolution
     ''' </summary>
-    ''' <value>Double value in seconds</value>
-    ''' <returns>The smallest increment in exposure time that the camera recognises</returns>
-    ''' <remarks></remarks>
+    ''' <returns>The smallest increment in exposure time supported by Camera.StartExposure.</returns>
+    ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
+    ''' active connection in order to retrieve necessary information from the camera.)</exception>
+    ''' <exception cref="InvalidValueException">Must throw an exception if not valid.</exception>
+    ''' <remarks>This can be used, for example, to specify the resolution of a user interface "spin control" used to dial in the exposure time.
+    ''' <para>Please note that the Duration provided to Camera.StartExposure does not have to be an exact multiple of this number; 
+    ''' the driver should choose the closest available value. Also in some cases the resolution may not be constant over the full range 
+    ''' of exposure times; in this case the smallest increment would be appropriate. </para>
+    ''' <para>It is recommended that this function be called only after a connection is established with the camera hardware, to ensure 
+    ''' that the driver is aware of the capabilities of the specific camera model.</para></remarks>
     ReadOnly Property ExposureResolution As Double
 
     ''' <summary>
@@ -469,71 +502,168 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' </summary>
     ''' <value>True sets fast readout mode, false sets normal mode</value>
     ''' <returns>True when the current readout mode is fast and false when the readout mode is normal.</returns>
-    ''' <remarks></remarks>
+    ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
+    ''' active connection in order to retrieve necessary information from the camera.)</exception>
+    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if Camera.CanFastReadout returns False.</exception>
+    ''' <remarks>Must thrown an exception if no link is established to the camera. Must throw an exception if Camera.CanFastReadout 
+    ''' returns False.
+    ''' <para>Many cameras have a "fast mode" intended for use in focusing. When set to True, the camera will operate in Fast mode; when 
+    ''' set False, the camera will operate normally. This property should default to False.</para>
+    ''' <para>Please note that this function may in some cases interact with Camera.ReadoutModes; for example, there may be modes where 
+    ''' the Fast/Normal switch is meaningless. In this case, it may be preferable to use the Camera.ReadoutModes function to control 
+    ''' fast/normal switching.</para>
+    ''' <para>If this feature is not available, then Camera.CanFastReadout must return False.</para></remarks>
     Property FastReadout As Boolean
 
     ''' <summary>
-    ''' Gain - Needs explanation!!
+    ''' Index into the Gains array for the selected camera gain
     ''' </summary>
-    ''' <value></value>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
+    ''' <value>Short integer index for the current camera gain in the gains string array.</value>
+    ''' <returns>Index into the Gains array for the selected camera gain</returns>
+    ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
+    ''' active connection in order to retrieve necessary information from the camera.)</exception>
+    ''' <exception cref="InvalidValueException">Must throw an exception if not valid.</exception>
+    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if gain is not supported</exception>
+    ''' <remarks>
+    ''' Camera.Gain can be used to adjust the gain setting of the camera, if supported. There are two typical usage scenarios:
+    '''<ul>
+    ''' <li>DSLR Cameras - Camera.Gains will return a 0-based array of strings, which correspond to different gain settings such as 
+    ''' "ISO 800". Camera.Gain must be set to an integer in this range. Camera.GainMin and Camera.GainMax must thrown an exception if 
+    ''' this mode is used.</li>
+    ''' <li>Adjustable gain CCD cameras - Camera.GainMax and Camera.GainMin return integers, which specify the valid range for Camera.Gain.</li>
+    ''' </ul>
+    '''<para>The driver must default Camera.Gain to a valid value. </para>
+    '''<para>Please note that Camera.ReadoutMode may in some cases affect the gain of the camera; if so the driver must be written such 
+    ''' that the two properties do not conflict if both are used.</para></remarks>
     Property Gain As Short
 
     ''' <summary>
     ''' Maximum value of gain
     ''' </summary>
-    ''' <value></value>
+    ''' <value>Short integer representing the maximum gain value supported by the camera.</value>
     ''' <returns>The maximum gain value that this camera supports</returns>
-    ''' <remarks></remarks>
+    ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
+    ''' active connection in order to retrieve necessary information from the camera.)</exception>
+    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if gainmax is not supported</exception>
+    ''' <remarks>When specifying the gain setting with an integer value, Camera.GainMax is used in conjunction with Camera.GainMin to 
+    ''' specify the range of valid settings.
+    ''' <para>Camera.GainMax shall be greater than Camera.GainMin. If either is available, then both must be available.</para>
+    ''' <para>Please see Camera.Gain for more information.</para>
+    ''' <para>It is recommended that this function be called only after a connection is established with the camera hardware, to ensure 
+    ''' that the driver is aware of the capabilities of the specific camera model.</para></remarks>
     ReadOnly Property GainMax As Short
 
     ''' <summary>
     ''' Minimum value of gain
     ''' </summary>
-    ''' <value></value>
     ''' <returns>The minimum gain value that this camera supports</returns>
-    ''' <remarks></remarks>
+    ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
+    ''' active connection in order to retrieve necessary information from the camera.)</exception>
+    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if gainmin is not supported</exception>
+    ''' <remarks>When specifying the gain setting with an integer value, Camera.GainMin is used in conjunction with Camera.GainMax to 
+    ''' specify the range of valid settings.
+    ''' <para>Camera.GainMax shall be greater than Camera.GainMin. If either is available, then both must be available.</para>
+    ''' <para>Please see Camera.Gain for more information.</para>
+    ''' <para>It is recommended that this function be called only after a connection is established with the camera hardware, to ensure 
+    ''' that the driver is aware of the capabilities of the specific camera model.</para></remarks>
+
     ReadOnly Property GainMin As Short
 
     ''' <summary>
     ''' Gains supported by the camera
     ''' </summary>
-    ''' <value></value>
     ''' <returns>String array of gain names </returns>
-    ''' <remarks></remarks>
+    ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
+    ''' active connection in order to retrieve necessary information from the camera.)</exception>
+    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if gainmin is not supported</exception>
+    ''' <remarks>Gains provides a 0-based array of available gain settings.  This is often used to specify ISO settings for DSLR cameras.  
+    ''' Typically the application software will display the available gain settings in a drop list. The application will then supply 
+    ''' the selected index to the driver via the Camera.Gain property. 
+    ''' <para>The Gain setting may alternatively be specified using integer values; if this mode is used then Gains is invalid 
+    ''' and must throw an exception. Please see Camera.GainMax and Camera.GainMin for more information.</para>
+    ''' <para>It is recommended that this function be called only after a connection is established with the camera hardware, 
+    ''' to ensure that the driver is aware of the capabilities of the specific camera model.</para></remarks>
     ReadOnly Property Gains As String()
 
     ''' <summary>
     ''' Percent conpleted
     ''' </summary>
-    ''' <value></value>
     ''' <returns>A value between 0 and 100% indicating the completeness of this operation</returns>
-    ''' <remarks></remarks>
+    ''' <exception cref="InvalidOperationException">Thrown when it is inappropriate to call Camera.percentCOmpleted</exception>
+    ''' <remarks>If valid, returns an integer between 0 and 100, where 0 indicates 0% progress (function just started) and 
+    ''' 100 indicates 100% progress (i.e. completion).
+    ''' <para>At the discretion of the driver author, Camera.PercentCompleted may optionally be valid when <see cref="CameraState">Camera.CameraState</see> is 
+    ''' in any or all of the following states: <see cref="CameraStates.cameraExposing">CameraExposing</see>, 
+    ''' <see cref="CameraStates.cameraExposing">CameraWaiting</see>, <see cref="CameraStates.cameraExposing">CameraReading</see>, 
+    ''' or <see cref="CameraStates.cameraExposing">CameraDownload</see>. In all other states an exception shall be thrown.</para>
+    ''' <para>Typically the application user interface will show a progress bar based on the Camera.PercentCompleted value.</para>
+    ''' <para>Please note that client applications are not required to use this value, and in some cases may display status 
+    ''' information based on other information, such as time elapsed.</para>
+    ''' </remarks>
     ReadOnly Property PercentCompleted As Short
 
     ''' <summary>
     ''' Readout mode
     ''' </summary>
     ''' <value></value>
-    ''' <returns>Short integer index into the ReadoutModes array of string readout mode names indicating the camera's current readout mode.</returns>
-    ''' <remarks></remarks>
+    ''' <returns>Short integer index into the <see cref="ReadoutModes">ReadoutModes</see> array of string readout mode names indicating 
+    ''' the camera's current readout mode.</returns>
+    ''' <exception cref="InvalidValueException">Must throw an exception if set to an illegal or unavailable mode.</exception>
+    ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
+    ''' active connection in order to retrieve necessary information from the camera.)</exception>
+    ''' <remarks>ReadoutMode is an index into the array <see cref="ReadoutModes">Camera.ReadoutModes</see>, and selects the desired readout mode for the camera.  
+    ''' Defaults to 0 if not set.  Throws an exception if the selected mode is not available.
+    ''' <para>It is strongly recommended, but not required, that driver authors make the 0-index mode suitable for standard imaging operations, 
+    ''' since it is the default.</para>
+    ''' <para>Please see <see cref="ReadoutModes">Camera.ReadoutModes</see> for additional information.</para></remarks>
     ReadOnly Property ReadoutMode As Short
 
     ''' <summary>
     ''' List of available readout modes
     ''' </summary>
-    ''' <value></value>
     ''' <returns>A string array of readout mode names</returns>
-    ''' <remarks></remarks>
+    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if gainmin is not supported</exception>
+    ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
+    ''' active connection in order to retrieve necessary information from the camera.)</exception>
+    ''' <remarks>This property provides an array of strings, each of which describes an available readout mode of the camera.  
+    ''' At least two strings must be present in the list. The user interface of a control application will typically present to the 
+    ''' user a drop-list of modes.  The choice of available modes made available is entirely at the discretion of the driver author. 
+    ''' Please note that if the camera has many different modes of operation, then the most commonly adjusted settings should be in 
+    ''' ReadoutModes; additional settings may be provided using <see cref="SetupDialog">Camera.SetupDialog</see>.
+    ''' <para>To select a mode, the application will set <see cref="ReadoutMode">Camera.ReadoutMode</see> to index of the desired mode.  The index is zero-based.</para>
+    ''' <para>This property should only be read while a connection to the camera is actually established.  Drivers often support 
+    ''' multiple cameras with different capabilities, which are not known until the connection is made.  If the available readout modes 
+    ''' are not known because no connection has been established, this property shall throw an exception.</para>
+    ''' <para>Please note that the default Camera.ReadoutMode setting is 0. It is strongly recommended, but not required, that 
+    ''' driver authors make the 0-index mode suitable for standard imaging operations, since it is the default.</para>
+    ''' <para>This feature may be used in parallel with <see cref="FastReadout">Camera.FastReadout</see>; however, care should be taken to ensure that the two 
+    ''' features work together consistently. If there are modes that are inconsistent having a separate fast/normal switch, then it 
+    ''' may be better to simply list Fast as one of the ReadoutModes.</para><para>It is recommended that this function be called 
+    ''' only after a connection is established with the camera hardware, to ensure that the driver is aware of the capabilities 
+    ''' of the specific camera model.</para></remarks>
     ReadOnly Property ReadoutModes As String()
 
     ''' <summary>
     ''' Sensor name
     ''' </summary>
-    ''' <value></value>
     ''' <returns>The name of sensor used within the camera</returns>
-    ''' <remarks></remarks>
+    ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
+    ''' active connection in order to retrieve necessary information from the camera.)</exception>
+    ''' <remarks>Returns the name (datasheet part number) of the sensor, e.g. ICX285AL.  The format is to be exactly as shown on 
+    ''' manufacturer data sheet, subject to the following rules. All letter shall be uppercase.  Spaces shall not be included.
+    ''' <para>Any extra suffixes that define region codes, package types, temperature range, coatings, grading, color/monochrome, 
+    ''' etc. shall not be included. For color sensors, if a suffix differentiates different Bayer matrix encodings, it shall be 
+    ''' included.</para>
+    ''' <para>Examples:</para>
+    ''' <ul>
+    ''' <li>ICX285AL-F shall be reported as ICX285</li>
+    ''' <li>KAF-8300-AXC-CD-AA shall be reported as KAF-8300</li>
+    ''' </ul>
+    ''' <para>Note:  The most common usage of this property is to select approximate color balance parameters to be applied to 
+    ''' the Bayer matrix of one-shot color sensors.  Application authors should assume that an appropriate IR cutoff filter is 
+    ''' in place for color sensors.</para><para>It is recommended that this function be called only after a connection is established with 
+    ''' the camera hardware, to ensure that the driver is aware of the capabilities of the specific camera model.</para>
+    ''' </remarks>
     ReadOnly Property SensorName As String
 
     ''' <summary>
@@ -541,7 +671,673 @@ Public Interface ICamera 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' </summary>
     ''' <value></value>
     ''' <returns>The SensorType enum value of the camera sensor</returns>
-    ''' <remarks></remarks>
+    ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
+    ''' active connection in order to retrieve necessary information from the camera.)</exception>
+    ''' <remarks>
+    ''' SensorType returns a value indicating whether the sensor is monochrome, or what Bayer matrix it encodes.  The following values are defined:
+    ''' <para>
+    ''' <table style="width:76.24%;" cellspacing="0" width="76.24%">
+    ''' <col style="width: 11.701%;"></col>
+    ''' <col style="width: 20.708%;"></col>
+    ''' <col style="width: 67.591%;"></col>
+    ''' <tr>
+    ''' <td colspan="1" rowspan="1" style="width: 11.701%; padding-right: 10px; padding-left: 10px; 
+    ''' border-left-color: #000000; border-left-style: Solid; 
+    ''' border-top-color: #000000; border-top-style: Solid; 
+    ''' border-right-color: #000000; border-right-style: Solid;
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; 
+    ''' background-color: #00ffff;" width="11.701%">
+    ''' <b>Value</b></td>
+    ''' <td colspan="1" rowspan="1" style="width: 20.708%; padding-right: 10px; padding-left: 10px; 
+    ''' border-top-color: #000000; border-top-style: Solid; 
+    ''' border-right-style: Solid; border-right-color: #000000; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; 
+    ''' background-color: #00ffff;" width="20.708%">
+    ''' <b>Enumeration</b></td>
+    ''' <td colspan="1" rowspan="1" style="width: 67.591%; padding-right: 10px; padding-left: 10px; 
+    ''' border-top-color: #000000; border-top-style: Solid; 
+    ''' border-right-style: Solid; border-right-color: #000000; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; 
+    ''' background-color: #00ffff;" width="67.591%">
+    ''' <b>Meaning</b></td>
+    ''' </tr>
+    ''' <tr>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-left-color: #000000; border-left-style: Solid; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' 0</td>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' Monochrome</td>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' Camera produces monochrome array with no Bayer encoding</td>
+    ''' </tr>
+    ''' <tr>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-left-color: #000000; border-left-style: Solid; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' 1</td>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' Colour</td>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' Camera produces color image directly, requiring not Bayer decoding</td>
+    ''' </tr>
+    ''' <tr>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-left-color: #000000; border-left-style: Solid; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' 2</td>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' RGGB</td>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' Camera produces RGGB encoded Bayer array images</td>
+    ''' </tr>
+    ''' <tr>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-left-color: #000000; border-left-style: Solid; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' 3</td>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' CMYG</td>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' Camera produces CMYG encoded Bayer array images</td>
+    ''' </tr>
+    ''' <tr>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-left-color: #000000; border-left-style: Solid; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' 4</td>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' CMYG2</td>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' Camera produces CMYG2 encoded Bayer array images</td>
+    ''' </tr>
+    ''' <tr>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-left-color: #000000; border-left-style: Solid; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' 5</td>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' LRGB</td>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' Camera produces Kodak TRUESENSE Bayer LRGB array images</td>
+    ''' </tr>
+    ''' </table>
+    ''' </para>
+    ''' <para>Please note that additional values may be defined in future updates of the standard, as new Bayer matrices may be created 
+    ''' by sensor manufacturers in the future.  If this occurs, then a new enumeration value shall be defined. The pre-existing enumeration 
+    ''' values shall not change.
+    ''' <para>SensorType can possibly change between exposures, for example if <see cref="ReadoutMode">Camera.ReadoutMode</see> is changed, and should always be checked after each exposure.</para>
+    ''' <para>In the following definitions, R = red, G = green, B = blue, C = cyan, M = magenta, Y = yellow.  The Bayer matrix is 
+    ''' defined with X increasing from left to right, and Y increasing from top to bottom. The pattern repeats every N x M pixels for the 
+    ''' entire pixel array, where N is the height of the Bayer matrix, and M is the width.</para>
+    ''' <para>RGGB indicates the following matrix:</para>
+    ''' </para>
+    ''' <para>
+    ''' <table style="width:41.254%;" cellspacing="0" width="41.254%">
+    ''' <col style="width: 10%;"></col>
+    ''' <col style="width: 10%;"></col>
+    ''' <col style="width: 10%;"></col>
+    ''' 
+    ''' <tr valign="top" align="center">
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #ffffff" width="10%">
+    ''' </td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px;
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #00ffff;" width="10%">
+    ''' <b>X = 0</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; 
+    ''' background-color: #00ffff;" width="10%">
+    ''' <b>X = 1</b></td>
+    ''' </tr>
+    ''' 
+    ''' <tr valign="top" align="center">
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #00ffff" width="10%">
+    ''' <b>Y = 0</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' " width="10%">
+    ''' R</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-top-color: #000000; border-top-style: Solid;  border-top-width: 1px; 
+    ''' border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; 
+    ''' " width="10%">
+    ''' G</td>
+    ''' </tr>
+    ''' 
+    ''' <tr valign="top" align="center">
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; border-bottom=width: 1px;
+    ''' background-color: #00ffff;" width="10%">
+    ''' <b>Y = 1</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; border-bottom=width: 1px;
+    ''' " width="10%">
+    ''' G</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; border-bottom=width: 1px;
+    ''' border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; 
+    ''' " width="10%">
+    ''' B</td>
+    ''' </tr>
+    ''' </table>
+    ''' </para>
+    ''' 
+    ''' <para>CMYG indicates the following matrix:</para>
+    ''' <para>
+    ''' <table style="width:41.254%;" cellspacing="0" width="41.254%">
+    ''' <col style="width: 10%;"></col>
+    ''' <col style="width: 10%;"></col>
+    ''' <col style="width: 10%;"></col>
+    ''' 
+    ''' <tr valign="top" align="center">
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #ffffff" width="10%">
+    ''' </td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px;
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #00ffff;" width="10%">
+    ''' <b>X = 0</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; 
+    ''' background-color: #00ffff;" width="10%">
+    ''' <b>X = 1</b></td>
+    ''' </tr>
+    ''' 
+    ''' <tr valign="top" align="center">
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #00ffff" width="10%">
+    ''' <b>Y = 0</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' " width="10%">
+    ''' Y</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-top-color: #000000; border-top-style: Solid;  border-top-width: 1px; 
+    ''' border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; 
+    ''' " width="10%">
+    ''' C</td>
+    ''' </tr>
+    ''' 
+    ''' <tr valign="top" align="center">
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; border-bottom=width: 1px;
+    ''' background-color: #00ffff;" width="10%">
+    ''' <b>Y = 1</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; border-bottom=width: 1px;
+    ''' " width="10%">
+    ''' G</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; border-bottom=width: 1px;
+    ''' border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; 
+    ''' " width="10%">
+    ''' M</td>
+    ''' </tr>
+    ''' 
+    ''' </table>
+    ''' </para>
+    ''' <para>CMYG2 indicates the following matrix:</para>
+    ''' <para>
+    ''' <table style="width:41.254%;" cellspacing="0" width="41.254%">
+    ''' <col style="width: 10%;"></col>
+    ''' <col style="width: 10%;"></col>
+    ''' <col style="width: 10%;"></col>
+    ''' 
+    ''' <tr valign="top" align="center">
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #ffffff" width="10%">
+    ''' </td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px;
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #00ffff;" width="10%">
+    ''' <b>X = 0</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; 
+    ''' background-color: #00ffff;" width="10%">
+    ''' <b>X = 1</b></td>
+    ''' </tr>
+    ''' 
+    ''' <tr valign="top" align="center">
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #00ffff" width="10%">
+    ''' <b>Y = 0</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' " width="10%">
+    ''' C</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-top-color: #000000; border-top-style: Solid;  border-top-width: 1px; 
+    ''' border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; 
+    ''' " width="10%">
+    ''' Y</td>
+    ''' </tr>
+    ''' 
+    ''' <tr valign="top" align="center">
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #00ffff;" width="10%">
+    ''' <b>Y = 1</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' " width="10%">
+    ''' M</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; 
+    ''' " width="10%">
+    ''' G</td>
+    ''' </tr>
+    ''' <tr valign="top" align="center">
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #00ffff" width="10%">
+    ''' <b>Y = 2</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' " width="10%">
+    ''' C</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-top-color: #000000; border-top-style: Solid;  border-top-width: 1px; 
+    ''' border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; 
+    ''' " width="10%">
+    ''' Y</td>
+    ''' </tr>
+    ''' 
+    ''' <tr valign="top" align="center">
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; border-bottom=width: 1px;
+    ''' background-color: #00ffff;" width="10%">
+    ''' <b>Y = 3</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; border-bottom=width: 1px;
+    ''' " width="10%">
+    ''' G</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; border-bottom=width: 1px;
+    ''' " width="10%">
+    ''' M</td>
+    ''' </tr>
+    ''' </table>
+    ''' </para>
+    ''' 
+    ''' <para>LRGB indicates the following matrix (Kodak TRUESENSE):</para>
+    ''' <para>
+    ''' <table style="width:68.757%;" cellspacing="0" width="68.757%">
+    ''' <col style="width: 10%;"></col>
+    ''' <col style="width: 10%;"></col>
+    ''' <col style="width: 10%;"></col>
+    ''' <col style="width: 10%;"></col>
+    ''' <col style="width: 10%;"></col>
+    ''' 
+    ''' <tr valign="top" align="center">
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #ffffff" width="10%">
+    ''' </td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px;
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #00ffff;" width="10%">
+    ''' <b>X = 0</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #00ffff;" width="10%">
+    ''' <b>X = 1</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #00ffff;" width="10%">
+    ''' <b>X = 2</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; 
+    ''' background-color: #00ffff;" width="10%">
+    ''' <b>X = 3</b></td>
+    ''' </tr>
+    ''' 
+    ''' <tr valign="top" align="center">
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #00ffff" width="10%">
+    ''' <b>Y = 0</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' " width="10%">
+    ''' L</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' " width="10%">
+    ''' R</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' " width="10%">
+    ''' L</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-top-color: #000000; border-top-style: Solid;  border-top-width: 1px; 
+    ''' border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; 
+    ''' " width="10%">
+    ''' G</td>
+    ''' </tr>
+    ''' 
+    ''' <tr valign="top" align="center">
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #00ffff;" width="10%">
+    ''' <b>Y = 1</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' " width="10%">
+    ''' R</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' " width="10%">
+    ''' L</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' " width="10%">
+    ''' G</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; 
+    ''' " width="10%">
+    ''' L</td>
+    ''' </tr>
+    ''' <tr valign="top" align="center">
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #00ffff" width="10%">
+    ''' <b>Y = 2</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' " width="10%">
+    ''' L</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' " width="10%">
+    ''' G</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' " width="10%">
+    ''' L</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-top-color: #000000; border-top-style: Solid;  border-top-width: 1px; 
+    ''' border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; 
+    ''' " width="10%">
+    ''' B</td>
+    ''' </tr>
+    ''' 
+    ''' <tr valign="top" align="center">
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; border-bottom=width: 1px;
+    ''' background-color: #00ffff;" width="10%">
+    ''' <b>Y = 3</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; border-bottom=width: 1px;
+    ''' " width="10%">
+    ''' G</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; border-bottom=width: 1px;
+    ''' " width="10%">
+    ''' L</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; border-bottom=width: 1px;
+    ''' " width="10%">
+    ''' B</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; border-bottom=width: 1px;
+    ''' " width="10%">
+    ''' L</td>
+    ''' </tr>
+    ''' </table>
+    ''' </para>
+    ''' 
+    ''' <para>The alignment of the array may be modified by <see cref="BayerOffsetX">Camera.BayerOffsetX</see> and <see cref="BayerOffsetY">Camera.BayerOffsetY</see>. The offset is measured from the 
+    ''' 0,0 position in the sensor array to the upper left corner of the Bayer matrix table. Please note that the Bayer offset values 
+    ''' are not affected by subframe settings.</para>
+    ''' <para>For example, if a CMYG2 sensor has a Bayer matrix offset as shown below, BayerOffsetX is 0 and BayerOffsetY is 1:</para>
+    '''<para>
+    ''' <table style="width:41.254%;" cellspacing="0" width="41.254%">
+    ''' <col style="width: 10%;"></col>
+    ''' <col style="width: 10%;"></col>
+    ''' <col style="width: 10%;"></col>
+    ''' 
+    ''' <tr valign="top" align="center">
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #ffffff" width="10%">
+    ''' </td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px;
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #00ffff;" width="10%">
+    ''' <b>X = 0</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; 
+    ''' background-color: #00ffff;" width="10%">
+    ''' <b>X = 1</b></td>
+    ''' </tr>
+    ''' 
+    ''' <tr valign="top" align="center">
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #00ffff" width="10%">
+    ''' <b>Y = 0</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' " width="10%">
+    ''' G</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-top-color: #000000; border-top-style: Solid;  border-top-width: 1px; 
+    ''' border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; 
+    ''' " width="10%">
+    ''' M</td>
+    ''' </tr>
+    ''' 
+    ''' <tr valign="top" align="center">
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #00ffff;" width="10%">
+    ''' <b>Y = 1</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' " width="10%">
+    ''' C</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; 
+    ''' " width="10%">
+    ''' Y</td>
+    ''' </tr>
+    ''' <tr valign="top" align="center">
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' background-color: #00ffff" width="10%">
+    ''' <b>Y = 2</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' " width="10%">
+    ''' M</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-top-color: #000000; border-top-style: Solid;  border-top-width: 1px; 
+    ''' border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; 
+    ''' " width="10%">
+    ''' G</td>
+    ''' </tr>
+    ''' 
+    ''' <tr valign="top" align="center">
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; border-bottom=width: 1px;
+    ''' background-color: #00ffff;" width="10%">
+    ''' <b>Y = 3</b></td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; border-bottom=width: 1px;
+    ''' " width="10%">
+    ''' C</td>
+    ''' <td colspan="1" rowspan="1" style="width:10%; 
+    ''' border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; 
+    ''' border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; 
+    ''' border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; border-bottom=width: 1px;
+    ''' " width="10%">
+    ''' Y</td>
+    ''' </tr>
+    ''' </table>
+    ''' </para>
+    ''' <para>It is recommended that this function be called only after a connection is established with the camera hardware, to ensure that 
+    ''' the driver is aware of the capabilities of the specific camera model.</para>
+    ''' </remarks>
     ReadOnly Property SensorType As SensorType
+#End Region
 
 End Interface

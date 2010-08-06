@@ -18,6 +18,8 @@
     <HtmlHelpName>PlatformHelp</HtmlHelpName>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj" />
+      <DocumentationSource sourceFile="..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj" />
+      <DocumentationSource sourceFile="..\ASCOM.DriverAccess\ASCOM.DriverAccess.csproj" />
       <DocumentationSource sourceFile="..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj" />
       <DocumentationSource sourceFile="..\ASCOM.IConform\ASCOM.IConform\ASCOM.IConform.vbproj" />
       <DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj" />
