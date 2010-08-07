@@ -182,6 +182,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraSimulator", "Drivers 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Interfaces", "ASCOM.Interfaces\ASCOM.Interfaces.csproj", "{5A0818BF-F3DD-4262-AF69-FD794832B85C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraTest", "TestApps\CameraTest\CameraTest.csproj", "{9A46CC7D-2155-4996-8367-BFD6446CD347}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Quick|Any CPU = Debug Quick|Any CPU
@@ -738,6 +740,18 @@ Global
 		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.Release|x86.ActiveCfg = Release|x86
 		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.Release|x86.Build.0 = Release|x86
+		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
+		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Debug Quick|x86.ActiveCfg = Debug|Any CPU
+		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Peter|Any CPU.ActiveCfg = Release|Any CPU
+		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Peter|Any CPU.Build.0 = Release|Any CPU
+		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Peter|x86.ActiveCfg = Release|Any CPU
+		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
