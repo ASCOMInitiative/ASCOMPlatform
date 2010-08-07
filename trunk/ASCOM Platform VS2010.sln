@@ -182,8 +182,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraSimulator", "Drivers 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Interfaces", "ASCOM.Interfaces\ASCOM.Interfaces.csproj", "{5A0818BF-F3DD-4262-AF69-FD794832B85C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraTest", "TestApps\CameraTest\CameraTest.csproj", "{9A46CC7D-2155-4996-8367-BFD6446CD347}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Quick|Any CPU = Debug Quick|Any CPU
@@ -740,18 +738,6 @@ Global
 		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.Release|x86.ActiveCfg = Release|x86
 		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.Release|x86.Build.0 = Release|x86
-		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
-		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
-		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Debug Quick|x86.ActiveCfg = Debug|Any CPU
-		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Peter|Any CPU.ActiveCfg = Release|Any CPU
-		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Peter|Any CPU.Build.0 = Release|Any CPU
-		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Peter|x86.ActiveCfg = Release|Any CPU
-		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -811,13 +797,13 @@ Global
 		{12633CA2-397C-4924-B924-5BCC119B9077} = {DB708C00-E3FC-48C9-9091-275181312CBB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0DestinationAssemblyName = 
-		Reflector0DestinationVersion = 4.0.812.4
-		Reflector0DestinationName = Moq
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0SourceAssemblyName = 
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceName = Moq
 		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
+		Reflector0SourceName = Moq
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceAssemblyName = 
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0DestinationName = Moq
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationAssemblyName = 
 	EndGlobalSection
 EndGlobal
