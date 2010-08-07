@@ -1,9 +1,10 @@
-//
+//-----------------------------------------------------------------------
+// <summary>Defines the Rotator class.</summary>
+//-----------------------------------------------------------------------
 // 10-Jul-08	rbd		1.0.5 - Release COM on Dispose().
-//
+// 29-May-10  	rem     6.0.0 - Added memberFactory.
+
 using System;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using ASCOM.Interface;
 using ASCOM.Utilities;
 
@@ -15,9 +16,10 @@ namespace ASCOM.DriverAccess
     /// </summary>
     public class Rotator : ASCOM.Interface.IRotator, IDisposable
     {
-        object objRotatorLateBound;
-        ASCOM.Interface.IRotator IRotator;
-        Type objTypeRotator;
+
+        #region IRotator constructors
+
+        private MemberFactory memberFactory;
 
         /// <summary>
         /// Creates a rotator object with the given Prog ID
@@ -25,22 +27,7 @@ namespace ASCOM.DriverAccess
         /// <param name="rotatorID"></param>
         public Rotator(string rotatorID)
 		{
-			// Get Type Information 
-            objTypeRotator = Type.GetTypeFromProgID(rotatorID);
-
-            // Create an instance of the Rotator object
-            objRotatorLateBound = Activator.CreateInstance(objTypeRotator);
-
-            // Try to see if this driver has an ASCOM.Rotator interface
-			try
-			{
-                IRotator = (ASCOM.Interface.IRotator)objRotatorLateBound;
-			}
-			catch (Exception)
-			{
-                IRotator = null;
-			}
-
+            memberFactory = new MemberFactory(rotatorID);
 		}
 
         /// <summary>
@@ -62,6 +49,8 @@ namespace ASCOM.DriverAccess
             }
         }
 
+        #endregion
+
         #region IRotator Members
 
         /// <summary>
@@ -69,15 +58,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanReverse
         {
-            get
-            {
-                if (IRotator != null)
-                    return IRotator.CanReverse;
-                else
-                    return Convert.ToBoolean(objTypeRotator.InvokeMember("CanReverse",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objRotatorLateBound, new object[] { }));
-            }
+            get { return (bool)memberFactory.CallMember(1, "CanReverse", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -87,24 +68,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Connected
         {
-            get
-            {
-                if (IRotator != null)
-                    return IRotator.Connected;
-                else
-                    return Convert.ToBoolean(objTypeRotator.InvokeMember("Connected",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objRotatorLateBound, new object[] { }));
-            }
-            set
-            {
-                if (IRotator != null)
-                    IRotator.Connected = value;
-                else
-                    objTypeRotator.InvokeMember("Connected",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objRotatorLateBound, new object[] { value });
-            }
+            get { return (bool)memberFactory.CallMember(1, "Connected", new Type[] { }, new object[] { }); }
+            set { memberFactory.CallMember(2, "Connected", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -112,12 +77,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void Halt()
         {
-            if (IRotator != null)
-                IRotator.Halt();
-            else
-                objTypeRotator.InvokeMember("Halt",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objRotatorLateBound, new object[] { });
+            memberFactory.CallMember(3, "Halt", new Type[] { }, new object[] { });
         }
 
         /// <summary>
@@ -125,15 +85,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool IsMoving
         {
-            get
-            {
-                if (IRotator != null)
-                    return IRotator.IsMoving;
-                else
-                    return Convert.ToBoolean(objTypeRotator.InvokeMember("IsMoving",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objRotatorLateBound, new object[] { }));
-            }
+            get { return (bool)memberFactory.CallMember(1, "IsMoving", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -142,12 +94,7 @@ namespace ASCOM.DriverAccess
         /// <param name="Position">Relative position to move in degrees from current Position.</param>
         public void Move(float Position)
         {
-            if (IRotator != null)
-                IRotator.Move(Position);
-            else
-                objTypeRotator.InvokeMember("Move",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objRotatorLateBound, new object[] { Position });
+            memberFactory.CallMember(3, "Move", new Type[] { typeof(float) }, new object[] { Position });
         }
 
         /// <summary>
@@ -156,12 +103,7 @@ namespace ASCOM.DriverAccess
         /// <param name="Position">absolute position in degrees.</param>
         public void MoveAbsolute(float Position)
         {
-            if (IRotator != null)
-                IRotator.MoveAbsolute(Position);
-            else
-                objTypeRotator.InvokeMember("MoveAbsolute",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objRotatorLateBound, new object[] { Position });
+            memberFactory.CallMember(3, "MoveAbsolute", new Type[] { typeof(float) }, new object[] { Position });
         }
 
         /// <summary>
@@ -169,15 +111,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public float Position
         {
-            get
-            {
-                if (IRotator != null)
-                    return IRotator.Position;
-                else
-                    return Convert.ToSingle(objTypeRotator.InvokeMember("Position",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objRotatorLateBound, new object[] { }));
-            }
+            get { return (float)memberFactory.CallMember(1, "Position", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -185,24 +119,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Reverse
         {
-            get
-            {
-                if (IRotator != null)
-                    return IRotator.Reverse;
-                else
-                    return Convert.ToBoolean(objTypeRotator.InvokeMember("Reverse",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objRotatorLateBound, new object[] { }));
-            }
-            set
-            {
-                if (IRotator != null)
-                    IRotator.Connected = value;
-                else
-                    objTypeRotator.InvokeMember("Reverse",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objRotatorLateBound, new object[] { value });
-            }
+            get { return (bool)memberFactory.CallMember(1, "Reverse", new Type[] { }, new object[] { }); }
+            set { memberFactory.CallMember(2, "Reverse", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -210,12 +128,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void SetupDialog()
         {
-            if (IRotator != null)
-                IRotator.SetupDialog();
-            else
-                objTypeRotator.InvokeMember("SetupDialog",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objRotatorLateBound, new object[] { });
+            memberFactory.CallMember(3, "SetupDialog", new Type[] { }, new object[] { });
         }
 
         /// <summary>
@@ -223,15 +136,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public float StepSize
         {
-            get
-            {
-                if (IRotator != null)
-                    return IRotator.StepSize;
-                else
-                    return Convert.ToSingle(objTypeRotator.InvokeMember("StepSize",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objRotatorLateBound, new object[] { }));
-            }
+            get { return (float)memberFactory.CallMember(1, "StepSize", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -239,15 +144,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public float TargetPosition
         {
-            get
-            {
-                if (IRotator != null)
-                    return IRotator.TargetPosition;
-                else
-                    return Convert.ToSingle(objTypeRotator.InvokeMember("TargetPosition",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objRotatorLateBound, new object[] { }));
-            }
+            get { return (float)memberFactory.CallMember(1, "TargetPosition", new Type[] { }, new object[] { }); }
         }
 
         #endregion
@@ -261,12 +158,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void Dispose()
         {
-			if (this.objRotatorLateBound != null)
-			{
-				try { Marshal.ReleaseComObject(objRotatorLateBound); }
-				catch (Exception) { }
-				objRotatorLateBound = null;
-			}
+			 memberFactory.Dispose();
 		}
 
         #endregion

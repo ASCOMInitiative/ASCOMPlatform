@@ -1,9 +1,10 @@
-//
+//-----------------------------------------------------------------------
+// <summary>Defines the FilterWheel class.</summary>
+//-----------------------------------------------------------------------
 // 10-Jul-08	rbd		1.0.5 - Release COM on Dispose().
-//
+// 29-May-10  	rem     6.0.0 - Added memberFactory.
+
 using System;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using ASCOM.Interface;
 using ASCOM.Utilities;
 
@@ -15,9 +16,9 @@ namespace ASCOM.DriverAccess
     /// </summary>
     public class FilterWheel : ASCOM.Interface.IFilterWheel, IDisposable
     {
-        object objFilterWheelLateBound;
-		ASCOM.Interface.IFilterWheel IFilterWheel;
-		Type objTypeFilterWheel;
+        #region FilterWheel constructors
+
+        private MemberFactory memberFactory;
 
         /// <summary>
         /// Creates a FilterWheel object with the given Prog ID
@@ -25,22 +26,7 @@ namespace ASCOM.DriverAccess
         /// <param name="filterWheelID"></param>
         public FilterWheel(string filterWheelID)
 		{
-			// Get Type Information 
-            objTypeFilterWheel = Type.GetTypeFromProgID(filterWheelID);
-
-            // Create an instance of the FilterWheel object
-            objFilterWheelLateBound = Activator.CreateInstance(objTypeFilterWheel);
-
-            // Try to see if this driver has an ASCOM.FilterWheel interface
-			try
-			{
-                IFilterWheel = (ASCOM.Interface.IFilterWheel)objFilterWheelLateBound;
-			}
-			catch (Exception)
-			{
-                IFilterWheel = null;
-			}
-
+            memberFactory = new MemberFactory(filterWheelID);
 		}
 
         /// <summary>
@@ -61,6 +47,9 @@ namespace ASCOM.DriverAccess
                 return "";
             }
 		}
+
+        #endregion
+
         #region IFilterWheel Members
 
         /// <summary>
@@ -70,24 +59,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Connected
         {
-            get
-            {
-                if (IFilterWheel != null)
-                    return IFilterWheel.Connected;
-                else
-                    return Convert.ToBoolean(objTypeFilterWheel.InvokeMember("Connected",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objFilterWheelLateBound, new object[] { }));
-            }
-            set
-            {
-                if (IFilterWheel != null)
-                    IFilterWheel.Connected = value;
-                else
-                    objTypeFilterWheel.InvokeMember("Connected",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objFilterWheelLateBound, new object[] { value });
-            }
+            get { return (bool)memberFactory.CallMember(1, "Connected", new Type[] { }, new object[] { }); }
+            set { memberFactory.CallMember(2, "Connected", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -100,17 +73,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public int[] FocusOffsets
         {
-            get
-            {
-                if (IFilterWheel != null)
-                    return IFilterWheel.FocusOffsets;
-                else
-                {
-                    return (int[])objTypeFilterWheel.InvokeMember("FocusOffsets",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objFilterWheelLateBound, new object[] { });
-                }
-            }
+            get { return (int[])memberFactory.CallMember(1, "FocusOffsets", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -122,17 +85,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string[] Names
         {
-            get
-            {
-                if (IFilterWheel != null)
-                    return IFilterWheel.Names;
-                else
-                {
-                    return (string[])objTypeFilterWheel.InvokeMember("Names",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objFilterWheelLateBound, new object[] { });
-                }
-            }
+            get { return (string[])memberFactory.CallMember(1, "Names", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -149,24 +102,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public short Position
         {
-            get
-            {
-                if (IFilterWheel != null)
-                    return IFilterWheel.Position;
-                else
-                    return Convert.ToInt16(objTypeFilterWheel.InvokeMember("Position",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objFilterWheelLateBound, new object[] { }));
-            }
-            set
-            {
-                if (IFilterWheel != null)
-                    IFilterWheel.Position = value;
-                else
-                    objTypeFilterWheel.InvokeMember("Position",
-                        BindingFlags.Default | BindingFlags.SetProperty,
-                        null, objFilterWheelLateBound, new object[] { value });
-            }
+            get { return Convert.ToInt16(memberFactory.CallMember(1, "Position", new Type[] { }, new object[] { })); }
+            set { memberFactory.CallMember(2, "Position", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -176,12 +113,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw an exception if Setup dialog is unavailable.</exception>
         public void SetupDialog()
         {
-            if (IFilterWheel != null)
-                IFilterWheel.SetupDialog();
-            else
-                objTypeFilterWheel.InvokeMember("SetupDialog",
-                    BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, objFilterWheelLateBound, new object[] { });
+            memberFactory.CallMember(3, "SetupDialog", new Type[] { }, new object[] { });
         }
 
         #endregion
@@ -195,12 +127,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void Dispose()
         {
-			if (this.objFilterWheelLateBound != null)
-			{
-				try { Marshal.ReleaseComObject(objFilterWheelLateBound); }
-				catch (Exception) { }
-				objFilterWheelLateBound = null;
-			}
+            memberFactory.Dispose();
 		}
 
         #endregion

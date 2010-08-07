@@ -1,9 +1,13 @@
+//-----------------------------------------------------------------------
+// <summary>Defines the Switch class.</summary>
+//-----------------------------------------------------------------------
+// 10-Jul-08	rbd		1.0.5 - Release COM on Dispose().
+// 29-May-10  	rem     6.0.0 - Added memberFactory.
+
 using System;
-using System.Collections;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using ASCOM.Interface;
 using ASCOM.Utilities;
+using System.Collections;
 
 namespace ASCOM.DriverAccess
 {
@@ -14,10 +18,11 @@ namespace ASCOM.DriverAccess
 	///   Provides universal access to Switch drivers
 	/// </summary>
 	public class Switch //: ISwitch, IDisposable
-	{
-		private readonly ISwitch ISwitch;
-		private readonly Type objTypeSwitch;
-		private object objSwitchLateBound;
+    {
+
+        #region Switch constructors
+
+        private MemberFactory memberFactory;
 
 		/// <summary>
 		///   Creates a Switch object with the given Prog ID
@@ -25,44 +30,21 @@ namespace ASCOM.DriverAccess
 		/// <param name = "switchID"></param>
 		public Switch(string switchID)
 		{
-			// Get Type Information 
-			objTypeSwitch = Type.GetTypeFromProgID(switchID);
-
-			// Create an instance of the Switch object
-			objSwitchLateBound = Activator.CreateInstance(objTypeSwitch);
-
-			// Try to see if this driver has an ASCOM.Switch interface
-			try
-			{
-				ISwitch = (ISwitch) objSwitchLateBound;
-			}
-			catch (Exception)
-			{
-				ISwitch = null;
-			}
+            memberFactory = new MemberFactory(switchID);
 		}
 
+        #endregion
 
-		#region IDisposable Members
+        #region IDisposable Members
 
-		/// <summary>
+        /// <summary>
 		///   Dispose the late-bound interface, if needed. Will release it via COM
 		///   if it is a COM object, else if native .NET will just dereference it
 		///   for GC.
 		/// </summary>
 		public void Dispose()
 		{
-			if (objSwitchLateBound != null)
-			{
-				try
-				{
-					Marshal.ReleaseComObject(objSwitchLateBound);
-				}
-				catch (Exception)
-				{
-				}
-				objSwitchLateBound = null;
-			}
+            memberFactory.Dispose();
 		}
 
 		#endregion
@@ -74,17 +56,7 @@ namespace ASCOM.DriverAccess
 		/// </summary>
 		public ArrayList SwitchCollection
 		{
-			get
-			{
-                if (ISwitch != null)
-                    return null; //ISwitch.SwitchCollection;
-                else
-                {
-                    return (ArrayList)(objTypeSwitch.InvokeMember("SwitchCollection",
-                                                                   BindingFlags.Default | BindingFlags.GetProperty,
-                                                                   null, objSwitchLateBound, new object[] { }));
-                }
-			}
+            get { return (ArrayList)memberFactory.CallMember(1, "SwitchCollection", new Type[] { }, new object[] { }); }
 		}
 
 
@@ -95,24 +67,8 @@ namespace ASCOM.DriverAccess
 		/// </summary>
 		public bool Connected
 		{
-			get
-			{
-				if (ISwitch != null)
-					return ISwitch.Connected;
-				else
-					return Convert.ToBoolean(objTypeSwitch.InvokeMember("Connected",
-					                                                    BindingFlags.Default | BindingFlags.GetProperty,
-					                                                    null, objSwitchLateBound, new object[] {}));
-			}
-			set
-			{
-				if (ISwitch != null)
-					ISwitch.Connected = value;
-				else
-					objTypeSwitch.InvokeMember("Connected",
-					                           BindingFlags.Default | BindingFlags.SetProperty,
-					                           null, objSwitchLateBound, new object[] {value});
-			}
+            get { return (bool)memberFactory.CallMember(1, "Connected", new Type[] { }, new object[] { }); }
+            set { memberFactory.CallMember(2, "Connected", new Type[] { }, new object[] { value }); }
 		}
 
 		/// <summary>
@@ -120,15 +76,7 @@ namespace ASCOM.DriverAccess
 		/// </summary>
 		public string Description
 		{
-			get
-			{
-				if (ISwitch != null)
-					return ISwitch.Description;
-				else
-					return Convert.ToString(objTypeSwitch.InvokeMember("Description",
-					                                                   BindingFlags.Default | BindingFlags.GetProperty,
-					                                                   null, objSwitchLateBound, new object[] {}));
-			}
+            get { return (string)memberFactory.CallMember(1, "Description", new Type[] { typeof(string) }, new object[] { }); }
 		}
 
 		/// <summary>
@@ -136,15 +84,7 @@ namespace ASCOM.DriverAccess
 		/// </summary>
 		public string DriverInfo
 		{
-			get
-			{
-				if (ISwitch != null)
-					return ISwitch.DriverInfo;
-				else
-					return Convert.ToString(objTypeSwitch.InvokeMember("DriverInfo",
-					                                                   BindingFlags.Default | BindingFlags.GetProperty,
-					                                                   null, objSwitchLateBound, new object[] {}));
-			}
+            get { return (string)memberFactory.CallMember(1, "DriverInfo", new Type[] { typeof(string) }, new object[] { }); }
 		}
 
 		/// <summary>
@@ -152,15 +92,7 @@ namespace ASCOM.DriverAccess
 		/// </summary>
 		public string DriverVersion
 		{
-			get
-			{
-				if (ISwitch != null)
-					return ISwitch.DriverVersion;
-				else
-					return Convert.ToString(objTypeSwitch.InvokeMember("DriverVersion",
-					                                                   BindingFlags.Default | BindingFlags.GetProperty,
-					                                                   null, objSwitchLateBound, new object[] {}));
-			}
+            get { return (string)memberFactory.CallMember(1, "DriverVersion", new Type[] { typeof(string) }, new object[] { }); }
 		}
 
 		/// <summary>
@@ -168,15 +100,7 @@ namespace ASCOM.DriverAccess
 		/// </summary>
 		public short InterfaceVersion
 		{
-			get
-			{
-				if (ISwitch != null)
-					return ISwitch.InterfaceVersion;
-				else
-					return Convert.ToInt16(objTypeSwitch.InvokeMember("InterfaceVersion",
-					                                                  BindingFlags.Default | BindingFlags.GetProperty,
-					                                                  null, objSwitchLateBound, new object[] {}));
-			}
+            get { return Convert.ToInt16(memberFactory.CallMember(1, "InterfaceVersion", new Type[] { }, new object[] { })); }
 		}
 
 		/// <summary>
@@ -184,15 +108,7 @@ namespace ASCOM.DriverAccess
 		/// </summary>
 		public string Name
 		{
-			get
-			{
-				if (ISwitch != null)
-					return ISwitch.Name;
-				else
-					return Convert.ToString(objTypeSwitch.InvokeMember("Name",
-					                                                   BindingFlags.Default | BindingFlags.GetProperty,
-					                                                   null, objSwitchLateBound, new object[] {}));
-			}
+            get { return (string)memberFactory.CallMember(1, "Name", new Type[] { typeof(string) }, new object[] { }); }
 		}
 
 		///<summary>
@@ -202,15 +118,8 @@ namespace ASCOM.DriverAccess
 		///<exception cref = " System.Exception">Must throw an exception if Setup dialog is unavailable.</exception>
 		public void SetupDialog()
 		{
-			if (ISwitch != null)
-				ISwitch.SetupDialog();
-			else
-				objTypeSwitch.InvokeMember("SetupDialog",
-				                           BindingFlags.Default | BindingFlags.InvokeMethod,
-				                           null, objSwitchLateBound, new object[] {});
+            memberFactory.CallMember(3, "SetupDialog", new Type[] { }, new object[] { });
 		}
-
-		#endregion
 
 		/// <summary>
 		///   Brings up the ASCOM Chooser Dialog to choose a Switch
@@ -223,6 +132,8 @@ namespace ASCOM.DriverAccess
 			oChooser.DeviceType = "Switch"; // Requires Helper 5.0.3 (May '07)
 			return oChooser.Choose(switchID);
 		}
+
+        #endregion
 
 	}
 
