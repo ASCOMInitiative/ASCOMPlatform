@@ -63,7 +63,7 @@
   <ItemGroup>
     <Reference Include="CSharpFITS_v1.1, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\FITS\CSharpFITS_v1.1_dll\CSharpFITS_v1.1_dll\CSharpFITS_v1.1.dll</HintPath>
+      <HintPath>.\CSharpFITS_v1.1.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
