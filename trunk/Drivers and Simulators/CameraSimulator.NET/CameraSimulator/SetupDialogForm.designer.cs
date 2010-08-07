@@ -83,6 +83,7 @@ namespace ASCOM.Simulator
             this.checkBoxApplyNoise = new System.Windows.Forms.CheckBox();
             this.cameraBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.checkBoxInterfaceVersion = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.groupBoxCCD.SuspendLayout();
             this.groupBoxGainSettings.SuspendLayout();
@@ -136,8 +137,8 @@ namespace ASCOM.Simulator
             this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.picASCOM.TabIndex = 3;
             this.picASCOM.TabStop = false;
-            this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
             this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
+            this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
             // 
             // groupBoxCCD
             // 
@@ -616,11 +617,23 @@ namespace ASCOM.Simulator
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*";
             // 
+            // checkBoxInterfaceVersion
+            // 
+            this.checkBoxInterfaceVersion.AutoSize = true;
+            this.checkBoxInterfaceVersion.Location = new System.Drawing.Point(331, 170);
+            this.checkBoxInterfaceVersion.Name = "checkBoxInterfaceVersion";
+            this.checkBoxInterfaceVersion.Size = new System.Drawing.Size(115, 17);
+            this.checkBoxInterfaceVersion.TabIndex = 10;
+            this.checkBoxInterfaceVersion.Text = "Interface Version 2";
+            this.checkBoxInterfaceVersion.UseVisualStyleBackColor = true;
+            this.checkBoxInterfaceVersion.CheckedChanged += new System.EventHandler(this.checkBoxInterfaceVersion_CheckedChanged);
+            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(462, 353);
+            this.Controls.Add(this.checkBoxInterfaceVersion);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBoxExposure);
@@ -713,5 +726,6 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.RadioButton radioButtonNoGain;
         private System.Windows.Forms.Button buttonSetImageFile;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.CheckBox checkBoxInterfaceVersion;
 	}
 }

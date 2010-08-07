@@ -56,6 +56,7 @@ namespace ASCOM.Simulator
 
         internal void InitProperties(Camera camera)
         {
+            this.checkBoxInterfaceVersion.Checked = (camera.interfaceVersion == 2);
             this.textBoxPixelSizeX.Text = camera.pixelSizeX.ToString(STR_N2);
             this.textBoxPixelSizeY.Text = camera.pixelSizeY.ToString(STR_N2);
             //this.textBoxFullWellCapacity.Text = camera.fullWellCapacity.ToString();
@@ -149,6 +150,7 @@ namespace ASCOM.Simulator
                 camera.gainMin = Convert.ToInt16(textBoxGainMin.Text, CultureInfo.InvariantCulture);
                 camera.gainMax = Convert.ToInt16(textBoxGainMax.Text, CultureInfo.InvariantCulture);
             }
+            camera.interfaceVersion = (short)(checkBoxInterfaceVersion.Checked ? 2 : 1);
         }
 
         private void buttonSetImageFile_Click(object sender, EventArgs e)
@@ -156,6 +158,22 @@ namespace ASCOM.Simulator
             openFileDialog1.FileName = camera.imagePath;
             openFileDialog1.ShowDialog();
             camera.imagePath = openFileDialog1.FileName;
+        }
+
+        private void checkBoxInterfaceVersion_CheckedChanged(object sender, EventArgs e)
+        {
+            // enable the V2 properties if checked
+            this.textBoxBayerOffsetX.Enabled = checkBoxInterfaceVersion.Checked;
+            this.textBoxBayerOffsetY.Enabled = checkBoxInterfaceVersion.Checked;
+            this.textBoxGainMax.Enabled = checkBoxInterfaceVersion.Checked;
+            this.textBoxGainMin.Enabled = checkBoxInterfaceVersion.Checked;
+            this.textBoxMaxExposure.Enabled = checkBoxInterfaceVersion.Checked;
+            this.textBoxMinExposure.Enabled = checkBoxInterfaceVersion.Checked;
+            this.textBoxSensorName.Enabled = checkBoxInterfaceVersion.Checked;
+            this.comboBoxSensorType.Enabled = checkBoxInterfaceVersion.Checked;
+            this.radioButtonNoGain.Enabled = checkBoxInterfaceVersion.Checked;
+            this.radioButtonUseGains.Enabled = checkBoxInterfaceVersion.Checked;
+            this.radioButtonUseMinAndMax.Enabled = checkBoxInterfaceVersion.Checked;
         }
 	}
 }

@@ -26,7 +26,6 @@ using System.Runtime.InteropServices;
 
 using ASCOM;
 using ASCOM.Interface;
-using Helper = ASCOM.Utilities;
 using ASCOM.Utilities;
 using System.Globalization;
 using System.Drawing;
@@ -44,6 +43,7 @@ namespace ASCOM.Simulator
 	public class Camera : ICamera
     {
         #region profile string constants
+        private const string STR_InterfaceVersion = "InterfaceVersion";
         private const string STR_PixelSizeX = "PixelSizeX";
         private const string STR_PixelSizeY = "PixelSizeY";
         private const string STR_FullWellCapacity = "FullWellCapacity";
@@ -73,6 +73,9 @@ namespace ASCOM.Simulator
         #endregion
 
         #region internal properties
+
+        //Interface version
+        internal short interfaceVersion;
 
         //Pixel
         internal double pixelSizeX;
@@ -145,7 +148,7 @@ namespace ASCOM.Simulator
         /// SensorType returns a value indicating whether the sensor is monochrome,
         /// or what Bayer matrix it encodes.  The following values are defined:
         /// </summary>
-        public enum SensorTypes
+        internal enum SensorTypes
         {
             /// <summary>
             /// Camera produces monochrome array with no Bayer encoding
@@ -183,7 +186,6 @@ namespace ASCOM.Simulator
         private Timer exposureTimer;
         private Timer coolerTimer;
 
-
         #endregion
 
 		#region Camera Constructor
@@ -211,7 +213,7 @@ namespace ASCOM.Simulator
 		//
 		private static void RegUnregASCOM(bool bRegister)
 		{
-			Helper.Profile P = new Helper.Profile();
+			Profile P = new Profile();
 			P.DeviceType = "Camera";					//  Requires Helper 5.0.3 or later
 			if (bRegister)
 				P.Register(s_csDriverID, s_csDriverDescription);
@@ -605,7 +607,10 @@ namespace ASCOM.Simulator
             {
                 if (!this.connected)
                     throw new NotConnectedException("Can't read Description when not connected");
-                return string.Format("Simulated {0} camera {1}", this.sensorType, this.SensorName);
+                if (this.interfaceVersion == 1)
+                    return "Simulated V1 Camera";
+                else
+                    return string.Format("Simulated {0} camera {1}", this.sensorType, this.SensorName);
             }
 		}
 
@@ -1189,6 +1194,8 @@ namespace ASCOM.Simulator
         {
             get
             {
+                if (interfaceVersion == 1)
+                    throw new System.NotImplementedException();
                 if (!this.connected)
                     throw new NotConnectedException("Can't read BayerOffsetX when not connected");
                 return this.bayerOffsetX;
@@ -1206,6 +1213,8 @@ namespace ASCOM.Simulator
         {
             get
             {
+                if (interfaceVersion == 1)
+                    throw new System.NotImplementedException();
                 if (!this.connected)
                     throw new NotConnectedException("Can't read BayerOffsetY when not connected");
                 return this.bayerOffsetY;
@@ -1222,6 +1231,8 @@ namespace ASCOM.Simulator
         {
             get
             {
+                if (interfaceVersion == 1)
+                    throw new System.NotImplementedException();
                 if (!this.connected)
                     throw new NotConnectedException("Can't read CanFastReadout when not connected");
                 return this.CanFastReadout;
@@ -1240,8 +1251,26 @@ namespace ASCOM.Simulator
         {
             get
             {
+                if (interfaceVersion == 1)
+                    throw new System.NotImplementedException();
                 String strVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 return (s_csDriverDescription + " - Version " + strVersion);
+            }
+        }
+
+        /// <summary>
+        /// A string containing only the major and minor version of the driver. This must be in the form "n.n".
+        /// Not to be confused with the InterfaceVersion property, which is the version of this specification
+        /// supported by the driver (currently 2). 
+        /// </summary>
+        public string DriverVersion
+        {
+            get
+            {
+                if (interfaceVersion == 1)
+                    throw new System.NotImplementedException();
+                Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                return String.Format("{0}.{1}", version.Major, version.Minor);
             }
         }
 
@@ -1253,6 +1282,8 @@ namespace ASCOM.Simulator
         {
             get
             {
+                if (interfaceVersion == 1)
+                    throw new System.NotImplementedException();
                 if (!this.connected)
                     throw new NotConnectedException("Can't read ExposureMax when not connected");
                 return this.exposureMax;
@@ -1267,6 +1298,8 @@ namespace ASCOM.Simulator
         {
             get
             {
+                if (interfaceVersion == 1)
+                    throw new System.NotImplementedException();
                 if (!this.connected)
                     throw new NotConnectedException("Can't read ExposureMin when not connected");
                 return this.exposureMin;
@@ -1281,6 +1314,8 @@ namespace ASCOM.Simulator
         {
             get
             {
+                if (interfaceVersion == 1)
+                    throw new System.NotImplementedException();
                 if (!this.connected)
                     throw new NotConnectedException("Can't read ExposureResolution when not connected");
                 return this.exposureResolution;
@@ -1296,6 +1331,8 @@ namespace ASCOM.Simulator
         {
             get
             {
+                if (interfaceVersion == 1)
+                    throw new System.NotImplementedException();
                 if (!this.connected)
                     throw new NotConnectedException("Can't read FastReadout when not connected");
                 if (!this.canFastReadout)
@@ -1304,6 +1341,8 @@ namespace ASCOM.Simulator
             }
             set
             {
+                if (interfaceVersion == 1)
+                    throw new System.NotImplementedException();
                 if (!this.connected)
                     throw new NotConnectedException("Can't set FastReadout when not connected");
                 if (!this.canFastReadout)
@@ -1321,6 +1360,8 @@ namespace ASCOM.Simulator
         {
             get
             {
+                if (interfaceVersion == 1)
+                    throw new System.NotImplementedException();
                 if (!this.connected)
                     throw new NotConnectedException("Can't get Gain when not connected");
                 if (this.gainMax <= this.gainMin)
@@ -1329,6 +1370,8 @@ namespace ASCOM.Simulator
             }
             set
             {
+                if (interfaceVersion == 1)
+                    throw new System.NotImplementedException();
                 if (!this.connected)
                     throw new NotConnectedException("Can't set Gain when not connected");
                 if (this.gainMax <= this.gainMin)
@@ -1348,6 +1391,8 @@ namespace ASCOM.Simulator
         {
             get
             {
+                if (interfaceVersion == 1)
+                    throw new System.NotImplementedException();
                 if (!this.connected)
                     throw new NotConnectedException("Can't get GainMax when not connected");
                 if (this.gainMax <= this.gainMin)
@@ -1367,6 +1412,8 @@ namespace ASCOM.Simulator
         {
             get
             {
+                if (interfaceVersion == 1)
+                    throw new System.NotImplementedException();
                 if (!this.connected)
                     throw new NotConnectedException("Can't get GainMin when not connected");
                 if (this.gainMax <= this.gainMin)
@@ -1386,6 +1433,8 @@ namespace ASCOM.Simulator
         {
             get
             {
+                if (interfaceVersion == 1)
+                    throw new System.NotImplementedException();
                 if (!this.connected)
                     throw new NotConnectedException("Can't get Gains when not connected");
                 if (this.Gains == null || this.gains.Length == 0)
@@ -1398,11 +1447,10 @@ namespace ASCOM.Simulator
         /// Reports the version of this interface. Will return 2 for this version.
         /// </summary>
         /// <value>The interface version.</value>
-        public int InterfaceVersion
+        public short InterfaceVersion
         {
-            get { return 2; }
+            get { return this.interfaceVersion; }
         }
-        //public const int InterfaceVersion = 2;
 
         /// <summary>
         /// The short name of the camera, for display purposes.
@@ -1412,6 +1460,8 @@ namespace ASCOM.Simulator
         {
             get
             {
+                if (interfaceVersion == 1)
+                    throw new System.NotImplementedException();
                 if (!this.connected)
                     throw new NotConnectedException("Can't get camera Name when not connected");
                 return "Sim " + this.SensorName;
@@ -1427,6 +1477,8 @@ namespace ASCOM.Simulator
         {
             get
             {
+                if (interfaceVersion == 1)
+                    throw new System.NotImplementedException();
                 if (!this.connected)
                     throw new NotConnectedException("Can't get PercentCompleted when not connected");
                 switch (this.cameraState)
@@ -1452,6 +1504,8 @@ namespace ASCOM.Simulator
         {
             get
             {
+                if (interfaceVersion == 1)
+                    throw new System.NotImplementedException();
                 if (!this.connected)
                     throw new NotConnectedException("Can't get ReadoutMode when not connected");
                 if (this.readoutModes == null || this.readoutModes.Length < 1)
@@ -1460,6 +1514,8 @@ namespace ASCOM.Simulator
             }
             set
             {
+                if (interfaceVersion == 1)
+                    throw new System.NotImplementedException();
                 if (!this.connected)
                     throw new NotConnectedException("Can't set ReadoutMode when not connected");
                 if (this.readoutModes == null || this.readoutModes.Length < 1)
@@ -1480,6 +1536,8 @@ namespace ASCOM.Simulator
         {
             get
             {
+                if (interfaceVersion == 1)
+                    throw new System.NotImplementedException();
                 if (!this.connected)
                     throw new NotConnectedException("Can't get ReadoutModes when not connected");
                 if (this.readoutModes == null || this.readoutModes.Length < 1)
@@ -1498,6 +1556,8 @@ namespace ASCOM.Simulator
         {
             get
             {
+                if (interfaceVersion == 1)
+                    throw new System.NotImplementedException();
                 if (!this.connected)
                     throw new NotConnectedException("Can't get SensorName when not connected");
                 return this.sensorName;
@@ -1513,6 +1573,8 @@ namespace ASCOM.Simulator
         {
             get
             {
+                if (interfaceVersion == 1)
+                    throw new System.NotImplementedException();
                 if (!this.connected)
                     throw new NotConnectedException("Can't get SensorType when not connected");
                 return this.sensorType;
@@ -1528,6 +1590,7 @@ namespace ASCOM.Simulator
             Profile profile = new Profile(true);
             profile.DeviceType = "Camera";
             // read properties from profile
+            this.interfaceVersion = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_InterfaceVersion, string.Empty, "2"));
             this.pixelSizeX = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_PixelSizeX, string.Empty, "5.6"), CultureInfo.InvariantCulture);
             this.pixelSizeY = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_PixelSizeY, string.Empty, "5.6"), CultureInfo.InvariantCulture);
             this.fullWellCapacity = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_FullWellCapacity, string.Empty, "30000"), CultureInfo.InvariantCulture);
@@ -1555,7 +1618,7 @@ namespace ASCOM.Simulator
             this.exposureMax = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_MaxExposure, string.Empty, "3600"), CultureInfo.InvariantCulture);
             this.exposureMin = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_MinExposure, string.Empty, "0.001"), CultureInfo.InvariantCulture);
             this.exposureResolution = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_ExposureResolution, string.Empty, "0.001"), CultureInfo.InvariantCulture);
-            this.imagePath = profile.GetValue(s_csDriverID, STR_ImagePath, string.Empty, @"C:\ASCOM Projects\trunk\Drivers and Simulators\CameraSimulator.NET\m42-eos400-ns11.jpg");
+            this.imagePath = profile.GetValue(s_csDriverID, STR_ImagePath, string.Empty, @"D:\ASCOM Projects\trunk\ASCOM\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\m42-800x600.jpg");
             this.applyNoise = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_ApplyNoise, string.Empty, "false"), CultureInfo.InvariantCulture);
 
             // default to min = max && gains = null - no gain control
@@ -1577,6 +1640,7 @@ namespace ASCOM.Simulator
             Profile profile = new Profile();
             profile.DeviceType = "Camera";
 
+            profile.WriteValue(s_csDriverID, STR_InterfaceVersion, this.interfaceVersion.ToString(CultureInfo.InvariantCulture));
             profile.WriteValue(s_csDriverID, STR_PixelSizeX, this.pixelSizeX.ToString(CultureInfo.InvariantCulture));
             profile.WriteValue(s_csDriverID, STR_PixelSizeY, this.pixelSizeY.ToString(CultureInfo.InvariantCulture));
             profile.WriteValue(s_csDriverID, STR_FullWellCapacity, this.fullWellCapacity.ToString(CultureInfo.InvariantCulture));
@@ -1885,5 +1949,6 @@ namespace ASCOM.Simulator
             imageData[x, y, 2] = (bmp.GetPixel(x, y).B);
         }
         #endregion
+
     }
 }
