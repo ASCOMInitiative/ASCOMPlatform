@@ -148,7 +148,7 @@ namespace ASCOM.DriverAccess
             object obj;
             AxisRates ReturnValue = new AxisRates();
 
-            if (!memberFactory.IsCOMObject)
+            if (!memberFactory.IsComObject)
             {
                 obj = memberFactory.CallMember(3, "AxisRates", new Type[] { typeof(TelescopeAxes) }, new object[] { Axis });//ITelescope.AxisRates(Axis);
 
