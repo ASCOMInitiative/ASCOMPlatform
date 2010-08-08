@@ -19,12 +19,8 @@ namespace ASCOM.DriverAccess
     {
         #region MemberFactory
 
-        private readonly TraceLogger _tl;
-        private readonly bool _isComObject;
-        private readonly List<Type> _objInterfaceList;
-        private readonly Type _objType;
-        private readonly String _strProgId;
-        private object _objLateBound;
+        private TraceLogger _tl;
+        private String _strProgId;
 
 
         /// <summary>
@@ -35,13 +31,13 @@ namespace ASCOM.DriverAccess
         internal MemberFactory(string progId)
         {
             _strProgId = progId;
-            _objInterfaceList = new List<Type>();
+            GetInterfaces = new List<Type>();
 
             // Get Type Information 
-            _objType = Type.GetTypeFromProgID(progId);
+            GetObjType = Type.GetTypeFromProgID(progId);
 
             //check to see if it found the type information
-            if (_objType == null)
+            if (GetObjType == null)
             {
                 //no type information found throw error
                 throw new Exception("Check Driver: cannot create object type of progID: " + _strProgId);
@@ -50,21 +46,21 @@ namespace ASCOM.DriverAccess
             _tl.Enabled = true;
 
             //setup the property
-            _isComObject = _objType.IsCOMObject;
+            IsComObject = GetObjType.IsCOMObject;
 
             // Create an instance of the object
-            _objLateBound = Activator.CreateInstance(_objType);
+            GetLateBoundObject = Activator.CreateInstance(GetObjType);
 
             // Get list of interfaces
-            Type[] objInterfaces = _objType.GetInterfaces();
+            Type[] objInterfaces = GetObjType.GetInterfaces();
 
             foreach (Type objInterface in objInterfaces)
             {
-                _objInterfaceList.Add(objInterface);
+                GetInterfaces.Add(objInterface);
                 _tl.LogMessage("Interface", objInterface.AssemblyQualifiedName);
             }
 
-            MemberInfo[] members = _objType.GetMembers();
+            MemberInfo[] members = GetObjType.GetMembers();
             foreach (MemberInfo mi in members)
             {
                 _tl.LogMessage("Member", Enum.GetName(typeof (MemberTypes), mi.MemberType) + " " + mi.Name);
@@ -80,7 +76,7 @@ namespace ASCOM.DriverAccess
             }
 
             //no instance found throw error
-            if (_objLateBound == null)
+            if (GetLateBoundObject == null)
             {
                 throw new Exception("Check Driver: cannot create driver isntance of progID: " + _strProgId);
             }
@@ -90,34 +86,25 @@ namespace ASCOM.DriverAccess
         /// Returns the instance of the driver
         /// </summary> 
         /// <returns>object</returns>
-        internal object GetLateBoundObject
-        {
-            get { return _objLateBound; }
-        }
+        internal object GetLateBoundObject { get; private set; }
 
         /// <summary>
         /// Returns true is the driver is COM based
         /// </summary> 
         /// <returns>object</returns>
-        internal bool IsComObject
-        {
-            get { return _isComObject; }
-        }
+        internal bool IsComObject { get; private set; }
 
         /// <summary>
         /// Returns the driver type
         /// </summary> 
         /// <returns>type</returns>
-        internal Type GetObjType
-        {
-            get { return _objType; }
-        }
+        internal Type GetObjType { get; private set; }
 
-        internal List<Type> GetInterfaces
-        {
-            get { return _objInterfaceList; }
-        }
-
+        /// <summary>
+        /// Returns a list of supported interfaces
+        /// </summary> 
+        /// <returns>type</returns>
+        internal List<Type> GetInterfaces { get; private set; }
 
         /// <summary>
         /// Dispose the late-bound interface, if needed. Will release it via COM
@@ -127,16 +114,16 @@ namespace ASCOM.DriverAccess
         /// <returns>nothing</returns>
         public void Dispose()
         {
-            if (_objLateBound != null)
+            if (GetLateBoundObject != null)
             {
                 try
                 {
-                    Marshal.ReleaseComObject(_objLateBound);
+                    Marshal.ReleaseComObject(GetLateBoundObject);
                 }
                 catch
                 {
                 }
-                _objLateBound = null;
+                GetLateBoundObject = null;
             }
         }
 
@@ -159,14 +146,14 @@ namespace ASCOM.DriverAccess
                 case 1:
                     _tl.LogMessage("PropertyGet", memberName);
 
-                    PropertyInfo propertyGetInfo = _objType.GetProperty(memberName);
+                    PropertyInfo propertyGetInfo = GetObjType.GetProperty(memberName);
                     if (propertyGetInfo != null)
                     {
                         _tl.LogMessage("PropertyGet", "propertyGetInfo is not null");
                         try
                         {
                             //run the .net object
-                            return propertyGetInfo.GetValue(_objLateBound, null);
+                            return propertyGetInfo.GetValue(GetLateBoundObject, null);
                         }
                         catch (TargetInvocationException e)
                         {
@@ -194,7 +181,7 @@ namespace ASCOM.DriverAccess
                     }
                     _tl.LogMessage("PropertyGet", "propertyGetInfo is null");
                     //check the type to see if it's a COM object
-                    if (_isComObject)
+                    if (IsComObject)
                     {
                         _tl.LogMessage("PropertyGet", "propertyGetInfo is COM Object");
 
@@ -202,8 +189,8 @@ namespace ASCOM.DriverAccess
                         {
                             //run the COM object property
                             return
-                                (_objType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.GetProperty,
-                                                       null, _objLateBound, new object[] {}));
+                                (GetObjType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.GetProperty,
+                                                       null, GetLateBoundObject, new object[] {}));
                         }
                         catch (COMException e)
                         {
@@ -224,13 +211,13 @@ namespace ASCOM.DriverAccess
                     throw new PropertyNotImplementedException(_strProgId + " " + memberName, false);
                 case 2:
                     _tl.LogMessage("PropertySet", memberName);
-                    PropertyInfo propertySetInfo = _objType.GetProperty(memberName);
+                    PropertyInfo propertySetInfo = GetObjType.GetProperty(memberName);
                     if (propertySetInfo != null)
                     {
                         _tl.LogMessage("PropertySet", "propertyGetInfo is not null");
                         try
                         {
-                            propertySetInfo.SetValue(_objLateBound, parms[0], null);
+                            propertySetInfo.SetValue(GetLateBoundObject, parms[0], null);
                             return null;
                         }
                         catch (TargetInvocationException e)
@@ -259,14 +246,14 @@ namespace ASCOM.DriverAccess
                     }
                     _tl.LogMessage("PropertySet", "propertyGetInfo is null");
                     //check the type to see if it's a COM object
-                    if (_isComObject)
+                    if (IsComObject)
                     {
                         _tl.LogMessage("PropertySet", "propertyGetInfo is COM Object");
                         try
                         {
                             //run the COM object property
-                            _objType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.SetProperty, null,
-                                                  _objLateBound, parms);
+                            GetObjType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.SetProperty, null,
+                                                  GetLateBoundObject, parms);
                             return null;
                         }
                         catch (COMException e)
@@ -292,7 +279,7 @@ namespace ASCOM.DriverAccess
                     }
 
 
-                    MethodInfo methodInfo = _objType.GetMethod(memberName);
+                    MethodInfo methodInfo = GetObjType.GetMethod(memberName);
                     //, parameterTypes); //Peter: Had to take parameterTypes out to get CanMoveAxis to work with .NET drivers
                     if (methodInfo != null)
                     {
@@ -325,7 +312,7 @@ namespace ASCOM.DriverAccess
 
                         try
                         {
-                            object result = methodInfo.Invoke(_objLateBound, parms);
+                            object result = methodInfo.Invoke(GetLateBoundObject, parms);
                             _tl.LogMessage(memberName, "  Successfully called method");
                             return result;
                         }
@@ -348,14 +335,14 @@ namespace ASCOM.DriverAccess
                     }
                     _tl.LogMessage(memberName, "  Didn't Get MethodInfo");
                     //check the type to see if it's a COM object
-                    if (_isComObject)
+                    if (IsComObject)
                     {
                         _tl.LogMessage(memberName, "  It is a COM object");
                         try
                         {
                             //run the COM object method
-                            return _objType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.InvokeMethod,
-                                                         null, _objLateBound, parms);
+                            return GetObjType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.InvokeMethod,
+                                                         null, GetLateBoundObject, parms);
                         }
                         catch (COMException e)
                         {
