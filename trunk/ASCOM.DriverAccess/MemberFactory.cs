@@ -4,89 +4,86 @@
 // 29-May-10  	rem     6.0.0 - Added memberFactory.
 
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Globalization;
-using ASCOM;
 using ASCOM.Utilities;
-using System.Collections.Generic;
 
 namespace ASCOM.DriverAccess
 {
     /// <summary>
     /// A factory class to access any registered driver members
     /// </summary>
-    public class MemberFactory: IDisposable
+    public class MemberFactory : IDisposable
     {
         #region MemberFactory
 
-        private object objLateBound;
-        private Type objType;
-        private String strProgID;
-        private bool isCOMObject;
-        private TraceLogger TL ;
-        private List<Type> objInterfaceList;
+        private readonly TraceLogger _tl;
+        private readonly bool _isComObject;
+        private readonly List<Type> _objInterfaceList;
+        private readonly Type _objType;
+        private readonly String _strProgId;
+        private object _objLateBound;
 
 
         /// <summary>
         /// Constructor, creates an instance of the of the ASCOM driver
         /// 
         /// </summary> 
-        /// <param name="progID">The program ID of the driver</param>
-        internal MemberFactory(string progID)
+        /// <param name="progId">The program ID of the driver</param>
+        internal MemberFactory(string progId)
         {
-            strProgID = progID;
-            objInterfaceList=new List<Type>();
+            _strProgId = progId;
+            _objInterfaceList = new List<Type>();
 
             // Get Type Information 
-            objType = Type.GetTypeFromProgID(progID);
+            _objType = Type.GetTypeFromProgID(progId);
 
             //check to see if it found the type information
-            if (objType != null)
-            {
-                TL = new TraceLogger("","MemberFactory");
-                TL.Enabled=true;
-
-                //setup the property
-                isCOMObject = objType.IsCOMObject;
-
-                // Create an instance of the object
-                objLateBound = Activator.CreateInstance(objType);
-
-                // Get list of interfaces
-                Type[] objInterfaces = objType.GetInterfaces();
-
-                foreach (Type objInterface in objInterfaces)
-                {
-                        objInterfaceList.Add(objInterface);
-                        TL.LogMessage("Interface", objInterface.AssemblyQualifiedName.ToString());
-                }
-
-                MemberInfo[] Members = objType.GetMembers();
-                foreach (MemberInfo mi in Members)
-                {
-                    TL.LogMessage("Member", Enum.GetName(typeof(MemberTypes), mi.MemberType) + " " + mi.Name);
-                    if (mi.MemberType == MemberTypes.Method)
-                    {
-                        foreach (ParameterInfo pi in ((MethodInfo) mi).GetParameters())
-                        {
-                            TL.LogMessage("Parameter", "  " + pi.Name + " " + pi.ParameterType.Name + " " + pi.ParameterType.AssemblyQualifiedName );
-                        }
-                    }
-
-                }
-                
-                //no instance found throw error
-                if (objLateBound == null)
-                {
-                    throw new Exception("Check Driver: cannot create driver isntance of progID: " + strProgID);
-                }
-            }
-            else
+            if (_objType == null)
             {
                 //no type information found throw error
-                throw new Exception("Check Driver: cannot create object type of progID: " + strProgID);
-            } 
+                throw new Exception("Check Driver: cannot create object type of progID: " + _strProgId);
+            }
+            _tl = new TraceLogger("", "MemberFactory");
+            _tl.Enabled = true;
+
+            //setup the property
+            _isComObject = _objType.IsCOMObject;
+
+            // Create an instance of the object
+            _objLateBound = Activator.CreateInstance(_objType);
+
+            // Get list of interfaces
+            Type[] objInterfaces = _objType.GetInterfaces();
+
+            foreach (Type objInterface in objInterfaces)
+            {
+                _objInterfaceList.Add(objInterface);
+                _tl.LogMessage("Interface", objInterface.AssemblyQualifiedName);
+            }
+
+            MemberInfo[] members = _objType.GetMembers();
+            foreach (MemberInfo mi in members)
+            {
+                _tl.LogMessage("Member", Enum.GetName(typeof (MemberTypes), mi.MemberType) + " " + mi.Name);
+                if (mi.MemberType == MemberTypes.Method)
+                {
+                    foreach (ParameterInfo pi in ((MethodInfo) mi).GetParameters())
+                    {
+                        _tl.LogMessage("Parameter",
+                                       "  " + pi.Name + " " + pi.ParameterType.Name + " " +
+                                       pi.ParameterType.AssemblyQualifiedName);
+                    }
+                }
+            }
+
+            //no instance found throw error
+            if (_objLateBound == null)
+            {
+                throw new Exception("Check Driver: cannot create driver isntance of progID: " + _strProgId);
+            }
         }
 
         /// <summary>
@@ -95,16 +92,16 @@ namespace ASCOM.DriverAccess
         /// <returns>object</returns>
         internal object GetLateBoundObject
         {
-            get { return this.objLateBound ;}
+            get { return _objLateBound; }
         }
 
         /// <summary>
         /// Returns true is the driver is COM based
         /// </summary> 
         /// <returns>object</returns>
-        internal bool IsCOMObject
+        internal bool IsComObject
         {
-            get { return isCOMObject; }
+            get { return _isComObject; }
         }
 
         /// <summary>
@@ -113,14 +110,35 @@ namespace ASCOM.DriverAccess
         /// <returns>type</returns>
         internal Type GetObjType
         {
-            get { return this.objType; }
+            get { return _objType; }
         }
 
         internal List<Type> GetInterfaces
         {
-            get { return this.objInterfaceList; }
+            get { return _objInterfaceList; }
         }
 
+
+        /// <summary>
+        /// Dispose the late-bound interface, if needed. Will release it via COM
+        /// if it is a COM object, else if native .NET will just dereference it
+        /// for GC.
+        /// </summary>
+        /// <returns>nothing</returns>
+        public void Dispose()
+        {
+            if (_objLateBound != null)
+            {
+                try
+                {
+                    Marshal.ReleaseComObject(_objLateBound);
+                }
+                catch
+                {
+                }
+                _objLateBound = null;
+            }
+        }
 
         /// <summary>
         /// Calls a method on an object dynamically. 
@@ -130,269 +148,234 @@ namespace ASCOM.DriverAccess
         /// <param name="memberCode">1-GetProperty, 2-SetProperty, 3-Method</param>
         /// <param name="memberName">The member name to call as a string</param>
         /// <param name="parameterTypes">Array of paramerter types in order</param> 
-        /// <param name="parms">Array of parameters in order</param>        
+        /// <param name="parms">Array of parameters in order</param>
+        /// <exception cref="PropertyNotImplementedException"></exception>
+        /// <exception cref="MethodNotImplementedException"></exception>
         /// <returns>object</returns>
         internal object CallMember(int memberCode, string memberName, Type[] parameterTypes, params object[] parms)
         {
-                switch (memberCode)
-                {
-                    case 1:
-                        TL.LogMessage("PropertyGet", memberName);
+            switch (memberCode)
+            {
+                case 1:
+                    _tl.LogMessage("PropertyGet", memberName);
 
-                        PropertyInfo propertyGetInfo = objType.GetProperty(memberName);
-                        if (propertyGetInfo != null)
-                         {
-                             TL.LogMessage("PropertyGet", "propertyGetInfo is not null");
-                             try
-                             {
-                                 //run the .net object
-                                 return propertyGetInfo.GetValue(objLateBound, null);
-                             }
-                             catch (TargetInvocationException e)
-                             {
-                                 TL.LogMessage("PropertyGetEx1", e.ToString());
-                                 if (e.InnerException.GetType() == typeof(ASCOM.PropertyNotImplementedException))
-                                 {
-                                     throw new ASCOM.PropertyNotImplementedException(memberName + " is not implemented in this driver", true, e.InnerException);
-                                 }
-                                 else if (e.InnerException.GetType() == typeof(ASCOM.InvalidValueException))
-                                 {
-                                     throw new ASCOM.InvalidValueException(e.InnerException.Message,"","",e.InnerException);
-                                 }
-                                 else if (e.InnerException.GetType() == typeof(ASCOM.DriverException))
-                                 {
-                                     throw new ASCOM.DriverException(e.InnerException.Message, e.InnerException);
-                                 }
-                                 else
-                                 {
-                                     throw e.InnerException;
-                                 }
-                             }
-                             catch (Exception e)
-                             {
-                                 TL.LogMessage("PropertyGetEx2", e.ToString());
-                                 throw e;
-                             }
-                        }
-                        else
+                    PropertyInfo propertyGetInfo = _objType.GetProperty(memberName);
+                    if (propertyGetInfo != null)
+                    {
+                        _tl.LogMessage("PropertyGet", "propertyGetInfo is not null");
+                        try
                         {
-                            TL.LogMessage("PropertyGet", "propertyGetInfo is null");
-                            //check the type to see if it's a COM object
-                            if (isCOMObject)
+                            //run the .net object
+                            return propertyGetInfo.GetValue(_objLateBound, null);
+                        }
+                        catch (TargetInvocationException e)
+                        {
+                            _tl.LogMessage("PropertyGetEx1", e.ToString());
+                            if (e.InnerException.GetType() == typeof (PropertyNotImplementedException))
                             {
-                                TL.LogMessage("PropertyGet", "propertyGetInfo is COM Object");
+                                throw new PropertyNotImplementedException(
+                                    memberName + " is not implemented in this driver", true, e.InnerException);
+                            }
+                            if (e.InnerException.GetType() == typeof (InvalidValueException))
+                            {
+                                throw new InvalidValueException(e.InnerException.Message, "", "", e.InnerException);
+                            }
+                            if (e.InnerException.GetType() == typeof (DriverException))
+                            {
+                                throw new DriverException(e.InnerException.Message, e.InnerException);
+                            }
+                            throw e.InnerException;
+                        }
+                        catch (Exception e)
+                        {
+                            _tl.LogMessage("PropertyGetEx2", e.ToString());
+                            throw;
+                        }
+                    }
+                    _tl.LogMessage("PropertyGet", "propertyGetInfo is null");
+                    //check the type to see if it's a COM object
+                    if (_isComObject)
+                    {
+                        _tl.LogMessage("PropertyGet", "propertyGetInfo is COM Object");
 
-                                try
-                                {
-                                    //run the COM object property
-                                    return (objType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.GetProperty, null, objLateBound, new object[] { }));
-                                }
-                                catch (System.Runtime.InteropServices.COMException e)
-                                {
-                                    TL.LogMessage("PropertyGetEx3", e.ToString());
-                                    propertyGetInfo = null;
-                                    if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber)) throw new ASCOM.PropertyNotImplementedException(strProgID + " " + memberName, false);
-                                    else throw;
-                                }
-                                catch (Exception e)
-                                {
-                                    TL.LogMessage("PropertyGetEx4", e.ToString());
+                        try
+                        {
+                            //run the COM object property
+                            return
+                                (_objType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.GetProperty,
+                                                       null, _objLateBound, new object[] {}));
+                        }
+                        catch (COMException e)
+                        {
+                            _tl.LogMessage("PropertyGetEx3", e.ToString());
+                            if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber))
+                                throw new PropertyNotImplementedException(_strProgId + " " + memberName, false);
+                            else throw;
+                        }
+                        catch (Exception e)
+                        {
+                            _tl.LogMessage("PropertyGetEx4", e.ToString());
 
-                                    throw e.InnerException;
-                                }
+                            throw e.InnerException;
+                        }
+                    }
+                    //evertyhing failed so throw an exception
+                    _tl.LogMessage("PropertyGet", "propertyGetInfo is .NET object");
+                    throw new PropertyNotImplementedException(_strProgId + " " + memberName, false);
+                case 2:
+                    _tl.LogMessage("PropertySet", memberName);
+                    PropertyInfo propertySetInfo = _objType.GetProperty(memberName);
+                    if (propertySetInfo != null)
+                    {
+                        _tl.LogMessage("PropertySet", "propertyGetInfo is not null");
+                        try
+                        {
+                            propertySetInfo.SetValue(_objLateBound, parms[0], null);
+                            return null;
+                        }
+                        catch (TargetInvocationException e)
+                        {
+                            _tl.LogMessage("PropertySetEx1", e.ToString());
+                            if (e.InnerException.GetType() == typeof (PropertyNotImplementedException))
+                            {
+                                throw new PropertyNotImplementedException(
+                                    memberName + " is not implemented in this driver", true, e.InnerException);
+                            }
+                            if (e.InnerException.GetType() == typeof (DriverException))
+                            {
+                                throw new DriverException(e.InnerException.Message, e.InnerException);
+                            }
+                            if (e.InnerException.GetType() == typeof (InvalidValueException))
+                            {
+                                throw e.InnerException;
+                            }
+                            throw;
+                        }
+                        catch (Exception e)
+                        {
+                            _tl.LogMessage("PropertySetEx1", e.ToString());
+                            throw;
+                        }
+                    }
+                    _tl.LogMessage("PropertySet", "propertyGetInfo is null");
+                    //check the type to see if it's a COM object
+                    if (_isComObject)
+                    {
+                        _tl.LogMessage("PropertySet", "propertyGetInfo is COM Object");
+                        try
+                        {
+                            //run the COM object property
+                            _objType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.SetProperty, null,
+                                                  _objLateBound, parms);
+                            return null;
+                        }
+                        catch (COMException e)
+                        {
+                            _tl.LogMessage("PropertySetEx3", e.ToString());
+                            if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber))
+                                throw new PropertyNotImplementedException(_strProgId + " " + memberName, true);
+                            else throw;
+                        }
+                        catch (Exception e)
+                        {
+                            _tl.LogMessage("PropertySetEx4", e.ToString());
+                            throw e.InnerException;
+                        }
+                    }
+                    _tl.LogMessage("PropertySet", "propertyGetInfo is .NET object");
+                    throw new PropertyNotImplementedException(_strProgId + " " + memberName, true);
+                case 3:
+                    _tl.LogMessage(memberName, "Start");
+                    foreach (Type t in parameterTypes)
+                    {
+                        _tl.LogMessage(memberName, "  Parameter: " + t.FullName);
+                    }
+
+
+                    MethodInfo methodInfo = _objType.GetMethod(memberName);
+                    //, parameterTypes); //Peter: Had to take parameterTypes out to get CanMoveAxis to work with .NET drivers
+                    if (methodInfo != null)
+                    {
+                        _tl.LogMessage(memberName, "  Got MethodInfo");
+
+                        ParameterInfo[] pars = methodInfo.GetParameters();
+                        foreach (ParameterInfo p in pars)
+                        {
+                            _tl.LogMessage(memberName, "  Parameter: " + p.ParameterType);
+                            _tl.LogMessage(memberName,
+                                          "    AssemblyQualifiedName: " + p.ParameterType.AssemblyQualifiedName);
+                            _tl.LogMessage(memberName,
+                                          "    AssemblyQualifiedName: " + parameterTypes[0].AssemblyQualifiedName);
+                            _tl.LogMessage(memberName, "    FullName: " + p.ParameterType.FullName);
+                            _tl.LogMessage(memberName, "    FullName: " + parameterTypes[0].FullName);
+                            _tl.LogMessage(memberName, "    AssemblyFullName: " + p.ParameterType.Assembly.FullName);
+                            _tl.LogMessage(memberName, "    AssemblyFullName: " + parameterTypes[0].Assembly.FullName);
+                            _tl.LogMessage(memberName, "    AssemblyCodeBase: " + p.ParameterType.Assembly.CodeBase);
+                            _tl.LogMessage(memberName, "    AssemblyCodeBase: " + parameterTypes[0].Assembly.CodeBase);
+                            _tl.LogMessage(memberName, "    AssemblyLocation: " + p.ParameterType.Assembly.Location);
+                            _tl.LogMessage(memberName, "    AssemblyLocation: " + parameterTypes[0].Assembly.Location);
+                            _tl.LogMessage(memberName,
+                                          "    AssemblyGlobalAssemblyCache: " +
+                                          p.ParameterType.Assembly.GlobalAssemblyCache);
+                            _tl.LogMessage(memberName,
+                                          "    AssemblyGlobalAssemblyCache: " +
+                                          parameterTypes[0].Assembly.GlobalAssemblyCache);
+                        }
+
+
+                        try
+                        {
+                            object result = methodInfo.Invoke(_objLateBound, parms);
+                            _tl.LogMessage(memberName, "  Successfully called method");
+                            return result;
+                        }
+                        catch (TargetInvocationException e)
+                        {
+                            _tl.LogMessage(memberName, "  ***** TargetInvocationException: " + e);
+                            if (e.InnerException is DriverException)
+                            {
+                                throw e.InnerException;
                             }
                             else
-                            {
-                                //evertyhing failed so throw an exception
-                                propertyGetInfo = null;
-                                TL.LogMessage("PropertyGet", "propertyGetInfo is .NET object");
-                                throw new ASCOM.PropertyNotImplementedException(strProgID + " " + memberName, false);
-                            }
+                                throw new MethodNotImplementedException(_strProgId + " " + memberName,
+                                                                        e.InnerException);
                         }
-                    case 2:
-                        TL.LogMessage("PropertySet", memberName);
-                        PropertyInfo propertySetInfo = objType.GetProperty(memberName);
-                        if (propertySetInfo != null)
+                        catch (Exception e)
                         {
-                            TL.LogMessage("PropertySet", "propertyGetInfo is not null");
-                            try
-                            {
-                                propertySetInfo.SetValue(objLateBound, parms[0], null);
-                                return null;
-                            }
-                            catch (TargetInvocationException e)
-                            {
-                                TL.LogMessage("PropertySetEx1", e.ToString());
-                                if (e.InnerException.GetType() == typeof(ASCOM.PropertyNotImplementedException))
-                                {
-                                    throw new ASCOM.PropertyNotImplementedException(memberName + " is not implemented in this driver", true, e.InnerException);
-                                }
-                                else if (e.InnerException.GetType() == typeof(ASCOM.DriverException))
-                                {
-                                    throw new ASCOM.DriverException(e.InnerException.Message, e.InnerException);
-                                }
-                                else if (e.InnerException.GetType() == typeof(ASCOM.InvalidValueException))
-                                {
-                                    throw e.InnerException;
-                                }
-                                else
-                                {
-                                    throw;
-                                }
-
-
-
-
-                            }
-                            catch (Exception e)
-                            {
-                                TL.LogMessage("PropertySetEx1", e.ToString());
-                                throw e;
-                            }
+                            _tl.LogMessage(memberName, "  ***** Exception: " + e);
+                            throw;
                         }
-                        else
+                    }
+                    _tl.LogMessage(memberName, "  Didn't Get MethodInfo");
+                    //check the type to see if it's a COM object
+                    if (_isComObject)
+                    {
+                        _tl.LogMessage(memberName, "  It is a COM object");
+                        try
                         {
-                            TL.LogMessage("PropertySet", "propertyGetInfo is null");
-                            //check the type to see if it's a COM object
-                            if (isCOMObject)
-                            {
-                                TL.LogMessage("PropertySet", "propertyGetInfo is COM Object");
-                                try
-                                {
-                                    //run the COM object property
-                                    objType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.SetProperty, null, objLateBound, parms);
-                                    return null;
-                                }
-                                catch (System.Runtime.InteropServices.COMException e)
-                                {
-                                    TL.LogMessage("PropertySetEx3", e.ToString());
-                                    propertySetInfo = null;
-                                    if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber)) throw new ASCOM.PropertyNotImplementedException(strProgID + " " + memberName, true);
-                                    else throw;
-                                }
-                                catch (Exception e)
-                                {
-                                    TL.LogMessage("PropertySetEx4", e.ToString());
-                                    throw e.InnerException;
-                                }
-                            }
-                            else
-                            {
-                                propertySetInfo = null;
-                                TL.LogMessage("PropertySet", "propertyGetInfo is .NET object");
-                                throw new ASCOM.PropertyNotImplementedException(strProgID + " " + memberName, true);
-                            }
+                            //run the COM object method
+                            return _objType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.InvokeMethod,
+                                                         null, _objLateBound, parms);
                         }
-                    case 3:
-                        TL.LogMessage(memberName, "Start");
-                        foreach (Type t in parameterTypes)
+                        catch (COMException e)
                         {
-                            TL.LogMessage(memberName, "  Parameter: " + t.FullName);
+                            if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber))
+                                throw new MethodNotImplementedException(_strProgId + " " + memberName);
+                            else throw;
                         }
-
-
-                        MethodInfo methodInfo = objType.GetMethod(memberName);//, parameterTypes); //Peter: Had to take parameterTypes out to get CanMoveAxis to work with .NET drivers
-                        if (methodInfo != null)
+                        catch (Exception e)
                         {
-                            TL.LogMessage(memberName, "  Got MethodInfo");
-
-                            ParameterInfo[] pars = methodInfo.GetParameters();
-                            foreach (ParameterInfo p in pars)
-                            {
-                                TL.LogMessage(memberName, "  Parameter: " + p.ParameterType.ToString());
-                                TL.LogMessage(memberName, "    AssemblyQualifiedName: " + p.ParameterType.AssemblyQualifiedName);
-                                TL.LogMessage(memberName, "    AssemblyQualifiedName: " + parameterTypes[0].AssemblyQualifiedName);
-                                TL.LogMessage(memberName, "    FullName: " + p.ParameterType.FullName);
-                                TL.LogMessage(memberName, "    FullName: " + parameterTypes[0].FullName);
-                                TL.LogMessage(memberName, "    AssemblyFullName: " + p.ParameterType.Assembly.FullName);
-                                TL.LogMessage(memberName, "    AssemblyFullName: " + parameterTypes[0].Assembly.FullName);
-                                TL.LogMessage(memberName, "    AssemblyCodeBase: " + p.ParameterType.Assembly.CodeBase);
-                                TL.LogMessage(memberName, "    AssemblyCodeBase: " + parameterTypes[0].Assembly.CodeBase);
-                                TL.LogMessage(memberName, "    AssemblyLocation: " + p.ParameterType.Assembly.Location);
-                                TL.LogMessage(memberName, "    AssemblyLocation: " + parameterTypes[0].Assembly.Location);
-                                TL.LogMessage(memberName, "    AssemblyGlobalAssemblyCache: " + p.ParameterType.Assembly.GlobalAssemblyCache.ToString());
-                                TL.LogMessage(memberName, "    AssemblyGlobalAssemblyCache: " + parameterTypes[0].Assembly.GlobalAssemblyCache.ToString());
-                            }
- 
-
-
-
-                            try
-                            {
-                                object result = methodInfo.Invoke(objLateBound, parms);
-                                TL.LogMessage(memberName, "  Successfully called method");
-                                return result;
-                            }
-                            catch (TargetInvocationException e)
-                            {
-                                TL.LogMessage(memberName, "  ***** TargetInvocationException: " + e.ToString());
-                                if (e.InnerException is ASCOM.DriverException)
-                                {
-                                    throw e.InnerException;
-                                }
-                                else throw new ASCOM.MethodNotImplementedException(strProgID + " " + memberName, e.InnerException);
-                            }
-                            catch (Exception e)
-                            {
-                                TL.LogMessage(memberName, "  ***** Exception: " + e.ToString());
-                                 throw e;
-                            }
+                            throw e.InnerException;
                         }
-                        else
-                        {
-                            TL.LogMessage(memberName, "  Didn't Get MethodInfo");
-                            //check the type to see if it's a COM object
-                            if (isCOMObject)
-                            {
-                                TL.LogMessage(memberName, "  It is a COM object");
-                                try
-                                {
-                                    //run the COM object method
-                                    return objType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.InvokeMethod, null, objLateBound, parms);
-                                }
-                                catch (System.Runtime.InteropServices.COMException e)
-                                {
-                                    propertyGetInfo = null;
-                                    if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber)) throw new ASCOM.MethodNotImplementedException(strProgID + " " + memberName);
-                                    else throw;
-                                }
-                                catch (Exception e)
-                                {
-                                    throw e.InnerException;
-                                }
-                            }
-                            else
-                            {
-                                TL.LogMessage(memberName, "  It is NOT a COM object");
-                                methodInfo = null;
-                                throw new ASCOM.MethodNotImplementedException(strProgID + " " + memberName);
-                            }
-                        }
-                    default:
-                        return null;
-                }
-        }
-
-        #region IDisposable Members
-
-        /// <summary>
-        /// Dispose the late-bound interface, if needed. Will release it via COM
-		/// if it is a COM object, else if native .NET will just dereference it
-		/// for GC.
-        /// </summary>
-        /// <returns>nothing</returns>
-        public void Dispose()
-        {
-            if (objLateBound != null)
-            { 
-				try { Marshal.ReleaseComObject(objLateBound); }
-				catch (Exception) { }
-				objLateBound = null;
+                    }
+                    _tl.LogMessage(memberName, "  It is NOT a COM object");
+                    methodInfo = null;
+                    throw new MethodNotImplementedException(_strProgId + " " + memberName);
+                default:
+                    return null;
             }
         }
 
-        #endregion  
-        
         #endregion
     }
 }
