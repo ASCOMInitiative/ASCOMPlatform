@@ -10,36 +10,52 @@ using ASCOM.Utilities;
 
 namespace ASCOM.DriverAccess
 {
-	#region Dome wrapper
-	/// <summary>
-	/// Provides universal access to ASCOM Dome drivers
-	/// </summary>
-	public class Dome : ASCOM.Interface.IDome, IDisposable
+
+    #region Dome wrapper
+
+    /// <summary>
+    /// Provides universal access to ASCOM Dome drivers
+    /// </summary>
+    public class Dome : IDome, IDisposable
     {
         #region IDome constructors
 
-        private MemberFactory memberFactory;
+        private readonly MemberFactory _memberFactory;
 
         /// <summary>
         /// Constructor for Dome class. Creates a Dome based on the ProgID in the DomeID string.
         /// </summary>
-        /// <param name="domeID">The progID of the dome to be instantiated</param>
-        public Dome(string domeID)
-		{
-            memberFactory = new MemberFactory(domeID);
-		}
+        /// <param name="domeId">The progID of the dome to be instantiated</param>
+        public Dome(string domeId)
+        {
+            _memberFactory = new MemberFactory(domeId);
+        }
 
         /// <summary>
         /// Shows the ASCOM Chooser to select a Dome.
         /// </summary>
-        /// <param name="domeID">Prog ID of the default dome to select. Null if no default is to be set.</param>
+        /// <param name="domeId">Prog ID of the default dome to select. Null if no default is to be set.</param>
         /// <returns>The Prog ID of the Dome chosen, or Null if no dome is chose, or the dialog is canceled.</returns>
-        public static string Choose(string domeID)
+        public static string Choose(string domeId)
         {
-			Chooser oChooser = new Chooser();
-			oChooser.DeviceType = "Dome";				// Requires Helper 5.0.3 (May '07)
-			return oChooser.Choose(domeID);
-		}
+            var oChooser = new Chooser {DeviceType = "Dome"};
+            return oChooser.Choose(domeId);
+        }
+
+        #endregion
+
+        #region IDisposable Members
+
+        /// <summary>
+        /// Dispose the late-bound interface, if needed. Will release it via COM
+        /// if it is a COM object, else if native .NET will just dereference it
+        /// for GC.
+        /// </summary>
+        public void Dispose()
+        {
+            _memberFactory.Dispose();
+        }
+
         #endregion
 
         #region IDome Members
@@ -51,7 +67,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void AbortSlew()
         {
-            memberFactory.CallMember(3, "AbortSlew", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "AbortSlew", new Type[] {}, new object[] {});
         }
 
         /// <summary>
@@ -61,8 +77,9 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double Altitude
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "Altitude", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "Altitude", new Type[] {}, new object[] {})); }
         }
+
         /// <summary>
         /// True if the dome is in the Home position.
         /// Set only following a Dome.FindHome operation and reset with any azimuth slew operation.
@@ -70,7 +87,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool AtHome
         {
-            get { return (bool)memberFactory.CallMember(1, "AtHome", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "AtHome", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -80,14 +97,15 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool AtPark
         {
-            get { return (bool)memberFactory.CallMember(1, "AtPark", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "AtPark", new Type[] {}, new object[] {}); }
         }
+
         /// <summary>
         /// The dome azimuth (degrees, North zero and increasing clockwise, i.e., 90 East, 180 South, 270 West)
         /// </summary>
         public double Azimuth
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "Azimuth", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "Azimuth", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -95,7 +113,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanFindHome
         {
-            get { return (bool)memberFactory.CallMember(1, "CanFindHome", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "CanFindHome", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -103,7 +121,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanPark
         {
-            get { return (bool)memberFactory.CallMember(1, "CanPark", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "CanPark", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -111,7 +129,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSetAltitude
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSetAltitude", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "CanSetAltitude", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -119,7 +137,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSetAzimuth
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSetAzimuth", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "CanSetAzimuth", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -127,7 +145,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSetPark
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSetPark", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "CanSetPark", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -135,7 +153,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSetShutter
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSetShutter", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "CanSetShutter", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -143,7 +161,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSlave
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSlave", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "CanSlave", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -151,7 +169,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSyncAzimuth
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSyncAzimuth", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "CanSyncAzimuth", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -159,17 +177,17 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void CloseShutter()
         {
-            memberFactory.CallMember(3, "CloseShutter", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "CloseShutter", new Type[] {}, new object[] {});
         }
 
         /// <summary>
         /// Send a string command directly to the dome without expecting response data.
         /// Raises an error if not supported or if a communications failure occurs. 
         /// </summary>
-        /// <param name="Command"></param>
-        public void CommandBlind(string Command)
+        /// <param name="command"></param>
+        public void CommandBlind(string command)
         {
-            memberFactory.CallMember(3, "CommandBlind", new Type[] { typeof(string) }, new object[] { Command });
+            _memberFactory.CallMember(3, "CommandBlind", new[] {typeof (string)}, new object[] {command});
         }
 
 
@@ -177,22 +195,23 @@ namespace ASCOM.DriverAccess
         /// Send a string command directly to the dome, returning a True / False response.
         /// Raises an error if not supported or if a communications failure occurs. 
         /// </summary>
-        /// <param name="Command">Raw command string to be sent to the dome.</param>
+        /// <param name="command">Raw command string to be sent to the dome.</param>
         /// <returns>True if the response indicated True or success, else False.</returns>
-        public bool CommandBool(string Command)
+        public bool CommandBool(string command)
         {
-            return (bool)memberFactory.CallMember(3, "CommandBool", new Type[] { typeof(string) }, new object[] { Command });
+            return (bool) _memberFactory.CallMember(3, "CommandBool", new[] {typeof (string)}, new object[] {command});
         }
 
         /// <summary>
         /// Send a string command directly to the dome, returning the response string.
         /// Raises an error if not supported or if a communications failure occurs. 
         /// </summary>
-        /// <param name="Command">Raw command string to be sent to the dome.</param>
+        /// <param name="command">Raw command string to be sent to the dome.</param>
         /// <returns>Response string from controller.</returns>
-        public string CommandString(string Command)
+        public string CommandString(string command)
         {
-            return (string)memberFactory.CallMember(3, "CommandString", new Type[] { typeof(string) }, new object[] { Command });
+            return
+                (string) _memberFactory.CallMember(3, "CommandString", new[] {typeof (string)}, new object[] {command});
         }
 
         /// <summary>
@@ -202,8 +221,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Connected
         {
-            get { return (bool)memberFactory.CallMember(1, "Connected", new Type[] { }, new object[] { }); }
-            set { memberFactory.CallMember(2, "Connected", new Type[] { }, new object[] { value }); }
+            get { return (bool) _memberFactory.CallMember(1, "Connected", new Type[] {}, new object[] {}); }
+            set { _memberFactory.CallMember(2, "Connected", new Type[] {}, new object[] {value}); }
         }
 
         /// <summary>
@@ -211,7 +230,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string Description
         {
-            get { return (string)memberFactory.CallMember(1, "Description", new Type[] { typeof(string) }, new object[] { }); }
+            get { return (string) _memberFactory.CallMember(1, "Description", new[] {typeof (string)}, new object[] {}); }
         }
 
         /// <summary>
@@ -219,7 +238,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string DriverInfo
         {
-            get { return (string)memberFactory.CallMember(1, "DriverInfo", new Type[] { typeof(string) }, new object[] { }); }
+            get { return (string) _memberFactory.CallMember(1, "DriverInfo", new[] {typeof (string)}, new object[] {}); }
         }
 
         /// <summary>
@@ -227,7 +246,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void FindHome()
         {
-            memberFactory.CallMember(3, "FindHome", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "FindHome", new Type[] {}, new object[] {});
         }
 
         /// <summary>
@@ -236,7 +255,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public short InterfaceVersion
         {
-            get { return Convert.ToInt16(memberFactory.CallMember(1, "InterfaceVersion", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "InterfaceVersion", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -244,7 +263,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string Name
         {
-            get { return (string)memberFactory.CallMember(1, "Name", new Type[] { typeof(string) }, new object[] { }); }  
+            get { return (string) _memberFactory.CallMember(1, "Name", new[] {typeof (string)}, new object[] {}); }
         }
 
         /// <summary>
@@ -253,7 +272,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void OpenShutter()
         {
-            memberFactory.CallMember(3, "OpenShutter", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "OpenShutter", new Type[] {}, new object[] {});
         }
 
         /// <summary>
@@ -263,7 +282,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void Park()
         {
-            memberFactory.CallMember(3, "Park", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "Park", new Type[] {}, new object[] {});
         }
 
         /// <summary>
@@ -272,7 +291,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void SetPark()
         {
-            memberFactory.CallMember(3, "SetPark", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "SetPark", new Type[] {}, new object[] {});
         }
 
         /// <summary>
@@ -280,7 +299,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void SetupDialog()
         {
-            memberFactory.CallMember(3, "SetupDialog", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "SetupDialog", new Type[] {}, new object[] {});
         }
 
         /// <summary>
@@ -291,7 +310,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public ShutterState ShutterStatus
         {
-            get { return (ShutterState)memberFactory.CallMember(1, "ShutterStatus", new Type[] { }, new object[] { }); }
+            get { return (ShutterState) _memberFactory.CallMember(1, "ShutterStatus", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -303,8 +322,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Slaved
         {
-            get { return (bool)(memberFactory.CallMember(1, "Slaved", new Type[] { }, new object[] { })); }
-            set { memberFactory.CallMember(2, "Slaved", new Type[] { }, new object[] { value }); }
+            get { return (bool) (_memberFactory.CallMember(1, "Slaved", new Type[] {}, new object[] {})); }
+            set { _memberFactory.CallMember(2, "Slaved", new Type[] {}, new object[] {value}); }
         }
 
         /// <summary>
@@ -312,10 +331,10 @@ namespace ASCOM.DriverAccess
         /// Raises an error if Dome.Slaved is True, if not supported, if a communications failure occurs,
         /// or if the dome can not reach indicated altitude. 
         /// </summary>
-        /// <param name="Altitude">Target dome altitude (degrees, horizon zero and increasing positive to 90 zenith)</param>
-        public void SlewToAltitude(double Altitude)
+        /// <param name="altitude">Target dome altitude (degrees, horizon zero and increasing positive to 90 zenith)</param>
+        public void SlewToAltitude(double altitude)
         {
-            memberFactory.CallMember(3, "SlewToAltitude", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "SlewToAltitude", new Type[] {}, new object[] {});
         }
 
         /// <summary>
@@ -323,10 +342,10 @@ namespace ASCOM.DriverAccess
         /// Raises an error if Dome.Slaved is True, if not supported, if a communications failure occurs,
         /// or if the dome can not reach indicated azimuth. 
         /// </summary>
-        /// <param name="Azimuth">Target azimuth (degrees, North zero and increasing clockwise. i.e., 90 East, 180 South, 270 West)</param>
-        public void SlewToAzimuth(double Azimuth)
+        /// <param name="azimuth">Target azimuth (degrees, North zero and increasing clockwise. i.e., 90 East, 180 South, 270 West)</param>
+        public void SlewToAzimuth(double azimuth)
         {
-            memberFactory.CallMember(3, "SlewToAzimuth", new Type[] { typeof(double) }, new object[] { Azimuth });
+            _memberFactory.CallMember(3, "SlewToAzimuth", new[] {typeof (double)}, new object[] {azimuth});
         }
 
         /// <summary>
@@ -336,33 +355,21 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Slewing
         {
-            get { return (bool)(memberFactory.CallMember(1, "Slewing", new Type[] { }, new object[] { })); }
+            get { return (bool) (_memberFactory.CallMember(1, "Slewing", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
         /// Synchronize the current position of the dome to the given azimuth.
         /// Raises an error if not supported or if a communications failure occurs. 
         /// </summary>
-        /// <param name="Azimuth">Target azimuth (degrees, North zero and increasing clockwise. i.e., 90 East, 180 South, 270 West)</param>
-        public void SyncToAzimuth(double Azimuth)
+        /// <param name="azimuth">Target azimuth (degrees, North zero and increasing clockwise. i.e., 90 East, 180 South, 270 West)</param>
+        public void SyncToAzimuth(double azimuth)
         {
-            memberFactory.CallMember(3, "SyncToAzimuth", new Type[] { typeof(double) }, new object[] { Azimuth });
+            _memberFactory.CallMember(3, "SyncToAzimuth", new[] {typeof (double)}, new object[] {azimuth});
         }
 
         #endregion
+    }
 
-		#region IDisposable Members
-		/// <summary>
-		/// Dispose the late-bound interface, if needed. Will release it via COM
-		/// if it is a COM object, else if native .NET will just dereference it
-		/// for GC.
-		/// </summary>
-		public void Dispose()
-		{
-            memberFactory.Dispose();
-		}
-
-		#endregion
-	}
-	#endregion
+    #endregion
 }

@@ -5,7 +5,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using ASCOM.Interface;
 using ASCOM.Utilities;
 
@@ -16,29 +15,29 @@ namespace ASCOM.DriverAccess
 	/// <summary>
     /// Implements a telescope class to access any registered ASCOM telescope
     /// </summary>
-    public class Telescope : ASCOM.Interface.ITelescope, IDisposable 
+    public class Telescope : ITelescope, IDisposable 
     {
         //object objScopeLateBound;
 		//ASCOM.Interface.ITelescope ITelescope;
 		//Type objTypeScope;
-        private MemberFactory memberFactory;
-        private bool isPlatform6Telescope = false;
-        private bool isPlatform5Telescope = false;
+        private MemberFactory _memberFactory;
+        private readonly bool _isPlatform6Telescope;
+        private readonly bool _isPlatform5Telescope;
 
         #region ITelescope constructors
 
         /// <summary>
         /// Creates an instance of the telescope class.
         /// </summary>
-        /// <param name="telescopeID">The ProgID for the telescope</param>
-        public Telescope(string telescopeID)
+        /// <param name="telescopeId">The ProgID for the telescope</param>
+        public Telescope(string telescopeId)
 		{
-            memberFactory = new MemberFactory(telescopeID);
+            _memberFactory = new MemberFactory(telescopeId);
 
-            foreach (Type objInterface in memberFactory.GetInterfaces)
+            foreach (Type objInterface in _memberFactory.GetInterfaces)
             {
-                if (objInterface.Equals(typeof(ASCOM.DeviceInterface.ITelescope))) isPlatform6Telescope = true; //If the type matches the V2 type flag this
-                if (objInterface.Equals(typeof(ITelescope))) isPlatform5Telescope = true; //If the type matches the PIA type flag this
+                if (objInterface.Equals(typeof(DeviceInterface.ITelescope))) _isPlatform6Telescope = true; //If the type matches the V2 type flag this
+                if (objInterface.Equals(typeof(ITelescope))) _isPlatform5Telescope = true; //If the type matches the PIA type flag this
             }
 			// Get Type Information 
             //objTypeScope = Type.GetTypeFromProgID(telescopeID);
@@ -63,13 +62,13 @@ namespace ASCOM.DriverAccess
         /// and the corresponding telescope type is pre-selected in the Chooser's list.
         /// In this case, the OK button starts out enabled (lit-up); the assumption is that the pre-selected driver has already been configured. 
         /// </summary>
-        /// <param name="telescopeID">Optional DriverID of the previously selected telescope that is to be the pre-selected telescope in the list. </param>
+        /// <param name="telescopeId">Optional DriverID of the previously selected telescope that is to be the pre-selected telescope in the list. </param>
         /// <returns>The DriverID of the user selected telescope. Null if the dialog is canceled.</returns>
-        public static string Choose(string telescopeID)
+        public static string Choose(string telescopeId)
         {
 			Chooser oChooser = new Chooser();
 			oChooser.DeviceType = "Telescope";			// Requires Helper 5.0.3 (May '07)
-			return oChooser.Choose(telescopeID);
+			return oChooser.Choose(telescopeId);
         }
         
         #endregion
@@ -84,14 +83,14 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void AbortSlew()
         {
-            memberFactory.CallMember(3, "AbortSlew", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "AbortSlew", new Type[] { }, new object[] { });
         }
         /// <summary>
         /// The alignment mode of the mount.
         /// </summary>
         public AlignmentModes AlignmentMode
         {
-            get { return (AlignmentModes)memberFactory.CallMember(1, "AlignmentMode", new Type[] { }, new object[] { }); }
+            get { return (AlignmentModes)_memberFactory.CallMember(1, "AlignmentMode", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -99,7 +98,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double Altitude
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "Altitude", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "Altitude", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -107,7 +106,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double ApertureArea
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "ApertureArea", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "ApertureArea", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -115,7 +114,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double ApertureDiameter
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "ApertureDiameter", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "ApertureDiameter", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -123,7 +122,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool AtHome
         {
-            get { return (bool)memberFactory.CallMember(1, "AtHome", new Type[] { }, new object[] { }); }
+            get { return (bool)_memberFactory.CallMember(1, "AtHome", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -132,51 +131,52 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool AtPark
         {
-            get { return (bool)memberFactory.CallMember(1, "AtPark", new Type[] { }, new object[] { }); }
+            get { return (bool)_memberFactory.CallMember(1, "AtPark", new Type[] { }, new object[] { }); }
         }
 
-        /// <summary>
-        /// Determine the rates at which the telescope may be moved about the specified axis by the MoveAxis() method.
-        /// See the description of MoveAxis() for more information. This method must return an empty collection if MoveAxis is not supported. 
-        /// </summary>
-		/// <param name="Axis">The axis about which rate information is desired (TelescopeAxes value)</param>
-        /// <returns>Collection of Axis Rates</returns>
-        public IAxisRates AxisRates(TelescopeAxes Axis)
+	    /// <summary>
+	    /// Determine the rates at which the telescope may be moved about the specified axis by the MoveAxis() method.
+	    /// See the description of MoveAxis() for more information. This method must return an empty collection if MoveAxis is not supported. 
+	    /// </summary>
+	    /// <param name="axis">The axis about which rate information is desired (TelescopeAxes value)</param>
+	    /// <exception cref="System.NotImplementedException"></exception>
+	    /// <exception cref="System.NotImplementedException"></exception>
+	    /// <returns>Collection of Axis Rates</returns>
+	    public IAxisRates AxisRates(TelescopeAxes axis)
         {
-            object obj;
-            AxisRates ReturnValue = new AxisRates();
+            var returnValue = new AxisRates();
 
-            if (!memberFactory.IsCOMObject)
+            if (!_memberFactory.IsComObject)
             {
-                obj = memberFactory.CallMember(3, "AxisRates", new Type[] { typeof(TelescopeAxes) }, new object[] { Axis });//ITelescope.AxisRates(Axis);
+                object obj = _memberFactory.CallMember(3, "AxisRates", new[] { typeof(TelescopeAxes) }, new object[] { axis });
 
                 //global::System.Windows.Forms.MessageBox.Show("TelescopeP5 " + isPlatform5Telescope.ToString() + ", TelescopeP6 " + isPlatform6Telescope.ToString());
-                if (isPlatform5Telescope)
+                if (_isPlatform5Telescope)
                 {
                     return (IAxisRates)obj;
                 }
 
-                if (isPlatform6Telescope)
+                if (_isPlatform6Telescope)
                 {
-                    ASCOM.DeviceInterface.IAxisRates P6AxisRates = (ASCOM.DeviceInterface.IAxisRates)obj;
+                    var p6AxisRates = (ASCOM.DeviceInterface.IAxisRates)obj;
+                    if (p6AxisRates == null) throw new System.NotImplementedException();
 
-                    foreach (ASCOM.DeviceInterface.IRate r in P6AxisRates)
+                    foreach (ASCOM.DeviceInterface.IRate r in p6AxisRates)
                     {
-                        ReturnValue.Add(r.Minimum, r.Maximum);
+                        returnValue.Add(r.Minimum, r.Maximum);
                     }
                 }
-                return ReturnValue;
+                return returnValue;
             }
 
-            else return new _AxisRates(Axis, memberFactory.GetObjType, memberFactory.GetLateBoundObject);
-
+	        return new _AxisRates(axis, _memberFactory.GetObjType, _memberFactory.GetLateBoundObject);
         }
         /// <summary>
         /// The azimuth at the local horizon of the telescope's current position (degrees, North-referenced, positive East/clockwise).
         /// </summary>
         public double Azimuth
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "Azimuth", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "Azimuth", new Type[] { }, new object[] { })); }
         }
         /// <summary>
         /// True if this telescope is capable of programmed finding its home position (FindHome() method).
@@ -188,17 +188,17 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanFindHome
         {
-            get { return (bool)memberFactory.CallMember(1, "CanFindHome", new Type[] { }, new object[] { }); }
+            get { return (bool)_memberFactory.CallMember(1, "CanFindHome", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
         /// True if this telescope is capable of programmed parking (Park() method)
         /// </summary>
-        /// <param name="Axis"></param>
+        /// <param name="axis"></param>
         /// <returns></returns>
-        public bool CanMoveAxis(TelescopeAxes Axis)
+        public bool CanMoveAxis(TelescopeAxes axis)
         {
-            return (bool)memberFactory.CallMember(3, "CanMoveAxis", new Type[] { typeof(TelescopeAxes) }, new object[] { Axis });
+            return (bool)_memberFactory.CallMember(3, "CanMoveAxis", new[] { typeof(TelescopeAxes) }, new object[] { axis });
         }
 
         /// <summary>
@@ -207,7 +207,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanPark
         {
-            get { return (bool)memberFactory.CallMember(1, "CanPark", new Type[] { }, new object[] { }); }
+            get { return (bool)_memberFactory.CallMember(1, "CanPark", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -216,7 +216,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanPulseGuide
         {
-            get { return (bool)memberFactory.CallMember(1, "CanPulseGuide", new Type[] { }, new object[] { }); }
+            get { return (bool)_memberFactory.CallMember(1, "CanPulseGuide", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -225,7 +225,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSetDeclinationRate
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSetDeclinationRate", new Type[] { }, new object[] { }); }
+            get { return (bool)_memberFactory.CallMember(1, "CanSetDeclinationRate", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSetGuideRates
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSetGuideRates", new Type[] { }, new object[] { }); }
+            get { return (bool)_memberFactory.CallMember(1, "CanSetGuideRates", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSetPark
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSetPark", new Type[] { }, new object[] { }); }
+            get { return (bool)_memberFactory.CallMember(1, "CanSetPark", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -253,7 +253,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSetPierSide
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSetPierSide", new Type[] { }, new object[] { }); }
+            get { return (bool)_memberFactory.CallMember(1, "CanSetPierSide", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -262,7 +262,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSetRightAscensionRate
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSetRightAscensionRate", new Type[] { }, new object[] { }); }
+            get { return (bool)_memberFactory.CallMember(1, "CanSetRightAscensionRate", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -271,7 +271,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSetTracking
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSetTracking", new Type[] { }, new object[] { }); }
+            get { return (bool)_memberFactory.CallMember(1, "CanSetTracking", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -282,7 +282,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSlew
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSlew", new Type[] { }, new object[] { }); }
+            get { return (bool)_memberFactory.CallMember(1, "CanSlew", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -293,7 +293,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSlewAltAz
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSlewAltAz", new Type[] { }, new object[] { }); }
+            get { return (bool)_memberFactory.CallMember(1, "CanSlewAltAz", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -304,7 +304,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSlewAltAzAsync
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSlewAltAzAsync", new Type[] { }, new object[] { }); }
+            get { return (bool)_memberFactory.CallMember(1, "CanSlewAltAzAsync", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -315,7 +315,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSlewAsync
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSlewAsync", new Type[] { }, new object[] { }); }
+            get { return (bool)_memberFactory.CallMember(1, "CanSlewAsync", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -324,7 +324,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSync
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSync", new Type[] { }, new object[] { }); }
+            get { return (bool)_memberFactory.CallMember(1, "CanSync", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -333,7 +333,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSyncAltAz
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSyncAltAz", new Type[] { }, new object[] { }); }
+            get { return (bool)_memberFactory.CallMember(1, "CanSyncAltAz", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -343,7 +343,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanUnpark
         {
-            get { return (bool)memberFactory.CallMember(1, "CanUnpark", new Type[] { }, new object[] { }); }
+            get { return (bool)_memberFactory.CallMember(1, "CanUnpark", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -356,11 +356,11 @@ namespace ASCOM.DriverAccess
         /// Thus your application will not work with any arbitrary type of telescope. 
         /// Raises an error if there is a problem communicating with the telescope. 
         /// </summary>
-        /// <param name="Command">The command string to be sent to the telescope.</param>
-        /// <param name="Raw">Bypass any delimiters or framing around the command (optional, default = False)</param>
-        public void CommandBlind(string Command, bool Raw)
+        /// <param name="command">The command string to be sent to the telescope.</param>
+        /// <param name="raw">Bypass any delimiters or framing around the command (optional, default = False)</param>
+        public void CommandBlind(string command, bool raw)
         {
-            memberFactory.CallMember(3, "CommandBlind", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
+            _memberFactory.CallMember(3, "CommandBlind", new[] { typeof(string), typeof(bool) }, new object[] { command, raw });
         }
 
         /// <summary>
@@ -376,12 +376,12 @@ namespace ASCOM.DriverAccess
         /// It is the responsibility of the driver implementing this interface to translate raw response data to True/False values for return.
         /// If you want to see the raw response string, see CommandString(). 
         /// </summary>
-        /// <param name="Command">The command string to be sent to the telescope</param>
-        /// <param name="Raw">Bypass any delimiters or framing around the command (optional, default = False)</param>
+        /// <param name="command">The command string to be sent to the telescope</param>
+        /// <param name="raw">Bypass any delimiters or framing around the command (optional, default = False)</param>
         /// <returns>True if the response indicated true or success, else False.</returns>
-        public bool CommandBool(string Command, bool Raw)
+        public bool CommandBool(string command, bool raw)
         {
-            return (bool)memberFactory.CallMember(3, "CommandBool", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
+            return (bool)_memberFactory.CallMember(3, "CommandBool", new[] { typeof(string), typeof(bool) }, new object[] { command, raw });
         }
 
        /// <summary>
@@ -396,12 +396,12 @@ namespace ASCOM.DriverAccess
         /// Raises an error if there is a problem communicating with the telescope. 
         /// It is the responsibility of the driver implementing this interface to translate raw response data to True/False values for return.
         /// </summary>
-        /// <param name="Command">The command string to be sent to the telescope</param>
-        /// <param name="Raw">Bypass any delimiters or framing around the command (optional, default = False)</param>
+        /// <param name="command">The command string to be sent to the telescope</param>
+        /// <param name="raw">Bypass any delimiters or framing around the command (optional, default = False)</param>
         /// <returns>The response data from the telescope resulting from the sent command.</returns>
-        public string CommandString(string Command, bool Raw)
+        public string CommandString(string command, bool raw)
         {
-            return (string)memberFactory.CallMember(3, "CommandString", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
+            return (string)_memberFactory.CallMember(3, "CommandString", new[] { typeof(string), typeof(bool) }, new object[] { command, raw });
         }
 
         /// <summary>
@@ -435,8 +435,8 @@ namespace ASCOM.DriverAccess
 
              //   memberFactory.CallMember(2, "Connected", new Type[] { }, new object[] { value }); 
             }*/
-            get { return (bool)memberFactory.CallMember(1, "Connected", new Type[] { }, new object[] { }); }
-            set { memberFactory.CallMember(2, "Connected", new Type[] { }, new object[] { value }); }
+            get { return (bool)_memberFactory.CallMember(1, "Connected", new Type[] { }, new object[] { }); }
+            set { _memberFactory.CallMember(2, "Connected", new Type[] { }, new object[] { value }); }
 
         }
 
@@ -446,7 +446,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double Declination
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "Declination", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "Declination", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -467,8 +467,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double DeclinationRate
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "DeclinationRate", new Type[] { }, new object[] { })); }
-            set { memberFactory.CallMember(2, "DeclinationRate", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "DeclinationRate", new Type[] { }, new object[] { })); }
+            set { _memberFactory.CallMember(2, "DeclinationRate", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -483,18 +483,18 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string Description
         {
-            get { return (string)memberFactory.CallMember(1, "Description", new Type[] { typeof(string) }, new object[] { }); }
+            get { return (string)_memberFactory.CallMember(1, "Description", new[] { typeof(string) }, new object[] { }); }
         }
 
         /// <summary>
         /// Predict side of pier for German equatorial mounts
         /// </summary>
-        /// <param name="RightAscension">The destination right ascension (hours).</param>
-        /// <param name="Declination">The destination declination (degrees, positive North).</param>
+        /// <param name="rightAscension">The destination right ascension (hours).</param>
+        /// <param name="declination">The destination declination (degrees, positive North).</param>
         /// <returns>The side of the pier on which the telescope would be on if a slew to the given equatorial coordinates is performed at the current instant of time.</returns>
-        public PierSide DestinationSideOfPier(double RightAscension, double Declination)
+        public PierSide DestinationSideOfPier(double rightAscension, double declination)
         {
-            return (PierSide)memberFactory.CallMember(3, "DestinationSideOfPier", new Type[] { typeof(double), typeof(double) }, new object[] { RightAscension, Declination });
+            return (PierSide)_memberFactory.CallMember(3, "DestinationSideOfPier", new[] { typeof(double), typeof(double) }, new object[] { rightAscension, declination });
         }
 
         /// <summary>
@@ -514,8 +514,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool DoesRefraction
         {
-            get { return (bool)memberFactory.CallMember(1, "DoesRefraction", new Type[] { }, new object[] { }); }
-            set { memberFactory.CallMember(2, "DoesRefraction", new Type[] { }, new object[] { value }); }
+            get { return (bool)_memberFactory.CallMember(1, "DoesRefraction", new Type[] { }, new object[] { }); }
+            set { _memberFactory.CallMember(2, "DoesRefraction", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -527,7 +527,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string DriverInfo
         {
-            get { return (string)memberFactory.CallMember(1, "DriverInfo", new Type[] { typeof(string) }, new object[] { }); }
+            get { return (string)_memberFactory.CallMember(1, "DriverInfo", new[] { typeof(string) }, new object[] { }); }
         }
 
         /// <summary>
@@ -537,7 +537,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string DriverVersion
         {
-            get { return (string)memberFactory.CallMember(1, "DriverVersion", new Type[] { typeof(string) }, new object[] { }); }
+            get { return (string)_memberFactory.CallMember(1, "DriverVersion", new[] { typeof(string) }, new object[] { }); }
         }
 
         /// <summary>
@@ -555,7 +555,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public EquatorialCoordinateType EquatorialSystem
         {
-            get { return (EquatorialCoordinateType)memberFactory.CallMember(1, "EquatorialSystem", new Type[] { }, new object[] { }); }
+            get { return (EquatorialCoordinateType)_memberFactory.CallMember(1, "EquatorialSystem", new Type[] { }, new object[] { }); }
         }
         /// <summary>
         /// Locates the telescope's "home" position (synchronous)
@@ -566,7 +566,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void FindHome()
         {
-            memberFactory.CallMember(3, "FindHome", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "FindHome", new Type[] { }, new object[] { });
         }
 
         /// <summary>
@@ -575,7 +575,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double FocalLength
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "FocalLength", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "FocalLength", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -594,8 +594,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double GuideRateDeclination
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "GuideRateDeclination", new Type[] { }, new object[] { })); }
-            set { memberFactory.CallMember(2, "GuideRateDeclination", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "GuideRateDeclination", new Type[] { }, new object[] { })); }
+            set { _memberFactory.CallMember(2, "GuideRateDeclination", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -614,8 +614,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double GuideRateRightAscension
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "GuideRateRightAscension", new Type[] { }, new object[] { })); }
-            set { memberFactory.CallMember(2, "GuideRateRightAscension", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "GuideRateRightAscension", new Type[] { }, new object[] { })); }
+            set { _memberFactory.CallMember(2, "GuideRateRightAscension", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -626,7 +626,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public short InterfaceVersion
         {
-            get { return Convert.ToInt16(memberFactory.CallMember(1, "InterfaceVersion", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "InterfaceVersion", new Type[] { }, new object[] { })); }
         }
         /// <summary>
         /// True if a PulseGuide() command is in progress, False otherwise
@@ -635,7 +635,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool IsPulseGuiding
         {
-            get { return (bool)memberFactory.CallMember(1, "IsPulseGuiding", new Type[] { }, new object[] { }); }
+            get { return (bool)_memberFactory.CallMember(1, "IsPulseGuiding", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -659,11 +659,11 @@ namespace ASCOM.DriverAccess
         /// It may be possible to implement satellite tracking by using the MoveAxis()
         /// method to move the scope in the required manner to track a satellite. 
         /// </summary>
-        /// <param name="Axis">The physical axis about which movement is desired</param>
-        /// <param name="Rate">The rate of motion (deg/sec) about the specified axis</param>
-        public void MoveAxis(TelescopeAxes Axis, double Rate)
+        /// <param name="axis">The physical axis about which movement is desired</param>
+        /// <param name="rate">The rate of motion (deg/sec) about the specified axis</param>
+        public void MoveAxis(TelescopeAxes axis, double rate)
         {
-            memberFactory.CallMember(3, "MoveAxis", new Type[] { typeof(TelescopeAxes), typeof(double) }, new object[] { Axis, Rate });
+            _memberFactory.CallMember(3, "MoveAxis", new[] { typeof(TelescopeAxes), typeof(double) }, new object[] { axis, rate });
         }
 
         /// <summary>
@@ -671,7 +671,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string Name
         {
-            get { return (string)memberFactory.CallMember(1, "Name", new Type[] { typeof(string) }, new object[] { }); }
+            get { return (string)_memberFactory.CallMember(1, "Name", new[] { typeof(string) }, new object[] { }); }
         }
 
         /// <summary>
@@ -685,7 +685,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void Park()
         {
-            memberFactory.CallMember(3, "Park", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "Park", new Type[] { }, new object[] { });
         }
 
         /// <summary>
@@ -703,11 +703,11 @@ namespace ASCOM.DriverAccess
         /// into a single rate, depending on the driver's implementation
         /// and the capabilities of the telescope. 
         /// </summary>
-        /// <param name="Direction">The direction in which the guide-rate motion is to be made</param>
-        /// <param name="Duration">The duration of the guide-rate motion (milliseconds)</param>
-        public void PulseGuide(GuideDirections Direction, int Duration)
+        /// <param name="direction">The direction in which the guide-rate motion is to be made</param>
+        /// <param name="duration">The duration of the guide-rate motion (milliseconds)</param>
+        public void PulseGuide(GuideDirections direction, int duration)
         {
-            memberFactory.CallMember(3, "PulseGuide", new Type[] { typeof(GuideDirections), typeof(int) }, new object[] { (int)Direction, Duration });
+            _memberFactory.CallMember(3, "PulseGuide", new[] { typeof(GuideDirections), typeof(int) }, new object[] { (int)direction, duration });
         }
 
         /// <summary>
@@ -717,7 +717,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double RightAscension
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "RightAscension", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "RightAscension", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -773,8 +773,8 @@ namespace ASCOM.DriverAccess
 						BindingFlags.Default | BindingFlags.SetProperty,
 						null, objScopeLateBound, new object[] { value });
             }*/
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "RightAscensionRate", new Type[] { }, new object[] { })); }
-            set { memberFactory.CallMember(2, "RightAscensionRate", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "RightAscensionRate", new Type[] { }, new object[] { })); }
+            set { _memberFactory.CallMember(2, "RightAscensionRate", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -782,7 +782,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void SetPark()
         {
-            memberFactory.CallMember(3, "SetPark", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "SetPark", new Type[] { }, new object[] { });
         }
 
         /// <summary>
@@ -792,7 +792,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void SetupDialog()
         {
-            memberFactory.CallMember(3, "SetupDialog", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "SetupDialog", new Type[] { }, new object[] { });
         }
 
 
@@ -807,8 +807,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public PierSide SideOfPier
         {
-            get { return (PierSide)memberFactory.CallMember(1, "SideOfPier", new Type[] { }, new object[] { }); }
-            set { memberFactory.CallMember(2, "SideOfPier", new Type[] { }, new object[] { value }); }
+            get { return (PierSide)_memberFactory.CallMember(1, "SideOfPier", new Type[] { }, new object[] { }); }
+            set { _memberFactory.CallMember(2, "SideOfPier", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -820,7 +820,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double SiderealTime
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "SiderealTime", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "SiderealTime", new Type[] { }, new object[] { })); }
         }
         
         /// <summary>
@@ -830,8 +830,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double SiteElevation
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "SiteElevation", new Type[] { }, new object[] { })); }
-            set { memberFactory.CallMember(2, "SiteElevation", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "SiteElevation", new Type[] { }, new object[] { })); }
+            set { _memberFactory.CallMember(2, "SiteElevation", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -841,8 +841,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double SiteLatitude
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "SiteLatitude", new Type[] { }, new object[] { })); }
-            set { memberFactory.CallMember(2, "SiteLatitude", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "SiteLatitude", new Type[] { }, new object[] { })); }
+            set { _memberFactory.CallMember(2, "SiteLatitude", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -853,8 +853,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double SiteLongitude
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "SiteLongitude", new Type[] { }, new object[] { })); }
-            set { memberFactory.CallMember(2, "SiteLongitude", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "SiteLongitude", new Type[] { }, new object[] { })); }
+            set { _memberFactory.CallMember(2, "SiteLongitude", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -865,8 +865,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public short SlewSettleTime
         {
-            get { return Convert.ToInt16(memberFactory.CallMember(1, "SlewSettleTime", new Type[] { }, new object[] { })); }
-            set { memberFactory.CallMember(2, "SlewSettleTime", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "SlewSettleTime", new Type[] { }, new object[] { })); }
+            set { _memberFactory.CallMember(2, "SlewSettleTime", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -879,11 +879,11 @@ namespace ASCOM.DriverAccess
         /// The TargetRightAscension and TargetDeclination properties are not changed by this method. 
         /// Raises an error if AtPark is True, or if Tracking is True. 
         /// </summary>
-        /// <param name="Azimuth">Target azimuth (degrees, North-referenced, positive East/clockwise).</param>
-        /// <param name="Altitude">Target altitude (degrees, positive up)</param>
-        public void SlewToAltAz(double Azimuth, double Altitude)
+        /// <param name="azimuth">Target azimuth (degrees, North-referenced, positive East/clockwise).</param>
+        /// <param name="altitude">Target altitude (degrees, positive up)</param>
+        public void SlewToAltAz(double azimuth, double altitude)
         {
-            memberFactory.CallMember(3, "SlewToAltAz", new Type[] { typeof(double), typeof(double) }, new object[] { Azimuth, Altitude });
+            _memberFactory.CallMember(3, "SlewToAltAz", new[] { typeof(double), typeof(double) }, new object[] { azimuth, altitude });
         }
 
         /// <summary>
@@ -899,11 +899,11 @@ namespace ASCOM.DriverAccess
         /// The TargetRightAscension and TargetDeclination properties are not changed by this method. 
         /// Raises an error if AtPark is True, or if Tracking is True. 
         /// </summary>
-        /// <param name="Azimuth"></param>
-        /// <param name="Altitude"></param>
-        public void SlewToAltAzAsync(double Azimuth, double Altitude)
+        /// <param name="azimuth"></param>
+        /// <param name="altitude"></param>
+        public void SlewToAltAzAsync(double azimuth, double altitude)
         {
-            memberFactory.CallMember(3, "SlewToAltAzAsync", new Type[] { typeof(double), typeof(double) }, new object[] { Azimuth, Altitude });
+            _memberFactory.CallMember(3, "SlewToAltAzAsync", new[] { typeof(double), typeof(double) }, new object[] { azimuth, altitude });
         }
 
         /// <summary>
@@ -915,11 +915,11 @@ namespace ASCOM.DriverAccess
         /// Telescope.TargetRightAscension and Telescope.TargetDeclination whether or not the slew succeeds. 
         /// Raises an error if AtPark is True, or if Tracking is False. 
         /// </summary>
-        /// <param name="RightAscension">The destination right ascension (hours). Copied to Telescope.TargetRightAscension.</param>
-        /// <param name="Declination">The destination declination (degrees, positive North). Copied to Telescope.TargetDeclination.</param>
-        public void SlewToCoordinates(double RightAscension, double Declination)
+        /// <param name="rightAscension">The destination right ascension (hours). Copied to Telescope.TargetRightAscension.</param>
+        /// <param name="declination">The destination declination (degrees, positive North). Copied to Telescope.TargetDeclination.</param>
+        public void SlewToCoordinates(double rightAscension, double declination)
         {
-            memberFactory.CallMember(3, "SlewToCoordinates", new Type[] { typeof(double), typeof(double) }, new object[] { RightAscension, Declination });
+            _memberFactory.CallMember(3, "SlewToCoordinates", new[] { typeof(double), typeof(double) }, new object[] { rightAscension, declination });
         }
 
         /// <summary>
@@ -934,11 +934,11 @@ namespace ASCOM.DriverAccess
         /// whether or not the slew succeeds. 
         /// Raises an error if AtPark is True, or if Tracking is False. 
         /// </summary>
-        /// <param name="RightAscension">The destination right ascension (hours). Copied to Telescope.TargetRightAscension.</param>
-        /// <param name="Declination">The destination declination (degrees, positive North). Copied to Telescope.TargetDeclination.</param>
-        public void SlewToCoordinatesAsync(double RightAscension, double Declination)
+        /// <param name="rightAscension">The destination right ascension (hours). Copied to Telescope.TargetRightAscension.</param>
+        /// <param name="declination">The destination declination (degrees, positive North). Copied to Telescope.TargetDeclination.</param>
+        public void SlewToCoordinatesAsync(double rightAscension, double declination)
         {
-            memberFactory.CallMember(3, "SlewToCoordinatesAsync", new Type[] { typeof(double), typeof(double) }, new object[] { RightAscension, Declination });
+            _memberFactory.CallMember(3, "SlewToCoordinatesAsync", new[] { typeof(double), typeof(double) }, new object[] { rightAscension, declination });
         }
 
         /// <summary>
@@ -951,7 +951,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void SlewToTarget()
         {
-            memberFactory.CallMember(3, "SlewToTarget", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "SlewToTarget", new Type[] { }, new object[] { });
         }
 
         /// <summary>
@@ -969,7 +969,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void SlewToTargetAsync()
         {
-            memberFactory.CallMember(3, "SlewToTargetAsync", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "SlewToTargetAsync", new Type[] { }, new object[] { });
         }
 
         /// <summary>
@@ -985,7 +985,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Slewing
         {
-            get { return (bool)memberFactory.CallMember(1, "Slewing", new Type[] { }, new object[] { }); }
+            get { return (bool)_memberFactory.CallMember(1, "Slewing", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -993,21 +993,21 @@ namespace ASCOM.DriverAccess
         /// This must be implemented if the CanSyncAltAz property is True. Raises an error if matching fails. 
         /// Raises an error if AtPark is True, or if Tracking is True. 
         /// </summary>
-        /// <param name="Azimuth">Target azimuth (degrees, North-referenced, positive East/clockwise)</param>
-        /// <param name="Altitude">Target altitude (degrees, positive up)</param>
-        public void SyncToAltAz(double Azimuth, double Altitude)
+        /// <param name="azimuth">Target azimuth (degrees, North-referenced, positive East/clockwise)</param>
+        /// <param name="altitude">Target altitude (degrees, positive up)</param>
+        public void SyncToAltAz(double azimuth, double altitude)
         {
-            memberFactory.CallMember(3, "SyncToAltAz", new Type[] { typeof(double), typeof(double) }, new object[] { Azimuth, Altitude });
+            _memberFactory.CallMember(3, "SyncToAltAz", new[] { typeof(double), typeof(double) }, new object[] { azimuth, altitude });
         }
 
         /// <summary>
         /// Matches the scope's equatorial coordinates to the given equatorial coordinates.
         /// </summary>
-        /// <param name="RightAscension">The corrected right ascension (hours). Copied to the TargetRightAscension property.</param>
-        /// <param name="Declination">The corrected declination (degrees, positive North). Copied to the TargetDeclination property.</param>
-        public void SyncToCoordinates(double RightAscension, double Declination)
+        /// <param name="rightAscension">The corrected right ascension (hours). Copied to the TargetRightAscension property.</param>
+        /// <param name="declination">The corrected declination (degrees, positive North). Copied to the TargetDeclination property.</param>
+        public void SyncToCoordinates(double rightAscension, double declination)
         {
-            memberFactory.CallMember(3, "SyncToCoordinates", new Type[] { typeof(double), typeof(double) }, new object[] { RightAscension, Declination });
+            _memberFactory.CallMember(3, "SyncToCoordinates", new[] { typeof(double), typeof(double) }, new object[] { rightAscension, declination });
         }
 
         /// <summary>
@@ -1017,7 +1017,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void SyncToTarget()
         {
-            memberFactory.CallMember(3, "SyncToTarget", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "SyncToTarget", new Type[] { }, new object[] { });
         }
 
         /// <summary>
@@ -1027,8 +1027,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double TargetDeclination
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "TargetDeclination", new Type[] { }, new object[] { })); }
-            set { memberFactory.CallMember(2, "TargetDeclination", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "TargetDeclination", new Type[] { }, new object[] { })); }
+            set { _memberFactory.CallMember(2, "TargetDeclination", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -1038,8 +1038,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double TargetRightAscension
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "TargetRightAscension", new Type[] { }, new object[] { })); }
-            set { memberFactory.CallMember(2, "TargetRightAscension", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "TargetRightAscension", new Type[] { }, new object[] { })); }
+            set { _memberFactory.CallMember(2, "TargetRightAscension", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -1051,8 +1051,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Tracking
         {
-            get { return (bool)memberFactory.CallMember(1, "Tracking", new Type[] { }, new object[] { }); }
-            set { memberFactory.CallMember(2, "Tracking", new Type[] { }, new object[] { value }); }
+            get { return (bool)_memberFactory.CallMember(1, "Tracking", new Type[] { }, new object[] { }); }
+            set { _memberFactory.CallMember(2, "Tracking", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -1071,8 +1071,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public DriveRates TrackingRate
         {
-            get { return (DriveRates)memberFactory.CallMember(1, "TrackingRate", new Type[] { }, new object[] { }); }
-            set { memberFactory.CallMember(2, "TrackingRate", new Type[] { }, new object[] { value }); }
+            get { return (DriveRates)_memberFactory.CallMember(1, "TrackingRate", new Type[] { }, new object[] { }); }
+            set { _memberFactory.CallMember(2, "TrackingRate", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -1082,7 +1082,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public ITrackingRates TrackingRates
         {
-            get { return new _TrackingRates(memberFactory.GetObjType, memberFactory.GetLateBoundObject); }
+            get { return new _TrackingRates(_memberFactory.GetObjType, _memberFactory.GetLateBoundObject); }
         }
 
         /// <summary>
@@ -1097,8 +1097,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public DateTime UTCDate
         {
-            get { return (DateTime)memberFactory.CallMember(1, "UTCDate", new Type[] { }, new object[] { }); }
-            set { memberFactory.CallMember(2, "UTCDate", new Type[] { }, new object[] { value }); }
+            get { return (DateTime)_memberFactory.CallMember(1, "UTCDate", new Type[] { }, new object[] { }); }
+            set { _memberFactory.CallMember(2, "UTCDate", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -1110,7 +1110,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void Unpark()
         {
-            memberFactory.CallMember(3, "Unpark", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "Unpark", new Type[] { }, new object[] { });
         }
 
         #endregion
@@ -1123,10 +1123,10 @@ namespace ASCOM.DriverAccess
 		/// </summary>
 		public void Dispose()
         {
-            if (memberFactory != null)
+            if (_memberFactory != null)
             {
-                memberFactory.Dispose();
-                memberFactory = null;
+                _memberFactory.Dispose();
+                _memberFactory = null;
             }
         }
 
@@ -1146,21 +1146,21 @@ namespace ASCOM.DriverAccess
 	/// </summary>
 	class _Rate : IRate
 	{
-		Type objTypeRate;
-		object objRateLateBound;
+	    readonly Type _objTypeRate;
+		object _objRateLateBound;
 
 		public _Rate(int index, Type objTypeAxisRates, object objAxisRatesLateBound)
 		{
-			objRateLateBound = objTypeAxisRates.InvokeMember("Item",
+			_objRateLateBound = objTypeAxisRates.InvokeMember("Item",
 						BindingFlags.Default | BindingFlags.GetProperty,
 						null, objAxisRatesLateBound, new object[] { index });
-			objTypeRate = objRateLateBound.GetType();
+			_objTypeRate = _objRateLateBound.GetType();
 		}
 
 		public _Rate(object objRateLateBound)
 		{
-			this.objRateLateBound = objRateLateBound;
-			objTypeRate = objRateLateBound.GetType();
+			_objRateLateBound = objRateLateBound;
+			_objTypeRate = objRateLateBound.GetType();
 		}
 
 		/// <summary>
@@ -1171,15 +1171,15 @@ namespace ASCOM.DriverAccess
 		{
 			get
 			{
-				return (double)objTypeRate.InvokeMember("Maximum",
+				return (double)_objTypeRate.InvokeMember("Maximum",
 							BindingFlags.Default | BindingFlags.GetProperty,
-							null, objRateLateBound, new object[] { });
+							null, _objRateLateBound, new object[] { });
 			}
 			set
 			{
-				objTypeRate.InvokeMember("Maximum",
+				_objTypeRate.InvokeMember("Maximum",
 							BindingFlags.Default | BindingFlags.SetProperty,
-							null, objRateLateBound, new object[] { value });
+							null, _objRateLateBound, new object[] { value });
 			}
 		}
 
@@ -1191,15 +1191,15 @@ namespace ASCOM.DriverAccess
 		{
 			get
 			{
-				return (double)objTypeRate.InvokeMember("Minimum",
+				return (double)_objTypeRate.InvokeMember("Minimum",
 							BindingFlags.Default | BindingFlags.GetProperty,
-							null, objRateLateBound, new object[] { });
+							null, _objRateLateBound, new object[] { });
 			}
 			set
 			{
-				objTypeRate.InvokeMember("Minimum",
+				_objTypeRate.InvokeMember("Minimum",
 							BindingFlags.Default | BindingFlags.SetProperty,
-							null, objRateLateBound, new object[] { value });
+							null, _objRateLateBound, new object[] { value });
 			}
 		}
 
@@ -1207,9 +1207,9 @@ namespace ASCOM.DriverAccess
 
 		public void Dispose()
 		{
-			if (this.objRateLateBound != null)
+			if (_objRateLateBound != null)
 			{
-				objRateLateBound = null;
+				_objRateLateBound = null;
 			}
 		}
 
@@ -1224,34 +1224,34 @@ namespace ASCOM.DriverAccess
 	//
 	class _RateEnumerator : IEnumerator, IDisposable
 	{
-		IEnumerator objEnumerator;
-		Type objTypeAxisRates;
-		object objAxisRatesLateBound;
+		IEnumerator _objEnumerator;
+		Type _objTypeAxisRates;
+		object _objAxisRatesLateBound;
 
 		public _RateEnumerator(Type objTypeAxisRates, object objAxisRatesLateBound)
 		{
-			this.objTypeAxisRates = objTypeAxisRates;
-			this.objAxisRatesLateBound = objAxisRatesLateBound;
-			objEnumerator = (IEnumerator)objTypeAxisRates.InvokeMember("GetEnumerator",
+			_objTypeAxisRates = objTypeAxisRates;
+			_objAxisRatesLateBound = objAxisRatesLateBound;
+			_objEnumerator = (IEnumerator)objTypeAxisRates.InvokeMember("GetEnumerator",
 						BindingFlags.Default | BindingFlags.InvokeMethod,
 						null, objAxisRatesLateBound, new object[] { });
 		}
 
 		public void Reset()
 		{
-			objEnumerator.Reset();
+			_objEnumerator.Reset();
 		}
 
 		public bool MoveNext()
 		{
-			return objEnumerator.MoveNext();
+			return _objEnumerator.MoveNext();
 		}
 
 		public Object Current
 		{
 			get
 			{
-				return new _Rate(objEnumerator.Current);
+				return new _Rate(_objEnumerator.Current);
 			} 
 		}
 
@@ -1259,9 +1259,9 @@ namespace ASCOM.DriverAccess
 
 		public void Dispose()
 		{
-			if (this.objEnumerator != null)
+			if (_objEnumerator != null)
 			{
-				objEnumerator = null;
+				_objEnumerator = null;
 			}
 		}
 
@@ -1273,37 +1273,37 @@ namespace ASCOM.DriverAccess
 	//
 	class _AxisRates : IAxisRates
 	{
-		Type objTypeAxisRates;
-		object objAxisRatesLateBound;
+	    readonly Type _objTypeAxisRates;
+		object _objAxisRatesLateBound;
 
 		public _AxisRates(TelescopeAxes Axis, Type objTypeScope, object objScopeLateBound)
 		{
-			objAxisRatesLateBound = objTypeScope.InvokeMember("AxisRates",
+			_objAxisRatesLateBound = objTypeScope.InvokeMember("AxisRates",
 						BindingFlags.Default | BindingFlags.InvokeMethod,
 						null, objScopeLateBound, new object[] { (int)Axis });
-			objTypeAxisRates = objAxisRatesLateBound.GetType();
+			_objTypeAxisRates = _objAxisRatesLateBound.GetType();
 		}
 
 		public IRate this[int index]
 		{
 			get 
 			{
-				return new _Rate(index, objTypeAxisRates, objAxisRatesLateBound);
+				return new _Rate(index, _objTypeAxisRates, _objAxisRatesLateBound);
 			}
 		}
 
 		public IEnumerator GetEnumerator()
 		{
-			return new _RateEnumerator(objTypeAxisRates, objAxisRatesLateBound);
+			return new _RateEnumerator(_objTypeAxisRates, _objAxisRatesLateBound);
 		}
 
 		public int Count
 		{
 			get 
 			{
-				return (int)objTypeAxisRates.InvokeMember("Count",
+				return (int)_objTypeAxisRates.InvokeMember("Count",
 							BindingFlags.Default | BindingFlags.GetProperty,
-							null, objAxisRatesLateBound, new object[] { });
+							null, _objAxisRatesLateBound, new object[] { });
 			}
 		}
 
@@ -1311,9 +1311,9 @@ namespace ASCOM.DriverAccess
 
 		public void Dispose()
 		{
-			if (this.objAxisRatesLateBound != null)
+			if (_objAxisRatesLateBound != null)
 			{
-				objAxisRatesLateBound = null;
+				_objAxisRatesLateBound = null;
 			}
 		}
 
@@ -1325,41 +1325,41 @@ namespace ASCOM.DriverAccess
 	//
 	class _TrackingRates : ITrackingRates
 	{
-		Type objTypeTrackingRates;
-		object objTrackingRatesLateBound;
+	    readonly Type _objTypeTrackingRates;
+		object _objTrackingRatesLateBound;
 
 		public _TrackingRates(Type objTypeScope, object objScopeLateBound)
 		{
-			objTrackingRatesLateBound = objTypeScope.InvokeMember("TrackingRates",
+			_objTrackingRatesLateBound = objTypeScope.InvokeMember("TrackingRates",
 						BindingFlags.Default | BindingFlags.GetProperty,
 						null, objScopeLateBound, new object[] { });
-			objTypeTrackingRates = objTrackingRatesLateBound.GetType();
+			_objTypeTrackingRates = _objTrackingRatesLateBound.GetType();
 		}
 
 		public DriveRates this[int index]
 		{
 			get 
 			{
-				return (DriveRates)objTypeTrackingRates.InvokeMember("Item",
+				return (DriveRates)_objTypeTrackingRates.InvokeMember("Item",
 							BindingFlags.Default | BindingFlags.GetProperty,
-							null, objTrackingRatesLateBound, new object[] { index });
+							null, _objTrackingRatesLateBound, new object[] { index });
 			}
 		}
 
 		public IEnumerator GetEnumerator()
 		{
-			return (IEnumerator)objTypeTrackingRates.InvokeMember("GetEnumerator",
+			return (IEnumerator)_objTypeTrackingRates.InvokeMember("GetEnumerator",
 						BindingFlags.Default | BindingFlags.InvokeMethod,
-						null, objTrackingRatesLateBound, new object[] { });
+						null, _objTrackingRatesLateBound, new object[] { });
 		}
 
 		public int Count
 		{
 			get 
 			{
-				return (int)objTypeTrackingRates.InvokeMember("Count",
+				return (int)_objTypeTrackingRates.InvokeMember("Count",
 							BindingFlags.Default | BindingFlags.GetProperty,
-							null, objTrackingRatesLateBound, new object[] { });
+							null, _objTrackingRatesLateBound, new object[] { });
 			}
 		}
 
@@ -1367,9 +1367,9 @@ namespace ASCOM.DriverAccess
 
 		public void Dispose()
 		{
-			if (this.objTrackingRatesLateBound != null)
+			if (this._objTrackingRatesLateBound != null)
 			{
-				objTrackingRatesLateBound = null;
+				_objTrackingRatesLateBound = null;
 			}
 		}
 
@@ -1433,11 +1433,11 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Adds a new rate to the collection
         /// </summary>
-        /// <param name="Minimum">The lowest value in the rate range</param>
-        /// <param name="Maximum">The highest value in the rate range</param>
-        public void Add(double Minimum, double Maximum)
+        /// <param name="minimum">The lowest value in the rate range</param>
+        /// <param name="maximum">The highest value in the rate range</param>
+        public void Add(double minimum, double maximum)
         {
-            m_Rates.Add(new Rate(Minimum, Maximum));
+            m_Rates.Add(new Rate(minimum, maximum));
         }
 
     }
@@ -1451,17 +1451,17 @@ namespace ASCOM.DriverAccess
     public class Rate : IRate
     {
 
-        double m_dMaximumR = 0;
-        double m_dMinimumR = 0;
+        double _mDMaximumR = 0;
+        double _mDMinimumR = 0;
 
         //'
         //' Default constructor - Internal prevents public creation
         //' of instances. These are values for AxisRates.
 
-        internal Rate(double Minimum, double Maximum)
+        internal Rate(double minimum, double maximum)
         {
-            m_dMaximumR = Maximum;
-            m_dMinimumR = Minimum;
+            _mDMaximumR = maximum;
+            _mDMinimumR = minimum;
         }
 
         #region IRate Members
@@ -1471,8 +1471,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double Maximum
         {
-            get { return m_dMaximumR; }
-            set { m_dMaximumR = value; }
+            get { return _mDMaximumR; }
+            set { _mDMaximumR = value; }
         }
 
         /// <summary>
@@ -1480,8 +1480,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double Minimum
         {
-            get { return m_dMinimumR; }
-            set { m_dMinimumR = value; }
+            get { return _mDMinimumR; }
+            set { _mDMinimumR = value; }
         }
         
         /// <summary>

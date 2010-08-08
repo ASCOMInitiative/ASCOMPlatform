@@ -10,37 +10,52 @@ using ASCOM.Utilities;
 
 namespace ASCOM.DriverAccess
 {
-	#region Focuser wrapper
-	/// <summary>
-	/// Provides universal access to Focuser drivers
-	/// </summary>
-	public class Focuser : ASCOM.Interface.IFocuser, IDisposable
-    {
 
+    #region Focuser wrapper
+
+    /// <summary>
+    /// Provides universal access to Focuser drivers
+    /// </summary>
+    public class Focuser : IFocuser, IDisposable
+    {
         #region IFocuser constructors
 
-        private MemberFactory memberFactory;
+        private readonly MemberFactory _memberFactory;
 
         /// <summary>
         /// Creates a focuser object with the given Prog ID
         /// </summary>
-        /// <param name="focuserID"></param>
-        public Focuser(string focuserID)
-		{
-            memberFactory = new MemberFactory(focuserID);
-		}
+        /// <param name="focuserId"></param>
+        public Focuser(string focuserId)
+        {
+            _memberFactory = new MemberFactory(focuserId);
+        }
 
         /// <summary>
         /// Brings up the ASCOM Chooser Dialog to choose a Focuser
         /// </summary>
-        /// <param name="focuserID">Focuser Prog ID for default or null for None</param>
+        /// <param name="focuserId">Focuser Prog ID for default or null for None</param>
         /// <returns>Prog ID for chosen focuser or null for none</returns>
-        public static string Choose(string focuserID)
+        public static string Choose(string focuserId)
         {
-			Chooser oChooser = new Chooser();
-			oChooser.DeviceType = "Focuser";			// Requires Helper 5.0.3 (May '07)
-			return oChooser.Choose(focuserID);
-		}
+            var oChooser = new Chooser {DeviceType = "Focuser"};
+            return oChooser.Choose(focuserId);
+        }
+
+        #endregion
+
+        #region IDisposable Members
+
+        /// <summary>
+        /// Dispose the late-bound interface, if needed. Will release it via COM
+        /// if it is a COM object, else if native .NET will just dereference it
+        /// for GC.
+        /// </summary>
+        public void Dispose()
+        {
+            _memberFactory.Dispose();
+        }
+
         #endregion
 
         #region IFocuser Members
@@ -50,7 +65,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Absolute
         {
-            get { return (bool)memberFactory.CallMember(1, "Absolute", new Type[] { }, new object[] { }); }  
+            get { return (bool) _memberFactory.CallMember(1, "Absolute", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -61,7 +76,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void Halt()
         {
-            memberFactory.CallMember(3, "Halt", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "Halt", new Type[] {}, new object[] {});
         }
 
         /// <summary>
@@ -69,8 +84,9 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool IsMoving
         {
-            get { return (bool)memberFactory.CallMember(1, "IsMoving", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "IsMoving", new Type[] {}, new object[] {}); }
         }
+
         /// <summary>
         /// State of the connection to the focuser.
         /// et True to start the link to the focuser; set False to terminate the link. 
@@ -79,8 +95,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Link
         {
-            get { return (bool)memberFactory.CallMember(1, "Link", new Type[] { }, new object[] { }); }
-            set { memberFactory.CallMember(2, "Link", new Type[] { }, new object[] { value }); }
+            get { return (bool) _memberFactory.CallMember(1, "Link", new Type[] {}, new object[] {}); }
+            set { _memberFactory.CallMember(2, "Link", new Type[] {}, new object[] {value}); }
         }
 
         /// <summary>
@@ -91,7 +107,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public int MaxIncrement
         {
-            get { return Convert.ToInt32(memberFactory.CallMember(1, "MaxIncrement", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt32(_memberFactory.CallMember(1, "MaxIncrement", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -102,7 +118,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public int MaxStep
         {
-            get { return Convert.ToInt32(memberFactory.CallMember(1, "MaxStep", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt32(_memberFactory.CallMember(1, "MaxStep", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -112,7 +128,7 @@ namespace ASCOM.DriverAccess
         /// <param name="val"></param>
         public void Move(int val)
         {
-            memberFactory.CallMember(3, "Move", new Type[] { typeof(int) }, new object[] { val });
+            _memberFactory.CallMember(3, "Move", new[] {typeof (int)}, new object[] {val});
         }
 
         /// <summary>
@@ -122,7 +138,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public int Position
         {
-            get { return Convert.ToInt32(memberFactory.CallMember(1, "Position", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt32(_memberFactory.CallMember(1, "Position", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -131,17 +147,17 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void SetupDialog()
         {
-            memberFactory.CallMember(3, "SetupDialog", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "SetupDialog", new Type[] {}, new object[] {});
         }
+
         /// <summary>
         /// Step size (microns) for the focuser.
         /// Raises an exception if the focuser does not intrinsically know what the step size is. 
         /// 
         /// </summary>
-
         public double StepSize
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "StepSize", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "StepSize", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -154,8 +170,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool TempComp
         {
-            get { return (bool)memberFactory.CallMember(1, "TempComp", new Type[] { }, new object[] { }); }
-            set { memberFactory.CallMember(2, "TempComp", new Type[] { }, new object[] { value }); }
+            get { return (bool) _memberFactory.CallMember(1, "TempComp", new Type[] {}, new object[] {}); }
+            set { _memberFactory.CallMember(2, "TempComp", new Type[] {}, new object[] {value}); }
         }
 
         /// <summary>
@@ -164,7 +180,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool TempCompAvailable
         {
-            get { return (bool)memberFactory.CallMember(1, "TempCompAvailable", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "TempCompAvailable", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -174,24 +190,11 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double Temperature
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "Temperature", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "Temperature", new Type[] {}, new object[] {})); }
         }
 
         #endregion
+    }
 
-		#region IDisposable Members
-		/// <summary>
-		/// Dispose the late-bound interface, if needed. Will release it via COM
-		/// if it is a COM object, else if native .NET will just dereference it
-		/// for GC.
-		/// </summary>
-		public void Dispose()
-		{
-            memberFactory.Dispose();
-		}
-
-		#endregion
-
-	}
-	#endregion
+    #endregion
 }
