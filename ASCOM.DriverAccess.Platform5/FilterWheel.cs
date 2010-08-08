@@ -10,43 +10,58 @@ using ASCOM.Utilities;
 
 namespace ASCOM.DriverAccess
 {
+
     #region FilterWheel wrapper
+
     /// <summary>
     /// Provides universal access to FilterWheel drivers
     /// </summary>
-    public class FilterWheel : ASCOM.Interface.IFilterWheel, IDisposable
+    public class FilterWheel : IFilterWheel, IDisposable
     {
         #region FilterWheel constructors
 
-        private MemberFactory memberFactory;
+        private readonly MemberFactory _memberFactory;
 
         /// <summary>
         /// Creates a FilterWheel object with the given Prog ID
         /// </summary>
-        /// <param name="filterWheelID"></param>
-        public FilterWheel(string filterWheelID)
-		{
-            memberFactory = new MemberFactory(filterWheelID);
-		}
+        /// <param name="filterWheelId"></param>
+        public FilterWheel(string filterWheelId)
+        {
+            _memberFactory = new MemberFactory(filterWheelId);
+        }
 
         /// <summary>
         /// Brings up the ASCOM Chooser Dialog to choose a FilterWheel
         /// </summary>
-        /// <param name="filterWheelID">FilterWheel Prog ID for default or null for None</param>
+        /// <param name="filterWheelId">FilterWheel Prog ID for default or null for None</param>
         /// <returns>Prog ID for chosen FilterWheel or null for none</returns>
-        public static string Choose(string filterWheelID)
+        public static string Choose(string filterWheelId)
         {
             try
             {
-                Chooser oChooser = new Chooser();
-                oChooser.DeviceType = "FilterWheel";			// Requires Helper 5.0.3 (May '07)
-                return oChooser.Choose(filterWheelID);
+                var oChooser = new Chooser {DeviceType = "FilterWheel"};
+                return oChooser.Choose(filterWheelId);
             }
             catch
             {
                 return "";
             }
-		}
+        }
+
+        #endregion
+
+        #region IDisposable Members
+
+        /// <summary>
+        /// Dispose the late-bound interface, if needed. Will release it via COM
+        /// if it is a COM object, else if native .NET will just dereference it
+        /// for GC.
+        /// </summary>
+        public void Dispose()
+        {
+            _memberFactory.Dispose();
+        }
 
         #endregion
 
@@ -59,8 +74,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Connected
         {
-            get { return (bool)memberFactory.CallMember(1, "Connected", new Type[] { }, new object[] { }); }
-            set { memberFactory.CallMember(2, "Connected", new Type[] { }, new object[] { value }); }
+            get { return (bool) _memberFactory.CallMember(1, "Connected", new Type[] {}, new object[] {}); }
+            set { _memberFactory.CallMember(2, "Connected", new Type[] {}, new object[] {value}); }
         }
 
         /// <summary>
@@ -73,7 +88,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public int[] FocusOffsets
         {
-            get { return (int[])memberFactory.CallMember(1, "FocusOffsets", new Type[] { }, new object[] { }); }
+            get { return (int[]) _memberFactory.CallMember(1, "FocusOffsets", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -85,7 +100,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string[] Names
         {
-            get { return (string[])memberFactory.CallMember(1, "Names", new Type[] { }, new object[] { }); }
+            get { return (string[]) _memberFactory.CallMember(1, "Names", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -102,8 +117,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public short Position
         {
-            get { return Convert.ToInt16(memberFactory.CallMember(1, "Position", new Type[] { }, new object[] { })); }
-            set { memberFactory.CallMember(2, "Position", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "Position", new Type[] {}, new object[] {})); }
+            set { _memberFactory.CallMember(2, "Position", new Type[] {}, new object[] {value}); }
         }
 
         /// <summary>
@@ -113,24 +128,11 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw an exception if Setup dialog is unavailable.</exception>
         public void SetupDialog()
         {
-            memberFactory.CallMember(3, "SetupDialog", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "SetupDialog", new Type[] {}, new object[] {});
         }
 
         #endregion
-
-        #region IDisposable Members
-
-        /// <summary>
-		/// Dispose the late-bound interface, if needed. Will release it via COM
-		/// if it is a COM object, else if native .NET will just dereference it
-		/// for GC.
-        /// </summary>
-        public void Dispose()
-        {
-            memberFactory.Dispose();
-		}
-
-        #endregion
     }
+
     #endregion
 }

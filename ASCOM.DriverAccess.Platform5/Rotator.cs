@@ -10,43 +10,57 @@ using ASCOM.Utilities;
 
 namespace ASCOM.DriverAccess
 {
+
     #region Rotator wrapper
+
     /// <summary>
     /// Provides universal access to Rotator drivers
     /// </summary>
-    public class Rotator : ASCOM.Interface.IRotator, IDisposable
+    public class Rotator : IRotator, IDisposable
     {
-
         #region IRotator constructors
 
-        private MemberFactory memberFactory;
+        private readonly MemberFactory _memberFactory;
 
         /// <summary>
         /// Creates a rotator object with the given Prog ID
         /// </summary>
-        /// <param name="rotatorID"></param>
-        public Rotator(string rotatorID)
-		{
-            memberFactory = new MemberFactory(rotatorID);
-		}
+        /// <param name="rotatorId"></param>
+        public Rotator(string rotatorId)
+        {
+            _memberFactory = new MemberFactory(rotatorId);
+        }
 
         /// <summary>
         /// Brings up the ASCOM Chooser Dialog to choose a Rotator
         /// </summary>
-        /// <param name="rotatorID">Focuser Prog ID for default or null for None</param>
+        /// <param name="rotatorId">Focuser Prog ID for default or null for None</param>
         /// <returns>Prog ID for chosen Rotator or null for none</returns>
-        public static string Choose(string rotatorID)
+        public static string Choose(string rotatorId)
         {
             try
             {
-                Chooser oChooser = new Chooser();
-                oChooser.DeviceType = "Rotator";			// Requires Helper 5.0.3 (May '07)
-                return oChooser.Choose(rotatorID);
+                var oChooser = new Chooser {DeviceType = "Rotator"};
+                return oChooser.Choose(rotatorId);
             }
             catch
             {
                 return "";
             }
+        }
+
+        #endregion
+
+        #region IDisposable Members
+
+        /// <summary>
+        /// Dispose the late-bound interface, if needed. Will release it via COM
+        /// if it is a COM object, else if native .NET will just dereference it
+        /// for GC.
+        /// </summary>
+        public void Dispose()
+        {
+            _memberFactory.Dispose();
         }
 
         #endregion
@@ -58,7 +72,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanReverse
         {
-            get { return (bool)memberFactory.CallMember(1, "CanReverse", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "CanReverse", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -68,8 +82,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Connected
         {
-            get { return (bool)memberFactory.CallMember(1, "Connected", new Type[] { }, new object[] { }); }
-            set { memberFactory.CallMember(2, "Connected", new Type[] { }, new object[] { value }); }
+            get { return (bool) _memberFactory.CallMember(1, "Connected", new Type[] {}, new object[] {}); }
+            set { _memberFactory.CallMember(2, "Connected", new Type[] {}, new object[] {value}); }
         }
 
         /// <summary>
@@ -77,7 +91,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void Halt()
         {
-            memberFactory.CallMember(3, "Halt", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "Halt", new Type[] {}, new object[] {});
         }
 
         /// <summary>
@@ -85,25 +99,25 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool IsMoving
         {
-            get { return (bool)memberFactory.CallMember(1, "IsMoving", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "IsMoving", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
         /// Causes the rotator to move Position degrees relative to the current Position value.
         /// </summary>
-        /// <param name="Position">Relative position to move in degrees from current Position.</param>
-        public void Move(float Position)
+        /// <param name="position">Relative position to move in degrees from current Position.</param>
+        public void Move(float position)
         {
-            memberFactory.CallMember(3, "Move", new Type[] { typeof(float) }, new object[] { Position });
+            _memberFactory.CallMember(3, "Move", new[] {typeof (float)}, new object[] {position});
         }
 
         /// <summary>
         /// Causes the rotator to move the absolute position of Position degrees.
         /// </summary>
-        /// <param name="Position">absolute position in degrees.</param>
-        public void MoveAbsolute(float Position)
+        /// <param name="position">absolute position in degrees.</param>
+        public void MoveAbsolute(float position)
         {
-            memberFactory.CallMember(3, "MoveAbsolute", new Type[] { typeof(float) }, new object[] { Position });
+            _memberFactory.CallMember(3, "MoveAbsolute", new[] {typeof (float)}, new object[] {position});
         }
 
         /// <summary>
@@ -111,7 +125,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public float Position
         {
-            get { return (float)memberFactory.CallMember(1, "Position", new Type[] { }, new object[] { }); }
+            get { return (float) _memberFactory.CallMember(1, "Position", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -119,8 +133,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Reverse
         {
-            get { return (bool)memberFactory.CallMember(1, "Reverse", new Type[] { }, new object[] { }); }
-            set { memberFactory.CallMember(2, "Reverse", new Type[] { }, new object[] { value }); }
+            get { return (bool) _memberFactory.CallMember(1, "Reverse", new Type[] {}, new object[] {}); }
+            set { _memberFactory.CallMember(2, "Reverse", new Type[] {}, new object[] {value}); }
         }
 
         /// <summary>
@@ -128,7 +142,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void SetupDialog()
         {
-            memberFactory.CallMember(3, "SetupDialog", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "SetupDialog", new Type[] {}, new object[] {});
         }
 
         /// <summary>
@@ -136,7 +150,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public float StepSize
         {
-            get { return (float)memberFactory.CallMember(1, "StepSize", new Type[] { }, new object[] { }); }
+            get { return (float) _memberFactory.CallMember(1, "StepSize", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -144,24 +158,11 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public float TargetPosition
         {
-            get { return (float)memberFactory.CallMember(1, "TargetPosition", new Type[] { }, new object[] { }); }
+            get { return (float) _memberFactory.CallMember(1, "TargetPosition", new Type[] {}, new object[] {}); }
         }
 
         #endregion
-
-        #region IDisposable Members
-
-        /// <summary>
-		/// Dispose the late-bound interface, if needed. Will release it via COM
-		/// if it is a COM object, else if native .NET will just dereference it
-		/// for GC.
-        /// </summary>
-        public void Dispose()
-        {
-			 memberFactory.Dispose();
-		}
-
-        #endregion
     }
+
     #endregion
 }

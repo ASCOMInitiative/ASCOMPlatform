@@ -10,25 +10,28 @@ using ASCOM.Utilities;
 
 namespace ASCOM.DriverAccess
 {
-	#region Camera Wrapper
+
+    #region Camera Wrapper
+
     /// <summary>
     /// Implements a camera class to access any registered ASCOM Camera
     /// </summary>
-    public class Camera : ASCOM.Interface.ICamera, IDisposable
+    public class Camera : ICamera, IDisposable
     {
         #region ICamera constructors
-        private MemberFactory memberFactory;
-        private short DriverInterfaceVersion;
+
+        private readonly short _driverInterfaceVersion;
+        private readonly MemberFactory _memberFactory;
 
         /// <summary>
         /// Creates an instance of the camera class.
         /// </summary>
-        /// <param name="cameraID">The ProgID for the camera</param>
-        public Camera(string cameraID)
-		{
-            memberFactory = new MemberFactory(cameraID);
-            DriverInterfaceVersion = this.InterfaceVersion;
-		}
+        /// <param name="cameraId">The ProgID for the camera</param>
+        public Camera(string cameraId)
+        {
+            _memberFactory = new MemberFactory(cameraId);
+            _driverInterfaceVersion = InterfaceVersion;
+        }
 
         /// <summary>
         /// The Choose() method returns the DriverID of the selected driver.
@@ -36,17 +39,17 @@ namespace ASCOM.DriverAccess
         /// and the corresponding camera type is pre-selected in the Chooser///s list.
         /// In this case, the OK button starts out enabled (lit-up); the assumption is that the pre-selected driver has already been configured.
         /// </summary>
-        /// <param name="cameraID">Optional DriverID of the previously selected camera that is to be the pre-selected camera in the list.</param>
+        /// <param name="cameraId">Optional DriverID of the previously selected camera that is to be the pre-selected camera in the list.</param>
         /// <returns>
         /// The DriverID of the user selected camera. Null if the dialog is canceled.
         /// </returns>
-        public static string Choose(string cameraID)
+        public static string Choose(string cameraId)
         {
-            Chooser oChooser = new Chooser();
-            oChooser.DeviceType = "Camera";			// Requires Helper 5.0.3 (May ///07)
-            return oChooser.Choose(cameraID);
+            var oChooser = new Chooser {DeviceType = "Camera"};
+            return oChooser.Choose(cameraId);
         }
-    #endregion
+
+        #endregion
 
         #region ICamera Members
 
@@ -60,7 +63,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void AbortExposure()
         {
-            memberFactory.CallMember(3, "AbortExposure", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "AbortExposure", new Type[] {}, new object[] {});
         }
 
         /// <summary>
@@ -73,8 +76,8 @@ namespace ASCOM.DriverAccess
         /// <exception>Must throw an exception for illegal binning values</exception>
         public short BinX
         {
-            get { return Convert.ToInt16(memberFactory.CallMember(1, "BinX", new Type[] { }, new object[] { })); }
-            set { memberFactory.CallMember(2, "BinX", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "BinX", new Type[] {}, new object[] {})); }
+            set { _memberFactory.CallMember(2, "BinX", new Type[] {}, new object[] {value}); }
         }
 
         /// <summary>
@@ -87,8 +90,8 @@ namespace ASCOM.DriverAccess
         /// <exception>Must throw an exception for illegal binning values</exception>
         public short BinY
         {
-            get { return Convert.ToInt16(memberFactory.CallMember(1, "BinY", new Type[] { }, new object[] { })); }
-            set { memberFactory.CallMember(2, "BinY", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "BinY", new Type[] {}, new object[] {})); }
+            set { _memberFactory.CallMember(2, "BinY", new Type[] {}, new object[] {value}); }
         }
 
         /// <summary>
@@ -99,7 +102,7 @@ namespace ASCOM.DriverAccess
         /// <exception>Must throw exception if data unavailable.</exception>
         public double CCDTemperature
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "CCDTemperature", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "CCDTemperature", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -134,7 +137,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref="System.Exception">Must return an exception if the camera status is unavailable.</exception>
         public CameraStates CameraState
         {
-            get { return (CameraStates)memberFactory.CallMember(1, "CameraState", new Type[] { }, new object[] { }); }
+            get { return (CameraStates) _memberFactory.CallMember(1, "CameraState", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -144,7 +147,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref="System.Exception">Must throw exception if the value is not known</exception>
         public int CameraXSize
         {
-            get { return Convert.ToInt32(memberFactory.CallMember(1, "CameraXSize", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt32(_memberFactory.CallMember(1, "CameraXSize", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -154,7 +157,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref="System.Exception">Must throw exception if the value is not known</exception>
         public int CameraYSize
         {
-            get { return Convert.ToInt32(memberFactory.CallMember(1, "CameraYSize", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt32(_memberFactory.CallMember(1, "CameraYSize", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -165,7 +168,7 @@ namespace ASCOM.DriverAccess
         /// </value>
         public bool CanAbortExposure
         {
-            get { return (bool)memberFactory.CallMember(1, "CanAbortExposure", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "CanAbortExposure", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -180,7 +183,7 @@ namespace ASCOM.DriverAccess
         /// occurs if no link established and camera must be queried)</exception>
         public bool CanAsymmetricBin
         {
-            get { return (bool)memberFactory.CallMember(1, "CanAsymmetricBin", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "CanAsymmetricBin", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -189,9 +192,9 @@ namespace ASCOM.DriverAccess
         /// <value>
         /// 	<c>true</c> if this instance can get cooler power; otherwise, <c>false</c>.
         /// </value>
-        public bool  CanGetCoolerPower
+        public bool CanGetCoolerPower
         {
-            get { return (bool)memberFactory.CallMember(1, "CanGetCoolerPower", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "CanGetCoolerPower", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -204,7 +207,7 @@ namespace ASCOM.DriverAccess
         /// </value>
         public bool CanPulseGuide
         {
-            get { return (bool)memberFactory.CallMember(1, "CanPulseGuide", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "CanPulseGuide", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -217,7 +220,7 @@ namespace ASCOM.DriverAccess
         /// </value>
         public bool CanSetCCDTemperature
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSetCCDTemperature", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "CanSetCCDTemperature", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -232,7 +235,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">an error condition such as link failure is present</exception>
         public bool CanStopExposure
         {
-            get { return (bool)memberFactory.CallMember(1, "CanStopExposure", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "CanStopExposure", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -244,8 +247,8 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if unsuccessful.</exception>
         public bool Connected
         {
-            get { return (bool)memberFactory.CallMember(1, "Connected", new Type[] { }, new object[] { }); }
-            set { memberFactory.CallMember(2, "Connected", new Type[] { }, new object[] { value }); }
+            get { return (bool) _memberFactory.CallMember(1, "Connected", new Type[] {}, new object[] {}); }
+            set { _memberFactory.CallMember(2, "Connected", new Type[] {}, new object[] {value}); }
         }
 
         /// <summary>
@@ -258,22 +261,22 @@ namespace ASCOM.DriverAccess
         /// <value><c>true</c> if [cooler on]; otherwise, <c>false</c>.</value>
         /// <exception cref=" System.Exception">not supported</exception>
         /// <exception cref=" System.Exception">an error condition such as link failure is present</exception>
-       public bool CoolerOn
+        public bool CoolerOn
         {
-            get { return (bool)memberFactory.CallMember(1, "CoolerOn", new Type[] { }, new object[] { }); }
-            set { memberFactory.CallMember(2, "CoolerOn", new Type[] { }, new object[] { value }); }
+            get { return (bool) _memberFactory.CallMember(1, "CoolerOn", new Type[] {}, new object[] {}); }
+            set { _memberFactory.CallMember(2, "CoolerOn", new Type[] {}, new object[] {value}); }
         }
 
-       /// <summary>
-       /// Returns the present cooler power level, in percent.  Returns zero if CoolerOn is
-       /// False.
-       /// </summary>
-       /// <value>The cooler power.</value>
-       /// <exception cref=" System.Exception">not supported</exception>
-       /// <exception cref=" System.Exception">an error condition such as link failure is present</exception>
+        /// <summary>
+        /// Returns the present cooler power level, in percent.  Returns zero if CoolerOn is
+        /// False.
+        /// </summary>
+        /// <value>The cooler power.</value>
+        /// <exception cref=" System.Exception">not supported</exception>
+        /// <exception cref=" System.Exception">an error condition such as link failure is present</exception>
         public double CoolerPower
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "CoolerPower", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "CoolerPower", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -285,7 +288,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if description unavailable</exception>
         public string Description
         {
-            get { return (string)memberFactory.CallMember(1, "Description", new Type[] { typeof(string) }, new object[] { }); }
+            get { return (string) _memberFactory.CallMember(1, "Description", new[] {typeof (string)}, new object[] {}); }
         }
 
         /// <summary>
@@ -297,7 +300,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public double ElectronsPerADU
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "ElectronsPerADU", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "ElectronsPerADU", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -308,7 +311,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public double FullWellCapacity
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "FullWellCapacity", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "FullWellCapacity", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -319,20 +322,24 @@ namespace ASCOM.DriverAccess
         /// <value>
         /// 	<c>true</c> if this instance has shutter; otherwise, <c>false</c>.
         /// </value>
-       public bool HasShutter
+        public bool HasShutter
         {
-            get { return (bool)memberFactory.CallMember(1, "HasShutter", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "HasShutter", new Type[] {}, new object[] {}); }
         }
 
-       /// <summary>
-       /// Returns the current heat sink temperature (called "ambient temperature" by some
-       /// manufacturers) in degrees Celsius. Only valid if CanControlTemperature is True.
-       /// </summary>
-       /// <value>The heat sink temperature.</value>
-       /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
+        /// <summary>
+        /// Returns the current heat sink temperature (called "ambient temperature" by some
+        /// manufacturers) in degrees Celsius. Only valid if CanControlTemperature is True.
+        /// </summary>
+        /// <value>The heat sink temperature.</value>
+        /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public double HeatSinkTemperature
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "HeatSinkTemperature", new Type[] { }, new object[] { })); }
+            get
+            {
+                return
+                    Convert.ToDouble(_memberFactory.CallMember(1, "HeatSinkTemperature", new Type[] {}, new object[] {}));
+            }
         }
 
         /// <summary>
@@ -350,7 +357,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public object ImageArray
         {
-            get { return (object)memberFactory.CallMember(1, "ImageArray", new Type[] { }, new object[] { }); }
+            get { return _memberFactory.CallMember(1, "ImageArray", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -369,7 +376,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public object ImageArrayVariant
         {
-            get { return (object)memberFactory.CallMember(1, "ImageArrayVariant", new Type[] { }, new object[] { }); }
+            get { return _memberFactory.CallMember(1, "ImageArrayVariant", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -381,7 +388,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">hardware or communications link error has occurred.</exception>
         public bool ImageReady
         {
-            get { return (bool)memberFactory.CallMember(1, "ImageReady", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "ImageReady", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -394,7 +401,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">hardware or communications link error has occurred.</exception>
         public bool IsPulseGuiding
         {
-            get { return (bool)memberFactory.CallMember(1, "IsPulseGuiding", new Type[] { }, new object[] { }); }
+            get { return (bool) _memberFactory.CallMember(1, "IsPulseGuiding", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -406,7 +413,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if no error condition.</exception>
         public string LastError
         {
-            get { return (string)memberFactory.CallMember(1, "LastError", new Type[] { }, new object[] { }); }
+            get { return (string) _memberFactory.CallMember(1, "LastError", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -418,7 +425,11 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if not supported or no exposure has been taken</exception>
         public double LastExposureDuration
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "LastExposureDuration", new Type[] { }, new object[] { })); }
+            get
+            {
+                return
+                    Convert.ToDouble(_memberFactory.CallMember(1, "LastExposureDuration", new Type[] {}, new object[] {}));
+            }
         }
 
         /// <summary>
@@ -429,7 +440,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if not supported or no exposure has been taken</exception>
         public string LastExposureStartTime
         {
-            get { return (string)memberFactory.CallMember(1, "LastExposureStartTime", new Type[] { }, new object[] { }); }
+            get { return (string) _memberFactory.CallMember(1, "LastExposureStartTime", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -439,7 +450,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public int MaxADU
         {
-            get { return Convert.ToInt32(memberFactory.CallMember(1, "MaxADU", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt32(_memberFactory.CallMember(1, "MaxADU", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -451,7 +462,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public short MaxBinX
         {
-            get { return Convert.ToInt16(memberFactory.CallMember(1, "MaxBinX", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "MaxBinX", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -462,7 +473,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public short MaxBinY
         {
-            get { return Convert.ToInt16(memberFactory.CallMember(1, "MaxBinY", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "MaxBinY", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -473,8 +484,8 @@ namespace ASCOM.DriverAccess
         /// <value>The num X.</value>
         public int NumX
         {
-            get { return Convert.ToInt32(memberFactory.CallMember(1, "NumX", new Type[] { }, new object[] { })); }
-            set { memberFactory.CallMember(2, "NumX", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToInt32(_memberFactory.CallMember(1, "NumX", new Type[] {}, new object[] {})); }
+            set { _memberFactory.CallMember(2, "NumX", new Type[] {}, new object[] {value}); }
         }
 
         /// <summary>
@@ -485,8 +496,8 @@ namespace ASCOM.DriverAccess
         /// <value>The num Y.</value>
         public int NumY
         {
-            get { return Convert.ToInt32(memberFactory.CallMember(1, "NumY", new Type[] { }, new object[] { })); }
-            set { memberFactory.CallMember(2, "NumY", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToInt32(_memberFactory.CallMember(1, "NumY", new Type[] {}, new object[] {})); }
+            set { _memberFactory.CallMember(2, "NumY", new Type[] {}, new object[] {value}); }
         }
 
         /// <summary>
@@ -497,7 +508,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public double PixelSizeX
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "PixelSizeX", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "PixelSizeX", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -508,7 +519,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public double PixelSizeY
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "PixelSizeY", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "PixelSizeY", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -524,13 +535,14 @@ namespace ASCOM.DriverAccess
         /// Note: directions are nominal and may depend on exact mount wiring.  guideNorth
         /// must be opposite guideSouth, and guideEast must be opposite guideWest.
         /// </summary>
-        /// <param name="Direction">The direction.</param>
-        /// <param name="Duration">The duration.</param>
+        /// <param name="direction">The direction.</param>
+        /// <param name="duration">The duration.</param>
         /// <exception cref=" System.Exception">PulseGuide command is unsupported</exception>
         /// <exception cref=" System.Exception">PulseGuide command is unsuccessful</exception>
-        public void PulseGuide(GuideDirections Direction, int Duration)
+        public void PulseGuide(GuideDirections direction, int duration)
         {
-            memberFactory.CallMember(3, "PulseGuide", new Type[] { typeof(GuideDirections), typeof(int) }, new object[] { Direction, Duration });
+            _memberFactory.CallMember(3, "PulseGuide", new[] {typeof (GuideDirections), typeof (int)},
+                                      new object[] {direction, duration});
         }
 
         /// <summary>
@@ -544,8 +556,12 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if CanSetCCDTemperature is False.</exception>
         public double SetCCDTemperature
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "SetCCDTemperature", new Type[] { }, new object[] { })); }
-            set { memberFactory.CallMember(2, "SetCCDTemperature", new Type[] { }, new object[] { value }); }
+            get
+            {
+                return
+                    Convert.ToDouble(_memberFactory.CallMember(1, "SetCCDTemperature", new Type[] {}, new object[] {}));
+            }
+            set { _memberFactory.CallMember(2, "SetCCDTemperature", new Type[] {}, new object[] {value}); }
         }
 
         /// <summary>
@@ -555,20 +571,21 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw an exception if Setup dialog is unavailable.</exception>
         public void SetupDialog()
         {
-            memberFactory.CallMember(3, "SetupDialog", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "SetupDialog", new Type[] {}, new object[] {});
         }
 
         /// <summary>
         /// Starts an exposure. Use ImageReady to check when the exposure is complete.
         /// </summary>
-        /// <param name="Duration">Duration of exposure in seconds</param>
-        /// <param name="Light">True for light frame, False for dark frame (ignored if no shutter)</param>
+        /// <param name="duration">Duration of exposure in seconds</param>
+        /// <param name="light">True for light frame, False for dark frame (ignored if no shutter)</param>
         /// <exception cref=" System.Exception">NumX, NumY, XBin, YBin, StartX, StartY, or Duration parameters are invalid.</exception>
         /// <exception cref=" System.Exception">CanAsymmetricBin is False and BinX != BinY</exception>
         /// <exception cref=" System.Exception">the exposure cannot be started for any reason, such as a hardware or communications error</exception>
-        public void StartExposure(double Duration, bool Light)
+        public void StartExposure(double duration, bool light)
         {
-            memberFactory.CallMember(3, "StartExposure", new Type[] { typeof(double), typeof(bool) }, new object[] { Duration, Light }); 
+            _memberFactory.CallMember(3, "StartExposure", new[] {typeof (double), typeof (bool)},
+                                      new object[] {duration, light});
         }
 
         /// <summary>
@@ -578,8 +595,8 @@ namespace ASCOM.DriverAccess
         /// <value>The start X.</value>
         public int StartX
         {
-            get { return Convert.ToInt32(memberFactory.CallMember(1, "StartX", new Type[] { }, new object[] { })); }
-            set { memberFactory.CallMember(2, "StartX", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToInt32(_memberFactory.CallMember(1, "StartX", new Type[] {}, new object[] {})); }
+            set { _memberFactory.CallMember(2, "StartX", new Type[] {}, new object[] {value}); }
         }
 
         /// <summary>
@@ -589,8 +606,8 @@ namespace ASCOM.DriverAccess
         /// <value>The start Y.</value>
         public int StartY
         {
-            get { return Convert.ToInt32(memberFactory.CallMember(1, "StartY", new Type[] { }, new object[] { })); }
-            set { memberFactory.CallMember(2, "StartY", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToInt32(_memberFactory.CallMember(1, "StartY", new Type[] {}, new object[] {})); }
+            set { _memberFactory.CallMember(2, "StartY", new Type[] {}, new object[] {value}); }
         }
 
         /// <summary>
@@ -603,11 +620,13 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw an exception if for any reason no image readout will be available.</exception>
         public void StopExposure()
         {
-            memberFactory.CallMember(3, "StopExposure", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "StopExposure", new Type[] {}, new object[] {});
         }
+
         #endregion
 
         #region Camera V2 Properties
+
         // the Version 2 properties are late bound only for now,
         // so only the late bound interface is implemented
 
@@ -622,7 +641,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw an exception if not valid. </exception>
         public short BayerOffsetX
         {
-            get { return Convert.ToInt16(memberFactory.CallMember(1, "BayerOffsetX", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "BayerOffsetX", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -636,7 +655,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw an exception if not valid. </exception>
         public int BayerOffsetY
         {
-            get { return Convert.ToInt16(memberFactory.CallMember(1, "BayerOffsetY", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "BayerOffsetY", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -649,14 +668,11 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-                if (DriverInterfaceVersion > 1)
+                if (_driverInterfaceVersion > 1)
                 {
-                    return (bool)memberFactory.CallMember(1, "CanFastReadout", new Type[] { }, new object[] { });
+                    return (bool) _memberFactory.CallMember(1, "CanFastReadout", new Type[] {}, new object[] {});
                 }
-                else
-                {
-                    return false;
-                }
+                return false;
             }
         }
 
@@ -670,7 +686,7 @@ namespace ASCOM.DriverAccess
         /// <value>The driver info.</value>
         public string DriverInfo
         {
-            get { return (string)memberFactory.CallMember(1, "DriverInfo", new Type[] { typeof(string) }, new object[] { }); }
+            get { return (string) _memberFactory.CallMember(1, "DriverInfo", new[] {typeof (string)}, new object[] {}); }
         }
 
         /// <summary>
@@ -679,7 +695,7 @@ namespace ASCOM.DriverAccess
         /// <value>The maximum exposure in seconds.</value>
         public double ExposureMax
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "ExposureMax", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "ExposureMax", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -688,7 +704,7 @@ namespace ASCOM.DriverAccess
         /// <value>The minimum exposure in seconds.</value>
         public double ExposureMin
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "ExposureMin", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "ExposureMin", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -697,7 +713,11 @@ namespace ASCOM.DriverAccess
         /// <value>The exposure resolution in seconds</value>
         public double ExposureResolution
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "ExposureResolution", new Type[] { }, new object[] { })); }
+            get
+            {
+                return
+                    Convert.ToDouble(_memberFactory.CallMember(1, "ExposureResolution", new Type[] {}, new object[] {}));
+            }
         }
 
         /// <summary>
@@ -709,8 +729,8 @@ namespace ASCOM.DriverAccess
         /// <value><c>true</c> if fast readout is possible; otherwise, <c>false</c>.</value>
         public bool FastReadout
         {
-            set { memberFactory.CallMember(2, "FastReadout", new Type[] { }, new object[] { value }); }
-            get { return (bool)memberFactory.CallMember(1, "FastReadout", new Type[] { }, new object[] { }); }
+            set { _memberFactory.CallMember(2, "FastReadout", new Type[] {}, new object[] {value}); }
+            get { return (bool) _memberFactory.CallMember(1, "FastReadout", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -721,8 +741,8 @@ namespace ASCOM.DriverAccess
         /// <value>The gain.</value>
         public short Gain
         {
-            set { memberFactory.CallMember(2, "Gain", new Type[] { }, new object[] { value }); }
-            get { return Convert.ToInt16(memberFactory.CallMember(1, "Gain", new Type[] { }, new object[] { })); }
+            set { _memberFactory.CallMember(2, "Gain", new Type[] {}, new object[] {value}); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "Gain", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -733,7 +753,7 @@ namespace ASCOM.DriverAccess
         /// <value>The maximum value of gain</value>
         public short GainMax
         {
-            get { return Convert.ToInt16(memberFactory.CallMember(1, "GainMax", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "GainMax", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -744,7 +764,7 @@ namespace ASCOM.DriverAccess
         /// <value>The minimum value of gain</value>
         public short GainMin
         {
-            get { return Convert.ToInt16(memberFactory.CallMember(1, "GainMin", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "GainMin", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -757,7 +777,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string[] Gains
         {
-            get { return (string[])memberFactory.CallMember(1, "Gains", new Type[] { }, new object[] { }); } 
+            get { return (string[]) _memberFactory.CallMember(1, "Gains", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -771,7 +791,11 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-                try { return Convert.ToInt16(memberFactory.CallMember(1, "InterfaceVersion", new Type[] { }, new object[] { })); }
+                try
+                {
+                    return
+                        Convert.ToInt16(_memberFactory.CallMember(1, "InterfaceVersion", new Type[] {}, new object[] {}));
+                }
                 catch //Return version 1 for any exception 
                 {
                     return 1;
@@ -785,7 +809,7 @@ namespace ASCOM.DriverAccess
         /// <value>The name.</value>
         public string Name
         {
-            get { return (string)memberFactory.CallMember(1, "Name", new Type[] { typeof(string) }, new object[] { }); }
+            get { return (string) _memberFactory.CallMember(1, "Name", new[] {typeof (string)}, new object[] {}); }
         }
 
         /// <summary>
@@ -796,7 +820,7 @@ namespace ASCOM.DriverAccess
         /// <value>The percent completed.</value>
         public double PercentCompleted
         {
-            get { return Convert.ToInt16(memberFactory.CallMember(1, "PercentCompleted", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "PercentCompleted", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -807,7 +831,7 @@ namespace ASCOM.DriverAccess
         /// <value>The readout mode.</value>
         public short ReadoutMode
         {
-            get { return Convert.ToInt16(memberFactory.CallMember(1, "ReadoutMode", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "ReadoutMode", new Type[] {}, new object[] {})); }
         }
 
         /// <summary>
@@ -818,7 +842,7 @@ namespace ASCOM.DriverAccess
         /// <value>The readout modes.</value>
         public string[] ReadoutModes
         {
-            get { return (string[])memberFactory.CallMember(1, "ReadoutModes", new Type[] { }, new object[] { }); }
+            get { return (string[]) _memberFactory.CallMember(1, "ReadoutModes", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -827,7 +851,7 @@ namespace ASCOM.DriverAccess
         /// <value>The name of the sensor.</value>
         public string SensorName
         {
-            get { return (string)memberFactory.CallMember(1, "SensorName", new Type[] { }, new object[] { }); }
+            get { return (string) _memberFactory.CallMember(1, "SensorName", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -865,37 +889,23 @@ namespace ASCOM.DriverAccess
         /// <value>The type of the sensor.</value>
         public short SensorType
         {
-            get { return (short)memberFactory.CallMember(1, "SensorName", new Type[] { }, new object[] { }); }
+            get { return (short) _memberFactory.CallMember(1, "SensorName", new Type[] {}, new object[] {}); }
         }
 
-        private int? interfaceVersion;
-
-        private int CheckInterfaceVersion()
-        {
-            if (this.interfaceVersion != null)
-                return (int)interfaceVersion;
-            try
-            {
-                this.interfaceVersion = Convert.ToInt16(memberFactory.CallMember(1, "InterfaceVersion", new Type[] { }, new object[] { }));
-            }
-            catch (System.MissingFieldException)
-            {
-                this.interfaceVersion = 1;
-            }
-            return (int)this.interfaceVersion;
-        }
         #endregion
 
         #region IDisposable Members
+
         /// <summary>
         /// Dispose the late-bound interface, if needed. Will release it via COM
-		/// if it is a COM object, else if native .NET will just dereference it
-		/// for GC.
+        /// if it is a COM object, else if native .NET will just dereference it
+        /// for GC.
         /// </summary>
         public void Dispose()
         {
-            memberFactory.Dispose();
+            _memberFactory.Dispose();
         }
+
         #endregion
     }
 
