@@ -20,8 +20,7 @@ namespace ASCOM.DriverAccess
         #region MemberFactory
 
         private TraceLogger _tl;
-        private String _strProgId;
-
+        private readonly String _strProgId;
 
         /// <summary>
         /// Constructor, creates an instance of the of the ASCOM driver
@@ -42,8 +41,7 @@ namespace ASCOM.DriverAccess
                 //no type information found throw error
                 throw new Exception("Check Driver: cannot create object type of progID: " + _strProgId);
             }
-            _tl = new TraceLogger("", "MemberFactory");
-            _tl.Enabled = true;
+            _tl = new TraceLogger("", "MemberFactory") {Enabled = true};
 
             //setup the property
             IsComObject = GetObjType.IsCOMObject;
@@ -52,7 +50,7 @@ namespace ASCOM.DriverAccess
             GetLateBoundObject = Activator.CreateInstance(GetObjType);
 
             // Get list of interfaces
-            Type[] objInterfaces = GetObjType.GetInterfaces();
+            var objInterfaces = GetObjType.GetInterfaces();
 
             foreach (Type objInterface in objInterfaces)
             {
@@ -114,17 +112,9 @@ namespace ASCOM.DriverAccess
         /// <returns>nothing</returns>
         public void Dispose()
         {
-            if (GetLateBoundObject != null)
-            {
-                try
-                {
-                    Marshal.ReleaseComObject(GetLateBoundObject);
-                }
-                catch
-                {
-                }
-                GetLateBoundObject = null;
-            }
+            if (GetLateBoundObject == null) return;
+            var releaseComObject = Marshal.ReleaseComObject(GetLateBoundObject);
+            if (releaseComObject == 0 )GetLateBoundObject = null;
         }
 
         /// <summary>
@@ -197,7 +187,7 @@ namespace ASCOM.DriverAccess
                             _tl.LogMessage("PropertyGetEx3", e.ToString());
                             if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber))
                                 throw new PropertyNotImplementedException(_strProgId + " " + memberName, false);
-                            else throw;
+                            throw;
                         }
                         catch (Exception e)
                         {
@@ -261,7 +251,7 @@ namespace ASCOM.DriverAccess
                             _tl.LogMessage("PropertySetEx3", e.ToString());
                             if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber))
                                 throw new PropertyNotImplementedException(_strProgId + " " + memberName, true);
-                            else throw;
+                            throw;
                         }
                         catch (Exception e)
                         {
@@ -279,7 +269,7 @@ namespace ASCOM.DriverAccess
                     }
 
 
-                    MethodInfo methodInfo = GetObjType.GetMethod(memberName);
+                    var methodInfo = GetObjType.GetMethod(memberName);
                     //, parameterTypes); //Peter: Had to take parameterTypes out to get CanMoveAxis to work with .NET drivers
                     if (methodInfo != null)
                     {
@@ -323,9 +313,8 @@ namespace ASCOM.DriverAccess
                             {
                                 throw e.InnerException;
                             }
-                            else
-                                throw new MethodNotImplementedException(_strProgId + " " + memberName,
-                                                                        e.InnerException);
+                            throw new MethodNotImplementedException(_strProgId + " " + memberName,
+                                                                    e.InnerException);
                         }
                         catch (Exception e)
                         {
@@ -348,7 +337,7 @@ namespace ASCOM.DriverAccess
                         {
                             if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber))
                                 throw new MethodNotImplementedException(_strProgId + " " + memberName);
-                            else throw;
+                            throw;
                         }
                         catch (Exception e)
                         {
@@ -356,7 +345,6 @@ namespace ASCOM.DriverAccess
                         }
                     }
                     _tl.LogMessage(memberName, "  It is NOT a COM object");
-                    methodInfo = null;
                     throw new MethodNotImplementedException(_strProgId + " " + memberName);
                 default:
                     return null;
