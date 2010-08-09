@@ -29,8 +29,7 @@ namespace CameraTest
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBoxCoolerControl = new System.Windows.Forms.GroupBox();
             this.numericUpDownSetCCDTemperature = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.lblCoolerPower = new System.Windows.Forms.Label();
@@ -41,6 +40,7 @@ namespace CameraTest
             this.lblCCDTemp = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.checkBoxFastReadout = new System.Windows.Forms.CheckBox();
             this.checkBoxDarkFrame = new System.Windows.Forms.CheckBox();
             this.chkVariant = new System.Windows.Forms.CheckBox();
             this.btnAbort = new System.Windows.Forms.Button();
@@ -60,7 +60,7 @@ namespace CameraTest
             this.label14 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.groupBoxImageDisplay = new System.Windows.Forms.GroupBox();
             this.btnSave = new System.Windows.Forms.Button();
             this.imageControl = new CameraTest.ImageControl();
             this.txtExposureDuration = new System.Windows.Forms.Label();
@@ -69,13 +69,28 @@ namespace CameraTest
             this.chkAuto = new System.Windows.Forms.CheckBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripSplitButton1 = new System.Windows.Forms.ToolStripSplitButton();
             this.tsError = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.ExposureTimer = new System.Windows.Forms.Timer(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBoxV2 = new System.Windows.Forms.GroupBox();
+            this.checkBoxCanFastReadout = new System.Windows.Forms.CheckBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.labelSensorName = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.labelSensorType = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.labelDriverName = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.labelDriverVersion = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.labelBayerOffsetY = new System.Windows.Forms.Label();
+            this.labelBayerOffsetX = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.groupBoxCameraParameters = new System.Windows.Forms.GroupBox();
             this.label12 = new System.Windows.Forms.Label();
             this.lblMaxADU = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -108,13 +123,8 @@ namespace CameraTest
             this.buttonSetup = new System.Windows.Forms.Button();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.groupBoxV2 = new System.Windows.Forms.GroupBox();
-            this.label18 = new System.Windows.Forms.Label();
-            this.label19 = new System.Windows.Forms.Label();
-            this.label20 = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
-            this.groupBox2.SuspendLayout();
+            this.imageControl = new CameraTest.ImageControl();
+            this.groupBoxCoolerControl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSetCCDTemperature)).BeginInit();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numExposure)).BeginInit();
@@ -124,35 +134,35 @@ namespace CameraTest
             ((System.ComponentModel.ISupportInitialize)(this.numNumX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numStartY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numStartX)).BeginInit();
-            this.groupBox4.SuspendLayout();
+            this.groupBoxImageDisplay.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trkZoom)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.groupBoxV2.SuspendLayout();
+            this.groupBoxCameraParameters.SuspendLayout();
             this.gbCamera.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.groupBoxV2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // groupBox2
+            // groupBoxCoolerControl
             // 
-            this.groupBox2.Controls.Add(this.numericUpDownSetCCDTemperature);
-            this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Controls.Add(this.lblCoolerPower);
-            this.groupBox2.Controls.Add(this.chkCoolerOn);
-            this.groupBox2.Controls.Add(this.label5);
-            this.groupBox2.Controls.Add(this.lblHeatSinkTemp);
-            this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Controls.Add(this.lblCCDTemp);
-            this.groupBox2.Location = new System.Drawing.Point(3, 491);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(156, 90);
-            this.groupBox2.TabIndex = 2;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Cooler Control";
+            this.groupBoxCoolerControl.Controls.Add(this.numericUpDownSetCCDTemperature);
+            this.groupBoxCoolerControl.Controls.Add(this.label6);
+            this.groupBoxCoolerControl.Controls.Add(this.lblCoolerPower);
+            this.groupBoxCoolerControl.Controls.Add(this.chkCoolerOn);
+            this.groupBoxCoolerControl.Controls.Add(this.label5);
+            this.groupBoxCoolerControl.Controls.Add(this.lblHeatSinkTemp);
+            this.groupBoxCoolerControl.Controls.Add(this.label3);
+            this.groupBoxCoolerControl.Controls.Add(this.lblCCDTemp);
+            this.groupBoxCoolerControl.Location = new System.Drawing.Point(3, 335);
+            this.groupBoxCoolerControl.Name = "groupBoxCoolerControl";
+            this.groupBoxCoolerControl.Size = new System.Drawing.Size(156, 90);
+            this.groupBoxCoolerControl.TabIndex = 2;
+            this.groupBoxCoolerControl.TabStop = false;
+            this.groupBoxCoolerControl.Text = "Cooler Control";
             // 
             // numericUpDownSetCCDTemperature
             // 
@@ -244,6 +254,7 @@ namespace CameraTest
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.checkBoxFastReadout);
             this.groupBox3.Controls.Add(this.checkBoxDarkFrame);
             this.groupBox3.Controls.Add(this.chkVariant);
             this.groupBox3.Controls.Add(this.btnAbort);
@@ -265,10 +276,20 @@ namespace CameraTest
             this.groupBox3.Controls.Add(this.label13);
             this.groupBox3.Location = new System.Drawing.Point(0, 5);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(165, 214);
+            this.groupBox3.Size = new System.Drawing.Size(165, 233);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Exposure";
+            // 
+            // checkBoxFastReadout
+            // 
+            this.checkBoxFastReadout.AutoSize = true;
+            this.checkBoxFastReadout.Location = new System.Drawing.Point(9, 183);
+            this.checkBoxFastReadout.Name = "checkBoxFastReadout";
+            this.checkBoxFastReadout.Size = new System.Drawing.Size(87, 17);
+            this.checkBoxFastReadout.TabIndex = 21;
+            this.checkBoxFastReadout.Text = "FastReadout";
+            this.checkBoxFastReadout.UseVisualStyleBackColor = true;
             // 
             // checkBoxDarkFrame
             // 
@@ -292,7 +313,7 @@ namespace CameraTest
             // 
             // btnAbort
             // 
-            this.btnAbort.Location = new System.Drawing.Point(93, 187);
+            this.btnAbort.Location = new System.Drawing.Point(93, 206);
             this.btnAbort.Name = "btnAbort";
             this.btnAbort.Size = new System.Drawing.Size(48, 21);
             this.btnAbort.TabIndex = 18;
@@ -302,7 +323,7 @@ namespace CameraTest
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(48, 187);
+            this.btnStop.Location = new System.Drawing.Point(48, 206);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(38, 21);
             this.btnStop.TabIndex = 17;
@@ -312,7 +333,7 @@ namespace CameraTest
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(3, 187);
+            this.btnStart.Location = new System.Drawing.Point(3, 206);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(38, 21);
             this.btnStart.TabIndex = 16;
@@ -478,20 +499,20 @@ namespace CameraTest
             this.label13.TabIndex = 2;
             this.label13.Text = "X";
             // 
-            // groupBox4
+            // groupBoxImageDisplay
             // 
-            this.groupBox4.Controls.Add(this.btnSave);
-            this.groupBox4.Controls.Add(this.imageControl);
-            this.groupBox4.Controls.Add(this.txtExposureDuration);
-            this.groupBox4.Controls.Add(this.txtExposureStartTime);
-            this.groupBox4.Controls.Add(this.trkZoom);
-            this.groupBox4.Controls.Add(this.chkAuto);
-            this.groupBox4.Location = new System.Drawing.Point(0, 225);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(165, 206);
-            this.groupBox4.TabIndex = 5;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Image";
+            this.groupBoxImageDisplay.Controls.Add(this.btnSave);
+            this.groupBoxImageDisplay.Controls.Add(this.imageControl);
+            this.groupBoxImageDisplay.Controls.Add(this.txtExposureDuration);
+            this.groupBoxImageDisplay.Controls.Add(this.txtExposureStartTime);
+            this.groupBoxImageDisplay.Controls.Add(this.trkZoom);
+            this.groupBoxImageDisplay.Controls.Add(this.chkAuto);
+            this.groupBoxImageDisplay.Location = new System.Drawing.Point(0, 244);
+            this.groupBoxImageDisplay.Name = "groupBoxImageDisplay";
+            this.groupBoxImageDisplay.Size = new System.Drawing.Size(165, 206);
+            this.groupBoxImageDisplay.TabIndex = 5;
+            this.groupBoxImageDisplay.TabStop = false;
+            this.groupBoxImageDisplay.Text = "Image";
             // 
             // btnSave
             // 
@@ -594,8 +615,9 @@ namespace CameraTest
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsStatus,
-            this.toolStripSplitButton1,
-            this.tsError});
+            this.tsError,
+            this.toolStripProgressBar,
+            this.toolStripStatusLabel1});
             this.statusStrip1.Location = new System.Drawing.Point(0, 620);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(752, 22);
@@ -605,23 +627,24 @@ namespace CameraTest
             // tsStatus
             // 
             this.tsStatus.Name = "tsStatus";
-            this.tsStatus.Size = new System.Drawing.Size(78, 17);
+            this.tsStatus.Size = new System.Drawing.Size(83, 17);
             this.tsStatus.Text = "Camera Status";
-            // 
-            // toolStripSplitButton1
-            // 
-            this.toolStripSplitButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripSplitButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton1.Image")));
-            this.toolStripSplitButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripSplitButton1.Name = "toolStripSplitButton1";
-            this.toolStripSplitButton1.Size = new System.Drawing.Size(121, 20);
-            this.toolStripSplitButton1.Text = "toolStripSplitButton1";
             // 
             // tsError
             // 
             this.tsError.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.tsError.Name = "tsError";
             this.tsError.Size = new System.Drawing.Size(0, 17);
+            // 
+            // toolStripProgressBar
+            // 
+            this.toolStripProgressBar.Name = "toolStripProgressBar";
+            this.toolStripProgressBar.Size = new System.Drawing.Size(100, 16);
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
             // 
             // ExposureTimer
             // 
@@ -663,9 +686,9 @@ namespace CameraTest
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.groupBoxV2);
-            this.tabPage1.Controls.Add(this.groupBox1);
+            this.tabPage1.Controls.Add(this.groupBoxCameraParameters);
             this.tabPage1.Controls.Add(this.gbCamera);
-            this.tabPage1.Controls.Add(this.groupBox2);
+            this.tabPage1.Controls.Add(this.groupBoxCoolerControl);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -674,38 +697,179 @@ namespace CameraTest
             this.tabPage1.Text = "Setup";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // groupBox1
+            // groupBoxV2
             // 
-            this.groupBox1.Controls.Add(this.label12);
-            this.groupBox1.Controls.Add(this.lblMaxADU);
-            this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.lblFullWellCapacity);
-            this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Controls.Add(this.lblElectronsPerADU);
-            this.groupBox1.Controls.Add(this.chkCanPulseGuide);
-            this.groupBox1.Controls.Add(this.chkHasShutter);
-            this.groupBox1.Controls.Add(this.chkCanSetCCDTemp);
-            this.groupBox1.Controls.Add(this.chkCanGetCoolerPower);
-            this.groupBox1.Controls.Add(this.chkCanAsymetricBin);
-            this.groupBox1.Controls.Add(this.chkCanStopExposure);
-            this.groupBox1.Controls.Add(this.chkCanAbortExposure);
-            this.groupBox1.Controls.Add(this.label11);
-            this.groupBox1.Controls.Add(this.label10);
-            this.groupBox1.Controls.Add(this.label9);
-            this.groupBox1.Controls.Add(this.lblMaxBinY);
-            this.groupBox1.Controls.Add(this.lblMaxBinX);
-            this.groupBox1.Controls.Add(this.lblSizeY);
-            this.groupBox1.Controls.Add(this.lblSizeX);
-            this.groupBox1.Controls.Add(this.lblPixelSizeY);
-            this.groupBox1.Controls.Add(this.lblPixelSizeX);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(3, 59);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(156, 272);
-            this.groupBox1.TabIndex = 11;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Camera parameters";
+            this.groupBoxV2.Controls.Add(this.checkBoxCanFastReadout);
+            this.groupBoxV2.Controls.Add(this.label27);
+            this.groupBoxV2.Controls.Add(this.labelSensorName);
+            this.groupBoxV2.Controls.Add(this.label25);
+            this.groupBoxV2.Controls.Add(this.labelSensorType);
+            this.groupBoxV2.Controls.Add(this.label23);
+            this.groupBoxV2.Controls.Add(this.labelDriverName);
+            this.groupBoxV2.Controls.Add(this.label19);
+            this.groupBoxV2.Controls.Add(this.labelDriverVersion);
+            this.groupBoxV2.Controls.Add(this.label20);
+            this.groupBoxV2.Controls.Add(this.labelBayerOffsetY);
+            this.groupBoxV2.Controls.Add(this.labelBayerOffsetX);
+            this.groupBoxV2.Controls.Add(this.label18);
+            this.groupBoxV2.Location = new System.Drawing.Point(3, 428);
+            this.groupBoxV2.Name = "groupBoxV2";
+            this.groupBoxV2.Size = new System.Drawing.Size(156, 153);
+            this.groupBoxV2.TabIndex = 12;
+            this.groupBoxV2.TabStop = false;
+            this.groupBoxV2.Text = "Version 2 properties";
+            // 
+            // checkBoxCanFastReadout
+            // 
+            this.checkBoxCanFastReadout.AutoSize = true;
+            this.checkBoxCanFastReadout.Enabled = false;
+            this.checkBoxCanFastReadout.Location = new System.Drawing.Point(11, 121);
+            this.checkBoxCanFastReadout.Name = "checkBoxCanFastReadout";
+            this.checkBoxCanFastReadout.Size = new System.Drawing.Size(112, 17);
+            this.checkBoxCanFastReadout.TabIndex = 37;
+            this.checkBoxCanFastReadout.Text = "Can Fast Readout";
+            this.checkBoxCanFastReadout.UseVisualStyleBackColor = true;
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(9, 105);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(71, 13);
+            this.label27.TabIndex = 36;
+            this.label27.Text = "Sensor Name";
+            // 
+            // labelSensorName
+            // 
+            this.labelSensorName.BackColor = System.Drawing.SystemColors.Info;
+            this.labelSensorName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.labelSensorName.Location = new System.Drawing.Point(81, 105);
+            this.labelSensorName.Name = "labelSensorName";
+            this.labelSensorName.Size = new System.Drawing.Size(69, 13);
+            this.labelSensorName.TabIndex = 35;
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(8, 83);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(67, 13);
+            this.label25.TabIndex = 34;
+            this.label25.Text = "Sensor Type";
+            // 
+            // labelSensorType
+            // 
+            this.labelSensorType.BackColor = System.Drawing.SystemColors.Info;
+            this.labelSensorType.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.labelSensorType.Location = new System.Drawing.Point(75, 83);
+            this.labelSensorType.Name = "labelSensorType";
+            this.labelSensorType.Size = new System.Drawing.Size(76, 13);
+            this.labelSensorType.TabIndex = 33;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(9, 61);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(66, 13);
+            this.label23.TabIndex = 32;
+            this.label23.Text = "Driver Name";
+            // 
+            // labelDriverName
+            // 
+            this.labelDriverName.BackColor = System.Drawing.SystemColors.Info;
+            this.labelDriverName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.labelDriverName.Location = new System.Drawing.Point(75, 60);
+            this.labelDriverName.Name = "labelDriverName";
+            this.labelDriverName.Size = new System.Drawing.Size(75, 13);
+            this.labelDriverName.TabIndex = 31;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(7, 38);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(73, 13);
+            this.label19.TabIndex = 30;
+            this.label19.Text = "Driver Version";
+            // 
+            // labelDriverVersion
+            // 
+            this.labelDriverVersion.BackColor = System.Drawing.SystemColors.Info;
+            this.labelDriverVersion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.labelDriverVersion.Location = new System.Drawing.Point(107, 38);
+            this.labelDriverVersion.Name = "labelDriverVersion";
+            this.labelDriverVersion.Size = new System.Drawing.Size(35, 13);
+            this.labelDriverVersion.TabIndex = 29;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(5, 16);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(78, 13);
+            this.label20.TabIndex = 11;
+            this.label20.Text = "Bayer Offset X:";
+            // 
+            // labelBayerOffsetY
+            // 
+            this.labelBayerOffsetY.BackColor = System.Drawing.SystemColors.Info;
+            this.labelBayerOffsetY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.labelBayerOffsetY.Location = new System.Drawing.Point(119, 16);
+            this.labelBayerOffsetY.Name = "labelBayerOffsetY";
+            this.labelBayerOffsetY.Size = new System.Drawing.Size(14, 14);
+            this.labelBayerOffsetY.TabIndex = 10;
+            // 
+            // labelBayerOffsetX
+            // 
+            this.labelBayerOffsetX.BackColor = System.Drawing.SystemColors.Info;
+            this.labelBayerOffsetX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.labelBayerOffsetX.Location = new System.Drawing.Point(84, 16);
+            this.labelBayerOffsetX.Name = "labelBayerOffsetX";
+            this.labelBayerOffsetX.Size = new System.Drawing.Size(13, 14);
+            this.labelBayerOffsetX.TabIndex = 9;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(103, 16);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(17, 13);
+            this.label18.TabIndex = 3;
+            this.label18.Text = "Y:";
+            // 
+            // groupBoxCameraParameters
+            // 
+            this.groupBoxCameraParameters.Controls.Add(this.label12);
+            this.groupBoxCameraParameters.Controls.Add(this.lblMaxADU);
+            this.groupBoxCameraParameters.Controls.Add(this.label7);
+            this.groupBoxCameraParameters.Controls.Add(this.lblFullWellCapacity);
+            this.groupBoxCameraParameters.Controls.Add(this.label4);
+            this.groupBoxCameraParameters.Controls.Add(this.lblElectronsPerADU);
+            this.groupBoxCameraParameters.Controls.Add(this.chkCanPulseGuide);
+            this.groupBoxCameraParameters.Controls.Add(this.chkHasShutter);
+            this.groupBoxCameraParameters.Controls.Add(this.chkCanSetCCDTemp);
+            this.groupBoxCameraParameters.Controls.Add(this.chkCanGetCoolerPower);
+            this.groupBoxCameraParameters.Controls.Add(this.chkCanAsymetricBin);
+            this.groupBoxCameraParameters.Controls.Add(this.chkCanStopExposure);
+            this.groupBoxCameraParameters.Controls.Add(this.chkCanAbortExposure);
+            this.groupBoxCameraParameters.Controls.Add(this.label11);
+            this.groupBoxCameraParameters.Controls.Add(this.label10);
+            this.groupBoxCameraParameters.Controls.Add(this.label9);
+            this.groupBoxCameraParameters.Controls.Add(this.lblMaxBinY);
+            this.groupBoxCameraParameters.Controls.Add(this.lblMaxBinX);
+            this.groupBoxCameraParameters.Controls.Add(this.lblSizeY);
+            this.groupBoxCameraParameters.Controls.Add(this.lblSizeX);
+            this.groupBoxCameraParameters.Controls.Add(this.lblPixelSizeY);
+            this.groupBoxCameraParameters.Controls.Add(this.lblPixelSizeX);
+            this.groupBoxCameraParameters.Controls.Add(this.label2);
+            this.groupBoxCameraParameters.Controls.Add(this.label1);
+            this.groupBoxCameraParameters.Location = new System.Drawing.Point(3, 59);
+            this.groupBoxCameraParameters.Name = "groupBoxCameraParameters";
+            this.groupBoxCameraParameters.Size = new System.Drawing.Size(156, 272);
+            this.groupBoxCameraParameters.TabIndex = 11;
+            this.groupBoxCameraParameters.TabStop = false;
+            this.groupBoxCameraParameters.Text = "Camera parameters";
             // 
             // label12
             // 
@@ -981,18 +1145,18 @@ namespace CameraTest
             // 
             this.tabPage2.Controls.Add(this.buttonSetup);
             this.tabPage2.Controls.Add(this.groupBox3);
-            this.tabPage2.Controls.Add(this.groupBox4);
+            this.tabPage2.Controls.Add(this.groupBoxImageDisplay);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(168, 480);
+            this.tabPage2.Size = new System.Drawing.Size(168, 584);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Imaging";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // buttonSetup
             // 
-            this.buttonSetup.Location = new System.Drawing.Point(42, 442);
+            this.buttonSetup.Location = new System.Drawing.Point(43, 456);
             this.buttonSetup.Name = "buttonSetup";
             this.buttonSetup.Size = new System.Drawing.Size(77, 22);
             this.buttonSetup.TabIndex = 6;
@@ -1006,65 +1170,48 @@ namespace CameraTest
             this.saveFileDialog.Filter = "Fits File|*.fit";
             this.saveFileDialog.Title = "Save as FITS";
             // 
-            // groupBoxV2
+            // imageControl
             // 
-            this.groupBoxV2.Controls.Add(this.label20);
-            this.groupBoxV2.Controls.Add(this.label21);
-            this.groupBoxV2.Controls.Add(this.label22);
-            this.groupBoxV2.Controls.Add(this.label18);
-            this.groupBoxV2.Controls.Add(this.label19);
-            this.groupBoxV2.Location = new System.Drawing.Point(6, 332);
-            this.groupBoxV2.Name = "groupBoxV2";
-            this.groupBoxV2.Size = new System.Drawing.Size(153, 153);
-            this.groupBoxV2.TabIndex = 12;
-            this.groupBoxV2.TabStop = false;
-            this.groupBoxV2.Text = "Version 2 properties";
-            this.groupBoxV2.Enter += new System.EventHandler(this.groupBoxV2_Enter);
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(119, 16);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(14, 13);
-            this.label18.TabIndex = 3;
-            this.label18.Text = "Y";
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(79, 17);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(14, 13);
-            this.label19.TabIndex = 2;
-            this.label19.Text = "X";
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(5, 31);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(65, 13);
-            this.label20.TabIndex = 11;
-            this.label20.Text = "Bayer Offset";
-            // 
-            // label21
-            // 
-            this.label21.BackColor = System.Drawing.SystemColors.Info;
-            this.label21.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label21.Location = new System.Drawing.Point(112, 31);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(27, 14);
-            this.label21.TabIndex = 10;
-            // 
-            // label22
-            // 
-            this.label22.BackColor = System.Drawing.SystemColors.Info;
-            this.label22.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label22.Location = new System.Drawing.Point(72, 31);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(28, 14);
-            this.label22.TabIndex = 9;
+            this.imageControl.CtrlIncrement = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.imageControl.DecimalPlaces = 0;
+            this.imageControl.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.imageControl.Location = new System.Drawing.Point(0, 0);
+            this.imageControl.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.imageControl.MaxValue = new decimal(new int[] {
+            80,
+            0,
+            0,
+            0});
+            this.imageControl.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.imageControl.MinValue = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.imageControl.Name = "imageControl";
+            this.imageControl.ShiftIncrement = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.imageControl.Size = new System.Drawing.Size(156, 112);
+            this.imageControl.TabIndex = 0;
             // 
             // Form1
             // 
@@ -1077,10 +1224,10 @@ namespace CameraTest
             this.Location = global::CameraTest.Properties.Settings.Default.Location;
             this.Name = "Form1";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
+            this.Load += new System.EventHandler(this.Form1_Load);
+            this.groupBoxCoolerControl.ResumeLayout(false);
+            this.groupBoxCoolerControl.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSetCCDTemperature)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
@@ -1091,8 +1238,8 @@ namespace CameraTest
             ((System.ComponentModel.ISupportInitialize)(this.numNumX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numStartY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numStartX)).EndInit();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
+            this.groupBoxImageDisplay.ResumeLayout(false);
+            this.groupBoxImageDisplay.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trkZoom)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
@@ -1100,13 +1247,13 @@ namespace CameraTest
             this.splitContainer1.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.groupBoxV2.ResumeLayout(false);
+            this.groupBoxV2.PerformLayout();
+            this.groupBoxCameraParameters.ResumeLayout(false);
+            this.groupBoxCameraParameters.PerformLayout();
             this.gbCamera.ResumeLayout(false);
             this.gbCamera.PerformLayout();
             this.tabPage2.ResumeLayout(false);
-            this.groupBoxV2.ResumeLayout(false);
-            this.groupBoxV2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1114,7 +1261,7 @@ namespace CameraTest
 
         #endregion
 
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBoxCoolerControl;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label lblCoolerPower;
         private System.Windows.Forms.CheckBox chkCoolerOn;
@@ -1141,16 +1288,15 @@ namespace CameraTest
         private System.Windows.Forms.Button btnAbort;
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Button btnStart;
-        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox groupBoxImageDisplay;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel tsStatus;
         private System.Windows.Forms.ToolStripStatusLabel tsError;
-        private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton1;
         private System.Windows.Forms.Timer ExposureTimer;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBoxCameraParameters;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label lblMaxADU;
         private System.Windows.Forms.Label label7;
@@ -1194,10 +1340,21 @@ namespace CameraTest
         private System.Windows.Forms.Button buttonSetup;
         private System.Windows.Forms.GroupBox groupBoxV2;
         private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label labelBayerOffsetY;
+        private System.Windows.Forms.Label labelBayerOffsetX;
         private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.CheckBox checkBoxCanFastReadout;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label labelSensorName;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Label labelSensorType;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label labelDriverName;
         private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label labelDriverVersion;
+        private System.Windows.Forms.CheckBox checkBoxFastReadout;
+        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
     }
 }
 

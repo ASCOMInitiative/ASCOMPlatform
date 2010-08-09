@@ -164,6 +164,32 @@ namespace CameraTest
                 imageControl.Maximum = 65535;
             }
             checkBoxDarkFrame.Enabled = oCamera.HasShutter;
+
+            // set Camera Version 2 properties, the client should return this correctly, even for an unversioned driver.
+            if (oCamera.InterfaceVersion >= 2)
+            {
+                groupBoxV2.Visible = true;
+                labelSensorName.Text = oCamera.SensorName;
+                labelSensorType.Text = (oCamera.SensorType).ToString();
+                labelBayerOffsetX.Text = oCamera.BayerOffsetX.ToString();
+                labelBayerOffsetY.Text = Convert.ToString(oCamera.BayerOffsetY);
+                labelDriverVersion.Text = oCamera.DriverVersion;
+                labelDriverName.Text = oCamera.Name;
+                //DriverInfo - long
+                numExposure.Minimum = (decimal)oCamera.ExposureMin;
+                numExposure.Maximum = (decimal)oCamera.ExposureMax;
+                checkBoxFastReadout.Enabled = checkBoxCanFastReadout.Checked;
+                checkBoxCanFastReadout.Checked = oCamera.CanFastReadout;
+                checkBoxFastReadout.Visible = checkBoxCanFastReadout.Checked;
+                if (checkBoxCanFastReadout.Checked)
+                {
+                    checkBoxFastReadout.Checked = oCamera.FastReadout;
+                }
+            }
+            else
+            {
+                groupBoxV2.Visible = false;
+            }
         }
 
         private void ShowVariables()
@@ -398,12 +424,12 @@ namespace CameraTest
                             // cast the array to int
                             iarr = new int[oArr.GetLength(0), oArr.GetLength(1)];
                             for (int i = 0; i < iarr.GetLength(0); i++)
-		                    {
+                            {
                                 for (int j = 0; j < iarr.GetLength(1); j++)
                                 {
                                     iarr.SetValue(Convert.ToInt32(oArr.GetValue(i, j)), i, j);
                                 }
-		                    }
+                            }
                         }
                         else
                         {
@@ -412,7 +438,7 @@ namespace CameraTest
                     }
                     catch (Exception ex)
                     {
-                        toolStripSplitButton1.Text=  "ImageArray(Variant) failed " + ex.Message;
+                        toolStripStatusLabel1.Text = "ImageArray(Variant) failed " + ex.Message;
                     }
                     int Max = 0, Min = 0;
                     double Mean = 0;
@@ -435,6 +461,14 @@ namespace CameraTest
                     imageControl.Histogram(histogram);
                     //toolStripSplitButton1.Text = "Image OK";
                     ExposureTimer.Enabled = false;
+                }
+                else
+                {
+                    try
+                    {
+                        toolStripProgressBar.Value = oCamera.PercentCompleted;
+                    }
+                    catch{}
                 }
             }
         }
@@ -651,29 +685,31 @@ namespace CameraTest
         private void ProcessExposure()
         {
             decimal val = numExposure.Value;
+            decimal resolution = (oCamera.InterfaceVersion >= 2) ? (decimal)oCamera.ExposureResolution : 0.001M;
+
             if (val >= LastExposure)
             {
                 if (val > 1.0M)
                 {
-                    numExposure.Increment = 1.0M;
+                    numExposure.Increment = Math.Max(resolution, 1.0M);
                     //numExposure.DecimalPlaces = 0;
                     numExposure.Value = Math.Round(numExposure.Value + 0.4M, 0);
                 }
                 else if (val > 0.1M)
                 { 
-                    numExposure.Increment = 0.1M;
+                    numExposure.Increment = Math.Max(resolution, 0.1M);
                     //numExposure.DecimalPlaces = 1;
                     numExposure.Value = Math.Round(numExposure.Value + 0.04M, 1);
                 }
                 else if (val > 0.01M)
                 {
-                    numExposure.Increment = 0.01M;
+                    numExposure.Increment = Math.Max(resolution, 0.01M);
                     //numExposure.DecimalPlaces = 2;
                     numExposure.Value = Math.Round(numExposure.Value + 0.004M, 2);
                 }
                 else
                 {
-                    numExposure.Increment = 0.001M;
+                    numExposure.Increment = Math.Max(resolution, 0.001M);
                     //numExposure.DecimalPlaces = 3;
                 }
             }
@@ -681,24 +717,24 @@ namespace CameraTest
             {
                 if (val <= 0.01M)
                 {
-                    numExposure.Increment = 0.001M;
+                    numExposure.Increment = Math.Max(resolution, 0.001M);
                     //numExposure.DecimalPlaces = 3;
                 }
                 else if (val <= 0.1M)
                 {
-                    numExposure.Increment = 0.01M;
+                    numExposure.Increment = Math.Max(resolution, 0.01M);
                     numExposure.Value = Math.Round(numExposure.Value * 100) / 100.0M;
                     //numExposure.DecimalPlaces = 2;
                 }
                 else if (val <= 1.0M)
                 {
-                    numExposure.Increment = 0.1M;
+                    numExposure.Increment = Math.Max(resolution, 0.1M);
                     numExposure.Value = Math.Round(numExposure.Value * 10) / 10.0M;
                     //numExposure.DecimalPlaces = 1;
                 }
                 else
                 {
-                    numExposure.Increment = 1.0M;
+                    numExposure.Increment = Math.Max(resolution, 1.0M);
                     numExposure.Value = Math.Round(numExposure.Value);
                     //numExposure.DecimalPlaces = 0;
                 }
@@ -800,10 +836,17 @@ namespace CameraTest
             bds.Dispose();
         }
 
-        private void groupBoxV2_Enter(object sender, EventArgs e)
+        private enum SensorType
         {
-
+            Monochrome,
+            Color,
+            RGGB,
+            CMYG,
+            CMYG2,
+            LRGB
         }
+
+
 
     }
 }
