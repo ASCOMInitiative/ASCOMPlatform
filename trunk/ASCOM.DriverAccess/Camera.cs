@@ -715,7 +715,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public SensorType SensorType 
         { 
-            get { return (SensorType)memberFactory.CallMember(1, "SensorName", new Type[] { }, new object[] { }); }
+            get { return (SensorType)memberFactory.CallMember(1, "SensorType", new Type[] { }, new object[] { }); }
         }
         #endregion
 
