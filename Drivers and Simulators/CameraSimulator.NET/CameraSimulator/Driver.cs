@@ -94,7 +94,7 @@ namespace ASCOM.Simulator
         internal short binY;
         internal bool hasShutter;
         internal string sensorName;
-        internal SensorTypes sensorType;    // TODO make an Enum
+        internal SensorType sensorType;    // TODO make an Enum
         internal short bayerOffsetX;
         internal short bayerOffsetY;
 
@@ -144,37 +144,37 @@ namespace ASCOM.Simulator
         private float[,,] imageData;    // room for a 3 plane colour image
         private bool darkFrame;
 
-        /// <summary>
-        /// SensorType returns a value indicating whether the sensor is monochrome,
-        /// or what Bayer matrix it encodes.  The following values are defined:
-        /// </summary>
-        internal enum SensorTypes
-        {
-            /// <summary>
-            /// Camera produces monochrome array with no Bayer encoding
-            /// </summary>
-            Monochrome = 0,
-            /// <summary>
-            /// Camera produces color image directly, requiring no Bayer decoding
-            /// </summary>
-            Color,
-            /// <summary>
-            /// Camera produces RGGB encoded Bayer array images
-            /// </summary>
-            RGGB,
-            /// <summary>
-            /// Camera produces CMYG encoded Bayer array images
-            /// </summary>
-            CMYG,
-            /// <summary>
-            /// Camera produces CMYG2 encoded Bayer array images
-            /// </summary>
-            CMYG2,
-            /// <summary>
-            /// Camera produces Kodak TRUESENSE Bayer LRGB array images
-            /// </summary>
-            LRGB
-        };
+        ///// <summary>
+        ///// SensorType returns a value indicating whether the sensor is monochrome,
+        ///// or what Bayer matrix it encodes.  The following values are defined:
+        ///// </summary>
+        //internal enum SensorTypes
+        //{
+        //    /// <summary>
+        //    /// Camera produces monochrome array with no Bayer encoding
+        //    /// </summary>
+        //    Monochrome = 0,
+        //    /// <summary>
+        //    /// Camera produces color image directly, requiring no Bayer decoding
+        //    /// </summary>
+        //    Color,
+        //    /// <summary>
+        //    /// Camera produces RGGB encoded Bayer array images
+        //    /// </summary>
+        //    RGGB,
+        //    /// <summary>
+        //    /// Camera produces CMYG encoded Bayer array images
+        //    /// </summary>
+        //    CMYG,
+        //    /// <summary>
+        //    /// Camera produces CMYG2 encoded Bayer array images
+        //    /// </summary>
+        //    CMYG2,
+        //    /// <summary>
+        //    /// Camera produces Kodak TRUESENSE Bayer LRGB array images
+        //    /// </summary>
+        //    LRGB
+        //};
 
         internal bool connected=false;
         internal CameraStates cameraState = CameraStates.cameraIdle;
@@ -1235,7 +1235,7 @@ namespace ASCOM.Simulator
                     throw new System.NotImplementedException();
                 if (!this.connected)
                     throw new NotConnectedException("Can't read CanFastReadout when not connected");
-                return this.CanFastReadout;
+                return this.canFastReadout;
             }
         }
 
@@ -1569,7 +1569,7 @@ namespace ASCOM.Simulator
         /// or what Bayer matrix it encodes. 
         /// </summary>
         /// <value>The type of the sensor.</value>
-        private SensorTypes SensorType
+        public SensorType SensorType
         {
             get
             {
@@ -1604,7 +1604,7 @@ namespace ASCOM.Simulator
             this.maxBinY = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_MaxBinY, string.Empty, "4"), CultureInfo.InvariantCulture);
             this.hasShutter = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_HasShutter, string.Empty, "false"), CultureInfo.InvariantCulture);
             this.sensorName = profile.GetValue(s_csDriverID, STR_SensorName, string.Empty, "");
-            this.sensorType = (Camera.SensorTypes)Convert.ToInt32(profile.GetValue(s_csDriverID, STR_SensorType, string.Empty, "0"), CultureInfo.InvariantCulture);
+            this.sensorType = (ASCOM.Interface.SensorType)Convert.ToInt32(profile.GetValue(s_csDriverID, STR_SensorType, string.Empty, "0"), CultureInfo.InvariantCulture);
             this.bayerOffsetX = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_BayerOffsetX, string.Empty, "0"), CultureInfo.InvariantCulture);
             this.bayerOffsetY = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_BayerOffsetY, string.Empty, "0"), CultureInfo.InvariantCulture);
 
@@ -1856,19 +1856,19 @@ namespace ASCOM.Simulator
                 int stepY = 1;
                 switch (this.sensorType)
                 {
-                    case SensorTypes.Monochrome:
+                    case SensorType.Monochrome:
                         break;
-                    case SensorTypes.RGGB:
+                    case SensorType.RGGB:
                         getData = new GetData(RGGBData);
                         stepX = 2;
                         stepY = 2;
                         break;
-                    case SensorTypes.CMYG:
+                    case SensorType.CMYG:
                         getData = new GetData(CMYGData);
                         stepX = 2;
                         stepY = 2;
                         break;
-                    case SensorTypes.CMYG2:
+                    case SensorType.CMYG2:
                         getData = new GetData(CMYG2Data);
                         stepX = 4;
                         stepY = 2;
@@ -1877,12 +1877,12 @@ namespace ASCOM.Simulator
                         y2 = (bayerOffsetY + 2) & 3;
                         y3 = (bayerOffsetY + 3) & 3;
                         break;
-                    case SensorTypes.LRGB:
+                    case SensorType.LRGB:
                         getData = new GetData(LRGBData);
                         stepX = 2;
                         stepY = 2;
                         break;
-                    case SensorTypes.Color:
+                    case SensorType.Color:
                         this.imageData = new float[this.cameraXSize, this.cameraYSize, 3];
                         getData = new GetData(ColorData);
                         stepX = 1;

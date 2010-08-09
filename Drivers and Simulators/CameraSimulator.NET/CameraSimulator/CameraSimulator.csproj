@@ -121,6 +121,7 @@
     <Content Include="ASCOM.png" />
     <Content Include="favicon.ico" />
     <Content Include="ReadMe.htm" />
+    <Content Include="TextFile1.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
