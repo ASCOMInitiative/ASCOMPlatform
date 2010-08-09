@@ -1,0 +1,17 @@
+﻿ASCOM Camera Simulator
+
+This will set up a camera simulator that is designed to implement the ASCOM camera interface.
+
+It can implement V1 and V2 interfaces and most parameters can be controlled.
+
+It can provide "real" data using an image as a source of data, in more detail:
+The image can be anything that will deliver a colour bitmap, I suggest a JPG is good enough.
+The image size should be the same as the CCD size.
+The data read from the image will vary depending on the Sensor type, for a monochrome CCD it will read
+the brightness but for colour sensors with a Bayer arrray will
+extract the colour data using the sensor type and the Bayer offsets.
+
+Noise can be added to the image, so can can dark current.  the noise, dark current and
+image data is scaled according to the temperature and exposure time.
+
+Most testing has been done on the monochrome data, there is quite likely to be problems with the 
