@@ -321,6 +321,11 @@ namespace CameraTest
         private void ShowImage()
         {
             if (iarr == null) return;
+            if (oCamera.InterfaceVersion >= 2 && oCamera.SensorType == ASCOM.DeviceInterface.SensorType.RGGB)
+            {
+                ShowColourImage();
+                return;
+            }
 
             int Width = iarr.GetLength(0);
             int Height = iarr.GetLength(1);
@@ -384,6 +389,87 @@ namespace CameraTest
                 img.UnlockBits(data);
             }
             imageControl.Histogram(histogram);
+            zoom = (float)Math.Pow(10, trkZoom.Value / 100.0);
+            splitContainer1.Panel2.AutoScrollMinSize = new Size((int)(img.Width * zoom), (int)(img.Height * zoom));
+            splitContainer1.Panel2.Invalidate();
+        }
+
+        /// <summary>
+        /// Display the colour image. Use half the data resolution and apply the RGB values obtained from a 2x2
+        /// matrix of the data
+        /// </summary>
+        private void ShowColourImage()
+        {
+            if (iarr == null) return;
+
+            // make the display image half the size of the data
+            int Width = iarr.GetLength(0)/2;
+            int Height = iarr.GetLength(1)/2;
+
+            img = new Bitmap(Width, Height, PixelFormat.Format24bppRgb);
+
+            BitmapData data = img.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
+            try
+            {
+                unsafe
+                {
+                    // pointer to locked bitmap data
+                    byte* imgPtr = (byte*)(data.Scan0);
+                    // black level
+                    int k = (int)imageControl.MinValue;
+                    // scale, white-black
+                    int s = (int)imageControl.MaxValue - k;
+                    int r;
+                    int g;
+                    int b;
+                    int xx;         // offsets into the data, initialise to the Bayer offset
+                    int yy = 0;
+                    for (int y = 0; y < Height; y++)
+                    {
+                        xx = 0;
+                        for (int x = 0; x < Width; x++)
+                        {
+                            // TODO apply BayerOffset
+                            // TODO handle other sensorTypes
+                            r = Convert.ToInt32(iarr.GetValue(xx, yy));
+                            yy++;
+                            g = Convert.ToInt32(iarr.GetValue(xx, yy));
+                            xx++;
+                            b = Convert.ToInt32(iarr.GetValue(xx, yy));
+                            yy--;
+                            g += Convert.ToInt32(iarr.GetValue(xx, yy));
+                            xx++;
+                            g /= 2;
+                            // convert 16 bit signed to 16 bit unsigned
+                            if (r < 0) r += 65535;
+                            if (g < 0) g += 65535;
+                            if (b < 0) b += 65535;
+                            // scale to range 0 to s
+                            r = r - k;
+                            g = g - k;
+                            b = b - k;
+                            // scale to 0 to 255
+                            r = (int)(r * 255.0 / s);
+                            g = (int)(g * 255.0 / s);
+                            b = (int)(b * 255.0 / s);
+                            // TODO apply Gamma
+                            // truncate to byte range and put into the image
+                            *imgPtr = (byte)Math.Min(Math.Max(r, 0), 255);
+                            imgPtr++;
+                            *imgPtr = (byte)Math.Min(Math.Max(g, 0), 255);
+                            imgPtr++;
+                            *imgPtr = (byte)Math.Min(Math.Max(b, 0), 255);
+                            imgPtr++;
+                        }
+                        imgPtr += data.Stride - data.Width * 3;
+                        yy += 2;
+                    }
+                }
+            }
+            finally
+            {
+                img.UnlockBits(data);
+            }
             zoom = (float)Math.Pow(10, trkZoom.Value / 100.0);
             splitContainer1.Panel2.AutoScrollMinSize = new Size((int)(img.Width * zoom), (int)(img.Height * zoom));
             splitContainer1.Panel2.Invalidate();
