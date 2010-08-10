@@ -18,7 +18,7 @@ Public Interface ISwitch '44C03033-C60E-4101-856C-AAFB0F735F83
     Sub Dispose()
 
     ''' <summary>
-    ''' Yields a collection of ISwitchDevice objects.
+    ''' Yields a collection of strings in an arraylist.
     ''' </summary>
     ReadOnly Property Switches() As ArrayList
 
