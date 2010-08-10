@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptecHIDTools", "OptecHIDTools\OptecHIDTools.csproj", "{9786A9B9-97B9-4B23-AF39-4514AF45DEED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestOptecHID", "TestOptecHID\TestOptecHID.csproj", "{F607076F-CC2F-432F-B983-337971DE1C4B}"
