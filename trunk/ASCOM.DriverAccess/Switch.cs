@@ -15,31 +15,30 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Provides universal access to Switch drivers
     /// </summary>
-    public class Switch : ISwitch, IDisposable, IAscomDriver, IDeviceControl
+    public class Switch : ISwitch, IDisposable
     {
         #region Switch constructors
 
-        private MemberFactory memberFactory;
+        private readonly MemberFactory _memberFactory;
 
         /// <summary>
         /// Creates a Switch object with the given Prog ID
         /// </summary>
-        /// <param name="switchID"></param>
-        public Switch(string switchID)
+        /// <param name="switchId"></param>
+        public Switch(string switchId)
 		{
-            memberFactory = new MemberFactory(switchID);
+            _memberFactory = new MemberFactory(switchId);
 		}
 
         /// <summary>
         /// Brings up the ASCOM Chooser Dialog to choose a Switch
         /// </summary>
-        /// <param name="switchID">Switch Prog ID for default or null for None</param>
+        /// <param name="switchId">Switch Prog ID for default or null for None</param>
         /// <returns>Prog ID for chosen Switch or null for none</returns>
-        public static string Choose(string switchID)
+        public static string Choose(string switchId)
         {
-			Chooser oChooser = new Chooser();
-            oChooser.DeviceType = "Switch";			// Requires Helper 5.0.3 (May '07)
-            return oChooser.Choose(switchID);
+			var oChooser = new Chooser {DeviceType = "Switch"};
+            return oChooser.Choose(switchId);
         }
 
         #endregion
@@ -49,20 +48,20 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Sets a switch to on or off
         /// </summary>
-        /// <param name="Name">Name=name of switch to set</param> 
-        /// <param name="State">True=On, False=Off</param> 
-        public void SetSwitch(string Name, bool State)
+        /// <param name="name">Name=name of switch to set</param> 
+        /// <param name="state">True=On, False=Off</param> 
+        public void SetSwitch(string name, bool state)
         {
-            memberFactory.CallMember(3, "SetSwitch", new Type[] { typeof(string), typeof(bool) }, new object[] { Name, State });
+            _memberFactory.CallMember(3, "SetSwitch", new[] { typeof(string), typeof(bool) }, new object[] { name, state });
         }
 
         /// <summary>
-        /// Yields a collection of switches.
+        /// Yields a collection of strings in an arraylist.
         /// </summary>
         /// <value></value>
         public ArrayList Switches
         {
-            get { return (ArrayList)memberFactory.CallMember(1, "Switches", new Type[] { }, new object[] { }); }
+            get { return (ArrayList)_memberFactory.CallMember(1, "Switches", new Type[] { }, new object[] { }); }
         }
      
         #endregion
@@ -76,7 +75,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void Dispose()
         {
-            memberFactory.Dispose();
+            _memberFactory.Dispose();
         }
 
         #endregion
@@ -91,8 +90,8 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if unsuccessful.</exception>
         public bool Connected
         {
-            get { return (bool)memberFactory.CallMember(1, "Connected", new Type[] { }, new object[] { }); }
-            set { memberFactory.CallMember(2, "Connected", new Type[] { }, new object[] { value }); }
+            get { return (bool)_memberFactory.CallMember(1, "Connected", new Type[] { }, new object[] { }); }
+            set { _memberFactory.CallMember(2, "Connected", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -104,7 +103,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if description unavailable</exception>
         public string Description
         {
-            get { return (string)memberFactory.CallMember(1, "Description", new Type[] { typeof(string) }, new object[] { }); }
+            get { return (string)_memberFactory.CallMember(1, "Description", new[] { typeof(string) }, new object[] { }); }
         }
 
         /// <summary>
@@ -116,7 +115,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string DriverInfo
         {
-            get { return (string)memberFactory.CallMember(1, "DriverInfo", new Type[] { typeof(string) }, new object[] { }); }
+            get { return (string)_memberFactory.CallMember(1, "DriverInfo", new[] { typeof(string) }, new object[] { }); }
         }
 
         /// <summary>
@@ -126,7 +125,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string DriverVersion
         {
-            get { return (string)memberFactory.CallMember(1, "DriverVersion", new Type[] { typeof(string) }, new object[] { }); }
+            get { return (string)_memberFactory.CallMember(1, "DriverVersion", new[] { typeof(string) }, new object[] { }); }
         }
 
         /// <summary>
@@ -137,7 +136,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public short InterfaceVersion
         {
-            get { return Convert.ToInt16(memberFactory.CallMember(1, "InterfaceVersion", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "InterfaceVersion", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -149,7 +148,7 @@ namespace ASCOM.DriverAccess
         /// </value>
         public string LastResult
         {
-            get { return (string)memberFactory.CallMember(1, "LastResult", new Type[] { typeof(string) }, new object[] { }); }
+            get { return (string)_memberFactory.CallMember(1, "LastResult", new[] { typeof(string) }, new object[] { }); }
         }
 
         /// <summary>
@@ -157,7 +156,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string Name
         {
-            get { return (string)memberFactory.CallMember(1, "Name", new Type[] { typeof(string) }, new object[] { }); }
+            get { return (string)_memberFactory.CallMember(1, "Name", new[] { typeof(string) }, new object[] { }); }
         }
 
         /// <summary>
@@ -167,7 +166,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw an exception if Setup dialog is unavailable.</exception>
         public void SetupDialog()
         {
-            memberFactory.CallMember(3, "SetupDialog", new Type[] { }, new object[] { });
+            _memberFactory.CallMember(3, "SetupDialog", new Type[] { }, new object[] { });
         }
         #endregion
 
@@ -176,7 +175,7 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Invokes the specified device-specific action.
         /// </summary>
-        /// <param name="ActionName">
+        /// <param name="actionName">
         /// A well known name agreed by interested parties that represents the action
         /// to be carried out. 
         /// <example>suppose filter wheels start to appear with automatic wheel changers; new actions could 
@@ -184,12 +183,12 @@ namespace ASCOM.DriverAccess
         /// formatted list of wheel names and the second taking a wheel name and making the change.
         /// </example>
         /// </param>
-        /// <param name="ActionParameters">List of required parameters or <see cref="String.Empty"/>  if none are required.
+        /// <param name="actionParameters">List of required parameters or <see cref="String.Empty"/>  if none are required.
         /// </param>
         /// <returns>A string response and sets the <c>IDeviceControl.LastResult</c> property.</returns>
-        public string Action(string ActionName, string ActionParameters)
+        public string Action(string actionName, string actionParameters)
         {
-            return (string)memberFactory.CallMember(3, "Action", new Type[] { typeof(string), typeof(string) }, new object[] { ActionName, ActionParameters });
+            return (string)_memberFactory.CallMember(3, "Action", new[] { typeof(string), typeof(string) }, new object[] { actionName, actionParameters });
         }
 
         /// <summary>
@@ -198,55 +197,55 @@ namespace ASCOM.DriverAccess
         /// <value>The supported actions.</value>
         public string[] SupportedActions
         {
-            get { return (string[])memberFactory.CallMember(1, "SupportedActions", new Type[] { }, new object[] { }); }
+            get { return (string[])_memberFactory.CallMember(1, "SupportedActions", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
         /// Transmits an arbitrary string to the device and does not wait for a response.
         /// Optionally, protocol framing characters may be added to the string before transmission.
         /// </summary>
-        /// <param name="Command">The literal command string to be transmitted.</param>
-        /// <param name="Raw">
+        /// <param name="command">The literal command string to be transmitted.</param>
+        /// <param name="raw">
         /// if set to <c>true</c> the string is transmitted 'as-is'.
         /// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
         /// </param>
-        public void CommandBlind(string Command, bool Raw)
+        public void CommandBlind(string command, bool raw)
         {
-            memberFactory.CallMember(3, "CommandBlind", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
+            _memberFactory.CallMember(3, "CommandBlind", new[] { typeof(string), typeof(bool) }, new object[] { command, raw });
         }
 
         /// <summary>
         /// Transmits an arbitrary string to the device and waits for a boolean response.
         /// Optionally, protocol framing characters may be added to the string before transmission.
         /// </summary>
-        /// <param name="Command">The literal command string to be transmitted.</param>
-        /// <param name="Raw">
+        /// <param name="command">The literal command string to be transmitted.</param>
+        /// <param name="raw">
         /// if set to <c>true</c> the string is transmitted 'as-is'.
         /// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
         /// </param>
         /// <returns>
         /// Returns the interpreted boolean response received from the device.
         /// </returns>
-        public bool CommandBool(string Command, bool Raw)
+        public bool CommandBool(string command, bool raw)
         {
-            return (bool)memberFactory.CallMember(3, "CommandBool", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
+            return (bool)_memberFactory.CallMember(3, "CommandBool", new[] { typeof(string), typeof(bool) }, new object[] { command, raw });
         }
 
         /// <summary>
         /// Transmits an arbitrary string to the device and waits for a string response.
         /// Optionally, protocol framing characters may be added to the string before transmission.
         /// </summary>
-        /// <param name="Command">The literal command string to be transmitted.</param>
-        /// <param name="Raw">
+        /// <param name="command">The literal command string to be transmitted.</param>
+        /// <param name="raw">
         /// if set to <c>true</c> the string is transmitted 'as-is'.
         /// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
         /// </param>
         /// <returns>
         /// Returns the string response received from the device.
         /// </returns>
-        public string CommandString(string Command, bool Raw)
+        public string CommandString(string command, bool raw)
         {
-            return (string)memberFactory.CallMember(3, "CommandString", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
+            return (string)_memberFactory.CallMember(3, "CommandString", new[] { typeof(string), typeof(bool) }, new object[] { command, raw });
         }
 
         #endregion
