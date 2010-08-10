@@ -1912,10 +1912,11 @@ namespace ASCOM.Simulator
         }
         private void RGGBData(int x, int y)
         {
-            imageData[x + x0, y + y0, 0] = (bmp.GetPixel(x + x0, y + y0).G + bmp.GetPixel(x + x0, y + y0).B) / 2;      // cyan
-            imageData[x + x1, y + y0, 0] = (bmp.GetPixel(x + x1, y + y0).R + bmp.GetPixel(x + x1, y + y0).B) / 2;      // magenta
-            imageData[x + x0, y + y1, 0] = (bmp.GetPixel(x + x0, y + y1).G + bmp.GetPixel(x + x0, y + y1).R) / 2;      // yellow
-            imageData[x + x1, y + y1, 0] = (bmp.GetPixel(x + x1, y + y1).G);
+            // is this the correct order for RGGB data?
+            imageData[x + x0, y + y0, 0] = bmp.GetPixel(x + x0, y + y0).B;      // blue
+            imageData[x + x1, y + y0, 0] = bmp.GetPixel(x + x1, y + y0).G;      // green
+            imageData[x + x0, y + y1, 0] = bmp.GetPixel(x + x0, y + y1).G;      // green
+            imageData[x + x1, y + y1, 0] = bmp.GetPixel(x + x1, y + y1).R;      // red
         }
         private void LRGBData(int x, int y)
         {
