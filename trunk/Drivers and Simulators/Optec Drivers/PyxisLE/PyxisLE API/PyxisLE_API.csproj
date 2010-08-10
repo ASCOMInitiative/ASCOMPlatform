@@ -90,6 +90,12 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Dependencies\OptecHID\OptecHIDTools.csproj">
+      <Project>{9786A9B9-97B9-4B23-AF39-4514AF45DEED}</Project>
+      <Name>OptecHIDTools</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
