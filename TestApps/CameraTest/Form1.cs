@@ -321,8 +321,18 @@ namespace CameraTest
         private void ShowImage()
         {
             if (iarr == null) return;
+
+            // generate gamma LUT
+            gamma = new int[256];
+            double g = (double)imageControl.Gamma.Value;
+            for (int i = 0; i < 256; i++)
+            {
+                gamma[i] = (byte)(Math.Pow((double)i / 256.0, g) * 256.0);
+            }
+
             if (oCamera.InterfaceVersion >= 2 && oCamera.SensorType == ASCOM.DeviceInterface.SensorType.RGGB)
             {
+                // this is just to get it going, it needs doing properly with delegates.
                 ShowColourImage();
                 return;
             }
@@ -331,16 +341,6 @@ namespace CameraTest
             int Height = iarr.GetLength(1);
 
             img = new Bitmap(Width, Height, PixelFormat.Format24bppRgb);
-
-            byte[] gamma = new byte[256];
-
-            // generate gamma LUT
-            // gamma
-            double g = (double)imageControl.Gamma.Value;
-            for (int i = 0; i < 256; i++)
-            {
-                gamma[i] = (byte)(Math.Pow((double)i / 256.0, g) * 256.0);
-            }
 
             //BitmapData data = img.LockBits(new Rectangle(sx, sy, w, h), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
             BitmapData data = img.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
@@ -372,7 +372,7 @@ namespace CameraTest
                             // apply Gamma
                             // convert to byte range
                             k = (int)Math.Min(Math.Max(k, 0), 255);
-                            v = gamma[k];
+                            v = (byte)gamma[k];
                             *imgPtr = v;
                             imgPtr++;
                             *imgPtr = v;
@@ -449,10 +449,10 @@ namespace CameraTest
                             g = g - k;
                             b = b - k;
                             // scale to 0 to 255
-                            r = (int)(r * 255.0 / s);
-                            g = (int)(g * 255.0 / s);
-                            b = (int)(b * 255.0 / s);
-                            // TODO apply Gamma
+                            // apply Gamma
+                            r = gamma[(int)(r * 255.0 / s)];
+                            g = gamma[(int)(g * 255.0 / s)];
+                            b = gamma[(int)(b * 255.0 / s)];
                             // truncate to byte range and put into the image
                             *imgPtr = (byte)Math.Min(Math.Max(r, 0), 255);
                             imgPtr++;
@@ -473,6 +473,73 @@ namespace CameraTest
             zoom = (float)Math.Pow(10, trkZoom.Value / 100.0);
             splitContainer1.Panel2.AutoScrollMinSize = new Size((int)(img.Width * zoom), (int)(img.Height * zoom));
             splitContainer1.Panel2.Invalidate();
+        }
+
+        // gamma black level, scale
+        int[] gamma;
+        int blackLevel;
+        int scale;
+
+        // using delegates to select display process
+        private unsafe delegate void displayProcess(int x, int y, byte* imgPtr);
+
+        private unsafe void MonochromeData(int x, int y, byte* imgPtr)
+        {
+            int k = Convert.ToInt32(iarr.GetValue(x, y));
+            loadRGB(k, k, k, imgPtr);
+        }
+
+        private unsafe void RGGBData(int x, int y, byte* imgPtr)
+        {
+            int r = Convert.ToInt32(iarr.GetValue(x, y));
+            y++;
+            int g = Convert.ToInt32(iarr.GetValue(x, y));
+            x++;
+            int b = Convert.ToInt32(iarr.GetValue(x, y));
+            y--;
+            g += Convert.ToInt32(iarr.GetValue(x, y));
+            x++;
+            g /= 2;
+            loadRGB(r, g, g, imgPtr);
+        }
+
+        private unsafe void CMYGData(int w, int h, byte* imgPtr)
+        {
+            // get the cmyg values
+            int c = Convert.ToInt32(iarr.GetValue(w, h));
+            h++;
+            int y = Convert.ToInt32(iarr.GetValue(w, h));
+            w++;
+            int g = Convert.ToInt32(iarr.GetValue(w, h));
+            h--;
+            int m = Convert.ToInt32(iarr.GetValue(w, h));
+            w++;
+            // convert to rgb
+            int r = c;
+            int b = m;
+            loadRGB(r, g, b, imgPtr);
+        }
+
+        private unsafe void loadRGB(int r, int g, int b, byte *imgPtr)
+        {
+            // convert 16 bit signed to 16 bit unsigned
+            if (r < 0) r += 65535;
+            if (g < 0) g += 65535;
+            if (b < 0) b += 65535;
+            // scale to range 0 to s
+            r = r - blackLevel;
+            g = g - blackLevel;
+            b = b - blackLevel;
+            // scale to 0 to 255 and apply gamma
+            r = gamma[(int)(r * 255.0 / scale)];
+            g = gamma[(int)(g * 255.0 / scale)];
+            b = gamma[(int)(b * 255.0 / scale)];
+            // truncate to byte range and put into the image
+            *imgPtr = (byte)Math.Min(Math.Max(r, 0), 255);
+            imgPtr++;
+            *imgPtr = (byte)Math.Min(Math.Max(g, 0), 255);
+            imgPtr++;
+            *imgPtr = (byte)Math.Min(Math.Max(b, 0), 255);
         }
 
         private void btnStop_Click(object sender, EventArgs e)
