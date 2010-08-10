@@ -182,7 +182,7 @@ namespace PyxisLE_API
 
             //TODO: Enter the correct number of bytes here.
             //Check that enough bytes were received
-            if (StatusReport.ReceivedData.Length < 8) throw new ApplicationException("Device Status Not Received!");
+            if (StatusReport.ReceivedData.Length < 18) throw new ApplicationException("Device Status Not Received!");
 
             //Check if an ErrorState is set
 
