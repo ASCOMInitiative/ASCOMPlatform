@@ -418,7 +418,7 @@ namespace OptecHID_FilterWheelAPI
                 // Verify the the first response was correct
                 if (HomeReport.Response1[0] != FilterWheels.REPORT_TRUE)
                 {
-                    throw new ApplicationException("The first feature report received did not contain true.");
+                    throw new ApplicationException("The device never started homing according to response from feature report.");
                 }
 
                 //Verify the second response, the error state, is zero;

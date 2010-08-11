@@ -66,6 +66,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Resource1.Designer.cs">
+      <DependentUpon>Resource1.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Rotator.cs" />
     <Compile Include="Rotators.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -95,6 +100,12 @@
       <Project>{9786A9B9-97B9-4B23-AF39-4514AF45DEED}</Project>
       <Name>OptecHIDTools</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource1.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
