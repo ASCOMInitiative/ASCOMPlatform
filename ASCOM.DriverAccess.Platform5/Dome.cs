@@ -215,6 +215,54 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
+        /// Transmits an arbitrary string to the device and does not wait for a response.
+        /// Optionally, protocol framing characters may be added to the string before transmission.
+        /// </summary>
+        /// <param name="command">The literal command string to be transmitted.</param>
+        /// <param name="raw">
+        /// if set to <c>true</c> the string is transmitted 'as-is'.
+        /// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
+        /// </param>
+        public void CommandBlind(string command, bool raw)
+        {
+            _memberFactory.CallMember(3, "CommandBlind", new[] { typeof(string), typeof(bool) }, new object[] { command });
+        }
+
+        /// <summary>
+        /// Transmits an arbitrary string to the device and waits for a boolean response.
+        /// Optionally, protocol framing characters may be added to the string before transmission.
+        /// </summary>
+        /// <param name="command">The literal command string to be transmitted.</param>
+        /// <param name="raw">
+        /// if set to <c>true</c> the string is transmitted 'as-is'.
+        /// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
+        /// </param>
+        /// <returns>
+        /// Returns the interpreted boolean response received from the device.
+        /// </returns>
+        public bool CommandBool(string command, bool raw)
+        {
+            return (bool)_memberFactory.CallMember(3, "CommandBool", new[] { typeof(string), typeof(bool) }, new object[] { command });
+        }
+
+        /// <summary>
+        /// Transmits an arbitrary string to the device and waits for a string response.
+        /// Optionally, protocol framing characters may be added to the string before transmission.
+        /// </summary>
+        /// <param name="command">The literal command string to be transmitted.</param>
+        /// <param name="raw">
+        /// if set to <c>true</c> the string is transmitted 'as-is'.
+        /// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
+        /// </param>
+        /// <returns>
+        /// Returns the string response received from the device.
+        /// </returns>
+        public string CommandString(string command, bool raw)
+        {
+            return (string)_memberFactory.CallMember(3, "CommandString", new[] { typeof(string), typeof(bool) }, new object[] { command });
+        }
+
+        /// <summary>
         /// True if driver has established communication to dome control.
         /// Set to True to establish the link and set to False to terminate the link.
         /// Raises an error if connect fails. 
