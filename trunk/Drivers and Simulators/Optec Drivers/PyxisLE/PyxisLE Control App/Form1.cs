@@ -30,6 +30,7 @@ namespace PyxisLE_Control
             myRotator.HomeFinished += new EventHandler(myRotator_HomeFinished);
             myRotator.MoveFinished += new EventHandler(myRotator_MoveFinished);
             this.ReverseCB.Checked = myRotator.Reverse;
+            this.RTL_CB.Checked = myRotator.ReturnToLastOnHome;
         }
 
         private void GetDeviceInfo()
@@ -88,11 +89,19 @@ namespace PyxisLE_Control
             }
         }
 
-        private void MoveTextBoxes_KeyPress(object sender, KeyPressEventArgs e)
+        private void MoveTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Return)
             {
                 ReqMove_BTN_Click(this, EventArgs.Empty);
+            }
+        }
+
+        private void MoveTextBoxRelative_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                GoToRel_BTN_Click(this, EventArgs.Empty);
             }
         }
 
@@ -146,6 +155,28 @@ namespace PyxisLE_Control
         private void ReverseCB_CheckedChanged(object sender, EventArgs e)
         {
             myRotator.Reverse = ReverseCB.Checked;
+        }
+
+        private void Pic_Click(object sender, EventArgs e)
+        {
+            MouseEventArgs ClickedPt = e as MouseEventArgs;
+            int x1 = 78;
+            int y1 = 75;
+            int x2 = ClickedPt.X;
+            int y2 = ClickedPt.Y;
+            int dx = x2 - x1;
+            int dy = y2 - y1;
+            double radians = Math.Atan2((double)dy, (double)dx);
+            double angle = -(radians * (180 / Math.PI) - 180);
+            angle = angle + 90;
+            if (angle > 360) angle = (angle - 360);
+            myRotator.ChangePosition(angle);
+            
+        }
+
+        private void RTL_CB_CheckedChanged(object sender, EventArgs e)
+        {
+            myRotator.ReturnToLastOnHome = RTL_CB.Checked;
         }
 
        

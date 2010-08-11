@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.Test_BTN = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -39,6 +40,11 @@
             this.GoToRel_BTN = new System.Windows.Forms.Button();
             this.Halt_BTN = new System.Windows.Forms.Button();
             this.ReverseCB = new System.Windows.Forms.CheckBox();
+            this.RTL_CB = new System.Windows.Forms.CheckBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // listBox1
@@ -48,7 +54,7 @@
             "Output Window:"});
             this.listBox1.Location = new System.Drawing.Point(12, 26);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(489, 186);
+            this.listBox1.Size = new System.Drawing.Size(589, 186);
             this.listBox1.TabIndex = 0;
             // 
             // Test_BTN
@@ -67,7 +73,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(70, 20);
             this.textBox1.TabIndex = 2;
-            this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MoveTextBoxes_KeyPress);
+            this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MoveTextBox_KeyPress);
             // 
             // label1
             // 
@@ -113,7 +119,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(70, 20);
             this.textBox2.TabIndex = 2;
-            this.textBox2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MoveTextBoxes_KeyPress);
+            this.textBox2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MoveTextBoxRelative_KeyPress);
             // 
             // GoToRel_BTN
             // 
@@ -138,7 +144,7 @@
             // ReverseCB
             // 
             this.ReverseCB.AutoSize = true;
-            this.ReverseCB.Location = new System.Drawing.Point(46, 426);
+            this.ReverseCB.Location = new System.Drawing.Point(15, 401);
             this.ReverseCB.Name = "ReverseCB";
             this.ReverseCB.Size = new System.Drawing.Size(66, 17);
             this.ReverseCB.TabIndex = 9;
@@ -146,11 +152,45 @@
             this.ReverseCB.UseVisualStyleBackColor = true;
             this.ReverseCB.CheckedChanged += new System.EventHandler(this.ReverseCB_CheckedChanged);
             // 
+            // RTL_CB
+            // 
+            this.RTL_CB.AutoSize = true;
+            this.RTL_CB.Location = new System.Drawing.Point(15, 424);
+            this.RTL_CB.Name = "RTL_CB";
+            this.RTL_CB.Size = new System.Drawing.Size(180, 17);
+            this.RTL_CB.TabIndex = 9;
+            this.RTL_CB.Text = "Return to last position on Home?";
+            this.RTL_CB.UseVisualStyleBackColor = true;
+            this.RTL_CB.CheckedChanged += new System.EventHandler(this.RTL_CB_CheckedChanged);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Location = new System.Drawing.Point(-23, -45);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(100, 50);
+            this.pictureBox1.TabIndex = 10;
+            this.pictureBox1.TabStop = false;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(443, 290);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(158, 151);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.TabIndex = 11;
+            this.pictureBox2.TabStop = false;
+            this.pictureBox2.Visible = false;
+            this.pictureBox2.Click += new System.EventHandler(this.Pic_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(513, 490);
+            this.ClientSize = new System.Drawing.Size(613, 459);
+            this.Controls.Add(this.pictureBox2);
+            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.RTL_CB);
             this.Controls.Add(this.ReverseCB);
             this.Controls.Add(this.Halt_BTN);
             this.Controls.Add(this.GoToRel_BTN);
@@ -165,6 +205,8 @@
             this.Name = "Form1";
             this.Text = "Rotator Control Panel";
             this.Load += new System.EventHandler(this.Form1_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -183,6 +225,9 @@
         private System.Windows.Forms.Button GoToRel_BTN;
         private System.Windows.Forms.Button Halt_BTN;
         private System.Windows.Forms.CheckBox ReverseCB;
+        private System.Windows.Forms.CheckBox RTL_CB;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pictureBox2;
     }
 }
 

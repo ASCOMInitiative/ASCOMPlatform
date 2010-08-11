@@ -384,10 +384,16 @@ namespace PyxisLE_API
                 RefreshDeviceStatus();
                 while (isMoving)
                 {
-                    System.Threading.Thread.Sleep(250);
                     RefreshDeviceStatus();
+                    if (this.errorState != 0)
+                    {
+                        string errormsg = GetErrorMessage(ErrorState);
+                        Trace.WriteLine(errormsg);
+                        throw new ApplicationException("An Error State Has Been Set In the Device Firmware. \n" +
+                        errormsg);
+                    }
+                    System.Threading.Thread.Sleep(250);
                 }
-
                 TriggerMoveComplete();
             }
         }
@@ -395,14 +401,25 @@ namespace PyxisLE_API
         private void HomeMonitor()
         {
             RefreshDeviceStatus();
+
             while (isHoming)
             {
-                System.Threading.Thread.Sleep(250);
                 RefreshDeviceStatus();
+                if (this.errorState != 0)
+                {
+                    string errormsg = GetErrorMessage(ErrorState);
+                    Trace.WriteLine(errormsg);
+                    throw new ApplicationException("An Error State Has Been Set In the Device Firmware. \n" +
+                    errormsg);
+                }
+                System.Threading.Thread.Sleep(250);
             }
-
             TriggerHomingComplete();
-            MoveMonitor();
+            if (returnToLast)
+            {
+                MoveMonitor();
+            }
+            
         }
 
         private void TriggerHomingComplete()
@@ -460,18 +477,49 @@ namespace PyxisLE_API
             
             // Send the Report
             this.selectedDevice.ProcessFeatureReport(HomeReport);
+
+            // Verify the first response was correct (Verify device is homing)
+            if (HomeReport.Response1[0] != Rotators.REPORT_TRUE)
+            {
+                throw new ApplicationException("The device never started homing according to response1 from feature report");
+            }
+            // Verify the second response does not have error code set
+            if (HomeReport.Response2[3] != 0)
+            {
+                errorState = Convert.ToInt16(HomeReport.Response2[3]);
+                string msg = GetErrorMessage(errorState);
+            }
+
             // Start the HomeMonitor thread
             ThreadStart ts = new ThreadStart(this.HomeMonitor);
             HomeThread = new Thread(ts);
             HomeThread.Start();
         }
 
+        private string GetErrorMessage(short errorState)
+        {
+            try
+            {
+                string ErrorName = "ErrorState_" + ErrorState.ToString();
+                string x = Resource1.ResourceManager.GetString(ErrorName);
+
+                if (x == null) x = "No Error Message Available for: " + ErrorName;
+                return x;
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine("An erorr occurred while trying to retrieve the correct error message from the Resource Manager. \n" +
+                    "Exception Data = \n" + ex.ToString() + "\n");
+                return "No Error Message Available";
+            }
+        }
+
         public void ChangePosition(double NewPos)
         {
             // First check that the new pos is in the range of 0-359.9999999
-            if ((NewPos < 0) || NewPos > 360) throw new ApplicationException("New Position is outside the acceptable range.");
-
-            Int32 NewPosInt = (int)(NewPos * (double) this.StepsPerRev / (double)360); 
+          //  if ((NewPos < 0) || NewPos > 360) throw new ApplicationException("New Position is outside the acceptable range.");
+        
+            UInt32 NewPosInt = (uint)Math.Round((NewPos * (double) this.StepsPerRev / (double)360)); 
             byte[] datatosend = new byte[] { };
 
             // Create the report to send
@@ -485,6 +533,14 @@ namespace PyxisLE_API
             // Send the Report
             this.selectedDevice.ProcessFeatureReport(MoveReport);
             RefreshDeviceStatus();
+
+            // Check that no error codes were set
+            if (MoveReport.Response2[3] != 0)
+            {
+                errorState = Convert.ToInt16(MoveReport.Response2[3]);
+                string msg = GetErrorMessage(errorState);
+            }
+
             // Start the MoveMonitor thread
             ThreadStart ts = new ThreadStart(this.MoveMonitor);
             MoveThread = new Thread(ts);
@@ -502,13 +558,13 @@ namespace PyxisLE_API
                 {
                     NewAbsPos = Degrees - (360 - CP);
                 }
-                else NewAbsPos = CP + Degrees;
+                else NewAbsPos =CP + Degrees;
             }
             else
             {
                 if (Degrees + CP < 0)
                 {
-                    NewAbsPos = Degrees + CP;
+                    NewAbsPos = 360 + (Degrees + CP);
                 }
                 else NewAbsPos = CP + Degrees;
             }

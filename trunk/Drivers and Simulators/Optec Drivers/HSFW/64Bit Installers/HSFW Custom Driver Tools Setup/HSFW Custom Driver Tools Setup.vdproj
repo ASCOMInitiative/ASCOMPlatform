@@ -46,13 +46,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_BC53C9F5EF6F67FC2915BEF9BFA41392"
+        "OwnerKey" = "8:_F5B37FE243144C73B2E75607CBFB444D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_F5B37FE243144C73B2E75607CBFB444D"
+        "OwnerKey" = "8:_BC53C9F5EF6F67FC2915BEF9BFA41392"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -73,6 +73,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -89,6 +97,27 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5.SP1"
+                    {
+                    "Name" = "8:.NET Framework 3.5 SP1"
+                    "ProductCode" = "8:Microsoft.Net.Framework.3.5.SP1"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -165,11 +194,6 @@
             "AssemblyAsmDisplayName" = "8:OptecHIDTools, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_BC53C9F5EF6F67FC2915BEF9BFA41392"
-                    {
-                    "Name" = "8:OptecHIDTools.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:OptecHIDTools.dll"
             "TargetName" = "8:"
@@ -266,7 +290,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HSFW Custom Driver Tools"
         "ProductCode" = "8:{0721BD22-EE54-48CF-B81E-63401847837D}"
-        "PackageCode" = "8:{7D69D8EE-F605-46F8-B4E7-8FD53E177452}"
+        "PackageCode" = "8:{D3F2FA9B-278E-4939-845B-06D8CB046D1A}"
         "UpgradeCode" = "8:{67A4C930-2263-4881-91D1-8ACE1AA6A8C3}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
