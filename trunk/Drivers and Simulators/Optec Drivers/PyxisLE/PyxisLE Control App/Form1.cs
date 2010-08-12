@@ -21,16 +21,46 @@ namespace PyxisLE_Control
         {
             InitializeComponent();
             RotatorMonitor = new Rotators();
-            
+            ArrayList AllControls = new ArrayList();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            myRotator = RotatorMonitor.RotatorList[0] as Rotator;
-            myRotator.HomeFinished += new EventHandler(myRotator_HomeFinished);
-            myRotator.MoveFinished += new EventHandler(myRotator_MoveFinished);
-            this.ReverseCB.Checked = myRotator.Reverse;
-            this.RTL_CB.Checked = myRotator.ReturnToLastOnHome;
+            if ((RotatorMonitor.RotatorList.Count > 0))
+            {
+                myRotator = RotatorMonitor.RotatorList[0] as Rotator;
+                myRotator.HomeFinished += new EventHandler(myRotator_HomeFinished);
+                myRotator.MoveFinished += new EventHandler(myRotator_MoveFinished);
+                myRotator.DeviceUnplugged += new EventHandler(myRotator_DeviceUnplugged);
+                this.ReverseCB.Checked = myRotator.Reverse;
+                this.RTL_CB.Checked = myRotator.ReturnToLastOnHome;
+            }
+            else
+            {
+                timer1.Enabled = true;
+                foreach (Control x in this.Controls)
+                {
+                    try
+                    {
+                        if (x.GetType() != timer1.GetType())
+                        {
+                            x.Enabled = false;
+                            Application.DoEvents();
+                        }
+                    }
+                    catch { }
+                }
+            }
+            
+
+            
+        }
+
+        void myRotator_DeviceUnplugged(object sender, EventArgs e)
+        {
+            myRotator = null;
+            this.Invoke(new UpdateUI(DisableAllControls));
+            timer1.Enabled = true;
         }
 
         private void GetDeviceInfo()
@@ -177,6 +207,73 @@ namespace PyxisLE_Control
         private void RTL_CB_CheckedChanged(object sender, EventArgs e)
         {
             myRotator.ReturnToLastOnHome = RTL_CB.Checked;
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (myRotator == null)
+                {
+                    if (RotatorMonitor.RotatorList.Count > 0)
+                    {
+                        myRotator = RotatorMonitor.RotatorList[0] as Rotator;
+                        myRotator.HomeFinished += new EventHandler(myRotator_HomeFinished);
+                        myRotator.MoveFinished += new EventHandler(myRotator_MoveFinished);
+                        myRotator.DeviceUnplugged += new EventHandler(myRotator_DeviceUnplugged);
+                        this.Invoke(new UpdateUI(EnableAllControls));
+                        timer1.Enabled = false;
+                    }
+                }
+                
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private delegate void UpdateUI();
+
+        private void EnableAllControls()
+        {
+            try
+            {
+                foreach (Control x in this.Controls)
+                {
+                    if (x.GetType() != timer1.GetType())
+                    {
+                        x.Enabled = true;
+                        Application.DoEvents();
+                    }
+
+                }
+                this.Update();
+                this.Refresh();
+
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+        }
+
+        private void DisableAllControls()
+        {
+            try
+            {
+                foreach (Control x in this.Controls)
+                {
+                    if (x.GetType() != timer1.GetType())
+                    {
+                        x.Enabled = false;
+                        x.Refresh();
+                        x.Update();
+                        Application.DoEvents();
+                    }
+                }
+                this.Update();
+                this.Refresh();
+
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
        
