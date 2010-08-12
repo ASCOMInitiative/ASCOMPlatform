@@ -28,6 +28,7 @@ namespace PyxisLE_API
         private char deviceType = '?';
         private bool reverseProperty = false;
         private bool returnToLast = false;
+        private bool isAttached = false;
 
         private Thread HomeThread;
         private Thread MoveThread;
@@ -261,23 +262,31 @@ namespace PyxisLE_API
 
         private void TriggerRotatorUnplugged(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            TriggerAnEvent(this.DeviceUnplugged);
         }
 
         // ***** Public Properties*********************
+
+        public bool IsAttached
+        {
+            get { return this.selectedDevice.DeviceIsAttached; }
+        }
 
         public bool IsHomed
         {
             get { return isHomed; }
         }
+
         public bool IsHoming
         {
             get { return isHoming; }
         }
+
         public bool IsMoving
         {
             get { return isMoving; }
         }
+
 
         public short ErrorState
         {
