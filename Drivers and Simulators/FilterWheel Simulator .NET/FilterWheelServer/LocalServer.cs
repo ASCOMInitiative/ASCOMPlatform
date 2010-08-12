@@ -222,17 +222,24 @@ namespace ASCOM.FilterWheelSim
 
             string assy = Assembly.GetEntryAssembly().Location;
 			string assyPath = Path.GetDirectoryName(assy);
+            ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "LoadComObjectAssemblies");
+            TL.Enabled = true;
+            TL.LogMessage("Assembly", assy);
+            TL.LogMessage("AssemblyPath", assyPath);
 			//int i = assyPath.LastIndexOf(@"\FilterWheelServer\bin\");						// Look for us running in IDE
 			//if (i == -1) i = assyPath.LastIndexOf('\\');
 			//assyPath = assyPath.Remove(i, assyPath.Length - i) + "\\FilterWheelSimServedClasses";
 
 			//[TPL] Always look for served classes in the ServedClasses folder in the same folder as the executable.
 			string servedClassesPath = Path.Combine(assyPath, "ServedClasses");
+            TL.LogMessage("ServedClassesPath",servedClassesPath);
 			DirectoryInfo d = new DirectoryInfo(servedClassesPath);
             foreach (FileInfo fi in d.GetFiles("*.dll"))
             {
                 string aPath = fi.FullName;
                 string fqClassName = fi.Name.Replace(fi.Extension, "");						// COM class FQN
+                TL.LogMessage("FilePath", aPath);
+                TL.LogMessage("ClassName", fqClassName);
                 //
                 // First try to load the assembly and get the types for
                 // the class and the class facctory. If this doesn't work ????
@@ -245,7 +252,8 @@ namespace ASCOM.FilterWheelSim
 					{
 						m_ComObjectTypes.Add(so.GetType(fqClassName, true));
 						m_ComObjectAssys.Add(so);
-					}
+                        TL.LogMessage("  AddedOK", so.FullName.ToString());
+                    }
 				}
 				catch (Exception e)
 				{
@@ -255,6 +263,10 @@ namespace ASCOM.FilterWheelSim
 				}
 
             }
+            TL.Enabled=false;
+            TL.Dispose();
+            TL = null;
+
             return true;
         }
         #endregion
@@ -320,6 +332,9 @@ namespace ASCOM.FilterWheelSim
             //
             // For each of the driver assemblies
             //
+            ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "FilterWheelregister");
+            TL.Enabled = true;
+            TL.LogMessage("Register", "Start");
             foreach (Type type in m_ComObjectTypes)
             {
                 bool bFail = false;
@@ -330,6 +345,7 @@ namespace ASCOM.FilterWheelSim
                     //
                     string clsid = Marshal.GenerateGuidForType(type).ToString("B");
                     string progid = Marshal.GenerateProgIdForType(type);
+                    TL.LogMessage("Register", progid + " " + clsid);
                     key = Registry.ClassesRoot.CreateSubKey("CLSID\\" + clsid);
                     key.SetValue(null, progid);						// Could be assyTitle/Desc??, but .NET components show ProgId here
                     key.SetValue("AppId", m_sAppId);
@@ -396,6 +412,9 @@ namespace ASCOM.FilterWheelSim
                 }
                 if (bFail) break;
             }
+            TL.Enabled = false;
+            TL.Dispose();
+            TL = null;
         }
 
         //
@@ -465,9 +484,13 @@ namespace ASCOM.FilterWheelSim
         //
         private static bool RegisterClassFactories()
         {
+            ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "RegisterClassFactories");
+            TL.Enabled = true;
+
             m_ClassFactories = new ArrayList();
             foreach (Type type in m_ComObjectTypes)
             {
+                TL.LogMessage("New ClassFactory", type.AssemblyQualifiedName); 
                 ClassFactory factory = new ClassFactory(type);					// Use default context & flags
                 m_ClassFactories.Add(factory);
                 if (!factory.RegisterClassObject())
@@ -478,6 +501,11 @@ namespace ASCOM.FilterWheelSim
                 }
             }
             ClassFactory.ResumeClassObjects();									// Served objects now go live
+            
+            TL.Enabled = false;
+            TL.Dispose();
+            TL = null;
+
             return true;
         }
 
