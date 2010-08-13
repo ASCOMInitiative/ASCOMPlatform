@@ -330,63 +330,84 @@ namespace CameraTest
                 gamma[i] = (byte)(Math.Pow((double)i / 256.0, g) * 256.0);
             }
 
-            if (oCamera.InterfaceVersion >= 2 && oCamera.SensorType == ASCOM.DeviceInterface.SensorType.RGGB)
+            int stepX = 1;
+            int stepY = 1;
+
+            unsafe
             {
-                // this is just to get it going, it needs doing properly with delegates.
-                ShowColourImage();
-                return;
-            }
+                DisplayProcess displayProcess = new DisplayProcess(MonochromeProcess);
+                int width = iarr.GetLength(0);
+                int height = iarr.GetLength(1);
+                int stepH = 1;
 
-            int Width = iarr.GetLength(0);
-            int Height = iarr.GetLength(1);
+                if (oCamera.InterfaceVersion >= 2)
+                {
+                    switch (oCamera.SensorType)
+                    {
+                        case ASCOM.DeviceInterface.SensorType.Monochrome:
+                            break;
+                        case ASCOM.DeviceInterface.SensorType.RGGB:
+                            displayProcess = new DisplayProcess(RGGBProcess);
+                            stepX = 2;
+                            stepY = 2;
+                            break;
+                        case ASCOM.DeviceInterface.SensorType.CMYG:
+                            displayProcess = new DisplayProcess(CMYGProcess);
+                            stepX = 2;
+                            stepY = 2;
+                            break;
+                        case ASCOM.DeviceInterface.SensorType.LRGB:
+                            displayProcess = new DisplayProcess(LRGBProcess);
+                            stepX = 2;
+                            stepY = 2;
+                            break;
+                        case ASCOM.DeviceInterface.SensorType.CMYG2:
+                            displayProcess = new DisplayProcess(CMYG2Process);
+                            stepX = 2;
+                            stepY = 4;
+                            stepH = 2;
+                            break;
+                        case ASCOM.DeviceInterface.SensorType.Color:
+                            displayProcess = new DisplayProcess(ColourProcess);
+                            break;
+                        default:
+                            break;
+                    }
+                    width /= stepX;
+                    height /= (stepY/stepH);
+                }
 
-            img = new Bitmap(Width, Height, PixelFormat.Format24bppRgb);
+                img = new Bitmap(width, height, PixelFormat.Format24bppRgb);
 
-            //BitmapData data = img.LockBits(new Rectangle(sx, sy, w, h), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
-            BitmapData data = img.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
-            try
-            {
-                unsafe
+                BitmapData data = img.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
+                try
                 {
                     // pointer to locked bitmap data
                     byte* imgPtr = (byte*)(data.Scan0);
                     // black level
-                    int b = (int)imageControl.MinValue;
+                    blackLevel = (int)imageControl.MinValue;
                     // scale, white-black
-                    int s = (int)imageControl.MaxValue - b;
-                    byte v;
-                    int k;
+                    scale = (int)imageControl.MaxValue - blackLevel;
+                    stride = data.Stride;
 
-                    for (int y = 0; y < Height; y++)
+                    int yy = 0;
+                    for (int y = 0; y < height; y+= stepH)
                     {
-                        for (int x = 0; x < Width; x++)
+                        int xx = 0;
+                        for (int x = 0; x < width; x++)
                         {
-                            k = Convert.ToInt32(iarr.GetValue(x, y));
-                            // convert 16 bit signed to 16 bit unsigned
-                            if (k < 0)
-                                k += 65535;
-                            // scale to range 0 to s
-                            k = k - b;
-                            // scale to 0 to 255
-                            k = (int)(k * 255.0 / s);
-                            // apply Gamma
-                            // convert to byte range
-                            k = (int)Math.Min(Math.Max(k, 0), 255);
-                            v = (byte)gamma[k];
-                            *imgPtr = v;
-                            imgPtr++;
-                            *imgPtr = v;
-                            imgPtr++;
-                            *imgPtr = v;
-                            imgPtr++;
+                            displayProcess(xx, yy, imgPtr);
+                            xx += stepX;
+                            imgPtr += 3;
                         }
-                        imgPtr += data.Stride - data.Width * 3;
+                        imgPtr += data.Stride - data.Width * 3 + (stepH - 1) * data.Stride;
+                        yy += stepY;
                     }
                 }
-            }
-            finally
-            {
-                img.UnlockBits(data);
+                finally
+                {
+                    img.UnlockBits(data);
+                }
             }
             imageControl.Histogram(histogram);
             zoom = (float)Math.Pow(10, trkZoom.Value / 100.0);
@@ -394,102 +415,24 @@ namespace CameraTest
             splitContainer1.Panel2.Invalidate();
         }
 
-        /// <summary>
-        /// Display the colour image. Use half the data resolution and apply the RGB values obtained from a 2x2
-        /// matrix of the data
-        /// </summary>
-        private void ShowColourImage()
-        {
-            if (iarr == null) return;
-
-            // make the display image half the size of the data
-            int Width = iarr.GetLength(0)/2;
-            int Height = iarr.GetLength(1)/2;
-
-            img = new Bitmap(Width, Height, PixelFormat.Format24bppRgb);
-
-            BitmapData data = img.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
-            try
-            {
-                unsafe
-                {
-                    // pointer to locked bitmap data
-                    byte* imgPtr = (byte*)(data.Scan0);
-                    // black level
-                    int k = (int)imageControl.MinValue;
-                    // scale, white-black
-                    int s = (int)imageControl.MaxValue - k;
-                    int r;
-                    int g;
-                    int b;
-                    int xx;         // offsets into the data, initialise to the Bayer offset
-                    int yy = 0;
-                    for (int y = 0; y < Height; y++)
-                    {
-                        xx = 0;
-                        for (int x = 0; x < Width; x++)
-                        {
-                            // TODO apply BayerOffset
-                            // TODO handle other sensorTypes
-                            r = Convert.ToInt32(iarr.GetValue(xx, yy));
-                            yy++;
-                            g = Convert.ToInt32(iarr.GetValue(xx, yy));
-                            xx++;
-                            b = Convert.ToInt32(iarr.GetValue(xx, yy));
-                            yy--;
-                            g += Convert.ToInt32(iarr.GetValue(xx, yy));
-                            xx++;
-                            g /= 2;
-                            // convert 16 bit signed to 16 bit unsigned
-                            if (r < 0) r += 65535;
-                            if (g < 0) g += 65535;
-                            if (b < 0) b += 65535;
-                            // scale to range 0 to s
-                            r = r - k;
-                            g = g - k;
-                            b = b - k;
-                            // scale to 0 to 255
-                            // apply Gamma
-                            r = gamma[(int)(r * 255.0 / s)];
-                            g = gamma[(int)(g * 255.0 / s)];
-                            b = gamma[(int)(b * 255.0 / s)];
-                            // truncate to byte range and put into the image
-                            *imgPtr = (byte)Math.Min(Math.Max(r, 0), 255);
-                            imgPtr++;
-                            *imgPtr = (byte)Math.Min(Math.Max(g, 0), 255);
-                            imgPtr++;
-                            *imgPtr = (byte)Math.Min(Math.Max(b, 0), 255);
-                            imgPtr++;
-                        }
-                        imgPtr += data.Stride - data.Width * 3;
-                        yy += 2;
-                    }
-                }
-            }
-            finally
-            {
-                img.UnlockBits(data);
-            }
-            zoom = (float)Math.Pow(10, trkZoom.Value / 100.0);
-            splitContainer1.Panel2.AutoScrollMinSize = new Size((int)(img.Width * zoom), (int)(img.Height * zoom));
-            splitContainer1.Panel2.Invalidate();
-        }
-
-        // gamma black level, scale
         int[] gamma;
         int blackLevel;
         int scale;
+        int stride;
 
         // using delegates to select display process
-        private unsafe delegate void displayProcess(int x, int y, byte* imgPtr);
+        private unsafe delegate void DisplayProcess(int x, int y, byte* imgPtr);
 
-        private unsafe void MonochromeData(int x, int y, byte* imgPtr)
+        // these processes take one cell of the image and generate the rgb values from the contents of the cell
+        // then use loadRGB to put the RGB values in the image
+
+        private unsafe void MonochromeProcess(int x, int y, byte* imgPtr)
         {
             int k = Convert.ToInt32(iarr.GetValue(x, y));
             loadRGB(k, k, k, imgPtr);
         }
 
-        private unsafe void RGGBData(int x, int y, byte* imgPtr)
+        private unsafe void RGGBProcess(int x, int y, byte* imgPtr)
         {
             int r = Convert.ToInt32(iarr.GetValue(x, y));
             y++;
@@ -500,10 +443,10 @@ namespace CameraTest
             g += Convert.ToInt32(iarr.GetValue(x, y));
             x++;
             g /= 2;
-            loadRGB(r, g, g, imgPtr);
+            loadRGB(r, g, b, imgPtr);
         }
 
-        private unsafe void CMYGData(int w, int h, byte* imgPtr)
+        private unsafe void CMYGProcess(int w, int h, byte* imgPtr)
         {
             // get the cmyg values
             int c = Convert.ToInt32(iarr.GetValue(w, h));
@@ -514,9 +457,69 @@ namespace CameraTest
             h--;
             int m = Convert.ToInt32(iarr.GetValue(w, h));
             w++;
-            // convert to rgb
-            int r = c;
-            int b = m;
+            // convert to rgb, c = g + b, y = r + g, m = r + b
+            int r = y + m - c;
+            int b = c + m - y;
+            g += (c + y - m);
+            loadRGB(r, g/2, b, imgPtr);
+        }
+
+        private unsafe void LRGBProcess(int w, int h, byte* imgPtr)
+        {
+            // get the lrgb values
+            int l = Convert.ToInt32(iarr.GetValue(w, h));
+            h++;
+            int g = Convert.ToInt32(iarr.GetValue(w, h));
+            w++;
+            int b = Convert.ToInt32(iarr.GetValue(w, h));
+            h--;
+            int r = Convert.ToInt32(iarr.GetValue(w, h));
+            w++;
+            // ignore l
+            //r += (l - g - b);
+            //g += (l - r - b);
+            //b += (l - r - g);
+            loadRGB(r, g, b, imgPtr);
+        }
+
+        private unsafe void CMYG2Process(int w, int h, byte* imgPtr)
+        {
+            // get the cmyg values
+            int c = Convert.ToInt32(iarr.GetValue(w, h));
+            w++;
+            int y = Convert.ToInt32(iarr.GetValue(w, h));
+            h++;
+            int g = Convert.ToInt32(iarr.GetValue(w, h));
+            w--;
+            int m = Convert.ToInt32(iarr.GetValue(w, h));
+            // convert to rgb, c = g + b, y = r + g, m = r + b
+            int r = y + m - c;
+            int b = c + m - y;
+            g += (c + y - m);
+            loadRGB(r, g/2, b, imgPtr);
+
+            h++;
+            c = Convert.ToInt32(iarr.GetValue(w, h));
+            w++;
+            y = Convert.ToInt32(iarr.GetValue(w, h));
+            h++;
+            m = Convert.ToInt32(iarr.GetValue(w, h));
+            w--;
+            g = Convert.ToInt32(iarr.GetValue(w, h));
+
+            // convert to rgb, c = g + b, y = r + g, m = r + b
+            r = y + m - c;
+            b = c + m - y;
+            g += (c + y - m);
+            loadRGB(r, g/2, b, imgPtr + stride);
+        }
+
+        private unsafe void ColourProcess(int w, int h, byte* imgPtr)
+        {
+            // get the rgb values from the three image planes
+            int r = Convert.ToInt32(iarr.GetValue(w, h, 0));
+            int g = Convert.ToInt32(iarr.GetValue(w, h, 1));
+            int b = Convert.ToInt32(iarr.GetValue(w, h, 2));
             loadRGB(r, g, b, imgPtr);
         }
 
@@ -526,20 +529,20 @@ namespace CameraTest
             if (r < 0) r += 65535;
             if (g < 0) g += 65535;
             if (b < 0) b += 65535;
-            // scale to range 0 to s
+            // scale to range 0 to scale
             r = r - blackLevel;
             g = g - blackLevel;
             b = b - blackLevel;
-            // scale to 0 to 255 and apply gamma
-            r = gamma[(int)(r * 255.0 / scale)];
-            g = gamma[(int)(g * 255.0 / scale)];
-            b = gamma[(int)(b * 255.0 / scale)];
-            // truncate to byte range and put into the image
-            *imgPtr = (byte)Math.Min(Math.Max(r, 0), 255);
+            // scale to 0 to 255
+            r = (int)(r * 255.0 / scale);
+            g = (int)(g * 255.0 / scale);
+            b = (int)(b * 255.0 / scale);
+            // truncate to byte range, apply gamma and put into the image
+            *imgPtr = (byte) gamma[Math.Min(Math.Max(b, 0), 255)];
             imgPtr++;
-            *imgPtr = (byte)Math.Min(Math.Max(g, 0), 255);
+            *imgPtr = (byte) gamma[Math.Min(Math.Max(g, 0), 255)];
             imgPtr++;
-            *imgPtr = (byte)Math.Min(Math.Max(b, 0), 255);
+            *imgPtr = (byte) gamma[Math.Min(Math.Max(r, 0), 255)];
         }
 
         private void btnStop_Click(object sender, EventArgs e)

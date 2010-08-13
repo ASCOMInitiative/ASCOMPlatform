@@ -1831,6 +1831,8 @@ namespace ASCOM.Simulator
         private int y1;
         private int y2;
         private int y3;
+        private int stepX;
+        private int stepY;
 
         /// <summary>
         /// reads image data from a file and puts it into a buffer in a format suitable for
@@ -1843,8 +1845,6 @@ namespace ASCOM.Simulator
             try
             {
                 bmp = (Bitmap)Image.FromFile(this.imagePath);
-                int w = Math.Min(this.cameraXSize, bmp.Width);
-                int h = Math.Min(this.cameraYSize, bmp.Height);
 
                 x0 = bayerOffsetX;
                 x1 = (bayerOffsetX + 1) & 1;
@@ -1852,11 +1852,11 @@ namespace ASCOM.Simulator
                 y1 = (bayerOffsetY + 1) & 1;
 
                 GetData getData = new GetData(MonochromeData);
-                int stepX = 1;
-                int stepY = 1;
                 switch (this.sensorType)
                 {
                     case SensorType.Monochrome:
+                        stepX = 1;
+                        stepY = 1;
                         break;
                     case SensorType.RGGB:
                         getData = new GetData(RGGBData);
@@ -1870,8 +1870,8 @@ namespace ASCOM.Simulator
                         break;
                     case SensorType.CMYG2:
                         getData = new GetData(CMYG2Data);
-                        stepX = 4;
-                        stepY = 2;
+                        stepX = 2;
+                        stepY = 4;
                         y1 = (bayerOffsetY + 0) & 3;
                         y2 = (bayerOffsetY + 1) & 3;
                         y2 = (bayerOffsetY + 2) & 3;
@@ -1891,6 +1891,8 @@ namespace ASCOM.Simulator
                     default:
                         break;
                 }
+                int w = Math.Min(this.cameraXSize, bmp.Width*stepX);
+                int h = Math.Min(this.cameraYSize, bmp.Height * stepY);
                 for (int y = 0; y < h; y+=stepY)
                 {
                     for (int x = 0; x < w; x+=stepX)
@@ -1912,36 +1914,40 @@ namespace ASCOM.Simulator
         }
         private void RGGBData(int x, int y)
         {
-            // is this the correct order for RGGB data?
-            imageData[x + x0, y + y0, 0] = bmp.GetPixel(x + x0, y + y0).B;      // blue
-            imageData[x + x1, y + y0, 0] = bmp.GetPixel(x + x1, y + y0).G;      // green
-            imageData[x + x0, y + y1, 0] = bmp.GetPixel(x + x0, y + y1).G;      // green
-            imageData[x + x1, y + y1, 0] = bmp.GetPixel(x + x1, y + y1).R;      // red
+            Color px = bmp.GetPixel(x/2, y/2);
+            imageData[x + x0, y + y0, 0] = px.R;      // red
+            imageData[x + x1, y + y0, 0] = px.G;      // green
+            imageData[x + x0, y + y1, 0] = px.G;      // green
+            imageData[x + x1, y + y1, 0] = px.B;      // blue
         }
         private void LRGBData(int x, int y)
         {
-            imageData[x + x0, y + y0, 0] = (bmp.GetPixel(x + x0, y + y0).GetBrightness() * 255);
-            imageData[x + x1, y + y0, 0] = (bmp.GetPixel(x + x1, y + y0).R);
-            imageData[x + x0, y + y1, 0] = (bmp.GetPixel(x + x0, y + y1).G);
-            imageData[x + x1, y + y1, 0] = (bmp.GetPixel(x + x1, y + y1).B);
+            Color px = bmp.GetPixel(x/2, y/2);
+            imageData[x + x0, y + y0, 0] = (px.GetBrightness() * 255);
+            imageData[x + x1, y + y0, 0] = (px.R);
+            imageData[x + x0, y + y1, 0] = (px.G);
+            imageData[x + x1, y + y1, 0] = (px.B);
         }
         private void CMYGData(int x, int y)
         {
-            imageData[x + x0, y + y0, 0] = (bmp.GetPixel(x + x0, y + y0).G + bmp.GetPixel(x + x0, y + y0).R) / 2;      // yellow
-            imageData[x + x1, y + y0, 0] = (bmp.GetPixel(x + x1, y + y0).G + bmp.GetPixel(x + x1, y + y0).B) / 2;      // cyan
-            imageData[x + x0, y + y1, 0] = (bmp.GetPixel(x + x0, y + y1).G);
-            imageData[x + x1, y + y1, 0] = (bmp.GetPixel(x + x1, y + y1).B + bmp.GetPixel(x + x1, y + y1).R) / 2;      // magenta
+            Color px = bmp.GetPixel(x/2, y/2);
+            imageData[x + x0, y + y0, 0] = (px.G + px.B) / 2;       // cyan
+            imageData[x + x1, y + y0, 0] = (px.R + px.B) / 2;       // magenta
+            imageData[x + x0, y + y1, 0] = (px.R + px.G) / 2;       // yellow
+            imageData[x + x1, y + y1, 0] = px.G;                    // green
         }
         private void CMYG2Data(int x, int y)
         {
-            imageData[x + x0, y + y0, 0] = (bmp.GetPixel(x + x0, y + y0).G + bmp.GetPixel(x + x0, y + y0).B) / 2;      // cyan
-            imageData[x + x1, y + y0, 0] = (bmp.GetPixel(x + x1, y + y0).R + bmp.GetPixel(x + x1, y + y0).G) / 2;      // yellow
-            imageData[x + x0, y + y1, 0] = (bmp.GetPixel(x + x0, y + y1).B + bmp.GetPixel(x + x0, y + y1).R) / 2;      // magenta
-            imageData[x + x1, y + y1, 0] = (bmp.GetPixel(x + x1, y + y1).G);
-            imageData[x + x0, y + y2, 0] = (bmp.GetPixel(x + x0, y + y2).G + bmp.GetPixel(x + x0, y + y2).B) / 2;      // cyan
-            imageData[x + x1, y + y2, 0] = (bmp.GetPixel(x + x1, y + y2).R + bmp.GetPixel(x + x1, y + y2).G) / 2;      // yellow
-            imageData[x + x0, y + y3, 0] = (bmp.GetPixel(x + x0, y + y3).G);
-            imageData[x + x1, y + y3, 0] = (bmp.GetPixel(x + x1, y + y3).B + bmp.GetPixel(x + x1, y + y3).R) / 2;      // magenta
+            Color px = bmp.GetPixel(x/2, y/2);
+            imageData[x + x0, y + y0, 0] = (px.G + px.B) / 2;      // cyan
+            imageData[x + x1, y + y0, 0] = (px.R + px.G) / 2;      // yellow
+            imageData[x + x0, y + y1, 0] = (px.B + px.R) / 2;      // magenta
+            imageData[x + x1, y + y1, 0] = (px.G);
+            px = bmp.GetPixel(x / 2, (y/2) + 1);
+            imageData[x + x0, y + y2, 0] = (px.G + px.B) / 2;      // cyan
+            imageData[x + x1, y + y2, 0] = (px.R + px.G) / 2;      // yellow
+            imageData[x + x0, y + y3, 0] = (px.G);
+            imageData[x + x1, y + y3, 0] = (px.B + px.R) / 2;      // magenta
         }
         private void ColorData(int x, int y)
         {
