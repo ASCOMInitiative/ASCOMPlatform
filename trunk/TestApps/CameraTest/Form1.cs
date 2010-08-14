@@ -339,6 +339,7 @@ namespace CameraTest
                 int width = iarr.GetLength(0);
                 int height = iarr.GetLength(1);
                 int stepH = 1;
+                int stepW = 1;
 
                 if (oCamera.InterfaceVersion >= 2)
                 {
@@ -358,8 +359,10 @@ namespace CameraTest
                             break;
                         case ASCOM.DeviceInterface.SensorType.LRGB:
                             displayProcess = new DisplayProcess(LRGBProcess);
-                            stepX = 2;
-                            stepY = 2;
+                            stepX = 4;
+                            stepY = 4;
+                            stepH = 2;
+                            stepW = 2;
                             break;
                         case ASCOM.DeviceInterface.SensorType.CMYG2:
                             displayProcess = new DisplayProcess(CMYG2Process);
@@ -373,11 +376,13 @@ namespace CameraTest
                         default:
                             break;
                     }
-                    width /= stepX;
+                    width /= (stepX/stepW);
                     height /= (stepY/stepH);
                     // set the bayer offsets
                     x0 = oCamera.BayerOffsetX;
-                    x1 = (x0 + 1) & 1;
+                    x1 = (x0 + 1) & (stepX - 1);
+                    x2 = (x0 + 2) & (stepX - 1);
+                    x3 = (x0 + 3) & (stepX - 1);
                     y0 = oCamera.BayerOffsetY;
                     y1 = (y0 + 1) & (stepY - 1);
                     y2 = (y0 + 2) & (stepY - 1);
@@ -401,11 +406,11 @@ namespace CameraTest
                     for (int y = 0; y < height; y+= stepH)
                     {
                         int xx = 0;
-                        for (int x = 0; x < width; x++)
+                        for (int x = 0; x < width; x+=stepW)
                         {
                             displayProcess(xx, yy, imgPtr);
                             xx += stepX;
-                            imgPtr += 3;
+                            imgPtr += (3 * stepW);
                         }
                         imgPtr += data.Stride - data.Width * 3 + (stepH - 1) * data.Stride;
                         yy += stepY;
@@ -430,6 +435,8 @@ namespace CameraTest
         // bayer offsets
         int x0;
         int x1;
+        int x2;
+        int x3;
         int y0;
         int y1;
         int y2;
@@ -497,16 +504,32 @@ namespace CameraTest
 
         private unsafe void LRGBProcess(int x, int y, byte* imgPtr)
         {
+            // convert a 4 x 4 rid of input pixels to a 2 x2 grid of output pixels
             // get the lrgb values
             int l = Convert.ToInt32(iarr.GetValue(x+x0, y+y0));
-            int g = Convert.ToInt32(iarr.GetValue(x+x0, y+y1));
-            int b = Convert.ToInt32(iarr.GetValue(x+x1, y+y1));
+            l += Convert.ToInt32(iarr.GetValue(x+x1, y+y1));
             int r = Convert.ToInt32(iarr.GetValue(x+x1, y+y0));
-            // ignore l
-            //r += (l - g - b);
-            //g += (l - r - b);
-            //b += (l - r - g);
-            loadRGB(r, g, b, imgPtr);
+            r += Convert.ToInt32(iarr.GetValue(x+x0, y+y1));
+            int g = Convert.ToInt32(iarr.GetValue(x+x0, y+y3));
+            g += Convert.ToInt32(iarr.GetValue(x+x2, y+y1));
+            int b = l - r - g;
+            loadRGB(r/2, g/2, b/2, imgPtr);     // top left
+            l = Convert.ToInt32(iarr.GetValue(x+x2, y+y0));
+            l += Convert.ToInt32(iarr.GetValue(x+x3, y+y1));
+            b = l - r - g;
+            loadRGB(r/2, g/2, b/2, imgPtr+3);     // top right
+            l = Convert.ToInt32(iarr.GetValue(x+x0, y+y2));
+            l += Convert.ToInt32(iarr.GetValue(x+x1, y+y3));
+            g = Convert.ToInt32(iarr.GetValue(x+x1, y+y2));
+            g += Convert.ToInt32(iarr.GetValue(x+x0, y+y3));
+            b = Convert.ToInt32(iarr.GetValue(x+x3, y+y2));
+            b += Convert.ToInt32(iarr.GetValue(x+x2, y+y3));
+            r = l - g - b;
+            loadRGB(r/2, g/2, b/2, imgPtr+stride);     // bottom left
+            l = Convert.ToInt32(iarr.GetValue(x+x2, y+y2));
+            l += Convert.ToInt32(iarr.GetValue(x+x3, y+y3));
+            r = l - b - g;
+            loadRGB(r/2, g/2, b/2, imgPtr+stride+3);     // bottom right
         }
 
         private unsafe void ColourProcess(int w, int h, byte* imgPtr)

@@ -1825,12 +1825,17 @@ namespace ASCOM.Simulator
 
         private delegate void GetData(int x, int y);
         private Bitmap bmp;
+        // bayer offsets
         private int x0;
         private int x1;
+        private int x2;
+        private int x3;
+
         private int y0;
         private int y1;
         private int y2;
         private int y3;
+
         private int stepX;
         private int stepY;
 
@@ -1846,10 +1851,10 @@ namespace ASCOM.Simulator
             {
                 bmp = (Bitmap)Image.FromFile(this.imagePath);
 
-                x0 = bayerOffsetX;
-                x1 = (bayerOffsetX + 1) & 1;
-                y0 = bayerOffsetY;
-                y1 = (bayerOffsetY + 1) & 1;
+                //x0 = bayerOffsetX;
+                //x1 = (bayerOffsetX + 1) & 1;
+                //y0 = bayerOffsetY;
+                //y1 = (bayerOffsetY + 1) & 1;
 
                 GetData getData = new GetData(MonochromeData);
                 switch (this.sensorType)
@@ -1872,15 +1877,15 @@ namespace ASCOM.Simulator
                         getData = new GetData(CMYG2Data);
                         stepX = 2;
                         stepY = 4;
-                        y0 = (bayerOffsetY) & 3;
-                        y1 = (bayerOffsetY + 1) & 3;
-                        y2 = (bayerOffsetY + 2) & 3;
-                        y3 = (bayerOffsetY + 3) & 3;
+                        //y0 = (bayerOffsetY) & 3;
+                        //y1 = (bayerOffsetY + 1) & 3;
+                        //y2 = (bayerOffsetY + 2) & 3;
+                        //y3 = (bayerOffsetY + 3) & 3;
                         break;
                     case SensorType.LRGB:
                         getData = new GetData(LRGBData);
-                        stepX = 2;
-                        stepY = 2;
+                        stepX = 4;
+                        stepY = 4;
                         break;
                     case SensorType.Color:
                         this.imageData = new float[this.cameraXSize, this.cameraYSize, 3];
@@ -1891,6 +1896,15 @@ namespace ASCOM.Simulator
                     default:
                         break;
                 }
+                x0 = bayerOffsetX;
+                x1 = (x0 + 1) & (stepX - 1);
+                x2 = (x0 + 2) & (stepX - 1);
+                x3 = (x0 + 3) & (stepX - 1);
+                y0 = bayerOffsetY;
+                y1 = (y0 + 1) & (stepY - 1);
+                y2 = (y0 + 2) & (stepY - 1);
+                y3 = (y0 + 3) & (stepY - 1);
+
                 int w = Math.Min(this.cameraXSize, bmp.Width*stepX);
                 int h = Math.Min(this.cameraYSize, bmp.Height * stepY);
                 for (int y = 0; y < h; y+=stepY)
@@ -1944,10 +1958,25 @@ namespace ASCOM.Simulator
         private void LRGBData(int x, int y)
         {
             Color px = bmp.GetPixel(x/2, y/2);
-            imageData[x + x0, y + y0, 0] = (px.GetBrightness() * 255);
+            imageData[x + x0, y + y0, 0] = px.GetBrightness() * 255;
             imageData[x + x1, y + y0, 0] = (px.R);
-            imageData[x + x0, y + y1, 0] = (px.G);
-            imageData[x + x1, y + y1, 0] = (px.B);
+            imageData[x + x0, y + y1, 0] = (px.R);
+            imageData[x + x1, y + y1, 0] = px.GetBrightness() * 255;
+            px = bmp.GetPixel((x/2)+ 1, y/2);
+            imageData[x + x2, y + y0, 0] = px.GetBrightness() * 255;
+            imageData[x + x3, y + y0, 0] = (px.G);
+            imageData[x + x2, y + y1, 0] = (px.G);
+            imageData[x + x3, y + y1, 0] = px.GetBrightness() * 255;
+            px = bmp.GetPixel(x/2, (y/2)+1);
+            imageData[x + x0, y + y2, 0] = px.GetBrightness() * 255;
+            imageData[x + x1, y + y2, 0] = (px.G);
+            imageData[x + x0, y + y3, 0] = (px.G);
+            imageData[x + x1, y + y3, 0] = px.GetBrightness() * 255;
+            px = bmp.GetPixel((x/2)+1, (y/2)+1);
+            imageData[x + x2, y + y2, 0] = px.GetBrightness() * 255;
+            imageData[x + x3, y + y2, 0] = (px.B);
+            imageData[x + x2, y + y3, 0] = (px.B);
+            imageData[x + x3, y + y3, 0] = px.GetBrightness() * 255;
         }
         private void ColorData(int x, int y)
         {
