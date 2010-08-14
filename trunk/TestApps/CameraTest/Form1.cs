@@ -375,6 +375,13 @@ namespace CameraTest
                     }
                     width /= stepX;
                     height /= (stepY/stepH);
+                    // set the bayer offsets
+                    x0 = oCamera.BayerOffsetX;
+                    x1 = (x0 + 1) & 1;
+                    y0 = oCamera.BayerOffsetY;
+                    y1 = (y0 + 1) & (stepY - 1);
+                    y2 = (y0 + 2) & (stepY - 1);
+                    y3 = (y0 + 3) & (stepY - 1);
                 }
 
                 img = new Bitmap(width, height, PixelFormat.Format24bppRgb);
@@ -420,6 +427,14 @@ namespace CameraTest
         int scale;
         int stride;
 
+        // bayer offsets
+        int x0;
+        int x1;
+        int y0;
+        int y1;
+        int y2;
+        int y3;
+
         // using delegates to select display process
         private unsafe delegate void DisplayProcess(int x, int y, byte* imgPtr);
 
@@ -434,29 +449,21 @@ namespace CameraTest
 
         private unsafe void RGGBProcess(int x, int y, byte* imgPtr)
         {
-            int r = Convert.ToInt32(iarr.GetValue(x, y));
-            y++;
-            int g = Convert.ToInt32(iarr.GetValue(x, y));
-            x++;
-            int b = Convert.ToInt32(iarr.GetValue(x, y));
-            y--;
-            g += Convert.ToInt32(iarr.GetValue(x, y));
-            x++;
+            int r = Convert.ToInt32(iarr.GetValue(x+x0, y+y0));
+            int g = Convert.ToInt32(iarr.GetValue(x+x0, y+y1));
+            int b = Convert.ToInt32(iarr.GetValue(x+x1, y+y1));
+            g += Convert.ToInt32(iarr.GetValue(x+x1, y+y0));
             g /= 2;
             loadRGB(r, g, b, imgPtr);
         }
 
-        private unsafe void CMYGProcess(int w, int h, byte* imgPtr)
+        private unsafe void CMYGProcess(int x, int h, byte* imgPtr)
         {
             // get the cmyg values
-            int c = Convert.ToInt32(iarr.GetValue(w, h));
-            h++;
-            int y = Convert.ToInt32(iarr.GetValue(w, h));
-            w++;
-            int g = Convert.ToInt32(iarr.GetValue(w, h));
-            h--;
-            int m = Convert.ToInt32(iarr.GetValue(w, h));
-            w++;
+            int y = Convert.ToInt32(iarr.GetValue(x+x0, h+y0));
+            int c = Convert.ToInt32(iarr.GetValue(x+x1, h+y0));
+            int g = Convert.ToInt32(iarr.GetValue(x+x0, h+y1));
+            int m = Convert.ToInt32(iarr.GetValue(x+x1, h+y1));
             // convert to rgb, c = g + b, y = r + g, m = r + b
             int r = y + m - c;
             int b = c + m - y;
@@ -464,54 +471,42 @@ namespace CameraTest
             loadRGB(r, g/2, b, imgPtr);
         }
 
-        private unsafe void LRGBProcess(int w, int h, byte* imgPtr)
+        private unsafe void CMYG2Process(int x, int h, byte* imgPtr)
         {
-            // get the lrgb values
-            int l = Convert.ToInt32(iarr.GetValue(w, h));
-            h++;
-            int g = Convert.ToInt32(iarr.GetValue(w, h));
-            w++;
-            int b = Convert.ToInt32(iarr.GetValue(w, h));
-            h--;
-            int r = Convert.ToInt32(iarr.GetValue(w, h));
-            w++;
-            // ignore l
-            //r += (l - g - b);
-            //g += (l - r - b);
-            //b += (l - r - g);
-            loadRGB(r, g, b, imgPtr);
-        }
-
-        private unsafe void CMYG2Process(int w, int h, byte* imgPtr)
-        {
-            // get the cmyg values
-            int c = Convert.ToInt32(iarr.GetValue(w, h));
-            w++;
-            int y = Convert.ToInt32(iarr.GetValue(w, h));
-            h++;
-            int g = Convert.ToInt32(iarr.GetValue(w, h));
-            w--;
-            int m = Convert.ToInt32(iarr.GetValue(w, h));
+            // get the cmyg values for the top pixel
+            int g = Convert.ToInt32(iarr.GetValue(x+x0, h+y0));
+            int m = Convert.ToInt32(iarr.GetValue(x+x1, h+y0));
+            int c = Convert.ToInt32(iarr.GetValue(x+x0, h+y1));
+            int y = Convert.ToInt32(iarr.GetValue(x+x1, h+y1));
             // convert to rgb, c = g + b, y = r + g, m = r + b
             int r = y + m - c;
             int b = c + m - y;
             g += (c + y - m);
             loadRGB(r, g/2, b, imgPtr);
-
-            h++;
-            c = Convert.ToInt32(iarr.GetValue(w, h));
-            w++;
-            y = Convert.ToInt32(iarr.GetValue(w, h));
-            h++;
-            m = Convert.ToInt32(iarr.GetValue(w, h));
-            w--;
-            g = Convert.ToInt32(iarr.GetValue(w, h));
-
+            // and the bottom pixel
+            m = Convert.ToInt32(iarr.GetValue(x+x0, h+y2));
+            g = Convert.ToInt32(iarr.GetValue(x+x1, h+y2));
+            c = Convert.ToInt32(iarr.GetValue(x+x0, h+y3));
+            y = Convert.ToInt32(iarr.GetValue(x+x1, h+y3));
             // convert to rgb, c = g + b, y = r + g, m = r + b
             r = y + m - c;
             b = c + m - y;
             g += (c + y - m);
             loadRGB(r, g/2, b, imgPtr + stride);
+        }
+
+        private unsafe void LRGBProcess(int x, int y, byte* imgPtr)
+        {
+            // get the lrgb values
+            int l = Convert.ToInt32(iarr.GetValue(x+x0, y+y0));
+            int g = Convert.ToInt32(iarr.GetValue(x+x0, y+y1));
+            int b = Convert.ToInt32(iarr.GetValue(x+x1, y+y1));
+            int r = Convert.ToInt32(iarr.GetValue(x+x1, y+y0));
+            // ignore l
+            //r += (l - g - b);
+            //g += (l - r - b);
+            //b += (l - r - g);
+            loadRGB(r, g, b, imgPtr);
         }
 
         private unsafe void ColourProcess(int w, int h, byte* imgPtr)
