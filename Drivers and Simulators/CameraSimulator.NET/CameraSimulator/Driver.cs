@@ -1872,8 +1872,8 @@ namespace ASCOM.Simulator
                         getData = new GetData(CMYG2Data);
                         stepX = 2;
                         stepY = 4;
-                        y1 = (bayerOffsetY + 0) & 3;
-                        y2 = (bayerOffsetY + 1) & 3;
+                        y0 = (bayerOffsetY) & 3;
+                        y1 = (bayerOffsetY + 1) & 3;
                         y2 = (bayerOffsetY + 2) & 3;
                         y3 = (bayerOffsetY + 3) & 3;
                         break;
@@ -1920,6 +1920,27 @@ namespace ASCOM.Simulator
             imageData[x + x0, y + y1, 0] = px.G;      // green
             imageData[x + x1, y + y1, 0] = px.B;      // blue
         }
+        private void CMYGData(int x, int y)
+        {
+            Color px = bmp.GetPixel(x/2, y/2);
+            imageData[x + x0, y + y0, 0] = (px.R + px.G) / 2;       // yellow
+            imageData[x + x1, y + y0, 0] = (px.G + px.B) / 2;       // cyan
+            imageData[x + x0, y + y1, 0] = px.G;                    // green
+            imageData[x + x1, y + y1, 0] = (px.R + px.B) / 2;       // magenta
+        }
+        private void CMYG2Data(int x, int y)
+        {
+            Color px = bmp.GetPixel(x/2, y/2);
+            imageData[x + x0, y + y0, 0] = (px.G);
+            imageData[x + x1, y + y0, 0] = (px.B + px.R) / 2;      // magenta
+            imageData[x + x0, y + y1, 0] = (px.G + px.B) / 2;      // cyan
+            imageData[x + x1, y + y1, 0] = (px.R + px.G) / 2;      // yellow
+            px = bmp.GetPixel(x / 2, (y/2) + 1);
+            imageData[x + x0, y + y2, 0] = (px.B + px.R) / 2;      // magenta
+            imageData[x + x1, y + y2, 0] = (px.G);
+            imageData[x + x0, y + y3, 0] = (px.G + px.B) / 2;      // cyan
+            imageData[x + x1, y + y3, 0] = (px.R + px.G) / 2;      // yellow
+        }
         private void LRGBData(int x, int y)
         {
             Color px = bmp.GetPixel(x/2, y/2);
@@ -1927,27 +1948,6 @@ namespace ASCOM.Simulator
             imageData[x + x1, y + y0, 0] = (px.R);
             imageData[x + x0, y + y1, 0] = (px.G);
             imageData[x + x1, y + y1, 0] = (px.B);
-        }
-        private void CMYGData(int x, int y)
-        {
-            Color px = bmp.GetPixel(x/2, y/2);
-            imageData[x + x0, y + y0, 0] = (px.G + px.B) / 2;       // cyan
-            imageData[x + x1, y + y0, 0] = (px.R + px.B) / 2;       // magenta
-            imageData[x + x0, y + y1, 0] = (px.R + px.G) / 2;       // yellow
-            imageData[x + x1, y + y1, 0] = px.G;                    // green
-        }
-        private void CMYG2Data(int x, int y)
-        {
-            Color px = bmp.GetPixel(x/2, y/2);
-            imageData[x + x0, y + y0, 0] = (px.G + px.B) / 2;      // cyan
-            imageData[x + x1, y + y0, 0] = (px.R + px.G) / 2;      // yellow
-            imageData[x + x0, y + y1, 0] = (px.B + px.R) / 2;      // magenta
-            imageData[x + x1, y + y1, 0] = (px.G);
-            px = bmp.GetPixel(x / 2, (y/2) + 1);
-            imageData[x + x0, y + y2, 0] = (px.G + px.B) / 2;      // cyan
-            imageData[x + x1, y + y2, 0] = (px.R + px.G) / 2;      // yellow
-            imageData[x + x0, y + y3, 0] = (px.G);
-            imageData[x + x1, y + y3, 0] = (px.B + px.R) / 2;      // magenta
         }
         private void ColorData(int x, int y)
         {
