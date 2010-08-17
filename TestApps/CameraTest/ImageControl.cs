@@ -128,6 +128,8 @@ namespace CameraTest
 
         public void Histogram(int[] hist)
         {
+            if (hist == null)
+                return;
             hist.CopyTo(histogram, 0);
             DrawHistogram();
         }
