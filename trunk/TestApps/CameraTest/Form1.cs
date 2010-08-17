@@ -297,6 +297,7 @@ namespace CameraTest
         {
             if (CheckConnected)
             {
+                tsError.Text = "";
                 try
                 {
                     oCamera.StartX = (int)numStartX.Value;
@@ -305,9 +306,7 @@ namespace CameraTest
                     oCamera.NumY = (int)numNumY.Value;
                     oCamera.BinX = (short)numBinX.Value;
                     oCamera.BinY = (short)numBinY.Value;
-                    bool light = true;
-                    if (oCamera.HasShutter)
-                        light = !checkBoxDarkFrame.Checked;
+                    bool light = (oCamera.HasShutter) ? !checkBoxDarkFrame.Checked : true;
                     oCamera.StartExposure((double)numExposure.Value, light);
                     ExposureTimer.Enabled = true;
                 }
@@ -317,6 +316,8 @@ namespace CameraTest
                 }
             }
         }
+
+        #region Show Image
 
         private void ShowImage()
         {
@@ -379,11 +380,11 @@ namespace CameraTest
                     width /= (stepX/stepW);
                     height /= (stepY/stepH);
                     // set the bayer offsets
-                    x0 = oCamera.BayerOffsetX;
+                    x0 = (oCamera.BayerOffsetX + oCamera.StartX * oCamera.BinX) & (stepX - 1);
                     x1 = (x0 + 1) & (stepX - 1);
                     x2 = (x0 + 2) & (stepX - 1);
                     x3 = (x0 + 3) & (stepX - 1);
-                    y0 = oCamera.BayerOffsetY;
+                    y0 = (oCamera.BayerOffsetY + oCamera.StartY * oCamera.BinY) & (stepY - 1);
                     y1 = (y0 + 1) & (stepY - 1);
                     y2 = (y0 + 2) & (stepY - 1);
                     y3 = (y0 + 3) & (stepY - 1);
@@ -442,7 +443,7 @@ namespace CameraTest
         int y2;
         int y3;
 
-        // using delegates to select display process
+        // use delegates to select display process
         private unsafe delegate void DisplayProcess(int x, int y, byte* imgPtr);
 
         // these processes take one cell of the image and generate the rgb values from the contents of the cell
@@ -504,7 +505,7 @@ namespace CameraTest
 
         private unsafe void LRGBProcess(int x, int y, byte* imgPtr)
         {
-            // convert a 4 x 4 rid of input pixels to a 2 x2 grid of output pixels
+            // convert a 4 x 4 grid of input pixels to a 2 x2 grid of output pixels
             // get the lrgb values
             int l = Convert.ToInt32(iarr.GetValue(x+x0, y+y0));
             l += Convert.ToInt32(iarr.GetValue(x+x1, y+y1));
@@ -563,6 +564,8 @@ namespace CameraTest
             *imgPtr = (byte) gamma[Math.Min(Math.Max(r, 0), 255)];
         }
 
+        #endregion
+
         private void btnStop_Click(object sender, EventArgs e)
         {
             if (CheckConnected)
@@ -596,12 +599,28 @@ namespace CameraTest
                         {
                             Array oArr = (Array)oCamera.ImageArrayVariant;
                             // cast the array to int
-                            iarr = new int[oArr.GetLength(0), oArr.GetLength(1)];
-                            for (int i = 0; i < iarr.GetLength(0); i++)
+                            if (oCamera.SensorType == ASCOM.DeviceInterface.SensorType.Color)
                             {
-                                for (int j = 0; j < iarr.GetLength(1); j++)
+                                iarr = new int[oArr.GetLength(0), oArr.GetLength(1), 3];
+                                for (int i = 0; i < iarr.GetLength(0); i++)
                                 {
-                                    iarr.SetValue(Convert.ToInt32(oArr.GetValue(i, j)), i, j);
+                                    for (int j = 0; j < iarr.GetLength(1); j++)
+                                    {
+                                        iarr.SetValue(Convert.ToInt32(oArr.GetValue(i, j, 0)), i, j, 0);
+                                        iarr.SetValue(Convert.ToInt32(oArr.GetValue(i, j, 1)), i, j, 1);
+                                        iarr.SetValue(Convert.ToInt32(oArr.GetValue(i, j, 2)), i, j, 2);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                iarr = new int[oArr.GetLength(0), oArr.GetLength(1)];
+                                for (int i = 0; i < iarr.GetLength(0); i++)
+                                {
+                                    for (int j = 0; j < iarr.GetLength(1); j++)
+                                    {
+                                        iarr.SetValue(Convert.ToInt32(oArr.GetValue(i, j)), i, j);
+                                    }
                                 }
                             }
                         }
@@ -656,28 +675,48 @@ namespace CameraTest
             int max = 0;
             int min = oCamera.MaxADU;
             int num = 0;
-
             unsafe
             {
-                fixed (int* pArr = (int[,])iarr)
+                if (iarr.Rank == 3)
                 {
-                    int* pA = pArr;
-
-                    for (int i = 0; i < iarr.GetLength(0) * iarr.GetLength(1); i++)
+                    fixed (int* pArr = (int[,,])iarr)
                     {
-                        //int v = Convert.ToInt32(iarr.GetValue(i, j));
-                        int v = *pA;
-                        if (v < 0) v = 65536 + v;
-                        if (max < v) max = v;
-                        if (min > v) min = v;
-                        sum += *pA;
-                        sumsq += v * v;
-                        num++;
-                        pA++;
+                        int* pA = (int*)pArr;
+
+                        for (int i = 0; i < iarr.Length; i++)
+                        {
+                            //int v = Convert.ToInt32(iarr.GetValue(i, j));
+                            int v = *pA;
+                            if (v < 0) v = 65536 + v;
+                            if (max < v) max = v;
+                            if (min > v) min = v;
+                            sum += *pA;
+                            sumsq += v * v;
+                            num++;
+                            pA++;
+                        }
                     }
                 }
+                else
+                {
+                    fixed (int* pArr = (int[,])iarr)
+                    {
+                        int* pA = (int*)pArr;
 
-
+                        for (int i = 0; i < iarr.GetLength(0) * iarr.GetLength(1); i++)
+                        {
+                            //int v = Convert.ToInt32(iarr.GetValue(i, j));
+                            int v = *pA;
+                            if (v < 0) v = 65536 + v;
+                            if (max < v) max = v;
+                            if (min > v) min = v;
+                            sum += *pA;
+                            sumsq += v * v;
+                            num++;
+                            pA++;
+                        }
+                    }
+                }
             }
             decimal var = (sumsq - (sum * sum) / num) / num;
             double sd = Math.Sqrt((double)var);
@@ -698,18 +737,39 @@ namespace CameraTest
             if (max <= min) s = 1;
             unsafe
             {
-                fixed (int* pArr = (int[,])iarr)
-                {
-                    int* pA = pArr;
-                    for (int i = 0; i < iarr.GetLength(1) * iarr.GetLength(0); i++)
-                    {
-                        int v = *pA++;
-                        if (v < 0) v = 65536 + v;
-                        int idx = (int)((v - min) * s);
-                        if (idx >= 0 && idx <= 255)
-                            histogram[idx]++;
-                    }
-                }
+                switch (iarr.Rank)
+	            {
+                    case 2:
+                        fixed (int* pArr = (int[,])iarr)
+                        {
+                            int* pA = pArr;
+                            for (int i = 0; i < iarr.GetLength(1) * iarr.GetLength(0); i++)
+                            {
+                                int v = *pA++;
+                                if (v < 0) v = 65536 + v;
+                                int idx = (int)((v - min) * s);
+                                if (idx >= 0 && idx <= 255)
+                                    histogram[idx]++;
+                            }
+                        }
+                        break;
+                    case 3:
+                        fixed (int* pArr = (int[,,])iarr)
+                        {
+                            int* pA = pArr;
+                            for (int i = 0; i < iarr.Length; i++)
+                            {
+                                int v = *pA++;
+                                if (v < 0) v = 65536 + v;
+                                int idx = (int)((v - min) * s);
+                                if (idx >= 0 && idx <= 255)
+                                    histogram[idx]++;
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+	            } 
 
             }
         }
