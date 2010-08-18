@@ -72,6 +72,7 @@ namespace PyxisLE_Control
             this.listBox1.Items.Add("Current Position = " + myRotator.CurrentPosition.ToString());
             this.listBox1.Items.Add("Target Position = " + myRotator.TargetPosition.ToString());
             this.listBox1.Items.Add("Zero Offset = " + myRotator.ZeroOffset.ToString());
+            this.listBox1.Items.Add("Sky PA Offset = " + myRotator.CurrentSkyPA.ToString());
             this.listBox1.Items.Add("Steps per Revolution = " + myRotator.StepsPerRev.ToString());
             this.listBox1.Items.Add("Reverse Property = " + myRotator.Reverse.ToString());
             this.listBox1.Items.Add("Return To Last On Home = " + myRotator.ReturnToLastOnHome.ToString());
@@ -179,6 +180,9 @@ namespace PyxisLE_Control
             string msg = "\nMove Completed!";
             this.Invoke(new UI_Update(UpdateTheListBox), new object[] { msg });
             msg = "Current Position = " + myRotator.CurrentPosition.ToString() + "°";
+
+            this.Invoke(new UI_Update(UpdateTheListBox), new object[] { msg });
+            msg = "Current Sky PA = " + myRotator.CurrentSkyPA.ToString() + "°";
             this.Invoke(new UI_Update(UpdateTheListBox), new object[] { msg });
         }
 
@@ -274,6 +278,17 @@ namespace PyxisLE_Control
 
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
+        }
+
+        private void SetZOBTN_Click(object sender, EventArgs e)
+        {
+            myRotator.ZeroOffset = Int16.Parse(ZOff_TB.Text);
+        }
+
+        private void SetSkyPA_BTN_Click(object sender, EventArgs e)
+        {
+            double x = double.Parse(SkyPA_TB.Text);
+            myRotator.CurrentSkyPA = x;
         }
 
        

@@ -34,13 +34,13 @@
         "Entry"
         {
         "MsmKey" = "8:_7CCFD1DCB3CD8B8BF2CD2157C1A4523B"
-        "OwnerKey" = "8:_072B8E60E425BFB98327D59AD8A88B9C"
+        "OwnerKey" = "8:_9102EC9AC0D44E058E177337E9517DE2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_7CCFD1DCB3CD8B8BF2CD2157C1A4523B"
-        "OwnerKey" = "8:_9102EC9AC0D44E058E177337E9517DE2"
+        "OwnerKey" = "8:_072B8E60E425BFB98327D59AD8A88B9C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -76,7 +76,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_9102EC9AC0D44E058E177337E9517DE2"
+        "OwnerKey" = "8:_7CCFD1DCB3CD8B8BF2CD2157C1A4523B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -88,7 +88,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7CCFD1DCB3CD8B8BF2CD2157C1A4523B"
+        "OwnerKey" = "8:_9102EC9AC0D44E058E177337E9517DE2"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -153,6 +153,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
         "Release"
@@ -227,11 +240,6 @@
             "AssemblyAsmDisplayName" = "8:PyxisLE_API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_072B8E60E425BFB98327D59AD8A88B9C"
-                    {
-                    "Name" = "8:PyxisLE_API.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:PyxisLE_API.dll"
             "TargetName" = "8:"
@@ -258,11 +266,6 @@
             "AssemblyAsmDisplayName" = "8:OptecHIDTools, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_7CCFD1DCB3CD8B8BF2CD2157C1A4523B"
-                    {
-                    "Name" = "8:OptecHIDTools.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:OptecHIDTools.dll"
             "TargetName" = "8:"
@@ -411,15 +414,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:PyxisLE"
-        "ProductCode" = "8:{DCAC2831-7D6F-42DF-A733-6CD81F8FCE39}"
-        "PackageCode" = "8:{AE7741CB-3BD4-4A3B-866B-8F1FE5982119}"
+        "ProductCode" = "8:{894DE74E-3B48-40AC-9994-F40C3A5676D9}"
+        "PackageCode" = "8:{2FB2F3EE-EEF6-4592-B2D9-01772D7EA03F}"
         "UpgradeCode" = "8:{76DEDA9D-2B4C-4821-AF37-968A7E0C7FA1}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.0.1"
         "Manufacturer" = "8:Optec Inc."
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -961,7 +964,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_5FB1854B9A1F4917BEAA5EF577ED312E"
             {
-            "SourcePath" = "8:..\\PyxisLE API\\obj\\ASCOM Driver\\PyxisLE_API.dll"
+            "SourcePath" = "8:..\\PyxisLE API\\obj\\Debug\\PyxisLE_API.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_FDD1E0F5F4F647B8A6C48AD8E8CC0225"
@@ -989,7 +992,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_9102EC9AC0D44E058E177337E9517DE2"
             {
-            "SourcePath" = "8:..\\PyxisLE Control App\\obj\\ASCOM Driver\\PyxisLE_Control.exe"
+            "SourcePath" = "8:..\\PyxisLE Control App\\obj\\Debug\\PyxisLE_Control.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_FDD1E0F5F4F647B8A6C48AD8E8CC0225"
