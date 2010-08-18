@@ -19,7 +19,8 @@ namespace PyxisLE_API
         private bool isHomed = false;
         private bool isHoming = false;
         private bool isMoving = false;
-        private Int32 zeroOffset = 0;
+        private Int16 zeroOffset = 0;
+        private Int16 skyPAOffset = 0;
         private double targetPosition = 0;
         private double currentPosition = 0;
         private Int32 stepsPerRev = 0;
@@ -89,7 +90,8 @@ namespace PyxisLE_API
                 short rFirmwareVerMinor = 0;
                 short rFirmwareVerRevision = 0;
                 char rDeviceType = '?';
-                Int32 rZeroOffset = 0;
+                Int16 rZeroOffset = 0;
+                Int16 rSkyPAOffset = 0;
                 Int32 rStepsPerRev = 0;
                 short rreverseProperty = 0;
                 short rreturnToLast = 0;
@@ -123,13 +125,19 @@ namespace PyxisLE_API
                 else this.deviceType = Convert.ToChar(rDeviceType);
 
                 // Extract the Zero Offset
-                rZeroOffset = BitConverter.ToInt32(
+                rZeroOffset = BitConverter.ToInt16(
                     new byte[] {
                         DescriptionReport.ReceivedData[5],
-                        DescriptionReport.ReceivedData[6],
+                        DescriptionReport.ReceivedData[6]}, 0);
+                this.zeroOffset = rZeroOffset;
+
+                rSkyPAOffset = BitConverter.ToInt16(
+                    new byte[] {
                         DescriptionReport.ReceivedData[7],
                         DescriptionReport.ReceivedData[8]}, 0);
-                this.zeroOffset = rZeroOffset;
+                this.skyPAOffset = rSkyPAOffset;
+
+
                 // Extract the StepsPerRev
                 rStepsPerRev = BitConverter.ToInt32(
                     new byte[] {
@@ -287,7 +295,6 @@ namespace PyxisLE_API
             get { return isMoving; }
         }
 
-
         public short ErrorState
         {
             get { return errorState; }
@@ -305,6 +312,51 @@ namespace PyxisLE_API
                 return currentPosition; }
         }
 
+        public double CurrentSkyPA
+        {
+            get
+            {
+                // skyPAOffset is the Offset from the current position in stepper counts
+                // Convert it to degrees by multiplying by (360/StepsPerRev)
+                double offset_deg = (double)skyPAOffset * (double)(360D/(double)StepsPerRev);
+                double SkyPA = CurrentPosition + offset_deg;
+                if (SkyPA >= 360) SkyPA = SkyPA - 360;
+                else if (SkyPA < 0) SkyPA = SkyPA + 360;
+                if (SkyPA == 360) SkyPA = 0;
+                return SkyPA;
+            }
+            set
+            {
+                // Receive this value in the form of a PA in degrees.
+                // verify that it is no the same as the current device PA.
+             //   if (value == CurrentPosition) return;
+                // Convert it to an offset
+                double offset_deg = value - CurrentPosition;
+                if (Math.Abs(offset_deg) > 360)
+                    throw new ApplicationException("SkyPAOffset passed is too large");
+                // convert the value to a number of stepper counts
+                Int16 counts = (Int16)((StepsPerRev / 360) * offset_deg);
+
+
+                byte[] datatosend = new byte[] { };
+                // Create the report to send
+                FeatureReport SkyPAReport = new FeatureReport(
+                    Rotators.REPORTID_FEATURE_DO_MOTION, datatosend);
+                // Feature Reports Must have at least one data item so we put a zero in it.
+
+                // Create a byte to hold the new value
+
+                // Set the opcode byte and the new value byte
+                byte[] x = BitConverter.GetBytes(counts);
+                SkyPAReport.DataToSend = new byte[] { Rotators.MOTION_OPCODE_SET_NEW_SKYPA,
+                x[0], x[1] };
+                // Send the Report
+                this.selectedDevice.ProcessFeatureReport(SkyPAReport);
+                // Update the property value by reading it from the device.
+                RefershDeviceDescription();
+            }
+        }
+
         public double TargetPosition
         {
             get { return targetPosition; }
@@ -320,9 +372,29 @@ namespace PyxisLE_API
             get { return deviceType; }
         }
 
-        public Int32 ZeroOffset
+        public Int16 ZeroOffset
         {
             get { return zeroOffset; }
+            set {
+
+                byte[] datatosend = new byte[] { };
+                // Create the report to send
+                FeatureReport ZOffReport = new FeatureReport(
+                    Rotators.REPORTID_FEATURE_DO_MOTION, datatosend);
+                // Feature Reports Must have at least one data item so we put a zero in it.
+
+                // Create a byte to hold the new value
+         
+                // Set the opcode byte and the new value byte
+
+                byte[] x = BitConverter.GetBytes(value);
+                ZOffReport.DataToSend = new byte[] { Rotators.MOTION_OPCODE_SET_ZOFF,
+                x[0], x[1] };
+                // Send the Report
+                this.selectedDevice.ProcessFeatureReport(ZOffReport);
+                // Update the property value by reading it from the device.
+                RefershDeviceDescription();
+            }
         }
 
         public string SerialNumber
@@ -472,8 +544,8 @@ namespace PyxisLE_API
             }
         }
 
-
         // ******* Public Methods ***************************************
+
         public void Home()
         {
             byte[] datatosend = new byte[] { };

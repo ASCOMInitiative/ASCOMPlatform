@@ -45,6 +45,10 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.SetZOBTN = new System.Windows.Forms.Button();
+            this.ZOff_TB = new System.Windows.Forms.TextBox();
+            this.SetSkyPA_BTN = new System.Windows.Forms.Button();
+            this.SkyPA_TB = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -157,6 +161,7 @@
             // RTL_CB
             // 
             this.RTL_CB.AutoSize = true;
+            this.RTL_CB.Enabled = false;
             this.RTL_CB.Location = new System.Drawing.Point(15, 424);
             this.RTL_CB.Name = "RTL_CB";
             this.RTL_CB.Size = new System.Drawing.Size(180, 17);
@@ -189,11 +194,49 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // SetZOBTN
+            // 
+            this.SetZOBTN.Location = new System.Drawing.Point(257, 424);
+            this.SetZOBTN.Name = "SetZOBTN";
+            this.SetZOBTN.Size = new System.Drawing.Size(98, 23);
+            this.SetZOBTN.TabIndex = 12;
+            this.SetZOBTN.Text = "Set Zero Offset";
+            this.SetZOBTN.UseVisualStyleBackColor = true;
+            this.SetZOBTN.Click += new System.EventHandler(this.SetZOBTN_Click);
+            // 
+            // ZOff_TB
+            // 
+            this.ZOff_TB.Location = new System.Drawing.Point(362, 426);
+            this.ZOff_TB.Name = "ZOff_TB";
+            this.ZOff_TB.Size = new System.Drawing.Size(55, 20);
+            this.ZOff_TB.TabIndex = 13;
+            // 
+            // SetSkyPA_BTN
+            // 
+            this.SetSkyPA_BTN.Location = new System.Drawing.Point(257, 229);
+            this.SetSkyPA_BTN.Name = "SetSkyPA_BTN";
+            this.SetSkyPA_BTN.Size = new System.Drawing.Size(75, 23);
+            this.SetSkyPA_BTN.TabIndex = 14;
+            this.SetSkyPA_BTN.Text = "Set Sky PA";
+            this.SetSkyPA_BTN.UseVisualStyleBackColor = true;
+            this.SetSkyPA_BTN.Click += new System.EventHandler(this.SetSkyPA_BTN_Click);
+            // 
+            // SkyPA_TB
+            // 
+            this.SkyPA_TB.Location = new System.Drawing.Point(351, 231);
+            this.SkyPA_TB.Name = "SkyPA_TB";
+            this.SkyPA_TB.Size = new System.Drawing.Size(100, 20);
+            this.SkyPA_TB.TabIndex = 15;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(613, 459);
+            this.Controls.Add(this.SkyPA_TB);
+            this.Controls.Add(this.SetSkyPA_BTN);
+            this.Controls.Add(this.ZOff_TB);
+            this.Controls.Add(this.SetZOBTN);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.RTL_CB);
@@ -235,6 +278,10 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Button SetZOBTN;
+        private System.Windows.Forms.TextBox ZOff_TB;
+        private System.Windows.Forms.Button SetSkyPA_BTN;
+        private System.Windows.Forms.TextBox SkyPA_TB;
     }
 }
 

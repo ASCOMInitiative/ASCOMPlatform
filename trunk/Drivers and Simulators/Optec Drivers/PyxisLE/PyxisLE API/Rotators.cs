@@ -31,16 +31,17 @@ namespace PyxisLE_API
         internal const byte MOTION_OPCODE_DOMOVE = 2;
         internal const byte MOTION_OPCODE_HALT = 3;
         internal const byte MOTION_OPCODE_SET_REVERSE = 4;
-        internal const byte MOTION_OPCODE_SET_NEW_PA = 5;
+        internal const byte MOTION_OPCODE_SET_NEW_SKYPA = 5;
         internal const byte MOTION_OPCODE_SET_RETURNTOLAST = 6;
         internal const byte MOTION_OPCODE_SET_DEVICETYPE = 7;
+        internal const byte MOTION_OPCODE_SET_ZOFF = 8;
         
         internal const byte REPORT_TRUE = 255;
         internal const byte REPORT_FALSE = 0;
 
         public Rotators()
         {
-            MessageBox.Show("Creating");
+           // MessageBox.Show("Creating");
             Trace.WriteLine("*******************************************************************");
             Trace.WriteLine("**************FilterWheel API IS IN USE****************************");
             HIDMonitor.HIDAttached += new EventHandler(HIDMonitor_HIDAttached);
