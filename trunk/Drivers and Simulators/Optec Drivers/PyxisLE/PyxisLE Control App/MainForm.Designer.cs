@@ -28,39 +28,42 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.label1 = new System.Windows.Forms.Label();
             this.SkyPA_TB = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.DA_TB = new System.Windows.Forms.TextBox();
             this.HomeBTN = new System.Windows.Forms.Button();
             this.SetPA_BTN = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.AbsoluteMove_TB = new System.Windows.Forms.TextBox();
+            this.AbsoluteMove_BTN = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.RotatorDiagram = new System.Windows.Forms.PictureBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.RelativeIncrement_TB = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.RelativeForward_BTN = new System.Windows.Forms.Button();
+            this.RelativeReverse_Btn = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deviceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.advancedSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.diagnosticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ablueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deviceDocumentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.advancedSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.diagnosticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showDeviceDiagramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RotatorDiagram)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -82,39 +85,27 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 27);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(24, 36);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(98, 13);
+            this.label1.Size = new System.Drawing.Size(144, 20);
             this.label1.TabIndex = 1;
             this.label1.Text = "Sky Position Angle:";
             // 
             // SkyPA_TB
             // 
-            this.SkyPA_TB.Location = new System.Drawing.Point(147, 24);
+            this.SkyPA_TB.Cursor = System.Windows.Forms.Cursors.No;
+            this.SkyPA_TB.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SkyPA_TB.Location = new System.Drawing.Point(170, 33);
             this.SkyPA_TB.Name = "SkyPA_TB";
-            this.SkyPA_TB.Size = new System.Drawing.Size(73, 20);
+            this.SkyPA_TB.ReadOnly = true;
+            this.SkyPA_TB.Size = new System.Drawing.Size(73, 26);
             this.SkyPA_TB.TabIndex = 2;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 57);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(74, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Device Angle:";
-            // 
-            // DA_TB
-            // 
-            this.DA_TB.Location = new System.Drawing.Point(147, 54);
-            this.DA_TB.Name = "DA_TB";
-            this.DA_TB.ReadOnly = true;
-            this.DA_TB.Size = new System.Drawing.Size(73, 20);
-            this.DA_TB.TabIndex = 2;
+            this.SkyPA_TB.TabStop = false;
             // 
             // HomeBTN
             // 
-            this.HomeBTN.Location = new System.Drawing.Point(113, 376);
+            this.HomeBTN.Location = new System.Drawing.Point(115, 346);
             this.HomeBTN.Name = "HomeBTN";
             this.HomeBTN.Size = new System.Drawing.Size(73, 23);
             this.HomeBTN.TabIndex = 4;
@@ -124,43 +115,48 @@
             // 
             // SetPA_BTN
             // 
-            this.SetPA_BTN.Location = new System.Drawing.Point(228, 22);
+            this.SetPA_BTN.Location = new System.Drawing.Point(266, 36);
             this.SetPA_BTN.Name = "SetPA_BTN";
-            this.SetPA_BTN.Size = new System.Drawing.Size(55, 23);
+            this.SetPA_BTN.Size = new System.Drawing.Size(73, 23);
             this.SetPA_BTN.TabIndex = 5;
-            this.SetPA_BTN.Text = "Set PA";
+            this.SetPA_BTN.Text = "Set PA...";
             this.SetPA_BTN.UseVisualStyleBackColor = true;
             this.SetPA_BTN.Click += new System.EventHandler(this.SetPA_BTN_Click);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 90);
+            this.label3.Location = new System.Drawing.Point(34, 382);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(131, 13);
             this.label3.TabIndex = 6;
             this.label3.Text = "Move to Absolute Sky PA:";
             // 
-            // textBox1
+            // AbsoluteMove_TB
             // 
-            this.textBox1.Location = new System.Drawing.Point(147, 87);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(73, 20);
-            this.textBox1.TabIndex = 7;
+            this.AbsoluteMove_TB.Location = new System.Drawing.Point(177, 379);
+            this.AbsoluteMove_TB.Name = "AbsoluteMove_TB";
+            this.AbsoluteMove_TB.Size = new System.Drawing.Size(73, 20);
+            this.AbsoluteMove_TB.TabIndex = 7;
+            this.AbsoluteMove_TB.Text = "0";
+            this.AbsoluteMove_TB.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.AbsoluteMove_TB.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.AbsoluteMove_TB_KeyPress);
+            this.AbsoluteMove_TB.Validating += new System.ComponentModel.CancelEventHandler(this.AbsoluteMove_TB_Validating);
             // 
-            // button1
+            // AbsoluteMove_BTN
             // 
-            this.button1.Location = new System.Drawing.Point(228, 85);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(55, 23);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "Go";
-            this.button1.UseVisualStyleBackColor = true;
+            this.AbsoluteMove_BTN.Location = new System.Drawing.Point(273, 377);
+            this.AbsoluteMove_BTN.Name = "AbsoluteMove_BTN";
+            this.AbsoluteMove_BTN.Size = new System.Drawing.Size(55, 23);
+            this.AbsoluteMove_BTN.TabIndex = 8;
+            this.AbsoluteMove_BTN.Text = "Go";
+            this.AbsoluteMove_BTN.UseVisualStyleBackColor = true;
+            this.AbsoluteMove_BTN.Click += new System.EventHandler(this.AbsoluteMove_BTN_Click);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(23, 381);
+            this.label4.Location = new System.Drawing.Point(34, 351);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(75, 13);
             this.label4.TabIndex = 9;
@@ -168,67 +164,76 @@
             // 
             // RotatorDiagram
             // 
+            this.RotatorDiagram.Cursor = System.Windows.Forms.Cursors.Cross;
+            this.RotatorDiagram.ErrorImage = ((System.Drawing.Image)(resources.GetObject("RotatorDiagram.ErrorImage")));
             this.RotatorDiagram.Image = ((System.Drawing.Image)(resources.GetObject("RotatorDiagram.Image")));
-            this.RotatorDiagram.Location = new System.Drawing.Point(16, 139);
+            this.RotatorDiagram.Location = new System.Drawing.Point(51, 71);
             this.RotatorDiagram.Name = "RotatorDiagram";
-            this.RotatorDiagram.Size = new System.Drawing.Size(307, 220);
+            this.RotatorDiagram.Size = new System.Drawing.Size(260, 260);
             this.RotatorDiagram.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.RotatorDiagram.TabIndex = 10;
             this.RotatorDiagram.TabStop = false;
             this.RotatorDiagram.Click += new System.EventHandler(this.RotatorDiagram_Click);
+            this.RotatorDiagram.Paint += new System.Windows.Forms.PaintEventHandler(this.RotatorDiagram_Paint);
             // 
-            // textBox2
+            // RelativeIncrement_TB
             // 
-            this.textBox2.Location = new System.Drawing.Point(120, 36);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(71, 20);
-            this.textBox2.TabIndex = 11;
+            this.RelativeIncrement_TB.Location = new System.Drawing.Point(121, 35);
+            this.RelativeIncrement_TB.Name = "RelativeIncrement_TB";
+            this.RelativeIncrement_TB.Size = new System.Drawing.Size(71, 20);
+            this.RelativeIncrement_TB.TabIndex = 11;
+            this.RelativeIncrement_TB.Text = "10";
+            this.RelativeIncrement_TB.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.RelativeIncrement_TB.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.RelativeIncrement_TB_KeyPress);
+            this.RelativeIncrement_TB.Validating += new System.ComponentModel.CancelEventHandler(this.RelativeIncrement_TB_Validating);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(134, 20);
+            this.label5.Location = new System.Drawing.Point(130, 17);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(47, 13);
             this.label5.TabIndex = 12;
             this.label5.Text = "Degrees";
             // 
-            // button2
+            // RelativeForward_BTN
             // 
-            this.button2.Location = new System.Drawing.Point(197, 34);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(48, 23);
-            this.button2.TabIndex = 13;
-            this.button2.Text = ">>";
-            this.button2.UseVisualStyleBackColor = true;
+            this.RelativeForward_BTN.Location = new System.Drawing.Point(208, 34);
+            this.RelativeForward_BTN.Name = "RelativeForward_BTN";
+            this.RelativeForward_BTN.Size = new System.Drawing.Size(90, 23);
+            this.RelativeForward_BTN.TabIndex = 13;
+            this.RelativeForward_BTN.Text = ">>";
+            this.RelativeForward_BTN.UseVisualStyleBackColor = true;
+            this.RelativeForward_BTN.Click += new System.EventHandler(this.RelativeForward_BTN_Click);
             // 
-            // button3
+            // RelativeReverse_Btn
             // 
-            this.button3.Location = new System.Drawing.Point(66, 36);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(48, 23);
-            this.button3.TabIndex = 14;
-            this.button3.Text = "<<";
-            this.button3.UseVisualStyleBackColor = true;
+            this.RelativeReverse_Btn.Location = new System.Drawing.Point(9, 34);
+            this.RelativeReverse_Btn.Name = "RelativeReverse_Btn";
+            this.RelativeReverse_Btn.Size = new System.Drawing.Size(96, 23);
+            this.RelativeReverse_Btn.TabIndex = 14;
+            this.RelativeReverse_Btn.Text = "<<";
+            this.RelativeReverse_Btn.UseVisualStyleBackColor = true;
+            this.RelativeReverse_Btn.Click += new System.EventHandler(this.RelativeReverse_Btn_Click);
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.button3);
+            this.groupBox1.Controls.Add(this.RelativeReverse_Btn);
             this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.button2);
-            this.groupBox1.Controls.Add(this.textBox2);
-            this.groupBox1.Location = new System.Drawing.Point(16, 407);
+            this.groupBox1.Controls.Add(this.RelativeForward_BTN);
+            this.groupBox1.Controls.Add(this.RelativeIncrement_TB);
+            this.groupBox1.Location = new System.Drawing.Point(28, 407);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(307, 74);
             this.groupBox1.TabIndex = 15;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Relative Move";
-            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.viewToolStripMenuItem,
             this.deviceToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -236,6 +241,21 @@
             this.menuStrip1.Size = new System.Drawing.Size(363, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exitToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // deviceToolStripMenuItem
             // 
@@ -245,6 +265,19 @@
             this.deviceToolStripMenuItem.Name = "deviceToolStripMenuItem";
             this.deviceToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.deviceToolStripMenuItem.Text = "Device";
+            // 
+            // advancedSetupToolStripMenuItem
+            // 
+            this.advancedSetupToolStripMenuItem.Name = "advancedSetupToolStripMenuItem";
+            this.advancedSetupToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.advancedSetupToolStripMenuItem.Text = "Advanced Setup";
+            this.advancedSetupToolStripMenuItem.Click += new System.EventHandler(this.advancedSetupToolStripMenuItem_Click);
+            // 
+            // diagnosticsToolStripMenuItem
+            // 
+            this.diagnosticsToolStripMenuItem.Name = "diagnosticsToolStripMenuItem";
+            this.diagnosticsToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.diagnosticsToolStripMenuItem.Text = "Diagnostics";
             // 
             // helpToolStripMenuItem
             // 
@@ -274,31 +307,24 @@
             this.deviceDocumentationToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.deviceDocumentationToolStripMenuItem.Text = "Device Documentation";
             // 
-            // advancedSetupToolStripMenuItem
+            // errorProvider1
             // 
-            this.advancedSetupToolStripMenuItem.Name = "advancedSetupToolStripMenuItem";
-            this.advancedSetupToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.advancedSetupToolStripMenuItem.Text = "Advanced Setup";
+            this.errorProvider1.ContainerControl = this;
             // 
-            // diagnosticsToolStripMenuItem
+            // viewToolStripMenuItem
             // 
-            this.diagnosticsToolStripMenuItem.Name = "diagnosticsToolStripMenuItem";
-            this.diagnosticsToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.diagnosticsToolStripMenuItem.Text = "Diagnostics";
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showDeviceDiagramToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "View";
             // 
-            // fileToolStripMenuItem
+            // showDeviceDiagramToolStripMenuItem
             // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.exitToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "File";
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.exitToolStripMenuItem.Text = "Exit";
+            this.showDeviceDiagramToolStripMenuItem.Name = "showDeviceDiagramToolStripMenuItem";
+            this.showDeviceDiagramToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.showDeviceDiagramToolStripMenuItem.Text = "Show/Hide Rotator Diagram";
+            this.showDeviceDiagramToolStripMenuItem.Click += new System.EventHandler(this.showDeviceDiagramToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -307,13 +333,11 @@
             this.ClientSize = new System.Drawing.Size(363, 520);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.AbsoluteMove_BTN);
+            this.Controls.Add(this.AbsoluteMove_TB);
             this.Controls.Add(this.HomeBTN);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.SetPA_BTN);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.DA_TB);
             this.Controls.Add(this.SkyPA_TB);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.statusStrip1);
@@ -330,6 +354,7 @@
             this.groupBox1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -341,19 +366,17 @@
         private System.Windows.Forms.ToolStripStatusLabel StatusLabel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox SkyPA_TB;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox DA_TB;
         private System.Windows.Forms.Button HomeBTN;
         private System.Windows.Forms.Button SetPA_BTN;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox AbsoluteMove_TB;
+        private System.Windows.Forms.Button AbsoluteMove_BTN;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.PictureBox RotatorDiagram;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox RelativeIncrement_TB;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button RelativeForward_BTN;
+        private System.Windows.Forms.Button RelativeReverse_Btn;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem deviceToolStripMenuItem;
@@ -365,5 +388,8 @@
         private System.Windows.Forms.ToolStripMenuItem ablueToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem checkForUpdatesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deviceDocumentationToolStripMenuItem;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showDeviceDiagramToolStripMenuItem;
     }
 }
