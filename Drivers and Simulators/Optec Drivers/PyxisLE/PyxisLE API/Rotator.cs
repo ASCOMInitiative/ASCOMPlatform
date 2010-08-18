@@ -305,21 +305,29 @@ namespace PyxisLE_API
             get { return firmwareVersion; }
         }
 
-        public double CurrentPosition
+        public double CurrentDevicePA
         {
-            get {
+            // The units for CurrentDevicePA are degrees
+            get 
+            {
                 RefreshDeviceStatus();
-                return currentPosition; }
+                // Convert currentPosition from stepper count to degrees...
+               // double CP_degrees = currentPosition * (double)(360D / (double)StepsPerRev);
+                return currentPosition; 
+            }
+            set
+            {
+                this.ChangeDevicePA(value);
+            }
         }
 
         public double CurrentSkyPA
         {
+            // The units for CurrentSkyPA are degrees
             get
             {
-                // skyPAOffset is the Offset from the current position in stepper counts
-                // Convert it to degrees by multiplying by (360/StepsPerRev)
-                double offset_deg = (double)skyPAOffset * (double)(360D/(double)StepsPerRev);
-                double SkyPA = CurrentPosition + offset_deg;
+                double offset_deg = SkyPAOffset;
+                double SkyPA = CurrentDevicePA - offset_deg;
                 if (SkyPA >= 360) SkyPA = SkyPA - 360;
                 else if (SkyPA < 0) SkyPA = SkyPA + 360;
                 if (SkyPA == 360) SkyPA = 0;
@@ -327,15 +335,51 @@ namespace PyxisLE_API
             }
             set
             {
-                // Receive this value in the form of a PA in degrees.
+                double offset_deg = SkyPAOffset;
+                double NewDevicePosition_Degrees = SkyPAOffset + value;
+                if (NewDevicePosition_Degrees == 360)
+                {
+                    NewDevicePosition_Degrees = 0;
+                }
+                else if (NewDevicePosition_Degrees > 360 )
+                {
+                    NewDevicePosition_Degrees = NewDevicePosition_Degrees - 360;
+                }
+                else if (NewDevicePosition_Degrees < 0)
+                {
+                    NewDevicePosition_Degrees = NewDevicePosition_Degrees + 360;
+                }
+                ChangeDevicePA(NewDevicePosition_Degrees);
+            }
+        }
+
+        public double SkyPAOffset
+        {
+            get
+            {
+                // skyPAOffset is the Offset from the current position in stepper counts
+                // Convert it to degrees by multiplying by (360/StepsPerRev)
+                double offset_deg = (double)skyPAOffset * (double)(360D/(double)StepsPerRev);
+               // double SkyPA = CurrentDevicePA + offset_deg;
+               // if (SkyPA >= 360) SkyPA = SkyPA - 360;
+               // else if (SkyPA < 0) SkyPA = SkyPA + 360;
+               // if (SkyPA == 360) SkyPA = 0;
+               // return SkyPA;
+                return offset_deg;
+            }
+
+            set
+            {
+                // Receive this value in degrees
                 // verify that it is no the same as the current device PA.
-             //   if (value == CurrentPosition) return;
+                // if (value == CurrentPosition) return;
                 // Convert it to an offset
-                double offset_deg = value - CurrentPosition;
-                if (Math.Abs(offset_deg) > 360)
+                // double offset_deg = value - CurrentDevicePA;
+
+                if (Math.Abs(value) > 360)
                     throw new ApplicationException("SkyPAOffset passed is too large");
                 // convert the value to a number of stepper counts
-                Int16 counts = (Int16)((StepsPerRev / 360) * offset_deg);
+                Int16 counts = (Int16)((StepsPerRev / 360) * value);
 
 
                 byte[] datatosend = new byte[] { };
@@ -544,6 +588,58 @@ namespace PyxisLE_API
             }
         }
 
+        private void ChangeDevicePA(double NewPos)
+        {
+
+            // First check that the new pos is in the range of 0-359.9999999
+            if ((NewPos < 0) || NewPos > 360) throw new ApplicationException("New Position is outside the acceptable range.");
+            // Convert degrees to steps
+            UInt32 NewPosInt = (uint)Math.Round((NewPos * (double)this.StepsPerRev / (double)360));
+            byte[] datatosend = new byte[] { };
+
+            // Create the report to send
+            FeatureReport MoveReport = new FeatureReport(
+                Rotators.REPORTID_FEATURE_DO_MOTION, datatosend);
+            // Feature Reports Must have at least one data item so we put a zero in it.
+            byte[] x = BitConverter.GetBytes(NewPosInt);
+            MoveReport.DataToSend = new byte[] { Rotators.MOTION_OPCODE_DOMOVE,
+                x[0], x[1], x[2], x[3] };
+
+            // Send the Report
+            this.selectedDevice.ProcessFeatureReport(MoveReport);
+            RefreshDeviceStatus();
+
+            // Check that no error codes were set
+            if (MoveReport.Response2[3] != 0)
+            {
+                errorState = Convert.ToInt16(MoveReport.Response2[3]);
+                string msg = GetErrorMessage(errorState);
+            }
+
+            // Start the MoveMonitor thread
+            ThreadStart ts = new ThreadStart(this.MoveMonitor);
+            MoveThread = new Thread(ts);
+            MoveThread.Start();
+        }
+
+        private string GetErrorMessage(short errorState)
+        {
+            try
+            {
+                string ErrorName = "ErrorState_" + ErrorState.ToString();
+                string x = Resource1.ResourceManager.GetString(ErrorName);
+
+                if (x == null) x = "No Error Message Available for: " + ErrorName;
+                return x;
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine("An erorr occurred while trying to retrieve the correct error message from the Resource Manager. \n" +
+                    "Exception Data = \n" + ex.ToString() + "\n");
+                return "No Error Message Available";
+            }
+        }
+
         // ******* Public Methods ***************************************
 
         public void Home()
@@ -575,98 +671,6 @@ namespace PyxisLE_API
             ThreadStart ts = new ThreadStart(this.HomeMonitor);
             HomeThread = new Thread(ts);
             HomeThread.Start();
-        }
-
-        private string GetErrorMessage(short errorState)
-        {
-            try
-            {
-                string ErrorName = "ErrorState_" + ErrorState.ToString();
-                string x = Resource1.ResourceManager.GetString(ErrorName);
-
-                if (x == null) x = "No Error Message Available for: " + ErrorName;
-                return x;
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine("An erorr occurred while trying to retrieve the correct error message from the Resource Manager. \n" +
-                    "Exception Data = \n" + ex.ToString() + "\n");
-                return "No Error Message Available";
-            }
-        }
-
-        public void ChangePosition(double NewPos)
-        {
-            // First check that the new pos is in the range of 0-359.9999999
-          //  if ((NewPos < 0) || NewPos > 360) throw new ApplicationException("New Position is outside the acceptable range.");
-        
-            UInt32 NewPosInt = (uint)Math.Round((NewPos * (double) this.StepsPerRev / (double)360)); 
-            byte[] datatosend = new byte[] { };
-
-            // Create the report to send
-            FeatureReport MoveReport = new FeatureReport(
-                Rotators.REPORTID_FEATURE_DO_MOTION, datatosend);
-            // Feature Reports Must have at least one data item so we put a zero in it.
-            byte[] x = BitConverter.GetBytes(NewPosInt);
-            MoveReport.DataToSend = new byte[] { Rotators.MOTION_OPCODE_DOMOVE,
-                x[0], x[1], x[2], x[3] };
-
-            // Send the Report
-            this.selectedDevice.ProcessFeatureReport(MoveReport);
-            RefreshDeviceStatus();
-
-            // Check that no error codes were set
-            if (MoveReport.Response2[3] != 0)
-            {
-                errorState = Convert.ToInt16(MoveReport.Response2[3]);
-                string msg = GetErrorMessage(errorState);
-            }
-
-            // Start the MoveMonitor thread
-            ThreadStart ts = new ThreadStart(this.MoveMonitor);
-            MoveThread = new Thread(ts);
-            MoveThread.Start();
-        }
-
-        public void ChangePosition_Relative(double Degrees)
-        {
-            double CP = this.CurrentPosition;
-            double NewAbsPos = 0;
-            if ((Degrees < -360) || Degrees > 360) throw new ApplicationException("Offset is outside the acceptable range.");
-            if (Degrees > 0)
-            {
-                if ((Degrees + CP) > 360)
-                {
-                    NewAbsPos = Degrees - (360 - CP);
-                }
-                else NewAbsPos =CP + Degrees;
-            }
-            else
-            {
-                if (Degrees + CP < 0)
-                {
-                    NewAbsPos = 360 + (Degrees + CP);
-                }
-                else NewAbsPos = CP + Degrees;
-            }
-            // Convert the new position to a step count.
-            Int32 NewPosInt = (int)(NewAbsPos * (double)this.StepsPerRev / (double)360);
-            byte[] datatosend = new byte[] { };
-            // Create the report to send
-            FeatureReport MoveReport = new FeatureReport(
-                Rotators.REPORTID_FEATURE_DO_MOTION, datatosend);
-            // Feature Reports Must have at least one data item so we put a zero in it.
-            byte[] x = BitConverter.GetBytes(NewPosInt);
-            MoveReport.DataToSend = new byte[] { Rotators.MOTION_OPCODE_DOMOVE,
-                x[0], x[1], x[2], x[3] };
-
-            // Send the Report
-            this.selectedDevice.ProcessFeatureReport(MoveReport);
-            RefreshDeviceStatus();
-            // Start the MoveMonitor thread
-            ThreadStart ts = new ThreadStart(this.MoveMonitor);
-            MoveThread = new Thread(ts);
-            MoveThread.Start();
         }
 
         public void Halt_Move()

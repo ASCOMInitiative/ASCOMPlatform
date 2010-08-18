@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using OptecHIDTools;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace PyxisLE_API
 {
@@ -39,6 +40,8 @@ namespace PyxisLE_API
         internal const byte REPORT_TRUE = 255;
         internal const byte REPORT_FALSE = 0;
 
+        private Thread RefreshRotatorListThread;
+
         public Rotators()
         {
            // MessageBox.Show("Creating");
@@ -46,16 +49,45 @@ namespace PyxisLE_API
             Trace.WriteLine("**************FilterWheel API IS IN USE****************************");
             HIDMonitor.HIDAttached += new EventHandler(HIDMonitor_HIDAttached);
             HIDMonitor.HIDRemoved += new EventHandler(HIDMonitor_HIDRemoved);
+
+            StartRefreshingRotatorList();
         }
 
         void HIDMonitor_HIDRemoved(object sender, EventArgs e)
         {
-            //throw new NotImplementedException();
+            if (RefreshRotatorListThread.IsAlive)
+            {
+                RefreshRotatorListThread.Join();
+            }
+            else StartRefreshingRotatorList();
+
+            DeviceListChangedArgs deviceInfo = (DeviceListChangedArgs)e;
+            if ((deviceInfo.PID == ROTATOR_PID) && (deviceInfo.VID == OPTEC_VID))
+            {
+                TriggerAnEvent(RotatorRemoved);
+            }
         }
 
         void HIDMonitor_HIDAttached(object sender, EventArgs e)
         {
-            //throw new NotImplementedException();
+            if (RefreshRotatorListThread.IsAlive)
+            {
+                RefreshRotatorListThread.Join();
+            }
+            else StartRefreshingRotatorList();
+
+            DeviceListChangedArgs deviceInfo = (DeviceListChangedArgs)e;
+            if ((deviceInfo.PID == ROTATOR_PID) && (deviceInfo.VID == OPTEC_VID))
+            {
+                TriggerAnEvent(RotatorAttached);
+            }
+        }
+
+        private void StartRefreshingRotatorList()
+        {
+            ThreadStart ts = new ThreadStart(RefreshRotatorList);
+            RefreshRotatorListThread = new Thread(ts);
+            RefreshRotatorListThread.Start();
         }
 
         private void RefreshRotatorList()
@@ -74,8 +106,44 @@ namespace PyxisLE_API
         {
             get
             {
-                RefreshRotatorList();
+                if (RefreshRotatorListThread.IsAlive) RefreshRotatorListThread.Join();
                 return DetectedRotators;
+            }
+        }
+
+        // This method is used to trigger an event handeler and pass
+        // execution of that handler to a new thread. This ensures that 
+        // if the handler executs a long running operation, the class can 
+        // still continue to function normally.
+        private void TriggerAnEvent(EventHandler EH)
+        {
+            if (EH == null) return;
+            var EventListeners = EH.GetInvocationList();
+            if (EventListeners != null)
+            {
+                for (int index = 0; index < EventListeners.Count(); index++)
+                {
+                    var methodToInvoke = (EventHandler)EventListeners[index];
+                    methodToInvoke.BeginInvoke(null, EventArgs.Empty, EndAsyncEvent, new object[] { });
+                }
+            }
+
+        }
+
+        // Needed for triggering events on separate threads
+        private static void EndAsyncEvent(IAsyncResult iar)
+        {
+            var ar = (System.Runtime.Remoting.Messaging.AsyncResult)iar;
+            var invokedMethod = (EventHandler)ar.AsyncDelegate;
+
+            try
+            {
+                invokedMethod.EndInvoke(iar);
+            }
+            catch
+            {
+                // Handle any exceptions that were thrown by the invoked method
+                Console.WriteLine("An event listener went kaboom!");
             }
         }
     }

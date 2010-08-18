@@ -189,7 +189,7 @@ namespace ASCOM.PyxisLE_ASCOM
             get 
             {
                 if (!Connected) throw new ASCOM.NotConnectedException("The rotator device is no longer connected");
-                return (float)myRotator.CurrentPosition; 
+                return (float)myRotator.CurrentDevicePA; 
             }
         }
 
