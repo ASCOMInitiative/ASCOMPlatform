@@ -52,6 +52,10 @@ TELEAPIEXPORT int CALLBACK tapiEstablishLink(void)
 {
 	int iRes = OK;
 
+	if (_bScopeActive) {		// TheSky X allows connect to connected!
+		return iRes;
+	}
+
 	__try {
 		InitScope();
 	} __except(EXCEPTION_EXECUTE_HANDLER) {
@@ -64,7 +68,10 @@ TELEAPIEXPORT int CALLBACK tapiEstablishLink(void)
 //Do any clean up here
 TELEAPIEXPORT int CALLBACK tapiTerminateLink(void)
 {
-	TermScope(false);
+	if (_bScopeActive) {		// TheSky X allows disconnect to disconnected!
+		TermScope(false);
+	}
+
 	return 0;
 }
 
