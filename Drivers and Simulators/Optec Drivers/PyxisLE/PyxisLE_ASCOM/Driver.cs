@@ -48,7 +48,7 @@ namespace ASCOM.PyxisLE_ASCOM
         //
         private static string s_csDriverID = "ASCOM.PyxisLE_ASCOM.Rotator";
         // TODO Change the descriptive string for your driver then remove this line
-        private static string s_csDriverDescription = "PyxisLE_ASCOM Rotator";
+        private static string s_csDriverDescription = "Optec Pyxis LE";
 
         private Rotators RotatorManager;
         private Profile myProfile;
@@ -59,6 +59,9 @@ namespace ASCOM.PyxisLE_ASCOM
         //
         public Rotator()
         {
+
+            System.Windows.Forms.MessageBox.Show("For Debugging...");
+
             RotatorManager = new Rotators();
             myProfile = new Profile();
             myProfile.DeviceType = "Rotator";
@@ -72,6 +75,7 @@ namespace ASCOM.PyxisLE_ASCOM
         //
         private static void RegUnregASCOM(bool bRegister)
         {
+  
             Utilities.Profile P = new Utilities.Profile();
             P.DeviceType = "Rotator";					//  Requires Helper 5.0.3 or later
             if (bRegister)
@@ -89,12 +93,14 @@ namespace ASCOM.PyxisLE_ASCOM
         [ComRegisterFunction]
         public static void RegisterASCOM(Type t)
         {
+            System.Windows.Forms.MessageBox.Show("Registering Driver...");
             RegUnregASCOM(true);
         }
 
         [ComUnregisterFunction]
         public static void UnregisterASCOM(Type t)
         {
+            System.Windows.Forms.MessageBox.Show("Unregistering Driver...");
             RegUnregASCOM(false);
         }
         #endregion
@@ -171,17 +177,25 @@ namespace ASCOM.PyxisLE_ASCOM
 
         public void Move(float Position)
         {
-            // TODO Replace this with your implementation
-
             if (!Connected) throw new ASCOM.NotConnectedException("The rotator device is no longer connected");
-            throw new MethodNotImplementedException("Move");
+            if (Position > 360) throw new ASCOM.InvalidOperationException("Cannot move to position greater than 360°");
+            else if (Position < -360) throw new ASCOM.InvalidOperationException("Cannot move to position less than 0°");
+            double NewPosition = myRotator.CurrentSkyPA + Position;
+            if (NewPosition > 360) NewPosition = NewPosition - 360;
+            else if (NewPosition < 0) NewPosition = NewPosition + 360;
+            myRotator.CurrentSkyPA = NewPosition;
+            while (myRotator.IsMoving) { }
+            System.Threading.Thread.Sleep(100);
         }
 
         public void MoveAbsolute(float Position)
         {
             if (!Connected) throw new ASCOM.NotConnectedException("The rotator device is no longer connected");
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("MoveAbsolute");
+            if (Position > 360) throw new ASCOM.InvalidOperationException("Cannot move to position greater than 360°");
+            else if (Position < 0) throw new ASCOM.InvalidOperationException("Cannot move to position less than 0°");
+            myRotator.CurrentSkyPA = (double)Position;
+            while (myRotator.IsMoving) { }
+            System.Threading.Thread.Sleep(100);
         }
 
         public float Position
@@ -202,6 +216,8 @@ namespace ASCOM.PyxisLE_ASCOM
             set { 
                 if (!Connected) throw new ASCOM.NotConnectedException("The rotator device is no longer connected");
                 myRotator.Reverse = value;
+                System.Threading.Thread.Sleep(500);
+                while (myRotator.IsHoming || myRotator.IsMoving) {/* We have to wait here because this method is synchronous*/ }
             }
         }
 
@@ -223,8 +239,9 @@ namespace ASCOM.PyxisLE_ASCOM
         {
             get 
             {
-                VerifyConnected();
-                return (float)myRotator.TargetPosition;
+                throw new NotImplementedException("Target position not implemented");
+                //VerifyConnected();
+                //return (float)myRotator.TargetPosition;
             }
         }
 

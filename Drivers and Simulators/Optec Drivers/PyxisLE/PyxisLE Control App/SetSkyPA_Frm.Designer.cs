@@ -84,7 +84,6 @@
             // OK_BTN
             // 
             this.OK_BTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.OK_BTN.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.OK_BTN.Location = new System.Drawing.Point(307, 167);
             this.OK_BTN.Name = "OK_BTN";
             this.OK_BTN.Size = new System.Drawing.Size(75, 23);
@@ -107,12 +106,14 @@
             // 
             // NewValue_TB
             // 
+            this.NewValue_TB.CausesValidation = false;
             this.NewValue_TB.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.NewValue_TB.Location = new System.Drawing.Point(265, 57);
             this.NewValue_TB.Name = "NewValue_TB";
             this.NewValue_TB.Size = new System.Drawing.Size(96, 31);
             this.NewValue_TB.TabIndex = 7;
-            this.NewValue_TB.Validating += new System.ComponentModel.CancelEventHandler(this.textBox2_Validating);
+            this.NewValue_TB.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NewValue_TB_KeyPress);
+            this.NewValue_TB.Validating += new System.ComponentModel.CancelEventHandler(this.NewValue_TB_Validating);
             // 
             // errorProvider1
             // 

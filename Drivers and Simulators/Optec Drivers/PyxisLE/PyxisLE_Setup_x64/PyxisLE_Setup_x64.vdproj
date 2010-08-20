@@ -3,7 +3,7 @@
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
 "IsWebType" = "8:FALSE"
-"ProjectName" = "8:PyxisLE_Setup_x86"
+"ProjectName" = "8:PyxisLE_Setup_x64"
 "LanguageId" = "3:1033"
 "CodePage" = "3:1252"
 "UILanguageId" = "3:1033"
@@ -15,188 +15,145 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_072B8E60E425BFB98327D59AD8A88B9C"
-        "OwnerKey" = "8:_9102EC9AC0D44E058E177337E9517DE2"
+        "MsmKey" = "8:_18535BEA925F88DF63E1F44B040600EA"
+        "OwnerKey" = "8:_7EA61CACBA654016A025A4BB6B870C09"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_072B8E60E425BFB98327D59AD8A88B9C"
-        "OwnerKey" = "8:_B197E307094F4C2E8590932E808EA8DB"
+        "MsmKey" = "8:_23359C156E414904635AE1256D405972"
+        "OwnerKey" = "8:_7EA61CACBA654016A025A4BB6B870C09"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_46EE7A7CEB7D4E7EAA308F7283D619BE"
+        "MsmKey" = "8:_2A462955BDA546F31F1E150014C6E580"
+        "OwnerKey" = "8:_EBA0B3F5948D4BAD832FA15D914DAE99"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2F953A7F10F5EE1FF479C7EDDC38F4E4"
+        "OwnerKey" = "8:_4EFB0665196B42D9A7235EFE849C9B41"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2F953A7F10F5EE1FF479C7EDDC38F4E4"
+        "OwnerKey" = "8:_23359C156E414904635AE1256D405972"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4EFB0665196B42D9A7235EFE849C9B41"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_5FB1854B9A1F4917BEAA5EF577ED312E"
+        "MsmKey" = "8:_6BF98B21A13B48FC39133063FCD6148D"
+        "OwnerKey" = "8:_7EA61CACBA654016A025A4BB6B870C09"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_75AF1D880F9A773FC7374E334C6493FB"
+        "OwnerKey" = "8:_4EFB0665196B42D9A7235EFE849C9B41"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_75AF1D880F9A773FC7374E334C6493FB"
+        "OwnerKey" = "8:_7EA61CACBA654016A025A4BB6B870C09"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_75AF1D880F9A773FC7374E334C6493FB"
+        "OwnerKey" = "8:_23359C156E414904635AE1256D405972"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7EA61CACBA654016A025A4BB6B870C09"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_7CCFD1DCB3CD8B8BF2CD2157C1A4523B"
-        "OwnerKey" = "8:_5FB1854B9A1F4917BEAA5EF577ED312E"
+        "MsmKey" = "8:_B120CF2869B0DCFFBCAC32C3D1865EE0"
+        "OwnerKey" = "8:_75AF1D880F9A773FC7374E334C6493FB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_7CCFD1DCB3CD8B8BF2CD2157C1A4523B"
-        "OwnerKey" = "8:_B197E307094F4C2E8590932E808EA8DB"
+        "MsmKey" = "8:_B36CD6EA29F8583DF4CB07472D0CB4EA"
+        "OwnerKey" = "8:_7EA61CACBA654016A025A4BB6B870C09"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_7CCFD1DCB3CD8B8BF2CD2157C1A4523B"
-        "OwnerKey" = "8:_072B8E60E425BFB98327D59AD8A88B9C"
+        "MsmKey" = "8:_B36CD6EA29F8583DF4CB07472D0CB4EA"
+        "OwnerKey" = "8:_18535BEA925F88DF63E1F44B040600EA"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_7CCFD1DCB3CD8B8BF2CD2157C1A4523B"
-        "OwnerKey" = "8:_9102EC9AC0D44E058E177337E9517DE2"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9102EC9AC0D44E058E177337E9517DE2"
+        "MsmKey" = "8:_EBA0B3F5948D4BAD832FA15D914DAE99"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_B197E307094F4C2E8590932E808EA8DB"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C47F17CFD1CC9136C23D7493CE158284"
-        "OwnerKey" = "8:_7CCFD1DCB3CD8B8BF2CD2157C1A4523B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C47F17CFD1CC9136C23D7493CE158284"
-        "OwnerKey" = "8:_46EE7A7CEB7D4E7EAA308F7283D619BE"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E743663C028EF9A8321F04CA5EF30619"
-        "OwnerKey" = "8:_B197E307094F4C2E8590932E808EA8DB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E743663C028EF9A8321F04CA5EF30619"
-        "OwnerKey" = "8:_F8696657F86A501CC84327B09609CA14"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F8696657F86A501CC84327B09609CA14"
-        "OwnerKey" = "8:_B197E307094F4C2E8590932E808EA8DB"
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_EBA0B3F5948D4BAD832FA15D914DAE99"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_5FB1854B9A1F4917BEAA5EF577ED312E"
+        "OwnerKey" = "8:_75AF1D880F9A773FC7374E334C6493FB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_46EE7A7CEB7D4E7EAA308F7283D619BE"
+        "OwnerKey" = "8:_4EFB0665196B42D9A7235EFE849C9B41"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B197E307094F4C2E8590932E808EA8DB"
+        "OwnerKey" = "8:_B36CD6EA29F8583DF4CB07472D0CB4EA"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_F8696657F86A501CC84327B09609CA14"
+        "OwnerKey" = "8:_18535BEA925F88DF63E1F44B040600EA"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E743663C028EF9A8321F04CA5EF30619"
+        "OwnerKey" = "8:_23359C156E414904635AE1256D405972"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_9102EC9AC0D44E058E177337E9517DE2"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_072B8E60E425BFB98327D59AD8A88B9C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7CCFD1DCB3CD8B8BF2CD2157C1A4523B"
+        "OwnerKey" = "8:_7EA61CACBA654016A025A4BB6B870C09"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
     "Configurations"
     {
-        "ASCOM Driver"
-        {
-        "DisplayName" = "8:ASCOM Driver"
-        "IsDebugOnly" = "11:FALSE"
-        "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:ASCOM Driver\\PyxisLE_Setup_x86.msi"
-        "PackageFilesAs" = "3:2"
-        "PackageFileSize" = "3:-2147483648"
-        "CabType" = "3:1"
-        "Compression" = "3:2"
-        "SignOutput" = "11:FALSE"
-        "CertificateFile" = "8:"
-        "PrivateKeyFile" = "8:"
-        "TimeStampServer" = "8:"
-        "InstallerBootstrapper" = "3:2"
-            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
-            {
-            "Enabled" = "11:TRUE"
-            "PromptEnabled" = "11:TRUE"
-            "PrerequisitesLocation" = "2:1"
-            "Url" = "8:"
-            "ComponentsUrl" = "8:"
-                "Items"
-                {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5.SP1"
-                    {
-                    "Name" = "8:.NET Framework 3.5 SP1"
-                    "ProductCode" = "8:Microsoft.Net.Framework.3.5.SP1"
-                    }
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
-                    {
-                    "Name" = "8:Windows Installer 3.1"
-                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
-                    }
-                }
-            }
-        }
         "Debug"
         {
         "DisplayName" = "8:Debug"
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:Debug\\PyxisLE_Setup_x86.msi"
+        "OutputFilename" = "8:Debug\\PyxisLE_Setup_x64.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -233,7 +190,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\PyxisLE_Setup_x86.msi"
+        "OutputFilename" = "8:Release\\PyxisLE_Setup_x64.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -270,6 +227,34 @@
     {
         "CustomAction"
         {
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_9CA3C7FE92A1433D864A47400C344F5F"
+            {
+            "Name" = "8:Primary output from PyxisLE_ASCOM (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_7EA61CACBA654016A025A4BB6B870C09"
+            "FileType" = "3:1"
+            "InstallAction" = "3:1"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_DB52B4E4_E478_4379_BA57_F4DF2D55DC1D"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_CD85591649C445E0A5B2AAE419508668"
+            {
+            "Name" = "8:Primary output from PyxisLE_ASCOM (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_7EA61CACBA654016A025A4BB6B870C09"
+            "FileType" = "3:1"
+            "InstallAction" = "3:4"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_557EE280_A2EB_475C_9C77_4E59BD0B6D08"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
         }
         "DefaultFeature"
         {
@@ -281,7 +266,7 @@
         {
             "LaunchCondition"
             {
-                "{A06ECF26-33A3-4562-8140-9B0E340D4F24}:_6579172D2C1D454590BF6BEED698552C"
+                "{A06ECF26-33A3-4562-8140-9B0E340D4F24}:_8D8A4BAB8FBD40C1B358B2B9E25843D0"
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
@@ -293,23 +278,44 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_072B8E60E425BFB98327D59AD8A88B9C"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_18535BEA925F88DF63E1F44B040600EA"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:PyxisLE_API, Version=0.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ASCOM.Utilities, Version=5.5.1.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_072B8E60E425BFB98327D59AD8A88B9C"
-                    {
-                    "Name" = "8:PyxisLE_API.dll"
-                    "Attributes" = "3:512"
-                    }
+                }
+            "SourcePath" = "8:ASCOM.Utilities.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_A227B68435404C979A6C5C822F0684F1"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_23359C156E414904635AE1256D405972"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:PyxisLE_API, Version=1.0.3.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
                 }
             "SourcePath" = "8:PyxisLE_API.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_FDD1E0F5F4F647B8A6C48AD8E8CC0225"
+            "Folder" = "8:_A227B68435404C979A6C5C822F0684F1"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -324,43 +330,12 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7CCFD1DCB3CD8B8BF2CD2157C1A4523B"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:OptecHIDTools, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_7CCFD1DCB3CD8B8BF2CD2157C1A4523B"
-                    {
-                    "Name" = "8:OptecHIDTools.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:OptecHIDTools.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_BC49A0A759174418BC2409EFF9AB05BC"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C47F17CFD1CC9136C23D7493CE158284"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2A462955BDA546F31F1E150014C6E580"
             {
             "SourcePath" = "8:OptecHIDTools.tlb"
             "TargetName" = "8:OptecHIDTools.tlb"
             "Tag" = "8:"
-            "Folder" = "8:_FDD1E0F5F4F647B8A6C48AD8E8CC0225"
+            "Folder" = "8:_A227B68435404C979A6C5C822F0684F1"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -375,23 +350,58 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E743663C028EF9A8321F04CA5EF30619"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2F953A7F10F5EE1FF479C7EDDC38F4E4"
+            {
+            "SourcePath" = "8:PyxisLE_API.tlb"
+            "TargetName" = "8:PyxisLE_API.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_A227B68435404C979A6C5C822F0684F1"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6BF98B21A13B48FC39133063FCD6148D"
+            {
+            "SourcePath" = "8:ASCOM.PyxisLE_ASCOM.Rotator.tlb"
+            "TargetName" = "8:ASCOM.PyxisLE_ASCOM.Rotator.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_A227B68435404C979A6C5C822F0684F1"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_75AF1D880F9A773FC7374E334C6493FB"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:OptecHIDTools, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_E743663C028EF9A8321F04CA5EF30619"
-                    {
-                    "Name" = "8:ASCOM.Exceptions.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
-            "SourcePath" = "8:ASCOM.Exceptions.dll"
+            "SourcePath" = "8:OptecHIDTools.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_FDD1E0F5F4F647B8A6C48AD8E8CC0225"
+            "Folder" = "8:_A227B68435404C979A6C5C822F0684F1"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -406,23 +416,38 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F8696657F86A501CC84327B09609CA14"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B120CF2869B0DCFFBCAC32C3D1865EE0"
+            {
+            "SourcePath" = "8:OptecHIDTools.tlb"
+            "TargetName" = "8:OptecHIDTools.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_A227B68435404C979A6C5C822F0684F1"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B36CD6EA29F8583DF4CB07472D0CB4EA"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ASCOM.Utilities, Version=5.5.1.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_F8696657F86A501CC84327B09609CA14"
-                    {
-                    "Name" = "8:ASCOM.Utilities.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
-            "SourcePath" = "8:ASCOM.Utilities.dll"
+            "SourcePath" = "8:ASCOM.Exceptions.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_FDD1E0F5F4F647B8A6C48AD8E8CC0225"
+            "Folder" = "8:_A227B68435404C979A6C5C822F0684F1"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -443,9 +468,9 @@
         }
         "Folder"
         {
-            "{3C67513D-01DD-4637-8A68-80971EB9504F}:_BC49A0A759174418BC2409EFF9AB05BC"
+            "{3C67513D-01DD-4637-8A68-80971EB9504F}:_A227B68435404C979A6C5C822F0684F1"
             {
-            "DefaultLocation" = "8:[ProgramFilesFolder]Optec\\PyxisLE"
+            "DefaultLocation" = "8:[ProgramFiles64Folder]Optec\\PyxisLE"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -453,20 +478,9 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_FDD1E0F5F4F647B8A6C48AD8E8CC0225"
-                    {
-                    "Name" = "8:Executable Files"
-                    "AlwaysCreate" = "11:FALSE"
-                    "Condition" = "8:"
-                    "Transitive" = "11:FALSE"
-                    "Property" = "8:_31F6D148B438437F985B9ED3BB0EBEAC"
-                        "Folders"
-                        {
-                        }
-                    }
                 }
             }
-            "{1525181F-901A-416C-8A58-119130FE478E}:_E32035E90E7841E8A510D875895B497E"
+            "{1525181F-901A-416C-8A58-119130FE478E}:_C7A8823E341A4D7F8F7350E194F4D936"
             {
             "Name" = "8:#1919"
             "AlwaysCreate" = "11:FALSE"
@@ -475,31 +489,9 @@
             "Property" = "8:ProgramMenuFolder"
                 "Folders"
                 {
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_DDD1AED912684DECBE9C48A9A4EB678F"
-                    {
-                    "Name" = "8:Optec"
-                    "AlwaysCreate" = "11:FALSE"
-                    "Condition" = "8:"
-                    "Transitive" = "11:FALSE"
-                    "Property" = "8:_ABB545CCDAE347C2A6E491A841DF216C"
-                        "Folders"
-                        {
-                            "{9EF0B969-E518-4E46-987F-47570745A589}:_F6C78F9154934C319EE8EBFD09C184F7"
-                            {
-                            "Name" = "8:PyxisLE"
-                            "AlwaysCreate" = "11:FALSE"
-                            "Condition" = "8:"
-                            "Transitive" = "11:FALSE"
-                            "Property" = "8:_9EF1F919ECD34EBE803BBA1E075FBB36"
-                                "Folders"
-                                {
-                                }
-                            }
-                        }
-                    }
                 }
             }
-            "{1525181F-901A-416C-8A58-119130FE478E}:_EF6627C926744D2F9095350A1C420FFC"
+            "{1525181F-901A-416C-8A58-119130FE478E}:_C8F99369E5FA4D0097A19B7C2D2843A1"
             {
             "Name" = "8:#1916"
             "AlwaysCreate" = "11:FALSE"
@@ -525,10 +517,10 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:PyxisLE"
-        "ProductCode" = "8:{84B2A41F-EA6A-4404-98EC-30EE7F8BD607}"
-        "PackageCode" = "8:{67983971-3AEA-456A-8360-35890AA66869}"
-        "UpgradeCode" = "8:{76DEDA9D-2B4C-4821-AF37-968A7E0C7FA1}"
+        "ProductName" = "8:PyxisLE_Setup_x64"
+        "ProductCode" = "8:{A07BB71D-F960-43F1-95A1-9BC210A26486}"
+        "PackageCode" = "8:{838CAF87-7BCB-48CA-A22A-9C81B905564F}"
+        "UpgradeCode" = "8:{48E51D1A-9601-4DE2-932B-32BD5815EF51}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -538,11 +530,11 @@
         "Manufacturer" = "8:Optec Inc."
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:PyxisLE Setup (x86)"
+        "Title" = "8:Pyxis LE"
         "Subject" = "8:"
         "ARPCONTACT" = "8:Jordan Schaenzle"
         "Keywords" = "8:"
-        "ARPCOMMENTS" = "8:Setup project for Pyxis LE software"
+        "ARPCOMMENTS" = "8:Installer for Optec Pyxis LE Tools"
         "ARPURLINFOABOUT" = "8:"
         "ARPPRODUCTICON" = "8:"
         "ARPIconIndex" = "3:0"
@@ -559,7 +551,7 @@
             {
                 "Keys"
                 {
-                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_14D1BDAF36464048964CA660A054D96F"
+                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_80092B3CC2EE430FB798E9DADDC870B7"
                     {
                     "Name" = "8:Software"
                     "Condition" = "8:"
@@ -568,7 +560,7 @@
                     "Transitive" = "11:FALSE"
                         "Keys"
                         {
-                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_7CE13AA65F6F479F93076E6B7FED0489"
+                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_2EF7719C69144164A2982C4D5EAA0D7A"
                             {
                             "Name" = "8:[Manufacturer]"
                             "Condition" = "8:"
@@ -593,7 +585,7 @@
             {
                 "Keys"
                 {
-                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_D1AF59B112E3492A821DA2CE73161004"
+                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_1A6DF75CB1FA4A23ACC58A4F5302EA60"
                     {
                     "Name" = "8:Software"
                     "Condition" = "8:"
@@ -602,7 +594,7 @@
                     "Transitive" = "11:FALSE"
                         "Keys"
                         {
-                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_ADDFE61525114B818A61448DFD6C7D90"
+                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_E8C61900805E4B799DE61B9CB92968A5"
                             {
                             "Name" = "8:[Manufacturer]"
                             "Condition" = "8:"
@@ -647,57 +639,111 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_27A0F852225340858F3880D8A0C73A02"
-            {
-            "Name" = "8:PyxisLE Control"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_9102EC9AC0D44E058E177337E9517DE2"
-            "Folder" = "8:_EF6627C926744D2F9095350A1C420FFC"
-            "WorkingFolder" = "8:_BC49A0A759174418BC2409EFF9AB05BC"
-            "Icon" = "8:"
-            "Feature" = "8:"
-            }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_AB515DE8F26A4C138810B1FFA61550F0"
-            {
-            "Name" = "8:PyxisLE Control"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_5FB1854B9A1F4917BEAA5EF577ED312E"
-            "Folder" = "8:_F6C78F9154934C319EE8EBFD09C184F7"
-            "WorkingFolder" = "8:_BC49A0A759174418BC2409EFF9AB05BC"
-            "Icon" = "8:"
-            "Feature" = "8:"
-            }
         }
         "UserInterface"
         {
-            "{2479F3F5-0309-486D-8047-8187E2CE5BA0}:_104B39B50DFD45709A2BF6104819003E"
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_00DD9BA11FD7433E9A687850DAC1EB23"
+            {
+            "Name" = "8:#1901"
+            "Sequence" = "3:1"
+            "Attributes" = "3:2"
+                "Dialogs"
+                {
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_F5AD60DA57C1420FB2CF1685C49AAF15"
+                    {
+                    "Sequence" = "3:100"
+                    "DisplayName" = "8:Progress"
+                    "UseDynamicProperties" = "11:TRUE"
+                    "IsDependency" = "11:FALSE"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdProgressDlg.wid"
+                        "Properties"
+                        {
+                            "BannerBitmap"
+                            {
+                            "Name" = "8:BannerBitmap"
+                            "DisplayName" = "8:#1001"
+                            "Description" = "8:#1101"
+                            "Type" = "3:8"
+                            "ContextData" = "8:Bitmap"
+                            "Attributes" = "3:4"
+                            "Setting" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "ShowProgress"
+                            {
+                            "Name" = "8:ShowProgress"
+                            "DisplayName" = "8:#1009"
+                            "Description" = "8:#1109"
+                            "Type" = "3:5"
+                            "ContextData" = "8:1;True=1;False=0"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:0"
+                            "Value" = "3:1"
+                            "DefaultValue" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                        }
+                    }
+                }
+            }
+            "{2479F3F5-0309-486D-8047-8187E2CE5BA0}:_207FEF3B4170481983BF436838964CAE"
             {
             "UseDynamicProperties" = "11:FALSE"
             "IsDependency" = "11:FALSE"
             "SourcePath" = "8:<VsdDialogDir>\\VsdUserInterface.wim"
             }
-            "{2479F3F5-0309-486D-8047-8187E2CE5BA0}:_10A204BF06984ECAA0D36E69CB622CD8"
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_31DFA499BC874EB1BDE16AB1A5456724"
             {
-            "UseDynamicProperties" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "SourcePath" = "8:<VsdDialogDir>\\VsdBasicDialogs.wim"
+            "Name" = "8:#1901"
+            "Sequence" = "3:2"
+            "Attributes" = "3:2"
+                "Dialogs"
+                {
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_2D8830E93C134E3EA1F5118D53BBCD0A"
+                    {
+                    "Sequence" = "3:100"
+                    "DisplayName" = "8:Progress"
+                    "UseDynamicProperties" = "11:TRUE"
+                    "IsDependency" = "11:FALSE"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdAdminProgressDlg.wid"
+                        "Properties"
+                        {
+                            "BannerBitmap"
+                            {
+                            "Name" = "8:BannerBitmap"
+                            "DisplayName" = "8:#1001"
+                            "Description" = "8:#1101"
+                            "Type" = "3:8"
+                            "ContextData" = "8:Bitmap"
+                            "Attributes" = "3:4"
+                            "Setting" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "ShowProgress"
+                            {
+                            "Name" = "8:ShowProgress"
+                            "DisplayName" = "8:#1009"
+                            "Description" = "8:#1109"
+                            "Type" = "3:5"
+                            "ContextData" = "8:1;True=1;False=0"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:0"
+                            "Value" = "3:1"
+                            "DefaultValue" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                        }
+                    }
+                }
             }
-            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_13A8C36D59FE4CAD8DF093DA698AF07F"
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_6E8E44FA42014A3788075D4D30B92878"
             {
             "Name" = "8:#1902"
             "Sequence" = "3:1"
             "Attributes" = "3:3"
                 "Dialogs"
                 {
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_E5D1EB4C79454AAF91B9312E14D5AA53"
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_91DC3FD38D554A0CB9F9941B6395A88D"
                     {
                     "Sequence" = "3:100"
                     "DisplayName" = "8:Finished"
@@ -734,67 +780,20 @@
                     }
                 }
             }
-            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_334DA5D82CE54EA4B5BBCE46FC1C5570"
+            "{2479F3F5-0309-486D-8047-8187E2CE5BA0}:_6FBD69F8520D4325A6294C8DBEDE4D72"
             {
-            "Name" = "8:#1902"
-            "Sequence" = "3:2"
-            "Attributes" = "3:3"
-                "Dialogs"
-                {
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_8CBA4293B0AD4D20BF3A17C50E827771"
-                    {
-                    "Sequence" = "3:100"
-                    "DisplayName" = "8:Finished"
-                    "UseDynamicProperties" = "11:TRUE"
-                    "IsDependency" = "11:FALSE"
-                    "SourcePath" = "8:<VsdDialogDir>\\VsdAdminFinishedDlg.wid"
-                        "Properties"
-                        {
-                            "BannerBitmap"
-                            {
-                            "Name" = "8:BannerBitmap"
-                            "DisplayName" = "8:#1001"
-                            "Description" = "8:#1101"
-                            "Type" = "3:8"
-                            "ContextData" = "8:Bitmap"
-                            "Attributes" = "3:4"
-                            "Setting" = "3:1"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                        }
-                    }
-                }
+            "UseDynamicProperties" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "SourcePath" = "8:<VsdDialogDir>\\VsdBasicDialogs.wim"
             }
-            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_869835BAE5D64EC58491C0E9F41DC746"
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_9B47DACCA084463382C9216E34CF5093"
             {
             "Name" = "8:#1900"
             "Sequence" = "3:1"
             "Attributes" = "3:1"
                 "Dialogs"
                 {
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_270A527E74E64F84A81A3616584BE1AD"
-                    {
-                    "Sequence" = "3:300"
-                    "DisplayName" = "8:Confirm Installation"
-                    "UseDynamicProperties" = "11:TRUE"
-                    "IsDependency" = "11:FALSE"
-                    "SourcePath" = "8:<VsdDialogDir>\\VsdConfirmDlg.wid"
-                        "Properties"
-                        {
-                            "BannerBitmap"
-                            {
-                            "Name" = "8:BannerBitmap"
-                            "DisplayName" = "8:#1001"
-                            "Description" = "8:#1101"
-                            "Type" = "3:8"
-                            "ContextData" = "8:Bitmap"
-                            "Attributes" = "3:4"
-                            "Setting" = "3:1"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                        }
-                    }
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_6BBC64233C18436EB926F4ADFA242C3D"
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_16BB769397AA4AF8984E92C9D3BFFCD5"
                     {
                     "Sequence" = "3:200"
                     "DisplayName" = "8:Installation Folder"
@@ -829,7 +828,7 @@
                             }
                         }
                     }
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_EC0B481727F8478DBC72CFD8D7F707B4"
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_AEC76FEFFE824608A686A4E4043B4FF8"
                     {
                     "Sequence" = "3:100"
                     "DisplayName" = "8:Welcome"
@@ -877,22 +876,44 @@
                             }
                         }
                     }
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_FB0FB36F86E149009D862515C5CA613C"
+                    {
+                    "Sequence" = "3:300"
+                    "DisplayName" = "8:Confirm Installation"
+                    "UseDynamicProperties" = "11:TRUE"
+                    "IsDependency" = "11:FALSE"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdConfirmDlg.wid"
+                        "Properties"
+                        {
+                            "BannerBitmap"
+                            {
+                            "Name" = "8:BannerBitmap"
+                            "DisplayName" = "8:#1001"
+                            "Description" = "8:#1101"
+                            "Type" = "3:8"
+                            "ContextData" = "8:Bitmap"
+                            "Attributes" = "3:4"
+                            "Setting" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                        }
+                    }
                 }
             }
-            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_A54F8196012446889F9223FE04319E7A"
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_B05C839BADC546CAB144C38232839AB6"
             {
-            "Name" = "8:#1901"
+            "Name" = "8:#1902"
             "Sequence" = "3:2"
-            "Attributes" = "3:2"
+            "Attributes" = "3:3"
                 "Dialogs"
                 {
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_7644F0163E2D446EB76B02CA7AFE8AFA"
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_A2725E3DB02D45A3A5A373BD441F1930"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:Progress"
+                    "DisplayName" = "8:Finished"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
-                    "SourcePath" = "8:<VsdDialogDir>\\VsdAdminProgressDlg.wid"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdAdminFinishedDlg.wid"
                         "Properties"
                         {
                             "BannerBitmap"
@@ -906,75 +927,18 @@
                             "Setting" = "3:1"
                             "UsePlugInResources" = "11:TRUE"
                             }
-                            "ShowProgress"
-                            {
-                            "Name" = "8:ShowProgress"
-                            "DisplayName" = "8:#1009"
-                            "Description" = "8:#1109"
-                            "Type" = "3:5"
-                            "ContextData" = "8:1;True=1;False=0"
-                            "Attributes" = "3:0"
-                            "Setting" = "3:0"
-                            "Value" = "3:1"
-                            "DefaultValue" = "3:1"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
                         }
                     }
                 }
             }
-            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_E6C7C33086C042978E110B66B7209A26"
-            {
-            "Name" = "8:#1901"
-            "Sequence" = "3:1"
-            "Attributes" = "3:2"
-                "Dialogs"
-                {
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_664EBA7511AB4333825DDEE6303C8324"
-                    {
-                    "Sequence" = "3:100"
-                    "DisplayName" = "8:Progress"
-                    "UseDynamicProperties" = "11:TRUE"
-                    "IsDependency" = "11:FALSE"
-                    "SourcePath" = "8:<VsdDialogDir>\\VsdProgressDlg.wid"
-                        "Properties"
-                        {
-                            "BannerBitmap"
-                            {
-                            "Name" = "8:BannerBitmap"
-                            "DisplayName" = "8:#1001"
-                            "Description" = "8:#1101"
-                            "Type" = "3:8"
-                            "ContextData" = "8:Bitmap"
-                            "Attributes" = "3:4"
-                            "Setting" = "3:1"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                            "ShowProgress"
-                            {
-                            "Name" = "8:ShowProgress"
-                            "DisplayName" = "8:#1009"
-                            "Description" = "8:#1109"
-                            "Type" = "3:5"
-                            "ContextData" = "8:1;True=1;False=0"
-                            "Attributes" = "3:0"
-                            "Setting" = "3:0"
-                            "Value" = "3:1"
-                            "DefaultValue" = "3:1"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                        }
-                    }
-                }
-            }
-            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_F94BEE4446204EE2B56E4F41974E32A9"
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_CACB942C7F4C4724919F9EF02C423D0E"
             {
             "Name" = "8:#1900"
             "Sequence" = "3:2"
             "Attributes" = "3:1"
                 "Dialogs"
                 {
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_6940EE84280344DEAB88BE7B1BCB691E"
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_03F9B08DA9A84B4E9EAD586DA921649E"
                     {
                     "Sequence" = "3:200"
                     "DisplayName" = "8:Installation Folder"
@@ -996,29 +960,7 @@
                             }
                         }
                     }
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_9F4E5F6F18C64BC8B00E625FC665524E"
-                    {
-                    "Sequence" = "3:300"
-                    "DisplayName" = "8:Confirm Installation"
-                    "UseDynamicProperties" = "11:TRUE"
-                    "IsDependency" = "11:FALSE"
-                    "SourcePath" = "8:<VsdDialogDir>\\VsdAdminConfirmDlg.wid"
-                        "Properties"
-                        {
-                            "BannerBitmap"
-                            {
-                            "Name" = "8:BannerBitmap"
-                            "DisplayName" = "8:#1001"
-                            "Description" = "8:#1101"
-                            "Type" = "3:8"
-                            "ContextData" = "8:Bitmap"
-                            "Attributes" = "3:4"
-                            "Setting" = "3:1"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                        }
-                    }
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_A14B46375E574B49984E2C24612BE52F"
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_291FBEE7DBB24E52A88650027295E16E"
                     {
                     "Sequence" = "3:100"
                     "DisplayName" = "8:Welcome"
@@ -1066,6 +1008,28 @@
                             }
                         }
                     }
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_E7B3C0B817174F2B8C7D01C3310B3B14"
+                    {
+                    "Sequence" = "3:300"
+                    "DisplayName" = "8:Confirm Installation"
+                    "UseDynamicProperties" = "11:TRUE"
+                    "IsDependency" = "11:FALSE"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdAdminConfirmDlg.wid"
+                        "Properties"
+                        {
+                            "BannerBitmap"
+                            {
+                            "Name" = "8:BannerBitmap"
+                            "DisplayName" = "8:#1001"
+                            "Description" = "8:#1101"
+                            "Type" = "3:8"
+                            "ContextData" = "8:Bitmap"
+                            "Attributes" = "3:4"
+                            "Setting" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1074,40 +1038,12 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_46EE7A7CEB7D4E7EAA308F7283D619BE"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_4EFB0665196B42D9A7235EFE849C9B41"
             {
-            "SourcePath" = "8:..\\Dependencies\\OptecHID\\obj\\Release\\OptecHIDTools.dll"
+            "SourcePath" = "8:..\\PyxisLE API\\obj\\Debug\\PyxisLE_API.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_BC49A0A759174418BC2409EFF9AB05BC"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:2"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{9786A9B9-97B9-4B23-AF39-4514AF45DEED}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_5FB1854B9A1F4917BEAA5EF577ED312E"
-            {
-            "SourcePath" = "8:..\\PyxisLE API\\obj\\Release\\PyxisLE_API.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_BC49A0A759174418BC2409EFF9AB05BC"
+            "Folder" = "8:_A227B68435404C979A6C5C822F0684F1"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1130,40 +1066,12 @@
                 {
                 }
             }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_9102EC9AC0D44E058E177337E9517DE2"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_7EA61CACBA654016A025A4BB6B870C09"
             {
-            "SourcePath" = "8:..\\PyxisLE Control App\\obj\\Release\\PyxisLE_Control.exe"
+            "SourcePath" = "8:..\\PyxisLE_ASCOM\\obj\\Debug\\ASCOM.PyxisLE_ASCOM.Rotator.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_BC49A0A759174418BC2409EFF9AB05BC"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{5343ADF9-2AC8-4E37-8E58-C0525EF38756}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B197E307094F4C2E8590932E808EA8DB"
-            {
-            "SourcePath" = "8:..\\PyxisLE_ASCOM\\obj\\Release\\ASCOM.PyxisLE_ASCOM.Rotator.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_BC49A0A759174418BC2409EFF9AB05BC"
+            "Folder" = "8:_A227B68435404C979A6C5C822F0684F1"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1181,6 +1089,34 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
             "OutputProjectGuid" = "8:{E22760F3-EED4-4E0C-AE8D-A2B45022B088}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_EBA0B3F5948D4BAD832FA15D914DAE99"
+            {
+            "SourcePath" = "8:..\\Dependencies\\OptecHID\\obj\\Debug\\OptecHIDTools.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_A227B68435404C979A6C5C822F0684F1"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:2"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{9786A9B9-97B9-4B23-AF39-4514AF45DEED}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {

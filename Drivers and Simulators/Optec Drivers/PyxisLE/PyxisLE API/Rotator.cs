@@ -29,7 +29,7 @@ namespace PyxisLE_API
         private char deviceType = '?';
         private bool reverseProperty = false;
         private bool returnToLast = false;
-        private bool isAttached = false;
+
 
         private Thread HomeThread;
         private Thread MoveThread;
@@ -48,7 +48,7 @@ namespace PyxisLE_API
 
             TimeSpan MaxHomeTime = new TimeSpan(0, 0, 60);
             DateTime FirstAttempt = DateTime.Now;
-            RefershDeviceDescription();
+            RefreshDeviceDescription();
             // Keep checking device status until the device is homed...
             TryAgain:
             RefreshDeviceStatus();
@@ -61,11 +61,11 @@ namespace PyxisLE_API
             }
             else if (this.ErrorState == 0)
             {
-                RefershDeviceDescription();
+                RefreshDeviceDescription();
             }
         }
 
-        private void RefershDeviceDescription()
+        private void RefreshDeviceDescription()
         {
             try
             {
@@ -121,7 +121,8 @@ namespace PyxisLE_API
                 this.firmwareVersion = tempFV;
 
                 // Extract the Device Type
-                if (rDeviceType < 'A' || rDeviceType > 'Z') throw new ArgumentException("Device type was not A through Z");
+                if (rDeviceType < 'A' || rDeviceType > 'Z') 
+                    throw new ArgumentException("Device type was not A through Z");
                 else this.deviceType = Convert.ToChar(rDeviceType);
 
                 // Extract the Zero Offset
@@ -327,7 +328,7 @@ namespace PyxisLE_API
             get
             {
                 double offset_deg = SkyPAOffset;
-                double SkyPA = CurrentDevicePA - offset_deg;
+                double SkyPA = CurrentDevicePA + offset_deg;
                 if (SkyPA >= 360) SkyPA = SkyPA - 360;
                 else if (SkyPA < 0) SkyPA = SkyPA + 360;
                 if (SkyPA == 360) SkyPA = 0;
@@ -335,8 +336,8 @@ namespace PyxisLE_API
             }
             set
             {
-                double offset_deg = SkyPAOffset;
-                double NewDevicePosition_Degrees = SkyPAOffset + value;
+               // double offset_deg = SkyPAOffset;
+                double NewDevicePosition_Degrees = -SkyPAOffset + value;
                 if (NewDevicePosition_Degrees == 360)
                 {
                     NewDevicePosition_Degrees = 0;
@@ -397,7 +398,7 @@ namespace PyxisLE_API
                 // Send the Report
                 this.selectedDevice.ProcessFeatureReport(SkyPAReport);
                 // Update the property value by reading it from the device.
-                RefershDeviceDescription();
+                RefreshDeviceDescription();
             }
         }
 
@@ -420,7 +421,17 @@ namespace PyxisLE_API
         {
             get { return zeroOffset; }
             set {
-
+                // Verify that is in the correct range of acceptable values
+                if (value > StepsPerRev / 4)
+                {
+                    throw new ApplicationException(
+                     "The Zero Offset can not be set greater than 90 degrees (" + (StepsPerRev / 4).ToString() + " steps)");
+                }
+                else if (value < -(StepsPerRev / 4))
+                {
+                    throw new ApplicationException(
+                     "The Zero Offset can not be set less than -90 degrees (" + (-StepsPerRev / 4).ToString() + " steps)");   
+                }
                 byte[] datatosend = new byte[] { };
                 // Create the report to send
                 FeatureReport ZOffReport = new FeatureReport(
@@ -437,7 +448,11 @@ namespace PyxisLE_API
                 // Send the Report
                 this.selectedDevice.ProcessFeatureReport(ZOffReport);
                 // Update the property value by reading it from the device.
-                RefershDeviceDescription();
+                RefreshDeviceDescription();
+                // Start the HomeMonitor thread
+                ThreadStart ts = new ThreadStart(this.HomeMonitor);
+                HomeThread = new Thread(ts);
+                HomeThread.Start();
             }
         }
 
@@ -450,7 +465,6 @@ namespace PyxisLE_API
         {
             get 
             { 
-                RefershDeviceDescription();
                 return reverseProperty;
             }
             set 
@@ -469,7 +483,13 @@ namespace PyxisLE_API
                 // Send the Report
                 this.selectedDevice.ProcessFeatureReport(ReverseReport);
                 // Update the property value by reading it from the device.
-                RefreshDeviceStatus();
+                RefreshDeviceDescription();
+                // Start the HomeMonitor thread
+                ThreadStart ts = new ThreadStart(this.HomeMonitor);
+                HomeThread = new Thread(ts);
+                HomeThread.Start();
+              
+                
             }
         }
 
@@ -477,7 +497,6 @@ namespace PyxisLE_API
         {
             get
             {
-                RefershDeviceDescription();
                 return returnToLast;
             }
             set
@@ -496,7 +515,7 @@ namespace PyxisLE_API
                 // Send the Report
                 this.selectedDevice.ProcessFeatureReport(ReturnToHomeReport);
                 // Update the property value by reading it from the device.
-                RefreshDeviceStatus();
+                RefreshDeviceDescription();
             }
         }
 

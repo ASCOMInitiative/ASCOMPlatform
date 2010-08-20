@@ -59,5 +59,19 @@ namespace PyxisLE_Control.Properties {
                 resourceCulture = value;
             }
         }
+        
+        internal static System.Drawing.Bitmap Rotator_FWD {
+            get {
+                object obj = ResourceManager.GetObject("Rotator_FWD", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Rotator_REV {
+            get {
+                object obj = ResourceManager.GetObject("Rotator_REV", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }
