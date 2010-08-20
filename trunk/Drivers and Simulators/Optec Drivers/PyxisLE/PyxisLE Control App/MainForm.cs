@@ -18,17 +18,29 @@ namespace PyxisLE_Control
         private Rotator myRotator;
         private ArrayList ControlList = new ArrayList();
         private const string NC_msg = "No connected Pyxis LE rotators are connected to the PC";
-        private bool LastState = false;        
+        private bool LastState = false;
+        private const int SHORT_HEIGHT = 290;
 
         public MainForm()
         {
-            InitializeComponent();    
+            InitializeComponent();
+            this.MinimumSize = new System.Drawing.Size(0, SHORT_HEIGHT);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             ControlList.Add(SkyPA_TB);
+            ControlList.Add(label1);
+            ControlList.Add(SetPA_BTN);
             ControlList.Add(HomeBTN);
+            ControlList.Add(label4);
+            ControlList.Add(groupBox1);
+            ControlList.Add(RelativeForward_BTN);
+            ControlList.Add(RelativeReverse_Btn);
+            ControlList.Add(RelativeIncrement_TB);
+            ControlList.Add(AbsoluteMove_TB);
+            ControlList.Add(label3);
+            ControlList.Add(AbsoluteMove_BTN);
             
             
             RotatorMonitor = new Rotators();
@@ -81,8 +93,25 @@ namespace PyxisLE_Control
             {
                 x.Enabled = true;
             }
-            SkyPA_TB.Text = myRotator.CurrentSkyPA.ToString() + "°";
-            RotatorDiagram.Visible = true;
+            SkyPA_TB.Text = myRotator.CurrentSkyPA.ToString("000.00°");
+            if (myRotator.Reverse == false)
+            {
+                RotatorDiagram.Image = Properties.Resources.Rotator_FWD;
+            }
+            else RotatorDiagram.Image = Properties.Resources.Rotator_REV;
+            if (Properties.Settings.Default.ShowRotatorDiagram)
+            {
+                RotatorDiagram.Visible = true;
+                RotatorDiagram.Update();
+                this.Height = 550;
+            }
+            else
+            {
+                RotatorDiagram.Visible = false;
+                this.Height = SHORT_HEIGHT;
+            }
+            label2.Visible = true;
+            label6.Visible = true;
         }
 
         private void DisableControls()
@@ -98,7 +127,10 @@ namespace PyxisLE_Control
                 x.Enabled = false;
             }
             SkyPA_TB.Text = "";
+            label2.Visible = false;
+            label6.Visible = false;
             RotatorDiagram.Visible = false;
+            this.Height = SHORT_HEIGHT;
         }
 
         private Rotator FindMyDevice()
@@ -119,22 +151,47 @@ namespace PyxisLE_Control
 
         private void RotatorDiagram_Paint(object sender, PaintEventArgs e)
         {
-            if (myRotator == null || myRotator.IsAttached == false) return;
-            PictureBox sndr = sender as PictureBox;
-            double center_x = sndr.Size.Width / 2;
-            double center_y = sndr.Size.Height / 2;
+            try
+            {
+                if (Properties.Settings.Default.ShowRotatorDiagram == false) return;
+                if (myRotator == null || myRotator.IsAttached == false) return;
+                PictureBox sndr = sender as PictureBox;
+                double center_x = sndr.Size.Width / 2;
+                double center_y = sndr.Size.Height / 2;
 
-            double x_zero = 0;
-            double y_zero = -((double)center_y * 0.72D);
+                double x_zero = 0;
+                double y_zero = -((double)center_y * 0.72D);
 
-            double RotationAngle_Rad = myRotator.CurrentSkyPA * (Math.PI / 180);
-            double x_rotated = x_zero * Math.Cos(RotationAngle_Rad) + y_zero * Math.Sin(RotationAngle_Rad);
-            double y_rotated = (-(x_zero) * Math.Sin(RotationAngle_Rad)) + y_zero * Math.Cos(RotationAngle_Rad);
+                double RotationAngle_deg = myRotator.CurrentSkyPA;
 
-            Graphics g = e.Graphics;
-            Pen p = new Pen(Color.OrangeRed, 3);
-            g.DrawLine(p, new Point((int)center_x - 1, (int)center_y), new Point((int)(x_rotated + center_x - 1), (int)(y_rotated + center_y)));
+                if (myRotator.Reverse)
+                {
+                    if (RotationAngle_deg == 0) { }
+                    else if (RotationAngle_deg < 180)
+                    {
+                        RotationAngle_deg = 180 + (180 - RotationAngle_deg);
+                    }
+                    else if (RotationAngle_deg > 180)
+                    {
+                        RotationAngle_deg = 180 - (RotationAngle_deg - 180);
+                    }
+                }
+                double RotationAngle_Rad = RotationAngle_deg * (Math.PI / 180);
+                double x_rotated = x_zero * Math.Cos(RotationAngle_Rad) + y_zero * Math.Sin(RotationAngle_Rad);
 
+
+                double y_rotated = (-(x_zero) * Math.Sin(RotationAngle_Rad)) + y_zero * Math.Cos(RotationAngle_Rad);
+
+                Graphics g = e.Graphics;
+                Pen p = new Pen(Color.OrangeRed, 3);
+                g.DrawLine(p, new Point((int)center_x - 1, (int)center_y), new Point((int)(x_rotated + center_x - 1), (int)(y_rotated + center_y)));
+
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void RotatorDiagram_Click(object sender, EventArgs e)
@@ -155,6 +212,19 @@ namespace PyxisLE_Control
                 double angle = -(radians * (180 / Math.PI) - 180);
                 angle = angle + 90;
                 if (angle > 360) angle = (angle - 360);
+
+                if (myRotator.Reverse)
+                {
+                    if (angle == 0) { }
+                    else if (angle < 180)
+                    {
+                        angle = 180 + (180 - angle);
+                    }
+                    else if (angle > 180)
+                    {
+                        angle = 180 - (angle - 180);
+                    }
+                }
                 StartAMove(angle);
             }
         }
@@ -189,9 +259,10 @@ namespace PyxisLE_Control
 
         private void MotionMonitor()
         {
-            System.Threading.Thread.Sleep(200);
+            System.Threading.Thread.Sleep(100);
             while (myRotator.IsMoving || myRotator.IsHoming)
             {
+                System.Threading.Thread.Sleep(25);
                 this.Invoke(new DelNoParms(RotatorDiagram.Refresh));
                 this.Invoke(new DelNoParms(UpdateSkyPATextbox));
                 Application.DoEvents();
@@ -203,7 +274,7 @@ namespace PyxisLE_Control
 
         private void UpdateSkyPATextbox()
         {
-            this.SkyPA_TB.Text = myRotator.CurrentSkyPA.ToString() + "°";
+            this.SkyPA_TB.Text = myRotator.CurrentSkyPA.ToString("000.00°") ;
         }
 
         private void SetPA_BTN_Click(object sender, EventArgs e)
@@ -214,11 +285,20 @@ namespace PyxisLE_Control
             double NewOffset = 0;
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                if (myRotator.CurrentDevicePA <= frm.NewPAValue)
-                {
-                    NewOffset = frm.NewPAValue - myRotator.CurrentDevicePA;
-                }
-                else NewOffset = myRotator.CurrentDevicePA - frm.NewPAValue;
+                //if (frm.NewPAValue > 180)
+                //{
+                //    double i = 360 - frm.NewPAValue;
+
+                //}
+
+               // if (myRotator.CurrentDevicePA <= frm.NewPAValue)
+               // {
+               //     NewOffset = frm.NewPAValue - myRotator.CurrentDevicePA;
+               // }
+               // else NewOffset = myRotator.CurrentDevicePA - frm.NewPAValue;
+
+                NewOffset = frm.NewPAValue - myRotator.CurrentDevicePA;
+
                 myRotator.SkyPAOffset = NewOffset;
                 this.Invoke(new DelNoParms(RotatorDiagram.Refresh));
                 this.Invoke(new DelNoParms(UpdateSkyPATextbox));
@@ -300,7 +380,10 @@ namespace PyxisLE_Control
 
         private void showDeviceDiagramToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            Properties.Settings.Default.ShowRotatorDiagram = !Properties.Settings.Default.ShowRotatorDiagram;
+            Properties.Settings.Default.Save();
+            if (Connected) EnableControls();
+            else DisableControls();
         }
 
         private void RelativeForward_BTN_Click(object sender, EventArgs e)
@@ -355,8 +438,24 @@ namespace PyxisLE_Control
 
         private void advancedSetupToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AdvancedForm frm = new AdvancedForm(myRotator);
-            frm.ShowDialog();
+            try
+            {
+                AdvancedForm frm = new AdvancedForm(myRotator);
+                frm.ShowDialog();
+                frm.Dispose();
+                enableControls();
+                MotionMonitor();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+
+        }
+
+        private void AbsoluteMove_TB_TextChanged(object sender, EventArgs e)
+        {
+                   
         }
     }
 }

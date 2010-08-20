@@ -25,6 +25,11 @@ namespace PyxisLE_Control
             RotatorAdvancedSettingsUI UIClass = new RotatorAdvancedSettingsUI(myRotator);
             this.propertyGrid1.SelectedObject = UIClass;
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 
     class RotatorAdvancedSettingsUI

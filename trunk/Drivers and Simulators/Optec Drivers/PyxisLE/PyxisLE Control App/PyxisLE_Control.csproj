@@ -125,6 +125,7 @@
     <EmbeddedResource Include="SetSkyPA_Frm.resx">
       <DependentUpon>SetSkyPA_Frm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="Optec.snk" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -173,6 +174,12 @@
       <Project>{550D78D4-A958-4A57-8EA1-753E83747B99}</Project>
       <Name>PyxisLE_API</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rotator_FWD.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rotator_REV.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

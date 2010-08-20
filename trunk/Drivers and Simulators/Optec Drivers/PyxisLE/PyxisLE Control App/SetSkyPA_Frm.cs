@@ -19,7 +19,8 @@ namespace PyxisLE_Control
         private double oldValue = 0;
         private double newValue = 0;
 
-        private void textBox2_Validating(object sender, CancelEventArgs e)
+
+        private void NewValue_TB_Validating(object sender, CancelEventArgs e)
         {
             double NewPA;
             TextBox sndr = sender as TextBox;
@@ -49,8 +50,15 @@ namespace PyxisLE_Control
 
         private void OK_BTN_Click(object sender, EventArgs e)
         {
-            newValue = double.Parse(this.NewValue_TB.Text);
-            this.Close();
+            CancelEventArgs c = new CancelEventArgs();
+            NewValue_TB_Validating(this.NewValue_TB, c);
+            if (c.Cancel) return;
+            else
+            {
+                newValue = double.Parse(this.NewValue_TB.Text);
+                this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                this.Close();
+            }     
         }
 
         private void Cancel_BTN_Click(object sender, EventArgs e)
@@ -71,6 +79,15 @@ namespace PyxisLE_Control
         public double NewPAValue
         {
             get { return newValue; }
+        }
+
+        private void NewValue_TB_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                OK_BTN_Click(OK_BTN, EventArgs.Empty);
+                e.Handled = true;
+            }
         }
     }
 }

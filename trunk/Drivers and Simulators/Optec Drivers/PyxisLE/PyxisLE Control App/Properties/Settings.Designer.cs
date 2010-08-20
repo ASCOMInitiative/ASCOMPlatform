@@ -22,5 +22,17 @@ namespace PyxisLE_Control.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowRotatorDiagram {
+            get {
+                return ((bool)(this["ShowRotatorDiagram"]));
+            }
+            set {
+                this["ShowRotatorDiagram"] = value;
+            }
+        }
     }
 }
