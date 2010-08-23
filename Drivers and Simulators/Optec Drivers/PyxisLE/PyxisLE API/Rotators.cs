@@ -8,6 +8,7 @@ using System.Diagnostics;
 using OptecHIDTools;
 using System.Windows.Forms;
 using System.Threading;
+using OptecLogging;
 
 namespace PyxisLE_API
 {
@@ -44,9 +45,8 @@ namespace PyxisLE_API
 
         public Rotators()
         {
-           // MessageBox.Show("Creating");
-            Trace.WriteLine("*******************************************************************");
-            Trace.WriteLine("**************FilterWheel API IS IN USE****************************");
+            OptecLogger.LogMessage("*******************************************************************");
+            OptecLogger.LogMessage("**************Rotator API Constructer Called***********************");
             HIDMonitor.HIDAttached += new EventHandler(HIDMonitor_HIDAttached);
             HIDMonitor.HIDRemoved += new EventHandler(HIDMonitor_HIDRemoved);
 
@@ -62,8 +62,10 @@ namespace PyxisLE_API
             else StartRefreshingRotatorList();
 
             DeviceListChangedArgs deviceInfo = (DeviceListChangedArgs)e;
+
             if ((deviceInfo.PID == ROTATOR_PID) && (deviceInfo.VID == OPTEC_VID))
             {
+                OptecLogger.LogMessage("Rotator Removed - Serial Number = " + deviceInfo.SerialNumber);
                 TriggerAnEvent(RotatorRemoved);
             }
         }
@@ -80,6 +82,7 @@ namespace PyxisLE_API
             if ((deviceInfo.PID == ROTATOR_PID) && (deviceInfo.VID == OPTEC_VID))
             {
                 TriggerAnEvent(RotatorAttached);
+                OptecLogger.LogMessage("Rotator Attached - Serial Number = " + deviceInfo.SerialNumber);
             }
         }
 
@@ -92,13 +95,21 @@ namespace PyxisLE_API
 
         private void RefreshRotatorList()
         {
-            DetectedRotators.Clear();
-            List<HID> detectedHIDs = HIDMonitor.DetectedHIDs;
-            detectedHIDs = detectedHIDs.Where(d => d.PID_Hex == ROTATOR_PID).ToList();
-            detectedHIDs = detectedHIDs.Where(d => d.DeviceIsAttached == true).ToList();
-            foreach (HID x in detectedHIDs)
+            try
             {
-                DetectedRotators.Add(new Rotator(x));
+                DetectedRotators.Clear();
+                List<HID> detectedHIDs = HIDMonitor.DetectedHIDs;
+                detectedHIDs = detectedHIDs.Where(d => d.PID_Hex == ROTATOR_PID).ToList();
+                detectedHIDs = detectedHIDs.Where(d => d.DeviceIsAttached == true).ToList();
+                foreach (HID x in detectedHIDs)
+                {
+
+                    DetectedRotators.Add(new Rotator(x));
+                }
+            }
+            catch (Exception ex)
+            { 
+                throw;
             }
         }
 
@@ -115,6 +126,7 @@ namespace PyxisLE_API
         // execution of that handler to a new thread. This ensures that 
         // if the handler executs a long running operation, the class can 
         // still continue to function normally.
+
         private void TriggerAnEvent(EventHandler EH)
         {
             if (EH == null) return;
@@ -138,11 +150,13 @@ namespace PyxisLE_API
 
             try
             {
+                OptecLogger.LogMessage("EndAsyncEvent Method called");
                 invokedMethod.EndInvoke(iar);
             }
             catch
             {
                 // Handle any exceptions that were thrown by the invoked method
+                OptecLogger.LogMessage("An event listener went kaboom!");
                 Console.WriteLine("An event listener went kaboom!");
             }
         }

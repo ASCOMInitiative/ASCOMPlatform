@@ -8,6 +8,8 @@ using System.Text;
 using System.Windows.Forms;
 using PyxisLE_API;
 using System.Collections;
+using System.Threading;
+using OptecLogging;
 
 namespace PyxisLE_Control
 {
@@ -19,12 +21,19 @@ namespace PyxisLE_Control
         private ArrayList ControlList = new ArrayList();
         private const string NC_msg = "No connected Pyxis LE rotators are connected to the PC";
         private bool LastState = false;
+        private const int NORMAL_HEIGHT = 628;
+        private const int SKY_PA_HEIGHT = 43;
+        private const int ROTATOR_DIAGRAM_HEIGHT = 315;
+        private const int HOME_BUTTON_HEIGHT = 43;
+        private const int ABSOLUTE_HEIGHT = 43;
+        private const int RELATIVE_HEIGHT = 75;
+
         private const int SHORT_HEIGHT = 290;
+        private Thread MotionMonitorThread;
 
         public MainForm()
         {
             InitializeComponent();
-            this.MinimumSize = new System.Drawing.Size(0, SHORT_HEIGHT);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -33,11 +42,10 @@ namespace PyxisLE_Control
             ControlList.Add(label1);
             ControlList.Add(SetPA_BTN);
             ControlList.Add(HomeBTN);
-            ControlList.Add(label4);
-            ControlList.Add(groupBox1);
+            ControlList.Add(HomeDev_LBL);
             ControlList.Add(RelativeForward_BTN);
             ControlList.Add(RelativeReverse_Btn);
-            ControlList.Add(RelativeIncrement_TB);
+            ControlList.Add(Relative_NUD);
             ControlList.Add(AbsoluteMove_TB);
             ControlList.Add(label3);
             ControlList.Add(AbsoluteMove_BTN);
@@ -47,6 +55,9 @@ namespace PyxisLE_Control
             RotatorMonitor.RotatorAttached += new EventHandler(RotatorListChanged);
             RotatorMonitor.RotatorRemoved += new EventHandler(RotatorListChanged);
             myRotator = FindMyDevice();
+
+            ThreadStart ts = new ThreadStart(MotionMonitor);
+            MotionMonitorThread = new Thread(ts);
 
             if (myRotator != null)
             {
@@ -63,60 +74,207 @@ namespace PyxisLE_Control
 
         void RotatorListChanged(object sender, EventArgs e)
         {
-            if (myRotator != null)
+            try
             {
-                if (myRotator.IsAttached) return;
-                else
+                if (myRotator != null)
                 {
-                    DisableControls();
-                    myRotator = null;
+                    if (myRotator.IsAttached) return;
+                    else
+                    {
+                        DisableControls();
+                        myRotator = null;
+                    }
+                }
+                else  // myRotator = NULL
+                {
+                    myRotator = FindMyDevice();
+                    if (myRotator != null) EnableControls();
                 }
             }
-            else  // myRotator = NULL
+            catch (Exception ex)
             {
-                myRotator = FindMyDevice();
-                if (myRotator != null) EnableControls();
+                MessageBox.Show(ex.Message);
             }
         }
 
-        #region Enable/Disable Controls Methods
+        bool Connected
+        {
+            get
+            {
+                if(LastState == false)
+                {
+                    myRotator = FindMyDevice();
+                }
+                
+                if (myRotator == null) return false;
+                if (!myRotator.IsAttached)
+                {
+                    myRotator = null;
+                    return false;
+                }
+                return true;
+                
+            }
+        }
+
+        private void MotionMonitor()
+        {
+            System.Threading.Thread.Sleep(100);
+            string msg = "";
+            if (myRotator.IsHoming) msg = "Homing Complete!";
+            else if (myRotator.IsMoving) msg = "Move Completed!";
+            while (myRotator.IsMoving || myRotator.IsHoming)
+            {
+                System.Threading.Thread.Sleep(25);
+                this.Invoke(new DelNoParms(RotatorDiagram.Refresh));
+                this.Invoke(new DelNoParms(UpdateSkyPATextbox));
+                Application.DoEvents();
+            }
+            this.Invoke(new DelNoParms(RotatorDiagram.Refresh));
+            this.Invoke(new DelNoParms(UpdateSkyPATextbox));
+            this.Invoke(new SingleStringDelegate(SetStatusLabelText), new object[] { msg });
+            
+            Application.DoEvents();
+        }
+
+        private void StartAMove(double newpos)
+        {
+            myRotator.CurrentSkyPA = newpos;
+            string msg = "Moving rotator to Sky Position Angle " + newpos.ToString("0.00°");
+            this.Invoke(new SingleStringDelegate(SetStatusLabelText), new object[] { msg });
+            if (MotionMonitorThread.IsAlive) return;
+            else
+            {
+                ThreadStart ts = new ThreadStart(MotionMonitor);
+                MotionMonitorThread = new Thread(ts);
+                MotionMonitorThread.Start();
+            }
+        }
+
+#region Enable/Disable Controls Methods
 
         private void EnableControls()
         {
-            this.BeginInvoke(new DelNoParms(enableControls));
+            try
+            {
+                this.BeginInvoke(new DelNoParms(enableControls));
+            }
+            catch (Exception ex)
+            {
+                OptecLogger.LogMessage(ex.Message);
+                DisableControls();
+                throw;
+            }
         }
 
         private void enableControls()
         {
-            StatusLabel.Text = "Connected to Pyxis LE with serial number: " + myRotator.SerialNumber;
-            foreach (Control x in ControlList)
+            try
             {
-                x.Enabled = true;
+                StatusLabel.Text = "Connected to Pyxis LE with serial number: " + myRotator.SerialNumber;
+                foreach (Control x in ControlList)
+                {
+                    x.Enabled = true;
+                }
+                SkyPA_TB.Text = myRotator.CurrentSkyPA.ToString("000.00°");
+                Degree_LBL.Visible = true;
+
+                // Set the Forward or Reverse image for the RotatorDiagram.
+                if (myRotator.Reverse == false)
+                {
+                    RotatorDiagram.Image = Properties.Resources.Rotator_FWD;
+                }
+                else RotatorDiagram.Image = Properties.Resources.Rotator_REV;
+
+                // Adjust form for Show/Hide settings.
+                int FormHeight = NORMAL_HEIGHT;
+
+                // SKY PA Area
+                if (Properties.Settings.Default.ShowSkyPA)
+                {
+                    tableLayoutPanel1.RowStyles[0].Height = SKY_PA_HEIGHT;
+                    SkyPAPanel.Visible = true;
+                }
+                else
+                {
+                    FormHeight -= SKY_PA_HEIGHT;
+                    tableLayoutPanel1.RowStyles[0].Height = 0;
+                    SkyPAPanel.Visible = false;
+                }
+
+                // Rotator Diagram
+                if (Properties.Settings.Default.ShowRotatorDiagram)
+                {
+                    tableLayoutPanel1.RowStyles[1].Height = ROTATOR_DIAGRAM_HEIGHT;
+                    RotatorDiagram.Enabled = true;
+                    RotatorDiagram.Visible = true;
+                }
+                else
+                {
+                    tableLayoutPanel1.RowStyles[1].Height = 0;
+                    RotatorDiagram.Enabled = false;
+                    RotatorDiagram.Visible = false;
+                    FormHeight -= ROTATOR_DIAGRAM_HEIGHT;
+                }
+
+                // Home Button and Label
+                if (Properties.Settings.Default.ShowHomeButton)
+                {
+                    tableLayoutPanel1.RowStyles[2].Height = HOME_BUTTON_HEIGHT;
+                    HomePanel.Visible = true;
+                }
+                else
+                {
+                    FormHeight -= HOME_BUTTON_HEIGHT;
+                    tableLayoutPanel1.RowStyles[2].Height = 0;
+                    HomePanel.Visible = false;
+                }
+
+                // Absolute Move controls
+                if (Properties.Settings.Default.ShowAbsoluteMove)
+                {
+                    tableLayoutPanel1.RowStyles[3].Height = ABSOLUTE_HEIGHT;
+                    AbsPanel.Visible = true;
+                }
+                else
+                {
+                    FormHeight -= ABSOLUTE_HEIGHT;
+                    tableLayoutPanel1.RowStyles[3].Height = 0;
+                    AbsPanel.Visible = false;
+                }
+                // Relative Move Controls.
+                if (Properties.Settings.Default.ShowRelativeMove)
+                {
+                    tableLayoutPanel1.RowStyles[4].Height = RELATIVE_HEIGHT;
+                    RelativePanel.Visible = true;
+                }
+                else
+                {
+                    FormHeight -= RELATIVE_HEIGHT;
+                    tableLayoutPanel1.RowStyles[4].Height = 0;
+                    RelativePanel.Visible = false;
+                }
+                Height = FormHeight;
             }
-            SkyPA_TB.Text = myRotator.CurrentSkyPA.ToString("000.00°");
-            if (myRotator.Reverse == false)
+            catch (Exception ex)
             {
-                RotatorDiagram.Image = Properties.Resources.Rotator_FWD;
+                OptecLogger.LogMessage("An exception was caught while trying to update controls for PyxisLE_Control." +
+                    " This is likely caused by unplugging the device while it is homing" + ex.Message);
+                disableControls();
             }
-            else RotatorDiagram.Image = Properties.Resources.Rotator_REV;
-            if (Properties.Settings.Default.ShowRotatorDiagram)
-            {
-                RotatorDiagram.Visible = true;
-                RotatorDiagram.Update();
-                this.Height = 550;
-            }
-            else
-            {
-                RotatorDiagram.Visible = false;
-                this.Height = SHORT_HEIGHT;
-            }
-            label2.Visible = true;
-            label6.Visible = true;
+
         }
 
         private void DisableControls()
         {
-            this.BeginInvoke(new DelNoParms(disableControls));
+            try
+            {
+                this.BeginInvoke(new DelNoParms(disableControls));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void disableControls()
@@ -127,10 +285,10 @@ namespace PyxisLE_Control
                 x.Enabled = false;
             }
             SkyPA_TB.Text = "";
-            label2.Visible = false;
-            label6.Visible = false;
+            Degree_LBL.Visible = false;
             RotatorDiagram.Visible = false;
-            this.Height = SHORT_HEIGHT;
+            RotatorDiagram.Enabled = false;
+
         }
 
         private Rotator FindMyDevice()
@@ -145,9 +303,9 @@ namespace PyxisLE_Control
 
         private delegate void DelNoParms();
 
-        #endregion
+ #endregion
 
-        #region UpdateDisplay Methods
+#region UpdateDisplay Methods
 
         private void RotatorDiagram_Paint(object sender, PaintEventArgs e)
         {
@@ -196,6 +354,12 @@ namespace PyxisLE_Control
 
         private void RotatorDiagram_Click(object sender, EventArgs e)
         {
+            if (myRotator.IsHoming)
+            {
+                MessageBox.Show(
+                 "Please wait until home procedure is finished.");
+                return;
+            }
             MouseEventArgs ClickedPt = e as MouseEventArgs;
             double x1 = RotatorDiagram.Size.Width / 2;
             double y1 = RotatorDiagram.Size.Height / 2;
@@ -229,89 +393,21 @@ namespace PyxisLE_Control
             }
         }
 
-        #endregion
-
-        bool Connected
-        {
-            get
-            {
-                if(LastState == false)
-                {
-                    myRotator = FindMyDevice();
-                }
-                
-                if (myRotator == null) return false;
-                if (!myRotator.IsAttached)
-                {
-                    myRotator = null;
-                    return false;
-                }
-                return true;
-                
-            }
-        }
-
-        private void HomeBTN_Click(object sender, EventArgs e)
-        {
-            myRotator.Home();
-            MotionMonitor();
-        }
-
-        private void MotionMonitor()
-        {
-            System.Threading.Thread.Sleep(100);
-            while (myRotator.IsMoving || myRotator.IsHoming)
-            {
-                System.Threading.Thread.Sleep(25);
-                this.Invoke(new DelNoParms(RotatorDiagram.Refresh));
-                this.Invoke(new DelNoParms(UpdateSkyPATextbox));
-                Application.DoEvents();
-            }
-            this.Invoke(new DelNoParms(RotatorDiagram.Refresh));
-            this.Invoke(new DelNoParms(UpdateSkyPATextbox));
-            Application.DoEvents();
-        }
-
         private void UpdateSkyPATextbox()
         {
-            this.SkyPA_TB.Text = myRotator.CurrentSkyPA.ToString("000.00°") ;
+            this.SkyPA_TB.Text = myRotator.CurrentSkyPA.ToString("000.00°");
         }
 
-        private void SetPA_BTN_Click(object sender, EventArgs e)
+#endregion
+
+#region Form Button Clicks
+
+        private void AbsoluteMove_BTN_Click(object sender, EventArgs e)
         {
-            SetSkyPA_Frm frm = new SetSkyPA_Frm();
-            frm.OldPAValue = myRotator.CurrentSkyPA;
-            DialogResult result = frm.ShowDialog();
-            double NewOffset = 0;
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                //if (frm.NewPAValue > 180)
-                //{
-                //    double i = 360 - frm.NewPAValue;
 
-                //}
-
-               // if (myRotator.CurrentDevicePA <= frm.NewPAValue)
-               // {
-               //     NewOffset = frm.NewPAValue - myRotator.CurrentDevicePA;
-               // }
-               // else NewOffset = myRotator.CurrentDevicePA - frm.NewPAValue;
-
-                NewOffset = frm.NewPAValue - myRotator.CurrentDevicePA;
-
-                myRotator.SkyPAOffset = NewOffset;
-                this.Invoke(new DelNoParms(RotatorDiagram.Refresh));
-                this.Invoke(new DelNoParms(UpdateSkyPATextbox));
-                Application.DoEvents();
-            }
-
-            frm.Dispose();
-        }
-
-        private void StartAMove(double newpos)
-        {
-            myRotator.CurrentSkyPA = newpos;
-            MotionMonitor();
+            double pos = double.Parse(AbsoluteMove_TB.Text);
+            StartAMove(pos);
+            if (pos == 360) AbsoluteMove_TB.Text = "0";
         }
 
         private void AbsoluteMove_TB_Validating(object sender, CancelEventArgs e)
@@ -342,12 +438,19 @@ namespace PyxisLE_Control
 
         }
 
-        private void AbsoluteMove_BTN_Click(object sender, EventArgs e)
+        private void AbsoluteMove_TB_KeyPress(object sender, KeyPressEventArgs e)
         {
-            
-            double pos = double.Parse(AbsoluteMove_TB.Text);
-            StartAMove(pos);
-            if (pos == 360) AbsoluteMove_TB.Text = "0";
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                CancelEventArgs c = new CancelEventArgs();
+                AbsoluteMove_TB_Validating(AbsoluteMove_TB, c);
+                if (c.Cancel == false)
+                {
+                    AbsoluteMove_BTN_Click(this.AbsoluteMove_BTN, EventArgs.Empty);
+                    e.Handled = true;
+                }
+            }
+
         }
 
         private void RelativeIncrement_TB_Validating(object sender, CancelEventArgs e)
@@ -378,17 +481,9 @@ namespace PyxisLE_Control
 
         }
 
-        private void showDeviceDiagramToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.ShowRotatorDiagram = !Properties.Settings.Default.ShowRotatorDiagram;
-            Properties.Settings.Default.Save();
-            if (Connected) EnableControls();
-            else DisableControls();
-        }
-
         private void RelativeForward_BTN_Click(object sender, EventArgs e)
         {
-            double increment = double.Parse(RelativeIncrement_TB.Text);
+            double increment = (double)Relative_NUD.Value;
             if (increment == 0) return;
             double NewPositon = myRotator.CurrentSkyPA + increment;
             if (NewPositon > 360) NewPositon = NewPositon - 360;
@@ -398,7 +493,7 @@ namespace PyxisLE_Control
 
         private void RelativeReverse_Btn_Click(object sender, EventArgs e)
         {
-            double increment = double.Parse(RelativeIncrement_TB.Text);
+            double increment = (double)Relative_NUD.Value;
             if (increment == 0) return;
             double NewPositon = myRotator.CurrentSkyPA - increment;
             if (NewPositon > 360) NewPositon = NewPositon - 360;
@@ -406,34 +501,50 @@ namespace PyxisLE_Control
             StartAMove(NewPositon);
         }
 
-        private void AbsoluteMove_TB_KeyPress(object sender, KeyPressEventArgs e)
+        private void HomeBTN_Click(object sender, EventArgs e)
         {
-            if (e.KeyChar == (char)Keys.Enter)
-            {
-                CancelEventArgs c = new CancelEventArgs();
-                AbsoluteMove_TB_Validating(AbsoluteMove_TB, c);
-                if (c.Cancel == false)
-                {
-                    AbsoluteMove_BTN_Click(this.AbsoluteMove_BTN, EventArgs.Empty);
-                    e.Handled = true;
-                }
-            }
-            
+            myRotator.Home();
+            StatusLabel.Text = "Homing device...";
+            MotionMonitor();
         }
 
-        private void RelativeIncrement_TB_KeyPress(object sender, KeyPressEventArgs e)
+        private void SetPA_BTN_Click(object sender, EventArgs e)
         {
-            if (e.KeyChar == (char)Keys.Enter)
+            SetSkyPA_Frm frm = new SetSkyPA_Frm();
+            frm.OldPAValue = myRotator.CurrentSkyPA;
+            DialogResult result = frm.ShowDialog();
+            double NewOffset = 0;
+            if (result == System.Windows.Forms.DialogResult.OK)
             {
-                this.RelativeForward_BTN.Focus();
-                e.Handled = true;
+
+                NewOffset = frm.NewPAValue - myRotator.CurrentDevicePA;
+
+                myRotator.SkyPAOffset = NewOffset;
+                RotatorDiagram.Refresh();
+                UpdateSkyPATextbox();
+                this.StatusLabel.Text = "Sky PA set to " + frm.NewPAValue.ToString() + "°";
+                Application.DoEvents();
             }
+
+            frm.Dispose();
         }
+
+#endregion
+
+#region ToolStripMenu Clicks
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             RotatorMonitor = null;
             this.Close();
+        }
+
+        private void showDeviceDiagramToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.ShowRotatorDiagram = !Properties.Settings.Default.ShowRotatorDiagram;
+            Properties.Settings.Default.Save();
+            if (Connected) EnableControls();
+            else DisableControls();
         }
 
         private void advancedSetupToolStripMenuItem_Click(object sender, EventArgs e)
@@ -453,9 +564,119 @@ namespace PyxisLE_Control
 
         }
 
-        private void AbsoluteMove_TB_TextChanged(object sender, EventArgs e)
+        private void ShowHideSkyPAToolStripMenuItem_Click(object sender, EventArgs e)
         {
-                   
+            Properties.Settings.Default.ShowSkyPA = !Properties.Settings.Default.ShowSkyPA;
+            Properties.Settings.Default.Save();
+            if (Connected) EnableControls();
+            else DisableControls();
         }
+
+        private void showHideHomeButtonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.ShowHomeButton = !Properties.Settings.Default.ShowHomeButton;
+            Properties.Settings.Default.Save();
+            if (Connected) EnableControls();
+            else DisableControls();
+        }
+
+        private void showHideAbsoluteMoveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.ShowAbsoluteMove = !Properties.Settings.Default.ShowAbsoluteMove;
+            Properties.Settings.Default.Save();
+            if (Connected) EnableControls();
+            else DisableControls();
+        }
+
+        private void showHideRelativeMoveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.ShowRelativeMove = !Properties.Settings.Default.ShowRelativeMove;
+            Properties.Settings.Default.Save();
+            if (Connected) EnableControls();
+            else DisableControls();
+        }
+
+        private void showAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.ShowSkyPA = true;
+            Properties.Settings.Default.ShowRotatorDiagram = true;
+            Properties.Settings.Default.ShowHomeButton = true;
+            Properties.Settings.Default.ShowAbsoluteMove = true;
+            Properties.Settings.Default.ShowRelativeMove = true;
+            Properties.Settings.Default.Save();
+            if (Connected) EnableControls();
+            else DisableControls();
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AboutBox a = new AboutBox();
+            a.ShowDialog();
+        }
+
+        private void diagnosticsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string logfilepath = "";
+            try
+            {
+                logfilepath = OptecLogger.LogFileDirectory;
+                System.Diagnostics.Process.Start("explorer.exe", logfilepath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while attempting to navigate to log file directory at: " + logfilepath +
+                    Environment.NewLine + "The error message was: " + ex.Message);
+            }
+        }
+
+#endregion
+
+#region Status Label Updates
+
+        private const string STATUS_IDLE_MESSAGE = "Pyxis LE - Ready for action!";
+
+        private void StatusLabel_TextChanged(object sender, EventArgs e)
+        {
+            ToolStripStatusLabel sndr = sender as ToolStripStatusLabel;
+            if (sndr.Text != STATUS_IDLE_MESSAGE)
+            {
+                if (StatusLabelTimer.Enabled)
+                {
+                    StatusLabelTimer.Stop();
+                }
+                StatusLabelTimer.Enabled = true;
+            }
+        }
+
+        private void StatusLabelTimer_Tick(object sender, EventArgs e)
+        {
+
+            if (myRotator != null)
+            {
+                if (myRotator.IsMoving || myRotator.IsHoming)
+                {
+                    StatusLabelTimer.Enabled = true;
+                }
+                else
+                {
+                    this.Invoke(new SingleStringDelegate(SetStatusLabelText), new object[] { STATUS_IDLE_MESSAGE });
+                    StatusLabelTimer.Enabled = false;
+                } 
+            }
+        }
+
+        private delegate void SingleStringDelegate(string s);
+
+        private void SetStatusLabelText(string status)
+        {
+            this.StatusLabel.Text = status;
+        }
+
+#endregion
+
+        
+
+        
+ 
     }
 }

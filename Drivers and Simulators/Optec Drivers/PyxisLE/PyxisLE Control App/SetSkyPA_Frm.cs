@@ -68,7 +68,8 @@ namespace PyxisLE_Control
 
         private void SetSkyPA_Frm_Load(object sender, EventArgs e)
         {
-            this.CurrentSkyPA_LBL.Text = oldValue.ToString() + "°";
+            this.CurrentSkyPA_LBL.Text = oldValue.ToString("000.00°");
+            this.NewValue_TB.Focus();
         }
 
         public double OldPAValue

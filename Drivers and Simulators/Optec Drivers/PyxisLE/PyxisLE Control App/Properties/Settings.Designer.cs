@@ -34,5 +34,53 @@ namespace PyxisLE_Control.Properties {
                 this["ShowRotatorDiagram"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowSkyPA {
+            get {
+                return ((bool)(this["ShowSkyPA"]));
+            }
+            set {
+                this["ShowSkyPA"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowHomeButton {
+            get {
+                return ((bool)(this["ShowHomeButton"]));
+            }
+            set {
+                this["ShowHomeButton"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowAbsoluteMove {
+            get {
+                return ((bool)(this["ShowAbsoluteMove"]));
+            }
+            set {
+                this["ShowAbsoluteMove"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowRelativeMove {
+            get {
+                return ((bool)(this["ShowRelativeMove"]));
+            }
+            set {
+                this["ShowRelativeMove"] = value;
+            }
+        }
     }
 }

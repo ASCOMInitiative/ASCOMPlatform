@@ -5,6 +5,7 @@ using System.Text;
 using OptecHIDTools;
 using System.Diagnostics;
 using System.Threading;
+using OptecLogging;
 
 
 namespace PyxisLE_API
@@ -40,6 +41,7 @@ namespace PyxisLE_API
 
         public Rotator(HID Device)
         {
+            OptecLogger.LogMessage("Rotator Constructor called for HID with serial number " + Device.SerialNumber);
             this.selectedDevice = Device;
             this.manufacturer = Device.Manufacturer;
             this.name = Device.ProductDescription;
@@ -51,17 +53,27 @@ namespace PyxisLE_API
             RefreshDeviceDescription();
             // Keep checking device status until the device is homed...
             TryAgain:
-            RefreshDeviceStatus();
-            if (DateTime.Now.Subtract(FirstAttempt) > MaxHomeTime)
-                throw new System.ApplicationException("Home Procedure took too long");
-            else if (this.isHoming == true)
+            try
             {
-                System.Threading.Thread.Sleep(500);
-                goto TryAgain;
+                RefreshDeviceStatus();
+
+                if (DateTime.Now.Subtract(FirstAttempt) > MaxHomeTime)
+                    throw new System.ApplicationException("Home Procedure took too long");
+                else if (this.isHoming == true)
+                {
+                    System.Threading.Thread.Sleep(500);
+                    goto TryAgain;
+                }
+                else if (this.ErrorState == 0)
+                {
+                    RefreshDeviceDescription();
+                }
             }
-            else if (this.ErrorState == 0)
+            catch (Exception ex)
             {
-                RefreshDeviceDescription();
+                OptecLogger.LogMessage("An exception was thrown while Rotator device was being constructed. " +
+                    "This may have been caused by the device being unplugged. Exception message = \"" + ex.Message + "\"");
+            
             }
         }
 

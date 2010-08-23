@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ASCOM.PyxisLE_ASCOM.Properties {
+namespace PyxisLE_API.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ASCOM.PyxisLE_ASCOM.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ASCOM.PyxisLE_ASCOM.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PyxisLE_API.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -60,17 +60,10 @@ namespace ASCOM.PyxisLE_ASCOM.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap ASCOM {
+        internal static System.Drawing.Icon Rotator {
             get {
-                object obj = ResourceManager.GetObject("ASCOM", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Optec_Logo_medium_png {
-            get {
-                object obj = ResourceManager.GetObject("Optec_Logo_medium_png", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                object obj = ResourceManager.GetObject("Rotator", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
     }
