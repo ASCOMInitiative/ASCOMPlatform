@@ -46,7 +46,7 @@ namespace ASCOM.PyxisLE_ASCOM
         //
         // Driver ID and descriptive string that shows in the Chooser
         //
-        private static string s_csDriverID = "ASCOM.PyxisLE_ASCOM.Rotator";
+        internal static string s_csDriverID = "ASCOM.PyxisLE_ASCOM.Rotator";
         // TODO Change the descriptive string for your driver then remove this line
         private static string s_csDriverDescription = "Optec Pyxis LE";
 
@@ -59,9 +59,9 @@ namespace ASCOM.PyxisLE_ASCOM
         //
         public Rotator()
         {
-
-            System.Windows.Forms.MessageBox.Show("For Debugging...");
-
+#if DEBUG
+            System.Windows.Forms.MessageBox.Show("For Debugging");
+#endif
             RotatorManager = new Rotators();
             myProfile = new Profile();
             myProfile.DeviceType = "Rotator";
@@ -75,6 +75,7 @@ namespace ASCOM.PyxisLE_ASCOM
         //
         private static void RegUnregASCOM(bool bRegister)
         {
+
   
             Utilities.Profile P = new Utilities.Profile();
             P.DeviceType = "Rotator";					//  Requires Helper 5.0.3 or later
@@ -93,14 +94,20 @@ namespace ASCOM.PyxisLE_ASCOM
         [ComRegisterFunction]
         public static void RegisterASCOM(Type t)
         {
-            System.Windows.Forms.MessageBox.Show("Registering Driver...");
+#if DEBUG
+            System.Windows.Forms.MessageBox.Show("Registering Driver");
+#endif
+            Logger.TLogger.LogMessage("Installer","Registering driver for ASCOM");
             RegUnregASCOM(true);
         }
 
         [ComUnregisterFunction]
         public static void UnregisterASCOM(Type t)
         {
-            System.Windows.Forms.MessageBox.Show("Unregistering Driver...");
+#if DEBUG
+            System.Windows.Forms.MessageBox.Show("Unregistering Driver");
+#endif
+            Logger.TLogger.LogMessage("Installer", "Unregistering driver for ASCOM");
             RegUnregASCOM(false);
         }
         #endregion
@@ -185,7 +192,6 @@ namespace ASCOM.PyxisLE_ASCOM
             else if (NewPosition < 0) NewPosition = NewPosition + 360;
             myRotator.CurrentSkyPA = NewPosition;
             while (myRotator.IsMoving) { }
-            System.Threading.Thread.Sleep(100);
         }
 
         public void MoveAbsolute(float Position)
@@ -195,7 +201,6 @@ namespace ASCOM.PyxisLE_ASCOM
             else if (Position < 0) throw new ASCOM.InvalidOperationException("Cannot move to position less than 0°");
             myRotator.CurrentSkyPA = (double)Position;
             while (myRotator.IsMoving) { }
-            System.Threading.Thread.Sleep(100);
         }
 
         public float Position
@@ -203,7 +208,7 @@ namespace ASCOM.PyxisLE_ASCOM
             get 
             {
                 if (!Connected) throw new ASCOM.NotConnectedException("The rotator device is no longer connected");
-                return (float)myRotator.CurrentDevicePA; 
+                return (float)myRotator.CurrentSkyPA; 
             }
         }
 
@@ -218,6 +223,7 @@ namespace ASCOM.PyxisLE_ASCOM
                 myRotator.Reverse = value;
                 System.Threading.Thread.Sleep(500);
                 while (myRotator.IsHoming || myRotator.IsMoving) {/* We have to wait here because this method is synchronous*/ }
+                System.Threading.Thread.Sleep(100);
             }
         }
 

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetSkyPA_Frm));
             this.label1 = new System.Windows.Forms.Label();
             this.CurrentSkyPA_LBL = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -54,9 +55,9 @@
             this.CurrentSkyPA_LBL.AutoSize = true;
             this.CurrentSkyPA_LBL.Location = new System.Drawing.Point(156, 16);
             this.CurrentSkyPA_LBL.Name = "CurrentSkyPA_LBL";
-            this.CurrentSkyPA_LBL.Size = new System.Drawing.Size(35, 13);
+            this.CurrentSkyPA_LBL.Size = new System.Drawing.Size(78, 13);
             this.CurrentSkyPA_LBL.TabIndex = 2;
-            this.CurrentSkyPA_LBL.Text = "label2";
+            this.CurrentSkyPA_LBL.Text = "Current Angle °";
             // 
             // label2
             // 
@@ -87,7 +88,7 @@
             this.OK_BTN.Location = new System.Drawing.Point(307, 167);
             this.OK_BTN.Name = "OK_BTN";
             this.OK_BTN.Size = new System.Drawing.Size(75, 23);
-            this.OK_BTN.TabIndex = 5;
+            this.OK_BTN.TabIndex = 1;
             this.OK_BTN.Text = "OK";
             this.OK_BTN.UseVisualStyleBackColor = true;
             this.OK_BTN.Click += new System.EventHandler(this.OK_BTN_Click);
@@ -99,7 +100,7 @@
             this.Cancel_BTN.Location = new System.Drawing.Point(179, 167);
             this.Cancel_BTN.Name = "Cancel_BTN";
             this.Cancel_BTN.Size = new System.Drawing.Size(75, 23);
-            this.Cancel_BTN.TabIndex = 6;
+            this.Cancel_BTN.TabIndex = 2;
             this.Cancel_BTN.Text = "Cancel";
             this.Cancel_BTN.UseVisualStyleBackColor = true;
             this.Cancel_BTN.Click += new System.EventHandler(this.Cancel_BTN_Click);
@@ -111,7 +112,7 @@
             this.NewValue_TB.Location = new System.Drawing.Point(265, 57);
             this.NewValue_TB.Name = "NewValue_TB";
             this.NewValue_TB.Size = new System.Drawing.Size(96, 31);
-            this.NewValue_TB.TabIndex = 7;
+            this.NewValue_TB.TabIndex = 0;
             this.NewValue_TB.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NewValue_TB_KeyPress);
             this.NewValue_TB.Validating += new System.ComponentModel.CancelEventHandler(this.NewValue_TB_Validating);
             // 
@@ -131,7 +132,9 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.CurrentSkyPA_LBL);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SetSkyPA_Frm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Set Sky Position Angle";
             this.Load += new System.EventHandler(this.SetSkyPA_Frm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
