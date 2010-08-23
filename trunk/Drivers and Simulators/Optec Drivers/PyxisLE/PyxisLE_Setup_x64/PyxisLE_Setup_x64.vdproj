@@ -51,6 +51,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_5FEE592ADE7E030F84D0D4528836B2E5"
+        "OwnerKey" = "8:_7EA61CACBA654016A025A4BB6B870C09"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_6CCBA2DFE86E37494C37CB6D4C58B9C7"
         "OwnerKey" = "8:_7EA61CACBA654016A025A4BB6B870C09"
         "MsmSig" = "8:_UNDEFINED"
@@ -59,6 +65,12 @@
         {
         "MsmKey" = "8:_7EA61CACBA654016A025A4BB6B870C09"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A1EC9D5BCB18102F889066E6853DF21C"
+        "OwnerKey" = "8:_EBA0B3F5948D4BAD832FA15D914DAE99"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -99,6 +111,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_DD6A1AE8C36902352053CC5A4BF438E5"
+        "OwnerKey" = "8:_4EFB0665196B42D9A7235EFE849C9B41"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_E111344ACAF9F1C0155B84BB3F8BD022"
         "OwnerKey" = "8:_7EA61CACBA654016A025A4BB6B870C09"
         "MsmSig" = "8:_UNDEFINED"
@@ -124,18 +142,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E111344ACAF9F1C0155B84BB3F8BD022"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_22E6AF7109F4635D2841EEFC54962686"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_B427FDCDE3854E2CA8D78761784293F1"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -143,6 +149,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_7EA61CACBA654016A025A4BB6B870C09"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_E111344ACAF9F1C0155B84BB3F8BD022"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -161,6 +173,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_4EFB0665196B42D9A7235EFE849C9B41"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_22E6AF7109F4635D2841EEFC54962686"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -301,7 +319,7 @@
             "SourcePath" = "8:OptecHIDTools.tlb"
             "TargetName" = "8:OptecHIDTools.tlb"
             "Tag" = "8:"
-            "Folder" = "8:_A227B68435404C979A6C5C822F0684F1"
+            "Folder" = "8:_C2A36562BE7D429180062A6F324DAAB9"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -347,6 +365,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5FEE592ADE7E030F84D0D4528836B2E5"
+            {
+            "SourcePath" = "8:ASCOM.PyxisLE_ASCOM.Rotator.tlb"
+            "TargetName" = "8:ASCOM.PyxisLE_ASCOM.Rotator.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_C2A36562BE7D429180062A6F324DAAB9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6CCBA2DFE86E37494C37CB6D4C58B9C7"
             {
             "AssemblyRegister" = "3:1"
@@ -374,6 +412,26 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A1EC9D5BCB18102F889066E6853DF21C"
+            {
+            "SourcePath" = "8:OptecHIDTools.tlb"
+            "TargetName" = "8:OptecHIDTools.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_C2A36562BE7D429180062A6F324DAAB9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
             "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
@@ -469,11 +527,31 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DD6A1AE8C36902352053CC5A4BF438E5"
+            {
+            "SourcePath" = "8:PyxisLE_API.tlb"
+            "TargetName" = "8:PyxisLE_API.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_C2A36562BE7D429180062A6F324DAAB9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E111344ACAF9F1C0155B84BB3F8BD022"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:PyxisLE_API, Version=1.0.3.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:PyxisLE_API, Version=1.0.4.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_E111344ACAF9F1C0155B84BB3F8BD022"
@@ -590,7 +668,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:PyxisLE"
         "ProductCode" = "8:{9936C56A-997F-4C50-9631-601A8254BE76}"
-        "PackageCode" = "8:{361D5541-0B14-49B4-821F-1DAE22AC0AF3}"
+        "PackageCode" = "8:{9EF4E282-8A42-40B1-B9C2-F5E52A5F635E}"
         "UpgradeCode" = "8:{48E51D1A-9601-4DE2-932B-32BD5815EF51}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -1104,7 +1182,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_4EFB0665196B42D9A7235EFE849C9B41"
             {
-            "SourcePath" = "8:..\\PyxisLE API\\obj\\Release\\PyxisLE_API.dll"
+            "SourcePath" = "8:..\\PyxisLE API\\obj\\Debug\\PyxisLE_API.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_C2A36562BE7D429180062A6F324DAAB9"
@@ -1132,7 +1210,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_7EA61CACBA654016A025A4BB6B870C09"
             {
-            "SourcePath" = "8:..\\PyxisLE_ASCOM\\obj\\Release\\ASCOM.PyxisLE_ASCOM.Rotator.dll"
+            "SourcePath" = "8:..\\PyxisLE_ASCOM\\obj\\Debug\\ASCOM.PyxisLE_ASCOM.Rotator.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_C2A36562BE7D429180062A6F324DAAB9"
@@ -1160,7 +1238,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B427FDCDE3854E2CA8D78761784293F1"
             {
-            "SourcePath" = "8:..\\PyxisLE Control App\\obj\\Release\\PyxisLE_Control.exe"
+            "SourcePath" = "8:..\\PyxisLE Control App\\obj\\Debug\\PyxisLE_Control.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_C2A36562BE7D429180062A6F324DAAB9"
@@ -1188,7 +1266,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_EBA0B3F5948D4BAD832FA15D914DAE99"
             {
-            "SourcePath" = "8:..\\Dependencies\\OptecHID\\obj\\Release\\OptecHIDTools.dll"
+            "SourcePath" = "8:..\\Dependencies\\OptecHID\\obj\\Debug\\OptecHIDTools.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_C2A36562BE7D429180062A6F324DAAB9"
