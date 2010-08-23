@@ -60,7 +60,7 @@ namespace ASCOM.PyxisLE_ASCOM
         public Rotator()
         {
 #if DEBUG
-            System.Windows.Forms.MessageBox.Show("For Debugging");
+            System.Windows.Forms.MessageBox.Show("Constructing Rotator object");
 #endif
             RotatorManager = new Rotators();
             myProfile = new Profile();

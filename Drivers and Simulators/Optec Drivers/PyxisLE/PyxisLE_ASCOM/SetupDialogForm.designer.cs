@@ -36,6 +36,9 @@ namespace ASCOM.PyxisLE_ASCOM
             this.picASCOM = new System.Windows.Forms.PictureBox();
             this.AttachedDevices_CB = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.SetSkyPA_Btn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.SuspendLayout();
@@ -44,7 +47,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdOK.Location = new System.Drawing.Point(177, 407);
+            this.cmdOK.Location = new System.Drawing.Point(176, 367);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 0;
@@ -56,7 +59,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(71, 407);
+            this.cmdCancel.Location = new System.Drawing.Point(70, 367);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
@@ -70,7 +73,7 @@ namespace ASCOM.PyxisLE_ASCOM
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(222, 66);
+            this.textBox1.Size = new System.Drawing.Size(223, 66);
             this.textBox1.TabIndex = 4;
             this.textBox1.TabStop = false;
             this.textBox1.Text = "Below is a list containing the serial numbers of any Pyxis LE Rotators that are c" +
@@ -79,7 +82,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // pictureBox1
             // 
             this.pictureBox1.Image = global::ASCOM.PyxisLE_ASCOM.Properties.Resources.Optec_Logo_medium_png;
-            this.pictureBox1.Location = new System.Drawing.Point(1, -6);
+            this.pictureBox1.Location = new System.Drawing.Point(13, 0);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(139, 56);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -91,7 +94,7 @@ namespace ASCOM.PyxisLE_ASCOM
             this.picASCOM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picASCOM.Image = global::ASCOM.PyxisLE_ASCOM.Properties.Resources.ASCOM;
-            this.picASCOM.Location = new System.Drawing.Point(188, 12);
+            this.picASCOM.Location = new System.Drawing.Point(187, 12);
             this.picASCOM.Name = "picASCOM";
             this.picASCOM.Size = new System.Drawing.Size(48, 56);
             this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -106,7 +109,7 @@ namespace ASCOM.PyxisLE_ASCOM
             this.AttachedDevices_CB.FormattingEnabled = true;
             this.AttachedDevices_CB.Location = new System.Drawing.Point(113, 150);
             this.AttachedDevices_CB.Name = "AttachedDevices_CB";
-            this.AttachedDevices_CB.Size = new System.Drawing.Size(121, 21);
+            this.AttachedDevices_CB.Size = new System.Drawing.Size(122, 21);
             this.AttachedDevices_CB.TabIndex = 6;
             this.AttachedDevices_CB.SelectionChangeCommitted += new System.EventHandler(this.AttachedDevices_CB_SelectionChangeCommitted);
             // 
@@ -119,11 +122,43 @@ namespace ASCOM.PyxisLE_ASCOM
             this.label1.TabIndex = 7;
             this.label1.Text = "Attached Devices:";
             // 
+            // textBox2
+            // 
+            this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox2.Location = new System.Drawing.Point(15, 188);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.ReadOnly = true;
+            this.textBox2.Size = new System.Drawing.Size(94, 13);
+            this.textBox2.TabIndex = 8;
+            this.textBox2.TabStop = false;
+            this.textBox2.Text = "Current Sky PA:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(97, 188);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(38, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Angle°";
+            // 
+            // SetSkyPA_Btn
+            // 
+            this.SetSkyPA_Btn.Location = new System.Drawing.Point(154, 183);
+            this.SetSkyPA_Btn.Name = "SetSkyPA_Btn";
+            this.SetSkyPA_Btn.Size = new System.Drawing.Size(81, 23);
+            this.SetSkyPA_Btn.TabIndex = 10;
+            this.SetSkyPA_Btn.Text = "Set Sky PA...";
+            this.SetSkyPA_Btn.UseVisualStyleBackColor = true;
+            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(248, 443);
+            this.ClientSize = new System.Drawing.Size(247, 400);
+            this.Controls.Add(this.SetSkyPA_Btn);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.textBox2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.AttachedDevices_CB);
             this.Controls.Add(this.textBox1);
@@ -156,5 +191,8 @@ namespace ASCOM.PyxisLE_ASCOM
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ComboBox AttachedDevices_CB;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button SetSkyPA_Btn;
     }
 }
