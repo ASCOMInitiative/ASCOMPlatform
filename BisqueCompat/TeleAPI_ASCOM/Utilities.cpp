@@ -18,6 +18,7 @@
 // When			Who		What
 //----------	---		--------------------------------------------------
 // 25-Jun-02	rbd		Initial edit (from StarryNight ASCOM plugin)
+// 23-Aug-10	rbd		5.0.3 - Registry functions
 //========================================================================
 #include "StdAfx.h"
 
@@ -153,5 +154,105 @@ void drvFail(char *msg, EXCEPINFO *ei, bool bFatal)
 		TermScope(true);										// shut ourselves down
 
 	ABORT;
+}
+
+
+// -------------------
+// CreateRegistryKey()
+// -------------------
+//
+// Creates a single key specified by pszSubKey. Again, taken from NTDLS' 
+// answer to 
+//
+// http://stackoverflow.com/questions/508614/create-a-new-windows-registry-key-using-c
+//
+bool CreateRegistryKey(HKEY hKeyRoot, LPCTSTR pszSubKey)
+{
+    HKEY hKey;
+    DWORD dwFunc;
+    LONG  lRet;
+
+    //------------------------------------------------------------------------------
+
+    SECURITY_DESCRIPTOR SD;
+    SECURITY_ATTRIBUTES SA;
+
+    if(!InitializeSecurityDescriptor(&SD, SECURITY_DESCRIPTOR_REVISION))
+        return false;
+
+    if(!SetSecurityDescriptorDacl(&SD, true, 0, false))
+        return false;
+
+    SA.nLength             = sizeof(SA);
+    SA.lpSecurityDescriptor = &SD;
+    SA.bInheritHandle      = false;
+
+    //------------------------------------------------------------------------------
+
+    lRet = RegCreateKeyEx(
+        hKeyRoot,
+        pszSubKey,
+        0,
+        (LPTSTR)NULL,
+        REG_OPTION_NON_VOLATILE,
+        KEY_WRITE,
+        &SA,
+        &hKey,
+        &dwFunc
+    );
+
+    if(lRet == ERROR_SUCCESS)
+    {
+        RegCloseKey(hKey);
+        hKey = (HKEY)NULL;
+        return true;
+    }
+
+    SetLastError((DWORD)lRet);
+    return false;
+}
+
+// ----------------------------
+// CreateRegistryKeyStructure()
+// ----------------------------
+//
+// Create keys as needed for the entire path given. Taken from NTDLS' 
+// answer to 
+//
+// http://stackoverflow.com/questions/508614/create-a-new-windows-registry-key-using-c
+//
+// I would have done it recursively, but I am lazy and just used this code.
+//
+// FAILURES WILL NOT RAISE ERRORS. Returns the number of subkeys created.
+//
+int CreateRegKeyStructure(HKEY hKey, const char *sPath)
+{
+    char sDir[MAX_PATH];
+
+    int iNameSz = (int)strlen(sPath);
+	int iCount = 0;
+	int iPos = 0;
+
+    for(iPos = 0; iPos < iNameSz; iPos++)
+    {
+        if(sPath[iPos] == '\\' || sPath[iPos] == '/')
+        {
+            sDir[iPos] = '\0';
+			if(CreateRegistryKey(hKey, sDir))
+			{
+				iCount++;
+			}
+        }
+
+        sDir[iPos] = sPath[iPos];
+    }
+
+     sDir[iPos] = '\0';
+     if(CreateRegistryKey(hKey, sDir))
+	 {
+		 iCount++;
+	 }
+
+	 return iCount;
 }
 

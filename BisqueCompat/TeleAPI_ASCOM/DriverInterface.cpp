@@ -53,6 +53,9 @@
 //						to using the Global Interface Table as a cleaner
 //						way to marshal across threads. Prevent recursive
 //						errors in TermScope() which is called by drvFail().
+// 23-Aug-10	rbd		5.0.3 - Add GetAlignmentMode and integer COM support.
+//						Add support for registry value that tells TheSky
+//						whether the mount is a GEM or not (used by TPOINT).
 //========================================================================
 
 /* #include "AscomScope.h" */
@@ -63,6 +66,10 @@
 #define OUR_REGISTRY_AREA "Software\\SPACE.com\\TheSky TeleAPI-ASCOM Plugin"
 #define OUR_DRIVER_SEL "ASCOM Driver ID"
 
+#define TELEAPI_REGISTRY_AREA_6 "Software\\Software Bisque\\TheSky6\\TELEAPI"
+#define TELEAPI_REGISTRY_AREA_X "Software\\Software Bisque\\TheSkyX\\TELEAPI"
+
+static int get_integer(OLECHAR *name);
 static double get_double(OLECHAR *name);
 static void set_double(OLECHAR *name, double val);
 static bool get_bool(OLECHAR *name);
@@ -131,6 +138,7 @@ short InitScope(void)
 	char szProgID[256];
 	OLECHAR *ocProgID = NULL;
 	DWORD dwType;
+	DWORD dwGemVal;
 
 	__try {
 		_bScopeActive = false;									// Assume failure
@@ -218,6 +226,54 @@ short InitScope(void)
 		_bScopeCanSync = GetCanSync();							// Can it sync?
 		_bScopeCanSlew = GetCanSlew();							// Can it slew at all?	
 		_bScopeCanSlewAsync = GetCanSlewAsync();				// Can it slew asynchronously?
+		_bScopeIsGEM = (GetAlignmentMode() == 2);				// Is it a GEM?
+
+		//
+		// Write the magic registry value that TheSky uses for TPOINT to 
+		// tell if it is a GEM or not.
+		//
+		// Since this goes under HKCU, the installer can NOT make the keys.
+		// We must do it here for the current user! And we can't tell whether 
+		// we're running under TheSky 6 or X so we just write it into
+		// both places. BEST EFFORTS, NO ERROR DETECTION.
+		//
+		dwGemVal = _bScopeIsGEM ? 1 : 0;
+		dwSize = 4;
+		if(CreateRegKeyStructure(HKEY_CURRENT_USER, TELEAPI_REGISTRY_AREA_6))
+		{
+			if(RegOpenKeyEx(HKEY_CURRENT_USER, 
+					TELEAPI_REGISTRY_AREA_6,
+					0,
+					KEY_WRITE,
+					&hKey) == ERROR_SUCCESS)
+			{
+				HRESULT hr = RegSetValueEx(hKey, 
+						   "GEM",
+						   NULL,
+						   REG_DWORD,
+						   (const BYTE *)&dwGemVal,
+						   dwSize);
+				RegCloseKey(hKey);
+			}
+		}
+		
+		if(CreateRegKeyStructure(HKEY_CURRENT_USER, TELEAPI_REGISTRY_AREA_X))
+		{
+			if(RegOpenKeyEx(HKEY_CURRENT_USER, 
+					TELEAPI_REGISTRY_AREA_X,
+					0,
+					KEY_WRITE,
+					&hKey) == ERROR_SUCCESS)
+			{
+				RegSetValueEx(hKey, 
+						   "GEM",
+						   NULL,
+						   REG_DWORD,
+						   (const BYTE *)&dwGemVal,
+						   dwSize);
+				RegCloseKey(hKey);
+			}
+		}
 
 		//
 		// Now we verify that there is a scope out there. We first try to
@@ -374,6 +430,15 @@ bool GetCanSlewAsync(void)
 bool GetCanSync(void)
 {
 	return(get_bool(L"CanSync"));
+}
+
+// ------------------
+// GetAlignmentMode()
+// ------------------
+//
+int GetAlignmentMode(void)
+{
+	return(get_integer(L"AlignmentMode"));
 }
 
 // -----------------
@@ -994,6 +1059,78 @@ short ConfigScope(void)
 // ===============
 // LOCAL UTILITIES
 // ===============
+
+// BADLY NEEDS REFACTORING!
+
+// -------------
+// get_integer()
+// -------------
+//
+// Get a named double property. If the property is not supported
+// then this raises a NOTIMPL exception and lets upstream code
+// decide what to do.
+//
+static int get_integer(OLECHAR *name)
+{
+	DISPID dispid;
+	VARIANT result;
+	DISPPARAMS dispparms;
+	EXCEPINFO excep;
+	char *cp;
+	char buf[256];
+
+	switchThreadIf();
+
+	//
+	// Get our dispatch ID
+	//
+	if(FAILED(_p_DrvDisp->GetIDsOfNames(
+		IID_NULL, 
+		&name, 
+		1, 
+		LOCALE_USER_DEFAULT,
+		&dispid)))
+	{
+		cp = uni_to_ansi(name);
+		wsprintf(buf, 
+			 "The selected telescope driver is missing the %s property.", cp);
+		delete[] cp;
+		drvFail(buf, NULL, true);
+	}
+
+	//
+	// No dispatch parameters for propget
+	//
+	dispparms.cArgs = 0;
+	dispparms.rgvarg = NULL;
+	dispparms.cNamedArgs = 0;
+	dispparms.rgdispidNamedArgs = NULL;
+	//
+	// Invoke the method
+	//
+	if(FAILED(_p_DrvDisp->Invoke(dispid, 
+				     IID_NULL, 
+				     LOCALE_USER_DEFAULT, 
+				     DISPATCH_PROPERTYGET,
+				     &dispparms, 
+				     &result, 
+				     &excep, 
+				     NULL)))
+	{
+		if(excep.scode == EXCEP_NOTIMPL)						// Optional
+			NOTIMPL;											// Resignal silently
+		else
+		{
+			cp = uni_to_ansi(name);
+			wsprintf(buf, 
+				 "Internal error reading from the %s property.", cp);
+			delete[] cp;
+			drvFail(buf, &excep, true);
+		}
+	}
+
+	return(result.intVal);										// Return integer result
+}
 
 // ------------
 // get_double()
