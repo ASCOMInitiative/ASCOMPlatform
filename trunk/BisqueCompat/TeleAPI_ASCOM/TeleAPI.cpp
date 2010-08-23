@@ -22,12 +22,20 @@
 
 const char *_szAlertTitle = "TheSky TeleAPI ASCOM Plugin";
 
-bool _bScopeCanSlew = false;                    // This is true if scope can slew at all
-bool _bScopeCanSlewAsync = false;               // This is true if scope can slew asynchronously
-bool _bScopeCanSync = false;                    // This is true if scope can be sync'ed
-bool _bScopeHasEqu = false;                     // This is true if scope provides RA/Dec
-bool _bScopeActive = false;                     // This is true if scope is active
+//
+// Mount characteristics
+//
+bool _bScopeCanSlew = false;                    // This is true if mount can slew at all
+bool _bScopeCanSlewAsync = false;               // This is true if mount can slew asynchronously
+bool _bScopeCanSync = false;                    // This is true if mount can be sync'ed
+bool _bScopeHasEqu = false;                     // This is true if mount provides RA/Dec
+bool _bScopeIsGEM = false;						// True if driver reports that mount is GEM
 char *_szScopeName = NULL;                      // Name for crosshair labeling (delete[])
+
+//
+// State variables
+//
+bool _bScopeActive = false;                     // This is true if mount is active
 HWND _hWndMain = NULL;							// For bringing to front after slew
 
 //

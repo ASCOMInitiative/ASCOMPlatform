@@ -27,10 +27,12 @@ extern bool _bScopeHasEqu;
 extern bool _bScopeCanSlew;
 extern bool _bScopeCanSlewAsync;
 extern bool _bScopeCanSync;
+extern bool _bScopeIsGEM;
 extern bool InitDrivers(void);
 extern short InitScope(void);
 extern void TermScope(bool);
 extern short ConfigScope(void);
+extern int GetAlignmentMode(void);
 extern bool GetCanSlew(void);
 extern bool GetCanSlewAsync(void);
 extern bool GetCanSync(void);
@@ -58,4 +60,4 @@ extern BSTR ansi_to_bstr(char *s);
 extern OLECHAR *ansi_to_uni(char *s);
 extern char *uni_to_ansi(OLECHAR *os);
 extern void drvFail(char *msg, EXCEPINFO *ei, bool bFatal);
-
+extern int CreateRegKeyStructure(HKEY hKey, const char *sPath);
