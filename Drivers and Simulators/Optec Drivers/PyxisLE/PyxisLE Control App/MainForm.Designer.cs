@@ -40,7 +40,6 @@
             this.AbsoluteMove_TB = new System.Windows.Forms.TextBox();
             this.AbsoluteMove_BTN = new System.Windows.Forms.Button();
             this.HomeDev_LBL = new System.Windows.Forms.Label();
-            this.RotatorDiagram = new System.Windows.Forms.PictureBox();
             this.label5 = new System.Windows.Forms.Label();
             this.RelativeForward_BTN = new System.Windows.Forms.Button();
             this.RelativeReverse_Btn = new System.Windows.Forms.Button();
@@ -70,9 +69,12 @@
             this.RelativePanel = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.HomePanel = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.RotatorDiagram = new System.Windows.Forms.PictureBox();
             this.StatusLabelTimer = new System.Windows.Forms.Timer(this.components);
+            this.ExternalControlTimer = new System.Windows.Forms.Timer(this.components);
             this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.RotatorDiagram)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Relative_NUD)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
@@ -81,6 +83,9 @@
             this.AbsPanel.SuspendLayout();
             this.RelativePanel.SuspendLayout();
             this.HomePanel.SuspendLayout();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RotatorDiagram)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -190,19 +195,6 @@
             this.HomeDev_LBL.Size = new System.Drawing.Size(87, 13);
             this.HomeDev_LBL.TabIndex = 9;
             this.HomeDev_LBL.Text = "Home Device:";
-            // 
-            // RotatorDiagram
-            // 
-            this.RotatorDiagram.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.RotatorDiagram.Cursor = System.Windows.Forms.Cursors.Cross;
-            this.RotatorDiagram.Location = new System.Drawing.Point(22, 56);
-            this.RotatorDiagram.Name = "RotatorDiagram";
-            this.RotatorDiagram.Size = new System.Drawing.Size(300, 300);
-            this.RotatorDiagram.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.RotatorDiagram.TabIndex = 10;
-            this.RotatorDiagram.TabStop = false;
-            this.RotatorDiagram.Click += new System.EventHandler(this.RotatorDiagram_Click);
-            this.RotatorDiagram.Paint += new System.Windows.Forms.PaintEventHandler(this.RotatorDiagram_Paint);
             // 
             // label5
             // 
@@ -416,9 +408,9 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.Controls.Add(this.SkyPAPanel, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.AbsPanel, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.RotatorDiagram, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.RelativePanel, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.HomePanel, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 1);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 27);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
@@ -484,10 +476,49 @@
             this.HomePanel.Size = new System.Drawing.Size(314, 37);
             this.HomePanel.TabIndex = 20;
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.pictureBox1);
+            this.panel1.Controls.Add(this.RotatorDiagram);
+            this.panel1.Location = new System.Drawing.Point(6, 52);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(327, 309);
+            this.panel1.TabIndex = 22;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::PyxisLE_Control.Properties.Resources.Optec_Logo_medium_png;
+            this.pictureBox1.Location = new System.Drawing.Point(-3, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(113, 45);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 11;
+            this.pictureBox1.TabStop = false;
+            // 
+            // RotatorDiagram
+            // 
+            this.RotatorDiagram.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.RotatorDiagram.Cursor = System.Windows.Forms.Cursors.Cross;
+            this.RotatorDiagram.Location = new System.Drawing.Point(13, 4);
+            this.RotatorDiagram.Name = "RotatorDiagram";
+            this.RotatorDiagram.Size = new System.Drawing.Size(300, 300);
+            this.RotatorDiagram.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.RotatorDiagram.TabIndex = 10;
+            this.RotatorDiagram.TabStop = false;
+            this.RotatorDiagram.Click += new System.EventHandler(this.RotatorDiagram_Click);
+            this.RotatorDiagram.Paint += new System.Windows.Forms.PaintEventHandler(this.RotatorDiagram_Paint);
+            // 
             // StatusLabelTimer
             // 
             this.StatusLabelTimer.Interval = 5000;
             this.StatusLabelTimer.Tick += new System.EventHandler(this.StatusLabelTimer_Tick);
+            // 
+            // ExternalControlTimer
+            // 
+            this.ExternalControlTimer.Interval = 1000;
+            this.ExternalControlTimer.Tick += new System.EventHandler(this.ExternalControlTimer_Tick);
             // 
             // MainForm
             // 
@@ -507,7 +538,6 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.RotatorDiagram)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Relative_NUD)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -521,6 +551,9 @@
             this.RelativePanel.PerformLayout();
             this.HomePanel.ResumeLayout(false);
             this.HomePanel.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RotatorDiagram)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -569,5 +602,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolStripMenuItem showAllToolStripMenuItem;
         private System.Windows.Forms.Timer StatusLabelTimer;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Timer ExternalControlTimer;
     }
 }

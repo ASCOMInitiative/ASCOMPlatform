@@ -60,6 +60,13 @@ namespace PyxisLE_Control.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Optec_Logo_medium_png {
+            get {
+                object obj = ResourceManager.GetObject("Optec_Logo_medium_png", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Rotator_FWD {
             get {
                 object obj = ResourceManager.GetObject("Rotator_FWD", resourceCulture);
