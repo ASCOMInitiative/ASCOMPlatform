@@ -43,6 +43,7 @@ namespace ASCOM.PyxisLE_ASCOM
     [ClassInterface(ClassInterfaceType.None)]
     public class Rotator : IRotator
     {
+
         //
         // Driver ID and descriptive string that shows in the Chooser
         //

@@ -28,26 +28,43 @@ namespace ASCOM.PyxisLE_ASCOM
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetupDialogForm));
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.picASCOM = new System.Windows.Forms.PictureBox();
             this.AttachedDevices_CB = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.CurrentPA_LBL = new System.Windows.Forms.Label();
             this.SetSkyPA_Btn = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.HomeBTN = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.Relative_NUD = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
+            this.RelativeForward_BTN = new System.Windows.Forms.Button();
+            this.RelativeReverse_BTN = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.Degree_LBL = new System.Windows.Forms.Label();
+            this.AbsoluteMove_TB = new System.Windows.Forms.TextBox();
+            this.AbsoluteMove_BTN = new System.Windows.Forms.Button();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.picASCOM = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Relative_NUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // cmdOK
             // 
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdOK.Location = new System.Drawing.Point(176, 367);
+            this.cmdOK.Location = new System.Drawing.Point(176, 447);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 0;
@@ -59,7 +76,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(70, 367);
+            this.cmdCancel.Location = new System.Drawing.Point(70, 447);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
@@ -69,25 +86,215 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 78);
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox1.Location = new System.Drawing.Point(12, 74);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(223, 66);
             this.textBox1.TabIndex = 4;
             this.textBox1.TabStop = false;
-            this.textBox1.Text = "Below is a list containing the serial numbers of any Pyxis LE Rotators that are c" +
-                "urrently connected to your PC. Select the device that you wish to use.";
+            this.textBox1.Text = "Below is a list containing the serial numbers of all Pyxis LE Rotators currently " +
+                "connected to your PC. Select the device that you wish to use.";
             // 
-            // pictureBox1
+            // AttachedDevices_CB
             // 
-            this.pictureBox1.Image = global::ASCOM.PyxisLE_ASCOM.Properties.Resources.Optec_Logo_medium_png;
-            this.pictureBox1.Location = new System.Drawing.Point(13, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(139, 56);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 5;
-            this.pictureBox1.TabStop = false;
+            this.AttachedDevices_CB.DisplayMember = "SerialNumber";
+            this.AttachedDevices_CB.FormattingEnabled = true;
+            this.AttachedDevices_CB.Location = new System.Drawing.Point(111, 143);
+            this.AttachedDevices_CB.Name = "AttachedDevices_CB";
+            this.AttachedDevices_CB.Size = new System.Drawing.Size(122, 21);
+            this.AttachedDevices_CB.TabIndex = 6;
+            this.AttachedDevices_CB.SelectionChangeCommitted += new System.EventHandler(this.AttachedDevices_CB_SelectionChangeCommitted);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 146);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(95, 13);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Attached Devices:";
+            // 
+            // textBox2
+            // 
+            this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox2.Location = new System.Drawing.Point(13, 199);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.ReadOnly = true;
+            this.textBox2.Size = new System.Drawing.Size(94, 13);
+            this.textBox2.TabIndex = 8;
+            this.textBox2.TabStop = false;
+            this.textBox2.Text = "Current Sky PA:";
+            // 
+            // CurrentPA_LBL
+            // 
+            this.CurrentPA_LBL.AutoSize = true;
+            this.CurrentPA_LBL.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CurrentPA_LBL.Location = new System.Drawing.Point(110, 197);
+            this.CurrentPA_LBL.Name = "CurrentPA_LBL";
+            this.CurrentPA_LBL.Size = new System.Drawing.Size(43, 15);
+            this.CurrentPA_LBL.TabIndex = 9;
+            this.CurrentPA_LBL.Text = "Angle°";
+            // 
+            // SetSkyPA_Btn
+            // 
+            this.SetSkyPA_Btn.Location = new System.Drawing.Point(168, 187);
+            this.SetSkyPA_Btn.Name = "SetSkyPA_Btn";
+            this.SetSkyPA_Btn.Size = new System.Drawing.Size(65, 37);
+            this.SetSkyPA_Btn.TabIndex = 10;
+            this.SetSkyPA_Btn.Text = "Set Sky PA...";
+            this.SetSkyPA_Btn.UseVisualStyleBackColor = true;
+            this.SetSkyPA_Btn.Click += new System.EventHandler(this.SetSkyPA_Btn_Click);
+            // 
+            // HomeBTN
+            // 
+            this.HomeBTN.Location = new System.Drawing.Point(101, 19);
+            this.HomeBTN.Name = "HomeBTN";
+            this.HomeBTN.Size = new System.Drawing.Size(47, 23);
+            this.HomeBTN.TabIndex = 4;
+            this.HomeBTN.Text = "Home";
+            this.HomeBTN.UseVisualStyleBackColor = true;
+            this.HomeBTN.Click += new System.EventHandler(this.HomeBTN_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.Relative_NUD);
+            this.groupBox1.Controls.Add(this.HomeBTN);
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.RelativeForward_BTN);
+            this.groupBox1.Controls.Add(this.RelativeReverse_BTN);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.Degree_LBL);
+            this.groupBox1.Controls.Add(this.AbsoluteMove_TB);
+            this.groupBox1.Controls.Add(this.AbsoluteMove_BTN);
+            this.groupBox1.Location = new System.Drawing.Point(13, 243);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(220, 183);
+            this.groupBox1.TabIndex = 12;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Motion Controls";
+            // 
+            // Relative_NUD
+            // 
+            this.Relative_NUD.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.Relative_NUD.DecimalPlaces = 2;
+            this.Relative_NUD.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.Relative_NUD.Location = new System.Drawing.Point(74, 153);
+            this.Relative_NUD.Maximum = new decimal(new int[] {
+            35999,
+            0,
+            0,
+            131072});
+            this.Relative_NUD.Name = "Relative_NUD";
+            this.Relative_NUD.Size = new System.Drawing.Size(73, 20);
+            this.Relative_NUD.TabIndex = 25;
+            this.Relative_NUD.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Relative_NUD.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            // 
+            // label5
+            // 
+            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(77, 136);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(64, 13);
+            this.label5.TabIndex = 23;
+            this.label5.Text = "Increment(°)";
+            // 
+            // RelativeForward_BTN
+            // 
+            this.RelativeForward_BTN.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.RelativeForward_BTN.Location = new System.Drawing.Point(174, 152);
+            this.RelativeForward_BTN.Name = "RelativeForward_BTN";
+            this.RelativeForward_BTN.Size = new System.Drawing.Size(30, 23);
+            this.RelativeForward_BTN.TabIndex = 24;
+            this.RelativeForward_BTN.Text = ">>";
+            this.RelativeForward_BTN.UseVisualStyleBackColor = true;
+            this.RelativeForward_BTN.Click += new System.EventHandler(this.RelativeForward_BTN_Click);
+            // 
+            // RelativeReverse_BTN
+            // 
+            this.RelativeReverse_BTN.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.RelativeReverse_BTN.Location = new System.Drawing.Point(16, 152);
+            this.RelativeReverse_BTN.Name = "RelativeReverse_BTN";
+            this.RelativeReverse_BTN.Size = new System.Drawing.Size(30, 23);
+            this.RelativeReverse_BTN.TabIndex = 19;
+            this.RelativeReverse_BTN.Text = "<<";
+            this.RelativeReverse_BTN.UseVisualStyleBackColor = true;
+            this.RelativeReverse_BTN.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label2
+            // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(6, 116);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(93, 13);
+            this.label2.TabIndex = 22;
+            this.label2.Text = "Relative Move:";
+            // 
+            // label3
+            // 
+            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(6, 56);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(155, 13);
+            this.label3.TabIndex = 21;
+            this.label3.Text = "Move to Absolute Sky PA:";
+            // 
+            // Degree_LBL
+            // 
+            this.Degree_LBL.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.Degree_LBL.AutoSize = true;
+            this.Degree_LBL.BackColor = System.Drawing.Color.White;
+            this.Degree_LBL.Location = new System.Drawing.Point(100, 81);
+            this.Degree_LBL.Name = "Degree_LBL";
+            this.Degree_LBL.Size = new System.Drawing.Size(11, 13);
+            this.Degree_LBL.TabIndex = 20;
+            this.Degree_LBL.Text = "°";
+            // 
+            // AbsoluteMove_TB
+            // 
+            this.AbsoluteMove_TB.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.AbsoluteMove_TB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AbsoluteMove_TB.Location = new System.Drawing.Point(43, 79);
+            this.AbsoluteMove_TB.Name = "AbsoluteMove_TB";
+            this.AbsoluteMove_TB.Size = new System.Drawing.Size(73, 20);
+            this.AbsoluteMove_TB.TabIndex = 18;
+            this.AbsoluteMove_TB.Text = "0";
+            this.AbsoluteMove_TB.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.AbsoluteMove_TB.Validating += new System.ComponentModel.CancelEventHandler(this.AbsoluteMove_TB_Validating);
+            // 
+            // AbsoluteMove_BTN
+            // 
+            this.AbsoluteMove_BTN.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.AbsoluteMove_BTN.Location = new System.Drawing.Point(140, 77);
+            this.AbsoluteMove_BTN.Name = "AbsoluteMove_BTN";
+            this.AbsoluteMove_BTN.Size = new System.Drawing.Size(37, 23);
+            this.AbsoluteMove_BTN.TabIndex = 19;
+            this.AbsoluteMove_BTN.Text = "Go";
+            this.AbsoluteMove_BTN.UseVisualStyleBackColor = true;
+            this.AbsoluteMove_BTN.Click += new System.EventHandler(this.AbsoluteMove_BTN_Click);
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
             // 
             // picASCOM
             // 
@@ -103,61 +310,35 @@ namespace ASCOM.PyxisLE_ASCOM
             this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
             this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
             // 
-            // AttachedDevices_CB
+            // pictureBox1
             // 
-            this.AttachedDevices_CB.DisplayMember = "SerialNumber";
-            this.AttachedDevices_CB.FormattingEnabled = true;
-            this.AttachedDevices_CB.Location = new System.Drawing.Point(113, 150);
-            this.AttachedDevices_CB.Name = "AttachedDevices_CB";
-            this.AttachedDevices_CB.Size = new System.Drawing.Size(122, 21);
-            this.AttachedDevices_CB.TabIndex = 6;
-            this.AttachedDevices_CB.SelectionChangeCommitted += new System.EventHandler(this.AttachedDevices_CB_SelectionChangeCommitted);
+            this.pictureBox1.Image = global::ASCOM.PyxisLE_ASCOM.Properties.Resources.Optec_Logo_medium_png;
+            this.pictureBox1.Location = new System.Drawing.Point(13, 3);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(139, 56);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 5;
+            this.pictureBox1.TabStop = false;
             // 
-            // label1
+            // label4
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 153);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(95, 13);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Attached Devices:";
-            // 
-            // textBox2
-            // 
-            this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox2.Location = new System.Drawing.Point(15, 188);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(94, 13);
-            this.textBox2.TabIndex = 8;
-            this.textBox2.TabStop = false;
-            this.textBox2.Text = "Current Sky PA:";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(97, 188);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(38, 13);
-            this.label2.TabIndex = 9;
-            this.label2.Text = "Angle°";
-            // 
-            // SetSkyPA_Btn
-            // 
-            this.SetSkyPA_Btn.Location = new System.Drawing.Point(154, 183);
-            this.SetSkyPA_Btn.Name = "SetSkyPA_Btn";
-            this.SetSkyPA_Btn.Size = new System.Drawing.Size(81, 23);
-            this.SetSkyPA_Btn.TabIndex = 10;
-            this.SetSkyPA_Btn.Text = "Set Sky PA...";
-            this.SetSkyPA_Btn.UseVisualStyleBackColor = true;
+            this.label4.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(6, 24);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(89, 13);
+            this.label4.TabIndex = 26;
+            this.label4.Text = "Home Rotator:";
             // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(247, 400);
+            this.ClientSize = new System.Drawing.Size(247, 480);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.SetSkyPA_Btn);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.CurrentPA_LBL);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.AttachedDevices_CB);
@@ -175,8 +356,12 @@ namespace ASCOM.PyxisLE_ASCOM
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PyxisLE_ASCOM Setup";
             this.Load += new System.EventHandler(this.SetupDialogForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Relative_NUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -192,7 +377,20 @@ namespace ASCOM.PyxisLE_ASCOM
         private System.Windows.Forms.ComboBox AttachedDevices_CB;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label CurrentPA_LBL;
         private System.Windows.Forms.Button SetSkyPA_Btn;
+        private System.Windows.Forms.Button HomeBTN;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label Degree_LBL;
+        private System.Windows.Forms.TextBox AbsoluteMove_TB;
+        private System.Windows.Forms.Button AbsoluteMove_BTN;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button RelativeReverse_BTN;
+        private System.Windows.Forms.NumericUpDown Relative_NUD;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button RelativeForward_BTN;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.Label label4;
     }
 }

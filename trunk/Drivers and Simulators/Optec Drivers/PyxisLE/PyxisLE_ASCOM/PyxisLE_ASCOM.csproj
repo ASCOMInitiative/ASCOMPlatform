@@ -66,18 +66,18 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
-   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-     <DebugSymbols>true</DebugSymbols>
-     <DebugType>full</DebugType>
-     <Optimize>false</Optimize>
-     <OutputPath>bin\x86\Debug\</OutputPath>
-     <DefineConstants>DEBUG;TRACE</DefineConstants>
-     <ErrorReport>prompt</ErrorReport>
-     <WarningLevel>4</WarningLevel>
-     <RegisterForComInterop>true</RegisterForComInterop>
-     <PlatformTarget>x86</PlatformTarget>
-   </PropertyGroup>
- <PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
@@ -99,8 +99,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SolutionVersion.cs">
@@ -117,11 +119,23 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="SetSkyPA_Frm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SetSkyPA_Frm.designer.cs">
+      <DependentUpon>SetSkyPA_Frm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SetupDialogForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SetupDialogForm.designer.cs">
       <DependentUpon>SetupDialogForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Warning1Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Warning1Form.Designer.cs">
+      <DependentUpon>Warning1Form.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -130,12 +144,19 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="SetSkyPA_Frm.resx">
+      <DependentUpon>SetSkyPA_Frm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SetupDialogForm.resx">
       <DependentUpon>SetupDialogForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Warning1Form.resx">
+      <DependentUpon>Warning1Form.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Optec.snk" />
     <None Include="Test.js" />
   </ItemGroup>

@@ -674,6 +674,29 @@ namespace PyxisLE_Control
 
 #endregion
 
+        private void ExternalControlTimer_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (myRotator != null)
+                {
+                    if (myRotator.IsAttached)
+                    {
+                        this.Invoke(new DelNoParms(UpdateSkyPATextbox));
+                        if (RotatorDiagram.Visible && RotatorDiagram.Enabled)
+                        {
+                            this.Invoke(new DelNoParms(RotatorDiagram.Refresh));
+                        }
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+                
+            }
+        }
+
         
 
         
