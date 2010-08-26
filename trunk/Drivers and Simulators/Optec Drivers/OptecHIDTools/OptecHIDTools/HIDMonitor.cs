@@ -414,27 +414,29 @@ namespace OptecHIDTools
                 //throw;
             }
 
-
-            for (int i = 0; i < _DetectedHIDs.Count; i++)
-            {
-                // Search for the device with a matching path
-                if (String.Compare(_DetectedHIDs[i].Path.ToUpper(), devicePathName.ToUpper()) == 0)
-                {
-                    OptecLogger.LogMessage(AssemblyName, ClassName, "Setting Device NotAttached:" + _DetectedHIDs[i].Path + 
-                        " Serial Number =" + _DetectedHIDs[i].SerialNumber, true);
-                    // Mark the device in the list as disconnected
-                    _DetectedHIDs[i].DeviceIsAttached = false;
-                    // Trigger the devices Removed event
-                    _DetectedHIDs[i].TriggerDeviceRemoved();
-                    // Trigger the Monitor's Removed event
-                    DeviceListChangedArgs e = new DeviceListChangedArgs(_DetectedHIDs[i].PID_Hex,
-                        _DetectedHIDs[i].VID_Hex, _DetectedHIDs[i].SerialNumber);
-                    TriggerHIDRemoved(e);
-                    return;
-                }
-            }
-            OptecLogger.LogMessage(AssemblyName, ClassName, "WARNING: A device was removed but a match was not found in the device list. " +
-                "This should not happen but it may not cause a problem.", true);
+            // 
+            // THIS CODE WAS REPLACED BY THE ABOVE CODE ON 8/26/2010
+            //
+            //for (int i = 0; i < _DetectedHIDs.Count; i++)
+            //{
+            //    // Search for the device with a matching path
+            //    if (String.Compare(_DetectedHIDs[i].Path.ToUpper(), devicePathName.ToUpper()) == 0)
+            //    {
+            //        OptecLogger.LogMessage(AssemblyName, ClassName, "Setting Device NotAttached:" + _DetectedHIDs[i].Path + 
+            //            " Serial Number =" + _DetectedHIDs[i].SerialNumber, true);
+            //        // Mark the device in the list as disconnected
+            //        _DetectedHIDs[i].DeviceIsAttached = false;
+            //        // Trigger the devices Removed event
+            //        _DetectedHIDs[i].TriggerDeviceRemoved();
+            //        // Trigger the Monitor's Removed event
+            //        DeviceListChangedArgs e = new DeviceListChangedArgs(_DetectedHIDs[i].PID_Hex,
+            //            _DetectedHIDs[i].VID_Hex, _DetectedHIDs[i].SerialNumber);
+            //        TriggerHIDRemoved(e);
+            //        return;
+            //    }
+            //}
+            //OptecLogger.LogMessage(AssemblyName, ClassName, "WARNING: A device was removed but a match was not found in the device list. " +
+            //    "This should not happen but it may not cause a problem.", true);
         }
 
         private static string GetManufacturerString(SafeFileHandle sfh)
