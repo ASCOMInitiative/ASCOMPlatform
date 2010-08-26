@@ -9,13 +9,13 @@ using System.Windows.Forms;
 using PyxisLE_API;
 using System.Reflection;
 
-namespace PyxisLE_Control
+namespace ASCOM.PyxisLE_ASCOM
 {
     public partial class AdvancedForm : Form
     {
-        private Rotator myRotator;
+        private PyxisLE_API.Rotator myRotator;
 
-        public AdvancedForm(Rotator r)
+        public AdvancedForm(PyxisLE_API.Rotator r)
         {
             InitializeComponent();
             myRotator = r;
@@ -66,9 +66,9 @@ namespace PyxisLE_Control
 
     class RotatorAdvancedSettingsUI
     {
-        private Rotator myRotator;
+        private PyxisLE_API.Rotator myRotator;
 
-        public RotatorAdvancedSettingsUI(Rotator r)
+        public RotatorAdvancedSettingsUI(PyxisLE_API.Rotator r)
         {
             myRotator = r;
         }

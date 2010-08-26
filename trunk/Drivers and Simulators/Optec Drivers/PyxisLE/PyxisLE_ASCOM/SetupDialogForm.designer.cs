@@ -28,7 +28,6 @@ namespace ASCOM.PyxisLE_ASCOM
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetupDialogForm));
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
@@ -40,6 +39,7 @@ namespace ASCOM.PyxisLE_ASCOM
             this.SetSkyPA_Btn = new System.Windows.Forms.Button();
             this.HomeBTN = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.Relative_NUD = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.RelativeForward_BTN = new System.Windows.Forms.Button();
@@ -49,22 +49,30 @@ namespace ASCOM.PyxisLE_ASCOM
             this.Degree_LBL = new System.Windows.Forms.Label();
             this.AbsoluteMove_TB = new System.Windows.Forms.TextBox();
             this.AbsoluteMove_BTN = new System.Windows.Forms.Button();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider();
             this.picASCOM = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.label4 = new System.Windows.Forms.Label();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.deviceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.advancedSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.diagnosticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Relative_NUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmdOK
             // 
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdOK.Location = new System.Drawing.Point(176, 447);
+            this.cmdOK.Location = new System.Drawing.Point(176, 469);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 0;
@@ -76,7 +84,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(70, 447);
+            this.cmdCancel.Location = new System.Drawing.Point(70, 469);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
@@ -88,7 +96,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(12, 74);
+            this.textBox1.Location = new System.Drawing.Point(12, 103);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
@@ -102,7 +110,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             this.AttachedDevices_CB.DisplayMember = "SerialNumber";
             this.AttachedDevices_CB.FormattingEnabled = true;
-            this.AttachedDevices_CB.Location = new System.Drawing.Point(111, 143);
+            this.AttachedDevices_CB.Location = new System.Drawing.Point(111, 172);
             this.AttachedDevices_CB.Name = "AttachedDevices_CB";
             this.AttachedDevices_CB.Size = new System.Drawing.Size(122, 21);
             this.AttachedDevices_CB.TabIndex = 6;
@@ -111,7 +119,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 146);
+            this.label1.Location = new System.Drawing.Point(9, 175);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(95, 13);
             this.label1.TabIndex = 7;
@@ -121,7 +129,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox2.Location = new System.Drawing.Point(13, 199);
+            this.textBox2.Location = new System.Drawing.Point(13, 228);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
             this.textBox2.Size = new System.Drawing.Size(94, 13);
@@ -133,7 +141,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             this.CurrentPA_LBL.AutoSize = true;
             this.CurrentPA_LBL.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CurrentPA_LBL.Location = new System.Drawing.Point(110, 197);
+            this.CurrentPA_LBL.Location = new System.Drawing.Point(110, 226);
             this.CurrentPA_LBL.Name = "CurrentPA_LBL";
             this.CurrentPA_LBL.Size = new System.Drawing.Size(43, 15);
             this.CurrentPA_LBL.TabIndex = 9;
@@ -141,7 +149,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             // SetSkyPA_Btn
             // 
-            this.SetSkyPA_Btn.Location = new System.Drawing.Point(168, 187);
+            this.SetSkyPA_Btn.Location = new System.Drawing.Point(168, 216);
             this.SetSkyPA_Btn.Name = "SetSkyPA_Btn";
             this.SetSkyPA_Btn.Size = new System.Drawing.Size(65, 37);
             this.SetSkyPA_Btn.TabIndex = 10;
@@ -172,12 +180,23 @@ namespace ASCOM.PyxisLE_ASCOM
             this.groupBox1.Controls.Add(this.Degree_LBL);
             this.groupBox1.Controls.Add(this.AbsoluteMove_TB);
             this.groupBox1.Controls.Add(this.AbsoluteMove_BTN);
-            this.groupBox1.Location = new System.Drawing.Point(13, 243);
+            this.groupBox1.Location = new System.Drawing.Point(13, 272);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(220, 183);
             this.groupBox1.TabIndex = 12;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Motion Controls";
+            // 
+            // label4
+            // 
+            this.label4.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(6, 24);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(89, 13);
+            this.label4.TabIndex = 26;
+            this.label4.Text = "Home Rotator:";
             // 
             // Relative_NUD
             // 
@@ -301,7 +320,7 @@ namespace ASCOM.PyxisLE_ASCOM
             this.picASCOM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picASCOM.Image = global::ASCOM.PyxisLE_ASCOM.Properties.Resources.ASCOM;
-            this.picASCOM.Location = new System.Drawing.Point(187, 12);
+            this.picASCOM.Location = new System.Drawing.Point(187, 41);
             this.picASCOM.Name = "picASCOM";
             this.picASCOM.Size = new System.Drawing.Size(48, 56);
             this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -313,29 +332,79 @@ namespace ASCOM.PyxisLE_ASCOM
             // pictureBox1
             // 
             this.pictureBox1.Image = global::ASCOM.PyxisLE_ASCOM.Properties.Resources.Optec_Logo_medium_png;
-            this.pictureBox1.Location = new System.Drawing.Point(13, 3);
+            this.pictureBox1.Location = new System.Drawing.Point(13, 32);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(139, 56);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 5;
             this.pictureBox1.TabStop = false;
             // 
-            // label4
+            // menuStrip1
             // 
-            this.label4.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(6, 24);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(89, 13);
-            this.label4.TabIndex = 26;
-            this.label4.Text = "Home Rotator:";
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.deviceToolStripMenuItem,
+            this.helpToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(247, 24);
+            this.menuStrip1.TabIndex = 13;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // deviceToolStripMenuItem
+            // 
+            this.deviceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.advancedSettingsToolStripMenuItem,
+            this.diagnosticsToolStripMenuItem});
+            this.deviceToolStripMenuItem.Name = "deviceToolStripMenuItem";
+            this.deviceToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+            this.deviceToolStripMenuItem.Text = "Device";
+            // 
+            // advancedSettingsToolStripMenuItem
+            // 
+            this.advancedSettingsToolStripMenuItem.Name = "advancedSettingsToolStripMenuItem";
+            this.advancedSettingsToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.advancedSettingsToolStripMenuItem.Text = "Advanced Settings";
+            this.advancedSettingsToolStripMenuItem.Click += new System.EventHandler(this.advancedSettingsToolStripMenuItem_Click);
+            // 
+            // diagnosticsToolStripMenuItem
+            // 
+            this.diagnosticsToolStripMenuItem.Name = "diagnosticsToolStripMenuItem";
+            this.diagnosticsToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.diagnosticsToolStripMenuItem.Text = "Diagnostics";
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutToolStripMenuItem,
+            this.checkForUpdatesToolStripMenuItem,
+            this.documentationToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.aboutToolStripMenuItem.Text = "About";
+            // 
+            // checkForUpdatesToolStripMenuItem
+            // 
+            this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
+            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.checkForUpdatesToolStripMenuItem.Text = "Check for Updates";
+            // 
+            // documentationToolStripMenuItem
+            // 
+            this.documentationToolStripMenuItem.Name = "documentationToolStripMenuItem";
+            this.documentationToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.documentationToolStripMenuItem.Text = "Documentation";
             // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(247, 480);
+            this.ClientSize = new System.Drawing.Size(247, 502);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.SetSkyPA_Btn);
             this.Controls.Add(this.CurrentPA_LBL);
@@ -347,8 +416,10 @@ namespace ASCOM.PyxisLE_ASCOM
             this.Controls.Add(this.cmdCancel);
             this.Controls.Add(this.cmdOK);
             this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SetupDialogForm";
@@ -362,6 +433,8 @@ namespace ASCOM.PyxisLE_ASCOM
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -392,5 +465,13 @@ namespace ASCOM.PyxisLE_ASCOM
         private System.Windows.Forms.Button RelativeForward_BTN;
         private System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem deviceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem advancedSettingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem diagnosticsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem checkForUpdatesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem documentationToolStripMenuItem;
     }
 }
