@@ -107,7 +107,7 @@ namespace PyxisLE_API
                     DetectedRotators.Add(new Rotator(x));
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             { 
                 throw;
             }

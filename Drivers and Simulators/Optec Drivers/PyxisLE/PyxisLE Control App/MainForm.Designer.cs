@@ -535,7 +535,9 @@
             this.MinimumSize = new System.Drawing.Size(385, 38);
             this.Name = "MainForm";
             this.Text = "Pyxis LE Control";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Relative_NUD)).EndInit();

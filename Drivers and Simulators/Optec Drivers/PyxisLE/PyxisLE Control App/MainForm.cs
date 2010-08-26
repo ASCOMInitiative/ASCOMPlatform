@@ -161,7 +161,7 @@ namespace PyxisLE_Control
             }
             catch (Exception ex)
             {
-                OptecLogger.LogMessage(ex.Message);
+                OptecLogger.LogMessageBasic(ex.Message);
                 DisableControls();
                 throw;
             }
@@ -258,7 +258,7 @@ namespace PyxisLE_Control
             }
             catch (Exception ex)
             {
-                OptecLogger.LogMessage("An exception was caught while trying to update controls for PyxisLE_Control." +
+                OptecLogger.LogMessageBasic("An exception was caught while trying to update controls for PyxisLE_Control." +
                     " This is likely caused by unplugging the device while it is homing" + ex.Message);
                 disableControls();
             }
@@ -695,6 +695,17 @@ namespace PyxisLE_Control
             {
                 
             }
+        }
+
+        private void MainForm_Shown(object sender, EventArgs e)
+        {
+            ExternalControlTimer.Enabled = true;
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ExternalControlTimer.Stop();
+            ExternalControlTimer.Enabled = false;
         }
 
         

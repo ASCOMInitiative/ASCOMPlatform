@@ -13,7 +13,7 @@ namespace TestOptecHID
 {
     public partial class Form1 : Form
     {
-        HIDMonitor myHID = null;
+        //HIDMonitor myHID = null;
         public Form1()
         {
             InitializeComponent();
@@ -145,7 +145,7 @@ namespace TestOptecHID
         {
             button1.Enabled = true;
             //USBDevice x = (USBDevice)comboBox1.SelectedItem;
-            int i = comboBox1.SelectedIndex;
+            //int i = comboBox1.SelectedIndex;
             
            // myHID = new HIDMonitor(i);
            // MessageBox.Show(myHID.SelectedDevice.DeviceIsAttached.ToString());

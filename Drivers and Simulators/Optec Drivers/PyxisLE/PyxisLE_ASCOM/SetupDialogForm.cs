@@ -16,7 +16,7 @@ namespace ASCOM.PyxisLE_ASCOM
     public partial class SetupDialogForm : Form
     {
         Rotators RotatorManager;
-        PyxisLE_API.Rotator myRotator;
+        private PyxisLE_API.Rotator myRotator;
         private Utilities.Profile myProfile = new Utilities.Profile();
         private string selectedSerialNumber = "0";
         private Thread MotionMonitorThread;
@@ -160,9 +160,9 @@ namespace ASCOM.PyxisLE_ASCOM
 
             try
             {
-                PyxisLE_API.Rotator r = sndr.SelectedItem as PyxisLE_API.Rotator;
-                CurrentPA_LBL.Text = r.CurrentSkyPA.ToString();
-                myRotator = r;
+                myRotator = sndr.SelectedItem as PyxisLE_API.Rotator;
+                UpdateSkyPALabel();
+                
             }
             catch
             {
@@ -295,6 +295,23 @@ namespace ASCOM.PyxisLE_ASCOM
             if (NewPositon > 360) NewPositon = NewPositon - 360;
             if (NewPositon < 0) NewPositon = NewPositon + 360;
             StartAMove(NewPositon);
+        }
+
+        private void advancedSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                AdvancedForm frm = new AdvancedForm(myRotator);
+                frm.ShowDialog();
+                frm.Dispose();
+                //EnableControls();
+                MotionMonitor();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+
         }
     }
 }

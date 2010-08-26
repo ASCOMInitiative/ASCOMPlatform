@@ -138,7 +138,10 @@ namespace OptecHID_FilterWheelAPI
 
         public short ErrorState
         {
-            get { return errorState; }
+            get {
+                RefreshDeviceStatus();
+                return errorState; 
+            }
             set { errorState = value; }
         }
 

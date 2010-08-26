@@ -24,10 +24,16 @@ namespace OptecHIDTools
         private static System.Guid HIDGuid;
         private static IntPtr DeviceNotificationHandle;
         private static bool _Registered = false;
+        private static int InstanceCounter = 0;
+        private const string AssemblyName = "OptecHIDTools";
+        private const string ClassName = "DeviceChangeNotifier";
 
 
         static DeviceChangeNotifier()
         {
+            OptecLogger.LogMessage(AssemblyName, ClassName, "Creating instance of DeviceChangeNotifier. Instance Number " +
+                InstanceCounter.ToString(), false);
+            Interlocked.Increment(ref InstanceCounter);
         }
  
         internal static bool Registered
@@ -47,6 +53,7 @@ namespace OptecHIDTools
         {
             try
             {
+                OptecLogger.LogMessage(AssemblyName, ClassName, "Starting DeviceChangeNotifier Thread", true);
                 if (mInstance != null) return;
                 HIDGuid = guid;
                 Thread t = new Thread(runForm);
@@ -57,11 +64,13 @@ namespace OptecHIDTools
                 {
                     Application.DoEvents();
                 }
+                OptecLogger.LogMessage(AssemblyName, ClassName, "DeviceChangeNotifier Thread Started. Instance of notifier form created successfully!", true);
             }
             catch (Exception ex)
             {
                 _Registered = false;
-                Trace.WriteLine("EXCEPTION THROWN by DeviceChangeNotifier.Start: " + ex.ToString());
+                OptecLogger.LogMessage(AssemblyName, ClassName, "EXCEPTION THROWN by DeviceChangeNotifier.Start: " 
+                    + ex.ToString(), false);
                 throw;
             }
         }
@@ -86,21 +95,23 @@ namespace OptecHIDTools
             catch (Exception ex)
             {
                 _Registered = false;
-                Trace.WriteLine("EXCEPTION THROWN by DeviceChangeNotifier.RegisterForNotifications: " + ex.ToString());
+                OptecLogger.LogException(ex);
                 throw new ApplicationException("Error Registering For Notifications", ex);
             }
         }
 
         internal static void UnregisterForNotifications()
         {
+            OptecLogger.LogMessage(AssemblyName, ClassName, "Unregistering for Device Change Notifications", true);
             Setup_API_Wrappers.UnregisterDeviceNotification(DeviceNotificationHandle);
-            Trace.WriteLine("Unregisteration Completed");
+            OptecLogger.LogMessage(AssemblyName, ClassName, "Unregisteration complete!", true);
         }
 
         private void Register()
         {
             try
             {
+                OptecLogger.LogMessage(AssemblyName, ClassName, "Registering for Device Change Notifications", true);
                 Setup_API_Wrappers.DeviceBroadcastInterface devBDI = new Setup_API_Wrappers.DeviceBroadcastInterface();
                 IntPtr devBDI_Buffer;
 
@@ -113,14 +124,14 @@ namespace OptecHIDTools
 
                 devBDI_Buffer = Marshal.AllocHGlobal(size);
                 Marshal.StructureToPtr(devBDI, devBDI_Buffer, true);
-                Trace.WriteLine("Registering For Device Notifications");
                 DeviceNotificationHandle = Setup_API_Wrappers.RegisterDeviceNotification(this.Handle, devBDI_Buffer, 0);
-                Trace.WriteLine("Registeration Completed");
+                
                 Marshal.FreeHGlobal(devBDI_Buffer);
+                OptecLogger.LogMessage(AssemblyName, ClassName, "Registeration complete!", true);
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("EXCEPTION THROWN by DeviceChangeNotifier.Register: " + ex.ToString());
+                OptecLogger.LogException(ex);
                 throw;
             }
         }
@@ -133,6 +144,7 @@ namespace OptecHIDTools
  
         private void endForm()
         {
+            OptecLogger.LogMessage(AssemblyName, ClassName, "Closing DeviceChangeNotification Form", true);
             this.Close();
         }
 
@@ -159,8 +171,9 @@ namespace OptecHIDTools
         {
             if (message.WParam.ToInt32() == DBT_DEVICEARRIVAL)
             {
+                
                 // A device has been attached
-                Trace.WriteLine("DEVICE ARRIVAL DETECTED");
+                OptecLogger.LogMessage(AssemblyName, ClassName, "WndProc message received - DEVICE ARRIVAL", true);
                 string path = GetDevicePath(message);
                 HIDMonitor.AttachDevice(path);
                 //OptecHID.RefreshDeviceList(true);
@@ -168,10 +181,9 @@ namespace OptecHIDTools
             else if (message.WParam.ToInt32() == DBT_DEVICEREMOVECOMPLETE)
             {
                 // A device has been removed
-                Trace.WriteLine("DEVICE REMOVAL DETECTED");
+                OptecLogger.LogMessage(AssemblyName, ClassName, "WndProc message received - DEVICE REMOVAL", true);
                 string path = GetDevicePath(message);
-                if (path != "") HIDMonitor.SetDeviceDisconnected(path);
-                
+                if (path != "") HIDMonitor.SetDeviceDisconnected(path); 
             }
         }
 
@@ -215,9 +227,6 @@ namespace OptecHIDTools
             }
             return "";
         }
-
-
- 
 
     }
     

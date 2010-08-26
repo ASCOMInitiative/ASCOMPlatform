@@ -30,6 +30,7 @@ namespace PyxisLE_API
         private char deviceType = '?';
         private bool reverseProperty = false;
         private bool returnToLast = false;
+        private object RefreshingInfoLock = new object();
 
 
         private Thread HomeThread;
@@ -81,9 +82,15 @@ namespace PyxisLE_API
         {
             try
             {
-                InputReport DescriptionReport = new InputReport(Rotators.REPORTID_INPUT_DEVICE_DESC);
-                this.selectedDevice.RequestInputReport_Control(DescriptionReport);
-                ParseDeviceDescription(DescriptionReport);
+                lock (RefreshingInfoLock)
+                {
+#if DEBUG
+                    Trace.WriteLine("Refresing Device Description");
+#endif
+                    InputReport DescriptionReport = new InputReport(Rotators.REPORTID_INPUT_DEVICE_DESC);
+                    this.selectedDevice.RequestInputReport_Control(DescriptionReport);
+                    ParseDeviceDescription(DescriptionReport);
+                }
             }
             catch (Exception ex)
             {
@@ -179,11 +186,20 @@ namespace PyxisLE_API
 
         private void RefreshDeviceStatus()
         {
+            
             try
             {
-                InputReport StatusReport = new InputReport(Rotators.REPORTID_INPUT_DEVICE_STATUS);
-                this.selectedDevice.RequestInputReport_Control(StatusReport);
-                ParseDeviceStatus(StatusReport);
+                lock (RefreshingInfoLock)
+                {
+                    #if DEBUG
+                    Trace.WriteLine("Refresing Device Status");
+                    #endif
+                    InputReport StatusReport = new InputReport(Rotators.REPORTID_INPUT_DEVICE_STATUS);
+                    this.selectedDevice.RequestInputReport_Control(StatusReport);
+                    ParseDeviceStatus(StatusReport);
+                }
+                
+
             }
             catch (Exception ex)
             {
@@ -206,8 +222,7 @@ namespace PyxisLE_API
             //Check that enough bytes were received
             if (StatusReport.ReceivedData.Length < 18) throw new ApplicationException("Device Status Not Received!");
 
-            //Check if an ErrorState is set
-
+            
 
             // Convert the received bytes to usable types
             rReportID = Convert.ToInt16(StatusReport.ReceivedData[0]);
@@ -232,6 +247,9 @@ namespace PyxisLE_API
             rIsMoving = Convert.ToInt16(StatusReport.ReceivedData[11]);
             rErrorState = Convert.ToInt16(StatusReport.ReceivedData[13]);
 
+            //Check if an ErrorState is set
+            this.errorState = rErrorState;
+            if (this.errorState != 0) return;
 
             // Verify the ReportID is correct
             if (rReportID != Rotators.REPORTID_INPUT_DEVICE_STATUS)
@@ -264,10 +282,16 @@ namespace PyxisLE_API
             if (rIsMoving == Rotators.REPORT_TRUE)
             {
                 this.isMoving = true;
+                #if DEBUG
+                Trace.WriteLine("Device is Moving");
+                #endif
             }
             else if (rIsMoving == Rotators.REPORT_FALSE)
             {
                 this.isMoving = false;
+#if DEBUG
+                Trace.WriteLine("Device is  NOT Moving");
+#endif
             }
             else throw new ApplicationException("Invalid data received for IsMoving value");
 
@@ -295,22 +319,33 @@ namespace PyxisLE_API
 
         public bool IsHomed
         {
-            get { return isHomed; }
+            get {
+                RefreshDeviceStatus();
+                return isHomed; }
         }
 
         public bool IsHoming
         {
-            get { return isHoming; }
+            get {
+                RefreshDeviceStatus();
+                return isHoming; }
         }
 
         public bool IsMoving
         {
-            get { return isMoving; }
+            get 
+            {
+                RefreshDeviceStatus();
+                return isMoving; 
+            }
         }
 
         public short ErrorState
         {
-            get { return errorState; }
+            get {
+                RefreshDeviceStatus();
+                return errorState;
+            }
         }
 
         public string FirmwareVersion
@@ -464,6 +499,7 @@ namespace PyxisLE_API
                 // Start the HomeMonitor thread
                 ThreadStart ts = new ThreadStart(this.HomeMonitor);
                 HomeThread = new Thread(ts);
+                HomeThread.Name = "HomeThread in Rotator Class";
                 HomeThread.Start();
             }
         }
@@ -499,6 +535,7 @@ namespace PyxisLE_API
                 // Start the HomeMonitor thread
                 ThreadStart ts = new ThreadStart(this.HomeMonitor);
                 HomeThread = new Thread(ts);
+                HomeThread.Name = "Home Thread in Rotator class";
                 HomeThread.Start();
               
                 
@@ -621,9 +658,11 @@ namespace PyxisLE_API
 
         private void ChangeDevicePA(double NewPos)
         {
-
+            Trace.Write("Move Requested to " + NewPos.ToString() + Environment.NewLine);
             // First check that the new pos is in the range of 0-359.9999999
             if ((NewPos < 0) || NewPos > 360) throw new ApplicationException("New Position is outside the acceptable range.");
+            // Next check that it's not the same as the current position
+            if (NewPos == this.CurrentDevicePA) return;
             // Convert degrees to steps
             UInt32 NewPosInt = (uint)Math.Round((NewPos * (double)this.StepsPerRev / (double)360));
             byte[] datatosend = new byte[] { };
@@ -638,22 +677,46 @@ namespace PyxisLE_API
 
             // Send the Report
             this.selectedDevice.ProcessFeatureReport(MoveReport);
-            RefreshDeviceStatus();
+
+            Trace.Write("Move Feature Report Sent. " );
+            foreach (byte b in MoveReport.DataToSend)
+            {
+                Trace.Write(b.ToString() + "-");
+            }
+            Trace.WriteLine(" ");
 
             // Check that no error codes were set
             if (MoveReport.Response2[3] != 0)
             {
                 errorState = Convert.ToInt16(MoveReport.Response2[3]);
-                string msg = GetErrorMessage(errorState);
+                string msg = "Error Message = " +  GetErrorMessage(errorState);
+                throw new ApplicationException("Firmware error code set while requesting move. " + msg);
             }
+
+            //// check if the device started the move
+
+            if (MoveReport.Response2[2] != Rotators.REPORT_TRUE)
+            {
+                throw new ApplicationException("Device did not start home as requested.");
+            }
+
+            //int retryCounter = 0;
+            //while (this.IsMoving == false)
+            //{
+            //    if (retryCounter == 20) throw new ApplicationException("Device never started move. Did you request a move to the current position?");
+            //    System.Threading.Thread.Sleep(50);
+            //    RefreshDeviceStatus();
+            //    retryCounter++;
+            //}
 
             // Start the MoveMonitor thread
             ThreadStart ts = new ThreadStart(this.MoveMonitor);
             MoveThread = new Thread(ts);
+            MoveThread.Name = "Move Thread in Rotator class";
             MoveThread.Start();
         }
 
-        private string GetErrorMessage(short errorState)
+        public string GetErrorMessage(short errorState)
         {
             try
             {
@@ -675,6 +738,7 @@ namespace PyxisLE_API
 
         public void Home()
         {
+            Trace.Write("Home Requested");
             byte[] datatosend = new byte[] { };
 
             // Create the report to send
@@ -698,9 +762,13 @@ namespace PyxisLE_API
                 string msg = GetErrorMessage(errorState);
             }
 
+            // Refresh the device status
+            RefreshDeviceStatus();
+            
             // Start the HomeMonitor thread
             ThreadStart ts = new ThreadStart(this.HomeMonitor);
             HomeThread = new Thread(ts);
+            HomeThread.Name = "Home Thread in Rotator Class";
             HomeThread.Start();
         }
 
@@ -722,6 +790,18 @@ namespace PyxisLE_API
 
 
             }
+        }
+
+        public void ClearErrorState()
+        {
+            // Prepare the output report to send
+            OutputReport ClearErrorReport = new OutputReport(Rotators.REPORTID_OUTPUT_CLEAR_ERROR, new byte[]{0});
+            // send the report
+            this.selectedDevice.SendReport_Control(ClearErrorReport);
+            // Check the error state
+            RefreshDeviceStatus();
+            if (this.errorState != 0) throw new ApplicationException("Error state was not successfully cleared. Error state is set at " + this.ErrorState.ToString() +
+                 ". Error message = " + GetErrorMessage(this.ErrorState));
         }
     }
 }
