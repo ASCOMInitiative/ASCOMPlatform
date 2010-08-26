@@ -8,7 +8,6 @@ using System.Diagnostics;
 using OptecHIDTools;
 using System.Windows.Forms;
 using System.Threading;
-using OptecLogging;
 
 namespace PyxisLE_API
 {
@@ -42,15 +41,31 @@ namespace PyxisLE_API
         internal const byte REPORT_FALSE = 0;
 
         private Thread RefreshRotatorListThread;
+        private static int InstanceCounter = 0;
+        private int InstanceID;
+        private const string AssemblyName = "PyxisLE_API";
+        private const string ClassName = "Rotators";
 
         public Rotators()
         {
-            OptecLogger.LogMessage("*******************************************************************");
-            OptecLogger.LogMessage("**************Rotator API Constructer Called***********************");
-            HIDMonitor.HIDAttached += new EventHandler(HIDMonitor_HIDAttached);
-            HIDMonitor.HIDRemoved += new EventHandler(HIDMonitor_HIDRemoved);
+            try
+            {
+                this.InstanceID = InstanceCounter;
+                Interlocked.Increment(ref InstanceCounter);
 
-            StartRefreshingRotatorList();
+                Logger.LogMessage(AssemblyName, ClassName, "Creating instance(" + this.InstanceID.ToString() +
+                    ") of Rotator class", false);
+                HIDMonitor.HIDAttached += new EventHandler(HIDMonitor_HIDAttached);
+
+                HIDMonitor.HIDRemoved += new EventHandler(HIDMonitor_HIDRemoved);
+
+                StartRefreshingRotatorList();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex);
+                throw;
+            }
         }
 
         void HIDMonitor_HIDRemoved(object sender, EventArgs e)
@@ -65,7 +80,7 @@ namespace PyxisLE_API
 
             if ((deviceInfo.PID == ROTATOR_PID) && (deviceInfo.VID == OPTEC_VID))
             {
-                OptecLogger.LogMessage("Rotator Removed - Serial Number = " + deviceInfo.SerialNumber);
+                Logger.LogMessage(AssemblyName, ClassName, "Rotator Removed - Serial Number = " + deviceInfo.SerialNumber, false);
                 TriggerAnEvent(RotatorRemoved);
             }
         }
@@ -81,8 +96,8 @@ namespace PyxisLE_API
             DeviceListChangedArgs deviceInfo = (DeviceListChangedArgs)e;
             if ((deviceInfo.PID == ROTATOR_PID) && (deviceInfo.VID == OPTEC_VID))
             {
+                Logger.LogMessage(AssemblyName, ClassName, "Rotator Attached - Serial Number = " + deviceInfo.SerialNumber, false);
                 TriggerAnEvent(RotatorAttached);
-                OptecLogger.LogMessage("Rotator Attached - Serial Number = " + deviceInfo.SerialNumber);
             }
         }
 
@@ -97,18 +112,19 @@ namespace PyxisLE_API
         {
             try
             {
+                Logger.LogMessage(AssemblyName, ClassName, "Refreshing Rotator List", true);
                 DetectedRotators.Clear();
                 List<HID> detectedHIDs = HIDMonitor.DetectedHIDs;
                 detectedHIDs = detectedHIDs.Where(d => d.PID_Hex == ROTATOR_PID).ToList();
                 detectedHIDs = detectedHIDs.Where(d => d.DeviceIsAttached == true).ToList();
                 foreach (HID x in detectedHIDs)
                 {
-
                     DetectedRotators.Add(new Rotator(x));
                 }
             }
-            catch (Exception)
-            { 
+            catch (Exception ex)
+            {
+                Logger.LogException(ex);
                 throw;
             }
         }
@@ -150,14 +166,13 @@ namespace PyxisLE_API
 
             try
             {
-                OptecLogger.LogMessage("EndAsyncEvent Method called");
                 invokedMethod.EndInvoke(iar);
             }
-            catch
+            catch (Exception ex)
             {
                 // Handle any exceptions that were thrown by the invoked method
-                OptecLogger.LogMessage("An event listener went kaboom!");
-                Console.WriteLine("An event listener went kaboom!");
+                Logger.LogException(ex);
+                // Don't throw this because I don't know what to do with it...
             }
         }
     }
