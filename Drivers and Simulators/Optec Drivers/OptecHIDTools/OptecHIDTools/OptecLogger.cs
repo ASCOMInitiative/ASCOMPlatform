@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace OptecHIDTools
 {
-    class OptecLogger
+    public class OptecLogger
     {
         private static StreamWriter myStreamWriter;
         private static string MyDocsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
