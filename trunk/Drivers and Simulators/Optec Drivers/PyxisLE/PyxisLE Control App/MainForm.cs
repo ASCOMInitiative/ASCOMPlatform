@@ -9,7 +9,6 @@ using System.Windows.Forms;
 using PyxisLE_API;
 using System.Collections;
 using System.Threading;
-using OptecLogging;
 
 namespace PyxisLE_Control
 {
@@ -161,7 +160,7 @@ namespace PyxisLE_Control
             }
             catch (Exception ex)
             {
-                OptecLogger.LogMessageBasic(ex.Message);
+                Logger.
                 DisableControls();
                 throw;
             }

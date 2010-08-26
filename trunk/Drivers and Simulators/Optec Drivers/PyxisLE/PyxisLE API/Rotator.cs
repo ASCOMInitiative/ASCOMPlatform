@@ -5,7 +5,7 @@ using System.Text;
 using OptecHIDTools;
 using System.Diagnostics;
 using System.Threading;
-using OptecLogging;
+
 
 
 namespace PyxisLE_API
@@ -30,7 +30,7 @@ namespace PyxisLE_API
         private char deviceType = '?';
         private bool reverseProperty = false;
         private bool returnToLast = false;
-        private object RefreshingInfoLock = new object();
+        private static object RefreshingInfoLock = new object();
 
 
         private Thread HomeThread;
@@ -40,9 +40,19 @@ namespace PyxisLE_API
         public event EventHandler MoveFinished;
         public event EventHandler DeviceUnplugged;
 
+        private static int InstanceCounter = 0;
+        private int InstanceID = 0;
+
+        private const string ClassName = "Rotator";
+        private const string AssemblyName = "PyxisLE_API";
+
         public Rotator(HID Device)
         {
-            OptecLogger.LogMessage("Rotator Constructor called for HID with serial number " + Device.SerialNumber);
+            this.InstanceID = InstanceCounter;
+            Interlocked.Increment(ref InstanceCounter);
+
+            Logger.LogMessage(AssemblyName, ClassName, "Creating instance(" + this.InstanceID.ToString() + 
+                ") of Rotator class for serial number: " + Device.SerialNumber, false);
             this.selectedDevice = Device;
             this.manufacturer = Device.Manufacturer;
             this.name = Device.ProductDescription;
@@ -72,9 +82,8 @@ namespace PyxisLE_API
             }
             catch (Exception ex)
             {
-                OptecLogger.LogMessage("An exception was thrown while Rotator device was being constructed. " +
-                    "This may have been caused by the device being unplugged. Exception message = \"" + ex.Message + "\"");
-            
+                OptecLogger.LogException(ex);
+                throw ex;
             }
         }
 
@@ -84,9 +93,7 @@ namespace PyxisLE_API
             {
                 lock (RefreshingInfoLock)
                 {
-#if DEBUG
-                    Trace.WriteLine("Refresing Device Description");
-#endif
+                    Logger.LogMessage(AssemblyName, ClassName, "Rotator instance " + this.InstanceID.ToString() + " called RefreshDeviceDescription", true);
                     InputReport DescriptionReport = new InputReport(Rotators.REPORTID_INPUT_DEVICE_DESC);
                     this.selectedDevice.RequestInputReport_Control(DescriptionReport);
                     ParseDeviceDescription(DescriptionReport);
@@ -94,7 +101,7 @@ namespace PyxisLE_API
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("EXCEPTION THROWN in Rotator.RefershDeviceDescription: \n" + ex.ToString());
+                Logger.LogException(ex);
                 throw;
             }
         }
@@ -174,12 +181,10 @@ namespace PyxisLE_API
                 if (rreturnToLast == Rotators.REPORT_TRUE) this.returnToLast = true;
                 else if (rreturnToLast == Rotators.REPORT_FALSE) this.returnToLast = false;
                 else throw new ApplicationException("Invalid data received for ReturnToLast property");
-
-
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("EXCEPTION THROWN in Rotator.ParseDeviceDescription: \n" + ex.ToString());
+                Logger.LogException(ex);
                 throw;
             }
         }
@@ -197,116 +202,122 @@ namespace PyxisLE_API
                     InputReport StatusReport = new InputReport(Rotators.REPORTID_INPUT_DEVICE_STATUS);
                     this.selectedDevice.RequestInputReport_Control(StatusReport);
                     ParseDeviceStatus(StatusReport);
-                }
-                
-
+                } 
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("EXCEPTION THROWN in Rotator.RefreshDeviceStatus: \n" + ex.ToString());
+                Logger.LogException(ex);
                 throw;
             }
         }
 
         private void ParseDeviceStatus(InputReport StatusReport)
         {
-            short rReportID = 0;
-            short rIsHomed = 0;
-            short rIsHoming = 0;
-            short rIsMoving = 0;
-            double rCurrentPosition = 0;
-            double rTargetPosition = 0;
-            short rErrorState = 0;
+            try
+            {
+                short rReportID = 0;
+                short rIsHomed = 0;
+                short rIsHoming = 0;
+                short rIsMoving = 0;
+                double rCurrentPosition = 0;
+                double rTargetPosition = 0;
+                short rErrorState = 0;
 
-            //TODO: Enter the correct number of bytes here.
-            //Check that enough bytes were received
-            if (StatusReport.ReceivedData.Length < 18) throw new ApplicationException("Device Status Not Received!");
+                //TODO: Enter the correct number of bytes here.
+                //Check that enough bytes were received
+                if (StatusReport.ReceivedData.Length < 18) throw new ApplicationException("Device Status Not Received!");
 
-            
 
-            // Convert the received bytes to usable types
-            rReportID = Convert.ToInt16(StatusReport.ReceivedData[0]);
+                // Convert the received bytes to usable types
+                rReportID = Convert.ToInt16(StatusReport.ReceivedData[0]);
 
-            // NOTE: When converting to Ints I reverse the bytes because the MCU is LittleEndian.
-            rCurrentPosition = BitConverter.ToInt32(
-                new byte[] { 
+                // NOTE: When converting to Ints I reverse the bytes because the MCU is LittleEndian.
+                rCurrentPosition = BitConverter.ToInt32(
+                    new byte[] { 
                     StatusReport.ReceivedData[1],
                     StatusReport.ReceivedData[2],
                     StatusReport.ReceivedData[3],
                     StatusReport.ReceivedData[4]}, 0);
-            // NOTE: When converting to Ints I reverse the bytes because the MCU is LittleEndian.
-            rTargetPosition = BitConverter.ToInt32(
-                new byte[] {
+                // NOTE: When converting to Ints I reverse the bytes because the MCU is LittleEndian.
+                rTargetPosition = BitConverter.ToInt32(
+                    new byte[] {
                     StatusReport.ReceivedData[5],
                     StatusReport.ReceivedData[6],
                     StatusReport.ReceivedData[7],
                     StatusReport.ReceivedData[8]}, 0);
 
-            rIsHomed = Convert.ToInt16(StatusReport.ReceivedData[9]);
-            rIsHoming = Convert.ToInt16(StatusReport.ReceivedData[10]);
-            rIsMoving = Convert.ToInt16(StatusReport.ReceivedData[11]);
-            rErrorState = Convert.ToInt16(StatusReport.ReceivedData[13]);
+                rIsHomed = Convert.ToInt16(StatusReport.ReceivedData[9]);
+                rIsHoming = Convert.ToInt16(StatusReport.ReceivedData[10]);
+                rIsMoving = Convert.ToInt16(StatusReport.ReceivedData[11]);
+                rErrorState = Convert.ToInt16(StatusReport.ReceivedData[13]);
 
-            //Check if an ErrorState is set
-            this.errorState = rErrorState;
-            if (this.errorState != 0) return;
+                //Check if an ErrorState is set
+                this.errorState = rErrorState;
+                if (this.errorState != 0) return;
 
-            // Verify the ReportID is correct
-            if (rReportID != Rotators.REPORTID_INPUT_DEVICE_STATUS)
-            {
-                throw new ApplicationException("Wrong ReportID returned from device status request.");
-            }
-            // Extract the DeviceIsHomedFlag
-            if (rIsHomed == Rotators.REPORT_TRUE)
-            {
-                this.isHomed = true;
-            }
-            else if (rIsHomed == Rotators.REPORT_FALSE)
-            {
-                this.isHomed = false;
-            }
-            else throw new ApplicationException("Invalid data received for IsHomed value");
+                // Verify the ReportID is correct
+                if (rReportID != Rotators.REPORTID_INPUT_DEVICE_STATUS)
+                {
+                    throw new ApplicationException("Wrong ReportID returned from device status request.");
+                }
+                // Extract the DeviceIsHomedFlag
+                if (rIsHomed == Rotators.REPORT_TRUE)
+                {
+                    this.isHomed = true;
+                }
+                else if (rIsHomed == Rotators.REPORT_FALSE)
+                {
+                    this.isHomed = false;
+                }
+                else throw new ApplicationException("Invalid data received for IsHomed value");
 
-            // Extract the DeviceIsHomingFlag
-            if (rIsHoming == Rotators.REPORT_TRUE)
-            {
-                this.isHoming = true;
-            }
-            else if (rIsHoming == Rotators.REPORT_FALSE)
-            {
-                this.isHoming = false;
-            }
-            else throw new ApplicationException("Invalid data received for IsHoming value");
+                // Extract the DeviceIsHomingFlag
+                if (rIsHoming == Rotators.REPORT_TRUE)
+                {
+                    this.isHoming = true;
+                }
+                else if (rIsHoming == Rotators.REPORT_FALSE)
+                {
+                    this.isHoming = false;
+                }
+                else throw new ApplicationException("Invalid data received for IsHoming value");
 
-            // Extract the DeviceIsMovingFlag
-            if (rIsMoving == Rotators.REPORT_TRUE)
-            {
-                this.isMoving = true;
-                #if DEBUG
+                // Extract the DeviceIsMovingFlag
+                if (rIsMoving == Rotators.REPORT_TRUE)
+                {
+                    this.isMoving = true;
+#if DEBUG
                 Trace.WriteLine("Device is Moving");
-                #endif
-            }
-            else if (rIsMoving == Rotators.REPORT_FALSE)
-            {
-                this.isMoving = false;
+#endif
+                }
+                else if (rIsMoving == Rotators.REPORT_FALSE)
+                {
+                    this.isMoving = false;
 #if DEBUG
                 Trace.WriteLine("Device is  NOT Moving");
 #endif
+                }
+                else throw new ApplicationException("Invalid data received for IsMoving value");
+
+                // Extract the Current Position
+                rCurrentPosition = (rCurrentPosition / (StepsPerRev / 360));
+                this.currentPosition = rCurrentPosition;
+
+                // Extract the Target Position
+                rTargetPosition = (rTargetPosition / (StepsPerRev / 360));
+                this.targetPosition = rTargetPosition;
+
             }
-            else throw new ApplicationException("Invalid data received for IsMoving value");
-
-            // Extract the Current Position
-            rCurrentPosition = (rCurrentPosition/(StepsPerRev/360));
-            this.currentPosition = rCurrentPosition;
-
-            // Extract the Target Position
-            rTargetPosition = (rTargetPosition / (StepsPerRev / 360));
-            this.targetPosition = rTargetPosition;
- 
+            catch (Exception ex)
+            {
+                Logger.LogException(ex);
+                throw;
+            }
         }
 
         private void TriggerRotatorUnplugged(object sender, EventArgs e)
         {
+            Logger.LogMessage(AssemblyName, ClassName, "Triggering Rotator Unplugged", false);
             TriggerAnEvent(this.DeviceUnplugged);
         }
 
@@ -384,6 +395,7 @@ namespace PyxisLE_API
             set
             {
                // double offset_deg = SkyPAOffset;
+                
                 double NewDevicePosition_Degrees = -SkyPAOffset + value;
                 if (NewDevicePosition_Degrees == 360)
                 {
@@ -397,6 +409,8 @@ namespace PyxisLE_API
                 {
                     NewDevicePosition_Degrees = NewDevicePosition_Degrees + 360;
                 }
+                Logger.LogMessage(AssemblyName, ClassName, "Setting Current Device PA to " + NewDevicePosition_Degrees +
+                    "° for a requested Sky PA of " + value.ToString("0.0000°") , false);
                 ChangeDevicePA(NewDevicePosition_Degrees);
             }
         }
@@ -658,62 +672,55 @@ namespace PyxisLE_API
 
         private void ChangeDevicePA(double NewPos)
         {
-            Trace.Write("Move Requested to " + NewPos.ToString() + Environment.NewLine);
-            // First check that the new pos is in the range of 0-359.9999999
-            if ((NewPos < 0) || NewPos > 360) throw new ApplicationException("New Position is outside the acceptable range.");
-            // Next check that it's not the same as the current position
-            if (NewPos == this.CurrentDevicePA) return;
-            // Convert degrees to steps
-            UInt32 NewPosInt = (uint)Math.Round((NewPos * (double)this.StepsPerRev / (double)360));
-            byte[] datatosend = new byte[] { };
+            try
+            {
+                Logger.LogMessage(AssemblyName, ClassName, "Move Requested to " + NewPos.ToString() + Environment.NewLine, false);
+                // First check that the new pos is in the range of 0-359.9999999
+                if ((NewPos < 0) || NewPos > 360) throw new ApplicationException("New Position is outside the acceptable range.");
+                // Next check that it's not the same as the current position
+                if (NewPos == this.CurrentDevicePA) return;
+                // Convert degrees to steps
+                UInt32 NewPosInt = (uint)Math.Round((NewPos * (double)this.StepsPerRev / (double)360));
+                byte[] datatosend = new byte[] { };
 
-            // Create the report to send
-            FeatureReport MoveReport = new FeatureReport(
-                Rotators.REPORTID_FEATURE_DO_MOTION, datatosend);
-            // Feature Reports Must have at least one data item so we put a zero in it.
-            byte[] x = BitConverter.GetBytes(NewPosInt);
-            MoveReport.DataToSend = new byte[] { Rotators.MOTION_OPCODE_DOMOVE,
+                // Create the report to send
+                FeatureReport MoveReport = new FeatureReport(
+                    Rotators.REPORTID_FEATURE_DO_MOTION, datatosend);
+                // Feature Reports Must have at least one data item so we put a zero in it.
+                byte[] x = BitConverter.GetBytes(NewPosInt);
+                MoveReport.DataToSend = new byte[] { Rotators.MOTION_OPCODE_DOMOVE,
                 x[0], x[1], x[2], x[3] };
 
-            // Send the Report
-            this.selectedDevice.ProcessFeatureReport(MoveReport);
+                // Send the Report
+                this.selectedDevice.ProcessFeatureReport(MoveReport);
 
-            Trace.Write("Move Feature Report Sent. " );
-            foreach (byte b in MoveReport.DataToSend)
-            {
-                Trace.Write(b.ToString() + "-");
+                Logger.LogMessage(AssemblyName, ClassName, "Move Feature Report Sent.", true);
+
+                // Check that no error codes were set
+                if (MoveReport.Response2[3] != 0)
+                {
+                    errorState = Convert.ToInt16(MoveReport.Response2[3]);
+                    string msg = "Error Message = " + GetErrorMessage(errorState);
+                    throw new ApplicationException("Firmware error code set while requesting move. " + msg);
+                }
+
+                // Check if the device started the move
+                if (MoveReport.Response2[2] != Rotators.REPORT_TRUE)
+                {
+                    throw new ApplicationException("Device did not start home as requested.");
+                }
+
+                // Start the MoveMonitor thread
+                ThreadStart ts = new ThreadStart(this.MoveMonitor);
+                MoveThread = new Thread(ts);
+                MoveThread.Name = "Move Thread in Rotator class";
+                MoveThread.Start();
             }
-            Trace.WriteLine(" ");
-
-            // Check that no error codes were set
-            if (MoveReport.Response2[3] != 0)
+            catch (Exception ex)
             {
-                errorState = Convert.ToInt16(MoveReport.Response2[3]);
-                string msg = "Error Message = " +  GetErrorMessage(errorState);
-                throw new ApplicationException("Firmware error code set while requesting move. " + msg);
+                Logger.LogException(ex);
+                throw;
             }
-
-            //// check if the device started the move
-
-            if (MoveReport.Response2[2] != Rotators.REPORT_TRUE)
-            {
-                throw new ApplicationException("Device did not start home as requested.");
-            }
-
-            //int retryCounter = 0;
-            //while (this.IsMoving == false)
-            //{
-            //    if (retryCounter == 20) throw new ApplicationException("Device never started move. Did you request a move to the current position?");
-            //    System.Threading.Thread.Sleep(50);
-            //    RefreshDeviceStatus();
-            //    retryCounter++;
-            //}
-
-            // Start the MoveMonitor thread
-            ThreadStart ts = new ThreadStart(this.MoveMonitor);
-            MoveThread = new Thread(ts);
-            MoveThread.Name = "Move Thread in Rotator class";
-            MoveThread.Start();
         }
 
         public string GetErrorMessage(short errorState)
@@ -728,80 +735,106 @@ namespace PyxisLE_API
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("An erorr occurred while trying to retrieve the correct error message from the Resource Manager. \n" +
-                    "Exception Data = \n" + ex.ToString() + "\n");
-                return "No Error Message Available";
+                Logger.LogException (ex);      
             }
+            return "No Error Message Available";
         }
 
         // ******* Public Methods ***************************************
 
         public void Home()
         {
-            Trace.Write("Home Requested");
-            byte[] datatosend = new byte[] { };
-
-            // Create the report to send
-            FeatureReport HomeReport = new FeatureReport(
-                Rotators.REPORTID_FEATURE_DO_MOTION, datatosend);
-            // Feature Reports Must have at least one data item so we put a zero in it.
-            HomeReport.DataToSend = new byte[] { Rotators.MOTION_OPCODE_DOHOME };
-            
-            // Send the Report
-            this.selectedDevice.ProcessFeatureReport(HomeReport);
-
-            // Verify the first response was correct (Verify device is homing)
-            if (HomeReport.Response1[0] != Rotators.REPORT_TRUE)
+            try
             {
-                throw new ApplicationException("The device never started homing according to response1 from feature report");
-            }
-            // Verify the second response does not have error code set
-            if (HomeReport.Response2[3] != 0)
-            {
-                errorState = Convert.ToInt16(HomeReport.Response2[3]);
-                string msg = GetErrorMessage(errorState);
-            }
+                Logger.LogMessage(AssemblyName, ClassName, "Home Requested", false);
+                byte[] datatosend = new byte[] { };
 
-            // Refresh the device status
-            RefreshDeviceStatus();
-            
-            // Start the HomeMonitor thread
-            ThreadStart ts = new ThreadStart(this.HomeMonitor);
-            HomeThread = new Thread(ts);
-            HomeThread.Name = "Home Thread in Rotator Class";
-            HomeThread.Start();
+                // Create the report to send
+                FeatureReport HomeReport = new FeatureReport(
+                    Rotators.REPORTID_FEATURE_DO_MOTION, datatosend);
+                // Feature Reports Must have at least one data item so we put a zero in it.
+                HomeReport.DataToSend = new byte[] { Rotators.MOTION_OPCODE_DOHOME };
+
+                // Send the Report
+                this.selectedDevice.ProcessFeatureReport(HomeReport);
+
+                // Verify the first response was correct (Verify device is homing)
+                if (HomeReport.Response1[0] != Rotators.REPORT_TRUE)
+                {
+                    throw new ApplicationException("The device never started homing according to response1 from feature report");
+                }
+                // Verify the second response does not have error code set
+                if (HomeReport.Response2[3] != 0)
+                {
+                    errorState = Convert.ToInt16(HomeReport.Response2[3]);
+                    string msg = GetErrorMessage(errorState);
+                }
+
+                // Refresh the device status
+                RefreshDeviceStatus();
+
+                // Start the HomeMonitor thread
+                ThreadStart ts = new ThreadStart(this.HomeMonitor);
+                HomeThread = new Thread(ts);
+                HomeThread.Name = "Home Thread in Rotator Class";
+                HomeThread.Start();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex);
+                throw;
+            }
         }
 
         public void Halt_Move()
         {
-            if (IsHoming) throw new ApplicationException("You can not halt device while homing");
-            else if (true)
+            Logger.LogMessage(AssemblyName, ClassName, "Halt Requested", false);
+            try
             {
-                // Prepart the feature report to send.
-                byte[] datatosend = new byte[] { Rotators.MOTION_OPCODE_HALT };
-                FeatureReport HaltReport = new FeatureReport(Rotators.REPORTID_FEATURE_DO_MOTION, datatosend);
-                // Send the report to request the halt
-                this.selectedDevice.ProcessFeatureReport(HaltReport);
-                // Check the IsMoving bit
-                if (HaltReport.Response1[2] == Rotators.REPORT_TRUE) isMoving = true;
-                else if (HaltReport.Response1[2] == Rotators.REPORT_FALSE) isMoving = false;
-                // Alert if device is not halted.
-                if (IsMoving) throw new ApplicationException("Device did not respond to halt request");
-
-
+                if (IsHoming) throw new ApplicationException("You can not halt device while homing");
+                else if (true)
+                {
+                    // Prepart the feature report to send.
+                    byte[] datatosend = new byte[] { Rotators.MOTION_OPCODE_HALT };
+                    FeatureReport HaltReport = new FeatureReport(Rotators.REPORTID_FEATURE_DO_MOTION, datatosend);
+                    // Send the report to request the halt
+                    this.selectedDevice.ProcessFeatureReport(HaltReport);
+                    // Check the IsMoving bit
+                    if (HaltReport.Response1[2] == Rotators.REPORT_TRUE) isMoving = true;
+                    else if (HaltReport.Response1[2] == Rotators.REPORT_FALSE) isMoving = false;
+                    // Alert if device is not halted.
+                    if (IsMoving) throw new ApplicationException("Device did not respond to halt request");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex);
+                throw;
             }
         }
 
         public void ClearErrorState()
         {
-            // Prepare the output report to send
-            OutputReport ClearErrorReport = new OutputReport(Rotators.REPORTID_OUTPUT_CLEAR_ERROR, new byte[]{0});
-            // send the report
-            this.selectedDevice.SendReport_Control(ClearErrorReport);
-            // Check the error state
-            RefreshDeviceStatus();
-            if (this.errorState != 0) throw new ApplicationException("Error state was not successfully cleared. Error state is set at " + this.ErrorState.ToString() +
-                 ". Error message = " + GetErrorMessage(this.ErrorState));
+            try
+            {
+                Logger.LogMessage(AssemblyName, ClassName, "Attempting to Clear Error State", false);
+                // Prepare the output report to send
+                OutputReport ClearErrorReport = new OutputReport(Rotators.REPORTID_OUTPUT_CLEAR_ERROR, new byte[] { 0 });
+                // send the report
+                this.selectedDevice.SendReport_Control(ClearErrorReport);
+                // Check the error state
+                RefreshDeviceStatus();
+                if (this.errorState != 0) 
+                    throw new ApplicationException("Error state was not successfully cleared. Error state is set at " + this.ErrorState.ToString() +
+                     ". Error message = " + GetErrorMessage(this.ErrorState));
+                else 
+                    Logger.LogMessage(AssemblyName, ClassName, "Error State cleared successfully", false);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex);
+                throw;
+            }
         }
     }
 }
