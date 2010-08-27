@@ -21,6 +21,7 @@ using Microsoft.Win32.SafeHandles;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.ComponentModel;
+using Optec;
 
 
 namespace OptecHIDTools
@@ -35,8 +36,6 @@ namespace OptecHIDTools
         public static event EventHandler HIDAttached;
         public static event EventHandler HIDRemoved;
         private static int InstanceCounter = 0;
-        private const string AssemblyName = "OptecHIDTools";
-        private const string ClassName = "HIDMonitor";
         #endregion     
 
         #region Properties
@@ -54,8 +53,8 @@ namespace OptecHIDTools
         {
             try
             {
-                OptecLogger.LogMessage(AssemblyName, ClassName, "Creating Instance of HIDMonitor. Instance number " +
-                    InstanceCounter.ToString(), false);
+                EventLogger.LogMessage("Creating Instance of HIDMonitor. Instance number " +
+                    InstanceCounter.ToString(), TraceLevel.Info);
                 //Get the GUID for the HID CLASS
                 DetermineHID_GUID();
                 //Get the list of all the attached devices
@@ -70,7 +69,7 @@ namespace OptecHIDTools
             }
             catch (Exception ex)
             {
-                OptecLogger.LogException(ex);
+                EventLogger.LogMessage(ex);
                 throw ex;
             }
         }
@@ -83,7 +82,7 @@ namespace OptecHIDTools
             }
             catch (Exception ex)
             {
-                OptecLogger.LogException(ex);
+                EventLogger.LogMessage(ex);
                 throw new ApplicationException("Error retrieving HID class GUID", ex);
             }
         }
@@ -92,7 +91,7 @@ namespace OptecHIDTools
         {
             try
             {
-                OptecLogger.LogMessage(AssemblyName, ClassName, "Building Device List", true);
+                EventLogger.LogMessage("Building Device List", TraceLevel.Verbose);
                 // Create an empty HID object to hold the device info
                 HID NewDevice = new HID();
                 // Obtain a pointer to a Device Information Set*****************************************
@@ -157,8 +156,8 @@ namespace OptecHIDTools
                     // Check for success
                     if (!Success)
                     {
-                        OptecLogger.LogMessage(AssemblyName, ClassName, "Unable to obtain Device Interface Detail. " +
-                            "This device will not be added to the list.", true);
+                        EventLogger.LogMessage("Unable to obtain Device Interface Detail. " +
+                            "This device will not be added to the list.", TraceLevel.Warning);
                         continue;   // Goto next itteration of the loop
                     }
 
@@ -167,7 +166,7 @@ namespace OptecHIDTools
                     IntPtr pDevicePathName = new IntPtr(detailDataBuffer.ToInt32() + 4);
                     devicePathName = Marshal.PtrToStringAuto(pDevicePathName);
                     NewDevice.Path = devicePathName;
-                    OptecLogger.LogMessage(AssemblyName, ClassName, "Found Device with Path:" + devicePathName, true);
+                    EventLogger.LogMessage( "Found Device with Path:" + devicePathName, TraceLevel.Info);
                     
                     //Open a handle to the device
                     SafeFileHandle deviceHandle;
@@ -195,10 +194,10 @@ namespace OptecHIDTools
                         if ((NewDevice.PID_Hex.Length != 4) || (NewDevice.VID_Hex.Length != 4))
                         {
                             // There was a problem finding the PID or VID
-                            OptecLogger.LogMessage(AssemblyName, ClassName, "Error finding PID or VID for attached device. " +
-                                "PID=[" + NewDevice.PID_Hex + "] VID=[" + NewDevice.VID_Hex + "] " + devicePathName, true);
-                            OptecLogger.LogMessage(AssemblyName, ClassName, "Device with path [" + NewDevice.Path
-                                + "] will not be added to the attached device list", true);              
+                            EventLogger.LogMessage("Error finding PID or VID for attached device. " +
+                                "PID=[" + NewDevice.PID_Hex + "] VID=[" + NewDevice.VID_Hex + "] " + devicePathName, TraceLevel.Info);
+                            EventLogger.LogMessage("Device with path [" + NewDevice.Path
+                                + "] will not be added to the attached device list", TraceLevel.Info);              
                             continue;   // Go to the next itteration of the loop
                         }
                         // Obtain a pointer to the Device Capabilities...
@@ -226,11 +225,11 @@ namespace OptecHIDTools
                             (NewDevice.ProductDescription == "Unknown"))
                         {
                             System.Threading.Thread.Sleep(50);
-                            OptecLogger.LogMessage(AssemblyName, ClassName, "Failed to get Device Info Properly, Trying agian...", true); 
+                            EventLogger.LogMessage("Failed to get Device Info Properly, Trying agian...", TraceLevel.Warning); 
                             if (retries == 0)
                             {
-                                OptecLogger.LogMessage(AssemblyName, ClassName, "ERROR: Could not obtain SerialNumber, Manufacturer and Desctiption properly" +
-                                    " after multiple attempts. Divice is not being added to list", true);
+                                EventLogger.LogMessage("ERROR: Could not obtain SerialNumber, Manufacturer and Desctiption properly" +
+                                    " after multiple attempts. Divice is not being added to list", TraceLevel.Error);
                                 return;
                             }
                             retries--;
@@ -242,14 +241,14 @@ namespace OptecHIDTools
                        // bool MatchFound = false;
                         // Add the device to the list
                         _DetectedHIDs.Add(NewDevice);
-                        OptecLogger.LogMessage(AssemblyName, ClassName, "New Device Added To List: " +
-                            NewDevice.PID_Hex + " " + NewDevice.SerialNumber, false);
+                        EventLogger.LogMessage("New Device Added To List: " +
+                            NewDevice.PID_Hex + " " + NewDevice.SerialNumber, TraceLevel.Verbose);
                         NewDevice = new HID();    //Finally clear the temp device for the next itteration   
                     }
                     else
                     {
                         // Failed to get device attributes
-                         OptecLogger.LogMessage(AssemblyName, ClassName, "Failed to get device attributes properly. Device will not be added to the list.", false);
+                        EventLogger.LogMessage("Failed to get device attributes properly. Device will not be added to the list.", TraceLevel.Warning);
                     }
                     //Close the handle to the device 
                     if (!deviceHandle.IsClosed) deviceHandle.Close();
@@ -263,7 +262,7 @@ namespace OptecHIDTools
             }
             catch (Exception ex)
             {
-                OptecLogger.LogException(ex);
+                EventLogger.LogMessage(ex);
                 throw;
             }
         }
@@ -272,8 +271,8 @@ namespace OptecHIDTools
         {
             try
             {
-                OptecLogger.LogMessage(AssemblyName, ClassName, "Adding a device to DetectedHIDs List", true);
-                OptecLogger.LogMessage(AssemblyName, ClassName, "New device path is " + devicePathName, true);
+                EventLogger.LogMessage("Adding a device to DetectedHIDs List", TraceLevel.Info);
+                EventLogger.LogMessage("New device path is " + devicePathName, TraceLevel.Info);
 
                 // Create a HID object to store the new device info
                 HID NewDevice = new HID();
@@ -303,10 +302,10 @@ namespace OptecHIDTools
                     if ((NewDevice.PID_Hex.Length != 4) || (NewDevice.VID_Hex.Length != 4))
                     {
                         // There was a problem finding the PID or VID
-                        OptecLogger.LogMessage(AssemblyName, ClassName, "Error finding PID or VID for attached device. " +
-                            "PID=[" + NewDevice.PID_Hex + "] VID=[" + NewDevice.VID_Hex + "] " + devicePathName, true);
-                        OptecLogger.LogMessage(AssemblyName, ClassName, "Device with path [" + NewDevice.Path
-                            + "] will not be added to the attached device list", true);
+                        EventLogger.LogMessage("Error finding PID or VID for attached device. " +
+                            "PID=[" + NewDevice.PID_Hex + "] VID=[" + NewDevice.VID_Hex + "] " + devicePathName, TraceLevel.Info);
+                        EventLogger.LogMessage("Device with path [" + NewDevice.Path
+                            + "] will not be added to the attached device list", TraceLevel.Info);
                         return;
                     }
                     // Obtain a pointer to the Device Capabilities
@@ -314,8 +313,8 @@ namespace OptecHIDTools
                     Success = HID_API_Wrapers.HidD_GetPreparsedData(deviceHandle, ref preparsedData);
                     if (!Success)
                     {
-                        OptecLogger.LogMessage(AssemblyName, ClassName, "Error obtaining device capabilities for device with path [" +
-                            NewDevice.Path + "]. This device will not be added to the list", false);
+                        EventLogger.LogMessage("Error obtaining device capabilities for device with path [" +
+                            NewDevice.Path + "]. This device will not be added to the list", TraceLevel.Info);
                         return;
                     }
                     // Now Obtain the capabilities
@@ -336,11 +335,11 @@ namespace OptecHIDTools
                         (NewDevice.ProductDescription == "Unknown"))
                     {
                         System.Threading.Thread.Sleep(50);  //pause for a bit
-                        OptecLogger.LogMessage(AssemblyName, ClassName, "Failed to get Device Info Properly, Trying agian...", true);
+                        EventLogger.LogMessage("Failed to get Device Info Properly, Trying agian...", TraceLevel.Warning);
                         if (retries == 0)
                         {
-                            OptecLogger.LogMessage(AssemblyName, ClassName, "ERROR: Could not obtain SerialNumber, Manufacturer and Desctiption properly" +
-                                " after multiple attempts. Divice is not being added to list", false);
+                            EventLogger.LogMessage("ERROR: Could not obtain SerialNumber, Manufacturer and Desctiption properly" +
+                                " after multiple attempts. Divice is not being added to list", TraceLevel.Warning);
                             return;
                         }
                         retries--;
@@ -366,7 +365,7 @@ namespace OptecHIDTools
                             NewDevice.VID_Hex, NewDevice.SerialNumber);
                             TriggerHIDAttached(e);
                             MatchFound = true;
-                            OptecLogger.LogMessage(AssemblyName, ClassName, "Device Reconnected: " + NewDevice.PID_Hex + " " + NewDevice.SerialNumber, false);
+                            EventLogger.LogMessage("Device Reconnected: " + NewDevice.PID_Hex + " " + NewDevice.SerialNumber, TraceLevel.Info);
                         }
                     }
                     if (!MatchFound)
@@ -376,7 +375,7 @@ namespace OptecHIDTools
                         DeviceListChangedArgs x = new DeviceListChangedArgs(NewDevice.PID_Hex,
                             NewDevice.VID_Hex, NewDevice.SerialNumber);
                         TriggerHIDAttached(x);
-                        OptecLogger.LogMessage(AssemblyName, ClassName, "New Device Added To List: " + NewDevice.PID_Hex + " " + NewDevice.SerialNumber, false);
+                        EventLogger.LogMessage("New Device Added To List: " + NewDevice.PID_Hex + " " + NewDevice.SerialNumber, TraceLevel.Info);
                     }
                     //Finally clear the device 
                     NewDevice = null;
@@ -384,7 +383,7 @@ namespace OptecHIDTools
             }
             catch (Exception ex)
             {
-                OptecLogger.LogException(ex);
+                EventLogger.LogMessage(ex);
                 throw;
             }
         }
@@ -397,7 +396,7 @@ namespace OptecHIDTools
                 // Find the device
                 var d = _DetectedHIDs.Single(p => p.Path.ToUpper() == devicePathName.ToUpper());
                 // Mark the device in the list as disconnected
-                OptecLogger.LogMessage(AssemblyName, ClassName, "Setting device disconnected in list", true);
+                EventLogger.LogMessage("Setting device disconnected in list", TraceLevel.Info);
                 d.DeviceIsAttached = false;
 
                 // Trigger the device Removed event
@@ -409,8 +408,8 @@ namespace OptecHIDTools
             }
             catch (Exception)
             {
-                OptecLogger.LogMessage(AssemblyName, ClassName, "WARNING: A device was removed but a match was not found in the device list. " +
-                "This should not happen but it may not cause a problem.", true);
+                EventLogger.LogMessage("WARNING: A device was removed but a match was not found in the device list. " +
+                "This should not happen but it may not be a critical problem.", TraceLevel.Warning);
                 //throw;
             }
 
@@ -452,8 +451,8 @@ namespace OptecHIDTools
             }
             catch (Exception ex)
             {
-                OptecLogger.LogMessage(AssemblyName, ClassName, "ERROR: An Exception was thrown while attempting to retrieve the Device "
-                    + "Manufacturer string.\nException Data = " + ex.ToString(), true);
+                EventLogger.LogMessage("ERROR: An Exception was thrown while attempting to retrieve the Device "
+                    + "Manufacturer string.\nException Data = " + ex.ToString(), TraceLevel.Error);
                 return "Unknown";
             }
         }
@@ -466,7 +465,7 @@ namespace OptecHIDTools
                 bool success = HID_API_Wrapers.HidD_GetSerialNumberString(sfh, rawBytes, rawBytes.Length);
                 if (!success)
                 {
-                    OptecLogger.LogMessage(AssemblyName, ClassName, HID.ParseWin32Error("GetSerialNumberString - Invalid=" + sfh.IsInvalid.ToString()), true);
+                    EventLogger.LogMessage(HID.ParseWin32Error("GetSerialNumberString - Invalid=" + sfh.IsInvalid.ToString()), TraceLevel.Error);
                     return "Unknown";
                 }
                 string result = System.Text.Encoding.Unicode.GetString(rawBytes);
@@ -482,8 +481,8 @@ namespace OptecHIDTools
             }
             catch (Exception ex)
             {
-                OptecLogger.LogMessage(AssemblyName, ClassName, "ERROR: An Exception was thrown while attempting to retrieve the Device "
-                    + "Serial Number string.\nException Data = " + ex.ToString(), false);
+                EventLogger.LogMessage("ERROR: An Exception was thrown while attempting to retrieve the Device "
+                    + "Serial Number string.\nException Data = " + ex.ToString(), TraceLevel.Error);
                 return "Unknown";
             }
         }
@@ -501,21 +500,21 @@ namespace OptecHIDTools
             }
             catch (Exception ex)
             {
-                OptecLogger.LogMessage(AssemblyName, ClassName, "ERROR: An Exception was thrown while attempting to retrieve the Device "
-                    + "Product string.\nException Data = " + ex.ToString(), true);
+                EventLogger.LogMessage("ERROR: An Exception was thrown while attempting to retrieve the Device "
+                    + "Product string.\nException Data = " + ex.ToString(), TraceLevel.Error);
                 return "Unknown";
             }
         }
 
         private static void TriggerHIDAttached(DeviceListChangedArgs HID)
         {
-            OptecLogger.LogMessage(AssemblyName, ClassName, "Triggering HID Attached", true);
+            EventLogger.LogMessage("Triggering HID Attached", TraceLevel.Error);
             TriggerAnEvent(HIDAttached, HID);
         }
 
         private static void TriggerHIDRemoved(DeviceListChangedArgs HID)
         {
-            OptecLogger.LogMessage(AssemblyName, ClassName, "Triggering HID Removed", true);
+            EventLogger.LogMessage("Triggering HID Removed", TraceLevel.Info);
             TriggerAnEvent(HIDRemoved, HID);
         }
        
@@ -547,7 +546,7 @@ namespace OptecHIDTools
             catch(Exception ex)
             {
                 // Handle any exceptions that were thrown by the invoked method
-                OptecLogger.LogException(ex);
+                EventLogger.LogMessage(ex);
             }
         }
 
