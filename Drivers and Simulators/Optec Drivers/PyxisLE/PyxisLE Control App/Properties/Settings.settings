@@ -17,5 +17,8 @@
     <Setting Name="ShowRelativeMove" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="LastTraceLevel" Type="System.Diagnostics.TraceLevel" Scope="User">
+      <Value Profile="(Default)">Info</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -5,6 +5,7 @@ using System.Text;
 using OptecHIDTools;
 using System.Diagnostics;
 using System.Threading;
+using Optec;
 
 
 
@@ -43,16 +44,13 @@ namespace PyxisLE_API
         private static int InstanceCounter = 0;
         private int InstanceID = 0;
 
-        private const string ClassName = "Rotator";
-        private const string AssemblyName = "PyxisLE_API";
-
         public Rotator(HID Device)
         {
             this.InstanceID = InstanceCounter;
             Interlocked.Increment(ref InstanceCounter);
 
-            Logger.LogMessage(AssemblyName, ClassName, "Creating instance(" + this.InstanceID.ToString() + 
-                ") of Rotator class for serial number: " + Device.SerialNumber, false);
+            EventLogger.LogMessage("Creating instance(" + this.InstanceID.ToString() + 
+                ") of Rotator class for serial number: " + Device.SerialNumber, TraceLevel.Info);
             this.selectedDevice = Device;
             this.manufacturer = Device.Manufacturer;
             this.name = Device.ProductDescription;
@@ -82,7 +80,7 @@ namespace PyxisLE_API
             }
             catch (Exception ex)
             {
-                OptecLogger.LogException(ex);
+                EventLogger.LogMessage(ex);
                 throw ex;
             }
         }
@@ -93,7 +91,8 @@ namespace PyxisLE_API
             {
                 lock (RefreshingInfoLock)
                 {
-                    Logger.LogMessage(AssemblyName, ClassName, "Rotator instance " + this.InstanceID.ToString() + " called RefreshDeviceDescription", true);
+                    EventLogger.LogMessage( "Rotator instance " + this.InstanceID.ToString() +
+                        " called RefreshDeviceDescription", TraceLevel.Verbose);
                     InputReport DescriptionReport = new InputReport(Rotators.REPORTID_INPUT_DEVICE_DESC);
                     this.selectedDevice.RequestInputReport_Control(DescriptionReport);
                     ParseDeviceDescription(DescriptionReport);
@@ -101,7 +100,7 @@ namespace PyxisLE_API
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                EventLogger.LogMessage(ex);
                 throw;
             }
         }
@@ -184,7 +183,7 @@ namespace PyxisLE_API
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                EventLogger.LogMessage(ex);
                 throw;
             }
         }
@@ -196,9 +195,6 @@ namespace PyxisLE_API
             {
                 lock (RefreshingInfoLock)
                 {
-                    #if DEBUG
-                    Trace.WriteLine("Refresing Device Status");
-                    #endif
                     InputReport StatusReport = new InputReport(Rotators.REPORTID_INPUT_DEVICE_STATUS);
                     this.selectedDevice.RequestInputReport_Control(StatusReport);
                     ParseDeviceStatus(StatusReport);
@@ -206,7 +202,7 @@ namespace PyxisLE_API
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                EventLogger.LogMessage(ex);
                 throw;
             }
         }
@@ -310,14 +306,14 @@ namespace PyxisLE_API
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                EventLogger.LogMessage(ex);
                 throw;
             }
         }
 
         private void TriggerRotatorUnplugged(object sender, EventArgs e)
         {
-            Logger.LogMessage(AssemblyName, ClassName, "Triggering Rotator Unplugged", false);
+            EventLogger.LogMessage( "Triggering Rotator Unplugged", TraceLevel.Info);
             TriggerAnEvent(this.DeviceUnplugged);
         }
 
@@ -409,8 +405,8 @@ namespace PyxisLE_API
                 {
                     NewDevicePosition_Degrees = NewDevicePosition_Degrees + 360;
                 }
-                Logger.LogMessage(AssemblyName, ClassName, "Setting Current Device PA to " + NewDevicePosition_Degrees +
-                    "° for a requested Sky PA of " + value.ToString("0.0000°") , false);
+                EventLogger.LogMessage("Setting Current Device PA to " + NewDevicePosition_Degrees +
+                    "° for a requested Sky PA of " + value.ToString("0.0000°") , TraceLevel.Info);
                 ChangeDevicePA(NewDevicePosition_Degrees);
             }
         }
@@ -432,6 +428,7 @@ namespace PyxisLE_API
 
             set
             {
+                EventLogger.LogMessage("Setting SkyPA Offset to " + value.ToString(), TraceLevel.Info);
                 // Receive this value in degrees
                 // verify that it is no the same as the current device PA.
                 // if (value == CurrentPosition) return;
@@ -607,26 +604,34 @@ namespace PyxisLE_API
 
         private void HomeMonitor()
         {
-            RefreshDeviceStatus();
-
-            while (isHoming)
+            try
             {
                 RefreshDeviceStatus();
-                if (this.errorState != 0)
+
+                while (isHoming)
                 {
-                    string errormsg = GetErrorMessage(ErrorState);
-                    Trace.WriteLine(errormsg);
-                    throw new ApplicationException("An Error State Has Been Set In the Device Firmware. \n" +
-                    errormsg);
+                    RefreshDeviceStatus();
+                    if (this.errorState != 0)
+                    {
+                        string errormsg = GetErrorMessage(ErrorState);
+                        Trace.WriteLine(errormsg);
+                        throw new ApplicationException("An Error State Has Been Set In the Device Firmware. \n" +
+                        errormsg);
+                    }
+                    System.Threading.Thread.Sleep(250);
                 }
-                System.Threading.Thread.Sleep(250);
+                TriggerHomingComplete();
+                if (returnToLast)
+                {
+                    MoveMonitor();
+                }
+
             }
-            TriggerHomingComplete();
-            if (returnToLast)
+            catch (Exception ex)
             {
-                MoveMonitor();
+                EventLogger.LogMessage(ex);
+               // throw;
             }
-            
         }
 
         private void TriggerHomingComplete()
@@ -674,7 +679,7 @@ namespace PyxisLE_API
         {
             try
             {
-                Logger.LogMessage(AssemblyName, ClassName, "Move Requested to " + NewPos.ToString() + Environment.NewLine, false);
+                EventLogger.LogMessage( "Move Requested to " + NewPos.ToString() + Environment.NewLine, TraceLevel.Info);
                 // First check that the new pos is in the range of 0-359.9999999
                 if ((NewPos < 0) || NewPos > 360) throw new ApplicationException("New Position is outside the acceptable range.");
                 // Next check that it's not the same as the current position
@@ -694,7 +699,7 @@ namespace PyxisLE_API
                 // Send the Report
                 this.selectedDevice.ProcessFeatureReport(MoveReport);
 
-                Logger.LogMessage(AssemblyName, ClassName, "Move Feature Report Sent.", true);
+                EventLogger.LogMessage( "Move Feature Report Sent.", TraceLevel.Info);
 
                 // Check that no error codes were set
                 if (MoveReport.Response2[3] != 0)
@@ -704,11 +709,13 @@ namespace PyxisLE_API
                     throw new ApplicationException("Firmware error code set while requesting move. " + msg);
                 }
 
-                // Check if the device started the move
-                if (MoveReport.Response2[2] != Rotators.REPORT_TRUE)
+                // Check if the device received move request
+                if (MoveReport.Response1[4] != Rotators.REPORT_TRUE)
                 {
-                    throw new ApplicationException("Device did not start home as requested.");
+                    throw new ApplicationException("Device did not receive move request.");
                 }
+
+                System.Threading.Thread.Sleep(200);
 
                 // Start the MoveMonitor thread
                 ThreadStart ts = new ThreadStart(this.MoveMonitor);
@@ -718,7 +725,7 @@ namespace PyxisLE_API
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                EventLogger.LogMessage(ex);
                 throw;
             }
         }
@@ -735,7 +742,7 @@ namespace PyxisLE_API
             }
             catch (Exception ex)
             {
-                Logger.LogException (ex);      
+                EventLogger.LogMessage(ex);      
             }
             return "No Error Message Available";
         }
@@ -746,7 +753,7 @@ namespace PyxisLE_API
         {
             try
             {
-                Logger.LogMessage(AssemblyName, ClassName, "Home Requested", false);
+                EventLogger.LogMessage("Home Requested", TraceLevel.Info);
                 byte[] datatosend = new byte[] { };
 
                 // Create the report to send
@@ -781,14 +788,14 @@ namespace PyxisLE_API
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                EventLogger.LogMessage(ex);
                 throw;
             }
         }
 
         public void Halt_Move()
         {
-            Logger.LogMessage(AssemblyName, ClassName, "Halt Requested", false);
+            EventLogger.LogMessage( "Halt Requested", TraceLevel.Info);
             try
             {
                 if (IsHoming) throw new ApplicationException("You can not halt device while homing");
@@ -808,7 +815,7 @@ namespace PyxisLE_API
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                EventLogger.LogMessage(ex);
                 throw;
             }
         }
@@ -817,7 +824,7 @@ namespace PyxisLE_API
         {
             try
             {
-                Logger.LogMessage(AssemblyName, ClassName, "Attempting to Clear Error State", false);
+                EventLogger.LogMessage("Attempting to Clear Error State", TraceLevel.Info);
                 // Prepare the output report to send
                 OutputReport ClearErrorReport = new OutputReport(Rotators.REPORTID_OUTPUT_CLEAR_ERROR, new byte[] { 0 });
                 // send the report
@@ -828,11 +835,11 @@ namespace PyxisLE_API
                     throw new ApplicationException("Error state was not successfully cleared. Error state is set at " + this.ErrorState.ToString() +
                      ". Error message = " + GetErrorMessage(this.ErrorState));
                 else 
-                    Logger.LogMessage(AssemblyName, ClassName, "Error State cleared successfully", false);
+                    EventLogger.LogMessage("Error State cleared successfully", TraceLevel.Info);
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                EventLogger.LogMessage(ex);
                 throw;
             }
         }

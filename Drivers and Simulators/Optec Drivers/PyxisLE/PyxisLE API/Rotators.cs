@@ -8,6 +8,7 @@ using System.Diagnostics;
 using OptecHIDTools;
 using System.Windows.Forms;
 using System.Threading;
+using Optec;
 
 namespace PyxisLE_API
 {
@@ -43,8 +44,7 @@ namespace PyxisLE_API
         private Thread RefreshRotatorListThread;
         private static int InstanceCounter = 0;
         private int InstanceID;
-        private const string AssemblyName = "PyxisLE_API";
-        private const string ClassName = "Rotators";
+
 
         public Rotators()
         {
@@ -53,8 +53,8 @@ namespace PyxisLE_API
                 this.InstanceID = InstanceCounter;
                 Interlocked.Increment(ref InstanceCounter);
 
-                Logger.LogMessage(AssemblyName, ClassName, "Creating instance(" + this.InstanceID.ToString() +
-                    ") of Rotator class", false);
+                EventLogger.LogMessage( "Creating instance(" + this.InstanceID.ToString() +
+                    ") of Rotator class", TraceLevel.Info);
                 HIDMonitor.HIDAttached += new EventHandler(HIDMonitor_HIDAttached);
 
                 HIDMonitor.HIDRemoved += new EventHandler(HIDMonitor_HIDRemoved);
@@ -63,7 +63,7 @@ namespace PyxisLE_API
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                EventLogger.LogMessage(ex);
                 throw;
             }
         }
@@ -80,7 +80,7 @@ namespace PyxisLE_API
 
             if ((deviceInfo.PID == ROTATOR_PID) && (deviceInfo.VID == OPTEC_VID))
             {
-                Logger.LogMessage(AssemblyName, ClassName, "Rotator Removed - Serial Number = " + deviceInfo.SerialNumber, false);
+                EventLogger.LogMessage( "Rotator Removed - Serial Number = " + deviceInfo.SerialNumber, TraceLevel.Info);
                 TriggerAnEvent(RotatorRemoved);
             }
         }
@@ -96,7 +96,7 @@ namespace PyxisLE_API
             DeviceListChangedArgs deviceInfo = (DeviceListChangedArgs)e;
             if ((deviceInfo.PID == ROTATOR_PID) && (deviceInfo.VID == OPTEC_VID))
             {
-                Logger.LogMessage(AssemblyName, ClassName, "Rotator Attached - Serial Number = " + deviceInfo.SerialNumber, false);
+                EventLogger.LogMessage( "Rotator Attached - Serial Number = " + deviceInfo.SerialNumber, TraceLevel.Info);
                 TriggerAnEvent(RotatorAttached);
             }
         }
@@ -112,7 +112,7 @@ namespace PyxisLE_API
         {
             try
             {
-                Logger.LogMessage(AssemblyName, ClassName, "Refreshing Rotator List", true);
+                EventLogger.LogMessage( "Refreshing Rotator List", TraceLevel.Info);
                 DetectedRotators.Clear();
                 List<HID> detectedHIDs = HIDMonitor.DetectedHIDs;
                 detectedHIDs = detectedHIDs.Where(d => d.PID_Hex == ROTATOR_PID).ToList();
@@ -124,7 +124,7 @@ namespace PyxisLE_API
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                EventLogger.LogMessage(ex);
                 throw;
             }
         }
@@ -171,7 +171,7 @@ namespace PyxisLE_API
             catch (Exception ex)
             {
                 // Handle any exceptions that were thrown by the invoked method
-                Logger.LogException(ex);
+                EventLogger.LogMessage(ex);
                 // Don't throw this because I don't know what to do with it...
             }
         }

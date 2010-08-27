@@ -56,7 +56,6 @@
             this.showHideRelativeMoveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deviceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.diagnosticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -74,6 +73,7 @@
             this.RotatorDiagram = new System.Windows.Forms.PictureBox();
             this.StatusLabelTimer = new System.Windows.Forms.Timer(this.components);
             this.ExternalControlTimer = new System.Windows.Forms.Timer(this.components);
+            this.VersionCheckerBGWorker = new System.ComponentModel.BackgroundWorker();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Relative_NUD)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -214,6 +214,7 @@
             this.RelativeForward_BTN.Text = ">>";
             this.RelativeForward_BTN.UseVisualStyleBackColor = true;
             this.RelativeForward_BTN.Click += new System.EventHandler(this.RelativeForward_BTN_Click);
+            this.RelativeForward_BTN.Validating += new System.ComponentModel.CancelEventHandler(this.RelativeIncrement_TB_Validating);
             // 
             // RelativeReverse_Btn
             // 
@@ -224,6 +225,7 @@
             this.RelativeReverse_Btn.Text = "<<";
             this.RelativeReverse_Btn.UseVisualStyleBackColor = true;
             this.RelativeReverse_Btn.Click += new System.EventHandler(this.RelativeReverse_Btn_Click);
+            this.RelativeReverse_Btn.Validating += new System.ComponentModel.CancelEventHandler(this.RelativeIncrement_TB_Validating);
             // 
             // Relative_NUD
             // 
@@ -335,8 +337,7 @@
             // deviceToolStripMenuItem
             // 
             this.deviceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.advancedSetupToolStripMenuItem,
-            this.diagnosticsToolStripMenuItem});
+            this.advancedSetupToolStripMenuItem});
             this.deviceToolStripMenuItem.Name = "deviceToolStripMenuItem";
             this.deviceToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.deviceToolStripMenuItem.Text = "Device";
@@ -347,13 +348,6 @@
             this.advancedSetupToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.advancedSetupToolStripMenuItem.Text = "Advanced Setup";
             this.advancedSetupToolStripMenuItem.Click += new System.EventHandler(this.advancedSetupToolStripMenuItem_Click);
-            // 
-            // diagnosticsToolStripMenuItem
-            // 
-            this.diagnosticsToolStripMenuItem.Name = "diagnosticsToolStripMenuItem";
-            this.diagnosticsToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.diagnosticsToolStripMenuItem.Text = "Diagnostics";
-            this.diagnosticsToolStripMenuItem.Click += new System.EventHandler(this.diagnosticsToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -377,6 +371,7 @@
             this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
             this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.checkForUpdatesToolStripMenuItem.Text = "Check for Updates";
+            this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdatesToolStripMenuItem_Click);
             // 
             // deviceDocumentationToolStripMenuItem
             // 
@@ -520,6 +515,10 @@
             this.ExternalControlTimer.Interval = 1000;
             this.ExternalControlTimer.Tick += new System.EventHandler(this.ExternalControlTimer_Tick);
             // 
+            // VersionCheckerBGWorker
+            // 
+            this.VersionCheckerBGWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.VersionCheckerBGWorker_DoWork);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -583,7 +582,6 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem advancedSetupToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem diagnosticsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem checkForUpdatesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deviceDocumentationToolStripMenuItem;
@@ -607,5 +605,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Timer ExternalControlTimer;
+        private System.ComponentModel.BackgroundWorker VersionCheckerBGWorker;
     }
 }

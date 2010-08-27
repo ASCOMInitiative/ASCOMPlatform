@@ -82,5 +82,17 @@ namespace PyxisLE_Control.Properties {
                 this["ShowRelativeMove"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Info")]
+        public global::System.Diagnostics.TraceLevel LastTraceLevel {
+            get {
+                return ((global::System.Diagnostics.TraceLevel)(this["LastTraceLevel"]));
+            }
+            set {
+                this["LastTraceLevel"] = value;
+            }
+        }
     }
 }

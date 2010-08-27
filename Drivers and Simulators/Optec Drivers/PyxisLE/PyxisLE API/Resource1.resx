@@ -124,7 +124,7 @@
     <value>12VDC Power is Disconnected</value>
   </data>
   <data name="ErrorState_2" xml:space="preserve">
-    <value />
+    <value>Invalid parameter sent in command</value>
   </data>
   <data name="ErrorState_3" xml:space="preserve">
     <value />

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.IO;
+using Optec;
 
 namespace ASCOM.PyxisLE_ASCOM
 {
@@ -22,11 +23,9 @@ namespace ASCOM.PyxisLE_ASCOM
         public override void Install(System.Collections.IDictionary stateSaver)
         {
             string msg = "Install custom action - Starting registration for COM Interop";
-            Trace.WriteLine(msg);
-            Logger.TLogger.LogMessage("Installer", msg);
+            EventLogger.LogMessage(msg, TraceLevel.Warning);
 #if DEBUG
             MessageBox.Show("Attach debugger to this process now, if required", "Custom Action Debug", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-
 #endif
             base.Install(stateSaver);
 
@@ -37,9 +36,8 @@ namespace ASCOM.PyxisLE_ASCOM
                 Logger.TLogger.LogMessage("Installer", "Failed to Register driver for COM Interop");
                 throw new InstallException("Failed To Register driver for COM Interop");
             }
-            Trace.WriteLine("Completed registration for COM Interop");
-            Logger.TLogger.LogMessage("Installer", "Completed registration for COM Interop");
-            Logger.TLogger.Dispose();
+            EventLogger.LogMessage("ASCOM Registration completed successfully", TraceLevel.Warning);
+          
         }
 
         /// <summary>
