@@ -30,6 +30,8 @@ using ASCOM.Interface;
 using PyxisLE_API;
 using ASCOM.Utilities;
 
+using Optec;
+
 namespace ASCOM.PyxisLE_ASCOM
 {
     //

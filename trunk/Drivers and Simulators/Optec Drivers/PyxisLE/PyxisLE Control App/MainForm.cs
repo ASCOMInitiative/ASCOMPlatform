@@ -9,6 +9,10 @@ using System.Windows.Forms;
 using PyxisLE_API;
 using System.Collections;
 using System.Threading;
+using Optec;
+using System.Diagnostics;
+using System.Reflection;
+
 
 namespace PyxisLE_Control
 {
@@ -19,7 +23,8 @@ namespace PyxisLE_Control
         private Rotator myRotator;
         private ArrayList ControlList = new ArrayList();
         private const string NC_msg = "No connected Pyxis LE rotators are connected to the PC";
-        private bool LastState = false;
+        private bool LastConnectedState = true;
+        private bool LastPowerStateConnected = true;
         private const int NORMAL_HEIGHT = 628;
         private const int SKY_PA_HEIGHT = 43;
         private const int ROTATOR_DIAGRAM_HEIGHT = 315;
@@ -27,12 +32,14 @@ namespace PyxisLE_Control
         private const int ABSOLUTE_HEIGHT = 43;
         private const int RELATIVE_HEIGHT = 75;
 
+
         private const int SHORT_HEIGHT = 290;
         private Thread MotionMonitorThread;
 
         public MainForm()
         {
             InitializeComponent();
+            EventLogger.LoggingLevel = Properties.Settings.Default.LastTraceLevel;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -100,7 +107,7 @@ namespace PyxisLE_Control
         {
             get
             {
-                if(LastState == false)
+                if(LastConnectedState == false)
                 {
                     myRotator = FindMyDevice();
                 }
@@ -118,35 +125,62 @@ namespace PyxisLE_Control
 
         private void MotionMonitor()
         {
-            System.Threading.Thread.Sleep(100);
-            string msg = "";
-            if (myRotator.IsHoming) msg = "Homing Complete!";
-            else if (myRotator.IsMoving) msg = "Move Completed!";
-            while (myRotator.IsMoving || myRotator.IsHoming)
+            try
             {
-                System.Threading.Thread.Sleep(25);
+                System.Threading.Thread.Sleep(100);
+                string msg = "";
+                if (myRotator.IsHoming) msg = "Homing Complete!";
+                else if (myRotator.IsMoving) msg = "Move Completed!";
+                while (myRotator.IsMoving || myRotator.IsHoming)
+                {
+                    System.Threading.Thread.Sleep(25);
+                    this.Invoke(new DelNoParms(RotatorDiagram.Refresh));
+                    this.Invoke(new DelNoParms(UpdateSkyPATextbox));
+                    Application.DoEvents();
+                }
                 this.Invoke(new DelNoParms(RotatorDiagram.Refresh));
                 this.Invoke(new DelNoParms(UpdateSkyPATextbox));
+                this.Invoke(new SingleStringDelegate(SetStatusLabelText), new object[] { msg });
+
                 Application.DoEvents();
             }
-            this.Invoke(new DelNoParms(RotatorDiagram.Refresh));
-            this.Invoke(new DelNoParms(UpdateSkyPATextbox));
-            this.Invoke(new SingleStringDelegate(SetStatusLabelText), new object[] { msg });
-            
-            Application.DoEvents();
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void StartAMove(double newpos)
         {
-            myRotator.CurrentSkyPA = newpos;
-            string msg = "Moving rotator to Sky Position Angle " + newpos.ToString("0.00°");
-            this.Invoke(new SingleStringDelegate(SetStatusLabelText), new object[] { msg });
-            if (MotionMonitorThread.IsAlive) return;
-            else
+            try
             {
-                ThreadStart ts = new ThreadStart(MotionMonitor);
-                MotionMonitorThread = new Thread(ts);
-                MotionMonitorThread.Start();
+                if (myRotator.ErrorState == 1)
+                {
+                    EventLogger.LogMessage("Device had Error State = 1 (No Power) when move was attempted.", System.Diagnostics.TraceLevel.Warning);
+                    myRotator.ClearErrorState();
+                    if (myRotator.ErrorState != 0) throw new ApplicationException("Connect 12V power to Pyxis LE");
+                }
+                else if (myRotator.ErrorState != 0)
+                {
+                    throw new ApplicationException("Rotator has firmware error code set: " +
+                        myRotator.GetErrorMessage(myRotator.ErrorState));
+                }
+                myRotator.CurrentSkyPA = newpos;
+                string msg = "Moving rotator to Sky Position Angle " + newpos.ToString("0.00°");
+                this.Invoke(new SingleStringDelegate(SetStatusLabelText), new object[] { msg });
+                if (MotionMonitorThread.IsAlive) return;
+                else
+                {
+                    ThreadStart ts = new ThreadStart(MotionMonitor);
+                    MotionMonitorThread = new Thread(ts);
+                    MotionMonitorThread.Start();
+                }
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -160,7 +194,7 @@ namespace PyxisLE_Control
             }
             catch (Exception ex)
             {
-                Logger.
+                EventLogger.LogMessage(ex);
                 DisableControls();
                 throw;
             }
@@ -257,8 +291,7 @@ namespace PyxisLE_Control
             }
             catch (Exception ex)
             {
-                OptecLogger.LogMessageBasic("An exception was caught while trying to update controls for PyxisLE_Control." +
-                    " This is likely caused by unplugging the device while it is homing" + ex.Message);
+                EventLogger.LogMessage(ex);
                 disableControls();
             }
 
@@ -502,9 +535,18 @@ namespace PyxisLE_Control
 
         private void HomeBTN_Click(object sender, EventArgs e)
         {
-            myRotator.Home();
-            StatusLabel.Text = "Homing device...";
-            MotionMonitor();
+            try
+            {
+                myRotator.Home();
+                StatusLabel.Text = "Homing device...";
+                MotionMonitor();
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                MessageBox.Show(ex.Message);
+                throw;
+            }
         }
 
         private void SetPA_BTN_Click(object sender, EventArgs e)
@@ -613,20 +655,6 @@ namespace PyxisLE_Control
             a.ShowDialog();
         }
 
-        private void diagnosticsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string logfilepath = "";
-            try
-            {
-                logfilepath = OptecLogger.LogFileDirectory;
-                System.Diagnostics.Process.Start("explorer.exe", logfilepath);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("An error occurred while attempting to navigate to log file directory at: " + logfilepath +
-                    Environment.NewLine + "The error message was: " + ex.Message);
-            }
-        }
 
 #endregion
 
@@ -682,12 +710,44 @@ namespace PyxisLE_Control
                     if (myRotator.IsAttached)
                     {
                         this.Invoke(new DelNoParms(UpdateSkyPATextbox));
+
                         if (RotatorDiagram.Visible && RotatorDiagram.Enabled)
                         {
+                            if (myRotator.ErrorState == 1)
+                            {
+                                try
+                                {
+                                    if (LastPowerStateConnected)
+                                    {
+                                        LastPowerStateConnected = false;
+                                        MessageBox.Show("12V Power has been disconnected for the rotator. Please reconnect it now.");
+                                        EventLogger.LogMessage("ExtCtrlTmr found Frmwr error code 1 set (No 12V power).", System.Diagnostics.TraceLevel.Warning);
+                                        myRotator.ClearErrorState(); 
+                                    }
+                                    else
+                                    {
+                                        
+                                        myRotator.ClearErrorState();
+                                        LastPowerStateConnected = true;
+                                        EventLogger.LogMessage("Restoring trace level", TraceLevel.Info);
+                                        EventLogger.LoggingLevel = Properties.Settings.Default.LastTraceLevel;
+                                        MessageBox.Show("Power has just been restored to the device. If you have a heavy load on the rotator it would be wise to re-home now.");
+                                    }
+                                }
+                                catch (Exception)
+                                {
+                                    
+                                    if (EventLogger.LoggingLevel != TraceLevel.Off)
+                                    {
+                                        EventLogger.LogMessage("Temporarily disabling logging while waiting for power to be reconnected.", TraceLevel.Info);
+                                        EventLogger.LoggingLevel = TraceLevel.Off;
+                                    }
+                                    
+                                }
+                            }
                             this.Invoke(new DelNoParms(RotatorDiagram.Refresh));
                         }
                     }
-
                 }
             }
             catch (Exception)
@@ -699,6 +759,7 @@ namespace PyxisLE_Control
         private void MainForm_Shown(object sender, EventArgs e)
         {
             ExternalControlTimer.Enabled = true;
+            VersionCheckerBGWorker.RunWorkerAsync();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -707,9 +768,65 @@ namespace PyxisLE_Control
             ExternalControlTimer.Enabled = false;
         }
 
-        
+        private void VersionCheckerBGWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+           try
+            {
+                //Check For A newer verison of the driver
+                if (NewVersionChecker.CheckLatestVerisonNumber(NewVersionChecker.ProductType.HSFWControl))
+                {
+                    //Found a VersionNumber, now check if it's newer
+                    Assembly asm = Assembly.GetExecutingAssembly();
+                    AssemblyName asmName = asm.GetName();
+                    NewVersionChecker.CompareToLatestVersion(asmName.Version);
+                    if (NewVersionChecker.NewerVersionAvailable)
+                    {
+                        NewVersionFrm nvf = new NewVersionFrm(asmName.Version.ToString(),
+                            NewVersionChecker.NewerVersionNumber, NewVersionChecker.NewerVersionURL);
+                        nvf.ShowDialog();
+                    }
+                }
+            }
+            catch{} // Just ignore all errors. They mean the computer isn't connected to internet.
+        }
 
-        
- 
+        private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
+                if (VersionCheckerBGWorker.IsBusy)
+                {
+                    string msg = "The Version Checker is currently busy. Please try again in a moment.";
+                    MessageBox.Show(msg);
+                }
+                else
+                {
+                    if (NewVersionChecker.CheckLatestVerisonNumber(NewVersionChecker.ProductType.HSFWControl))
+                    {
+                        //Found a VersionNumber, now check if it's newer
+                        Assembly asm = Assembly.GetExecutingAssembly();
+                        AssemblyName asmName = asm.GetName();
+                        NewVersionChecker.CompareToLatestVersion(asmName.Version);
+                        if (NewVersionChecker.NewerVersionAvailable)
+                        {
+                            NewVersionFrm nvf = new NewVersionFrm(asmName.Version.ToString(),
+                                NewVersionChecker.NewerVersionNumber, NewVersionChecker.NewerVersionURL);
+                            nvf.ShowDialog();
+                        }
+                        else MessageBox.Show("Congratulations! You have the most recent version of this program!\n" +
+                            "This version number is " + asmName.Version.ToString(), "No Update Needed! - V" +
+                            asmName.Version.ToString());
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Unable to connect to the server www.optecinc.com",
+                    "Version Information Unavailable");
+            }
+            finally { this.Cursor = Cursors.Default; }
+        }
+
     }
 }

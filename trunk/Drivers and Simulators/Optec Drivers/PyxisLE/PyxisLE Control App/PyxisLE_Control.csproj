@@ -16,7 +16,7 @@
     <ManifestCertificateThumbprint>A53E5AC8E5B7510118BB76C5448AFFE8C57B6040</ManifestCertificateThumbprint>
     <ManifestKeyFile>RotatorAPITest_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Optec.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
@@ -156,6 +156,13 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="NewVersionChecker.cs" />
+    <Compile Include="NewVersionFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewVersionFrm.designer.cs">
+      <DependentUpon>NewVersionFrm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SetSkyPA_Frm.cs">
@@ -172,6 +179,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewVersionFrm.resx">
+      <DependentUpon>NewVersionFrm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -234,6 +244,10 @@
     <ProjectReference Include="..\PyxisLE API\PyxisLE_API.csproj">
       <Project>{550D78D4-A958-4A57-8EA1-753E83747B99}</Project>
       <Name>PyxisLE_API</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Jordans Programs %28Working Copy%29\Optec.EventLogger\Optec.EventLogger\Optec.EventLogger.csproj">
+      <Project>{9EC2D59F-5842-43FA-A943-625B23295484}</Project>
+      <Name>Optec.EventLogger</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
