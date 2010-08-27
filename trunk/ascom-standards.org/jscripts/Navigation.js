@@ -184,7 +184,7 @@ function writesubmenu() {
  	    SubMenuOutput += "</ul>";
         SubMenuOutput += "<h3>Driver Design Principles</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
-		SubMenuOutput += "<li><a href=\"Principles.htm\">The General Principle</a></li>";
+		SubMenuOutput += "<li><a href=\"Principles.htm\">The General Principles</a></li>";
 		SubMenuOutput += "<li><a href=\"Errors.htm\">Errors and Retries</a></li>";
 		SubMenuOutput += "<li><a href=\"Throttling.htm\">Traffic Throttling</a></li>";
 		SubMenuOutput += "<li><a href=\"Binding.htm\">Early and Late Binding</a></li>";
@@ -209,8 +209,9 @@ function writesubmenu() {
 	    SubMenuOutput += "</ul>";
 	    break;
     case 7: // FAQs
-        SubMenuOutput += "<h3>FAQ\'s</h3>";
+        SubMenuOutput += "<h3>Detailed FAQ Answers</h3>";
         SubMenuOutput += "<ul class=\"treeview\">";
+	    SubMenuOutput += "<li><a href=\"SoftwareVictory.htm\">Correcting for Problems</a></li>";
 	    SubMenuOutput += "<li><a href=\"TheSky.htm\">Working With TheSky</a></li>";
 	    SubMenuOutput += "<li><a href=\"POTH.htm\">Using POTH</a></li>";
 	    SubMenuOutput += "</ul>";
