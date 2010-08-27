@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 using System.Threading;
 using System.Diagnostics;
-
+using Optec;
 
 
 namespace OptecHIDTools
@@ -25,8 +25,6 @@ namespace OptecHIDTools
         private string _Manufacturer = "";
         private string _Product = "";
         private bool _DeviceIsAttached = false;
-        private const string AssemblyName = "OptecHIDTools";
-        private const string ClassName = "HID";
         private static int CurrentInstance = 0;
         internal int InstanceID;
 
@@ -44,20 +42,20 @@ namespace OptecHIDTools
             this.SerialNumber = serialNumber;
             InstanceID = CurrentInstance;
             Interlocked.Increment(ref CurrentInstance);
-            OptecLogger.LogMessage(AssemblyName, ClassName, "Creating HID object instance. Instance number = "
-                + InstanceID.ToString(), false);
+            EventLogger.LogMessage("Creating HID object instance. Instance number = "
+                + InstanceID.ToString(), TraceLevel.Info);
         }
 
         internal void TriggerDeviceRemoved()
         {
             triggerAnEvent(ref this.DeviceRemoved);
-            OptecLogger.LogMessage(AssemblyName, ClassName, "Triggering Device Removed Event", true);
+            EventLogger.LogMessage( "Triggering Device Removed Event", TraceLevel.Info);
         }
 
         internal void TriggerDeviceAttached()
         {
             triggerAnEvent( ref this.DeviceAttached);
-            OptecLogger.LogMessage(AssemblyName, ClassName, "Triggering Device Attached Event", true);
+            EventLogger.LogMessage("Triggering Device Attached Event", TraceLevel.Info);
         }
 
         private void triggerAnEvent(ref EventHandler EH)
@@ -87,7 +85,7 @@ namespace OptecHIDTools
             catch
             {
                 // Handle any exceptions that were thrown by the invoked method
-                OptecLogger.LogMessage(AssemblyName, ClassName, "An exception was caught in EndAsyncEvent method", false);
+                EventLogger.LogMessage("An exception was caught in EndAsyncEvent method", TraceLevel.Info);
             }
         }
   
@@ -173,7 +171,7 @@ namespace OptecHIDTools
                 ReadWrite_API_Wrappers.OPEN_EXISTING,
                 ReadWrite_API_Wrappers.FILE_ATTRIBUTE_NORMAL | ReadWrite_API_Wrappers.FILE_FLAG_OVERLAPPED,
                 0);
-            OptecLogger.LogMessage(AssemblyName, ClassName, "A SafeFileHandle was opened to path " + _pathString, true);
+            EventLogger.LogMessage("A SafeFileHandle was opened to path " + _pathString, TraceLevel.Info);
             return pHandle;
         }
 
@@ -210,13 +208,13 @@ namespace OptecHIDTools
                 if (Success == false)
                 {
                     string resultString = ParseWin32Error("WriteFile Error in SendReport_Interrupt");
-                    OptecLogger.LogMessage(AssemblyName, ClassName, resultString, false);
+                    EventLogger.LogMessage(resultString, TraceLevel.Warning);
                 }
                 return Success;
             }
             catch (Exception ex)
             {
-                OptecLogger.LogException(ex);
+                EventLogger.LogMessage(ex);
                 throw; 
             }
             finally
@@ -230,7 +228,7 @@ namespace OptecHIDTools
             
             try
             {
-                OptecLogger.LogMessage(AssemblyName, ClassName, "Attempting to process Feature report", true);
+                EventLogger.LogMessage("Attempting to process Feature report", TraceLevel.Verbose);
                 // Verify that the Report is not empty
                 if (ReportToProcess == null)
                 {
@@ -321,12 +319,12 @@ namespace OptecHIDTools
                     // Update the feature report with the received data
                     ReportToProcess.Response1 = ReceivedResponse1;
                     ReportToProcess.Response2 = ReceivedResponse2;
-                    OptecLogger.LogMessage(AssemblyName, ClassName, "Feature Report Processed successfully", true);
+                    EventLogger.LogMessage("Feature Report Processed successfully", TraceLevel.Verbose);
                 }               
             }
             catch (Exception ex)
             {
-                OptecLogger.LogException(ex);    
+                EventLogger.LogMessage(ex);    
                 throw;
             }
             finally
@@ -341,7 +339,7 @@ namespace OptecHIDTools
         {
             try
             {
-                OptecLogger.LogMessage(AssemblyName, ClassName, "Attempting to send Output Report via Control Transfer", true);
+                EventLogger.LogMessage("Attempting to send Output Report via Control Transfer", TraceLevel.Verbose);
                 // Open the handle if it's not already opened
                 if (!IsConnected()) Connect();  
                 // Prepare the buffers and success bit
@@ -370,11 +368,11 @@ namespace OptecHIDTools
                     string resultString = ParseWin32Error("SendReport_Control");
                     throw new ApplicationException("An error occurred while sending output report.\n " + resultString);
                 }
-                OptecLogger.LogMessage(AssemblyName, ClassName, "Output Report Sent Successfully!", true);
+                EventLogger.LogMessage("Output Report Sent Successfully!", TraceLevel.Verbose);
             }
             catch (Exception ex) 
             {
-                OptecLogger.LogException(ex);
+                EventLogger.LogMessage(ex);
            
                 throw; 
             }
@@ -432,7 +430,7 @@ namespace OptecHIDTools
             }
             else
             {
-                OptecLogger.LogMessage(AssemblyName, ClassName, ParseWin32Error("Read File"), true);
+                EventLogger.LogMessage(ParseWin32Error("Read File"), TraceLevel.Warning);
                 //no response so now we have to wait...
                 result = ReadWrite_API_Wrappers.WaitForSingleObject(eventObject, 3000);
 
@@ -445,18 +443,18 @@ namespace OptecHIDTools
                             unManagedOverlapped,
                             ref numberOfBytesRead,
                             false);
-                        OptecLogger.LogMessage(AssemblyName, ClassName, "\nOverlapped Result Returned\n", true);
+                        EventLogger.LogMessage( "\nOverlapped Result Returned\n", TraceLevel.Info);
                         break;
                     
                     case ReadWrite_API_Wrappers.WAIT_TIMEOUT:
                         inputReportBuffer = null;
                         ReadWrite_API_Wrappers.CancelIo(readHandle);
-                        OptecLogger.LogMessage(AssemblyName, ClassName, "Timeout occured during ReadFile. " + ParseWin32Error("Read File"), true);
+                        EventLogger.LogMessage("Timeout occured during ReadFile. " + ParseWin32Error("Read File"), TraceLevel.Info);
                         break;
 
                     default:
                         inputReportBuffer = null;
-                        OptecLogger.LogMessage(AssemblyName, ClassName, "Error occured during ReadFile. " + ParseWin32Error("Read File"), true);
+                        EventLogger.LogMessage("Error occured during ReadFile. " + ParseWin32Error("Read File"), TraceLevel.Info);
                         ReadWrite_API_Wrappers.CancelIo(readHandle);
                         break;
 
@@ -471,7 +469,7 @@ namespace OptecHIDTools
         {
             try
             {
-                OptecLogger.LogMessage(AssemblyName, ClassName, "Requesting Input Report via Control Transfer", true);
+                EventLogger.LogMessage( "Requesting Input Report via Control Transfer", TraceLevel.Verbose);
                 //Open the handle it is not already open
                 if (!IsConnected()) Connect();  
                 // Prepare the input report buffer and success bit
@@ -495,6 +493,7 @@ namespace OptecHIDTools
                     string resultString = ParseWin32Error("ReadInputReport_Control");
                     throw new ApplicationException("Error Receiving Input Report.\n" + resultString);
                 }
+
                 // Finally verify that the data received has the same Report ID as what we requested
                 if (Report.ReceivedData[0] != Convert.ToByte(Report.ReportID))
                 {
@@ -507,13 +506,13 @@ namespace OptecHIDTools
                 }
                 else
                 {
-                    OptecLogger.LogMessage(AssemblyName, ClassName, "Input Report Received", true);
+                    EventLogger.LogMessage("Input Report Received", TraceLevel.Verbose);
                     return;
                 }
             }
             catch (Exception ex)
             {
-                OptecLogger.LogException(ex);
+                EventLogger.LogMessage(ex);
                 throw;
             }
 
@@ -571,7 +570,7 @@ namespace OptecHIDTools
         {
             DeviceHandle.Close();
             DeviceHandle = null;
-            OptecLogger.LogMessage(AssemblyName, ClassName, "SafeFileHandle Closed", true);
+            EventLogger.LogMessage("SafeFileHandle Closed", TraceLevel.Verbose);
             //Debug.WriteLine("Handle Closed!");
         }
         
