@@ -78,6 +78,15 @@ namespace PyxisLE_Control
             }
         }
 
+        private void MainForm_Shown(object sender, EventArgs e)
+        {
+            ExternalControlTimer.Enabled = true;
+            if (Properties.Settings.Default.CheckForUpdates)
+            {
+                VersionCheckerBGWorker.RunWorkerAsync();
+            }
+        }
+
         void RotatorListChanged(object sender, EventArgs e)
         {
             try
@@ -756,12 +765,6 @@ namespace PyxisLE_Control
             }
         }
 
-        private void MainForm_Shown(object sender, EventArgs e)
-        {
-            ExternalControlTimer.Enabled = true;
-            VersionCheckerBGWorker.RunWorkerAsync();
-        }
-
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             ExternalControlTimer.Stop();
@@ -773,6 +776,7 @@ namespace PyxisLE_Control
            try
             {
                 //Check For A newer verison of the driver
+                EventLogger.LogMessage("Checking for application updates", TraceLevel.Info);
                 if (NewVersionChecker.CheckLatestVerisonNumber(NewVersionChecker.ProductType.HSFWControl))
                 {
                     //Found a VersionNumber, now check if it's newer
@@ -781,13 +785,21 @@ namespace PyxisLE_Control
                     NewVersionChecker.CompareToLatestVersion(asmName.Version);
                     if (NewVersionChecker.NewerVersionAvailable)
                     {
+                        EventLogger.LogMessage("This application is NOT the most recent version available", TraceLevel.Warning);
                         NewVersionFrm nvf = new NewVersionFrm(asmName.Version.ToString(),
                             NewVersionChecker.NewerVersionNumber, NewVersionChecker.NewerVersionURL);
                         nvf.ShowDialog();
                     }
+                    else
+                    {
+                        EventLogger.LogMessage("This application is the most recent version available", TraceLevel.Info);
+                    }
                 }
             }
-            catch{} // Just ignore all errors. They mean the computer isn't connected to internet.
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+            } // Just ignore all errors. They mean the computer isn't connected to internet.
         }
 
         private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
