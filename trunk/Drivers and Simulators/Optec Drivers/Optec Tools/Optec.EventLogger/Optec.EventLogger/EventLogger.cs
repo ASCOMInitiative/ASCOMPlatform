@@ -11,7 +11,7 @@ namespace Optec
         private static EventLog myEventLog;
         private static EventLogTraceListener myEventLogTraceListener;
         private const string eventLogSource = "Optec Inc.";
-        private const string eventLogName = "USB Device Log";
+        private const string eventLogName = "Optec Device Log";
         private static TraceSwitch myTraceSwitch;
 
         static EventLogger()
