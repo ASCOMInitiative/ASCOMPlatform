@@ -23,7 +23,7 @@ namespace PyxisLE_API
         private bool isMoving = false;
         private Int16 zeroOffset = 0;
         private Int16 skyPAOffset = 0;
-        private double targetPosition = 0;
+        private double targetDevicePosition = 0;
         private double currentPosition = 0;
         private Int32 stepsPerRev = 0;
         private short errorState = 0;
@@ -301,7 +301,7 @@ namespace PyxisLE_API
 
                 // Extract the Target Position
                 rTargetPosition = (rTargetPosition / (StepsPerRev / 360));
-                this.targetPosition = rTargetPosition;
+                this.targetDevicePosition = rTargetPosition;
 
             }
             catch (Exception ex)
@@ -460,9 +460,22 @@ namespace PyxisLE_API
             }
         }
 
-        public double TargetPosition
+        public double TargetDevicePosition
         {
-            get { return targetPosition; }
+            get { return targetDevicePosition; }
+        }
+
+        public double TargetSkyPA
+        {
+            get
+            {
+                double offset_deg = SkyPAOffset;
+                double TSkyPA = targetDevicePosition + offset_deg;
+                if (TSkyPA >= 360) TSkyPA = TSkyPA - 360;
+                else if (TSkyPA < 0) TSkyPA = TSkyPA + 360;
+                if (TSkyPA == 360) TSkyPA = 0;
+                return TSkyPA;
+            }
         }
 
         public Int32 StepsPerRev

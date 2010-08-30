@@ -31,6 +31,7 @@ using PyxisLE_API;
 using ASCOM.Utilities;
 
 using Optec;
+using System.Diagnostics;
 
 namespace ASCOM.PyxisLE_ASCOM
 {
@@ -187,23 +188,40 @@ namespace ASCOM.PyxisLE_ASCOM
 
         public void Move(float Position)
         {
-            if (!Connected) throw new ASCOM.NotConnectedException("The rotator device is no longer connected");
-            if (Position > 360) throw new ASCOM.InvalidOperationException("Cannot move to position greater than 360°");
-            else if (Position < -360) throw new ASCOM.InvalidOperationException("Cannot move to position less than 0°");
-            double NewPosition = myRotator.CurrentSkyPA + Position;
-            if (NewPosition > 360) NewPosition = NewPosition - 360;
-            else if (NewPosition < 0) NewPosition = NewPosition + 360;
-            myRotator.CurrentSkyPA = NewPosition;
-            while (myRotator.IsMoving) { }
+
+            try
+            {
+                if (!Connected) throw new ASCOM.NotConnectedException("The rotator device is no longer connected");
+                if (Position > 360) throw new ASCOM.InvalidOperationException("Cannot move to position greater than 360°");
+                else if (Position < -360) throw new ASCOM.InvalidOperationException("Cannot move to position less than 0°");
+                double NewPosition = myRotator.CurrentSkyPA + Position;
+                if (NewPosition > 360) NewPosition = NewPosition - 360;
+                else if (NewPosition < 0) NewPosition = NewPosition + 360;
+                myRotator.CurrentSkyPA = NewPosition;
+                while (myRotator.IsMoving) { }
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                throw;
+            }
         }
 
         public void MoveAbsolute(float Position)
         {
-            if (!Connected) throw new ASCOM.NotConnectedException("The rotator device is no longer connected");
-            if (Position > 360) throw new ASCOM.InvalidOperationException("Cannot move to position greater than 360°");
-            else if (Position < 0) throw new ASCOM.InvalidOperationException("Cannot move to position less than 0°");
-            myRotator.CurrentSkyPA = (double)Position;
-            while (myRotator.IsMoving) { }
+            try
+            {
+                if (!Connected) throw new ASCOM.NotConnectedException("The rotator device is no longer connected");
+                if (Position > 360) throw new ASCOM.InvalidOperationException("Cannot move to position greater than 360°");
+                else if (Position < 0) throw new ASCOM.InvalidOperationException("Cannot move to position less than 0°");
+                myRotator.CurrentSkyPA = (double)Position;
+                while (myRotator.IsMoving) { }
+            }
+            catch (Exception ex) 
+            {
+                EventLogger.LogMessage(ex);
+                throw;
+            }
         }
 
         public float Position
@@ -221,19 +239,35 @@ namespace ASCOM.PyxisLE_ASCOM
                 if (!Connected) throw new ASCOM.NotConnectedException("The rotator device is no longer connected");
                 return myRotator.Reverse;
             }
-            set { 
-                if (!Connected) throw new ASCOM.NotConnectedException("The rotator device is no longer connected");
-                myRotator.Reverse = value;
-                System.Threading.Thread.Sleep(500);
-                while (myRotator.IsHoming || myRotator.IsMoving) {/* We have to wait here because this method is synchronous*/ }
-                System.Threading.Thread.Sleep(100);
+            set {
+                try
+                {
+                    if (!Connected) throw new ASCOM.NotConnectedException("The rotator device is no longer connected");
+                    myRotator.Reverse = value;
+                    System.Threading.Thread.Sleep(500);
+                    while (myRotator.IsHoming || myRotator.IsMoving) { /* We have to wait here because this method is synchronous*/ }
+                    System.Threading.Thread.Sleep(100);
+                }
+                catch (Exception ex) 
+                { 
+                    EventLogger.LogMessage(ex);
+                    throw;
+                }
             }
         }
 
         public void SetupDialog()
         {
-            SetupDialogForm F = new SetupDialogForm();
-            F.ShowDialog();
+            try
+            {
+                SetupDialogForm F = new SetupDialogForm();
+                F.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                throw;
+            }
         }
 
         public float StepSize
@@ -248,9 +282,9 @@ namespace ASCOM.PyxisLE_ASCOM
         {
             get 
             {
-                throw new NotImplementedException("Target position not implemented");
-                //VerifyConnected();
-                //return (float)myRotator.TargetPosition;
+                
+                VerifyConnected();
+                return (float)myRotator.TargetSkyPA;
             }
         }
 
@@ -260,16 +294,33 @@ namespace ASCOM.PyxisLE_ASCOM
 
         private PyxisLE_API.Rotator FindMyRotator()
         {
-            string DesiredSerialNumber = myProfile.GetValue(s_csDriverID, "SelectedSerialNumber", "", "0");
-
-            foreach (PyxisLE_API.Rotator r in RotatorManager.RotatorList)
+            try
             {
-                if (r.SerialNumber == DesiredSerialNumber)
+                string DesiredSerialNumber = myProfile.GetValue(s_csDriverID, "SelectedSerialNumber", "", "0");
+
+                if (RotatorManager.RotatorList.Count == 1)
                 {
-                    return r;
+                    PyxisLE_API.Rotator rr = RotatorManager.RotatorList[0] as PyxisLE_API.Rotator;
+                    string msg = "Only one rotator attached. Using that rotator: " + rr.SerialNumber + " for ASCOM application.";
+                    EventLogger.LogMessage(msg, TraceLevel.Info);
+                    return rr;
                 }
+
+                foreach (PyxisLE_API.Rotator r in RotatorManager.RotatorList)
+                {
+                    if (r.SerialNumber == DesiredSerialNumber)
+                    {
+                        return r;
+                    }
+                }
+                throw new ApplicationException("The selected rotator is not connected to the PC");
             }
-            throw new ApplicationException("The selected rotator is not connected to the PC");
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                throw;
+            }
+
         }
 
         private void VerifyConnected()
