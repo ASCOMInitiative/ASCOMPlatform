@@ -241,13 +241,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Dependencies\Optec.EventLogger\Optec.EventLogger.csproj">
+      <Project>{9EC2D59F-5842-43FA-A943-625B23295484}</Project>
+      <Name>Optec.EventLogger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PyxisLE API\PyxisLE_API.csproj">
       <Project>{550D78D4-A958-4A57-8EA1-753E83747B99}</Project>
       <Name>PyxisLE_API</Name>
-    </ProjectReference>
-    <ProjectReference Include="C:\Jordans Programs %28Working Copy%29\Optec.EventLogger\Optec.EventLogger\Optec.EventLogger.csproj">
-      <Project>{9EC2D59F-5842-43FA-A943-625B23295484}</Project>
-      <Name>Optec.EventLogger</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

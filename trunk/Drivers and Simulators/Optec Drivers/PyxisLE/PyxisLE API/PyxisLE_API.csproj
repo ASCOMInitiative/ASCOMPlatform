@@ -177,16 +177,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dependencies\OptecHID\OptecHIDTools.csproj">
-      <Project>{9786A9B9-97B9-4B23-AF39-4514AF45DEED}</Project>
-      <Name>OptecHIDTools</Name>
-    </ProjectReference>
-    <ProjectReference Include="C:\Jordans Programs %28Working Copy%29\Optec.EventLogger\Optec.EventLogger\Optec.EventLogger.csproj">
-      <Project>{9EC2D59F-5842-43FA-A943-625B23295484}</Project>
-      <Name>Optec.EventLogger</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -198,6 +188,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Rotator.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Dependencies\Optec.EventLogger\Optec.EventLogger.csproj">
+      <Project>{9EC2D59F-5842-43FA-A943-625B23295484}</Project>
+      <Name>Optec.EventLogger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dependencies\OptecHID\OptecHIDTools.csproj">
+      <Project>{9786A9B9-97B9-4B23-AF39-4514AF45DEED}</Project>
+      <Name>OptecHIDTools</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
