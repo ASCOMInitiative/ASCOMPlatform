@@ -290,7 +290,7 @@ namespace PyxisLE_API
                 {
                     this.isMoving = false;
 #if DEBUG
-                Trace.WriteLine("Device is  NOT Moving");
+                Trace.WriteLine("Device is NOT Moving");
 #endif
                 }
                 else throw new ApplicationException("Invalid data received for IsMoving value");

@@ -73,6 +73,19 @@ namespace PyxisLE_Control
             myRotator = r;
         }
 
+        [Category("Application Settings")]
+        [DisplayName("Check for Updates")]
+        [Description("Configure whether the application automatically checks for updates on startup or not.")]
+        public bool CheckForUpdates
+        {
+            get { return Properties.Settings.Default.CheckForUpdates; }
+            set
+            {
+                Properties.Settings.Default.CheckForUpdates = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
         [Category("Settings")]
         [DisplayName("Zero Offset")]
         [Description("Adjust the rotators zero point. This is used when homing the device. Changing this value will force the device to home.")]
