@@ -48,7 +48,6 @@ namespace ASCOM.OptecTCF_S
             this.temperatureCoefficientsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.FocStatusControls_GB = new System.Windows.Forms.GroupBox();
             this.Center_Btn = new System.Windows.Forms.Button();
-            this.Out_BTN = new System.Windows.Forms.Button();
             this.StepSize_NUD = new System.Windows.Forms.NumericUpDown();
             this.PosDRO_TB = new System.Windows.Forms.TextBox();
             this.In_BTN = new System.Windows.Forms.Button();
@@ -62,7 +61,6 @@ namespace ASCOM.OptecTCF_S
             this.ModeAName_LB = new System.Windows.Forms.Label();
             this.ModeB_RB = new System.Windows.Forms.RadioButton();
             this.ModeA_RB = new System.Windows.Forms.RadioButton();
-            this.TempBGWorker = new System.ComponentModel.BackgroundWorker();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusTimer = new System.Windows.Forms.Timer(this.components);
@@ -74,6 +72,7 @@ namespace ASCOM.OptecTCF_S
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.VersionCheckerBGWorker = new System.ComponentModel.BackgroundWorker();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+            this.OUT_Btn = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.FocStatusControls_GB.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.StepSize_NUD)).BeginInit();
@@ -219,8 +218,8 @@ namespace ASCOM.OptecTCF_S
             // 
             // FocStatusControls_GB
             // 
+            this.FocStatusControls_GB.Controls.Add(this.OUT_Btn);
             this.FocStatusControls_GB.Controls.Add(this.Center_Btn);
-            this.FocStatusControls_GB.Controls.Add(this.Out_BTN);
             this.FocStatusControls_GB.Controls.Add(this.StepSize_NUD);
             this.FocStatusControls_GB.Controls.Add(this.PosDRO_TB);
             this.FocStatusControls_GB.Controls.Add(this.In_BTN);
@@ -245,17 +244,6 @@ namespace ASCOM.OptecTCF_S
             this.Center_Btn.Text = "Center";
             this.Center_Btn.UseVisualStyleBackColor = false;
             this.Center_Btn.Click += new System.EventHandler(this.Center_Btn_Click);
-            // 
-            // Out_BTN
-            // 
-            this.Out_BTN.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.Out_BTN.Location = new System.Drawing.Point(120, 77);
-            this.Out_BTN.Name = "Out_BTN";
-            this.Out_BTN.Size = new System.Drawing.Size(40, 40);
-            this.Out_BTN.TabIndex = 9;
-            this.Out_BTN.Text = "OUT";
-            this.Out_BTN.UseVisualStyleBackColor = false;
-            this.Out_BTN.Click += new System.EventHandler(this.Out_BTN_Click);
             // 
             // StepSize_NUD
             // 
@@ -411,14 +399,6 @@ namespace ASCOM.OptecTCF_S
             this.ModeA_RB.UseVisualStyleBackColor = true;
             this.ModeA_RB.Click += new System.EventHandler(this.ModeA_RB_Click);
             // 
-            // TempBGWorker
-            // 
-            this.TempBGWorker.WorkerReportsProgress = true;
-            this.TempBGWorker.WorkerSupportsCancellation = true;
-            this.TempBGWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.TempBGWorker_DoWork);
-            this.TempBGWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.TempBGWorker_RunWorkerCompleted);
-            this.TempBGWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.TempBGWorker_ProgressChanged);
-            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -434,10 +414,10 @@ namespace ASCOM.OptecTCF_S
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(74, 17);
             this.StatusLabel.Text = "DeviceStatus";
-            this.StatusLabel.MouseHover += new System.EventHandler(this.StatusLabel_MouseHover);
+            this.StatusLabel.Click += new System.EventHandler(this.StatusLabel_Click);
             this.StatusLabel.MouseEnter += new System.EventHandler(this.StatusLabel_MouseEnter);
             this.StatusLabel.MouseLeave += new System.EventHandler(this.StatusLabel_MouseLeave);
-            this.StatusLabel.Click += new System.EventHandler(this.StatusLabel_Click);
+            this.StatusLabel.MouseHover += new System.EventHandler(this.StatusLabel_MouseHover);
             // 
             // StatusTimer
             // 
@@ -496,6 +476,17 @@ namespace ASCOM.OptecTCF_S
             // 
             this.VersionCheckerBGWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.VersionCheckerBGWorker_DoWork);
             // 
+            // OUT_Btn
+            // 
+            this.OUT_Btn.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.OUT_Btn.Location = new System.Drawing.Point(121, 77);
+            this.OUT_Btn.Name = "OUT_Btn";
+            this.OUT_Btn.Size = new System.Drawing.Size(40, 40);
+            this.OUT_Btn.TabIndex = 12;
+            this.OUT_Btn.Text = "OUT";
+            this.OUT_Btn.UseVisualStyleBackColor = false;
+            this.OUT_Btn.Click += new System.EventHandler(this.Out_BTN_Click);
+            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -519,8 +510,8 @@ namespace ASCOM.OptecTCF_S
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Optec TCF-S Focuser Setup";
-            this.Load += new System.EventHandler(this.SetupDialogForm_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SetupDialogForm_FormClosing);
+            this.Load += new System.EventHandler(this.SetupDialogForm_Load);
             this.HelpRequested += new System.Windows.Forms.HelpEventHandler(this.SetupDialogForm_HelpRequested);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -542,8 +533,7 @@ namespace ASCOM.OptecTCF_S
         #endregion
 
         //fields used for temperature polling
-        private bool GetTemps = false;
-        private bool StoppedGettingTemps = false;
+
   //      private System.Windows.Forms.Button cmdOK;
         private System.Windows.Forms.Button cmdCancel;
         private System.Windows.Forms.MenuStrip menuStrip1;
@@ -554,7 +544,6 @@ namespace ASCOM.OptecTCF_S
         private System.Windows.Forms.ToolStripMenuItem temperatureCoefficientsToolStripMenuItem;
         private System.Windows.Forms.GroupBox FocStatusControls_GB;
         private System.Windows.Forms.Button Center_Btn;
-        private System.Windows.Forms.Button Out_BTN;
         private System.Windows.Forms.NumericUpDown StepSize_NUD;
         private System.Windows.Forms.TextBox PosDRO_TB;
         private System.Windows.Forms.Button In_BTN;
@@ -568,7 +557,6 @@ namespace ASCOM.OptecTCF_S
         private System.Windows.Forms.RadioButton ModeA_RB;
         private System.Windows.Forms.Label ModeBName_LB;
         private System.Windows.Forms.Label ModeAName_LB;
-        private System.ComponentModel.BackgroundWorker TempBGWorker;
 
         private System.Windows.Forms.PictureBox PowerLight;
         private System.Windows.Forms.StatusStrip statusStrip1;
@@ -590,5 +578,6 @@ namespace ASCOM.OptecTCF_S
         private System.Windows.Forms.Button Test_Btn;
         private System.ComponentModel.BackgroundWorker VersionCheckerBGWorker;
         private System.Windows.Forms.HelpProvider helpProvider1;
+        private System.Windows.Forms.Button OUT_Btn;
     }
 }
