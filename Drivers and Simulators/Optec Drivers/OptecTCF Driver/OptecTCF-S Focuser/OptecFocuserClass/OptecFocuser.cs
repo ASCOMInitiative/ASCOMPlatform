@@ -4,16 +4,20 @@ using System.Text;
 using System.Threading;
 using System.IO.Ports;
 using System.ComponentModel;
+using Optec;
+using System.Diagnostics;
 
 
 namespace ASCOM.OptecTCF_S
 {
+
     partial class OptecFocuser
     {
-        // This part of the class handles the initialization of the Focuser Object
-        // and declares all the parameters
+        // 
         
         //Enumerations and Properties 
+
+
         public enum ConnectionStates
         {
             Disconnected,
@@ -21,27 +25,39 @@ namespace ASCOM.OptecTCF_S
             TempCompMode,
             Sleeping
         }
+
+        /// <summary>
+        /// Represents the current connection state of the focuser
+        /// </summary>
         private static ConnectionStates _ConnectionState;
         public static ConnectionStates ConnectionState
         {
             get { return _ConnectionState; }
         }
 
+        /// <summary>
+        /// Static constructor for the OptecFocuser class.
+        /// Creates an instance of a SerialPort object and sets the baudrate to 19200
+        /// Defaults the connection state to Disconnected
+        /// </summary>
         static OptecFocuser()
         {
             mySerialPort = new SerialPort();
             _ConnectionState = ConnectionStates.Disconnected;
             mySerialPort.BaudRate = 19200;
-            //mySerialPort.PortName = "COM1";
-            
+
         }
 
+        /// <summary>
+        /// Open the serial port then send the serial command to enter serial mode "FMMODE"
+        /// Expects the response "!" back from the device.
+        /// </summary>
         public static void ConnectAndEnterSerialMode()
         {
             //*** Open up the COM Port **********************************************
             try
             {
-                Logger.TLogger.LogMessage("ConnectAndEnterSerialMode","Attempting to connect and enter serial mode");
+                EventLogger.LogMessage("Attempting to connect and enter serial mode", TraceLevel.Info);
 
                 if (!mySerialPort.IsOpen)
                 {
@@ -49,15 +65,22 @@ namespace ASCOM.OptecTCF_S
                     mySerialPort.Open();
                 }
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
+                EventLogger.LogMessage(ex);
                 mySerialPort.Close();
                 throw new InvalidOperationException("The Port Is Already Open");
             }
-            catch (ArgumentOutOfRangeException)
+            catch (ArgumentOutOfRangeException ex)
             {
+                EventLogger.LogMessage(ex);
                 mySerialPort.Close();
                 throw new InvalidOperationException("Port Properties Are Not Configured Properly");
+            }
+            catch (System.Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                throw;
             }
 
 
@@ -66,12 +89,12 @@ namespace ASCOM.OptecTCF_S
             {
                 SendCommandGetResponse("FMMODE", "!", 500, 4);    //Send FMMODE to Enter Serial
                 _ConnectionState = ConnectionStates.SerialMode;
-                Logger.TLogger.LogMessage("ConnectAndEnterSerialMode", "Successfully entered serial mode");
+                EventLogger.LogMessage("Successfully entered serial mode", TraceLevel.Info);
 
             }
-            catch (TimeoutException)
+            catch (TimeoutException ex)
             {
-                Logger.TLogger.LogMessage("ConnectAndEnterSerialMode", "Failed to enter serial mode");
+                EventLogger.LogMessage(ex);
                 mySerialPort.Close();
                 _ConnectionState = ConnectionStates.Disconnected;
                 throw new TimeoutException("Did Not Receive A Response Back From Command: FMMODE");
@@ -98,6 +121,7 @@ namespace ASCOM.OptecTCF_S
             }
             catch
             {
+                // We get here when the firmware is too old to support getting the firmware version
                 DeviceSettings.FirmwareVersion = "2.??";
                 if (DeviceSettings.DeviceType == DeviceSettings.DeviceTypes.Unknown)
                 {
@@ -108,10 +132,14 @@ namespace ASCOM.OptecTCF_S
 
         }
 
+        /// <summary>
+        /// Attempt to Exit Temperature Compensation Mode, Exit Sleep Mode, Exit Serial Mode, and finally close the port
+        /// </summary>
         public static void Disconnect()
         {
             try
             {
+                EventLogger.LogMessage("Disconnect from device", TraceLevel.Info);
                 // Exit Temp Comp mode
                 if (ConnectionState == ConnectionStates.TempCompMode)
                 {
@@ -132,9 +160,12 @@ namespace ASCOM.OptecTCF_S
 
                 // Close the port
                 if (mySerialPort.IsOpen) mySerialPort.Close();
+
+                EventLogger.LogMessage("Disconnected successfully", TraceLevel.Info);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                EventLogger.LogMessage(ex);
                 _ConnectionState = ConnectionStates.Disconnected;
                 //throw new ASCOM.DriverException("Error Disconnecting Device", ex);
             }
@@ -145,6 +176,8 @@ namespace ASCOM.OptecTCF_S
 
         }
 
+        // Attempt to leave 'Serial Mode' by sending the command "FFxxxx".
+        // To confirm that the device left 'Serial Mode' we must receive the response "END"
         private static void ExitSerialMode()
         {
             try
@@ -158,6 +191,9 @@ namespace ASCOM.OptecTCF_S
             }
         }
 
+        /// <summary>
+        /// Puts the device into sleep mode
+        /// </summary>
         public static void EnterSleepMode()
         {
             try
@@ -177,10 +213,15 @@ namespace ASCOM.OptecTCF_S
             }
             catch (Exception ex)
             {
+                EventLogger.LogMessage(ex);
                 throw new ASCOM.DriverException("Unable To Enter Sleep Mode.", ex);
             }
         }
 
+
+        /// <summary>
+        /// Wake the device up from sleep mode.
+        /// </summary>
         public static void WakeUpDevice()
         {
             try
@@ -194,6 +235,10 @@ namespace ASCOM.OptecTCF_S
             }
         }
 
+        /// <summary>
+        /// Enter Temperature Compensation Mode A or B based on which is selected by the 
+        /// ActiveTempCompMode property.
+        /// </summary>
         public static void EnterTempCompMode()
         {
             char mode = DeviceSettings.ActiveTempCompMode;
@@ -242,12 +287,19 @@ namespace ASCOM.OptecTCF_S
             }
         }
 
+        /// <summary>
+        /// Exit Temperature Compensation Mode
+        /// </summary>
         public static void ExitTempCompMode()
         {
             ReceivingUnsolicited = false;
             ConnectAndEnterSerialMode();        //This will set the connection state properly                                
         }
 
+        /// <summary>
+        /// Get the Firmware Version and Device Type from the connected device
+        /// </summary>
+        /// <returns> Returns a String array[FirmVersion, DeviceType] </returns>
         public static string[] GetFVandDT()   //Firmware Version & Device Type
         {
             try

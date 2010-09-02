@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO.Ports;
 using System.Diagnostics;
+using Optec;
 
 
 namespace ASCOM.OptecTCF_S
@@ -34,18 +35,20 @@ namespace ASCOM.OptecTCF_S
             }
         }
 
+        private static Object SerialLock = new Object();
+
         private static string SendCommandGetResponse(string CmdToSend, string ExpectedResponse, int Timeout, int Attempts)
         {
-            lock (LockObject)
+            lock (SerialLock)
             {
                 //Prepare the port and verify correct paramaters
                 try
                 {
-                    Debug.WriteLine("Entered SendCommandGetResponse");
                     PreparePort(CmdToSend, Timeout, Attempts);
                 }
                 catch (Exception ex)
                 {
+                    EventLogger.LogMessage(ex);
                     throw ex;
                 }
 
@@ -71,7 +74,7 @@ namespace ASCOM.OptecTCF_S
                     // Read the Response
                     try
                     {
-                        Debug.WriteLine("Read Attempt: " + i.ToString());
+                        Debug.WriteLine("Read Attempt: " + i.ToString() + " " + CmdToSend);
                         try
                         {
                             Received = mySerialPort.ReadLine();
@@ -79,7 +82,13 @@ namespace ASCOM.OptecTCF_S
                             {
                                 if (Received.Contains("ER=1"))
                                 {
+                                    i = Attempts;
                                     throw new ER1_DeviceException("ER=1");
+                                }
+                                else if (Received.Contains("ER=4"))
+                                {
+                                    i = Attempts;
+                                    throw new ER4_DeviceException("ER=4");
                                 }
                                 else
                                 {
@@ -95,12 +104,23 @@ namespace ASCOM.OptecTCF_S
                         catch (TimeoutException) {/*Do nothing here*/ }
                         catch (ER1_DeviceException)
                         {
-                            throw new ER1_DeviceException("ER=1");
+                            i = Attempts;
+                            throw;
                         }
+                        catch (ER4_DeviceException)
+                        {
+                            i = Attempts;
+                            throw;
+                        }
+
                     }
-                    catch (ER1_DeviceException ex)
+                    catch (ER1_DeviceException)
                     {
-                        throw ex;
+                        throw;
+                    }
+                    catch (ER4_DeviceException)
+                    {
+                        throw;
                     }
                     catch (Exception ex)
                     {
@@ -119,16 +139,16 @@ namespace ASCOM.OptecTCF_S
         private static string SendCommandGetResponse(string CmdToSend, int Timeout, int Attempts)
         {
 
-            lock (LockObject)
+            lock (SerialLock)
             {
                 //Prepare the port and verify correct paramaters
                 try
                 {
-                    Debug.WriteLine("Entered SendCommandGetResponse");
                     PreparePort(CmdToSend, Timeout, Attempts);
                 }
                 catch (Exception ex)
                 {
+                    EventLogger.LogMessage(ex);
                     throw ex;
                 }
 
@@ -180,6 +200,7 @@ namespace ASCOM.OptecTCF_S
             
         }
 
+
     }
 
     public class ER1_DeviceException : ASCOM.DriverException
@@ -196,6 +217,21 @@ namespace ASCOM.OptecTCF_S
         public ER1_DeviceException(string message, System.Exception inner)
             : base(message, ErrorCodes.NoTempProbe, inner) { }
     }
+
+    public class ER4_DeviceException : ASCOM.DriverException
+    {
+        /// <summary>
+
+        /// Default public constructor for exception to be thrown when the driver receives ER4 
+        /// from the device
+        /// </summary>
+
+        public ER4_DeviceException(string message)
+            : base(message, ErrorCodes.NoTempProbe) { }
+        public ER4_DeviceException(string message, System.Exception inner)
+            : base(message, ErrorCodes.NoTempProbe, inner) { }
+    }
+
     public class ErrorCodes
     {
         public const int NoTempProbe = unchecked((int)0x80040407);
