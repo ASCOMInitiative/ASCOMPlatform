@@ -390,6 +390,7 @@ namespace ASCOM.FilterWheelSim
 						P.Register(progid, chooserName);
 						try
 						{
+                            P.Dispose();
 							// In case Helper becomes native .NET
 							Marshal.ReleaseComObject(P);
 						}

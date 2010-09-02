@@ -36,7 +36,7 @@ namespace ASCOM.DriverAccess
 
             foreach (Type objInterface in _memberFactory.GetInterfaces)
             {
-                if (objInterface.Equals(typeof(DeviceInterface.ITelescope))) _isPlatform6Telescope = true; //If the type matches the V2 type flag this
+                if (objInterface.Equals(typeof(DeviceInterface.ITelescopeV2))) _isPlatform6Telescope = true; //If the type matches the V2 type flag this
                 if (objInterface.Equals(typeof(ITelescope))) _isPlatform5Telescope = true; //If the type matches the PIA type flag this
             }
 			// Get Type Information 

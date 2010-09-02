@@ -156,10 +156,6 @@
       <Project>{3B6C23F5-C590-4385-86BB-98B604B565BA}</Project>
       <Name>ASCOM.DriverAccess</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ASCOM.Interfaces\ASCOM.Interfaces.csproj">
-      <Project>{5A0818BF-F3DD-4262-AF69-FD794832B85C}</Project>
-      <Name>ASCOM.Interfaces</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

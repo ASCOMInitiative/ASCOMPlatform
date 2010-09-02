@@ -67,6 +67,12 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\..\ASCOM.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -115,6 +121,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\ASCOM.snk">
+      <Link>ASCOM.snk</Link>
+    </None>
     <None Include="Test.js" />
   </ItemGroup>
   <ItemGroup>
@@ -145,9 +154,9 @@
       <Project>{872EF2D6-AC89-4C15-AC84-6C69B040A843}</Project>
       <Name>ASCOM.DeviceInterface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\ASCOM.Interfaces\ASCOM.Interfaces.csproj">
-      <Project>{5A0818BF-F3DD-4262-AF69-FD794832B85C}</Project>
-      <Name>ASCOM.Interfaces</Name>
+    <ProjectReference Include="..\..\..\ASCOM.IConform\ASCOM.IConform\ASCOM.IConform.vbproj">
+      <Project>{44999847-A7B6-462D-B663-FE988D98E317}</Project>
+      <Name>ASCOM.IConform</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>

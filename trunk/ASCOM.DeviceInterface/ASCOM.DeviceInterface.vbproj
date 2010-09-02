@@ -104,10 +104,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enumerations.vb" />
-    <Compile Include="IAscomDriver.vb" />
     <Compile Include="IAxisRates.vb" />
-    <Compile Include="ICamera.vb" />
-    <Compile Include="IDeviceControl.vb" />
+    <Compile Include="ICameraV2.vb" />
     <Compile Include="IDome.vb" />
     <Compile Include="IFilterWheel.vb" />
     <Compile Include="IFocuser.vb" />
@@ -115,7 +113,7 @@
     <Compile Include="IRateEnumerator.vb" />
     <Compile Include="IRotator.vb" />
     <Compile Include="ISwitch.vb" />
-    <Compile Include="ITelescope.vb" />
+    <Compile Include="ITelescopeV2.vb" />
     <Compile Include="ITrackingRates.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -156,6 +154,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ASCOM.IConform\ASCOM.IConform\ASCOM.IConform.vbproj">
+      <Project>{44999847-A7B6-462D-B663-FE988D98E317}</Project>
+      <Name>ASCOM.IConform</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
       <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
       <Name>ASCOM.Exceptions</Name>

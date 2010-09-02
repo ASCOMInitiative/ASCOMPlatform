@@ -33,11 +33,8 @@ namespace ASCOM.Simulator
 	// The ClassInterface/None addribute prevents an empty interface called
 	// _Rotator from being created and used as the [default] interface
 	//
-	[Guid("e3244961-cb52-437d-aa9b-e5324db8f388")]
-	[ClassInterface(ClassInterfaceType.None)]
-	public class Rotator : 
-		ReferenceCountedObjectBase,
-		IRotator
+	[Guid("e3244961-cb52-437d-aa9b-e5324db8f388"), ClassInterface(ClassInterfaceType.None), ComVisible(true)] 
+	public class Rotator : ReferenceCountedObjectBase, IRotator
 	{
 
 		//

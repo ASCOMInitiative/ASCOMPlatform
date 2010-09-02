@@ -10,7 +10,7 @@ namespace ASCOM
     /// not allow it rather than for device errors such as a communications error.
     /// <para>Its the error to use when the client attempts something, which at another time would be sensible,
     /// but which is not sensible right now. If you expect the condition causing the issue to be short
-    /// lived, you may choose to stall the request until the condition is cleared rather than thorwing this exception.
+    /// lived, you may choose to stall the request until the condition is cleared rather than throwing this exception.
     /// Clearly, that is a judgement that you can only make given a specific scenario.</para>
     /// </summary>
     public class InvalidOperationException : ASCOM.DriverException

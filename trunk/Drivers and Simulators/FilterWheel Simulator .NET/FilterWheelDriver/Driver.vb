@@ -26,13 +26,10 @@
 '
 <Assembly: ServedClassName("Filter Wheel Simulator [.Net]")>     '[TPL] Mark this assembly as something that LocalServer should be interested in.
 
-<Guid("F9043C88-F6F2-101A-A3C9-08002B2F49FC")> _
-<ClassInterface(ClassInterfaceType.None)> Public Class FilterWheel
+<Guid("F9043C88-F6F2-101A-A3C9-08002B2F49FC"), ComVisible(True), ClassInterface(ClassInterfaceType.None)> Public Class FilterWheel
     '	==========
     Inherits ReferenceCountedObjectBase
-    Implements IAscomDriver
     Implements IFilterWheel ' Early-bind interface implemented by this driver
-    Implements IConform
     '	==========
 
     Private Const SCODE_NOT_CONNECTED As Integer = vbObjectError + &H402
@@ -54,7 +51,7 @@
     ' PUBLIC COM INTERFACE IFilterWheel IMPLEMENTATION
     '
 #Region "IAscomDriver"
-    Public Property Connected() As Boolean Implements IAscomDriver.Connected
+    Public Property Connected() As Boolean Implements IFilterWheel.Connected
         Get
             Connected = SimulatedHardware.Connected
         End Get
@@ -63,36 +60,39 @@
         End Set
     End Property
 
-    Public ReadOnly Property Description As String Implements IAscomDriver.Description
+    Public ReadOnly Property Description As String Implements IFilterWheel.Description
         Get
             Return "Simulator description"
         End Get
     End Property
 
-    Public ReadOnly Property DriverInfo As String Implements IAscomDriver.DriverInfo
+    Public ReadOnly Property DriverInfo As String Implements IFilterWheel.DriverInfo
         Get
             Return "ASCOM filter wheel driver simulator"
         End Get
     End Property
 
-    Public ReadOnly Property DriverVersion As String Implements IAscomDriver.DriverVersion
+    Public ReadOnly Property DriverVersion As String Implements IFilterWheel.DriverVersion
         Get
             Return "1.0"
         End Get
     End Property
 
-    Public ReadOnly Property InterfaceVersion As Short Implements IAscomDriver.InterfaceVersion
+    Public ReadOnly Property InterfaceVersion As Short Implements IFilterWheel.InterfaceVersion
         Get
             Return 1
         End Get
     End Property
 
-    Public ReadOnly Property LastResult As String Implements IAscomDriver.LastResult
+    Public ReadOnly Property LastResult As String Implements IFilterWheel.LastResult
         Get
+            Static FirstCall As Integer = 0
+            FirstCall += 1
+            If FirstCall = 1 Then Throw New InvalidOperationException("Attempt to call LastResult before any commands have been executed")
             Return ""
         End Get
     End Property
-    Public ReadOnly Property Name As String Implements IAscomDriver.Name
+    Public ReadOnly Property Name As String Implements IFilterWheel.Name
         Get
             Return "Filer Wheel Simulator .NET"
         End Get
@@ -100,22 +100,34 @@
 #End Region
 
 #Region "IDeviceControl"
-    Public Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String Implements IDeviceControl.Action
+    Public Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String Implements IFilterWheel.Action
         Throw New ASCOM.MethodNotImplementedException("Action is not implemented in this driver")
     End Function
-    Public ReadOnly Property SupportedActions As String() Implements IDeviceControl.SupportedActions
+    Public ReadOnly Property SupportedActions As String() Implements IFilterWheel.SupportedActions
         Get
             Throw New ASCOM.PropertyNotImplementedException("Actions are not supported by this driver", False)
         End Get
     End Property
 
-    Public Function CommandString(ByVal Cmd As String, Optional ByVal Raw As Boolean = False) As String Implements IDeviceControl.CommandString
-        Return ""
+    Public Function CommandString(ByVal Cmd As String, Optional ByVal Raw As Boolean = False) As String Implements IFilterWheel.CommandString
+        If Cmd = "CommandString" Then
+            Return "FWCommandString"
+        Else
+            Return "Bad command: " & Cmd
+        End If
     End Function
-    Public Function CommandBool(ByVal Cmd As String, Optional ByVal Raw As Boolean = False) As Boolean Implements IDeviceControl.CommandBool
-        Return False
+
+    Public Function CommandBool(ByVal Cmd As String, Optional ByVal Raw As Boolean = False) As Boolean Implements IFilterWheel.CommandBool
+
+        If Cmd = "CommandBool" Then
+            Return True
+        Else
+            Return False
+        End If
+
     End Function
-    Public Sub CommandBlind(ByVal Cmd As String, Optional ByVal Raw As Boolean = False) Implements IDeviceControl.CommandBlind
+
+    Public Sub CommandBlind(ByVal Cmd As String, Optional ByVal Raw As Boolean = False) Implements IFilterWheel.CommandBlind
 
     End Sub
 #End Region
@@ -146,28 +158,6 @@
     Public Sub SetupDialog() Implements IFilterWheel.SetupDialog
         SimulatedHardware.DoSetup()
     End Sub
-
-#End Region
-
-#Region "IConform Members"
-
-    Public ReadOnly Property ConformCommands() As ConformCommandStrings Implements IConform.ConformCommands
-        Get
-            ConformCommands = New ConformCommandStrings()
-        End Get
-    End Property
-
-    Public ReadOnly Property ConformCommandsRaw() As ConformCommandStrings Implements IConform.ConformCommandsRaw
-        Get
-            ConformCommandsRaw = New ConformCommandStrings()
-        End Get
-    End Property
-
-    Public ReadOnly Property ConformErrors() As ConformErrorNumbers Implements IConform.ConformErrors
-        Get
-            ConformErrors = New ConformErrorNumbers(ErrorCodes.NotImplemented, ErrorCodes.InvalidValue, Nothing, ErrorCodes.ValueNotSet)
-        End Get
-    End Property
 
 #End Region
 
