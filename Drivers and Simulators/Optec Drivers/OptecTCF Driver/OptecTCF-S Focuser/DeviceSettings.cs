@@ -34,7 +34,8 @@ namespace ASCOM.OptecTCF_S
             DelayA,
             DelayB,
 
-            TempProbeAttached
+            TempProbeAttached,
+            TempOffset
         }
 
         static DeviceSettings() //Constructor
@@ -69,14 +70,23 @@ namespace ASCOM.OptecTCF_S
         internal static bool TempProbePresent
         {
             get 
-            { 
-                return bool.Parse(Prof.GetValue(Focuser.s_csDriverID, 
-                ProfileStrings.TempProbeAttached.ToString(), "", true.ToString())); 
-            }
-            set 
             {
-                Prof.WriteValue(Focuser.s_csDriverID, ProfileStrings.TempProbeAttached.ToString(), value.ToString());
+                try
+                {
+                    double t = OptecFocuser.GetTemperature();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+               // return bool.Parse(Prof.GetValue(Focuser.s_csDriverID, 
+               // ProfileStrings.TempProbeAttached.ToString(), "", true.ToString())); 
             }
+           // set 
+           // {
+           //     Prof.WriteValue(Focuser.s_csDriverID, ProfileStrings.TempProbeAttached.ToString(), value.ToString());
+           // }
         }
 
         internal static char ActiveTempCompMode
@@ -263,6 +273,21 @@ namespace ASCOM.OptecTCF_S
             }
             return slope;
         }
+        internal static double TemperatureOffset
+        {
+            get
+            {
+                string t = Prof.GetValue(Focuser.s_csDriverID, ProfileStrings.TempOffset.ToString(), "", "0");
+                return double.Parse(t);
+            }
+            set
+            {
+                double t = Math.Round(value, 1);
+                if(t > 5) t = 5;
+                else if (t < -5) t=-5;
+                Prof.WriteValue(Focuser.s_csDriverID, ProfileStrings.TempOffset.ToString(), t.ToString());
+            } 
+        }
 
     }
 
@@ -296,6 +321,7 @@ namespace ASCOM.OptecTCF_S
             get { return s_dateTime; }
             set { s_dateTime = value; }
         }
+
         
     }
 
