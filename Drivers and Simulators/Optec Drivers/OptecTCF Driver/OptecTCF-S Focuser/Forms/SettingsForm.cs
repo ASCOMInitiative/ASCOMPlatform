@@ -71,12 +71,28 @@ namespace ASCOM.OptecTCF_S
            
         
         [CategoryAttribute("Temperature Compensation")]
-        [DescriptionAttribute("Set true is a temperature probe is attached to the device, otherwise set false.")]
+        [DescriptionAttribute("This property is automatically set when the probe is removed/connected")]
         [DisplayName("Temp. Probe Enabled")]
         public bool TemperatureProbeEnabled
         {
             get { return DeviceSettings.TempProbePresent; }
-            set { DeviceSettings.TempProbePresent = value; }
+           // set {
+           //     OptecFocuser.SetTempProbeEnabled(value);
+            //    DeviceSettings.TempProbePresent = value; 
+           // }
+        }
+
+        [CategoryAttribute("Temperature Compensation")]
+        [DescriptionAttribute("This property can be used to offset the temperature read by the probe." + 
+            " The allowed range of offsets is -5 to 5°.")]
+        [DisplayName("Temperature Offset")]
+        public double TemperatureOffset
+        {
+            get { return DeviceSettings.TemperatureOffset; }
+            set
+            {
+                DeviceSettings.TemperatureOffset = value;
+            }
         }
 
         [CategoryAttribute("Temperature Compensation")]

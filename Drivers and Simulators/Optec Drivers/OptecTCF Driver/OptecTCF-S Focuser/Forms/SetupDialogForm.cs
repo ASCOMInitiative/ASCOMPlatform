@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Reflection;
+using System.Threading;
 
 
 namespace ASCOM.OptecTCF_S
@@ -18,6 +19,10 @@ namespace ASCOM.OptecTCF_S
         private List<Control> ConnectionDependantControls;
         private static Object LockObject = new Object();
         private static string helpFilePath = "";
+        private static bool TempControlsEnabled = true;
+        private static int TempDelay = 1000;
+        private Thread TempGetterThread;
+
 
         public SetupDialogForm()
         {
@@ -36,7 +41,7 @@ namespace ASCOM.OptecTCF_S
             ConnectionDependantControls.Add(PosDRO_TB);
             ConnectionDependantControls.Add(Pos_LBL);
             ConnectionDependantControls.Add(In_BTN);
-            ConnectionDependantControls.Add(Out_BTN);
+            ConnectionDependantControls.Add(OUT_Btn);
             ConnectionDependantControls.Add(Center_Btn);
             ConnectionDependantControls.Add(StepSize_LBL);
             ConnectionDependantControls.Add(StepSize_NUD);
@@ -61,11 +66,19 @@ namespace ASCOM.OptecTCF_S
             try
             {
                 OptecFocuser.ConnectAndEnterSerialMode();
+
                 if (DeviceSettings.ActiveTempCompMode == 'A') ModeA_RB.Checked = true;
                 else ModeB_RB.Checked = true;
-                updateFormPosition();
-                if (DeviceSettings.TempProbePresent && (OptecFocuser.ConnectionState == OptecFocuser.ConnectionStates.SerialMode)) 
-                    PollingTemps = true;
+
+                UpdatePositionTextBox();
+
+                if (OptecFocuser.ConnectionState == OptecFocuser.ConnectionStates.SerialMode)
+                {
+                    ThreadStart ts = new ThreadStart(TempGetter);
+                    TempGetterThread = new Thread(ts);
+                    TempGetterThread.Start();
+                }
+                      
 
             }
             catch (Exception)
@@ -89,7 +102,7 @@ namespace ASCOM.OptecTCF_S
         {
             try
             {
-                DisconnectProctedure();
+                DisconnectProcedure();
             }
             catch { }
             finally
@@ -112,6 +125,7 @@ namespace ASCOM.OptecTCF_S
                 EnterSleepModeToolStripMenuItem.Enabled = false;
                 exitSleepModeToolStripMenuItem.Enabled = false;
                 Sleeping_TB.Visible = false;
+                TempControlsEnabled = false;
             }
             else
             {
@@ -122,14 +136,12 @@ namespace ASCOM.OptecTCF_S
                 }
                 connectToolStripMenuItem.Enabled = false;
                 PowerLight.Visible = true;
-                if (!DeviceSettings.TempProbePresent)
-                {
-                    foreach (Control x in TemperatureControls)
-                    {
-                        x.Enabled = false;
-                        x.Visible = true;
-                    }
-                }
+
+
+                if (TempControlsEnabled) EnableTempControls(true);
+                else EnableTempControls(false);
+                    
+                
                 ModeAName_LB.Text = DeviceSettings.ModeA_Name;
                 ModeBName_LB.Text = DeviceSettings.ModeB_Name;
                 if (DeviceSettings.ActiveTempCompMode == 'A')
@@ -168,14 +180,9 @@ namespace ASCOM.OptecTCF_S
         {
             try
             {
-                bool wasPollingTemps = false;
-                if (PollingTemps)
-                {
-                    wasPollingTemps = true;
-                    PollingTemps = false;
-                }
+
                 int DistToMove = Convert.ToInt32(StepSize_NUD.Value);
-                int CurrentPos = OptecFocuser.GetPosition();
+                int CurrentPos = OptecFocuser.GetPosition();     
                 if ((CurrentPos - DistToMove) < 1)
                 {
                     Console.Beep();
@@ -187,9 +194,10 @@ namespace ASCOM.OptecTCF_S
                     Application.DoEvents();
                     int newPos = CurrentPos - DistToMove;
                     OptecFocuser.MoveFocus(newPos);
-                    updateFormPosition();
+                    UpdatePositionTextBox();
                 }
-                if (wasPollingTemps) PollingTemps = true;
+     
+ 
 
             }
             catch (Exception ex)
@@ -202,43 +210,32 @@ namespace ASCOM.OptecTCF_S
         {
             try
             {
-                bool wasPollingTemps = false;
-                if (PollingTemps)
-                {
-                    wasPollingTemps = true;
-                    PollingTemps = false;
-                }
                 int DistToMove = Convert.ToInt32(StepSize_NUD.Value);
                 int CurrentPos = OptecFocuser.GetPosition();
                 if ((CurrentPos + DistToMove) > DeviceSettings.MaxStep)
                 {
-                    System.Media.SystemSounds.Beep.Play();
+                    Console.Beep();
                     return; // This means we can't move any further
                 }
                 else
                 {
-                    PosDRO_TB.Text = "MOVING";
+                    PosDRO_TB.Text = "MOVING";                
                     Application.DoEvents();
-                    int newPos = CurrentPos + DistToMove;
-                    OptecFocuser.MoveFocus(newPos);
-                    updateFormPosition();
+                    int newPos = CurrentPos + DistToMove; 
+                    OptecFocuser.MoveFocus(newPos);         
+                    UpdatePositionTextBox();
                 }
-                if (wasPollingTemps) PollingTemps = true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error Moving focus OUT.\n " + ex.ToString());
             }
+
+
         }
 
         private void Center_Btn_Click(object sender, EventArgs e)
         {
-            bool wasPollingTemps = false;
-            if (PollingTemps)
-            {
-                PollingTemps = false;
-                wasPollingTemps = true;
-            }
             int currentPos = OptecFocuser.GetPosition();
             int newPos = DeviceSettings.MaxStep / 2;
             int disttomove = currentPos - newPos;
@@ -256,7 +253,6 @@ namespace ASCOM.OptecTCF_S
 
             //Play a sound to let you know it's centered
             System.Media.SystemSounds.Asterisk.Play();
-            if (wasPollingTemps) PollingTemps = true;
         }
 
         private void ModeA_RB_Click(object sender, EventArgs e)
@@ -341,13 +337,17 @@ namespace ASCOM.OptecTCF_S
         private void connectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
-            {
-                if (PollingTemps) PollingTemps = false;
+            {  
                 this.Cursor = Cursors.WaitCursor;
                 OptecFocuser.ConnectAndEnterSerialMode();
                 EnableDisableControls();
-                updateFormPosition();
-                if (DeviceSettings.TempProbePresent) PollingTemps = true;
+                UpdatePositionTextBox();
+                if (!TempGetterThread.IsAlive)
+                {
+                    ThreadStart ts = new ThreadStart(TempGetter);
+                    TempGetterThread = new Thread(ts);
+                    TempGetterThread.Start();
+                }
             }
             catch (TimeoutException)
             {
@@ -372,30 +372,18 @@ namespace ASCOM.OptecTCF_S
             {
                 this.Cursor = Cursors.WaitCursor;
                 StatusTimer.Enabled = false;
-                if (PollingTemps) PollingTemps = false;
+                System.Threading.Thread.Sleep(150);
                 SettingsForm x = new SettingsForm();
                 x.ShowDialog();
                 this.Cursor = Cursors.Default;
                 Debug.WriteLine("Form is closed");
                 //update the active temp comp mode RB
 
-                if ((OptecFocuser.ConnectionState == OptecFocuser.ConnectionStates.SerialMode) &&
-                    DeviceSettings.TempProbePresent)
-                {
-                    Debug.WriteLine("Start Polling Temps");
-                    PollingTemps = true;
-                    Debug.WriteLine("Started Polling Temps");
-                }
-                else
-                {
-                    Debug.WriteLine(OptecFocuser.ConnectionState.ToString());
-                    Debug.WriteLine(DeviceSettings.TempProbePresent.ToString());
-                }
-
                 if (OptecFocuser.ConnectionState == OptecFocuser.ConnectionStates.SerialMode)
                 {
-                    updateFormPosition();
+                    UpdatePositionTextBox();
                 }
+
                 EnableDisableControls();
                 StatusTimer.Enabled = true;
             }
@@ -412,135 +400,137 @@ namespace ASCOM.OptecTCF_S
 
 #region Temperature Polling Methods
 
-        private bool PollingTemps
-       {
-           get 
-           {
-               return (TempBGWorker.IsBusy && GetTemps && (!StoppedGettingTemps));
-           }
-           set
-           {
-               if (value)
-               {
-                   if (DeviceSettings.TempProbePresent == false)
-                       throw new ASCOM.InvalidOperationException("Cannot poll for temperature when temp probe is disabled");
-                   GetTemps = true;
-                   StoppedGettingTemps = false;
-                   if (!TempBGWorker.IsBusy) TempBGWorker.RunWorkerAsync();
-                   else throw new ASCOM.InvalidOperationException("Attempted to get temps while background worker is already doing work");
-               }
-               else
-               {
-                   TempBGWorker.CancelAsync();
-                   GetTemps = false;
-                   while (!StoppedGettingTemps)
-                   {
-                       Application.DoEvents();
-                   }
-               }
-           }
-       }
-
-        private void TempBGWorker_DoWork(object sender, DoWorkEventArgs e)
+        private void TempGetter()
         {
-            try
+            while (true)
             {
-                while (GetTemps)
+                try
                 {
                     if (OptecFocuser.ConnectionState == OptecFocuser.ConnectionStates.SerialMode)
                     {
+                        System.Threading.Thread.Sleep(TempDelay);
+                        DateTime st = DateTime.Now;
                         double t = 0;
+                        st = DateTime.Now;
+                        
                         t = OptecFocuser.GetTemperature();
-                        TempBGWorker.ReportProgress(1, t);
+                         Debug.Print(st.Subtract(DateTime.Now).TotalSeconds.ToString());
+                        this.Invoke(new DoubleDelegate(UpdateTempTextBox), new object[] { t });
+
+
+                        if (!TempControlsEnabled) EnableTempControls(true);
+                        
+                    }
+
+                }
+                catch (ER1_DeviceException)
+                {
+                    if (!DeviceSettings.TempProbePresent)
+                    {
+                        if (TempControlsEnabled)
+                        {
+                            EnableTempControls(false);
+                        }
+                    }
+                    else
+                    {
+                        if (TempControlsEnabled)
+                        {
+                            // This is the first time an error has occurred.
+                            MessageBox.Show("The temperature probe is disconnected from the focuser. " +
+                                "If you wish to continue reading temperatures plug the probe back into the focuser.");
+                            EnableTempControls(false);
+                            // Disable the temperature contorls
+                        }
+
                     }
                 }
-            }
- 
-            catch (Exception ex)
-            {
-                if (ex.InnerException.Message.Contains("ER=1"))
+                catch (ER4_DeviceException)
                 {
-                    GetTemps = false;
-                    StoppedGettingTemps = true;
-                    MessageBox.Show("Temperature Probe Disconnected\n" + 
-                    "Disconnect and reconnect to begin polling temperatures again.", "Temperature Probe Disconnected",
-                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    this.Invoke(new UpdateFormControlAcrossThread(ClearTempBox));
-
+                    if (!DeviceSettings.TempProbePresent) return;
+                    else
+                    {
+                        if (TempControlsEnabled)
+                        {
+                            // This is the first time an error has occurred.
+                            MessageBox.Show("The temperature probe is either disabled in firmware or disconnected from the focuser. " +
+                                "If you wish to continue reading temperatures plug the probe back into the focuser and verify that it is enabled.");
+                            EnableTempControls(false);
+                            // Disable the temperature contorls
+                        }
+                    }
                 }
-                else
+                catch
                 {
-                    //Disconnect the device and Enable/Disable the controls
-
-                    Debug.WriteLine("An error occurred while getting temps" + ex.ToString());
-                    
-                    MessageBox.Show("Communication with the device has been broken\n" + 
-                        "Check the cables and attempt to reconnect.", "Communication Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
-                    GetTemps = false;
-                    StoppedGettingTemps = true;
-                    OptecFocuser.Disconnect();
-                    this.Invoke(new UpdateFormControlAcrossThread(EnableDisableControls));
+                    // Anything else just keep checking
                 }
             }
 
+
+        }
+
+        private delegate void DoubleDelegate(double d);
+
+        private void UpdateTempTextBox(double t)
+        {
+            if (t > 0) TempDRO_TB.Text = String.Format("{0:00.0}", t) + "°C";
+            else TempDRO_TB.Text = String.Format("{0:00.0}", t) + "°";
         }
 
         private delegate void UpdateFormControlAcrossThread();
-        private void ClearTempBox()
+
+        private delegate void BoolDelegate(bool b);
+
+        private void EnableTempControls(bool enable)
         {
-            TempDRO_TB.Text = "----°C";
+            this.Invoke(new BoolDelegate(enableTempControlsInvoked), new object[] {enable});
         }
 
-        private void TempBGWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void enableTempControlsInvoked(bool enable)
         {
-            try
+            if (enable)
             {
-                double temp = Convert.ToDouble(e.UserState);
-                if (temp > 0) TempDRO_TB.Text = String.Format("{0:00.0}", temp) + "°C";
-                else TempDRO_TB.Text = String.Format("{0:00.0}", temp) + "°";
-            }
-            catch { PollingTemps = false; }   //This occurs when the form has been closed
-
-        }
-
-        private void TempBGWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            StoppedGettingTemps = true;
-            
-        }
-
-        private void updateFormPosition()
-        {
-            if (PollingTemps)
-            {
-                PollingTemps = false;
-                PosDRO_TB.Text = OptecFocuser.GetPosition().ToString().PadLeft(4, '0') ;
-                PollingTemps = true;
+                foreach (Control c in TemperatureControls)
+                {
+                    c.Enabled = true;
+                }
+                TempControlsEnabled = true;
+                TempDelay = 1000;
             }
             else
             {
-                PosDRO_TB.Text = OptecFocuser.GetPosition().ToString().PadLeft(4, '0') ;
+                foreach (Control c in TemperatureControls)
+                {
+                    c.Enabled = false;
+                }
+                TempDRO_TB.Text = "----°C";
+                TempControlsEnabled = false;
+                TempDelay = 6000;
             }
+        }
+
+        private void UpdatePositionTextBox()
+        {
+            PosDRO_TB.Text = OptecFocuser.GetPosition().ToString().PadLeft(4, '0');      
         }
 
 #endregion Temperature Polling Methods
 
         private void disconnectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DisconnectProctedure();
+            DisconnectProcedure();
             EnableDisableControls();
         }
 
-        private void DisconnectProctedure()
+        private void DisconnectProcedure()
         {
-            if(PollingTemps)
-                PollingTemps = false;
+            TempGetterThread.Abort();
+            TempGetterThread.Join();
             OptecFocuser.Disconnect();
         }
 
 #region Status Bar Methods
+
         private void StatusTimer_Tick(object sender, EventArgs e)
         {
             this.StatusLabel.Text = StatusBar.GetNextMessage();
@@ -574,35 +564,21 @@ namespace ASCOM.OptecTCF_S
             SendKeys.Send("{TAB}");
             //SendKeys.Send(Keys.Tab.ToString());
         }
+
  #endregion Status Bar Methods
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            bool wasPollingTemps = false;
-            if (PollingTemps)
-            {
-                wasPollingTemps = true;
-                PollingTemps = false;
-            }
             AboutBox1 AboutBox = new AboutBox1();
             AboutBox.Show();
-            if (wasPollingTemps) PollingTemps = true;
         }
 
         private void setStartPointToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
-                bool wasPollingTemps = false;
-                if (PollingTemps)
-                {
-                    wasPollingTemps = true;
-                    PollingTemps = false;
-                }
                 StartPtForm SPF = new StartPtForm();
                 SPF.ShowDialog();
-
-                if (wasPollingTemps) PollingTemps = true;
             }
             catch(Exception ex)
             {
@@ -615,16 +591,8 @@ namespace ASCOM.OptecTCF_S
         {
             try
             {
-                bool wasPollingTemps = false;
-                if (PollingTemps)
-                {
-                    wasPollingTemps = true;
-                    PollingTemps = false;
-                }
                 EndPointForm EPF = new EndPointForm();
                 EPF.ShowDialog();
-
-                if (wasPollingTemps) PollingTemps = true;
             }
             catch (Exception ex)
             {
@@ -655,18 +623,8 @@ namespace ASCOM.OptecTCF_S
 
         private void Test_Btn_Click(object sender, EventArgs e)
         {
-            bool wasPollingTemps = false;
-
-            if (PollingTemps)
-            {
-                wasPollingTemps = true;
-                PollingTemps = false;
-            }
-
             TempCompTest_Form x = new TempCompTest_Form();
             x.ShowDialog();
-
-            if (wasPollingTemps) PollingTemps = true;
         }
 
         private void VersionCheckerBGWorker_DoWork(object sender, DoWorkEventArgs e)
