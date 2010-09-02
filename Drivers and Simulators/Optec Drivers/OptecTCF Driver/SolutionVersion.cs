@@ -8,5 +8,5 @@ using System.Runtime.InteropServices;
 // IMPORTANT: If you change this version you must change the 
 //            Installer Projects "PRODUCT CODE" property.
 //            DO NOT change the UPGRADE CODE property.
-[assembly: AssemblyVersion("5.2.0.0")]
-[assembly: AssemblyFileVersion("5.2.0.0")]
+[assembly: AssemblyVersion("5.2.1.0")]
+[assembly: AssemblyFileVersion("5.2.1.0")]
