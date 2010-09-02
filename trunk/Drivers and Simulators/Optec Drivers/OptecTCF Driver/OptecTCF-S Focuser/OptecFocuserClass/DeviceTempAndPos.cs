@@ -1,37 +1,54 @@
 ﻿using System.ComponentModel;
 using System;
 using System.Diagnostics;
+using Optec;
 
 namespace ASCOM.OptecTCF_S
 {
 
     partial class OptecFocuser
     {
-        // This part of the class handles the temperature and position methods and properties
-
+        
+        /// <summary>
+        /// Used to prevent two serial communications from occuring at the same time.
+        /// </summary>
         private static object LockObject = new object();
 
-        //Properties related to position and temperature
+        /// <summary>
+        /// Used to hold the most recent data received from the focuser
+        /// </summary>
+        private static string ReceivedData;
 
+        /// <summary>
+        /// Property used to determine if the device is currently moving or stationary.
+        /// </summary>
         private static bool _IsMoving = false;
-
         public static bool IsMoving
         {
             get { return _IsMoving; }
         }
 
+        /// <summary>
+        /// Property that represents the current temperature as measured by the device
+        /// </summary>
         private static double _CurrentTemp;
         public static double CurrentTemp
         {
             get { return _CurrentTemp; }
         }
 
+        /// <summary>
+        /// Property that holds the current position of the focuser
+        /// </summary>
         private static int _CurrentPosition;
         public static int CurrentPosition
         {
             get { return _CurrentPosition; }
         }
 
+        /// <summary>
+        /// Used to determine if the device is in the process of receiving non-requested data from the device
+        /// </summary>
         private static bool _ReceivingUnsolicited;
         public static bool ReceivingUnsolicited
         {
@@ -52,80 +69,101 @@ namespace ASCOM.OptecTCF_S
             }
         }
        
-        // Methods for receiving Temp and Pos while in TempComp mode
+        /// <summary>
+        /// Add the event handler for the serial port that is used to received the unsolicited data on the port.
+        /// </summary>
         private static void ReceiveUnsolicitedData()
         {
             mySerialPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(mySerialPort_DataReceived);
         }
 
+        /// <summary>
+        /// Removes the eventhandler for the DataReceived event
+        /// </summary>
         private static void StopReceivingUnsolicitedData()
         {
             mySerialPort.DataReceived -= mySerialPort_DataReceived;
         }
 
-        private static string ReceivedData;
-
+        /// <summary>
+        /// Parse the data received on the serial port.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private static void mySerialPort_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
-            try
+            lock (LockObject)
             {
-                if (ConnectionState != ConnectionStates.TempCompMode)
+                try
                 {
-                    // This should only happen in Temp Comp mode so throw an exception here
-                    throw new ASCOM.InvalidOperationException("Unsolicited Data Received while not in Temp Comp Mode");
-                }
+                    if (ConnectionState != ConnectionStates.TempCompMode)
+                    {
+                        // This should only happen in Temp Comp mode so throw an exception here
+                        throw new ASCOM.InvalidOperationException("Unsolicited Data Received while not in Temp Comp Mode");
+                    }
 
-                ReceivedData += mySerialPort.ReadExisting();
-                if (ReceivedData.Contains("\n\r"))
-                {
-                    int newline_index = ReceivedData.IndexOf("\n\r");
-                    int pos_index = ReceivedData.IndexOf("P=");
-                    int temp_index = ReceivedData.IndexOf("T=");
-                    int error_index = ReceivedData.IndexOf("ER=1");
-                    
+                    ReceivedData += mySerialPort.ReadExisting();
+                    if (ReceivedData.Contains("\n\r"))
+                    {
+                        int newline_index = ReceivedData.IndexOf("\n\r");
+                        int pos_index = ReceivedData.IndexOf("P=");
+                        int temp_index = ReceivedData.IndexOf("T=");
+                        int ER4_index = ReceivedData.IndexOf("ER=4");
+                        int ER1_index = ReceivedData.IndexOf("ER=1");
+
 #if DEBUG
-                    Logger.TLogger.LogMessage("SerialPort", "Unsolicited Data Received = " + ReceivedData );
+                        EventLogger.LogMessage("Unsolicited Data Received = " + ReceivedData, TraceLevel.Verbose);
 #endif
 
-                    string value = "";
-                    if (pos_index != -1 )
-                    {
-                        if (newline_index > pos_index)
+                        string value = "";
+
+                        // Attempt to parse the position value
+                        if (pos_index != -1)
                         {
-                            value = ReceivedData.Substring(pos_index + 2, 4);
-                            lock (LockObject)
+                            if (newline_index > pos_index)
                             {
+                                value = ReceivedData.Substring(pos_index + 2, 4);
                                 _CurrentPosition = Convert.ToInt32(value);
                             }
                         }
-                    }
-                    if (temp_index != -1)
-                    {
-                        if (newline_index > temp_index)
+
+                        // Attempt to parse the temperature value
+                        if (ER1_index != -1)
                         {
-                            value = ReceivedData.Substring(temp_index + 2, 5);
-                            lock (LockObject)
-                            {
-                                _CurrentTemp = Convert.ToDouble(value);
-                            } 
+                            throw new ASCOM.DriverException("Device Lost Connection To Temp Probe");
                         }
+                        else if (ER4_index != -1)
+                        {
+                            throw new ASCOM.DriverException("Received ER=4 during");
+                        }
+                        else if (temp_index != -1)
+                        {
+                            if (newline_index > temp_index)
+                            {
+                                value = ReceivedData.Substring(temp_index + 2, 5);
+                                _CurrentTemp = Convert.ToDouble(value);
+                            }
+                        }
+
+
                     }
-                    if (error_index != -1)
+                    else if (ReceivedData.Length > 15)
                     {
-                        throw new ASCOM.DriverException("Device Lost Connection To Temp Probe");
+                        // Too many characters received without a newline. 
+                        throw new ASCOM.DriverException("Too many characters received without a newline @ mySerialPort_DataReceived");
                     }
+                }
+                catch (Exception ex)
+                {
+                    EventLogger.LogMessage(ex);
+                    throw new ASCOM.DriverException("An error occurred while receiving unsolicited data from the serial port.\n" +
+                        "Exception data = " + ex.ToString());
+                }
+                finally
+                {
+                    // Get ready for the next transmission of data
                     ReceivedData = "";
                 }
-                else if (ReceivedData.Length > 15)
-                {
-                    // Too many characters received without a newline. 
-                    throw new ASCOM.DriverException("Too many characters received without a newline @ mySerialPort_DataReceived");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new ASCOM.DriverException("An error occurred while receiving unsolicited data from the serial port.\n" +
-                    "Exception data = " + ex.ToString());
             }
         }
 
@@ -133,72 +171,100 @@ namespace ASCOM.OptecTCF_S
         {
             try
             {
-                if (!DeviceSettings.TempProbePresent)
-                {
-                    throw new DriverException("Attempted To Retrieve Temperature Without Probe Attached.");
-                }
-                else if (_ConnectionState == ConnectionStates.Sleeping)
-                {
-                    throw new InvalidOperationException("Unable To Get Temperature While In Sleep Mode.");
-                }
-                else if (_ConnectionState == ConnectionStates.Disconnected)
-                {
-                    throw new InvalidOperationException("Unable To Get Temperature While Disconnected.");
-                }
-                else if (_ConnectionState == ConnectionStates.TempCompMode)
-                {
-                    lock (LockObject)
+               // lock (LockObject)
+              //  {
+
+                    if (_ConnectionState == ConnectionStates.Sleeping)
+                    {
+                        throw new InvalidOperationException("Unable To Get Temperature While In Sleep Mode.");
+                    }
+                    else if (_ConnectionState == ConnectionStates.Disconnected)
+                    {
+                        throw new InvalidOperationException("Unable To Get Temperature While Disconnected.");
+                    }
+                    else if (_ConnectionState == ConnectionStates.TempCompMode)
                     {
                         return _CurrentTemp;
                     }
-                }
-                else if (_ConnectionState == ConnectionStates.SerialMode)
-                {
-                    if (DeviceSettings.TempProbePresent)
+                    else if (_ConnectionState == ConnectionStates.SerialMode)
                     {
-                        string resp = SendCommandGetResponse("FTEMPx", "T=", 1000, 4);
+                        string resp = SendCommandGetResponse("FTEMPx", "T=", 310, 3);
                         int i = resp.IndexOf("T=") + 2;
-                        _CurrentTemp = double.Parse(resp.Substring(i, 5));
+                        _CurrentTemp = double.Parse(resp.Substring(i, 5)) + DeviceSettings.TemperatureOffset;
                         return _CurrentTemp;
                     }
-                    else throw new DriverException("Attempted To Retrieve Temperature Without Probe Attached.");
-                }
-                else throw new ASCOM.DriverException("Unknown Mode Selected.");
+                    else throw new ASCOM.DriverException("Unknown Mode Selected.");
+              //  }
 
             }
+            catch (ER1_DeviceException) {
+                System.Threading.Thread.Sleep(200);
+                throw; 
+            }
+            
+            catch (ER4_DeviceException) {
+                System.Threading.Thread.Sleep(200);
+                throw;  
+            }
+
             catch (Exception ex)
             {
                 throw new ASCOM.DriverException("Error Retrieving Temperature.", ex);
             }
+        
+
+        }
+
+        public static void SetTempProbeEnabled(bool enabled)
+        {
+            try
+            {
+                // Command FYxxx1 disables the probe
+                // Command FYxxx0 enabled the probe
+                string val = enabled ? "0" : "1";   // Means if enabled == true, val = 0 else val = 1;
+                string cmdToSend = "FYxxx" + val;
+                string expResp = "DONE";
+                lock (LockObject)
+                {
+                    SendCommandGetResponse(cmdToSend, expResp, 800, 4);
+                }
+                Debug.Print("Probe enabled = " + enabled.ToString());
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                throw;
+            }
+
         }
 
         public static int GetPosition()
         {
             try
             {
-                if (_ConnectionState == ConnectionStates.Sleeping)
-                {
-                    throw new InvalidOperationException("Unable To Get Position While In Sleep Mode.");
-                }
-                else if (_ConnectionState == ConnectionStates.Disconnected)
-                {
-                    throw new InvalidOperationException("Unable To Get Position While Disconnected.");
-                }
-                else if (_ConnectionState == ConnectionStates.TempCompMode)
-                {
-                    lock (LockObject)
+               // lock (LockObject)
+               // {
+                    if (_ConnectionState == ConnectionStates.Sleeping)
+                    {
+                        throw new InvalidOperationException("Unable To Get Position While In Sleep Mode.");
+                    }
+                    else if (_ConnectionState == ConnectionStates.Disconnected)
+                    {
+                        throw new InvalidOperationException("Unable To Get Position While Disconnected.");
+                    }
+                    else if (_ConnectionState == ConnectionStates.TempCompMode)
                     {
                         return _CurrentPosition;
                     }
-                }
-                else if (_ConnectionState == ConnectionStates.SerialMode)
-                {
-                    string resp = SendCommandGetResponse("FPOSxx", "P=", 500, 4);
-                    int i = resp.IndexOf("P=") + 2;
-                    _CurrentPosition = int.Parse(resp.Substring(i, 4));
-                    return _CurrentPosition;
-                }
-                else throw new ASCOM.DriverException("Unknown Mode Selected.");
+                    else if (_ConnectionState == ConnectionStates.SerialMode)
+                    {
+                        string resp = SendCommandGetResponse("FPOSxx", "P=", 400, 4);
+                        int i = resp.IndexOf("P=") + 2;
+                        _CurrentPosition = int.Parse(resp.Substring(i, 4));
+                        return _CurrentPosition;
+                    }
+                    else throw new ASCOM.DriverException("Unknown Mode Selected.");
+               // }
 
             }
             catch (Exception ex)
@@ -211,53 +277,55 @@ namespace ASCOM.OptecTCF_S
         {
             try
             {
-                if (ConnectionState != ConnectionStates.SerialMode)
-                {
-                    throw new InvalidOperationException("Must Be In Serial Mode To Move Focus");
-                }
-                else if (NewPos <= 0)
-                {
-                    NewPos = 1;
-                }
-                else if (NewPos > DeviceSettings.MaxStep)
-                {
-                    NewPos = DeviceSettings.MaxStep;
-                }
+           //     lock (LockObject)
+            //    {
+                    if (ConnectionState != ConnectionStates.SerialMode)
+                    {
+                        throw new InvalidOperationException("Must Be In Serial Mode To Move Focus");
+                    }
+                    else if (NewPos <= 0)
+                    {
+                        NewPos = 1;
+                    }
+                    else if (NewPos > DeviceSettings.MaxStep)
+                    {
+                        NewPos = DeviceSettings.MaxStep;
+                    }
 
-                // Prepare for Move
-                double diff = Math.Abs(_CurrentPosition - NewPos);
-                double t = ((37 * 1000) / 7000) * diff * 4;
-                int TimeOut = Convert.ToInt32(t);
-                if (TimeOut < 2000) TimeOut = 2000;
-                string cmd = "";
+                    // Prepare for Move
+                    double diff = Math.Abs(_CurrentPosition - NewPos);
+                    double t = ((37 * 1000) / 7000) * diff * 4;
+                    int TimeOut = Convert.ToInt32(t);
+                    if (TimeOut < 2000) TimeOut = 2000;
+                    string cmd = "";
 
-                // Do the Move
-                if (_CurrentPosition == NewPos)
-                {
-                    return;
-                }
-                else if (_CurrentPosition > NewPos)
-                {
-                    _IsMoving = true;
-                    cmd = "FI" + diff.ToString().PadLeft(4, '0');
-                    SendCommandGetResponse(cmd, "*", TimeOut, 1);
-                    _IsMoving = false;
-                }
-                else if (_CurrentPosition < NewPos)
-                {
-                    _IsMoving = true;
-                    cmd = "FO" + diff.ToString().PadLeft(4, '0');
-                    SendCommandGetResponse(cmd, "*", TimeOut, 1);
-                    _IsMoving = false;
-                }
+                    // Do the Move
+                    if (_CurrentPosition == NewPos)
+                    {
+                        return;
+                    }
+                    else if (_CurrentPosition > NewPos)
+                    {
+                        _IsMoving = true;
+                        cmd = "FI" + diff.ToString().PadLeft(4, '0');
+                        SendCommandGetResponse(cmd, "*", TimeOut, 1);
+                        _IsMoving = false;
+                    }
+                    else if (_CurrentPosition < NewPos)
+                    {
+                        _IsMoving = true;
+                        cmd = "FO" + diff.ToString().PadLeft(4, '0');
+                        SendCommandGetResponse(cmd, "*", TimeOut, 1);
+                        _IsMoving = false;
+                    }
 
-                // Verify new position and update Current Position...
-                _CurrentPosition = GetPosition();
-                if (_CurrentPosition != NewPos)
-                    throw new ASCOM.DriverException("Move Did Not Succeed. Desired Pos = " + NewPos.ToString() +
-                        "Final Position = " + _CurrentPosition.ToString());
+                    // Verify new position and update Current Position...
+                    _CurrentPosition = NewPos;
+                //    if (_CurrentPosition != NewPos)
+                 //       throw new ASCOM.DriverException("Move Did Not Succeed. Desired Pos = " + NewPos.ToString() +
+                  //          "Final Position = " + _CurrentPosition.ToString());
 
-
+              //  }
             }
             catch (Exception ex)
             {
@@ -285,8 +353,11 @@ namespace ASCOM.OptecTCF_S
                 {
                     cmd = "FDB";
                 }
-                cmd = cmd + delay.ToString().PadLeft(3, '0');    //cmd = FDAnnn or FDBnnn
-                SendCommandGetResponse(cmd, "DONE", 500, 4);
+                lock (LockObject)
+                {
+                    cmd = cmd + delay.ToString().PadLeft(3, '0');    //cmd = FDAnnn or FDBnnn
+                    SendCommandGetResponse(cmd, "DONE", 500, 4);
+                }
             }
             catch (Exception Ex)
             {
@@ -317,7 +388,10 @@ namespace ASCOM.OptecTCF_S
                         throw new ASCOM.InvalidValueException("Device Type to Set", 
                             value.ToString(), "TCF-S, TCF-Si, TCF-S3, TCF-S3i");
                 }
-                SendCommandGetResponse(CmdToSend, "DONE", 500, 4);
+                lock (LockObject)
+                {
+                    SendCommandGetResponse(CmdToSend, "DONE", 500, 4);
+                }
             }
             catch (Exception Ex)
             {
@@ -330,22 +404,25 @@ namespace ASCOM.OptecTCF_S
             int slope = 0;
             try
             {
-                
-                if (AorB == 'A')
+                lock (LockObject)
                 {
-                    string resp = SendCommandGetResponse("FREADA", "A=", 500, 4);
-                    int i = resp.IndexOf("=") + 2;
-                    slope = int.Parse(resp.Substring(i, 3));
-                }
-                else if (AorB == 'B')
-                {
-                    string resp = SendCommandGetResponse("FREADB", "B=", 500, 4);
-                    int i = resp.IndexOf("=") + 2;
-                    slope = int.Parse(resp.Substring(i, 3));
-                }
-                else
-                {
-                    throw new InvalidValueException("GetLearnedSlope", AorB.ToString(), "Must be A or B");
+
+                    if (AorB == 'A')
+                    {
+                        string resp = SendCommandGetResponse("FREADA", "A=", 500, 4);
+                        int i = resp.IndexOf("=") + 2;
+                        slope = int.Parse(resp.Substring(i, 3));
+                    }
+                    else if (AorB == 'B')
+                    {
+                        string resp = SendCommandGetResponse("FREADB", "B=", 500, 4);
+                        int i = resp.IndexOf("=") + 2;
+                        slope = int.Parse(resp.Substring(i, 3));
+                    }
+                    else
+                    {
+                        throw new InvalidValueException("GetLearnedSlope", AorB.ToString(), "Must be A or B");
+                    }
                 }
             }
             catch (Exception Ex)
@@ -385,26 +462,29 @@ namespace ASCOM.OptecTCF_S
         {
             try
             {
-                string cmd = "";
-                string slp = "";
-                int UnsignedSlope = Math.Abs(SignedSlope);
+                lock (LockObject)
+                {
+                    string cmd = "";
+                    string slp = "";
+                    int UnsignedSlope = Math.Abs(SignedSlope);
 
-                if (UnsignedSlope > 999) throw new InvalidValueException("Load Slope", "Slope", "000 to 999");
-                if (UnsignedSlope < 0) throw new InvalidValueException("Load Slope", "Slope", "000 to 999");
-                slp = UnsignedSlope.ToString().PadLeft(3, '0');
-                if (AorB == 'A')
-                {
-                    cmd = "FLA" + slp;
+                    if (UnsignedSlope > 999) throw new InvalidValueException("Load Slope", "Slope", "000 to 999");
+                    if (UnsignedSlope < 0) throw new InvalidValueException("Load Slope", "Slope", "000 to 999");
+                    slp = UnsignedSlope.ToString().PadLeft(3, '0');
+                    if (AorB == 'A')
+                    {
+                        cmd = "FLA" + slp;
+                    }
+                    else if (AorB == 'B')
+                    {
+                        cmd = "FLB" + slp;
+                    }
+                    else
+                    {
+                        throw new InvalidValueException("LoadSlope", AorB.ToString(), "Must be A or B");
+                    }
+                    SendCommandGetResponse(cmd, "DONE", 500, 4);
                 }
-                else if (AorB == 'B')
-                {
-                    cmd = "FLB" + slp;
-                }
-                else
-                {
-                    throw new InvalidValueException("LoadSlope", AorB.ToString(), "Must be A or B");
-                }
-                SendCommandGetResponse(cmd, "DONE", 500, 4);
 
             }
             catch (Exception Ex)
@@ -452,22 +532,25 @@ namespace ASCOM.OptecTCF_S
         {
             try
             {
+                
                 if (AorB != 'A' && AorB != 'B') throw new InvalidValueException("SetDelay", AorB.ToString(), "A or B");
                 if (delay < 1 || delay > 10.99) throw new InvalidValueException("SetDelay", delay.ToString(), "1 through 10.99");
-
-                delay = delay - 1;
-                string cmd;
-                string delaystring = (delay * 100).ToString().PadLeft(3, '0');
-
-                if (AorB == 'A')
+                lock (LockObject)
                 {
-                    cmd = "FDA" + delaystring;
+                    delay = delay - 1;
+                    string cmd;
+                    string delaystring = (delay * 100).ToString().PadLeft(3, '0');
+
+                    if (AorB == 'A')
+                    {
+                        cmd = "FDA" + delaystring;
+                    }
+                    else
+                    {
+                        cmd = "FDB" + delaystring;
+                    }
+                    SendCommandGetResponse(cmd, "DONE", 600, 4);
                 }
-                else
-                {
-                    cmd = "FDB" + delaystring;
-                }
-                SendCommandGetResponse(cmd, "DONE", 600, 4); 
             }
             catch (Exception Ex)
             {
