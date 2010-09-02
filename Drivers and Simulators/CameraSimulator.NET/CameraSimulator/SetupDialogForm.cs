@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using ASCOM.Utilities;
-using ASCOM.Interface;
+using ASCOM.DeviceInterface;
 using System.Globalization;
 
 namespace ASCOM.Simulator

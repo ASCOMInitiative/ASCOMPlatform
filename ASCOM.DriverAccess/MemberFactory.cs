@@ -159,7 +159,7 @@ namespace ASCOM.DriverAccess
                             }
                             if (e.InnerException.GetType() == typeof (DriverException))
                             {
-                                throw new DriverException(e.InnerException.Message, e.InnerException);
+                                throw new DriverException(e.InnerException.Message, ((DriverException)e.InnerException).Number, e.InnerException);
                             }
                             throw e.InnerException;
                         }
@@ -220,7 +220,7 @@ namespace ASCOM.DriverAccess
                             }
                             if (e.InnerException.GetType() == typeof (DriverException))
                             {
-                                throw new DriverException(e.InnerException.Message, e.InnerException);
+                                throw new DriverException(e.InnerException.Message, ((DriverException)e.InnerException).Number, e.InnerException);
                             }
                             if (e.InnerException.GetType() == typeof (InvalidValueException))
                             {

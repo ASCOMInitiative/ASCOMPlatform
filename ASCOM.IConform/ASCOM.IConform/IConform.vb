@@ -64,6 +64,7 @@ End Interface
 ''' </summary>
 ''' <remarks></remarks>
 <Guid("4876295B-6FCC-47c8-AEC9-CF39F1244AEB"), _
+InterfaceType(ComInterfaceType.InterfaceIsIDispatch), _
 ComVisible(True)> _
 Public Interface IConformCommandStrings
     ''' <summary>

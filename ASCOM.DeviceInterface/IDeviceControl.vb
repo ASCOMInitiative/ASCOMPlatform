@@ -23,7 +23,7 @@
 ''' case insensitive, so FilterWheel:SelectWheel, filterwheel:selectwheel 
 ''' and FILTERWHEEL:SELECTWHEEL will all refer to the same action. 
 ''' </summary>
-<Guid("B232CDBA-22CC-4596-84F9-23F99B2512FD"), ComVisible(True)> _
+<Guid("B232CDBA-22CC-4596-84F9-23F99B2512FD"), ComVisible(True), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
 Public Interface IDeviceControl
     ''' <summary>
     ''' Invokes the specified device-specific action.

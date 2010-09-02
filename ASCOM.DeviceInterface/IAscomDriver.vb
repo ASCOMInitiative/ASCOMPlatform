@@ -44,7 +44,7 @@
 ''' <summary>
 ''' Defines the properties and methods that are common to all ASCOM devices.
 ''' </summary> 
-<ComVisible(True), Guid("76E5F444-806B-4c72-9184-18CE21D350A7")> _
+<ComVisible(True), Guid("76E5F444-806B-4c72-9184-18CE21D350A7"), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
 Public Interface IAscomDriver
     ''' <summary>
     ''' Set True to enable the link. Set False to disable the link.

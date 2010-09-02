@@ -8,7 +8,7 @@ using System.Text;
 using System.IO;
 using System.Windows.Forms;
 using ASCOM.DriverAccess;
-using ASCOM.Interface;
+using ASCOM.DeviceInterface;
 using CameraTest.Properties;
 using nom.tam.fits;
 using nom.tam.util;

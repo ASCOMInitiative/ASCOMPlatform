@@ -344,6 +344,8 @@ Friend Class RegistryAccess
         Catch ex As Exception
             TL.LogMessageCrLf("MigrateProfile", "Exception: " & ex.ToString)
             Throw New ProfilePersistenceException("RegistryAccess.MigrateProfile exception", ex)
+        Finally
+            ProfileMutex.ReleaseMutex()
         End Try
     End Sub
 

@@ -124,6 +124,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AscomDriver.cs" />
     <Compile Include="Camera.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
@@ -181,6 +182,10 @@
     <ProjectReference Include="..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj">
       <Project>{872EF2D6-AC89-4C15-AC84-6C69B040A843}</Project>
       <Name>ASCOM.DeviceInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ASCOM.IConform\ASCOM.IConform\ASCOM.IConform.vbproj">
+      <Project>{44999847-A7B6-462D-B663-FE988D98E317}</Project>
+      <Name>ASCOM.IConform</Name>
     </ProjectReference>
     <ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>

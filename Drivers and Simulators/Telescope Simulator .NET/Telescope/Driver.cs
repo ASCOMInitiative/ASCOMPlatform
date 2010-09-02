@@ -33,8 +33,7 @@ namespace ASCOM.TelescopeSimulator
     // _Telescope from being created and used as the [default] interface
     //
     
-    [Guid("86931eac-1f52-4918-b6aa-7e9b0ff361bd")]
-    [ClassInterface(ClassInterfaceType.None)]
+    [Guid("86931eac-1f52-4918-b6aa-7e9b0ff361bd"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
     public class Telescope : ReferenceCountedObjectBase, ITelescope
     {
         //

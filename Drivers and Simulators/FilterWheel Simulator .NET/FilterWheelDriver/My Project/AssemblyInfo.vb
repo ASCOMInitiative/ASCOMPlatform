@@ -15,10 +15,10 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyCopyright("Mark Crossley")> 
 <Assembly: AssemblyTrademark("")> 
 
-<Assembly: ComVisible(True)> 
+<Assembly: ComVisible(False)> 
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("F9043C88-F6F2-101A-A3C9-08002B2F49FB")> 
+<Assembly: Guid("2DC50060-2842-45ba-B486-C2CC4841BD26")> 
 
 ' Version information for an assembly consists of the following four values:
 '

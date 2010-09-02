@@ -99,6 +99,8 @@
 ; Moved location of Help files directory from \Utilities to \Help
 ; Migrated to Inno setup 5.3.9
 ; Removed EraseProfile for Platform 6 as MigrateProfile can do this function
+; Merged changes from interface test branch
+; Installer version 24 released
 
 [Setup]
 ; Setup program version number - change this each time you change this setup script
@@ -311,7 +313,7 @@ Source: ..\..\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.pdb; DestDir:  {cf32}\AS
 Source: ..\..\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.dll; DestDir:  {cf32}\ASCOM\.net; Flags: ignoreversion
 Source: ..\..\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.pdb; DestDir:  {cf32}\ASCOM\.net; Flags: ignoreversion
 
- ;JPL Ephemeris and RA CIO files
+;JPL Ephemeris and RA CIO files
 Source: ..\..\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion; Check: IsWin64
 Source: ..\..\NOVAS\NOVAS-3\CioFile\cio_ra.bin; DestDir: {app}; Flags: ignoreversion
@@ -322,6 +324,14 @@ Source: ..\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe; DestDir: {app}; 
 Source: ..\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb; DestDir: {app}; Flags: ignoreversion
 source: ..\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll; DestDir: {app}; Flags: ignoreversion
 source: ..\FusionLib\bin\Release\ASCOM.Internal.FusionLib.pdb; DestDir: {app}; Flags: ignoreversion
+
+;Simulators, install to 32 and 64bit directories
+Source: "..\..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll"; DestDir: "{cf}\ASCOM\Camera"; Flags: ignoreversion
+Source: "..\..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll"; DestDir: "{cf32}\ASCOM\Camera"; Check: IsWin64; Flags: ignoreversion
+Source: "..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ASCOM.FilterWheelSim.exe"; DestDir: "{cf}\ASCOM\FilterWheel"; Flags: ignoreversion
+Source: "..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ServedClasses\ASCOM.FilterWheelSim.FilterWheel.dll"; DestDir: "{cf}\ASCOM\FilterWheel\ServedClasses"; Flags: ignoreversion
+Source: "..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ASCOM.FilterWheelSim.exe"; DestDir: "{cf32}\ASCOM\FilterWheel"; Check: IsWin64; Flags: ignoreversion
+Source: "..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ServedClasses\ASCOM.FilterWheelSim.FilterWheel.dll"; DestDir: "{cf32}\ASCOM\FilterWheel\ServedClasses"; Check: IsWin64; Flags: ignoreversion
 
 [Registry]
 Root: HKLM64; Subkey: SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM64; ValueType: string; ValueName: ; ValueData: {cf}\ASCOM\.net; Flags: uninsdeletekey; Check: IsWin64
@@ -345,16 +355,16 @@ Filename: {app}\ASCOM.Internal.GACInstall.exe; Parameters: ASCOM.IConform.dll; F
 Filename: {app}\ASCOM.Internal.GACInstall.exe; Parameters: ASCOM.Attributes.dll; Flags: runhidden; StatusMsg: Installing ASCOM.Attributes to the assembly cache
 Filename: {dotnet20}\regasm.exe; Parameters: "/TLB ""{app}\ASCOM.Utilities.dll"""; Flags: runhidden; StatusMsg: Registering Utilities type library for COM
 Filename: {dotnet20}\regasm.exe; Parameters: "/TLB ""{app}\ASCOM.Astrometry.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.Astrometry type library for COM
-Filename: {dotnet20}\regasm.exe; Parameters: "/TLB ""{app}\ASCOM.IConform.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.IConform type library for COM
+;Filename: {dotnet20}\regasm.exe; Parameters: "/TLB ""{app}\ASCOM.IConform.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.IConform type library for COM
 Filename: {dotnet2032}\regasm.exe; Parameters: "/TLB ""{cf32}\ASCOM\.net\ASCOM.Utilities.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering Utilities type library for 32bit COM
 Filename: {dotnet2032}\regasm.exe; Parameters: "/TLB ""{cf32}\ASCOM\.net\ASCOM.Astrometry.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering ASCOM.Astrometry type library for 32bit COM
-Filename: {dotnet2032}\regasm.exe; Parameters: "/TLB ""{cf32}\ASCOM\.net\ASCOM.IConform.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering ASCOM.IConform type library for 32bit COM
+;Filename: {dotnet2032}\regasm.exe; Parameters: "/TLB ""{cf32}\ASCOM\.net\ASCOM.IConform.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering ASCOM.IConform type library for 32bit COM
 Filename: {dotnet20}\regasm.exe; Parameters: """{app}\ASCOM.Utilities.dll"""; Flags: runhidden; StatusMsg: Registering Utilities for COM
 Filename: {dotnet20}\regasm.exe; Parameters: """{app}\ASCOM.Astrometry.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.Astrometry for COM
-Filename: {dotnet20}\regasm.exe; Parameters: """{app}\ASCOM.IConform.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.IConform for COM
+;Filename: {dotnet20}\regasm.exe; Parameters: """{app}\ASCOM.IConform.dll"""; Flags: runhidden; StatusMsg: Registering ASCOM.IConform for COM
 Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.Utilities.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering Utilities for 32bit COM
 Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.Astrometry.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering ASCOM.Astrometry for 32bit COM
-Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.IConform.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering ASCOM.IConform for 32bit COM
+;Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\.net\ASCOM.IConform.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering ASCOM.IConform for 32bit COM
 ; ASCOM DeviceInterfaces
 Filename: {app}\ASCOM.Internal.GACInstall.exe; Parameters: ASCOM.DeviceInterfaces.dll; Flags: runhidden; StatusMsg: Installing ASCOM.DeviceInterfaces to the assembly cache
 Filename: {dotnet20}\regasm.exe; Parameters: "/TLB ""{app}\ASCOM.DeviceInterfaces.dll"""; Flags: runhidden; StatusMsg: Registering Utilities type library for COM
@@ -383,7 +393,20 @@ Filename: {cf32}\ASCOM\Utilities\MigrateProfile.exe; Parameters: /MIGRATEIFNEEDE
 ; ReadMe file
 Filename: {app}\ReadMe55.txt; Description: ReadMe file; StatusMsg: Displaying ReadMe file; Flags: shellexec skipifdoesntexist postinstall skipifsilent
 
+; Register the simulators
+Filename: {dotnet20}\regasm.exe; Parameters: """{cf}\ASCOM\Camera\ASCOM.Simulator.Camera.dll"" /codebase"; Flags: runhidden; StatusMsg: Registering Camera Simulator for COM
+Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\Camera\ASCOM.Simulator.Camera.dll"" /codebase"; Flags: runhidden; Check: IsWin64; StatusMsg: Registering Camera Simulator for 32bit COM
+;Filename: {dotnet20}\regasm.exe; Parameters: """{cf}\ASCOM\FilterWheel\ASCOM.FilterWheelSim.exe"" /codebase "; Flags: runhidden; StatusMsg: Registering FilterWheel Simulator for COM
+;Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\FilterWheel\ASCOM.FilterWheelSim.exe"" /codebase "; Flags: runhidden; Check: IsWin64; StatusMsg: Registering FilterWheel Simulator for 32bit COM
+Filename: {cf32}\ASCOM\FilterWheel\ASCOM.FilterWheelSim.exe; Parameters: "/register"; Flags: runhidden; StatusMsg: Registering FilterWheel Simulator
+
 [UninstallRun]
+;Simulators
+Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister ""{cf}\ASCOM\Camera\ASCOM.Simulator.Camera.dll"""; Flags: runhidden; StatusMsg: Registering Camera Simulator for COM
+Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister ""{cf32}\ASCOM\Camera\ASCOM.Simulator.Camera.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering Camera Simulator for 32bit COM
+;Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister ""{cf}\ASCOM\Camera\ASCOM.FilterWheelSim.FilterWheel.dll"""; Flags: runhidden; StatusMsg: Registering FilterWheel Simulator for COM
+;Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister ""{cf32}\ASCOM\Camera\ASCOM.FilterWheelSim.FilterWheel.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Registering FilterWheel Simulator for 32bit COM
+
 ; uninstall Utilties, Astrometry and IConform from the GAC and unregister COM types for 32and 64bit COM
 Filename: {app}\ASCOM.Internal.GACInstall.exe; Parameters: "/U ""ASCOM.Astrometry"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Astrometry from the assembly cache
 Filename: {app}\ASCOM.Internal.GACInstall.exe; Parameters: "/U ""ASCOM.Utilities"""; Flags: runhidden; StatusMsg: Uninstalling Utilities from the assembly cache
@@ -414,7 +437,6 @@ Filename: {cf32}\ASCOM\ASCOM.Utilities\RestoreOriginalHelpers.cmd; Parameters: "
 Filename: {app}\ASCOM.Internal.GACInstall.exe; Parameters: "/U ""ASCOM.Exceptions"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Exceptions from the assembly cache
 
 ;ASCOM Client Toolkit
-;I'm deliberately leaving this installed as it is a prerequisite rather than part of this update
 
 ;Publisher policy
 #emit "Filename: {app}\ASCOM.Internal.GACInstall.exe; Parameters: ""/U """"policy." + str(Major) + "." + str(Minor) + ".ASCOM.Utilities""""""; Flags: runhidden; StatusMsg: Uninstalling ASCOM Utilities policy from the assembly cache"
@@ -486,6 +508,12 @@ WelcomeLabel1=%n%n[name]%n
 #emit "WelcomeLabel2=This will install ASCOM Utilities version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
 [_ISToolPreCompile]
 Name: ..\..\ASCOM Redirection Policies\ASCOM Redirection Policies\bin\Release\ASCOM Redirection Policies.exe; Parameters: ; Flags: runminimized abortonerror
+
+
+
+
+
+
 
 
 

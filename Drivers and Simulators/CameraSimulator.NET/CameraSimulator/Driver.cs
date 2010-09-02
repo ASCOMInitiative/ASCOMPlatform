@@ -25,8 +25,9 @@ using System.Text;
 using System.Runtime.InteropServices;
 
 using ASCOM;
-using ASCOM.Interface;
+using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
+using ASCOM.Conform;
 using System.Globalization;
 using System.Drawing;
 
@@ -38,9 +39,8 @@ namespace ASCOM.Simulator
 	/// The ClassInterface/None attribute prevents an empty interface called
 	/// _Camera from being created and used as the [default] interface
     /// </summary>
-	[Guid("12229c31-e7d6-49e8-9c5d-5d7ff05c3bfe")]
-	[ClassInterface(ClassInterfaceType.AutoDispatch)]
-	public class Camera : ICamera
+	[Guid("12229c31-e7d6-49e8-9c5d-5d7ff05c3bfe"), ClassInterface(ClassInterfaceType.None),ComVisible(true)]
+	public class Camera : ICameraV2
     {
         #region profile string constants
         private const string STR_InterfaceVersion = "InterfaceVersion";
@@ -240,15 +240,50 @@ namespace ASCOM.Simulator
 		}
 		#endregion
 
-
         //
 		// PUBLIC COM INTERFACE ICamera IMPLEMENTATION
-		//
+        //
 
-		#region ICamera Members
+        #region Common Methods
+        public string[] SupportedActions
+        {
+            get { throw new MethodNotImplementedException("SupportedActions"); }
+        }
+
+        public string LastResult
+        {
+            get { throw new PropertyNotImplementedException("LastResult",false); }
+        }
+
+        public void Dispose()
+        {
+        }
+
+        public string CommandString(string Command, bool Raw)
+        {
+            throw new MethodNotImplementedException("CommandString");
+        }
+
+        public void CommandBlind(string Command, bool Raw)
+        {
+            throw new MethodNotImplementedException("CommandBlind");
+        }
+        public bool CommandBool(string Command, bool Raw)
+        {
+            throw new MethodNotImplementedException("CommandBool");
+        }
+
+        public string Action(string Command, string Parameters)
+        {
+            throw new MethodNotImplementedException("Action");
+        }
+
+        #endregion
+
+        #region ICamera Members
 
 
-		/// <summary>
+        /// <summary>
 		/// Aborts the current exposure, if any, and returns the camera to Idle state.
 		/// Must throw exception if camera is not idle and abort is
 		///  unsuccessful (or not possible, e.g. during download).
@@ -1181,7 +1216,7 @@ namespace ASCOM.Simulator
 
 		#endregion
 
-        #region V2 properties
+        #region ICameraV2 properties
 
         /// <summary>
         /// Returns the X offset of the Bayer matrix, as defined in <see cref=""SensorType/>.
@@ -1604,7 +1639,7 @@ namespace ASCOM.Simulator
             this.maxBinY = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_MaxBinY, string.Empty, "4"), CultureInfo.InvariantCulture);
             this.hasShutter = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_HasShutter, string.Empty, "false"), CultureInfo.InvariantCulture);
             this.sensorName = profile.GetValue(s_csDriverID, STR_SensorName, string.Empty, "");
-            this.sensorType = (ASCOM.Interface.SensorType)Convert.ToInt32(profile.GetValue(s_csDriverID, STR_SensorType, string.Empty, "0"), CultureInfo.InvariantCulture);
+            this.sensorType = (ASCOM.DeviceInterface.SensorType)Convert.ToInt32(profile.GetValue(s_csDriverID, STR_SensorType, string.Empty, "0"), CultureInfo.InvariantCulture);
             this.bayerOffsetX = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_BayerOffsetX, string.Empty, "0"), CultureInfo.InvariantCulture);
             this.bayerOffsetY = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_BayerOffsetY, string.Empty, "0"), CultureInfo.InvariantCulture);
 
