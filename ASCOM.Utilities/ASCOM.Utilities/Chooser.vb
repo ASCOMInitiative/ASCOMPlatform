@@ -22,20 +22,6 @@ ComVisible(True), _
 ClassInterface(ClassInterfaceType.None)> _
 Public Class Chooser
     Implements IChooser, IChooserExtra, IDisposable
-
-    '---------------------------------------------------------------------
-    ' Copyright © 2000-2002 SPACE.com Inc., New York, NY
-    '
-    ' Permission is hereby granted to use this Software for any purpose
-    ' including combining with commercial products, creating derivative
-    ' works, and redistribution of source or binary code, without
-    ' limitation or consideration. Any redistributed copies of this
-    ' Software must include the above Copyright Notice.
-    '
-    ' THIS SOFTWARE IS PROVIDED "AS IS". SPACE.COM, INC. MAKES NO
-    ' WARRANTIES REGARDING THIS SOFTWARE, EXPRESS OR IMPLIED, AS TO ITS
-    ' SUITABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-    '---------------------------------------------------------------------
     '   ===========
     '   CHOOSER.CLS
     '   ===========
