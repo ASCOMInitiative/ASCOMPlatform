@@ -4,10 +4,10 @@ Imports System.Collections.Generic
 Imports System.Runtime.InteropServices
 
 ''' <summary>
-''' Class that can read and write a whole device Profile with a set of methods for for manipulating the Profile contents
+''' Class that represents a whole device Profile and which contains a set of methods for for manipulating its contents
 ''' </summary>
 ''' <remarks>
-''' This class is used by the Profile.GetProfile and Profile.SetProfile methods.
+''' This class is used by the Profile.GetProfile and Profile.SetProfile methods, do not confuse it with the Profile Class itself.
 ''' </remarks>
 <ComVisible(True), Guid("43325B3A-8B34-48db-8028-9D8CED9FA9E2"), ClassInterface(ClassInterfaceType.None)> _
 Public Class ASCOMProfile
