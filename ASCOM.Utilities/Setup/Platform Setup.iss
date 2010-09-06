@@ -102,9 +102,12 @@
 ; Merged changes from interface test branch
 ; Installer version 24 released
 
+; Fixed issue in restoration of original helpers
+; Installer version 25
+
 [Setup]
 ; Setup program version number - change this each time you change this setup script
-#define Public SetupVersion 24
+#define Public SetupVersion 25
 
 ;Text description of this update as it appears in the installer UI
 #define Public InstallerVersion "6.0"
@@ -338,7 +341,7 @@ Root: HKLM64; Subkey: SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFolder
 Root: HKLM32; Subkey: SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM64; ValueType: string; ValueName: ; ValueData: {cf64}\ASCOM\.net; Flags: uninsdeletekey; Check: IsWin64
 
 [Icons]
-Name: {commonprograms}\ASCOM Platform\Docs\ASCOM Platform Update 5.5; Filename: {cf}\ASCOM\Doc\PlatformHelp.chm
+Name: {commonprograms}\ASCOM Platform\Docs\ASCOM Platform 6; Filename: {cf}\ASCOM\Doc\PlatformHelp.chm
 Name: {commonprograms}\ASCOM Platform\Docs\ASCOM Platform Architecture; Filename: {cf}\ASCOM\Doc\Platform 5.5.pdf
 Name: {commonprograms}\ASCOM Platform\Tools\Profile Explorer; Filename: {pf}\ASCOM\Profile Explorer\ProfileExplorer.exe
 Name: {commonprograms}\ASCOM Platform\Tools\ASCOM Diagnostics; Filename: {app}\ASCOM Diagnostics.exe
@@ -431,7 +434,7 @@ Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister ""{cf32}\ASCOM\.net\
 Filename: {dotnet20}\regasm.exe; Parameters: "/Unregister /TLB ""{app}\ASCOM.DeviceInterfaces.dll"""; Flags: runhidden; StatusMsg: Unregistering ASCOM.Astrometry type library
 Filename: {dotnet2032}\regasm.exe; Parameters: "/Unregister /TLB ""{cf32}\ASCOM\.net\ASCOM.DeviceInterfaces.dll"""; Flags: runhidden; Check: IsWin64; StatusMsg: Unregistering 32bit ASCOM.IConform type library
 
-Filename: {cf32}\ASCOM\ASCOM.Utilities\RestoreOriginalHelpers.cmd; Parameters: """{cf32}\ASCOM\ASCOM.Utilities\*.dll"" ""{cf32}\ASCOM"""; StatusMsg: Restoring helper dlls; Flags: runhidden
+Filename: {cf32}\ASCOM\Utilities\RestoreOriginalHelpers.cmd; Parameters: """{cf32}\ASCOM\Utilities\*.dll"" ""{cf32}\ASCOM"""; StatusMsg: Restoring helper dlls; Flags: runhidden
 
 ;ASCOM Exceptions
 Filename: {app}\ASCOM.Internal.GACInstall.exe; Parameters: "/U ""ASCOM.Exceptions"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.Exceptions from the assembly cache
@@ -443,7 +446,7 @@ Filename: {app}\ASCOM.Internal.GACInstall.exe; Parameters: "/U ""ASCOM.Exception
 #emit "Filename: {app}\ASCOM.Internal.GACInstall.exe; Parameters: ""/U """"policy." + str(Major) + "." + str(Minor) + ".ASCOM.Astrometry""""""; Flags: runhidden; StatusMsg: Uninstalling ASCOM Astrometry policy from the assembly cache"
 
 [UninstallDelete]
-Type: files; Name: {cf32}\ASCOM\ASCOM.Utilities\*.*
+Type: files; Name: {cf32}\ASCOM\Utilities\*.*
 Type: dirifempty; Name: {cf32}\ASCOM\Utilities
 Type: files; Name: {cf32}\ASCOM\.net\ASCOM.Utilities.tlb
 Type: files; Name: {cf32}\ASCOM\.net\ASCOM.Astrometry.tlb
@@ -508,17 +511,3 @@ WelcomeLabel1=%n%n[name]%n
 #emit "WelcomeLabel2=This will install ASCOM Utilities version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
 [_ISToolPreCompile]
 Name: ..\..\ASCOM Redirection Policies\ASCOM Redirection Policies\bin\Release\ASCOM Redirection Policies.exe; Parameters: ; Flags: runminimized abortonerror
-
-
-
-
-
-
-
-
-
-
-
-
-
-
