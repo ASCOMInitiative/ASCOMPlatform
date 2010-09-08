@@ -31,7 +31,15 @@ namespace ASCOM.DriverAccess
         public Camera(string cameraId) : base(cameraId)
 		{
             _memberFactory = base.MemberFactory;
-            _driverInterfaceVersion = InterfaceVersion;
+            try
+            {
+                _driverInterfaceVersion = InterfaceVersion;
+            }
+            catch (PropertyNotImplementedException)
+            {
+                _driverInterfaceVersion = 1;
+            }
+
 		}
         #endregion
 

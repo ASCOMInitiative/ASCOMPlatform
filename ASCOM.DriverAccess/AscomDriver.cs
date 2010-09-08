@@ -103,7 +103,17 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public short InterfaceVersion
         {
-            get { return Convert.ToInt16(memberFactory.CallMember(1, "InterfaceVersion", new Type[] { }, new object[] { })); }
+            get 
+            {
+                try // Return the interface version or return 1 if property is not implemented
+                {
+                    return Convert.ToInt16(memberFactory.CallMember(1, "InterfaceVersion", new Type[] { }, new object[] { }));
+                }
+                catch (PropertyNotImplementedException)
+                {
+                    return 1;
+                }
+            }
         }
 
         /// <summary>
