@@ -387,18 +387,6 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Reports the last error condition reported by the camera hardware or communications
-        /// link.  The string may contain a text message or simply an error code.  The error
-        /// value is cleared the next time any method is called.
-        /// </summary>
-        /// <value>The last error.</value>
-        /// <exception cref=" System.Exception">Must throw exception if no error condition.</exception>
-        public string LastError
-        {
-            get { return (string)_memberFactory.CallMember(1, "LastError", new Type[] { }, new object[] { }); }
-        }
-
-        /// <summary>
         /// Reports the actual exposure duration in seconds (i.e. shutter open time).  This
         /// may differ from the exposure time requested due to shutter latency, camera timing
         /// precision, etc.

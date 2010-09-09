@@ -401,15 +401,6 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ReadOnly Property IsPulseGuiding() As Boolean
 
     ''' <summary>
-    ''' Reports the last error condition reported by the camera hardware or communications
-    ''' link.  The string may contain a text message or simply an error code.  The error
-    ''' value is cleared the next time any method is called.
-    ''' </summary>
-    ''' <value>The last error.</value>
-    ReadOnly Property LastError() As String
-
-
-    ''' <summary>
     ''' Reports the actual exposure duration in seconds (i.e. shutter open time).  This
     ''' may differ from the exposure time requested due to shutter latency, camera timing
     ''' precision, etc.
