@@ -84,14 +84,6 @@
         End Get
     End Property
 
-    Public ReadOnly Property LastResult As String Implements IFilterWheel.LastResult
-        Get
-            Static FirstCall As Integer = 0
-            FirstCall += 1
-            If FirstCall = 1 Then Throw New InvalidOperationException("Attempt to call LastResult before any commands have been executed")
-            Return ""
-        End Get
-    End Property
     Public ReadOnly Property Name As String Implements IFilterWheel.Name
         Get
             Return "Filer Wheel Simulator .NET"
