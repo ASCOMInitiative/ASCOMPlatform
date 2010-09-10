@@ -117,18 +117,6 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Gets the last result.
-        /// </summary>
-        /// <value>
-        /// The result of the last executed action, or <see cref="String.Empty"	/>
-        /// if no action has yet been executed.
-        /// </value>
-        public string LastResult
-        {
-            get { return (string)memberFactory.CallMember(1, "LastResult", new Type[] { typeof(string) }, new object[] { }); }
-        }
-
-        /// <summary>
         /// The short name of the driver, for display purposes
         /// </summary>
         public string Name

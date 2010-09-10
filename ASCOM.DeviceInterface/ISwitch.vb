@@ -54,15 +54,6 @@ Public Interface ISwitch '44C03033-C60E-4101-856C-AAFB0F735F83
     ReadOnly Property InterfaceVersion() As Short
 
     ''' <summary>
-    ''' Gets the last result.
-    ''' </summary>
-    ''' <value>
-    ''' The result of the last executed action, or <see cref="String.Empty"	/>
-    ''' if no action has yet been executed.
-    ''' </value>
-    ReadOnly Property LastResult() As String
-
-    ''' <summary>
     ''' The short name of the driver, for display purposes
     ''' </summary>
     ReadOnly Property Name() As String

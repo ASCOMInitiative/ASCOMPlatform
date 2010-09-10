@@ -53,15 +53,6 @@ Public Interface IDome 'CCDA0D85-474A-4775-8105-1D513ADC3896
     ReadOnly Property InterfaceVersion() As Short
 
     ''' <summary>
-    ''' Gets the last result.
-    ''' </summary>
-    ''' <value>
-    ''' The result of the last executed action, or <see cref="String.Empty"	/>
-    ''' if no action has yet been executed.
-    ''' </value>
-    ReadOnly Property LastResult() As String
-
-    ''' <summary>
     ''' The short name of the driver, for display purposes
     ''' </summary>
     ReadOnly Property Name() As String
@@ -89,7 +80,7 @@ Public Interface IDome 'CCDA0D85-474A-4775-8105-1D513ADC3896
     ''' <param name="ActionParameters">
     ''' List of required parameters or <see cref="String.Empty"/>  if none are required.
     ''' </param>
-    ''' <returns>A string response and sets the <c>IDeviceControl.LastResult</c> property.</returns>
+    ''' <returns>A string response if successful or an exception if not.</returns>
     Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String
 
     ''' <summary>

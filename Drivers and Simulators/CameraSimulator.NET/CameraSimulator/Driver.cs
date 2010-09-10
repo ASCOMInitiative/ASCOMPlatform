@@ -250,11 +250,6 @@ namespace ASCOM.Simulator
             get { throw new MethodNotImplementedException("SupportedActions"); }
         }
 
-        public string LastResult
-        {
-            get { throw new PropertyNotImplementedException("LastResult",false); }
-        }
-
         public void Dispose()
         {
         }

@@ -56,15 +56,6 @@ Public Interface ITelescopeV2 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ReadOnly Property InterfaceVersion() As Short
 
     ''' <summary>
-    ''' Gets the last result.
-    ''' </summary>
-    ''' <value>
-    ''' The result of the last executed action, or <see cref="String.Empty"	/>
-    ''' if no action has yet been executed.
-    ''' </value>
-    ReadOnly Property LastResult() As String
-
-    ''' <summary>
     ''' The short name of the driver, for display purposes
     ''' </summary>
     ReadOnly Property Name() As String
