@@ -180,8 +180,6 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ASCOM.DeviceInterface", "AS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraSimulator", "Drivers and Simulators\CameraSimulator.NET\CameraSimulator\CameraSimulator.csproj", "{AC00E557-DB2F-463E-BDAF-448AA7266CF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Interfaces", "ASCOM.Interfaces\ASCOM.Interfaces.csproj", "{5A0818BF-F3DD-4262-AF69-FD794832B85C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraTest", "TestApps\CameraTest\CameraTest.csproj", "{9A46CC7D-2155-4996-8367-BFD6446CD347}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FilterWheelSimDriver", "Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\FilterWheelSimDriver.vbproj", "{F0654070-4450-461F-A484-58D356E1740E}"
@@ -730,20 +728,6 @@ Global
 		{AC00E557-DB2F-463E-BDAF-448AA7266CF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC00E557-DB2F-463E-BDAF-448AA7266CF7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AC00E557-DB2F-463E-BDAF-448AA7266CF7}.Release|x86.ActiveCfg = Release|Any CPU
-		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.Debug Quick|Any CPU.ActiveCfg = Debug|x86
-		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.Debug Quick|x86.ActiveCfg = Debug|x86
-		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.Debug Quick|x86.Build.0 = Debug|x86
-		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.Debug|x86.ActiveCfg = Debug|x86
-		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.Debug|x86.Build.0 = Debug|x86
-		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.Peter|Any CPU.ActiveCfg = Release|x86
-		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.Peter|x86.ActiveCfg = Release|x86
-		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.Peter|x86.Build.0 = Release|x86
-		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.Release|x86.ActiveCfg = Release|x86
-		{5A0818BF-F3DD-4262-AF69-FD794832B85C}.Release|x86.Build.0 = Release|x86
 		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
 		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
 		{9A46CC7D-2155-4996-8367-BFD6446CD347}.Debug Quick|x86.ActiveCfg = Debug|Any CPU
@@ -797,7 +781,6 @@ Global
 		{96FE4339-269D-4908-A161-47F8F7DF838B} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{3B6C23F5-C590-4385-86BB-98B604B565BA} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{872EF2D6-AC89-4C15-AC84-6C69B040A843} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
-		{5A0818BF-F3DD-4262-AF69-FD794832B85C} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{AE1B820F-AB93-4BA9-B3DC-DF55EB333835} = {0B492F73-66F9-460E-BD84-A6CB1FC588C6}
 		{2CB726BB-E327-41C8-9AEC-5327E5187147} = {0B492F73-66F9-460E-BD84-A6CB1FC588C6}
 		{C9BF0A8B-594F-4AB9-938A-EDC8448D8520} = {0B492F73-66F9-460E-BD84-A6CB1FC588C6}
@@ -841,13 +824,13 @@ Global
 		{12633CA2-397C-4924-B924-5BCC119B9077} = {DB708C00-E3FC-48C9-9091-275181312CBB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
-		Reflector0SourceName = Moq
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceAssemblyName = 
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0DestinationName = Moq
-		Reflector0DestinationVersion = 4.0.812.4
 		Reflector0DestinationAssemblyName = 
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationName = Moq
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0SourceAssemblyName = 
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceName = Moq
+		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
 	EndGlobalSection
 EndGlobal
