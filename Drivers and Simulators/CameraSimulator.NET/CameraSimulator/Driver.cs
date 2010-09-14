@@ -20,16 +20,11 @@
 // --------------------------------------------------------------------------------
 //
 using System;
-using System.Collections;
-using System.Text;
+using System.Drawing;
+using System.Globalization;
 using System.Runtime.InteropServices;
-
-using ASCOM;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
-using ASCOM.Conform;
-using System.Globalization;
-using System.Drawing;
 
 namespace ASCOM.Simulator
 {
@@ -181,6 +176,8 @@ namespace ASCOM.Simulator
 
         private int[,] imageArray;
         private object[,] imageArrayVariant;
+        private int[,,] imageArrayColour;
+        private object[,,] imageArrayVariantColour;
         private string lastError = string.Empty;
 
         private Timer exposureTimer;
@@ -729,7 +726,10 @@ namespace ASCOM.Simulator
                 if (!this.imageReady)
                     throw new ASCOM.InvalidOperationException("There is no image available");
 
-                return this.imageArray;
+                if (this.sensorType == SensorType.Color)
+                    return this.imageArrayColour;
+                else
+                    return this.imageArray;
             }
 		}
 
@@ -756,17 +756,33 @@ namespace ASCOM.Simulator
                 if (!this.imageReady)
                     throw new ASCOM.InvalidOperationException("There is no image available");
                 // convert to variant
-                this.imageArrayVariant = new object[imageArray.GetLength(0), imageArray.GetLength(1)];
-                for (int i = 0; i < imageArray.GetLength(1); i++)
+                if (this.sensorType == SensorType.Color)
                 {
-                    for (int j = 0; j < imageArray.GetLength(0); j++)
+                    this.imageArrayVariantColour = new object[imageArrayColour.GetLength(0), imageArrayColour.GetLength(1), 3];
+                    for (int i = 0; i < imageArrayColour.GetLength(1); i++)
                     {
-                        imageArrayVariant[j,i] = imageArray[j,i];
+                        for (int j = 0; j < imageArrayColour.GetLength(0); j++)
+                        {
+                            for (int k = 0; k < 3; k++)
+                                imageArrayVariantColour[j, i, k] = imageArrayColour[j, i, k];
+                        }
+
                     }
-                    
+                    return imageArrayVariantColour;
                 }
-                //this.imageArray.CopyTo(iav, 0);
-                return imageArrayVariant;
+                else
+                {
+                    this.imageArrayVariant = new object[imageArray.GetLength(0), imageArray.GetLength(1)];
+                    for (int i = 0; i < imageArray.GetLength(1); i++)
+                    {
+                        for (int j = 0; j < imageArray.GetLength(0); j++)
+                        {
+                            imageArrayVariant[j, i] = imageArray[j, i];
+                        }
+
+                    }
+                    return imageArrayVariant;
+                }
             }
 		}
 
@@ -1093,7 +1109,10 @@ namespace ASCOM.Simulator
             }
             this.lastExposureStartTime = DateTime.UtcNow.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss");
             // set the image array dimensions
-            this.imageArray = new int[this.numX, this.numY];
+            if (this.SensorType == SensorType.Color)
+                this.imageArrayColour = new int[this.numX, this.numY, 3];
+            else
+                this.imageArray = new int[this.numX, this.numY];
 
             if (this.exposureTimer == null)
             {
@@ -1735,8 +1754,6 @@ namespace ASCOM.Simulator
 
         private delegate int PixelProcess(double value);
 
-        private delegate double ShutterProcess(int x, int y);
-
         private void FillImageArray()
         {
             PixelProcess pixelProcess = new PixelProcess(NoNoise);
@@ -1759,9 +1776,22 @@ namespace ASCOM.Simulator
             {
                 for (int x = 0; x < this.numX; x++)
                 {
-                    double s = shutterProcess((x + this.startX) * this.binX, (y + this.startY) * this.binY);
+                    double s;
+                    if (this.sensorType == SensorType.Color)
+                    {
+                        s = shutterProcess((x + this.startX) * this.binX, (y + this.startY) * this.binY, 0);
+                        this.imageArrayColour[x, y, 0] = pixelProcess(s + darkCurrent);
+                        s = shutterProcess((x + this.startX) * this.binX, (y + this.startY) * this.binY, 1);
+                        this.imageArrayColour[x, y, 1] = pixelProcess(s + darkCurrent);
+                        s = shutterProcess((x + this.startX) * this.binX, (y + this.startY) * this.binY, 2);
+                        this.imageArrayColour[x, y, 2] = pixelProcess(s + darkCurrent);
+                    }
+                    else
+                    {
+                        s = shutterProcess((x + this.startX) * this.binX, (y + this.startY) * this.binY, 0);
+                        this.imageArray[x, y] = pixelProcess(s + darkCurrent);
+                    }
                     //s *= this.lastExposureDuration;
-                    this.imageArray[x, y] = pixelProcess(s + darkCurrent);
                 }
             }
         }
@@ -1814,28 +1844,38 @@ namespace ASCOM.Simulator
         }
 
         /// <summary>
+        /// Delegate to handle getting the binned or unbinned data for each pixel
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        private delegate double ShutterProcess(int x, int y, int p);
+
+        /// <summary>
         /// returns the sum of the image data for binX x BinY pixels
         /// </summary>
         /// <param name="x">left of bin area</param>
         /// <param name="y">top of bin area</param>
         /// <returns></returns>
-        private double BinData(int x, int y)
+        private double BinData(int x, int y, int p)
         {
             double s = 0;
             for (int k = 0; k < this.binY; k++)
             {
                 for (int l = 0; l < this.binX; l++)
                 {
-                    s += imageData[l + x, k + y, 0];
+                    s += imageData[l + x, k + y, p];
                 }
             }
             return s * this.lastExposureDuration;
         }
 
-        private double DarkData(int x, int y)
+        private double DarkData(int x, int y, int p)
         {
             return 5.0 * this.binX * this.binY;
         }
+
 
         private delegate void GetData(int x, int y);
         private Bitmap bmp;
