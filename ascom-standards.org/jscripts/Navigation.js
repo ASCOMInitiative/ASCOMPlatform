@@ -126,6 +126,7 @@ function writesubmenu() {
         SubMenuOutput += "<li><a href=\"CompatLang.htm\">Compatible Languages</a></li>";
         SubMenuOutput += "<li><a href=\"Projects.htm\">Projects in Progress</a></li>";
         SubMenuOutput += "<li><a href=\"History.htm\">A Brief History</a></li>";
+        SubMenuOutput += "<li><a href=\"Licensing.htm\">Ownership and Licensing</a></li>";
         SubMenuOutput += "<li><a href=\"HallOfFame.htm\">ASCOM Hall of Fame</a></li>";
         SubMenuOutput += "</ul>";
         break;
