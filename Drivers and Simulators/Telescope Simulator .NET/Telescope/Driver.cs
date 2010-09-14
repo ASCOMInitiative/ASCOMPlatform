@@ -20,7 +20,7 @@ using System;
 using System.Collections;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using ASCOM.Interface;
+using ASCOM.DeviceInterface;
 
 
 namespace ASCOM.TelescopeSimulator
@@ -34,7 +34,7 @@ namespace ASCOM.TelescopeSimulator
     //
     
     [Guid("86931eac-1f52-4918-b6aa-7e9b0ff361bd"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
-    public class Telescope : ReferenceCountedObjectBase, ITelescope
+    public class Telescope : ReferenceCountedObjectBase, ITelescopeV2, IDisposable
     {
         //
         // Driver private data (rate collections)
@@ -65,6 +65,19 @@ namespace ASCOM.TelescopeSimulator
         //
 
         #region ITelescope Members
+
+        public string Action(string Command, string Parameters)
+        {
+            throw new MethodNotImplementedException("Action");
+        }
+
+        public string[] SupportedActions
+        {
+            get
+            {
+                throw new PropertyNotImplementedException("SupportedActions", false);
+            }
+        }
 
         public void AbortSlew()
         {
@@ -416,13 +429,13 @@ namespace ASCOM.TelescopeSimulator
                 {
                     switch (Axis)
                     {
-                        case ASCOM.Interface.TelescopeAxes.axisPrimary:
+                        case ASCOM.DeviceInterface.TelescopeAxes.axisPrimary:
                             SharedResources.TrafficForm.TrafficStart("CanMoveAxis Primary: ");
                             break;
-                        case ASCOM.Interface.TelescopeAxes.axisSecondary:
+                        case ASCOM.DeviceInterface.TelescopeAxes.axisSecondary:
                             SharedResources.TrafficForm.TrafficStart("CanMoveAxis Secondary: ");
                             break;
-                        case ASCOM.Interface.TelescopeAxes.axisTertiary:
+                        case ASCOM.DeviceInterface.TelescopeAxes.axisTertiary:
                             SharedResources.TrafficForm.TrafficStart("CanMoveAxis Tertiary: ");
                             break;
                     }
@@ -1365,13 +1378,13 @@ namespace ASCOM.TelescopeSimulator
                 {
                     switch (Axis)
                     {
-                        case ASCOM.Interface.TelescopeAxes.axisPrimary:
+                        case ASCOM.DeviceInterface.TelescopeAxes.axisPrimary:
                             SharedResources.TrafficForm.TrafficStart("MoveAxis Primary " + Rate + ": ");
                             break;
-                        case ASCOM.Interface.TelescopeAxes.axisSecondary:
+                        case ASCOM.DeviceInterface.TelescopeAxes.axisSecondary:
                             SharedResources.TrafficForm.TrafficStart("MoveAxis Secondary " + Rate + ": ");
                             break;
-                        case ASCOM.Interface.TelescopeAxes.axisTertiary:
+                        case ASCOM.DeviceInterface.TelescopeAxes.axisTertiary:
                             SharedResources.TrafficForm.TrafficStart("MoveAxis Tertiary " + Rate + ": ");
                             break;
                     }
@@ -1407,13 +1420,13 @@ namespace ASCOM.TelescopeSimulator
 
                 switch (Axis)
                 {
-                    case ASCOM.Interface.TelescopeAxes.axisPrimary:
+                    case ASCOM.DeviceInterface.TelescopeAxes.axisPrimary:
                         TelescopeHardware.m_DeltaAz = Rate;
                         break;
-                    case ASCOM.Interface.TelescopeAxes.axisSecondary:
+                    case ASCOM.DeviceInterface.TelescopeAxes.axisSecondary:
                         TelescopeHardware.m_DeltaAlt = Rate;
                         break;
-                    case ASCOM.Interface.TelescopeAxes.axisTertiary:
+                    case ASCOM.DeviceInterface.TelescopeAxes.axisTertiary:
                         TelescopeHardware.m_DeltaDec = Rate;
                         break;
                 }
@@ -2817,6 +2830,15 @@ namespace ASCOM.TelescopeSimulator
         }
 
         #endregion
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        #endregion
     }
 
     //
@@ -2829,7 +2851,7 @@ namespace ASCOM.TelescopeSimulator
     //
     [Guid("d0acdb0f-9c7e-4c53-abb7-576e9f2b8225")]
     [ClassInterface(ClassInterfaceType.None)]
-    public class Rate : IRate
+    public class Rate : IRate, IDisposable
     {
         private double m_dMaximum = 0;
         private double m_dMinimum = 0;
@@ -2859,6 +2881,15 @@ namespace ASCOM.TelescopeSimulator
         }
 
         #endregion
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        #endregion
     }
 
     //
@@ -2872,7 +2903,7 @@ namespace ASCOM.TelescopeSimulator
     //
     [Guid("af5510b9-3108-4237-83da-ae70524aab7d")]
     [ClassInterface(ClassInterfaceType.None)]
-    public class AxisRates : IAxisRates, IEnumerable
+    public class AxisRates : IAxisRates, IEnumerable, IDisposable
     {
         private TelescopeAxes m_Axis;
         private Rate[] m_Rates;
@@ -2931,6 +2962,15 @@ namespace ASCOM.TelescopeSimulator
 
         #endregion
 
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        #endregion
     }
     //
     // TrackingRates is a strongly-typed collection that must be enumerable by
@@ -2943,7 +2983,7 @@ namespace ASCOM.TelescopeSimulator
     //
     [Guid("4bf5c72a-8491-49af-8668-626eac765e91")]
     [ClassInterface(ClassInterfaceType.None)]
-    public class TrackingRates : ITrackingRates, IEnumerable, IEnumerator
+    public class TrackingRates : ITrackingRates, IEnumerable, IEnumerator, IDisposable
     {
         public DriveRates[] m_TrackingRates;
         private static int _pos = -1;
@@ -3004,11 +3044,20 @@ namespace ASCOM.TelescopeSimulator
         }
 
         #endregion
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        #endregion
     }
 
     [Guid("46753368-42d1-424a-85fa-26eee8f4c178")]
     [ClassInterface(ClassInterfaceType.None)]
-    public class TrackingRatesSimple : ITrackingRates, IEnumerable, IEnumerator
+    public class TrackingRatesSimple : ITrackingRates, IEnumerable, IEnumerator, IDisposable
     {
         public DriveRates[] m_TrackingRates;
         private static int _pos = -1;
@@ -3066,6 +3115,15 @@ namespace ASCOM.TelescopeSimulator
                 if (_pos < 0 || _pos >= m_TrackingRates.Length) throw new System.InvalidOperationException();
                 return m_TrackingRates[_pos];
             }
+        }
+
+        #endregion
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            throw new System.NotImplementedException();
         }
 
         #endregion
