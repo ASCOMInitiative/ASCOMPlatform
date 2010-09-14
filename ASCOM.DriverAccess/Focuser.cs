@@ -51,7 +51,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Absolute
         {
-            get { return (bool)memberFactory.CallMember(1, "Absolute", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "Absolute", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool IsMoving
         {
-            get { return (bool)memberFactory.CallMember(1, "IsMoving", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "IsMoving", new Type[] { }, new object[] { })); }
         }
         /// <summary>
         /// State of the connection to the focuser.
@@ -80,7 +80,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Link
         {
-            get { return (bool)memberFactory.CallMember(1, "Link", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "Link", new Type[] { }, new object[] { })); }
             set { memberFactory.CallMember(2, "Link", new Type[] { }, new object[] { value }); }
         }
 
@@ -146,7 +146,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool TempComp
         {
-            get { return (bool)memberFactory.CallMember(1, "TempComp", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "TempComp", new Type[] { }, new object[] { })); }
             set { memberFactory.CallMember(2, "TempComp", new Type[] { }, new object[] { value }); }
         }
 
@@ -156,7 +156,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool TempCompAvailable
         {
-            get { return (bool)memberFactory.CallMember(1, "TempCompAvailable", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "TempCompAvailable", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
