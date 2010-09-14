@@ -389,7 +389,7 @@ namespace ASCOM.TelescopeSimulator
             if (TelescopeHardware.Tracking) checkBoxTrack.Checked = true;
             else checkBoxTrack.Checked = false;
         }
-        public void LEDPier(ASCOM.Interface.PierSide SideOfPier)
+        public void LEDPier(ASCOM.DeviceInterface.PierSide SideOfPier)
         {
 
         }

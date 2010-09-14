@@ -398,29 +398,29 @@ namespace ASCOM.TelescopeSimulator
             }
             set { textBoxFocalLength.Text = value.ToString(); }
         }
-        public ASCOM.Interface.AlignmentModes AlignmentMode
+        public ASCOM.DeviceInterface.AlignmentModes AlignmentMode
         {
             get
             {
                 if (radioButtonAltAzimuth.Checked)
-                { return ASCOM.Interface.AlignmentModes.algAltAz; }
+                { return ASCOM.DeviceInterface.AlignmentModes.algAltAz; }
                 if (radioButtonEquatorial.Checked)
-                { return ASCOM.Interface.AlignmentModes.algPolar; }
+                { return ASCOM.DeviceInterface.AlignmentModes.algPolar; }
                 if (radioButtonGermanEquatorial.Checked)
-                { return ASCOM.Interface.AlignmentModes.algGermanPolar; }
-                return ASCOM.Interface.AlignmentModes.algGermanPolar;
+                { return ASCOM.DeviceInterface.AlignmentModes.algGermanPolar; }
+                return ASCOM.DeviceInterface.AlignmentModes.algGermanPolar;
             }
             set
             {
                 switch (value)
                 {
-                    case ASCOM.Interface.AlignmentModes.algAltAz:
+                    case ASCOM.DeviceInterface.AlignmentModes.algAltAz:
                         radioButtonAltAzimuth.Checked = true;
                         break;
-                    case ASCOM.Interface.AlignmentModes.algGermanPolar:
+                    case ASCOM.DeviceInterface.AlignmentModes.algGermanPolar:
                         radioButtonGermanEquatorial.Checked = true;
                         break;
-                    case ASCOM.Interface.AlignmentModes.algPolar:
+                    case ASCOM.DeviceInterface.AlignmentModes.algPolar:
                         radioButtonEquatorial.Checked = true;
                         break;
                 }

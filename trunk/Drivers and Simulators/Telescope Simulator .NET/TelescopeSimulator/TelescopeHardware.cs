@@ -65,7 +65,7 @@ namespace ASCOM.TelescopeSimulator
         private static bool m_CanTrackingRates;
         
         //Telescope Implementation
-        private static ASCOM.Interface.AlignmentModes m_AlignmentMode;
+        private static ASCOM.DeviceInterface.AlignmentModes m_AlignmentMode;
         private static double m_ApertureArea;
         private static double m_ApertureDiameter;
         private static double m_FocalLength;
@@ -127,7 +127,7 @@ namespace ASCOM.TelescopeSimulator
 
         private static double m_SettleTix;
 
-        private static ASCOM.Interface.PierSide m_SideOfPier;
+        private static ASCOM.DeviceInterface.PierSide m_SideOfPier;
 
         private static bool m_Connected = false; //Keep track of the connection status of the hardware
 
@@ -231,16 +231,16 @@ namespace ASCOM.TelescopeSimulator
             switch (int.Parse(m_Profile.GetValue(SharedResources.PROGRAM_ID, "AlignMode")))
             {
                 case 0:
-                    m_AlignmentMode = ASCOM.Interface.AlignmentModes.algAltAz;
+                    m_AlignmentMode = ASCOM.DeviceInterface.AlignmentModes.algAltAz;
                     break;
                 case 1:
-                    m_AlignmentMode = ASCOM.Interface.AlignmentModes.algGermanPolar;
+                    m_AlignmentMode = ASCOM.DeviceInterface.AlignmentModes.algGermanPolar;
                     break;
                 case 2:
-                    m_AlignmentMode = ASCOM.Interface.AlignmentModes.algPolar;
+                    m_AlignmentMode = ASCOM.DeviceInterface.AlignmentModes.algPolar;
                     break;
                 default:
-                    m_AlignmentMode = ASCOM.Interface.AlignmentModes.algGermanPolar;
+                    m_AlignmentMode = ASCOM.DeviceInterface.AlignmentModes.algGermanPolar;
                     break;
             }
                 
@@ -520,7 +520,7 @@ namespace ASCOM.TelescopeSimulator
                 }
                 else if (m_SlewState == SlewType.SlewMoveAxis)
                 {
-                    if (m_AlignmentMode == ASCOM.Interface.AlignmentModes.algAltAz)
+                    if (m_AlignmentMode == ASCOM.DeviceInterface.AlignmentModes.algAltAz)
                     {
                         m_Azimuth = m_Azimuth + m_DeltaAz * SharedResources.TIMER_INTERVAL;
                         m_Altitude = m_Altitude + m_DeltaAlt * SharedResources.TIMER_INTERVAL;
@@ -621,7 +621,7 @@ namespace ASCOM.TelescopeSimulator
         #region Properties For Settings
 
         //I used some of these as dual purpose if the driver uses the same exact property
-        public static ASCOM.Interface.AlignmentModes AlignmentMode
+        public static ASCOM.DeviceInterface.AlignmentModes AlignmentMode
         {
             get { return m_AlignmentMode; }
             set
@@ -629,13 +629,13 @@ namespace ASCOM.TelescopeSimulator
                 m_AlignmentMode = value;
                 switch (value)
                 {
-                    case ASCOM.Interface.AlignmentModes.algAltAz:
+                    case ASCOM.DeviceInterface.AlignmentModes.algAltAz:
                         m_Profile.WriteValue(SharedResources.PROGRAM_ID, "AlignMode", "0");
                         break;
-                    case ASCOM.Interface.AlignmentModes.algGermanPolar:
+                    case ASCOM.DeviceInterface.AlignmentModes.algGermanPolar:
                         m_Profile.WriteValue(SharedResources.PROGRAM_ID, "AlignMode", "1");
                         break;
-                    case ASCOM.Interface.AlignmentModes.algPolar:
+                    case ASCOM.DeviceInterface.AlignmentModes.algPolar:
                         m_Profile.WriteValue(SharedResources.PROGRAM_ID, "AlignMode", "2");
                         break;
                 }
@@ -1036,18 +1036,18 @@ namespace ASCOM.TelescopeSimulator
             set
             { m_Connected = value; }
         }
-       public static bool CanMoveAxis(ASCOM.Interface.TelescopeAxes Axis)
+       public static bool CanMoveAxis(ASCOM.DeviceInterface.TelescopeAxes Axis)
         {
             int axis =0;
             switch (Axis)
             {
-                case ASCOM.Interface.TelescopeAxes.axisPrimary:
+                case ASCOM.DeviceInterface.TelescopeAxes.axisPrimary:
                     axis = 1;
                     break;
-                case ASCOM.Interface.TelescopeAxes.axisSecondary:
+                case ASCOM.DeviceInterface.TelescopeAxes.axisSecondary:
                     axis = 2;
                     break;
-                case ASCOM.Interface.TelescopeAxes.axisTertiary:
+                case ASCOM.DeviceInterface.TelescopeAxes.axisTertiary:
                     axis = 3;
                     break;
             }
@@ -1199,33 +1199,33 @@ namespace ASCOM.TelescopeSimulator
         #endregion
 
         #region Helper Functions
-       public static ASCOM.Interface.PierSide SideOfPierRaDec(double RightAscension, double Declination)
+       public static ASCOM.DeviceInterface.PierSide SideOfPierRaDec(double RightAscension, double Declination)
        {
            double hourAngle;
-           if (m_AlignmentMode != ASCOM.Interface.AlignmentModes.algGermanPolar)
+           if (m_AlignmentMode != ASCOM.DeviceInterface.AlignmentModes.algGermanPolar)
            {
-               return ASCOM.Interface.PierSide.pierUnknown;
+               return ASCOM.DeviceInterface.PierSide.pierUnknown;
            }
            else
            {
                hourAngle = AstronomyFunctions.RangeHa(AstronomyFunctions.LocalSiderealTime(m_Longitude) - RightAscension);
-               if (hourAngle >=0) return ASCOM.Interface.PierSide.pierEast;
-               else return ASCOM.Interface.PierSide.pierWest;
+               if (hourAngle >=0) return ASCOM.DeviceInterface.PierSide.pierEast;
+               else return ASCOM.DeviceInterface.PierSide.pierWest;
 
            }
        }
-       public static ASCOM.Interface.PierSide SideOfPier(double Azimuth)
+       public static ASCOM.DeviceInterface.PierSide SideOfPier(double Azimuth)
        {
-           if (m_AlignmentMode != ASCOM.Interface.AlignmentModes.algGermanPolar)
+           if (m_AlignmentMode != ASCOM.DeviceInterface.AlignmentModes.algGermanPolar)
            {
-               return ASCOM.Interface.PierSide.pierUnknown;
+               return ASCOM.DeviceInterface.PierSide.pierUnknown;
            }
-           if (Azimuth >= 180) return ASCOM.Interface.PierSide.pierEast;
-           else return ASCOM.Interface.PierSide.pierWest;
+           if (Azimuth >= 180) return ASCOM.DeviceInterface.PierSide.pierEast;
+           else return ASCOM.DeviceInterface.PierSide.pierWest;
        }
        public static void StartSlewRaDec(double RightAscension, double Declination, bool DoSideOfPier)
        {
-           ASCOM.Interface.PierSide targetSideOfPier;
+           ASCOM.DeviceInterface.PierSide targetSideOfPier;
            m_SlewState = SlewType.SlewNone;
 
            if (DoSideOfPier) targetSideOfPier = SideOfPierRaDec(RightAscension, Declination);
@@ -1255,7 +1255,7 @@ namespace ASCOM.TelescopeSimulator
        }
        public static void StartSlewAltAz(double Altitude, double Azimuth, bool DoSideOfPier, SlewType Slew)
        {
-           ASCOM.Interface.PierSide targetSideOfPier;
+           ASCOM.DeviceInterface.PierSide targetSideOfPier;
            m_SlewState = SlewType.SlewNone;
 
            if (DoSideOfPier) targetSideOfPier = SideOfPier(Azimuth);
