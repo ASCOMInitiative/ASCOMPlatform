@@ -1,9 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitchSimulatorDriver", "SwitchSimulatorDriver.csproj", "{64308775-BD4A-469C-BCAB-3ED830B811AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitchConsole", "..\SwitchConsole\SwitchConsole.csproj", "{2B0526EE-AF0D-446D-A6C2-EC350E790C25}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitchConsoleTest", "..\SwitchConsole\SwitchConsoleTest.csproj", "{2B0526EE-AF0D-446D-A6C2-EC350E790C25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
