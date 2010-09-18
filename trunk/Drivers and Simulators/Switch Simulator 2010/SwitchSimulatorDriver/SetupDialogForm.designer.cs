@@ -80,7 +80,7 @@ namespace ASCOM.Simulator
             this.cmdOK.TabIndex = 0;
             this.cmdOK.Text = "OK";
             this.cmdOK.UseVisualStyleBackColor = true;
-            this.cmdOK.Click += new System.EventHandler(this.cmdOK_Click);
+            this.cmdOK.Click += new System.EventHandler(this.CmdOkClick);
             // 
             // picASCOM
             // 
@@ -216,7 +216,7 @@ namespace ASCOM.Simulator
             this.pictureBox8.Size = new System.Drawing.Size(21, 20);
             this.pictureBox8.TabIndex = 7;
             this.pictureBox8.TabStop = false;
-            this.pictureBox8.Click += new System.EventHandler(this.pictureBox8_Click);
+            this.pictureBox8.Click += new System.EventHandler(this.PictureBox8Click);
             // 
             // pictureBox7
             // 
@@ -226,7 +226,7 @@ namespace ASCOM.Simulator
             this.pictureBox7.Size = new System.Drawing.Size(21, 20);
             this.pictureBox7.TabIndex = 6;
             this.pictureBox7.TabStop = false;
-            this.pictureBox7.Click += new System.EventHandler(this.pictureBox7_Click);
+            this.pictureBox7.Click += new System.EventHandler(this.PictureBox7Click);
             // 
             // pictureBox6
             // 
@@ -236,7 +236,7 @@ namespace ASCOM.Simulator
             this.pictureBox6.Size = new System.Drawing.Size(21, 20);
             this.pictureBox6.TabIndex = 5;
             this.pictureBox6.TabStop = false;
-            this.pictureBox6.Click += new System.EventHandler(this.pictureBox6_Click);
+            this.pictureBox6.Click += new System.EventHandler(this.PictureBox6Click);
             // 
             // pictureBox5
             // 
@@ -246,7 +246,7 @@ namespace ASCOM.Simulator
             this.pictureBox5.Size = new System.Drawing.Size(21, 20);
             this.pictureBox5.TabIndex = 4;
             this.pictureBox5.TabStop = false;
-            this.pictureBox5.Click += new System.EventHandler(this.pictureBox5_Click);
+            this.pictureBox5.Click += new System.EventHandler(this.PictureBox5Click);
             // 
             // pictureBox4
             // 
@@ -256,7 +256,7 @@ namespace ASCOM.Simulator
             this.pictureBox4.Size = new System.Drawing.Size(21, 20);
             this.pictureBox4.TabIndex = 3;
             this.pictureBox4.TabStop = false;
-            this.pictureBox4.Click += new System.EventHandler(this.pictureBox4_Click);
+            this.pictureBox4.Click += new System.EventHandler(this.PictureBox4Click);
             // 
             // pictureBox3
             // 
@@ -266,7 +266,7 @@ namespace ASCOM.Simulator
             this.pictureBox3.Size = new System.Drawing.Size(21, 20);
             this.pictureBox3.TabIndex = 2;
             this.pictureBox3.TabStop = false;
-            this.pictureBox3.Click += new System.EventHandler(this.pictureBox3_Click);
+            this.pictureBox3.Click += new System.EventHandler(this.PictureBox3Click);
             // 
             // pictureBox2
             // 
@@ -276,7 +276,7 @@ namespace ASCOM.Simulator
             this.pictureBox2.Size = new System.Drawing.Size(21, 20);
             this.pictureBox2.TabIndex = 1;
             this.pictureBox2.TabStop = false;
-            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
+            this.pictureBox2.Click += new System.EventHandler(this.PictureBox2Click);
             // 
             // pictureBox1
             // 
@@ -286,7 +286,7 @@ namespace ASCOM.Simulator
             this.pictureBox1.Size = new System.Drawing.Size(21, 20);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            this.pictureBox1.Click += new System.EventHandler(this.PictureBox1Click);
             // 
             // SetupDialogForm
             // 

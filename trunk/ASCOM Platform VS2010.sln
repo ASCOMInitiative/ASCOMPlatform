@@ -186,6 +186,10 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FilterWheelSimDriver", "Dri
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilterWheelSimServer", "Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\FilterWheelSimServer.csproj", "{D659379E-3131-4AD4-8D62-5C8BAC2C9A82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitchSimulatorDriver", "Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\SwitchSimulatorDriver.csproj", "{C423D505-B4E4-4116-8560-8D9ADFCBD838}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitchConsoleTest", "Drivers and Simulators\Switch Simulator 2010\SwitchConsole\SwitchConsoleTest.csproj", "{2B0526EE-AF0D-446D-A6C2-EC350E790C25}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Quick|Any CPU = Debug Quick|Any CPU
@@ -764,6 +768,35 @@ Global
 		{D659379E-3131-4AD4-8D62-5C8BAC2C9A82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D659379E-3131-4AD4-8D62-5C8BAC2C9A82}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D659379E-3131-4AD4-8D62-5C8BAC2C9A82}.Release|x86.ActiveCfg = Release|Any CPU
+		{C423D505-B4E4-4116-8560-8D9ADFCBD838}.Debug Quick|Any CPU.ActiveCfg = Debug|x86
+		{C423D505-B4E4-4116-8560-8D9ADFCBD838}.Debug Quick|x86.ActiveCfg = Debug|x86
+		{C423D505-B4E4-4116-8560-8D9ADFCBD838}.Debug Quick|x86.Build.0 = Debug|x86
+		{C423D505-B4E4-4116-8560-8D9ADFCBD838}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C423D505-B4E4-4116-8560-8D9ADFCBD838}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C423D505-B4E4-4116-8560-8D9ADFCBD838}.Debug|x86.ActiveCfg = Debug|x86
+		{C423D505-B4E4-4116-8560-8D9ADFCBD838}.Debug|x86.Build.0 = Debug|x86
+		{C423D505-B4E4-4116-8560-8D9ADFCBD838}.Peter|Any CPU.ActiveCfg = Peter|Any CPU
+		{C423D505-B4E4-4116-8560-8D9ADFCBD838}.Peter|Any CPU.Build.0 = Peter|Any CPU
+		{C423D505-B4E4-4116-8560-8D9ADFCBD838}.Peter|x86.ActiveCfg = Peter|x86
+		{C423D505-B4E4-4116-8560-8D9ADFCBD838}.Peter|x86.Build.0 = Peter|x86
+		{C423D505-B4E4-4116-8560-8D9ADFCBD838}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C423D505-B4E4-4116-8560-8D9ADFCBD838}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C423D505-B4E4-4116-8560-8D9ADFCBD838}.Release|x86.ActiveCfg = Release|x86
+		{C423D505-B4E4-4116-8560-8D9ADFCBD838}.Release|x86.Build.0 = Release|x86
+		{2B0526EE-AF0D-446D-A6C2-EC350E790C25}.Debug Quick|Any CPU.ActiveCfg = Debug|x86
+		{2B0526EE-AF0D-446D-A6C2-EC350E790C25}.Debug Quick|x86.ActiveCfg = Debug|x86
+		{2B0526EE-AF0D-446D-A6C2-EC350E790C25}.Debug Quick|x86.Build.0 = Debug|x86
+		{2B0526EE-AF0D-446D-A6C2-EC350E790C25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B0526EE-AF0D-446D-A6C2-EC350E790C25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B0526EE-AF0D-446D-A6C2-EC350E790C25}.Debug|x86.ActiveCfg = Debug|x86
+		{2B0526EE-AF0D-446D-A6C2-EC350E790C25}.Debug|x86.Build.0 = Debug|x86
+		{2B0526EE-AF0D-446D-A6C2-EC350E790C25}.Peter|Any CPU.ActiveCfg = Release|x86
+		{2B0526EE-AF0D-446D-A6C2-EC350E790C25}.Peter|x86.ActiveCfg = Release|x86
+		{2B0526EE-AF0D-446D-A6C2-EC350E790C25}.Peter|x86.Build.0 = Release|x86
+		{2B0526EE-AF0D-446D-A6C2-EC350E790C25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B0526EE-AF0D-446D-A6C2-EC350E790C25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B0526EE-AF0D-446D-A6C2-EC350E790C25}.Release|x86.ActiveCfg = Release|x86
+		{2B0526EE-AF0D-446D-A6C2-EC350E790C25}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -812,6 +845,8 @@ Global
 		{71BB4DA7-4092-416D-89FE-97CD15207371} = {02FC4179-0ADE-45D2-9C78-52F74FF6156C}
 		{3689A2CB-94C5-4012-A5CF-7E7D1DD27143} = {02FC4179-0ADE-45D2-9C78-52F74FF6156C}
 		{ABCC46C4-55C3-48A4-AB6F-3FDB0B99269F} = {02FC4179-0ADE-45D2-9C78-52F74FF6156C}
+		{C423D505-B4E4-4116-8560-8D9ADFCBD838} = {52217DE4-DFAA-468E-B1A0-A79243708790}
+		{2B0526EE-AF0D-446D-A6C2-EC350E790C25} = {52217DE4-DFAA-468E-B1A0-A79243708790}
 		{D202E935-5ADA-4769-A4D8-4A915B4267FA} = {351942DD-A33B-40F1-B71F-224E7D5B4E7B}
 		{7814C016-C363-4A04-B095-27A5B33AA783} = {351942DD-A33B-40F1-B71F-224E7D5B4E7B}
 		{74D351E3-1E5A-451D-AA70-D3FA28CF1F54} = {351942DD-A33B-40F1-B71F-224E7D5B4E7B}
@@ -824,13 +859,13 @@ Global
 		{12633CA2-397C-4924-B924-5BCC119B9077} = {DB708C00-E3FC-48C9-9091-275181312CBB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0DestinationAssemblyName = 
-		Reflector0DestinationVersion = 4.0.812.4
-		Reflector0DestinationName = Moq
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0SourceAssemblyName = 
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceName = Moq
 		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
+		Reflector0SourceName = Moq
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceAssemblyName = 
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0DestinationName = Moq
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationAssemblyName = 
 	EndGlobalSection
 EndGlobal

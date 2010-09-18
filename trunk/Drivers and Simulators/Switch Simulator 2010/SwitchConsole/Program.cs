@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using ASCOM.Simulator;
 
 
@@ -8,20 +9,23 @@ namespace SwitchConsole
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
 
-            //Switch obj = (Switch)Activator.CreateInstance(Type.GetTypeFromProgID("ASCOM.Simulator.Switch"));
-            //ArrayList list = obj.SwitchDevices;
-            //foreach (ASCOM.Simulator.ISwitchDevice item in list)
-            //{
-            //    Console.WriteLine("Item name: " + item.Name + " & " + item.State);
-            //}
-            //string test = obj.DriverInfo;
+            var obj = new Switch();
+            // Activator.CreateInstance(Type.GetTypeFromProgID("ASCOM.Simulator.Switch")));
+            var list = obj.Switches;
+            foreach (string[,] swithItems in list.Cast<string[,]>().Where(swithItems => swithItems != null))
+            {
+                Console.WriteLine(swithItems[0,0] + @" = " + swithItems[0,1]);
+            }
+            Console.WriteLine(obj.DriverInfo);
+            Console.WriteLine(obj.Name);
+            Console.WriteLine(obj.InterfaceVersion);
+            Console.WriteLine(obj.LastResult);
 
            
-            ASCOM.Utilities.Chooser chooser = new ASCOM.Utilities.Chooser();
-            chooser.DeviceType = "Switch";
+            var chooser = new ASCOM.Utilities.Chooser {DeviceType = "Switch"};
             chooser.Choose();
 
         }
