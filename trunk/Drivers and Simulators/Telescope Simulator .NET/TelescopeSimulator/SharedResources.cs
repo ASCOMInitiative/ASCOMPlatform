@@ -86,13 +86,13 @@ namespace ASCOM.TelescopeSimulator
         public static double INVALID_COORDINATE = 100000;
 
         public static uint ERROR_BASE = 0x80040400;
-        public static uint SCODE_NO_TARGET_COORDS = ERROR_BASE + 0x404;
+        public static uint SCODE_NO_TARGET_COORDS = (uint) ASCOM.ErrorCodes.InvalidOperationException; //ERROR_BASE + 0x404;
         public static string MSG_NO_TARGET_COORDS = "Target coordinates have not yet been set";
-        public static uint SCODE_VAL_OUTOFRANGE = ERROR_BASE + 0x405;
+        public static uint SCODE_VAL_OUTOFRANGE = (uint)ASCOM.ErrorCodes.InvalidValue;// ERROR_BASE + 0x405;
         public static string MSG_VAL_OUTOFRANGE = "The property value is out of range";
-        public static uint SCOPE_PROP_NOT_SET = ERROR_BASE + 0x403;
+        public static uint SCOPE_PROP_NOT_SET = (uint)ASCOM.ErrorCodes.ValueNotSet;// ERROR_BASE + 0x403;
         public static string MSG_PROP_NOT_SET = "The property has not yet been set";
-        public static uint INVALID_AT_PARK = ERROR_BASE + 0x404;
+        public static uint INVALID_AT_PARK = (uint) ASCOM.ErrorCodes.InvalidWhileParked; //ERROR_BASE + 0x404;
         public static string MSG_INVALID_AT_PARK = "Invalid while parked";
         //
         // Public access to shared resources
