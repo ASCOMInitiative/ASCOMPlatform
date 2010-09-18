@@ -222,18 +222,29 @@ namespace ASCOM.TelescopeSimulator
             m_ComObjectAssys = new ArrayList();
             m_ComObjectTypes = new ArrayList();
 
+            string assy = Assembly.GetEntryAssembly().Location;
             string assyPath = Assembly.GetEntryAssembly().Location;
             int i = assyPath.LastIndexOf(@"\TelescopeSimulator\bin\");						// Look for us running in IDE
+            ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "LoadComObjectAssemblies");
+            TL.Enabled = true;
+            TL.LogMessage("Assembly", assy);
+            TL.LogMessage("AssemblyPath", assyPath);
+
+
+
             if (i == -1) i = assyPath.LastIndexOf('\\');
             assyPath = assyPath.Remove(i, assyPath.Length - i) + "\\TelescopeSimulatorServedClasses";
 
             //assyPath = "C:\\Documents and Settings\\Robert Turner\\My Documents\\Projects\\Robert\\ASCOM Platform\\Telescope Simulator .NET\\Telescope\\bin\\Debug";
+            TL.LogMessage("ServedClassesPath", assyPath);
 
             DirectoryInfo d = new DirectoryInfo(assyPath);
             foreach (FileInfo fi in d.GetFiles("*.dll"))  //Modified to only load *.DLL
             {
                 string aPath = fi.FullName;
                 string fqClassName = fi.Name.Replace(fi.Extension, "");						// COM class FQN
+                TL.LogMessage("FilePath", aPath);
+                TL.LogMessage("ClassName", fqClassName);
                 //
                 // First try to load the assembly and get the types for
                 // the class and the class facctory. If this doesn't work ????
@@ -248,6 +259,7 @@ namespace ASCOM.TelescopeSimulator
                     {
                         m_ComObjectTypes.Add(so.GetType(fqClassName, true));
                         m_ComObjectAssys.Add(so);
+                        TL.LogMessage("  AddedOK", so.FullName.ToString());
                     }
                 }
                 catch (Exception e)
@@ -258,6 +270,10 @@ namespace ASCOM.TelescopeSimulator
                 }
 
             }
+            TL.Enabled = false;
+            TL.Dispose();
+            TL = null;
+
             return true;
         }
         #endregion
@@ -323,6 +339,9 @@ namespace ASCOM.TelescopeSimulator
             //
             // For each of the driver assemblies
             //
+            ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "FilterWheelregister");
+            TL.Enabled = true;
+            TL.LogMessage("Register", "Start");
             foreach (Type type in m_ComObjectTypes)
             {
                 bool bFail = false;
@@ -333,6 +352,8 @@ namespace ASCOM.TelescopeSimulator
                     //
                     string clsid = Marshal.GenerateGuidForType(type).ToString("B");
                     string progid = Marshal.GenerateProgIdForType(type);
+                    TL.LogMessage("Register", progid + " " + clsid);
+
                     key = Registry.ClassesRoot.CreateSubKey("CLSID\\" + clsid);
                     key.SetValue(null, progid);						// Could be assyTitle/Desc??, but .NET components show ProgId here
                     key.SetValue("AppId", m_sAppId);
@@ -400,6 +421,10 @@ namespace ASCOM.TelescopeSimulator
                 }
                 if (bFail) break;
             }
+            TL.Enabled = false;
+            TL.Dispose();
+            TL = null;
+
         }
 
         //
@@ -468,9 +493,12 @@ namespace ASCOM.TelescopeSimulator
         //
         private static bool RegisterClassFactories()
         {
+            ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "RegisterClassFactories");
+            TL.Enabled = true;
             m_ClassFactories = new ArrayList();
             foreach (Type type in m_ComObjectTypes)
             {
+                TL.LogMessage("New ClassFactory", type.AssemblyQualifiedName); 
                 ClassFactory factory = new ClassFactory(type);					// Use default context & flags
                 m_ClassFactories.Add(factory);
                 if (!factory.RegisterClassObject())
@@ -481,6 +509,9 @@ namespace ASCOM.TelescopeSimulator
                 }
             }
             ClassFactory.ResumeClassObjects();									// Served objects now go live
+            TL.Enabled = false;
+            TL.Dispose();
+            TL = null;
             return true;
         }
 

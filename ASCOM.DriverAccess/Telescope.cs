@@ -1145,51 +1145,85 @@ namespace ASCOM.DriverAccess
         #endregion
     }
 
-    //<summary>
-    // Late bound TrackingRates implementation
-    //</summary>
-    class _TrackingRates : ITrackingRates
+    ///<summary>
+    /// Late bound TrackingRates implementation
+    ///</summary>
+    public class _TrackingRates : ITrackingRates, IEnumerable //, IEnumerator
     {
         Type objTypeTrackingRates;
         object objTrackingRatesLateBound;
+        // private static int pos = 0;
 
+        /// <summary>
+        /// TrackingRates constructor
+        /// </summary>
+        /// <param name="objTypeScope">The type of the supplied object</param>
+        /// <param name="objScopeLateBound">The object representing the telescope device</param>
         public _TrackingRates(Type objTypeScope, object objScopeLateBound)
         {
             objTrackingRatesLateBound = objTypeScope.InvokeMember("TrackingRates",
-                        BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objScopeLateBound, new object[] { });
+                                                                  BindingFlags.Default | BindingFlags.GetProperty,
+                                                                  null, 
+                                                                  objScopeLateBound, 
+                                                                  new object[] { });
             objTypeTrackingRates = objTrackingRatesLateBound.GetType();
         }
 
+        /// <summary>
+        /// Return a drive rate given its index
+        /// </summary>
+        /// <param name="index">Index position of the item</param>
+        /// <returns>Integer DriveRate enum value</returns>
         public DriveRates this[int index]
         {
             get
             {
                 return (DriveRates)objTypeTrackingRates.InvokeMember("Item",
-                            BindingFlags.Default | BindingFlags.GetProperty,
-                            null, objTrackingRatesLateBound, new object[] { index });
+                                                                     BindingFlags.Default | BindingFlags.GetProperty,
+                                                                     null, 
+                                                                     objTrackingRatesLateBound, 
+                                                                     new object[] { index });
             }
         }
 
+        /// <summary>
+        /// Returns an enumerator for the driverates object
+        /// </summary>
+        /// <returns>IEnumerator object</returns>
         public IEnumerator GetEnumerator()
         {
-            return (IEnumerator)objTypeTrackingRates.InvokeMember("GetEnumerator",
-                        BindingFlags.Default | BindingFlags.InvokeMethod,
-                        null, objTrackingRatesLateBound, new object[] { });
+            //global::System.Windows.Forms.MessageBox.Show("DriverAccess.GetEnumerator - before calling Object.GetEnumerator");
+
+            object enumeratorobj = (IEnumerator)objTypeTrackingRates.InvokeMember("GetEnumerator",
+                                                                                  BindingFlags.Default | BindingFlags.InvokeMethod,
+                                                                                  null, 
+                                                                                  objTrackingRatesLateBound, 
+                                                                                  new object[] { });
+            IEnumerator enumerator = (IEnumerator)enumeratorobj;
+
+            return enumerator;
         }
 
+        /// <summary>
+        /// Returns the number of driverates supported by the telescope 
+        /// </summary>
         public int Count
         {
             get
             {
-                return (int)objTypeTrackingRates.InvokeMember("Count",
-                            BindingFlags.Default | BindingFlags.GetProperty,
-                            null, objTrackingRatesLateBound, new object[] { });
+                return (int) objTypeTrackingRates.InvokeMember("Count",
+                                                               BindingFlags.Default | BindingFlags.GetProperty,
+                                                               null, 
+                                                               objTrackingRatesLateBound, 
+                                                               new object[] { });
             }
         }
 
         #region IDisposable Members
 
+        /// <summary>
+        /// Disposes of this object
+        /// </summary>
         public void Dispose()
         {
             if (this.objTrackingRatesLateBound != null)

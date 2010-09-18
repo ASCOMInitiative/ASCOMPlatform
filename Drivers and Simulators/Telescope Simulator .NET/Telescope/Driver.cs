@@ -21,7 +21,7 @@ using System.Collections;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
-
+using System.Windows.Forms;
 
 namespace ASCOM.TelescopeSimulator
 {
@@ -34,7 +34,7 @@ namespace ASCOM.TelescopeSimulator
     //
     
     [Guid("86931eac-1f52-4918-b6aa-7e9b0ff361bd"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
-    public class Telescope : ReferenceCountedObjectBase, ITelescopeV2, IDisposable
+    public class Telescope : ReferenceCountedObjectBase, ITelescopeV2
     {
         //
         // Driver private data (rate collections)
@@ -2537,7 +2537,7 @@ namespace ASCOM.TelescopeSimulator
                     }
                     throw new MethodNotImplementedException("TargetRightAscension");
                 }
-                if (TelescopeHardware.RightAscension == SharedResources.INVALID_COORDINATE)
+                if (TelescopeHardware.TargetRightAscension == SharedResources.INVALID_COORDINATE)
                 {
                     if (SharedResources.TrafficForm != null)
                     {
@@ -2581,7 +2581,7 @@ namespace ASCOM.TelescopeSimulator
                     }
                     throw new MethodNotImplementedException("TargetRightAscension");
                 }
-                if (value < 0 || value >= 24)
+                if ((value < 0.0) || (value >= 24.0))
                 {
                     if (SharedResources.TrafficForm != null)
                     {
@@ -2591,7 +2591,7 @@ namespace ASCOM.TelescopeSimulator
 
                         }
                     }
-                    throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+                    throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE + " " + value, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
                 }
                 if (SharedResources.TrafficForm != null)
                 {
@@ -2901,8 +2901,7 @@ namespace ASCOM.TelescopeSimulator
     // The ClassInterface/None addribute prevents an empty interface called
     // _AxisRates from being created and used as the [default] interface
     //
-    [Guid("af5510b9-3108-4237-83da-ae70524aab7d")]
-    [ClassInterface(ClassInterfaceType.None)]
+    [Guid("af5510b9-3108-4237-83da-ae70524aab7d"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
     public class AxisRates : IAxisRates, IEnumerable, IDisposable
     {
         private TelescopeAxes m_Axis;
@@ -3011,6 +3010,7 @@ namespace ASCOM.TelescopeSimulator
 
         public IEnumerator GetEnumerator()
         {
+            _pos = -1; //Reset pointer as this is assumed by .NET enumeration
             return this as IEnumerator;
         }
 
@@ -3085,6 +3085,7 @@ namespace ASCOM.TelescopeSimulator
 
         public IEnumerator GetEnumerator()
         {
+            _pos = -1; //Reset pointer as this is assumed by .NET enumeration
             return this as IEnumerator;
         }
 
