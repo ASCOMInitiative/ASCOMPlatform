@@ -99,7 +99,8 @@ namespace ASCOM.TelescopeSimulator
 
                     }
                 }
-                throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+                throw new ParkedException();
+
             }
             TelescopeHardware.SlewState = SlewType.SlewNone;
 
@@ -1111,6 +1112,8 @@ namespace ASCOM.TelescopeSimulator
                 throw new MethodNotImplementedException("FindHome");
             }
 
+            if (TelescopeHardware.AtPark) throw new ParkedException();
+
             TelescopeHardware.FindHome();
 
             while (TelescopeHardware.SlewState == SlewType.SlewHome || TelescopeHardware.SlewState == SlewType.SlewSettle)
@@ -1403,7 +1406,14 @@ namespace ASCOM.TelescopeSimulator
                 throw new MethodNotImplementedException("MoveAxis");
             }
 
-            if (!CanMoveAxis(Axis)) throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
+            if (Rate > 50.0) throw new InvalidValueException("MoveAxis", Rate.ToString(), "-50 to -10, 0 and 10 to 50");
+            if ((Rate < 10.0) && (Rate > 0.0)) throw new InvalidValueException("MoveAxis", Rate.ToString(), "-50 to -10, 0 and 10 to 50");
+            if (Rate < -50.0) throw new InvalidValueException("MoveAxis", Rate.ToString(), "-50 to -10, 0 and 10 to 50");
+            if ((Rate > -10.0) && (Rate < 0.0)) throw new InvalidValueException("MoveAxis", Rate.ToString(), "-50 to -10, 0 and 10 to 50");
+
+            if (!CanMoveAxis(Axis)) throw new MethodNotImplementedException("CanMoveAxis " + Enum.GetName(typeof(TelescopeAxes), Axis));
+
+            if (TelescopeHardware.AtPark) throw new ParkedException();
 
             if (TelescopeHardware.SlewState == SlewType.SlewMoveAxis || Rate != 0)
             {
@@ -1440,15 +1450,14 @@ namespace ASCOM.TelescopeSimulator
                             if (SharedResources.TrafficForm.Slew)
                             {
                                 SharedResources.TrafficForm.TrafficEnd("(stopped)");
-
                             }
                         }
                         return;
                     }
-                    else
-                    {
-                        TelescopeHardware.SlewState = SlewType.SlewMoveAxis;
-                    }
+                }
+                else
+                {
+                    TelescopeHardware.SlewState = SlewType.SlewMoveAxis;
                 }
 
             }
@@ -1536,6 +1545,8 @@ namespace ASCOM.TelescopeSimulator
             string directionString = "";
             long tempTicks = 0;
 
+            if (TelescopeHardware.AtPark) throw new ParkedException();
+
             if (SharedResources.TrafficForm != null)
             {
                 if (SharedResources.TrafficForm.Slew)
@@ -1588,7 +1599,7 @@ namespace ASCOM.TelescopeSimulator
 
             if (!TelescopeHardware.CanDualAxisPulseGuide)
             {
-                System.Threading.Thread.Sleep(Duration);
+                System.Threading.Thread.Sleep(Duration); // Must be synchronous so wait out the pulseguide duration here
             }
 
             if (SharedResources.TrafficForm != null)
@@ -2152,7 +2163,7 @@ namespace ASCOM.TelescopeSimulator
             }
             if (!TelescopeHardware.CanSlew)
             {
-                throw new MethodNotImplementedException("SlewToTarget");
+                throw new MethodNotImplementedException("SlewToCoordinates");
             }
             if (RightAscension > 24 || RightAscension < 0 || Declination < -180 || Declination > 180)
             {
@@ -2168,6 +2179,7 @@ namespace ASCOM.TelescopeSimulator
                 }
             }
 
+            if (TelescopeHardware.AtPark) throw new ParkedException();
 
             TelescopeHardware.StartSlewRaDec(RightAscension, Declination, true);
 
@@ -2190,7 +2202,7 @@ namespace ASCOM.TelescopeSimulator
             }
             if (!TelescopeHardware.CanSlew)
             {
-                throw new MethodNotImplementedException("SlewToTarget");
+                throw new MethodNotImplementedException("SlewToCoordinatesAsync");
             }
             if (RightAscension > 24 || RightAscension < 0 || Declination < -180 || Declination > 180)
             {
@@ -2205,6 +2217,8 @@ namespace ASCOM.TelescopeSimulator
 
                 }
             }
+
+            if (TelescopeHardware.AtPark) throw new ParkedException();
 
             TelescopeHardware.StartSlewRaDec(RightAscension, Declination, true);
         }
@@ -2232,6 +2246,8 @@ namespace ASCOM.TelescopeSimulator
                 throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
             }
 
+            if (TelescopeHardware.AtPark) throw new ParkedException();
+
             TelescopeHardware.StartSlewRaDec(TelescopeHardware.TargetRightAscension, TelescopeHardware.Declination, true);
 
             while (TelescopeHardware.SlewState == SlewType.SlewRaDec || TelescopeHardware.SlewState == SlewType.SlewSettle)
@@ -2252,7 +2268,7 @@ namespace ASCOM.TelescopeSimulator
             }
             if (!TelescopeHardware.CanSlew)
             {
-                throw new MethodNotImplementedException("SlewToTarget");
+                throw new MethodNotImplementedException("SlewToTargetAsync");
             }
             if (TelescopeHardware.TargetRightAscension == SharedResources.INVALID_COORDINATE || TelescopeHardware.Declination == SharedResources.INVALID_COORDINATE)
             {
@@ -2262,6 +2278,9 @@ namespace ASCOM.TelescopeSimulator
             {
                 throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
             }
+   
+         if (TelescopeHardware.AtPark) throw new ParkedException();
+
             TelescopeHardware.StartSlewRaDec(TelescopeHardware.TargetRightAscension, TelescopeHardware.Declination, true);
         }
 
@@ -2333,7 +2352,8 @@ namespace ASCOM.TelescopeSimulator
                 }
             }
 
-            
+            if (TelescopeHardware.AtPark) throw new ParkedException();
+
             TelescopeHardware.ChangeHome(false);
             TelescopeHardware.ChangePark(false);
 
@@ -2372,6 +2392,8 @@ namespace ASCOM.TelescopeSimulator
                 }
             }
 
+            if (TelescopeHardware.AtPark) throw new ParkedException();
+
             TelescopeHardware.TargetDeclination = Declination;
             TelescopeHardware.TargetRightAscension = RightAscension;
 
@@ -2409,6 +2431,8 @@ namespace ASCOM.TelescopeSimulator
                 }
             }
 
+
+            if (TelescopeHardware.AtPark) throw new ParkedException();
 
             TelescopeHardware.ChangeHome(false);
             TelescopeHardware.ChangePark(false);
@@ -2817,6 +2841,7 @@ namespace ASCOM.TelescopeSimulator
                 throw new MethodNotImplementedException("UnPark");
             }
 
+            TelescopeHardware.ChangePark(false);
             TelescopeHardware.Tracking = true;
 
             if (SharedResources.TrafficForm != null)
@@ -2850,7 +2875,7 @@ namespace ASCOM.TelescopeSimulator
     // _Rate from being created and used as the [default] interface
     //
     [Guid("d0acdb0f-9c7e-4c53-abb7-576e9f2b8225")]
-    [ClassInterface(ClassInterfaceType.None)]
+    [ClassInterface(ClassInterfaceType.None), ComVisible(true)]
     public class Rate : IRate, IDisposable
     {
         private double m_dMaximum = 0;
@@ -2867,6 +2892,11 @@ namespace ASCOM.TelescopeSimulator
         }
 
         #region IRate Members
+
+        public IEnumerator GetEnumerator()
+        {
+            return null;
+        }
 
         public double Maximum
         {
@@ -2902,10 +2932,11 @@ namespace ASCOM.TelescopeSimulator
     // _AxisRates from being created and used as the [default] interface
     //
     [Guid("af5510b9-3108-4237-83da-ae70524aab7d"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
-    public class AxisRates : IAxisRates, IEnumerable, IDisposable
+    public class AxisRates : IAxisRates, IEnumerable, IEnumerator, IDisposable
     {
         private TelescopeAxes m_Axis;
         private Rate[] m_Rates;
+        private int pos;
 
         //
         // Constructor - Internal prevents public creation
@@ -2929,17 +2960,18 @@ namespace ASCOM.TelescopeSimulator
                 case TelescopeAxes.axisPrimary:
                     // TODO Initialize this array with any Primary axis rates that your driver may provide
                     // Example: m_Rates = new Rate[] { new Rate(10.5, 30.2), new Rate(54.0, 43.6) }
-                    m_Rates = new Rate[] { new Rate(10.5, 30.2), new Rate(54.0, 43.6) };
+                    m_Rates = new Rate[] { new Rate(10.0, 30.2), new Rate(43.6, 50.0) };
                     break;
                 case TelescopeAxes.axisSecondary:
                     // TODO Initialize this array with any Secondary axis rates that your driver may provide
-                    m_Rates = new Rate[] { new Rate(10.5, 30.2), new Rate(54.0, 43.6) };
+                    m_Rates = new Rate[] { new Rate(10.0, 30.2), new Rate(43.6, 50.0) };
                     break;
                 case TelescopeAxes.axisTertiary:
                     // TODO Initialize this array with any Tertiary axis rates that your driver may provide
-                    m_Rates = new Rate[] { new Rate(10.5, 30.2), new Rate(54.0, 43.6) };
+                    m_Rates = new Rate[] { new Rate(10.0, 30.2), new Rate(43.6, 50.0) };
                     break;
             }
+            pos = -1;
         }
 
         #region IAxisRates Members
@@ -2951,7 +2983,8 @@ namespace ASCOM.TelescopeSimulator
 
         public IEnumerator GetEnumerator()
         {
-            return m_Rates.GetEnumerator();
+            pos = -1; //Reset pointer as this is assumed by .NET enumeration
+            return this as IEnumerator;
         }
 
         public IRate this[int Index]
@@ -2961,12 +2994,35 @@ namespace ASCOM.TelescopeSimulator
 
         #endregion
 
-
         #region IDisposable Members
 
         public void Dispose()
         {
             throw new System.NotImplementedException();
+        }
+
+        #endregion
+
+        #region IEnumerator implementation
+
+        public bool MoveNext()
+        {
+            if (++pos >= m_Rates.Length) return false;
+            return true;
+        }
+
+        public void Reset()
+        {
+            pos = -1;
+        }
+
+        public object Current
+        {
+            get
+            {
+                if (pos < 0 || pos >= m_Rates.Length) throw new System.InvalidOperationException();
+                return m_Rates[pos];
+            }
         }
 
         #endregion

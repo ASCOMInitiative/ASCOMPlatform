@@ -33,6 +33,7 @@ namespace ASCOM.TelescopeSimulator
         private static Timer m_Timer = new Timer(); //Simulated Hardware by running a Timer
         private static Utilities.Profile m_Profile;
         private static bool m_OnTop;
+        private static ASCOM.Utilities.TraceLogger TL;
 
         //Capabilities
         private static bool m_CanFindHome;
@@ -137,7 +138,8 @@ namespace ASCOM.TelescopeSimulator
             m_Profile = new Utilities.Profile();
             m_Timer.Elapsed += new ElapsedEventHandler(TimerEvent);
             m_Timer.Interval = SharedResources.TIMER_INTERVAL * 1000;
-            
+            TL = new ASCOM.Utilities.TraceLogger("", "SimTelescopeHardware");
+            TL.Enabled = true;
 
             if (m_Profile.GetValue(SharedResources.PROGRAM_ID, "RegVer", "") != SharedResources.REGISTRATION_VERSION)
             {
@@ -365,7 +367,7 @@ namespace ASCOM.TelescopeSimulator
             }
             else //Process the movement
             {
-                z = Math.Cos(m_Declination * SharedResources.DEG_RAD) * 15;
+                z = Math.Cos(m_Declination * SharedResources.DEG_RAD) * 2; // *15;
                 if (z < 0.001) {z = 0.001;}
 
                 if (m_SlewState == SlewType.SlewHandpad) //We are doing a slew with the handpad buttons
@@ -433,39 +435,48 @@ namespace ASCOM.TelescopeSimulator
                 else if (m_SlewState == SlewType.SlewRaDec)
                 {
                     m_SettleTix = GetTickCount() + m_SlewSettleTime;
+                    TL.LogMessage("Fast, Med, Slow, Target RA, Dec", m_SlewSpeedFast + " " + m_SlewSpeedMedium + " " + m_SlewSpeedSlow + " " + m_TargetRightAscension + " " + m_TargetDeclination);
 
                     //RA Step
                     y = Math.Abs(m_DeltaRa);
-                    if (m_SlewSpeedFast / SharedResources.TIMER_INTERVAL >= 50) step = y / z;
-                    else if (y > 2 * m_SlewSpeedFast) step = m_SlewSpeedFast / z;
-                    else if (y > 2 * m_SlewSpeedMedium) step = m_SlewSpeedMedium / z;
-                    else if (y > 2 * m_SlewSpeedSlow) step = m_SlewSpeedSlow / z;
-                    else step = y / z;
+                    if (m_SlewSpeedFast / SharedResources.TIMER_INTERVAL >= 50) { step = y / z; TL.LogStart("RA Speed z y step", "Maximum"); }
+                    else if (y > 2 * m_SlewSpeedFast) { step = m_SlewSpeedFast / z; TL.LogStart("RA Speed z y step", "Fast"); }
+                    else if (y > 2 * m_SlewSpeedMedium) { step = m_SlewSpeedMedium / z; TL.LogStart("RA Speed z y step", "Medium"); }
+                    else if (y > 2 * m_SlewSpeedSlow) { step = m_SlewSpeedSlow / z; TL.LogStart("RA Speed z y step", "Slow"); }
+                    else { step = y / z; TL.LogStart("RA Speed z y step", "Minimum"); }
 
                     step = step * Math.Sign(m_DeltaRa);
+
+                    TL.LogFinish(" " + z + " " + y + " " + step);
 
                     m_RightAscension += step;
                     m_DeltaRa -= step;
 
                     //Dec Step
                     y = Math.Abs(m_DeltaDec);
-                    if (m_SlewSpeedFast / SharedResources.TIMER_INTERVAL >= 50) step = y;
-                    else if (y > 2 * m_SlewSpeedFast) step = m_SlewSpeedFast;
-                    else if (y > 2 * m_SlewSpeedMedium) step = m_SlewSpeedMedium;
-                    else if (y > 2 * m_SlewSpeedSlow) step = m_SlewSpeedSlow;
-                    else step = y;
+                    if (m_SlewSpeedFast / SharedResources.TIMER_INTERVAL >= 50) { step = y; TL.LogStart("Dec Speed z y step", "Maximum"); }
+                    else if (y > 2 * m_SlewSpeedFast) { step = m_SlewSpeedFast; TL.LogStart("Dec Speed z y step", "Fast"); }
+                    else if (y > 2 * m_SlewSpeedMedium) { step = m_SlewSpeedMedium; TL.LogStart("Dec Speed z y step", "Medium"); }
+                    else if (y > 2 * m_SlewSpeedSlow) { step = m_SlewSpeedSlow; TL.LogStart("Dec Speed z y step", "Slow"); }
+                    else { step = y; TL.LogStart("Dec Speed z y step", "Minimum"); }
 
                     step = step * Math.Sign(m_DeltaDec);
+                    TL.LogFinish( " " + z + " " + y + " " + step);
 
                     m_Declination += step;
                     m_DeltaDec -= step;
 
                     m_Declination = AstronomyFunctions.RangeDec(m_Declination);
                     m_RightAscension = AstronomyFunctions.RangeHa(m_RightAscension);
-
+                    TL.LogMessage("RA, Dec", m_RightAscension + " " + m_DeltaRa + " " + m_Declination + " " + m_DeltaDec);
                     CalculateAltAz();
 
-                    if (Math.Abs(m_DeltaRa) < 0.0000001 && Math.Abs(m_DeltaDec) < 0.0000001) m_SlewState = SlewType.SlewSettle;
+                    if (Math.Abs(m_DeltaRa) < 0.0003 && Math.Abs(m_DeltaDec) < 0.0003)
+                    {
+                        TL.LogMessage("Settle", "Moved from slew to settle");
+                        m_SlewState = SlewType.SlewSettle;
+                    }
+                    TL.BlankLine();
 
                 }
                 else if (m_SlewState == SlewType.SlewAltAz || m_SlewState == SlewType.SlewHome || m_SlewState == SlewType.SlewPark)
@@ -540,58 +551,58 @@ namespace ASCOM.TelescopeSimulator
                     }
 
                 }
-                else if (m_PulseGuideTixRa > 0 || m_PulseGuideTixDec > 0)
+            }
+            if (m_PulseGuideTixRa > 0 || m_PulseGuideTixDec > 0)
+            {
+                ChangeHome(false);
+                ChangePark(false);
+                if (m_PulseGuideTixRa > 0)
                 {
-                    ChangeHome(false);
-                    ChangePark(false);
-                    if (m_PulseGuideTixRa > 0)
+                    if (m_PulseGuideTixRa + (SharedResources.TIMER_INTERVAL / 2) <= GetTickCount())
                     {
-                        if (m_PulseGuideTixRa + (SharedResources.TIMER_INTERVAL / 2) <= GetTickCount())
+                        if (SharedResources.TrafficForm != null)
                         {
-                            if (SharedResources.TrafficForm != null)
+                            if (SharedResources.TrafficForm.Slew)
                             {
-                                if (SharedResources.TrafficForm.Slew)
-                                {
-                                    SharedResources.TrafficForm.TrafficLine("(PulseGuide in RA complete)");
+                                SharedResources.TrafficForm.TrafficLine("(PulseGuide in RA complete)");
 
-                                }
                             }
-                            m_PulseGuideTixRa = 0;
                         }
+                        m_PulseGuideTixRa = 0;
                     }
-
-                    if (m_PulseGuideTixDec > 0)
-                    {
-                        if (m_PulseGuideTixDec + (SharedResources.TIMER_INTERVAL / 2) <= GetTickCount())
-                        {
-                            if (SharedResources.TrafficForm != null)
-                            {
-                                if (SharedResources.TrafficForm.Slew)
-                                {
-                                    SharedResources.TrafficForm.TrafficLine("(PulseGuide in Dec complete)");
-
-                                }
-                            }
-                            m_PulseGuideTixDec = 0;
-                        }
-                    }
-
-                    if (m_Tracking) raRate = m_RightAscensionRate;
-                    else raRate = 15;
-                    raRate = (raRate / SharedResources.SIDRATE) / 3600;
-                    if (m_PulseGuideTixRa > 0) raRate = raRate + (m_GuideRateRightAscension / 15);
-
-                    decRate = m_DeclinationRate / 3600;
-                    if (m_PulseGuideTixDec > 0) decRate = decRate + m_GuideRateDeclination;
-
-                    m_RightAscension += raRate * SharedResources.TIMER_INTERVAL;
-                    m_Declination += decRate * SharedResources.TIMER_INTERVAL;
-
-                    m_Declination = AstronomyFunctions.RangeDec(m_Declination);
-                    m_RightAscension = AstronomyFunctions.RangeHa(m_RightAscension);
-
-                    CalculateAltAz();
                 }
+
+                if (m_PulseGuideTixDec > 0)
+                {
+                    if (m_PulseGuideTixDec + (SharedResources.TIMER_INTERVAL / 2) <= GetTickCount())
+                    {
+                        if (SharedResources.TrafficForm != null)
+                        {
+                            if (SharedResources.TrafficForm.Slew)
+                            {
+                                SharedResources.TrafficForm.TrafficLine("(PulseGuide in Dec complete)");
+
+                            }
+                        }
+                        m_PulseGuideTixDec = 0;
+                    }
+                }
+
+                if (m_Tracking) raRate = m_RightAscensionRate;
+                else raRate = 15;
+                raRate = (raRate / SharedResources.SIDRATE) / 3600;
+                if (m_PulseGuideTixRa > 0) raRate = raRate + (m_GuideRateRightAscension / 15);
+
+                decRate = m_DeclinationRate / 3600;
+                if (m_PulseGuideTixDec > 0) decRate = decRate + m_GuideRateDeclination;
+
+                m_RightAscension += raRate * SharedResources.TIMER_INTERVAL;
+                m_Declination += decRate * SharedResources.TIMER_INTERVAL;
+
+                m_Declination = AstronomyFunctions.RangeDec(m_Declination);
+                m_RightAscension = AstronomyFunctions.RangeHa(m_RightAscension);
+
+                CalculateAltAz();
             }
 
             if (m_SlewState == SlewType.SlewSettle)
@@ -1106,9 +1117,9 @@ namespace ASCOM.TelescopeSimulator
            set { m_Declination = value; }
        }
 
-
        public static bool AtPark
        { get { return m_AtPark; } }
+
        public static SlewType SlewState
        { 
            get { return m_SlewState; }
@@ -1196,9 +1207,9 @@ namespace ASCOM.TelescopeSimulator
        {
            get { return m_AtPark; }
        }
-        #endregion
+       #endregion
 
-        #region Helper Functions
+       #region Helper Functions
        public static ASCOM.DeviceInterface.PierSide SideOfPierRaDec(double RightAscension, double Declination)
        {
            double hourAngle;
@@ -1208,7 +1219,9 @@ namespace ASCOM.TelescopeSimulator
            }
            else
            {
-               hourAngle = AstronomyFunctions.RangeHa(AstronomyFunctions.LocalSiderealTime(m_Longitude) - RightAscension);
+               //hourAngle = AstronomyFunctions.RangeHa(AstronomyFunctions.LocalSiderealTime(m_Longitude) - RightAscension);
+               hourAngle = AstronomyFunctions.LocalSiderealTime(m_Longitude) - RightAscension;
+               TL.LogMessage("SideOfPierRaDec", "Longitude: " + m_Longitude + "LST: " + AstronomyFunctions.LocalSiderealTime(m_Longitude) + "HA: " + hourAngle + " RA: " + RightAscension);
                if (hourAngle >=0) return ASCOM.DeviceInterface.PierSide.pierEast;
                else return ASCOM.DeviceInterface.PierSide.pierWest;
 
@@ -1295,7 +1308,7 @@ namespace ASCOM.TelescopeSimulator
        {
            double altitude;
            double azimuth;
-
+           if (m_AtPark) throw new ParkedException();
            if (m_Latitude >= 0) azimuth = 180;
            else azimuth = 0;
 
