@@ -8,7 +8,7 @@
 ''' It is possible that the Rate.Maximum and Rate.Minimum properties will be equal. In this case, the Rate object expresses a single discrete rate. 
 ''' Both the Rate.Maximum and Rate.Minimum properties are always expressed in units of degrees per second. 
 ''' </summary>
-<ComVisible(True), Guid("2E7CEEE4-B5C6-4e9a-87F4-80445700D123")> _
+<ComVisible(True), Guid("2E7CEEE4-B5C6-4e9a-87F4-80445700D123"), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
 Public Interface IRate '221C0BC0-110B-4129-85A0-18BB28579290
     ''' <summary>
     ''' Dispose the late-bound interface, if needed. Will release it via COM

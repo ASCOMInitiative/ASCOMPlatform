@@ -969,6 +969,11 @@ namespace ASCOM.DriverAccess
         Type objTypeRate;
         object objRateLateBound;
 
+        public IEnumerator GetEnumerator()
+        {
+            return null;
+        }
+
         public _Rate(int index, Type objTypeAxisRates, object objAxisRatesLateBound)
         {
             objRateLateBound = objTypeAxisRates.InvokeMember("Item",
@@ -1315,7 +1320,7 @@ namespace ASCOM.DriverAccess
 #region IRate Members
 
     /// <summary>
-    /// Maximu value of the rate range
+    /// Maximum value of the rate range
     /// </summary>
     public double Maximum
     {
