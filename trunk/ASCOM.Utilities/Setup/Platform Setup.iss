@@ -335,6 +335,10 @@ Source: "..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServ
 Source: "..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ServedClasses\ASCOM.FilterWheelSim.FilterWheel.dll"; DestDir: "{cf}\ASCOM\FilterWheel\ServedClasses"; Flags: ignoreversion
 Source: "..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ASCOM.FilterWheelSim.exe"; DestDir: "{cf32}\ASCOM\FilterWheel"; Check: IsWin64; Flags: ignoreversion
 Source: "..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ServedClasses\ASCOM.FilterWheelSim.FilterWheel.dll"; DestDir: "{cf32}\ASCOM\FilterWheel\ServedClasses"; Check: IsWin64; Flags: ignoreversion
+Source: "..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe"; DestDir: "{cf}\ASCOM\Telescope"; Flags: ignoreversion
+Source: "..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulatorServedClasses\ASCOM.TelescopeSimulator.Telescope.dll"; DestDir: "{cf}\ASCOM\Telescope\TelescopeSimulatorServedClasses"; Flags: ignoreversion
+Source: "..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe"; DestDir: "{cf32}\ASCOM\Telescope"; Check: IsWin64; Flags: ignoreversion
+Source: "..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulatorServedClasses\ASCOM.TelescopeSimulator.Telescope.dll"; DestDir: "{cf32}\ASCOM\Telescope\TelescopeSimulatorServedClasses"; Check: IsWin64; Flags: ignoreversion
 
 [Registry]
 Root: HKLM64; Subkey: SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM64; ValueType: string; ValueName: ; ValueData: {cf}\ASCOM\.net; Flags: uninsdeletekey; Check: IsWin64
@@ -402,6 +406,7 @@ Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\Camera\ASCOM.Simu
 ;Filename: {dotnet20}\regasm.exe; Parameters: """{cf}\ASCOM\FilterWheel\ASCOM.FilterWheelSim.exe"" /codebase "; Flags: runhidden; StatusMsg: Registering FilterWheel Simulator for COM
 ;Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\FilterWheel\ASCOM.FilterWheelSim.exe"" /codebase "; Flags: runhidden; Check: IsWin64; StatusMsg: Registering FilterWheel Simulator for 32bit COM
 Filename: {cf32}\ASCOM\FilterWheel\ASCOM.FilterWheelSim.exe; Parameters: "/register"; Flags: runhidden; StatusMsg: Registering FilterWheel Simulator
+Filename: {cf32}\ASCOM\Telescope\ASCOM.TelescopeSimulator.exe; Parameters: "/register"; Flags: runhidden; StatusMsg: Registering Telescope Simulator
 
 [UninstallRun]
 ;Simulators
@@ -511,3 +516,5 @@ WelcomeLabel1=%n%n[name]%n
 #emit "WelcomeLabel2=This will install ASCOM Utilities version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
 [_ISToolPreCompile]
 Name: ..\..\ASCOM Redirection Policies\ASCOM Redirection Policies\bin\Release\ASCOM Redirection Policies.exe; Parameters: ; Flags: runminimized abortonerror
+
+

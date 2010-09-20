@@ -156,7 +156,7 @@ namespace ASCOM.TelescopeSimulator
             set
             {
                 SetTextCallback setText = new SetTextCallback(SetLstText);
-                string text = m_Util.DegreesToHMS(value);
+                string text = m_Util.HoursToHMS(value);
                 try{this.Invoke(setText, text);}
                 catch { }
                 
@@ -168,7 +168,7 @@ namespace ASCOM.TelescopeSimulator
             set
             {
                 SetTextCallback setText = new SetTextCallback(SetRaText);
-                string text = m_Util.DegreesToHMS(value);
+                string text = m_Util.HoursToHMS(value);
                 try { this.Invoke(setText, text); }
                 catch { }
             }

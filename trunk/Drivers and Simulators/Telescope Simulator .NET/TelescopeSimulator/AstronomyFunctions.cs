@@ -19,12 +19,15 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ASCOM.Astrometry.NOVAS;
 
 namespace ASCOM.TelescopeSimulator
 {
     public class AstronomyFunctions
     {
         private static Utilities.Util m_Util = new ASCOM.Utilities.Util();
+        private static ASCOM.Astrometry.SiteInfo Site = new ASCOM.Astrometry.SiteInfo();
+
         static AstronomyFunctions()
         { }
 
@@ -172,26 +175,35 @@ namespace ASCOM.TelescopeSimulator
         //----------------------------------------------------------------------------------------
         public static double CalculateAltitude(double RightAscension, double Declination, double Latitude, double Longitude)
         {
-            double lst = LocalSiderealTime(Longitude * SharedResources.RAD_DEG);
-            double ha = lst * SharedResources.DEG_RAD - RightAscension;
-            return Math.Asin(Math.Sin(Declination) * Math.Sin(Latitude) + Math.Cos(Declination) * Math.Cos(ha) * Math.Cos(Latitude)) * SharedResources.RAD_DEG;
+            double ElevationTopoValue = 0;
+            double AzimuthTopoValue = 0;
+            double RATopoValue = 0;
+            double DECTopoValue = 0;
+
+            Site.Height = 0.0;
+            Site.Latitude = Latitude * SharedResources.RAD_DEG;
+            Site.Longitude = Longitude * SharedResources.RAD_DEG;
+            Site.Pressure = 1000.0;
+            Site.Temperature = 10.0;
+            NOVAS2.Equ2Hor(m_Util.JulianDate, 0.0, 0.0, 0.0, ref Site, RightAscension * SharedResources.RAD_HRS, Declination * SharedResources.RAD_DEG, ASCOM.Astrometry.RefractionOption.StandardRefraction , ref ElevationTopoValue, ref AzimuthTopoValue, ref RATopoValue, ref DECTopoValue);
+            ElevationTopoValue = 90.0 - ElevationTopoValue; // 'Convert zenith distance to elevation
+            return ElevationTopoValue;
 
         }
         public static double CalculateAzimuth(double RightAscension, double Declination, double Latitude, double Longitude)
         {
-            double lst = LocalSiderealTime(Longitude * SharedResources.RAD_DEG);
-            double ha = lst * SharedResources.DEG_RAD - RightAscension;
+            double ElevationTopoValue = 0;
+            double AzimuthTopoValue = 0;
+            double RATopoValue = 0;
+            double DECTopoValue = 0;
 
-            double A1 = -Math.Cos(Declination) * Math.Sin(ha) / Math.Cos(Math.Asin(Math.Sin(Declination) * Math.Sin(Latitude) + Math.Cos(Declination) * Math.Cos(ha) * Math.Cos(Latitude)));
-            double A2 = (Math.Sin(Declination) * Math.Cos(Latitude) - Math.Cos(Declination) * Math.Cos(ha) * Math.Sin(Latitude)) / Math.Cos(Math.Asin(Math.Sin(Declination) * Math.Sin(Latitude) + Math.Cos(Declination) * Math.Cos(ha) * Math.Cos(Latitude)));
-
-            double azimuth  = Math.Atan2(A1,A2);
-            if (azimuth<0)
-            {
-              azimuth = 2*Math.PI + azimuth;
-            }
-
-            return azimuth*SharedResources.RAD_DEG;
+            Site.Height = 0.0;
+            Site.Latitude = Latitude * SharedResources.RAD_DEG;
+            Site.Longitude = Longitude * SharedResources.RAD_DEG;
+            Site.Pressure = 1000.0;
+            Site.Temperature = 10.0;
+            NOVAS2.Equ2Hor(m_Util.JulianDate, 0.0, 0.0, 0.0, ref Site, RightAscension * SharedResources.RAD_HRS, Declination * SharedResources.RAD_DEG, ASCOM.Astrometry.RefractionOption.StandardRefraction, ref ElevationTopoValue, ref AzimuthTopoValue, ref RATopoValue, ref DECTopoValue);
+            return AzimuthTopoValue;
         }
 
         //----------------------------------------------------------------------------------------
