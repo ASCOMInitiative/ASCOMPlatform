@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+ 
+<head><!-- #BeginEditable "Title" -->
+<title>Driver Development Notes</title><!-- #EndEditable -->
+
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+
+</head>
+ 
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	
+	<div id="breadcrumbs">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	breadcrumbs(); 
+	-->
+	</script>
+</div>
+
+	<div class="topmenucontainer">
+    <script type="text/javascript" language="javascript">
+      <!-- 
+	        writemainmenu();
+	        -->
+    </script>
+  </div>
+</div>
+
+
+
+<div id="leftcontent">
+
+
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	writesubmenu(); 
+	-->
+	</script>
+	
+	</div></div></div></div>
+
+	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+	<div class="article">
+		<h3>Driver Development Notes </h3>
+		<div class="article">
+			<h5>Supporting Early Binding</h5>
+			<p> For details, see <a href="Binding.htm">Early and Late Binding</a>. It is recommended (though not required) that your driver implement the relevant ASCOM abstract interface (e.g., ITelescope) for early binding. <span class="underline">If you use C#.NET or VisualBasic.NET and the templates included with the Platform 2008, this issue is handled in the driver by the template code</span>. Otherwise, if you want to expose the early binding interface, it's up to you to figure out how to do this in your chosen language. </p>
+			<h5>Storage of Driver-Specific Data </h5>
+			<p>Most drivers will need to save persistent data (e.g. COM port selection). It's highly recommended that you use the DriverHelper.Profile object for this. It has a very simple interface and guarantees that you will get private storage for your persistent data items. While it currently uses an area of the registry set aside for ASCOM drivers, it's possible that the storage scheme will be changed to use XML in the future. Or perhaps the layout of data in the registry will change doe to future opperating system restrictions. Either way, <span class="underline">if you write directly to the registry you're asking for trouble</span>. On the other hand, if you choose to write your own private persistence storage code (e.g. to an XML file) that's fine too. </p>
+			<h5>The Setup Dialog</h5>
+			<p>All ASCOM interfaces include a SetupDialog() member. This is intended to display a <i>modal </i> dialog that provides access to device-specific things like COM port selection and controls for device-specific features. Keep in mind that many client programs expect a &quot;perfect&quot; device looking into the driver, and will use the device to support observing. Features like PEC, pointing/tracking models, backlash compensation, etc. that aren't exposed through the standard interface belong in the setup dialog. </p>
+			<p>This is a frequent source of confusion and frustration for driver developers, as they want to expose the &quot;value added&quot; features of their device where the driver interface doesn't support those features. Try to resist the temptation to have your driver open a &quot;permanent&quot; modeless window with a bunch of doodads like position or coordinate displays, switches, buttons, etc. The client sofware users will see these windows appear when they connect to the device, and they will think the window is part of the client program. This generates pain for client software developers who get asked for support. It also allows users to change things during normal usage, risking obscure problems and confusion. </p>
+		</div>
+		<h5>Registering (and Unregistering) for ASCOM</h5>
+		<p>Besides registering your driver as a Windows Object (COM), it also must be registered for ASCOM in order for it to appear in <a href="Chooser.htm">Chooser</a>. At a minimum, your installer needs do this. <span class="underline">If you use C#.NET or VisualBasic.NET and the templates included with the Platform 2008, this issue is handled in the driver by the template code</span>. Otherwise, if you use the Inno Setup tools included with the Platform 2008, it will be done for you. Otherwise, you'll need call the DriverHelper.Profile.Register() method during install and the DriverHelper.Profile.Unregister() method during uninstall. It's up to you to figure out how to do this with your installer tools. <span class="underline">Be sure to remove the driver's ASCOM Chooser info when the driver is uninstalled</span>. </p>
+		<h5> Drivers With Multiple Interfaces </h5>
+		<p>A driver can expose multiple interfaces (for example Telescope and Focuser for a mount that has both pointing and focuser controls). In order for different client programs to use the two interfaces, though, the driver must be a &quot;local server&quot; or executable type Windows Object (COM) server. In order for this type of driver to be accessible from TheSky (via the TeleAPI or DomeAPI plugins), <a href="TheSky.htm">special registry info</a> must be created <span class="underline">and removed</span> by your installer.   If you use C#.NET or VisualBasic.NET and the templates included with the Platform 2008, this issue is handled in the driver by the template code. Otherwise, if you use the Inno Setup tools included with the Platform 2008, it will be done for you. Otherwise, it is up to you to figure out how to do this with your installer tools. Details are provided <a href="TheSky.htm">here</a>. </p>
+	</div>
+	<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright © 1998-2010, The ASCOM Initiative. 
+	All rights reserved. </div>
+
+</body>
+
+<!-- #EndTemplate --></html>

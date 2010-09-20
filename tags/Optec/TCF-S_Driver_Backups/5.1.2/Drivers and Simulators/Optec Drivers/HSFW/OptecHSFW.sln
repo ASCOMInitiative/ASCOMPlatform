@@ -1,0 +1,124 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{B9CEE0E9-C6B5-4D67-9167-E72B9629D31D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "64Bit Installers", "64Bit Installers", "{BD9CF658-DD68-44FC-A940-F301BFB24975}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ASCOM Platform", "ASCOM Platform", "{6F15CB55-2EEA-4361-9AB8-ED85DF354D3D}"
+	ProjectSection(SolutionItems) = preProject
+		Dependencies\ASCOMPlatformDependencies\ASCOM.Astrometry.dll = Dependencies\ASCOMPlatformDependencies\ASCOM.Astrometry.dll
+		Dependencies\ASCOMPlatformDependencies\ASCOM.Attributes.dll = Dependencies\ASCOMPlatformDependencies\ASCOM.Attributes.dll
+		Dependencies\ASCOMPlatformDependencies\ASCOM.Controls.dll = Dependencies\ASCOMPlatformDependencies\ASCOM.Controls.dll
+		Dependencies\ASCOMPlatformDependencies\ASCOM.DriverAccess.dll = Dependencies\ASCOMPlatformDependencies\ASCOM.DriverAccess.dll
+		Dependencies\ASCOMPlatformDependencies\ASCOM.Exceptions.dll = Dependencies\ASCOMPlatformDependencies\ASCOM.Exceptions.dll
+		Dependencies\ASCOMPlatformDependencies\ASCOM.IConform.dll = Dependencies\ASCOMPlatformDependencies\ASCOM.IConform.dll
+		Dependencies\ASCOMPlatformDependencies\ASCOM.Interfaces.dll = Dependencies\ASCOMPlatformDependencies\ASCOM.Interfaces.dll
+		Dependencies\ASCOMPlatformDependencies\ASCOM.SettingsProvider.dll = Dependencies\ASCOMPlatformDependencies\ASCOM.SettingsProvider.dll
+		Dependencies\ASCOMPlatformDependencies\ASCOM.Utilities.dll = Dependencies\ASCOMPlatformDependencies\ASCOM.Utilities.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "32Bit Installers", "32Bit Installers", "{F423B20A-FE51-4C39-96FB-5F7FAD61C7C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptecHID_FilterWheelAPI", "HSFW API\OptecHID_FilterWheelAPI.csproj", "{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptecHIDTools", "Dependencies\OptecHID\OptecHIDTools.csproj", "{9786A9B9-97B9-4B23-AF39-4514AF45DEED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "High Speed Filter Wheel Control", "HSFW Control App\High Speed Filter Wheel Control.csproj", "{D2936A77-5E35-4F18-B92E-5BE0F53E3D95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HSFW_ASCOM_Driver", "HSFW_ASCOM_Driver\HSFW_ASCOM_Driver.csproj", "{A4083C6B-4D48-4DAD-8E9D-5E6D72D7AFE0}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HSFW ASCOM Driver Setup", "64Bit Installers\HSFW ASCOM Driver Setup\HSFW ASCOM Driver Setup.vdproj", "{AF6913EF-3E58-4EE6-A20D-ED497FE736F4}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HSFW Control Setup", "64Bit Installers\HSFW Control Setup\HSFW Control Setup.vdproj", "{34D67565-D825-457F-B6B5-0E0E9A959BB6}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HSFW Custom Driver Tools Setup", "64Bit Installers\HSFW Custom Driver Tools Setup\HSFW Custom Driver Tools Setup.vdproj", "{1B8EFCC5-28CF-48AB-884F-2FAFA952EF3E}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HSFW Control Setup (x86)", "32Bit Installers\HSFW Control Setup (x86)\HSFW Control Setup (x86).vdproj", "{D6057DEE-CA5A-4392-8EBA-04A6F8776852}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HSFW ASCOM Driver Setup (x86)", "32Bit Installers\HSFW ASCOM Driver Setup (x86)\HSFW ASCOM Driver Setup (x86).vdproj", "{A456C8E5-D83F-4D41-9E6E-5D07C7FF0753}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HSFW Custom Driver Tools Setup (x86)", "32Bit Installers\HSFW Custom Driver Tools Setup (x86)\HSFW Custom Driver Tools Setup (x86).vdproj", "{F6631F2D-2DCB-4DDF-A9F8-7DD28036553E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		API Debug|Any CPU = API Debug|Any CPU
+		ASCOM Driver Debug|Any CPU = ASCOM Driver Debug|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}.API Debug|Any CPU.ActiveCfg = API Debug|Any CPU
+		{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}.API Debug|Any CPU.Build.0 = API Debug|Any CPU
+		{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}.ASCOM Driver Debug|Any CPU.ActiveCfg = ASCOM Driver Debug|Any CPU
+		{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}.ASCOM Driver Debug|Any CPU.Build.0 = ASCOM Driver Debug|Any CPU
+		{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31C3CED5-E02F-4B99-BC57-4B6E552A5ED2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9786A9B9-97B9-4B23-AF39-4514AF45DEED}.API Debug|Any CPU.ActiveCfg = API Debug|Any CPU
+		{9786A9B9-97B9-4B23-AF39-4514AF45DEED}.API Debug|Any CPU.Build.0 = API Debug|Any CPU
+		{9786A9B9-97B9-4B23-AF39-4514AF45DEED}.ASCOM Driver Debug|Any CPU.ActiveCfg = ASCOM Driver Debug|Any CPU
+		{9786A9B9-97B9-4B23-AF39-4514AF45DEED}.ASCOM Driver Debug|Any CPU.Build.0 = ASCOM Driver Debug|Any CPU
+		{9786A9B9-97B9-4B23-AF39-4514AF45DEED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9786A9B9-97B9-4B23-AF39-4514AF45DEED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9786A9B9-97B9-4B23-AF39-4514AF45DEED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9786A9B9-97B9-4B23-AF39-4514AF45DEED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2936A77-5E35-4F18-B92E-5BE0F53E3D95}.API Debug|Any CPU.ActiveCfg = API Debug|Any CPU
+		{D2936A77-5E35-4F18-B92E-5BE0F53E3D95}.ASCOM Driver Debug|Any CPU.ActiveCfg = ASCOM Driver Debug|Any CPU
+		{D2936A77-5E35-4F18-B92E-5BE0F53E3D95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2936A77-5E35-4F18-B92E-5BE0F53E3D95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2936A77-5E35-4F18-B92E-5BE0F53E3D95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2936A77-5E35-4F18-B92E-5BE0F53E3D95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4083C6B-4D48-4DAD-8E9D-5E6D72D7AFE0}.API Debug|Any CPU.ActiveCfg = API Debug|Any CPU
+		{A4083C6B-4D48-4DAD-8E9D-5E6D72D7AFE0}.ASCOM Driver Debug|Any CPU.ActiveCfg = ASCOM Driver Debug|Any CPU
+		{A4083C6B-4D48-4DAD-8E9D-5E6D72D7AFE0}.ASCOM Driver Debug|Any CPU.Build.0 = ASCOM Driver Debug|Any CPU
+		{A4083C6B-4D48-4DAD-8E9D-5E6D72D7AFE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4083C6B-4D48-4DAD-8E9D-5E6D72D7AFE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4083C6B-4D48-4DAD-8E9D-5E6D72D7AFE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4083C6B-4D48-4DAD-8E9D-5E6D72D7AFE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF6913EF-3E58-4EE6-A20D-ED497FE736F4}.API Debug|Any CPU.ActiveCfg = Debug
+		{AF6913EF-3E58-4EE6-A20D-ED497FE736F4}.ASCOM Driver Debug|Any CPU.ActiveCfg = Debug
+		{AF6913EF-3E58-4EE6-A20D-ED497FE736F4}.Debug|Any CPU.ActiveCfg = Debug
+		{AF6913EF-3E58-4EE6-A20D-ED497FE736F4}.Release|Any CPU.ActiveCfg = Release
+		{AF6913EF-3E58-4EE6-A20D-ED497FE736F4}.Release|Any CPU.Build.0 = Release
+		{34D67565-D825-457F-B6B5-0E0E9A959BB6}.API Debug|Any CPU.ActiveCfg = Debug
+		{34D67565-D825-457F-B6B5-0E0E9A959BB6}.ASCOM Driver Debug|Any CPU.ActiveCfg = Debug
+		{34D67565-D825-457F-B6B5-0E0E9A959BB6}.Debug|Any CPU.ActiveCfg = Debug
+		{34D67565-D825-457F-B6B5-0E0E9A959BB6}.Release|Any CPU.ActiveCfg = Release
+		{34D67565-D825-457F-B6B5-0E0E9A959BB6}.Release|Any CPU.Build.0 = Release
+		{1B8EFCC5-28CF-48AB-884F-2FAFA952EF3E}.API Debug|Any CPU.ActiveCfg = Debug
+		{1B8EFCC5-28CF-48AB-884F-2FAFA952EF3E}.ASCOM Driver Debug|Any CPU.ActiveCfg = Debug
+		{1B8EFCC5-28CF-48AB-884F-2FAFA952EF3E}.Debug|Any CPU.ActiveCfg = Debug
+		{1B8EFCC5-28CF-48AB-884F-2FAFA952EF3E}.Release|Any CPU.ActiveCfg = Release
+		{1B8EFCC5-28CF-48AB-884F-2FAFA952EF3E}.Release|Any CPU.Build.0 = Release
+		{D6057DEE-CA5A-4392-8EBA-04A6F8776852}.API Debug|Any CPU.ActiveCfg = Debug
+		{D6057DEE-CA5A-4392-8EBA-04A6F8776852}.ASCOM Driver Debug|Any CPU.ActiveCfg = Debug
+		{D6057DEE-CA5A-4392-8EBA-04A6F8776852}.Debug|Any CPU.ActiveCfg = Debug
+		{D6057DEE-CA5A-4392-8EBA-04A6F8776852}.Release|Any CPU.ActiveCfg = Release
+		{D6057DEE-CA5A-4392-8EBA-04A6F8776852}.Release|Any CPU.Build.0 = Release
+		{A456C8E5-D83F-4D41-9E6E-5D07C7FF0753}.API Debug|Any CPU.ActiveCfg = Debug
+		{A456C8E5-D83F-4D41-9E6E-5D07C7FF0753}.ASCOM Driver Debug|Any CPU.ActiveCfg = Debug
+		{A456C8E5-D83F-4D41-9E6E-5D07C7FF0753}.Debug|Any CPU.ActiveCfg = Debug
+		{A456C8E5-D83F-4D41-9E6E-5D07C7FF0753}.Release|Any CPU.ActiveCfg = Release
+		{A456C8E5-D83F-4D41-9E6E-5D07C7FF0753}.Release|Any CPU.Build.0 = Release
+		{F6631F2D-2DCB-4DDF-A9F8-7DD28036553E}.API Debug|Any CPU.ActiveCfg = Debug
+		{F6631F2D-2DCB-4DDF-A9F8-7DD28036553E}.ASCOM Driver Debug|Any CPU.ActiveCfg = Debug
+		{F6631F2D-2DCB-4DDF-A9F8-7DD28036553E}.Debug|Any CPU.ActiveCfg = Debug
+		{F6631F2D-2DCB-4DDF-A9F8-7DD28036553E}.Release|Any CPU.ActiveCfg = Release
+		{F6631F2D-2DCB-4DDF-A9F8-7DD28036553E}.Release|Any CPU.Build.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6F15CB55-2EEA-4361-9AB8-ED85DF354D3D} = {B9CEE0E9-C6B5-4D67-9167-E72B9629D31D}
+		{9786A9B9-97B9-4B23-AF39-4514AF45DEED} = {B9CEE0E9-C6B5-4D67-9167-E72B9629D31D}
+		{AF6913EF-3E58-4EE6-A20D-ED497FE736F4} = {BD9CF658-DD68-44FC-A940-F301BFB24975}
+		{34D67565-D825-457F-B6B5-0E0E9A959BB6} = {BD9CF658-DD68-44FC-A940-F301BFB24975}
+		{1B8EFCC5-28CF-48AB-884F-2FAFA952EF3E} = {BD9CF658-DD68-44FC-A940-F301BFB24975}
+		{D6057DEE-CA5A-4392-8EBA-04A6F8776852} = {F423B20A-FE51-4C39-96FB-5F7FAD61C7C9}
+		{A456C8E5-D83F-4D41-9E6E-5D07C7FF0753} = {F423B20A-FE51-4C39-96FB-5F7FAD61C7C9}
+		{F6631F2D-2DCB-4DDF-A9F8-7DD28036553E} = {F423B20A-FE51-4C39-96FB-5F7FAD61C7C9}
+	EndGlobalSection
+EndGlobal

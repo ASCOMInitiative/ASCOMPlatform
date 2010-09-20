@@ -1,0 +1,286 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{248BFAB5-FA97-409B-AF75-807D3C7EBF8A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ASCOM.OptecTCF_S</RootNamespace>
+    <AssemblyName>ASCOM.OptecTCF_S.Focuser</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>OptecInc.snk</AssemblyOriginatorKeyFile>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release With Install|AnyCPU' ">
+    <OutputPath>bin\Release With Install\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release With Install|x86' ">
+    <OutputPath>bin\x86\Release With Install\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dependencies\ASCOMPlatformDependencies\ASCOM.Exceptions.dll</HintPath>
+    </Reference>
+    <Reference Include="ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\Dependencies\ASCOMPlatformDependencies\ASCOM.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ASCOM.Utilities, Version=5.5.1.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dependencies\ASCOMPlatformDependencies\ASCOM.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\SolutionVersion.cs">
+      <Link>Properties\SolutionVersion.cs</Link>
+    </Compile>
+    <Compile Include="Forms\AboutBox1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AboutBox1.Designer.cs">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\EndPointForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\EndPointForm.Designer.cs">
+      <DependentUpon>EndPointForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\NewVersionFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\NewVersionFrm.Designer.cs">
+      <DependentUpon>NewVersionFrm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SetSlopeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SetSlopeForm.Designer.cs">
+      <DependentUpon>SetSlopeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\StartPtForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\StartPtForm.Designer.cs">
+      <DependentUpon>StartPtForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TempCompTest_Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TempCompTest_Form.Designer.cs">
+      <DependentUpon>TempCompTest_Form.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InstallerCustomActions.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="NewVersionChecker.cs" />
+    <Compile Include="OptecFocuserClass\SerialComm.cs" />
+    <Compile Include="DeviceSettings.cs" />
+    <Compile Include="OptecFocuserClass\DeviceTempAndPos.cs" />
+    <Compile Include="Driver.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <DependentUpon>Resources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SetupDialogForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SetupDialogForm.designer.cs">
+      <DependentUpon>SetupDialogForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OptecFocuserClass\OptecFocuser.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\AboutBox1.resx">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\EndPointForm.resx">
+      <DependentUpon>EndPointForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\NewVersionFrm.resx">
+      <DependentUpon>NewVersionFrm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SetSlopeForm.resx">
+      <DependentUpon>SetSlopeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\StartPtForm.resx">
+      <DependentUpon>StartPtForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TempCompTest_Form.resx">
+      <DependentUpon>TempCompTest_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SetupDialogForm.resx">
+      <DependentUpon>SetupDialogForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Test.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\ASCOM.png" />
+    <Content Include="I:\Software Development\HelpNDoc\TCF-S\ASCOM\.NET Version\TCFSHelp.chm">
+      <Link>TCFSHelp.chm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Resources\TCF.ico">
+    </None>
+    <None Include="OptecInc.snk" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="ReadMe.rtf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TCF-S3_TCF-S_1_Medium.jpg" />
+    <None Include="Resources\RedLight.png" />
+    <None Include="Resources\Optec Logo-medium png.png" />
+    <None Include="Resources\Optec Logo-large png.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Dependencies\Optec.EventLogger\Optec.EventLogger.csproj">
+      <Project>{9EC2D59F-5842-43FA-A943-625B23295484}</Project>
+      <Name>Optec.EventLogger</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

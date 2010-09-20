@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C423D505-B4E4-4116-8560-8D9ADFCBD838}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ASCOM.Simulator</RootNamespace>
+    <AssemblyName>ASCOM.Simulator.Switch</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <ApplicationIcon>ASCOM.ico</ApplicationIcon>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>ASCOM.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DocumentationFile>bin\Debug\ASCOM.Simulator.Switch.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <RegisterForComInterop>false</RegisterForComInterop>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Peter|AnyCPU' ">
+    <OutputPath>bin\Peter\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Peter|x86' ">
+    <OutputPath>bin\x86\Peter\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Driver.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="SetupDialogForm.cs">
+      <SubType>Form</SubType>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="SetupDialogForm.designer.cs">
+      <DependentUpon>SetupDialogForm.cs</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SetupDialogForm.resx">
+      <DependentUpon>SetupDialogForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ASCOM.snk" />
+    <None Include="Test.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ASCOM.png" />
+    <Content Include="ASCOM.ico" />
+    <Content Include="ReadMe.htm" />
+    <EmbeddedResource Include="Resources\RedLED.bmp" />
+    <EmbeddedResource Include="Resources\GreenLED.bmp" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Resources\ASCOM.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj">
+      <Project>{872EF2D6-AC89-4C15-AC84-6C69B040A843}</Project>
+      <Name>ASCOM.DeviceInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
+      <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
+      <Name>ASCOM.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
+      <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
+      <Name>ASCOM.Exceptions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\..\..\External Dependencies\StyleCop\v4.3\Microsoft.StyleCop.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

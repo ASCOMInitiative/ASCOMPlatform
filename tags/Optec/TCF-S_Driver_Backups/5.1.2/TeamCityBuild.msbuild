@@ -1,0 +1,21 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask
+    AssemblyFile="External Dependencies\xUnit\xunit.runner.msbuild.dll"
+    TaskName="Xunit.Runner.MSBuild.xunit" />
+  <PropertyGroup>
+    <SandCastleHFBCmd>$(SHFBROOT)SandcastleBuilderConsole.exe</SandCastleHFBCmd>
+    <SandCastleHFBProject>Help\ASCOMPlatform.shfb</SandCastleHFBProject>
+  </PropertyGroup>
+  <Target Name="Build">
+    <MSBuild
+      Projects="ASCOM Platform VS2010.sln"
+      Targets="Build"
+      Properties="Configuration=Release" />
+    <xunit Assembly="ASCOM.Platform.Test\bin\Release\ASCOM.Platform.Test.dll" />
+  </Target>
+  <Target Name="BuildDocumentation">
+    <MSBuild
+      Projects="Help\ASCOMPlatform.shfbproj"
+      Properties="Configuration=Release" />
+  </Target>
+</Project>
