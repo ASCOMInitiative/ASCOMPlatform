@@ -627,6 +627,7 @@ namespace ASCOM.TelescopeSimulator
             TelescopeSimulator.m_MainForm.Azimuth = m_Azimuth;
             TelescopeSimulator.m_MainForm.RightAscension = m_RightAscension;
             TelescopeSimulator.m_MainForm.Declination = m_Declination;
+            TelescopeSimulator.m_MainForm.Tracking();
         }
 
         #region Properties For Settings
