@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Linq;
-using ASCOM.Simulator;
-
+using Switch = ASCOM.Simulator.Switch;
 
 
 namespace SwitchConsole
@@ -24,7 +22,7 @@ namespace SwitchConsole
             Console.WriteLine(obj.InterfaceVersion);
             Console.WriteLine(obj.LastResult);
 
-           
+
             var chooser = new ASCOM.Utilities.Chooser {DeviceType = "Switch"};
             chooser.Choose();
 
