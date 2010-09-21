@@ -20,9 +20,8 @@
 // dd-mmm-yyyy	XXX	1.0.0	Initial edit, from ASCOM Rotator Driver template
 // --------------------------------------------------------------------------------
 //
-using System;
 using System.Runtime.InteropServices;
-using ASCOM.Interface;
+using ASCOM.DeviceInterface;
 
 namespace ASCOM.Simulator
 {
@@ -33,7 +32,9 @@ namespace ASCOM.Simulator
 	// The ClassInterface/None addribute prevents an empty interface called
 	// _Rotator from being created and used as the [default] interface
 	//
-	[Guid("e3244961-cb52-437d-aa9b-e5324db8f388"), ClassInterface(ClassInterfaceType.None), ComVisible(true)] 
+    [Guid("347B5004-3662-42C0-96B8-3F8F6F0467D2")]
+    [ClassInterface(ClassInterfaceType.None)]
+    [ComVisible(true)] 
 	public class Rotator : ReferenceCountedObjectBase, IRotator
 	{
 
@@ -51,26 +52,83 @@ namespace ASCOM.Simulator
             throw new MethodNotImplementedException("Action");
         }
 
-        public string[] SupportedActions()
+	    public void CommandBlind(string command, bool raw)
+	    {
+            throw new MethodNotImplementedException("CommandBlind");
+	    }
+
+	    public bool CommandBool(string command, bool raw)
+	    {
+            throw new MethodNotImplementedException("CommandBool");
+	    }
+
+	    public string CommandString(string command, bool raw)
+	    {
+            throw new MethodNotImplementedException("CommandString");
+	    }
+
+	    public void Dispose()
+	    {
+            throw new MethodNotImplementedException("Dispose");
+	    }
+
+	    public string[] SupportedActions()
         {
             throw new MethodNotImplementedException("SupportedActions");
         }
+        
+        
+        
+        
+        
         #endregion
 
-        #region IRotator Members
 
-        public bool CanReverse
+        
+        
+        #region IRotator Members
+        public bool Connected
+        {
+            get { return RotatorHardware.Connected; }
+            set { RotatorHardware.Connected = value; }
+        }
+
+        public string Description
+        {
+            get { return RotatorHardware.Description; }
+        }
+
+        public string DriverInfo
+        {
+            get { return RotatorHardware.DriverInfo; }
+        }
+
+        public string DriverVersion
+        {
+            get { return RotatorHardware.DriverVersion; }
+        }
+
+        public short InterfaceVersion
+        {
+            get { return RotatorHardware.InterfaceVersion; }
+        }
+
+        public string Name
+        {
+            get { return RotatorHardware.RotatorName; }
+        }
+
+        string[] IRotator.SupportedActions
+	    {
+            get { throw new MethodNotImplementedException("SupportedActions"); }
+	    }
+
+	    public bool CanReverse
 		{
 			get { return RotatorHardware.CanReverse; }
 		}
 
-		public bool Connected
-		{
-			get { return RotatorHardware.Connected; }
-			set { RotatorHardware.Connected = value; }
-		}
-
-		public void Halt()
+	    public void Halt()
 		{
 			RotatorHardware.Halt();
 		}
@@ -80,14 +138,14 @@ namespace ASCOM.Simulator
 			get { return RotatorHardware.Moving; }
 		}
 
-		public void Move(float Position)
+		public void Move(float position)
 		{
-			RotatorHardware.Move(Position);
+			RotatorHardware.Move(position);
 		}
 
-		public void MoveAbsolute(float Position)
+		public void MoveAbsolute(float position)
 		{
-			RotatorHardware.MoveAbsolute(Position);
+			RotatorHardware.MoveAbsolute(position);
 		}
 
 		public float Position
@@ -106,10 +164,17 @@ namespace ASCOM.Simulator
 			if(RotatorHardware.Connected)
 				throw new DriverException("The rotator is connected, cannot do SetupDialog()",
 									unchecked(ErrorCodes.DriverBase + 4));
-			RotatorSimulator.m_MainForm.DoSetupDialog();			// Kinda sleazy
+            RotatorHardware.SetupDialog();
+
+			//RotatorSimulator.m_MainForm.DoSetupDialog();			// Kinda sleazy
 		}
 
-		public float StepSize
+	    string IRotator.Action(string actionName, string actionParameters)
+	    {
+	        throw new System.NotImplementedException();
+	    }
+
+	    public float StepSize
 		{
 			get { return RotatorHardware.StepSize; }
 		}
