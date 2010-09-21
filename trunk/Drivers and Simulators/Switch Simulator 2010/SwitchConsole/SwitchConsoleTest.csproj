@@ -14,7 +14,7 @@
     <FileAlignment>512</FileAlignment>
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>ASCOM.snk</AssemblyOriginatorKeyFile>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
     <ManifestCertificateThumbprint>CB83A88560CDAC649A74286098656EB4C18CC934</ManifestCertificateThumbprint>
     <StartupObject>SwitchConsole.Program</StartupObject>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -131,7 +131,7 @@
       <Name>ASCOM.Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\SwitchSimulatorDriver\SwitchSimulatorDriver.csproj">
-      <Project>{64308775-BD4A-469C-BCAB-3ED830B811AF}</Project>
+      <Project>{C423D505-B4E4-4116-8560-8D9ADFCBD838}</Project>
       <Name>SwitchSimulatorDriver</Name>
     </ProjectReference>
   </ItemGroup>
