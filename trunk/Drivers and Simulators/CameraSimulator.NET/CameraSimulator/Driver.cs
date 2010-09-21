@@ -139,38 +139,6 @@ namespace ASCOM.Simulator
         private float[,,] imageData;    // room for a 3 plane colour image
         private bool darkFrame;
 
-        ///// <summary>
-        ///// SensorType returns a value indicating whether the sensor is monochrome,
-        ///// or what Bayer matrix it encodes.  The following values are defined:
-        ///// </summary>
-        //internal enum SensorTypes
-        //{
-        //    /// <summary>
-        //    /// Camera produces monochrome array with no Bayer encoding
-        //    /// </summary>
-        //    Monochrome = 0,
-        //    /// <summary>
-        //    /// Camera produces color image directly, requiring no Bayer decoding
-        //    /// </summary>
-        //    Color,
-        //    /// <summary>
-        //    /// Camera produces RGGB encoded Bayer array images
-        //    /// </summary>
-        //    RGGB,
-        //    /// <summary>
-        //    /// Camera produces CMYG encoded Bayer array images
-        //    /// </summary>
-        //    CMYG,
-        //    /// <summary>
-        //    /// Camera produces CMYG2 encoded Bayer array images
-        //    /// </summary>
-        //    CMYG2,
-        //    /// <summary>
-        //    /// Camera produces Kodak TRUESENSE Bayer LRGB array images
-        //    /// </summary>
-        //    LRGB
-        //};
-
         internal bool connected=false;
         internal CameraStates cameraState = CameraStates.cameraIdle;
 
@@ -1520,7 +1488,7 @@ namespace ASCOM.Simulator
                     case CameraStates.cameraExposing:
                     case CameraStates.cameraReading:
                     case CameraStates.cameraDownload:
-                        return (short)((this.exposureDuration / (DateTime.Now - this.exposureStartTime).TotalSeconds) * 100);
+                        return (short)(((DateTime.Now - this.exposureStartTime).TotalSeconds / this.exposureDuration) * 100);
                     default:
                         throw new ASCOM.InvalidOperationException("get PercentCompleted is not valid if the camera is not active");
                 }
