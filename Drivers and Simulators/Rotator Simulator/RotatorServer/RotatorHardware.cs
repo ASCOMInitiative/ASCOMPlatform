@@ -4,7 +4,7 @@
 //							(this is a reference implementation!)
 //
 using System;
-using Helper = ASCOM.Utilities;
+using ASCOM.Utilities;
 
 namespace ASCOM.Simulator
 {
@@ -13,10 +13,11 @@ namespace ASCOM.Simulator
 	//
 	public class RotatorHardware
 	{
-		private static Helper.Profile Profile;
-		private static string s_sProgID = "ASCOM.Simulator.Rotator";
+        /// <summary>
+        /// Name of the Driver
+        /// </summary>
 
-		//
+	    //
 		// Settings, persistent
 		//
 		private static float s_fPosition;
@@ -32,6 +33,15 @@ namespace ASCOM.Simulator
 		private static bool s_bDirection;
 		private static float s_fTargetPosition;
 		private static int s_iUpdateInterval = 250;			// Milliseconds, default, set by main form
+        private static string _rotatorName = "ASCOM.Simulator.Rotator";
+        private static string _description = "ASCOM Rotator Driver for RotatorSimulator";
+        private static string _driverInfo = "ASCOM.Simulator.Rotator";
+        private static string _driverVersion = "6.0";
+        private static short _interfaceVersion = 6;
+        private static string s_sProgID = "ASCOM.Simulator.Rotator";
+
+        private static Profile Profile;
+
 
 		//
 		// Sync object
@@ -43,7 +53,7 @@ namespace ASCOM.Simulator
 		//
 		static RotatorHardware()
 		{
-			Profile = new Helper.Profile();
+			Profile = new Profile();
 			Profile.DeviceType = "Rotator";
 			s_fPosition = 0.0F;
 			s_bConnected = false;
@@ -54,10 +64,10 @@ namespace ASCOM.Simulator
 		//
 		// Settings support
 		//
-		private static string GetSetting(string Name, string DefValue)
+		private static string GetSetting(string name, string defValue)
 		{
-			string s = Profile.GetValue(s_sProgID, Name, "");
-			if (s == "") s = DefValue;
+			string s = Profile.GetValue(s_sProgID, name, "");
+			if (s == "") s = defValue;
 			return s;
 		}
 
@@ -104,13 +114,51 @@ namespace ASCOM.Simulator
 		//
 		// State properties for clients
 		//
+        public static string RotatorName
+        {
+            get { return _rotatorName; }
+            set { _rotatorName = value; }
+        }
+
+        public static string Description
+        {
+            get { return _description; }
+            set { _description = value; }
+        }
+
+        public static string DriverInfo
+        {
+            get { return _driverInfo; }
+            set { _driverInfo = value; }
+        }
+
+        public static string DriverVersion
+        {
+            get { return _driverVersion; }
+            set { _driverVersion = value; }
+        }
+
+        public static short InterfaceVersion
+        {
+            get { return _interfaceVersion; }
+            set { _interfaceVersion = value; }
+        }
+
 		public static bool Connected
 		{
 			get { return s_bConnected; }
 			set { s_bConnected = value; }
 		}
 
-		public static float Position
+        public static void SetupDialog()
+        {
+            frmMain form = new frmMain();
+            Initialize();
+            form.Show();
+ 
+        }
+
+	    public static float Position
 		{
 			get { CheckConnected(); lock (s_objSync) { return s_fPosition; } }
 		}
@@ -148,24 +196,24 @@ namespace ASCOM.Simulator
 		//
 		// Methods for clients
 		//
-		public static void Move(float RelativePosition)
+		public static void Move(float relativePosition)
 		{
 			CheckConnected();
 			lock (s_objSync) 
 			{
-				CheckAngle(s_fTargetPosition + RelativePosition);
-				s_fTargetPosition += RelativePosition; 
+				CheckAngle(s_fTargetPosition + relativePosition);
+				s_fTargetPosition += relativePosition; 
 				s_bMoving = true;
 			}
 		}
 
-		public static void MoveAbsolute(float Position)
+		public static void MoveAbsolute(float position)
 		{
 			CheckConnected();
-			CheckAngle(Position);
+			CheckAngle(position);
 			lock (s_objSync) 
 			{ 
-				s_fTargetPosition = Position;
+				s_fTargetPosition = position;
 				s_bMoving = true;
 			}
 		}
@@ -231,15 +279,15 @@ namespace ASCOM.Simulator
 		//
 		private static void CheckConnected()
 		{
-			if (!s_bConnected) throw new ASCOM.DriverException("The rotator is not connected", 
-								unchecked(ASCOM.ErrorCodes.DriverBase + 2));
+			if (!s_bConnected) throw new DriverException("The rotator is not connected", 
+								unchecked(ErrorCodes.DriverBase + 2));
 		}
 
 		private static void CheckAngle(float angle)
 		{
 			if (angle < 0.0F || angle >= 360.0F) 
-				throw new ASCOM.DriverException("Angle out of range, must be 0 <= angle < 360",
-								unchecked(ASCOM.ErrorCodes.DriverBase + 5));
+				throw new DriverException("Angle out of range, must be 0 <= angle < 360",
+								unchecked(ErrorCodes.DriverBase + 5));
 		}
 
 		private static void CheckMoving(bool bAssert)
@@ -248,17 +296,17 @@ namespace ASCOM.Simulator
 			lock (s_objSync)
 			{
 				if (s_bMoving != bAssert)
-					throw new ASCOM.DriverException(
+					throw new DriverException(
 						"Illegal - the rotator is " + (s_bMoving ? "" : "not " + "moving"),
-						unchecked(ASCOM.ErrorCodes.DriverBase + 3));
+						unchecked(ErrorCodes.DriverBase + 3));
 			}
 		}
 
-		private static float RangeAngle(float Angle, float Min, float Max)
+		private static float RangeAngle(float angle, float min, float max)
 		{
-			while(Angle >= Max) Angle -= 360.0F;
-			while (Angle < Min) Angle += 360.0F;
-			return Angle;
+			while(angle >= max) angle -= 360.0F;
+			while (angle < min) angle += 360.0F;
+			return angle;
 		}
 	}
 }
