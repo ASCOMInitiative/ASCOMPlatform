@@ -20,15 +20,19 @@
 // dd-mmm-yyyy	XXX	1.0.0	Initial edit, from ASCOM Focuser Driver template
 // --------------------------------------------------------------------------------
 //
+
+
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Optec_TCF_S_Focuser;
 
 using ASCOM;
 using ASCOM.Utilities;
 using ASCOM.Interface;
+
 
 
 namespace ASCOM.OptecTCF_S
@@ -49,13 +53,17 @@ namespace ASCOM.OptecTCF_S
         //
         internal static string s_csDriverID = "ASCOM.OptecTCF_S.Focuser";
         private static string s_csDriverDescription = "Optec TCF-S Focuser";    //Displayed in Chooser
-
         //
         // Constructor - Must be public for COM registration!
         //
+        private OptecFocuser myFocuser;
         public Focuser()
         {
             // TODO Implement your additional construction here
+#if DEBUG
+            MessageBox.Show("Creating");
+#endif
+            myFocuser = OptecFocuser.Instance;
         }
 
         #region ASCOM Registration
@@ -83,6 +91,9 @@ namespace ASCOM.OptecTCF_S
         [ComRegisterFunction]
         public static void RegisterASCOM(Type t)
         {
+#if DEBUG
+            MessageBox.Show("Registering");
+#endif
             RegUnregASCOM(true);
         }
 
@@ -114,16 +125,26 @@ namespace ASCOM.OptecTCF_S
         {
             //This driver does not allow any other methods to be called
             //while the device is moving. So this is always false.
-            get { return OptecFocuser.IsMoving; }
+            get { return myFocuser.IsMoving; }
         }
 
         public bool Link
         {
             get 
             {
-                if (OptecFocuser.ConnectionState != OptecFocuser.ConnectionStates.Disconnected)
-                    return true;
-                else return false;
+                switch (myFocuser.ConnectionState)
+                {
+                    case OptecFocuser.ConnectionStates.Disconnected:
+                        return false;
+                    case OptecFocuser.ConnectionStates.SerialMode:
+                        return true;
+                    case OptecFocuser.ConnectionStates.Sleep:
+                        return false;
+                    case OptecFocuser.ConnectionStates.TempCompMode:
+                        return true;
+                    default:
+                        return false;
+                }
             }
             set
             {
@@ -133,17 +154,17 @@ namespace ASCOM.OptecTCF_S
                     if (value)
                     {
                         //OptecTCF_S_Focuser.OptecFocuser.Connect();
-                        OptecFocuser.ConnectAndEnterSerialMode();
+                        myFocuser.ConnectionState = OptecFocuser.ConnectionStates.SerialMode;
                     }
                     else
                     {
-                        OptecFocuser.Disconnect();
+                        myFocuser.ConnectionState = OptecFocuser.ConnectionStates.Disconnected;
                     }
                 }
                 catch (Exception ex)
                 { 
                     if (value)
-                    throw new DriverException("Unable To Connect To Device.", ex);
+                        throw new DriverException("Unable To Connect To Device.", ex);
                     else throw new DriverException("Error While Disconnecting Device.", ex);
                 }
             }
@@ -152,25 +173,25 @@ namespace ASCOM.OptecTCF_S
         public int MaxIncrement
         {
             //Max Increment is the same as Max Step in our case so use the same method...
-            get { return DeviceSettings.MaxStep; }
+            get { return myFocuser.MaxSteps; }
         }
 
         public int MaxStep
         {
-            get { return DeviceSettings.MaxStep; }
+            get { return myFocuser.MaxSteps; }
         }
 
         public void Move(int val)
         {
             try
             {
-                if (OptecFocuser.ConnectionState == OptecFocuser.ConnectionStates.TempCompMode)
+                if (myFocuser.ConnectionState == OptecFocuser.ConnectionStates.TempCompMode)
                 {
                     throw new ASCOM.InvalidOperationException("Attempted to move while in TempComp Mode");
                 }
                 else
                 {
-                    OptecFocuser.MoveFocus(val);
+                    myFocuser.TargetPosition = val;
                 }
             }
             catch (Exception ex)
@@ -185,7 +206,7 @@ namespace ASCOM.OptecTCF_S
             {
                 try
                 {
-                    return OptecFocuser.GetPosition();
+                    return (int)myFocuser.CurrentPosition;
                 }
                 catch (Exception ex)
                 {
@@ -196,9 +217,9 @@ namespace ASCOM.OptecTCF_S
 
         public void SetupDialog()
         {
-            if (OptecFocuser.ConnectionState == OptecFocuser.ConnectionStates.Disconnected)
+            if (myFocuser.ConnectionState == OptecFocuser.ConnectionStates.Disconnected)
             {
-                SetupDialogForm F = new SetupDialogForm();
+                SetupDialog2 F = new SetupDialog2(myFocuser);
                 F.ShowDialog();
             }
             else
@@ -210,7 +231,7 @@ namespace ASCOM.OptecTCF_S
 
         public double StepSize
         {
-            get { return DeviceSettings.StepSize; }
+            get { return myFocuser.StepSize; }
         }
 
         public bool TempComp
@@ -218,7 +239,7 @@ namespace ASCOM.OptecTCF_S
             // TODO Replace this with your implementation
             get 
             {
-                if (OptecFocuser.ConnectionState == OptecFocuser.ConnectionStates.TempCompMode)
+                if (myFocuser.ConnectionState == OptecFocuser.ConnectionStates.TempCompMode)
                     return true;
                 else return false;
             }
@@ -226,31 +247,18 @@ namespace ASCOM.OptecTCF_S
             {
                 try
                 {
-                    if (!DeviceSettings.TempProbePresent)
-                    {
-                        throw new ASCOM.NotImplementedException("The temperature probe is disabled");
-                    }
+
                     if (value)
                     {
-                        if (OptecFocuser.ConnectionState == OptecFocuser.ConnectionStates.TempCompMode)
-                            return;
-                        else
-                            OptecFocuser.EnterTempCompMode();
+                        if (myFocuser.TempProbeDisabled)
+                        {
+                            throw new ASCOM.NotImplementedException("The temperature probe is disabled");
+                        }
+                        myFocuser.ConnectionState = OptecFocuser.ConnectionStates.TempCompMode;
                     }
                     else
                     {
-                        if (OptecFocuser.ConnectionState == OptecFocuser.ConnectionStates.TempCompMode)
-                        {
-                            OptecFocuser.ExitTempCompMode();
-                        }
-                        else if (OptecFocuser.ConnectionState == OptecFocuser.ConnectionStates.SerialMode)
-                        {
-                            return;
-                        }
-                        else
-                        {
-                            throw new ASCOM.InvalidOperationException("Attemped to exit temp comp mode from unacceptable state.");
-                        }
+                        myFocuser.ConnectionState = OptecFocuser.ConnectionStates.SerialMode;
                     }
                 }
                 catch (Exception ex)
@@ -265,8 +273,7 @@ namespace ASCOM.OptecTCF_S
         {
             get
             {
-                if (DeviceSettings.TempProbePresent) return true;
-                else return false;
+                return !myFocuser.TempProbeDisabled;
             }
         }
 
@@ -276,7 +283,7 @@ namespace ASCOM.OptecTCF_S
             {
                 try
                 {
-                    return OptecFocuser.GetTemperature();
+                    return myFocuser.CurrentTemperature;
                 }
                 catch (Exception ex)
                 {

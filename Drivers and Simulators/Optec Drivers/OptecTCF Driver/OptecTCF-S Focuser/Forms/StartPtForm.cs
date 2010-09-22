@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace ASCOM.OptecTCF_S
 {
+    /*
     public partial class StartPtForm : Form
     {
         private int CurrentPos = 0;
@@ -42,6 +43,7 @@ namespace ASCOM.OptecTCF_S
                 // Retrieve the current position and temperature
                 CurrentPos = OptecFocuser.GetPosition();
                 CurrentTemp = OptecFocuser.GetTemperature();
+               
 
 
                 // Fill the position and temp boxes in the form.
@@ -86,4 +88,5 @@ namespace ASCOM.OptecTCF_S
             }
         }
     }
+     */
 }

@@ -1,5 +1,6 @@
 ﻿namespace ASCOM.OptecTCF_S
 {
+    /*
     partial class StartPtForm
     {
         /// <summary>
@@ -152,4 +153,5 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button Cancel_Btn;
     }
+     */
 }

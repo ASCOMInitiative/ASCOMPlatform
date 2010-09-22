@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace ASCOM.OptecTCF_S
 {
+    /*
     public partial class EndPointForm : Form
     {
         private string StartDate = "";
@@ -97,4 +98,5 @@ namespace ASCOM.OptecTCF_S
             if (x == DialogResult.Yes) this.Close();
         }
     }
+     */
 }

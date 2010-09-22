@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace ASCOM.OptecTCF_S
 {
+    /*
     public partial class TempCompTest_Form : Form
     {
         private int TestDuration = 0;
@@ -40,13 +41,14 @@ namespace ASCOM.OptecTCF_S
             if (OptecFocuser.ConnectionState == OptecFocuser.ConnectionStates.TempCompMode)
             {
                 Output("Successfully Entered Temp Comp Mode");
+                TestTimer.Interval = 1000;
+                TestTimer.Enabled = true;
             }
             else
             {
                 Output("Failed To Enter Temp Comp Mode");
             }
-            TestTimer.Interval = 1000;
-            TestTimer.Enabled = true;
+            
         }
 
         private void Output(string text)
@@ -160,4 +162,5 @@ namespace ASCOM.OptecTCF_S
             this.Close();
         }
     }
+     */
 }

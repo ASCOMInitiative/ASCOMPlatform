@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.IO;
 using Optec;
+using System;
 
 namespace ASCOM.OptecTCF_S
 {
@@ -58,6 +59,10 @@ namespace ASCOM.OptecTCF_S
                     throw new InstallException("Failed To Unregister from COM Interop");
                 }
             }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show(ex.ToString());
+            }   
             finally
             {
                 Trace.WriteLine("Completed uninstall custom action");

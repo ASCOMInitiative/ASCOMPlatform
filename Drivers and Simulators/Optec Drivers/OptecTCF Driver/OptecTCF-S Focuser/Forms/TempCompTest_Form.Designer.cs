@@ -1,5 +1,6 @@
 ﻿namespace ASCOM.OptecTCF_S
 {
+    /*
     partial class TempCompTest_Form
     {
         /// <summary>
@@ -181,4 +182,6 @@
         private System.Windows.Forms.Timer TestTimer;
         private System.Windows.Forms.ProgressBar progressBar1;
     }
+
+     */
 }

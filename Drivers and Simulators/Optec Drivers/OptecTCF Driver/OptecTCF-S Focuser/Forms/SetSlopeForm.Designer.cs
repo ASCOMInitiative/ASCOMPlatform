@@ -1,5 +1,6 @@
 ﻿namespace ASCOM.OptecTCF_S
 {
+    /*
     partial class SetSlopeForm
     {
         /// <summary>
@@ -145,4 +146,5 @@
         private System.Windows.Forms.TextBox Slope_TB;
         private System.Windows.Forms.Label label1;
     }
+     */
 }

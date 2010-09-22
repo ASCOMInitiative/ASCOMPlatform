@@ -1,5 +1,6 @@
 ﻿namespace ASCOM.OptecTCF_S
 {
+    /*
     partial class EndPointForm
     {
         /// <summary>
@@ -239,4 +240,5 @@
         private System.Windows.Forms.Button Cancel_Btn;
         private System.Windows.Forms.Button CapStPt_BTN;
     }
+     */
 }

@@ -15,6 +15,11 @@ namespace TestHarness
             var driver = new Focuser(progId);
             var thing = driver.IsMoving;				// Just to give a place to set a breakpoint.
             driver.SetupDialog();
+            driver.Link = true;
+            driver.Move((int)3510);
+            while (driver.IsMoving) { }
+            driver.Link = false;
+            Console.WriteLine("Current Position = " + driver.Position.ToString());
             Console.WriteLine("Press any key to exit");
             Console.ReadLine();
         }

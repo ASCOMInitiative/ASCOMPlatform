@@ -106,8 +106,8 @@ namespace ASCOM.OptecTCF_S
             try
             {
                 // DeviceComm.Connect();
-                textBoxDescription.Text += Environment.NewLine + "Device Type: " + DeviceSettings.DeviceType;
-                textBoxDescription.Text += Environment.NewLine + "Firmware Version: " + DeviceSettings.FirmwareVersion;
+               // textBoxDescription.Text += Environment.NewLine + "Device Type: " + DeviceSettings.DeviceType;
+               // textBoxDescription.Text += Environment.NewLine + "Firmware Version: " + DeviceSettings.FirmwareVersion;
                 textBoxDescription.Update();
             }
             catch
