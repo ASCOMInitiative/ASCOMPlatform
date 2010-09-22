@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.IO.Ports;
 using System.Reflection;
 using System.Diagnostics;
+
 namespace ASCOM.OptecTCF_S
 {
     public partial class SettingsForm : Form
@@ -68,7 +69,7 @@ namespace ASCOM.OptecTCF_S
     
     public class TCFSettings
     {
-           
+          /* 
         
         [CategoryAttribute("Temperature Compensation")]
         [DescriptionAttribute("This property is automatically set when the probe is removed/connected")]
@@ -78,7 +79,7 @@ namespace ASCOM.OptecTCF_S
             get { return DeviceSettings.TempProbePresent; }
            // set {
            //     OptecFocuser.SetTempProbeEnabled(value);
-            //    DeviceSettings.TempProbePresent = value; 
+          //     DeviceSettings.TempProbePresent = value; 
            // }
         }
 
@@ -213,6 +214,18 @@ namespace ASCOM.OptecTCF_S
             get { return DeviceSettings.FirmwareVersion; }
         }
 
+        [CategoryAttribute("Device Properties")]
+        [DescriptionAttribute("Adjust the brightness of the lights on the hand contorl box.")]
+        [DisplayName("Display Brightness")]
+        public OptecFocuser.LEDBrightnessValues LEDBrightness
+        {
+            get { return OptecFocuser.LEDBrightness; }
+            set
+            {
+                OptecFocuser.LEDBrightness = value;
+            }
+        }
+
         [CategoryAttribute("Connection Settings")]
         [DisplayName("COM Port")]
         [Description("Select the COM port to use for connecting to your focuser.")]
@@ -312,5 +325,6 @@ namespace ASCOM.OptecTCF_S
             StandardValuesCollection x = new StandardValuesCollection(new char[] { 'A', 'B' });
             return x;
         }
+           */
     }
 }

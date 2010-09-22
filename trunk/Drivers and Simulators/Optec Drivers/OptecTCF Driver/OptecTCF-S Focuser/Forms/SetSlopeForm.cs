@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace ASCOM.OptecTCF_S
 {
+    /*
     public partial class SetSlopeForm : Form
     {
         public SetSlopeForm()
@@ -117,4 +118,5 @@ namespace ASCOM.OptecTCF_S
         }
 
     }
+     */
 }

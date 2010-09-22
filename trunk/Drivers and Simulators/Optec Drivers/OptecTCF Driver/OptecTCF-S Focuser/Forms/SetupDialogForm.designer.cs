@@ -47,6 +47,7 @@ namespace ASCOM.OptecTCF_S
             this.driverDocumentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.temperatureCoefficientsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.FocStatusControls_GB = new System.Windows.Forms.GroupBox();
+            this.OUT_Btn = new System.Windows.Forms.Button();
             this.Center_Btn = new System.Windows.Forms.Button();
             this.StepSize_NUD = new System.Windows.Forms.NumericUpDown();
             this.PosDRO_TB = new System.Windows.Forms.TextBox();
@@ -72,7 +73,7 @@ namespace ASCOM.OptecTCF_S
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.VersionCheckerBGWorker = new System.ComponentModel.BackgroundWorker();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
-            this.OUT_Btn = new System.Windows.Forms.Button();
+            this.TempTimer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.FocStatusControls_GB.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.StepSize_NUD)).BeginInit();
@@ -86,14 +87,13 @@ namespace ASCOM.OptecTCF_S
             // cmdCancel
             // 
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.cmdCancel.Location = new System.Drawing.Point(161, 320);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
             this.cmdCancel.Text = "Close";
             this.cmdCancel.UseVisualStyleBackColor = true;
-            this.cmdCancel.Click += new System.EventHandler(this.cmdCancel_Click);
             // 
             // menuStrip1
             // 
@@ -130,21 +130,18 @@ namespace ASCOM.OptecTCF_S
             this.disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
             this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.disconnectToolStripMenuItem.Text = "Disconnect";
-            this.disconnectToolStripMenuItem.Click += new System.EventHandler(this.disconnectToolStripMenuItem_Click);
             // 
             // EnterSleepModeToolStripMenuItem
             // 
             this.EnterSleepModeToolStripMenuItem.Name = "EnterSleepModeToolStripMenuItem";
             this.EnterSleepModeToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.EnterSleepModeToolStripMenuItem.Text = "Enter Sleep Mode";
-            this.EnterSleepModeToolStripMenuItem.Click += new System.EventHandler(this.putToSleepToolStripMenuItem_Click);
             // 
             // exitSleepModeToolStripMenuItem
             // 
             this.exitSleepModeToolStripMenuItem.Name = "exitSleepModeToolStripMenuItem";
             this.exitSleepModeToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.exitSleepModeToolStripMenuItem.Text = "Exit Sleep Mode";
-            this.exitSleepModeToolStripMenuItem.Click += new System.EventHandler(this.exitSleepModeToolStripMenuItem_Click);
             // 
             // setupToolStripMenuItem
             // 
@@ -160,7 +157,6 @@ namespace ASCOM.OptecTCF_S
             this.deviceSettingsToolStripMenuItem.Name = "deviceSettingsToolStripMenuItem";
             this.deviceSettingsToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.deviceSettingsToolStripMenuItem.Text = "Device Settings";
-            this.deviceSettingsToolStripMenuItem.Click += new System.EventHandler(this.deviceSettingsToolStripMenuItem_Click);
             // 
             // temperatureCoefficientsToolStripMenuItem
             // 
@@ -176,14 +172,12 @@ namespace ASCOM.OptecTCF_S
             this.setStartPointToolStripMenuItem.Name = "setStartPointToolStripMenuItem";
             this.setStartPointToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.setStartPointToolStripMenuItem.Text = "Set Start Point";
-            this.setStartPointToolStripMenuItem.Click += new System.EventHandler(this.setStartPointToolStripMenuItem_Click);
             // 
             // setEndPointToolStripMenuItem
             // 
             this.setEndPointToolStripMenuItem.Name = "setEndPointToolStripMenuItem";
             this.setEndPointToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.setEndPointToolStripMenuItem.Text = "Set End Point";
-            this.setEndPointToolStripMenuItem.Click += new System.EventHandler(this.setEndPointToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -200,21 +194,18 @@ namespace ASCOM.OptecTCF_S
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
             this.aboutToolStripMenuItem.Text = "About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // driverDocumentationToolStripMenuItem
             // 
             this.driverDocumentationToolStripMenuItem.Name = "driverDocumentationToolStripMenuItem";
             this.driverDocumentationToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
             this.driverDocumentationToolStripMenuItem.Text = "Driver Documentation";
-            this.driverDocumentationToolStripMenuItem.Click += new System.EventHandler(this.driverDocumentationToolStripMenuItem_Click);
             // 
             // temperatureCoefficientsToolStripMenuItem1
             // 
             this.temperatureCoefficientsToolStripMenuItem1.Name = "temperatureCoefficientsToolStripMenuItem1";
             this.temperatureCoefficientsToolStripMenuItem1.Size = new System.Drawing.Size(237, 22);
             this.temperatureCoefficientsToolStripMenuItem1.Text = "Calculating Temp. Coefficients";
-            this.temperatureCoefficientsToolStripMenuItem1.Click += new System.EventHandler(this.temperatureCoefficientsToolStripMenuItem1_Click);
             // 
             // FocStatusControls_GB
             // 
@@ -234,6 +225,16 @@ namespace ASCOM.OptecTCF_S
             this.FocStatusControls_GB.TabStop = false;
             this.FocStatusControls_GB.Text = "Focuser Status";
             // 
+            // OUT_Btn
+            // 
+            this.OUT_Btn.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.OUT_Btn.Location = new System.Drawing.Point(121, 77);
+            this.OUT_Btn.Name = "OUT_Btn";
+            this.OUT_Btn.Size = new System.Drawing.Size(40, 40);
+            this.OUT_Btn.TabIndex = 12;
+            this.OUT_Btn.Text = "OUT";
+            this.OUT_Btn.UseVisualStyleBackColor = false;
+            // 
             // Center_Btn
             // 
             this.Center_Btn.BackColor = System.Drawing.SystemColors.Control;
@@ -243,7 +244,6 @@ namespace ASCOM.OptecTCF_S
             this.Center_Btn.TabIndex = 11;
             this.Center_Btn.Text = "Center";
             this.Center_Btn.UseVisualStyleBackColor = false;
-            this.Center_Btn.Click += new System.EventHandler(this.Center_Btn_Click);
             // 
             // StepSize_NUD
             // 
@@ -289,7 +289,6 @@ namespace ASCOM.OptecTCF_S
             this.In_BTN.TabIndex = 4;
             this.In_BTN.Text = "IN";
             this.In_BTN.UseVisualStyleBackColor = false;
-            this.In_BTN.Click += new System.EventHandler(this.In_BTN_Click);
             // 
             // TempDRO_TB
             // 
@@ -355,7 +354,6 @@ namespace ASCOM.OptecTCF_S
             this.Test_Btn.TabIndex = 5;
             this.Test_Btn.Text = "Test";
             this.Test_Btn.UseVisualStyleBackColor = true;
-            this.Test_Btn.Click += new System.EventHandler(this.Test_Btn_Click);
             // 
             // ModeBName_LB
             // 
@@ -385,7 +383,6 @@ namespace ASCOM.OptecTCF_S
             this.ModeB_RB.TabStop = true;
             this.ModeB_RB.Text = "B";
             this.ModeB_RB.UseVisualStyleBackColor = true;
-            this.ModeB_RB.Click += new System.EventHandler(this.ModeB_RB_Click);
             // 
             // ModeA_RB
             // 
@@ -397,7 +394,6 @@ namespace ASCOM.OptecTCF_S
             this.ModeA_RB.TabStop = true;
             this.ModeA_RB.Text = "A";
             this.ModeA_RB.UseVisualStyleBackColor = true;
-            this.ModeA_RB.Click += new System.EventHandler(this.ModeA_RB_Click);
             // 
             // statusStrip1
             // 
@@ -414,16 +410,11 @@ namespace ASCOM.OptecTCF_S
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(74, 17);
             this.StatusLabel.Text = "DeviceStatus";
-            this.StatusLabel.Click += new System.EventHandler(this.StatusLabel_Click);
-            this.StatusLabel.MouseEnter += new System.EventHandler(this.StatusLabel_MouseEnter);
-            this.StatusLabel.MouseLeave += new System.EventHandler(this.StatusLabel_MouseLeave);
-            this.StatusLabel.MouseHover += new System.EventHandler(this.StatusLabel_MouseHover);
             // 
             // StatusTimer
             // 
             this.StatusTimer.Enabled = true;
             this.StatusTimer.Interval = 2000;
-            this.StatusTimer.Tick += new System.EventHandler(this.StatusTimer_Tick);
             // 
             // PowerLight
             // 
@@ -458,7 +449,6 @@ namespace ASCOM.OptecTCF_S
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 15;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.BrowseToAscom);
             // 
             // pictureBox2
             // 
@@ -470,22 +460,10 @@ namespace ASCOM.OptecTCF_S
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 16;
             this.pictureBox2.TabStop = false;
-            this.pictureBox2.Click += new System.EventHandler(this.BrowseToOptec);
             // 
-            // VersionCheckerBGWorker
+            // TempTimer
             // 
-            this.VersionCheckerBGWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.VersionCheckerBGWorker_DoWork);
-            // 
-            // OUT_Btn
-            // 
-            this.OUT_Btn.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.OUT_Btn.Location = new System.Drawing.Point(121, 77);
-            this.OUT_Btn.Name = "OUT_Btn";
-            this.OUT_Btn.Size = new System.Drawing.Size(40, 40);
-            this.OUT_Btn.TabIndex = 12;
-            this.OUT_Btn.Text = "OUT";
-            this.OUT_Btn.UseVisualStyleBackColor = false;
-            this.OUT_Btn.Click += new System.EventHandler(this.Out_BTN_Click);
+            this.TempTimer.Interval = 1000;
             // 
             // SetupDialogForm
             // 
@@ -510,9 +488,7 @@ namespace ASCOM.OptecTCF_S
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Optec TCF-S Focuser Setup";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SetupDialogForm_FormClosing);
             this.Load += new System.EventHandler(this.SetupDialogForm_Load);
-            this.HelpRequested += new System.Windows.Forms.HelpEventHandler(this.SetupDialogForm_HelpRequested);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.FocStatusControls_GB.ResumeLayout(false);
@@ -579,5 +555,6 @@ namespace ASCOM.OptecTCF_S
         private System.ComponentModel.BackgroundWorker VersionCheckerBGWorker;
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.Button OUT_Btn;
+        private System.Windows.Forms.Timer TempTimer;
     }
 }

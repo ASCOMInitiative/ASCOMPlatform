@@ -3,7 +3,7 @@
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
 "IsWebType" = "8:FALSE"
-"ProjectName" = "8:Installer_x64_ASCOM"
+"ProjectName" = "8:Installer_TCFS_Focuser"
 "LanguageId" = "3:1033"
 "CodePage" = "3:1252"
 "UILanguageId" = "3:1033"
@@ -15,74 +15,32 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_4795E007AC2190D09853F1E8F3455124"
-        "OwnerKey" = "8:_523DAC0C6D9F4AED87E851B958DF490C"
+        "MsmKey" = "8:_557DB2E8611BED88FD1E344CC86FEF05"
+        "OwnerKey" = "8:_E1BF5BABAB5F40C7B38C16F59EDED1E8"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_4795E007AC2190D09853F1E8F3455124"
-        "OwnerKey" = "8:_9C7343D3E10F7469F49CD79A6D9FC208"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_523DAC0C6D9F4AED87E851B958DF490C"
+        "MsmKey" = "8:_8F2A91E2F1A44873B01A3873BB41473B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_928DE03130444E72E6884D89AAB08F62"
-        "OwnerKey" = "8:_523DAC0C6D9F4AED87E851B958DF490C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9C7343D3E10F7469F49CD79A6D9FC208"
-        "OwnerKey" = "8:_523DAC0C6D9F4AED87E851B958DF490C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C5FEEA750A254F028580152F5C7CE0F4"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_EBE64198259AD0082C6B5E0C12929A87"
-        "OwnerKey" = "8:_523DAC0C6D9F4AED87E851B958DF490C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F9178DD134FB4E068D02EF0BB6C85181"
+        "MsmKey" = "8:_E1BF5BABAB5F40C7B38C16F59EDED1E8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_523DAC0C6D9F4AED87E851B958DF490C"
+        "OwnerKey" = "8:_557DB2E8611BED88FD1E344CC86FEF05"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_EBE64198259AD0082C6B5E0C12929A87"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_9C7343D3E10F7469F49CD79A6D9FC208"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_4795E007AC2190D09853F1E8F3455124"
+        "OwnerKey" = "8:_E1BF5BABAB5F40C7B38C16F59EDED1E8"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -93,7 +51,7 @@
         "DisplayName" = "8:Debug"
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:Debug\\OptecTCF-S_Installer_x64.msi"
+        "OutputFilename" = "8:Debug\\Installer_x64_Focuser.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -103,71 +61,13 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
-            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
-            {
-            "Enabled" = "11:TRUE"
-            "PromptEnabled" = "11:TRUE"
-            "PrerequisitesLocation" = "2:1"
-            "Url" = "8:"
-            "ComponentsUrl" = "8:"
-                "Items"
-                {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5.SP1"
-                    {
-                    "Name" = "8:.NET Framework 3.5 SP1"
-                    "ProductCode" = "8:Microsoft.Net.Framework.3.5.SP1"
-                    }
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
-                    {
-                    "Name" = "8:Windows Installer 3.1"
-                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
-                    }
-                }
-            }
         }
         "Release"
         {
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\OptecTCF-S_Installer_x64.msi"
-        "PackageFilesAs" = "3:2"
-        "PackageFileSize" = "3:-2147483648"
-        "CabType" = "3:1"
-        "Compression" = "3:2"
-        "SignOutput" = "11:FALSE"
-        "CertificateFile" = "8:"
-        "PrivateKeyFile" = "8:"
-        "TimeStampServer" = "8:"
-        "InstallerBootstrapper" = "3:2"
-            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
-            {
-            "Enabled" = "11:TRUE"
-            "PromptEnabled" = "11:TRUE"
-            "PrerequisitesLocation" = "2:1"
-            "Url" = "8:"
-            "ComponentsUrl" = "8:"
-                "Items"
-                {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5.SP1"
-                    {
-                    "Name" = "8:.NET Framework 3.5 SP1"
-                    "ProductCode" = "8:Microsoft.Net.Framework.3.5.SP1"
-                    }
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
-                    {
-                    "Name" = "8:Windows Installer 3.1"
-                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
-                    }
-                }
-            }
-        }
-        "Release With Install"
-        {
-        "DisplayName" = "8:Release With Install"
-        "IsDebugOnly" = "11:FALSE"
-        "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:Release\\Installer_x64.msi"
+        "OutputFilename" = "8:Release\\Installer_TCFS_Focuser.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -204,34 +104,6 @@
     {
         "CustomAction"
         {
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_015778D07C6F4C5092B94D1B081D54C8"
-            {
-            "Name" = "8:Primary output from OptecTCF-S Focuser (Active)"
-            "Condition" = "8:"
-            "Object" = "8:_523DAC0C6D9F4AED87E851B958DF490C"
-            "FileType" = "3:1"
-            "InstallAction" = "3:4"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_262FA4C5_0B8A_42B7_B0CC_94ED1BF42BDB"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_A288E796705B49BDA726474A3095022F"
-            {
-            "Name" = "8:Primary output from OptecTCF-S Focuser (Active)"
-            "Condition" = "8:"
-            "Object" = "8:_523DAC0C6D9F4AED87E851B958DF490C"
-            "FileType" = "3:1"
-            "InstallAction" = "3:1"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_A3447326_19F5_405B_A5CB_E1C3A499CFE9"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
         }
         "DefaultFeature"
         {
@@ -243,128 +115,26 @@
         {
             "LaunchCondition"
             {
-                "{A06ECF26-33A3-4562-8140-9B0E340D4F24}:_480FA220D785456AAADC71F19004589D"
+                "{A06ECF26-33A3-4562-8140-9B0E340D4F24}:_84892B6F3E014E699BA14FDB0E010DC9"
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
                 "FrameworkVersion" = "8:.NETFramework,Version=v3.5"
                 "AllowLaterVersions" = "11:FALSE"
-                "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=76617"
+                "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=131000"
                 }
             }
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4795E007AC2190D09853F1E8F3455124"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_4795E007AC2190D09853F1E8F3455124"
-                    {
-                    "Name" = "8:ASCOM.Exceptions.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:ASCOM.Exceptions.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_E18A983983FD41AD96CF5BED37D290DE"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_928DE03130444E72E6884D89AAB08F62"
-            {
-            "SourcePath" = "8:ASCOM.OptecTCF_S.Focuser.tlb"
-            "TargetName" = "8:ASCOM.OptecTCF_S.Focuser.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_1C4CC00E43EE4C97B813519D0660D7F6"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9C7343D3E10F7469F49CD79A6D9FC208"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ASCOM.Utilities, Version=5.5.1.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_9C7343D3E10F7469F49CD79A6D9FC208"
-                    {
-                    "Name" = "8:ASCOM.Utilities.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:ASCOM.Utilities.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_E18A983983FD41AD96CF5BED37D290DE"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C5FEEA750A254F028580152F5C7CE0F4"
-            {
-            "SourcePath" = "8:..\\OptecTCF-S Focuser\\Resources\\TCF.ico"
-            "TargetName" = "8:TCF.ico"
-            "Tag" = "8:"
-            "Folder" = "8:_1C4CC00E43EE4C97B813519D0660D7F6"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EBE64198259AD0082C6B5E0C12929A87"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_557DB2E8611BED88FD1E344CC86FEF05"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Optec.EventLogger, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_EBE64198259AD0082C6B5E0C12929A87"
+                    "_557DB2E8611BED88FD1E344CC86FEF05"
                     {
                     "Name" = "8:Optec.EventLogger.dll"
                     "Attributes" = "3:512"
@@ -373,7 +143,7 @@
             "SourcePath" = "8:Optec.EventLogger.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_1C4CC00E43EE4C97B813519D0660D7F6"
+            "Folder" = "8:_5364E1F2B8554C538F1BB95190751BCA"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -388,12 +158,12 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F9178DD134FB4E068D02EF0BB6C85181"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8F2A91E2F1A44873B01A3873BB41473B"
             {
-            "SourcePath" = "8:..\\OptecTCF-S Focuser\\ReadMe.rtf"
-            "TargetName" = "8:ReadMe.rtf"
+            "SourcePath" = "8:I:\\Software Development\\ICONS\\TCF-S2010\\TCF-S 2010.ico"
+            "TargetName" = "8:TCF-S 2010.ico"
             "Tag" = "8:"
-            "Folder" = "8:_393CB8BA09414F18BAC008B345F47F22"
+            "Folder" = "8:_480E631361264387AF9F2D94AF7783D4"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -414,7 +184,18 @@
         }
         "Folder"
         {
-            "{3C67513D-01DD-4637-8A68-80971EB9504F}:_E18A983983FD41AD96CF5BED37D290DE"
+            "{1525181F-901A-416C-8A58-119130FE478E}:_3BD4CB9713D246379F3BA436398BAB9F"
+            {
+            "Name" = "8:#1916"
+            "AlwaysCreate" = "11:FALSE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:DesktopFolder"
+                "Folders"
+                {
+                }
+            }
+            "{3C67513D-01DD-4637-8A68-80971EB9504F}:_480E631361264387AF9F2D94AF7783D4"
             {
             "DefaultLocation" = "8:[ProgramFilesFolder]Optec\\TCF-S"
             "Name" = "8:#1925"
@@ -424,26 +205,59 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_1C4CC00E43EE4C97B813519D0660D7F6"
-                    {
-                    "Name" = "8:Application Files"
-                    "AlwaysCreate" = "11:FALSE"
-                    "Condition" = "8:"
-                    "Transitive" = "11:FALSE"
-                    "Property" = "8:_998B65BDCED74E44BA1E46E34CCF6BCC"
-                        "Folders"
-                        {
-                        }
-                    }
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_393CB8BA09414F18BAC008B345F47F22"
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_028C764FB51345F2AB4CF37023D76D4E"
                     {
                     "Name" = "8:Documentation"
                     "AlwaysCreate" = "11:FALSE"
                     "Condition" = "8:"
                     "Transitive" = "11:FALSE"
-                    "Property" = "8:_A1BC59E9682A4D42A7AA11CF98EE960C"
+                    "Property" = "8:_08B869E9C16C4A2D87883BAC419C972D"
                         "Folders"
                         {
+                        }
+                    }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_5364E1F2B8554C538F1BB95190751BCA"
+                    {
+                    "Name" = "8:Application Files"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_D1B09251AADA48E492CE5830BA87CA78"
+                        "Folders"
+                        {
+                        }
+                    }
+                }
+            }
+            "{1525181F-901A-416C-8A58-119130FE478E}:_5DB9A2EDE14F463089363E50238C7060"
+            {
+            "Name" = "8:#1919"
+            "AlwaysCreate" = "11:FALSE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:ProgramMenuFolder"
+                "Folders"
+                {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_6519CC3FD5014C6989EBED13D7967EE6"
+                    {
+                    "Name" = "8:Optec"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_05124F46B63A40B19F74EEB27EEDE1E5"
+                        "Folders"
+                        {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_627917382BAA4B7890925610AD0B981E"
+                            {
+                            "Name" = "8:TCF-S"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_C2DAD35D82614E14BEE8418AAA533331"
+                                "Folders"
+                                {
+                                }
+                            }
                         }
                     }
                 }
@@ -451,53 +265,9 @@
         }
         "LaunchCondition"
         {
-            "{836E08B8-0285-4809-BA42-01DB6754A45D}:_9DDCE9580DD54E0696531B7D13956901"
-            {
-            "Name" = "8:BetaVersionUninstalled"
-            "Condition" = "8:NOT BETAVERSIONEXISTS"
-            "Message" = "8:You must remove the Beta version before installation can continue.  Do this through Control Panel -> Add/Remove Programs  (Programs and Features on Windows Vista and later)"
-            "InstallUrl" = "8:"
-            }
-            "{836E08B8-0285-4809-BA42-01DB6754A45D}:_F3C535FC132943979A7366C495600EA2"
-            {
-            "Name" = "8:Platform5.5 Installed"
-            "Condition" = "8:UTILITIESFOUND"
-            "Message" = "8:The ASCOM Platform 5.5 was not detected."
-            "InstallUrl" = "8:"
-            }
         }
         "Locator"
         {
-            "{39E1837C-0DB9-45A2-89C8-438377A77565}:_3A73C247F4A94F94A228DC482E87EA1A"
-            {
-            "Name" = "8:SearchForUtilities"
-            "Folder" = "8:[CommonFiles64Folder]ASCOM"
-            "Depth" = "2:10"
-            "FileName" = "8:ASCOM.Utilities.dll"
-            "MinVesion" = "8:5.5"
-            "MaxVersion" = "8:5.9.9.9"
-            "MinSize" = "8:"
-            "MaxSize" = "8:"
-            "MinDate" = "8:"
-            "MaxDate" = "8:"
-            "Languages" = "8:"
-            "Property" = "8:UTILITIESFOUND"
-            }
-            "{39E1837C-0DB9-45A2-89C8-438377A77565}:_9117608B22194CC397BE6E2EBB3B34AE"
-            {
-            "Name" = "8:SearchForBetaVersion"
-            "Folder" = "8:[CommonFiles64Folder]ASCOM"
-            "Depth" = "2:0"
-            "FileName" = "8:ASCOM.OptecTCF_Driver.Focuser.dll"
-            "MinVesion" = "8:5.0.0.0"
-            "MaxVersion" = "8:5.0.1.0"
-            "MinSize" = "8:"
-            "MaxSize" = "8:"
-            "MinDate" = "8:"
-            "MaxDate" = "8:"
-            "Languages" = "8:"
-            "Property" = "8:BETAVERSIONEXISTS"
-            }
         }
         "MsiBootstrapper"
         {
@@ -507,30 +277,30 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Optec TCF-S ASCOM Driver (64 Bit)"
-        "ProductCode" = "8:{DA1047AA-4D01-494F-80F2-8CCE0A741893}"
-        "PackageCode" = "8:{EB13638D-9183-4886-9F3F-69CACA2A8278}"
-        "UpgradeCode" = "8:{DF502D19-C0EE-487E-A73B-CB13D898853D}"
+        "ProductName" = "8:Optec TCF-S Focuser"
+        "ProductCode" = "8:{279005B4-D656-423C-A298-E5117F738BEC}"
+        "PackageCode" = "8:{88F3FB0C-28BA-4269-A615-FBE31A034070}"
+        "UpgradeCode" = "8:{783440A9-51F0-4D91-8780-A132C0BB1777}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
         "ProductVersion" = "8:5.3.0"
-        "Manufacturer" = "8:Optec Inc"
+        "Manufacturer" = "8:Optec Inc."
         "ARPHELPTELEPHONE" = "8:"
-        "ARPHELPLINK" = "8:http://www.optecinc.com"
-        "Title" = "8:Optec TCF-S ASCOM Driver Installer (64 bit)"
+        "ARPHELPLINK" = "8:"
+        "Title" = "8:Optec TCF-S Focuser"
         "Subject" = "8:"
-        "ARPCONTACT" = "8:Jordan Schaenzle"
+        "ARPCONTACT" = "8:Jordan S."
         "Keywords" = "8:"
-        "ARPCOMMENTS" = "8:ASCOM driver for Optec TCF-S Focuser (64 bit)"
-        "ARPURLINFOABOUT" = "8:www.optecinc.com"
-        "ARPPRODUCTICON" = "8:_C5FEEA750A254F028580152F5C7CE0F4"
+        "ARPCOMMENTS" = "8:Installer for Optec TCF-S Focuser"
+        "ARPURLINFOABOUT" = "8:"
+        "ARPPRODUCTICON" = "8:_8F2A91E2F1A44873B01A3873BB41473B"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
-        "TargetPlatform" = "3:1"
+        "TargetPlatform" = "3:0"
         "PreBuildEvent" = "8:"
         "PostBuildEvent" = "8:"
         "RunPostBuildEvent" = "3:0"
@@ -541,7 +311,7 @@
             {
                 "Keys"
                 {
-                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_34660D86D6B649DA994B40DB92449967"
+                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_E855AAA750024E9B9B6A243F4F96BBF8"
                     {
                     "Name" = "8:Software"
                     "Condition" = "8:"
@@ -550,7 +320,7 @@
                     "Transitive" = "11:FALSE"
                         "Keys"
                         {
-                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_B8FEEE5D47E646089104BABAC7743428"
+                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_2A1EDB3379484C76B09A329B7227B587"
                             {
                             "Name" = "8:[Manufacturer]"
                             "Condition" = "8:"
@@ -575,7 +345,7 @@
             {
                 "Keys"
                 {
-                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_2AC1DC2BE2224F1FB0220496FD376C5B"
+                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_F83AF3A4B29B45E6A2CC7FAE30578B88"
                     {
                     "Name" = "8:Software"
                     "Condition" = "8:"
@@ -584,7 +354,7 @@
                     "Transitive" = "11:FALSE"
                         "Keys"
                         {
-                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_71C4317B7AF9430C8067FFA4BB00596C"
+                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_D89F5F9AF00D46F891E4824F118F3907"
                             {
                             "Name" = "8:[Manufacturer]"
                             "Condition" = "8:"
@@ -629,67 +399,57 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_1F44603F835C4216A90AC080F29D0416"
+            {
+            "Name" = "8:TCF-S Focuser"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_E1BF5BABAB5F40C7B38C16F59EDED1E8"
+            "Folder" = "8:_627917382BAA4B7890925610AD0B981E"
+            "WorkingFolder" = "8:_5364E1F2B8554C538F1BB95190751BCA"
+            "Icon" = "8:_8F2A91E2F1A44873B01A3873BB41473B"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_692E3D3484F4498B87EBB691689BC802"
+            {
+            "Name" = "8:Optec TCF-S Focuser"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_E1BF5BABAB5F40C7B38C16F59EDED1E8"
+            "Folder" = "8:_3BD4CB9713D246379F3BA436398BAB9F"
+            "WorkingFolder" = "8:_5364E1F2B8554C538F1BB95190751BCA"
+            "Icon" = "8:_8F2A91E2F1A44873B01A3873BB41473B"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {
-            "{2479F3F5-0309-486D-8047-8187E2CE5BA0}:_2BFF7B2F3ADD4E45B8682EA59E1E3242"
+            "{2479F3F5-0309-486D-8047-8187E2CE5BA0}:_0F79B958C198458384A32EFECF0D852E"
+            {
+            "UseDynamicProperties" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "SourcePath" = "8:<VsdDialogDir>\\VsdUserInterface.wim"
+            }
+            "{2479F3F5-0309-486D-8047-8187E2CE5BA0}:_1F135D54FCD248849C60260DB5A01438"
             {
             "UseDynamicProperties" = "11:FALSE"
             "IsDependency" = "11:FALSE"
             "SourcePath" = "8:<VsdDialogDir>\\VsdBasicDialogs.wim"
             }
-            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_32BEE9E1B9C54A7DBB27634B82461337"
-            {
-            "Name" = "8:#1901"
-            "Sequence" = "3:2"
-            "Attributes" = "3:2"
-                "Dialogs"
-                {
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_4EAE439D3ED041E48955BE4AB6389C5B"
-                    {
-                    "Sequence" = "3:100"
-                    "DisplayName" = "8:Progress"
-                    "UseDynamicProperties" = "11:TRUE"
-                    "IsDependency" = "11:FALSE"
-                    "SourcePath" = "8:<VsdDialogDir>\\VsdAdminProgressDlg.wid"
-                        "Properties"
-                        {
-                            "BannerBitmap"
-                            {
-                            "Name" = "8:BannerBitmap"
-                            "DisplayName" = "8:#1001"
-                            "Description" = "8:#1101"
-                            "Type" = "3:8"
-                            "ContextData" = "8:Bitmap"
-                            "Attributes" = "3:4"
-                            "Setting" = "3:1"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                            "ShowProgress"
-                            {
-                            "Name" = "8:ShowProgress"
-                            "DisplayName" = "8:#1009"
-                            "Description" = "8:#1109"
-                            "Type" = "3:5"
-                            "ContextData" = "8:1;True=1;False=0"
-                            "Attributes" = "3:0"
-                            "Setting" = "3:0"
-                            "Value" = "3:1"
-                            "DefaultValue" = "3:1"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                        }
-                    }
-                }
-            }
-            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_3765FDF962884978915DBC79CF69B560"
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_6093EA6D247C44579C5ADC09D2FED1C2"
             {
             "Name" = "8:#1901"
             "Sequence" = "3:1"
             "Attributes" = "3:2"
                 "Dialogs"
                 {
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_7DDC31143AD24916BFB00A5B6DAFC5DF"
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_80B8E5BE69054836A81762D3ED1231C8"
                     {
                     "Sequence" = "3:100"
                     "DisplayName" = "8:Progress"
@@ -726,20 +486,108 @@
                     }
                 }
             }
-            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_3EE635DA2CF448B0ABD72A9E43E06A16"
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_71081CDAA7BB4AF3B1F9ED1F2EC8914C"
+            {
+            "Name" = "8:#1901"
+            "Sequence" = "3:2"
+            "Attributes" = "3:2"
+                "Dialogs"
+                {
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_2B4D94499993490B8BC57C74F34A286C"
+                    {
+                    "Sequence" = "3:100"
+                    "DisplayName" = "8:Progress"
+                    "UseDynamicProperties" = "11:TRUE"
+                    "IsDependency" = "11:FALSE"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdAdminProgressDlg.wid"
+                        "Properties"
+                        {
+                            "BannerBitmap"
+                            {
+                            "Name" = "8:BannerBitmap"
+                            "DisplayName" = "8:#1001"
+                            "Description" = "8:#1101"
+                            "Type" = "3:8"
+                            "ContextData" = "8:Bitmap"
+                            "Attributes" = "3:4"
+                            "Setting" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "ShowProgress"
+                            {
+                            "Name" = "8:ShowProgress"
+                            "DisplayName" = "8:#1009"
+                            "Description" = "8:#1109"
+                            "Type" = "3:5"
+                            "ContextData" = "8:1;True=1;False=0"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:0"
+                            "Value" = "3:1"
+                            "DefaultValue" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                        }
+                    }
+                }
+            }
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_750CD4C2BA2F4449A0A11A7764C8D9BE"
+            {
+            "Name" = "8:#1902"
+            "Sequence" = "3:1"
+            "Attributes" = "3:3"
+                "Dialogs"
+                {
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_8DA19757D0AA45988280C3DC6E51DD8B"
+                    {
+                    "Sequence" = "3:100"
+                    "DisplayName" = "8:Finished"
+                    "UseDynamicProperties" = "11:TRUE"
+                    "IsDependency" = "11:FALSE"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdFinishedDlg.wid"
+                        "Properties"
+                        {
+                            "BannerBitmap"
+                            {
+                            "Name" = "8:BannerBitmap"
+                            "DisplayName" = "8:#1001"
+                            "Description" = "8:#1101"
+                            "Type" = "3:8"
+                            "ContextData" = "8:Bitmap"
+                            "Attributes" = "3:4"
+                            "Setting" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "UpdateText"
+                            {
+                            "Name" = "8:UpdateText"
+                            "DisplayName" = "8:#1058"
+                            "Description" = "8:#1158"
+                            "Type" = "3:15"
+                            "ContextData" = "8:"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:1"
+                            "Value" = "8:#1258"
+                            "DefaultValue" = "8:#1258"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                        }
+                    }
+                }
+            }
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_9C92036D6A1F4D8D8AF921B1B16B8AE2"
             {
             "Name" = "8:#1900"
             "Sequence" = "3:2"
             "Attributes" = "3:1"
                 "Dialogs"
                 {
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_A74370D5F2FC4D8080DE7D6490E1C5C9"
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_0DF35884867147D293C4D2CAB9ACA352"
                     {
-                    "Sequence" = "3:300"
-                    "DisplayName" = "8:Confirm Installation"
+                    "Sequence" = "3:200"
+                    "DisplayName" = "8:Installation Folder"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
-                    "SourcePath" = "8:<VsdDialogDir>\\VsdAdminConfirmDlg.wid"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdAdminFolderDlg.wid"
                         "Properties"
                         {
                             "BannerBitmap"
@@ -755,7 +603,7 @@
                             }
                         }
                     }
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_EB7EC818640B4B2D856AF94CD9F2F37D"
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_B7B75533FC9B49D59B63299F3B133B6C"
                     {
                     "Sequence" = "3:100"
                     "DisplayName" = "8:Welcome"
@@ -803,18 +651,40 @@
                             }
                         }
                     }
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_F1F04FA7C4774A3CA0E7E9A597B97D80"
+                    {
+                    "Sequence" = "3:300"
+                    "DisplayName" = "8:Confirm Installation"
+                    "UseDynamicProperties" = "11:TRUE"
+                    "IsDependency" = "11:FALSE"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdAdminConfirmDlg.wid"
+                        "Properties"
+                        {
+                            "BannerBitmap"
+                            {
+                            "Name" = "8:BannerBitmap"
+                            "DisplayName" = "8:#1001"
+                            "Description" = "8:#1101"
+                            "Type" = "3:8"
+                            "ContextData" = "8:Bitmap"
+                            "Attributes" = "3:4"
+                            "Setting" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                        }
+                    }
                 }
             }
-            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_47CAE9F9A39D43838F82D663E0A1EC7E"
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_9DC5B2E2994B4FCA9BC35CC3174A0F03"
             {
             "Name" = "8:#1902"
             "Sequence" = "3:2"
             "Attributes" = "3:3"
                 "Dialogs"
                 {
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_857109C8D0324AA6A79E535C7AB6A0A8"
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_0D181A192883400B8EA58093BE507294"
                     {
-                    "Sequence" = "3:200"
+                    "Sequence" = "3:100"
                     "DisplayName" = "8:Finished"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
@@ -836,111 +706,36 @@
                     }
                 }
             }
-            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_4A07465F68C5477CB1915E710530403C"
-            {
-            "Name" = "8:#1902"
-            "Sequence" = "3:1"
-            "Attributes" = "3:3"
-                "Dialogs"
-                {
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_4DDC5A7B89B742948DF84F8CEF5DC1F1"
-                    {
-                    "Sequence" = "3:200"
-                    "DisplayName" = "8:Finished"
-                    "UseDynamicProperties" = "11:TRUE"
-                    "IsDependency" = "11:FALSE"
-                    "SourcePath" = "8:<VsdDialogDir>\\VsdFinishedDlg.wid"
-                        "Properties"
-                        {
-                            "BannerBitmap"
-                            {
-                            "Name" = "8:BannerBitmap"
-                            "DisplayName" = "8:#1001"
-                            "Description" = "8:#1101"
-                            "Type" = "3:8"
-                            "ContextData" = "8:Bitmap"
-                            "Attributes" = "3:4"
-                            "Setting" = "3:1"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                            "UpdateText"
-                            {
-                            "Name" = "8:UpdateText"
-                            "DisplayName" = "8:#1058"
-                            "Description" = "8:#1158"
-                            "Type" = "3:15"
-                            "ContextData" = "8:"
-                            "Attributes" = "3:0"
-                            "Setting" = "3:1"
-                            "Value" = "8:#1258"
-                            "DefaultValue" = "8:#1258"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                        }
-                    }
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_FFA7A81B00D44766974F3B285687BD0F"
-                    {
-                    "Sequence" = "3:100"
-                    "DisplayName" = "8:Read Me"
-                    "UseDynamicProperties" = "11:TRUE"
-                    "IsDependency" = "11:FALSE"
-                    "SourcePath" = "8:<VsdDialogDir>\\VsdReadmeDlg.wid"
-                        "Properties"
-                        {
-                            "BannerBitmap"
-                            {
-                            "Name" = "8:BannerBitmap"
-                            "DisplayName" = "8:#1001"
-                            "Description" = "8:#1101"
-                            "Type" = "3:8"
-                            "ContextData" = "8:Bitmap"
-                            "Attributes" = "3:4"
-                            "Setting" = "3:1"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                            "ReadmeText"
-                            {
-                            "Name" = "8:ReadmeText"
-                            "DisplayName" = "8:#1010"
-                            "Description" = "8:#1110"
-                            "Type" = "3:6"
-                            "ContextData" = "8:"
-                            "Attributes" = "3:0"
-                            "Setting" = "3:2"
-                            "Value" = "8:_F9178DD134FB4E068D02EF0BB6C85181"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                            "Sunken"
-                            {
-                            "Name" = "8:Sunken"
-                            "DisplayName" = "8:#1007"
-                            "Description" = "8:#1107"
-                            "Type" = "3:5"
-                            "ContextData" = "8:4;True=4;False=0"
-                            "Attributes" = "3:0"
-                            "Setting" = "3:0"
-                            "Value" = "3:4"
-                            "DefaultValue" = "3:4"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                        }
-                    }
-                }
-            }
-            "{2479F3F5-0309-486D-8047-8187E2CE5BA0}:_D994C245D4084BD2920C2AE64305E8AF"
-            {
-            "UseDynamicProperties" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "SourcePath" = "8:<VsdDialogDir>\\VsdUserInterface.wim"
-            }
-            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_FB25D5919DD34FE3A800D38710FB96D5"
+            "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_BB4D456E1E6340DE88BE859BB5A01C1C"
             {
             "Name" = "8:#1900"
             "Sequence" = "3:1"
             "Attributes" = "3:1"
                 "Dialogs"
                 {
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_9FBF6C7A959141A7A5C61E8E25444AA8"
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_4EE615AC18494E60B25D58E5490A925C"
+                    {
+                    "Sequence" = "3:300"
+                    "DisplayName" = "8:Confirm Installation"
+                    "UseDynamicProperties" = "11:TRUE"
+                    "IsDependency" = "11:FALSE"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdConfirmDlg.wid"
+                        "Properties"
+                        {
+                            "BannerBitmap"
+                            {
+                            "Name" = "8:BannerBitmap"
+                            "DisplayName" = "8:#1001"
+                            "Description" = "8:#1101"
+                            "Type" = "3:8"
+                            "ContextData" = "8:Bitmap"
+                            "Attributes" = "3:4"
+                            "Setting" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                        }
+                    }
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_C289AC219930429B81C815B8B121406B"
                     {
                     "Sequence" = "3:100"
                     "DisplayName" = "8:Welcome"
@@ -988,28 +783,6 @@
                             }
                         }
                     }
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_E01AF7BB419E4A52B90084F271BB776E"
-                    {
-                    "Sequence" = "3:300"
-                    "DisplayName" = "8:Confirm Installation"
-                    "UseDynamicProperties" = "11:TRUE"
-                    "IsDependency" = "11:FALSE"
-                    "SourcePath" = "8:<VsdDialogDir>\\VsdConfirmDlg.wid"
-                        "Properties"
-                        {
-                            "BannerBitmap"
-                            {
-                            "Name" = "8:BannerBitmap"
-                            "DisplayName" = "8:#1001"
-                            "Description" = "8:#1101"
-                            "Type" = "3:8"
-                            "ContextData" = "8:Bitmap"
-                            "Attributes" = "3:4"
-                            "Setting" = "3:1"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                        }
-                    }
                 }
             }
         }
@@ -1018,40 +791,12 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_523DAC0C6D9F4AED87E851B958DF490C"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_E1BF5BABAB5F40C7B38C16F59EDED1E8"
             {
-            "SourcePath" = "8:..\\OptecTCF-S Focuser\\obj\\Release\\ASCOM.OptecTCF_S.Focuser.dll"
+            "SourcePath" = "8:..\\Optec TCF-S Focuser\\obj\\x86\\Release\\Optec TCF-S Focuser.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_1C4CC00E43EE4C97B813519D0660D7F6"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:2"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{248BFAB5-FA97-409B-AF75-807D3C7EBF8A}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_792911D10748466E938DEC1694431402"
-            {
-            "SourcePath" = "8:"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_393CB8BA09414F18BAC008B345F47F22"
+            "Folder" = "8:_5364E1F2B8554C538F1BB95190751BCA"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1067,8 +812,8 @@
             "IsolateTo" = "8:"
             "ProjectOutputGroupRegister" = "3:1"
             "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:ContentFiles"
-            "OutputProjectGuid" = "8:{248BFAB5-FA97-409B-AF75-807D3C7EBF8A}"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{97A20E46-26D2-4E3E-AC59-209A9A7710A2}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {

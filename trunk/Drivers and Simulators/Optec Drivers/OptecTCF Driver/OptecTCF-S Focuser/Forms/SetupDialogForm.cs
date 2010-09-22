@@ -21,13 +21,11 @@ namespace ASCOM.OptecTCF_S
         private static string helpFilePath = "";
         private static bool TempControlsEnabled = true;
         private static int TempDelay = 1000;
-        private Thread TempGetterThread;
-
-
+     
         public SetupDialogForm()
         {
             InitializeComponent();
-
+            /*
             //Setup the lists for manipulating controls
 
             TemperatureControls = new List<Control>();
@@ -56,9 +54,20 @@ namespace ASCOM.OptecTCF_S
             helpFilePath += "\\Optec\\TCF-S\\Help Files\\TCFSHelp.chm";
             helpProvider1.HelpNamespace = helpFilePath;
             helpProvider1.SetShowHelp(this, true);
-           
+           */
         }
 
+        private void SetupDialogForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void connectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        /*
         private void SetupDialogForm_Load(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
@@ -74,9 +83,11 @@ namespace ASCOM.OptecTCF_S
 
                 if (OptecFocuser.ConnectionState == OptecFocuser.ConnectionStates.SerialMode)
                 {
-                    ThreadStart ts = new ThreadStart(TempGetter);
-                    TempGetterThread = new Thread(ts);
-                    TempGetterThread.Start();
+                    TempTimer.Enabled = true;
+                    //ThreadStart ts = new ThreadStart(TempGetter);
+                    //TempGetterThread = new Thread(ts);
+                    //TempGetterThread.Name = "TempGetterThread1";
+                    //TempGetterThread.Start();
                 }
                       
 
@@ -102,6 +113,7 @@ namespace ASCOM.OptecTCF_S
         {
             try
             {
+                ExitTempGetterThread();
                 DisconnectProcedure();
             }
             catch { }
@@ -166,15 +178,7 @@ namespace ASCOM.OptecTCF_S
 
         }
 
-        private void cmdOK_Click(object sender, EventArgs e)
-        {
-            Dispose();
-        }
-
-        private void cmdCancel_Click(object sender, EventArgs e)
-        {
-            Dispose();
-        }
+      
 
         private void In_BTN_Click(object sender, EventArgs e)
         {
@@ -239,7 +243,7 @@ namespace ASCOM.OptecTCF_S
             int currentPos = OptecFocuser.GetPosition();
             int newPos = DeviceSettings.MaxStep / 2;
             int disttomove = currentPos - newPos;
-            if (newPos.Equals(currentPos)) { /* Do nothing*/ }
+            if (newPos.Equals(currentPos)) {  }
             else
             {
                 //Display MOVING
@@ -340,14 +344,29 @@ namespace ASCOM.OptecTCF_S
             {  
                 this.Cursor = Cursors.WaitCursor;
                 OptecFocuser.ConnectAndEnterSerialMode();
+                TempTimer.Enabled = true;
                 EnableDisableControls();
                 UpdatePositionTextBox();
-                if (!TempGetterThread.IsAlive)
-                {
-                    ThreadStart ts = new ThreadStart(TempGetter);
-                    TempGetterThread = new Thread(ts);
-                    TempGetterThread.Start();
-                }
+                
+                //if (TempGetterThread == null)
+                //{
+                //    ThreadStart ts = new ThreadStart(TempGetter);
+                //    TempGetterThread = (ts);
+                //    TempGetterThread.Name =  "TempGetterThread2";
+                //    TempGetterThread.Start();
+                //}
+                //else
+                //{
+                //    if (TempGetterThread.ThreadState != System.Threading.ThreadState.Running)
+                //    {
+                //        //TempGetterThread = null;
+                //        Debug.WriteLine("TempGetterThread state = " + TempGetterThread.ThreadState.ToString());
+                //        ThreadStart ts = new ThreadStart(TempGetter);
+                //        TempGetterThread = new Thread(ts);
+                //        TempGetterThread.Name = "TempGetterThread3";
+                //        TempGetterThread.Start();
+                //    }
+                //}
             }
             catch (TimeoutException)
             {
@@ -372,6 +391,7 @@ namespace ASCOM.OptecTCF_S
             {
                 this.Cursor = Cursors.WaitCursor;
                 StatusTimer.Enabled = false;
+                TempTimer.Enabled = false;
                 System.Threading.Thread.Sleep(150);
                 SettingsForm x = new SettingsForm();
                 x.ShowDialog();
@@ -386,6 +406,7 @@ namespace ASCOM.OptecTCF_S
 
                 EnableDisableControls();
                 StatusTimer.Enabled = true;
+                TempTimer.Enabled = true;
             }
             catch (Exception ex)
             {
@@ -400,74 +421,84 @@ namespace ASCOM.OptecTCF_S
 
 #region Temperature Polling Methods
 
-        private void TempGetter()
-        {
-            while (true)
-            {
-                try
-                {
-                    if (OptecFocuser.ConnectionState == OptecFocuser.ConnectionStates.SerialMode)
-                    {
-                        System.Threading.Thread.Sleep(TempDelay);
-                        DateTime st = DateTime.Now;
-                        double t = 0;
-                        st = DateTime.Now;
-                        
-                        t = OptecFocuser.GetTemperature();
-                         Debug.Print(st.Subtract(DateTime.Now).TotalSeconds.ToString());
-                        this.Invoke(new DoubleDelegate(UpdateTempTextBox), new object[] { t });
+        private void TempGetter() { }
+  //      private void TempGetter()
+  //      {
+  //          TempGetterExited = false;
+  //          while (ExitTempGetter == false)
+  //          {
+  //              try
+  //              {
+  //                  if (OptecFocuser.ConnectionState == OptecFocuser.ConnectionStates.SerialMode)
+  //                  {
+  //                      while (PauseTempGetter)
+  //                      {
+  //                          // just sleep for a while
+  //                          System.Threading.Thread.Sleep(500);
+  //                      }
+  //                      System.Threading.Thread.Sleep(TempDelay);
+  //                      DateTime st = DateTime.Now;
+  //                      double t = 0;
+  //                      st = DateTime.Now;
+
+  //                      t = OptecFocuser.GetTemperature();
+  ////                      Debug.Print(st.Subtract(DateTime.Now).TotalSeconds.ToString());
+  //                      this.Invoke(new DoubleDelegate(UpdateTempTextBox), new object[] { t });
 
 
-                        if (!TempControlsEnabled) EnableTempControls(true);
-                        
-                    }
+  //                      if (!TempControlsEnabled) EnableTempControls(true);
 
-                }
-                catch (ER1_DeviceException)
-                {
-                    if (!DeviceSettings.TempProbePresent)
-                    {
-                        if (TempControlsEnabled)
-                        {
-                            EnableTempControls(false);
-                        }
-                    }
-                    else
-                    {
-                        if (TempControlsEnabled)
-                        {
-                            // This is the first time an error has occurred.
-                            MessageBox.Show("The temperature probe is disconnected from the focuser. " +
-                                "If you wish to continue reading temperatures plug the probe back into the focuser.");
-                            EnableTempControls(false);
-                            // Disable the temperature contorls
-                        }
+  //                  }
 
-                    }
-                }
-                catch (ER4_DeviceException)
-                {
-                    if (!DeviceSettings.TempProbePresent) return;
-                    else
-                    {
-                        if (TempControlsEnabled)
-                        {
-                            // This is the first time an error has occurred.
-                            MessageBox.Show("The temperature probe is either disabled in firmware or disconnected from the focuser. " +
-                                "If you wish to continue reading temperatures plug the probe back into the focuser and verify that it is enabled.");
-                            EnableTempControls(false);
-                            // Disable the temperature contorls
-                        }
-                    }
-                }
-                catch
-                {
-                    // Anything else just keep checking
-                }
-            }
+  //              }
+  //              catch (ER1_DeviceException)
+  //              {
+  //                  if (!DeviceSettings.TempProbePresent)
+  //                  {
+  //                      if (TempControlsEnabled)
+  //                      {
+  //                          EnableTempControls(false);
+  //                      }
+  //                  }
+  //                  else
+  //                  {
+  //                      if (TempControlsEnabled)
+  //                      {
+  //                          // This is the first time an error has occurred.
+  //                          MessageBox.Show("The temperature probe is disconnected from the focuser. " +
+  //                              "If you wish to continue reading temperatures plug the probe back into the focuser.");
+  //                          EnableTempControls(false);
+  //                          // Disable the temperature contorls
+  //                      }
 
-
-        }
+  //                  }
+  //              }
+  //              catch (ER4_DeviceException)
+  //              {
+  //                  if (!DeviceSettings.TempProbePresent) return;
+  //                  else
+  //                  {
+  //                      if (TempControlsEnabled)
+  //                      {
+  //                          // This is the first time an error has occurred.
+  //                          MessageBox.Show("The temperature probe is either disabled in firmware or disconnected from the focuser. " +
+  //                              "If you wish to continue reading temperatures plug the probe back into the focuser and verify that it is enabled.");
+  //                          EnableTempControls(false);
+  //                          // Disable the temperature contorls
+  //                      }
+  //                  }
+  //              }
+  //              catch (ThreadAbortException)
+  //              {
+  //                  break;
+  //              }
+  //              catch
+  //              {
+  //                  // Anything else just keep checking
+  //              }
+  //          }
+  //          TempGetterExited = true;
+  //      }
 
         private delegate void DoubleDelegate(double d);
 
@@ -505,7 +536,7 @@ namespace ASCOM.OptecTCF_S
                 }
                 TempDRO_TB.Text = "----°C";
                 TempControlsEnabled = false;
-                TempDelay = 6000;
+                TempDelay = 3000;
             }
         }
 
@@ -518,15 +549,36 @@ namespace ASCOM.OptecTCF_S
 
         private void disconnectToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            ExitTempGetterThread();
             DisconnectProcedure();
             EnableDisableControls();
         }
 
-        private void DisconnectProcedure()
+        private void ExitTempGetterThread()
         {
-            TempGetterThread.Abort();
-            TempGetterThread.Join();
-            OptecFocuser.Disconnect();
+            try
+            {
+                TempTimer.Enabled = false;
+                //ExitTempGetter = true;
+               // TempGetterThread.Join();
+                //while (TempGetterExited == false) { } // just wait
+            }
+            catch (Exception)
+            {
+                
+            }
+        }
+
+        private static void DisconnectProcedure()
+        {
+            try
+            {
+                OptecFocuser.Disconnect();
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
 #region Status Bar Methods
@@ -623,8 +675,17 @@ namespace ASCOM.OptecTCF_S
 
         private void Test_Btn_Click(object sender, EventArgs e)
         {
-            TempCompTest_Form x = new TempCompTest_Form();
-            x.ShowDialog();
+            try
+            {
+                TempTimer.Enabled = false;          
+                TempCompTest_Form x = new TempCompTest_Form();
+                x.ShowDialog();
+                TempTimer.Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void VersionCheckerBGWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -668,11 +729,38 @@ namespace ASCOM.OptecTCF_S
             ShowHelpFile();
         }
 
-      
+        private void cmdCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
 
-        
+        private void TempTimer_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (OptecFocuser.ConnectionState == OptecFocuser.ConnectionStates.SerialMode)
+                {
 
+
+                    double t = 0;
+
+                    //t = OptecFocuser.GetTemperature();
+                    t = OptecFocuser.CurrentTemp;
+                    //                      Debug.Print(st.Subtract(DateTime.Now).TotalSeconds.ToString());
+                    this.Invoke(new DoubleDelegate(UpdateTempTextBox), new object[] { t });
+
+                    if (!TempControlsEnabled) EnableTempControls(true);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.Message);
+            }
+        }
+ 
     }
+
 
     class StatusBar
     {
@@ -763,5 +851,7 @@ namespace ASCOM.OptecTCF_S
                 return "Not Available";
             }
         }
+
+*/
     }
 }
