@@ -16,18 +16,18 @@
         "Entry"
         {
         "MsmKey" = "8:_557DB2E8611BED88FD1E344CC86FEF05"
-        "OwnerKey" = "8:_E1BF5BABAB5F40C7B38C16F59EDED1E8"
+        "OwnerKey" = "8:_6B3A684775C64FE39CBF100A20E758D9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_8F2A91E2F1A44873B01A3873BB41473B"
+        "MsmKey" = "8:_6B3A684775C64FE39CBF100A20E758D9"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_E1BF5BABAB5F40C7B38C16F59EDED1E8"
+        "MsmKey" = "8:_8F2A91E2F1A44873B01A3873BB41473B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -40,7 +40,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E1BF5BABAB5F40C7B38C16F59EDED1E8"
+        "OwnerKey" = "8:_6B3A684775C64FE39CBF100A20E758D9"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -61,6 +61,27 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -134,11 +155,6 @@
             "AssemblyAsmDisplayName" = "8:Optec.EventLogger, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_557DB2E8611BED88FD1E344CC86FEF05"
-                    {
-                    "Name" = "8:Optec.EventLogger.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Optec.EventLogger.dll"
             "TargetName" = "8:"
@@ -399,7 +415,7 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_1F44603F835C4216A90AC080F29D0416"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_145E278DDA434F12A241E4B47EDEF737"
             {
             "Name" = "8:TCF-S Focuser"
             "Arguments" = "8:"
@@ -407,13 +423,13 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_E1BF5BABAB5F40C7B38C16F59EDED1E8"
+            "Target" = "8:_6B3A684775C64FE39CBF100A20E758D9"
             "Folder" = "8:_627917382BAA4B7890925610AD0B981E"
             "WorkingFolder" = "8:_5364E1F2B8554C538F1BB95190751BCA"
             "Icon" = "8:_8F2A91E2F1A44873B01A3873BB41473B"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_692E3D3484F4498B87EBB691689BC802"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_DC4EFAC570B24845A1BC5E1E575A3D94"
             {
             "Name" = "8:Optec TCF-S Focuser"
             "Arguments" = "8:"
@@ -421,7 +437,7 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_E1BF5BABAB5F40C7B38C16F59EDED1E8"
+            "Target" = "8:_6B3A684775C64FE39CBF100A20E758D9"
             "Folder" = "8:_3BD4CB9713D246379F3BA436398BAB9F"
             "WorkingFolder" = "8:_5364E1F2B8554C538F1BB95190751BCA"
             "Icon" = "8:_8F2A91E2F1A44873B01A3873BB41473B"
@@ -791,7 +807,7 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_E1BF5BABAB5F40C7B38C16F59EDED1E8"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_6B3A684775C64FE39CBF100A20E758D9"
             {
             "SourcePath" = "8:..\\Optec TCF-S Focuser\\obj\\x86\\Release\\Optec TCF-S Focuser.exe"
             "TargetName" = "8:"
