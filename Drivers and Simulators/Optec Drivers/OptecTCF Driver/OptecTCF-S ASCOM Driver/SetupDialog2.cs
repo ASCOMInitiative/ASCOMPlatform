@@ -108,6 +108,11 @@ namespace ASCOM.OptecTCF_S
 
         private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            if(myFocuser.ConnectionState != OptecFocuser.ConnectionStates.Disconnected)
+            {
+                MessageBox.Show("You must disconnect before you can change the serial port.");
+                refreshCOMPortNames();
+            }
             ComboBox cb = sender as ComboBox;
 
             myFocuser.SavedSerialPortName = cb.SelectedItem as string;
@@ -120,8 +125,14 @@ namespace ASCOM.OptecTCF_S
         {
             try
             {
+                if (myFocuser.ConnectionState != OptecFocuser.ConnectionStates.Disconnected)
+                {
+                    MessageBox.Show("Already Connected!");
+                    return;
+                }
                 myFocuser.ConnectionState = OptecFocuser.ConnectionStates.SerialMode;
                 propertyGrid1.Refresh();
+                PowerLight.Image = Properties.Resources.RedLight;
             }
             catch (Exception ex)
             {
@@ -135,6 +146,7 @@ namespace ASCOM.OptecTCF_S
             {
                 myFocuser.ConnectionState = OptecFocuser.ConnectionStates.Disconnected;
                 propertyGrid1.Refresh();
+                PowerLight.Image = Properties.Resources.GreyLight;
             }
             catch (Exception ex)
             {

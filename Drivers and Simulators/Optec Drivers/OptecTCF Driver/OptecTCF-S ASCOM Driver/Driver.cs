@@ -28,6 +28,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Optec_TCF_S_Focuser;
+using Optec;
 
 using ASCOM;
 using ASCOM.Utilities;
@@ -63,7 +64,14 @@ namespace ASCOM.OptecTCF_S
 #if DEBUG
             MessageBox.Show("Creating");
 #endif
-            myFocuser = OptecFocuser.Instance;
+            try
+            {
+                myFocuser = OptecFocuser.Instance;
+            }
+            catch(Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+            }
         }
 
         #region ASCOM Registration
@@ -155,14 +163,17 @@ namespace ASCOM.OptecTCF_S
                     {
                         //OptecTCF_S_Focuser.OptecFocuser.Connect();
                         myFocuser.ConnectionState = OptecFocuser.ConnectionStates.SerialMode;
+                        EventLogger.LogMessage("Focuser Link Established", System.Diagnostics.TraceLevel.Info);
                     }
                     else
                     {
                         myFocuser.ConnectionState = OptecFocuser.ConnectionStates.Disconnected;
+                        EventLogger.LogMessage("Focuser Link Terminated", System.Diagnostics.TraceLevel.Info);
                     }
                 }
                 catch (Exception ex)
-                { 
+                {
+                    EventLogger.LogMessage(ex);
                     if (value)
                         throw new DriverException("Unable To Connect To Device.", ex);
                     else throw new DriverException("Error While Disconnecting Device.", ex);
@@ -191,11 +202,23 @@ namespace ASCOM.OptecTCF_S
                 }
                 else
                 {
-                    myFocuser.TargetPosition = val;
+                    EventLogger.LogMessage("MOVING TO " + val.ToString(), System.Diagnostics.TraceLevel.Verbose);
+                    if (IsMoving)
+                    {
+                        EventLogger.LogMessage("*Waiting for previous move to finish", System.Diagnostics.TraceLevel.Verbose);
+                    }
+                    myFocuser.TargetPosition = val; // Shouldn't return until the move starts...
+                    
+                    while (IsMoving)
+                    {
+                        //block while waiting for move to stop
+                    }
+
                 }
             }
             catch (Exception ex)
             {
+                EventLogger.LogMessage(ex);
                 throw ex;
             }
         }
@@ -210,6 +233,7 @@ namespace ASCOM.OptecTCF_S
                 }
                 catch (Exception ex)
                 {
+                    EventLogger.LogMessage(ex);
                     throw new ASCOM.DriverException("Error Getting Position", ex);
                 }
             }
@@ -217,15 +241,23 @@ namespace ASCOM.OptecTCF_S
 
         public void SetupDialog()
         {
-            if (myFocuser.ConnectionState == OptecFocuser.ConnectionStates.Disconnected)
+            try
             {
-                SetupDialog2 F = new SetupDialog2(myFocuser);
-                F.ShowDialog();
+                if (myFocuser.ConnectionState == OptecFocuser.ConnectionStates.Disconnected)
+                {
+                    SetupDialog2 F = new SetupDialog2(myFocuser);
+                    F.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show("A connection to the focuser is currently open. \n" +
+                        "To access the driver settings please disconnect from the device first.", "Disconnect Device", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("A connection to the focuser is currently open. \n" + 
-                    "To access the driver settings please disconnect from the device first.", "Disconnect Device", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                EventLogger.LogMessage(ex);
+                throw;
             }
         }
 
@@ -250,6 +282,7 @@ namespace ASCOM.OptecTCF_S
 
                     if (value)
                     {
+                        EventLogger.LogMessage("Attempting to turn Temp Comp ON", System.Diagnostics.TraceLevel.Info);
                         if (myFocuser.TempProbeDisabled)
                         {
                             throw new ASCOM.NotImplementedException("The temperature probe is disabled");
@@ -258,11 +291,13 @@ namespace ASCOM.OptecTCF_S
                     }
                     else
                     {
+                        EventLogger.LogMessage("Attempting to turn Temp Comp OFF", System.Diagnostics.TraceLevel.Info);
                         myFocuser.ConnectionState = OptecFocuser.ConnectionStates.SerialMode;
                     }
                 }
                 catch (Exception ex)
                 {
+                    EventLogger.LogMessage(ex);
                     throw new ASCOM.DriverException("Failed to set temp comp mode = " + value.ToString() +
                         "\n Exception throw was: " + ex.ToString());
                 }
@@ -287,6 +322,7 @@ namespace ASCOM.OptecTCF_S
                 }
                 catch (Exception ex)
                 {
+                    EventLogger.LogMessage(ex);
                     throw new ASCOM.DriverException("Error Getting Temperature", ex);
                 }
             }

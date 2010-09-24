@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO.Ports;
 using System.Diagnostics;
+using Optec;
 
 namespace Optec_TCF_S_Focuser
 {
@@ -16,12 +17,13 @@ namespace Optec_TCF_S_Focuser
         private string portName = "COM1";
         private bool PortNameValid = false;
 
-        private SerialCommunicator() {
+        private SerialCommunicator()
+        {
             Debug.Print("Initializing Serial Communicator");
             mySerialPort = new SerialPort();
             mySerialPort.BaudRate = 19200;
             mySerialPort.NewLine = "\n\r";
-            mySerialPort.PortName = portName;  
+            mySerialPort.PortName = portName;
         }
 
         public string PortName
@@ -75,22 +77,19 @@ namespace Optec_TCF_S_Focuser
                     if (!mySerialPort.IsOpen) mySerialPort.Open();
                     mySerialPort.DiscardInBuffer();
                     mySerialPort.DiscardOutBuffer();
-                    Debug.Print("Sending (SerialCommander): " + cmd);
+                    EventLogger.LogMessage("Sending (SerialCommander): " + cmd, TraceLevel.Verbose);
                     mySerialPort.Write(cmd);
                     string r = mySerialPort.ReadLine();
-                    Debug.Print("SendCommand() received: " + r);
+                    EventLogger.LogMessage("SendCommand() received: " + r, TraceLevel.Verbose);
                     return r;
                 }
-                
-                catch (Exception)
+
+                catch (Exception ex)
                 {
+                    EventLogger.LogMessage(ex);
                     throw;
                 }
-                finally
-                {
-                   // mySerialPort.Close();
 
-                } 
             }
         }
 
@@ -116,13 +115,14 @@ namespace Optec_TCF_S_Focuser
                         return "CLEARING INPUT BUFFER";
                     }
                 }
-                catch
+                catch (TimeoutException)
                 {
                     throw;
                 }
-                finally
+                catch (Exception ex)
                 {
-                    // mySerialPort.Close();
+                    EventLogger.LogMessage(ex);
+                    throw;
                 }
             }
         }
@@ -147,5 +147,4 @@ namespace Optec_TCF_S_Focuser
             }
         }
     }
-
 }

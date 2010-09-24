@@ -45,6 +45,9 @@ namespace Optec_TCF_S_Focuser
 
         private OptecFocuser()
         {
+            // First set the desired trace level.
+            EventLogger.LoggingLevel = XMLSettings.LoggerTraceLevel;
+            EventLogger.LogMessage("Creating Instance of Optec Focuser", TraceLevel.Info);
             connectionState = ConnectionStates.Disconnected;
             mySerialCommunicator = SerialCommunicator.Instance;
 
@@ -66,9 +69,9 @@ namespace Optec_TCF_S_Focuser
             {
                 mySerialCommunicator.PortName = savedSerialPortName;
             }
-            catch
+            catch (Exception ex)
             {
-
+                EventLogger.LogMessage(ex);
             }
         }
 
@@ -128,14 +131,11 @@ namespace Optec_TCF_S_Focuser
         [Description("The current position, in steps, of the connected focuser.")]
         public double CurrentPosition
         {
-            get { return currentPosition; }
-            // set
-            // {
-            //      if (isMoving) throw new ApplicationException("Device is already moving");
-            //      IsMoving = true;
-            //       ChangeFocus((int)value);
-
-            //   }
+            get
+            {
+                if (connectionState == ConnectionStates.Disconnected) return 0;
+                else return currentPosition;
+            }
         }
         [DisplayName("Device Pos. for Display")]
         [Category("Device Status")]
@@ -149,7 +149,8 @@ namespace Optec_TCF_S_Focuser
         {
             get
             {
-                string pos = "----";
+                if (connectionState == ConnectionStates.Disconnected) return "------";
+                string pos = "-----";
                 switch (displayPositionUnits)
                 {
                     case PositionUnits.Microns:
@@ -171,19 +172,39 @@ namespace Optec_TCF_S_Focuser
         [Browsable(false)]  // No need to show this to the user
         public int TargetPosition
         {
-            get { return targetPosition; }
+            get
+            {
+                if (connectionState == ConnectionStates.Disconnected)
+                {
+                    EventLogger.LogMessage("Attempted to get Target Postion while not connected", TraceLevel.Warning);
+                    return 0;
+                }
+                return targetPosition;
+            }
             set
             {
                 try
                 {
+                    EventLogger.LogMessage("Setting Target Position to " + value.ToString(), TraceLevel.Info);
                     if (connectionState != ConnectionStates.SerialMode)
                         throw new InvalidOperationException("The device must be in Serial Mode to perform this operation.");
+                    while (IsMoving)
+                    {
+                        //block
+                    }
                     if (value > MaxSteps) targetPosition = MaxSteps;
                     else if (value < 1) targetPosition = 1;
-                    else targetPosition = value;
+                    else if (value == currentPosition) return;
+                    else
+                    {
+                        targetPosition = value;
+                        while (!isMoving) { }
+                    }
+                    EventLogger.LogMessage("Target Position set to " + targetPosition.ToString(), TraceLevel.Verbose);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    EventLogger.LogMessage(ex);
                     throw;
                 }
             }
@@ -197,6 +218,7 @@ namespace Optec_TCF_S_Focuser
         {
             get
             {
+                if (connectionState == ConnectionStates.Disconnected) return 0;
                 if (tempProbeDisabled)
                 {
                     currentTemperature = TEMP_WHEN_PROBE_DISABLED;
@@ -219,6 +241,7 @@ namespace Optec_TCF_S_Focuser
             get
             {
                 string t = "------";
+                if (connectionState == ConnectionStates.Disconnected) return t;
                 if (currentTemperature == TEMP_WHEN_PROBE_DISABLED) return t;
                 switch (displayTempUnits)
                 {
@@ -427,7 +450,7 @@ namespace Optec_TCF_S_Focuser
         private void EnterSerialMode()
         {
             // Send FMMODE to first to possible get device out of another mode
-            Debug.Print("Entering Serial Mode");
+            EventLogger.LogMessage("Entering Serial Mode", TraceLevel.Verbose);
             RefreshTimer.Stop();
             DateTime start = DateTime.Now;
             string response = "";
@@ -445,7 +468,10 @@ namespace Optec_TCF_S_Focuser
                     }
                     else System.Threading.Thread.Sleep(100);
                 }
-                catch (TimeoutException) { }
+                catch (TimeoutException ex)
+                {
+                    EventLogger.LogMessage(ex);
+                }
             }
 
             if (success) connectionState = ConnectionStates.SerialMode;
@@ -723,6 +749,11 @@ namespace Optec_TCF_S_Focuser
             }
             set
             {
+                if (myFocuser.connectionState != ConnectionStates.SerialMode)
+                {
+                    throw new ApplicationException("You must connect to the focuser to perform this" +
+                        " operation. Also, the focuser can not be in Sleep or Temp. Comp. mode while setting this property.");
+                }
                 ChangeDeviceType(value);
 
             }
@@ -795,6 +826,7 @@ namespace Optec_TCF_S_Focuser
             private set
             {
                 isMoving = value;
+                EventLogger.LogMessage("isMoving set to " + value.ToString(), TraceLevel.Verbose);
                 TriggerAnEvent(DeviceStatusChanged);
             }
         }
@@ -807,11 +839,9 @@ namespace Optec_TCF_S_Focuser
             {
                 if (targetPosition != CurrentPosition)
                 {
-                    isMoving = true;
-                    TriggerAnEvent(DeviceStatusChanged);
+                    IsMoving = true;
                     ChangeFocus(targetPosition);
-                    isMoving = false;
-                    TriggerAnEvent(DeviceStatusChanged);
+                    IsMoving = false;
                 }
             }
             catch
@@ -1014,6 +1044,7 @@ namespace Optec_TCF_S_Focuser
         {
             try
             {
+                EventLogger.LogMessage("Attempting to change focus to " + NewPos.ToString(), TraceLevel.Verbose);
                 if (NewPos == currentPosition) return;
                 int diff = (int)Math.Abs((double)currentPosition - (double)NewPos);
                 int timeout = 1000 + (diff * 6);
@@ -1026,13 +1057,14 @@ namespace Optec_TCF_S_Focuser
                     IsMoving = false;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                EventLogger.LogMessage(ex);
                 throw;
             }
             finally
             {
-                isMoving = false;
+                IsMoving = false;
             }
 
         }
@@ -1127,6 +1159,11 @@ namespace Optec_TCF_S_Focuser
             get { return displayBrightness; }
             set
             {
+                if (myFocuser.connectionState != ConnectionStates.SerialMode)
+                {
+                    throw new ApplicationException("You must connect to the focuser to perform this" +
+                        " operation. Also, the focuser can not be in Sleep or Temp. Comp. mode while setting this property.");
+                }
                 SetDisplayBrightness(value);
 
             }
@@ -1151,6 +1188,11 @@ namespace Optec_TCF_S_Focuser
             get { return tempProbeDisabled; }
             set
             {
+                if (myFocuser.connectionState != ConnectionStates.SerialMode)
+                {
+                    throw new ApplicationException("You must connect to the focuser to perform this" +
+                        " operation. Also, the focuser can not be in Sleep or Temp. Comp. mode while setting this property.");
+                }
                 DisableTempProbe(value);
             }
         }
@@ -1199,21 +1241,37 @@ namespace Optec_TCF_S_Focuser
         private int autoBDelay = 0;
         [Category("Device Configuration")]
         [DisplayName("Temp Mode A Delay")]
-        [Description("The delay minimum delay between position adjustments when in Temp. Comp. Mode. " +
+        [Description("The time delay between position adjustments when in Temp. Comp. Mode in 5ms increments. " +
             "The default and minimum value for this property is 1.")]
         public int AutoADelay
         {
             get { return autoADelay; }
-            set { SetAutoDelay('A', value); }
+            set
+            {
+                if (myFocuser.connectionState != ConnectionStates.SerialMode)
+                {
+                    throw new ApplicationException("You must connect to the focuser to perform this" +
+                        " operation. Also, the focuser can not be in Sleep or Temp. Comp. mode while setting this property.");
+                }
+                SetAutoDelay('A', value);
+            }
         }
         [Category("Device Configuration")]
         [DisplayName("Temp Mode B Delay")]
-        [Description("The delay minimum delay between position adjustments when in Temp. Comp. Mode. " +
+        [Description("The time delay between position adjustments when in Temp. Comp. Mode in 5ms increments. " +
             "The default and minimum value for this property is 1.")]
         public int AutoBDelay
         {
             get { return autoBDelay; }
-            set { SetAutoDelay('B', value); }
+            set
+            {
+                if (myFocuser.connectionState != ConnectionStates.SerialMode)
+                {
+                    throw new ApplicationException("You must connect to the focuser to perform this" +
+                        " operation. Also, the focuser can not be in Sleep or Temp. Comp. mode while setting this property.");
+                }
+                SetAutoDelay('B', value);
+            }
         }
 
         private void SetAutoDelay(char AorB, double d)
@@ -1221,7 +1279,7 @@ namespace Optec_TCF_S_Focuser
             try
             {
                 // First try to st the delay in the device
-                
+
                 if (AorB != 'A' && AorB != 'B') throw new InvalidOperationException("SetDelay must be A or B. Received: " + AorB.ToString());
                 if (d < 0 || d > 999) throw new InvalidOperationException("SetDelay must be between 0 through 999");
                 int delay = (int)d;
@@ -1244,6 +1302,7 @@ namespace Optec_TCF_S_Focuser
             }
             catch (Exception ex)
             {
+                EventLogger.LogMessage(ex);
                 throw ex;
             }
         }
@@ -1265,6 +1324,7 @@ namespace Optec_TCF_S_Focuser
         private int tempCoefficientA = 86;
         [Category("Device Configuration")]
         [DisplayName("Mode A Temp. Coefficient")]
+        [Description("The number of steps the focuser will move per degree Celsius of temperature change when in Temperature Compensation Mode A.")]
         public int TempCoefficientA
         {
             get
@@ -1273,12 +1333,19 @@ namespace Optec_TCF_S_Focuser
             }
             set
             {
+                if (myFocuser.connectionState != ConnectionStates.SerialMode)
+                {
+                    throw new ApplicationException("You must connect to the focuser to perform this" +
+                        " operation. Also, the focuser can not be in Sleep or Temp. Comp. mode while setting this property.");
+                }
                 SetTempCoefficient('A', value);
             }
         }
+
         private int tempCoefficientB = 86;
         [Category("Device Configuration")]
         [DisplayName("Mode B Temp. Coefficient")]
+        [Description("The number of steps the focuser will move per degree Celsius of temperature change when in Temperature Compensation Mode A.")]
         public int TempCoefficientB
         {
             get
@@ -1287,6 +1354,11 @@ namespace Optec_TCF_S_Focuser
             }
             set
             {
+                if (myFocuser.connectionState != ConnectionStates.SerialMode)
+                {
+                    throw new ApplicationException("You must connect to the focuser to perform this" +
+                        " operation. Also, the focuser can not be in Sleep or Temp. Comp. mode while setting this property.");
+                }
                 SetTempCoefficient('B', value);
             }
         }
@@ -1456,7 +1528,4 @@ namespace Optec_TCF_S_Focuser
             OffsetSteps = offsetSteps;
         }
     }
-
-
-
 }
