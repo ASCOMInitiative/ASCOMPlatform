@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using System.Reflection;
+using Optec;
+using System.Diagnostics;
 
 
 namespace Optec_TCF_S_Focuser
@@ -30,7 +32,7 @@ namespace Optec_TCF_S_Focuser
         {
             try
             {
-                
+                EventLogger.LogMessage("Loading XML Settings Data.", TraceLevel.Info);
                 if (!System.IO.File.Exists(xpath))
                 {
                     // Create the settings file...
@@ -59,6 +61,7 @@ namespace Optec_TCF_S_Focuser
         {
             try
             {
+                EventLogger.LogMessage("Getting property  " + PropertyName + " from xml file.", TraceLevel.Verbose);
                 XElement e = TCFSettingsDocument.Descendants("TCFSettings").Descendants().Single(i => i.Name == PropertyName);
 
                 if (t.IsEnum)
@@ -70,8 +73,9 @@ namespace Optec_TCF_S_Focuser
                 else return Convert.ChangeType(e.Value, t);
                 
             }
-            catch(InvalidOperationException)
+            catch(InvalidOperationException ex)
             {
+                EventLogger.LogMessage(ex);
                 CreatePropertyInXML(PropertyName, defaultValue);
                 return getPropertyFromXML(PropertyName, t, defaultValue);
             }
@@ -82,12 +86,14 @@ namespace Optec_TCF_S_Focuser
         {
             try
             {
+                EventLogger.LogMessage("Getting property  " + PropertyName + "to " + NewValue.ToString() + " in xml file.", TraceLevel.Verbose);
                 XElement x = TCFSettingsDocument.Descendants("TCFSettings").Descendants().Single(i => i.Name == PropertyName);
                 x.SetValue(NewValue);
                 TCFSettingsDocument.Save(xpath);
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
+                EventLogger.LogMessage(ex);
                 CreatePropertyInXML(PropertyName, NewValue);
             }
         }
@@ -247,6 +253,18 @@ namespace Optec_TCF_S_Focuser
             set
             {
                 setPropertyInXML("SerialPortName", value);
+            }
+        }
+
+        public static TraceLevel LoggerTraceLevel
+        {
+            get
+            {
+                return (TraceLevel)getPropertyFromXML("LoggerTraceLevel", typeof(TraceLevel), TraceLevel.Warning);
+            }
+            set
+            {
+                setPropertyInXML("LoggerTraceLevel", value);
             }
         }
     }

@@ -34,13 +34,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_557DB2E8611BED88FD1E344CC86FEF05"
+        "OwnerKey" = "8:_6B3A684775C64FE39CBF100A20E758D9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6B3A684775C64FE39CBF100A20E758D9"
+        "OwnerKey" = "8:_557DB2E8611BED88FD1E344CC86FEF05"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -70,10 +70,10 @@
             "ComponentsUrl" = "8:"
                 "Items"
                 {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5.SP1"
                     {
-                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
-                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    "Name" = "8:.NET Framework 3.5 SP1"
+                    "ProductCode" = "8:Microsoft.Net.Framework.3.5.SP1"
                     }
                     "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
                     {
@@ -155,6 +155,11 @@
             "AssemblyAsmDisplayName" = "8:Optec.EventLogger, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
+                    "_557DB2E8611BED88FD1E344CC86FEF05"
+                    {
+                    "Name" = "8:Optec.EventLogger.dll"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:Optec.EventLogger.dll"
             "TargetName" = "8:"
@@ -295,7 +300,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Optec TCF-S Focuser"
         "ProductCode" = "8:{279005B4-D656-423C-A298-E5117F738BEC}"
-        "PackageCode" = "8:{88F3FB0C-28BA-4269-A615-FBE31A034070}"
+        "PackageCode" = "8:{78057D94-8898-44FA-8C93-578CC7AC2F98}"
         "UpgradeCode" = "8:{783440A9-51F0-4D91-8780-A132C0BB1777}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -809,7 +814,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_6B3A684775C64FE39CBF100A20E758D9"
             {
-            "SourcePath" = "8:..\\Optec TCF-S Focuser\\obj\\x86\\Release\\Optec TCF-S Focuser.exe"
+            "SourcePath" = "8:..\\Optec TCF-S Focuser\\obj\\x86\\Debug\\Optec TCF-S Focuser.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_5364E1F2B8554C538F1BB95190751BCA"

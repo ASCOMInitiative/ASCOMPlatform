@@ -67,9 +67,9 @@ namespace ASCOM.OptecTCF_S.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap Optec_Logo_large_png {
+        internal static System.Drawing.Bitmap GreyLight {
             get {
-                object obj = ResourceManager.GetObject("Optec_Logo_large_png", resourceCulture);
+                object obj = ResourceManager.GetObject("GreyLight", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
