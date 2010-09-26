@@ -141,6 +141,7 @@
     <Compile Include="Rotator.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
+    <Compile Include="SafetyMonitor.cs" />
     <Compile Include="Switch.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
