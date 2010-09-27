@@ -40,43 +40,59 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::ASCOM.Simulator.Properties.Resources.ASCOM1;
-            resources.ApplyResources(this.pictureBox1, "pictureBox1");
+            this.pictureBox1.Location = new System.Drawing.Point(3, 3);
             this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(51, 56);
+            this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(PictureBox1Click);
             // 
             // pictureBox2
             // 
             this.pictureBox2.Image = global::ASCOM.Simulator.Properties.Resources.RedLED1;
-            resources.ApplyResources(this.pictureBox2, "pictureBox2");
+            this.pictureBox2.Location = new System.Drawing.Point(161, 11);
             this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(22, 21);
+            this.pictureBox2.TabIndex = 1;
             this.pictureBox2.TabStop = false;
             // 
             // label1
             // 
-            resources.ApplyResources(this.label1, "label1");
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
             this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(62, 12);
             this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(93, 16);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Safety Monitor";
             // 
             // button1
             // 
+            this.button1.BackColor = System.Drawing.Color.White;
             this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            resources.ApplyResources(this.button1, "button1");
+            this.button1.Location = new System.Drawing.Point(99, 36);
             this.button1.Name = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Size = new System.Drawing.Size(52, 23);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "Close";
+            this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.Button1Click);
             // 
             // SetupDialogForm
             // 
-            resources.ApplyResources(this, "$this");
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.CancelButton = this.button1;
+            this.ClientSize = new System.Drawing.Size(229, 74);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "SetupDialogForm";
+            this.Text = " SafetyMonitor";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
