@@ -120,7 +120,7 @@
     <None Include="Optec.snk" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Optec.EventLogger\Optec.EventLogger.csproj">
+    <ProjectReference Include="..\OptecEventLogger\Optec.EventLogger.csproj">
       <Project>{9EC2D59F-5842-43FA-A943-625B23295484}</Project>
       <Name>Optec.EventLogger</Name>
     </ProjectReference>
