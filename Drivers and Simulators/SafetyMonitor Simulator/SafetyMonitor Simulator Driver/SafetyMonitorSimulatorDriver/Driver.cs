@@ -86,11 +86,14 @@ namespace ASCOM.Simulator
             //check to see if the profile is ok
             if (ValidateProfile())
             {
+                if (CheckSafetyMonitorKeyValue()) ;
                 //load profile settings
                 GetProfileSetting();
             }
             else
-                throw new Exception("Profile is in an invalid sate");
+            {
+                RegisterWithProfile();
+            }
         }
 
         /// <summary>
@@ -233,18 +236,7 @@ namespace ASCOM.Simulator
             {
                 Profile.DeviceType = "SafetyMonitor";
                 //check profile if the driver id is registered
-                bool chkRegistered = Profile.IsRegistered(sCsDriverId);
-                if (chkRegistered)
-                {
-                     string s = Profile.GetValue(sCsDriverId, "SafetyMonitor");
-                        if (s != "True" & s != "False")
-                        {
-                            //found something wrong, delete evertyhing
-                            DeleteProfileSettings();
-                            return false;
-                        }
-                }
-                return false;
+                return Profile.IsRegistered(sCsDriverId);
             }
             catch (System.IO.DirectoryNotFoundException)
             {
@@ -252,12 +244,36 @@ namespace ASCOM.Simulator
             }
         }
 
+        private static bool CheckSafetyMonitorKeyValue()
+        {
+            string s = Profile.GetValue(sCsDriverId, "SafetyMonitor").ToUpper();
+            if (s != "TRUE" & s != "FALSE")
+            {
+                //found something wrong, delete evertyhing
+                DeleteProfileSettings();
+                return RegisterWithProfile();
+            }
+            return true;
+        }
+
+        private static bool RegisterWithProfile()
+        {
+            Profile.Register(sCsDriverId, sCsDriverId);
+            if (ValidateProfile())
+            {
+                Profile.WriteValue(sCsDriverId, "SafetyMonitor", "false");
+                return true;
+            }
+            return false;
+        }
+
         /// <summary>
         /// Loads a specific setting from the profile
         /// </summary>
         private static void GetProfileSetting()
         {
-            _isSafe = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "SafetyMonitor", "false"));
+            string s = Profile.GetValue(sCsDriverId, "SafetyMonitor");
+            _isSafe = Convert.ToBoolean(s);
         }
 
         /// <summary>
