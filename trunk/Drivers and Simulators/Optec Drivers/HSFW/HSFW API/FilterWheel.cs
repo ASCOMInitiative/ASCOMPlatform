@@ -5,6 +5,7 @@ using System.Text;
 using OptecHIDTools;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Optec;
 
 
 namespace OptecHID_FilterWheelAPI
@@ -202,8 +203,8 @@ namespace OptecHID_FilterWheelAPI
             }
             catch (Exception ex)
             {
-
-                Trace.WriteLine("EXCEPTION THROWN in FilterWheel.RefreshDeviceStatus: \n" + ex.ToString());
+                EventLogger.LogMessage(ex);
+                Debug.WriteLine("EXCEPTION THROWN in FilterWheel.RefreshDeviceStatus: \n" + ex.ToString());
                 throw;
             }
 
@@ -465,6 +466,7 @@ namespace OptecHID_FilterWheelAPI
             }
             catch (Exception ex)
             {
+                EventLogger.LogMessage(ex);
                 Trace.WriteLine(ex.ToString());
                 throw;
             }
@@ -507,6 +509,7 @@ namespace OptecHID_FilterWheelAPI
             }
             catch (Exception ex)
             {
+                EventLogger.LogMessage(ex);
                 Trace.WriteLine(ex.ToString());
                 throw;
             }
@@ -558,7 +561,8 @@ namespace OptecHID_FilterWheelAPI
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("EXCEPTION THROWN in ChangePosition: " + ex.ToString());
+                EventLogger.LogMessage(ex);
+                Debug.WriteLine("EXCEPTION THROWN in ChangePosition: " + ex.ToString());
                 throw;
             }
         }
@@ -577,6 +581,7 @@ namespace OptecHID_FilterWheelAPI
             }
             catch (Exception ex)
             {
+                EventLogger.LogMessage(ex);
                 Trace.WriteLine("EXCEPTION THROWN in FilterWheel.ClearErrorState: " + ex.ToString());
                 throw;
             }
@@ -615,6 +620,7 @@ namespace OptecHID_FilterWheelAPI
             }
             catch (Exception ex)
             {
+                EventLogger.LogMessage(ex);
                 Trace.WriteLine("EXCEPTION THROWN in FilterWheel.StoreDefaultNames: " + ex.ToString());
                 throw;
             }
@@ -685,6 +691,7 @@ namespace OptecHID_FilterWheelAPI
             }
             catch (Exception ex)
             {
+                EventLogger.LogMessage(ex);
                 Trace.WriteLine("EXCEPTION THROWN in FilterWheel.GetFilterWheelNames: \n" + ex.ToString());
                 throw;
             }
@@ -746,6 +753,7 @@ namespace OptecHID_FilterWheelAPI
             }
             catch (Exception ex)
             {
+                EventLogger.LogMessage(ex);
                 Trace.WriteLine("EXCEPTION THROWN in FilterWHeel.GetWheelNames: " +  ex.ToString());
                 throw;
             }
@@ -802,6 +810,7 @@ namespace OptecHID_FilterWheelAPI
             }
             catch (Exception ex)
             {
+                EventLogger.LogMessage(ex);
                 Trace.WriteLine("EXCEPTION THROWN in FilterWhel.UpdateFilterName:" + ex.ToString());
                 throw;
             }
@@ -850,7 +859,8 @@ namespace OptecHID_FilterWheelAPI
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("EXCEPTION THROWN in FilterWhel.UpdateWheelName:" + ex.ToString());
+                EventLogger.LogMessage(ex);
+                Debug.WriteLine("EXCEPTION THROWN in FilterWhel.UpdateWheelName:" + ex.ToString());
                 throw;
             }
         }    
@@ -913,7 +923,8 @@ namespace OptecHID_FilterWheelAPI
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("An erorr occurred while trying to retrieve the proper error message from the Resource Manager. \n" + 
+                EventLogger.LogMessage(ex);
+                Debug.WriteLine("An erorr occurred while trying to retrieve the proper error message from the Resource Manager. \n" + 
                     "Exception Data = \n" + ex.ToString() + "\n");
                 return "No Error Message Available";
             }
