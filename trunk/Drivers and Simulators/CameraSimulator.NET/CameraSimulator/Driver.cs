@@ -17,11 +17,13 @@
 // 14-Oct-2007	rbd	1.0.0	Initial edit, from ASCOM Camera Driver template
 // 09-Jan-2009  cdr 6.0.0   Get the basic functionality working, some V2 properties in place but no interface
 // 22-Jan-2009  cdr 6.0.0   More functionality, including temperature, noise, image
+// 03-Oct-2010  cdr 6.0.0   Should be close to complete.
 // --------------------------------------------------------------------------------
 //
 using System;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
@@ -148,8 +150,8 @@ namespace ASCOM.Simulator
         private object[,,] imageArrayVariantColour;
         private string lastError = string.Empty;
 
-        private Timer exposureTimer;
-        private Timer coolerTimer;
+        private ASCOM.Utilities.Timer exposureTimer;
+        private ASCOM.Utilities.Timer coolerTimer;
 
         #endregion
 
@@ -549,8 +551,8 @@ namespace ASCOM.Simulator
                     // implement CCD temperature control
                     if (this.coolerTimer == null)
                     {
-                        coolerTimer = new Timer();
-                        coolerTimer.Tick += new Timer.TickEventHandler(coolerTimer_Tick);
+                        coolerTimer = new ASCOM.Utilities.Timer();
+                        coolerTimer.Tick += new ASCOM.Utilities.Timer.TickEventHandler(coolerTimer_Tick);
                         coolerTimer.Interval = 1000;
                         coolerTimer.Enabled = true;
                     }
@@ -1084,7 +1086,7 @@ namespace ASCOM.Simulator
 
             if (this.exposureTimer == null)
             {
-                this.exposureTimer = new Timer();
+                this.exposureTimer = new ASCOM.Utilities.Timer();
                 this.exposureTimer.Tick += exposureTimer_Tick;
             }
             this.exposureTimer.Interval = (int)(Duration * 1000);
@@ -1619,7 +1621,8 @@ namespace ASCOM.Simulator
             this.exposureMax = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_MaxExposure, string.Empty, "3600"), CultureInfo.InvariantCulture);
             this.exposureMin = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_MinExposure, string.Empty, "0.001"), CultureInfo.InvariantCulture);
             this.exposureResolution = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_ExposureResolution, string.Empty, "0.001"), CultureInfo.InvariantCulture);
-            this.imagePath = profile.GetValue(s_csDriverID, STR_ImagePath, string.Empty, @"D:\ASCOM Projects\trunk\ASCOM\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\m42-800x600.jpg");
+            string fullPath = Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly((this.GetType())).Location);
+            this.imagePath = profile.GetValue(s_csDriverID, STR_ImagePath, string.Empty, Path.Combine(fullPath, @"m42-800x600.jpg"));
             this.applyNoise = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_ApplyNoise, string.Empty, "false"), CultureInfo.InvariantCulture);
 
             // default to min = max && gains = null - no gain control
