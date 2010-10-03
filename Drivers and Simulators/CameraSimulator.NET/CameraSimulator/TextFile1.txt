@@ -14,4 +14,3 @@ extract the colour data using the sensor type and the Bayer offsets.
 Noise can be added to the image, so can can dark current.  the noise, dark current and
 image data is scaled according to the temperature and exposure time.
 
-Most testing has been done on the monochrome data, there is quite likely to be problems with the 

@@ -1,13 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Windows.Forms;
-using ASCOM.Utilities;
-using ASCOM.DeviceInterface;
 using System.Globalization;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+using ASCOM.DeviceInterface;
 
 namespace ASCOM.Simulator
 {
@@ -156,6 +152,9 @@ namespace ASCOM.Simulator
 
         private void buttonSetImageFile_Click(object sender, EventArgs e)
         {
+            openFileDialog1.CheckPathExists = true;
+            openFileDialog1.CheckFileExists = true;
+            openFileDialog1.InitialDirectory = Path.GetDirectoryName(camera.imagePath);
             openFileDialog1.FileName = camera.imagePath;
             openFileDialog1.ShowDialog();
             camera.imagePath = openFileDialog1.FileName;

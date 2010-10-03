@@ -129,7 +129,13 @@
   <ItemGroup>
     <Content Include="ASCOM.png" />
     <Content Include="favicon.ico" />
+    <Content Include="m42-800x600.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="ReadMe.htm" />
+    <Content Include="Testcard_F.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="TextFile1.txt" />
   </ItemGroup>
   <ItemGroup>
