@@ -1,6 +1,6 @@
-﻿namespace FocuserSimulatorDriver
+﻿namespace ASCOM.Simulator
 {
-    partial class Form1
+    partial class SetupDialogForm
     {
         /// <summary>
         /// Required designer variable.
