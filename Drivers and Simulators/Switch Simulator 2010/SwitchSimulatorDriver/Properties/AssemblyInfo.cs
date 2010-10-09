@@ -10,10 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ASCOM.Simulator.Switch")]
 [assembly: AssemblyDescription("ASCOM Switch Simulator Driver")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("The ASCOM Initiative")]
-[assembly: AssemblyProduct("ASCOM.Simulator.Switch")]
 [assembly: AssemblyCopyright("Copyright © 2010 The ASCOM Initiative")]
-[assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
@@ -35,5 +32,4 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 //
 // TODO - Set your driver's version here
-[assembly: AssemblyVersion("6")]
-[assembly: AssemblyFileVersion("6.0.0.0")]
+
