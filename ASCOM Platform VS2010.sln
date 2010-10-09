@@ -192,6 +192,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitchSimulatorDriver", "Dr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitchConsoleTest", "Drivers and Simulators\Switch Simulator 2010\SwitchConsole\SwitchConsoleTest.csproj", "{2B0526EE-AF0D-446D-A6C2-EC350E790C25}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SafetyMonitor", "SafetyMonitor", "{1276545E-B141-48D8-AA99-3E169CF840FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafetyMonitorSimulatorDriver", "Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\SafetyMonitorSimulatorDriver.csproj", "{6D940101-25F1-45F1-8356-3E4D1CD1385D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Quick|Any CPU = Debug Quick|Any CPU
@@ -799,6 +803,20 @@ Global
 		{2B0526EE-AF0D-446D-A6C2-EC350E790C25}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2B0526EE-AF0D-446D-A6C2-EC350E790C25}.Release|x86.ActiveCfg = Release|x86
 		{2B0526EE-AF0D-446D-A6C2-EC350E790C25}.Release|x86.Build.0 = Release|x86
+		{6D940101-25F1-45F1-8356-3E4D1CD1385D}.Debug Quick|Any CPU.ActiveCfg = Debug|x86
+		{6D940101-25F1-45F1-8356-3E4D1CD1385D}.Debug Quick|x86.ActiveCfg = Debug|x86
+		{6D940101-25F1-45F1-8356-3E4D1CD1385D}.Debug Quick|x86.Build.0 = Debug|x86
+		{6D940101-25F1-45F1-8356-3E4D1CD1385D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D940101-25F1-45F1-8356-3E4D1CD1385D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D940101-25F1-45F1-8356-3E4D1CD1385D}.Debug|x86.ActiveCfg = Debug|x86
+		{6D940101-25F1-45F1-8356-3E4D1CD1385D}.Debug|x86.Build.0 = Debug|x86
+		{6D940101-25F1-45F1-8356-3E4D1CD1385D}.Peter|Any CPU.ActiveCfg = Release|x86
+		{6D940101-25F1-45F1-8356-3E4D1CD1385D}.Peter|x86.ActiveCfg = Release|x86
+		{6D940101-25F1-45F1-8356-3E4D1CD1385D}.Peter|x86.Build.0 = Release|x86
+		{6D940101-25F1-45F1-8356-3E4D1CD1385D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D940101-25F1-45F1-8356-3E4D1CD1385D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D940101-25F1-45F1-8356-3E4D1CD1385D}.Release|x86.ActiveCfg = Release|x86
+		{6D940101-25F1-45F1-8356-3E4D1CD1385D}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -828,6 +846,7 @@ Global
 		{F319D614-A93C-4952-9D75-4230DB9896B8} = {358D1EAC-1E2A-479F-80DB-3E7E22E39D97}
 		{52217DE4-DFAA-468E-B1A0-A79243708790} = {358D1EAC-1E2A-479F-80DB-3E7E22E39D97}
 		{AC00E557-DB2F-463E-BDAF-448AA7266CF7} = {358D1EAC-1E2A-479F-80DB-3E7E22E39D97}
+		{1276545E-B141-48D8-AA99-3E169CF840FF} = {358D1EAC-1E2A-479F-80DB-3E7E22E39D97}
 		{A4006FB9-7B26-44C6-B66A-E3A1EFA85D16} = {2F656A36-ED02-4FE2-AA49-C212A92908AA}
 		{C9BD6FCB-97C7-4096-B917-6E59B6E2C684} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
 		{9EE7C0D0-D2D7-496B-8989-C44ECD53A45A} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
@@ -859,15 +878,16 @@ Global
 		{6DD9248B-EB0E-4076-9F50-1B206B695AFB} = {DB708C00-E3FC-48C9-9091-275181312CBB}
 		{47E68B0F-EE59-4204-9055-2B9C33E47537} = {DB708C00-E3FC-48C9-9091-275181312CBB}
 		{12633CA2-397C-4924-B924-5BCC119B9077} = {DB708C00-E3FC-48C9-9091-275181312CBB}
+		{6D940101-25F1-45F1-8356-3E4D1CD1385D} = {1276545E-B141-48D8-AA99-3E169CF840FF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0DestinationAssemblyName = 
-		Reflector0DestinationVersion = 4.0.812.4
-		Reflector0DestinationName = Moq
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0SourceAssemblyName = 
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceName = Moq
 		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
+		Reflector0SourceName = Moq
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceAssemblyName = 
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0DestinationName = Moq
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationAssemblyName = 
 	EndGlobalSection
 EndGlobal
