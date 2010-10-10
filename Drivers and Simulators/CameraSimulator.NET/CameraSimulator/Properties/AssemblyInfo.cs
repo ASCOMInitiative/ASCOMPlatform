@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Simulator Camera V2 Driver")]
 [assembly: AssemblyDescription("ASCOM Camera Driver for Camera Simulator")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCopyright("Copyright © 2010 The ASCOM Initiative")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
