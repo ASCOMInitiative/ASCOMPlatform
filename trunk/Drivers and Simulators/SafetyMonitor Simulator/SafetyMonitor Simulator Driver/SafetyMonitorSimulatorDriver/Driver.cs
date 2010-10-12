@@ -86,7 +86,7 @@ namespace ASCOM.Simulator
             //check to see if the profile is ok
             if (ValidateProfile())
             {
-                if (CheckSafetyMonitorKeyValue()) ;
+                if (CheckSafetyMonitorKeyValue()) 
                 //load profile settings
                 GetProfileSetting();
             }
