@@ -203,6 +203,15 @@ namespace ASCOM.TelescopeSimulator
                 catch { }
             }
         }
+        public string ParkButton
+        {
+            set
+            {
+                SetTextCallback setText = new SetTextCallback(SetParkButtonText);
+                try { this.Invoke(setText, value); }
+                catch { }
+            }
+        }
         private void frmMain_Load(object sender, EventArgs e)
         {
             SetSlewButtons();
@@ -229,6 +238,11 @@ namespace ASCOM.TelescopeSimulator
         private void SetAzimuthText(string text)
         {
             labelAz.Text = text;
+        }
+
+        private void SetParkButtonText(string text)
+        {
+            buttonUnpark.Text = text;
         }
 
         #endregion
@@ -389,8 +403,33 @@ namespace ASCOM.TelescopeSimulator
             if (TelescopeHardware.Tracking) checkBoxTrack.Checked = true;
             else checkBoxTrack.Checked = false;
         }
+
         public void LEDPier(ASCOM.DeviceInterface.PierSide SideOfPier)
         {
+            if (SideOfPier == ASCOM.DeviceInterface.PierSide.pierEast)
+            {
+                ledPierEast.Green = true;
+                ledPierWest.Red = false;
+            }
+            else
+            {
+                ledPierWest.Red = true;
+                ledPierEast.Green = false;
+            }
+        }
+
+        private void buttonUnpark_Click(object sender, EventArgs e)
+        {
+            if (TelescopeHardware.IsParked)
+            {
+                TelescopeHardware.ChangePark(false);
+                TelescopeHardware.Tracking = true;
+            }
+            else
+            {
+                TelescopeHardware.ChangePark(true);
+                TelescopeHardware.Tracking = false;
+            }
 
         }
     }

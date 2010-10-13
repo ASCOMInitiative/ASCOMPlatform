@@ -328,6 +328,12 @@ Source: ..\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb; DestDir: {app}; 
 source: ..\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll; DestDir: {app}; Flags: ignoreversion
 source: ..\FusionLib\bin\Release\ASCOM.Internal.FusionLib.pdb; DestDir: {app}; Flags: ignoreversion
 
+;ASCOM Controls
+Source: ..\..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll; DestDir: {app}; Flags: ignoreversion
+;Source: ..\..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.pdb; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
+;Source: ..\..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.pdb; DestDir: {cf32}\ASCOM\.net; Flags: ignoreversion
+
 ;Simulators, install to 32 and 64bit directories
 Source: "..\..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll"; DestDir: "{cf}\ASCOM\Camera"; Flags: ignoreversion
 Source: "..\..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll"; DestDir: "{cf32}\ASCOM\Camera"; Check: IsWin64; Flags: ignoreversion
@@ -400,6 +406,9 @@ Filename: {cf32}\ASCOM\Utilities\MigrateProfile.exe; Parameters: /MIGRATEIFNEEDE
 ; ReadMe file
 Filename: {app}\ReadMe55.txt; Description: ReadMe file; StatusMsg: Displaying ReadMe file; Flags: shellexec skipifdoesntexist postinstall skipifsilent
 
+;Tim's components
+Filename: {app}\ASCOM.Internal.GACInstall.exe; Parameters: ASCOM.Controls.dll; Flags: runhidden; StatusMsg: Installing ASCOM.DeviceInterfaces to the assembly cache
+
 ; Register the simulators
 Filename: {dotnet20}\regasm.exe; Parameters: """{cf}\ASCOM\Camera\ASCOM.Simulator.Camera.dll"" /codebase"; Flags: runhidden; StatusMsg: Registering Camera Simulator for COM
 Filename: {dotnet2032}\regasm.exe; Parameters: """{cf32}\ASCOM\Camera\ASCOM.Simulator.Camera.dll"" /codebase"; Flags: runhidden; Check: IsWin64; StatusMsg: Registering Camera Simulator for 32bit COM
@@ -449,6 +458,9 @@ Filename: {app}\ASCOM.Internal.GACInstall.exe; Parameters: "/U ""ASCOM.Exception
 ;Publisher policy
 #emit "Filename: {app}\ASCOM.Internal.GACInstall.exe; Parameters: ""/U """"policy." + str(Major) + "." + str(Minor) + ".ASCOM.Utilities""""""; Flags: runhidden; StatusMsg: Uninstalling ASCOM Utilities policy from the assembly cache"
 #emit "Filename: {app}\ASCOM.Internal.GACInstall.exe; Parameters: ""/U """"policy." + str(Major) + "." + str(Minor) + ".ASCOM.Astrometry""""""; Flags: runhidden; StatusMsg: Uninstalling ASCOM Astrometry policy from the assembly cache"
+
+;Tim's components
+Filename: {app}\ASCOM.Internal.GACInstall.exe; Parameters: "/U ""ASCOM.Controls"""; Flags: runhidden; StatusMsg: Uninstalling ASCOM.DeviceInterfaces from the assembly cache
 
 [UninstallDelete]
 Type: files; Name: {cf32}\ASCOM\Utilities\*.*
@@ -516,5 +528,6 @@ WelcomeLabel1=%n%n[name]%n
 #emit "WelcomeLabel2=This will install ASCOM Utilities version: " + AppVer + ".%n%nIt is recommended that you close all other applications before continuing.%n%n"
 [_ISToolPreCompile]
 Name: ..\..\ASCOM Redirection Policies\ASCOM Redirection Policies\bin\Release\ASCOM Redirection Policies.exe; Parameters: ; Flags: runminimized abortonerror
+
 
 

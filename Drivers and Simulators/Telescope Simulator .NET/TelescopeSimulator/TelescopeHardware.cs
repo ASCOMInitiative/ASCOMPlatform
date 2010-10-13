@@ -22,6 +22,8 @@ using System.Text;
 using System.ComponentModel;
 using System.Timers;
 using System.Runtime.InteropServices;
+using System.Drawing;
+using ASCOM.DeviceInterface;
 
 namespace ASCOM.TelescopeSimulator
 {
@@ -128,7 +130,7 @@ namespace ASCOM.TelescopeSimulator
 
         private static double m_SettleTix;
 
-        private static ASCOM.DeviceInterface.PierSide m_SideOfPier;
+        public static PierSide m_SideOfPier;
 
         private static bool m_Connected = false; //Keep track of the connection status of the hardware
 
@@ -367,7 +369,7 @@ namespace ASCOM.TelescopeSimulator
             }
             else //Process the movement
             {
-                z = Math.Cos(m_Declination * SharedResources.DEG_RAD) * 2; // *15;
+                z = Math.Cos(m_Declination * SharedResources.DEG_RAD) * 15;
                 if (z < 0.001) {z = 0.001;}
 
                 if (m_SlewState == SlewType.SlewHandpad) //We are doing a slew with the handpad buttons
@@ -420,13 +422,13 @@ namespace ASCOM.TelescopeSimulator
                             break;
                         case SlewDirection.SlewEast:
                             m_RightAscension += step*z;
-                            m_RightAscension = AstronomyFunctions.RangeHa(m_RightAscension);
+                            m_RightAscension = AstronomyFunctions.RangeRa(m_RightAscension);
                             m_Altitude = AstronomyFunctions.CalculateAltitude(m_RightAscension * SharedResources.HRS_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
                             m_Azimuth = AstronomyFunctions.CalculateAzimuth(m_RightAscension * SharedResources.HRS_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
                             break;
                         case SlewDirection.SlewWest:
                             m_RightAscension -= step*z;
-                            m_RightAscension = AstronomyFunctions.RangeHa(m_RightAscension);
+                            m_RightAscension = AstronomyFunctions.RangeRa(m_RightAscension);
                             m_Altitude = AstronomyFunctions.CalculateAltitude(m_RightAscension * SharedResources.HRS_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
                             m_Azimuth = AstronomyFunctions.CalculateAzimuth(m_RightAscension * SharedResources.HRS_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
                             break;
@@ -438,14 +440,14 @@ namespace ASCOM.TelescopeSimulator
                     TL.LogMessage("Fast, Med, Slow, Target RA, Dec", m_SlewSpeedFast + " " + m_SlewSpeedMedium + " " + m_SlewSpeedSlow + " " + m_TargetRightAscension + " " + m_TargetDeclination);
 
                     //RA Step
-                    y = Math.Abs(m_DeltaRa);
+                    y = Math.Abs(m_DeltaRa *360.0 /24.0); // In degrees
                     if (m_SlewSpeedFast / SharedResources.TIMER_INTERVAL >= 50) { step = y / z; TL.LogStart("RA Speed z y step", "Maximum"); }
                     else if (y > 2 * m_SlewSpeedFast) { step = m_SlewSpeedFast / z; TL.LogStart("RA Speed z y step", "Fast"); }
                     else if (y > 2 * m_SlewSpeedMedium) { step = m_SlewSpeedMedium / z; TL.LogStart("RA Speed z y step", "Medium"); }
                     else if (y > 2 * m_SlewSpeedSlow) { step = m_SlewSpeedSlow / z; TL.LogStart("RA Speed z y step", "Slow"); }
                     else { step = y / z; TL.LogStart("RA Speed z y step", "Minimum"); }
 
-                    step = step * Math.Sign(m_DeltaRa);
+                    step = step * Math.Sign(m_DeltaRa) * Math.Cos(m_Declination * SharedResources.DEG_RAD); // Reduce step size near pole so we dont overshoot and oscillate
 
                     TL.LogFinish(" " + z + " " + y + " " + step);
 
@@ -467,7 +469,7 @@ namespace ASCOM.TelescopeSimulator
                     m_DeltaDec -= step;
 
                     m_Declination = AstronomyFunctions.RangeDec(m_Declination);
-                    m_RightAscension = AstronomyFunctions.RangeHa(m_RightAscension);
+                    m_RightAscension = AstronomyFunctions.RangeRa(m_RightAscension);
                     TL.LogMessage("RA, Dec", m_RightAscension + " " + m_DeltaRa + " " + m_Declination + " " + m_DeltaDec);
                     CalculateAltAz();
 
@@ -485,29 +487,31 @@ namespace ASCOM.TelescopeSimulator
 
                     //Altitude Step
                     y = Math.Abs(m_DeltaAlt);
-                    if (m_SlewSpeedFast / SharedResources.TIMER_INTERVAL >= 50) step = y;
-                    else if (y > 2 * m_SlewSpeedFast) step = m_SlewSpeedFast;
-                    else if (y > 2 * m_SlewSpeedMedium) step = m_SlewSpeedMedium;
-                    else if (y > 2 * m_SlewSpeedSlow) step = m_SlewSpeedSlow;
-                    else step = y;
+                    if (m_SlewSpeedFast / SharedResources.TIMER_INTERVAL >= 50) { step = y; TL.LogStart("Alt Speed z y step", "Maximum"); }
+                    else if (y > 2 * m_SlewSpeedFast) { step = m_SlewSpeedFast; TL.LogStart("Alt Speed z y step", "Fast"); }
+                    else if (y > 2 * m_SlewSpeedMedium) { step = m_SlewSpeedMedium; TL.LogStart("Alt Speed z y step", "Medium"); }
+                    else if (y > 2 * m_SlewSpeedSlow) { step = m_SlewSpeedSlow; TL.LogStart("Alt Speed z y step", "Slow"); }
+                    else { step = y; TL.LogStart("Alt Speed z y step", "Minimum"); }
 
                     step = step * Math.Sign(m_DeltaAlt);
 
                     m_Altitude += step;
                     m_DeltaAlt -= step;
+                    TL.LogFinish(" " + y + " " + step + " " + m_Altitude + " " + m_DeltaAlt);
 
                     //Azimuth Step
                     y = Math.Abs(m_DeltaAz);
-                    if (m_SlewSpeedFast / SharedResources.TIMER_INTERVAL >= 50) step = y;
-                    else if (y > 2 * m_SlewSpeedFast) step = m_SlewSpeedFast;
-                    else if (y > 2 * m_SlewSpeedMedium) step = m_SlewSpeedMedium;
-                    else if (y > 2 * m_SlewSpeedSlow) step = m_SlewSpeedSlow;
-                    else step = y;
+                    if (m_SlewSpeedFast / SharedResources.TIMER_INTERVAL >= 50) { step = y; TL.LogStart("Az Speed", "Maximum"); }
+                    else if (y > 2 * m_SlewSpeedFast) { step = m_SlewSpeedFast; TL.LogStart("Az Speed", "Fast"); }
+                    else if (y > 2 * m_SlewSpeedMedium) { step = m_SlewSpeedMedium; TL.LogStart("Az Speed", "Medium"); }
+                    else if (y > 2 * m_SlewSpeedSlow) { step = m_SlewSpeedSlow; TL.LogStart("Az Speed", "Slow"); }
+                    else { step = y; TL.LogStart("Az Speed", "Minimum"); }
 
                     step = step * Math.Sign(m_DeltaAz);
 
                     m_Azimuth += step;
                     m_DeltaAz -= step;
+                    TL.LogFinish(" " + y + " " + step + " " + m_Azimuth + " " + m_DeltaAz);
 
                     m_Azimuth = AstronomyFunctions.RangeAzimuth(m_Azimuth);
                     m_Altitude = AstronomyFunctions.RangeAlt(m_Altitude);
@@ -545,7 +549,7 @@ namespace ASCOM.TelescopeSimulator
                         m_Declination = m_Declination + m_DeltaAlt * SharedResources.TIMER_INTERVAL;
 
                         m_Declination = AstronomyFunctions.RangeDec(m_Declination);
-                        m_RightAscension = AstronomyFunctions.RangeHa(m_RightAscension);
+                        m_RightAscension = AstronomyFunctions.RangeRa(m_RightAscension);
 
                         CalculateAltAz();
                     }
@@ -600,7 +604,7 @@ namespace ASCOM.TelescopeSimulator
                 m_Declination += decRate * SharedResources.TIMER_INTERVAL;
 
                 m_Declination = AstronomyFunctions.RangeDec(m_Declination);
-                m_RightAscension = AstronomyFunctions.RangeHa(m_RightAscension);
+                m_RightAscension = AstronomyFunctions.RangeRa(m_RightAscension);
 
                 CalculateAltAz();
             }
@@ -621,13 +625,25 @@ namespace ASCOM.TelescopeSimulator
                 }
             }
 
+            //Calculate Current SideOfPier
             m_SiderealTime = AstronomyFunctions.LocalSiderealTime(m_Longitude);
+            m_SideOfPier = SideOfPierRaDec(m_RightAscension, m_Declination);
+
             TelescopeSimulator.m_MainForm.SiderealTime = m_SiderealTime;
             TelescopeSimulator.m_MainForm.Altitude = m_Altitude;
             TelescopeSimulator.m_MainForm.Azimuth = m_Azimuth;
             TelescopeSimulator.m_MainForm.RightAscension = m_RightAscension;
             TelescopeSimulator.m_MainForm.Declination = m_Declination;
             TelescopeSimulator.m_MainForm.Tracking();
+            TelescopeSimulator.m_MainForm.LEDPier(m_SideOfPier);
+
+            if (m_AtPark) TelescopeSimulator.m_MainForm.lblPARK.ForeColor = Color.Red;
+            else TelescopeSimulator.m_MainForm.lblPARK.ForeColor = Color.SaddleBrown;
+            if (m_AtHome) TelescopeSimulator.m_MainForm.lblHOME.ForeColor = Color.Red;
+            else TelescopeSimulator.m_MainForm.lblHOME.ForeColor = Color.SaddleBrown;
+            if (m_SlewState == SlewType.SlewNone) TelescopeSimulator.m_MainForm.labelSlew.ForeColor = Color.SaddleBrown;
+            else TelescopeSimulator.m_MainForm.labelSlew.ForeColor = Color.Red;
+
         }
 
         #region Properties For Settings
@@ -1211,20 +1227,31 @@ namespace ASCOM.TelescopeSimulator
        #endregion
 
        #region Helper Functions
-       public static ASCOM.DeviceInterface.PierSide SideOfPierRaDec(double RightAscension, double Declination)
+       public static PierSide SideOfPierRaDec(double RightAscension, double Declination)
        {
-           double hourAngle;
+           PierSide SideOfPier;
+           //double hourAngle;
            if (m_AlignmentMode != ASCOM.DeviceInterface.AlignmentModes.algGermanPolar)
            {
                return ASCOM.DeviceInterface.PierSide.pierUnknown;
            }
            else
            {
+               double Ha = AstronomyFunctions.HourAngle(RightAscension, m_Longitude);
+               if (Ha < 0.0 && Ha >= -12.0) SideOfPier = PierSide.pierWest;
+               //else if (Ha < -6.0 && Ha >= -12.0) return  PierSide.pierWest;
+               else if (Ha >= 0.0 && Ha <= 12.0) SideOfPier = PierSide.pierEast;
+               //else if (Ha > 6.0 && Ha <= 12.0) return PierSide.pierEast;
+               else SideOfPier = PierSide.pierUnknown;
+               TL.LogMessage("SideOfPierRaDec", RightAscension + " " + Declination + " " + Ha + " " + SideOfPier.ToString());
+
+               return SideOfPier;
+
                //hourAngle = AstronomyFunctions.RangeHa(AstronomyFunctions.LocalSiderealTime(m_Longitude) - RightAscension);
-               hourAngle = AstronomyFunctions.LocalSiderealTime(m_Longitude) - RightAscension;
-               TL.LogMessage("SideOfPierRaDec", "Longitude: " + m_Longitude + "LST: " + AstronomyFunctions.LocalSiderealTime(m_Longitude) + "HA: " + hourAngle + " RA: " + RightAscension);
-               if (hourAngle >=0) return ASCOM.DeviceInterface.PierSide.pierEast;
-               else return ASCOM.DeviceInterface.PierSide.pierWest;
+               //hourAngle = AstronomyFunctions.LocalSiderealTime(m_Longitude) - RightAscension;
+               //TL.LogMessage("SideOfPierRaDec", "Longitude: " + m_Longitude + "LST: " + AstronomyFunctions.LocalSiderealTime(m_Longitude) + "HA: " + hourAngle + " RA: " + RightAscension);
+               //if (hourAngle >=0) return ASCOM.DeviceInterface.PierSide.pierEast;
+               //else return ASCOM.DeviceInterface.PierSide.pierWest;
 
            }
        }
@@ -1239,10 +1266,11 @@ namespace ASCOM.TelescopeSimulator
        }
        public static void StartSlewRaDec(double RightAscension, double Declination, bool DoSideOfPier)
        {
-           ASCOM.DeviceInterface.PierSide targetSideOfPier;
+         
+           //ASCOM.DeviceInterface.PierSide targetSideOfPier;
            m_SlewState = SlewType.SlewNone;
 
-           if (DoSideOfPier) targetSideOfPier = SideOfPierRaDec(RightAscension, Declination);
+           /*if (DoSideOfPier) targetSideOfPier = SideOfPierRaDec(RightAscension, Declination);
            else targetSideOfPier = m_SideOfPier;
 
            if (targetSideOfPier != m_SideOfPier)
@@ -1252,15 +1280,16 @@ namespace ASCOM.TelescopeSimulator
 
                CalculateAltAz();
                m_SideOfPier = targetSideOfPier;
-               TelescopeSimulator.m_MainForm.LEDPier(m_SideOfPier);
-           }
+           } */
            m_DeltaRa = RightAscension - m_RightAscension;
            m_DeltaDec = Declination - m_Declination;
            m_DeltaAlt = 0;
            m_DeltaAz = 0;
+           TL.LogMessage("StartSlewRaDec", RightAscension + " " + Declination + " " + DoSideOfPier + " " + m_DeltaRa + " " + m_DeltaDec);
 
            if (m_DeltaRa < -12) m_DeltaRa = m_DeltaRa + 24;
            else if (m_DeltaRa > 12) m_DeltaRa = m_DeltaRa - 24;
+           TL.LogMessage("StartSlewRaDec", RightAscension + " " + Declination + " " + DoSideOfPier + " " + m_DeltaRa + " " + m_DeltaDec);
 
            ChangeHome(false);
            ChangePark(false);
@@ -1269,6 +1298,7 @@ namespace ASCOM.TelescopeSimulator
        }
        public static void StartSlewAltAz(double Altitude, double Azimuth, bool DoSideOfPier, SlewType Slew)
        {
+           TL.LogMessage("StartSlewAltAz", Altitude + " " + Azimuth + " " + DoSideOfPier + " " + Enum.GetName(typeof(SlewType), Slew));
            ASCOM.DeviceInterface.PierSide targetSideOfPier;
            m_SlewState = SlewType.SlewNone;
 
@@ -1282,15 +1312,14 @@ namespace ASCOM.TelescopeSimulator
 
                CalculateRaDec();
                m_SideOfPier = targetSideOfPier;
-               TelescopeSimulator.m_MainForm.LEDPier(m_SideOfPier);
            }
            m_DeltaRa = 0;
            m_DeltaDec = 0;
            m_DeltaAlt = Altitude - m_Altitude;
            m_DeltaAz = Azimuth - m_Azimuth;
 
-           if (m_DeltaAz < -180) m_DeltaAz = m_DeltaAz +360;
-           else if (m_DeltaAz > 180) m_DeltaAz = m_DeltaAz -360;
+           if (m_DeltaAz < 0.0) m_DeltaAz = m_DeltaAz + 360.0;
+           else if (m_DeltaAz >= 360.0) m_DeltaAz = m_DeltaAz - 360.0;
 
            ChangeHome(false);
            ChangePark(false);
@@ -1327,20 +1356,22 @@ namespace ASCOM.TelescopeSimulator
        public static void ChangePark(bool NewValue)
        {
            m_AtPark = NewValue;
+           if (m_AtPark) TelescopeSimulator.m_MainForm.ParkButton = "Unpark";
+           else TelescopeSimulator.m_MainForm.ParkButton = "Park";
        }
        public static void CalculateAltAz()
        {
            m_Altitude = AstronomyFunctions.CalculateAltitude(m_RightAscension * SharedResources.HRS_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
            m_Azimuth = AstronomyFunctions.CalculateAzimuth(m_RightAscension * SharedResources.HRS_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+           TL.LogMessage("TimerEvent:CalcAltAz", m_Altitude + " " + m_DeltaAlt + " " + m_Azimuth + " " + m_DeltaAz);
        }
        public static void CalculateRaDec()
        {
            m_Declination = AstronomyFunctions.CalculateDec(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD);
            m_RightAscension = AstronomyFunctions.CalculateRa(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+           TL.LogMessage("TimerEvent:CalcRADec", m_Altitude + " " + m_Azimuth + " " + m_Latitude + " " + m_Longitude);
        }
         #endregion
-
-
 
     }
     

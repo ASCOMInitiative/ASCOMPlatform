@@ -1752,8 +1752,7 @@ namespace ASCOM.TelescopeSimulator
 
         public PierSide SideOfPier
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("SideOfPier", false); }
+            get { return TelescopeHardware.m_SideOfPier; }
             set { throw new PropertyNotImplementedException("SideOfPier", true); }
         }
 
@@ -2113,7 +2112,7 @@ namespace ASCOM.TelescopeSimulator
             TelescopeHardware.StartSlewAltAz(Altitude, Azimuth, true, SlewType.SlewAltAz);
 
 
-            while (TelescopeHardware.SlewState == SlewType.SlewRaDec || TelescopeHardware.SlewState == SlewType.SlewSettle)
+            while (TelescopeHardware.SlewState == SlewType.SlewAltAz || TelescopeHardware.SlewState == SlewType.SlewSettle)
             {
                 System.Windows.Forms.Application.DoEvents();
             }
@@ -2248,7 +2247,7 @@ namespace ASCOM.TelescopeSimulator
 
             if (TelescopeHardware.AtPark) throw new ParkedException();
 
-            TelescopeHardware.StartSlewRaDec(TelescopeHardware.TargetRightAscension, TelescopeHardware.Declination, true);
+            TelescopeHardware.StartSlewRaDec(TelescopeHardware.TargetRightAscension, TelescopeHardware.TargetDeclination, true);
 
             while (TelescopeHardware.SlewState == SlewType.SlewRaDec || TelescopeHardware.SlewState == SlewType.SlewSettle)
             {
@@ -2281,7 +2280,7 @@ namespace ASCOM.TelescopeSimulator
    
          if (TelescopeHardware.AtPark) throw new ParkedException();
 
-            TelescopeHardware.StartSlewRaDec(TelescopeHardware.TargetRightAscension, TelescopeHardware.Declination, true);
+            TelescopeHardware.StartSlewRaDec(TelescopeHardware.TargetRightAscension, TelescopeHardware.TargetDeclination, true);
         }
 
         public bool Slewing

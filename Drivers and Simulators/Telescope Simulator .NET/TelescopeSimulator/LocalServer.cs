@@ -596,7 +596,9 @@ namespace ASCOM.TelescopeSimulator
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             m_MainForm = new frmMain();
-            if (m_bComStart) m_MainForm.WindowState = FormWindowState.Minimized;
+            m_MainForm.Show();
+            //if (m_bComStart) m_MainForm.WindowState = FormWindowState.Minimized;
+            m_MainForm.Visible = true;
 
             // Register the class factories of the served objects
             RegisterClassFactories();
