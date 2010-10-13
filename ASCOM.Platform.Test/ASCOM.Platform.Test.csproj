@@ -91,6 +91,9 @@
     <AssemblyOriginatorKeyFile>..\ASCOM.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Machine.Specifications">
+      <HintPath>..\External Dependencies\MSpec\Machine.Specifications.dll</HintPath>
+    </Reference>
     <Reference Include="microsoft.visualbasic" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Moq, Version=4.0.812.4, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
@@ -127,19 +130,16 @@
     <Compile Include="AssertExtensions.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="DeviceIdAttributeTest.cs" />
-    <Compile Include="FileInfoExtensionsTest.cs" />
-    <Compile Include="IntExtensionsTest.cs" />
+    <Compile Include="DeviceIdAttributeSpecs.cs" />
+    <Compile Include="FileInfoExtensionsSpecs.cs" />
+    <Compile Include="IntExtensionsSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="ServedClassNameAttributeTest.cs" />
+    <Compile Include="ServedClassNameAttributeSpecs.cs" />
     <Compile Include="SettingsProviderTest.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="AuthoringTests.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ASCOM.Attributes\ASCOM.Attributes.csproj">
