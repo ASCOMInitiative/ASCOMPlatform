@@ -1865,6 +1865,14 @@ Namespace NOVAS
                                            ByRef dec As Double, _
                                            ByRef dis As Double)
 
+        ''' <summary>
+        ''' Return the value of DeltaT for the given Julian date
+        ''' </summary>
+        ''' <param name="Tjd">Julian date for which the delta T value is required</param>
+        ''' <returns>Double value of DeltaT (seconds)</returns>
+        ''' <remarks>Valid between the years 1650 and 2050</remarks>
+        <DispId(43)> Function DeltaT(ByVal Tjd As Double) As Double
+
     End Interface
 End Namespace
 #End Region
@@ -3382,6 +3390,14 @@ Namespace NOVAS
                                  ByVal y As Double, _
                                  ByVal Pos1() As Double, _
                                  ByRef Pos2() As Double)
+
+        ''' <summary>
+        ''' Return the value of DeltaT for the given Julian date
+        ''' </summary>
+        ''' <param name="Tjd">Julian date for which the delta T value is required</param>
+        ''' <returns>Double value of DeltaT (seconds)</returns>
+        ''' <remarks>Valid between the years 1650 and 2050</remarks>
+        <DispId(72)> Function DeltaT(ByVal Tjd As Double) As Double
     End Interface
 End Namespace
 #End Region

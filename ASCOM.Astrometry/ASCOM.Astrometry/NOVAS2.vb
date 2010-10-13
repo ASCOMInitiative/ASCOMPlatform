@@ -1138,22 +1138,19 @@ Namespace NOVAS
                 sun_eph32(jd, ra, dec, dis)
             End If
         End Sub
-        'Public Shared Function solarsystem(ByVal tjd As Double, _
-        '                                      ByVal body As Body, _
-        '                                      ByRef origin As Origin, _
-        '                                      ByRef pos As Double(), _
-        '                                      ByRef vel As Double()) As Short
-        'Dim vpos As New posvector, vvel As New velvector
-        'Dim rc As Short
-        '    If Is64Bit() Then
-        '        rc = solarsystem64(tjd, body, origin, vpos, vvel)
-        '    Else
-        '        rc = solarsystem32(tjd, body, origin, vpos, vvel)
-        '    End If
-        '    PosVecToArr(vpos, pos)
-        '    VelVecToArr(vvel, vel)
-        '    Return rc
-        'End Function
+        
+#End Region
+
+#Region "DeltaT Member"
+        ''' <summary>
+        ''' Return the value of DeltaT for the given Julian date
+        ''' </summary>
+        ''' <param name="Tjd">Julian date for which the delta T value is required</param>
+        ''' <returns>Double value of DeltaT (seconds)</returns>
+        ''' <remarks>Valid between the years 1650 and 2050</remarks>
+        Public Shared Function DeltaT(ByVal Tjd As Double) As Double
+            Return ASCOM.Astrometry.DeltaTCalc(Tjd)
+        End Function
 #End Region
 
 #Region "DLL Entry Points (32bit)"
