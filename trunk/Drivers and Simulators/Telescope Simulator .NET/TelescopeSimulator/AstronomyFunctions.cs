@@ -19,14 +19,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using ASCOM.Astrometry.NOVAS;
 
 namespace ASCOM.TelescopeSimulator
 {
     public class AstronomyFunctions
     {
         private static Utilities.Util m_Util = new ASCOM.Utilities.Util();
-        private static ASCOM.Astrometry.SiteInfo Site = new ASCOM.Astrometry.SiteInfo();
 
         static AstronomyFunctions()
         { }
@@ -48,10 +46,22 @@ namespace ASCOM.TelescopeSimulator
             return 24 - s1 + (24 * (y - 1900));
             
         }
+
+        /// <summary>
+        /// Calculate the hour angle of the current pointing direction
+        /// </summary>
+        /// <param name="RightAscension"></param>
+        /// <param name="Longitude"></param>
+        /// <returns></returns>
+        public static double HourAngle(double RightAscension, double Longitude)
+        {
+            return RangeHa(LocalSiderealTime(Longitude) - RightAscension) ;  // Hours
+        }
+
+
         //----------------------------------------------------------------------------------------
         // Current Local Apparent Sidereal Time for Longitude
         //----------------------------------------------------------------------------------------
-
         public static double LocalSiderealTime(double longitude)
         {
             double days_since_j_2000 = m_Util.JulianDate - 2451545.0;
@@ -143,114 +153,133 @@ namespace ASCOM.TelescopeSimulator
             double correction1 = (dp1 * Math.Cos(ea1)) / 3600;
             l1mst = l1mst + correction1;
 
-            return l1mst * 24.0 / 360.0;
+            return RangeRa(l1mst * 24.0 / 360.0);
 
         }
-
-       
-        
+            
         //----------------------------------------------------------------------------------------
         // Calculate RA and Dec From Altitude and Azimuth and Site
         //----------------------------------------------------------------------------------------
         public static double CalculateRa(double Altitude, double Azimuth, double Latitude, double Longitude)
         {
 
-            double hourAngle = Math.Atan2(-Math.Sin(Azimuth) * Math.Cos(Altitude), - Math.Cos(Azimuth) * Math.Sin(Latitude) * Math.Cos(Altitude) + Math.Sin(Altitude) * Math.Cos(Latitude)) * SharedResources.RAD_DEG;
-            if (hourAngle < 0)
-            { hourAngle += 360; }
-            else if (hourAngle >= 360)
-            { hourAngle -= 360; }
-            double lst = LocalSiderealTime(Longitude); // * SharedResources.RAD_DEG);
-            double ra = lst - (hourAngle * 24.0 / 360.0);
-            
-            return RangeHa(ra);
+            double hourAngle = Math.Atan2(-Math.Sin(Azimuth) * Math.Cos(Altitude),
+                                          -Math.Cos(Azimuth) * Math.Sin(Latitude) * Math.Cos(Altitude) + Math.Sin(Altitude) * Math.Cos(Latitude))
+                                          * SharedResources.RAD_HRS; 
+
+            double lst = LocalSiderealTime(Longitude * SharedResources.RAD_DEG); 
+
+            return RangeRa(lst - hourAngle);
         }
+
         public static double CalculateDec(double Altitude, double Azimuth, double Latitude)
         {
             
             return Math.Asin(Math.Cos(Azimuth) * Math.Cos(Latitude) * Math.Cos(Altitude) + Math.Sin(Latitude) * Math.Sin(Altitude)) * SharedResources.RAD_DEG;
         }
+
         //----------------------------------------------------------------------------------------
         // Calculate Altitude and Azimuth From Ra/Dec and Site
         //----------------------------------------------------------------------------------------
         public static double CalculateAltitude(double RightAscension, double Declination, double Latitude, double Longitude)
         {
-            double ElevationTopoValue = 0;
-            double AzimuthTopoValue = 0;
-            double RATopoValue = 0;
-            double DECTopoValue = 0;
 
-            Site.Height = 0.0;
-            Site.Latitude = Latitude * SharedResources.RAD_DEG;
-            Site.Longitude = Longitude * SharedResources.RAD_DEG;
-            Site.Pressure = 1000.0;
-            Site.Temperature = 10.0;
-            NOVAS2.Equ2Hor(m_Util.JulianDate, 0.0, 0.0, 0.0, ref Site, RightAscension * SharedResources.RAD_HRS, Declination * SharedResources.RAD_DEG, ASCOM.Astrometry.RefractionOption.StandardRefraction , ref ElevationTopoValue, ref AzimuthTopoValue, ref RATopoValue, ref DECTopoValue);
-            ElevationTopoValue = 90.0 - ElevationTopoValue; // 'Convert zenith distance to elevation
-            return ElevationTopoValue;
+            double lst = LocalSiderealTime(Longitude * SharedResources.RAD_DEG); // Hours
+            double ha = (lst - RightAscension * SharedResources.RAD_HRS) * SharedResources.HRS_RAD; //Radians
 
+            double sh = Math.Sin(ha);
+            double ch = Math.Cos(ha);
+            double sd = Math.Sin(Declination);
+            double cd = Math.Cos(Declination);
+            double sl = Math.Sin(Latitude);
+            double cl = Math.Cos(Latitude);
+
+            double x = (sd * cl) - (ch * cd * sl);
+            double y = -(sh * cd);
+            double z = (ch * cd * cl) + (sd * sl);
+            double r = Math.Sqrt((x * x) + (y * y));
+
+            return RangeAlt(Math.Atan2(z, r) * SharedResources.RAD_DEG);
         }
+
         public static double CalculateAzimuth(double RightAscension, double Declination, double Latitude, double Longitude)
         {
-            double ElevationTopoValue = 0;
-            double AzimuthTopoValue = 0;
-            double RATopoValue = 0;
-            double DECTopoValue = 0;
+            
+            double lst = LocalSiderealTime(Longitude * SharedResources.RAD_DEG); // Hours
+            double ha = (lst - RightAscension * SharedResources.RAD_HRS) * SharedResources.HRS_RAD;  // Radians
 
-            Site.Height = 0.0;
-            Site.Latitude = Latitude * SharedResources.RAD_DEG;
-            Site.Longitude = Longitude * SharedResources.RAD_DEG;
-            Site.Pressure = 1000.0;
-            Site.Temperature = 10.0;
-            NOVAS2.Equ2Hor(m_Util.JulianDate, 0.0, 0.0, 0.0, ref Site, RightAscension * SharedResources.RAD_HRS, Declination * SharedResources.RAD_DEG, ASCOM.Astrometry.RefractionOption.StandardRefraction, ref ElevationTopoValue, ref AzimuthTopoValue, ref RATopoValue, ref DECTopoValue);
-            return AzimuthTopoValue;
+            double sh = Math.Sin(ha);
+            double ch = Math.Cos(ha);
+            double sd = Math.Sin(Declination);
+            double cd = Math.Cos(Declination);
+            double sl = Math.Sin(Latitude);
+            double cl = Math.Cos(Latitude);
+
+            double x =  (sd * cl) - (ch * cd * sl);
+            double y = -(sh * cd);
+
+            return RangeAzimuth(Math.Atan2(y, x) * SharedResources.RAD_DEG);
         }
 
+        /// <summary>
+        /// Return an hour angle in the range -12 to +12 hours
+        /// </summary>
+        /// <param name="HourAngle">Value to range</param>
+        /// <returns>Hour angle in the range -12 to +12 hours</returns>
+        public static double RangeHa(double HourAngle)
+        {
+            while ((HourAngle >= 12.0) || (HourAngle <= -12.0))
+            {
+                if (HourAngle <= -12.0) HourAngle += 24.0;
+                if (HourAngle >= 12.0) HourAngle -= 24.0;
+            }
+
+            return HourAngle;
+        }
+        
+        
         //----------------------------------------------------------------------------------------
         // Range RA and DEC
         //----------------------------------------------------------------------------------------
-        public static double RangeHa(double RightAscension)
+        public static double RangeRa(double RightAscension)
         {
-            if (RightAscension < 0)
+            while ((RightAscension >= 24.0) || (RightAscension < 0.0))
             {
-                return 24 + RightAscension;
+                if (RightAscension < 0.0) RightAscension += 24.0;
+                if (RightAscension >= 24.0) RightAscension -= 24.0;
             }
-            else if (RightAscension >= 24)
-            {
-                return RightAscension - 24;
-            }
-            else
-            {
-                return RightAscension;
-            }
+
+            return RightAscension;
         }
         public static double RangeDec(double Declination)
         {
-            if (Declination > 90)
+            while ((Declination > 90.0) || (Declination < -90.0))
             {
-                return 90;
+                if (Declination < -90.0) Declination += 90.0;
+                if (Declination > 90.0) Declination -= 90.0;
             }
-            else if (Declination < -90)
-            {
-                return -90;
-            }
-            else
-            {
-                return Declination;
-            }
+
+            return Declination;
         }
         public static double RangeAlt(double Alitude)
         {
-            if (Alitude > 90) return 90;
-            else if (Alitude < 90) return -90;
-            else return Alitude;
+            while ((Alitude > 90.0) || (Alitude < -90.0))
+            {
+                if (Alitude < -90.0) Alitude += 90.0;
+                if (Alitude > 90.0) Alitude -= 90.0;
+            }
+
+            return Alitude;
         }
         public static double RangeAzimuth(double Azimuth)
         {
-            if (Azimuth < 0) return Azimuth + 360;
-            if (Azimuth >= 360) return Azimuth - 360;
-            else return Azimuth;
+            while ((Azimuth >= 360.0) || (Azimuth < 0.0))
+            {
+                if (Azimuth < 0.0) Azimuth += 360.0;
+                if (Azimuth >= 360.0) Azimuth -= 360.0;
+            }
 
+            return Azimuth;
         }
     }
 }

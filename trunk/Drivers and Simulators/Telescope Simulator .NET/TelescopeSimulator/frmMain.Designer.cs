@@ -49,6 +49,8 @@ namespace ASCOM.TelescopeSimulator
             this.buttonSlew2 = new System.Windows.Forms.Button();
             this.buttonSlew0 = new System.Windows.Forms.Button();
             this.pictureBoxPierSideEast = new System.Windows.Forms.PictureBox();
+            this.ledPierEast = new ASCOM.Controls.LEDIndicator();
+            this.ledPierWest = new ASCOM.Controls.LEDIndicator();
             this.checkBoxTrack = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.buttonTraffic = new System.Windows.Forms.Button();
@@ -215,6 +217,8 @@ namespace ASCOM.TelescopeSimulator
             this.tableLayoutPanel2.Controls.Add(this.buttonSlew2, 1, 2);
             this.tableLayoutPanel2.Controls.Add(this.buttonSlew0, 1, 1);
             this.tableLayoutPanel2.Controls.Add(this.pictureBoxPierSideEast, 2, 0);
+            this.tableLayoutPanel2.Controls.Add(this.ledPierEast, 2, 2);
+            this.tableLayoutPanel2.Controls.Add(this.ledPierWest, 0, 2);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(12, 206);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 3;
@@ -300,6 +304,28 @@ namespace ASCOM.TelescopeSimulator
             this.pictureBoxPierSideEast.TabIndex = 5;
             this.pictureBoxPierSideEast.TabStop = false;
             // 
+            // ledPierEast
+            // 
+            this.ledPierEast.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.ledPierEast.Cadence = ASCOM.Controls.CadencePattern.SteadyOn;
+            this.ledPierEast.Green = false;
+            this.ledPierEast.LabelText = "LED";
+            this.ledPierEast.Location = new System.Drawing.Point(87, 84);
+            this.ledPierEast.Name = "ledPierEast";
+            this.ledPierEast.Size = new System.Drawing.Size(17, 16);
+            this.ledPierEast.TabIndex = 7;
+            // 
+            // ledPierWest
+            // 
+            this.ledPierWest.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.ledPierWest.Cadence = ASCOM.Controls.CadencePattern.SteadyOn;
+            this.ledPierWest.Green = false;
+            this.ledPierWest.LabelText = "LED";
+            this.ledPierWest.Location = new System.Drawing.Point(11, 84);
+            this.ledPierWest.Name = "ledPierWest";
+            this.ledPierWest.Size = new System.Drawing.Size(16, 16);
+            this.ledPierWest.TabIndex = 8;
+            // 
             // checkBoxTrack
             // 
             this.checkBoxTrack.AutoSize = true;
@@ -370,6 +396,7 @@ namespace ASCOM.TelescopeSimulator
             this.buttonUnpark.TabIndex = 0;
             this.buttonUnpark.Text = "Unpark";
             this.buttonUnpark.UseVisualStyleBackColor = true;
+            this.buttonUnpark.Click += new System.EventHandler(this.buttonUnpark_Click);
             // 
             // tableLayoutPanel4
             // 
@@ -416,7 +443,7 @@ namespace ASCOM.TelescopeSimulator
             // 
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picASCOM.Image = global::ASCOM.TelescopeSimulator.Properties.Resources.ASCOM;
-            this.picASCOM.Location = new System.Drawing.Point(79, 12);
+            this.picASCOM.Location = new System.Drawing.Point(79, 10);
             this.picASCOM.Name = "picASCOM";
             this.picASCOM.Size = new System.Drawing.Size(48, 56);
             this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -515,6 +542,8 @@ namespace ASCOM.TelescopeSimulator
         private System.Windows.Forms.PictureBox pictureBoxPierSideEast;
         internal System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         internal System.Windows.Forms.Label labelSlew;
+        private Controls.LEDIndicator ledPierEast;
+        private Controls.LEDIndicator ledPierWest;
 
 
     }
