@@ -4,11 +4,12 @@ using System.Text;
 
 namespace ASCOM
 {
-	/// <summary>
-	/// An attribute for declaratively associating an assembly, class or property with an ASCOM device.
-	/// </summary>
-	/// <remarks>
-    /// This attribute is intended for use int two main situations:
+    /// <summary>
+    /// An attribute for declaratively associating an assembly, class or property with an 
+    /// ASCOM device ID (and optionally, a display name).
+    /// </summary>
+    /// <remarks>
+    /// This attribute is intended for use in two main situations:
     /// <list type="numbered">
     /// <item>Settings management and integration with Visual Studio designers</item>
     /// <description>
@@ -28,28 +29,40 @@ namespace ASCOM
     /// at the assembly level will assist in this situation.
     /// </description>
     /// </list>
-	/// </remarks>
-	[global::System.AttributeUsage(AttributeTargets.Class | AttributeTargets.Assembly | AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
-	public sealed class DeviceIdAttribute : Attribute
-	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DeviceIdAttribute"/> class.
-		/// </summary>
-		/// <param name="deviceId">The ASCOM device ID (aka COM ProgID) to be associated with the class.</param>
-		public DeviceIdAttribute(string deviceId)
-		{
-			this.DeviceId = deviceId;
-		}
+    /// </remarks>
+    [global::System.AttributeUsage(AttributeTargets.Class | AttributeTargets.Assembly | AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
+    public sealed class DeviceIdAttribute : Attribute
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeviceIdAttribute"/> class.
+        /// </summary>
+        /// <param name="deviceId">The ASCOM device ID (aka COM ProgID) to be associated with the class.</param>
+        /// <remarks>
+        /// <para>
+        /// Recommended usage is:
+        /// <example>[DeviceId("ASCOM.SuperDuper.Telescope", DeviceName="SuperDuper Deluxe")]</example>
+        /// </para>
+        /// <para>
+        /// In the event that the DeviceName optional parameter is not set, it will return the DeviceId.
+        /// </para>
+        /// </remarks>
+        public DeviceIdAttribute(string deviceId)
+        {
+            this.DeviceId = deviceId;
+            // DeviceName defaults to be the same as the ID, unless the user changes it later. This ensures that there is
+            // always *something* available for the Chooser to use as the display name, should the user neglect to set it.
+            this.DeviceName = deviceId;
+        }
 
-		/// <summary>
-		/// Gets the ASCOM DeviceID, also known as the COM ProgID.
-		/// </summary>
-		public string DeviceId { get; private set; }
+        /// <summary>
+        /// Gets the ASCOM DeviceID, also known as the COM ProgID.
+        /// </summary>
+        public string DeviceId { get; private set; }
 
         /// <summary>
         /// Gets or sets the display name of the device. This would be the short display name, as displayed in the ASCOM Chooser.
         /// </summary>
         /// <value>The name of the device.</value>
         public string DeviceName { get; set; }
-	}
+    }
 }

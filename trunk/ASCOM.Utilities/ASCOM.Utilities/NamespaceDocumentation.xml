@@ -40,13 +40,30 @@
         </p>
       </summary>
     </member>
-    
+
     <member name="N:ASCOM.Utilities.Interfaces">
       <summary>
         <h2>ASCOM.Utilties.Interfaces Namespace</h2>
         <h3>Summary</h3>
         <p>
           This namespace contains interfaces for the core utilities
+        </p>
+      </summary>
+    </member>
+
+    <member name="N:ASCOM.Utilities.Internal">
+      <summary>
+        <h2>ASCOM.Internal Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains private classes that are used internally within the ASCOM Platform, the platform installer and related items.
+          Developers should not use any items defined in this namespace. The items defined here carry no guarantees and are subject to change
+          at any time without notice, including the possibility of breaking changes. Use of this code is explicitly not supported.
+        </p>
+        <p>
+          If you wish to use code in this namespace, you may obtain a copy of the source code, either from the ASCOM Subversion repository, or
+          by using .NET Reflector to reverse-engineer the code. You may then copy the source code to your own project. You then assume all
+          responsibility for supporting the code.
         </p>
       </summary>
     </member>
