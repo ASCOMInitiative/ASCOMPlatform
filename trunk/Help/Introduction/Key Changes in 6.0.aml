@@ -35,6 +35,7 @@
   				<listItem>Multiple device instances ???</listItem>
   				<listItem>Tool to tell you when updated components are available</listItem>  	
   				<listItem>New full platform installer. Removes the need to install Platform 5 and then the 5.5 update.</listItem>
+  				<listItem>NOVAS2 and NOVAS3 components now have DeltaT methods valid for the year 1650 to 2050.</listItem>
   			</list>
       	</content>
     </section>

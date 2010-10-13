@@ -3440,6 +3440,18 @@ Namespace NOVAS
         End Function
 #End Region
 
+#Region "DeltaT Member"
+        ''' <summary>
+        ''' Return the value of DeltaT for the given Julian date
+        ''' </summary>
+        ''' <param name="Tjd">Julian date for which the delta T value is required</param>
+        ''' <returns>Double value of DeltaT (seconds)</returns>
+        ''' <remarks>Valid between the years 1650 and 2050</remarks>
+        Public Function DeltaT(ByVal Tjd As Double) As Double Implements INOVAS3.DeltaT
+            Return ASCOM.Astrometry.DeltaTCalc(Tjd)
+        End Function
+#End Region
+
     End Class
 
 End Namespace
