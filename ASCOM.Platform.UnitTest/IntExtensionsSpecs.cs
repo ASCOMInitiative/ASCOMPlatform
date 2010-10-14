@@ -2,7 +2,7 @@
 using ASCOM.Internal;
 using Machine.Specifications;
 
-namespace ASCOM.Platform.Test
+namespace ASCOM.Platform.UnitTest
 {
 
     public class With_uint_register
