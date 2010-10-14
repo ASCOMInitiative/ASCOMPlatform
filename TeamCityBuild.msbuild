@@ -23,7 +23,7 @@
       Targets="Build"
       Properties="Configuration=Release" />
     <xunit Assembly="ASCOM.Platform.Test\bin\Release\ASCOM.Platform.Test.dll" />
-    <Exec Command=".\External Dependencies\MSpec\mspec.exe ASCOM.Platform.Test\bin\Release\ASCOM.Platform.Test.dll --teamcity" />
+    <Exec Command='".\External Dependencies\MSpec\mspec.exe" ASCOM.Platform.Test\bin\Release\ASCOM.Platform.Test.dll --teamcity' />
   </Target>
   <Target Name="BuildDocumentation">
     <MSBuild
