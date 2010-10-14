@@ -1,9 +1,8 @@
 ﻿using ASCOM.Internal;
 using Machine.Specifications;
 using System.IO;
-using It = Machine.Specifications.It;
 
-namespace ASCOM.Platform.Test
+namespace ASCOM.Platform.UnitTest
 {
     /***
      * FileInfoExtensions

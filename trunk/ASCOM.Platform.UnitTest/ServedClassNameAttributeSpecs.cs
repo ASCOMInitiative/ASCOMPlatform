@@ -1,9 +1,7 @@
 ﻿using Machine.Specifications;
 
-namespace ASCOM.Platform.Test
+namespace ASCOM.Platform.UnitTest
 {
-    using ASCOM;
-
     /// <summary>
     ///This is a test class for ServedClassNameAttributeTest and is intended
     ///to contain all ServedClassNameAttributeTest Unit Tests

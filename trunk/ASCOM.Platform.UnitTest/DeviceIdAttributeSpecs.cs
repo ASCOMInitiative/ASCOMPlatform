@@ -1,6 +1,6 @@
 ﻿using Machine.Specifications;
 
-namespace ASCOM.Platform.Test
+namespace ASCOM.Platform.UnitTest
 {
     /// <summary>
     ///   Context base class for three part DeviceIDs "ASCOM.DeviceName.DeviceType".

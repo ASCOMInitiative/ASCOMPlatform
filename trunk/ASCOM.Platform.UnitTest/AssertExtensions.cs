@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace ASCOM.Platform.Test
+namespace ASCOM.Platform.UnitTest
 	{
 	/// <summary>
 	/// Extension methods that make it easier to assert various things.
