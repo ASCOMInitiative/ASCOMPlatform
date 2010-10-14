@@ -158,8 +158,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FusionLib", "ASCOM.Utilitie
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "LocalServer Composite Driver VB", "DriverTemplates\LocalServer Composite Driver VB\LocalServer Composite Driver VB.vbproj", "{ABCC46C4-55C3-48A4-AB6F-3FDB0B99269F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Platform.Test", "ASCOM.Platform.Test\ASCOM.Platform.Test.csproj", "{EB26A3EC-5E15-4EED-B421-E64E4B83F3F6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.SettingsProviderSample", "ASCOM.SettingsProvider\ASCOM.SettingsProviderSample\ASCOM.SettingsProviderSample.csproj", "{747DBFF8-4265-4C15-9BB4-A13384D971B4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Internal.Extensions", "ASCOM.Internal.Extensions\ASCOM.Internal.Extensions.csproj", "{F9268CC9-3FA4-4DAB-962C-0FF3638E9D9F}"
@@ -191,6 +189,16 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Focuser", "Focuser", "{F0B54D82-741C-4EC1-A620-E5DEA1038EAA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FocuserSimulatorDriver", "Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\FocuserSimulatorDriver.csproj", "{81091BA8-725D-465D-AC6B-A36912B73AA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Platform.UnitTest", "ASCOM.Platform.UnitTest\ASCOM.Platform.UnitTest.csproj", "{A48688B8-9E35-42CE-8D3A-7C41CB8105AB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSpec", "MSpec", "{EDBA5DAC-173D-4247-8A68-45E23ED4EA1F}"
+	ProjectSection(SolutionItems) = preProject
+		External Dependencies\MSpec\CommandLine.dll = External Dependencies\MSpec\CommandLine.dll
+		External Dependencies\MSpec\Machine.Specifications.dll = External Dependencies\MSpec\Machine.Specifications.dll
+		External Dependencies\MSpec\Machine.Specifications.Reporting.dll = External Dependencies\MSpec\Machine.Specifications.Reporting.dll
+		External Dependencies\MSpec\mspec.exe = External Dependencies\MSpec\mspec.exe
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -581,21 +589,6 @@ Global
 		{ABCC46C4-55C3-48A4-AB6F-3FDB0B99269F}.Peter|x86.Build.0 = Peter|x86
 		{ABCC46C4-55C3-48A4-AB6F-3FDB0B99269F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABCC46C4-55C3-48A4-AB6F-3FDB0B99269F}.Release|x86.ActiveCfg = Release|x86
-		{EB26A3EC-5E15-4EED-B421-E64E4B83F3F6}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
-		{EB26A3EC-5E15-4EED-B421-E64E4B83F3F6}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
-		{EB26A3EC-5E15-4EED-B421-E64E4B83F3F6}.Debug Quick|x86.ActiveCfg = Debug|x86
-		{EB26A3EC-5E15-4EED-B421-E64E4B83F3F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EB26A3EC-5E15-4EED-B421-E64E4B83F3F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EB26A3EC-5E15-4EED-B421-E64E4B83F3F6}.Debug|x86.ActiveCfg = Debug|x86
-		{EB26A3EC-5E15-4EED-B421-E64E4B83F3F6}.Debug|x86.Build.0 = Debug|x86
-		{EB26A3EC-5E15-4EED-B421-E64E4B83F3F6}.Peter|Any CPU.ActiveCfg = Release|Any CPU
-		{EB26A3EC-5E15-4EED-B421-E64E4B83F3F6}.Peter|Any CPU.Build.0 = Release|Any CPU
-		{EB26A3EC-5E15-4EED-B421-E64E4B83F3F6}.Peter|x86.ActiveCfg = Release|x86
-		{EB26A3EC-5E15-4EED-B421-E64E4B83F3F6}.Peter|x86.Build.0 = Release|x86
-		{EB26A3EC-5E15-4EED-B421-E64E4B83F3F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EB26A3EC-5E15-4EED-B421-E64E4B83F3F6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EB26A3EC-5E15-4EED-B421-E64E4B83F3F6}.Release|x86.ActiveCfg = Release|x86
-		{EB26A3EC-5E15-4EED-B421-E64E4B83F3F6}.Release|x86.Build.0 = Release|x86
 		{747DBFF8-4265-4C15-9BB4-A13384D971B4}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
 		{747DBFF8-4265-4C15-9BB4-A13384D971B4}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
 		{747DBFF8-4265-4C15-9BB4-A13384D971B4}.Debug Quick|x86.ActiveCfg = Debug|x86
@@ -785,6 +778,18 @@ Global
 		{81091BA8-725D-465D-AC6B-A36912B73AA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81091BA8-725D-465D-AC6B-A36912B73AA7}.Release|x86.ActiveCfg = Release|x86
 		{81091BA8-725D-465D-AC6B-A36912B73AA7}.Release|x86.Build.0 = Release|x86
+		{A48688B8-9E35-42CE-8D3A-7C41CB8105AB}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
+		{A48688B8-9E35-42CE-8D3A-7C41CB8105AB}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
+		{A48688B8-9E35-42CE-8D3A-7C41CB8105AB}.Debug Quick|x86.ActiveCfg = Debug|Any CPU
+		{A48688B8-9E35-42CE-8D3A-7C41CB8105AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A48688B8-9E35-42CE-8D3A-7C41CB8105AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A48688B8-9E35-42CE-8D3A-7C41CB8105AB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A48688B8-9E35-42CE-8D3A-7C41CB8105AB}.Peter|Any CPU.ActiveCfg = Release|Any CPU
+		{A48688B8-9E35-42CE-8D3A-7C41CB8105AB}.Peter|Any CPU.Build.0 = Release|Any CPU
+		{A48688B8-9E35-42CE-8D3A-7C41CB8105AB}.Peter|x86.ActiveCfg = Release|Any CPU
+		{A48688B8-9E35-42CE-8D3A-7C41CB8105AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A48688B8-9E35-42CE-8D3A-7C41CB8105AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A48688B8-9E35-42CE-8D3A-7C41CB8105AB}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -839,6 +844,7 @@ Global
 		{D202E935-5ADA-4769-A4D8-4A915B4267FA} = {351942DD-A33B-40F1-B71F-224E7D5B4E7B}
 		{7814C016-C363-4A04-B095-27A5B33AA783} = {351942DD-A33B-40F1-B71F-224E7D5B4E7B}
 		{74D351E3-1E5A-451D-AA70-D3FA28CF1F54} = {351942DD-A33B-40F1-B71F-224E7D5B4E7B}
+		{EDBA5DAC-173D-4247-8A68-45E23ED4EA1F} = {351942DD-A33B-40F1-B71F-224E7D5B4E7B}
 		{908A13CE-4C6D-4546-AD52-AB958FF46C5B} = {7814C016-C363-4A04-B095-27A5B33AA783}
 		{70FDA2DE-A36D-45A0-812F-E5357AC7A8D2} = {29B3E411-4259-4315-85A7-3063F31A282A}
 		{F9268CC9-3FA4-4DAB-962C-0FF3638E9D9F} = {29B3E411-4259-4315-85A7-3063F31A282A}
