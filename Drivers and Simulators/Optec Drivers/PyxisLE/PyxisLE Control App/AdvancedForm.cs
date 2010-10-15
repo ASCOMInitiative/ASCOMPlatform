@@ -62,6 +62,11 @@ namespace PyxisLE_Control
         {
             this.Close();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //myRotator.de
+        }
     }
 
     class RotatorAdvancedSettingsUI
@@ -87,11 +92,16 @@ namespace PyxisLE_Control
         }
 
         [Category("Settings")]
-        [DisplayName("Zero Offset")]
-        [Description("Adjust the rotators zero point. This is used when homing the device. Changing this value will force the device to home.")]
-        public short ZeroOffset
+        [DisplayName("Zero Offset (°)")]
+        [Description("Adjust the rotators zero point in units of degrees. This is used when homing the device. Changing this value will force the device to home.")]
+        public double ZeroOffset
         {
-            get { return myRotator.ZeroOffset; }
+            get {
+                int steps = myRotator.ZeroOffset;
+                int deg = steps / (myRotator.StepsPerRev / 360);
+
+                return (short)deg;
+            }
             set 
             {
 
@@ -100,7 +110,15 @@ namespace PyxisLE_Control
                      "this property are in stepper motor steps. Positive and negative values are allowed.";
                 DialogResult r = MessageBox.Show(msg, "Continue?", MessageBoxButtons.YesNo,
                      MessageBoxIcon.Question);
-                if (r == DialogResult.Yes) myRotator.ZeroOffset = value; 
+                if (r == DialogResult.Yes)
+                {
+                    // convert the degree value to steps
+                    double StepsPerDegree =   myRotator.StepsPerRev / 360;
+
+                    double newvalue = (value * StepsPerDegree);
+                    // Set the value in the rotator
+                    myRotator.ZeroOffset = (short)newvalue;
+                }
             }
         }
 
@@ -139,6 +157,7 @@ namespace PyxisLE_Control
         }
 
         [Category("Device Description")]
+        [DisplayName("Resolution (Steps per Rev)")]
         [Description("The number of stepper motor steps per revolution for the connected device.")]
         public string Resolution
         {

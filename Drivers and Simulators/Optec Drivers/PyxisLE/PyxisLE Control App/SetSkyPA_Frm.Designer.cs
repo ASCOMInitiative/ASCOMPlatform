@@ -79,8 +79,7 @@
             this.textBox1.Size = new System.Drawing.Size(349, 41);
             this.textBox1.TabIndex = 4;
             this.textBox1.TabStop = false;
-            this.textBox1.Text = "Note: Changing the Sky Position Angle will not move the rotator.  This is used to" +
-                " \"tell\" the focuser that it is currently at the specifiec position angle. ";
+            this.textBox1.Text = resources.GetString("textBox1.Text");
             // 
             // OK_BTN
             // 

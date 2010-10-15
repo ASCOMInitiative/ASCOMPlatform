@@ -25,12 +25,14 @@ namespace PyxisLE_Control
         private const string NC_msg = "No connected Pyxis LE rotators are connected to the PC";
         private bool LastConnectedState = true;
         private bool LastPowerStateConnected = true;
-        private const int NORMAL_HEIGHT = 628;
+        private const int NORMAL_HEIGHT = 555;
         private const int SKY_PA_HEIGHT = 43;
-        private const int ROTATOR_DIAGRAM_HEIGHT = 315;
+        private const int ROTATOR_DIAGRAM_HEIGHT = 235;
         private const int HOME_BUTTON_HEIGHT = 43;
         private const int ABSOLUTE_HEIGHT = 43;
-        private const int RELATIVE_HEIGHT = 75;
+        private const int RELATIVE_HEIGHT = 60;
+
+        private double lastMoveTo = -9999999;
 
 
         private const int SHORT_HEIGHT = 290;
@@ -40,6 +42,7 @@ namespace PyxisLE_Control
         {
             InitializeComponent();
             EventLogger.LoggingLevel = Properties.Settings.Default.LastTraceLevel;
+            this.TopMost = Properties.Settings.Default.AlwaysOnTop;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -175,6 +178,7 @@ namespace PyxisLE_Control
                     throw new ApplicationException("Rotator has firmware error code set: " +
                         myRotator.GetErrorMessage(myRotator.ErrorState));
                 }
+                Trace.WriteLine("Clicked " + newpos.ToString());
                 myRotator.CurrentSkyPA = newpos;
                 string msg = "Moving rotator to Sky Position Angle " + newpos.ToString("0.00°");
                 this.Invoke(new SingleStringDelegate(SetStatusLabelText), new object[] { msg });
@@ -430,6 +434,8 @@ namespace PyxisLE_Control
                         angle = 180 - (angle - 180);
                     }
                 }
+                if (angle == lastMoveTo) return;
+                else lastMoveTo = angle;
                 StartAMove(angle);
             }
         }
@@ -445,7 +451,11 @@ namespace PyxisLE_Control
 
         private void AbsoluteMove_BTN_Click(object sender, EventArgs e)
         {
-
+            if (myRotator.IsHoming)
+            {
+                MessageBox.Show("Please wait for the home procedure to finish before performing this operation.");
+                return;
+            }
             double pos = double.Parse(AbsoluteMove_TB.Text);
             StartAMove(pos);
             if (pos == 360) AbsoluteMove_TB.Text = "0";
@@ -497,7 +507,7 @@ namespace PyxisLE_Control
         private void RelativeIncrement_TB_Validating(object sender, CancelEventArgs e)
         {
             double NewIncrement;
-            TextBox sndr = sender as TextBox;
+            NumericUpDown sndr = Relative_NUD as NumericUpDown;
             try
             {
                 NewIncrement = double.Parse(sndr.Text);
@@ -524,16 +534,27 @@ namespace PyxisLE_Control
 
         private void RelativeForward_BTN_Click(object sender, EventArgs e)
         {
+            if (myRotator.IsHoming)
+            {
+                MessageBox.Show("Please wait for the home procedure to finish before performing this operation.");
+                return;
+            }
             double increment = (double)Relative_NUD.Value;
             if (increment == 0) return;
             double NewPositon = myRotator.CurrentSkyPA + increment;
             if (NewPositon > 360) NewPositon = NewPositon - 360;
             if (NewPositon < 0) NewPositon = NewPositon + 360;
+            if (NewPositon == myRotator.CurrentDevicePA) return;
             StartAMove(NewPositon);
         }
 
         private void RelativeReverse_Btn_Click(object sender, EventArgs e)
         {
+            if (myRotator.IsHoming)
+            {
+                MessageBox.Show("Please wait for the home procedure to finish before performing this operation.");
+                return;
+            }
             double increment = (double)Relative_NUD.Value;
             if (increment == 0) return;
             double NewPositon = myRotator.CurrentSkyPA - increment;
@@ -546,6 +567,9 @@ namespace PyxisLE_Control
         {
             try
             {
+                myRotator.Halt_Move();
+                System.Threading.Thread.Sleep(100);
+                if (myRotator.ErrorState != 0) myRotator.ClearErrorState();
                 myRotator.Home();
                 StatusLabel.Text = "Homing device...";
                 MotionMonitor();
@@ -838,6 +862,33 @@ namespace PyxisLE_Control
                     "Version Information Unavailable");
             }
             finally { this.Cursor = Cursors.Default; }
+        }
+
+        private void alwaysOnTopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ToolStripMenuItem aot = sender as ToolStripMenuItem;
+                Properties.Settings.Default.AlwaysOnTop = aot.Checked;
+                Properties.Settings.Default.Save();
+                this.TopMost = aot.Checked;
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void haltToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                myRotator.Halt_Move();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
     }
