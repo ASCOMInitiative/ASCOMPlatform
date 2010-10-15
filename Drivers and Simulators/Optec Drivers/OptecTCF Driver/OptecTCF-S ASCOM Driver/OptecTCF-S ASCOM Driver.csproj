@@ -43,7 +43,7 @@
     <DefineConstants>TRACE;DEBUG;ASCOM</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RegisterForComInterop>true</RegisterForComInterop>
+    <RegisterForComInterop>false</RegisterForComInterop>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -53,7 +53,7 @@
     <DefineConstants>TRACE;ASCOM</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RegisterForComInterop>true</RegisterForComInterop>
+    <RegisterForComInterop>false</RegisterForComInterop>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -78,7 +78,7 @@
     <OutputPath>bin\Release With Install\</OutputPath>
     <DefineConstants>TRACE;ASCOM</DefineConstants>
     <Optimize>true</Optimize>
-    <RegisterForComInterop>true</RegisterForComInterop>
+    <RegisterForComInterop>false</RegisterForComInterop>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -99,7 +99,6 @@
     </Reference>
     <Reference Include="ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>..\Dependencies\ASCOMPlatformDependencies\ASCOM.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="ASCOM.Utilities, Version=5.5.1.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
@@ -108,6 +107,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -169,12 +171,6 @@
     <Compile Include="Forms\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SetupDialogForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\SetupDialogForm.designer.cs">
-      <DependentUpon>SetupDialogForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="SerialCommunicatorA.cs" />
     <Compile Include="SetupDialog2.cs">
       <SubType>Form</SubType>
@@ -211,23 +207,18 @@
     <EmbeddedResource Include="Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SetupDialogForm.resx">
-      <DependentUpon>SetupDialogForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="SetupDialog2.resx">
       <DependentUpon>SetupDialog2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="I:\Software Development\HelpNDoc\TCF-S\TCF-S Focuser %28.NET%29\TCF-S_Help.chm">
+      <Link>TCF-S_Help.chm</Link>
+    </None>
     <None Include="Test.js" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\ASCOM.png" />
-    <Content Include="I:\Software Development\HelpNDoc\TCF-S\ASCOM\.NET Version\TCFSHelp.chm">
-      <Link>TCFSHelp.chm</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <None Include="Resources\ASCOM.png" />
     <None Include="Resources\GreyLight.png" />
     <None Include="Resources\TCF.ico">
     </None>

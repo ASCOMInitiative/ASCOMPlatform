@@ -39,8 +39,10 @@ namespace Optec_TCF_S_Focuser
 
                     XElement SettingsElement = new XElement("TCFSettings");
                     XElement FocusOffsetsElement = new XElement("FocusOffsets");
+                    XElement AbsolutePresetsElement = new XElement("AbsolutePresets");
 
                     SettingsElement.Add(FocusOffsetsElement);
+                    SettingsElement.Add(AbsolutePresetsElement);
 
                     XDeclaration dec = new XDeclaration("1.0", "UTF-8", "yes");
                     TCFSettingsDocument = new XDocument(dec, SettingsElement);
@@ -218,6 +220,28 @@ namespace Optec_TCF_S_Focuser
             }
         }
 
+        public static List<FocusOffset> SavedAbsolutePresets
+        {
+            get
+            {
+                List<FocusOffset> returnList = new List<FocusOffset>();
+                XElement MainElement = TCFSettingsDocument.Descendants().Single(i => i.Name == "TCFSettings").
+                Descendants().Single(j => j.Name == "AbsolutePresets");
+
+                foreach (XElement x in MainElement.Descendants())
+                {
+                    if (x.Name == "Offset")
+                    {
+                        string name = x.Element("Name").Value;
+                        int value = int.Parse(x.Element("Steps").Value);
+                        FocusOffset fo = new FocusOffset(name, value);
+                        returnList.Add(fo);
+                    }
+                }
+                return returnList;
+            }
+        }
+
         public static void AddFocusOffset(FocusOffset f)
         {
             XElement Name = new XElement("Name", f.OffsetName);
@@ -227,6 +251,19 @@ namespace Optec_TCF_S_Focuser
             // Add the offset to the offsets section of the file.
             XElement MainElement = TCFSettingsDocument.Descendants().Single(i => i.Name == "TCFSettings").
                 Descendants().Single(j => j.Name == "FocusOffsets");
+            MainElement.Add(Offset);
+            TCFSettingsDocument.Save(xpath);
+        }
+
+        public static void AddAbsolutePreset(FocusOffset f)
+        {
+            XElement Name = new XElement("Name", f.OffsetName);
+            XElement Steps = new XElement("Steps", f.OffsetSteps.ToString());
+
+            XElement Offset = new XElement("Offset", new object[] { Name, Steps });
+            // Add the offset to the offsets section of the file.
+            XElement MainElement = TCFSettingsDocument.Descendants().Single(i => i.Name == "TCFSettings").
+                Descendants().Single(j => j.Name == "AbsolutePresets");
             MainElement.Add(Offset);
             TCFSettingsDocument.Save(xpath);
         }
@@ -241,12 +278,31 @@ namespace Optec_TCF_S_Focuser
 
         }
 
+        public static void RemoveAbsolutePreset(FocusOffset f)
+        {
+            XElement ElementToRemove = TCFSettingsDocument.Descendants().Single(i => i.Name == "TCFSettings").
+                Descendants().Single(j => j.Name == "AbsolutePresets").Descendants("Offset").Single(k => k.Value == f.OffsetName + f.OffsetSteps.ToString());
+
+            ElementToRemove.Remove();
+            TCFSettingsDocument.Save(xpath);
+        }
+
         public static bool CheckOffsetNameUnique(string name)
         {
             List<FocusOffset> savedoffsets = SavedFocusOffsets;
             foreach (FocusOffset f in savedoffsets)
             {
                 if (f.OffsetName.ToUpper() == name.ToUpper()) return false;
+            }
+            return true;
+        }
+
+        public static bool CheckPresetNameUnique(string name)
+        {
+            List<FocusOffset> savedPresets = SavedAbsolutePresets;
+            foreach (FocusOffset p in savedPresets)
+            {
+                if (p.OffsetName.ToUpper() == name.ToUpper()) return false;
             }
             return true;
         }

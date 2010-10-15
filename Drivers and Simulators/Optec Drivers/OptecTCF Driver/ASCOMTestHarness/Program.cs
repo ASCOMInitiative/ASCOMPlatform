@@ -19,21 +19,32 @@ namespace TestHarness
                 var driver = new Focuser(progId);
                 var thing = driver.IsMoving;				// Just to give a place to set a breakpoint.
                 driver.SetupDialog();
-                while (Console.ReadLine() != System.ConsoleKey.Escape.ToString())
+                while (Console.ReadLine() != "e")
                 {
                     driver.Link = true;
+                    driver.TempComp = true;
+                    Console.WriteLine("In temp comp mode");
+
                     Console.WriteLine("IsMoving = " + driver.IsMoving.ToString());
+                    Console.WriteLine("Moving to 3500...");
+                    try{
+                    driver.Move((int)3500);
+                    }
+                    catch{
+                        Console.WriteLine("Exception thrown as expected!");
+                    }
+                    driver.TempComp = false;
+
+
                     Console.WriteLine("Moving to 3500...");
                     driver.Move((int)3500);
                     Console.WriteLine("IsMoving = " + driver.IsMoving.ToString());
                     Console.WriteLine("Current Position = " + driver.Position.ToString());
                     Console.WriteLine("Moving to 1000...");
-                    Console.WriteLine("IsMoving = " + driver.IsMoving.ToString());
                     driver.Move((int)1000);
                     Console.WriteLine("IsMoving = " + driver.IsMoving.ToString());
                     Console.WriteLine("Current Position = " + driver.Position.ToString());
                     Console.WriteLine("Moving to 3000...");
-                    Console.WriteLine("IsMoving = " + driver.IsMoving.ToString());
                     driver.Move((int)3000);
                     Console.WriteLine("IsMoving = " + driver.IsMoving.ToString());
                     Console.WriteLine("Current Position = " + driver.Position.ToString());

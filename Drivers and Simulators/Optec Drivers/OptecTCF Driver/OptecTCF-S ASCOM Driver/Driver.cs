@@ -33,6 +33,7 @@ using Optec;
 using ASCOM;
 using ASCOM.Utilities;
 using ASCOM.Interface;
+using System.Diagnostics;
 
 
 
@@ -64,14 +65,10 @@ namespace ASCOM.OptecTCF_S
 #if DEBUG
             MessageBox.Show("Creating");
 #endif
-            try
-            {
-                myFocuser = OptecFocuser.Instance;
-            }
-            catch(Exception ex)
-            {
-                EventLogger.LogMessage(ex);
-            }
+
+            myFocuser = OptecFocuser.Instance;
+        
+           
         }
 
         #region ASCOM Registration
@@ -196,6 +193,7 @@ namespace ASCOM.OptecTCF_S
         {
             try
             {
+                EventLogger.LogMessage("Attempting to move to " + val.ToString() + " while in " + myFocuser.ConnectionState.ToString(), TraceLevel.Info);
                 if (myFocuser.ConnectionState == OptecFocuser.ConnectionStates.TempCompMode)
                 {
                     throw new ASCOM.InvalidOperationException("Attempted to move while in TempComp Mode");
@@ -208,11 +206,13 @@ namespace ASCOM.OptecTCF_S
                         EventLogger.LogMessage("*Waiting for previous move to finish", System.Diagnostics.TraceLevel.Verbose);
                     }
                     myFocuser.TargetPosition = val; // Shouldn't return until the move starts...
-                    
-                    while (IsMoving)
+                    while (myFocuser.CurrentPosition != val)
                     {
-                        //block while waiting for move to stop
+                        EventLogger.LogMessage("Waiting for CurrentPosition == val", TraceLevel.Verbose);
+                        System.Threading.Thread.Sleep(100);
+                        //block
                     }
+                   
 
                 }
             }
@@ -288,6 +288,8 @@ namespace ASCOM.OptecTCF_S
                             throw new ASCOM.NotImplementedException("The temperature probe is disabled");
                         }
                         myFocuser.ConnectionState = OptecFocuser.ConnectionStates.TempCompMode;
+                        if (myFocuser.ConnectionState != OptecFocuser.ConnectionStates.TempCompMode)
+                            throw new ASCOM.DriverException("Device failed to enter TempComp Mode");
                     }
                     else
                     {

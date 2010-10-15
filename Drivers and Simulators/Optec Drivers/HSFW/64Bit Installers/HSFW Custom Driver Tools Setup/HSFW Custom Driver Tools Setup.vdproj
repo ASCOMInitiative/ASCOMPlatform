@@ -80,6 +80,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
         "Release"
@@ -289,15 +302,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HSFW Custom Driver Tools"
-        "ProductCode" = "8:{0721BD22-EE54-48CF-B81E-63401847837D}"
-        "PackageCode" = "8:{D3F2FA9B-278E-4939-845B-06D8CB046D1A}"
+        "ProductCode" = "8:{E4B381CD-AFF5-4814-BD98-589559667A4C}"
+        "PackageCode" = "8:{9D8D6973-DC25-4996-AB76-7B36559A6EB0}"
         "UpgradeCode" = "8:{67A4C930-2263-4881-91D1-8ACE1AA6A8C3}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:2.0.0"
         "Manufacturer" = "8:Optec"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

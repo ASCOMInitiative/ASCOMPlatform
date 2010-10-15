@@ -6,6 +6,7 @@ using System.Timers;
 using System.ComponentModel;
 using System.Diagnostics;
 using Optec;
+using System.Threading;
 
 namespace Optec_TCF_S_Focuser
 {
@@ -14,9 +15,10 @@ namespace Optec_TCF_S_Focuser
 
         private static readonly OptecFocuser myFocuser = new OptecFocuser();
         private SerialCommunicator mySerialCommunicator;
-        private Timer RefreshTimer = new Timer();
-        private BackgroundWorker RefreshBGWkr = new BackgroundWorker();
-
+        //System.Windows.Forms.Timer RefreshTimer = new System.Windows.Forms.Timer();
+        BackgroundWorker RefreshBGWorker = new BackgroundWorker();
+        private bool RefreshDone;
+        //bool pauseRefresh = false;
         private bool isMoving = false;
         public event EventHandler DeviceStatusChanged;
         public event EventHandler ErrorOccurred;
@@ -25,8 +27,8 @@ namespace Optec_TCF_S_Focuser
         private int ConsecutiveTimeouts_SerialMode = 0;
 
 
-        private const double FIRST_TCFS_WITH_BACKLASH = 4.10;
-        private const double FIRST_TCFSI_WITH_BACKLASH = 3.10;
+        private const double FIRST_TCFS_WITH_BACKLASH = 4.11;
+        private const double FIRST_TCFSI_WITH_BACKLASH = 3.11;
         private const double FIRST_TCFS_WITH_DISPLAY_ADJUST = 4.00;
         private const double FIRST_TCFS_CAN_REPORT_BRIGHTNESS = 4.01;
         private const double FIRST_TCFSI_CAN_REPORT_BRIGHTNESS = 3.10;
@@ -35,9 +37,9 @@ namespace Optec_TCF_S_Focuser
         private const double STEP_SIZE_MICROS_TCF_S3 = 2.5;
 
 #if DEBUG
-        private const double SERIAL_MODE_REFRESH_DELAY = 500;
+        private const int SERIAL_MODE_REFRESH_DELAY = 500;
 #else
-        private const double SERIAL_MODE_REFRESH_DELAY = 500;
+        private const int SERIAL_MODE_REFRESH_DELAY = 200;
 #endif
 
         public const int TEMP_WHEN_PROBE_DISABLED = -274;
@@ -46,15 +48,18 @@ namespace Optec_TCF_S_Focuser
         private OptecFocuser()
         {
             // First set the desired trace level.
+            RefreshDone = true;
             EventLogger.LoggingLevel = XMLSettings.LoggerTraceLevel;
             EventLogger.LogMessage("Creating Instance of Optec Focuser", TraceLevel.Info);
             connectionState = ConnectionStates.Disconnected;
             mySerialCommunicator = SerialCommunicator.Instance;
 
-            RefreshTimer.Interval = SERIAL_MODE_REFRESH_DELAY;
-            RefreshBGWkr.WorkerSupportsCancellation = true;
-            RefreshTimer.Elapsed += new ElapsedEventHandler(RefreshTimer_Elapsed);
-            RefreshBGWkr.DoWork += new DoWorkEventHandler(RefreshBGWkr_DoWork);
+            //RefreshTimer.Interval = SERIAL_MODE_REFRESH_DELAY;
+            // RefreshTimer. = false;
+            //RefreshTimer.Tick += new EventHandler(RefreshTimer_Elapsed);
+            RefreshBGWorker.WorkerSupportsCancellation = true;
+            RefreshBGWorker.DoWork += new DoWorkEventHandler(RefreshBGWorker_DoWork);
+            RefreshBGWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(RefreshBGWorker_RunWorkerCompleted);
 
             // Get the settings stored in the xml file.
             this.displayBrightness = XMLSettings.DisplayBrightness;
@@ -75,32 +80,89 @@ namespace Optec_TCF_S_Focuser
             }
         }
 
-        void RefreshBGWkr_DoWork(object sender, DoWorkEventArgs e)
+        void RefreshBGWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             try
             {
-                if (connectionState == ConnectionStates.SerialMode)
+                if (e.Error != null)
                 {
-                    RefreshDeviceStatus();
+                    TriggerAnEvent(ErrorOccurred, e.Error);
+
+                    if (e.Error.GetType() == typeof(ER1_Exception))
+                    {
+                        RefreshBGWorker.RunWorkerAsync();
+                    }
                 }
-                else if (connectionState == ConnectionStates.TempCompMode)
-                {
-                    RefreshDeviceStatusAutoMode();
-                }
+                
             }
             catch (Exception ex)
             {
                 EventLogger.LogMessage(ex);
-                TriggerAnEvent(ErrorOccurred);
             }
-
+          
         }
 
-        void RefreshTimer_Elapsed(object sender, ElapsedEventArgs e)
+        void RefreshBGWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            if (RefreshBGWkr.IsBusy) return;
-            else RefreshBGWkr.RunWorkerAsync();
+            RefreshDone = false;
+              while (true)
+                {
+                    try
+                    {
+
+                        if (RefreshBGWorker.CancellationPending)
+                        {
+                            e.Cancel = true;
+                            break;
+                        }
+                        // Do the refresh
+                        DoRefresh();
+
+                        // Sleep for a brief time before refreshing
+                        System.Threading.Thread.Sleep(SERIAL_MODE_REFRESH_DELAY);
+                        if (RefreshBGWorker.CancellationPending)
+                        {
+                            e.Cancel = true;
+                            break;
+                        }
+                        System.Windows.Forms.Application.DoEvents();
+                    }
+                    catch (Exception ex)
+                    {
+                        EventLogger.LogMessage(ex);
+                        RefreshDone = true;
+                        throw ex;
+                    }              
+                }
+            
+            RefreshDone = true;
         }
+
+        private void DoRefresh()
+        {
+            mySerialCommunicator = SerialCommunicator.Instance;
+            if (connectionState == ConnectionStates.SerialMode)
+            {
+                RefreshDeviceStatus();
+            }
+            else if (connectionState == ConnectionStates.TempCompMode)
+            {
+                RefreshDeviceStatusAutoMode();
+            }
+        }
+
+        //void RefreshTimer_Elapsed(object sender, EventArgs e)
+        //{
+        //    //if (RefreshBGWkr.IsBusy) return;
+        //    // else RefreshBGWkr.RunWorkerAsync();
+        //    Trace.WriteLine("Refresh Timer Elapsed, starting refresh");
+        //    StartRefresh();
+        //    if (!pauseRefresh)
+        //    {
+        //        Trace.WriteLine("Resetting timer in RefreshTimer_Elapsed");
+        //        RefreshTimer.Start();
+        //    }
+        //}
 
         [DisplayName("Step Size (µm)")]
         [Category("Device Status")]
@@ -137,7 +199,7 @@ namespace Optec_TCF_S_Focuser
                 else return currentPosition;
             }
         }
-        [DisplayName("Device Pos. for Display")]
+        [DisplayName("Current Pos. for Display")]
         [Category("Device Status")]
         [Description("Set the units for the position in the application readout (NOT the device readout). If you are using the TCF-S ASCOM driver, this will not affect the driver functionality.")]
 #if ASCOM
@@ -188,18 +250,10 @@ namespace Optec_TCF_S_Focuser
                     EventLogger.LogMessage("Setting Target Position to " + value.ToString(), TraceLevel.Info);
                     if (connectionState != ConnectionStates.SerialMode)
                         throw new InvalidOperationException("The device must be in Serial Mode to perform this operation.");
-                    while (IsMoving)
-                    {
-                        //block
-                    }
                     if (value > MaxSteps) targetPosition = MaxSteps;
                     else if (value < 1) targetPosition = 1;
                     else if (value == currentPosition) return;
-                    else
-                    {
-                        targetPosition = value;
-                        while (!isMoving) { }
-                    }
+                    else targetPosition = value;
                     EventLogger.LogMessage("Target Position set to " + targetPosition.ToString(), TraceLevel.Verbose);
                 }
                 catch (Exception ex)
@@ -303,6 +357,7 @@ namespace Optec_TCF_S_Focuser
                         {
                             case ConnectionStates.Disconnected:
                                 // The port is already closed, just set the mode
+                
                                 break;
                             case ConnectionStates.SerialMode:
                                 // Release the device
@@ -319,18 +374,19 @@ namespace Optec_TCF_S_Focuser
                                 try
                                 {
                                     ExitTempCompMode();
-
+                                    ReleaseDevice();
                                 }
                                 catch
                                 {
                                 }
-                                ReleaseDevice();
+                                
                                 break;
                             default:
                                 // Should never get here. Something is wrong...
                                 throw new ApplicationException("Tried to disconnect from unknown mode");
                         }
-                        RefreshTimer.Stop();
+                        //RefreshTimer.Stop();
+                        
                     }
                     catch (Exception)
                     {
@@ -451,7 +507,8 @@ namespace Optec_TCF_S_Focuser
         {
             // Send FMMODE to first to possible get device out of another mode
             EventLogger.LogMessage("Entering Serial Mode", TraceLevel.Verbose);
-            RefreshTimer.Stop();
+            //RefreshTimer.Stop();
+            PauseRefresh();
             DateTime start = DateTime.Now;
             string response = "";
             bool success = false;
@@ -470,12 +527,18 @@ namespace Optec_TCF_S_Focuser
                 }
                 catch (TimeoutException ex)
                 {
+                    mySerialCommunicator.ClearBuffers();
                     EventLogger.LogMessage(ex);
                 }
+                System.Windows.Forms.Application.DoEvents();
             }
 
             if (success) connectionState = ConnectionStates.SerialMode;
-            else throw new ApplicationException("Device failed to enter serial mode");
+            else
+            {
+                mySerialCommunicator.ClearBuffers();
+                throw new ApplicationException("Device failed to enter serial mode");
+            }
 
             // Entered Serial Mode
             // Next try to get firmware version
@@ -515,20 +578,17 @@ namespace Optec_TCF_S_Focuser
                 {
                     case 1:
                         if (FirmVerNum >= 3 && FirmVerNum < 4) deviceType = DeviceTypes.TCF_Si;
-
                         else deviceType = DeviceTypes.TCF_S;
                         break;
                     case 2:
                         deviceType = DeviceTypes.TCF_Si;
-                        hasBacklashCompensation = true;
                         break;
                     case 3:
                         if (FirmVerNum >= 3 && FirmVerNum < 4) deviceType = DeviceTypes.TCF_S3i;
                         else deviceType = DeviceTypes.TCF_S3;
                         break;
                     case 4:
-                        deviceType = DeviceTypes.TCF_S3i;
-                        hasBacklashCompensation = true;
+                        deviceType = DeviceTypes.TCF_S3i;            
                         break;
                     default:
                         // This will happen if the device type has not been selected in firmware but
@@ -541,15 +601,23 @@ namespace Optec_TCF_S_Focuser
                 // Determine if it has Backlash Compensation
                 if (DeviceIs_i())
                 {
-                    if (FirmVerNum >= FIRST_TCFSI_WITH_BACKLASH) hasBacklashCompensation = true;
+                    if (FirmVerNum >= FIRST_TCFSI_WITH_BACKLASH)
+                    {
+                        hasBacklashCompensation = true;
+                    }
                     else hasBacklashCompensation = false;
                 }
                 else
                 {
-                    if (FirmVerNum >= FIRST_TCFS_WITH_BACKLASH) hasBacklashCompensation = true;
+                    if (FirmVerNum >= FIRST_TCFS_WITH_BACKLASH)
+                    {
+                        hasBacklashCompensation = true;
+                    }
                     else hasBacklashCompensation = false;
                 }
 
+                // Determine if backlash comp is turned on or off.
+                backlashCompEnabled = CheckIfBCEnabled();
 
                 // Determine if it can adjust the display brightness
                 if (DeviceIs_i())
@@ -613,7 +681,7 @@ namespace Optec_TCF_S_Focuser
             tempCoefficientB = GetTempCoefficient('B');
 
             RefreshDeviceStatus();
-            RefreshTimer.Start();
+            ResumeRefresh();
 
         }
 
@@ -625,13 +693,11 @@ namespace Optec_TCF_S_Focuser
             try
             {
                 // Stop the Timer...
-                RefreshTimer.Stop();
-                while (RefreshBGWkr.IsBusy) { System.Windows.Forms.Application.DoEvents(); }
+                PauseRefresh();
                 // Timer is stopped, it is safe to enter serial mode
                 string r = mySerialCommunicator.SendCommand("F" + tempCompMode + "MODE", 2000);
                 if (r.Contains(tempCompMode.ToString())) connectionState = ConnectionStates.TempCompMode;
-                RefreshTimer.Interval = 100;
-                RefreshTimer.Start();
+                ResumeRefresh();
             }
             catch (Exception)
             {
@@ -639,17 +705,50 @@ namespace Optec_TCF_S_Focuser
             }
         }
 
+        private void PauseRefresh()
+        {
+            Trace.WriteLine("Pausing Refresh Timer. Waiting for RefreshDone to be true...");
+            DateTime StartTime = DateTime.Now;
+            //pauseRefresh = true;
+            RefreshBGWorker.CancelAsync();
+            //System.Threading.Thread.Sleep(100);
+            while (RefreshDone == false)
+            {
+                if (DateTime.Now.Subtract(StartTime).TotalSeconds >= 3) return;
+                System.Windows.Forms.Application.DoEvents();
+            }
+            if (RefreshBGWorker.IsBusy)
+            {
+                Trace.WriteLine("Waiting for BGWorker to be not busy");
+                while (RefreshBGWorker.IsBusy) { System.Windows.Forms.Application.DoEvents(); }
+                Trace.WriteLine("BGWorker finished");
+            }
+
+            Trace.WriteLine("RefreshDone == true. Pause was successful;");
+        }
+
+        private void ResumeRefresh()
+        {
+            Trace.WriteLine("Resuming Timer");
+            // pauseRefresh = false;
+            if (RefreshBGWorker.IsBusy)
+            {
+                EventLogger.LogMessage("Attempted to resume refresh while BGWorker IsBusy. RefreshDone = " +
+                    RefreshDone.ToString(), TraceLevel.Warning);
+                return;
+            }
+            else RefreshBGWorker.RunWorkerAsync();
+            //RefreshTimer.Start();
+            Trace.WriteLine("Timer Resumed");
+        }
+
         private void ExitTempCompMode()
         {
             // Stop the Timer...
             Debug.Print("Exiting Temp Comp mode");
-            RefreshTimer.Stop();
-            while (RefreshBGWkr.IsBusy) { System.Windows.Forms.Application.DoEvents(); }
-            // Timer is stopped, it is safe to enter serial mode
-            RefreshTimer.Interval = SERIAL_MODE_REFRESH_DELAY;
+            //PauseRefresh();
             // Now go into serial mode
             EnterSerialMode();
-
         }
 
         private void EnterSleepMode()
@@ -675,6 +774,7 @@ namespace Optec_TCF_S_Focuser
                     {
                         break;
                     }
+                    System.Windows.Forms.Application.DoEvents();
                 }
             }
             catch (TimeoutException)
@@ -695,28 +795,26 @@ namespace Optec_TCF_S_Focuser
                 throw new ApplicationException("Can not release device when not in serial mode");
 
             // Stop the Timer...
-            RefreshTimer.Stop();
-            RefreshBGWkr.CancelAsync();
-
-            DateTime Start = DateTime.Now;
-
-            while (DateTime.Now.Subtract(Start).TotalSeconds < 2)
-            {
-                if (RefreshBGWkr.IsBusy) System.Windows.Forms.Application.DoEvents();
-                else break;
-            }
-            string r = "";
-
-            Start = DateTime.Now;
             try
             {
-                while (DateTime.Now.Subtract(Start).TotalSeconds < 3)
+                PauseRefresh();
+            }
+            catch
+            {
+            }
+
+            DateTime Start = DateTime.Now;
+            string r = "";
+            try
+            {
+                while (DateTime.Now.Subtract(Start).TotalSeconds < 1.5)
                 {
                     r = mySerialCommunicator.SendCommand("FFxxxx", 700);
                     if (r.Contains("END"))
                     {
                         break;
                     }
+                    System.Windows.Forms.Application.DoEvents();
                 }
             }
             catch (TimeoutException)
@@ -846,6 +944,8 @@ namespace Optec_TCF_S_Focuser
             }
             catch
             {
+                IsMoving = false;
+                throw;
             }
 
             try
@@ -861,8 +961,16 @@ namespace Optec_TCF_S_Focuser
                 // Pause for the ER=1 crap.
                 System.Threading.Thread.Sleep(1500);
 
-                DisableTempProbe(true);
-                //throw;
+                try
+                {
+                    TempProbeDisabled = true;
+                    TriggerAnEvent(DeviceStatusChanged);
+                }
+                catch 
+                {
+                    ConnectionState = ConnectionStates.Disconnected;
+                    throw new ApplicationException("Communication with the device has been lost. The device state will now be set to Disconnected.");
+                }
                 throw new ER1_Exception("The device lost communication with the temperature probe. The probe will now be disabled. " +
                   "To continue using the temperature probe, resolve the connection problem and then re-enable the probe.");
             }
@@ -892,6 +1000,7 @@ namespace Optec_TCF_S_Focuser
                 if (ConsecutiveTimeouts_SerialMode++ >= 3)
                 {
                     ConnectionState = ConnectionStates.Disconnected;
+
                     throw new ApplicationException("Communication with the device has been lost. The device state will now be set to Disconnected.");
                 }
             }
@@ -942,11 +1051,8 @@ namespace Optec_TCF_S_Focuser
             catch (ER1_Exception)
             {
                 // Try to exit temp comp mode...
-                RefreshTimer.Stop();
-                System.Threading.Thread.Sleep(1000);
+                PauseRefresh();
                 // Timer is stopped, it is safe to enter serial mode
-                RefreshTimer.Interval = SERIAL_MODE_REFRESH_DELAY;
-                // Now go into serial mode
                 mySerialCommunicator.SendCommand("FMMODE", 1000);
                 mySerialCommunicator.SendCommand("FMMODE", 1000);
                 mySerialCommunicator.SendCommand("FMMODE", 1000);
@@ -956,7 +1062,7 @@ namespace Optec_TCF_S_Focuser
                 TempProbeDisabled = true;
                 TriggerAnEvent(DeviceStatusChanged);
                 // Start the timer again
-                RefreshTimer.Start();
+                ResumeRefresh();
                 throw;
             }
             catch (Exception)
@@ -1054,7 +1160,6 @@ namespace Optec_TCF_S_Focuser
                 if (r.Contains("*"))
                 {
                     currentPosition = targetPosition;
-                    IsMoving = false;
                 }
             }
             catch (Exception ex)
@@ -1064,7 +1169,6 @@ namespace Optec_TCF_S_Focuser
             }
             finally
             {
-                IsMoving = false;
             }
 
         }
@@ -1095,6 +1199,7 @@ namespace Optec_TCF_S_Focuser
                 return XMLSettings.DisplayBrightness;
             }
         }
+
         private void SetDisplayBrightness(DisplayBrightnessValues newValue)
         {
             if (!canAdjustBrightness) throw new InvalidOperationException("This focuser does not have the ability to adjust the display brightness. " +
@@ -1135,6 +1240,7 @@ namespace Optec_TCF_S_Focuser
                 else displayBrightness = DisplayBrightnessValues.ON;
             }
         }
+
         private bool canAdjustBrightness = false;
         [Browsable(false)]
         public bool CanAdjustBrightness
@@ -1188,19 +1294,10 @@ namespace Optec_TCF_S_Focuser
             get { return tempProbeDisabled; }
             set
             {
-                if (myFocuser.connectionState != ConnectionStates.SerialMode)
-                {
-                    throw new ApplicationException("You must connect to the focuser to perform this" +
-                        " operation. Also, the focuser can not be in Sleep or Temp. Comp. mode while setting this property.");
-                }
-                DisableTempProbe(value);
+                // just set it in the XML file and the in-memory property.
+                XMLSettings.TemperatureProbeDisabled = value;
+                tempProbeDisabled = value;
             }
-        }
-        private void DisableTempProbe(bool d)
-        {
-            // just disable it in the XML file and the in-memory property.
-            XMLSettings.TemperatureProbeDisabled = d;
-            tempProbeDisabled = d;
         }
 
         public const string OLD_FIRMWARE_STRING = "V.old";
@@ -1215,16 +1312,80 @@ namespace Optec_TCF_S_Focuser
         }
 
         private bool hasBacklashCompensation = false;
-        [Browsable(false)]
+        private bool backlashCompEnabled = true;
+
+        [DisplayName("Backlash Comp. Available")]
+        [Category("Device Status")]
+        [Description("Indicates whether the device is capable of backlash compensation.")]
         public bool HasBacklashCompensation
         {
-            get { return hasBacklashCompensation; }
+            get {
+                if (FirmwareVersion == "V3.10" || FirmwareVersion == "V4.10") return true;
+                else return hasBacklashCompensation; 
+            }
+        }
+
+        private bool CheckIfBCEnabled()
+        {
+            if (FirmwareVersion == "V3.10" || FirmwareVersion == "V4.10") return true;
+
+            if (!hasBacklashCompensation) return false;
+            else
+            {
+                try
+                {
+                    string cmd = "BKxxxx";
+                    string received = mySerialCommunicator.SendCommand(cmd, 1000);
+                    if (received.Contains("=0")) return false;
+                    else if (received.Contains("=1")) return true;
+                    else return false;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
+        private void SetBacklash(bool e)
+        {
+            // Verify that it can set blkcomp
+            if (!hasBacklashCompensation) 
+                throw new ApplicationException("This device does not support Backlash Compensation");
+            string cmd = e ? "FKxxx1" : "FKxxx0";
+            string received = mySerialCommunicator.SendCommand(cmd, 1000);
+            string resp = e ? "=1" : "=0";
+            if (received.Contains(resp))
+            {
+                backlashCompEnabled = e;
+                return;
+            }
+            else throw new ApplicationException("No response from device while attempting to set backlash.");
+
+        }
+
+        [DisplayName("Backlash Compensation Enabled")]
+        [Category("Device Configuration")]
+        [Description("Select whether backlash compensation should be used or not. NOTE: Firmware versions 4.10 and 3.10 " + 
+            "have backlash compensation but are incapable of disabling it.")]
+        public bool BacklashCompEnabled
+        {
+            get
+            {
+                if (FirmwareVersion == "V3.10" || FirmwareVersion == "V4.10") return true;
+                else return backlashCompEnabled;
+            }
+            set
+            {
+                if (FirmwareVersion == "V3.10" || FirmwareVersion == "V4.10")
+                    throw new ApplicationException("This firmware version is not capable of disabling backlash compensation");
+                SetBacklash(value);
+            }
         }
 
         public enum TempCompModes { A, B }
         private TempCompModes tempCompMode = TempCompModes.A;
         [Category("Device Configuration")]
-        [DisplayName("Temp Comp Mode")]
+        [DisplayName("Temp. Comp. Mode")]
         [Description("Selects which temperature coefficient (A or B) to use when the device" +
             " enters Temperature Compensation Mode.")]
         public TempCompModes TempCompMode
@@ -1240,7 +1401,7 @@ namespace Optec_TCF_S_Focuser
         private int autoADelay = 0;
         private int autoBDelay = 0;
         [Category("Device Configuration")]
-        [DisplayName("Temp Mode A Delay")]
+        [DisplayName("Temp. Mode. A Delay")]
         [Description("The time delay between position adjustments when in Temp. Comp. Mode in 5ms increments. " +
             "The default and minimum value for this property is 1.")]
         public int AutoADelay
@@ -1350,7 +1511,7 @@ namespace Optec_TCF_S_Focuser
         {
             get
             {
-                return tempCoefficientA;
+                return tempCoefficientB;
             }
             set
             {
@@ -1410,11 +1571,12 @@ namespace Optec_TCF_S_Focuser
                 {
                     throw;
                 }
-
+                System.Windows.Forms.Application.DoEvents();
             }
             return sign * slope;
 
         }
+
         private void SetTempCoefficient(char AorB, int coeff)
         {
             string cmd = "";
@@ -1460,10 +1622,22 @@ namespace Optec_TCF_S_Focuser
         {
             get
             {
-                List<FocusOffset> list = new List<FocusOffset>();
+                //List<FocusOffset> list = new List<FocusOffset>();
                 //list.Add(new FocusOffset("No Filter", 0));
-                list.AddRange(XMLSettings.SavedFocusOffsets);
-                return list;
+                //list.AddRange(XMLSettings.SavedFocusOffsets);
+                return XMLSettings.SavedFocusOffsets;
+            }
+        }
+
+        [Browsable(false)]
+        public List<FocusOffset> AbsolutePresets
+        {
+            get
+            {
+                //List<FocusOffset> list = new List<FocusOffset>();
+                //list.Add(new FocusOffset("No Filter", 0));
+                //list.AddRange(XMLSettings.SavedAbsolutePresets);
+                return XMLSettings.SavedAbsolutePresets;
             }
         }
 
@@ -1477,6 +1651,23 @@ namespace Optec_TCF_S_Focuser
                 {
                     var methodToInvoke = (EventHandler)EventListeners[index];
                     methodToInvoke.BeginInvoke(this, EventArgs.Empty, EndAsyncEvent, new object[] { });
+                }
+            }
+
+        }
+
+        private void TriggerAnEvent(EventHandler EH, object e)
+        {
+            if (EH == null) return;
+            var EventListeners = EH.GetInvocationList();
+            if (EventListeners != null)
+            {
+                for (int index = 0; index < EventListeners.Count(); index++)
+                {
+
+                    var methodToInvoke = (EventHandler)EventListeners[index];
+                    methodToInvoke.BeginInvoke(e, EventArgs.Empty , EndAsyncEvent, new object[] { });
+                    
                 }
             }
 
@@ -1497,7 +1688,6 @@ namespace Optec_TCF_S_Focuser
                 Console.WriteLine("An event listener went kaboom!");
             }
         }
-
 
     }
 

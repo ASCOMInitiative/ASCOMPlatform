@@ -39,8 +39,10 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.NewVersionBGWorker = new System.ComponentModel.BackgroundWorker();
             this.PowerLight = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -108,14 +110,14 @@
             // connectToolStripMenuItem
             // 
             this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
-            this.connectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.connectToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.connectToolStripMenuItem.Text = "Connect";
             this.connectToolStripMenuItem.Click += new System.EventHandler(this.connectToolStripMenuItem_Click);
             // 
             // disconnectToolStripMenuItem
             // 
             this.disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
-            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.disconnectToolStripMenuItem.Text = "Disconnect";
             this.disconnectToolStripMenuItem.Click += new System.EventHandler(this.disconnectToolStripMenuItem_Click);
             // 
@@ -123,7 +125,8 @@
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem,
-            this.documentationToolStripMenuItem});
+            this.documentationToolStripMenuItem,
+            this.checkForUpdatesToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
@@ -131,14 +134,23 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // documentationToolStripMenuItem
             // 
             this.documentationToolStripMenuItem.Name = "documentationToolStripMenuItem";
-            this.documentationToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.documentationToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.documentationToolStripMenuItem.Text = "Documentation";
+            this.documentationToolStripMenuItem.Click += new System.EventHandler(this.documentationToolStripMenuItem_Click);
+            // 
+            // checkForUpdatesToolStripMenuItem
+            // 
+            this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
+            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.checkForUpdatesToolStripMenuItem.Text = "Check for Updates";
+            this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdatesToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -156,9 +168,13 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(137, 17);
             this.toolStripStatusLabel1.Text = "Device is Not Connected";
             // 
+            // NewVersionBGWorker
+            // 
+            this.NewVersionBGWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.NewVersionBGWorker_DoWork);
+            // 
             // PowerLight
             // 
-            this.PowerLight.Enabled = false;
+            this.PowerLight.Cursor = System.Windows.Forms.Cursors.Hand;
             this.PowerLight.Image = global::ASCOM.OptecTCF_S.Properties.Resources.GreyLight;
             this.PowerLight.Location = new System.Drawing.Point(40, 37);
             this.PowerLight.Name = "PowerLight";
@@ -166,6 +182,7 @@
             this.PowerLight.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PowerLight.TabIndex = 22;
             this.PowerLight.TabStop = false;
+            this.PowerLight.Click += new System.EventHandler(this.PowerLight_Click);
             // 
             // pictureBox2
             // 
@@ -208,6 +225,7 @@
             this.Text = "Setup Optec TCF-S - ASCOM";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SetupDialog2_FormClosing);
             this.Load += new System.EventHandler(this.SetupDialog2_Load);
+            this.Shown += new System.EventHandler(this.SetupDialog2_Shown);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -238,5 +256,7 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.PictureBox PowerLight;
+        private System.Windows.Forms.ToolStripMenuItem checkForUpdatesToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker NewVersionBGWorker;
     }
 }

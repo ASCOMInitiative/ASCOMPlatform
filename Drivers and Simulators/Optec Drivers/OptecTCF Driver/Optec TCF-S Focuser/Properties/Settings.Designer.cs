@@ -49,13 +49,109 @@ namespace Optec_TCF_S_Focuser.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int FormHeight {
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DisplayRelativeMoves {
             get {
-                return ((int)(this["FormHeight"]));
+                return ((bool)(this["DisplayRelativeMoves"]));
             }
             set {
-                this["FormHeight"] = value;
+                this["DisplayRelativeMoves"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DisplayAbsolutePresets {
+            get {
+                return ((bool)(this["DisplayAbsolutePresets"]));
+            }
+            set {
+                this["DisplayAbsolutePresets"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DisplayPosAndTemp {
+            get {
+                return ((bool)(this["DisplayPosAndTemp"]));
+            }
+            set {
+                this["DisplayPosAndTemp"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DisplayTempComp {
+            get {
+                return ((bool)(this["DisplayTempComp"]));
+            }
+            set {
+                this["DisplayTempComp"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AlwaysOnTop {
+            get {
+                return ((bool)(this["AlwaysOnTop"]));
+            }
+            set {
+                this["AlwaysOnTop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-1000")]
+        public int FormLocX {
+            get {
+                return ((int)(this["FormLocX"]));
+            }
+            set {
+                this["FormLocX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-1000")]
+        public int FormLocY {
+            get {
+                return ((int)(this["FormLocY"]));
+            }
+            set {
+                this["FormLocY"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("75")]
+        public int RelativePanelHeight {
+            get {
+                return ((int)(this["RelativePanelHeight"]));
+            }
+            set {
+                this["RelativePanelHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("75")]
+        public int AbsolutePanelHeight {
+            get {
+                return ((int)(this["AbsolutePanelHeight"]));
+            }
+            set {
+                this["AbsolutePanelHeight"] = value;
             }
         }
     }

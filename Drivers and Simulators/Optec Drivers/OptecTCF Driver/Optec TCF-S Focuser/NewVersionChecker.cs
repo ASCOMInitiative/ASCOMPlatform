@@ -7,16 +7,16 @@ using System.Linq;
 
 namespace Optec
 {
-
+    
     public static class NewVersionChecker
     {
         private static string _url = "";
         private static Version _LatestVersionNumber = new Version();
 
         private static bool _NewerVersionAvailable = false;
+        
 
-
-        public enum ProductType { TCF_S }
+        public enum ProductType {TCF_S}
 
         public static bool NewerVersionAvailable
         {
@@ -44,7 +44,7 @@ namespace Optec
                 _url = v.Value;
                 return true;
             }
-            catch
+            catch 
             {
                 return false;
             }

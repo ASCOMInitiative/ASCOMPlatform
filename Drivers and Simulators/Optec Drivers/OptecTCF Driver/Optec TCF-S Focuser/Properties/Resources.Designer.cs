@@ -87,5 +87,12 @@ namespace Optec_TCF_S_Focuser.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        internal static System.Drawing.Icon TCF_S_2010 {
+            get {
+                object obj = ResourceManager.GetObject("TCF_S_2010", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }
