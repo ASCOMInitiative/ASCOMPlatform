@@ -58,7 +58,7 @@
     <Compile Include="IntExtensionsSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServedClassNameAttributeSpecs.cs" />
-    <Compile Include="SettingsProviderTest.cs" />
+    <Compile Include="SettingsProviderSpecs.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ASCOM.Attributes\ASCOM.Attributes.csproj">
