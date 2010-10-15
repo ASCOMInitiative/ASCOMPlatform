@@ -28,27 +28,43 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // propertyGrid1
             // 
-            this.propertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.propertyGrid1.Location = new System.Drawing.Point(0, 0);
             this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(342, 486);
+            this.propertyGrid1.Size = new System.Drawing.Size(294, 503);
             this.propertyGrid1.TabIndex = 0;
+            // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.button1.Location = new System.Drawing.Point(210, 509);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Close";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(342, 486);
+            this.ClientSize = new System.Drawing.Size(294, 536);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.propertyGrid1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = global::Optec_TCF_S_Focuser.Properties.Resources.TCF_S_2010;
             this.Name = "SettingsForm";
-            this.Text = "SettingsForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Device Settings";
+            this.TopMost = true;
             this.Load += new System.EventHandler(this.SettingsForm_Load);
             this.ResumeLayout(false);
 
@@ -57,5 +73,6 @@
         #endregion
 
         private System.Windows.Forms.PropertyGrid propertyGrid1;
+        private System.Windows.Forms.Button button1;
     }
 }

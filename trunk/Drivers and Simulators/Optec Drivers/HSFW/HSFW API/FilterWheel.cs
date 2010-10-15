@@ -445,6 +445,7 @@ namespace OptecHID_FilterWheelAPI
                     if (this.IsHomed == true)
                     {
                         // Home Finished
+                        this.RefershDeviceDescription();
                         Trace.WriteLine("Home Completed in " + elapsedTime.ToString());
                         TriggerHomingComplete();
                         return;

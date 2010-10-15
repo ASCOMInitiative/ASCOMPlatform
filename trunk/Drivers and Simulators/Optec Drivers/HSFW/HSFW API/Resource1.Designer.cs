@@ -131,5 +131,14 @@ namespace OptecHID_FilterWheelAPI {
                 return ResourceManager.GetString("ErrorState_7", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to determing WheelID. (Is a magnet missing from wheel?).
+        /// </summary>
+        internal static string ErrorState_8 {
+            get {
+                return ResourceManager.GetString("ErrorState_8", resourceCulture);
+            }
+        }
     }
 }

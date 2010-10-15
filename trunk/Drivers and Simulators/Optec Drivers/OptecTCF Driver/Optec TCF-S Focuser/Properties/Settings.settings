@@ -8,8 +8,32 @@
     <Setting Name="DisplayAbsoluteMove" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="FormHeight" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+    <Setting Name="DisplayRelativeMoves" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="DisplayAbsolutePresets" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="DisplayPosAndTemp" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="DisplayTempComp" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="AlwaysOnTop" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="FormLocX" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">-1000</Value>
+    </Setting>
+    <Setting Name="FormLocY" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">-1000</Value>
+    </Setting>
+    <Setting Name="RelativePanelHeight" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">75</Value>
+    </Setting>
+    <Setting Name="AbsolutePanelHeight" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">75</Value>
     </Setting>
   </Settings>
 </SettingsFile>

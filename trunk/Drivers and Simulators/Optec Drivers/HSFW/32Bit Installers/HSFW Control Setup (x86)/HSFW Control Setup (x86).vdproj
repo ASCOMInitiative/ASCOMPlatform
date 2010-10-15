@@ -64,13 +64,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_79873CD7AAD399294C6142E238B37670"
+        "OwnerKey" = "8:_15E5D0A15B0BB862B53EA3F48F945B0F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_15E5D0A15B0BB862B53EA3F48F945B0F"
+        "OwnerKey" = "8:_79873CD7AAD399294C6142E238B37670"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -98,6 +98,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
         "Release"
@@ -355,15 +368,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HSFW Control"
-        "ProductCode" = "8:{1B409A21-BE13-4C8A-8570-28ACF4716A7A}"
-        "PackageCode" = "8:{FB28A8AC-4582-4659-9BBD-431A7E1352B5}"
+        "ProductCode" = "8:{1880BC10-909C-409F-80BF-495978943FAC}"
+        "PackageCode" = "8:{69BB47DA-5BD6-4B9A-9D18-E321BA0C7466}"
         "UpgradeCode" = "8:{A1BE9926-E740-402D-8389-9417D0627F50}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:2.0.0"
         "Manufacturer" = "8:Optec"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

@@ -94,19 +94,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E4AB35C8BFB264FC6511F0BAD9F3E832"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_DAFBEA40AFEBBEEDA7907A46B1E66B28"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_5CD74790511188F639A30CFEB36CC114"
+        "OwnerKey" = "8:_837EF0DAB9F963D347ECC07FFD3E739C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -118,7 +106,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_837EF0DAB9F963D347ECC07FFD3E739C"
+        "OwnerKey" = "8:_5CD74790511188F639A30CFEB36CC114"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_DAFBEA40AFEBBEEDA7907A46B1E66B28"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_E4AB35C8BFB264FC6511F0BAD9F3E832"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -146,6 +146,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
         "Release"
@@ -240,11 +253,6 @@
             "AssemblyAsmDisplayName" = "8:ASCOM.Utilities, Version=5.5.1.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_5CD74790511188F639A30CFEB36CC114"
-                    {
-                    "Name" = "8:ASCOM.Utilities.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:ASCOM.Utilities.dll"
             "TargetName" = "8:"
@@ -291,11 +299,6 @@
             "AssemblyAsmDisplayName" = "8:ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_837EF0DAB9F963D347ECC07FFD3E739C"
-                    {
-                    "Name" = "8:ASCOM.Exceptions.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:ASCOM.Exceptions.dll"
             "TargetName" = "8:"
@@ -414,11 +417,6 @@
             "AssemblyAsmDisplayName" = "8:ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_F2E0FEEFF08F9F5418CB0898D7B6757B"
-                    {
-                    "Name" = "8:ASCOM.Interfaces.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:ASCOM.Interfaces.dll"
             "TargetName" = "8:"
@@ -494,15 +492,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HSFW ASCOM Driver"
-        "ProductCode" = "8:{3E22BD59-F86D-4E0A-B4C3-F5C02A065EBE}"
-        "PackageCode" = "8:{5DE858DD-43CF-45A9-B37D-C2F6898519E5}"
+        "ProductCode" = "8:{92BB2CB8-A76B-4AEE-8661-CBB235155AF1}"
+        "PackageCode" = "8:{BD33FA48-0C59-4568-B746-6D9C1F6160D7}"
         "UpgradeCode" = "8:{7B31CC61-32B9-4904-B7D0-E2A14EF45AF5}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:2.0.0"
         "Manufacturer" = "8:Optec"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

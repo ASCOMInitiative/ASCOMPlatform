@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 namespace Optec_TCF_S_Focuser
 {
-   
+
     class XMLSettings
     {
         private static string XmlFilename = "TCFSettings.XML";
@@ -23,7 +23,7 @@ namespace Optec_TCF_S_Focuser
             LoadXML();
 
         }
-              
+
         /// <summary>
         /// Finds the XML file that contains the device settings. If the file doesn't exist
         /// it creates the file with all of the default values.
@@ -36,11 +36,13 @@ namespace Optec_TCF_S_Focuser
                 if (!System.IO.File.Exists(xpath))
                 {
                     // Create the settings file...
-                    
+
                     XElement SettingsElement = new XElement("TCFSettings");
                     XElement FocusOffsetsElement = new XElement("FocusOffsets");
+                    XElement AbsolutePresetsElement = new XElement("AbsolutePresets");
 
                     SettingsElement.Add(FocusOffsetsElement);
+                    SettingsElement.Add(AbsolutePresetsElement);
 
                     XDeclaration dec = new XDeclaration("1.0", "UTF-8", "yes");
                     TCFSettingsDocument = new XDocument(dec, SettingsElement);
@@ -51,10 +53,10 @@ namespace Optec_TCF_S_Focuser
             }
             catch (Exception)
             {
-                
+
                 throw;
             }
-            
+
         }
 
         private static object getPropertyFromXML(string PropertyName, Type t, object defaultValue)
@@ -71,15 +73,15 @@ namespace Optec_TCF_S_Focuser
                 }
 
                 else return Convert.ChangeType(e.Value, t);
-                
+
             }
-            catch(InvalidOperationException ex)
+            catch (InvalidOperationException ex)
             {
                 EventLogger.LogMessage(ex);
                 CreatePropertyInXML(PropertyName, defaultValue);
                 return getPropertyFromXML(PropertyName, t, defaultValue);
             }
-       
+
         }
 
         private static void setPropertyInXML(string PropertyName, object NewValue)
@@ -133,12 +135,12 @@ namespace Optec_TCF_S_Focuser
 
         public static OptecFocuser.DeviceTypes DeviceType
         {
-            get 
+            get
             {
-                return (OptecFocuser.DeviceTypes)getPropertyFromXML("DeviceType", 
-                    typeof(OptecFocuser.DeviceTypes), OptecFocuser.DeviceTypes.TCF_S); 
+                return (OptecFocuser.DeviceTypes)getPropertyFromXML("DeviceType",
+                    typeof(OptecFocuser.DeviceTypes), OptecFocuser.DeviceTypes.TCF_S);
             }
-            set { setPropertyInXML("DeviceType", value); }  
+            set { setPropertyInXML("DeviceType", value); }
         }
 
         public static bool TemperatureProbeDisabled
@@ -159,18 +161,25 @@ namespace Optec_TCF_S_Focuser
             set { setPropertyInXML("TempCompMode", value); }
         }
 
-        public static OptecFocuser.TemperatureUnits DisplayTempUnits 
+        public static OptecFocuser.TemperatureUnits DisplayTempUnits
         {
-            get { return (OptecFocuser.TemperatureUnits)getPropertyFromXML("DisplayTempUnits", 
-                typeof(OptecFocuser.TemperatureUnits),
-                OptecFocuser.TemperatureUnits.Celsius);}
+            get
+            {
+                return (OptecFocuser.TemperatureUnits)getPropertyFromXML("DisplayTempUnits",
+                    typeof(OptecFocuser.TemperatureUnits),
+                    OptecFocuser.TemperatureUnits.Celsius);
+            }
             set { setPropertyInXML("DisplayTempUnits", value); }
         }
 
-        public static OptecFocuser.PositionUnits DisplayPositionUnits {
-            get { return (OptecFocuser.PositionUnits)getPropertyFromXML(
-                "DisplayPositionUnits", typeof(OptecFocuser.PositionUnits),
-                OptecFocuser.PositionUnits.Steps); }
+        public static OptecFocuser.PositionUnits DisplayPositionUnits
+        {
+            get
+            {
+                return (OptecFocuser.PositionUnits)getPropertyFromXML(
+                    "DisplayPositionUnits", typeof(OptecFocuser.PositionUnits),
+                    OptecFocuser.PositionUnits.Steps);
+            }
             set
             {
                 setPropertyInXML("DisplayPositionUnits", value);
@@ -211,15 +220,50 @@ namespace Optec_TCF_S_Focuser
             }
         }
 
+        public static List<FocusOffset> SavedAbsolutePresets
+        {
+            get
+            {
+                List<FocusOffset> returnList = new List<FocusOffset>();
+                XElement MainElement = TCFSettingsDocument.Descendants().Single(i => i.Name == "TCFSettings").
+                Descendants().Single(j => j.Name == "AbsolutePresets");
+
+                foreach (XElement x in MainElement.Descendants())
+                {
+                    if (x.Name == "Offset")
+                    {
+                        string name = x.Element("Name").Value;
+                        int value = int.Parse(x.Element("Steps").Value);
+                        FocusOffset fo = new FocusOffset(name, value);
+                        returnList.Add(fo);
+                    }
+                }
+                return returnList;
+            }
+        }
+
         public static void AddFocusOffset(FocusOffset f)
         {
             XElement Name = new XElement("Name", f.OffsetName);
             XElement Steps = new XElement("Steps", f.OffsetSteps.ToString());
 
-            XElement Offset = new XElement("Offset", new object[]{Name, Steps});
+            XElement Offset = new XElement("Offset", new object[] { Name, Steps });
             // Add the offset to the offsets section of the file.
             XElement MainElement = TCFSettingsDocument.Descendants().Single(i => i.Name == "TCFSettings").
                 Descendants().Single(j => j.Name == "FocusOffsets");
+            MainElement.Add(Offset);
+            TCFSettingsDocument.Save(xpath);
+        }
+
+        public static void AddAbsolutePreset(FocusOffset f)
+        {
+            XElement Name = new XElement("Name", f.OffsetName);
+            XElement Steps = new XElement("Steps", f.OffsetSteps.ToString());
+
+            XElement Offset = new XElement("Offset", new object[] { Name, Steps });
+            // Add the offset to the offsets section of the file.
+            XElement MainElement = TCFSettingsDocument.Descendants().Single(i => i.Name == "TCFSettings").
+                Descendants().Single(j => j.Name == "AbsolutePresets");
             MainElement.Add(Offset);
             TCFSettingsDocument.Save(xpath);
         }
@@ -228,10 +272,19 @@ namespace Optec_TCF_S_Focuser
         {
             XElement ElementToRemove = TCFSettingsDocument.Descendants().Single(i => i.Name == "TCFSettings").
                 Descendants().Single(j => j.Name == "FocusOffsets").Descendants("Offset").Single(k => k.Value == f.OffsetName + f.OffsetSteps.ToString());
- 
+
             ElementToRemove.Remove();
             TCFSettingsDocument.Save(xpath);
-                     
+
+        }
+
+        public static void RemoveAbsolutePreset(FocusOffset f)
+        {
+            XElement ElementToRemove = TCFSettingsDocument.Descendants().Single(i => i.Name == "TCFSettings").
+                Descendants().Single(j => j.Name == "AbsolutePresets").Descendants("Offset").Single(k => k.Value == f.OffsetName + f.OffsetSteps.ToString());
+
+            ElementToRemove.Remove();
+            TCFSettingsDocument.Save(xpath);
         }
 
         public static bool CheckOffsetNameUnique(string name)
@@ -244,7 +297,17 @@ namespace Optec_TCF_S_Focuser
             return true;
         }
 
-        public static string SavedSerialPortName 
+        public static bool CheckPresetNameUnique(string name)
+        {
+            List<FocusOffset> savedPresets = SavedAbsolutePresets;
+            foreach (FocusOffset p in savedPresets)
+            {
+                if (p.OffsetName.ToUpper() == name.ToUpper()) return false;
+            }
+            return true;
+        }
+
+        public static string SavedSerialPortName
         {
             get
             {
@@ -268,7 +331,7 @@ namespace Optec_TCF_S_Focuser
             }
         }
     }
-   
 
-    
+
+
 }

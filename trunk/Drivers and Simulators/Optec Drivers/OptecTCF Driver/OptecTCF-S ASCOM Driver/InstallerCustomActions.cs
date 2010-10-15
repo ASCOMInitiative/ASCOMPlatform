@@ -24,20 +24,22 @@ namespace ASCOM.OptecTCF_S
         public override void Install(System.Collections.IDictionary stateSaver)
         {
             string msg = "Install custom action - Starting registration for COM Interop";
-            EventLogger.LogMessage(msg, TraceLevel.Warning);
+            Trace.WriteLine(msg);
+    
 #if DEBUG
             MessageBox.Show("Attach debugger to this process now, if required", "Custom Action Debug", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+
 #endif
             base.Install(stateSaver);
 
             RegistrationServices regsrv = new RegistrationServices();
             if (!regsrv.RegisterAssembly(this.GetType().Assembly, AssemblyRegistrationFlags.SetCodeBase))
             {
-                EventLogger.LogMessage("Installer failed to register driver for COM Interop", TraceLevel.Warning);
+                Trace.WriteLine("COM registration failed");
+    
                 throw new InstallException("Failed To Register driver for COM Interop");
             }
-            EventLogger.LogMessage("ASCOM Registration completed successfully", TraceLevel.Warning);
-          
+            Trace.WriteLine("Completed registration for COM Interop");
         }
 
         /// <summary>

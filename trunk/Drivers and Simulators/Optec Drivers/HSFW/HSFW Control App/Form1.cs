@@ -19,7 +19,14 @@ namespace HSFWControlApp
         public Form1()
         {
             InitializeComponent();
-            ConstructTabs();
+            try
+            {
+                ConstructTabs();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
             FilterWheelManager.FilterWheelAttached += new EventHandler(FilterWheels_FilterWheelListChanged);
             FilterWheelManager.FilterWheelRemoved += new EventHandler(FilterWheels_FilterWheelListChanged);
         }
@@ -381,7 +388,14 @@ namespace HSFWControlApp
 
         private void refreshDevicesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ConstructTabs();
+            try
+            {
+                ConstructTabs();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
 
         private void Form1_Shown(object sender, EventArgs e)

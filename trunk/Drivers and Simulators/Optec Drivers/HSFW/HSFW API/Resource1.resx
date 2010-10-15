@@ -141,4 +141,7 @@
   <data name="ErrorState_7" xml:space="preserve">
     <value>No wheel was detected in the device</value>
   </data>
+  <data name="ErrorState_8" xml:space="preserve">
+    <value>Unable to determing WheelID. (Is a magnet missing from wheel?)</value>
+  </data>
 </root>
