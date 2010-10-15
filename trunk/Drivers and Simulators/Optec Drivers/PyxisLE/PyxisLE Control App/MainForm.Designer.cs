@@ -63,26 +63,29 @@
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.Degree_LBL = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.SkyPAPanel = new System.Windows.Forms.Panel();
             this.AbsPanel = new System.Windows.Forms.Panel();
             this.RelativePanel = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.HomePanel = new System.Windows.Forms.Panel();
+            this.SkyPAPanel = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.RotatorDiagram = new System.Windows.Forms.PictureBox();
             this.StatusLabelTimer = new System.Windows.Forms.Timer(this.components);
             this.ExternalControlTimer = new System.Windows.Forms.Timer(this.components);
             this.VersionCheckerBGWorker = new System.ComponentModel.BackgroundWorker();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.alwaysOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.haltToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Relative_NUD)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
-            this.SkyPAPanel.SuspendLayout();
             this.AbsPanel.SuspendLayout();
             this.RelativePanel.SuspendLayout();
             this.HomePanel.SuspendLayout();
+            this.SkyPAPanel.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.RotatorDiagram)).BeginInit();
@@ -92,9 +95,9 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.StatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 568);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 495);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(369, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(298, 22);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -107,24 +110,22 @@
             // 
             // label1
             // 
-            this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(4, 7);
+            this.label1.Location = new System.Drawing.Point(4, 8);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(163, 20);
+            this.label1.Size = new System.Drawing.Size(71, 20);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Sky Position Angle:";
+            this.label1.Text = "Sky PA:";
             // 
             // SkyPA_TB
             // 
-            this.SkyPA_TB.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.SkyPA_TB.Cursor = System.Windows.Forms.Cursors.No;
             this.SkyPA_TB.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SkyPA_TB.Location = new System.Drawing.Point(173, 4);
+            this.SkyPA_TB.Location = new System.Drawing.Point(81, 5);
             this.SkyPA_TB.Name = "SkyPA_TB";
             this.SkyPA_TB.ReadOnly = true;
-            this.SkyPA_TB.Size = new System.Drawing.Size(73, 26);
+            this.SkyPA_TB.Size = new System.Drawing.Size(95, 26);
             this.SkyPA_TB.TabIndex = 2;
             this.SkyPA_TB.TabStop = false;
             // 
@@ -141,10 +142,10 @@
             // 
             // SetPA_BTN
             // 
-            this.SetPA_BTN.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.SetPA_BTN.Location = new System.Drawing.Point(252, 6);
+            this.SetPA_BTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.SetPA_BTN.Location = new System.Drawing.Point(189, 8);
             this.SetPA_BTN.Name = "SetPA_BTN";
-            this.SetPA_BTN.Size = new System.Drawing.Size(75, 23);
+            this.SetPA_BTN.Size = new System.Drawing.Size(85, 23);
             this.SetPA_BTN.TabIndex = 5;
             this.SetPA_BTN.Text = "Change...";
             this.SetPA_BTN.UseVisualStyleBackColor = true;
@@ -165,7 +166,7 @@
             // 
             this.AbsoluteMove_TB.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.AbsoluteMove_TB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AbsoluteMove_TB.Location = new System.Drawing.Point(164, 9);
+            this.AbsoluteMove_TB.Location = new System.Drawing.Point(162, 9);
             this.AbsoluteMove_TB.Name = "AbsoluteMove_TB";
             this.AbsoluteMove_TB.Size = new System.Drawing.Size(73, 20);
             this.AbsoluteMove_TB.TabIndex = 7;
@@ -199,17 +200,18 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(131, 13);
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(112, 15);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(76, 13);
+            this.label5.Size = new System.Drawing.Size(64, 13);
             this.label5.TabIndex = 12;
             this.label5.Text = "Increment(°)";
             // 
             // RelativeForward_BTN
             // 
-            this.RelativeForward_BTN.Location = new System.Drawing.Point(224, 30);
+            this.RelativeForward_BTN.Location = new System.Drawing.Point(210, 32);
             this.RelativeForward_BTN.Name = "RelativeForward_BTN";
-            this.RelativeForward_BTN.Size = new System.Drawing.Size(90, 23);
+            this.RelativeForward_BTN.Size = new System.Drawing.Size(70, 25);
             this.RelativeForward_BTN.TabIndex = 13;
             this.RelativeForward_BTN.Text = ">>";
             this.RelativeForward_BTN.UseVisualStyleBackColor = true;
@@ -218,9 +220,9 @@
             // 
             // RelativeReverse_Btn
             // 
-            this.RelativeReverse_Btn.Location = new System.Drawing.Point(25, 30);
+            this.RelativeReverse_Btn.Location = new System.Drawing.Point(8, 32);
             this.RelativeReverse_Btn.Name = "RelativeReverse_Btn";
-            this.RelativeReverse_Btn.Size = new System.Drawing.Size(96, 23);
+            this.RelativeReverse_Btn.Size = new System.Drawing.Size(70, 25);
             this.RelativeReverse_Btn.TabIndex = 14;
             this.RelativeReverse_Btn.Text = "<<";
             this.RelativeReverse_Btn.UseVisualStyleBackColor = true;
@@ -235,9 +237,14 @@
             0,
             0,
             0});
-            this.Relative_NUD.Location = new System.Drawing.Point(128, 32);
+            this.Relative_NUD.Location = new System.Drawing.Point(99, 36);
             this.Relative_NUD.Maximum = new decimal(new int[] {
             35999,
+            0,
+            0,
+            131072});
+            this.Relative_NUD.Minimum = new decimal(new int[] {
+            5,
             0,
             0,
             131072});
@@ -260,7 +267,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(369, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(298, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -287,7 +294,9 @@
             this.showDeviceDiagramToolStripMenuItem,
             this.showHideHomeButtonToolStripMenuItem,
             this.showHideAbsoluteMoveToolStripMenuItem,
-            this.showHideRelativeMoveToolStripMenuItem});
+            this.showHideRelativeMoveToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.alwaysOnTopToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.viewToolStripMenuItem.Text = "View";
@@ -337,7 +346,8 @@
             // deviceToolStripMenuItem
             // 
             this.deviceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.advancedSetupToolStripMenuItem});
+            this.advancedSetupToolStripMenuItem,
+            this.haltToolStripMenuItem});
             this.deviceToolStripMenuItem.Name = "deviceToolStripMenuItem";
             this.deviceToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.deviceToolStripMenuItem.Text = "Device";
@@ -396,36 +406,26 @@
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.tableLayoutPanel1.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.InsetDouble;
             this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.Controls.Add(this.SkyPAPanel, 0, 0);
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.AbsPanel, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.RelativePanel, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.HomePanel, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.SkyPAPanel, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 1);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 27);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 24);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 43F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 315F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 255F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 43F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 43F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(345, 535);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(298, 471);
             this.tableLayoutPanel1.TabIndex = 18;
-            // 
-            // SkyPAPanel
-            // 
-            this.SkyPAPanel.Controls.Add(this.label1);
-            this.SkyPAPanel.Controls.Add(this.SkyPA_TB);
-            this.SkyPAPanel.Controls.Add(this.SetPA_BTN);
-            this.SkyPAPanel.Location = new System.Drawing.Point(6, 6);
-            this.SkyPAPanel.Name = "SkyPAPanel";
-            this.SkyPAPanel.Size = new System.Drawing.Size(333, 35);
-            this.SkyPAPanel.TabIndex = 19;
             // 
             // AbsPanel
             // 
@@ -433,9 +433,10 @@
             this.AbsPanel.Controls.Add(this.label3);
             this.AbsPanel.Controls.Add(this.AbsoluteMove_TB);
             this.AbsPanel.Controls.Add(this.AbsoluteMove_BTN);
-            this.AbsPanel.Location = new System.Drawing.Point(6, 416);
+            this.AbsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AbsPanel.Location = new System.Drawing.Point(6, 356);
             this.AbsPanel.Name = "AbsPanel";
-            this.AbsPanel.Size = new System.Drawing.Size(318, 37);
+            this.AbsPanel.Size = new System.Drawing.Size(286, 37);
             this.AbsPanel.TabIndex = 20;
             // 
             // RelativePanel
@@ -445,18 +446,18 @@
             this.RelativePanel.Controls.Add(this.label5);
             this.RelativePanel.Controls.Add(this.RelativeReverse_Btn);
             this.RelativePanel.Controls.Add(this.RelativeForward_BTN);
+            this.RelativePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RelativePanel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RelativePanel.Location = new System.Drawing.Point(6, 462);
+            this.RelativePanel.Location = new System.Drawing.Point(6, 402);
             this.RelativePanel.Name = "RelativePanel";
-            this.RelativePanel.Size = new System.Drawing.Size(331, 69);
+            this.RelativePanel.Size = new System.Drawing.Size(286, 63);
             this.RelativePanel.TabIndex = 21;
             // 
             // label2
             // 
-            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(5, 8);
+            this.label2.Location = new System.Drawing.Point(5, 5);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(93, 13);
             this.label2.TabIndex = 18;
@@ -464,41 +465,54 @@
             // 
             // HomePanel
             // 
+            this.HomePanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.HomePanel.Controls.Add(this.HomeDev_LBL);
             this.HomePanel.Controls.Add(this.HomeBTN);
-            this.HomePanel.Location = new System.Drawing.Point(6, 370);
+            this.HomePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.HomePanel.Location = new System.Drawing.Point(6, 310);
             this.HomePanel.Name = "HomePanel";
-            this.HomePanel.Size = new System.Drawing.Size(314, 37);
+            this.HomePanel.Size = new System.Drawing.Size(286, 37);
             this.HomePanel.TabIndex = 20;
+            // 
+            // SkyPAPanel
+            // 
+            this.SkyPAPanel.Controls.Add(this.label1);
+            this.SkyPAPanel.Controls.Add(this.SkyPA_TB);
+            this.SkyPAPanel.Controls.Add(this.SetPA_BTN);
+            this.SkyPAPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SkyPAPanel.Location = new System.Drawing.Point(6, 6);
+            this.SkyPAPanel.Name = "SkyPAPanel";
+            this.SkyPAPanel.Size = new System.Drawing.Size(286, 37);
+            this.SkyPAPanel.TabIndex = 19;
             // 
             // panel1
             // 
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Controls.Add(this.RotatorDiagram);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(6, 52);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(327, 309);
+            this.panel1.Size = new System.Drawing.Size(286, 249);
             this.panel1.TabIndex = 22;
             // 
             // pictureBox1
             // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox1.Image = global::PyxisLE_Control.Properties.Resources.Optec_Logo_medium_png;
-            this.pictureBox1.Location = new System.Drawing.Point(-3, 0);
+            this.pictureBox1.Location = new System.Drawing.Point(-3, -7);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(113, 45);
+            this.pictureBox1.Size = new System.Drawing.Size(98, 34);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 11;
             this.pictureBox1.TabStop = false;
             // 
             // RotatorDiagram
             // 
-            this.RotatorDiagram.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.RotatorDiagram.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.RotatorDiagram.Cursor = System.Windows.Forms.Cursors.Cross;
-            this.RotatorDiagram.Location = new System.Drawing.Point(13, 4);
+            this.RotatorDiagram.Location = new System.Drawing.Point(18, -1);
             this.RotatorDiagram.Name = "RotatorDiagram";
-            this.RotatorDiagram.Size = new System.Drawing.Size(300, 300);
+            this.RotatorDiagram.Size = new System.Drawing.Size(250, 250);
             this.RotatorDiagram.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.RotatorDiagram.TabIndex = 10;
             this.RotatorDiagram.TabStop = false;
@@ -519,19 +533,39 @@
             // 
             this.VersionCheckerBGWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.VersionCheckerBGWorker_DoWork);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(220, 6);
+            // 
+            // alwaysOnTopToolStripMenuItem
+            // 
+            this.alwaysOnTopToolStripMenuItem.CheckOnClick = true;
+            this.alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
+            this.alwaysOnTopToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.alwaysOnTopToolStripMenuItem.Text = "Always on Top";
+            this.alwaysOnTopToolStripMenuItem.Click += new System.EventHandler(this.alwaysOnTopToolStripMenuItem_Click);
+            // 
+            // haltToolStripMenuItem
+            // 
+            this.haltToolStripMenuItem.Name = "haltToolStripMenuItem";
+            this.haltToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.haltToolStripMenuItem.Text = "Halt";
+            this.haltToolStripMenuItem.Click += new System.EventHandler(this.haltToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(369, 590);
+            this.ClientSize = new System.Drawing.Size(298, 517);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.MaximumSize = new System.Drawing.Size(385, 700);
-            this.MinimumSize = new System.Drawing.Size(385, 38);
+            this.MaximumSize = new System.Drawing.Size(700, 700);
+            this.MinimumSize = new System.Drawing.Size(35, 38);
             this.Name = "MainForm";
             this.Text = "Pyxis LE Control";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
@@ -544,14 +578,14 @@
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
-            this.SkyPAPanel.ResumeLayout(false);
-            this.SkyPAPanel.PerformLayout();
             this.AbsPanel.ResumeLayout(false);
             this.AbsPanel.PerformLayout();
             this.RelativePanel.ResumeLayout(false);
             this.RelativePanel.PerformLayout();
             this.HomePanel.ResumeLayout(false);
             this.HomePanel.PerformLayout();
+            this.SkyPAPanel.ResumeLayout(false);
+            this.SkyPAPanel.PerformLayout();
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.RotatorDiagram)).EndInit();
@@ -606,5 +640,8 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Timer ExternalControlTimer;
         private System.ComponentModel.BackgroundWorker VersionCheckerBGWorker;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem alwaysOnTopToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem haltToolStripMenuItem;
     }
 }

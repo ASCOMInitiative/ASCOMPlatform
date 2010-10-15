@@ -100,5 +100,10 @@ namespace PyxisLE_Control
             }
         }
         #endregion
+
+        private void AboutBox_Load(object sender, EventArgs e)
+        {
+            textBoxDescription.Text = "\"These are not the droids you're looking for...\"";
+        }
     }
 }

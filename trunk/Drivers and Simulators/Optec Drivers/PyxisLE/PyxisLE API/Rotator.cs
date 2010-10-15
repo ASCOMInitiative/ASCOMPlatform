@@ -566,31 +566,31 @@ namespace PyxisLE_API
             }
         }
 
-        public bool ReturnToLastOnHome
-        {
-            get
-            {
-                return returnToLast;
-            }
-            set
-            {
-                byte[] datatosend = new byte[] { };
-                // Create the report to send
-                FeatureReport ReturnToHomeReport = new FeatureReport(
-                    Rotators.REPORTID_FEATURE_DO_MOTION, datatosend);
-                // Feature Reports Must have at least one data item so we put a zero in it.
-                // Create a byte to hold the new value
-                byte NewValue = 0;
-                if (value) NewValue = Rotators.REPORT_TRUE;
-                else NewValue = Rotators.REPORT_FALSE;
-                // Set the opcode byte and the new value byte
-                ReturnToHomeReport.DataToSend = new byte[] { Rotators.MOTION_OPCODE_SET_RETURNTOLAST, NewValue };
-                // Send the Report
-                this.selectedDevice.ProcessFeatureReport(ReturnToHomeReport);
-                // Update the property value by reading it from the device.
-                RefreshDeviceDescription();
-            }
-        }
+        //public bool ReturnToLastOnHome
+        //{
+        //    get
+        //    {
+        //        return returnToLast;
+        //    }
+        //    set
+        //    {
+        //        byte[] datatosend = new byte[] { };
+        //        // Create the report to send
+        //        FeatureReport ReturnToHomeReport = new FeatureReport(
+        //            Rotators.REPORTID_FEATURE_DO_MOTION, datatosend);
+        //        // Feature Reports Must have at least one data item so we put a zero in it.
+        //        // Create a byte to hold the new value
+        //        byte NewValue = 0;
+        //        if (value) NewValue = Rotators.REPORT_TRUE;
+        //        else NewValue = Rotators.REPORT_FALSE;
+        //        // Set the opcode byte and the new value byte
+        //        ReturnToHomeReport.DataToSend = new byte[] { Rotators.MOTION_OPCODE_SET_RETURNTOLAST, NewValue };
+        //        // Send the Report
+        //        this.selectedDevice.ProcessFeatureReport(ReturnToHomeReport);
+        //        // Update the property value by reading it from the device.
+        //        RefreshDeviceDescription();
+        //    }
+        //}
 
         // ******* Private Methods ***************************************
 
