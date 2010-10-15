@@ -3,7 +3,7 @@
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
 "IsWebType" = "8:FALSE"
-"ProjectName" = "8:Installer_x64_ASCOM"
+"ProjectName" = "8:Installer_x64"
 "LanguageId" = "3:1033"
 "CodePage" = "3:1252"
 "UILanguageId" = "3:1033"
@@ -88,25 +88,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_9FA4994B247D474ABE72B03FC17A36DD"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_9C7343D3E10F7469F49CD79A6D9FC208"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_90280F33BF80C8F5A1711CA347D38DBF"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_4795E007AC2190D09853F1E8F3455124"
+        "OwnerKey" = "8:_0A91E3EE6350B0D785C3B60D674AA3A7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -118,7 +100,25 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_0A91E3EE6350B0D785C3B60D674AA3A7"
+        "OwnerKey" = "8:_4795E007AC2190D09853F1E8F3455124"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_90280F33BF80C8F5A1711CA347D38DBF"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_9C7343D3E10F7469F49CD79A6D9FC208"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_9FA4994B247D474ABE72B03FC17A36DD"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -298,11 +298,6 @@
             "AssemblyAsmDisplayName" = "8:Optec.EventLogger, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_0A91E3EE6350B0D785C3B60D674AA3A7"
-                    {
-                    "Name" = "8:Optec.EventLogger.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Optec.EventLogger.dll"
             "TargetName" = "8:"
@@ -329,11 +324,6 @@
             "AssemblyAsmDisplayName" = "8:ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_4795E007AC2190D09853F1E8F3455124"
-                    {
-                    "Name" = "8:ASCOM.Exceptions.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:ASCOM.Exceptions.dll"
             "TargetName" = "8:"
@@ -360,11 +350,6 @@
             "AssemblyAsmDisplayName" = "8:ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_90280F33BF80C8F5A1711CA347D38DBF"
-                    {
-                    "Name" = "8:ASCOM.Interfaces.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:ASCOM.Interfaces.dll"
             "TargetName" = "8:"
@@ -391,11 +376,6 @@
             "AssemblyAsmDisplayName" = "8:ASCOM.Utilities, Version=5.5.1.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_9C7343D3E10F7469F49CD79A6D9FC208"
-                    {
-                    "Name" = "8:ASCOM.Utilities.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:ASCOM.Utilities.dll"
             "TargetName" = "8:"
