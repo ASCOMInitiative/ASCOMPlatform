@@ -551,7 +551,9 @@ namespace ASCOM.GeminiTelescope
                 BalloonIcon.ContextMenu.MenuItems[Resources.Connect].Text = Resources.Disconnect;
 
                 m_Messages.Clear(); // remove all queued up messages, we don't care now that the mount is connected:
-                SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME + "\r\n" + (GeminiHardware.BaudRate.ToString()) + "b/s on " + GeminiHardware.ComPort, Resources.MountIsConnected, ToolTipIcon.Info);
+                
+                SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME + "\r\n" + 
+                    (GeminiHardware.EthernetPort? "" : (GeminiHardware.BaudRate.ToString()) + "b/s ") +  "On " + GeminiHardware.ComPort, Resources.MountIsConnected, ToolTipIcon.Info);
             }
             if (Connected)
             {
@@ -846,6 +848,7 @@ namespace ASCOM.GeminiTelescope
 
             setupForm.AsyncPulseGuide = GeminiHardware.AsyncPulseGuide;
             setupForm.ReportPierSide = GeminiHardware.ReportPierSide;
+            setupForm.PrecisionPulseGuide = GeminiHardware.PrecisionPulseGuide;
 
             DialogResult ans;
             if (this.Visible==false)
@@ -859,7 +862,7 @@ namespace ASCOM.GeminiTelescope
 
                 try
                 {
-                    GeminiHardware.ComPort = setupForm.ComPort;
+                    GeminiHardware.ComPort = setupForm.ComPort;                 
                 }
                 catch 
                 {
@@ -893,6 +896,8 @@ namespace ASCOM.GeminiTelescope
                 GeminiHardware.AsyncPulseGuide = setupForm.AsyncPulseGuide;
 
                 GeminiHardware.ReportPierSide = setupForm.ReportPierSide;
+
+                GeminiHardware.PrecisionPulseGuide = setupForm.PrecisionPulseGuide;
 
                 GeminiHardware.ScanCOMPorts = setupForm.AllowPortScan;
 

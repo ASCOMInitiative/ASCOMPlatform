@@ -1299,12 +1299,27 @@ namespace ASCOM.GeminiTelescope
                 double incr = 1;
                 if (value.Count != 0) incr = 100.0 / value.Count;
 
+
+                List<string> batch = new List<string>();
+
                 foreach (KeyValuePair<int, string> kp in value)
                 {
+                    if (batch.Count >= 10)
+                    {
+                        GeminiHardware.DoCommandResult(batch.ToArray(), GeminiHardware.MAX_TIMEOUT, false);
+                        batch.Clear();
+                    }
                     frmProgress.Update(incr, null);
-                    GeminiHardware.DoCommandResult(">511:" + kp.Value.ToString(), GeminiHardware.MAX_TIMEOUT, false);
+                    batch.Add(">511:" + kp.Value.ToString());
+//                    GeminiHardware.DoCommandResult(">511:" + kp.Value.ToString(), GeminiHardware.MAX_TIMEOUT, false);
                 }
-                
+
+                if (batch.Count > 0)
+                {
+                    GeminiHardware.DoCommandResult(batch.ToArray(), GeminiHardware.MAX_TIMEOUT, false);
+                    batch.Clear();
+                }
+
                 byte pec = GeminiHardware.PECStatus;
                 if (pec != 0xff)
                 {

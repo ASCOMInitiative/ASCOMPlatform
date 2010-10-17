@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using ASCOM.GeminiTelescope.Properties;
+using System.Linq;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -20,6 +21,8 @@ namespace ASCOM.GeminiTelescope
         private double m_SaveLatitude;
         private double m_SaveLongitude;
         private int m_SaveUTCOffset;
+
+        private string m_PreviousComPort = null;
 
         public string[] TimeZones = {
             "UTC-11",
@@ -86,6 +89,13 @@ namespace ASCOM.GeminiTelescope
             foreach (string s in System.IO.Ports.SerialPort.GetPortNames())
             {
                 comboBoxComPort.Items.Add(s);
+            }
+
+            // if a network connection is available, add 'Ethernet' for Gemini II 
+            if (System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces().Any(
+                x => x.OperationalStatus == System.Net.NetworkInformation.OperationalStatus.Up))
+            {
+                comboBoxComPort.Items.Add("Ethernet");
             }
 
             string[] joys = Joystick.JoystickNames;
@@ -389,6 +399,12 @@ namespace ASCOM.GeminiTelescope
             set { chkPierSide.Checked = value; }
         }
 
+        public bool PrecisionPulseGuide
+        {
+            get { return chkPrecisionPulse.Checked; }
+            set { chkPrecisionPulse.Checked = value; }
+        }
+
         #endregion
 
         private void TelescopeSetupDialogForm_Load(object sender, EventArgs e)
@@ -598,6 +614,26 @@ namespace ASCOM.GeminiTelescope
         }
 
         private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBoxComPort_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxComPort.Text == "Ethernet" && m_PreviousComPort!=null)
+            {
+                Speech.SayIt(Resources.EthernetSettings, Speech.SpeechType.Command);
+
+                //configure ethernet connection for Gemini II
+                frmNetworkSettings net = new frmNetworkSettings();
+                DialogResult res = net.ShowDialog(this);
+            }
+            m_PreviousComPort = comboBoxComPort.Text;
+
+            comboBoxBaudRate.Enabled = (comboBoxComPort.Text != "Ethernet");
+        }
+
+        private void chkPierSide_CheckedChanged(object sender, EventArgs e)
         {
 
         }

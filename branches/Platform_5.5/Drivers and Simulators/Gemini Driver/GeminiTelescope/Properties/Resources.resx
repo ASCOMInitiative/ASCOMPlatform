@@ -797,4 +797,13 @@ RA</value>
   <data name="Track" xml:space="preserve">
     <value>Track</value>
   </data>
+  <data name="EthernetError" xml:space="preserve">
+    <value>Communications error</value>
+  </data>
+  <data name="EthernetSettings" xml:space="preserve">
+    <value>Gemini 2 Network Settings</value>
+  </data>
+  <data name="EthernetTimeout" xml:space="preserve">
+    <value>Command timed out</value>
+  </data>
 </root>

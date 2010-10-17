@@ -165,6 +165,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase">
@@ -185,6 +186,13 @@
     </Compile>
     <Compile Include="CollapsibleGroupBox.Designer.cs">
       <DependentUpon>CollapsibleGroupBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Connection.cs" />
+    <Compile Include="frmNetworkSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmNetworkSettings.Designer.cs">
+      <DependentUpon>frmNetworkSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="frmObservationLog.cs">
       <SubType>Form</SubType>
@@ -296,6 +304,12 @@
     <EmbeddedResource Include="AboutBox\AboutBox1.resx">
       <DependentUpon>AboutBox1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmNetworkSettings.de.resx">
+      <DependentUpon>frmNetworkSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmNetworkSettings.resx">
+      <DependentUpon>frmNetworkSettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmMain.fr.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -363,6 +377,7 @@
     <EmbeddedResource Include="Properties\Resources.en-GB.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.en-GB.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ru.resx" />
     <EmbeddedResource Include="Properties\Resources.fr.resx">
