@@ -995,6 +995,7 @@ namespace ASCOM.GeminiTelescope
         {
             get {
                 AssertConnect();
+                System.Threading.Thread.Sleep(10);  // allow some delay for apps that query in a tight loop
                 bool res = GeminiHardware.IsPulseGuiding;
                 GeminiHardware.Trace.Enter("IT:IsPulseGuiding.Get", res);
                 return res;
@@ -1103,6 +1104,11 @@ namespace ASCOM.GeminiTelescope
         /// <param name="Duration"></param>
         public void PulseGuide(GuideDirections Direction, int Duration)
         {
+            if (!GeminiHardware.PrecisionPulseGuide)
+            {
+                OldPulseGuide(Direction, Duration);
+                return;
+            }
 
             GeminiHardware.Trace.Enter("IT:PulseGuide", Direction, Duration);
 
@@ -1244,13 +1250,75 @@ namespace ASCOM.GeminiTelescope
             {
                 int d = (count > maxduration ? maxduration : count);
                 string c = cmd + d.ToString();
+
+                // Set time for pulse guide command to be started (used by IsPulseGuiding property)
+                // IsPulseGuiding will report true until this many milliseconds elapse.
+                // After this time, IsPulseGuiding will query the mount for tracking speed
+                // to return the proper status. This is necessary because Gemini doesn't immediately
+                // set 'G' or 'C' tracking rate when pulse-guiding command is issued and continues to track
+                // for a little while. Use 1/2 of the total duration or 100 milliseconds, whichever is greater:
+                GeminiHardware.EndOfPulseGuide = Math.Max(d / 2, 100);
+
                 GeminiHardware.DoCommandResult(c, Duration + GeminiHardware.MAX_TIMEOUT, false);
                 GeminiHardware.Velocity = "G";
                 count -= d;
+
+
                 if (!GeminiHardware.AsyncPulseGuide || count > 0)
                     GeminiHardware.WaitForVelocity("TN", Duration + GeminiHardware.MAX_TIMEOUT); // shouldn't take much longer than 'Duration', right?
             }
-            GeminiHardware.Trace.Exit("IT:PulseGuide", Direction, Duration, totalSteps);
+            GeminiHardware.Trace.Exit("IT:PulseGuide", Direction, Duration, totalSteps, GeminiHardware.AsyncPulseGuide);
+        }
+
+        /// <summary>
+        /// Use pc timing to execute pulse-guiding commands instead of Gemini precision-guiding commands
+        /// </summary>
+        /// <param name="Direction"></param>
+        /// <param name="Duration"></param>
+        private void OldPulseGuide(GuideDirections Direction, int Duration)
+        {
+            GeminiHardware.Trace.Enter("IT:OldPulseGuide", Direction, Duration, GeminiHardware.AsyncPulseGuide);
+            AssertConnect();
+            if (GeminiHardware.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+
+            if (Duration > 60000 || Duration < 0)  // too large or negative...
+                throw new InvalidValueException("PulseGuide", Duration.ToString(), "0..60000");
+
+            if (Duration == 0) return;
+
+            string[] cmd = new string[2];
+
+            cmd[0] = ":RG";
+
+            switch (Direction)
+            {
+                case GuideDirections.guideEast:
+                    cmd[1] = ":Me"; 
+                    break;
+                case GuideDirections.guideNorth:
+                    cmd[1] = ":Mn"; 
+                    break;
+                case GuideDirections.guideSouth:
+                    cmd[1] = ":Ms"; 
+                    break;
+                case GuideDirections.guideWest:
+                    cmd[1] = ":Mw"; 
+                    break;
+            }
+
+            // Set time for pulse guide command to be started (used by IsPulseGuiding property)
+            // IsPulseGuiding will report true until this many milliseconds elapse.
+            // After this time, IsPulseGuiding will query the mount for tracking speed
+            // to return the proper status. This is necessary because Gemini doesn't immediately
+            // set 'G' or 'C' tracking rate when pulse-guiding command is issued and continues to track
+            // for a little while. Use 1/2 of the total duration or 100 milliseconds, whichever is greater:
+            GeminiHardware.EndOfPulseGuide = Math.Max(Duration / 2, 100);
+
+            GeminiHardware.Velocity = "G";
+
+            GeminiHardware.DoPulseCommand(cmd, Duration, GeminiHardware.AsyncPulseGuide);
+
+            GeminiHardware.Trace.Exit("IT:OldPulseGuide", Direction, Duration, GeminiHardware.AsyncPulseGuide);
         }
 
         public double RightAscension
