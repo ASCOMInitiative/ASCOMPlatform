@@ -8,21 +8,21 @@ using ASCOM.DeviceInterface;
 namespace ASCOM.Simulator
 {
     //
-    // Your driver's DeviceID is ASCOM.Simulator.SafetyMonitor
+    // Your driver's DeviceID is ASCOM.Simulator.Focuser
     //
-    // The Guid attribute sets the CLSID for ASCOM.Simulator.SafetyMonitor
+    // The Guid attribute sets the CLSID for ASCOM.Simulator.Focuser
     // The ClassInterface/None addribute prevents an empty interface called
     // _Conceptual from being created and used as the [default] interface
     //
 
     /// <summary>
-    /// ASCOM SafetyMonitor Driver for a SafetyMonitor.
+    /// ASCOM Focuser Driver for a Focuser.
     /// This class is the implementation of the public ASCOM interface.
     /// </summary>
     [Guid("24C040F2-2FA5-4DA4-B87B-6C1101828D2A")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
-    public class Focuser : IFocuser, IDisposable
+    public class Focuser : IFocuserExt, IDisposable
     {
         #region Constants
 
@@ -67,18 +67,16 @@ namespace ASCOM.Simulator
         /// </summary>
         private static readonly Profile Profile = new Profile();
 
-        private static bool _isSafe;
-
         #endregion
 
         #region Focuser Public Members
 
         //
-        // PUBLIC COM INTERFACE ISafetyMonitor IMPLEMENTATION
+        // PUBLIC COM INTERFACE IFocuser IMPLEMENTATION
         //
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SafetyMonitor"/> class.
+        /// Initializes a new instance of the <see cref="Focuser"/> class.
         /// Must be public for COM registration.
         /// </summary>
         public Focuser()
@@ -86,9 +84,23 @@ namespace ASCOM.Simulator
             //check to see if the profile is ok
             if (ValidateProfile())
             {
-                if (CheckSafetyMonitorKeyValue()) ;
-                //load profile settings
-                GetProfileSetting();
+                try
+                {
+                    if (!LoadFocuserKeyValues())
+                    {
+                        //setup new profile settings
+                        SetDefaultProfileSettings();
+                        Connected = false;
+                        Link = false;
+                        throw new Exception("Could not load settings, resetting defaults");
+                    }
+                }
+                catch (Exception)
+                {
+                    
+                    throw new Exception("Profile Reading or Writing Error");
+                }
+                
             }
             else
             {
@@ -107,13 +119,33 @@ namespace ASCOM.Simulator
             f.ShowDialog();
         }
 
+        /// <summary>
+        /// Start the move of the focuser.
+        /// </summary>
         public void Move(int val)
         {
-            throw new System.NotImplementedException();
+            Connected = true;
+            Link = true;
+            IsMoving = true;
+            Position = Position + val;
+
+            if (Position >= MaxStep)
+            {
+                Position = MaxStep;
+            }
+           if (Position + val <= 0)
+            {
+                Position = 0;
+            }
+            IsMoving = false;
+            Connected = false;
+            Link = false;
+
+
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="SafetyMonitor"/> is connected.
+        /// Gets or sets a value indicating whether this <see cref="Focuser"/> is connected.
         /// </summary>
         /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
         public bool Connected { get; set; }
@@ -177,18 +209,18 @@ namespace ASCOM.Simulator
         {
             get { throw new MethodNotImplementedException("LastResult"); }
         }
-
       
         public void Halt()
         {
-            throw new System.NotImplementedException();
+            if (!CanHalt) return;
+            IsMoving = false;
+            Connected = false;
         }
 
         private static void Dispose()
         {
             throw new System.NotImplementedException();
         }
-
 
         public string Action(string actionName, string actionParameters)
         {
@@ -220,16 +252,16 @@ namespace ASCOM.Simulator
             get { throw new MethodNotImplementedException("SupportedActions"); }
         }
 
-        public bool Absolute { get; private set; }
-        public bool IsMoving { get; private set; }
+        public bool Absolute { get; set; }
+        public bool IsMoving { get; set; }
         public bool Link { get; set; }
-        public int MaxIncrement { get; private set; }
-        public int MaxStep { get; private set; }
-        public int Position { get; private set; }
-        public double StepSize { get; private set; }
+        public int MaxIncrement { get; set; }
+        public int MaxStep { get; set; }
+        public int Position { get; set; }
+        public double StepSize { get; set; }
         public bool TempComp { get; set; }
-        public bool TempCompAvailable { get; private set; }
-        public double Temperature { get; private set; }
+        public bool TempCompAvailable { get; set; }
+        public double Temperature { get; set; }
 
         void IDisposable.Dispose()
         {
@@ -240,7 +272,6 @@ namespace ASCOM.Simulator
 
         #region Focuser Private Members
 
-
         /// <summary>
         /// Validate the profile is in good shape
         /// </summary>
@@ -248,7 +279,7 @@ namespace ASCOM.Simulator
         {
             try
             {
-                Profile.DeviceType = "SafetyMonitor";
+                Profile.DeviceType = "Focuser";
                 //check profile if the driver id is registered
                 return Profile.IsRegistered(sCsDriverId);
             }
@@ -258,36 +289,77 @@ namespace ASCOM.Simulator
             }
         }
 
-        private static bool CheckSafetyMonitorKeyValue()
+        /// <summary>
+        /// Load the profile values
+        /// </summary>
+        private bool LoadFocuserKeyValues()
         {
-            string s = Profile.GetValue(sCsDriverId, "SafetyMonitor").ToUpper();
-            if (s != "TRUE" & s != "FALSE")
+            try
             {
-                //found something wrong, delete evertyhing
-                DeleteProfileSettings();
-                return RegisterWithProfile();
+                Absolute = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "Absolute"));
+                MaxIncrement = Convert.ToInt32(Profile.GetValue(sCsDriverId, "MaxIncrement"));
+                MaxStep = Convert.ToInt32(Profile.GetValue(sCsDriverId, "MaxStep"));
+                Position = Convert.ToInt32(Profile.GetValue(sCsDriverId, "Position"));
+                StepSize = Convert.ToDouble(Profile.GetValue(sCsDriverId, "StepSize"));
+                Temperature = Convert.ToDouble(Profile.GetValue(sCsDriverId, "Temperature"));
+                TempComp = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempComp"));
+                TempCompAvailable = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempCompAvailable"));
+                
+                //extended focuser items
+                CanHalt = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "CanHalt"));
+                TempProbe = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempProbe"));
+                Synchronus = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "Synchronus"));
+                CanStepSize = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "CanStepSize"));
+                TempMax = Convert.ToInt32(Profile.GetValue(sCsDriverId, "TempMax"));
+                TempMin = Convert.ToInt32(Profile.GetValue(sCsDriverId, "TempMin"));
+                TempPeriod = Convert.ToInt32(Profile.GetValue(sCsDriverId, "TempPeriod"));
+                TempSteps = Convert.ToInt32(Profile.GetValue(sCsDriverId, "TempSteps"));
+
+                return true;
+
             }
-            return true;
+            catch (Exception)
+            {
+                return false;
+            }  
         }
 
-        private static bool RegisterWithProfile()
+        /// <summary>
+        /// Register the driver to setup a Profile
+        /// </summary>
+        private static void RegisterWithProfile()
         {
             Profile.Register(sCsDriverId, sCsDriverId);
             if (ValidateProfile())
             {
-                Profile.WriteValue(sCsDriverId, "SafetyMonitor", "false");
-                return true;
+                Profile.WriteValue(sCsDriverId, "Focuser", "false");
+                return;
             }
-            return false;
+            return;
         }
 
         /// <summary>
-        /// Loads a specific setting from the profile
+        /// Default values for the profile
         /// </summary>
-        private static void GetProfileSetting()
+        public void SetDefaultProfileSettings()
         {
-            string s = Profile.GetValue(sCsDriverId, "SafetyMonitor");
-            _isSafe = Convert.ToBoolean(s);
+            Profile.WriteValue(sCsDriverId, "Absolute", "True");
+            Profile.WriteValue(sCsDriverId, "MaxIncrement", "50000");
+            Profile.WriteValue(sCsDriverId, "MaxStep", "50000");
+            Profile.WriteValue(sCsDriverId, "Position", "25000");
+            Profile.WriteValue(sCsDriverId, "StepSize", "20");
+            Profile.WriteValue(sCsDriverId, "Temperature", "4.96");
+            Profile.WriteValue(sCsDriverId, "TempComp", "True");
+            Profile.WriteValue(sCsDriverId, "TempCompAvailable", "True");
+            Profile.WriteValue(sCsDriverId, "CanHalt", "True");
+            Profile.WriteValue(sCsDriverId, "TempProbe", "True");
+            Profile.WriteValue(sCsDriverId, "Synchronus", "True");
+            Profile.WriteValue(sCsDriverId, "CanStepSize", "True");
+            Profile.WriteValue(sCsDriverId, "TempMax", "5");
+            Profile.WriteValue(sCsDriverId, "TempMin", "-5");
+            Profile.WriteValue(sCsDriverId, "TempPeriod", "500");
+            Profile.WriteValue(sCsDriverId, "TempSteps", "10");
+
         }
 
         /// <summary>
@@ -295,7 +367,7 @@ namespace ASCOM.Simulator
         /// </summary>
         private static void DeleteProfileSettings()
         {
-            Profile.DeleteSubKey(sCsDriverId, "SafetyMonitor");
+            Profile.DeleteSubKey(sCsDriverId, "Focuser");
         }
 
         #endregion
@@ -312,7 +384,7 @@ namespace ASCOM.Simulator
         /// <param name="bRegister">If <c>true</c>, registers the driver, otherwise unregisters it.</param>
         private static void RegUnregASCOM(bool bRegister)
         {
-            var p = new Profile { DeviceType = "SafetyMonitor" };
+            var p = new Profile { DeviceType = "Focuser" };
             if (bRegister)
             {
                 p.Register(sCsDriverId, sCsDriverDescription);
@@ -372,6 +444,61 @@ namespace ASCOM.Simulator
         }
         #endregion
 
+        #region IFocuserExt Members
+        //used to extend the functionallity beyound the ascom interfaces
 
+
+        public bool CanHalt { get; set; }
+        public bool TempProbe { get; set; }
+        public bool Synchronus { get; set; }
+        public bool CanStepSize { get; set; }
+        public int TempMax { get; set; }
+        public int TempMin { get; set; }
+        public int TempPeriod { get; set; }
+        public int TempSteps { get; set; }
+
+
+        /// <summary>
+        /// Save profile values
+        /// </summary>
+        public void SaveProfileSettings()
+        {
+
+            if (TempMin > TempMax)
+            { TempMin = TempMax; }
+            if (TempMax < TempMin)
+            { TempMax = TempMin; }
+            if (Temperature > TempMax)
+            {Temperature = TempMax;}
+            if (Temperature < TempMin)
+            { Temperature = TempMin; }
+
+            if (Position > MaxStep)
+            { Position = MaxStep;}
+
+            //ascom items
+            Profile.WriteValue(sCsDriverId,"MaxStep", MaxStep.ToString()) ;
+            Profile.WriteValue(sCsDriverId, "StepSize", StepSize.ToString());
+            Profile.WriteValue(sCsDriverId, "Absolute", Absolute.ToString());
+            Profile.WriteValue(sCsDriverId, "MaxIncrement", MaxIncrement.ToString());
+            Profile.WriteValue(sCsDriverId, "Position", Position.ToString());
+            Profile.WriteValue(sCsDriverId, "Temperature", Temperature.ToString());
+            Profile.WriteValue(sCsDriverId, "TempComp", TempComp.ToString());
+            Profile.WriteValue(sCsDriverId, "TempCompAvailable", TempCompAvailable.ToString());
+
+            //extended items
+            Profile.WriteValue(sCsDriverId, "CanHalt", CanHalt.ToString());
+            Profile.WriteValue(sCsDriverId, "TempProbe", TempProbe.ToString());
+            Profile.WriteValue(sCsDriverId, "Synchronus", Synchronus.ToString());
+            Profile.WriteValue(sCsDriverId, "CanStepSize", CanStepSize.ToString());
+            Profile.WriteValue(sCsDriverId, "TempMax", TempMax.ToString());
+            Profile.WriteValue(sCsDriverId, "TempMin", TempMin.ToString());
+            Profile.WriteValue(sCsDriverId, "TempPeriod", TempPeriod.ToString());
+            Profile.WriteValue(sCsDriverId, "TempSteps", TempSteps.ToString());
+
+        }   
+
+
+        #endregion
     }
 }
