@@ -850,6 +850,11 @@ namespace ASCOM.GeminiTelescope
             setupForm.ReportPierSide = GeminiHardware.ReportPierSide;
             setupForm.PrecisionPulseGuide = GeminiHardware.PrecisionPulseGuide;
 
+            setupForm.OpticsUnitOfMeasure = GeminiHardware.OpticsUnitOfMeasure;
+            setupForm.ApertureDiameter = GeminiHardware.ApertureDiameter;
+            setupForm.FocalLength = GeminiHardware.FocalLength;
+            
+
             DialogResult ans;
             if (this.Visible==false)
                 ans = setupForm.ShowDialog(this);
@@ -883,6 +888,16 @@ namespace ASCOM.GeminiTelescope
 
                 try { GeminiHardware.UTCOffset = -setupForm.TZ; }
                 catch { error += "Timezone" + ", "; }
+
+                try { GeminiHardware.FocalLength = setupForm.FocalLength; }
+                catch { error += "FocalLength" + ", "; }
+
+                try { GeminiHardware.ApertureDiameter = setupForm.ApertureDiameter; }
+                catch { error += "ApertureDiameter" + ", "; }
+
+                GeminiHardware.ApertureArea = Math.PI * ((GeminiHardware.ApertureDiameter / 2.0) * (GeminiHardware.ApertureDiameter / 2.0));
+
+                GeminiHardware.OpticsUnitOfMeasure = setupForm.OpticsUnitOfMeasure;
 
                 GeminiHardware.UseDriverTime = setupForm.UseDriverTime;
                 GeminiHardware.UseDriverSite = setupForm.UseDriverSite;

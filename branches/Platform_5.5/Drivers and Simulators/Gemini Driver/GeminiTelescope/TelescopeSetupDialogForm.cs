@@ -361,6 +361,51 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        public string OpticsUnitOfMeasure
+        {
+            get
+            {
+                if (radioButtonInches.Checked) return "inches";
+                else return "millimeters";
+            }
+            set
+            {
+                if (value == "inches") radioButtonInches.Checked = true;
+                else radioButtonmillimeters.Checked = true;
+            }
+        }
+        public double FocalLength
+        {
+            get
+            {
+                double focallength;
+                double.TryParse(textBoxFocalLength.Text, out focallength);
+                if (radioButtonInches.Checked) return focallength * 25.4;
+                else return focallength;
+            }
+            set
+            {
+                if (radioButtonInches.Checked) textBoxFocalLength.Text = (value / 25.4).ToString();
+                else textBoxFocalLength.Text = value.ToString();
+            }
+        }
+
+        public double ApertureDiameter
+        {
+            get
+            {
+                double aperture;
+                double.TryParse(textBoxAperture.Text, out aperture);
+                if (radioButtonInches.Checked) return aperture * 25.4;
+                else return aperture;
+            }
+            set
+            {
+                if (radioButtonInches.Checked) textBoxAperture.Text = (value / 25.4).ToString();
+                else textBoxAperture.Text = value.ToString();
+            }
+        }
+
         public int TraceLevel
         {
             get { return cbLogging.SelectedIndex-1; }

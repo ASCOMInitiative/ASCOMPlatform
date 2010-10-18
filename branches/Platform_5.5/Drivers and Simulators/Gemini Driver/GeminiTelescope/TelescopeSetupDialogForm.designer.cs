@@ -111,6 +111,14 @@ namespace ASCOM.GeminiTelescope
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton4 = new System.Windows.Forms.RadioButton();
             this.chkPrecisionPulse = new System.Windows.Forms.CheckBox();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
+            this.label14 = new System.Windows.Forms.Label();
+            this.textBoxAperture = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.textBoxFocalLength = new System.Windows.Forms.TextBox();
+            this.radioButtonmillimeters = new System.Windows.Forms.RadioButton();
+            this.radioButtonInches = new System.Windows.Forms.RadioButton();
             buttonGps = new System.Windows.Forms.Button();
             pbGeminiSettings = new System.Windows.Forms.Button();
             button1 = new System.Windows.Forms.Button();
@@ -127,6 +135,8 @@ namespace ASCOM.GeminiTelescope
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.tableLayoutPanel7.SuspendLayout();
             this.tableLayoutPanel8.SuspendLayout();
+            this.groupBox8.SuspendLayout();
+            this.tableLayoutPanel9.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonGps
@@ -739,11 +749,65 @@ namespace ASCOM.GeminiTelescope
             this.chkPrecisionPulse.Name = "chkPrecisionPulse";
             this.chkPrecisionPulse.UseVisualStyleBackColor = true;
             // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.tableLayoutPanel9);
+            this.groupBox8.ForeColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.groupBox8, "groupBox8");
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.TabStop = false;
+            // 
+            // tableLayoutPanel9
+            // 
+            resources.ApplyResources(this.tableLayoutPanel9, "tableLayoutPanel9");
+            this.tableLayoutPanel9.Controls.Add(this.label14, 0, 0);
+            this.tableLayoutPanel9.Controls.Add(this.textBoxAperture, 1, 0);
+            this.tableLayoutPanel9.Controls.Add(this.label15, 0, 1);
+            this.tableLayoutPanel9.Controls.Add(this.textBoxFocalLength, 1, 1);
+            this.tableLayoutPanel9.Controls.Add(this.radioButtonmillimeters, 1, 2);
+            this.tableLayoutPanel9.Controls.Add(this.radioButtonInches, 0, 2);
+            this.tableLayoutPanel9.Name = "tableLayoutPanel9";
+            // 
+            // label14
+            // 
+            resources.ApplyResources(this.label14, "label14");
+            this.label14.Name = "label14";
+            // 
+            // textBoxAperture
+            // 
+            resources.ApplyResources(this.textBoxAperture, "textBoxAperture");
+            this.textBoxAperture.Name = "textBoxAperture";
+            // 
+            // label15
+            // 
+            resources.ApplyResources(this.label15, "label15");
+            this.label15.Name = "label15";
+            // 
+            // textBoxFocalLength
+            // 
+            resources.ApplyResources(this.textBoxFocalLength, "textBoxFocalLength");
+            this.textBoxFocalLength.Name = "textBoxFocalLength";
+            // 
+            // radioButtonmillimeters
+            // 
+            resources.ApplyResources(this.radioButtonmillimeters, "radioButtonmillimeters");
+            this.radioButtonmillimeters.Name = "radioButtonmillimeters";
+            this.radioButtonmillimeters.TabStop = true;
+            this.radioButtonmillimeters.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonInches
+            // 
+            resources.ApplyResources(this.radioButtonInches, "radioButtonInches");
+            this.radioButtonInches.Name = "radioButtonInches";
+            this.radioButtonInches.TabStop = true;
+            this.radioButtonInches.UseVisualStyleBackColor = true;
+            // 
             // TelescopeSetupDialogForm
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
+            this.Controls.Add(this.groupBox8);
             this.Controls.Add(this.chkPrecisionPulse);
             this.Controls.Add(this.chkPierSide);
             this.Controls.Add(this.chkAsyncPulseGuide);
@@ -789,6 +853,9 @@ namespace ASCOM.GeminiTelescope
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.tableLayoutPanel7.ResumeLayout(false);
             this.tableLayoutPanel8.ResumeLayout(false);
+            this.groupBox8.ResumeLayout(false);
+            this.tableLayoutPanel9.ResumeLayout(false);
+            this.tableLayoutPanel9.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -877,5 +944,13 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.RadioButton radioButton3;
         private System.Windows.Forms.RadioButton radioButton4;
         private System.Windows.Forms.CheckBox chkPrecisionPulse;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.RadioButton radioButtonInches;
+        private System.Windows.Forms.RadioButton radioButtonmillimeters;
+        private System.Windows.Forms.TextBox textBoxAperture;
+        private System.Windows.Forms.TextBox textBoxFocalLength;
     }
 }

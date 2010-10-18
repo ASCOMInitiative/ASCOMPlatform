@@ -279,6 +279,18 @@ namespace ASCOM.GeminiTelescope
         }
 
 
+        private static string m_OpticsUnitOfMeasure = "millimeter";
+        public static string OpticsUnitOfMeasure
+        {
+            get { return GeminiHardware.m_OpticsUnitOfMeasure; }
+            set
+            {
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsUnitOfMeasure", value.ToString(GeminiHardware.m_GeminiCulture));
+                GeminiHardware.m_OpticsUnitOfMeasure = value;
+            }
+        }
+
         private static double m_FocalLength;
 
         public static double FocalLength
@@ -1072,6 +1084,9 @@ namespace ASCOM.GeminiTelescope
 
             if (!int.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "UTCOffset", ""), out m_UTCOffset))
                 m_UTCOffset = -(int)(TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).TotalHours);
+
+            m_OpticsUnitOfMeasure = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsUnitOfMeasure", "");
+            if (m_OpticsUnitOfMeasure == "") OpticsUnitOfMeasure = "millimeter";
 
             if (!double.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureArea", ""), System.Globalization.NumberStyles.Float, m_GeminiCulture, out m_ApertureArea))
                 m_ApertureArea = 0.0;
