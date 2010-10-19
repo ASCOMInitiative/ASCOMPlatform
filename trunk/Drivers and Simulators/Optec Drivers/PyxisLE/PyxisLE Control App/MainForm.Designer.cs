@@ -54,8 +54,11 @@
             this.showHideHomeButtonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showHideAbsoluteMoveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showHideRelativeMoveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.alwaysOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deviceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.haltToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -74,9 +77,7 @@
             this.StatusLabelTimer = new System.Windows.Forms.Timer(this.components);
             this.ExternalControlTimer = new System.Windows.Forms.Timer(this.components);
             this.VersionCheckerBGWorker = new System.ComponentModel.BackgroundWorker();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.alwaysOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.haltToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Halt_BTN = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Relative_NUD)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -343,6 +344,19 @@
             this.showHideRelativeMoveToolStripMenuItem.Text = "Show/Hide Relative Move";
             this.showHideRelativeMoveToolStripMenuItem.Click += new System.EventHandler(this.showHideRelativeMoveToolStripMenuItem_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(220, 6);
+            // 
+            // alwaysOnTopToolStripMenuItem
+            // 
+            this.alwaysOnTopToolStripMenuItem.CheckOnClick = true;
+            this.alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
+            this.alwaysOnTopToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.alwaysOnTopToolStripMenuItem.Text = "Always on Top";
+            this.alwaysOnTopToolStripMenuItem.Click += new System.EventHandler(this.alwaysOnTopToolStripMenuItem_Click);
+            // 
             // deviceToolStripMenuItem
             // 
             this.deviceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -358,6 +372,13 @@
             this.advancedSetupToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.advancedSetupToolStripMenuItem.Text = "Advanced Setup";
             this.advancedSetupToolStripMenuItem.Click += new System.EventHandler(this.advancedSetupToolStripMenuItem_Click);
+            // 
+            // haltToolStripMenuItem
+            // 
+            this.haltToolStripMenuItem.Name = "haltToolStripMenuItem";
+            this.haltToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.haltToolStripMenuItem.Text = "Halt";
+            this.haltToolStripMenuItem.Click += new System.EventHandler(this.haltToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -487,6 +508,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.Halt_BTN);
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Controls.Add(this.RotatorDiagram);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -533,25 +555,16 @@
             // 
             this.VersionCheckerBGWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.VersionCheckerBGWorker_DoWork);
             // 
-            // toolStripSeparator1
+            // Halt_BTN
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(220, 6);
-            // 
-            // alwaysOnTopToolStripMenuItem
-            // 
-            this.alwaysOnTopToolStripMenuItem.CheckOnClick = true;
-            this.alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
-            this.alwaysOnTopToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
-            this.alwaysOnTopToolStripMenuItem.Text = "Always on Top";
-            this.alwaysOnTopToolStripMenuItem.Click += new System.EventHandler(this.alwaysOnTopToolStripMenuItem_Click);
-            // 
-            // haltToolStripMenuItem
-            // 
-            this.haltToolStripMenuItem.Name = "haltToolStripMenuItem";
-            this.haltToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.haltToolStripMenuItem.Text = "Halt";
-            this.haltToolStripMenuItem.Click += new System.EventHandler(this.haltToolStripMenuItem_Click);
+            this.Halt_BTN.Enabled = false;
+            this.Halt_BTN.Location = new System.Drawing.Point(226, 174);
+            this.Halt_BTN.Name = "Halt_BTN";
+            this.Halt_BTN.Size = new System.Drawing.Size(42, 42);
+            this.Halt_BTN.TabIndex = 12;
+            this.Halt_BTN.Text = "Halt";
+            this.Halt_BTN.UseVisualStyleBackColor = true;
+            this.Halt_BTN.Click += new System.EventHandler(this.Halt_BTN_Click);
             // 
             // MainForm
             // 
@@ -643,5 +656,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem alwaysOnTopToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem haltToolStripMenuItem;
+        private System.Windows.Forms.Button Halt_BTN;
     }
 }

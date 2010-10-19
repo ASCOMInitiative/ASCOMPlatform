@@ -215,6 +215,7 @@ namespace ASCOM.PyxisLE_ASCOM
                 if (Position > 360) throw new ASCOM.InvalidOperationException("Cannot move to position greater than 360°");
                 else if (Position < 0) throw new ASCOM.InvalidOperationException("Cannot move to position less than 0°");
                 myRotator.CurrentSkyPA = (double)Position;
+                System.Threading.Thread.Sleep(100);
                 while (myRotator.IsMoving) { }
             }
             catch (Exception ex) 

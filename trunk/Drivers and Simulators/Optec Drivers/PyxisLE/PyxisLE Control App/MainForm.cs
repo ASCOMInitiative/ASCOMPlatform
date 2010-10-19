@@ -27,7 +27,7 @@ namespace PyxisLE_Control
         private bool LastPowerStateConnected = true;
         private const int NORMAL_HEIGHT = 555;
         private const int SKY_PA_HEIGHT = 43;
-        private const int ROTATOR_DIAGRAM_HEIGHT = 235;
+        private const int ROTATOR_DIAGRAM_HEIGHT = 230;
         private const int HOME_BUTTON_HEIGHT = 43;
         private const int ABSOLUTE_HEIGHT = 43;
         private const int RELATIVE_HEIGHT = 60;
@@ -42,6 +42,7 @@ namespace PyxisLE_Control
         {
             InitializeComponent();
             EventLogger.LoggingLevel = Properties.Settings.Default.LastTraceLevel;
+            this.alwaysOnTopToolStripMenuItem.Checked = Properties.Settings.Default.AlwaysOnTop;
             this.TopMost = Properties.Settings.Default.AlwaysOnTop;
         }
 
@@ -63,8 +64,9 @@ namespace PyxisLE_Control
             RotatorMonitor = new Rotators();
             RotatorMonitor.RotatorAttached += new EventHandler(RotatorListChanged);
             RotatorMonitor.RotatorRemoved += new EventHandler(RotatorListChanged);
+            
             myRotator = FindMyDevice();
-
+           
             ThreadStart ts = new ThreadStart(MotionMonitor);
             MotionMonitorThread = new Thread(ts);
 
@@ -148,12 +150,13 @@ namespace PyxisLE_Control
                     System.Threading.Thread.Sleep(25);
                     this.Invoke(new DelNoParms(RotatorDiagram.Refresh));
                     this.Invoke(new DelNoParms(UpdateSkyPATextbox));
+                    
                     Application.DoEvents();
                 }
                 this.Invoke(new DelNoParms(RotatorDiagram.Refresh));
                 this.Invoke(new DelNoParms(UpdateSkyPATextbox));
                 this.Invoke(new SingleStringDelegate(SetStatusLabelText), new object[] { msg });
-
+                this.Invoke(new DelNoParms(DisableHaltBtn));
                 Application.DoEvents();
             }
             catch (Exception ex)
@@ -161,6 +164,14 @@ namespace PyxisLE_Control
                 EventLogger.LogMessage(ex);
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void DisableHaltBtn()
+        {
+            this.Halt_BTN.Enabled = false;
+            this.Halt_BTN.Font = new Font(Halt_BTN.Font, FontStyle.Regular);
+            this.Halt_BTN.BackColor = System.Drawing.SystemColors.Control;
+            this.haltToolStripMenuItem.Enabled = false;
         }
 
         private void StartAMove(double newpos)
@@ -185,6 +196,10 @@ namespace PyxisLE_Control
                 if (MotionMonitorThread.IsAlive) return;
                 else
                 {
+                    Halt_BTN.BackColor = Color.OrangeRed;
+                    Halt_BTN.Font = new Font(Halt_BTN.Font, FontStyle.Bold);
+                    Halt_BTN.Enabled = true;
+                    this.haltToolStripMenuItem.Enabled = true;
                     ThreadStart ts = new ThreadStart(MotionMonitor);
                     MotionMonitorThread = new Thread(ts);
                     MotionMonitorThread.Start();
@@ -889,6 +904,16 @@ namespace PyxisLE_Control
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void Halt_BTN_Click(object sender, EventArgs e)
+        {
+            Button b = sender as Button;
+            if (myRotator != null)
+                myRotator.Halt_Move();
+            b.BackColor = System.Drawing.SystemColors.Control;
+            Halt_BTN.Font = new Font(Halt_BTN.Font, FontStyle.Regular);
+            b.Enabled = false;
         }
 
     }

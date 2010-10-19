@@ -23,6 +23,9 @@ namespace PyxisLE_API
         private bool isMoving = false;
         private Int16 zeroOffset = 0;
         private Int16 skyPAOffset = 0;
+        private UInt16 backlashSteps = 0;
+        private bool backlashEnabled = false;
+
         private double targetDevicePosition = 0;
         private double currentPosition = 0;
         private Int32 stepsPerRev = 0;
@@ -218,6 +221,8 @@ namespace PyxisLE_API
                 double rCurrentPosition = 0;
                 double rTargetPosition = 0;
                 short rErrorState = 0;
+                ushort rBacklashSteps = 0;
+                short rBacklashEnabled = 0;
 
                 //TODO: Enter the correct number of bytes here.
                 //Check that enough bytes were received
@@ -245,7 +250,10 @@ namespace PyxisLE_API
                 rIsHomed = Convert.ToInt16(StatusReport.ReceivedData[9]);
                 rIsHoming = Convert.ToInt16(StatusReport.ReceivedData[10]);
                 rIsMoving = Convert.ToInt16(StatusReport.ReceivedData[11]);
+                rBacklashEnabled = Convert.ToInt16(StatusReport.ReceivedData[12]);
                 rErrorState = Convert.ToInt16(StatusReport.ReceivedData[13]);
+                rBacklashSteps = Convert.ToUInt16(StatusReport.ReceivedData[14]);
+                
 
                 //Check if an ErrorState is set
                 this.errorState = rErrorState;
@@ -303,6 +311,26 @@ namespace PyxisLE_API
                 rTargetPosition = (rTargetPosition / (StepsPerRev / 360));
                 this.targetDevicePosition = rTargetPosition;
 
+                // Extract the backlash enabled flag
+                if (rBacklashEnabled == Rotators.REPORT_TRUE)
+                {
+                    this.backlashEnabled = true;
+#if DEBUG
+                Trace.WriteLine("Backlash comp is enabled");
+#endif
+                }
+                else if (rBacklashEnabled == Rotators.REPORT_FALSE)
+                {
+                    this.backlashEnabled = false;
+#if DEBUG
+                Trace.WriteLine("Backlash comp is disabled.");
+#endif
+                }
+                else throw new ApplicationException("Invalid data received for BacklashEnabled value");
+                
+                // Extract the backlash steps value
+                this.backlashSteps = rBacklashSteps;
+
             }
             catch (Exception ex)
             {
@@ -352,6 +380,37 @@ namespace PyxisLE_API
             get {
                 RefreshDeviceStatus();
                 return errorState;
+            }
+        }
+
+        public short BacklashSteps
+        {
+            get { return (short)backlashSteps; }
+            set
+            {
+                if(value < 0) throw new ApplicationException ("Valid values are between 0 and 100 steps");
+                if(value > 100) throw new ApplicationException("Valid values are between 0 and 100 steps");
+                byte newValue = (byte)value;
+                byte[] toSend = new byte[] { Rotators.MOTION_OPCODE_SET_BKSTEPS, newValue };
+                FeatureReport bklstReport = new FeatureReport(Rotators.REPORTID_FEATURE_DO_MOTION, toSend);
+                this.selectedDevice.ProcessFeatureReport(bklstReport);
+                RefreshDeviceStatus();
+                if (this.backlashSteps != value) throw new ApplicationException("Unable to set backlash steps.");
+            }
+        }
+
+        public bool BacklashEnabled
+        {
+            get { return backlashEnabled; }
+            set
+            {
+                byte enabled = (value) ? (byte)255 : (byte)0;
+                byte[] toSend = new byte[] { Rotators.MOTION_OPCODE_SET_BKLEN, enabled };
+                FeatureReport bklReport = new FeatureReport(Rotators.REPORTID_FEATURE_DO_MOTION, toSend); 
+                this.selectedDevice.ProcessFeatureReport(bklReport);
+                this.RefreshDeviceStatus();
+                if (this.backlashEnabled != value)
+                    throw new ApplicationException("Backlash compensation feature was not changed successfully");
             }
         }
 
