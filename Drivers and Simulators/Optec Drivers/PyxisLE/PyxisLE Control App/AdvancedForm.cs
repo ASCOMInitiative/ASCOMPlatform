@@ -139,6 +139,28 @@ namespace PyxisLE_Control
             }
         }
 
+        [Category("Settings")]
+        [DisplayName("Backlash Comp. Enabled")]
+        public bool BacklashComp
+        {
+            get
+            {
+                return myRotator.BacklashEnabled;
+            }
+            set
+            {
+                myRotator.BacklashEnabled = value;
+            }
+        }
+
+        [Category("Settings")]
+        [DisplayName("Backlash Steps")]
+        public short bklsteps
+        {
+            get{ return myRotator.BacklashSteps;}
+            set{ myRotator.BacklashSteps = value;}
+        }
+
         //[Category("Settings")]
         //[DisplayName("Return to Last")]
         //public bool ReturnToLast

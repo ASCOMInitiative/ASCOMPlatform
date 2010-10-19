@@ -37,6 +37,9 @@ namespace PyxisLE_API
         internal const byte MOTION_OPCODE_SET_RETURNTOLAST = 6;
         internal const byte MOTION_OPCODE_SET_DEVICETYPE = 7;
         internal const byte MOTION_OPCODE_SET_ZOFF = 8;
+        internal const byte MOTION_OPCODE_RESTORE_DEF = 9;
+        internal const byte MOTION_OPCODE_SET_BKLEN = 10;
+        internal const byte MOTION_OPCODE_SET_BKSTEPS = 11;
         
         internal const byte REPORT_TRUE = 255;
         internal const byte REPORT_FALSE = 0;
