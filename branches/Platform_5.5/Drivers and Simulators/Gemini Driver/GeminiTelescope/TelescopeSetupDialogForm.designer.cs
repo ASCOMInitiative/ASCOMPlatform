@@ -34,6 +34,7 @@ namespace ASCOM.GeminiTelescope
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TelescopeSetupDialogForm));
             System.Windows.Forms.Button pbGeminiSettings;
             System.Windows.Forms.Button button1;
+            System.Windows.Forms.Button pbEditSavedOptics;
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -113,15 +114,17 @@ namespace ASCOM.GeminiTelescope
             this.chkPrecisionPulse = new System.Windows.Forms.CheckBox();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
+            this.comboBoxSavedOptics = new System.Windows.Forms.ComboBox();
             this.label14 = new System.Windows.Forms.Label();
             this.textBoxAperture = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
             this.textBoxFocalLength = new System.Windows.Forms.TextBox();
             this.radioButtonmillimeters = new System.Windows.Forms.RadioButton();
+            this.label15 = new System.Windows.Forms.Label();
             this.radioButtonInches = new System.Windows.Forms.RadioButton();
             buttonGps = new System.Windows.Forms.Button();
             pbGeminiSettings = new System.Windows.Forms.Button();
             button1 = new System.Windows.Forms.Button();
+            pbEditSavedOptics = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -168,6 +171,16 @@ namespace ASCOM.GeminiTelescope
             button1.Name = "button1";
             button1.UseVisualStyleBackColor = false;
             button1.Click += new System.EventHandler(this.buttonGps_Click);
+            // 
+            // pbEditSavedOptics
+            // 
+            pbEditSavedOptics.BackColor = System.Drawing.Color.Black;
+            pbEditSavedOptics.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            resources.ApplyResources(pbEditSavedOptics, "pbEditSavedOptics");
+            pbEditSavedOptics.ForeColor = System.Drawing.Color.White;
+            pbEditSavedOptics.Name = "pbEditSavedOptics";
+            pbEditSavedOptics.UseVisualStyleBackColor = false;
+            pbEditSavedOptics.Click += new System.EventHandler(this.pbEditSavedOptics_Click);
             // 
             // cmdOK
             // 
@@ -760,13 +773,25 @@ namespace ASCOM.GeminiTelescope
             // tableLayoutPanel9
             // 
             resources.ApplyResources(this.tableLayoutPanel9, "tableLayoutPanel9");
-            this.tableLayoutPanel9.Controls.Add(this.label14, 0, 0);
-            this.tableLayoutPanel9.Controls.Add(this.textBoxAperture, 1, 0);
-            this.tableLayoutPanel9.Controls.Add(this.label15, 0, 1);
+            this.tableLayoutPanel9.Controls.Add(this.comboBoxSavedOptics, 1, 0);
+            this.tableLayoutPanel9.Controls.Add(this.label14, 0, 2);
+            this.tableLayoutPanel9.Controls.Add(this.textBoxAperture, 1, 2);
             this.tableLayoutPanel9.Controls.Add(this.textBoxFocalLength, 1, 1);
-            this.tableLayoutPanel9.Controls.Add(this.radioButtonmillimeters, 1, 2);
-            this.tableLayoutPanel9.Controls.Add(this.radioButtonInches, 0, 2);
+            this.tableLayoutPanel9.Controls.Add(this.radioButtonmillimeters, 1, 3);
+            this.tableLayoutPanel9.Controls.Add(this.label15, 0, 1);
+            this.tableLayoutPanel9.Controls.Add(this.radioButtonInches, 0, 3);
+            this.tableLayoutPanel9.Controls.Add(pbEditSavedOptics, 0, 0);
             this.tableLayoutPanel9.Name = "tableLayoutPanel9";
+            // 
+            // comboBoxSavedOptics
+            // 
+            this.comboBoxSavedOptics.DisplayMember = "Id";
+            resources.ApplyResources(this.comboBoxSavedOptics, "comboBoxSavedOptics");
+            this.comboBoxSavedOptics.FormattingEnabled = true;
+            this.comboBoxSavedOptics.Items.AddRange(new object[] {
+            resources.GetString("comboBoxSavedOptics.Items")});
+            this.comboBoxSavedOptics.Name = "comboBoxSavedOptics";
+            this.comboBoxSavedOptics.SelectedIndexChanged += new System.EventHandler(this.comboBoxSavedOptics_SelectedIndexChanged);
             // 
             // label14
             // 
@@ -777,16 +802,15 @@ namespace ASCOM.GeminiTelescope
             // 
             resources.ApplyResources(this.textBoxAperture, "textBoxAperture");
             this.textBoxAperture.Name = "textBoxAperture";
-            // 
-            // label15
-            // 
-            resources.ApplyResources(this.label15, "label15");
-            this.label15.Name = "label15";
+            this.textBoxAperture.TextChanged += new System.EventHandler(this.textBoxAperture_TextChanged);
+            this.textBoxAperture.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxAperture_KeyPress);
             // 
             // textBoxFocalLength
             // 
             resources.ApplyResources(this.textBoxFocalLength, "textBoxFocalLength");
             this.textBoxFocalLength.Name = "textBoxFocalLength";
+            this.textBoxFocalLength.TextChanged += new System.EventHandler(this.textBoxFocalLength_TextChanged);
+            this.textBoxFocalLength.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxFocalLength_KeyPress);
             // 
             // radioButtonmillimeters
             // 
@@ -795,12 +819,18 @@ namespace ASCOM.GeminiTelescope
             this.radioButtonmillimeters.TabStop = true;
             this.radioButtonmillimeters.UseVisualStyleBackColor = true;
             // 
+            // label15
+            // 
+            resources.ApplyResources(this.label15, "label15");
+            this.label15.Name = "label15";
+            // 
             // radioButtonInches
             // 
             resources.ApplyResources(this.radioButtonInches, "radioButtonInches");
             this.radioButtonInches.Name = "radioButtonInches";
             this.radioButtonInches.TabStop = true;
             this.radioButtonInches.UseVisualStyleBackColor = true;
+            this.radioButtonInches.CheckedChanged += new System.EventHandler(this.radioButtonInches_CheckedChanged);
             // 
             // TelescopeSetupDialogForm
             // 
@@ -952,5 +982,6 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.RadioButton radioButtonmillimeters;
         private System.Windows.Forms.TextBox textBoxAperture;
         private System.Windows.Forms.TextBox textBoxFocalLength;
+        private System.Windows.Forms.ComboBox comboBoxSavedOptics;
     }
 }

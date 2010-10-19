@@ -291,9 +291,36 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        private static double m_FocalLength;
+        private static string m_OpticsNames = "";
+        public static string OpticsNames
+        {
+            get { return GeminiHardware.m_OpticsNames; }
+            set
+            {
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsNames", value.ToString(GeminiHardware.m_GeminiCulture));
+                GeminiHardware.m_OpticsNames = value;
+            }
+        }
 
-        public static double FocalLength
+        private static int m_OpticsValueIndex = 0;
+        public static int OpticsValueIndex
+        {
+            get { return m_OpticsValueIndex; }
+            set
+            {
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsValueIndex", value.ToString(GeminiHardware.m_GeminiCulture));
+                GeminiHardware.m_OpticsValueIndex = value;
+            }
+        }
+
+        
+
+
+        private static string m_FocalLength;
+
+        public static string FocalLength
         {
             get { return GeminiHardware.m_FocalLength; }
             set {
@@ -308,17 +335,12 @@ namespace ASCOM.GeminiTelescope
         public static double ApertureArea
         {
             get { return GeminiHardware.m_ApertureArea; }
-            set {
-                Profile.DeviceType = "Telescope";
-                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureArea", value.ToString(GeminiHardware.m_GeminiCulture));
-                GeminiHardware.m_ApertureArea = value;
-            }
         }
 
 
-        private static double m_ApertureDiameter;
+        private static string m_ApertureDiameter;
 
-        public static double ApertureDiameter
+        public static string ApertureDiameter
         {
             get { return GeminiHardware.m_ApertureDiameter; }
             set {
@@ -1085,17 +1107,18 @@ namespace ASCOM.GeminiTelescope
             if (!int.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "UTCOffset", ""), out m_UTCOffset))
                 m_UTCOffset = -(int)(TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).TotalHours);
 
+            m_OpticsNames = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsNames", "");
+
+            if (!int.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsValueIndex", ""), out m_OpticsValueIndex))
+                m_OpticsValueIndex = 0;
+
             m_OpticsUnitOfMeasure = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsUnitOfMeasure", "");
             if (m_OpticsUnitOfMeasure == "") OpticsUnitOfMeasure = "millimeter";
 
-            if (!double.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureArea", ""), System.Globalization.NumberStyles.Float, m_GeminiCulture, out m_ApertureArea))
-                m_ApertureArea = 0.0;
+            m_ApertureDiameter = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureDiameter", "");
 
-            if (!double.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureDiameter", ""), System.Globalization.NumberStyles.Float, m_GeminiCulture, out m_ApertureDiameter))
-                m_ApertureDiameter = 0.0;
-
-            if (!double.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "FocalLength", ""), System.Globalization.NumberStyles.Float, m_GeminiCulture, out m_FocalLength))
-                m_FocalLength = 0.0;
+            
+            m_FocalLength = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "FocalLength", "");
 
             if (!bool.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "AsyncPulseGuide", ""), out m_AsyncPulseGuide))
                 m_AsyncPulseGuide = true;

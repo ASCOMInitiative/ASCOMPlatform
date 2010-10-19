@@ -349,17 +349,28 @@ namespace ASCOM.GeminiTelescope
 
         public double ApertureArea
         {
-            get {
-                GeminiHardware.Trace.Enter("IT:ApertureArea.Get", GeminiHardware.ApertureArea); 
-                return GeminiHardware.ApertureArea;
+            get 
+            {
+                try
+                {
+                    GeminiHardware.Trace.Enter("IT:ApertureArea.Get", GeminiHardware.ApertureArea);
+                    return Math.PI * ((ApertureDiameter / 2.0) * (ApertureDiameter / 2.0));
+                }
+                catch { return 0; }
             }
         }
 
         public double ApertureDiameter
         {
-            get {
-                GeminiHardware.Trace.Enter("IT:ApertureDiameter.Get", GeminiHardware.ApertureDiameter); 
-                return GeminiHardware.ApertureDiameter;
+            get 
+            {
+                try{
+                    GeminiHardware.Trace.Enter("IT:ApertureDiameter.Get", GeminiHardware.ApertureDiameter);
+                    double aperturediameter;
+                    double.TryParse(GeminiHardware.ApertureDiameter.Split('~')[GeminiHardware.OpticsValueIndex], out aperturediameter);
+                    return aperturediameter;
+                }
+                catch { return 0; }
             }
         }
 
@@ -930,9 +941,15 @@ namespace ASCOM.GeminiTelescope
 
         public double FocalLength
         {
-            get {
-                GeminiHardware.Trace.Enter("IT:Altitude.Get", GeminiHardware.FocalLength); 
-                return GeminiHardware.FocalLength;
+            get 
+            {
+                try {
+                    GeminiHardware.Trace.Enter("IT:Altitude.Get", GeminiHardware.FocalLength);
+                    double focallength;
+                    double.TryParse(GeminiHardware.FocalLength.Split('~')[GeminiHardware.OpticsValueIndex], out focallength);
+                    return focallength;
+                }
+                catch { return 0; }
             }
         }
 

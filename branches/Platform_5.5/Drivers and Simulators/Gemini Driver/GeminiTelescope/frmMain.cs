@@ -850,10 +850,28 @@ namespace ASCOM.GeminiTelescope
             setupForm.ReportPierSide = GeminiHardware.ReportPierSide;
             setupForm.PrecisionPulseGuide = GeminiHardware.PrecisionPulseGuide;
 
-            setupForm.OpticsUnitOfMeasure = GeminiHardware.OpticsUnitOfMeasure;
-            setupForm.ApertureDiameter = GeminiHardware.ApertureDiameter;
-            setupForm.FocalLength = GeminiHardware.FocalLength;
-            
+            string[] optics = GeminiHardware.OpticsNames.Split('~');
+            string[] focallengths = GeminiHardware.FocalLength.Split('~');
+            string[] apertures = GeminiHardware.ApertureDiameter.Split('~');
+            string[] uoms = GeminiHardware.OpticsUnitOfMeasure.Split('~');
+
+            setupForm.ClearOpticsInfos();
+
+            for (int i = 0; i < optics.Length; i++)
+            {
+                OpticsInfo oi = new OpticsInfo();
+                try
+                {
+                    oi.Name = optics[i];
+                    oi.FocalLength = double.Parse(focallengths[i]);
+                    oi.ApertureDiameter = double.Parse(apertures[i]);
+                    oi.UnitOfMeasure = uoms[i];
+                    setupForm.AddOpticsInfo(oi);
+                }
+                catch { }
+            }
+
+            setupForm.SelectedOptic = GeminiHardware.OpticsValueIndex;
 
             DialogResult ans;
             if (this.Visible==false)
@@ -889,15 +907,7 @@ namespace ASCOM.GeminiTelescope
                 try { GeminiHardware.UTCOffset = -setupForm.TZ; }
                 catch { error += "Timezone" + ", "; }
 
-                try { GeminiHardware.FocalLength = setupForm.FocalLength; }
-                catch { error += "FocalLength" + ", "; }
 
-                try { GeminiHardware.ApertureDiameter = setupForm.ApertureDiameter; }
-                catch { error += "ApertureDiameter" + ", "; }
-
-                GeminiHardware.ApertureArea = Math.PI * ((GeminiHardware.ApertureDiameter / 2.0) * (GeminiHardware.ApertureDiameter / 2.0));
-
-                GeminiHardware.OpticsUnitOfMeasure = setupForm.OpticsUnitOfMeasure;
 
                 GeminiHardware.UseDriverTime = setupForm.UseDriverTime;
                 GeminiHardware.UseDriverSite = setupForm.UseDriverSite;
@@ -930,7 +940,30 @@ namespace ASCOM.GeminiTelescope
                 GeminiHardware.SpeechVoice = setupForm.SpeechVoice;
                 GeminiHardware.SpeechFilter = setupForm.SpeechFlags;
 
-                
+                //Get the Optics Data
+                GeminiHardware.OpticsValueIndex = setupForm.SelectedOptic;
+                string focallength = "";
+                string aperture = "";
+                string uom = "";
+                string name = "";
+                for (int i = 0; i < setupForm.OpticsInfos.Count; i++)
+                {
+                    OpticsInfo oi = setupForm.GetOpticsInfo(i);
+                    if (focallength == "") focallength += oi.FocalLength.ToString();
+                    else focallength += "~" + oi.FocalLength.ToString();
+                    if (aperture == "") aperture += oi.ApertureDiameter.ToString();
+                    else aperture += "~" + oi.ApertureDiameter.ToString();
+                    if (uom == "") uom += oi.UnitOfMeasure;
+                    else uom += "~" + oi.UnitOfMeasure;
+                    if (oi.Name != "") name += "~" + oi.Name;
+
+                }
+
+                GeminiHardware.FocalLength = focallength;
+                GeminiHardware.ApertureDiameter = aperture;
+                GeminiHardware.OpticsUnitOfMeasure = uom;
+                GeminiHardware.OpticsNames = name;
+
                 if (error != "")
                 {
                     if (error.EndsWith(", ")) error = error.Substring(0, error.Length - 2);

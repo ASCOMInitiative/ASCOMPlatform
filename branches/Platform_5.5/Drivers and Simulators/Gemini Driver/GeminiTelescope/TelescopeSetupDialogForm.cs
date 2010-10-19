@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using ASCOM.GeminiTelescope.Properties;
 using System.Linq;
+using System.Collections;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -23,6 +24,10 @@ namespace ASCOM.GeminiTelescope
         private int m_SaveUTCOffset;
 
         private string m_PreviousComPort = null;
+
+        private ArrayList m_OpticsInfos = new ArrayList();
+
+        private bool m_SelectedOpticChanged = false;
 
         public string[] TimeZones = {
             "UTC-11",
@@ -78,6 +83,8 @@ namespace ASCOM.GeminiTelescope
             get { return chkPortScan.Checked; }
             set { chkPortScan.Checked = value; }
         }
+
+        
 
         public TelescopeSetupDialogForm()
         {
@@ -166,6 +173,7 @@ namespace ASCOM.GeminiTelescope
         }
 
         #region Properties for Settings
+       
         public GeminiHardware.GeminiBootMode BootMode
         {
             get
@@ -360,50 +368,72 @@ namespace ASCOM.GeminiTelescope
                 }
             }
         }
-
-        public string OpticsUnitOfMeasure
+        public void AddOpticsInfo(OpticsInfo oi)
         {
-            get
+            m_OpticsInfos.Add(oi);
+            comboBoxSavedOptics.Items.Add(oi.Name);
+        }
+        public void RemoveOpticsInfo(int i)
+        {
+            m_OpticsInfos.RemoveAt(i);
+        }
+        public OpticsInfo GetOpticsInfo(int i)
+        {
+            return (OpticsInfo)m_OpticsInfos[i];
+        }
+        public int SelectedOptic
+        {
+            get { return comboBoxSavedOptics.SelectedIndex; }
+            set 
             {
-                if (radioButtonInches.Checked) return "inches";
-                else return "millimeters";
-            }
-            set
-            {
-                if (value == "inches") radioButtonInches.Checked = true;
-                else radioButtonmillimeters.Checked = true;
+                try
+                {
+                    comboBoxSavedOptics.SelectedIndex = value;
+                    OpticsInfo oi = (OpticsInfo)m_OpticsInfos[comboBoxSavedOptics.SelectedIndex];
+
+                    if (oi.UnitOfMeasure == "inches")
+                    {
+                        radioButtonInches.Checked = true;
+                        textBoxAperture.Text = (oi.ApertureDiameter / 25.4).ToString();
+                        textBoxFocalLength.Text = (oi.FocalLength / 25.4).ToString();
+                    }
+                    else
+                    {
+                        radioButtonmillimeters.Checked = true;
+                        textBoxAperture.Text = oi.ApertureDiameter.ToString();
+                        textBoxFocalLength.Text = oi.FocalLength.ToString();
+                    }
+                }
+                catch 
+                { 
+                    m_OpticsInfos.Clear();
+                    OpticsInfo oi = new OpticsInfo();
+                    oi.Name = "";
+                    oi.FocalLength = 0;
+                    oi.UnitOfMeasure = "millimeters";
+                    oi.ApertureDiameter = 0;
+                    m_OpticsInfos.Add(oi);
+                    comboBoxSavedOptics.SelectedIndex = 0;
+                }
             }
         }
-        public double FocalLength
+        public ArrayList OpticsInfos
         {
-            get
-            {
-                double focallength;
-                double.TryParse(textBoxFocalLength.Text, out focallength);
-                if (radioButtonInches.Checked) return focallength * 25.4;
-                else return focallength;
-            }
-            set
-            {
-                if (radioButtonInches.Checked) textBoxFocalLength.Text = (value / 25.4).ToString();
-                else textBoxFocalLength.Text = value.ToString();
+            get { return m_OpticsInfos; }
+            set 
+            { 
+                m_OpticsInfos = value;
+                comboBoxSavedOptics.Items.Clear();
+                for (int i=0; i<m_OpticsInfos.Count; i++)
+                {
+                    comboBoxSavedOptics.Items.Add(((OpticsInfo)m_OpticsInfos[i]).Name);
+                }
             }
         }
-
-        public double ApertureDiameter
+        public void ClearOpticsInfos()
         {
-            get
-            {
-                double aperture;
-                double.TryParse(textBoxAperture.Text, out aperture);
-                if (radioButtonInches.Checked) return aperture * 25.4;
-                else return aperture;
-            }
-            set
-            {
-                if (radioButtonInches.Checked) textBoxAperture.Text = (value / 25.4).ToString();
-                else textBoxAperture.Text = value.ToString();
-            }
+            m_OpticsInfos.Clear();
+            comboBoxSavedOptics.Items.Clear();
         }
 
         public int TraceLevel
@@ -683,6 +713,116 @@ namespace ASCOM.GeminiTelescope
 
         }
 
+        private void pbEditSavedOptics_Click(object sender, EventArgs e)
+        {
+            frmOpticsSetup opticsForm = new frmOpticsSetup();
+            opticsForm.OpticInfos = m_OpticsInfos;
+            DialogResult ans = opticsForm.ShowDialog();
+            if (ans == DialogResult.OK)
+            {
+                OpticsInfos = opticsForm.OpticInfos;
+            }
+        }
+
+        private void comboBoxSavedOptics_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            m_SelectedOpticChanged = true;
+
+            OpticsInfo oi = (OpticsInfo)m_OpticsInfos[comboBoxSavedOptics.SelectedIndex];
+            if (oi.UnitOfMeasure == "inches")
+            {
+                radioButtonInches.Checked = true;
+                textBoxAperture.Text = (oi.ApertureDiameter / 25.4).ToString();
+                textBoxFocalLength.Text = (oi.FocalLength / 25.4).ToString();
+            }
+            else
+            {
+                radioButtonmillimeters.Checked = true;
+                textBoxAperture.Text = oi.ApertureDiameter.ToString();
+                textBoxFocalLength.Text = oi.FocalLength.ToString();
+            }
+
+            m_SelectedOpticChanged = false;
+        }
+
+        private void textBoxFocalLength_TextChanged(object sender, EventArgs e)
+        {
+            if (!m_SelectedOpticChanged)
+            {
+                comboBoxSavedOptics.SelectedIndex = 0;
+                if (radioButtonInches.Checked) ((OpticsInfo)m_OpticsInfos[0]).FocalLength = (double.Parse(textBoxFocalLength.Text)) * 25.4;
+                else ((OpticsInfo)m_OpticsInfos[0]).FocalLength = double.Parse(textBoxFocalLength.Text);
+            }
+        }
+
+        private void textBoxAperture_TextChanged(object sender, EventArgs e)
+        {
+            if (!m_SelectedOpticChanged)
+            {
+                comboBoxSavedOptics.SelectedIndex = 0;
+                if (radioButtonInches.Checked) ((OpticsInfo)m_OpticsInfos[0]).ApertureDiameter = (double.Parse(textBoxAperture.Text)) * 25.4;
+                else ((OpticsInfo)m_OpticsInfos[0]).ApertureDiameter = double.Parse(textBoxAperture.Text);
+            }
+        }
+
+        private void radioButtonInches_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!m_SelectedOpticChanged)
+            {
+                comboBoxSavedOptics.SelectedIndex = 0;
+                if (radioButtonInches.Checked) ((OpticsInfo)m_OpticsInfos[0]).UnitOfMeasure = "inches";
+                else ((OpticsInfo)m_OpticsInfos[0]).UnitOfMeasure = "millimeters";
+            }
+        }
+
+        private void textBoxFocalLength_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            System.Globalization.NumberFormatInfo numberFormatInfo = System.Globalization.CultureInfo.CurrentCulture.NumberFormat;
+
+            string decimalSeparator = numberFormatInfo.NumberDecimalSeparator;
+
+            string groupSeparator = numberFormatInfo.NumberGroupSeparator;
+
+            string negativeSign = numberFormatInfo.NegativeSign;
+
+            string keyInput = e.KeyChar.ToString();
+            if (Char.IsDigit(e.KeyChar))
+            {
+            }
+            else if (e.KeyChar.ToString() == Keys.Back.ToString())
+            {
+            }
+
+            else
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBoxAperture_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            System.Globalization.NumberFormatInfo numberFormatInfo = System.Globalization.CultureInfo.CurrentCulture.NumberFormat;
+
+            string decimalSeparator = numberFormatInfo.NumberDecimalSeparator;
+
+            string groupSeparator = numberFormatInfo.NumberGroupSeparator;
+
+            string negativeSign = numberFormatInfo.NegativeSign;
+
+            string keyInput = e.KeyChar.ToString();
+            if (Char.IsDigit(e.KeyChar))
+            {
+            }
+            else if (e.KeyChar.ToString() == Keys.Back.ToString())
+            {
+            }
+
+            else
+            {
+                e.Handled = true;
+            }
+        }
+
     }
 
 
@@ -692,6 +832,14 @@ namespace ASCOM.GeminiTelescope
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public int UTCOffset { get; set; }
+    }
+
+    public class OpticsInfo
+    {
+        public string Name { get; set; }
+        public double FocalLength { get; set; }
+        public double ApertureDiameter { get; set; }
+        public string UnitOfMeasure { get; set; }
     }
 
 }

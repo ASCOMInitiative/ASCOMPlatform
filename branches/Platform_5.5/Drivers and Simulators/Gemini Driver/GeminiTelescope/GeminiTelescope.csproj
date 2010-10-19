@@ -200,6 +200,12 @@
     <Compile Include="frmObservationLog.Designer.cs">
       <DependentUpon>frmObservationLog.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmOpticsSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmOpticsSetup.Designer.cs">
+      <DependentUpon>frmOpticsSetup.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmParkPosition.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -315,6 +321,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmObservationLog.resx">
       <DependentUpon>frmObservationLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmOpticsSetup.resx">
+      <DependentUpon>frmOpticsSetup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmParkPosition.resx">
       <DependentUpon>frmParkPosition.cs</DependentUpon>
