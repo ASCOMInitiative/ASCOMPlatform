@@ -353,7 +353,7 @@ namespace ASCOM.GeminiTelescope
             {
                 try
                 {
-                    GeminiHardware.Trace.Enter("IT:ApertureArea.Get", GeminiHardware.ApertureArea);
+                    GeminiHardware.Trace.Enter("IT:ApertureArea.Get", Math.PI * ((ApertureDiameter / 2.0) * (ApertureDiameter / 2.0)));
                     return Math.PI * ((ApertureDiameter / 2.0) * (ApertureDiameter / 2.0));
                 }
                 catch { return 0; }

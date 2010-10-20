@@ -330,13 +330,6 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        private static double m_ApertureArea;
-
-        public static double ApertureArea
-        {
-            get { return GeminiHardware.m_ApertureArea; }
-        }
-
 
         private static string m_ApertureDiameter;
 
@@ -1107,18 +1100,30 @@ namespace ASCOM.GeminiTelescope
             if (!int.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "UTCOffset", ""), out m_UTCOffset))
                 m_UTCOffset = -(int)(TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).TotalHours);
 
-            m_OpticsNames = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsNames", "");
+            //Capture the exception if the Optics values are not setup
+            try
+            {
+                m_OpticsNames = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsNames", "");
+                m_FocalLength = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "FocalLength", "");
+                if (m_FocalLength == "") m_FocalLength = "0";
 
-            if (!int.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsValueIndex", ""), out m_OpticsValueIndex))
+                m_ApertureDiameter = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureDiameter", "");
+                if (m_ApertureDiameter == "") m_ApertureDiameter = "0";
+
+                m_OpticsUnitOfMeasure = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsUnitOfMeasure", "");
+                if (m_OpticsUnitOfMeasure == "") OpticsUnitOfMeasure = "millimeter";
+
+                if (!int.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsValueIndex", ""), out m_OpticsValueIndex))
+                    m_OpticsValueIndex = 0;
+            }
+            catch 
+            {
+                m_ApertureDiameter = "0";
+                m_FocalLength = "0";
+                m_OpticsUnitOfMeasure = "millimeter";
+                m_OpticsNames = "";
                 m_OpticsValueIndex = 0;
-
-            m_OpticsUnitOfMeasure = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsUnitOfMeasure", "");
-            if (m_OpticsUnitOfMeasure == "") OpticsUnitOfMeasure = "millimeter";
-
-            m_ApertureDiameter = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureDiameter", "");
-
-            
-            m_FocalLength = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "FocalLength", "");
+            }
 
             if (!bool.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "AsyncPulseGuide", ""), out m_AsyncPulseGuide))
                 m_AsyncPulseGuide = true;
