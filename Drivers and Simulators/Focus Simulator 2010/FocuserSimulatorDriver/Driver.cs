@@ -22,7 +22,7 @@ namespace ASCOM.Simulator
     [Guid("24C040F2-2FA5-4DA4-B87B-6C1101828D2A")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
-    public class Focuser : IFocuserExt, IDisposable
+    public class Focuser : IFocuser, IDisposable
     {
         #region Constants
 
@@ -69,11 +69,7 @@ namespace ASCOM.Simulator
 
         #endregion
 
-        #region Focuser Public Members
-
-        //
-        // PUBLIC COM INTERFACE IFocuser IMPLEMENTATION
-        //
+        #region Public Focuser ASCOM Members
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Focuser"/> class.
@@ -84,23 +80,24 @@ namespace ASCOM.Simulator
             //check to see if the profile is ok
             if (ValidateProfile())
             {
-                try
+                if (LoadFocuserKeyValues())
                 {
-                    if (!LoadFocuserKeyValues())
+                    if (!LoadStaticFocuserKeyValues())
                     {
-                        //setup new profile settings
+                        DeleteProfileSettings();
                         SetDefaultProfileSettings();
                         Connected = false;
                         Link = false;
-                        throw new Exception("Could not load settings, resetting defaults");
                     }
                 }
-                catch (Exception)
+                else
                 {
-                    
-                    throw new Exception("Profile Reading or Writing Error");
-                }
-                
+                    DeleteProfileSettings();
+                    SetDefaultProfileSettings();
+                    Connected = false;
+                    Link = false;
+                }    
+
             }
             else
             {
@@ -109,40 +106,10 @@ namespace ASCOM.Simulator
         }
 
         /// <summary>
-        /// Displays the Setup Dialog form.
-        /// If the user clicks the OK button to dismiss the form, then
-        /// the new settings are saved, otherwise the old values are reloaded.
+        /// True if the focuser is capable of absolute position; 
+        /// that is, being commanded to a specific step location.
         /// </summary>
-        public void SetupDialog()
-        {
-            var f = new SetupDialogForm();
-            f.ShowDialog();
-        }
-
-        /// <summary>
-        /// Start the move of the focuser.
-        /// </summary>
-        public void Move(int val)
-        {
-            Connected = true;
-            Link = true;
-            IsMoving = true;
-            Position = Position + val;
-
-            if (Position >= MaxStep)
-            {
-                Position = MaxStep;
-            }
-           if (Position + val <= 0)
-            {
-                Position = 0;
-            }
-            IsMoving = false;
-            Connected = false;
-            Link = false;
-
-
-        }
+        public bool Absolute { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="Focuser"/> is connected.
@@ -190,6 +157,36 @@ namespace ASCOM.Simulator
         }
 
         /// <summary>
+        /// True if the focuser is currently moving to a new position. False if the focuser is stationary.
+        /// </summary>
+        /// <value><c>true</c> if moving; otherwise, <c>false</c>.</value>
+        public bool IsMoving { get; set; }
+
+        /// <summary>
+        /// State of the connection to the focuser. et True to start the link to the focuser; 
+        /// set False to terminate the link. The current link status can also be read 
+        /// back as this property. An exception will be raised if the link fails to 
+        /// change state for any reason.
+        /// </summary>
+        /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
+        public bool Link { get; set; }
+
+        /// <summary>
+        /// Maximum increment size allowed by the focuser; i.e. the maximum number 
+        /// of steps allowed in one move operation. For most focusers this is the 
+        /// same as the MaxStep property. This is normally used to limit the 
+        /// Increment display in the host software.
+        /// </summary>
+        public int MaxIncrement { get; set; }
+
+        /// <summary>
+        /// Maximum step position permitted. The focuser can step between 0 and MaxStep. 
+        /// If an attempt is made to move the focuser beyond these limits, 
+        /// it will automatically stop at the limit.
+        /// </summary>
+        public int MaxStep { get; set; }
+
+        /// <summary>
         /// Gets the name.
         /// </summary>
         /// <value>The name.</value>
@@ -199,17 +196,70 @@ namespace ASCOM.Simulator
         }
 
         /// <summary>
-        /// Gets the last result.
+        /// Current focuser position, in steps. Valid only for absolute positioning 
+        /// focusers (see the Absolute property). An exception will be raised for 
+        /// relative positioning focusers.
         /// </summary>
-        /// <value>
-        /// The result of the last executed action, or <see cref="String.Empty"	/>
-        /// if no action has yet been executed.
-        /// </value>
-        public string LastResult
+        public int Position { get; set; }
+
+        /// <summary>
+        /// Step size (microns) for the focuser. Raises an exception if the focuser 
+        /// does not intrinsically know what the step size is.
+        /// </summary>
+        public double StepSize { get; set; }
+
+        /// <summary>
+        /// Gets the supported actions.
+        /// </summary>
+        public string[] SupportedActions
         {
-            get { throw new MethodNotImplementedException("LastResult"); }
+            get { throw new MethodNotImplementedException("SupportedActions"); }
         }
-      
+
+        /// <summary>
+        /// The state of temperature compensation mode (if available), else always 
+        /// False. If the TempCompAvailable property is True, then setting TempComp 
+        /// to True puts the focuser into temperature tracking mode. While in 
+        /// temperature tracking mode, Move commands will be rejected by the 
+        /// focuser. Set to False to turn off temperature tracking. An exception 
+        /// will be raised if TempCompAvailable is False and an attempt is made 
+        /// to set TempComp to true.
+        /// </summary>
+        public bool TempComp { get; set; }
+
+        /// <summary>
+        /// True if focuser has temperature compensation available. Will be True 
+        /// only if the focuser's temperature compensation can be turned on and 
+        /// off via the TempComp property.
+        /// </summary>
+        public bool TempCompAvailable { get; set; }
+
+        /// <summary>
+        /// Current ambient temperature as measured by the focuser. Raises an 
+        /// exception if ambient temperature is not available. Commonly 
+        /// available on focusers with a built-in temperature compensation 
+        /// mode.
+        /// </summary>
+        public double Temperature { get; set; }
+
+        /// <summary>
+        /// Dispose the late-bound interface, if needed. Will release it 
+        /// via COM if it is a COM object, else if native .NET will just 
+        /// dereference it for GC
+        /// </summary>
+        /// <exception cref="System.NotImplementedException"></exception>
+        private static void Dispose()
+        {
+            throw new System.NotImplementedException();
+        }
+        
+        /// <summary>
+        /// Immediately stop any focuser motion due to a previous Move() 
+        /// method call. Some focusers may not support this function, in 
+        /// which case an exception will be raised. Recommendation: Host 
+        /// software should call this method upon initialization and, if 
+        /// it fails, disable the Halt button in the user interface.
+        /// </summary>
         public void Halt()
         {
             if (!CanHalt) return;
@@ -217,51 +267,94 @@ namespace ASCOM.Simulator
             Connected = false;
         }
 
-        private static void Dispose()
+        /// <summary>
+        /// Step size (microns) for the focuser. Raises an exception if 
+        /// the focuser does not intrinsically know what the step size is.
+        /// </summary>
+        public void Move(int val)
         {
-            throw new System.NotImplementedException();
+            Connected = true;
+            Link = true;
+            IsMoving = true;
+            Position = Position + val;
+
+            if (Position >= MaxStep)
+            {
+                Position = MaxStep;
+            }
+            if (Position + val <= 0)
+            {
+                Position = 0;
+            }
+            IsMoving = false;
+            Connected = false;
+            Link = false;
+
+
         }
 
+        /// <summary>
+        /// Displays the Setup Dialog form.
+        /// If the user clicks the OK button to dismiss the form, then
+        /// the new settings are saved, otherwise the old values are reloaded.
+        /// </summary>
+        public void SetupDialog()
+        {
+            var f = new SetupDialogForm();
+            f.ShowDialog();
+        }
+
+        /// <summary>
+        /// Invokes the specified device-specific action.
+        /// </summary>
+        /// <exception cref="MethodNotImplementedException"></exception>
         public string Action(string actionName, string actionParameters)
         {
             throw new MethodNotImplementedException("Action");
         }
 
+        /// <summary>
+        /// Transmits an arbitrary string to the device and does not 
+        /// wait for a response. Optionally, protocol framing characters 
+        /// may be added to the string before transmission.
+        /// mode.
+        /// </summary>
+        /// <exception cref="MethodNotImplementedException"></exception>
         public void CommandBlind(string command, bool raw)
         {
             throw new MethodNotImplementedException("CommandBlind");
         }
 
+        /// <summary>
+        /// Transmits an arbitrary string to the device and waits 
+        /// for a boolean response. Optionally, protocol framing 
+        /// characters may be added to the string before transmission.
+        /// </summary>
+        /// <exception cref="MethodNotImplementedException"></exception>
         public bool CommandBool(string command, bool raw)
         {
             throw new MethodNotImplementedException("CommandBool");
         }
 
+        /// <summary>
+        /// Transmits an arbitrary string to the device and waits 
+        /// for a string response. Optionally, protocol framing 
+        /// characters may be added to the string before transmission.
+        /// </summary>
+        /// <exception cref="MethodNotImplementedException"></exception>
         public string CommandString(string command, bool raw)
         {
             throw new MethodNotImplementedException("CommandString");
         }
 
+        #endregion
+
+        #region explicit Members
+
         void IFocuser.Dispose()
         {
             Dispose();
         }
-
-        public string[] SupportedActions
-        {
-            get { throw new MethodNotImplementedException("SupportedActions"); }
-        }
-
-        public bool Absolute { get; set; }
-        public bool IsMoving { get; set; }
-        public bool Link { get; set; }
-        public int MaxIncrement { get; set; }
-        public int MaxStep { get; set; }
-        public int Position { get; set; }
-        public double StepSize { get; set; }
-        public bool TempComp { get; set; }
-        public bool TempCompAvailable { get; set; }
-        public double Temperature { get; set; }
 
         void IDisposable.Dispose()
         {
@@ -304,7 +397,23 @@ namespace ASCOM.Simulator
                 Temperature = Convert.ToDouble(Profile.GetValue(sCsDriverId, "Temperature"));
                 TempComp = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempComp"));
                 TempCompAvailable = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempCompAvailable"));
-                
+
+                return true;
+
+            }
+            catch (Exception)
+            {
+                return false;
+            }  
+        }
+
+        /// <summary>
+        /// Load the profile values
+        /// </summary>
+        private bool LoadStaticFocuserKeyValues()
+        {
+            try
+            {
                 //extended focuser items
                 CanHalt = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "CanHalt"));
                 TempProbe = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempProbe"));
@@ -321,7 +430,7 @@ namespace ASCOM.Simulator
             catch (Exception)
             {
                 return false;
-            }  
+            }
         }
 
         /// <summary>
@@ -336,30 +445,6 @@ namespace ASCOM.Simulator
                 return;
             }
             return;
-        }
-
-        /// <summary>
-        /// Default values for the profile
-        /// </summary>
-        public void SetDefaultProfileSettings()
-        {
-            Profile.WriteValue(sCsDriverId, "Absolute", "True");
-            Profile.WriteValue(sCsDriverId, "MaxIncrement", "50000");
-            Profile.WriteValue(sCsDriverId, "MaxStep", "50000");
-            Profile.WriteValue(sCsDriverId, "Position", "25000");
-            Profile.WriteValue(sCsDriverId, "StepSize", "20");
-            Profile.WriteValue(sCsDriverId, "Temperature", "4.96");
-            Profile.WriteValue(sCsDriverId, "TempComp", "True");
-            Profile.WriteValue(sCsDriverId, "TempCompAvailable", "True");
-            Profile.WriteValue(sCsDriverId, "CanHalt", "True");
-            Profile.WriteValue(sCsDriverId, "TempProbe", "True");
-            Profile.WriteValue(sCsDriverId, "Synchronus", "True");
-            Profile.WriteValue(sCsDriverId, "CanStepSize", "True");
-            Profile.WriteValue(sCsDriverId, "TempMax", "5");
-            Profile.WriteValue(sCsDriverId, "TempMin", "-5");
-            Profile.WriteValue(sCsDriverId, "TempPeriod", "500");
-            Profile.WriteValue(sCsDriverId, "TempSteps", "10");
-
         }
 
         /// <summary>
@@ -444,9 +529,8 @@ namespace ASCOM.Simulator
         }
         #endregion
 
-        #region IFocuserExt Members
+        #region Public Focuser Extended Members
         //used to extend the functionallity beyound the ascom interfaces
-
 
         public bool CanHalt { get; set; }
         public bool TempProbe { get; set; }
@@ -457,17 +541,12 @@ namespace ASCOM.Simulator
         public int TempPeriod { get; set; }
         public int TempSteps { get; set; }
 
-
         /// <summary>
         /// Save profile values
         /// </summary>
         public void SaveProfileSettings()
         {
 
-            if (TempMin > TempMax)
-            { TempMin = TempMax; }
-            if (TempMax < TempMin)
-            { TempMax = TempMin; }
             if (Temperature > TempMax)
             {Temperature = TempMax;}
             if (Temperature < TempMin)
@@ -485,6 +564,18 @@ namespace ASCOM.Simulator
             Profile.WriteValue(sCsDriverId, "Temperature", Temperature.ToString());
             Profile.WriteValue(sCsDriverId, "TempComp", TempComp.ToString());
             Profile.WriteValue(sCsDriverId, "TempCompAvailable", TempCompAvailable.ToString());
+        }
+
+        /// <summary>
+        /// Save profile values
+        /// </summary>
+        public void SaveStaticProfileSettings()
+        {
+
+            if (TempMin > TempMax)
+            { TempMin = TempMax; }
+            if (TempMax < TempMin)
+            { TempMax = TempMin; }
 
             //extended items
             Profile.WriteValue(sCsDriverId, "CanHalt", CanHalt.ToString());
@@ -495,9 +586,39 @@ namespace ASCOM.Simulator
             Profile.WriteValue(sCsDriverId, "TempMin", TempMin.ToString());
             Profile.WriteValue(sCsDriverId, "TempPeriod", TempPeriod.ToString());
             Profile.WriteValue(sCsDriverId, "TempSteps", TempSteps.ToString());
+        }
 
-        }   
+        /// <summary>
+        /// Saves specific state setting to the profile a switchdevice
+        /// </summary>
+        public void SaveProfileSetting(string keyName, string value)
+        {
+            Profile.WriteValue(sCsDriverId, keyName, value);
+        }
 
+        /// <summary>
+        /// Default values for the profile
+        /// </summary>
+        public void SetDefaultProfileSettings()
+        {
+            Profile.WriteValue(sCsDriverId, "Absolute", "True");
+            Profile.WriteValue(sCsDriverId, "MaxIncrement", "50000");
+            Profile.WriteValue(sCsDriverId, "MaxStep", "50000");
+            Profile.WriteValue(sCsDriverId, "Position", "25000");
+            Profile.WriteValue(sCsDriverId, "StepSize", "20");
+            Profile.WriteValue(sCsDriverId, "Temperature", "4.96");
+            Profile.WriteValue(sCsDriverId, "TempComp", "False");
+            Profile.WriteValue(sCsDriverId, "TempCompAvailable", "True");
+            Profile.WriteValue(sCsDriverId, "CanHalt", "True");
+            Profile.WriteValue(sCsDriverId, "TempProbe", "True");
+            Profile.WriteValue(sCsDriverId, "Synchronus", "True");
+            Profile.WriteValue(sCsDriverId, "CanStepSize", "True");
+            Profile.WriteValue(sCsDriverId, "TempMax", "5");
+            Profile.WriteValue(sCsDriverId, "TempMin", "-5");
+            Profile.WriteValue(sCsDriverId, "TempPeriod", "3");
+            Profile.WriteValue(sCsDriverId, "TempSteps", "10");
+
+        }
 
         #endregion
     }

@@ -6,7 +6,7 @@ using ASCOM.DeviceInterface;
 
 namespace ASCOM.Simulator
 {
-    public interface IFocuserExt : IFocuser
+    public interface IFocuserExt 
 
 {
     bool CanHalt { get; set; }
@@ -18,13 +18,13 @@ namespace ASCOM.Simulator
     int TempPeriod { get; set; }
     int TempSteps { get; set; }
 
-    new bool Absolute { set; }
-    new int MaxStep { set; }
-    new double StepSize { set; }
-    new int Position { set; }
+    bool Absolute { set; }
+    int MaxStep { set; }
+    double StepSize { set; }
+    int Position { set; }
 
-    new int MaxIncrement { set; }
-    new double Temperature { set; }
+    int MaxIncrement { set; }
+    double Temperature { set; }
 
     void SaveProfileSettings();
     void SetDefaultProfileSettings();

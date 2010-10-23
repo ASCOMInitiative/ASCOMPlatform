@@ -5,16 +5,19 @@ namespace ASCOM.Simulator
 {
     public partial class SettingsForm : Form
     {
-        // Sets up an instance of focuser driver for use in this class
         private readonly Focuser _focuser = new Focuser();
 
-        // This is the method to run when the class is constructe
+        /// <summary>
+        /// This is the method to run when the class is constructe
+        /// </summary>
         public SettingsForm()
         {
             InitializeComponent();
         }
 
-        // This is the method to run when you want the form loaded with the class settings
+        /// <summary>
+        /// This is the method to run when you want the form loaded with the class settings
+        /// </summary>
         private void SettingsFormLoad(object sender, EventArgs e)
         {
             textBox1.Text = _focuser.MaxStep.ToString();
@@ -37,13 +40,18 @@ namespace ASCOM.Simulator
 
         }
 
-        // This is the method to run when you want the form reset with the defaults
+        /// <summary>
+        /// This is the method to run when you want the form reset with the defaults
+        /// </summary>
         private void Button1Click(object sender, EventArgs e)
         {
             _focuser.SetDefaultProfileSettings();
+            _focuser.SaveStaticProfileSettings();
         }
 
-        // This is the method to run when you want save the contents of the form to the profile
+        /// <summary>
+        /// This is the method to run when you want save the contents of the form to the profile
+        /// </summary>
         private void Button2Click(object sender, EventArgs e)
         {
             //save textboxes
@@ -67,13 +75,14 @@ namespace ASCOM.Simulator
             _focuser.Absolute = radioButton1.Checked;
 
             _focuser.SaveProfileSettings();
-            Close();
             Hide();
             var f = new SetupDialogForm();
             f.ShowDialog();
         }
 
-        // This is the method to run when you want to turn the tempature probe off or on 
+        /// <summary>
+        /// This is the method to run when you want to turn the tempature probe off or on 
+        /// </summary>
         private void CheckBox1CheckedChanged(object sender, EventArgs e)
         {
             if (!checkBox1.Checked)
@@ -99,14 +108,18 @@ namespace ASCOM.Simulator
             }
         }
 
-        // This is the method to run when you want to turn the tempature compensator off or on
+        /// <summary>
+        /// This is the method to run when you want to turn the tempature compensator off or on
+        /// </summary>
         private void CheckBox2CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox2.Checked) checkBox1.Checked = true;
      
         }
 
-        // This is the method to run when you want to turn the step size off or on
+        /// <summary>
+        /// This is the method to run when you want to turn the step size off or on
+        /// </summary>
         private void CheckBox3CheckedChanged(object sender, EventArgs e)
         {
             textBox2.Enabled = checkBox3.Checked;
