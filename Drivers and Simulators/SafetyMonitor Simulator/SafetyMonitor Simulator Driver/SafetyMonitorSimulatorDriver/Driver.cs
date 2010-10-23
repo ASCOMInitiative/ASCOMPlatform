@@ -182,50 +182,70 @@ namespace ASCOM.Simulator
         {
             throw new System.NotImplementedException();
         }
-
-        /// <summary>
-        /// Return the condition of the SafetyMonitor
-        /// </summary>
-        /// <value>name of the SafetyMonitor</value>
-        public bool IsSafe 
-        {
-            get { return _isSafe; }
-        }
-
-        public string Action(string actionName, string actionParameters)
-        {
-            throw new MethodNotImplementedException("Action");
-        }
-
-        public void CommandBlind(string command, bool raw)
-        {
-            throw new MethodNotImplementedException("CommandBlind");
-        }
-
-        public bool CommandBool(string command, bool raw)
-        {
-            throw new MethodNotImplementedException("CommandBool");
-        }
-
-        public string CommandString(string command, bool raw)
-        {
-            throw new MethodNotImplementedException("CommandString");
-        }
-
-        public string[] SupportedActions
-        {
-            get { throw new MethodNotImplementedException("SupportedActions"); }
-        }
-
+        
         void IDisposable.Dispose()
         {
             Dispose();
         }
 
+        /// <summary>
+        /// Return the condition of the SafetyMonitor
+        /// </summary>
+        /// <value>State of the Monitor</value>
+        public bool IsSafe 
+        {
+            get { return _isSafe; }
+        }
+
+        /// <summary>
+        /// Invokes the specified device-specific action.
+        /// </summary>
+        public string Action(string actionName, string actionParameters)
+        {
+            throw new MethodNotImplementedException("Action");
+        }
+
+        /// <summary>
+        /// Transmits an arbitrary string to the device and does 
+        /// not wait for a response. Optionally, protocol framing 
+        /// characters may be added to the string before transmission.
+        /// </summary>
+        public void CommandBlind(string command, bool raw)
+        {
+            throw new MethodNotImplementedException("CommandBlind");
+        }
+
+        /// <summary>
+        /// Transmits an arbitrary string to the device and waits 
+        /// for a boolean response. Optionally, protocol framing 
+        /// characters may be added to the string before transmission.
+        /// </summary>
+        public bool CommandBool(string command, bool raw)
+        {
+            throw new MethodNotImplementedException("CommandBool");
+        }
+
+        /// <summary>
+        /// Transmits an arbitrary string to the device and waits 
+        /// for a string response. Optionally, protocol framing 
+        /// characters may be added to the string before transmission.
+        /// </summary>
+        public string CommandString(string command, bool raw)
+        {
+            throw new MethodNotImplementedException("CommandString");
+        }
+
+        /// <summary>
+        /// Gets the supported actions.
+        /// </summary>
+        public string[] SupportedActions
+        {
+            get { throw new MethodNotImplementedException("SupportedActions"); }
+        }
+
         #endregion
 
         #region SafetyMonitor Private Members
-
 
         /// <summary>
         /// Validate the profile is in good shape
@@ -244,6 +264,9 @@ namespace ASCOM.Simulator
             }
         }
 
+        /// <summary>
+        /// Validates the profile key and the value
+        /// </summary>
         private static bool CheckSafetyMonitorKeyValue()
         {
             string s = Profile.GetValue(sCsDriverId, "SafetyMonitor").ToUpper();
@@ -256,6 +279,9 @@ namespace ASCOM.Simulator
             return true;
         }
 
+        /// <summary>
+        /// Registers the driver with the profile
+        /// </summary>
         private static bool RegisterWithProfile()
         {
             Profile.Register(sCsDriverId, sCsDriverId);

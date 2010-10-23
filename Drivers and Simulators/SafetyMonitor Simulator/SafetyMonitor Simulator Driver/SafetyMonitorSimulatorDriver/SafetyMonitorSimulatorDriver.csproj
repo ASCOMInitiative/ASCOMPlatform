@@ -107,7 +107,6 @@
     <EmbeddedResource Include="SetupDialogForm.resx">
       <DependentUpon>SetupDialogForm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="ClassDiagram1.cd" />
     <None Include="Resources\ASCOM.bmp" />
     <Content Include="ASCOM.ico" />
     <Content Include="Resources\ASCOM.ico" />
