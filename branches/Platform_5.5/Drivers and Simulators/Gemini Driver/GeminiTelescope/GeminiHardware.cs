@@ -303,6 +303,18 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        private static string m_OpticsObstruction = "";
+        public static string OpticsObstruction
+        {
+            get { return GeminiHardware.m_OpticsObstruction; }
+            set
+            {
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsObstruction", value.ToString(GeminiHardware.m_GeminiCulture));
+                GeminiHardware.m_OpticsObstruction = value;
+            }
+        }
+
         private static int m_OpticsValueIndex = 0;
         public static int OpticsValueIndex
         {
@@ -1110,6 +1122,9 @@ namespace ASCOM.GeminiTelescope
                 m_ApertureDiameter = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureDiameter", "");
                 if (m_ApertureDiameter == "") m_ApertureDiameter = "0";
 
+                m_OpticsObstruction = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsObstruction", "");
+                if (m_OpticsObstruction == "") m_OpticsObstruction = "0";
+
                 m_OpticsUnitOfMeasure = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsUnitOfMeasure", "");
                 if (m_OpticsUnitOfMeasure == "") OpticsUnitOfMeasure = "millimeter";
 
@@ -1123,6 +1138,7 @@ namespace ASCOM.GeminiTelescope
                 m_OpticsUnitOfMeasure = "millimeter";
                 m_OpticsNames = "";
                 m_OpticsValueIndex = 0;
+                m_OpticsObstruction = "0";
             }
 
             if (!bool.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "AsyncPulseGuide", ""), out m_AsyncPulseGuide))

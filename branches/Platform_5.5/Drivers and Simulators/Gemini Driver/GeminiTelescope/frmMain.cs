@@ -854,6 +854,7 @@ namespace ASCOM.GeminiTelescope
             string[] focallengths = GeminiHardware.FocalLength.Split('~');
             string[] apertures = GeminiHardware.ApertureDiameter.Split('~');
             string[] uoms = GeminiHardware.OpticsUnitOfMeasure.Split('~');
+            string[] obstructions = GeminiHardware.OpticsObstruction.Split('~');
 
             setupForm.ClearOpticsInfos();
 
@@ -865,10 +866,21 @@ namespace ASCOM.GeminiTelescope
                     oi.Name = optics[i];
                     oi.FocalLength = double.Parse(focallengths[i]);
                     oi.ApertureDiameter = double.Parse(apertures[i]);
+                    oi.ObstructionDiameter = double.Parse(obstructions[i]);
                     oi.UnitOfMeasure = uoms[i];
                     setupForm.AddOpticsInfo(oi);
                 }
-                catch { }
+                catch 
+                {
+                    setupForm.ClearOpticsInfos();
+                    oi = new OpticsInfo();
+                    oi.Name = "";
+                    oi.FocalLength = 0;
+                    oi.UnitOfMeasure = "millimeters";
+                    oi.ApertureDiameter = 0;
+                    oi.ObstructionDiameter = 0;
+                    setupForm.AddOpticsInfo(oi);
+                }
             }
 
             setupForm.SelectedOptic = GeminiHardware.OpticsValueIndex;
@@ -946,6 +958,7 @@ namespace ASCOM.GeminiTelescope
                 string aperture = "";
                 string uom = "";
                 string name = "";
+                string obstruction = "";
                 for (int i = 0; i < setupForm.OpticsInfos.Count; i++)
                 {
                     OpticsInfo oi = setupForm.GetOpticsInfo(i);
@@ -956,6 +969,8 @@ namespace ASCOM.GeminiTelescope
                     if (uom == "") uom += oi.UnitOfMeasure;
                     else uom += "~" + oi.UnitOfMeasure;
                     if (oi.Name != "") name += "~" + oi.Name;
+                    if (obstruction == "") obstruction += oi.ObstructionDiameter.ToString();
+                    else obstruction += "~" + oi.ObstructionDiameter.ToString();
 
                 }
 
@@ -963,6 +978,7 @@ namespace ASCOM.GeminiTelescope
                 GeminiHardware.ApertureDiameter = aperture;
                 GeminiHardware.OpticsUnitOfMeasure = uom;
                 GeminiHardware.OpticsNames = name;
+                GeminiHardware.OpticsObstruction = obstruction;
 
                 if (error != "")
                 {

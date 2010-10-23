@@ -412,6 +412,7 @@ namespace ASCOM.GeminiTelescope
                     oi.FocalLength = 0;
                     oi.UnitOfMeasure = "millimeters";
                     oi.ApertureDiameter = 0;
+                    oi.ObstructionDiameter = 0;
                     m_OpticsInfos.Add(oi);
                     comboBoxSavedOptics.SelectedIndex = 0;
                 }
@@ -734,12 +735,14 @@ namespace ASCOM.GeminiTelescope
                 radioButtonInches.Checked = true;
                 textBoxAperture.Text = (oi.ApertureDiameter / 25.4).ToString();
                 textBoxFocalLength.Text = (oi.FocalLength / 25.4).ToString();
+                textBoxObstruction.Text = (oi.ObstructionDiameter / 25.4).ToString();
             }
             else
             {
                 radioButtonmillimeters.Checked = true;
                 textBoxAperture.Text = oi.ApertureDiameter.ToString();
                 textBoxFocalLength.Text = oi.FocalLength.ToString();
+                textBoxObstruction.Text = oi.ObstructionDiameter.ToString();
             }
 
             m_SelectedOpticChanged = false;
@@ -747,21 +750,19 @@ namespace ASCOM.GeminiTelescope
 
         private void textBoxFocalLength_TextChanged(object sender, EventArgs e)
         {
-            if (!m_SelectedOpticChanged)
+            if (!m_SelectedOpticChanged && textBoxFocalLength.Text != "")
             {
-                comboBoxSavedOptics.SelectedIndex = 0;
-                if (radioButtonInches.Checked) ((OpticsInfo)m_OpticsInfos[0]).FocalLength = (double.Parse(textBoxFocalLength.Text)) * 25.4;
-                else ((OpticsInfo)m_OpticsInfos[0]).FocalLength = double.Parse(textBoxFocalLength.Text);
+                if (radioButtonInches.Checked) ((OpticsInfo)m_OpticsInfos[comboBoxSavedOptics.SelectedIndex]).FocalLength = (double.Parse(textBoxFocalLength.Text)) * 25.4;
+                else ((OpticsInfo)m_OpticsInfos[comboBoxSavedOptics.SelectedIndex]).FocalLength = double.Parse(textBoxFocalLength.Text);
             }
         }
 
         private void textBoxAperture_TextChanged(object sender, EventArgs e)
         {
-            if (!m_SelectedOpticChanged)
+            if (!m_SelectedOpticChanged && textBoxAperture.Text != "")
             {
-                comboBoxSavedOptics.SelectedIndex = 0;
-                if (radioButtonInches.Checked) ((OpticsInfo)m_OpticsInfos[0]).ApertureDiameter = (double.Parse(textBoxAperture.Text)) * 25.4;
-                else ((OpticsInfo)m_OpticsInfos[0]).ApertureDiameter = double.Parse(textBoxAperture.Text);
+                if (radioButtonInches.Checked) ((OpticsInfo)m_OpticsInfos[comboBoxSavedOptics.SelectedIndex]).ApertureDiameter = (double.Parse(textBoxAperture.Text)) * 25.4;
+                else ((OpticsInfo)m_OpticsInfos[comboBoxSavedOptics.SelectedIndex]).ApertureDiameter = double.Parse(textBoxAperture.Text);
             }
         }
 
@@ -769,9 +770,8 @@ namespace ASCOM.GeminiTelescope
         {
             if (!m_SelectedOpticChanged)
             {
-                comboBoxSavedOptics.SelectedIndex = 0;
-                if (radioButtonInches.Checked) ((OpticsInfo)m_OpticsInfos[0]).UnitOfMeasure = "inches";
-                else ((OpticsInfo)m_OpticsInfos[0]).UnitOfMeasure = "millimeters";
+                if (radioButtonInches.Checked) ((OpticsInfo)m_OpticsInfos[comboBoxSavedOptics.SelectedIndex]).UnitOfMeasure = "inches";
+                else ((OpticsInfo)m_OpticsInfos[comboBoxSavedOptics.SelectedIndex]).UnitOfMeasure = "millimeters";
             }
         }
 
@@ -789,10 +789,10 @@ namespace ASCOM.GeminiTelescope
             if (Char.IsDigit(e.KeyChar))
             {
             }
-            else if (e.KeyChar.ToString() == Keys.Back.ToString())
+            else if (e.KeyChar == (char)8)
             {
             }
-
+            else if (e.KeyChar.ToString() == Keys.Delete.ToString()) { }
             else
             {
                 e.Handled = true;
@@ -813,13 +813,49 @@ namespace ASCOM.GeminiTelescope
             if (Char.IsDigit(e.KeyChar))
             {
             }
-            else if (e.KeyChar.ToString() == Keys.Back.ToString())
+            else if (e.KeyChar == (char)8)
             {
             }
-
+            else if (e.KeyChar.ToString() == Keys.Delete.ToString()) { }
             else
             {
                 e.Handled = true;
+            }
+        }
+
+        private void textBoxObstruction_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            System.Globalization.NumberFormatInfo numberFormatInfo = System.Globalization.CultureInfo.CurrentCulture.NumberFormat;
+
+            string decimalSeparator = numberFormatInfo.NumberDecimalSeparator;
+
+            string groupSeparator = numberFormatInfo.NumberGroupSeparator;
+
+            string negativeSign = numberFormatInfo.NegativeSign;
+
+            string keyInput = e.KeyChar.ToString();
+            if (Char.IsDigit(e.KeyChar))
+            {
+            }
+            else if (e.KeyChar == (char)8)
+            {
+            }
+            else if (e.KeyChar.ToString() == Keys.Delete.ToString()) { }
+            else
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBoxObstruction_TextChanged(object sender, EventArgs e)
+        {
+            if (!m_SelectedOpticChanged && textBoxObstruction.Text != "")
+            {
+
+                if (radioButtonInches.Checked) ((OpticsInfo)m_OpticsInfos[comboBoxSavedOptics.SelectedIndex]).ObstructionDiameter = (double.Parse(textBoxObstruction.Text)) * 25.4;
+                else ((OpticsInfo)m_OpticsInfos[comboBoxSavedOptics.SelectedIndex]).ObstructionDiameter = double.Parse(textBoxObstruction.Text);
+                if (radioButtonInches.Checked) ((OpticsInfo)m_OpticsInfos[comboBoxSavedOptics.SelectedIndex]).UnitOfMeasure = "inches";
+                else ((OpticsInfo)m_OpticsInfos[comboBoxSavedOptics.SelectedIndex]).UnitOfMeasure = "millimeters";
             }
         }
 
@@ -839,6 +875,7 @@ namespace ASCOM.GeminiTelescope
         public string Name { get; set; }
         public double FocalLength { get; set; }
         public double ApertureDiameter { get; set; }
+        public double ObstructionDiameter { get; set; }
         public string UnitOfMeasure { get; set; }
     }
 

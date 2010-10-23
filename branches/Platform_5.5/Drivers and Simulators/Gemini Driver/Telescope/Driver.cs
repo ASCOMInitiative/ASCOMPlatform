@@ -353,8 +353,11 @@ namespace ASCOM.GeminiTelescope
             {
                 try
                 {
-                    GeminiHardware.Trace.Enter("IT:ApertureArea.Get", Math.PI * ((ApertureDiameter / 2.0) * (ApertureDiameter / 2.0)));
-                    return Math.PI * ((ApertureDiameter / 2.0) * (ApertureDiameter / 2.0));
+                    double area = Math.PI * ((ApertureDiameter / 2.0) * (ApertureDiameter / 2.0));
+                    double obstruction = double.Parse(GeminiHardware.OpticsObstruction.Split('~')[GeminiHardware.OpticsValueIndex]);
+                    area -= Math.PI * ((obstruction / 2.0) * (obstruction / 2.0));
+                    GeminiHardware.Trace.Enter("IT:ApertureArea.Get", area);
+                    return area;
                 }
                 catch { return 0; }
             }

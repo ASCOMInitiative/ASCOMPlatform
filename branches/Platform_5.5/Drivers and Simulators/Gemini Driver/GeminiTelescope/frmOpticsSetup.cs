@@ -38,10 +38,10 @@ namespace ASCOM.GeminiTelescope
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            if (textBoxName.Text == "")
+            if (textBoxName.Text == "" || textBoxAperture.Text == "" || textBoxFocalLength.Text == "" || textBoxObstruction.Text == "")
             {
-                MessageBox.Show("Name cannot be blank.");
-                textBoxName.Focus();
+                MessageBox.Show("Please fill in all entries.");
+                
             }
             else
             {
@@ -52,12 +52,14 @@ namespace ASCOM.GeminiTelescope
                 {
                     oi.FocalLength = double.Parse(textBoxFocalLength.Text) * 25.4;
                     oi.ApertureDiameter = double.Parse(textBoxAperture.Text) * 25.4;
+                    oi.ObstructionDiameter = double.Parse(textBoxObstruction.Text) * 25.4;
                     oi.UnitOfMeasure = "inches";
                 }
                 else
                 {
                     oi.FocalLength = double.Parse(textBoxFocalLength.Text);
                     oi.ApertureDiameter = double.Parse(textBoxAperture.Text);
+                    oi.ObstructionDiameter = double.Parse(textBoxObstruction.Text);
                     oi.UnitOfMeasure = "millimeters";
                 }
 
@@ -90,10 +92,10 @@ namespace ASCOM.GeminiTelescope
             if (Char.IsDigit(e.KeyChar))
             {
             }
-            else if (e.KeyChar.ToString() == Keys.Back.ToString())
+            else if (e.KeyChar == (char)8)
             {
             }
-
+            else if (e.KeyChar.ToString() == Keys.Delete.ToString()) { }
             else
             {
                 e.Handled = true;
@@ -111,13 +113,13 @@ namespace ASCOM.GeminiTelescope
             string negativeSign = numberFormatInfo.NegativeSign;
 
             string keyInput = e.KeyChar.ToString();
-            if (Char.IsDigit(e.KeyChar))
+            if (Char.IsDigit(e.KeyChar)) 
             {
             }
-            else if (e.KeyChar.ToString() == Keys.Back.ToString())
+            else if (e.KeyChar == (char)8)
             {
             }
-
+            else if (e.KeyChar.ToString() == Keys.Delete.ToString()) { }
             else
             {
                 e.Handled = true;

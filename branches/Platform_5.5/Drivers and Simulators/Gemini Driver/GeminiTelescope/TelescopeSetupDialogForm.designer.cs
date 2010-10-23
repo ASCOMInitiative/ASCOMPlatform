@@ -114,12 +114,14 @@ namespace ASCOM.GeminiTelescope
             this.chkPrecisionPulse = new System.Windows.Forms.CheckBox();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
+            this.label16 = new System.Windows.Forms.Label();
+            this.textBoxObstruction = new System.Windows.Forms.TextBox();
             this.comboBoxSavedOptics = new System.Windows.Forms.ComboBox();
             this.label14 = new System.Windows.Forms.Label();
             this.textBoxAperture = new System.Windows.Forms.TextBox();
             this.textBoxFocalLength = new System.Windows.Forms.TextBox();
-            this.radioButtonmillimeters = new System.Windows.Forms.RadioButton();
             this.label15 = new System.Windows.Forms.Label();
+            this.radioButtonmillimeters = new System.Windows.Forms.RadioButton();
             this.radioButtonInches = new System.Windows.Forms.RadioButton();
             buttonGps = new System.Windows.Forms.Button();
             pbGeminiSettings = new System.Windows.Forms.Button();
@@ -773,19 +775,34 @@ namespace ASCOM.GeminiTelescope
             // tableLayoutPanel9
             // 
             resources.ApplyResources(this.tableLayoutPanel9, "tableLayoutPanel9");
+            this.tableLayoutPanel9.Controls.Add(this.label16, 0, 3);
+            this.tableLayoutPanel9.Controls.Add(this.textBoxObstruction, 1, 3);
             this.tableLayoutPanel9.Controls.Add(this.comboBoxSavedOptics, 1, 0);
             this.tableLayoutPanel9.Controls.Add(this.label14, 0, 2);
             this.tableLayoutPanel9.Controls.Add(this.textBoxAperture, 1, 2);
             this.tableLayoutPanel9.Controls.Add(this.textBoxFocalLength, 1, 1);
-            this.tableLayoutPanel9.Controls.Add(this.radioButtonmillimeters, 1, 3);
             this.tableLayoutPanel9.Controls.Add(this.label15, 0, 1);
-            this.tableLayoutPanel9.Controls.Add(this.radioButtonInches, 0, 3);
             this.tableLayoutPanel9.Controls.Add(pbEditSavedOptics, 0, 0);
+            this.tableLayoutPanel9.Controls.Add(this.radioButtonmillimeters, 1, 4);
+            this.tableLayoutPanel9.Controls.Add(this.radioButtonInches, 0, 4);
             this.tableLayoutPanel9.Name = "tableLayoutPanel9";
+            // 
+            // label16
+            // 
+            resources.ApplyResources(this.label16, "label16");
+            this.label16.Name = "label16";
+            // 
+            // textBoxObstruction
+            // 
+            resources.ApplyResources(this.textBoxObstruction, "textBoxObstruction");
+            this.textBoxObstruction.Name = "textBoxObstruction";
+            this.textBoxObstruction.TextChanged += new System.EventHandler(this.textBoxObstruction_TextChanged);
+            this.textBoxObstruction.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxObstruction_KeyPress);
             // 
             // comboBoxSavedOptics
             // 
             this.comboBoxSavedOptics.DisplayMember = "Id";
+            this.comboBoxSavedOptics.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             resources.ApplyResources(this.comboBoxSavedOptics, "comboBoxSavedOptics");
             this.comboBoxSavedOptics.FormattingEnabled = true;
             this.comboBoxSavedOptics.Items.AddRange(new object[] {
@@ -812,17 +829,17 @@ namespace ASCOM.GeminiTelescope
             this.textBoxFocalLength.TextChanged += new System.EventHandler(this.textBoxFocalLength_TextChanged);
             this.textBoxFocalLength.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxFocalLength_KeyPress);
             // 
+            // label15
+            // 
+            resources.ApplyResources(this.label15, "label15");
+            this.label15.Name = "label15";
+            // 
             // radioButtonmillimeters
             // 
             resources.ApplyResources(this.radioButtonmillimeters, "radioButtonmillimeters");
             this.radioButtonmillimeters.Name = "radioButtonmillimeters";
             this.radioButtonmillimeters.TabStop = true;
             this.radioButtonmillimeters.UseVisualStyleBackColor = true;
-            // 
-            // label15
-            // 
-            resources.ApplyResources(this.label15, "label15");
-            this.label15.Name = "label15";
             // 
             // radioButtonInches
             // 
@@ -983,5 +1000,7 @@ namespace ASCOM.GeminiTelescope
         private System.Windows.Forms.TextBox textBoxAperture;
         private System.Windows.Forms.TextBox textBoxFocalLength;
         private System.Windows.Forms.ComboBox comboBoxSavedOptics;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox textBoxObstruction;
     }
 }

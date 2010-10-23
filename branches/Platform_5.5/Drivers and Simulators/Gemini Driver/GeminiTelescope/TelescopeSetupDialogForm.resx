@@ -2766,6 +2766,57 @@
   <data name="tableLayoutPanel9.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
+  <data name="label16.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label16.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label16.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 105</value>
+  </data>
+  <data name="label16.Size" type="System.Drawing.Size, System.Drawing">
+    <value>61, 26</value>
+  </data>
+  <data name="label16.TabIndex" type="System.Int32, mscorlib">
+    <value>40</value>
+  </data>
+  <data name="label16.Text" xml:space="preserve">
+    <value>Obstruction Diameter:</value>
+  </data>
+  <data name="&gt;&gt;label16.Name" xml:space="preserve">
+    <value>label16</value>
+  </data>
+  <data name="&gt;&gt;label16.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label16.Parent" xml:space="preserve">
+    <value>tableLayoutPanel9</value>
+  </data>
+  <data name="&gt;&gt;label16.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="textBoxObstruction.Location" type="System.Drawing.Point, System.Drawing">
+    <value>70, 108</value>
+  </data>
+  <data name="textBoxObstruction.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 20</value>
+  </data>
+  <data name="textBoxObstruction.TabIndex" type="System.Int32, mscorlib">
+    <value>40</value>
+  </data>
+  <data name="&gt;&gt;textBoxObstruction.Name" xml:space="preserve">
+    <value>textBoxObstruction</value>
+  </data>
+  <data name="&gt;&gt;textBoxObstruction.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;textBoxObstruction.Parent" xml:space="preserve">
+    <value>tableLayoutPanel9</value>
+  </data>
+  <data name="&gt;&gt;textBoxObstruction.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
   <data name="comboBoxSavedOptics.Font" type="System.Drawing.Font, System.Drawing">
     <value>Courier New, 9pt</value>
   </data>
@@ -2773,7 +2824,7 @@
     <value />
   </data>
   <data name="comboBoxSavedOptics.Location" type="System.Drawing.Point, System.Drawing">
-    <value>69, 3</value>
+    <value>70, 3</value>
   </data>
   <data name="comboBoxSavedOptics.Size" type="System.Drawing.Size, System.Drawing">
     <value>144, 23</value>
@@ -2791,7 +2842,7 @@
     <value>tableLayoutPanel9</value>
   </data>
   <data name="&gt;&gt;comboBoxSavedOptics.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>2</value>
   </data>
   <data name="label14.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2800,7 +2851,7 @@
     <value>NoControl</value>
   </data>
   <data name="label14.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 68</value>
+    <value>3, 70</value>
   </data>
   <data name="label14.Size" type="System.Drawing.Size, System.Drawing">
     <value>52, 26</value>
@@ -2821,16 +2872,16 @@
     <value>tableLayoutPanel9</value>
   </data>
   <data name="&gt;&gt;label14.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>3</value>
   </data>
   <data name="textBoxAperture.Location" type="System.Drawing.Point, System.Drawing">
-    <value>69, 71</value>
+    <value>70, 73</value>
   </data>
   <data name="textBoxAperture.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 20</value>
   </data>
   <data name="textBoxAperture.TabIndex" type="System.Int32, mscorlib">
-    <value>12</value>
+    <value>39</value>
   </data>
   <data name="&gt;&gt;textBoxAperture.Name" xml:space="preserve">
     <value>textBoxAperture</value>
@@ -2842,16 +2893,16 @@
     <value>tableLayoutPanel9</value>
   </data>
   <data name="&gt;&gt;textBoxAperture.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>4</value>
   </data>
   <data name="textBoxFocalLength.Location" type="System.Drawing.Point, System.Drawing">
-    <value>69, 37</value>
+    <value>70, 38</value>
   </data>
   <data name="textBoxFocalLength.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 20</value>
   </data>
   <data name="textBoxFocalLength.TabIndex" type="System.Int32, mscorlib">
-    <value>14</value>
+    <value>38</value>
   </data>
   <data name="&gt;&gt;textBoxFocalLength.Name" xml:space="preserve">
     <value>textBoxFocalLength</value>
@@ -2863,34 +2914,7 @@
     <value>tableLayoutPanel9</value>
   </data>
   <data name="&gt;&gt;textBoxFocalLength.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="radioButtonmillimeters.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="radioButtonmillimeters.Location" type="System.Drawing.Point, System.Drawing">
-    <value>69, 105</value>
-  </data>
-  <data name="radioButtonmillimeters.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 17</value>
-  </data>
-  <data name="radioButtonmillimeters.TabIndex" type="System.Int32, mscorlib">
-    <value>11</value>
-  </data>
-  <data name="radioButtonmillimeters.Text" xml:space="preserve">
-    <value>millimeters</value>
-  </data>
-  <data name="&gt;&gt;radioButtonmillimeters.Name" xml:space="preserve">
-    <value>radioButtonmillimeters</value>
-  </data>
-  <data name="&gt;&gt;radioButtonmillimeters.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;radioButtonmillimeters.Parent" xml:space="preserve">
-    <value>tableLayoutPanel9</value>
-  </data>
-  <data name="&gt;&gt;radioButtonmillimeters.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="label15.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2899,7 +2923,7 @@
     <value>NoControl</value>
   </data>
   <data name="label15.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 34</value>
+    <value>3, 35</value>
   </data>
   <data name="label15.Size" type="System.Drawing.Size, System.Drawing">
     <value>43, 26</value>
@@ -2920,19 +2944,46 @@
     <value>tableLayoutPanel9</value>
   </data>
   <data name="&gt;&gt;label15.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
+  </data>
+  <data name="radioButtonmillimeters.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="radioButtonmillimeters.Location" type="System.Drawing.Point, System.Drawing">
+    <value>70, 143</value>
+  </data>
+  <data name="radioButtonmillimeters.Size" type="System.Drawing.Size, System.Drawing">
+    <value>72, 17</value>
+  </data>
+  <data name="radioButtonmillimeters.TabIndex" type="System.Int32, mscorlib">
+    <value>42</value>
+  </data>
+  <data name="radioButtonmillimeters.Text" xml:space="preserve">
+    <value>millimeters</value>
+  </data>
+  <data name="&gt;&gt;radioButtonmillimeters.Name" xml:space="preserve">
+    <value>radioButtonmillimeters</value>
+  </data>
+  <data name="&gt;&gt;radioButtonmillimeters.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;radioButtonmillimeters.Parent" xml:space="preserve">
+    <value>tableLayoutPanel9</value>
+  </data>
+  <data name="&gt;&gt;radioButtonmillimeters.ZOrder" xml:space="preserve">
+    <value>8</value>
   </data>
   <data name="radioButtonInches.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="radioButtonInches.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 105</value>
+    <value>3, 143</value>
   </data>
   <data name="radioButtonInches.Size" type="System.Drawing.Size, System.Drawing">
     <value>56, 17</value>
   </data>
   <data name="radioButtonInches.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
+    <value>41</value>
   </data>
   <data name="radioButtonInches.Text" xml:space="preserve">
     <value>inches</value>
@@ -2947,7 +2998,7 @@
     <value>tableLayoutPanel9</value>
   </data>
   <data name="&gt;&gt;radioButtonInches.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>9</value>
   </data>
   <data name="tableLayoutPanel9.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -2956,10 +3007,10 @@
     <value>3, 16</value>
   </data>
   <data name="tableLayoutPanel9.RowCount" type="System.Int32, mscorlib">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="tableLayoutPanel9.Size" type="System.Drawing.Size, System.Drawing">
-    <value>217, 139</value>
+    <value>217, 177</value>
   </data>
   <data name="tableLayoutPanel9.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2977,13 +3028,13 @@
     <value>0</value>
   </data>
   <data name="tableLayoutPanel9.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="comboBoxSavedOptics" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label14" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBoxAperture" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="textBoxFocalLength" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="radioButtonmillimeters" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label15" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="radioButtonInches" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="pbEditSavedOptics" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,30.41475,Percent,69.58525" /&gt;&lt;Rows Styles="Percent,25,Percent,25,Percent,25,Percent,25" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label16" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBoxObstruction" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="comboBoxSavedOptics" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label14" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBoxAperture" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="textBoxFocalLength" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label15" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="pbEditSavedOptics" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="radioButtonmillimeters" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="radioButtonInches" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,31.3364,Percent,68.6636" /&gt;&lt;Rows Styles="Percent,20,Percent,20,Percent,20,Percent,20,Percent,20,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="groupBox8.Location" type="System.Drawing.Point, System.Drawing">
     <value>241, 146</value>
   </data>
   <data name="groupBox8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>223, 158</value>
+    <value>223, 196</value>
   </data>
   <data name="groupBox8.TabIndex" type="System.Int32, mscorlib">
     <value>40</value>
