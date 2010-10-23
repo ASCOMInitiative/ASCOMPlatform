@@ -60,7 +60,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Backing store for the private switch collection.
         /// </summary>
-        private static readonly ArrayList switches = new ArrayList(numSwitches);
+        private static readonly ArrayList SwitchList = new ArrayList(numSwitches);
         
         /// <summary>
         /// ASCOM DeviceID (COM ProgID) for this driver.
@@ -87,7 +87,6 @@ namespace ASCOM.Simulator
         /// Sets up the permenant store for device names
         /// </summary>
         private static readonly string[] DeviceNames = { "White Lights", "Red Lights", "Telescope Power", "Camera Power", "Focuser Power", "Dew Heaters", "Dome Power", "Self Destruct" };
-
 
         #endregion
 
@@ -207,7 +206,7 @@ namespace ASCOM.Simulator
         /// <value></value>
         public ArrayList Switches
         {
-            get{ return switches;}
+            get{ return SwitchList;}
         }
 
 	    void ISwitch.Dispose()
@@ -220,6 +219,11 @@ namespace ASCOM.Simulator
             throw new System.NotImplementedException();
         }
 
+        void IDisposable.Dispose()
+        {
+            Dispose();
+        }
+
 	    /// <summary>
         /// Flips a switch on or off
         /// </summary>
@@ -227,7 +231,7 @@ namespace ASCOM.Simulator
         public void SetSwitch(string switchName, bool state)
 	    {
 	        if (switchName == null) throw new ArgumentNullException("switchName");
-	        foreach (string[,] sd in switches)
+            foreach (string[,] sd in SwitchList)
             {
                 if (sd[0, 0] == switchName)
                 {
@@ -237,34 +241,50 @@ namespace ASCOM.Simulator
             }
 	    }
 
+        /// <summary>
+        /// Gets the supported actions.
+        /// </summary>
 	    public string Action(string actionName, string actionParameters)
         {
             throw new MethodNotImplementedException("Action");
         }
 
+        /// <summary>
+        /// Transmits an arbitrary string to the device and does not 
+        /// wait for a response. Optionally, protocol framing 
+        /// characters may be added to the string before transmission.
+        /// </summary>
         public void CommandBlind(string command, bool raw)
         {
             throw new MethodNotImplementedException("CommandBlind");
         }
 
+        /// <summary>
+        /// Transmits an arbitrary string to the device and waits 
+        /// for a boolean response. Optionally, protocol framing 
+        /// characters may be added to the string before transmission.
+        /// </summary>
         public bool CommandBool(string command, bool raw)
         {
             throw new MethodNotImplementedException("CommandBool");
         }
 
+        /// <summary>
+        /// Transmits an arbitrary string to the device and waits 
+        /// for a string response. Optionally, protocol framing 
+        /// characters may be added to the string before transmission.
+        /// </summary>
         public string CommandString(string command, bool raw)
         {
             throw new MethodNotImplementedException("CommandString");
         }
 
+        /// <summary>
+        /// Gets the supported actions.
+        /// </summary>
         public string[] SupportedActions
         {
             get { throw new MethodNotImplementedException("SupportedActions");}
-        }
-
-        void IDisposable.Dispose()
-        {
-            Dispose();
         }
 
         #endregion
@@ -277,14 +297,14 @@ namespace ASCOM.Simulator
         private static void LoadSwitchDevices()
         {
             //each new instance load the switches, make sure this doesn't repeat
-            if (switches.Count != 8)
+            if (SwitchList.Count != 8)
             {
                 //too many or not enough found, start over
-                switches.Clear();
+                SwitchList.Clear();
                 //load a new set of switch devices
                 foreach (string device in DeviceNames)
                 {
-                    if (device != null) switches.Add(new string[1,2]{{device, "False"}});
+                    if (device != null) SwitchList.Add(new string[1, 2] { { device, "False" } });
                 }
             }
         }
@@ -294,7 +314,7 @@ namespace ASCOM.Simulator
         /// </summary>
         private static void GetProfileSettings()
         {
-             foreach (string[,] sw in switches)
+            foreach (string[,] sw in SwitchList)
              {
                  bool state = Convert.ToBoolean(GetProfileSetting(sw[0,0], "false"));
 
@@ -352,7 +372,7 @@ namespace ASCOM.Simulator
         /// </summary>
         private static void SaveProfileSettings()
         {
-            foreach (string[,] sd in switches)
+            foreach (string[,] sd in SwitchList)
             {
                 Profile.WriteValue(sCsDriverId, sd[0,0], sd[0,1], "Switches");
                 Trace.WriteLine("Save Setting: " + sd[0, 0] + "-" + sd[0, 1]);
@@ -400,7 +420,7 @@ namespace ASCOM.Simulator
         /// <param name="bRegister">If <c>true</c>, registers the driver, otherwise unregisters it.</param>
         private static void RegUnregASCOM(bool bRegister)
         {
-            var p = new ASCOM.Utilities.Profile {DeviceType = "Switch"};
+            var p = new Profile { DeviceType = "Switch" };
             if (bRegister)
             {
                 p.Register(sCsDriverId, sCsDriverDescription);
@@ -409,7 +429,6 @@ namespace ASCOM.Simulator
             {
                 p.Unregister(sCsDriverId);
             }
-            p = null;
         }
 
         /// <summary>
@@ -459,8 +478,6 @@ namespace ASCOM.Simulator
             Trace.WriteLine("Unregistering -> {0} with ASCOM Profile", sCsDriverId);
             RegUnregASCOM(false);
         }
-        #endregion
-
-	   
+        #endregion	   
     }
 }
