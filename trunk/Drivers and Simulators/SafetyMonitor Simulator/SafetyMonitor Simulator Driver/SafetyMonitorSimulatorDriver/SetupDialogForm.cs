@@ -14,6 +14,9 @@ namespace ASCOM.Simulator
         Stream _redLed;
         Stream _greenLed;
 
+        /// <summary>
+        /// Constructor for the form
+        /// </summary>
         public SetupDialogForm()
         {
             InitializeComponent();
@@ -22,11 +25,17 @@ namespace ASCOM.Simulator
 
         }
 
+        /// <summary>
+        /// Closes the form
+        /// </summary>
         private void Button1Click(object sender, EventArgs e)
         {
             Close();
         }
 
+        /// <summary>
+        /// Link to the ASCOM website
+        /// </summary>
         private static void PictureBox1Click(object sender, EventArgs e)
         {
             try
@@ -38,6 +47,7 @@ namespace ASCOM.Simulator
                 MessageBox.Show(other.Message);
             }
         }
+
         /// <summary>
         /// Changes the image for a given PictureBox based on the boolean 
         /// </summary>
@@ -56,6 +66,7 @@ namespace ASCOM.Simulator
             _redLed = _assembly.GetManifestResourceStream("ASCOM.Simulator.Resources.RedLED.bmp");
             _greenLed = _assembly.GetManifestResourceStream("ASCOM.Simulator.Resources.GreenLED.bmp");
         }
+
         /// <summary>
         /// Populates the form from the driver with the Switch ArrayList
         /// </summary>
