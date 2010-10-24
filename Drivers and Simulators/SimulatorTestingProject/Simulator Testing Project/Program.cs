@@ -11,6 +11,8 @@ namespace Simulator_Testing_Project
         static void Main(string[] args)
         {
 
+
+
             var chooser = new ASCOM.Utilities.Chooser { DeviceType = "Switch" };
             chooser.Choose();
         }
