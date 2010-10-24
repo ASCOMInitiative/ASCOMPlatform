@@ -4,6 +4,129 @@
         <name>MSBuild.Community.Tasks</name>
     </assembly>
     <members>
+        <member name="T:MSBuild.Community.Tasks.AspNet.InstallAspNet">
+            <summary>
+            Installs and register script mappings for ASP.NET
+            </summary>
+            <remarks>Uses the aspnet_regiis.exe tool included with the .NET Framework.</remarks>
+            <example>
+      Install the latest version of ASP.NET on the server:
+      <code>
+        <![CDATA[ <InstallAspNet /> ]]>
+      </code>
+    </example><example>
+      Install the latest version of ASP.NET on the server, but do not update script maps:
+      <code>
+        <![CDATA[ <InstallAspNet ApplyScriptMaps="Never" /> ]]>
+      </code>
+    </example><example>
+      Install the script maps for ASP.NET 2.0 on a web directory on the default website:
+      <code>
+        <![CDATA[ <InstallAspNet Path="MyApplication" Version="Version20" /> ]]>
+      </code>
+    </example><example>
+      Install the script maps for ASP.NET 1.1 on a web directory on a non-default website:
+      <code>
+        <![CDATA[ <InstallAspNet Path="MyApplication" Version="W3SVC/3/Root/Version11" /> ]]>
+      </code>
+    </example><example>
+      Install client side script only for the latest version:
+      <code>
+        <![CDATA[ <InstallAspNet ClientScriptsOnly="True" /> ]]>
+      </code>
+    </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.AspNet.InstallAspNet.GenerateFullPathToTool">
+            <summary>
+            Returns the fully qualified path to the executable file.
+            </summary>
+            <returns>
+            The fully qualified path to the executable file.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.AspNet.InstallAspNet.GenerateCommandLineCommands">
+            <summary>
+            Returns a string value containing the command line arguments 
+            to pass directly to the executable file.
+            </summary>
+            <returns>
+            A string value containing the command line arguments to pass 
+            directly to the executable file.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.AspNet.InstallAspNet.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            True if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.AspNet.InstallAspNet.IsValidPropertyCombinations">
+            <summary>
+            Determines if the current property values can be used together
+            </summary>
+            <returns><see langword="true"/> when properties can be used together.</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.AspNet.InstallAspNet.Version">
+            <summary>
+            The version of ASP.NET to install
+            </summary>
+            <remarks>
+            The default behavior is to use the latest version of ASP.NET available on the computer.
+            <list type="table">
+            <listheader><term>Version</term></listheader>
+            <item><term>Version11</term><description>ASP.NET v1.1</description></item>
+            <item><term>Version20</term><description>ASP.NET v2.0</description></item>
+            <item><term>VersionLatest</term><description>The latest version of ASP.NET available</description></item>
+            </list>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.AspNet.InstallAspNet.ApplyScriptMaps">
+            <summary>
+            The method used to determine if ASP.NET script mappings should be applied
+            </summary>
+            <remarks>
+            The default behavior is to register script mappings on all sites except those with a newer version of ASP.NET.
+            <list type="table">
+            <listheader><term>Value</term></listheader>
+            <item><term>Never</term><description>Register ASP.NET on the computer without updating any script mappings.</description></item>
+            <item><term>IfNoneExist</term><description>Register script mappings only on for sites that do not have any existing ASP.NET script mappings (not available for ASP.NET v1.1)</description></item>
+            <item><term>UnlessNewerExist</term><description>Register script mappings on all sites except those with a newer version of ASP.NET.</description></item>
+            <item><term>Always</term><description>Register script mappings on all sites, even if they already have a newer version of ASP.NET.</description></item>
+            </list>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.AspNet.InstallAspNet.ClientScriptsOnly">
+            <summary>
+            When <see langword="true"/>, the aspnet_client scripts will be installed. No script mappings will be updated.
+            </summary>
+            <remarks>This cannot be <see langword="true"/> if a value for <see cref="P:MSBuild.Community.Tasks.AspNet.InstallAspNet.Path"/> or <see cref="P:MSBuild.Community.Tasks.AspNet.InstallAspNet.ApplyScriptMaps"/> has been specified.</remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.AspNet.InstallAspNet.Path">
+            <summary>
+            The web application that should have its script maps updated.
+            </summary>
+            <remarks>
+            The path must be of the form W3SVC/[instance]/Root/[webdirectory], for example W3SVC/1/Root/SampleApp1.
+            As a shortcut, you can specify just the web directory name,
+            if the web directory is installed in the default website instance (W3SVC/1/Root).
+            <para>You should not specify a value for <see cref="P:MSBuild.Community.Tasks.AspNet.InstallAspNet.ApplyScriptMaps"/> when specifying a path.</para>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.AspNet.InstallAspNet.Recursive">
+            <summary>
+            When <see langword="true"/>, script maps are applied recursively under <see cref="P:MSBuild.Community.Tasks.AspNet.InstallAspNet.Path"/>.
+            </summary>
+            <remarks>This property is only valid when specifying a value for <see cref="P:MSBuild.Community.Tasks.AspNet.InstallAspNet.Path"/>. It is <see langword="true"/> by default.</remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.AspNet.InstallAspNet.ToolName">
+            <summary>
+            Gets the name of the executable file to run.
+            </summary>
+            <value></value>
+            <returns>The name of the executable file to run.</returns>
+        </member>
         <member name="T:MSBuild.Community.Tasks.AssemblyInfo">
             <summary>
             Generates an AssemblyInfo files
@@ -138,6 +261,12 @@
             </summary>
             <value>The assembly file version.</value>
         </member>
+        <member name="P:MSBuild.Community.Tasks.AssemblyInfo.AssemblyInformationalVersion">
+            <summary>
+            Gets or sets the assembly informational version.
+            </summary>
+            <value>The assembly informational version.</value>
+        </member>
         <member name="P:MSBuild.Community.Tasks.AssemblyInfo.AssemblyKeyFile">
             <summary>
             Gets or sets the assembly key file.
@@ -151,6 +280,11 @@
         <member name="P:MSBuild.Community.Tasks.AssemblyInfo.AssemblyDelaySign">
             <summary>
             Gets or sets the assembly delay sign value.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.AssemblyInfo.GenerateClass">
+            <summary>
+            Gets or sets a value indicating whether to generate the ThisAssmebly class.
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.AssemblyInfo.OutputFile">
@@ -242,6 +376,904 @@
             </summary>
             <value><c>true</c> if system; otherwise, <c>false</c>.</value>
         </member>
+        <member name="T:MSBuild.Community.Tasks.GacUtilCommands">
+            <summary>
+            The list of the commans available to the GacUtil Task
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.GacUtilCommands.Install">
+            <summary>Install the list of assemblies into the GAC.</summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.GacUtilCommands.Uninstall">
+            <summary>Uninstall the list of assembly names from the GAC.</summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.GacUtil">
+            <summary>
+            MSBuild task to install and uninstall asseblies into the GAC
+            </summary>
+            <example>Install a dll into the GAC.
+            <code><![CDATA[
+                <GacUtil 
+                    Command="Install" 
+                    Assemblies="MSBuild.Community.Tasks.dll" 
+                    Force="true" />
+            ]]></code>
+            </example>
+            <example>Uninstall a dll from the GAC.
+            <code><![CDATA[
+                <GacUtil 
+                    Command="Uninstall" 
+                    Assemblies="MSBuild.Community.Tasks" 
+                    Force="true" />
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.GacUtil.GenerateFullPathToTool">
+            <summary>
+            Returns the fully qualified path to the executable file.
+            </summary>
+            <returns>
+            The fully qualified path to the executable file.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.GacUtil.LogToolCommand(System.String)">
+            <summary>
+            Logs the starting point of the run to all registered loggers.
+            </summary>
+            <param name="message">A descriptive message to provide loggers, usually the command line and switches.</param>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.GacUtil.GenerateCommandLineCommands">
+            <summary>
+            Returns a string value containing the command line arguments to pass directly to the executable file.
+            </summary>
+            <returns>
+            A string value containing the command line arguments to pass directly to the executable file.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.GacUtil.Execute">
+            <summary>
+            Runs the exectuable file with the specified task parameters.
+            </summary>
+            <returns>
+            true if the task runs successfully; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.GacUtil.Command">
+            <summary>
+            Gets or sets the command.
+            </summary>
+            <value>The command.</value>
+            <enum cref="T:MSBuild.Community.Tasks.GacUtilCommands"/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.GacUtil.Force">
+            <summary>
+            Gets or sets a value indicating whether to force reinstall of an assembly.
+            </summary>
+            <value><c>true</c> if force; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.GacUtil.Assemblies">
+            <summary>
+            Gets or sets the assembly.
+            </summary>
+            <value>The assembly.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.GacUtil.ToolName">
+            <summary>
+            Gets the name of the executable file to run.
+            </summary>
+            <value></value>
+            <returns>The name of the executable file to run.</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.GacUtil.StandardOutputLoggingImportance">
+            <summary>
+            Gets the <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.
+            </summary>
+            <value></value>
+            <returns>The <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.</returns>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.JavaScript.JSCompress">
+            <summary>
+            Compresses JavaScript source by removing comments and unnecessary 
+            whitespace. It typically reduces the size of the script by half, 
+            resulting in faster downloads and code that is harder to read.
+            </summary>
+            <remarks>
+            This task does not change the behavior of the program that it is 
+            compressing. The resulting code will be harder to debug as well as
+            harder to read.
+            </remarks>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.JavaScript.JSCompress.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            true if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.JavaScript.JSCompress.Files">
+            <summary>
+            Gets or sets the files to source-compress.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.JavaScript.JSCompress.Encoding">
+            <summary>
+            Encoding to use to read and write files.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.JavaScript.JSCompress.CompressedFiles">
+            <summary>
+            Gets the files that were successfully source-compressed.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Subversion.SvnCopy">
+            <summary>
+            Copy a file or folder in Subversion
+            </summary>
+            <remarks>
+            This is most useful for automatically tagging your source code during a build. 
+            You can create a tag by copying a path from one server location to another.
+            </remarks>
+            <example>Create a tag of the trunk with the current Cruise Control build number:
+            <code><![CDATA[
+            <Target Name="TagTheBuild">
+              <SvnCopy SourcePath="file:///d:/svn/repo/Test/trunk"
+                       DestinationPath="file:///d:/svn/repo/Test/tags/BUILD-$(CCNetLabel)" 
+                       Message="Automatic build of $(CCNetProject)" />      
+            </Target>
+            ]]></code>
+            </example>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Subversion.SvnClient">
+            <summary>
+            Subversion client base class
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.GenerateSvnCommand">
+            <summary>
+            Generates the SVN command.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.GenerateSvnArguments">
+            <summary>
+            Generates the SVN arguments.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.GenerateCommandLineCommands">
+            <summary>
+            Returns a string value containing the command line arguments to pass directly to the executable file.
+            </summary>
+            <returns>
+            A string value containing the command line arguments to pass directly to the executable file.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.ValidateParameters">
+            <summary>
+            Indicates whether all task paratmeters are valid.
+            </summary>
+            <returns>
+            true if all task parameters are valid; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.LogEventsFromTextOutput(System.String,Microsoft.Build.Framework.MessageImportance)">
+            <summary>
+            Logs the events from text output.
+            </summary>
+            <param name="singleLine">The single line.</param>
+            <param name="messageImportance">The message importance.</param>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.GenerateFullPathToTool">
+            <summary>
+            Returns the fully qualified path to the executable file.
+            </summary>
+            <returns>
+            The fully qualified path to the executable file.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.LogToolCommand(System.String)">
+            <summary>
+            Logs the starting point of the run to all registered loggers.
+            </summary>
+            <param name="message">A descriptive message to provide loggers, usually the command line and switches.</param>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Command">
+            <summary>
+            Gets or sets the command.
+            </summary>
+            <value>The command.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Arguments">
+            <summary>
+            Gets or sets the arguments.
+            </summary>
+            <value>The arguments.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Username">
+            <summary>
+            Gets or sets the username.
+            </summary>
+            <value>The username.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Password">
+            <summary>
+            Gets or sets the password.
+            </summary>
+            <value>The password.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Verbose">
+            <summary>
+            Gets or sets the verbose.
+            </summary>
+            <value>The verbose.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Force">
+            <summary>
+            Gets or sets the force.
+            </summary>
+            <value>The force.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Message">
+            <summary>
+            Gets or sets the message.
+            </summary>
+            <value>The message.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.RepositoryPath">
+            <summary>
+            Gets or sets the repository path.
+            </summary>
+            <value>The repository path.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.LocalPath">
+            <summary>
+            Gets or sets the local path.
+            </summary>
+            <value>The local path.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Targets">
+            <summary>
+            Gets or sets the targets.
+            </summary>
+            <value>The targets.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Revision">
+            <summary>
+            Gets or sets the revision.
+            </summary>
+            <value>The revision.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.CommandSwitches">
+            <summary>
+            Gets or sets the command switchs.
+            </summary>
+            <value>The command switchs.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.StandardOutputLoggingImportance">
+            <summary>
+            Gets the <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.
+            </summary>
+            <value></value>
+            <returns>The <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.ToolName">
+            <summary>
+            Gets the name of the executable file to run.
+            </summary>
+            <value></value>
+            <returns>The name of the executable file to run.</returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnCopy.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:MSBuild.Community.Tasks.Subversion.SvnCopy"/> class.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnCopy.GenerateSvnCommand">
+            <summary>
+            Generates the SVN command.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnCopy.ValidateParameters">
+            <summary>
+            Indicates whether all task paratmeters are valid.
+            </summary>
+            <returns>
+            true if all task parameters are valid; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnCopy.SourcePath">
+            <summary>
+            The path of the source file or folder that should be copied
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnCopy.DestinationPath">
+            <summary>
+            The path to which the SourcePath should be copied
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Tfs.IServer">
+            <summary>
+            Describes the behavior of a Team Foundation Server
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Tfs.IServer.GetLatestChangesetId(System.String,System.Net.ICredentials)">
+            <summary>
+            Retrieves the latest changeset ID associated with a path
+            </summary>
+            <param name="localPath">A path on the local filesystem</param>
+            <param name="credentials">Credentials used to authenticate against the serer</param>
+            <returns></returns>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Tfs.TeamFoundationServer">
+            <summary>
+            Handles all communication with the Team Foundation Server
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Tfs.TeamFoundationServer.#ctor(System.String)">
+            <summary>
+            Creates an instace of the TeamFoundationServer class
+            </summary>
+            <param name="clientLocation">The local file path containing the TFS libraries. null if TFS is in the GAC.</param>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Tfs.TeamFoundationServer.GetLatestChangesetId(System.String,System.Net.ICredentials)">
+            <summary>
+            Retrieves the latest changeset ID associated with a path
+            </summary>
+            <param name="localPath">A path on the local filesystem</param>
+            <param name="credentials">Credentials used to authenticate against the serer</param>
+            <returns></returns>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Tfs.TeamFoundationServerException">
+            <summary>
+            Exceptions returned by the Team Foundation Server
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Tfs.TeamFoundationServerException.#ctor">
+            <summary>
+            Creates a new instance of the exception
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Tfs.TeamFoundationServerException.#ctor(System.String)">
+            <summary>
+            Creates a new instance of the exception
+            </summary>
+            <param name="message">A description of the exception</param>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Tfs.TfsVersion">
+            <summary>
+            Determines the changeset in a local Team Foundation Server workspace
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Tfs.TfsVersion.Execute">
+            <summary>
+            Runs the exectuable file with the specified task parameters.
+            </summary>
+            <returns>
+            true if the task runs successfully; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Tfs.TfsVersion.Username">
+            <summary>
+            The user to authenticate on the server
+            </summary>
+            <remarks>Leave empty to use the credentials of the current user.</remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Tfs.TfsVersion.Password">
+            <summary>
+            The password for the user to authenticate on the server
+            </summary>
+            <remarks>Leave empty to use the credentials of the current user.</remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Tfs.TfsVersion.Domain">
+            <summary>
+            The domain of the user to authenticate on the server
+            </summary>
+            <remarks>Leave empty to use the credentials of the current user.</remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Tfs.TfsVersion.LocalPath">
+            <summary>Path to local working copy.</summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Tfs.TfsVersion.Changeset">
+            <summary>
+            The latest changeset ID in the local path
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Tfs.TfsVersion.TfsLibraryLocation">
+            <summary>
+            The location of the Team Foundation Server client assemblies. Leave empty when the client is installed in the Global Assembly Cache.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Xml.XmlMassUpdate">
+            <summary>
+            Performs multiple updates on an XML file
+            </summary>
+            <remarks>
+      XmlMassUpdate allows to to specify multiple changes to make to an XML file (the <see cref="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.ContentFile"/>. By default, the changes are applied to the <see cref="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.ContentFile"/>, but you can create a new file by providing the <see cref="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.MergedFile"/> attribute.  The change instructions are specified using XML in the <see cref="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.SubstitutionsFile"/>. If the <see cref="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.SubstitutionsFile"/> does not mirror the structure of the <see cref="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.ContentFile"/> exactly, you can specify the <see cref="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.ContentRoot"/> and <see cref="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.SubstitutionsRoot"/> XPath expressions which determine how the files should be mapped to each other.
+      <para>Any element within the <see cref="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.SubstitutionsRoot"/> will find the corresponding element in the <see cref="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.ContentRoot"/>. If it does not exist, it will be created with all of its attributes. If it does exist, the attributes will be added or updated as specified.</para>
+      <para>
+        Any attribute declared within the <see cref="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.UpdateControlNamespace"/> will not be copied to the modified file. Valid attributes are <c>key</c> and <c>action</c>. The <c>key</c> attribute allows you to define an attribute to use as the identifying attribute when you only want to update a single element, and multiple elements with the same name exist. You can also use the <c>action="remove"</c> attribute to specify that an element should be deleted instead of updated.
+      </para>
+  </remarks><example>
+      <para>These examples will demonstrate how to make multiple updates to a XML file named web.config. It looks like:
+      <code>
+        <![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+	<appSettings>
+		<add key="ItemsPerPage" value="10" />
+		<add key="EnableCaching" value="true" />
+		<add key="DefaultServer" value="TIGRIS" />
+	</appSettings>
+    <system.web>
+        <compilation defaultLanguage="c#" debug="true" />
+        <customErrors mode="Off" />
+        <trace enabled="true" requestLimit="10" pageOutput="true" />
+        <globalization requestEncoding="utf-8" responseEncoding="utf-8" />
+    </system.web>
+</configuration> ]]>
+      </code>
+      </para>
+    </example><example>
+      You can update the file using instructions from an external file (specified as the <see cref="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.SubstitutionsFile"/>):
+      <code>
+        <![CDATA[<XmlMassUpdate ContentFile="web.config" SubstitutionsFile="changes.xml" ContentRoot="/configuration/system.web" SubstitutionsRoot="/system.web" /> ]]>
+      </code>
+      The <see cref="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.SubstitutionsFile"/> is named changes.xml and contains:
+      <code>
+      <![CDATA[<system.web>
+        <compilation debug="false" />
+        <customErrors mode="RemoteOnly" defaultRedirect="Error.htm">
+          <error statusCode="401" redirect="AccessDenied.aspx" />
+        </customErrors>
+        <trace enabled="false" />
+      </system.web> ]]>
+      </code>
+    </example><example>
+      You can also provide the update instructions within the MSBuild project file itself. It takes advantage of the MSBuild ProjectExtensions element which allows you to add XML to a project file that will be ignored by the MSBuild engine. This example also demonstrates how to use <see cref="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.NamespaceDefinitions"/>:
+      <code>
+        <![CDATA[<ProjectExtensions>
+  <system.web>
+    <compilation debug="false" />
+    <trace enabled="false" />
+  </system.web>
+</ProjectExtensions>
+<Target Name="SubstituteFromProj">
+  <XmlMassUpdate ContentFile="web.config" ContentRoot="/configuration/system.web"
+    NamespaceDefinitions="msb=http://schemas.microsoft.com/developer/msbuild/2003"
+    SubstitutionsFile="$(MSBuildProjectFullPath)"
+    SubstitutionsRoot="/msb:Project/msb:ProjectExtensions/msb:system.web" />
+</Target> ]]>
+      </code>
+    </example><example>
+      The following example demonstrates how to deal with "keyed" elements. When you need to update an element, and multiple elements exist with the same name, it must be be differentied by one of its attributes. You designate the differentiating attribute using the "key" attribute declared in the <see cref="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.UpdateControlNamespace"/>.
+      If an element matching the keyed attribute is not found, a new element will be created (DefaultSort in the example). This example also demonstrates creating a new file with the merged changes instead of modifying the original file.
+      <code>
+        <![CDATA[ <XmlMassUpdate ContentFile="web.config" SubstitutionsFile="changes.xml" MergedFile="web.config.keyed.xml"  /> ]]>
+      </code>
+      Using a changes.xml file with the following contents:
+      <code>
+        <![CDATA[<configuration xmlns:xmu="urn:msbuildcommunitytasks-xmlmassupdate">
+  <appSettings>
+        <add xmu:key="key" key="EnableCaching" value="false" />
+        <add xmu:key="key" key="DefaultSort" value="LastName" />
+  </appSettings>
+</configuration> ]]>
+    </code>
+  </example><example>
+      Use a changes.xml file with the following contents to demonstrate how to remove an element from the updated file:
+      <code>
+        <![CDATA[<configuration xmlns:xmu="urn:msbuildcommunitytasks-xmlmassupdate">
+  <appSettings>
+        <add xmu:key="key" key="ItemsPerPage" xmu:action="remove" />
+        <trace xmu:action="remove" />
+  </appSettings>
+</configuration> ]]>
+      </code>
+    </example><example>
+      You can also specify the changes to apply from within the target document. By making use of the <see cref="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.SubstitutionsRoot"/> property, you can store multiple sets of changes to apply based on runtime conditions.
+      Consider the following source web.config file:
+      <code>
+        <![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <system.web>
+        <compilation defaultLanguage="c#" debug="true" />
+        <customErrors mode="Off" />
+        <trace enabled="true" requestLimit="10" pageOutput="true" />
+        <globalization requestEncoding="utf-8" responseEncoding="utf-8" />
+    </system.web>
+    <substitutions>
+      <test>
+        <system.web>
+          <compilation debug="false" />
+          <trace enabled="true" />
+        </system.web>
+      </test>
+      <prod>
+        <system.web>
+          <compilation debug="false" />
+          <trace enabled="false" />
+        </system.web>
+      </prod>
+    </substitutions>
+</configuration> ]]>
+      </code>
+      You could use the following task definition, which relies on a property "TargetEnvironment" to determine which set of changes to apply:
+      <code>
+        <![CDATA[ <XmlMassUpdate ContentFile="web.config" ContentRoot="/configuration" SubstitutionsRoot="/configuration/substitutions/$(TargetEnvironment)" /> ]]>
+      </code>
+      You will need to provide a value of "test" or "prod" to the TargetEnvironment property. The property can be defined in a PropertyGroup section of the MSBuild file, or passed as a command-line parameter.
+      <code>
+        <![CDATA[ msbuild build.proj /p:TargetEnvironment=prod ]]>
+      </code>
+
+    </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Xml.XmlMassUpdate.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            True if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Xml.XmlMassUpdate.LoadSubstitutionsDocument">
+            <summary>
+            Returns <see cref="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.SubstitutionsFile"/> as an <see cref="T:System.Xml.XmlDocument"/>.
+            </summary>
+            <remarks>This method is not intended for use by consumers. It is exposed for testing purposes.</remarks>
+            <returns></returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Xml.XmlMassUpdate.LoadContentDocument">
+            <summary>
+            Returns <see cref="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.ContentFile"/> as an <see cref="T:System.Xml.XmlDocument"/>.
+            </summary>
+            <remarks>This method is not intended for use by consumers. It is exposed for testing purposes.</remarks>
+            <returns></returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Xml.XmlMassUpdate.SaveMergedDocument(System.Xml.XmlDocument)">
+            <summary>
+            Creates <see cref="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.MergedFile"/> from the specified <see cref="T:System.Xml.XmlDocument"/>
+            </summary>
+            <param name="mergedDocument">The XML to save to a file</param>
+            <remarks>This method is not intended for use by consumers. It is exposed for testing purposes.</remarks>
+            <returns></returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.ContentFile">
+            <summary>
+            The original file whose content is to be updated
+            </summary>
+            <remarks>This task is currently under construction and not necessarily feature complete.</remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.SubstitutionsFile">
+            <summary>
+            The file containing the list of updates to perform
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.MergedFile">
+            <summary>
+            The file created after performing the updates
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.SubstitutionsRoot">
+            <summary>
+            The XPath expression used to locate the list of substitutions to perform
+            </summary>
+            <remarks>When not specified, the default is the document root: <c>/</c>
+            <para>When there is a set of elements with the same name, and you want to update
+            a single element which can be identified by one of its attributes, you need to include an attribute
+            named 'key' in the namespace <c>urn:msbuildcommunitytasks-xmlmassupdate</c>. The value of the
+            attribute is the name of the attribute that should be used as the unique identifier.</para></remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.ContentRoot">
+            <summary>
+            The XPath expression identifying root node that substitions are relative to
+            </summary>
+            <remarks>When not specified, the default is the document root: <c>/</c></remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.NamespaceDefinitions">
+            <summary>
+            A collection of prefix=namespace definitions used to query the XML documents
+            </summary>
+            <example>
+      Defining multiple namespaces:
+      <code>
+        <![CDATA[
+<XmlMassUpdate ContentFile="web.config"
+  SubstitutionsRoot="/configuration/substitutions"
+ 	NamespaceDefinitions = "soap=http://www.w3.org/2001/12/soap-envelope;x=http://www.w3.org/1999/XSL/Transform">
+/>]]>
+      </code>
+    </example>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.ContentPathUsedByTask">
+            <summary>
+            The full path of the file containing content updated by the task
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.SubstitutionsPathUsedByTask">
+            <summary>
+            The full path of the file containing substitutions used by the task
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.MergedPathUsedByTask">
+            <summary>
+            The full path of the file containing the results of the task
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xml.XmlMassUpdate.UpdateControlNamespace">
+            <summary>
+            The namespace used for XmlMassUpdate pre-defined attributes
+            </summary>
+            <remarks>Evaluates to: <c>urn:msbuildcommunitytasks-xmlmassupdate</c>
+            <para>Attributes decorated with this namespace are used to control how a substitutions element
+            or attribute is handled during the update. For example, the key attribute is used to identify the
+            attribute on an element that uniquely identifies the element in a set.</para></remarks>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.IIS.WebDirectoryScriptMap">
+            <summary>
+            Sets an application mapping for a filename extension on an existing web directory.
+            </summary>
+            <example>Map the .axd extension to the lastest version of ASP.NET:
+            <code><![CDATA[
+            <WebDirectoryScriptMap VirtualDirectoryName="MyWeb" Extension=".axd" MapToAspNet="True" VerifyFileExists="False" />
+            ]]></code>
+            </example>
+            <example>Map GET requests to the .rss extension to a specific executable:
+            <code><![CDATA[
+            <WebDirectoryScriptMap VirtualDirectoryName="MyWeb" Extension=".rss" Verbs="GET" ExecutablePath="$(WINDIR)\Microsoft.Net\Framework\1.0.3705\aspnet_isapi.dll" />
+            ]]></code>
+            </example>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.IIS.WebBase">
+            <summary>
+            Base task for any IIS-related task.
+            </summary>
+            <remarks>Stores the base logic for gathering the IIS version and server and port checking.  This
+            base task also stores common properties for other related tasks.</remarks>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.mIISVersion">
+            <summary>
+            IIS version.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.IIS.WebBase.GetIISVersion">
+            <summary>
+            Gets the IIS version.
+            </summary>
+            <returns>The <see cref="T:MSBuild.Community.Tasks.IIS.WebBase.IISVersion"/> for IIS.</returns>
+            <exclude/>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.IIS.WebBase.GetRemoteOSVersion">
+            <summary>
+            Gets the remote machine OS version.
+            </summary>
+            <returns>Returns a <see cref="T:System.Version"/> of the operating system.</returns>
+            <exclude/>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.IIS.WebBase.VerifyIISRoot">
+            <summary>
+            Verifies that the IIS root exists based on the <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.ServerName"/> and <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.ServerPort"/>.
+            </summary>
+            <exclude/>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.IIS.WebBase.VerifyServerPortExists(System.DirectoryServices.DirectoryEntry)">
+            <summary>
+            Helper method for <see cref="M:MSBuild.Community.Tasks.IIS.WebBase.VerifyIISRoot"/> that verifies the server port exists.
+            </summary>
+            <param name="site">The site to verify the port.</param>
+            <returns>Boolean value indicating the status of the port check.</returns>
+            <exclude/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.ServerName">
+            <summary>
+            Gets or sets the name of the server.  The default value is 'localhost'.
+            </summary>
+            <value>The name of the server.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.ServerPort">
+            <summary>
+            Gets or sets the server port.
+            </summary>
+            <value>The server port.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.IISServerPath">
+            <summary>
+            Gets or sets the IIS server path.
+            </summary>
+            <remarks>Is in the form 'IIS://localhost/W3SVC/1/Root'.</remarks>
+            <value>The IIS server path.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.IISApplicationPath">
+            <summary>
+            Gets or sets the application path.
+            </summary>
+            <remarks>Is in the form '/LM/W3SVC/1/Root'.</remarks>
+            <value>The application path.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.IISAppPoolPath">
+            <summary>
+            Gets or sets the IIS application pool path.
+            </summary>
+            <remarks>Is in the form 'IIS://localhost/W3SVC/AppPools'.</remarks>
+            <value>The IIS application pool path.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.Username">
+            <summary>
+            Gets or sets the username for the account the task will run under.  This property
+            is needed if you specified a <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.ServerName"/> for a remote machine.
+            </summary>
+            <value>The username of the account.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.Password">
+            <summary>
+            Gets or sets the password for the account the task will run under.  This property
+            is needed if you specified a <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.ServerName"/> for a remote machine.
+            </summary>
+            <value>The password of the account.</value>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.IIS.WebBase.IISVersion">
+            <summary>
+            Defines the possible IIS versions supported by the task.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.IISVersion.Four">
+            <summary>
+            IIS version 4.x
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.IISVersion.Five">
+            <summary>
+            IIS version 5.x
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.IISVersion.Six">
+            <summary>
+            IIS version 6.x
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction">
+            <summary>
+            Defines the possible application pool actions to be performed.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction.Recycle">
+            <summary>
+            Recycles an application pool.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction.Restart">
+            <summary>
+            Stops and restarts the application pool.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction.Start">
+            <summary>
+            Starts the application pool.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction.Stop">
+            <summary>
+            Stops the application pool.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState">
+            <summary>
+            Defines the current application pool state.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState.Starting">
+            <summary>
+            The application pool is starting.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState.Started">
+            <summary>
+            The application pool has started.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState.Stopping">
+            <summary>
+            The application pool is stopping.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState.Stopped">
+            <summary>
+            The application pool has stopped.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.IIS.WebDirectoryScriptMap.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            True if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryScriptMap.VirtualDirectoryName">
+            <summary>
+            Gets or sets the name of the virtual directory.
+            </summary>
+            <value>The name of the virtual directory.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryScriptMap.Extension">
+            <summary>
+            The filename extension that will be mapped to an executable.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryScriptMap.ExecutablePath">
+            <summary>
+            The full path to the executable used to respond to requests for a Uri ending with <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryScriptMap.Extension"/>
+            </summary>
+            <remarks>This property is required when <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryScriptMap.MapToAspNet"/> is <c>false</c> (the default).</remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryScriptMap.MapToAspNet">
+            <summary>
+            Indicates whether <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryScriptMap.Extension"/> should be mapped to the ASP.NET runtime.
+            </summary>
+            <remarks>When <c>true</c>, <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryScriptMap.ExecutablePath"/> is set to aspnet_isapi.dll
+            in the installation folder of the latest version of the .NET Framework.</remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryScriptMap.Verbs">
+            <summary>
+            A comma-separated list of the HTTP verbs to include in the application mapping.
+            </summary>
+            <remarks>The default behavior (when this property is empty or unspecified) is to map all verbs.
+            <para>A semi-colon-separated list will also be recognized, allowing you to use an MSBuild Item.</para></remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryScriptMap.EnableScriptEngine">
+            <summary>
+            Set to <c>true</c> when you want the application to run in a directory without Execute permissions.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryScriptMap.VerifyFileExists">
+            <summary>
+            Set to <c>true</c> to instruct the Web server to verify the existence of the requested script file and to ensure that the requesting user has access permission for that script file.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.IIS.WebDirectorySetting">
+            <summary>
+            Reads and modifies a web directory configuration setting.
+            </summary>
+            <example>Display the file system path of the MyWeb web directory:
+            <code><![CDATA[
+            <WebDirectorySetting VirtualDirectoryName="MyWeb" SettingName="Path">
+                <Output TaskParameter="SettingValue" PropertyName="LocalPath" />
+            </WebDirectorySetting>
+            <Message Text="MyWeb is located at $(LocalPath)" />
+            ]]></code>
+            </example>
+            <example>Set the default document for the MyWeb directory to Default.aspx:
+            <code><![CDATA[
+            <WebDirectorySetting VirtualDirectoryName="MyWeb" SettingName="DefaultDoc" SettingValue="Default.aspx" />
+            <WebDirectorySetting VirtualDirectoryName="MyWeb" SettingName="EnableDefaultDoc" SettingValue="True" />
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.IIS.WebDirectorySetting.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            True if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectorySetting.VirtualDirectoryName">
+            <summary>
+            Gets or sets the name of the virtual directory.
+            </summary>
+            <value>The name of the virtual directory.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectorySetting.SettingName">
+            <summary>
+            Gets or sets the configuration setting to read or modify.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectorySetting.SettingValue">
+            <summary>
+            Gets or sets the value of <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectorySetting.SettingName"/> on the web directory
+            </summary>
+        </member>
         <member name="T:MSBuild.Community.Tasks.ILMerge">
              <summary>
              A wrapper for the ILMerge tool.
@@ -252,7 +1284,7 @@
              It is available <a href="http://research.microsoft.com/~mbarnett/ILMerge.aspx">here</a>.
              </para>
              <para>
-             The command line options "/wildcards" and "/lib" of ILMerge is not supported,
+             The command line options "/wildcards" and "/lib" of ILMerge are not supported,
              because MSBuild is in charge of expanding wildcards for item groups.
              </para>
              </remarks>
@@ -534,6 +1566,398 @@
             Gets the name of the executable file to run.
             </summary>
         </member>
+        <member name="T:MSBuild.Community.Tasks.Install.InstallAssembly">
+             <summary>
+             Installs assemblies.
+             </summary>
+            <remarks>
+             Uses InstallUtil.exe to execute the 
+             <see href="http://msdn2.microsoft.com/system.configuration.install.installer.install.aspx">Install</see>
+             method of
+             <see href="http://msdn2.microsoft.com/system.configuration.install.installer.aspx">Installer</see>
+             classes contained within specified assemblies.
+             </remarks>
+             <example>
+      Install multiple assemblies by specifying the file names:
+      <code>
+        <![CDATA[
+<InstallAssembly AssemblyFiles="Engine.dll;Presenter.dll" />
+]]>
+      </code>
+    </example><example>
+      Install an assembly using the assembly name. Also disable the log file by setting it to a single space:
+      <code>
+        <![CDATA[
+<InstallAssembly AssemblyNames="Engine,Version=1.5.0.0,Culture=neutral" LogFile=" "/>
+]]>
+      </code>
+    </example><example>
+      You can easily chain an install to the result of a build:
+      <code>
+        <![CDATA[
+<MSBuild Projects="Project1.csproj;Project2.csproj">
+ <Output TaskParameter="TargetOutputs" ItemName="ProjectBinaries" />
+</MSBuild>
+<InstallAssembly AssemblyFiles="@(ProjectBinaries)" />
+]]>
+      </code>
+    </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Install.InstallAssembly.GenerateFullPathToTool">
+            <summary>
+            Returns the fully qualified path to the executable file.
+            </summary>
+            <returns>
+            The fully qualified path to the executable file.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Install.InstallAssembly.GenerateCommandLineCommands">
+            <summary>
+            Returns a string value containing the command line arguments 
+            to pass directly to the executable file.
+            </summary>
+            <returns>
+            A string value containing the command line arguments to pass 
+            directly to the executable file.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Install.InstallAssembly.AssemblyNames">
+            <summary>
+            The assemblies to process, identified by their assembly name.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Install.InstallAssembly.AssemblyFiles">
+            <summary>
+            The assemblies to process, identified by their filename.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Install.InstallAssembly.LogFile">
+            <summary>
+            The file to write installation progress to.
+            </summary>
+            <remarks>Set to a single space to disable logging to a file.
+            <para>
+            If not specified, the default is to log to [assemblyname].installLog
+            </para>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Install.InstallAssembly.ShowCallStack">
+            <summary>
+             If an exception occurs at any point during installation, the call
+             stack will be printed to the log.
+             </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Install.InstallAssembly.IsUninstall">
+            <summary>
+            Determines whether assemblies are installed or uninstalled.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Install.InstallAssembly.ToolName">
+            <summary>
+            Gets the name of the executable file to run.
+            </summary>
+            <value></value>
+            <returns>The name of the executable file to run.</returns>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Install.UninstallAssembly">
+            <summary>Uninstalls assemblies.</summary>    
+            <remarks>
+            Uses InstallUtil.exe to execute the 
+            <see href="http://msdn2.microsoft.com/system.configuration.install.installer.uninstall.aspx">Uninstall</see>
+            method of
+            <see href="http://msdn2.microsoft.com/system.configuration.install.installer.aspx">Installer</see>
+            classes contained within specified assemblies.
+            </remarks>
+            <example>Uninstall multiple assemblies by specifying the file names:
+            <code><![CDATA[
+            <UninstallAssembly AssemblyFiles="Engine.dll;Presenter.dll" />
+            ]]></code>
+            </example>
+            <example>Unnstall an assembly using the assembly name. Also disable the log file by setting it to a single space:
+            <code><![CDATA[
+            <UninstallAssembly AssemblyNames="Engine,Version=1.5.0.0,Culture=neutral" LogFile=" "/>
+            ]]></code>
+            </example>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Install.UninstallAssembly.IsUninstall">
+            <summary>
+            Determines whether assemblies are installed or uninstalled.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Math.Modulo">
+            <summary>
+            Performs the modulo operation on numbers.
+            </summary>
+            <remarks>
+      The modulo operation finds the remainder of the division of one number by another.
+      <para>When the second number (modulus) is a fractional value, the result can be a fractional value.</para>
+      <para>
+        Equivalent to the % operator in C# or the Mod operator in Visual Basic.
+      </para>
+    </remarks><example>
+      Numbers evenly divide:
+      <code>
+        <![CDATA[
+<Math.Modulo Numbers="12;4">
+    <Output TaskParameter="Result" PropertyName="Result" />
+</Math.Modulo>
+<Message Text="12 modulo 4 = $(Result)"/>
+]]>
+      </code>
+      Above example will display:
+      <code>12 modulo 4 = 0</code>
+    </example><example>
+      Division on the numbers produces a remainder:
+      <code>
+        <![CDATA[
+<Math.Modulo Numbers="14;4">
+    <Output TaskParameter="Result" PropertyName="Result" />
+</Math.Modulo>
+<Message Text="14 modulo 4 = $(Result)"/>
+]]>
+      </code>
+      Above example will display:
+      <code>14 modulo 4 = 2</code>
+    </example><example>
+      Modulus is a fractional value:
+      <code>
+        <![CDATA[
+<Math.Modulo Numbers="12;3.5">
+    <Output TaskParameter="Result" PropertyName="Result" />
+</Math.Modulo>
+<Message Text="12 modulo 3.5 = $(Result)"/>
+]]>
+      </code>
+      Above example will display:
+      <code>12 modulo 3.5 = 1.5</code>
+    </example>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Math.MathBase">
+            <summary>
+            Math task base class
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Math.MathBase.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            true if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Math.MathBase.StringArrayToDecimalArray(System.String[])">
+            <summary>
+            Strings array to decimal array.
+            </summary>
+            <param name="numbers">The numbers.</param>
+            <returns></returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Math.MathBase.Numbers">
+            <summary>
+            Gets or sets the numbers to work with.
+            </summary>
+            <value>The numbers.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Math.MathBase.Result">
+            <summary>
+            Gets or sets the result.
+            </summary>
+            <value>The result.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Math.MathBase.NumericFormat">
+            <summary>
+            Gets or sets the numeric format.
+            </summary>
+            <value>The numeric format.</value>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Math.Modulo.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            true if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Prompt">
+            <summary>
+            Displays a message on the console and waits for user input.
+            </summary>
+            <remarks>It is important to note that the message is not written to the MSBuild logger, 
+            it is always written to the console, no matter which logger is configured.
+            <para>This task requires user input from the console. Do not use this task for projects
+            that will be executed unattended. It is recommended that you always add a Condtion so that
+            this task is only enabled when a custom property is set through the command line.
+            This will ensure that the other users do not attempt to execute the task in unattended mode.
+            </para></remarks>
+            <example>Pause the build if the interactive property is set:
+            <code><![CDATA[
+            <!-- Pause when invoked with the interactive property: msbuild myproject.proj /property:interactive=true -->
+            
+            <Prompt Text="You can now attach the debugger to the msbuild.exe process..." Condition="'$(Interactive)' == 'True'" />
+            ]]></code>
+            </example>
+            <example>Obtain user input during the build: 
+            (Note: in most cases, it is recommended that users instead provide custom values to your build through the /property argument of msbuild.exe)
+            <code><![CDATA[
+            <Prompt Text="Tell me your name:" Condition="'$(Interactive)' == 'True'" >
+              <Output TaskParameter="UserInput" PropertyName="PersonName" />
+            </Prompt>
+            <Message Text="Hello $(PersonName)" />
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Prompt.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            true if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Prompt.Text">
+            <summary>
+            The message to display in the console.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Prompt.UserInput">
+            <summary>
+            The text entered at the console.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.RegexBase">
+            <summary>
+            Base class for Regex tasks
+            Handles public properties for Input, Expression, Options and Output
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.RegexBase.Expression">
+            <summary>
+            Regex expression
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.RegexBase.Input">
+            <summary>
+            Input, list of items to perform the regex on
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.RegexBase.Options">
+            <summary>
+            Regex options as strings corresponding to the RegexOptions enum:
+                Compiled
+                CultureInvariant
+                ECMAScript 
+                ExplicitCapture
+                IgnoreCase
+                IgnorePatternWhitespace
+                Multiline
+                None
+                RightToLeft
+                Singleline
+            </summary>
+            <enum cref="T:System.Text.RegularExpressions.RegexOptions"/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.RegexBase.Output">
+            <summary>
+            Results of the Regex transformation.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.RegexBase.ExpressionOptions">
+            <summary>
+            Options converted to RegexOptions enum
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.RegexMatch">
+            <summary>
+            Task to filter an Input list with a Regex expression.
+            Output list contains items from Input list that matched given expression
+            </summary>
+            <example>Matches from TestGroup those names ending in a, b or c
+            <code><![CDATA[
+            <ItemGroup>
+               <TestGroup Include="foo.my.foo.foo.test.o" />
+               <TestGroup Include="foo.my.faa.foo.test.a" />
+               <TestGroup Include="foo.my.fbb.foo.test.b" />
+               <TestGroup Include="foo.my.fcc.foo.test.c" />
+               <TestGroup Include="foo.my.fdd.foo.test.d" />
+               <TestGroup Include="foo.my.fee.foo.test.e" />
+               <TestGroup Include="foo.my.fff.foo.test.f" />
+            </ItemGroup>
+            <Target Name="Test">
+               <!-- Outputs only items that end with a, b or c -->
+               <RegexMatch Input="@(TestGroup)" Expression="[a-c]$">
+                  <Output ItemName ="MatchReturn" TaskParameter="Output" />
+               </RegexMatch>
+               <Message Text="&#xA;Output Match:&#xA;@(MatchReturn, '&#xA;')" />
+            </Target>
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.RegexMatch.Execute">
+            <summary>
+            Performs the Match task
+            </summary>
+            <returns><see langword="true"/> if the task ran successfully; 
+            otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.RegexReplace">
+            <summary>
+            Task to replace portions of strings within the Input list
+            Output list contains all the elements of the Input list after
+            performing the Regex Replace.
+            </summary>
+            <example>
+            1st example replaces first occurance of "foo." with empty string
+            2nd example replaces occurance of "foo." after character 6 with "oop." string
+            <code><![CDATA[
+            <ItemGroup>
+               <TestGroup Include="foo.my.foo.foo.test.o" />
+               <TestGroup Include="foo.my.faa.foo.test.a" />
+               <TestGroup Include="foo.my.fbb.foo.test.b" />
+               <TestGroup Include="foo.my.fcc.foo.test.c" />
+               <TestGroup Include="foo.my.fdd.foo.test.d" />
+               <TestGroup Include="foo.my.fee.foo.test.e" />
+               <TestGroup Include="foo.my.fff.foo.test.f" />
+            </ItemGroup>
+            <Target Name="Test">
+               <Message Text="Input:&#xA;@(TestGroup, '&#xA;')"/>
+               <!-- Replaces first occurance of "foo." with empty string-->
+               <RegexReplace Input="@(TestGroup)" Expression="foo\." Replacement="" Count="1">
+                  <Output ItemName ="ReplaceReturn1" TaskParameter="Output" />
+               </RegexReplace>
+               <Message Text="&#xA;Output Replace 1:&#xA;@(ReplaceReturn1, '&#xA;')" />
+               <!-- Replaces occurance of "foo." after character 6 with "oop." string-->
+               <RegexReplace Input="@(TestGroup)" Expression="foo\." Replacement="oop" Startat="6">
+                  <Output ItemName ="ReplaceReturn2" TaskParameter="Output" />
+               </RegexReplace>
+               <Message Text="&#xA;Output Replace 2:&#xA;@(ReplaceReturn2, '&#xA;')" />
+            </Target>
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.RegexReplace.Execute">
+            <summary>
+            Performs the Replace task
+            </summary>
+            <returns><see langword="true"/> if the task ran successfully; 
+            otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.RegexReplace.Replacement">
+            <summary>
+            String replacing matching expression strings in input list.
+            If left empty matches in the input list are removed (replaced with empty string)
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.RegexReplace.Count">
+            <summary>
+            Number of matches to allow on each input item.
+            -1 indicates to perform matches on all matches within input item
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.RegexReplace.StartAt">
+            <summary>
+            Position within the input item to start matching
+            </summary>
+        </member>
         <member name="T:MSBuild.Community.Tasks.Schema.TaskListAssemblyFormatType">
             <summary>
             Different ways to specify the assembly in a UsingTask element.
@@ -632,6 +2056,89 @@
             Gets or sets a list of included schemas
             </summary>
         </member>
+        <member name="T:MSBuild.Community.Tasks.GetSolutionProjects">
+            <summary>
+            Task to get paths to projects and project names from VS2005 solution file
+            </summary>
+            <example>
+            Returns project name and relative path from test solution
+            <code><![CDATA[
+              <Target Name="Test">
+                  <GetSolutionProjects Solution="TestSolution.sln">
+                      <Output ItemName="ProjectFiles" TaskParameter="Output"/>
+                  </GetSolutionProjects>
+            
+                <Message Text="Solution Project paths:" />
+                <Message Text="%(ProjectFiles.ProjectName) : @(ProjectFiles)" />
+              </Target>
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.GetSolutionProjects.Execute">
+            <summary>
+            Perform task
+            </summary>
+            <returns>true on success</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.GetSolutionProjects.Output">
+            <summary>
+            Output list contains TaskItems of project filenames contained within the given solution.
+            Metadata tag "ProjectName" contains name of project.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.GetSolutionProjects.Solution">
+            <summary>
+            Name of Solution to get Projects from
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.SqlServer.ExecuteDDL">
+             <summary>
+             MSBuild task to execute DDL and SQL statements.
+             </summary>
+             <remarks>Requires the the SQL Server libraries and dynamically loads the 
+             required Microsoft.SqlServer.ConnectionInfo assembly.</remarks>
+             <example>
+             <code><![CDATA[
+             <PropertyGroup>
+            		<ConnectionString>Server=localhost;Integrated Security=True</ConnectionString>
+            	</PropertyGroup>
+            
+             <Target Name="ExecuteDDL">
+            		<ExecuteDDL ConnectionString="$(ConnectionString)" Files="SqlBatchScript.sql" ContinueOnError="false" />
+             </Target>
+             ]]></code>
+             </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SqlServer.ExecuteDDL.Execute">
+            <summary>
+            Executes the task.
+            </summary>
+            <returns>
+            true if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SqlServer.ExecuteDDL.ConnectionString">
+            <summary>
+            The connection string
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SqlServer.ExecuteDDL.Files">
+            <summary>
+            Gets or sets the DDL/SQL files.
+            </summary>
+            <value>The assemblies.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SqlServer.ExecuteDDL.Results">
+            <summary>
+            Output the return count/values
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SqlServer.ExecuteDDL.BatchSeparator">
+            <summary>
+            Gets or sets the batch delimter string.
+            </summary>
+            <remarks>Default is "GO" for T-SQL.</remarks>
+        </member>
         <member name="T:MSBuild.Community.Tasks.Subversion.NodeKind">
             <summary>
             The kind of Subversion node. The names match the text output
@@ -643,7 +2150,7 @@
             Node is a file
             </summary>
         </member>
-        <member name="F:MSBuild.Community.Tasks.Subversion.NodeKind.directory">
+        <member name="F:MSBuild.Community.Tasks.Subversion.NodeKind.dir">
             <summary>
             Node is a directory
             </summary>
@@ -673,162 +2180,19 @@
             Run the "svn info" command and parse the output
             </summary>
             <example>
-            This example will determine the Subversion repository root for the.
-            current directory and print it out.
+            This example will determine the Subversion repository root for
+            a working directory and print it out.
             <code><![CDATA[
             <Target Name="printinfo">
-              <SvnInfo LocalPath=".">
+              <SvnInfo LocalPath="c:\code\myapp">
                 <Output TaskParameter="RepositoryRoot" PropertyName="root" />
               </SvnInfo>
               <Message Text="root: $(root)" />
             </Target>
             ]]></code>
             </example>
-        </member>
-        <member name="T:MSBuild.Community.Tasks.Subversion.SvnClient">
-            <summary>
-            Subversion client base class
-            </summary>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:SvnClient"/> class.
-            </summary>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.GenerateSvnCommand">
-            <summary>
-            Generates the SVN command.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.GenerateSvnArguments">
-            <summary>
-            Generates the SVN arguments.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.GenerateCommandLineCommands">
-            <summary>
-            Returns a string value containing the command line arguments to pass directly to the executable file.
-            </summary>
-            <returns>
-            A string value containing the command line arguments to pass directly to the executable file.
-            </returns>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.ValidateParameters">
-            <summary>
-            Indicates whether all task paratmeters are valid.
-            </summary>
-            <returns>
-            true if all task parameters are valid; otherwise, false.
-            </returns>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.LogEventsFromTextOutput(System.String,Microsoft.Build.Framework.MessageImportance)">
-            <summary>
-            Logs the events from text output.
-            </summary>
-            <param name="singleLine">The single line.</param>
-            <param name="messageImportance">The message importance.</param>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.GenerateFullPathToTool">
-            <summary>
-            Returns the fully qualified path to the executable file.
-            </summary>
-            <returns>
-            The fully qualified path to the executable file.
-            </returns>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.LogToolCommand(System.String)">
-            <summary>
-            Logs the starting point of the run to all registered loggers.
-            </summary>
-            <param name="message">A descriptive message to provide loggers, usually the command line and switches.</param>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Command">
-            <summary>
-            Gets or sets the command.
-            </summary>
-            <value>The command.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Arguments">
-            <summary>
-            Gets or sets the arguments.
-            </summary>
-            <value>The arguments.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Username">
-            <summary>
-            Gets or sets the username.
-            </summary>
-            <value>The username.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Password">
-            <summary>
-            Gets or sets the password.
-            </summary>
-            <value>The password.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Verbose">
-            <summary>
-            Gets or sets the verbose.
-            </summary>
-            <value>The verbose.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Force">
-            <summary>
-            Gets or sets the force.
-            </summary>
-            <value>The force.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Message">
-            <summary>
-            Gets or sets the message.
-            </summary>
-            <value>The message.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.RepositoryPath">
-            <summary>
-            Gets or sets the repository path.
-            </summary>
-            <value>The repository path.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.LocalPath">
-            <summary>
-            Gets or sets the local path.
-            </summary>
-            <value>The local path.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Targets">
-            <summary>
-            Gets or sets the targets.
-            </summary>
-            <value>The targets.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Revision">
-            <summary>
-            Gets or sets the revision.
-            </summary>
-            <value>The revision.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.CommandSwitchs">
-            <summary>
-            Gets or sets the command switchs.
-            </summary>
-            <value>The command switchs.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.StandardOutputLoggingImportance">
-            <summary>
-            Gets the <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.
-            </summary>
-            <value></value>
-            <returns>The <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.</returns>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.ToolName">
-            <summary>
-            Gets the name of the executable file to run.
-            </summary>
-            <value></value>
-            <returns>The name of the executable file to run.</returns>
+            <remarks>You can retrieve Subversion information for a <see cref="P:MSBuild.Community.Tasks.Subversion.SvnClient.LocalPath"/> or <see cref="P:MSBuild.Community.Tasks.Subversion.SvnClient.RepositoryPath"/>.
+            If you do not provide a value for <see cref="P:MSBuild.Community.Tasks.Subversion.SvnClient.LocalPath"/> or <see cref="P:MSBuild.Community.Tasks.Subversion.SvnClient.RepositoryPath"/>, the current directory is assumed.</remarks>
         </member>
         <member name="M:MSBuild.Community.Tasks.Subversion.SvnInfo.#ctor">
             <summary>
@@ -840,43 +2204,17 @@
             Reset all instance variables to their default (unset) state.
             </summary>
         </member>
-        <member name="M:MSBuild.Community.Tasks.Subversion.SvnInfo.ValidateParameters">
-            <summary>
-            Indicates whether all task paratmeters are valid.
-            </summary>
-            <returns>
-            true if all task parameters are valid; otherwise, false.
-            </returns>
-        </member>
         <member name="M:MSBuild.Community.Tasks.Subversion.SvnInfo.Execute">
             <summary>
             Execute the task.
             </summary>
             <returns>true if execution is successful, false if not.</returns>
         </member>
-        <member name="M:MSBuild.Community.Tasks.Subversion.SvnInfo.ExtractKeyValuePair(System.String,System.String@,System.String@)">
-            <summary>
-            "svn.exe info" prints out key/value pairs separated by a colon. 
-            </summary>
-            <param name="strLine">A line of text printed out by svn.exe</param>
-            <param name="strKey">The key string. empty if no key/value found.</param>
-            <param name="strValue">The value string. empty of no key/value found.</param>
-            <returns>true if a key/value pair found. false if not</returns>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.Subversion.SvnInfo.ParseSvnDate(System.String)">
-            <summary>
-            Parse a subversion date/time value. They print out a date that
-            looks like this "2006-02-09 14:36:05 -0600 (Thu, 09 Feb 2006)" which
-            isn't directly parsable by the DateTime class.
-            </summary>
-            <param name="datetime"></param>
-            <returns></returns>
-        </member>
         <member name="M:MSBuild.Community.Tasks.Subversion.SvnInfo.LogEventsFromTextOutput(System.String,Microsoft.Build.Framework.MessageImportance)">
             <summary>
-            Parse the text output from the command and log the lines.
+            Logs the events from text output.
             </summary>
-            <param name="singleLine">One line of text output from the tool being run.</param>
+            <param name="singleLine">The single line.</param>
             <param name="messageImportance">The message importance.</param>
         </member>
         <member name="P:MSBuild.Community.Tasks.Subversion.SvnInfo.RepositoryRoot">
@@ -915,6 +2253,62 @@
             The Subversion schedule type.
             </summary>
             <enum cref="T:MSBuild.Community.Tasks.Subversion.Schedule"/>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.TemplateFile">
+            <summary>
+            MSBuild task that replaces tokens in a template file and writes out a new file.
+            </summary>
+            <example>
+            <code><![CDATA[
+            <ItemGroup>
+            	<Tokens Include="Name">
+            		<ReplacementValue>MSBuild Community Tasks</ReplacementValue>
+            	</Tokens>
+            </ItemGroup>
+            
+            <TemplateFile TemplateFile="ATemplateFile.template" OutputFile="ReplacedFile.txt" Tokens="@(Tokens)" />
+            ]]></code>
+            </example>
+            <remarks>Tokens in the template file are formatted using ${var} syntax and names are not 
+            case-sensitive, so ${Token} and ${TOKEN} are equivalent.</remarks>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.TemplateFile.MetadataValueTag">
+            <summary>
+            Meta data tag used for token replacement
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.TemplateFile.#ctor">
+            <summary>
+            Default constructor. Creates a new TemplateFile task.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.TemplateFile.Execute">
+            <summary>
+            Executes the task.
+            </summary>
+            <returns>Success or failure of the task.</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.TemplateFile.OutputFile">
+            <summary>
+            The token replaced template file.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.TemplateFile.OutputFilename">
+            <summary>
+            The full path to the output file name.  If no filename is specified (the default) the
+            output file will be the Template filename with a .out extension.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.TemplateFile.Template">
+            <summary>
+            The template file used.  Tokens with values of ${Name} are replaced by name.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.TemplateFile.Tokens">
+            <summary>
+            List of tokens to replace in the template.  Token name is taken from the TaskItem.ItemSpec and the
+            replacement value comes from the ReplacementValue metadata of the item.
+            </summary>
         </member>
         <member name="T:MSBuild.Community.Tasks.Time">
             <summary>
@@ -1067,93 +2461,325 @@
             Gets the internal time value.
             </summary>
         </member>
-        <member name="T:MSBuild.Community.Tasks.Xslt">
-             <summary>
-             A task to merge and transform
-             a set of xml files.
-             </summary>
-             <remarks>
-             <p>
-             The xml files of parameter <see cref="P:MSBuild.Community.Tasks.Xslt.Inputs"/>
-             are merged into one xml document,
-             wrapped with a root tag <see cref="P:MSBuild.Community.Tasks.Xslt.RootTag"/>
-             (defaults to <see cref="F:MSBuild.Community.Tasks.Xslt.DEFAULT_ROOT_TAG"/>).
-             </p>
-             <p>
-             If only one input file is provided,
-             merging and wrapping can be omitted
-             by setting <see cref="P:MSBuild.Community.Tasks.Xslt.RootTag"/> to an empty string.
-             </p>
-             <p>
-             The root tag can be given any number of attributes
-             by providing a list of semicolon-delimited name/value pairs
-             to parameter <see cref="P:MSBuild.Community.Tasks.Xslt.RootAttributes"/>.
-             For example: <code>RootAttributes="foo=bar;date=$(buildDate)"</code>
-             </p>
-             <p>
-             Parameter <see cref="P:MSBuild.Community.Tasks.Xslt.RootAttributes"/> defaults to
-             one attribute with a name specified by <see cref="F:MSBuild.Community.Tasks.Xslt.CREATED_ATTRIBUTE"/>,
-             and a local time stamp as value.
-             To suppress the default value, an empty parameter
-             <code>RootAttributes=""</code>
-             must be specified explicitely.
-             </p>
-             <p>
-             The xsl transformation file 
-             specified by parameter <see cref="P:MSBuild.Community.Tasks.Xslt.Xsl"/>
-             is applied on the input.
-             </p>
-             <p>
-             The <see cref="T:Microsoft.Build.Framework.ITaskItem"/> <see cref="P:MSBuild.Community.Tasks.Xslt.Xsl"/>
-             can be given any number of metadata,
-             which will be handed to the xsl transformation
-             as parameters.
-             </p>
-             <p>
-             The output is written to the file
-             specified by parameter <see cref="P:MSBuild.Community.Tasks.Xslt.Output"/>.
-             </p>
-             </remarks>
-             <example>
-             This example for generating a report
-             from a set of NUnit xml results:
-             <code><![CDATA[
-             <ItemGroup>
-                 <nunitReportXslFile Include="$(MSBuildCommunityTasksPath)\$(nunitReportXsl)">
-                     <project>$(project)</project>
-                     <configuration>$(configuration)</configuration>
-                     <msbuildFilename>$(MSBuildProjectFullPath)</msbuildFilename>
-                     <msbuildBinpath>$(MSBuildBinPath)</msbuildBinpath>
-                     <xslFile>$(MSBuildCommunityTasksPath)\$(nunitReportXsl)</xslFile>
-                 </nunitReportXslFile>
-             </ItemGroup>
-            
-             <Target Name="test-report" >
-                 <Xslt Inputs="@(nunitFiles)"
-                     Xsl="@(nunitReportXslFile)" 
-                     Output="$(testDir)\TestReport.html" />
-             </Target>]]></code>
-             
-             This examples shows all available task attributes:
-             <code><![CDATA[
-             <Time Format="yyyyMMddHHmmss">
-                 <Output TaskParameter="LocalTimestamp" PropertyName="buildDate" />
-             </Time>
-             
-             <Xslt
-                  Inputs="@(xmlfiles)"
-                  RootTag="mergedroot"
-                  RootAttributes="foo=bar;date=$(buildDate)"
-                  Xsl="transformation.xsl"
-                  Output="report.html"
-             />]]></code>
-             </example>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.Xslt.DEFAULT_ROOT_TAG">
+        <member name="T:MSBuild.Community.Tasks.Xml.XmlNodeTaskItem">
             <summary>
-            The default value for <see cref="P:MSBuild.Community.Tasks.Xslt.RootTag"/>.
-            The value is <c>"mergedroot"</c>.
+            Represents a single XmlNode selected using an XML task.
             </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Xml.XmlNodeTaskItem.#ctor(System.Xml.XPath.XPathNavigator,System.String)">
+            <summary>
+            Initializes a new instance of an XmlNodeTaskItem
+            </summary>
+            <param name="xpathNavigator">The selected XmlNode</param>
+            <param name="reservedMetaDataPrefix">The prefix to attach to the reserved metadata properties.</param>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Xml.XmlNodeTaskItem.ToString">
+            <summary>
+            Returns a string representation of the XmlNodeTaskItem.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Xml.XmlNodeTaskItem.op_Explicit(MSBuild.Community.Tasks.Xml.XmlNodeTaskItem)~System.String">
+            <summary>
+            Returns the ItemSpec when the XmlNodeTaskItem is explicitly cast as a <see cref="T:System.String"/>
+            </summary>
+            <param name="taskItemToCast">The XmlNodeTaskItem</param>
+            <returns></returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Xml.XmlNodeTaskItem.CloneCustomMetadata">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Xml.XmlNodeTaskItem.CopyMetadataTo(Microsoft.Build.Framework.ITaskItem)">
+            <summary>
+            
+            </summary>
+            <param name="destinationItem"></param>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Xml.XmlNodeTaskItem.GetMetadata(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="metadataName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Xml.XmlNodeTaskItem.RemoveMetadata(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="metadataName"></param>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Xml.XmlNodeTaskItem.SetMetadata(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="metadataName"></param>
+            <param name="metadataValue"></param>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xml.XmlNodeTaskItem.ItemSpec">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xml.XmlNodeTaskItem.MetadataCount">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xml.XmlNodeTaskItem.MetadataNames">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Xml.XmlQuery">
+            <summary>
+            Reads a value or values from lines of XML
+            </summary>
+            <remarks>
+      Use the Lines property (possibly populated from the the ReadLinesFromFile task) if you want to perform multiple
+      queries against some XML in memory. Use the XmlFileName property to query a large XML file.
+      <para>
+        An XPath expression can return multiple nodes in the <see cref="P:MSBuild.Community.Tasks.Xml.XmlQuery.Values"/> collection.
+        The number of nodes returned is availabe in the <see cref="P:MSBuild.Community.Tasks.Xml.XmlQuery.ValuesCount"/> output TaskParameter.
+      </para>
+      <para>
+        When the XPath expression resolves to an element node, all of the
+        attributes of the element are added as metadata to the returned <see cref="T:Microsoft.Build.Framework.ITaskItem"/>.
+        In addition, some reserved metadata properties are available on all element nodes.
+        They are all prefixed with the <see cref="P:MSBuild.Community.Tasks.Xml.XmlQuery.ReservedMetaDataPrefix"/>,
+        which is a single underscore (_) by default.
+        <list type="table">
+          <listheader>
+            <term>Reserved Property</term>
+          </listheader>
+          <item>
+            <term>_value</term>
+            <description>The value of the node (non-xml text between the opening and closing tags).</description>
+          </item>
+          <item>
+            <term>_innerXml</term>
+            <description>The markup representing the children of this node.</description>
+          </item>
+          <item>
+            <term>_outerXml</term>
+            <description>The markup representing this node and all its child nodes.</description>
+          </item>
+        </list>
+      </para>
+    </remarks><example>
+      Read an attribute value by selecting it with an XPath expression:
+      <code>
+        <![CDATA[
+<ReadLinesFromFile File="web.config">
+    <Output TaskParameter="Lines" ItemName="FileContents" />
+</ReadLinesFromFile>
+
+<XmlQuery Lines="@(FileContents)"
+    XPath = "/configuration/system.web/compilation/@defaultLanguage">
+	<Output TaskParameter="Values" PropertyName="CompilationLanguage" />
+</XmlQuery>
+
+<Message Text="The default language is $(CompilationLanguage)." />
+]]>
+      </code>
+    </example><example>
+      Read attribute values (from an XML file) using item metadata on a selected element node:
+      <code>
+        <![CDATA[
+<XmlQuery XmlFileName="$(MSBuildProjectDirectory)\web.config"
+    XPath = "/configuration/system.web/compilation">
+	<Output TaskParameter="Values" ItemName="CompilationElement" />
+</XmlQuery>
+
+<Message Text="The default language is: $(CompilationElement.defaultLanguage)." />
+<Message Text="Debug is enabled: $(CompilationElement.debug)." />
+]]>
+      </code>
+    </example><example>
+      Read an element value (requires use of the reserved metadata property "_value"):
+      <code>
+        <![CDATA[
+<ReadLinesFromFile File="web.config">
+    <Output TaskParameter="Lines" ItemName="FileContents" />
+</ReadLinesFromFile>
+
+<XmlQuery Lines="@(FileContents)"
+    XPath = "/configuration/singleValue/LastName">
+	<Output TaskParameter="Values" PropertyName="LastNameElement" />
+</XmlQuery>
+
+<Message Text="The last name is %(LastNameElement._value)" />
+]]>
+      </code>
+    </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Xml.XmlQuery.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            True if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xml.XmlQuery.Lines">
+            <summary>
+            The lines of a valid XML document
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xml.XmlQuery.XmlFileName">
+            <summary>
+            Gets or sets the name of an XML file to query
+            </summary>
+            <value>The full path of the XML file.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xml.XmlQuery.NamespaceDefinitions">
+            <summary>
+            A collection of prefix=namespace definitions used to query the XML document
+            </summary>
+            <example>
+      Defining multiple namespaces:
+      <code>
+        <![CDATA[
+<XmlMassUpdate ContentFile="web.config"
+  SubstitutionsRoot="/configuration/substitutions"
+ 	NamespaceDefinitions = "soap=http://www.w3.org/2001/12/soap-envelope;x=http://www.w3.org/1999/XSL/Transform">
+/>]]>
+      </code>
+    </example>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xml.XmlQuery.XPath">
+            <summary>
+            The query used to identify the values in the XML document
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xml.XmlQuery.Values">
+            <summary>
+            The values selected by <see cref="P:MSBuild.Community.Tasks.Xml.XmlQuery.XPath"/>
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xml.XmlQuery.ValuesCount">
+            <summary>
+            The number of values returned in <see cref="P:MSBuild.Community.Tasks.Xml.XmlQuery.Values"/>
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xml.XmlQuery.ReservedMetaDataPrefix">
+            <summary>
+            The string that is prepended to all reserved metadata properties.
+            </summary>
+            <remarks>The default value is a single underscore: '_'
+            <para>All attributes of an element node are added as metadata to the returned ITaskItem,
+            so this property can be used to avoid clashes with the reserved properties.
+            For example, if you selected the following node:
+            <code><![CDATA[ <SomeNode _name="x" _value="y" /> ]]></code>
+            the <c>_value</c> attribute would clash with the <c>value</c> reserved property, when using
+            the default prefix. If you set the ReservedMetaDataPrefix to another value (two underscores '__')
+            there would be no clash. You would be able to select the attribute using <c>%(item._value)</c>
+            and the value of the node using <c>%(item.__value)</c>.</para></remarks>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Xml.XmlTaskHelper">
+            <summary>
+            Provides methods used by all of the XML tasks
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Xml.XmlTaskHelper.JoinItems(Microsoft.Build.Framework.ITaskItem[])">
+            <summary>
+            Concatenates the string value of a list of ITaskItems into a single string
+            </summary>
+            <param name="items">The items to concatenate</param>
+            <returns>A single string containing the values from all of the items</returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Xml.XmlTaskHelper.LoadNamespaceDefinitionItems(System.Xml.XmlNamespaceManager,Microsoft.Build.Framework.ITaskItem[])">
+            <summary>
+            Uses the prefix=namespace definitions in <paramref name="definitions"/> to populate <paramref name="namespaceManager"/>
+            </summary>
+            <param name="namespaceManager">The <see cref="T:System.Xml.XmlNamespaceManager"/> to populate.</param>
+            <param name="definitions">The prefix=namespace definitions.</param>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Xslt">
+            <summary>
+            A task to merge and transform a set of xml files.
+            </summary>
+            <remarks>
+      <p>
+        The xml files of parameter <see cref="P:MSBuild.Community.Tasks.Xslt.Inputs"/>
+        are merged into one xml document,
+        wrapped with a root tag <see cref="P:MSBuild.Community.Tasks.Xslt.RootTag"/>
+      </p>
+      <p>
+        If only one input file is provided,
+        merging and wrapping can be omitted
+        by setting <see cref="P:MSBuild.Community.Tasks.Xslt.RootTag"/> to an empty string.
+      </p>
+      <p>
+        The root tag can be given any number of attributes
+        by providing a list of semicolon-delimited name/value pairs
+        to parameter <see cref="P:MSBuild.Community.Tasks.Xslt.RootAttributes"/>.
+        For example: <code>RootAttributes="foo=bar;date=$(buildDate)"</code>
+      </p>
+      <p>
+        Parameter <see cref="P:MSBuild.Community.Tasks.Xslt.RootAttributes"/> defaults to
+        one attribute with a name specified by <see cref="F:MSBuild.Community.Tasks.Xslt.CREATED_ATTRIBUTE"/>,
+        and a local time stamp as value.
+        To suppress the default value, an empty parameter
+        <code>RootAttributes=""</code>
+        must be specified explicitely.
+      </p>
+      <p>
+        The xsl transformation file
+        specified by parameter <see cref="P:MSBuild.Community.Tasks.Xslt.Xsl"/>
+        is applied on the input.
+      </p>
+      <p>
+        The <see cref="T:Microsoft.Build.Framework.ITaskItem"/> <see cref="P:MSBuild.Community.Tasks.Xslt.Xsl"/>
+        can be given any number of metadata,
+        which will be handed to the xsl transformation
+        as parameters.
+      </p>
+      <p>
+        The output is written to the file
+        specified by parameter <see cref="P:MSBuild.Community.Tasks.Xslt.Output"/>.
+      </p>
+    </remarks><example>
+      This example for generating a report
+      from a set of NUnit xml results:
+      <code>
+        <![CDATA[
+<ItemGroup>
+    <nunitReportXslFile Include="$(MSBuildCommunityTasksPath)\$(nunitReportXsl)">
+        <project>$(project)</project>
+        <configuration>$(configuration)</configuration>
+        <msbuildFilename>$(MSBuildProjectFullPath)</msbuildFilename>
+        <msbuildBinpath>$(MSBuildBinPath)</msbuildBinpath>
+        <xslFile>$(MSBuildCommunityTasksPath)\$(nunitReportXsl)</xslFile>
+    </nunitReportXslFile>
+</ItemGroup>
+
+<Target Name="test-report" >
+    <Xslt Inputs="@(nunitFiles)"
+        RootTag="mergedroot"
+        Xsl="@(nunitReportXslFile)" 
+        Output="$(testDir)\TestReport.html" />
+</Target>]]>
+      </code>
+
+      This examples shows all available task attributes:
+      <code>
+        <![CDATA[
+<Time Format="yyyyMMddHHmmss">
+    <Output TaskParameter="LocalTimestamp" PropertyName="buildDate" />
+</Time>
+
+<Xslt
+     Inputs="@(xmlfiles)"
+     RootTag="mergedroot"
+     RootAttributes="foo=bar;date=$(buildDate)"
+     Xsl="transformation.xsl"
+     Output="report.html"
+/>]]>
+      </code>
+    </example>
         </member>
         <member name="F:MSBuild.Community.Tasks.Xslt.CREATED_ATTRIBUTE">
             <summary>
@@ -1276,6 +2902,13 @@
             </summary>
             <value>The replacement text.</value>
         </member>
+        <member name="P:MSBuild.Community.Tasks.FileUpdate.Encoding">
+            <summary>
+            The character encoding used to read and write the file.
+            </summary>
+            <remarks>Any value returned by <see cref="P:System.Text.Encoding.WebName"/> is valid input.
+            <para>The default is <c>utf-8</c></para></remarks>
+        </member>
         <member name="T:MSBuild.Community.Tasks.FxCop">
             <summary>
             Uses FxCop to analyse managed code assemblies and reports on
@@ -1290,6 +2923,7 @@
             <FxCop 
               TargetAssemblies="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll"
               RuleLibraries="@(FxCopRuleAssemblies)" 
+              Rules="Microsoft.Design#CA1012;-Microsoft.Performance#CA1805"
               AnalysisReportFileName="Test.html"
               DependencyDirectories="$(MSBuildCommunityTasksPath)"
               FailOnError="False"
@@ -1326,6 +2960,12 @@
             A string value containing the command line arguments to pass 
             directly to the executable file.
             </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.FxCop.ValidateParameters">
+            <summary>
+            Indicates whether all task paratmeters are valid. 
+            </summary>
+            <returns>true if all task parameters are valid; otherwise, false</returns>
         </member>
         <member name="M:MSBuild.Community.Tasks.FxCop.GetWorkingDirectory">
             <summary>
@@ -1378,8 +3018,16 @@
         </member>
         <member name="P:MSBuild.Community.Tasks.FxCop.RuleLibraries">
             <summary>
-            Specifies the filename(s) of FxCop project file(s).
+            Specifies the filename(s) of FxCop rule assemblies
             </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FxCop.Rules">
+            <summary>
+            The list of rules to run
+            </summary>
+            <remarks>Rule names should be provided using the format Library#RuleNumber. For example <c>Microsoft.Design#CA1012</c>
+            <para>Place a single hyphen (-) in front of the rule name to exclude it. For example <c>-Microsoft.Performance#CA1805</c></para>
+            </remarks>
         </member>
         <member name="P:MSBuild.Community.Tasks.FxCop.AnalysisReportFileName">
             <summary>
@@ -1452,163 +3100,6 @@
             </summary>
             <value></value>
             <returns>The name of the executable file to run.</returns>
-        </member>
-        <member name="T:MSBuild.Community.Tasks.IIS.WebBase">
-            <summary>
-            Base task for any IIS-related task.
-            </summary>
-            <remarks>Stores the base logic for gathering the IIS version and server and port checking.  This
-            base task also stores common properties for other related tasks.</remarks>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.mIISVersion">
-            <summary>
-            IIS version.
-            </summary>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.IIS.WebBase.GetIISVersion">
-            <summary>
-            Gets the IIS version.
-            </summary>
-            <returns>The <see cref="T:MSBuild.Community.Tasks.IIS.WebBase.IISVersion"/> for IIS.</returns>
-            <exclude/>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.IIS.WebBase.GetRemoteOSVersion">
-            <summary>
-            Gets the remote machine OS version.
-            </summary>
-            <returns>Returns a <see cref="T:System.Version"/> of the operating system.</returns>
-            <exclude/>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.IIS.WebBase.VerifyIISRoot">
-            <summary>
-            Verifies that the IIS root exists based on the <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.ServerName"/> and <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.ServerPort"/>.
-            </summary>
-            <exclude/>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.IIS.WebBase.VerifyServerPortExists(System.DirectoryServices.DirectoryEntry)">
-            <summary>
-            Helper method for <see cref="M:MSBuild.Community.Tasks.IIS.WebBase.VerifyIISRoot"/> that verifies the server port exists.
-            </summary>
-            <param name="site">The site to verify the port.</param>
-            <returns>Boolean value indicating the status of the port check.</returns>
-            <exclude/>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.ServerName">
-            <summary>
-            Gets or sets the name of the server.  The default value is 'localhost'.
-            </summary>
-            <value>The name of the server.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.ServerPort">
-            <summary>
-            Gets or sets the server port.
-            </summary>
-            <value>The server port.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.IISServerPath">
-            <summary>
-            Gets or sets the IIS server path.
-            </summary>
-            <remarks>Is in the form 'IIS://localhost/W3SVC/1/Root'.</remarks>
-            <value>The IIS server path.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.IISApplicationPath">
-            <summary>
-            Gets or sets the application path.
-            </summary>
-            <remarks>Is in the form '/LM/W3SVC/1/Root'.</remarks>
-            <value>The application path.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.IISAppPoolPath">
-            <summary>
-            Gets or sets the IIS application pool path.
-            </summary>
-            <remarks>Is in the form 'IIS://localhost/W3SVC/AppPools'.</remarks>
-            <value>The IIS application pool path.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.Username">
-            <summary>
-            Gets or sets the username for the account the task will run under.  This property
-            is needed if you specified a <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.ServerName"/> for a remote machine.
-            </summary>
-            <value>The username of the account.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.Password">
-            <summary>
-            Gets or sets the password for the account the task will run under.  This property
-            is needed if you specified a <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.ServerName"/> for a remote machine.
-            </summary>
-            <value>The password of the account.</value>
-        </member>
-        <member name="T:MSBuild.Community.Tasks.IIS.WebBase.IISVersion">
-            <summary>
-            Defines the possible IIS versions supported by the task.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.IISVersion.Four">
-            <summary>
-            IIS version 4.x
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.IISVersion.Five">
-            <summary>
-            IIS version 5.x
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.IISVersion.Six">
-            <summary>
-            IIS version 6.x
-            </summary>
-        </member>
-        <member name="T:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction">
-            <summary>
-            Defines the possible application pool actions to be performed.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction.Recycle">
-            <summary>
-            Recycles an application pool.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction.Restart">
-            <summary>
-            Stops and restarts the application pool.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction.Start">
-            <summary>
-            Starts the application pool.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction.Stop">
-            <summary>
-            Stops the application pool.
-            </summary>
-        </member>
-        <member name="T:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState">
-            <summary>
-            Defines the current application pool state.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState.Starting">
-            <summary>
-            The application pool is starting.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState.Started">
-            <summary>
-            The application pool has started.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState.Stopping">
-            <summary>
-            The application pool is stopping.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState.Stopped">
-            <summary>
-            The application pool has stopped.
-            </summary>
         </member>
         <member name="T:MSBuild.Community.Tasks.ServiceActions">
             <summary>
@@ -2876,44 +4367,6 @@
             ]]></code>
             </example>
         </member>
-        <member name="T:MSBuild.Community.Tasks.Math.MathBase">
-            <summary>
-            Math task base class
-            </summary>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.Math.MathBase.Execute">
-            <summary>
-            When overridden in a derived class, executes the task.
-            </summary>
-            <returns>
-            true if the task successfully executed; otherwise, false.
-            </returns>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.Math.MathBase.StringArrayToDecimalArray(System.String[])">
-            <summary>
-            Strings array to decimal array.
-            </summary>
-            <param name="numbers">The numbers.</param>
-            <returns></returns>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Math.MathBase.Numbers">
-            <summary>
-            Gets or sets the numbers to work with.
-            </summary>
-            <value>The numbers.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Math.MathBase.Result">
-            <summary>
-            Gets or sets the result.
-            </summary>
-            <value>The result.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Math.MathBase.NumericFormat">
-            <summary>
-            Gets or sets the numeric format.
-            </summary>
-            <value>The numeric format.</value>
-        </member>
         <member name="M:MSBuild.Community.Tasks.Math.Add.Execute">
             <summary>
             When overridden in a derived class, executes the task.
@@ -2927,13 +4380,29 @@
             Divide numbers
             </summary>
             <example>
-            <code><![CDATA[
-            <Math.Divide Numbers="1;2">
-                <Output TaskParameter="Result" PropertyName="Result" />
-            </Math.Divide>
-            <Message Text="Divide 1/2= $(Result)"/>
-            ]]></code>
-            </example>
+      <code>
+        <![CDATA[
+<Math.Divide Numbers="1;2">
+    <Output TaskParameter="Result" PropertyName="Result" />
+</Math.Divide>
+<Message Text="Divide 1/2= $(Result)"/>
+]]>
+      </code>
+      Above example will display:
+      <code>Divide 1/2= 0.5</code>
+    </example><example>
+      Truncate the result to always return an integer:
+      <code>
+        <![CDATA[
+<Math.Divide Numbers="7;3" TruncateResult="true">
+    <Output TaskParameter="Result" PropertyName="Result" />
+</Math.Divide>
+<Message Text="Divide 7/3= $(Result)"/>
+]]>
+      </code>
+      Above example will display:
+      <code>Divide 7/3= 2</code>
+    </example>
         </member>
         <member name="M:MSBuild.Community.Tasks.Math.Divide.Execute">
             <summary>
@@ -2942,6 +4411,18 @@
             <returns>
             true if the task successfully executed; otherwise, false.
             </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Math.Divide.TruncateResult">
+            <summary>
+            When <see langword="true"/>, uses integer division to truncate the result. Default is <see langword="false" />
+            </summary>
+            <remarks>
+            Any remainder in the result is dropped, and the closest integer to zero is returned.
+            <para>
+            Refer to the documentation for the <see href="http://msdn2.microsoft.com/library/0e16fywh.aspx">\ Operator</see>
+            for more information about integer division.
+            </para>
+            </remarks>
         </member>
         <member name="T:MSBuild.Community.Tasks.Math.Multiple">
             <summary>
@@ -3135,7 +4616,7 @@
             <example>Run NUnit tests.
             <code><![CDATA[
             <ItemGroup>
-                <TestAssembly Include="C:\Program Files\NUnit 2.2.3\bin\*.tests.dll" />
+                <TestAssembly Include="C:\Program Files\NUnit 2.2.7\bin\*.tests.dll" />
             </ItemGroup>
             <Target Name="NUnit">
                 <NUnit Assemblies="@(TestAssembly)" />
@@ -3146,7 +4627,7 @@
         <member name="F:MSBuild.Community.Tasks.NUnit.DEFAULT_NUNIT_DIRECTORY">
             <summary>
             The default relative path of the NUnit installation.
-            The value is <c>@"NUnit-Net-2.0 2.2.5\bin"</c>.
+            The value is <c>@"NUnit-Net-2.0 2.2.7\bin"</c>.
             </summary>
         </member>
         <member name="M:MSBuild.Community.Tasks.NUnit.#ctor">
@@ -3192,15 +4673,15 @@
         </member>
         <member name="P:MSBuild.Community.Tasks.NUnit.IncludeCategory">
             <summary>
-            Gets or sets the include category.
+            Gets or sets the categories to include.
             </summary>
-            <value>The include category.</value>
+            <remarks>Multiple values must be separated by a comma ","</remarks>
         </member>
         <member name="P:MSBuild.Community.Tasks.NUnit.ExcludeCategory">
             <summary>
-            Gets or sets the exclude category.
+            Gets or sets the categories to exclude.
             </summary>
-            <value>The exclude category.</value>
+            <remarks>Multiple values must be separated by a comma ","</remarks>
         </member>
         <member name="P:MSBuild.Community.Tasks.NUnit.Fixture">
             <summary>
@@ -3220,6 +4701,11 @@
             </summary>
             <value>The output XML file.</value>
         </member>
+        <member name="P:MSBuild.Community.Tasks.NUnit.ErrorOutputFile">
+            <summary>
+            The file to receive test error details.
+            </summary>
+        </member>
         <member name="P:MSBuild.Community.Tasks.NUnit.WorkingDirectory">
             <summary>
             Gets or sets the working directory.
@@ -3228,6 +4714,24 @@
             <returns>
             The directory in which to run the executable file, or a null reference (Nothing in Visual Basic) if the executable file should be run in the current directory.
             </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.NUnit.DisableShadowCopy">
+            <summary>
+            Determines whether assemblies are copied to a shadow folder during testing.
+            </summary>
+            <remarks>Shadow copying is enabled by default. If you want to test the assemblies "in place",
+            you must set this property to <c>True</c>.</remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.NUnit.ProjectConfiguration">
+            <summary>
+            The project configuration to run.
+            </summary>
+            <remarks>Only applies when a project file is used. The default is the first configuration, usually Debug.</remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.NUnit.TestInNewThread">
+            <summary>
+            Allows tests to be run in a new thread, allowing you to take advantage of ApartmentState and ThreadPriority settings in the config file.
+            </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.NUnit.ToolName">
             <summary>
@@ -3306,6 +4810,21 @@
               Looks up a localized string similar to The URI &quot;{0}&quot; scheme is not valid..
             </summary>
         </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.JSCompressCompressed">
+            <summary>
+              Looks up a localized string similar to Compressed by {0}, from {1} to {2} byte(s).
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.JSCompressCompressing">
+            <summary>
+              Looks up a localized string similar to Compressing JavaScript in &quot;{0}&quot;..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.JSCompressWriting">
+            <summary>
+              Looks up a localized string similar to Writing compressed JavaScript back to &quot;{0}&quot; using {1}..
+            </summary>
+        </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.MailEmailing">
             <summary>
               Looks up a localized string similar to Emailing &quot;{0}&quot;..
@@ -3354,6 +4873,11 @@
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.NUnitNotFound">
             <summary>
               Looks up a localized string similar to Could not find the NUnit Project File open command. Please make sure NUnit is installed..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.ParameterNotUsed">
+            <summary>
+              Looks up a localized string similar to The parameter &quot;{1}&quot; does not apply to the current use of task &quot;{0}&quot;..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.ParameterRequired">
@@ -3446,6 +4970,11 @@
               Looks up a localized string similar to {0} service is stopping ....
             </summary>
         </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.SolutionNotFound">
+            <summary>
+              Looks up a localized string similar to Solution file &quot;{0}&quot; not found..
+            </summary>
+        </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.SvnLocalPathNotWorkCopy">
             <summary>
               Looks up a localized string similar to LocalPath is not a working subversion copy..
@@ -3483,14 +5012,139 @@
               Looks up a localized string similar to Unzipped file &quot;{0}&quot; successfully..
             </summary>
         </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultAddFileCommitFailed">
+            <summary>
+              Looks up a localized string similar to Commitment of change set failed!.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultAddFileCommitSucceeded">
+            <summary>
+              Looks up a localized string similar to Files added to Vault repository successfully..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultAddFilesException">
+            <summary>
+              Looks up a localized string similar to Files specified for addition to repository cannot be found..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultCheckinFileException">
+            <summary>
+              Looks up a localized string similar to The file {0} could not be checked in: {1}..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultCheckinFileNotFoundException">
+            <summary>
+              Looks up a localized string similar to File or folder {0} not found for checkin..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultCheckinFolderException">
+            <summary>
+              Looks up a localized string similar to The folder {0} could not be checked in: {1}..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultCheckinSuccessful">
+            <summary>
+              Looks up a localized string similar to {0} successfully checked out..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultCheckoutSuccessful">
+            <summary>
+              Looks up a localized string similar to {0} successfully checked out..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultDiskFileDoesNotExist">
+            <summary>
+              Looks up a localized string similar to Specified diskfile {0} does not exist..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultFileAddedToChangeSet">
+            <summary>
+              Looks up a localized string similar to File [{0}] added to change set..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultFolderAddedToChangeSet">
+            <summary>
+              Looks up a localized string similar to Folder [{0}] added to change set..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultIncorrectParameters">
+            <summary>
+              Looks up a localized string similar to Incorrect parameters passed to VaultSession..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultLoginFailed">
+            <summary>
+              Looks up a localized string similar to Login to Vault repository failed..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultPathValidationException">
+            <summary>
+              Looks up a localized string similar to Error validating path &quot;{0}&quot;..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultRepositorySelectionFailure">
+            <summary>
+              Looks up a localized string similar to Selection of the repository failed: {0}..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultResourceNotFound">
+            <summary>
+              Looks up a localized string similar to File or folder {0} not found for checkout..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultSetNewWorkingFolder">
+            <summary>
+              Looks up a localized string similar to Set working folder for {0} to {1} from {2}..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultTreeCacheFailure">
+            <summary>
+              Looks up a localized string similar to ClientInstance.TreeCache has not been initialized, Common cause is that SelectRepository has not been called sucessfully..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultUndoCheckoutSuccessful">
+            <summary>
+              Looks up a localized string similar to Successfully undid check out for {0}..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultUrlRequired">
+            <summary>
+              Looks up a localized string similar to Url specifying vault location is required..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultUsernameRequired">
+            <summary>
+              Looks up a localized string similar to Username must be set to access repository..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultWorkingFolderCleared">
+            <summary>
+              Looks up a localized string similar to Clearing working folder for {0}..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultWorkingFolderRestored">
+            <summary>
+              Looks up a localized string similar to Restoring working folder for {0} to {1}..
+            </summary>
+        </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.VersionFileNotFound">
             <summary>
-              Looks up a localized string similar to Version file &quot;{0}&quot; not found ..
+              Looks up a localized string similar to Version file &quot;{0}&quot; not found - creating new file..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VersionModifiedValue">
+            <summary>
+              Looks up a localized string similar to Updated to version {0}.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VersionOriginalValue">
+            <summary>
+              Looks up a localized string similar to Initialized to version {0}.
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.VersionRead">
             <summary>
-              Looks up a localized string similar to Version &quot;{0}&quot; read from file &quot;{1}&quot;..
+              Looks up a localized string similar to Reading version from file &quot;{0}&quot;..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.VersionReadException">
@@ -3505,7 +5159,32 @@
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.VersionWrote">
             <summary>
-              Looks up a localized string similar to Version &quot;{0}&quot; wrote to file &quot;{1}&quot;..
+              Looks up a localized string similar to Wrote version to file &quot;{0}&quot;..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.WebDirectoryInvalidDirectory">
+            <summary>
+              Looks up a localized string similar to Web directory {0} does not exist on {1}..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.WebDirectoryScriptMapUpdate">
+            <summary>
+              Looks up a localized string similar to Setting scriptmap for {0} on web directory {1} on {2}..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.WebDirectorySettingInvalidSetting">
+            <summary>
+              Looks up a localized string similar to Web directory {0} on {1} does not have a setting called {2}..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.WebDirectorySettingStatusRead">
+            <summary>
+              Looks up a localized string similar to Reading {0} property of web directory {1} on {2}..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.WebDirectorySettingStatusSet">
+            <summary>
+              Looks up a localized string similar to Setting {0} property of web directory {1} on {2}..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.XmlReadDocument">
@@ -3535,37 +5214,37 @@
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.XmlUpdateResult">
             <summary>
-              Looks up a localized string similar to XmlUpdate Wrote: &quot;{0}&quot;.
+              Looks up a localized string similar to XmlUpdate Wrote: &quot;{0}&quot;..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.XsltAddingParameter">
             <summary>
-              Looks up a localized string similar to Adding Parameter \&quot;{0}\&quot;: \&quot;{1}\&quot;.
+              Looks up a localized string similar to Adding Parameter \&quot;{0}\&quot;: \&quot;{1}\&quot;..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.XsltAddingRootAttribute">
             <summary>
-              Looks up a localized string similar to Adding root attribute {0}=\&quot;{1}\&quot;.
+              Looks up a localized string similar to Adding root attribute {0}=\&quot;{1}\&quot;..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.XsltCreatingRootTag">
             <summary>
-              Looks up a localized string similar to Creating root tag \&quot;{0}\&quot;.
+              Looks up a localized string similar to Creating root tag \&quot;{0}\&quot;..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.XsltNoInputFiles">
             <summary>
-              Looks up a localized string similar to No input files.
+              Looks up a localized string similar to No input files..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.XsltNoRootTag">
             <summary>
-              Looks up a localized string similar to No root tag inserted.
+              Looks up a localized string similar to No root tag inserted..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.ZipAdded">
             <summary>
-              Looks up a localized string similar to   added &quot;{0}&quot;.
+              Looks up a localized string similar to   added &quot;{0}&quot;..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.ZipCreating">
@@ -3575,7 +5254,7 @@
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.ZipFileNotFound">
             <summary>
-              Looks up a localized string similar to Zip File Not Found: {0}.
+              Looks up a localized string similar to Zip File Not Found: {0}..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.ZipSuccessfully">
@@ -3597,6 +5276,10 @@
             <Message Text="InstallRoot: $(InstallRoot)"/>
             ]]></code>
             </example>
+            <remarks>The <see cref="P:MSBuild.Community.Tasks.RegistryRead.Value"/> parameter is set according to the following rules:
+            <list type="table"><item><description>If a <see cref="P:MSBuild.Community.Tasks.RegistryRead.DefaultValue"/> is provided, it will be used if the <see cref="P:MSBuild.Community.Tasks.RegistryRead.KeyName"/> or <see cref="P:MSBuild.Community.Tasks.RegistryRead.ValueName"/> does not exist.</description></item>
+            <item><description>If a <see cref="P:MSBuild.Community.Tasks.RegistryRead.DefaultValue"/> is not provided, the <see cref="P:MSBuild.Community.Tasks.RegistryRead.KeyName"/> exists, but the <see cref="P:MSBuild.Community.Tasks.RegistryRead.ValueName"/> does not exist, <see cref="P:MSBuild.Community.Tasks.RegistryRead.Value"/> will be set to an empty string.</description></item>
+            <item><description>If a <see cref="P:MSBuild.Community.Tasks.RegistryRead.DefaultValue"/> is not provided, and the <see cref="P:MSBuild.Community.Tasks.RegistryRead.KeyName"/> does not exist, the task will fail.</description></item></list></remarks>
         </member>
         <member name="M:MSBuild.Community.Tasks.RegistryRead.#ctor">
             <summary>
@@ -3684,22 +5367,45 @@
             Executes code contained within the task.
             </summary>
             <example>
-            <para>Simple script that writes to the console</para>
-            <code><![CDATA[
-            <PropertyGroup>
-                <HelloCode>
-                    <![CDATA[
-                    public static void ScriptMain() {
-                        Console.WriteLine("Hello MSBuild Community Scripting World.");
-                    }
-                    ]] >
-                </HelloCode>
-            </PropertyGroup>
-            <Target Name="Hello">
-                <Script Language="C#" Code="$(HelloCode)" />
-            </Target>
-            ]]></code>
-            </example>
+      <para>Simple script that writes to the console</para>
+      <code>
+        <![CDATA[
+<PropertyGroup>
+    <HelloCode>
+        <![CDATA[
+        public static void ScriptMain() {
+            Console.WriteLine("Hello MSBuild Community Scripting World.");
+        }
+        ]] >
+    </HelloCode>
+</PropertyGroup>
+<Target Name="Hello">
+    <Script Language="C#" Code="$(HelloCode)" Imports="System" />
+</Target>
+]]>
+      </code>
+    </example><example>
+      <para>Script that returns a value.</para>
+      <code>
+        <![CDATA[
+<PropertyGroup>
+    <GetProgramFilesCode>
+        <![CDATA[
+        public static string ScriptMain() {
+            return Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+        }
+        ]] >
+    </GetProgramFilesCode>
+</PropertyGroup>
+<Target Name="GetProgramFilesFolder">
+    <Script Language="C#" Code="$(GetProgramFilesCode)">
+        <Output TaskParameter="ReturnValue" PropertyName="ProgramFilesFolder" />
+    </Script>
+    <Message Text="Program files are in: $(ProgramFilesFolder)" />
+</Target>
+]]>
+      </code>
+    </example>
         </member>
         <member name="M:MSBuild.Community.Tasks.Script.Execute">
             <summary>
@@ -3739,7 +5445,17 @@
         </member>
         <member name="P:MSBuild.Community.Tasks.Script.Code">
             <summary>
-            THe code to compile and execute
+            The code to compile and execute
+            </summary>
+            <remarks>
+            The code must include a static (Shared in VB) method named ScriptMain.
+            It cannot accept any parameters. If you define the method return a <see cref="T:System.String"/>,
+            the returned value will be available in the <see cref="P:MSBuild.Community.Tasks.Script.ReturnValue"/> output property.
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Script.ReturnValue">
+            <summary>
+            The string returned from the custom ScriptMain method.
             </summary>
         </member>
         <member name="T:MSBuild.Community.Tasks.Sleep">
@@ -4419,18 +6135,24 @@
             </summary>
             <value>The target directory.</value>
         </member>
-        <member name="T:MSBuild.Community.Tasks.Vault.VaultClient">
-            <summary>
-            TODO Not Complete ...
-            </summary>
-        </member>
         <member name="T:MSBuild.Community.Tasks.Version">
             <summary>
-            Get Version information from file.
+            Generates version information based on various algorithms
             </summary>
-            <example>Get version information and increment revision.
+            <example>Get version information from file and increment revision.
             <code><![CDATA[
-            <Version VersionFile="number.txt" RevisionType="Increment">
+            <Version VersionFile="number.txt" BuildType="Automatic" RevisionType="Increment">
+                <Output TaskParameter="Major" PropertyName="Major" />
+                <Output TaskParameter="Minor" PropertyName="Minor" />
+                <Output TaskParameter="Build" PropertyName="Build" />
+                <Output TaskParameter="Revision" PropertyName="Revision" />
+            </Version>
+            <Message Text="Version: $(Major).$(Minor).$(Build).$(Revision)"/>
+            ]]></code>
+            </example>
+            <example>Specify Major and Minor version information and generate Build and Revision.
+            <code><![CDATA[
+            <Version BuildType="Automatic" RevisionType="Automatic" Major="1" Minor="3" >
                 <Output TaskParameter="Major" PropertyName="Major" />
                 <Output TaskParameter="Minor" PropertyName="Minor" />
                 <Output TaskParameter="Build" PropertyName="Build" />
@@ -4469,36 +6191,68 @@
             <summary>
             Gets or sets the build version number.
             </summary>
+            <seealso cref="P:MSBuild.Community.Tasks.Version.BuildType"/>
             <value>The build version number.</value>
         </member>
         <member name="P:MSBuild.Community.Tasks.Version.Revision">
             <summary>
             Gets or sets the revision version number.
             </summary>
+            <seealso cref="P:MSBuild.Community.Tasks.Version.RevisionType"/>
             <value>The revision version number.</value>
         </member>
         <member name="P:MSBuild.Community.Tasks.Version.VersionFile">
             <summary>
-            Gets or sets the version file.
+            Gets or sets the file used to initialize and persist the version.
             </summary>
             <value>The version file.</value>
+            <remarks>
+            When specified, the task will attempt to load the previous version information from the file.
+            After updating the version, the new value will be saved to the file.
+            <para>
+            If you do not specify a value for this property, the version will be calculated
+            based on the values passed to the <see cref="P:MSBuild.Community.Tasks.Version.Major"/>, <see cref="P:MSBuild.Community.Tasks.Version.Minor"/>,
+            <see cref="P:MSBuild.Community.Tasks.Version.Build"/>, and <see cref="P:MSBuild.Community.Tasks.Version.Revision"/> properties. The new version will not be persisted.</para></remarks>
         </member>
         <member name="P:MSBuild.Community.Tasks.Version.BuildType">
             <summary>
-            Gets or sets the type of the build.
+            Gets or sets the method used to generate a <see cref="P:MSBuild.Community.Tasks.Version.Build"/> number
             </summary>
-            <value>The type of the build.</value>
             <remarks>
-            Possible values include Automatic, Increment, NonIncrement, or Date.
+            If value is not provided, None is assumed.
+            The <see cref="P:MSBuild.Community.Tasks.Version.Build"/> number is set according to the following table:
+            <list type="table">
+            <listheader><term>BuildType</term><description>Description</description></listheader>
+            <item><term>None</term><description>The number is not modified.</description></item>
+            <item><term>Automatic</term><description>The number of days since <see cref="P:MSBuild.Community.Tasks.Version.StartDate"/>.</description></item>
+            <item><term>Increment</term><description>Increases the previous <see cref="P:MSBuild.Community.Tasks.Version.Build"/> value by 1.</description></item>
+            </list>
             </remarks>
         </member>
         <member name="P:MSBuild.Community.Tasks.Version.RevisionType">
             <summary>
-            Gets or sets the type of the revision.
+            Gets or sets the method used to generate a <see cref="P:MSBuild.Community.Tasks.Version.Revision"/> number
             </summary>
-            <value>The type of the revision.</value>
             <remarks>
-            Possible values include Automatic, Increment, NonIncrement.
+            If value is not provided, None is assumed.
+            The <see cref="P:MSBuild.Community.Tasks.Version.Revision"/> number is set according to the following table:
+            <list type="table">
+            <listheader><term>RevisionType</term><description>Description</description></listheader>
+            <item><term>None</term><description>The number is not modified.</description></item>
+            <item><term>Automatic</term><description>A number that starts at 0 at midnight, and constantly increases throughout the day (changing roughly every 1.3 seconds). Guaranteed to be safe for components of the AssemblyVersion attribute.</description></item>
+            <item><term>Increment</term><description>Increases the previous <see cref="P:MSBuild.Community.Tasks.Version.Revision"/> value by 1.</description></item>
+            <item><term>BuildIncrement</term><description>Increases the previous <see cref="P:MSBuild.Community.Tasks.Version.Revision"/> value by 1 when the value of <see cref="P:MSBuild.Community.Tasks.Version.Build"/> is unchanged. If the value of <see cref="P:MSBuild.Community.Tasks.Version.Build"/> has changed, <see cref="P:MSBuild.Community.Tasks.Version.Revision"/> is reset to zero.</description></item>
+            </list>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Version.StartDate">
+            <summary>
+            Gets or sets the starting date used to calculate the <see cref="P:MSBuild.Community.Tasks.Version.Build"/> number when <see cref="P:MSBuild.Community.Tasks.Version.BuildType"/> is Automatic.
+            </summary>
+            <value>The starting date for calculation of the build number.</value>
+            <remarks>
+            This value is only used when the <see cref="P:MSBuild.Community.Tasks.Version.BuildType"/> is Automatic.
+            <para>This default value is January 1, 2000.</para>
             </remarks>
         </member>
         <member name="T:MSBuild.Community.Tasks.WebDownload">

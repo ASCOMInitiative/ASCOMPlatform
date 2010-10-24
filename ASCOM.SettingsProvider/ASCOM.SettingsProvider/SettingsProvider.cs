@@ -78,7 +78,7 @@ namespace ASCOM
 		/// </summary>
 		public SettingsProvider()
 			{
-			ascomProfile = new Profile();
+			ascomProfile = new Profile(true);   // Ignores 'Profile not found' exceptions
 			}
 
 		/// <summary>

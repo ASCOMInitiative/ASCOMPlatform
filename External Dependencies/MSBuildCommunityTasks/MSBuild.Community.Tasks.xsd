@@ -1,6 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:msb="http://schemas.microsoft.com/developer/msbuild/2003" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/developer/msbuild/2003" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:include schemaLocation="Microsoft.Build.Commontypes.xsd" />
+  <xs:element name="InstallAspNet" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Installs and register script mappings for ASP.NET</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="ApplyScriptMaps" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The method used to determine if ASP.NET script mappings should be applied</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ClientScriptsOnly" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] When , the aspnet_client scripts will be installed. No script mappings will be updated.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ExitCode" />
+          <xs:attribute name="Path" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The web application that should have its script maps updated.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Recursive" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] When , script maps are applied recursively under .</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Timeout" />
+          <xs:attribute name="ToolPath" type="xs:string" />
+          <xs:attribute name="Version" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The version of ASP.NET to install</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="AssemblyInfo" substitutionGroup="msb:Task">
     <xs:annotation>
       <xs:documentation>Generates an AssemblyInfo files</xs:documentation>
@@ -28,7 +67,7 @@
               <xs:documentation>[Optional] Gets or sets the assembly culture.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
-          <xs:attribute name="AssemblyDelaySign" type="xs:string">
+          <xs:attribute name="AssemblyDelaySign" type="msb:non_empty_string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the assembly delay sign value.</xs:documentation>
             </xs:annotation>
@@ -41,6 +80,11 @@
           <xs:attribute name="AssemblyFileVersion" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the assembly file version.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="AssemblyInformationalVersion" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the assembly informational version.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="AssemblyKeyFile" type="xs:string">
@@ -86,6 +130,11 @@
           <xs:attribute name="ComVisible" type="msb:non_empty_string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets a value indicating whether [COMVisible].</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="GenerateClass" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating whether to generate the ThisAssmebly class.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="Guid" type="xs:string">
@@ -165,6 +214,11 @@
     <xs:complexType>
       <xs:complexContent mixed="false">
         <xs:extension base="msb:TaskType">
+          <xs:attribute name="Encoding" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The character encoding used to read and write the file.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="Files" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the files to update.</xs:documentation>
@@ -323,7 +377,12 @@
           </xs:attribute>
           <xs:attribute name="RuleLibraries" type="xs:string">
             <xs:annotation>
-              <xs:documentation>[Optional] Specifies the filename(s) of FxCop project file(s).</xs:documentation>
+              <xs:documentation>[Optional] Specifies the filename(s) of FxCop rule assemblies</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Rules" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The list of rules to run</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="SaveResults" type="msb:non_empty_string">
@@ -331,9 +390,9 @@
               <xs:documentation>[Optional] Saves the results of the analysis in the project file.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
-          <xs:attribute name="TargetAssemblies" type="msb:non_empty_string" use="required">
+          <xs:attribute name="TargetAssemblies" type="xs:string">
             <xs:annotation>
-              <xs:documentation>Specifies the target assembly to analyze.</xs:documentation>
+              <xs:documentation>[Optional] Specifies the target assembly to analyze.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="Timeout" />
@@ -354,6 +413,75 @@
           <xs:attribute name="WorkingDirectory" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the working directory.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GacUtil" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>MSBuild task to install and uninstall asseblies into the GAC</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="Assemblies" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Gets or sets the assembly.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Command" type="msb:GacUtilCommandsType">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the command.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ExitCode" />
+          <xs:attribute name="Force" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating whether to force reinstall of an assembly.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Timeout" />
+          <xs:attribute name="ToolPath" type="xs:string" />
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="GacUtilCommandsType">
+    <xs:union memberTypes="msb:non_empty_string">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Install">
+            <xs:annotation>
+              <xs:documentation>Install the list of assemblies into the GAC.</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Uninstall">
+            <xs:annotation>
+              <xs:documentation>Uninstall the list of assembly names from the GAC.</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:element name="GetSolutionProjects" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Task to get paths to projects and project names from VS2005 solution file</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="Output" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Output list contains TaskItems of project filenames contained within the given solution.
+            Metadata tag "ProjectName" contains name of project.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Solution" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Name of Solution to get Projects from</xs:documentation>
             </xs:annotation>
           </xs:attribute>
         </xs:extension>
@@ -1266,6 +1394,122 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  <xs:element name="WebDirectoryScriptMap" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Sets an application mapping for a filename extension on an existing web directory.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="EnableScriptEngine" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Set to true when you want the application to run in a directory without Execute permissions.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ExecutablePath" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The full path to the executable used to respond to requests for a Uri ending with</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Extension" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>The filename extension that will be mapped to an executable.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="MapToAspNet" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Indicates whether  should be mapped to the ASP.NET runtime.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Password" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the password for the account the task will run under.  This property
+            is needed if you specified a  for a remote machine.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ServerName" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the name of the server.  The default value is 'localhost'.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ServerPort" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the server port.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Username" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the username for the account the task will run under.  This property
+            is needed if you specified a  for a remote machine.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Verbs" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] A comma-separated list of the HTTP verbs to include in the application mapping.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="VerifyFileExists" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Set to true to instruct the Web server to verify the existence of the requested script file and to ensure that the requesting user has access permission for that script file.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="VirtualDirectoryName" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Gets or sets the name of the virtual directory.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="WebDirectorySetting" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Reads and modifies a web directory configuration setting.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="Password" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the password for the account the task will run under.  This property
+            is needed if you specified a  for a remote machine.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ServerName" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the name of the server.  The default value is 'localhost'.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ServerPort" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the server port.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="SettingName" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Gets or sets the configuration setting to read or modify.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="SettingValue" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets or sets the value of  on the web directory</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Username" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the username for the account the task will run under.  This property
+            is needed if you specified a  for a remote machine.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="VirtualDirectoryName" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Gets or sets the name of the virtual directory.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="ILMerge" substitutionGroup="msb:Task">
     <xs:annotation>
       <xs:documentation>A wrapper for the ILMerge tool.</xs:documentation>
@@ -1396,6 +1640,104 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  <xs:element name="InstallAssembly" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Installs assemblies.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="AssemblyFiles" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The assemblies to process, identified by their filename.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="AssemblyNames" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The assemblies to process, identified by their assembly name.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ExitCode" />
+          <xs:attribute name="LogFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The file to write installation progress to.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ShowCallStack" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] If an exception occurs at any point during installation, the call
+             stack will be printed to the log.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Timeout" />
+          <xs:attribute name="ToolPath" type="xs:string" />
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UninstallAssembly" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Uninstalls assemblies.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="AssemblyFiles" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The assemblies to process, identified by their filename.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="AssemblyNames" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The assemblies to process, identified by their assembly name.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ExitCode" />
+          <xs:attribute name="LogFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The file to write installation progress to.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ShowCallStack" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] If an exception occurs at any point during installation, the call
+             stack will be printed to the log.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Timeout" />
+          <xs:attribute name="ToolPath" type="xs:string" />
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="JSCompress" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Compresses JavaScript source by removing comments and unnecessary 
+            whitespace. It typically reduces the size of the script by half, 
+            resulting in faster downloads and code that is harder to read.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="CompressedFiles" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets the files that were successfully source-compressed.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Encoding" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Encoding to use to read and write files.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Files" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Gets or sets the files to source-compress.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="Mail" substitutionGroup="msb:Task">
     <xs:annotation>
       <xs:documentation>Sends an email message</xs:documentation>
@@ -1496,6 +1838,37 @@
   <xs:element name="Divide" substitutionGroup="msb:Task">
     <xs:annotation>
       <xs:documentation>Divide numbers</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="Numbers" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Gets or sets the numbers to work with.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="NumericFormat" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the numeric format.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Result" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets or sets the result.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="TruncateResult" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] When , uses integer division to truncate the result. Default is</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Modulo" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Performs the modulo operation on numbers.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:complexContent mixed="false">
@@ -1648,9 +2021,19 @@
               <xs:documentation>Gets or sets the assemblies.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
+          <xs:attribute name="DisableShadowCopy" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Determines whether assemblies are copied to a shadow folder during testing.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ErrorOutputFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The file to receive test error details.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="ExcludeCategory" type="xs:string">
             <xs:annotation>
-              <xs:documentation>[Optional] Gets or sets the exclude category.</xs:documentation>
+              <xs:documentation>[Optional] Gets or sets the categories to exclude.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="ExitCode" />
@@ -1661,12 +2044,22 @@
           </xs:attribute>
           <xs:attribute name="IncludeCategory" type="xs:string">
             <xs:annotation>
-              <xs:documentation>[Optional] Gets or sets the include category.</xs:documentation>
+              <xs:documentation>[Optional] Gets or sets the categories to include.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="OutputXmlFile" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the output XML file.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ProjectConfiguration" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The project configuration to run.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="TestInNewThread" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Allows tests to be run in a new thread, allowing you to take advantage of ApartmentState and ThreadPriority settings in the config file.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="Timeout" />
@@ -1679,6 +2072,129 @@
           <xs:attribute name="XsltTransformFile" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the XSLT transform file.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Prompt" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Displays a message on the console and waits for user input.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="Text" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The message to display in the console.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="UserInput" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] The text entered at the console.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RegexMatch" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Task to filter an Input list with a Regex expression.
+            Output list contains items from Input list that matched given expression</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="Expression" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Regex expression</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Input" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Input, list of items to perform the regex on</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Options" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Regex options as strings corresponding to the RegexOptions enum:
+                Compiled
+                CultureInvariant
+                ECMAScript 
+                ExplicitCapture
+                IgnoreCase
+                IgnorePatternWhitespace
+                Multiline
+                None
+                RightToLeft
+                Singleline</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Output" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Results of the Regex transformation.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RegexReplace" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Task to replace portions of strings within the Input list
+            Output list contains all the elements of the Input list after
+            performing the Regex Replace.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="Count" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Number of matches to allow on each input item.
+            -1 indicates to perform matches on all matches within input item</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Expression" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Regex expression</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Input" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Input, list of items to perform the regex on</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Options" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Regex options as strings corresponding to the RegexOptions enum:
+                Compiled
+                CultureInvariant
+                ECMAScript 
+                ExplicitCapture
+                IgnoreCase
+                IgnorePatternWhitespace
+                Multiline
+                None
+                RightToLeft
+                Singleline</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Output" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Results of the Regex transformation.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Replacement" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] String replacing matching expression strings in input list.
+            If left empty matches in the input list are removed (replaced with empty string)</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="StartAt" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Position within the input item to start matching</xs:documentation>
             </xs:annotation>
           </xs:attribute>
         </xs:extension>
@@ -1847,7 +2363,7 @@
         <xs:extension base="msb:TaskType">
           <xs:attribute name="Code" type="xs:string">
             <xs:annotation>
-              <xs:documentation>[Optional] THe code to compile and execute</xs:documentation>
+              <xs:documentation>[Optional] The code to compile and execute</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="Imports" type="xs:string">
@@ -1869,6 +2385,11 @@
           <xs:attribute name="References" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] The required references</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ReturnValue" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] The string returned from the custom ScriptMain method.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
         </xs:extension>
@@ -2547,6 +3068,37 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  <xs:element name="ExecuteDDL" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>MSBuild task to execute DDL and SQL statements.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="BatchSeparator" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the batch delimter string.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ConnectionString" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>The connection string</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Files" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Gets or sets the DDL/SQL files.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Results" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Output the return count/values</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="SvnCheckout" substitutionGroup="msb:Task">
     <xs:annotation>
       <xs:documentation>Checkout a local working copy of a Subversion repository.</xs:documentation>
@@ -2587,7 +3139,7 @@
           </xs:attribute>
           <xs:attribute name="RepositoryPath" type="xs:string">
             <xs:annotation>
-              <xs:documentation>[Optional] Gets or sets the repository path.</xs:documentation>
+              <xs:documentation>[Optional] [Output] Gets or sets the repository path.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="Revision" type="xs:string">
@@ -2656,7 +3208,7 @@
           </xs:attribute>
           <xs:attribute name="RepositoryPath" type="xs:string">
             <xs:annotation>
-              <xs:documentation>[Optional] Gets or sets the repository path.</xs:documentation>
+              <xs:documentation>[Optional] [Output] Gets or sets the repository path.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="Revision" type="xs:string">
@@ -2725,12 +3277,91 @@
           </xs:attribute>
           <xs:attribute name="RepositoryPath" type="xs:string">
             <xs:annotation>
-              <xs:documentation>[Optional] Gets or sets the repository path.</xs:documentation>
+              <xs:documentation>[Optional] [Output] Gets or sets the repository path.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="Revision" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] [Output] Gets or sets the revision.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Targets" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the targets.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Timeout" />
+          <xs:attribute name="ToolPath" type="xs:string" />
+          <xs:attribute name="Username" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the username.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Verbose" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the verbose.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SvnCopy" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Copy a file or folder in Subversion</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="Arguments" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the arguments.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Command" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the command.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="DestinationPath" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The path to which the SourcePath should be copied</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ExitCode" />
+          <xs:attribute name="Force" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the force.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="LocalPath" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the local path.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Message" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the message.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Password" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the password.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="RepositoryPath" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets or sets the repository path.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Revision" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets or sets the revision.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="SourcePath" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The path of the source file or folder that should be copied</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="Targets" type="xs:string">
@@ -2794,7 +3425,7 @@
           </xs:attribute>
           <xs:attribute name="RepositoryPath" type="xs:string">
             <xs:annotation>
-              <xs:documentation>[Optional] Gets or sets the repository path.</xs:documentation>
+              <xs:documentation>[Optional] [Output] Gets or sets the repository path.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="Revision" type="xs:string">
@@ -2883,7 +3514,7 @@
           </xs:attribute>
           <xs:attribute name="RepositoryPath" type="xs:string">
             <xs:annotation>
-              <xs:documentation>[Optional] Gets or sets the repository path.</xs:documentation>
+              <xs:documentation>[Optional] [Output] Gets or sets the repository path.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="RepositoryRoot" type="xs:string">
@@ -2938,7 +3569,7 @@
             </xs:documentation>
             </xs:annotation>
           </xs:enumeration>
-          <xs:enumeration value="directory">
+          <xs:enumeration value="dir">
             <xs:annotation>
               <xs:documentation>
             Node is a directory
@@ -3018,7 +3649,7 @@
           </xs:attribute>
           <xs:attribute name="RepositoryPath" type="xs:string">
             <xs:annotation>
-              <xs:documentation>[Optional] Gets or sets the repository path.</xs:documentation>
+              <xs:documentation>[Optional] [Output] Gets or sets the repository path.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="Revision" type="xs:string">
@@ -3093,6 +3724,80 @@
           </xs:attribute>
           <xs:attribute name="Timeout" />
           <xs:attribute name="ToolPath" type="xs:string" />
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TemplateFile" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>MSBuild task that replaces tokens in a template file and writes out a new file.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="OutputFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] The token replaced template file.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="OutputFilename" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The full path to the output file name.  If no filename is specified (the default) the
+            output file will be the Template filename with a .out extension.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Template" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>The template file used.  Tokens with values of ${Name} are replaced by name.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Tokens" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] List of tokens to replace in the template.  Token name is taken from the TaskItem.ItemSpec and the
+            replacement value comes from the ReplacementValue metadata of the item.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TfsVersion" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Determines the changeset in a local Team Foundation Server workspace</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="Changeset" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] The latest changeset ID in the local path</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Domain" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The domain of the user to authenticate on the server</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="LocalPath" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Path to local working copy.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Password" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The password for the user to authenticate on the server</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="TfsLibraryLocation" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The location of the Team Foundation Server client assemblies. Leave empty when the client is installed in the Global Assembly Cache.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Username" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The user to authenticate on the server</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
@@ -3253,7 +3958,7 @@
   </xs:element>
   <xs:element name="Version" substitutionGroup="msb:Task">
     <xs:annotation>
-      <xs:documentation>Get Version information from file.</xs:documentation>
+      <xs:documentation>Generates version information based on various algorithms</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:complexContent mixed="false">
@@ -3265,7 +3970,7 @@
           </xs:attribute>
           <xs:attribute name="BuildType" type="xs:string">
             <xs:annotation>
-              <xs:documentation>[Optional] Gets or sets the type of the build.</xs:documentation>
+              <xs:documentation>[Optional] Gets or sets the method used to generate a  number</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="Major" type="xs:string">
@@ -3285,12 +3990,17 @@
           </xs:attribute>
           <xs:attribute name="RevisionType" type="xs:string">
             <xs:annotation>
-              <xs:documentation>[Optional] Gets or sets the type of the revision.</xs:documentation>
+              <xs:documentation>[Optional] Gets or sets the method used to generate a  number</xs:documentation>
             </xs:annotation>
           </xs:attribute>
-          <xs:attribute name="VersionFile" type="msb:non_empty_string" use="required">
+          <xs:attribute name="StartDate" type="xs:string">
             <xs:annotation>
-              <xs:documentation>Gets or sets the version file.</xs:documentation>
+              <xs:documentation>[Optional] Gets or sets the starting date used to calculate the  number when  is Automatic.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="VersionFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the file used to initialize and persist the version.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
         </xs:extension>
@@ -3312,6 +4022,113 @@
           <xs:attribute name="FileUri" type="msb:non_empty_string" use="required">
             <xs:annotation>
               <xs:documentation>Gets or sets the URI from which to download data.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XmlMassUpdate" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Performs multiple updates on an XML file</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="ContentFile" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>The original file whose content is to be updated</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ContentPathUsedByTask" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] The full path of the file containing content updated by the task</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ContentRoot" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The XPath expression identifying root node that substitions are relative to</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="MergedFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The file created after performing the updates</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="MergedPathUsedByTask" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] The full path of the file containing the results of the task</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="NamespaceDefinitions" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] A collection of prefix=namespace definitions used to query the XML documents</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="SubstitutionsFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The file containing the list of updates to perform</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="SubstitutionsPathUsedByTask" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] The full path of the file containing substitutions used by the task</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="SubstitutionsRoot" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The XPath expression used to locate the list of substitutions to perform</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="UpdateControlNamespace" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The namespace used for XmlMassUpdate pre-defined attributes</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="XmlQuery" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Reads a value or values from lines of XML</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="Lines" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The lines of a valid XML document</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="NamespaceDefinitions" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] A collection of prefix=namespace definitions used to query the XML document</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ReservedMetaDataPrefix" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The string that is prepended to all reserved metadata properties.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Values" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] The values selected by</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ValuesCount" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] The number of values returned in</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="XmlFileName" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the name of an XML file to query</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="XPath" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>The query used to identify the values in the XML document</xs:documentation>
             </xs:annotation>
           </xs:attribute>
         </xs:extension>
@@ -3392,8 +4209,7 @@
   </xs:element>
   <xs:element name="Xslt" substitutionGroup="msb:Task">
     <xs:annotation>
-      <xs:documentation>A task to merge and transform
-             a set of xml files.</xs:documentation>
+      <xs:documentation>A task to merge and transform a set of xml files.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:complexContent mixed="false">
