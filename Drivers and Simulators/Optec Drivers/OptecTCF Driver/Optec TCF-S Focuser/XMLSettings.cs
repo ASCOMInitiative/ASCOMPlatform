@@ -51,9 +51,9 @@ namespace Optec_TCF_S_Focuser
 
                 else TCFSettingsDocument = XDocument.Load(xpath);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                EventLogger.LogMessage(ex);
                 throw;
             }
 
