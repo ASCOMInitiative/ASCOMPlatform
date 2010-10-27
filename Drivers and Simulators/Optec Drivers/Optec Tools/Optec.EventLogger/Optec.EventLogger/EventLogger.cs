@@ -38,6 +38,7 @@ namespace Optec
                 EventLog.CreateEventSource(eventLogSource, eventLogName);
             }
             myEventLog = new EventLog();
+            myEventLog.ModifyOverflowPolicy(OverflowAction.OverwriteAsNeeded, 0);
             myEventLog.Source = eventLogSource;
             myEventLogTraceListener = new EventLogTraceListener(myEventLog);
             Trace.Listeners.Add(myEventLogTraceListener);
