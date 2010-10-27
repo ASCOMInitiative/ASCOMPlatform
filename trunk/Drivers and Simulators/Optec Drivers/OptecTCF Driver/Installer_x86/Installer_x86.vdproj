@@ -88,25 +88,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C4A4DC9CCE4F0E0561EDACC223D173BE"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_4EC924A0D87CAC366E43589F79CDF2D2"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_AD05B5E2E1A37E0CB4A51B0282EF79EF"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_CA5BA54D26A71881DC51112441D3883F"
+        "OwnerKey" = "8:_5D9D922993F540CCA3414C4D54B5018B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -118,7 +100,25 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_5D9D922993F540CCA3414C4D54B5018B"
+        "OwnerKey" = "8:_CA5BA54D26A71881DC51112441D3883F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_AD05B5E2E1A37E0CB4A51B0282EF79EF"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_4EC924A0D87CAC366E43589F79CDF2D2"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_C4A4DC9CCE4F0E0561EDACC223D173BE"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -579,15 +579,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Optec TCF-S Programs (32 Bit)"
-        "ProductCode" = "8:{888A762B-E7F4-45B5-99D3-A5BBEF498B0C}"
-        "PackageCode" = "8:{1030EBBD-36FB-4A0E-8053-B205D05A6774}"
+        "ProductCode" = "8:{24846524-C9D2-4424-8870-C47A9E47611D}"
+        "PackageCode" = "8:{104F0748-F579-4D03-93E9-CED1AB5EB82A}"
         "UpgradeCode" = "8:{D13BC22A-7584-428E-BB86-78E43E49252A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:5.3.0"
+        "ProductVersion" = "8:5.3.1"
         "Manufacturer" = "8:Optec Inc."
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://www.optecinc.com"
@@ -1441,7 +1441,7 @@
             "ReadOnly" = "11:FALSE"
             "Hidden" = "11:FALSE"
             "System" = "11:FALSE"
-            "Permanent" = "11:TRUE"
+            "Permanent" = "11:FALSE"
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
