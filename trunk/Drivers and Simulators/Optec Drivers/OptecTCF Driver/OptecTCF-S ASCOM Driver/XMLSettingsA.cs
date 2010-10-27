@@ -93,7 +93,7 @@ namespace Optec_TCF_S_Focuser
                 x.SetValue(NewValue);
                 TCFSettingsDocument.Save(xpath);
             }
-            catch (InvalidOperationException ex)
+            catch (System.InvalidOperationException ex)
             {
                 EventLogger.LogMessage(ex);
                 CreatePropertyInXML(PropertyName, NewValue);
