@@ -136,7 +136,7 @@ namespace ASCOM.Platform.UnitTest
     public class When_setting_then_getting_properties_for_a_registered_device : With_mock_ascom_profile
     {
         static SettingsPropertyValueCollection result;
-        static SettingsPropertyCollection properties;
+        //static SettingsPropertyCollection properties; Commented out to remove compiler warning
         // Context:
         //	- mockProfile should capture whatever the DeviceType is configured to.
         Establish context = () =>
