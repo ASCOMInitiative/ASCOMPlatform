@@ -186,7 +186,6 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -268,14 +267,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GACInstall\GACInstall.csproj">
-      <Project>{68255A7C-76E3-4D51-9475-6CFE21188FF6}</Project>
-      <Name>GACInstall</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
-      <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
-      <Name>ASCOM.Exceptions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
       <Name>ASCOM.Utilities</Name>

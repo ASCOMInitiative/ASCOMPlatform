@@ -619,22 +619,18 @@ Friend Class RegistryAccess
 
         Select Case Result
             Case 0 'All OK so return result
-                Return PointerToRegistryKey(CType(SubKeyHandle, System.IntPtr), Writeable, False)
+                Return PointerToRegistryKey(CType(SubKeyHandle, System.IntPtr), Writeable, False, Options) ' Now pass the options as well for Framework 4 compatibility
             Case 2 'Key not found so return nothing
                 Throw New ProfilePersistenceException("Cannot open key " & SubKeyName & " as it does not exist - Result: 0x" & Hex(Result))
             Case Else 'Some other error so throw an error
                 Throw New System.ComponentModel.Win32Exception(Result, "OpenSubKey: Exception encountered opening key - Result: 0x" & Hex(Result))
         End Select
 
-
-        If Result <> 0 Then
-        End If
-
     End Function
 
-    Private Function PointerToRegistryKey(ByVal hKey As System.IntPtr, ByVal writable As Boolean, ByVal ownsHandle As Boolean) As Microsoft.Win32.RegistryKey
+    Private Function PointerToRegistryKey(ByVal hKey As System.IntPtr, ByVal writable As Boolean, ByVal ownsHandle As Boolean, ByVal options As RegWow64Options) As Microsoft.Win32.RegistryKey
         ' Create a SafeHandles.SafeRegistryHandle from this pointer - this is a private class
-        Dim privateConstructors As System.Reflection.BindingFlags
+        Dim privateConstructors, publicConstructors As System.Reflection.BindingFlags
         Dim safeRegistryHandleType As System.Type
         Dim safeRegistryHandleConstructorTypes As System.Type() = {GetType(System.IntPtr), GetType(System.Boolean)}
         Dim safeRegistryHandleConstructor As System.Reflection.ConstructorInfo
@@ -643,17 +639,25 @@ Friend Class RegistryAccess
         Dim registryKeyConstructor As System.Reflection.ConstructorInfo
         Dim result As Microsoft.Win32.RegistryKey
 
+        publicConstructors = System.Reflection.BindingFlags.Instance Or System.Reflection.BindingFlags.NonPublic Or System.Reflection.BindingFlags.Public
         privateConstructors = System.Reflection.BindingFlags.Instance Or System.Reflection.BindingFlags.NonPublic
         safeRegistryHandleType = GetType(Microsoft.Win32.SafeHandles.SafeHandleZeroOrMinusOneIsInvalid).Assembly.GetType("Microsoft.Win32.SafeHandles.SafeRegistryHandle")
-        safeRegistryHandleConstructor = safeRegistryHandleType.GetConstructor(privateConstructors, Nothing, safeRegistryHandleConstructorTypes, Nothing)
+        safeRegistryHandleConstructor = safeRegistryHandleType.GetConstructor(publicConstructors, Nothing, safeRegistryHandleConstructorTypes, Nothing)
         safeHandle = safeRegistryHandleConstructor.Invoke(New System.Object() {hKey, ownsHandle})
 
         ' Create a new Registry key using the private constructor using the safeHandle - this should then behave like a .NET natively opened handle and disposed of correctly
-        Dim registryKeyConstructorTypes As System.Type() = {safeRegistryHandleType, GetType(System.Boolean)}
-        registryKeyType = GetType(Microsoft.Win32.RegistryKey)
-        registryKeyConstructor = registryKeyType.GetConstructor(privateConstructors, Nothing, registryKeyConstructorTypes, Nothing)
-        result = DirectCast(registryKeyConstructor.Invoke(New Object() {safeHandle, writable}), Microsoft.Win32.RegistryKey)
-
+        If System.Environment.Version.Major >= 4 Then ' Deal with MS having added a new parameter to the RegistryKey private costructor!!
+            Dim RegistryViewType As System.Type = GetType(Microsoft.Win32.SafeHandles.SafeHandleZeroOrMinusOneIsInvalid).Assembly.GetType("Microsoft.Win32.RegistryView") ' This is the new parameter type
+            Dim registryKeyConstructorTypes As System.Type() = {safeRegistryHandleType, GetType(System.Boolean), RegistryViewType} 'Add the extra paraemter to the list of parameter types
+            registryKeyType = GetType(Microsoft.Win32.RegistryKey)
+            registryKeyConstructor = registryKeyType.GetConstructor(privateConstructors, Nothing, registryKeyConstructorTypes, Nothing)
+            result = DirectCast(registryKeyConstructor.Invoke(New Object() {safeHandle, writable, CInt(options)}), Microsoft.Win32.RegistryKey) ' Version 4 and later
+        Else ' Only two paraemters for Frameworks 3.5 and below
+            Dim registryKeyConstructorTypes As System.Type() = {safeRegistryHandleType, GetType(System.Boolean)}
+            registryKeyType = GetType(Microsoft.Win32.RegistryKey)
+            registryKeyConstructor = registryKeyType.GetConstructor(privateConstructors, Nothing, registryKeyConstructorTypes, Nothing)
+            result = DirectCast(registryKeyConstructor.Invoke(New Object() {safeHandle, writable}), Microsoft.Win32.RegistryKey) ' Version 3.5 and earlier
+        End If
         Return result
     End Function
 
