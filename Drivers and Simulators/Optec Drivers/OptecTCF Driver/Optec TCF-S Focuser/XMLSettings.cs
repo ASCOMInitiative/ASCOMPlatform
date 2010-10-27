@@ -75,7 +75,7 @@ namespace Optec_TCF_S_Focuser
                 else return Convert.ChangeType(e.Value, t);
 
             }
-            catch (InvalidOperationException ex)
+            catch (System.InvalidOperationException ex)
             {
                 EventLogger.LogMessage(ex);
                 CreatePropertyInXML(PropertyName, defaultValue);
