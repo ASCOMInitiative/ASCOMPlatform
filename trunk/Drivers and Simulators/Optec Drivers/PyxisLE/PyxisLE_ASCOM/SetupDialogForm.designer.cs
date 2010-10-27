@@ -28,6 +28,7 @@ namespace ASCOM.PyxisLE_ASCOM
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetupDialogForm));
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
@@ -46,33 +47,35 @@ namespace ASCOM.PyxisLE_ASCOM
             this.RelativeReverse_BTN = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.Degree_LBL = new System.Windows.Forms.Label();
             this.AbsoluteMove_TB = new System.Windows.Forms.TextBox();
             this.AbsoluteMove_BTN = new System.Windows.Forms.Button();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider();
+            this.label6 = new System.Windows.Forms.Label();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.picASCOM = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.deviceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.diagnosticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.StatusCheckTimer = new System.Windows.Forms.Timer(this.components);
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Relative_NUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmdOK
             // 
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdOK.Location = new System.Drawing.Point(176, 469);
+            this.cmdOK.Location = new System.Drawing.Point(176, 424);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 0;
@@ -84,7 +87,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(70, 469);
+            this.cmdCancel.Location = new System.Drawing.Point(74, 423);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
@@ -96,7 +99,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(12, 103);
+            this.textBox1.Location = new System.Drawing.Point(12, 100);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
@@ -129,7 +132,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox2.Location = new System.Drawing.Point(13, 228);
+            this.textBox2.Location = new System.Drawing.Point(13, 216);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
             this.textBox2.Size = new System.Drawing.Size(94, 13);
@@ -141,7 +144,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             this.CurrentPA_LBL.AutoSize = true;
             this.CurrentPA_LBL.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CurrentPA_LBL.Location = new System.Drawing.Point(110, 226);
+            this.CurrentPA_LBL.Location = new System.Drawing.Point(110, 214);
             this.CurrentPA_LBL.Name = "CurrentPA_LBL";
             this.CurrentPA_LBL.Size = new System.Drawing.Size(43, 15);
             this.CurrentPA_LBL.TabIndex = 9;
@@ -149,7 +152,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             // SetSkyPA_Btn
             // 
-            this.SetSkyPA_Btn.Location = new System.Drawing.Point(168, 216);
+            this.SetSkyPA_Btn.Location = new System.Drawing.Point(168, 204);
             this.SetSkyPA_Btn.Name = "SetSkyPA_Btn";
             this.SetSkyPA_Btn.Size = new System.Drawing.Size(65, 37);
             this.SetSkyPA_Btn.TabIndex = 10;
@@ -159,7 +162,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             // HomeBTN
             // 
-            this.HomeBTN.Location = new System.Drawing.Point(101, 19);
+            this.HomeBTN.Location = new System.Drawing.Point(101, 16);
             this.HomeBTN.Name = "HomeBTN";
             this.HomeBTN.Size = new System.Drawing.Size(47, 23);
             this.HomeBTN.TabIndex = 4;
@@ -177,22 +180,21 @@ namespace ASCOM.PyxisLE_ASCOM
             this.groupBox1.Controls.Add(this.RelativeReverse_BTN);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.Degree_LBL);
             this.groupBox1.Controls.Add(this.AbsoluteMove_TB);
             this.groupBox1.Controls.Add(this.AbsoluteMove_BTN);
-            this.groupBox1.Location = new System.Drawing.Point(13, 272);
+            this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Location = new System.Drawing.Point(13, 250);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(220, 183);
+            this.groupBox1.Size = new System.Drawing.Size(220, 168);
             this.groupBox1.TabIndex = 12;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Motion Controls";
             // 
             // label4
             // 
-            this.label4.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(6, 24);
+            this.label4.Location = new System.Drawing.Point(6, 27);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(89, 13);
             this.label4.TabIndex = 26;
@@ -200,14 +202,13 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             // Relative_NUD
             // 
-            this.Relative_NUD.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.Relative_NUD.DecimalPlaces = 2;
             this.Relative_NUD.Increment = new decimal(new int[] {
             5,
             0,
             0,
             0});
-            this.Relative_NUD.Location = new System.Drawing.Point(74, 153);
+            this.Relative_NUD.Location = new System.Drawing.Point(74, 138);
             this.Relative_NUD.Maximum = new decimal(new int[] {
             35999,
             0,
@@ -225,9 +226,8 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             // label5
             // 
-            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(77, 136);
+            this.label5.Location = new System.Drawing.Point(77, 121);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(64, 13);
             this.label5.TabIndex = 23;
@@ -235,8 +235,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             // RelativeForward_BTN
             // 
-            this.RelativeForward_BTN.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.RelativeForward_BTN.Location = new System.Drawing.Point(174, 152);
+            this.RelativeForward_BTN.Location = new System.Drawing.Point(174, 137);
             this.RelativeForward_BTN.Name = "RelativeForward_BTN";
             this.RelativeForward_BTN.Size = new System.Drawing.Size(30, 23);
             this.RelativeForward_BTN.TabIndex = 24;
@@ -246,8 +245,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             // RelativeReverse_BTN
             // 
-            this.RelativeReverse_BTN.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.RelativeReverse_BTN.Location = new System.Drawing.Point(16, 152);
+            this.RelativeReverse_BTN.Location = new System.Drawing.Point(16, 137);
             this.RelativeReverse_BTN.Name = "RelativeReverse_BTN";
             this.RelativeReverse_BTN.Size = new System.Drawing.Size(30, 23);
             this.RelativeReverse_BTN.TabIndex = 19;
@@ -257,10 +255,9 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             // label2
             // 
-            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(6, 116);
+            this.label2.Location = new System.Drawing.Point(6, 105);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(93, 13);
             this.label2.TabIndex = 22;
@@ -268,31 +265,18 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             // label3
             // 
-            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(6, 56);
+            this.label3.Location = new System.Drawing.Point(6, 57);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(155, 13);
             this.label3.TabIndex = 21;
             this.label3.Text = "Move to Absolute Sky PA:";
             // 
-            // Degree_LBL
-            // 
-            this.Degree_LBL.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.Degree_LBL.AutoSize = true;
-            this.Degree_LBL.BackColor = System.Drawing.Color.White;
-            this.Degree_LBL.Location = new System.Drawing.Point(100, 81);
-            this.Degree_LBL.Name = "Degree_LBL";
-            this.Degree_LBL.Size = new System.Drawing.Size(11, 13);
-            this.Degree_LBL.TabIndex = 20;
-            this.Degree_LBL.Text = "°";
-            // 
             // AbsoluteMove_TB
             // 
-            this.AbsoluteMove_TB.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.AbsoluteMove_TB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AbsoluteMove_TB.Location = new System.Drawing.Point(43, 79);
+            this.AbsoluteMove_TB.Location = new System.Drawing.Point(37, 79);
             this.AbsoluteMove_TB.Name = "AbsoluteMove_TB";
             this.AbsoluteMove_TB.Size = new System.Drawing.Size(73, 20);
             this.AbsoluteMove_TB.TabIndex = 18;
@@ -302,14 +286,22 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             // AbsoluteMove_BTN
             // 
-            this.AbsoluteMove_BTN.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.AbsoluteMove_BTN.Location = new System.Drawing.Point(140, 77);
+            this.AbsoluteMove_BTN.Location = new System.Drawing.Point(129, 77);
             this.AbsoluteMove_BTN.Name = "AbsoluteMove_BTN";
-            this.AbsoluteMove_BTN.Size = new System.Drawing.Size(37, 23);
+            this.AbsoluteMove_BTN.Size = new System.Drawing.Size(48, 23);
             this.AbsoluteMove_BTN.TabIndex = 19;
             this.AbsoluteMove_BTN.Text = "Go";
             this.AbsoluteMove_BTN.UseVisualStyleBackColor = true;
             this.AbsoluteMove_BTN.Click += new System.EventHandler(this.AbsoluteMove_BTN_Click);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(112, 76);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(11, 13);
+            this.label6.TabIndex = 27;
+            this.label6.Text = "°";
             // 
             // errorProvider1
             // 
@@ -320,7 +312,7 @@ namespace ASCOM.PyxisLE_ASCOM
             this.picASCOM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picASCOM.Image = global::ASCOM.PyxisLE_ASCOM.Properties.Resources.ASCOM;
-            this.picASCOM.Location = new System.Drawing.Point(187, 41);
+            this.picASCOM.Location = new System.Drawing.Point(193, 31);
             this.picASCOM.Name = "picASCOM";
             this.picASCOM.Size = new System.Drawing.Size(48, 56);
             this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -332,7 +324,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // pictureBox1
             // 
             this.pictureBox1.Image = global::ASCOM.PyxisLE_ASCOM.Properties.Resources.Optec_Logo_medium_png;
-            this.pictureBox1.Location = new System.Drawing.Point(13, 32);
+            this.pictureBox1.Location = new System.Drawing.Point(8, 26);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(139, 56);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -353,8 +345,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // deviceToolStripMenuItem
             // 
             this.deviceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.advancedSettingsToolStripMenuItem,
-            this.diagnosticsToolStripMenuItem});
+            this.advancedSettingsToolStripMenuItem});
             this.deviceToolStripMenuItem.Name = "deviceToolStripMenuItem";
             this.deviceToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.deviceToolStripMenuItem.Text = "Device";
@@ -365,12 +356,6 @@ namespace ASCOM.PyxisLE_ASCOM
             this.advancedSettingsToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.advancedSettingsToolStripMenuItem.Text = "Advanced Settings";
             this.advancedSettingsToolStripMenuItem.Click += new System.EventHandler(this.advancedSettingsToolStripMenuItem_Click);
-            // 
-            // diagnosticsToolStripMenuItem
-            // 
-            this.diagnosticsToolStripMenuItem.Name = "diagnosticsToolStripMenuItem";
-            this.diagnosticsToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
-            this.diagnosticsToolStripMenuItem.Text = "Diagnostics";
             // 
             // helpToolStripMenuItem
             // 
@@ -387,6 +372,7 @@ namespace ASCOM.PyxisLE_ASCOM
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // checkForUpdatesToolStripMenuItem
             // 
@@ -399,12 +385,36 @@ namespace ASCOM.PyxisLE_ASCOM
             this.documentationToolStripMenuItem.Name = "documentationToolStripMenuItem";
             this.documentationToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.documentationToolStripMenuItem.Text = "Documentation";
+            this.documentationToolStripMenuItem.Click += new System.EventHandler(this.documentationToolStripMenuItem_Click);
+            // 
+            // StatusCheckTimer
+            // 
+            this.StatusCheckTimer.Enabled = true;
+            this.StatusCheckTimer.Interval = 200;
+            this.StatusCheckTimer.Tick += new System.EventHandler(this.StatusCheckTimer_Tick);
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.StatusLabel});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 455);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(247, 22);
+            this.statusStrip1.TabIndex = 14;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // StatusLabel
+            // 
+            this.StatusLabel.Name = "StatusLabel";
+            this.StatusLabel.Size = new System.Drawing.Size(81, 17);
+            this.StatusLabel.Text = "Rotator Status";
             // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(247, 502);
+            this.ClientSize = new System.Drawing.Size(247, 477);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.SetSkyPA_Btn);
             this.Controls.Add(this.CurrentPA_LBL);
@@ -426,6 +436,7 @@ namespace ASCOM.PyxisLE_ASCOM
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PyxisLE_ASCOM Setup";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SetupDialogForm_FormClosing);
             this.Load += new System.EventHandler(this.SetupDialogForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -435,6 +446,8 @@ namespace ASCOM.PyxisLE_ASCOM
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -454,7 +467,6 @@ namespace ASCOM.PyxisLE_ASCOM
         private System.Windows.Forms.Button SetSkyPA_Btn;
         private System.Windows.Forms.Button HomeBTN;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label Degree_LBL;
         private System.Windows.Forms.TextBox AbsoluteMove_TB;
         private System.Windows.Forms.Button AbsoluteMove_BTN;
         private System.Windows.Forms.Label label3;
@@ -468,10 +480,13 @@ namespace ASCOM.PyxisLE_ASCOM
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem deviceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem advancedSettingsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem diagnosticsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem checkForUpdatesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem documentationToolStripMenuItem;
+        private System.Windows.Forms.Timer StatusCheckTimer;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel StatusLabel;
+        private System.Windows.Forms.Label label6;
     }
 }

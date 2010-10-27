@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Optec;
 
 namespace PyxisLE_Control
 {
@@ -21,7 +22,7 @@ namespace PyxisLE_Control
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message); 
+                EventLogger.LogMessage(ex);
             }
         }
     }

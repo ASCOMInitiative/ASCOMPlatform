@@ -9,6 +9,7 @@ using PyxisLE_API;
 using System.Diagnostics;
 using System.Threading;
 using System.Collections;
+using System.Reflection;
 
 namespace ASCOM.PyxisLE_ASCOM
 {
@@ -89,6 +90,26 @@ namespace ASCOM.PyxisLE_ASCOM
 
         private void cmdOK_Click(object sender, EventArgs e)
         {
+            if (myRotator == null)
+            {
+                string msg = "A rotator has not been selected! Press Cancel to quit.";
+                MessageBox.Show(msg);
+                return;
+            }
+            else if (myRotator.ErrorState != 0)
+            {
+                string msg = "The selected Rotator has an error state set. See status below.";
+                MessageBox.Show(msg);
+                return;
+            }
+            else if (!myRotator.IsHomed)
+            {
+                string msg = "The selected Rotator is not homed. Please home the device before continuing.";
+                MessageBox.Show(msg);
+                return;
+            }
+
+
             RotatorManager = null;
             myProfile.WriteValue(Rotator.s_csDriverID, "SelectedSerialNumber", selectedSerialNumber);
             myProfile.Dispose();
@@ -171,6 +192,16 @@ namespace ASCOM.PyxisLE_ASCOM
 
         private void HomeBTN_Click(object sender, EventArgs e)
         {
+            if (myRotator == null)
+            {
+                MessageBox.Show("No rotator has been selected");
+                return;
+            }
+            else if (myRotator.ErrorState != 0)
+            {
+                MessageBox.Show("An error code has been set in the rotators firmware. See status below.");
+            }
+
             myRotator.Home();
             MotionMonitor();
         }
@@ -182,40 +213,56 @@ namespace ASCOM.PyxisLE_ASCOM
 
         private void SetSkyPA_Btn_Click(object sender, EventArgs e)
         {
-            string show = myProfile.GetValue(Rotator.s_csDriverID, "ShowSetPAWarning", 
-                "", (true).ToString());
-            if(show == true.ToString())
+            try
             {
-                Warning1Form w = new Warning1Form();
-                DialogResult r = w.ShowDialog();
-                if (r != System.Windows.Forms.DialogResult.OK)
+                checkRotatorReady();
+                string show = myProfile.GetValue(Rotator.s_csDriverID, "ShowSetPAWarning",
+                        "", (true).ToString());
+                if (show == true.ToString())
                 {
-                    return;
+                    Warning1Form w = new Warning1Form();
+                    DialogResult r = w.ShowDialog();
+                    if (r != System.Windows.Forms.DialogResult.OK)
+                    {
+                        return;
+                    }
                 }
-            }
 
-            
-            SetSkyPA_Frm frm = new SetSkyPA_Frm();
-            frm.OldPAValue = myRotator.CurrentSkyPA;
-            DialogResult result = frm.ShowDialog();
-            double NewOffset = 0;
-            if (result == System.Windows.Forms.DialogResult.OK)
+
+                SetSkyPA_Frm frm = new SetSkyPA_Frm();
+                frm.OldPAValue = myRotator.CurrentSkyPA;
+                DialogResult result = frm.ShowDialog();
+                double NewOffset = 0;
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+
+                    NewOffset = frm.NewPAValue - myRotator.CurrentDevicePA;
+                    myRotator.SkyPAOffset = NewOffset;
+                    UpdateSkyPALabel();
+                    Application.DoEvents();
+                }
+
+                frm.Dispose();
+            }
+            catch (Exception ex)
             {
-
-                NewOffset = frm.NewPAValue - myRotator.CurrentDevicePA;
-                myRotator.SkyPAOffset = NewOffset;
-                UpdateSkyPALabel();
-                Application.DoEvents();
+                MessageBox.Show(ex.Message, "Attention");
             }
-
-            frm.Dispose();
         }
 
         private void AbsoluteMove_BTN_Click(object sender, EventArgs e)
         {
-            double pos = double.Parse(AbsoluteMove_TB.Text);
-            StartAMove(pos);
-            if (pos == 360) AbsoluteMove_TB.Text = "0";
+            try
+            {
+                checkRotatorReady();
+                double pos = double.Parse(AbsoluteMove_TB.Text);
+                StartAMove(pos);
+                if (pos == 360) AbsoluteMove_TB.Text = "0";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Attention");
+            }
 
         }
 
@@ -227,7 +274,7 @@ namespace ASCOM.PyxisLE_ASCOM
    
             while (myRotator.IsMoving || myRotator.IsHoming)
             {
-                System.Threading.Thread.Sleep(25);
+                System.Threading.Thread.Sleep(50);
           
                 this.Invoke(new DelNoParms(UpdateSkyPALabel));
                 Application.DoEvents();
@@ -279,28 +326,64 @@ namespace ASCOM.PyxisLE_ASCOM
 
         private void RelativeForward_BTN_Click(object sender, EventArgs e)
         {
-            double increment = (double)Relative_NUD.Value;
-            if (increment == 0) return;
-            double NewPositon = myRotator.CurrentSkyPA + increment;
-            if (NewPositon > 360) NewPositon = NewPositon - 360;
-            if (NewPositon < 0) NewPositon = NewPositon + 360;
-            StartAMove(NewPositon);
+            try
+            {
+                checkRotatorReady();
+                double increment = (double)Relative_NUD.Value;
+                if (increment == 0) return;
+                double NewPositon = myRotator.CurrentSkyPA + increment;
+                if (NewPositon > 360) NewPositon = NewPositon - 360;
+                if (NewPositon < 0) NewPositon = NewPositon + 360;
+                StartAMove(NewPositon);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Attention");
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            double increment = (double)Relative_NUD.Value;
-            if (increment == 0) return;
-            double NewPositon = myRotator.CurrentSkyPA - increment;
-            if (NewPositon > 360) NewPositon = NewPositon - 360;
-            if (NewPositon < 0) NewPositon = NewPositon + 360;
-            StartAMove(NewPositon);
+            try
+            {
+                checkRotatorReady();
+                double increment = (double)Relative_NUD.Value;
+                if (increment == 0) return;
+                double NewPositon = myRotator.CurrentSkyPA - increment;
+                if (NewPositon > 360) NewPositon = NewPositon - 360;
+                if (NewPositon < 0) NewPositon = NewPositon + 360;
+                StartAMove(NewPositon);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Attention");
+            }
+        }
+
+        private void checkRotatorReady()
+        {
+            if (myRotator == null)
+            {
+                string msg = "A rotator has not been selected. This operation can not be processed.";
+                throw new ASCOM.DriverException(msg);
+            }
+            else if (myRotator.ErrorState != 0)
+            {
+                string msg = "The selected Rotator has an error state set. See status below.";
+                throw new ASCOM.DriverException(msg);
+            }
+            else if (!myRotator.IsHomed)
+            {
+                string msg = "The selected Rotator is not homed. Please home the device before continuing.";
+                throw new ASCOM.DriverException(msg);
+            }
         }
 
         private void advancedSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
+                checkRotatorReady();
                 AdvancedForm frm = new AdvancedForm(myRotator);
                 frm.ShowDialog();
                 frm.Dispose();
@@ -309,9 +392,77 @@ namespace ASCOM.PyxisLE_ASCOM
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(ex.Message, "Attention");
             }
 
+        }
+
+        private void documentationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string asmpath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            int i = asmpath.IndexOf("PyxisLE");
+            asmpath = asmpath.Substring(0, i + 5);
+            string fname = "Pyxis LE Help.chm";
+            asmpath += "\\Documentation\\" + fname;
+            //MessageBox.Show(asmpath);
+            Process p = new Process();
+            p.StartInfo.FileName = asmpath;
+            p.Start();
+        }
+
+        private void StatusCheckTimer_Tick(object sender, EventArgs e)
+        {
+            if (myRotator == null)
+            {
+                UpdateStatusLabel("No Rotator Conntected");
+            }
+            else
+            {
+                if (myRotator.ErrorState == 1)
+                {
+                    UpdateStatusLabel("ATTN: 12VDC Disconnected");
+                }
+                else if (myRotator.ErrorState != 0)
+                {
+                    UpdateStatusLabel(myRotator.GetErrorMessage(myRotator.ErrorState));
+                }
+                else if (!myRotator.IsHomed)
+                {
+                    UpdateStatusLabel("ATTN: HOME REQUIRED");
+                }
+                else UpdateStatusLabel("Rotator Ready!");
+            }
+        }
+
+        private delegate void StatusLabelUpdater(string s);
+
+        private void UpdateStatusLabel(string s)
+        {
+            try
+            {
+                if (this != null)
+                    this.Invoke(new StatusLabelUpdater(usl), s);
+            }
+            catch { }
+            
+        }
+
+        private void usl(string s)
+        {
+            this.StatusLabel.Text = s;
+            Application.DoEvents();
+        }
+
+        private void SetupDialogForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            StatusCheckTimer.Enabled = false;
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AboutBox1 abb = new AboutBox1();
+            abb.ShowDialog();
+            abb.Dispose();
         }
     }
 }
