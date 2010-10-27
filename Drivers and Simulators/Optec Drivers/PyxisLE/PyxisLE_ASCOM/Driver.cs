@@ -61,6 +61,7 @@ namespace ASCOM.PyxisLE_ASCOM
         //
         // Constructor - Must be public for COM registration!
         //
+
         public Rotator()
         {
 #if DEBUG
@@ -70,6 +71,7 @@ namespace ASCOM.PyxisLE_ASCOM
             myProfile = new Profile();
             myProfile.DeviceType = "Rotator";
             myRotator = null;
+            EventLogger.LoggingLevel = TraceLevel.Info;
         }
 
         #region ASCOM Registration
@@ -133,6 +135,7 @@ namespace ASCOM.PyxisLE_ASCOM
             {
                 if(myRotator == null) return false;        // No device has been set yet...
                 if(myRotator.IsAttached == false) return false;    // Device has been unattached from PC
+                
                 return true; 
             }
 
@@ -173,8 +176,7 @@ namespace ASCOM.PyxisLE_ASCOM
 
         public void Halt()
         {
-            if (!Connected) throw new ASCOM.NotConnectedException("The rotator device is no longer connected");
-            myRotator.Halt_Move();
+            if (Connected && myRotator.IsMoving) myRotator.Halt_Move();
         }
 
         public bool IsMoving
@@ -182,7 +184,8 @@ namespace ASCOM.PyxisLE_ASCOM
             get 
             {
                 VerifyConnected();
-                return (myRotator.IsMoving || myRotator.IsMoving);
+                return (myRotator.IsMoving || myRotator.IsHoming);
+                
             }
         }     
 
@@ -191,14 +194,18 @@ namespace ASCOM.PyxisLE_ASCOM
 
             try
             {
-                if (!Connected) throw new ASCOM.NotConnectedException("The rotator device is no longer connected");
+                EventLogger.LogMessage("Relative move to " + Position.ToString() + " requested.", TraceLevel.Info);
+                VerifyConnected();
                 if (Position > 360) throw new ASCOM.InvalidOperationException("Cannot move to position greater than 360°");
                 else if (Position < -360) throw new ASCOM.InvalidOperationException("Cannot move to position less than 0°");
                 double NewPosition = myRotator.CurrentSkyPA + Position;
                 if (NewPosition > 360) NewPosition = NewPosition - 360;
                 else if (NewPosition < 0) NewPosition = NewPosition + 360;
                 myRotator.CurrentSkyPA = NewPosition;
-                while (myRotator.IsMoving) { }
+                System.Threading.Thread.Sleep(500);
+                EventLogger.LogMessage("Move Started at " + DateTime.Now.ToLongTimeString(), TraceLevel.Info);
+                while (this.IsMoving) { System.Threading.Thread.Sleep(100); System.Windows.Forms.Application.DoEvents(); }
+                EventLogger.LogMessage("Returning from move method at " + DateTime.Now.ToLongTimeString(), TraceLevel.Info);
             }
             catch (Exception ex)
             {
@@ -211,12 +218,18 @@ namespace ASCOM.PyxisLE_ASCOM
         {
             try
             {
-                if (!Connected) throw new ASCOM.NotConnectedException("The rotator device is no longer connected");
+                EventLogger.LogMessage("Absolute move to " + Position.ToString(), TraceLevel.Info);
+                VerifyConnected();
                 if (Position > 360) throw new ASCOM.InvalidOperationException("Cannot move to position greater than 360°");
                 else if (Position < 0) throw new ASCOM.InvalidOperationException("Cannot move to position less than 0°");
-                myRotator.CurrentSkyPA = (double)Position;
-                System.Threading.Thread.Sleep(100);
-                while (myRotator.IsMoving) { }
+                EventLogger.LogMessage("Starting Move at " + DateTime.Now.ToLongTimeString(), TraceLevel.Info);
+                myRotator.CurrentSkyPA = (double)Position;    
+                
+                //DateTime start = DateTime.Now;
+                //while (myRotator.CurrentSkyPA != Position) { System.Windows.Forms.Application.DoEvents(); }
+                 while (myRotator.IsMoving || myRotator.CurrentSkyPA != Position) { System.Windows.Forms.Application.DoEvents(); }
+                EventLogger.LogMessage("Returning from move method at " + DateTime.Now.ToLongTimeString() + 
+                    ", Current Sky PA = " + myRotator.CurrentSkyPA.ToString(), TraceLevel.Info);
             }
             catch (Exception ex) 
             {
@@ -229,7 +242,7 @@ namespace ASCOM.PyxisLE_ASCOM
         {
             get 
             {
-                if (!Connected) throw new ASCOM.NotConnectedException("The rotator device is no longer connected");
+                VerifyConnected();
                 return (float)myRotator.CurrentSkyPA; 
             }
         }
@@ -237,13 +250,15 @@ namespace ASCOM.PyxisLE_ASCOM
         public bool Reverse
         {
             get {
-                if (!Connected) throw new ASCOM.NotConnectedException("The rotator device is no longer connected");
+                VerifyConnected();
+               
                 return myRotator.Reverse;
             }
             set {
                 try
                 {
-                    if (!Connected) throw new ASCOM.NotConnectedException("The rotator device is no longer connected");
+                    VerifyConnected();
+                    while (myRotator.IsHoming || myRotator.IsMoving) { }
                     myRotator.Reverse = value;
                     System.Threading.Thread.Sleep(500);
                     while (myRotator.IsHoming || myRotator.IsMoving) { /* We have to wait here because this method is synchronous*/ }
@@ -283,11 +298,12 @@ namespace ASCOM.PyxisLE_ASCOM
         {
             get 
             {
-                
                 VerifyConnected();
                 return (float)myRotator.TargetSkyPA;
             }
         }
+
+
 
         #endregion
 
@@ -327,6 +343,8 @@ namespace ASCOM.PyxisLE_ASCOM
         private void VerifyConnected()
         {
             if (!Connected) throw new ASCOM.NotConnectedException("The rotator device is no longer connected");
+            else if (myRotator.ErrorState != 0) throw new ASCOM.NotConnectedException(myRotator.GetErrorMessage(myRotator.ErrorState));
+            else if (myRotator.IsHomed == false) throw new ASCOM.NotConnectedException("The Connected Rotator is not homed. You must home the device before the requested operation can be performed.");
         }
 
         #endregion

@@ -65,7 +65,26 @@ namespace PyxisLE_Control
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //myRotator.de
+            string msg = String.Empty;
+            msg = "The following properties will be restored as shown..." + Environment.NewLine + Environment.NewLine;
+            msg += "Reverse = FALSE"+ Environment.NewLine;
+            msg += "Backlash = Enabled" + Environment.NewLine;
+            msg += "Backlash Steps = 20" + Environment.NewLine;
+            msg += "Zero Offset = 0" + Environment.NewLine;
+            msg += "Sky PA Offset = 0" + Environment.NewLine;
+            msg += "AND THE DEVICE WILL BE FORCED TO HOME." + Environment.NewLine + Environment.NewLine;
+            msg+= "Are you sure you want to proceed with restore?";
+
+            DialogResult result = MessageBox.Show(
+                msg, 
+                "Restore Default Settings?", 
+                MessageBoxButtons.YesNo, 
+                MessageBoxIcon.Question);
+            if (result == System.Windows.Forms.DialogResult.Yes)
+            {
+                myRotator.RestoreDefaults();
+            }
+             
         }
     }
 

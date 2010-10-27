@@ -108,6 +108,12 @@
     <Compile Include="..\SolutionVersion.cs">
       <Link>SolutionVersion.cs</Link>
     </Compile>
+    <Compile Include="AboutBox1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox1.Designer.cs">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+    </Compile>
     <Compile Include="AdvancedForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -124,6 +130,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="SetSkyPA_Frm.cs">
       <SubType>Form</SubType>
@@ -145,6 +156,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AboutBox1.resx">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AdvancedForm.resx">
       <DependentUpon>AdvancedForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -166,7 +180,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Content Include="I:\Software Development\HelpNDoc\Pyxis LE\Pyxis LE Help.chm">
+      <Link>Pyxis LE Help.chm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Optec.snk" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Test.js" />
   </ItemGroup>
   <ItemGroup>

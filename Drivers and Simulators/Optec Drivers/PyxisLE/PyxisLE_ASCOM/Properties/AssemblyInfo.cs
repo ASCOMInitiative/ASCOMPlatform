@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 //
 // TODO - Add your authorship information here
 [assembly: AssemblyTitle("PyxisLE_ASCOM Rotator Driver")]
-[assembly: AssemblyDescription("ASCOM Rotator Driver for PyxisLE_ASCOM")]
+[assembly: AssemblyDescription("ASCOM Driver for Pyxis LE Camera Field Rotator")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Optec Inc.")]
 [assembly: AssemblyProduct("")]

@@ -73,39 +73,89 @@ namespace ASCOM.PyxisLE_ASCOM
             myRotator = r;
         }
 
-        [Category("Settings")]
-        [DisplayName("Zero Offset")]
-        [Description("Adjust the rotators zero point. This is used when homing the device. Changing this value will force the device to home.")]
-        public short ZeroOffset
+        [Category("Application Settings")]
+        [DisplayName("Check for Updates")]
+        [Description("Configure whether the application automatically checks for updates on startup or not.")]
+        public bool CheckForUpdates
         {
-            get { return myRotator.ZeroOffset; }
-            set 
+            get { return Properties.Settings.Default.CheckForUpdates; }
+            set
             {
-
-                string msg = "ATTENTION: Changing the reverse property will cause the device to re-home. " + Environment.NewLine +
-                     "The Zero-Offset property is used to change the point that the rotator 'thinks' is zero degrees PA. The units for " + 
-                     "this property are in stepper motor steps. Positive and negative values are allowed.";
-                DialogResult r = MessageBox.Show(msg, "Continue?", MessageBoxButtons.YesNo,
-                     MessageBoxIcon.Question);
-                if (r == DialogResult.Yes) myRotator.ZeroOffset = value; 
+                Properties.Settings.Default.CheckForUpdates = value;
+                Properties.Settings.Default.Save();
             }
         }
 
         [Category("Settings")]
-        [Description("Use this property to reverse the direction of travel for move commands. " + 
-            "The False setting will result in counter-clockwise positive moves. The True setting " + 
+        [DisplayName("Zero Offset (°)")]
+        [Description("Adjust the rotators zero point in units of degrees. This is used when homing the device. Changing this value will force the device to home.")]
+        public double ZeroOffset
+        {
+            get
+            {
+                int steps = myRotator.ZeroOffset;
+                int deg = steps / (myRotator.StepsPerRev / 360);
+
+                return (short)deg;
+            }
+            set
+            {
+
+                string msg = "ATTENTION: Changing the reverse property will cause the device to re-home. " + Environment.NewLine +
+                     "The Zero-Offset property is used to change the point that the rotator 'thinks' is zero degrees PA. The units for " +
+                     "this property are in stepper motor steps. Positive and negative values are allowed.";
+                DialogResult r = MessageBox.Show(msg, "Continue?", MessageBoxButtons.YesNo,
+                     MessageBoxIcon.Question);
+                if (r == DialogResult.Yes)
+                {
+                    // convert the degree value to steps
+                    double StepsPerDegree = myRotator.StepsPerRev / 360;
+
+                    double newvalue = (value * StepsPerDegree);
+                    // Set the value in the rotator
+                    myRotator.ZeroOffset = (short)newvalue;
+                }
+            }
+        }
+
+        [Category("Settings")]
+        [Description("Use this property to reverse the direction of travel for move commands. " +
+            "The False setting will result in counter-clockwise positive moves. The True setting " +
             "will result in clockwise positive moves.")]
         public bool Reverse
         {
             get { return myRotator.Reverse; }
-            set {
-                string msg = "ATTENTION: Changing the reverse property will cause the device to re-home. " + Environment.NewLine + 
-                    "The reverse property should be used to switch the direction that the rotator will travel when given move commands. " + 
+            set
+            {
+                string msg = "ATTENTION: Changing the reverse property will cause the device to re-home. " + Environment.NewLine +
+                    "The reverse property should be used to switch the direction that the rotator will travel when given move commands. " +
                     "This essentially flips the x-axis. " + Environment.NewLine + "Would you like to continue?";
-               DialogResult r = MessageBox.Show(msg, "Continue?", MessageBoxButtons.YesNo, 
-                    MessageBoxIcon.Question);
-                if(r == DialogResult.Yes) myRotator.Reverse = value; 
+                DialogResult r = MessageBox.Show(msg, "Continue?", MessageBoxButtons.YesNo,
+                     MessageBoxIcon.Question);
+                if (r == DialogResult.Yes) myRotator.Reverse = value;
             }
+        }
+
+        [Category("Settings")]
+        [DisplayName("Backlash Comp. Enabled")]
+        public bool BacklashComp
+        {
+            get
+            {
+                return myRotator.BacklashEnabled;
+            }
+            set
+            {
+                myRotator.BacklashEnabled = value;
+            }
+        }
+
+        [Category("Settings")]
+        [DisplayName("Backlash Steps")]
+        public short bklsteps
+        {
+            get { return myRotator.BacklashSteps; }
+            set { myRotator.BacklashSteps = value; }
         }
 
         //[Category("Settings")]
@@ -126,10 +176,11 @@ namespace ASCOM.PyxisLE_ASCOM
         }
 
         [Category("Device Description")]
+        [DisplayName("Resolution (Steps per Rev)")]
         [Description("The number of stepper motor steps per revolution for the connected device.")]
         public string Resolution
         {
-            get { return myRotator.StepsPerRev.ToString();}
+            get { return myRotator.StepsPerRev.ToString(); }
             set { /* Read Only*/}
         }
 
@@ -141,6 +192,5 @@ namespace ASCOM.PyxisLE_ASCOM
             get { return myRotator.FirmwareVersion; }
             set { /* Read Only*/}
         }
-
     }
 }

@@ -40,44 +40,44 @@
             this.AbsoluteMove_TB = new System.Windows.Forms.TextBox();
             this.AbsoluteMove_BTN = new System.Windows.Forms.Button();
             this.HomeDev_LBL = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
+            this.IncLabel = new System.Windows.Forms.Label();
             this.RelativeForward_BTN = new System.Windows.Forms.Button();
             this.RelativeReverse_Btn = new System.Windows.Forms.Button();
             this.Relative_NUD = new System.Windows.Forms.NumericUpDown();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ShowHideSkyPAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showDeviceDiagramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showHideHomeButtonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showHideAbsoluteMoveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showHideRelativeMoveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.alwaysOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deviceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.haltToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.skyPADisplayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rotatorDiagramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.homeButtonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.absoluteMoveControlsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.relativeMoveControlsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.alwaysOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deviceDocumentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.Degree_LBL = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.AbsPanel = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
             this.RelativePanel = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
+            this.RelMoveLbl = new System.Windows.Forms.Label();
             this.HomePanel = new System.Windows.Forms.Panel();
             this.SkyPAPanel = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.Halt_BTN = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.RotatorDiagram = new System.Windows.Forms.PictureBox();
-            this.StatusLabelTimer = new System.Windows.Forms.Timer(this.components);
             this.ExternalControlTimer = new System.Windows.Forms.Timer(this.components);
             this.VersionCheckerBGWorker = new System.ComponentModel.BackgroundWorker();
-            this.Halt_BTN = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Relative_NUD)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -96,7 +96,7 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.StatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 495);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 494);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(298, 22);
             this.statusStrip1.TabIndex = 0;
@@ -107,7 +107,6 @@
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(77, 17);
             this.StatusLabel.Text = "Device Status";
-            this.StatusLabel.TextChanged += new System.EventHandler(this.StatusLabel_TextChanged);
             // 
             // label1
             // 
@@ -169,7 +168,7 @@
             this.AbsoluteMove_TB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AbsoluteMove_TB.Location = new System.Drawing.Point(162, 9);
             this.AbsoluteMove_TB.Name = "AbsoluteMove_TB";
-            this.AbsoluteMove_TB.Size = new System.Drawing.Size(73, 20);
+            this.AbsoluteMove_TB.Size = new System.Drawing.Size(62, 20);
             this.AbsoluteMove_TB.TabIndex = 7;
             this.AbsoluteMove_TB.Text = "0";
             this.AbsoluteMove_TB.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -198,15 +197,15 @@
             this.HomeDev_LBL.TabIndex = 9;
             this.HomeDev_LBL.Text = "Home Device:";
             // 
-            // label5
+            // IncLabel
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(112, 15);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(64, 13);
-            this.label5.TabIndex = 12;
-            this.label5.Text = "Increment(°)";
+            this.IncLabel.AutoSize = true;
+            this.IncLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.IncLabel.Location = new System.Drawing.Point(112, 15);
+            this.IncLabel.Name = "IncLabel";
+            this.IncLabel.Size = new System.Drawing.Size(64, 13);
+            this.IncLabel.TabIndex = 12;
+            this.IncLabel.Text = "Increment(°)";
             // 
             // RelativeForward_BTN
             // 
@@ -263,8 +262,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.viewToolStripMenuItem,
             this.deviceToolStripMenuItem,
+            this.viewToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -286,76 +285,6 @@
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
-            // viewToolStripMenuItem
-            // 
-            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showAllToolStripMenuItem,
-            this.ShowHideSkyPAToolStripMenuItem,
-            this.showDeviceDiagramToolStripMenuItem,
-            this.showHideHomeButtonToolStripMenuItem,
-            this.showHideAbsoluteMoveToolStripMenuItem,
-            this.showHideRelativeMoveToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.alwaysOnTopToolStripMenuItem});
-            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.viewToolStripMenuItem.Text = "View";
-            // 
-            // showAllToolStripMenuItem
-            // 
-            this.showAllToolStripMenuItem.Name = "showAllToolStripMenuItem";
-            this.showAllToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
-            this.showAllToolStripMenuItem.Text = "Show All";
-            this.showAllToolStripMenuItem.Click += new System.EventHandler(this.showAllToolStripMenuItem_Click);
-            // 
-            // ShowHideSkyPAToolStripMenuItem
-            // 
-            this.ShowHideSkyPAToolStripMenuItem.Name = "ShowHideSkyPAToolStripMenuItem";
-            this.ShowHideSkyPAToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
-            this.ShowHideSkyPAToolStripMenuItem.Text = "Show/Hide Sky PA";
-            this.ShowHideSkyPAToolStripMenuItem.Click += new System.EventHandler(this.ShowHideSkyPAToolStripMenuItem_Click);
-            // 
-            // showDeviceDiagramToolStripMenuItem
-            // 
-            this.showDeviceDiagramToolStripMenuItem.Name = "showDeviceDiagramToolStripMenuItem";
-            this.showDeviceDiagramToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
-            this.showDeviceDiagramToolStripMenuItem.Text = "Show/Hide Rotator Diagram";
-            this.showDeviceDiagramToolStripMenuItem.Click += new System.EventHandler(this.showDeviceDiagramToolStripMenuItem_Click);
-            // 
-            // showHideHomeButtonToolStripMenuItem
-            // 
-            this.showHideHomeButtonToolStripMenuItem.Name = "showHideHomeButtonToolStripMenuItem";
-            this.showHideHomeButtonToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
-            this.showHideHomeButtonToolStripMenuItem.Text = "Show/Hide Home Button";
-            this.showHideHomeButtonToolStripMenuItem.Click += new System.EventHandler(this.showHideHomeButtonToolStripMenuItem_Click);
-            // 
-            // showHideAbsoluteMoveToolStripMenuItem
-            // 
-            this.showHideAbsoluteMoveToolStripMenuItem.Name = "showHideAbsoluteMoveToolStripMenuItem";
-            this.showHideAbsoluteMoveToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
-            this.showHideAbsoluteMoveToolStripMenuItem.Text = "Show/Hide Absolute Move";
-            this.showHideAbsoluteMoveToolStripMenuItem.Click += new System.EventHandler(this.showHideAbsoluteMoveToolStripMenuItem_Click);
-            // 
-            // showHideRelativeMoveToolStripMenuItem
-            // 
-            this.showHideRelativeMoveToolStripMenuItem.Name = "showHideRelativeMoveToolStripMenuItem";
-            this.showHideRelativeMoveToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
-            this.showHideRelativeMoveToolStripMenuItem.Text = "Show/Hide Relative Move";
-            this.showHideRelativeMoveToolStripMenuItem.Click += new System.EventHandler(this.showHideRelativeMoveToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(220, 6);
-            // 
-            // alwaysOnTopToolStripMenuItem
-            // 
-            this.alwaysOnTopToolStripMenuItem.CheckOnClick = true;
-            this.alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
-            this.alwaysOnTopToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
-            this.alwaysOnTopToolStripMenuItem.Text = "Always on Top";
-            this.alwaysOnTopToolStripMenuItem.Click += new System.EventHandler(this.alwaysOnTopToolStripMenuItem_Click);
             // 
             // deviceToolStripMenuItem
             // 
@@ -379,6 +308,87 @@
             this.haltToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.haltToolStripMenuItem.Text = "Halt";
             this.haltToolStripMenuItem.Click += new System.EventHandler(this.haltToolStripMenuItem_Click);
+            // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showAllToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.skyPADisplayToolStripMenuItem,
+            this.rotatorDiagramToolStripMenuItem,
+            this.homeButtonToolStripMenuItem,
+            this.absoluteMoveControlsToolStripMenuItem,
+            this.relativeMoveControlsToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.alwaysOnTopToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "View";
+            // 
+            // showAllToolStripMenuItem
+            // 
+            this.showAllToolStripMenuItem.Name = "showAllToolStripMenuItem";
+            this.showAllToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.showAllToolStripMenuItem.Tag = "ShowAll";
+            this.showAllToolStripMenuItem.Text = "Show All";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(199, 6);
+            // 
+            // skyPADisplayToolStripMenuItem
+            // 
+            this.skyPADisplayToolStripMenuItem.CheckOnClick = true;
+            this.skyPADisplayToolStripMenuItem.Name = "skyPADisplayToolStripMenuItem";
+            this.skyPADisplayToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.skyPADisplayToolStripMenuItem.Tag = "SkyPADisplay";
+            this.skyPADisplayToolStripMenuItem.Text = "Sky PA Display";
+            // 
+            // rotatorDiagramToolStripMenuItem
+            // 
+            this.rotatorDiagramToolStripMenuItem.CheckOnClick = true;
+            this.rotatorDiagramToolStripMenuItem.Name = "rotatorDiagramToolStripMenuItem";
+            this.rotatorDiagramToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.rotatorDiagramToolStripMenuItem.Tag = "RotatorDiagram";
+            this.rotatorDiagramToolStripMenuItem.Text = "Rotator Diagram";
+            // 
+            // homeButtonToolStripMenuItem
+            // 
+            this.homeButtonToolStripMenuItem.CheckOnClick = true;
+            this.homeButtonToolStripMenuItem.Name = "homeButtonToolStripMenuItem";
+            this.homeButtonToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.homeButtonToolStripMenuItem.Tag = "HomeButton";
+            this.homeButtonToolStripMenuItem.Text = "Home Button";
+            // 
+            // absoluteMoveControlsToolStripMenuItem
+            // 
+            this.absoluteMoveControlsToolStripMenuItem.CheckOnClick = true;
+            this.absoluteMoveControlsToolStripMenuItem.Name = "absoluteMoveControlsToolStripMenuItem";
+            this.absoluteMoveControlsToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.absoluteMoveControlsToolStripMenuItem.Tag = "AbsoluteMoveControls";
+            this.absoluteMoveControlsToolStripMenuItem.Text = "Absolute Move Controls";
+            // 
+            // relativeMoveControlsToolStripMenuItem
+            // 
+            this.relativeMoveControlsToolStripMenuItem.CheckOnClick = true;
+            this.relativeMoveControlsToolStripMenuItem.Name = "relativeMoveControlsToolStripMenuItem";
+            this.relativeMoveControlsToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.relativeMoveControlsToolStripMenuItem.Tag = "RelativeMoveControls";
+            this.relativeMoveControlsToolStripMenuItem.Text = "Relative Move Controls";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(199, 6);
+            // 
+            // alwaysOnTopToolStripMenuItem
+            // 
+            this.alwaysOnTopToolStripMenuItem.CheckOnClick = true;
+            this.alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
+            this.alwaysOnTopToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.alwaysOnTopToolStripMenuItem.Tag = "AlwaysOnTop";
+            this.alwaysOnTopToolStripMenuItem.Text = "Always on Top";
             // 
             // helpToolStripMenuItem
             // 
@@ -409,21 +419,11 @@
             this.deviceDocumentationToolStripMenuItem.Name = "deviceDocumentationToolStripMenuItem";
             this.deviceDocumentationToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.deviceDocumentationToolStripMenuItem.Text = "Device Documentation";
+            this.deviceDocumentationToolStripMenuItem.Click += new System.EventHandler(this.deviceDocumentationToolStripMenuItem_Click);
             // 
             // errorProvider1
             // 
             this.errorProvider1.ContainerControl = this;
-            // 
-            // Degree_LBL
-            // 
-            this.Degree_LBL.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.Degree_LBL.AutoSize = true;
-            this.Degree_LBL.BackColor = System.Drawing.Color.White;
-            this.Degree_LBL.Location = new System.Drawing.Point(221, 12);
-            this.Degree_LBL.Name = "Degree_LBL";
-            this.Degree_LBL.Size = new System.Drawing.Size(11, 13);
-            this.Degree_LBL.TabIndex = 17;
-            this.Degree_LBL.Text = "°";
             // 
             // tableLayoutPanel1
             // 
@@ -445,12 +445,12 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 43F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 43F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(298, 471);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(298, 470);
             this.tableLayoutPanel1.TabIndex = 18;
             // 
             // AbsPanel
             // 
-            this.AbsPanel.Controls.Add(this.Degree_LBL);
+            this.AbsPanel.Controls.Add(this.label4);
             this.AbsPanel.Controls.Add(this.label3);
             this.AbsPanel.Controls.Add(this.AbsoluteMove_TB);
             this.AbsPanel.Controls.Add(this.AbsoluteMove_BTN);
@@ -460,29 +460,38 @@
             this.AbsPanel.Size = new System.Drawing.Size(286, 37);
             this.AbsPanel.TabIndex = 20;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(226, 11);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(11, 13);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "°";
+            // 
             // RelativePanel
             // 
-            this.RelativePanel.Controls.Add(this.label2);
+            this.RelativePanel.Controls.Add(this.RelMoveLbl);
             this.RelativePanel.Controls.Add(this.Relative_NUD);
-            this.RelativePanel.Controls.Add(this.label5);
+            this.RelativePanel.Controls.Add(this.IncLabel);
             this.RelativePanel.Controls.Add(this.RelativeReverse_Btn);
             this.RelativePanel.Controls.Add(this.RelativeForward_BTN);
             this.RelativePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RelativePanel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RelativePanel.Location = new System.Drawing.Point(6, 402);
             this.RelativePanel.Name = "RelativePanel";
-            this.RelativePanel.Size = new System.Drawing.Size(286, 63);
+            this.RelativePanel.Size = new System.Drawing.Size(286, 62);
             this.RelativePanel.TabIndex = 21;
             // 
-            // label2
+            // RelMoveLbl
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(5, 5);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(93, 13);
-            this.label2.TabIndex = 18;
-            this.label2.Text = "Relative Move:";
+            this.RelMoveLbl.AutoSize = true;
+            this.RelMoveLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RelMoveLbl.Location = new System.Drawing.Point(5, 5);
+            this.RelMoveLbl.Name = "RelMoveLbl";
+            this.RelMoveLbl.Size = new System.Drawing.Size(93, 13);
+            this.RelMoveLbl.TabIndex = 18;
+            this.RelMoveLbl.Text = "Relative Move:";
             // 
             // HomePanel
             // 
@@ -517,6 +526,17 @@
             this.panel1.Size = new System.Drawing.Size(286, 249);
             this.panel1.TabIndex = 22;
             // 
+            // Halt_BTN
+            // 
+            this.Halt_BTN.Enabled = false;
+            this.Halt_BTN.Location = new System.Drawing.Point(226, 174);
+            this.Halt_BTN.Name = "Halt_BTN";
+            this.Halt_BTN.Size = new System.Drawing.Size(42, 42);
+            this.Halt_BTN.TabIndex = 12;
+            this.Halt_BTN.Text = "Halt";
+            this.Halt_BTN.UseVisualStyleBackColor = true;
+            this.Halt_BTN.Click += new System.EventHandler(this.Halt_BTN_Click);
+            // 
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
@@ -541,11 +561,6 @@
             this.RotatorDiagram.Click += new System.EventHandler(this.RotatorDiagram_Click);
             this.RotatorDiagram.Paint += new System.Windows.Forms.PaintEventHandler(this.RotatorDiagram_Paint);
             // 
-            // StatusLabelTimer
-            // 
-            this.StatusLabelTimer.Interval = 5000;
-            this.StatusLabelTimer.Tick += new System.EventHandler(this.StatusLabelTimer_Tick);
-            // 
             // ExternalControlTimer
             // 
             this.ExternalControlTimer.Interval = 1000;
@@ -555,30 +570,19 @@
             // 
             this.VersionCheckerBGWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.VersionCheckerBGWorker_DoWork);
             // 
-            // Halt_BTN
-            // 
-            this.Halt_BTN.Enabled = false;
-            this.Halt_BTN.Location = new System.Drawing.Point(226, 174);
-            this.Halt_BTN.Name = "Halt_BTN";
-            this.Halt_BTN.Size = new System.Drawing.Size(42, 42);
-            this.Halt_BTN.TabIndex = 12;
-            this.Halt_BTN.Text = "Halt";
-            this.Halt_BTN.UseVisualStyleBackColor = true;
-            this.Halt_BTN.Click += new System.EventHandler(this.Halt_BTN_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(298, 517);
+            this.ClientSize = new System.Drawing.Size(298, 516);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.MaximumSize = new System.Drawing.Size(700, 700);
-            this.MinimumSize = new System.Drawing.Size(35, 38);
+            this.MaximumSize = new System.Drawing.Size(314, 700);
+            this.MinimumSize = new System.Drawing.Size(35, 10);
             this.Name = "MainForm";
             this.Text = "Pyxis LE Control";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
@@ -620,7 +624,7 @@
         private System.Windows.Forms.Button AbsoluteMove_BTN;
         private System.Windows.Forms.Label HomeDev_LBL;
         private System.Windows.Forms.PictureBox RotatorDiagram;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label IncLabel;
         private System.Windows.Forms.Button RelativeForward_BTN;
         private System.Windows.Forms.Button RelativeReverse_Btn;
         private System.Windows.Forms.MenuStrip menuStrip1;
@@ -634,21 +638,13 @@
         private System.Windows.Forms.ToolStripMenuItem deviceDocumentationToolStripMenuItem;
         private System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem showDeviceDiagramToolStripMenuItem;
-        private System.Windows.Forms.Label Degree_LBL;
         private System.Windows.Forms.NumericUpDown Relative_NUD;
-        private System.Windows.Forms.ToolStripMenuItem ShowHideSkyPAToolStripMenuItem;
         private System.Windows.Forms.Panel SkyPAPanel;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel HomePanel;
         private System.Windows.Forms.Panel AbsPanel;
-        private System.Windows.Forms.ToolStripMenuItem showHideHomeButtonToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem showHideAbsoluteMoveToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem showHideRelativeMoveToolStripMenuItem;
         private System.Windows.Forms.Panel RelativePanel;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ToolStripMenuItem showAllToolStripMenuItem;
-        private System.Windows.Forms.Timer StatusLabelTimer;
+        private System.Windows.Forms.Label RelMoveLbl;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Timer ExternalControlTimer;
@@ -657,5 +653,13 @@
         private System.Windows.Forms.ToolStripMenuItem alwaysOnTopToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem haltToolStripMenuItem;
         private System.Windows.Forms.Button Halt_BTN;
+        private System.Windows.Forms.ToolStripMenuItem skyPADisplayToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rotatorDiagramToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem homeButtonToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem absoluteMoveControlsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem relativeMoveControlsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showAllToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.Label label4;
     }
 }

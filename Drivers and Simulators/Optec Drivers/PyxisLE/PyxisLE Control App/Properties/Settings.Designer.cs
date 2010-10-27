@@ -118,5 +118,17 @@ namespace PyxisLE_Control.Properties {
                 this["AlwaysOnTop"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Pyxis LE Help.chm")]
+        public string HelpFileName {
+            get {
+                return ((string)(this["HelpFileName"]));
+            }
+            set {
+                this["HelpFileName"] = value;
+            }
+        }
     }
 }

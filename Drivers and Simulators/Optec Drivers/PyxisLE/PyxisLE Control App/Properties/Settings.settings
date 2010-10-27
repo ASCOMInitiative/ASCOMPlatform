@@ -26,5 +26,8 @@
     <Setting Name="AlwaysOnTop" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="HelpFileName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Pyxis LE Help.chm</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

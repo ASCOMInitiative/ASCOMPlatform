@@ -18,9 +18,9 @@ namespace PyxisLE_API
         private string serialNumber;
         private string manufacturer;
         private HID selectedDevice = null;
-        private bool isHomed = false;
-        private bool isHoming = false;
-        private bool isMoving = false;
+        private volatile bool isHomed = false;
+        private volatile bool isHoming = false;
+        private volatile bool isMoving = false;
         private Int16 zeroOffset = 0;
         private Int16 skyPAOffset = 0;
         private UInt16 backlashSteps = 0;
@@ -64,22 +64,23 @@ namespace PyxisLE_API
             DateTime FirstAttempt = DateTime.Now;
             RefreshDeviceDescription();
             // Keep checking device status until the device is homed...
-            TryAgain:
+           // TryAgain:
             try
             {
-                RefreshDeviceStatus();
+                RefreshDeviceDescription();
+                RefreshDeviceStatus(); 
 
-                if (DateTime.Now.Subtract(FirstAttempt) > MaxHomeTime)
-                    throw new System.ApplicationException("Home Procedure took too long");
-                else if (this.isHoming == true)
-                {
-                    System.Threading.Thread.Sleep(500);
-                    goto TryAgain;
-                }
-                else if (this.ErrorState == 0)
-                {
-                    RefreshDeviceDescription();
-                }
+                //if (DateTime.Now.Subtract(FirstAttempt) > MaxHomeTime)
+                //    throw new System.ApplicationException("Home Procedure took too long");
+                //else if (this.isHoming == true)
+                //{
+                //    System.Threading.Thread.Sleep(500);
+                //   // goto TryAgain;
+                //}
+                //else if (this.ErrorState == 0)
+                //{
+                //    RefreshDeviceDescription();
+                //}
             }
             catch (Exception ex)
             {
@@ -104,7 +105,7 @@ namespace PyxisLE_API
             catch (Exception ex)
             {
                 EventLogger.LogMessage(ex);
-                throw;
+                if (this.IsAttached) throw;
             }
         }
 
@@ -206,7 +207,7 @@ namespace PyxisLE_API
             catch (Exception ex)
             {
                 EventLogger.LogMessage(ex);
-                throw;
+                if(this.IsAttached) throw;
             }
         }
 
@@ -290,16 +291,16 @@ namespace PyxisLE_API
                 if (rIsMoving == Rotators.REPORT_TRUE)
                 {
                     this.isMoving = true;
-#if DEBUG
-                Trace.WriteLine("Device is Moving");
-#endif
+
+                Debug.WriteLine("Device is Moving");
+
                 }
                 else if (rIsMoving == Rotators.REPORT_FALSE)
                 {
                     this.isMoving = false;
-#if DEBUG
-                Trace.WriteLine("Device is NOT Moving");
-#endif
+
+                Debug.WriteLine("Device is NOT Moving");
+
                 }
                 else throw new ApplicationException("Invalid data received for IsMoving value");
 
@@ -315,16 +316,16 @@ namespace PyxisLE_API
                 if (rBacklashEnabled == Rotators.REPORT_TRUE)
                 {
                     this.backlashEnabled = true;
-#if DEBUG
-                Trace.WriteLine("Backlash comp is enabled");
-#endif
+
+                Debug.WriteLine("Backlash comp is enabled");
+
                 }
                 else if (rBacklashEnabled == Rotators.REPORT_FALSE)
                 {
                     this.backlashEnabled = false;
-#if DEBUG
-                Trace.WriteLine("Backlash comp is disabled.");
-#endif
+
+                Debug.WriteLine("Backlash comp is disabled.");
+
                 }
                 else throw new ApplicationException("Invalid data received for BacklashEnabled value");
                 
@@ -355,6 +356,7 @@ namespace PyxisLE_API
         public bool IsHomed
         {
             get {
+
                 RefreshDeviceStatus();
                 return isHomed; }
         }
@@ -467,6 +469,9 @@ namespace PyxisLE_API
                 EventLogger.LogMessage("Setting Current Device PA to " + NewDevicePosition_Degrees +
                     "° for a requested Sky PA of " + value.ToString("0.0000°") , TraceLevel.Info);
                 ChangeDevicePA(NewDevicePosition_Degrees);
+                
+                RefreshDeviceStatus();
+                Trace.WriteLine("Current Sky PA Changed. Device status refreshed. IsMoving = " + this.IsMoving.ToString());
             }
         }
 
@@ -751,13 +756,16 @@ namespace PyxisLE_API
         {
             try
             {
-                EventLogger.LogMessage( "Move Requested to " + NewPos.ToString() + Environment.NewLine, TraceLevel.Info);
+                EventLogger.LogMessage( "Move Requested to " + NewPos.ToString() , TraceLevel.Info);
                 // First check that the new pos is in the range of 0-359.9999999
                 if ((NewPos < 0) || NewPos > 360) throw new ApplicationException("New Position is outside the acceptable range.");
                 // Next check that it's not the same as the current position
-                if (NewPos == this.CurrentDevicePA) return;
+                if (NewPos == this.CurrentDevicePA) 
+                    return;
                 // Convert degrees to steps
                 UInt32 NewPosInt = (uint)Math.Round((NewPos * (double)this.StepsPerRev / (double)360));
+
+                Trace.WriteLine("Moving to new position: " + NewPosInt.ToString());
                 byte[] datatosend = new byte[] { };
 
                 // Create the report to send
@@ -793,6 +801,7 @@ namespace PyxisLE_API
                 ThreadStart ts = new ThreadStart(this.MoveMonitor);
                 MoveThread = new Thread(ts);
                 MoveThread.Name = "Move Thread in Rotator class";
+
                 MoveThread.Start();
             }
             catch (Exception ex)
@@ -825,7 +834,11 @@ namespace PyxisLE_API
         {
             try
             {
+
                 EventLogger.LogMessage("Home Requested", TraceLevel.Info);
+
+                if (this.errorState == 1) throw new ApplicationException("A Home can not be performed at this time. The device does not have 12V power connected.");
+
                 byte[] datatosend = new byte[] { };
 
                 // Create the report to send
@@ -914,6 +927,22 @@ namespace PyxisLE_API
                 EventLogger.LogMessage(ex);
                 throw;
             }
+        }
+
+        public void RestoreDefaults()
+        {
+            byte[] toSend = new byte[] { Rotators.MOTION_OPCODE_RESTORE_DEF, 7 };
+            FeatureReport restReport = new FeatureReport(Rotators.REPORTID_FEATURE_DO_MOTION, toSend);
+            this.selectedDevice.ProcessFeatureReport(restReport);
+            System.Threading.Thread.Sleep(100);
+            RefreshDeviceDescription();
+            System.Threading.Thread.Sleep(100);
+            // Start the HomeMonitor thread
+            ThreadStart ts = new ThreadStart(this.HomeMonitor);
+            HomeThread = new Thread(ts);
+            HomeThread.Name = "Home Thread in Rotator class";
+            HomeThread.Start();
+
         }
     }
 }
