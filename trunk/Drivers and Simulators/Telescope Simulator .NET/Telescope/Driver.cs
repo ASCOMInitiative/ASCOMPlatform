@@ -71,12 +71,13 @@ namespace ASCOM.TelescopeSimulator
             throw new MethodNotImplementedException("Action");
         }
 
+        /// <summary>
+        /// Gets the supported actions.
+        /// </summary>
         public string[] SupportedActions
         {
-            get
-            {
-                throw new PropertyNotImplementedException("SupportedActions", false);
-            }
+            // no supported actions, return empty array
+            get { string[] sa = { }; return sa; }
         }
 
         public void AbortSlew()

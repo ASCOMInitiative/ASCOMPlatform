@@ -240,7 +240,8 @@ namespace ASCOM.Simulator
         /// </summary>
         public string[] SupportedActions
         {
-            get { throw new MethodNotImplementedException("SupportedActions"); }
+            // no supported actions, return empty array
+            get { string[] sa = { }; return sa; }
         }
 
         #endregion

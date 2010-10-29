@@ -95,9 +95,12 @@
     Public Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String Implements IFilterWheel.Action
         Throw New ASCOM.MethodNotImplementedException("Action is not implemented in this driver")
     End Function
+
     Public ReadOnly Property SupportedActions As String() Implements IFilterWheel.SupportedActions
         Get
-            Throw New ASCOM.PropertyNotImplementedException("Actions are not supported by this driver", False)
+            Dim actions(-1) As String   ' declare an empty string array
+            Return actions
+            'Throw New ASCOM.PropertyNotImplementedException("Actions are not supported by this driver", False)
         End Get
     End Property
 
