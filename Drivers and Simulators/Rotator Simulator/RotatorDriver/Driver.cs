@@ -47,7 +47,11 @@ namespace ASCOM.Simulator
 		// PUBLIC COM INTERFACE IRotator IMPLEMENTATION
         //
         #region IDeviceControl Members
-        public void Action(string cmd,string parms)
+        /// <summary>
+        /// Invokes the specified device-specific action.
+        /// </summary>
+        /// <exception cref="MethodNotImplementedException"></exception>
+        public string Action(string actionName, string actionParameters)
         {
             throw new MethodNotImplementedException("Action");
         }
@@ -72,10 +76,16 @@ namespace ASCOM.Simulator
             throw new MethodNotImplementedException("Dispose");
 	    }
 
-	    public string[] SupportedActions()
+        /// <summary>
+        /// Gets the supported actions.
+        /// </summary>
+        public string[] SupportedActions
         {
-            throw new MethodNotImplementedException("SupportedActions");
+            // no supported actions, return empty array
+            get { string[] sa = { }; return sa; }
+            //get { throw new MethodNotImplementedException("SupportedActions"); }
         }
+
         
         
         
