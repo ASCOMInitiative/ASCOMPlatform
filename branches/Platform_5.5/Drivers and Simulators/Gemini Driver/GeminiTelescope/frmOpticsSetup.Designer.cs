@@ -56,7 +56,7 @@
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cmdCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdCancel.ForeColor = System.Drawing.Color.White;
-            this.cmdCancel.Location = new System.Drawing.Point(207, 254);
+            this.cmdCancel.Location = new System.Drawing.Point(235, 251);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 18;
@@ -69,7 +69,7 @@
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.cmdOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdOK.ForeColor = System.Drawing.Color.White;
-            this.cmdOK.Location = new System.Drawing.Point(207, 224);
+            this.cmdOK.Location = new System.Drawing.Point(235, 221);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 17;
@@ -81,29 +81,29 @@
             this.listBoxOptics.FormattingEnabled = true;
             this.listBoxOptics.Location = new System.Drawing.Point(12, 184);
             this.listBoxOptics.Name = "listBoxOptics";
-            this.listBoxOptics.Size = new System.Drawing.Size(189, 95);
+            this.listBoxOptics.Size = new System.Drawing.Size(217, 95);
             this.listBoxOptics.TabIndex = 16;
             // 
             // textBoxName
             // 
-            this.textBoxName.Location = new System.Drawing.Point(94, 3);
+            this.textBoxName.Location = new System.Drawing.Point(135, 3);
             this.textBoxName.Name = "textBoxName";
-            this.textBoxName.Size = new System.Drawing.Size(86, 20);
+            this.textBoxName.Size = new System.Drawing.Size(73, 20);
             this.textBoxName.TabIndex = 8;
             // 
             // textBoxFocalLength
             // 
-            this.textBoxFocalLength.Location = new System.Drawing.Point(94, 33);
+            this.textBoxFocalLength.Location = new System.Drawing.Point(135, 33);
             this.textBoxFocalLength.Name = "textBoxFocalLength";
-            this.textBoxFocalLength.Size = new System.Drawing.Size(86, 20);
+            this.textBoxFocalLength.Size = new System.Drawing.Size(73, 20);
             this.textBoxFocalLength.TabIndex = 9;
             this.textBoxFocalLength.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxFocalLength_KeyPress);
             // 
             // textBoxAperture
             // 
-            this.textBoxAperture.Location = new System.Drawing.Point(94, 63);
+            this.textBoxAperture.Location = new System.Drawing.Point(135, 63);
             this.textBoxAperture.Name = "textBoxAperture";
-            this.textBoxAperture.Size = new System.Drawing.Size(86, 20);
+            this.textBoxAperture.Size = new System.Drawing.Size(73, 20);
             this.textBoxAperture.TabIndex = 10;
             this.textBoxAperture.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxAperture_KeyPress);
             // 
@@ -111,41 +111,46 @@
             // 
             this.labelLatitude.AutoSize = true;
             this.labelLatitude.BackColor = System.Drawing.Color.Transparent;
+            this.labelLatitude.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelLatitude.ForeColor = System.Drawing.Color.White;
             this.labelLatitude.Location = new System.Drawing.Point(3, 0);
             this.labelLatitude.Name = "labelLatitude";
-            this.labelLatitude.Size = new System.Drawing.Size(38, 13);
+            this.labelLatitude.Size = new System.Drawing.Size(126, 30);
             this.labelLatitude.TabIndex = 11;
             this.labelLatitude.Text = "Name:";
+            this.labelLatitude.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label1.ForeColor = System.Drawing.Color.White;
             this.label1.Location = new System.Drawing.Point(3, 30);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(72, 13);
+            this.label1.Size = new System.Drawing.Size(126, 30);
             this.label1.TabIndex = 12;
             this.label1.Text = "Focal Length:";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.Transparent;
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label2.ForeColor = System.Drawing.Color.White;
             this.label2.Location = new System.Drawing.Point(3, 60);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(52, 26);
+            this.label2.Size = new System.Drawing.Size(126, 30);
             this.label2.TabIndex = 13;
-            this.label2.Text = "Aperture\r\nDiameter:";
+            this.label2.Text = "Aperture Diameter:";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // buttonAdd
             // 
             this.buttonAdd.BackColor = System.Drawing.Color.Black;
             this.buttonAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonAdd.ForeColor = System.Drawing.Color.White;
-            this.buttonAdd.Location = new System.Drawing.Point(207, 122);
+            this.buttonAdd.Location = new System.Drawing.Point(235, 119);
             this.buttonAdd.Name = "buttonAdd";
             this.buttonAdd.Size = new System.Drawing.Size(59, 25);
             this.buttonAdd.TabIndex = 14;
@@ -158,7 +163,7 @@
             this.buttonRemove.BackColor = System.Drawing.Color.Black;
             this.buttonRemove.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonRemove.ForeColor = System.Drawing.Color.White;
-            this.buttonRemove.Location = new System.Drawing.Point(207, 153);
+            this.buttonRemove.Location = new System.Drawing.Point(235, 150);
             this.buttonRemove.Name = "buttonRemove";
             this.buttonRemove.Size = new System.Drawing.Size(59, 25);
             this.buttonRemove.TabIndex = 15;
@@ -172,7 +177,7 @@
             this.radioButtonmillimeters.Checked = true;
             this.radioButtonmillimeters.ForeColor = System.Drawing.Color.White;
             this.radioButtonmillimeters.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.radioButtonmillimeters.Location = new System.Drawing.Point(94, 123);
+            this.radioButtonmillimeters.Location = new System.Drawing.Point(135, 123);
             this.radioButtonmillimeters.Name = "radioButtonmillimeters";
             this.radioButtonmillimeters.Size = new System.Drawing.Size(72, 17);
             this.radioButtonmillimeters.TabIndex = 13;
@@ -198,7 +203,7 @@
             this.groupBox1.ForeColor = System.Drawing.Color.White;
             this.groupBox1.Location = new System.Drawing.Point(12, 8);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(189, 170);
+            this.groupBox1.Size = new System.Drawing.Size(217, 170);
             this.groupBox1.TabIndex = 32;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Optics";
@@ -206,8 +211,8 @@
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 62.61682F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 37.38318F));
             this.tableLayoutPanel1.Controls.Add(this.textBoxObstruction, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.textBoxName, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.textBoxAperture, 1, 2);
@@ -222,38 +227,40 @@
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(183, 151);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.00203F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.00203F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.00203F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 19.99695F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 19.99695F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(211, 151);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // textBoxObstruction
             // 
-            this.textBoxObstruction.Location = new System.Drawing.Point(94, 93);
+            this.textBoxObstruction.Location = new System.Drawing.Point(135, 93);
             this.textBoxObstruction.Name = "textBoxObstruction";
-            this.textBoxObstruction.Size = new System.Drawing.Size(86, 20);
+            this.textBoxObstruction.Size = new System.Drawing.Size(73, 20);
             this.textBoxObstruction.TabIndex = 11;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Transparent;
+            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label3.ForeColor = System.Drawing.Color.White;
             this.label3.Location = new System.Drawing.Point(3, 90);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(61, 26);
+            this.label3.Size = new System.Drawing.Size(126, 30);
             this.label3.TabIndex = 33;
-            this.label3.Text = "Obstruction\r\nDiameter:";
+            this.label3.Text = "Obstruction Diameter:";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // frmOpticsSetup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(277, 291);
+            this.ClientSize = new System.Drawing.Size(323, 291);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonRemove);
             this.Controls.Add(this.buttonAdd);
@@ -265,6 +272,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmOpticsSetup";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Optics";
             this.groupBox1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);

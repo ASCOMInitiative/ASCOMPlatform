@@ -126,7 +126,7 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="buttonGps.Location" type="System.Drawing.Point, System.Drawing">
-    <value>247, 381</value>
+    <value>274, 381</value>
   </data>
   <data name="buttonGps.Size" type="System.Drawing.Size, System.Drawing">
     <value>163, 23</value>
@@ -157,7 +157,7 @@
     <value>Flat</value>
   </data>
   <data name="pbGeminiSettings.Location" type="System.Drawing.Point, System.Drawing">
-    <value>247, 352</value>
+    <value>274, 352</value>
   </data>
   <data name="pbGeminiSettings.Size" type="System.Drawing.Size, System.Drawing">
     <value>163, 23</value>
@@ -1489,7 +1489,7 @@
     <value>True</value>
   </data>
   <data name="checkBoxShowHandbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>478, 78</value>
+    <value>478, 154</value>
   </data>
   <data name="checkBoxShowHandbox.Size" type="System.Drawing.Size, System.Drawing">
     <value>125, 17</value>
@@ -2074,7 +2074,7 @@
     <value>3</value>
   </data>
   <data name="chkJoystick.Location" type="System.Drawing.Point, System.Drawing">
-    <value>477, 244</value>
+    <value>476, 282</value>
   </data>
   <data name="chkJoystick.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 0, 3, 0</value>
@@ -2107,7 +2107,7 @@
     <value>Flat</value>
   </data>
   <data name="cmbJoystick.Location" type="System.Drawing.Point, System.Drawing">
-    <value>479, 283</value>
+    <value>478, 321</value>
   </data>
   <data name="cmbJoystick.Size" type="System.Drawing.Size, System.Drawing">
     <value>143, 21</value>
@@ -2131,7 +2131,7 @@
     <value>True</value>
   </data>
   <data name="chkVoice.Location" type="System.Drawing.Point, System.Drawing">
-    <value>478, 101</value>
+    <value>478, 177</value>
   </data>
   <data name="chkVoice.Size" type="System.Drawing.Size, System.Drawing">
     <value>130, 17</value>
@@ -2166,50 +2166,50 @@
   <data name="btnJoysticConfig.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         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
-        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
+        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
 </value>
   </data>
   <data name="btnJoysticConfig.Location" type="System.Drawing.Point, System.Drawing">
-    <value>577, 236</value>
+    <value>576, 274</value>
   </data>
   <data name="btnJoysticConfig.Size" type="System.Drawing.Size, System.Drawing">
     <value>45, 41</value>
@@ -2260,7 +2260,7 @@
     <value>True</value>
   </data>
   <data name="label11.Location" type="System.Drawing.Point, System.Drawing">
-    <value>247, 407</value>
+    <value>274, 407</value>
   </data>
   <data name="label11.Size" type="System.Drawing.Size, System.Drawing">
     <value>142, 13</value>
@@ -2305,7 +2305,7 @@
     <value>6: All Available</value>
   </data>
   <data name="cbLogging.Location" type="System.Drawing.Point, System.Drawing">
-    <value>247, 423</value>
+    <value>274, 423</value>
   </data>
   <data name="cbLogging.Size" type="System.Drawing.Size, System.Drawing">
     <value>163, 21</value>
@@ -2329,7 +2329,7 @@
     <value>True</value>
   </data>
   <data name="chkAsyncPulseGuide.Location" type="System.Drawing.Point, System.Drawing">
-    <value>478, 124</value>
+    <value>478, 200</value>
   </data>
   <data name="chkAsyncPulseGuide.Size" type="System.Drawing.Size, System.Drawing">
     <value>153, 17</value>
@@ -2356,7 +2356,7 @@
     <value>True</value>
   </data>
   <data name="chkPierSide.Location" type="System.Drawing.Point, System.Drawing">
-    <value>478, 170</value>
+    <value>478, 246</value>
   </data>
   <data name="chkPierSide.Size" type="System.Drawing.Size, System.Drawing">
     <value>103, 17</value>
@@ -2740,7 +2740,7 @@
     <value>NoControl</value>
   </data>
   <data name="chkPrecisionPulse.Location" type="System.Drawing.Point, System.Drawing">
-    <value>478, 147</value>
+    <value>478, 223</value>
   </data>
   <data name="chkPrecisionPulse.Size" type="System.Drawing.Size, System.Drawing">
     <value>123, 17</value>
@@ -2763,8 +2763,185 @@
   <data name="&gt;&gt;chkPrecisionPulse.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="&gt;&gt;tableLayoutPanel9.Name" xml:space="preserve">
+    <value>tableLayoutPanel9</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel9.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel9.Parent" xml:space="preserve">
+    <value>groupBox8</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel9.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tableLayoutPanel9.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label16" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBoxObstruction" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="comboBoxSavedOptics" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label14" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBoxAperture" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="textBoxFocalLength" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label15" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="pbEditSavedOptics" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="radioButtonmillimeters" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="radioButtonInches" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,31.3364,Percent,68.6636" /&gt;&lt;Rows Styles="Percent,20,Percent,20,Percent,20,Percent,20,Percent,20,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="groupBox8.Location" type="System.Drawing.Point, System.Drawing">
+    <value>241, 146</value>
+  </data>
+  <data name="groupBox8.Size" type="System.Drawing.Size, System.Drawing">
+    <value>223, 196</value>
+  </data>
+  <data name="groupBox8.TabIndex" type="System.Int32, mscorlib">
+    <value>40</value>
+  </data>
+  <data name="groupBox8.Text" xml:space="preserve">
+    <value>Optics</value>
+  </data>
+  <data name="&gt;&gt;groupBox8.Name" xml:space="preserve">
+    <value>groupBox8</value>
+  </data>
+  <data name="&gt;&gt;groupBox8.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox8.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;groupBox8.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="tableLayoutPanel9.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
+  </data>
+  <data name="&gt;&gt;label16.Name" xml:space="preserve">
+    <value>label16</value>
+  </data>
+  <data name="&gt;&gt;label16.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label16.Parent" xml:space="preserve">
+    <value>tableLayoutPanel9</value>
+  </data>
+  <data name="&gt;&gt;label16.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;textBoxObstruction.Name" xml:space="preserve">
+    <value>textBoxObstruction</value>
+  </data>
+  <data name="&gt;&gt;textBoxObstruction.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;textBoxObstruction.Parent" xml:space="preserve">
+    <value>tableLayoutPanel9</value>
+  </data>
+  <data name="&gt;&gt;textBoxObstruction.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;comboBoxSavedOptics.Name" xml:space="preserve">
+    <value>comboBoxSavedOptics</value>
+  </data>
+  <data name="&gt;&gt;comboBoxSavedOptics.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;comboBoxSavedOptics.Parent" xml:space="preserve">
+    <value>tableLayoutPanel9</value>
+  </data>
+  <data name="&gt;&gt;comboBoxSavedOptics.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;label14.Name" xml:space="preserve">
+    <value>label14</value>
+  </data>
+  <data name="&gt;&gt;label14.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label14.Parent" xml:space="preserve">
+    <value>tableLayoutPanel9</value>
+  </data>
+  <data name="&gt;&gt;label14.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;textBoxAperture.Name" xml:space="preserve">
+    <value>textBoxAperture</value>
+  </data>
+  <data name="&gt;&gt;textBoxAperture.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;textBoxAperture.Parent" xml:space="preserve">
+    <value>tableLayoutPanel9</value>
+  </data>
+  <data name="&gt;&gt;textBoxAperture.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;textBoxFocalLength.Name" xml:space="preserve">
+    <value>textBoxFocalLength</value>
+  </data>
+  <data name="&gt;&gt;textBoxFocalLength.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;textBoxFocalLength.Parent" xml:space="preserve">
+    <value>tableLayoutPanel9</value>
+  </data>
+  <data name="&gt;&gt;textBoxFocalLength.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;label15.Name" xml:space="preserve">
+    <value>label15</value>
+  </data>
+  <data name="&gt;&gt;label15.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label15.Parent" xml:space="preserve">
+    <value>tableLayoutPanel9</value>
+  </data>
+  <data name="&gt;&gt;label15.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;radioButtonmillimeters.Name" xml:space="preserve">
+    <value>radioButtonmillimeters</value>
+  </data>
+  <data name="&gt;&gt;radioButtonmillimeters.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;radioButtonmillimeters.Parent" xml:space="preserve">
+    <value>tableLayoutPanel9</value>
+  </data>
+  <data name="&gt;&gt;radioButtonmillimeters.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;radioButtonInches.Name" xml:space="preserve">
+    <value>radioButtonInches</value>
+  </data>
+  <data name="&gt;&gt;radioButtonInches.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;radioButtonInches.Parent" xml:space="preserve">
+    <value>tableLayoutPanel9</value>
+  </data>
+  <data name="&gt;&gt;radioButtonInches.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="tableLayoutPanel9.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tableLayoutPanel9.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 16</value>
+  </data>
+  <data name="tableLayoutPanel9.RowCount" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="tableLayoutPanel9.Size" type="System.Drawing.Size, System.Drawing">
+    <value>217, 177</value>
+  </data>
+  <data name="tableLayoutPanel9.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel9.Name" xml:space="preserve">
+    <value>tableLayoutPanel9</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel9.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel9.Parent" xml:space="preserve">
+    <value>groupBox8</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel9.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tableLayoutPanel9.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label16" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBoxObstruction" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="comboBoxSavedOptics" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label14" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBoxAperture" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="textBoxFocalLength" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label15" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="pbEditSavedOptics" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="radioButtonmillimeters" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="radioButtonInches" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,31.3364,Percent,68.6636" /&gt;&lt;Rows Styles="Percent,20,Percent,20,Percent,20,Percent,20,Percent,20,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="label16.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2999,60 +3176,6 @@
   </data>
   <data name="&gt;&gt;radioButtonInches.ZOrder" xml:space="preserve">
     <value>9</value>
-  </data>
-  <data name="tableLayoutPanel9.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tableLayoutPanel9.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 16</value>
-  </data>
-  <data name="tableLayoutPanel9.RowCount" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="tableLayoutPanel9.Size" type="System.Drawing.Size, System.Drawing">
-    <value>217, 177</value>
-  </data>
-  <data name="tableLayoutPanel9.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel9.Name" xml:space="preserve">
-    <value>tableLayoutPanel9</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel9.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel9.Parent" xml:space="preserve">
-    <value>groupBox8</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel9.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tableLayoutPanel9.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label16" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBoxObstruction" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="comboBoxSavedOptics" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label14" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBoxAperture" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="textBoxFocalLength" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label15" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="pbEditSavedOptics" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="radioButtonmillimeters" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="radioButtonInches" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,31.3364,Percent,68.6636" /&gt;&lt;Rows Styles="Percent,20,Percent,20,Percent,20,Percent,20,Percent,20,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="groupBox8.Location" type="System.Drawing.Point, System.Drawing">
-    <value>241, 146</value>
-  </data>
-  <data name="groupBox8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>223, 196</value>
-  </data>
-  <data name="groupBox8.TabIndex" type="System.Int32, mscorlib">
-    <value>40</value>
-  </data>
-  <data name="groupBox8.Text" xml:space="preserve">
-    <value>Optics</value>
-  </data>
-  <data name="&gt;&gt;groupBox8.Name" xml:space="preserve">
-    <value>groupBox8</value>
-  </data>
-  <data name="&gt;&gt;groupBox8.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;groupBox8.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;groupBox8.ZOrder" xml:space="preserve">
-    <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>

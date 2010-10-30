@@ -1926,10 +1926,16 @@ namespace ASCOM.GeminiTelescope
         /// <param name="bAsync">wait to complete or return immediately</param>
         public static void DoPulseCommand(string[] cmd, int duration, bool bAsync)
         {
-            DoCommand(cmd, false); // set guide rate and start movement
-            string c = cmd[1].Replace(":M", ":Q");  //make a quit commad
+           Trace.Enter(4, "GeminiHardware:DoPulseCommand");
 
-            if (bAsync)
+           lock (m_CommandQueue)
+               Transmit(cmd[0] + "#" + cmd[1] + "#");    //force the transmit ahead of anything in the queue
+           
+           EndOfPulseGuide = duration;
+           string c = cmd[1].Replace(":M", ":Q") + "#";  //make a quit commad
+
+           // if too short, do it synchronously
+            if (bAsync && duration > 25)
             {
                 object[] param = new object[2] {duration, c};
                 System.Threading.ThreadPool.QueueUserWorkItem(StopPulseGuide, param);
@@ -1937,8 +1943,11 @@ namespace ASCOM.GeminiTelescope
             else
             {
                 System.Threading.Thread.Sleep(duration);
-                DoCommandResult(c, MAX_TIMEOUT, false);
+                lock (m_CommandQueue)
+                    Transmit(c);
             }
+
+            Trace.Exit(4, "GeminiHardware:DoPulseCommand");
         }
 
         /// <summary>
@@ -1951,10 +1960,13 @@ namespace ASCOM.GeminiTelescope
         /// </param>
         private static void StopPulseGuide(object param)
         {
-            int duration = (int)((object[])param)[0];
-            string cmd = (string)((object[])param)[1];
-            System.Threading.Thread.Sleep(duration);
-            DoCommand(cmd, false);
+            string cmd = (string)((object[])param)[1] ;
+            
+            // compute duration from time left to pulse-guide
+            int duration = (int)EndOfPulseGuide;
+            if (duration > 0) System.Threading.Thread.Sleep(duration);
+            lock (m_CommandQueue)
+                Transmit(cmd);
         }
 
 
@@ -3099,6 +3111,7 @@ namespace ASCOM.GeminiTelescope
         /// 
         private static void _UpdatePolledVariables()
         {
+            if (IsPulseGuiding) return; //don't tie up the serial port while pulse guiding -- timing is critical!
 
             Trace.Enter("_UpdatePolledVariables");
             try

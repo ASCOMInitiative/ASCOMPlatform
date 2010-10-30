@@ -1331,8 +1331,8 @@ namespace ASCOM.GeminiTelescope
             // After this time, IsPulseGuiding will query the mount for tracking speed
             // to return the proper status. This is necessary because Gemini doesn't immediately
             // set 'G' or 'C' tracking rate when pulse-guiding command is issued and continues to track
-            // for a little while. Use 1/2 of the total duration or 100 milliseconds, whichever is greater:
-            GeminiHardware.EndOfPulseGuide = Math.Max(Duration / 2, 100);
+            // for a little while. Use the total duration:
+            GeminiHardware.EndOfPulseGuide = Duration;
 
             GeminiHardware.Velocity = "G";
 
