@@ -87,7 +87,7 @@ Public Interface IRotator '"49003324-8DE2-4986-BC7D-4D85E1C4CF6B
     ''' Gets the supported actions.
     ''' </summary>
     ''' <value>The supported actions.</value>
-    ReadOnly Property SupportedActions() As String()
+    ReadOnly Property SupportedActions() As ArrayList
 
     ''' <summary>
     ''' Transmits an arbitrary string to the device and does not wait for a response.

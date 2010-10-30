@@ -89,7 +89,7 @@ Public Interface IFilterWheel '756FD725-A6E2-436F-8C7A-67E358622027
     ''' Gets the supported actions.
     ''' </summary>
     ''' <value>The supported actions.</value>
-    ReadOnly Property SupportedActions() As String()
+    ReadOnly Property SupportedActions() As ArrayList
 
     ''' <summary>
     ''' Transmits an arbitrary string to the device and does not wait for a response.

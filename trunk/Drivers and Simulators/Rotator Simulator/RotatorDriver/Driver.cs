@@ -22,6 +22,7 @@
 //
 using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
+using System.Collections;
 
 namespace ASCOM.Simulator
 {
@@ -79,10 +80,10 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Gets the supported actions.
         /// </summary>
-        public string[] SupportedActions
+        public ArrayList SupportedActions
         {
             // no supported actions, return empty array
-            get { string[] sa = { }; return sa; }
+            get { ArrayList sa = new ArrayList(); return sa; }
             //get { throw new MethodNotImplementedException("SupportedActions"); }
         }
 
@@ -128,9 +129,9 @@ namespace ASCOM.Simulator
             get { return RotatorHardware.RotatorName; }
         }
 
-        string[] IRotator.SupportedActions
+        ArrayList IRotator.SupportedActions
 	    {
-            get { throw new MethodNotImplementedException("SupportedActions"); }
+            get { return new ArrayList(); }
 	    }
 
 	    public bool CanReverse

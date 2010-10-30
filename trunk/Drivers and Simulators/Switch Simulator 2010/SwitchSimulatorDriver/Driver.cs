@@ -282,10 +282,10 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Gets the supported actions.
         /// </summary>
-        public string[] SupportedActions
+        public ArrayList SupportedActions
         {
             // no supported actions, return empty array
-            get { string[] sa = { }; return sa; }
+            get { ArrayList sa = new ArrayList(); return sa; }
         }
 
         #endregion

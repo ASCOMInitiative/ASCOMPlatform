@@ -96,9 +96,9 @@
         Throw New ASCOM.MethodNotImplementedException("Action is not implemented in this driver")
     End Function
 
-    Public ReadOnly Property SupportedActions As String() Implements IFilterWheel.SupportedActions
+    Public ReadOnly Property SupportedActions As ArrayList Implements IFilterWheel.SupportedActions
         Get
-            Dim actions(-1) As String   ' declare an empty string array
+            Dim actions As New ArrayList   ' declare an empty array list
             Return actions
             'Throw New ASCOM.PropertyNotImplementedException("Actions are not supported by this driver", False)
         End Get
