@@ -50,11 +50,13 @@ welcome.dfm.miaf
 wizard.dfm
 wizard.dfm.miaf
 $
+Index.htm
 license.rtf
 moon.bmp
 readme.rtf
 swoosh.avi
 $
+
 
 
 
@@ -397,9 +399,9 @@ Ascom Platform 6
 Ascom Platform 6 Installation
 ASCOM Initiative
 http://ascom-standards.org/
-{D8C168D4-FB69-4D4C-9F9A-548F2DB4E273}
-My Company
-My Company
+{6411B1C2-EC2F-4526-BBE1-1D6789696BA7}
+ASCOM Initiative
+ASCOM Initiative
 http://astroanswers.org/
 http://ascom-standards.org/updates/
 Copyright © 1998-2010, The ASCOM Initiative. All rights reserved. 
