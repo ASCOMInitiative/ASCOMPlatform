@@ -1,5 +1,6 @@
 ﻿Imports System.Runtime.InteropServices
-Imports ASCOM.Conform
+Imports System.Collections
+
 '-----------------------------------------------------------------------
 ' <summary>Defines the ITelescope Interface</summary>
 '-----------------------------------------------------------------------
@@ -8,18 +9,14 @@ Imports ASCOM.Conform
 ''' </summary>
 <ComVisible(True), Guid("A007D146-AE3D-4754-98CA-199FEC03CF68"), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
 Public Interface ITelescopeV2 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
-    'Inherits IAscomDriver
-    'Inherits IDeviceControl
 
 #Region "Common Methods"
-    'IAscomDriver Methods
-
     ''' <summary>
-    ''' Set True to enable the link. Set False to disable the link.
-    ''' You can also read the property to check whether it is connected.
+    ''' Set True to connect to the device. Set False to disconnect from the device.
+    ''' You can also read the property to check whether the device is connected.
     ''' </summary>
     ''' <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
-    ''' <exception cref=" System.Exception">Must throw exception if unsuccessful.</exception>
+    ''' <exception cref=" ASCOM.DriverException">Must throw exception if unsuccessful.</exception>
     Property Connected() As Boolean
 
     ''' <summary>
@@ -28,7 +25,7 @@ Public Interface ITelescopeV2 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' characters (for compatibility with FITS headers).
     ''' </summary>
     ''' <value>The description.</value>
-    ''' <exception cref=" System.Exception">Must throw exception if description unavailable</exception>
+    ''' <exception cref=" ASCOM.DriverException">Must throw an exception if description unavailable</exception>
     ReadOnly Property Description() As String
 
     ''' <summary>
@@ -43,15 +40,12 @@ Public Interface ITelescopeV2 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' A string containing only the major and minor version of the driver.
     ''' This must be in the form "n.n".
-    ''' Not to be confused with the InterfaceVersion property, which is the version of this specification supported by the driver (currently 2). 
+    ''' Not to be confused with the InterfaceVersion property, which is the version of the ASCOM specification supported by the driver.
     ''' </summary>
     ReadOnly Property DriverVersion() As String
 
     ''' <summary>
-    ''' The version of this interface. Will return 2 for this version.
-    ''' Clients can detect legacy V1 drivers by trying to read ths property.
-    ''' If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1. 
-    ''' In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver. 
+    ''' The ASCOM device interface version that this driver supports.
     ''' </summary>
     ReadOnly Property InterfaceVersion() As Short
 
@@ -64,33 +58,38 @@ Public Interface ITelescopeV2 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' Launches a configuration dialog box for the driver.  The call will not return
     ''' until the user clicks OK or cancel manually.
     ''' </summary>
-    ''' <exception cref=" System.Exception">Must throw an exception if Setup dialog is unavailable.</exception>
+    ''' <exception cref="ASCOM.MethodNotImplementedException">Must throw an exception if Setup dialog is unavailable.</exception>
     Sub SetupDialog()
-
-    'DeviceControl Methods
 
     ''' <summary>
     ''' Invokes the specified device-specific action.
     ''' </summary>
     ''' <param name="ActionName">
-    ''' A well known name agreed by interested parties that represents the action
-    ''' to be carried out. 
-    ''' <example>suppose filter wheels start to appear with automatic wheel changers; new actions could 
+    ''' A well known name agreed by interested parties that represents the action to be carried out. 
+    ''' </param>
+    ''' <param name="ActionParameters">
+    ''' List of required parameters in an agreed format or an empty string <see cref="String.Empty"/> if none are required.
+    ''' </param>
+    ''' <returns>A string response in an agreed format</returns>
+    ''' <example>Suppose filter wheels start to appear with automatic wheel changers; new actions could 
     ''' be “FilterWheel:QueryWheels” and “FilterWheel:SelectWheel”. The former returning a 
     ''' formatted list of wheel names and the second taking a wheel name and making the change.
     ''' </example>
-    ''' </param>
-    ''' <param name="ActionParameters">
-    ''' List of required parameters or <see cref="String.Empty"/>  if none are required.
-    ''' </param>
-    ''' <returns>A string response and sets the <c>IDeviceControl.LastResult</c> property.</returns>
     Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String
 
     ''' <summary>
-    ''' Gets the supported actions.
+    ''' Gets a list of supported actions.
     ''' </summary>
-    ''' <value>The supported actions.</value>
-    ReadOnly Property SupportedActions() As String()
+    ''' <value>A collection of string values, the supported action names.</value>
+    ''' <remarks>This is a mandatory parameter and cannot return a PropertyNotImplemented exception. If your driver does not support any 
+    ''' actions then you should return an empty collection.
+    ''' <para>An array list collection has been selected as the vehicle for the action names in order to make it easier for clients to
+    ''' determine whether a particular action is supported. This is easily done through the Contains method. Since the
+    ''' collection is also ennumerable it is easy to use constructs such as For Each ... to operate on members without having to be concerned 
+    ''' about hom many members are in the collection. </para>
+    ''' <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET
+    ''' the ArrayList is the correct implementation to use as the .NET Generic methods are not compatible with COM.</para></remarks>
+    ReadOnly Property SupportedActions() As ArrayList
 
     ''' <summary>
     ''' Transmits an arbitrary string to the device and does not wait for a response.

@@ -44,6 +44,9 @@ namespace ASCOM.TelescopeSimulator
         private TrackingRatesSimple m_TrackingRatesSimple;
         private ASCOM.Utilities.Util m_Util;
 
+        const string SlewToHA = "SlewToHA"; const string SlewToHAUpper = "SLEWTOHA";
+        const string AssemblyVersionNumber = "AssemblyVersionNumber"; const string AssemblyVersionNumberUpper = "ASSEMBLYVERSIONNUMBER";
+
         //
         // Constructor - Must be public for COM registration!
         //
@@ -68,16 +71,41 @@ namespace ASCOM.TelescopeSimulator
 
         public string Action(string Command, string Parameters)
         {
-            throw new MethodNotImplementedException("Action");
+            //throw new MethodNotImplementedException("Action");
+            string Response = "";
+            switch (Command.ToUpper())
+            {
+                case AssemblyVersionNumberUpper:
+                    Response = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                    break;
+                case SlewToHAUpper:
+                    //Assume that we have just been supplied with an HA
+                    //Let errors just go straight back to the caller
+                        double HA = double.Parse(Parameters);
+                        double RA = this.SiderealTime - HA;
+                        this.SlewToCoordinates(RA, 0.0);
+                        Response = "Slew successful!";
+                    break;
+                default:
+                    throw new ASCOM.InvalidOperationException("Command: '" + Command + "' is not recognised by the Scope Simulator .NET driver. " + AssemblyVersionNumberUpper + " " + SlewToHAUpper);
+            }
+            return Response;
         }
 
         /// <summary>
         /// Gets the supported actions.
         /// </summary>
-        public string[] SupportedActions
+        public ArrayList SupportedActions
         {
             // no supported actions, return empty array
-            get { string[] sa = { }; return sa; }
+            get 
+            { 
+                ArrayList sa = new ArrayList();
+                sa.Add(AssemblyVersionNumber); // Add a test action to return a value
+                sa.Add(SlewToHA); // Expects an numeric HA Parameter
+                
+                return sa; 
+            }
         }
 
         public void AbortSlew()

@@ -27,6 +27,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
+using System.Collections;
 
 namespace ASCOM.Simulator
 {
@@ -216,10 +217,10 @@ namespace ASCOM.Simulator
         /// <summary>
         /// 
         /// </summary>
-        public string[] SupportedActions
+        public ArrayList SupportedActions
         {
             // no supported actions, return empty array
-            get { string[] sa = { }; return sa; }
+            get { ArrayList sa = new ArrayList(); return sa; }
         }
 
         public void Dispose()

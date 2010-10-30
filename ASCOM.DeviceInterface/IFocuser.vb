@@ -87,7 +87,7 @@ Public Interface IFocuser 'C2E3FE9C-01CD-440C-B8E3-C56EE9E4EDBC
     ''' Gets the supported actions.
     ''' </summary>
     ''' <value>The supported actions.</value>
-    ReadOnly Property SupportedActions() As String()
+    ReadOnly Property SupportedActions() As ArrayList
 
     ''' <summary>
     ''' Transmits an arbitrary string to the device and does not wait for a response.

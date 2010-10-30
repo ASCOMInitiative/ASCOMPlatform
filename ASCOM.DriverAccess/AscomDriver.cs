@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ASCOM.Conform;
+using System.Collections;
 
 namespace ASCOM.DriverAccess
 {
@@ -160,9 +161,9 @@ namespace ASCOM.DriverAccess
         /// Gets string array of the supported actions.
         /// </summary>
         /// <value>The supported actions.</value>
-        public string[] SupportedActions
+        public ArrayList SupportedActions
         {
-            get { return (string[])memberFactory.CallMember(1, "SupportedActions", new Type[] { }, new object[] { }); }
+            get { return (ArrayList)memberFactory.CallMember(1, "SupportedActions", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>

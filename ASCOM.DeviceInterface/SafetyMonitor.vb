@@ -88,7 +88,7 @@ Public Interface ISafetyMonitor
     ''' Gets the supported actions.
     ''' </summary>
     ''' <value>The supported actions.</value>
-    ReadOnly Property SupportedActions() As String()
+    ReadOnly Property SupportedActions() As ArrayList
 
     ''' <summary>
     ''' Transmits an arbitrary string to the device and does not wait for a response.
