@@ -1,0 +1,326 @@
+Comment: .NET Application Setup Project
+ 
+[DEFINE REGION: Application Updates]
+Include Script: updates
+[END REGION]
+ 
+[DEFINE REGION: Check Application Requirements]
+Get System Setting Administrator Rights into CHECKSYSTEM
+if Variable CHECKSYSTEM not Equals TRUE
+  MessageBox: $TITLE$ Setup Error, This product requires at least Administrator Privileges.$NEWLINE$$NEWLINE$Setup cannot continue.
+  Terminate Installation
+end
+Comment: Check system has at least Windows 98
+Get System Setting Windows XP into CHECKSYSTEM
+if Variable CHECKSYSTEM not Equals TRUE
+  MessageBox: $TITLE$ Setup Error, This product requires at least Windows XP.$NEWLINE$$NEWLINE$Setup cannot continue.
+  Terminate Installation
+end
+ 
+Comment: Check system has at least Internet Explorer 5.01 Service Pack 1
+Get System Setting Internet Explorer 5.01 Service Pack 1 into CHECKIE
+if Variable CHECKIE not Equals TRUE
+  MessageBox: $TITLE$ Setup Error, This product requires Internet Explorer 5.01 Service Pack 1 or later. Please install it and try again.
+  Terminate Installation
+end
+ 
+[END REGION]
+ 
+[DEFINE REGION: Check/Install Application Pre-Requisites]
+ 
+[DEFINE REGION: Check Application Pre-Requisites]
+Comment: Check setup pre-requisites
+Set Variable PREREQ to FALSE
+Set Variable PRELIST to 
+[compiler if Variable BUILDMODE not Equals PATCH]
+if Variable NEEDSUPGRADE Equals TRUE
+  Set Variable PREREQ to TRUE
+  Set Variable PRELIST to $PRELIST$$NEWLINE$Previous Version Uninstallation
+end
+Include Script: checkmsi31
+Include Script: checknet2sp1
+Include Script: checknet2sp2
+Include Script: checkmsxml60
+Include Script: checknet30
+Include Script: checknet3sp1
+Include Script: checknet35x
+Include Script: checknet3sp2
+Include Script: checknet351
+Include Script: checkmsi30
+Include Script: checknet20
+[compiler end]
+[END REGION]
+ 
+[DEFINE REGION: Install Application Pre-Requisites]
+Comment: Install setup pre-requisites
+if Variable PREREQ not Equals FALSE
+  Display Dialog: prereq, wait for dialog to return (modal)
+  if Variable WIZARD Equals CANCEL
+    Terminate Installation
+  end
+  Display Dialog: progressprereq, use as progress dialog (non-modal)
+  [compiler if Variable BUILDMODE not Equals PATCH]
+  if Variable NEEDSUPGRADE Equals TRUE
+    Set Variable REMOVEOLD to 
+    Set Variable ERROROLD to 
+    Install/Remove MSI Package $PRODUCTCODE$[REMOVE=ALL] (get result into variable REMOVEOLD)
+    if Variable REMOVEOLD Equals ERROR
+      MessageBox: $TITLE$ Setup, Unable to uninstall old version of $TITLE$. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$ERROROLD$
+      Terminate Installation
+    end
+    if Variable REMOVEOLD Equals REBOOT
+      MessageBox: $TITLE$ Setup, Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$NEWLINE$Please save your work in all running programs and click OK to restart your computer. Setup will resume once your computer restarts.$NEWLINE$$NEWLINE$If you click CANCEL, setup will exit. You will have to run setup again at a later time to install $TITLE$.
+      if Variable REBOOTNOW Equals OK
+        Reboot Computer and Resume Setup
+      else
+        Terminate Installation
+      end
+    end
+    Set Variable MAINTENANCE to FALSE
+  end
+  [DEFINE WEB MEDIA Microsoft Windows Installer 3.1]
+  Include Script: setupmsi31
+  [DEFINE WEB MEDIA Microsoft .NET Framework 2.0 with Service Pack 1]
+  Include Script: setupnet2sp1
+  [DEFINE WEB MEDIA Microsoft .NET Framework 2.0 with Service Pack 2]
+  Include Script: setupnet2sp2
+  [DEFINE WEB MEDIA Microsoft XML Parser 6.0]
+  Include Script: setupmsxml60
+  [DEFINE WEB MEDIA Microsoft .NET Framework 3.0]
+  Include Script: setupnet30
+  [DEFINE WEB MEDIA Microsoft .NET Framework 3.0 Service Pack 1]
+  Include Script: setupnet3sp1
+  [DEFINE WEB MEDIA Microsoft .NET Framework 3.5]
+  Include Script: setupnet35x
+  [DEFINE WEB MEDIA Microsoft .NET Framework 3.0 Service Pack 2]
+  Include Script: setupnet3sp2
+  [DEFINE WEB MEDIA Microsoft .NET Framework 3.5 with Service Pack 1]
+  Include Script: setupnet351
+  [DEFINE WEB MEDIA Microsoft Windows Installer 3.0]
+  Include Script: setupmsi30
+  [DEFINE WEB MEDIA Microsoft .NET Framework 2.0]
+  Include Script: setupnet20
+  [compiler end]
+  Hide Dialog
+end
+[END REGION]
+ 
+[END REGION]
+ 
+[DEFINE REGION: Define Setup Globals]
+Comment: Define Setup Components
+ 
+Comment: Initialize Setup Globals
+Get System Setting Windows NT Kernel (NT4, 2000, XP, 2003, Vista, 2008) into ISNT
+Get Folder Location System->Program Files Directory into PROGRAMFILES
+Get Common Folder Location System->Program Files Directory into COMMONFILES
+Get Common Folder Location Start Menu->Programs Group into SHORTCUTFILESALL
+Get Folder Location Start Menu->Programs Group into SHORTCUTFILES
+if Variable SHORTCUTFILESALL Equals 
+  Set Variable SHORTCUTFILESALL to $SHORTCUTFILES$
+end
+Get Folder Location System->Desktop Directory into DESKTOPDIR
+Get Folder Location System->Windows Directory into WINDIR
+Get Folder Location System->System Directory into WINSYSDIR
+Get Folder Location Taskbar->Quick Launch Directory into QUICKLAUNCHDIR
+Get Folder Location WWW->WWWRoot into WWWROOTDIR
+[END REGION]
+ 
+[DEFINE REGION: Setup User Interview]
+if Variable MAINTENANCE Equals TRUE
+  GoTo Label: Maintenance
+else
+  [compiler if Variable BUILDMODE not Equals PATCH]
+  Comment: First Time Install
+  Set Variable TARGETDIR to $PROGRAMFILES$\$TITLE$
+  Set Variable STARTMENU to $TITLE$
+  [compiler end]
+end
+ 
+label: Welcome Dialog
+Display Dialog: welcome, wait for dialog to return (modal)
+if Variable WIZARD Equals CANCEL
+  GoTo Label: Main Install
+end
+[compiler if Variable BUILDMODE not Equals PATCH]
+label: License Check
+Display Dialog: licensecheck, wait for dialog to return (modal)
+if Variable WIZARD Equals BACK
+  GoTo Label: Welcome Dialog
+else
+  if Variable WIZARD Equals CANCEL
+    GoTo Label: Main Install
+  end
+end
+label: ReadMe Information
+Display Dialog: readme, wait for dialog to return (modal)
+if Variable WIZARD Equals BACK
+  GoTo Label: License Check
+else
+  if Variable WIZARD Equals CANCEL
+    GoTo Label: Main Install
+  end
+end
+label: User Registration
+Comment: Display Dialog: registration, wait for dialog to return (modal)
+if Variable WIZARD Equals BACK
+  GoTo Label: ReadMe Information
+else
+  if Variable WIZARD Equals CANCEL
+    GoTo Label: Main Install
+  end
+end
+label: Setup Type
+Comment: Display Dialog: setuptype, wait for dialog to return (modal)
+if Variable WIZARD Equals BACK
+  GoTo Label: User Registration
+else
+  if Variable WIZARD Equals CANCEL
+    GoTo Label: Main Install
+  end
+end
+Comment: TO-DO: Customize your minimum setup here
+if Variable MINIMUM Equals TRUE
+else
+  if Variable COMPLETE Equals TRUE
+  end
+end
+label: Custom Setup
+Comment: Display Dialog: componentstree (if variable PERSONALIZED is TRUE), wait for dialog to return (modal)
+if Variable WIZARD Equals BACK
+  GoTo Label: Setup Type
+else
+  if Variable WIZARD Equals CANCEL
+    GoTo Label: Main Install
+  end
+end
+label: Destination Directory
+Display Dialog: destination, wait for dialog to return (modal)
+if Variable WIZARD Equals BACK
+  GoTo Label: Custom Setup
+else
+  if Variable WIZARD Equals CANCEL
+    GoTo Label: Main Install
+  end
+end
+label: Start Menu
+Comment: Display Dialog: startmenu, wait for dialog to return (modal)
+if Variable WIZARD Equals BACK
+  GoTo Label: Destination Directory
+else
+  if Variable WIZARD Equals CANCEL
+    GoTo Label: Main Install
+  end
+end
+[compiler end]
+label: Start Installation
+Display Dialog: startinstallation, wait for dialog to return (modal)
+if Variable WIZARD Equals BACK
+  [compiler if Variable BUILDMODE not Equals PATCH]
+  GoTo Label: Start Menu
+  [compiler else]
+  GoTo Label: Welcome Dialog
+  [compiler end]
+else
+  GoTo Label: Main Install
+end
+ 
+label: Maintenance
+Comment: Maintenance Install/Uninstall
+wizard loop
+Display Dialog: maintenance, wait for dialog to return (modal)
+Comment: Display Dialog: componentstree (if variable MODIFY is TRUE), wait for dialog to return (modal)
+Display Dialog: startinstallation, wait for dialog to return (modal)
+end
+[END REGION]
+ 
+[DEFINE REGION: Process (Un)Installation]
+label: Main Install
+Comment: Exit Setup if Wizard Loop cancelled
+if Variable WIZARD Equals CANCEL
+  Terminate Installation
+end
+ 
+Comment: Prepare to install
+Set Variable PROGRESSTEXT to Installing $TITLE$
+Set Variable SUCCESS to 
+Set Variable LASTERROR to 
+if Variable ALLUSERS Equals TRUE
+  Set Variable SHORTCUTFOLDER to $SHORTCUTFILESALL$\$STARTMENU$
+else
+  Set Variable SHORTCUTFOLDER to $SHORTCUTFILES$\$STARTMENU$
+end
+Display Dialog: progress, use as progress dialog (non-modal)
+ 
+Comment: Modify Target System
+[DEFINE REGION: Perform Uninstallation]
+if Variable REMOVE Equals TRUE
+  Comment: Uninstall product
+  Comment: TO-DO: Insert any additional uninstall commands here
+  Apply Uninstall (get result into variable SUCCESS)
+  if Variable SUCCESS not Equals ERROR
+    if Variable SUCCESS not Equals CANCEL
+      Remove Unpinned Assemblies
+    end
+  end
+  Set Variable PROGRESS to 100
+else
+  [END REGION]
+  [DEFINE REGION: Perform First Time or Maintenance Installation]
+  Comment: Install/Re-Install product
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Uninstall #TITLE# to $UNINSTALLLINK$
+  [OFFLINE CONTENT]
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\#TITLE# Update to $UNINSTALLLINK$
+  [DEFINE WEB MEDIA Ascom Platform 6]
+  if Variable SELECTED Equals TRUE
+  end
+  Comment: TO-DO: Insert any additional install commands here
+  [compiler if Variable BUILDMODE Equals PATCH]
+  Apply Patch (get result into variable SUCCESS)
+  [compiler else]
+  if Variable ADVERTISE Equals TRUE
+    Apply Advertised (get result into variable SUCCESS)
+  else
+    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.Astrometry.dll to Global Assembly Cache
+    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.Attributes.dll to Global Assembly Cache
+    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.DeviceInterfaces.dll to Global Assembly Cache
+    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.DriverAccess.dll to Global Assembly Cache
+    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.Exceptions.dll to Global Assembly Cache
+    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.Helper.dll to Global Assembly Cache
+    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.Helper2.dll to Global Assembly Cache
+    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.IConform.dll to Global Assembly Cache
+    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.Utilities.dll to Global Assembly Cache
+    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\ASCOM.DriverAccess.dll to Global Assembly Cache
+    Create Folder $SHORTCUTFILES$\ASCOM Platform 6
+    Apply Install (get result into variable SUCCESS)
+    if Variable SUCCESS not Equals ERROR
+      if Variable SUCCESS not Equals CANCEL
+      end
+    end
+  end
+  [compiler end]
+  Set Variable PROGRESS to 100
+end
+[END REGION]
+[END REGION]
+ 
+[DEFINE REGION: Finish Setup]
+Comment: End of Installation
+Hide Dialog
+Comment: Display Dialog: finish, wait for dialog to return (modal)
+if Variable SILENT Equals FALSE
+  if Variable REBOOTCOMPUTER Equals TRUE
+    if Variable SUCCESS Equals REBOOT
+      Reboot Computer
+    end
+  end
+  if Variable RUNAPP Equals TRUE
+    if Variable REMOVE Equals FALSE
+      if Variable SUCCESS Equals COMPLETE
+        Comment: TO-DO: Insert command that starts your application here
+      end
+    end
+  end
+end
+[END REGION]
+ 
