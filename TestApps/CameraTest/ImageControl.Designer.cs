@@ -17,6 +17,7 @@ namespace CameraTest
             {
                 components.Dispose();
             }
+            bmp.Dispose();
             base.Dispose(disposing);
         }
 

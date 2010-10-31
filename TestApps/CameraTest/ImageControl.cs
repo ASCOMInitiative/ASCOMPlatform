@@ -10,10 +10,10 @@ using System.Diagnostics;
 
 namespace CameraTest
 {
-    public partial class ImageControl : UserControl
+    internal partial class ImageControl : UserControl
     {
         #region constructor
-        public ImageControl()
+        internal ImageControl()
         {        
             InitializeComponent();
             SetColourScale();
@@ -29,16 +29,17 @@ namespace CameraTest
         /// <summary>
         /// This event is raised when the values or gamma are changed
         /// </summary>
-        public event ChangeHandler Change;
-        public EventArgs e = null;
-        public delegate void ChangeHandler(ImageControl sender, EventArgs e);
+        internal event ChangeHandler Change;
+        //internal ImageControl sender;
+        //internal EventArgs e = null;
+        internal delegate void ChangeHandler(object sender, EventArgs e);
         #endregion
 
-        #region public interface
+        #region internal interface
         /// <summary>
         /// Maximum value for control
         /// </summary>
-        public decimal Maximum
+        internal decimal Maximum
         {
             get { return numMaximum.Maximum; }
             set
@@ -51,7 +52,7 @@ namespace CameraTest
         /// <summary>
         /// Minimum value for control
         /// </summary>
-        public decimal Minimum
+        internal decimal Minimum
         {
             get { return numMinimum.Minimum; }
             set
@@ -64,7 +65,7 @@ namespace CameraTest
         /// <summary>
         /// left hand (minimum) value of slider
         /// </summary>
-        public decimal MinValue
+        internal decimal MinValue
         {
             get { return numMinimum.Value; }
             set
@@ -77,7 +78,7 @@ namespace CameraTest
         /// <summary>
         /// right hand (maximum) value of slider
         /// </summary>
-        public decimal MaxValue
+        internal decimal MaxValue
         {
             get { return numMaximum.Value; }
             set
@@ -90,9 +91,9 @@ namespace CameraTest
         /// <summary>
         /// number of decimal places
         /// </summary>
-        public int DecimalPlaces
+        internal int DecimalPlaces
         {
-            get { return numMaximum.DecimalPlaces; }
+            //get { return numMaximum.DecimalPlaces; }
             set { numMaximum.DecimalPlaces = numMinimum.DecimalPlaces = value; }
         }
 
@@ -100,9 +101,9 @@ namespace CameraTest
         /// <summary>
         /// Increment
         /// </summary>
-        public decimal Increment
+        internal decimal Increment
         {
-            get { return increment; }
+            //get { return increment; }
             set { numMinimum.Increment = numMaximum.Increment = increment = value; }
         }
 
@@ -110,9 +111,9 @@ namespace CameraTest
         /// <summary>
         /// Increment used when the shift key is down
         /// </summary>
-        public decimal ShiftIncrement
+        internal decimal ShiftIncrement
         {
-            get { return shiftIncrement; }
+            //get { return shiftIncrement; }
             set { shiftIncrement = value; }
         }
 
@@ -120,13 +121,13 @@ namespace CameraTest
         /// <summary>
         /// Increment used when the control key is down
         /// </summary>
-        public decimal CtrlIncrement
+        internal decimal CtrlIncrement
         {
-            get { return ctrlIncrement; }
+            //get { return ctrlIncrement; }
             set { ctrlIncrement = value; }
         }
 
-        public void Histogram(int[] hist)
+        internal void Histogram(int[] hist)
         {
             if (hist == null)
                 return;
@@ -257,37 +258,42 @@ namespace CameraTest
 
             Graphics g = pnlHistogram.CreateGraphics();
             Color colour = Color.Black;
-            Pen myPen = new Pen(new SolidBrush(colour),1);
-            //The width of the pen is given by the XUnit for the control.
-            int h = pnlHistogram.Height, w = pnlHistogram.Width;
-            float sy = (float)h / max;
-            float sx = (float)w / 255;
-            if (logScale) sy = (float)(h / Math.Log10(max));
-            for (int i=0; i<histogram.Length; i++)
+            using (SolidBrush sb = new SolidBrush(colour))
             {
-                int x = (int)(i*sx);
-                // set the colour
-                if (x < pnlSlider.Left)
+                using (Pen myPen = new Pen(sb, 1))
                 {
-                    myPen.Color = Color.Black;
+                    //The width of the pen is given by the XUnit for the control.
+                    int h = pnlHistogram.Height, w = pnlHistogram.Width;
+                    float sy = (float)h / max;
+                    float sx = (float)w / 255;
+                    if (logScale) sy = (float)(h / Math.Log10(max));
+                    for (int i = 0; i < histogram.Length; i++)
+                    {
+                        int x = (int)(i * sx);
+                        // set the colour
+                        if (x < pnlSlider.Left)
+                        {
+                            myPen.Color = Color.Black;
+                        }
+                        else if (x > pnlSlider.Left + pnlSlider.Width)
+                        {
+                            myPen.Color = Color.White;
+                        }
+                        else
+                        {
+                            double v = (double)(x - pnlSlider.Left) / pnlSlider.Width;
+                            v = Math.Pow(v, (double)Gamma.Value);
+                            int j = (int)(v * 255);
+                            myPen.Color = Color.FromArgb(j, j, j);
+                        }
+
+                        //We draw each line
+                        int y = h - (int)(histogram[i] * sy);
+                        if (logScale)
+                            y = h - (int)(Math.Log10(histogram[i] + 1) * sy);
+                        g.DrawLine(myPen, x, h, x, y);
+                    }
                 }
-                else if (x > pnlSlider.Left + pnlSlider.Width)
-                {
-                    myPen.Color = Color.White;
-                }
-                else
-                {
-                    double v = (double)(x - pnlSlider.Left) / pnlSlider.Width;
-                    v = Math.Pow(v, (double)Gamma.Value);
-                    int j = (int)(v * 255);
-                    myPen.Color = Color.FromArgb(j,j,j);
-                }
-                
-                //We draw each line
-                int y = h - (int)(histogram[i] * sy);
-                if (logScale)
-                    y = h - (int)(Math.Log10(histogram[i]+1)*sy);
-                g.DrawLine(myPen, x, h, x, y);
             }
         }
 
@@ -295,7 +301,7 @@ namespace CameraTest
         {
             SetColourScale();
             DrawHistogram();
-            Change(this, e);
+            this.Change(this, e);
         }
 
         private void numMaximum_ValueChanged(object sender, EventArgs e)
@@ -322,38 +328,40 @@ namespace CameraTest
         /// <param name="e"></param>
         private void numUpDown_KeyUpDown(object sender, KeyEventArgs e)
         {
+            NumericUpDown nud = sender as NumericUpDown;
             switch (e.Modifiers)
             {
+
                 case Keys.Control:
-                    ((NumericUpDown)sender).Increment = ctrlIncrement;
+                    nud.Increment = ctrlIncrement;
                     break;
                 case Keys.ControlKey:
                     break;
                 case Keys.Shift:
-                    ((NumericUpDown)sender).Increment = shiftIncrement;
+                    nud.Increment = shiftIncrement;
                     break;
                 default:
-                    ((NumericUpDown)sender).Increment = increment;
+                    nud.Increment = increment;
                     break;
 	        }
         }
 
         private void pnlSlider_MouseUp(object sender, MouseEventArgs e)
         {
-            DrawHistogram();
-            Change(this, e);
+            this.DrawHistogram();
+            this.Change(this, e);
         }
 
         private void numMaximum_Scroll(object sender, ScrollEventArgs e)
         {
-            DrawHistogram();
-            Change(this, e);
+            this.DrawHistogram();
+            this.Change(this, e);
         }
 
         private void logHistogramToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
             logScale = logHistogramToolStripMenuItem.Checked;
-            DrawHistogram();
+            this.DrawHistogram();
         }
         #endregion
     }
