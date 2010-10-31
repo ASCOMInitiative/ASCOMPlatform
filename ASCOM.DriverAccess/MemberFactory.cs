@@ -112,6 +112,12 @@ namespace ASCOM.DriverAccess
         /// <returns>nothing</returns>
         public void Dispose()
         {
+            if (!(_tl == null))
+            {
+                _tl.Enabled = false;
+                _tl.Dispose();
+                _tl = null;
+            }
             if (GetLateBoundObject == null) return;
             var releaseComObject = Marshal.ReleaseComObject(GetLateBoundObject);
             if (releaseComObject == 0 )GetLateBoundObject = null;

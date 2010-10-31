@@ -30,21 +30,6 @@ namespace ASCOM.DriverAccess
 		}
         #endregion
 
-        #region Convenience Members
-        /// <summary>
-        /// Brings up the ASCOM Chooser Dialog to choose a Rotator
-        /// </summary>
-        /// <param name="rotatorID">Focuser Prog ID for default or null for None</param>
-        /// <returns>Prog ID for chosen Rotator or null for none</returns>
-        public static string Choose(string rotatorID)
-        {
-            Chooser oChooser = new Chooser();
-            oChooser.DeviceType = "Rotator";			// Requires Helper 5.0.3 (May '07)
-            return oChooser.Choose(rotatorID);
-        }
-
-        #endregion
-
         #region IRotator Members
 
         /// <summary>

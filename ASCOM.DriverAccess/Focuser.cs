@@ -29,21 +29,6 @@ namespace ASCOM.DriverAccess
 		}
         #endregion
 
-        #region Convenience Members
-        /// <summary>
-        /// Brings up the ASCOM Chooser Dialog to choose a Focuser
-        /// </summary>
-        /// <param name="focuserID">Focuser Prog ID for default or null for None</param>
-        /// <returns>Prog ID for chosen focuser or null for none</returns>
-        public static string Choose(string focuserID)
-        {
-			Chooser oChooser = new Chooser();
-			oChooser.DeviceType = "Focuser";			// Requires Helper 5.0.3 (May '07)
-			return oChooser.Choose(focuserID);
-        }
-
-        #endregion
-
         #region IFocuser Members
 
         /// <summary>

@@ -43,25 +43,6 @@ namespace ASCOM.DriverAccess
 		}
         #endregion
 
-        #region Convenience Members
-        /// <summary>
-        /// The Choose() method returns the DriverID of the selected driver.
-        /// Choose() allows you to optionally pass the DriverID of a "current" driver,
-        /// and the corresponding camera type is pre-selected in the Chooser///s list.
-        /// In this case, the OK button starts out enabled (lit-up); the assumption is that the pre-selected driver has already been configured.
-        /// </summary>
-        /// <param name="cameraId">Optional DriverID of the previously selected camera that is to be the pre-selected camera in the list.</param>
-        /// <returns>
-        /// The DriverID of the user selected camera. Null if the dialog is canceled.
-        /// </returns>
-        public static string Choose(string cameraId)
-        {
-            var oChooser = new Chooser {DeviceType = "Camera"};
-            return oChooser.Choose(cameraId);
-        }
-
-        #endregion
-
         #region ICamera Members
 
         /// <summary>
