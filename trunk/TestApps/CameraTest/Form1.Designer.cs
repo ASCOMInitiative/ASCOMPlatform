@@ -17,6 +17,13 @@ namespace CameraTest
             {
                 components.Dispose();
             }
+            if (this.img != null)
+                this.img.Dispose();
+            if (oCamera != null)
+            {
+                oCamera.Connected = false;
+                //oCamera.Dispose();
+            }
             base.Dispose(disposing);
         }
 
@@ -62,7 +69,6 @@ namespace CameraTest
             this.label13 = new System.Windows.Forms.Label();
             this.groupBoxImageDisplay = new System.Windows.Forms.GroupBox();
             this.btnSave = new System.Windows.Forms.Button();
-            this.imageControl = new CameraTest.ImageControl();
             this.txtExposureDuration = new System.Windows.Forms.Label();
             this.txtExposureStartTime = new System.Windows.Forms.Label();
             this.trkZoom = new System.Windows.Forms.TrackBar();
@@ -501,8 +507,8 @@ namespace CameraTest
             // 
             // groupBoxImageDisplay
             // 
-            this.groupBoxImageDisplay.Controls.Add(this.btnSave);
             this.groupBoxImageDisplay.Controls.Add(this.imageControl);
+            this.groupBoxImageDisplay.Controls.Add(this.btnSave);
             this.groupBoxImageDisplay.Controls.Add(this.txtExposureDuration);
             this.groupBoxImageDisplay.Controls.Add(this.txtExposureStartTime);
             this.groupBoxImageDisplay.Controls.Add(this.trkZoom);
@@ -523,50 +529,6 @@ namespace CameraTest
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // imageControl
-            // 
-            this.imageControl.CtrlIncrement = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            this.imageControl.DecimalPlaces = 0;
-            this.imageControl.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.imageControl.Location = new System.Drawing.Point(3, 16);
-            this.imageControl.Maximum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.imageControl.MaxValue = new decimal(new int[] {
-            80,
-            0,
-            0,
-            0});
-            this.imageControl.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.imageControl.MinValue = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.imageControl.Name = "imageControl";
-            this.imageControl.ShiftIncrement = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.imageControl.Size = new System.Drawing.Size(159, 92);
-            this.imageControl.TabIndex = 9;
-            this.imageControl.Change += new CameraTest.ImageControl.ChangeHandler(this.imageControl_Change);
             // 
             // txtExposureDuration
             // 
@@ -1183,7 +1145,7 @@ namespace CameraTest
             0,
             0,
             0});
-            this.imageControl.Location = new System.Drawing.Point(0, 0);
+            this.imageControl.Location = new System.Drawing.Point(3, 19);
             this.imageControl.Maximum = new decimal(new int[] {
             100,
             0,
@@ -1210,8 +1172,8 @@ namespace CameraTest
             0,
             0,
             0});
-            this.imageControl.Size = new System.Drawing.Size(156, 112);
-            this.imageControl.TabIndex = 0;
+            this.imageControl.Size = new System.Drawing.Size(162, 89);
+            this.imageControl.TabIndex = 11;
             // 
             // Form1
             // 
@@ -1330,7 +1292,6 @@ namespace CameraTest
         private System.Windows.Forms.Label txtExposureDuration;
         private System.Windows.Forms.Label txtExposureStartTime;
         private System.Windows.Forms.TrackBar trkZoom;
-        private ImageControl imageControl;
         private System.Windows.Forms.ToolTip ToolTip;
         private System.Windows.Forms.CheckBox chkVariant;
         private System.Windows.Forms.Button btnSave;
@@ -1355,6 +1316,7 @@ namespace CameraTest
         private System.Windows.Forms.CheckBox checkBoxFastReadout;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private ImageControl imageControl;
     }
 }
 
