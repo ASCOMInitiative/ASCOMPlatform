@@ -11,7 +11,8 @@ namespace ASCOM
 	/// a member of ApplicationException, the base class of DriverException. The HResult
 	/// property of ApplicationException is simply renamed to Number.
 	/// </summary>
-	public class DriverException : ApplicationException
+    [Serializable]
+	public class DriverException : Exception
 	{
 		/// <summary>
 		/// Create a new ASCOM exception using the specified text message and error code.
@@ -67,6 +68,16 @@ namespace ASCOM
 		{
 
 		}
+
+        /// <summary>
+        /// Added to keep Code Analysis happy
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
+        protected DriverException(SerializationInfo info, 
+         StreamingContext context) : base(info, context)
+        {
+        }
 
 		/// <summary>
 		/// The error code for this exception (hex 80040400 - 800404FF)

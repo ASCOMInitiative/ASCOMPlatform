@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.Serialization;
 
 namespace ASCOM
 {
@@ -13,6 +14,7 @@ namespace ASCOM
     /// lived, you may choose to stall the request until the condition is cleared rather than throwing this exception.
     /// Clearly, that is a judgement that you can only make given a specific scenario.</para>
     /// </summary>
+    [Serializable]
     public class InvalidOperationException : ASCOM.DriverException
     {
         private const string csDefaultMessage = "The requested operation is not permitted at this time";
@@ -49,6 +51,16 @@ namespace ASCOM
         /// <param name="innerException">The inner exception the led to the throwing of this exception.</param>
         public InvalidOperationException(string message, Exception innerException)
             : base(message, ErrorCodes.InvalidOperationException, innerException)
+        {
+        }
+
+        /// <summary>
+        /// Added to keep Code Analysis happy
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
+        protected InvalidOperationException(SerializationInfo info, 
+         StreamingContext context) : base(info, context)
         {
         }
     }

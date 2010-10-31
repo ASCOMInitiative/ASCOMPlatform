@@ -7,9 +7,11 @@ namespace ASCOM
 	/// This exception should be raised when an operation is attempted that requires communication with the
 	/// device, but the device is disconnected.
 	/// </summary>
+    [Serializable]
 	public class NotConnectedException : ASCOM.DriverException
 	{
-		private const string csDefaultMessage = "Device is not connected";
+        [NonSerialized]
+        private const string csDefaultMessage = "Device is not connected";
 		/// <summary>
 		/// Default public constructor for NotConnectedException takes no parameters.
 		/// </summary>
@@ -44,5 +46,15 @@ namespace ASCOM
 			: base(message, ErrorCodes.NotConnected, innerException)
 		{
 		}
+
+        /// <summary>
+        /// Added to keep Code Analysis happy
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
+        protected NotConnectedException(SerializationInfo info, 
+         StreamingContext context) : base(info, context)
+        {
+        }
 	}
 }
