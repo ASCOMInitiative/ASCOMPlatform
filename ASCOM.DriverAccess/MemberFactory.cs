@@ -39,7 +39,7 @@ namespace ASCOM.DriverAccess
             if (GetObjType == null)
             {
                 //no type information found throw error
-                throw new Exception("Check Driver: cannot create object type of progID: " + _strProgId);
+                throw new  ASCOM.Utilities.Exceptions.HelperException("Check Driver: cannot create object type of progID: " + _strProgId);
             }
             _tl = new TraceLogger("", "MemberFactory") {Enabled = true};
 
@@ -76,7 +76,7 @@ namespace ASCOM.DriverAccess
             //no instance found throw error
             if (GetLateBoundObject == null)
             {
-                throw new Exception("Check Driver: cannot create driver isntance of progID: " + _strProgId);
+                throw new ASCOM.Utilities.Exceptions.HelperException("Check Driver: cannot create driver instance of progID: " + _strProgId);
             }
         }
 
