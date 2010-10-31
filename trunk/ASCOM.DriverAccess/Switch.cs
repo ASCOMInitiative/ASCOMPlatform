@@ -31,20 +31,6 @@ namespace ASCOM.DriverAccess
 		}
         #endregion
 
-        #region Convenience Members
-        /// <summary>
-        /// Brings up the ASCOM Chooser Dialog to choose a Switch
-        /// </summary>
-        /// <param name="switchId">Switch Prog ID for default or null for None</param>
-        /// <returns>Prog ID for chosen Switch or null for none</returns>
-        public static string Choose(string switchId)
-        {
-			var oChooser = new Chooser {DeviceType = "Switch"};
-            return oChooser.Choose(switchId);
-        }
-
-        #endregion
-
         #region ISwitch Members
 
         /// <summary>

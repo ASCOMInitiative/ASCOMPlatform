@@ -55,7 +55,8 @@
     <DocumentationFile>bin\Release\ASCOM.DriverAccess.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <RegisterForComInterop>false</RegisterForComInterop>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Peter|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
