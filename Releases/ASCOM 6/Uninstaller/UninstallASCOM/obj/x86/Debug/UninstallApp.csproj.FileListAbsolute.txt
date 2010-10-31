@@ -1,6 +1,0 @@
-C:\projects\uninstall\UninstallApp\UninstallApp\bin\Debug\UninstallApp.exe
-C:\projects\uninstall\UninstallApp\UninstallApp\bin\Debug\UninstallApp.pdb
-C:\projects\uninstall\UninstallApp\UninstallApp\obj\x86\Debug\ResolveAssemblyReference.cache
-C:\projects\uninstall\UninstallApp\UninstallApp\obj\x86\Debug\UninstallApp.exe
-C:\projects\uninstall\UninstallApp\UninstallApp\obj\x86\Debug\UninstallApp.pdb
-C:\projects\uninstall\UninstallApp\UninstallApp\bin\Debug\UninstallApp.exe.config
