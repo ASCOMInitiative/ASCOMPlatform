@@ -12,7 +12,7 @@ namespace ASCOM
 	/// property of ApplicationException is simply renamed to Number.
 	/// </summary>
     [Serializable]
-	public class DriverException : Exception
+	public class DriverException : System.InvalidOperationException
 	{
 		/// <summary>
 		/// Create a new ASCOM exception using the specified text message and error code.
