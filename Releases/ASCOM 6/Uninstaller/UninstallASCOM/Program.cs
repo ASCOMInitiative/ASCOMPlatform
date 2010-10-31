@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace UninstallAscom
 {
@@ -28,19 +29,24 @@ namespace UninstallAscom
 
             string platform564KeyValue = null;
             string platform5564KeyValue = null;
+            Console.WriteLine("Uninstaller running in 64 mode:" + is64BitProcess);
+
 
             if (is64BitOperatingSystem)
             {
+                Console.WriteLine("Checking 64 Bit Operating system...");
                 platform5564KeyValue = Read(uninstallString, platform5564);
                 platform564KeyValue =  Read(uninstallString, platform564);
             }
 
+            Console.WriteLine("Checking 32 Bit Operating system...");
             var platform5532KeyValue = Read(uninstallString, platform5532);
             var platform532KeyValue = Read(uninstallString, platform532);
 
             //remove 5.5
             if (platform5564KeyValue != null)
             {
+                Console.WriteLine("Removing ASCOM 5.5...");
                 Console.WriteLine(platform5564KeyValue);
                 RunProcess(platform5564KeyValue, " /SILENT");
             }
@@ -48,6 +54,7 @@ namespace UninstallAscom
             {
                 if (platform5532KeyValue != null)
                 {
+                    Console.WriteLine("Removing ASCOM 5.5...");
                     Console.WriteLine(platform5532KeyValue);
                     RunProcess(platform5532KeyValue, " /SILENT");
                 }
@@ -56,6 +63,7 @@ namespace UninstallAscom
             //remove 5.0
             if (platform564KeyValue != null)
             {
+                Console.WriteLine("Removing ASCOM 5...");
                 Console.WriteLine(platform564KeyValue);
                 RunProcess("MsiExec.exe", SplitKey(platform564KeyValue));
             }
@@ -63,10 +71,20 @@ namespace UninstallAscom
             {
                 if (platform532KeyValue != null)
                 {
+                    Console.WriteLine("Removing ASCOM 5...");
                     Console.WriteLine(platform532KeyValue);
                     RunProcess("MsiExec.exe", SplitKey(platform532KeyValue));
                 }
             }
+
+            CleanUp55();
+            CleanUp5();
+
+
+            Console.WriteLine("Uninstall Complete");
+            Console.WriteLine("");
+            Console.WriteLine("Press any Key to continue");
+            Console.Read();
         }
 
         //split the installer string
@@ -83,6 +101,7 @@ namespace UninstallAscom
         {
             try
             {
+                Console.WriteLine("Running Process: " + processToRun + ": " + args);
                 var startInfo = new ProcessStartInfo(processToRun) {Arguments = args};
                 var myProcess = Process.Start(startInfo);
                 myProcess.WaitForExit();
@@ -98,6 +117,7 @@ namespace UninstallAscom
         //Read a key
         public static string Read(string keyName, string subKey)
         {
+            Console.WriteLine("Reading Key: " + subKey + ": " + keyName);
             // Opening the registry key
             var rk = Registry.LocalMachine;
             // Open a subKey as read-only
@@ -138,5 +158,92 @@ namespace UninstallAscom
             }
             return false;
         }
+
+        //clean up any left over files from 5.0
+        protected static void CleanUp5()
+        {
+            Console.WriteLine("Removing remaing ASCOM 5 files...");
+                
+            //start menu
+            var startMenuDir = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
+            var shortcut = Path.Combine(startMenuDir, @"Programs\ASCOM Platform");
+            if (Directory.Exists(shortcut))
+                DeleteDirectory(shortcut);
+
+            //clea up prog files
+            const string ascomDir = @"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ASCOM Platform";
+            if (Directory.Exists(ascomDir))
+                DeleteDirectory(ascomDir);
+
+            //clean up files
+            const string pathToAscom = @"C:\Program Files (x86)\Common Files\ASCOM";
+            if (Directory.Exists(pathToAscom))
+                DeleteDirectory(pathToAscom);
+
+        }
+
+        //clean up any left over files from 5.5
+        public static void CleanUp55()
+        {
+                Console.WriteLine("Removing remaing ASCOM 5.5 files...");
+                //start menu
+                var startMenuDir = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
+                var shortcut = Path.Combine(startMenuDir, @"Programs\ASCOM Platform");
+                if (Directory.Exists(shortcut))
+                    DeleteDirectory(shortcut);
+
+                //clean up prog files
+                const string ascomDir = @"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ASCOM Platform";
+                if (Directory.Exists(ascomDir))
+                    DeleteDirectory(ascomDir);
+
+                //clean up files
+                const string pathToAscom = @"C:\Program Files (x86)\Common Files\ASCOM";
+                if (Directory.Exists(pathToAscom))
+                    DeleteDirectory(pathToAscom);
+                
+            //clean up files
+                const string pathToAscom1 = @"C:\Program Files (x86)\ASCOM";
+                if (Directory.Exists(pathToAscom1))
+                    DeleteDirectory(pathToAscom1);
+
+                //clean up files
+                const string pathToAscom2 = @"C:\Program Files\ASCOM";
+                if (Directory.Exists(pathToAscom2))
+                    DeleteDirectory(pathToAscom2);
+
+        }
+
+        //reset the file attributes and then deletes the file
+        protected static bool DeleteDirectory(string targetDir)
+        {
+            try
+            {
+                string[] files = Directory.GetFiles(targetDir);
+                string[] dirs = Directory.GetDirectories(targetDir);
+
+                foreach (string file in files)
+                {
+                    File.SetAttributes(file, FileAttributes.Normal);
+                    File.Delete(file);
+                }
+
+                foreach (string dir in dirs)
+                {
+                    DeleteDirectory(dir);
+                }
+
+                Directory.Delete(targetDir, true);
+
+                return true;
+
+            }
+            catch (Exception)
+            {
+                   return false;
+            }
+
+        } 
+
     }
 }
