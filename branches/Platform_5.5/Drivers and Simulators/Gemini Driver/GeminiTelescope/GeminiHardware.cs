@@ -2078,6 +2078,21 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+
+        /// <summary>
+        /// Tell background thread when it's safe to poll
+        /// (don't do it during pulse-guiding to improve timing)
+        /// </summary>
+        
+        public static bool CanPoll
+        {
+            get
+            {
+                return (EndOfPulseGuide <= 0);   // pulse-guide hasn't completed yet, don't poll!
+
+            }
+        }
+
         /// <summary>
         /// Number of connected clients
         /// </summary>
@@ -3111,7 +3126,7 @@ namespace ASCOM.GeminiTelescope
         /// 
         private static void _UpdatePolledVariables()
         {
-            if (IsPulseGuiding) return; //don't tie up the serial port while pulse guiding -- timing is critical!
+            if (!CanPoll) return; //don't tie up the serial port while pulse guiding -- timing is critical!
 
             Trace.Enter("_UpdatePolledVariables");
             try
