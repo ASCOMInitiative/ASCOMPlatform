@@ -292,7 +292,9 @@ else
     Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.Utilities.dll to Global Assembly Cache
     Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\ASCOM.DriverAccess.dll to Global Assembly Cache
     Create Folder $SHORTCUTFILES$\ASCOM Platform 6
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform\*.* to $TARGETDIR$\Platform, include subfolders
+    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform\*.* to $TARGETDIR$\Platform\, include subfolders
+    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Uninstaller\UninstallASCOM\bin\Release\UninstallAscom.exe to $TARGETDIR$\Platform\, include subfolders
+    Run Program $TARGETDIR$\Platform\UninstallAscom.exe  (WAIT)
     Apply Install (get result into variable SUCCESS)
     if Variable SUCCESS not Equals ERROR
       if Variable SUCCESS not Equals CANCEL
