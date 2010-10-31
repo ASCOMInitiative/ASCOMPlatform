@@ -1,0 +1,9 @@
+C:\projects\uninstall\UninstallApp\UninstallApp\bin\Debug\UninstallAscom.exe.config
+C:\projects\uninstall\UninstallApp\UninstallApp\bin\Debug\UninstallAscom.exe
+C:\projects\uninstall\UninstallApp\UninstallApp\bin\Debug\UninstallAscom.pdb
+C:\projects\uninstall\UninstallApp\UninstallApp\obj\Debug\ResolveAssemblyReference.cache
+C:\projects\uninstall\UninstallApp\UninstallApp\obj\Debug\UninstallAscom.exe
+C:\projects\uninstall\UninstallApp\UninstallApp\obj\Debug\UninstallAscom.pdb
+C:\ASCOM Trunk\Releases\ASCOM 6\Uninstaller\UninstallASCOM\bin\Debug\UninstallAscom.exe.config
+C:\ASCOM Trunk\Releases\ASCOM 6\Uninstaller\UninstallASCOM\obj\Debug\UninstallAscom.exe
+C:\ASCOM Trunk\Releases\ASCOM 6\Uninstaller\UninstallASCOM\obj\Debug\UninstallAscom.pdb
