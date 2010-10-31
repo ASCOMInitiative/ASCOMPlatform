@@ -952,10 +952,10 @@ namespace ASCOM.DriverAccess
         Type objTypeRate;
         object objRateLateBound;
 
-        public IEnumerator GetEnumerator()
+/*        public IEnumerator GetEnumerator() Commented out to remove style warning
         {
             return null;
-        }
+        } */
 
         public _Rate(int index, Type objTypeAxisRates, object objAxisRatesLateBound)
         {
@@ -1038,13 +1038,13 @@ namespace ASCOM.DriverAccess
     class _RateEnumerator : IEnumerator, IDisposable
     {
         IEnumerator objEnumerator;
-        Type objTypeAxisRates;
-        object objAxisRatesLateBound;
+        //Type objTypeAxisRates; Commented out to remove style checker warnings
+        //object objAxisRatesLateBound;
 
         public _RateEnumerator(Type objTypeAxisRates, object objAxisRatesLateBound)
         {
-            this.objTypeAxisRates = objTypeAxisRates;
-            this.objAxisRatesLateBound = objAxisRatesLateBound;
+            //this.objTypeAxisRates = objTypeAxisRates;  Commented out to remove style checker warnings
+            //this.objAxisRatesLateBound = objAxisRatesLateBound;
             objEnumerator = (IEnumerator)objTypeAxisRates.InvokeMember("GetEnumerator",
                         BindingFlags.Default | BindingFlags.InvokeMethod,
                         null, objAxisRatesLateBound, new object[] { });

@@ -6,7 +6,10 @@ using ASCOM.Conform;
 using System.Collections;
 using ASCOM.Utilities;
 
+[assembly: System.CLSCompliant(false)] //Mark DriverAccess.dll assembly as not CLS compliant
+
 namespace ASCOM.DriverAccess
+    
 {
     /// <summary>
     /// Base class for ASCOM driver access toolkit device classes. This class contains the methods common to all devices
