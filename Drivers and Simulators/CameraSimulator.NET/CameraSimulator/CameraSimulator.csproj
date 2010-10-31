@@ -43,7 +43,7 @@
     <StartArguments>..\..\Test.js</StartArguments>
     <StartWorkingDirectory>
     </StartWorkingDirectory>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\..\..\Ascom.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -170,6 +170,9 @@
     <None Include="Test.js" />
   </ItemGroup>
   <ItemGroup>
+    <CodeAnalysisDictionary Include="..\..\..\CustomDictionary.xml">
+      <Link>CustomDictionary.xml</Link>
+    </CodeAnalysisDictionary>
     <Content Include="ASCOM.png" />
     <Content Include="favicon.ico" />
     <Content Include="m42-800x600.jpg">
