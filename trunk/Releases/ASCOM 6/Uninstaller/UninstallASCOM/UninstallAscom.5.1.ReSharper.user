@@ -7,8 +7,41 @@
     </boolean>
   </SettingsComponent>
   <RecentFiles>
-    <RecentFiles />
-    <RecentEdits />
+    <RecentFiles>
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="3521" fromTop="0" />
+    </RecentFiles>
+    <RecentEdits>
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="7303" fromTop="9" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="7554" fromTop="25" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="7781" fromTop="32" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="8012" fromTop="41" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="8208" fromTop="27" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="7781" fromTop="10" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="7554" fromTop="12" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="7319" fromTop="6" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="6796" fromTop="16" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="6796" fromTop="21" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="6796" fromTop="24" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="6796" fromTop="20" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="9071" fromTop="35" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="6796" fromTop="34" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="6765" fromTop="22" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="6765" fromTop="27" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="6080" fromTop="13" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="6911" fromTop="19" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="8008" fromTop="15" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="7548" fromTop="5" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="7777" fromTop="10" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="7297" fromTop="15" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="8411" fromTop="13" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="9041" fromTop="31" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="8923" fromTop="17" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="8409" fromTop="20" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="161" fromTop="4" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="8301" fromTop="24" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="6809" fromTop="11" />
+      <File id="8D8F18F1-5298-49CC-9579-6C04568D9771/f:Program.cs" caret="5863" fromTop="22" />
+    </RecentEdits>
   </RecentFiles>
   <NAntValidationSettings>
     <NAntPath value="" />
@@ -20,4 +53,32 @@
     <NUnitInstallDir>C:\Program Files (x86)\NUnit 2.5.3\bin\net-2.0\</NUnitInstallDir>
     <UseAddins>Never</UseAddins>
   </UnitTestRunnerNUnit>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="Default">
+      <Item value="public" priority="0" />
+      <Item value="static" priority="0" />
+      <Item value="void" priority="0" />
+      <Item value="Directory`0" priority="0" />
+      <Item value="true" priority="2" />
+      <Item value="string" priority="0" />
+      <Item value="try" priority="4" />
+      <Item value="catch" priority="0" />
+      <Item value="Exception`0" priority="0" />
+      <Item value="return" priority="1" />
+      <Item value="Console`0" priority="1" />
+      <Item value="RunProcess`0" priority="0" />
+      <Item value="false" priority="0" />
+      <Item value="bool" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.IO.Directory">
+      <Item value="Exists`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Console">
+      <Item value="WriteLine`0" priority="0" />
+      <Item value="Read`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Boolean">
+      <Item value="ToString`0" priority="0" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
 </Configuration>

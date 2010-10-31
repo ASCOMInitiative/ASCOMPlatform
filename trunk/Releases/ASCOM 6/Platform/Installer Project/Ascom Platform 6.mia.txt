@@ -1,6 +1,7 @@
 Comment: .NET Application Setup Project
  
 [DEFINE REGION: Application Updates]
+Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT)
 Include Script: updates
 [END REGION]
  
@@ -281,6 +282,9 @@ else
   if Variable ADVERTISE Equals TRUE
     Apply Advertised (get result into variable SUCCESS)
   else
+    Create Folder $SHORTCUTFILES$\ASCOM Platform 6
+    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform\*.* to $TARGETDIR$\Platform\, include subfolders
+    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Uninstaller\UninstallASCOM\bin\Release\UninstallAscom.exe to $TARGETDIR$\Platform\, include subfolders
     Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.Astrometry.dll to Global Assembly Cache
     Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.Attributes.dll to Global Assembly Cache
     Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.DeviceInterfaces.dll to Global Assembly Cache
@@ -291,10 +295,6 @@ else
     Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.IConform.dll to Global Assembly Cache
     Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.Utilities.dll to Global Assembly Cache
     Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\ASCOM.DriverAccess.dll to Global Assembly Cache
-    Create Folder $SHORTCUTFILES$\ASCOM Platform 6
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform\*.* to $TARGETDIR$\Platform\, include subfolders
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Uninstaller\UninstallASCOM\bin\Release\UninstallAscom.exe to $TARGETDIR$\Platform\, include subfolders
-    Run Program $TARGETDIR$\Platform\UninstallAscom.exe  (WAIT)
     Apply Install (get result into variable SUCCESS)
     if Variable SUCCESS not Equals ERROR
       if Variable SUCCESS not Equals CANCEL
