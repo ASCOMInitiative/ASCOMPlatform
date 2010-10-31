@@ -235,10 +235,10 @@ namespace ASCOM.Simulator
         /// <summary>
         /// 
         /// </summary>
-        public string[] SupportedActions
+        public ArrayList SupportedActions
         {
             // no supported actions, return empty array
-            get { string[] sa = new string[]{}; return sa; }
+            get { ArrayList sa = new ArrayList(); return sa; }
         }
 
         public string CommandString(string Command, bool Raw)
@@ -2050,7 +2050,6 @@ namespace ASCOM.Simulator
             imageData[x, y, 2] = (bmp.GetPixel(x, y).B);
         }
         #endregion
-
 
     }
 }
