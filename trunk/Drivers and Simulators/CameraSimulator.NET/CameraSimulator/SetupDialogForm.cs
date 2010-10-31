@@ -34,7 +34,8 @@ namespace ASCOM.Simulator
 			Dispose();
 		}
 
-		private void BrowseToAscom(object sender, EventArgs e)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
+        private void BrowseToAscom(object sender, EventArgs e)
 		{
 			try
 			{
@@ -51,41 +52,41 @@ namespace ASCOM.Simulator
 			}
 		}
 
-        internal void InitProperties(Camera camera)
+        internal void InitProperties(Camera theCamera)
         {
-            this.checkBoxInterfaceVersion.Checked = (camera.interfaceVersion == 2);
-            this.textBoxPixelSizeX.Text = camera.pixelSizeX.ToString(STR_N2);
-            this.textBoxPixelSizeY.Text = camera.pixelSizeY.ToString(STR_N2);
+            this.checkBoxInterfaceVersion.Checked = (theCamera.interfaceVersion == 2);
+            this.textBoxPixelSizeX.Text = theCamera.pixelSizeX.ToString(STR_N2, CultureInfo.InvariantCulture);
+            this.textBoxPixelSizeY.Text = theCamera.pixelSizeY.ToString(STR_N2, CultureInfo.InvariantCulture);
             //this.textBoxFullWellCapacity.Text = camera.fullWellCapacity.ToString();
-            this.textBoxMaxADU.Text = camera.maxADU.ToString();
-            this.textBoxElectronsPerADU.Text = camera.electronsPerADU.ToString(STR_N2);
+            this.textBoxMaxADU.Text = theCamera.maxADU.ToString(CultureInfo.InvariantCulture);
+            this.textBoxElectronsPerADU.Text = theCamera.electronsPerADU.ToString(STR_N2, CultureInfo.InvariantCulture);
 
-            this.textBoxCameraXSize.Text = camera.cameraXSize.ToString(STR_N0);
-            this.textBoxCameraYSize.Text = camera.cameraYSize.ToString(STR_N0);
-            this.checkBoxCanAsymmetricBin.Checked = camera.canAsymmetricBin;
-            this.textBoxMaxBinX.Text = camera.maxBinX.ToString();
-            this.textBoxMaxBinY.Text = camera.maxBinY.ToString();
-            this.checkBoxHasShutter.Checked = camera.hasShutter;
-            this.textBoxSensorName.Text = camera.sensorName;
-            this.comboBoxSensorType.SelectedIndex = (int)camera.sensorType;
-            this.textBoxBayerOffsetX.Text = camera.bayerOffsetX.ToString();
-            this.textBoxBayerOffsetY.Text = camera.bayerOffsetY.ToString();
+            this.textBoxCameraXSize.Text = theCamera.cameraXSize.ToString(STR_N0, CultureInfo.InvariantCulture);
+            this.textBoxCameraYSize.Text = theCamera.cameraYSize.ToString(STR_N0, CultureInfo.InvariantCulture);
+            this.checkBoxCanAsymmetricBin.Checked = theCamera.canAsymmetricBin;
+            this.textBoxMaxBinX.Text = theCamera.maxBinX.ToString(CultureInfo.InvariantCulture);
+            this.textBoxMaxBinY.Text = theCamera.maxBinY.ToString(CultureInfo.InvariantCulture);
+            this.checkBoxHasShutter.Checked = theCamera.hasShutter;
+            this.textBoxSensorName.Text = theCamera.sensorName;
+            this.comboBoxSensorType.SelectedIndex = (int)theCamera.sensorType;
+            this.textBoxBayerOffsetX.Text = theCamera.bayerOffsetX.ToString(CultureInfo.InvariantCulture);
+            this.textBoxBayerOffsetY.Text = theCamera.bayerOffsetY.ToString(CultureInfo.InvariantCulture);
 
-            this.checkBoxHasCooler.Checked = camera.hasCooler;
-            this.checkBoxCanSetCCDTemperature.Checked = camera.canSetCcdTemperature;
-            this.checkBoxCanGetCoolerPower.Checked = camera.canGetCoolerPower;
+            this.checkBoxHasCooler.Checked = theCamera.hasCooler;
+            this.checkBoxCanSetCCDTemperature.Checked = theCamera.canSetCcdTemperature;
+            this.checkBoxCanGetCoolerPower.Checked = theCamera.canGetCoolerPower;
 
-            this.checkBoxCanAbortExposure.Checked = camera.canAbortExposure;
-            this.checkBoxCanStopExposure.Checked = camera.canStopExposure;
-            this.textBoxMaxExposure.Text = camera.exposureMax.ToString();
-            this.textBoxMinExposure.Text = camera.exposureMin.ToString();
+            this.checkBoxCanAbortExposure.Checked = theCamera.canAbortExposure;
+            this.checkBoxCanStopExposure.Checked = theCamera.canStopExposure;
+            this.textBoxMaxExposure.Text = theCamera.exposureMax.ToString(CultureInfo.InvariantCulture);
+            this.textBoxMinExposure.Text = theCamera.exposureMin.ToString(CultureInfo.InvariantCulture);
             //this.textboxExposureResolution.Text = camera.exposureResolution.ToString();
 
-            if (camera.gains != null && camera.gains.Length > 0)
+            if (theCamera.gains != null && theCamera.gains.Length > 0)
             {
                 radioButtonUseGains.Checked = true;
             }
-            else if (camera.gainMax > camera.gainMin)
+            else if (theCamera.gainMax > theCamera.gainMin)
             {
                 radioButtonUseMinAndMax.Checked = true;
             }
@@ -93,11 +94,11 @@ namespace ASCOM.Simulator
             {
                 radioButtonNoGain.Checked = true;
             }
-            this.textBoxGainMin.Text = camera.gainMin.ToString();
-            this.textBoxGainMax.Text = camera.gainMax.ToString();
-            this.checkBoxApplyNoise.Checked = camera.applyNoise;
+            this.textBoxGainMin.Text = theCamera.gainMin.ToString(CultureInfo.InvariantCulture);
+            this.textBoxGainMax.Text = theCamera.gainMax.ToString(CultureInfo.InvariantCulture);
+            this.checkBoxApplyNoise.Checked = theCamera.applyNoise;
 
-            this.camera = camera;
+            this.camera = theCamera;
         }
 
         private void SaveProperties()
