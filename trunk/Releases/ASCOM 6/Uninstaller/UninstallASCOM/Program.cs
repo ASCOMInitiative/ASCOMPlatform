@@ -24,38 +24,38 @@ namespace UninstallAscom
 
         static void Main()
         {
+           Console.WriteLine("Looking for old ASCOM versions to remove....");
            bool is64BitProcess = (IntPtr.Size == 8);
            bool is64BitOperatingSystem = is64BitProcess || InternalCheckIsWow64();
 
             string platform564KeyValue = null;
             string platform5564KeyValue = null;
-            Console.WriteLine("Uninstaller running in 64 mode:" + is64BitProcess);
-
+            bool found = false;
 
             if (is64BitOperatingSystem)
             {
-                Console.WriteLine("Checking 64 Bit Operating system...");
                 platform5564KeyValue = Read(uninstallString, platform5564);
                 platform564KeyValue =  Read(uninstallString, platform564);
             }
 
-            Console.WriteLine("Checking 32 Bit Operating system...");
             var platform5532KeyValue = Read(uninstallString, platform5532);
             var platform532KeyValue = Read(uninstallString, platform532);
 
             //remove 5.5
             if (platform5564KeyValue != null)
             {
-                Console.WriteLine("Removing ASCOM 5.5...");
+                Console.WriteLine("64 Removing ASCOM 5.5...");
                 Console.WriteLine(platform5564KeyValue);
+                found = true;
                 RunProcess(platform5564KeyValue, " /SILENT");
             }
             else
             {
                 if (platform5532KeyValue != null)
                 {
-                    Console.WriteLine("Removing ASCOM 5.5...");
+                    Console.WriteLine("32 Removing ASCOM 5.5...");
                     Console.WriteLine(platform5532KeyValue);
+                    found = true;
                     RunProcess(platform5532KeyValue, " /SILENT");
                 }
             }
@@ -63,28 +63,28 @@ namespace UninstallAscom
             //remove 5.0
             if (platform564KeyValue != null)
             {
-                Console.WriteLine("Removing ASCOM 5...");
+                Console.WriteLine("64 Removing ASCOM 5...");
                 Console.WriteLine(platform564KeyValue);
+                found = true;
                 RunProcess("MsiExec.exe", SplitKey(platform564KeyValue));
             }
             else
             {
                 if (platform532KeyValue != null)
                 {
-                    Console.WriteLine("Removing ASCOM 5...");
+                    Console.WriteLine("32 Removing ASCOM 5...");
                     Console.WriteLine(platform532KeyValue);
+                    found = true;
                     RunProcess("MsiExec.exe", SplitKey(platform532KeyValue));
                 }
             }
-
-            CleanUp55();
-            CleanUp5();
-
-
-            Console.WriteLine("Uninstall Complete");
-            Console.WriteLine("");
-            Console.WriteLine("Press any Key to continue");
-            Console.Read();
+            if (found == false)
+            {
+                CleanUp55();
+                CleanUp5();
+                Console.WriteLine("Nothing Found");
+            }
+            Pic();
         }
 
         //split the installer string
@@ -101,15 +101,14 @@ namespace UninstallAscom
         {
             try
             {
-                Console.WriteLine("Running Process: " + processToRun + ": " + args);
                 var startInfo = new ProcessStartInfo(processToRun) {Arguments = args};
                 var myProcess = Process.Start(startInfo);
                 myProcess.WaitForExit();
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
+                Console.WriteLine(e.Message);
                 return false;
             }
         }
@@ -117,7 +116,6 @@ namespace UninstallAscom
         //Read a key
         public static string Read(string keyName, string subKey)
         {
-            Console.WriteLine("Reading Key: " + subKey + ": " + keyName);
             // Opening the registry key
             var rk = Registry.LocalMachine;
             // Open a subKey as read-only
@@ -133,8 +131,9 @@ namespace UninstallAscom
                 // or null is returned.
                 return (string)sk1.GetValue(keyName);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return null;
             }
         }
@@ -162,8 +161,6 @@ namespace UninstallAscom
         //clean up any left over files from 5.0
         protected static void CleanUp5()
         {
-            Console.WriteLine("Removing remaing ASCOM 5 files...");
-                
             //start menu
             var startMenuDir = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
             var shortcut = Path.Combine(startMenuDir, @"Programs\ASCOM Platform");
@@ -179,13 +176,11 @@ namespace UninstallAscom
             const string pathToAscom = @"C:\Program Files (x86)\Common Files\ASCOM";
             if (Directory.Exists(pathToAscom))
                 DeleteDirectory(pathToAscom);
-
         }
 
         //clean up any left over files from 5.5
         public static void CleanUp55()
         {
-                Console.WriteLine("Removing remaing ASCOM 5.5 files...");
                 //start menu
                 var startMenuDir = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
                 var shortcut = Path.Combine(startMenuDir, @"Programs\ASCOM Platform");
@@ -211,7 +206,6 @@ namespace UninstallAscom
                 const string pathToAscom2 = @"C:\Program Files\ASCOM";
                 if (Directory.Exists(pathToAscom2))
                     DeleteDirectory(pathToAscom2);
-
         }
 
         //reset the file attributes and then deletes the file
@@ -238,12 +232,29 @@ namespace UninstallAscom
                 return true;
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                    return false;
             }
 
         } 
 
+        public static void Pic()
+        {
+            Console.WriteLine(" ");
+            Console.WriteLine(@" @  *  .  . *       *    .        .        .   *    ..");
+            Console.WriteLine(@" @. /\ *     ###     .      .        .            *");
+            Console.WriteLine(@" @ /  \  *  #####   .     *      *        *    .");
+            Console.WriteLine(@" ]/ [] \  ######### *    .  *       .  //    .  *   .");
+            Console.WriteLine(@" / [][] \###\#|#/###   ..    *     .  //  *  .  ..  *");
+            Console.WriteLine(@" |  __  | ###\|/###  *    *  ___o |==// .      *   *");
+            Console.WriteLine(@" |  |!  |  # }|{  #         /\  \/  //|\");
+            Console.WriteLine(@" |  ||  |    }|{    ejm97  / /        | \");
+            Console.WriteLine(@"                           ` `        '  '");
+            Console.WriteLine(" ");
+            Console.WriteLine("Clear Skies:   Press any key to continue... ");
+            Console.Read();
+        }
     }
 }
