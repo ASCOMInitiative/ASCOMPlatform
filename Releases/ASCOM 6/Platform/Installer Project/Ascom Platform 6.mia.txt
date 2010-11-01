@@ -1,7 +1,10 @@
 Comment: .NET Application Setup Project
  
 [DEFINE REGION: Application Updates]
+Comment: Removes older version of ASCOM
 Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT)
+Comment: Set this to your local ASCOM trunk path
+Set Persistent Variable ASCOMTrunkPath to C:\ASCOM Trunk
 Include Script: updates
 [END REGION]
  
@@ -261,7 +264,6 @@ if Variable REMOVE Equals TRUE
   Apply Uninstall (get result into variable SUCCESS)
   if Variable SUCCESS not Equals ERROR
     if Variable SUCCESS not Equals CANCEL
-      Remove Unpinned Assemblies
     end
   end
   Set Variable PROGRESS to 100
@@ -283,18 +285,90 @@ else
     Apply Advertised (get result into variable SUCCESS)
   else
     Create Folder $SHORTCUTFILES$\ASCOM Platform 6
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform\*.* to $TARGETDIR$\Platform\, include subfolders
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Uninstaller\UninstallASCOM\bin\Release\UninstallAscom.exe to $TARGETDIR$\Platform\, include subfolders
-    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.Astrometry.dll to Global Assembly Cache
-    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.Attributes.dll to Global Assembly Cache
-    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.DeviceInterfaces.dll to Global Assembly Cache
-    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.DriverAccess.dll to Global Assembly Cache
-    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.Exceptions.dll to Global Assembly Cache
-    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.Helper.dll to Global Assembly Cache
-    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.Helper2.dll to Global Assembly Cache
-    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.IConform.dll to Global Assembly Cache
-    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\V6\ASCOM.Utilities.dll to Global Assembly Cache
-    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Assemblies\ASCOM.DriverAccess.dll to Global Assembly Cache
+    Create Folder $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.pdb to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.xml to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.XML to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\VB6Helper\Helper.dll to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\VB6Helper2\Helper2.dll to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM Redirection Policies\ASCOM Redirection Policies\bin\Release\ASCOM Redirection Policies.exe to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM Redirection Policies\ASCOM Redirection Policies\bin\Release\ASCOM Redirection Policies.pdb to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM Redirection Policies\ASCOM Redirection Policies\bin\Release\ASCOM Redirection Policies.xml to $TARGETDIR$\Platform\bin
+    Create Folder $TARGETDIR$\Platform\Docs
+    Install Files C:\ASCOM Trunk\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction.pdf to $TARGETDIR$\Platform\Docs
+    Install Files C:\ASCOM Trunk\Help\Platform Supporting Documents\Platform 6.0.pdf to $TARGETDIR$\Platform\Docs
+    Create Folder $TARGETDIR$\Platform\Tools
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.exe to $TARGETDIR$\Platform\Utilities\
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $TARGETDIR$\Platform\Utilities\
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\MigrateProfile\bin\Release\MigrateProfile.exe to $TARGETDIR$\Platform\Utilities\
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\MigrateProfile\bin\Release\MigrateProfile.pdb to $TARGETDIR$\Platform\Utilities\
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\Resources\ASCOM.ico to $TARGETDIR$\Platform\Tools
+    Install Files C:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.pdb to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.XML to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.tlb to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.xml to $TARGETDIR$\Platform\bin
+    Create Folder $TARGETDIR$\Platform\bin\v5
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to $TARGETDIR$\Platform\bin\v5
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.pdb to $TARGETDIR$\Platform\bin\v5
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.XML to $TARGETDIR$\Platform\bin\v5
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.xml to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\policy.1.0.ASCOM.DriverAccess.dll to $TARGETDIR$\Platform\bin\v5
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\DriverAccess.config to $TARGETDIR$\Platform\bin\v5
+    Create Folder $WINSYSDIR$\Sysbols\dll
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb to $WINSYSDIR$\Sysbols\dll
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.pdb to $WINSYSDIR$\Sysbols\dll
+    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb to $WINSYSDIR$\Sysbols\dll
+    Install Files C:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb to $WINSYSDIR$\Sysbols\dll
+    Install Files C:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb to $WINSYSDIR$\Sysbols\dll
+    Install Files C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.pdb to $WINSYSDIR$\Sysbols\dll
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb to $WINSYSDIR$\Sysbols\dll
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $WINSYSDIR$\Sysbols\dll
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe to $TARGETDIR$\Platform\Utilities
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $TARGETDIR$\Platform\Utilities
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.xml to $TARGETDIR$\Platform\Utilities
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.xml to $TARGETDIR$\Platform\Utilities
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $WINSYSDIR$\Sysbols\dll
+    Install Files C:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.pdb to $WINSYSDIR$\Sysbols\dll
+    Install Files C:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.dll to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.pdb to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.dll to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.pdb to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH to $TARGETDIR$\Platform\bin
+    Install Files C:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to $TARGETDIR$\Platform\bin
+    Create Folder $TARGETDIR$\Platform\Simulators
+    Create Folder $TARGETDIR$\Platform\Simulators\Camera
+    Create Folder $TARGETDIR$\Platform\Simulators\Telescope
+    Create Folder $TARGETDIR$\Platform\Simulators\Switch
+    Create Folder $TARGETDIR$\Platform\Simulators\FilterWheel
+    Create Folder $TARGETDIR$\Platform\Simulators\Rotator
+    Create Folder $TARGETDIR$\Platform\Simulators\Dome
+    Create Folder $TARGETDIR$\Platform\Simulators\SafetyMonitor
+    Create Folder $TARGETDIR$\Platform\Simulators\Focuser
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll to $TARGETDIR$\Platform\Simulators\Camera
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ASCOM.FilterWheelSim.exe to $TARGETDIR$\Platform\Simulators\FilterWheel
+    Create Folder $TARGETDIR$\Platform\Simulators\FilterWheel\ServedClasses
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ServedClasses\ASCOM.FilterWheelSim.FilterWheel.dll to $TARGETDIR$\Platform\Simulators\FilterWheel\ServedClasses
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe to $TARGETDIR$\Platform\Simulators\Telescope
+    Create Folder $TARGETDIR$\Platform\Simulators\Telescope\ServedClasses
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulatorServedClasses\ASCOM.TelescopeSimulator.Telescope.dll to $TARGETDIR$\Platform\Simulators\Telescope\ServedClasses
+    Install Assembly C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to Global Assembly Cache
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.dll to $TARGETDIR$\Platform\Simulators\Switch
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\SafetyMonitorSimulatorDriver.dll to $TARGETDIR$\Platform\Simulators\SafetyMonitor
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\obj\Release\ASCOM.Simulator.Focuser.dll to $TARGETDIR$\Platform\Simulators\Focuser
     Apply Install (get result into variable SUCCESS)
     if Variable SUCCESS not Equals ERROR
       if Variable SUCCESS not Equals CANCEL
