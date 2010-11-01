@@ -30,6 +30,23 @@ namespace ASCOM.DriverAccess
 		}
         #endregion
 
+        #region Convenience Members
+        /// <summary>
+        /// Brings up the ASCOM Chooser Dialog to choose a Rotator
+        /// </summary>
+        /// <param name="rotatorId">Rotator Prog ID for default or null for None</param>
+        /// <returns>Prog ID for chosen Rotator or null for none</returns>
+        public static string Choose(string rotatorId)
+        {
+            Chooser chooser;
+            using (chooser = new Chooser { DeviceType = "Rotator" })
+            {
+                return chooser.Choose(rotatorId);
+            }
+        }
+
+        #endregion
+
         #region IRotator Members
 
         /// <summary>

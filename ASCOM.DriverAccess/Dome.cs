@@ -30,6 +30,23 @@ namespace ASCOM.DriverAccess
 		}
         #endregion
 
+        #region Convenience Members
+        /// <summary>
+        /// Shows the ASCOM Chooser to select a Dome.
+        /// </summary>
+        /// <param name="domeId">Prog ID of the default dome to select. Null if no default is to be set.</param>
+        /// <returns>The Prog ID of the Dome chosen, or Null if no dome is chose, or the dialog is canceled.</returns>
+        public static string Choose(string domeId)
+        {
+            Chooser oChooser;
+            using (oChooser = new Chooser() {DeviceType = "Dome"})
+            {
+                return oChooser.Choose(domeId);
+            }
+        }
+
+	    #endregion
+
         #region IDome Members
 
         /// <summary>

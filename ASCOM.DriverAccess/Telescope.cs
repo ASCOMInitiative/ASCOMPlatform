@@ -65,6 +65,26 @@ namespace ASCOM.DriverAccess
 
         #endregion
 
+        #region Convenience members
+        /// <summary>
+        /// The Choose() method returns the DriverID of the selected driver.
+        /// Choose() allows you to optionally pass the DriverID of a "current" driver (you probably save this in the registry),
+        /// and the corresponding telescope type is pre-selected in the Chooser's list.
+        /// In this case, the OK button starts out enabled (lit-up); the assumption is that the pre-selected driver has already been configured. 
+        /// </summary>
+        /// <param name="telescopeId">Optional DriverID of the previously selected telescope that is to be the pre-selected telescope in the list. </param>
+        /// <returns>The DriverID of the user selected telescope. Null if the dialog is canceled.</returns>
+        public static string Choose(string telescopeId)
+        {
+            Chooser chooser;
+            using (chooser = new Chooser { DeviceType = "Telescope" })
+            {
+                return chooser.Choose(telescopeId);
+            }
+        }
+
+        #endregion
+
         #region ITelescope Members
         /// <summary>
         /// Stops a slew in progress.
