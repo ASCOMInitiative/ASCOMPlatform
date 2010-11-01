@@ -36,6 +36,23 @@ namespace ASCOM.DriverAccess
 
         #endregion
 
+        #region Convenience Members
+        /// <summary>
+        /// Brings up the ASCOM Chooser Dialog to choose a FilterWheel
+        /// </summary>
+        /// <param name="filterWheelId">FilterWheel Prog ID for default or null for None</param>
+        /// <returns>Prog ID for chosen FilterWheel or null for none</returns>
+        public static string Choose(string filterWheelId)
+        {
+            Chooser chooser;
+            using (chooser = new Chooser { DeviceType = "FilterWheel" })
+            {
+                return chooser.Choose(filterWheelId);
+            }
+        }
+
+        #endregion
+
         #region IFilterWheel Members
 
         /// <summary>

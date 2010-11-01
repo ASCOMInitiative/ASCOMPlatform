@@ -30,6 +30,23 @@ namespace ASCOM.DriverAccess
         }
         #endregion
 
+        #region Convenience Members
+        /// <summary>
+        /// Brings up the ASCOM Chooser Dialog to choose a SafetyMonitor
+        /// </summary>
+        /// <param name="safetyMonitorId">SafetyMonitor Prog ID for default or null for None</param>
+        /// <returns>Prog ID for chosen SafetyMonitor or null for none</returns>
+        public static string Choose(string safetyMonitorId)
+        {
+            Chooser chooser;
+            using(chooser = new Chooser { DeviceType = "SafetyMonitor" })
+            {
+                return chooser.Choose(safetyMonitorId);               
+            }
+        }
+
+        #endregion
+
         #region ISafetyMonitor Members
 
         /// <summary>

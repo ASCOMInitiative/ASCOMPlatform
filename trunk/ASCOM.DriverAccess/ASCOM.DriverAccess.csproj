@@ -56,7 +56,6 @@
     <DebugSymbols>true</DebugSymbols>
     <RegisterForComInterop>false</RegisterForComInterop>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Peter|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
