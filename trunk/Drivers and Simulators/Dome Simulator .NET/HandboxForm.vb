@@ -34,6 +34,7 @@
 ' -----------------------------------------------------------------------------
 
 Imports System.Windows.Forms
+Imports ASCOM.Interface
 
 <ComVisible(False)> _
 Public Class HandboxForm

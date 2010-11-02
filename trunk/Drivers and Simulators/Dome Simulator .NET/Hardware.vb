@@ -1,4 +1,6 @@
-﻿' ==============
+﻿Imports ASCOM.Interface
+
+' ==============
 '  Hardware.vb
 ' ==============
 '
