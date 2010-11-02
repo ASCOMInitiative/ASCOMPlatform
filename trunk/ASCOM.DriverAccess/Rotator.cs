@@ -23,8 +23,8 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Creates a rotator object with the given Prog ID
         /// </summary>
-        /// <param name="rotatorID"></param>
-        public Rotator(string rotatorID) : base(rotatorID)
+        /// <param name="rotatorId"></param>
+        public Rotator(string rotatorId) : base(rotatorId)
 		{
             memberFactory = base.MemberFactory;
 		}
@@ -38,9 +38,9 @@ namespace ASCOM.DriverAccess
         /// <returns>Prog ID for chosen Rotator or null for none</returns>
         public static string Choose(string rotatorId)
         {
-            Chooser chooser;
-            using (chooser = new Chooser { DeviceType = "Rotator" })
+            using (Chooser chooser = new Chooser())
             {
+                chooser.DeviceType = "Rotator";
                 return chooser.Choose(rotatorId);
             }
         }

@@ -27,6 +27,7 @@ namespace ASCOM.DriverAccess
         /// 
         /// </summary> 
         /// <param name="progId">The program ID of the driver</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
         internal MemberFactory(string progId)
         {
             _strProgId = progId;
@@ -41,7 +42,8 @@ namespace ASCOM.DriverAccess
                 //no type information found throw error
                 throw new  ASCOM.Utilities.Exceptions.HelperException("Check Driver: cannot create object type of progID: " + _strProgId);
             }
-            _tl = new TraceLogger("", "MemberFactory") {Enabled = true};
+            _tl = new TraceLogger("", "MemberFactory");
+            _tl.Enabled = true;
 
             //setup the property
             IsComObject = GetObjType.IsCOMObject;
@@ -115,6 +117,8 @@ namespace ASCOM.DriverAccess
             if (GetLateBoundObject == null) return;
             var releaseComObject = Marshal.ReleaseComObject(GetLateBoundObject);
             if (releaseComObject == 0 )GetLateBoundObject = null;
+            if (_tl != null)
+                _tl.Dispose();
         }
 
         /// <summary>
@@ -180,12 +184,12 @@ namespace ASCOM.DriverAccess
                             //run the COM object property
                             return
                                 (GetObjType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.GetProperty,
-                                                       null, GetLateBoundObject, new object[] {}));
+                                                       null, GetLateBoundObject, new object[] { }, CultureInfo.InvariantCulture));
                         }
                         catch (COMException e)
                         {
                             _tl.LogMessage("PropertyGetEx3", e.ToString());
-                            if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber))
+                            if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber, CultureInfo.InvariantCulture))
                                 throw new PropertyNotImplementedException(_strProgId + " " + memberName, false);
                             throw;
                         }
@@ -243,13 +247,13 @@ namespace ASCOM.DriverAccess
                         {
                             //run the COM object property
                             GetObjType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.SetProperty, null,
-                                                  GetLateBoundObject, parms);
+                                                  GetLateBoundObject, parms, CultureInfo.InvariantCulture);
                             return null;
                         }
                         catch (COMException e)
                         {
                             _tl.LogMessage("PropertySetEx3", e.ToString());
-                            if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber))
+                            if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber, CultureInfo.InvariantCulture))
                                 throw new PropertyNotImplementedException(_strProgId + " " + memberName, true);
                             throw;
                         }
@@ -331,11 +335,11 @@ namespace ASCOM.DriverAccess
                         {
                             //run the COM object method
                             return GetObjType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.InvokeMethod,
-                                                         null, GetLateBoundObject, parms);
+                                                         null, GetLateBoundObject, parms, CultureInfo.InvariantCulture);
                         }
                         catch (COMException e)
                         {
-                            if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber))
+                            if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber, CultureInfo.InvariantCulture))
                                 throw new MethodNotImplementedException(_strProgId + " " + memberName);
                             throw;
                         }

@@ -8,6 +8,7 @@ using System;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using System.Collections;
+using System.Globalization;
 
 namespace ASCOM.DriverAccess
 {
@@ -39,9 +40,9 @@ namespace ASCOM.DriverAccess
         /// <returns>Prog ID for chosen Switch or null for none</returns>
         public static string Choose(string switchId)
         {
-            Chooser chooser;
-            using(chooser = new Chooser {DeviceType = "Switch"})
+            using(Chooser chooser = new Chooser())
             {
+                chooser.DeviceType = "Switch";
                 return chooser.Choose(switchId);
             }
         }
@@ -53,11 +54,11 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Sets a switch to on or off
         /// </summary>
-        /// <param name="name">Name=name of switch to set</param> 
-        /// <param name="state">True=On, False=Off</param> 
-        public void SetSwitch(string name, bool state)
+        /// <param name="Name">Name=name of switch to set</param> 
+        /// <param name="State">True=On, False=Off</param> 
+        public void SetSwitch(string Name, bool State)
         {
-            _memberFactory.CallMember(3, "SetSwitch", new[] { typeof(string), typeof(bool) }, new object[] { name, state });
+            _memberFactory.CallMember(3, "SetSwitch", new[] { typeof(string), typeof(bool) }, new object[] { Name, State }, CultureInfo.InvariantCulture);
         }
 
         /// <summary>

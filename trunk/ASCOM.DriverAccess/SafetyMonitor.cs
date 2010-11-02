@@ -38,9 +38,9 @@ namespace ASCOM.DriverAccess
         /// <returns>Prog ID for chosen SafetyMonitor or null for none</returns>
         public static string Choose(string safetyMonitorId)
         {
-            Chooser chooser;
-            using(chooser = new Chooser { DeviceType = "SafetyMonitor" })
+            using(Chooser chooser = new Chooser())
             {
+                chooser.DeviceType = "SafetyMonitor";
                 return chooser.Choose(safetyMonitorId);               
             }
         }

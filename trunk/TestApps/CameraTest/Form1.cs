@@ -14,7 +14,7 @@ using nom.tam.fits;
 using nom.tam.util;
 using System.Globalization;
 
-[assembly: CLSCompliant(true)]
+//[assembly: CLSCompliant(true)]
 namespace CameraTest
 {
     public partial class Form1 : Form

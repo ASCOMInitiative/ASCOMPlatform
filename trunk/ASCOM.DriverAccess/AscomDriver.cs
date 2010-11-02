@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ASCOM.Conform;
 using System.Collections;
+using System.Globalization;
 
 [assembly: System.CLSCompliant(false)] //Mark DriverAccess.dll assembly as not CLS compliant
 
@@ -24,10 +25,10 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Creates a new instance of the <see cref="AscomDriver"/> class.
         /// </summary>
-        /// <param name="DeviceProgId">The prog id. of the device being created.</param>
-        public AscomDriver(string DeviceProgId)
+        /// <param name="deviceProgId">The prog id. of the device being created.</param>
+        public AscomDriver(string deviceProgId)
         {
-            memberFactory = new MemberFactory(DeviceProgId);
+            memberFactory = new MemberFactory(deviceProgId);
         }
 
         /// <summary>
@@ -57,7 +58,7 @@ namespace ASCOM.DriverAccess
                 }
             }
             this.disposedValue = true;
-        } 
+        }
 
         #endregion
 
@@ -130,7 +131,7 @@ namespace ASCOM.DriverAccess
             {
                 try // Return the interface version or return 1 if property is not implemented
                 {
-                    return Convert.ToInt16(memberFactory.CallMember(1, "InterfaceVersion", new Type[] { }, new object[] { }));
+                    return Convert.ToInt16(memberFactory.CallMember(1, "InterfaceVersion", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture);
                 }
                 catch (PropertyNotImplementedException)
                 {
@@ -163,7 +164,7 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Invokes the specified device-specific action.
         /// </summary>
-        /// <param name="ActionName">
+        /// <param name="actionName">
         /// A well known name agreed by interested parties that represents the action
         /// to be carried out. 
         /// <example>suppose filter wheels start to appear with automatic wheel changers; new actions could 
@@ -171,12 +172,12 @@ namespace ASCOM.DriverAccess
         /// formatted list of wheel names and the second taking a wheel name and making the change.
         /// </example>
         /// </param>
-        /// <param name="ActionParameters">List of required parameters or <see cref="String.Empty"/>  if none are required.
+        /// <param name="actionParameters">List of required parameters or <see cref="String.Empty"/>  if none are required.
         /// </param>
         /// <returns>A string response and sets the <c>IDeviceControl.LastResult</c> property.</returns>
-        public string Action(string ActionName, string ActionParameters)
+        public string Action(string actionName, string actionParameters)
         {
-            return (string)memberFactory.CallMember(3, "Action", new Type[] { typeof(string), typeof(string) }, new object[] { ActionName, ActionParameters });
+            return (string)memberFactory.CallMember(3, "Action", new Type[] { typeof(string), typeof(string) }, new object[] { actionName, actionParameters });
         }
 
         /// <summary>
@@ -192,48 +193,48 @@ namespace ASCOM.DriverAccess
         /// Transmits an arbitrary string to the device and does not wait for a response.
         /// Optionally, protocol framing characters may be added to the string before transmission.
         /// </summary>
-        /// <param name="Command">The literal command string to be transmitted.</param>
-        /// <param name="Raw">
+        /// <param name="command">The literal command string to be transmitted.</param>
+        /// <param name="raw">
         /// if set to <c>true</c> the string is transmitted 'as-is'.
         /// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
         /// </param>
-        public void CommandBlind(string Command, bool Raw)
+        public void CommandBlind(string command, bool raw)
         {
-            memberFactory.CallMember(3, "CommandBlind", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
+            memberFactory.CallMember(3, "CommandBlind", new Type[] { typeof(string), typeof(bool) }, new object[] { command, raw });
         }
 
         /// <summary>
         /// Transmits an arbitrary string to the device and waits for a boolean response.
         /// Optionally, protocol framing characters may be added to the string before transmission.
         /// </summary>
-        /// <param name="Command">The literal command string to be transmitted.</param>
-        /// <param name="Raw">
+        /// <param name="command">The literal command string to be transmitted.</param>
+        /// <param name="raw">
         /// if set to <c>true</c> the string is transmitted 'as-is'.
         /// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
         /// </param>
         /// <returns>
         /// Returns the interpreted boolean response received from the device.
         /// </returns>
-        public bool CommandBool(string Command, bool Raw)
+        public bool CommandBool(string command, bool raw)
         {
-            return (bool)memberFactory.CallMember(3, "CommandBool", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
+            return (bool)memberFactory.CallMember(3, "CommandBool", new Type[] { typeof(string), typeof(bool) }, new object[] { command, raw });
         }
 
         /// <summary>
         /// Transmits an arbitrary string to the device and waits for a string response.
         /// Optionally, protocol framing characters may be added to the string before transmission.
         /// </summary>
-        /// <param name="Command">The literal command string to be transmitted.</param>
-        /// <param name="Raw">
+        /// <param name="command">The literal command string to be transmitted.</param>
+        /// <param name="raw">
         /// if set to <c>true</c> the string is transmitted 'as-is'.
         /// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
         /// </param>
         /// <returns>
         /// Returns the string response received from the device.
         /// </returns>
-        public string CommandString(string Command, bool Raw)
+        public string CommandString(string command, bool raw)
         {
-            return (string)memberFactory.CallMember(3, "CommandString", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
+            return (string)memberFactory.CallMember(3, "CommandString", new Type[] { typeof(string), typeof(bool) }, new object[] { command, raw });
         }
 
         #endregion
