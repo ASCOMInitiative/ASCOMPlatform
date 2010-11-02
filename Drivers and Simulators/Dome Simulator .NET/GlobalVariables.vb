@@ -1,4 +1,6 @@
-﻿'---------------------------------------------------------------------
+﻿Imports ASCOM.Interface
+
+'---------------------------------------------------------------------
 ' Copyright © 2000-2002 SPACE.com Inc., New York, NY
 '
 ' Permission is hereby granted to use this Software for any purpose
