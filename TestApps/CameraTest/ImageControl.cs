@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 namespace CameraTest
 {
-    internal partial class ImageControl : UserControl
+    public partial class ImageControl : UserControl
     {
         #region constructor
         internal ImageControl()
@@ -39,7 +39,7 @@ namespace CameraTest
         /// <summary>
         /// Maximum value for control
         /// </summary>
-        internal decimal Maximum
+        public decimal Maximum
         {
             get { return numMaximum.Maximum; }
             set
@@ -52,7 +52,7 @@ namespace CameraTest
         /// <summary>
         /// Minimum value for control
         /// </summary>
-        internal decimal Minimum
+        public decimal Minimum
         {
             get { return numMinimum.Minimum; }
             set
@@ -65,7 +65,7 @@ namespace CameraTest
         /// <summary>
         /// left hand (minimum) value of slider
         /// </summary>
-        internal decimal MinValue
+        public decimal MinValue
         {
             get { return numMinimum.Value; }
             set
@@ -78,7 +78,7 @@ namespace CameraTest
         /// <summary>
         /// right hand (maximum) value of slider
         /// </summary>
-        internal decimal MaxValue
+        public decimal MaxValue
         {
             get { return numMaximum.Value; }
             set
@@ -91,9 +91,9 @@ namespace CameraTest
         /// <summary>
         /// number of decimal places
         /// </summary>
-        internal int DecimalPlaces
+        public int DecimalPlaces
         {
-            //get { return numMaximum.DecimalPlaces; }
+            get { return numMaximum.DecimalPlaces; }
             set { numMaximum.DecimalPlaces = numMinimum.DecimalPlaces = value; }
         }
 
@@ -101,9 +101,9 @@ namespace CameraTest
         /// <summary>
         /// Increment
         /// </summary>
-        internal decimal Increment
+        public decimal Increment
         {
-            //get { return increment; }
+            get { return increment; }
             set { numMinimum.Increment = numMaximum.Increment = increment = value; }
         }
 
@@ -111,9 +111,9 @@ namespace CameraTest
         /// <summary>
         /// Increment used when the shift key is down
         /// </summary>
-        internal decimal ShiftIncrement
+        public decimal ShiftIncrement
         {
-            //get { return shiftIncrement; }
+            get { return shiftIncrement; }
             set { shiftIncrement = value; }
         }
 
@@ -121,9 +121,9 @@ namespace CameraTest
         /// <summary>
         /// Increment used when the control key is down
         /// </summary>
-        internal decimal CtrlIncrement
+        public decimal CtrlIncrement
         {
-            //get { return ctrlIncrement; }
+            get { return ctrlIncrement; }
             set { ctrlIncrement = value; }
         }
 

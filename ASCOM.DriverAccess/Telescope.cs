@@ -12,6 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Globalization;
 
 namespace ASCOM.DriverAccess
 {
@@ -31,8 +32,8 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Creates an instance of the telescope class.
         /// </summary>
-        /// <param name="telescopeID">The ProgID for the telescope</param>
-        public Telescope(string telescopeID) : base(telescopeID)
+        /// <param name="telescopeId">The ProgID for the telescope</param>
+        public Telescope(string telescopeId) : base(telescopeId)
         {
             memberFactory = base.MemberFactory;
 
@@ -76,9 +77,9 @@ namespace ASCOM.DriverAccess
         /// <returns>The DriverID of the user selected telescope. Null if the dialog is canceled.</returns>
         public static string Choose(string telescopeId)
         {
-            Chooser chooser;
-            using (chooser = new Chooser { DeviceType = "Telescope" })
+            using (Chooser chooser = new Chooser())
             {
+                chooser.DeviceType = "Telescope";
                 return chooser.Choose(telescopeId);
             }
         }
@@ -111,7 +112,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double Altitude
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "Altitude", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "Altitude", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -119,7 +120,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double ApertureArea
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "ApertureArea", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "ApertureArea", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -127,7 +128,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double ApertureDiameter
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "ApertureDiameter", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "ApertureDiameter", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -189,7 +190,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double Azimuth
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "Azimuth", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "Azimuth", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -292,7 +293,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSlew
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSlew", new Type[] { }, new object[] { }); }
+            get { return (bool)memberFactory.CallMember(1, "CanSlew", new Type[] { }, new object[] { }, CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -362,7 +363,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double Declination
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "Declination", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "Declination", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -383,7 +384,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double DeclinationRate
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "DeclinationRate", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "DeclinationRate", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
             set { memberFactory.CallMember(2, "DeclinationRate", new Type[] { }, new object[] { value }); }
         }
 
@@ -455,7 +456,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double FocalLength
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "FocalLength", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "FocalLength", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -474,7 +475,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double GuideRateDeclination
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "GuideRateDeclination", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "GuideRateDeclination", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
             set { memberFactory.CallMember(2, "GuideRateDeclination", new Type[] { }, new object[] { value }); }
         }
 
@@ -494,7 +495,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double GuideRateRightAscension
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "GuideRateRightAscension", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "GuideRateRightAscension", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
             set { memberFactory.CallMember(2, "GuideRateRightAscension", new Type[] { }, new object[] { value }); }
         }
 
@@ -579,7 +580,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double RightAscension
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "RightAscension", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "RightAscension", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -617,7 +618,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double RightAscensionRate
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "RightAscensionRate", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "RightAscensionRate", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
             set { memberFactory.CallMember(2, "RightAscensionRate", new Type[] { }, new object[] { value }); }
         }
 
@@ -653,7 +654,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double SiderealTime
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "SiderealTime", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "SiderealTime", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -663,7 +664,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double SiteElevation
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "SiteElevation", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "SiteElevation", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
             set { memberFactory.CallMember(2, "SiteElevation", new Type[] { }, new object[] { value }); }
         }
 
@@ -674,7 +675,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double SiteLatitude
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "SiteLatitude", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "SiteLatitude", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
             set { memberFactory.CallMember(2, "SiteLatitude", new Type[] { }, new object[] { value }); }
         }
 
@@ -686,7 +687,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double SiteLongitude
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "SiteLongitude", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "SiteLongitude", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
             set { memberFactory.CallMember(2, "SiteLongitude", new Type[] { }, new object[] { value }); }
         }
 
@@ -698,7 +699,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public short SlewSettleTime
         {
-            get { return Convert.ToInt16(memberFactory.CallMember(1, "SlewSettleTime", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt16(memberFactory.CallMember(1, "SlewSettleTime", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
             set { memberFactory.CallMember(2, "SlewSettleTime", new Type[] { }, new object[] { value }); }
         }
 
@@ -860,7 +861,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double TargetDeclination
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "TargetDeclination", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "TargetDeclination", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
             set { memberFactory.CallMember(2, "TargetDeclination", new Type[] { }, new object[] { value }); }
         }
 
@@ -871,7 +872,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double TargetRightAscension
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "TargetRightAscension", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "TargetRightAscension", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
             set { memberFactory.CallMember(2, "TargetRightAscension", new Type[] { }, new object[] { value }); }
         }
 
@@ -981,7 +982,7 @@ namespace ASCOM.DriverAccess
         {
             objRateLateBound = objTypeAxisRates.InvokeMember("Item",
                         BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objAxisRatesLateBound, new object[] { index });
+                        null, objAxisRatesLateBound, new object[] { index }, CultureInfo.InvariantCulture);
             objTypeRate = objRateLateBound.GetType();
         }
 
@@ -1001,13 +1002,13 @@ namespace ASCOM.DriverAccess
             {
                 return (double)objTypeRate.InvokeMember("Maximum",
                             BindingFlags.Default | BindingFlags.GetProperty,
-                            null, objRateLateBound, new object[] { });
+                            null, objRateLateBound, new object[] { }, CultureInfo.InvariantCulture);
             }
             set
             {
                 objTypeRate.InvokeMember("Maximum",
                             BindingFlags.Default | BindingFlags.SetProperty,
-                            null, objRateLateBound, new object[] { value });
+                            null, objRateLateBound, new object[] { value }, CultureInfo.InvariantCulture);
             }
         }
 
@@ -1021,13 +1022,13 @@ namespace ASCOM.DriverAccess
             {
                 return (double)objTypeRate.InvokeMember("Minimum",
                             BindingFlags.Default | BindingFlags.GetProperty,
-                            null, objRateLateBound, new object[] { });
+                            null, objRateLateBound, new object[] { }, CultureInfo.InvariantCulture);
             }
             set
             {
                 objTypeRate.InvokeMember("Minimum",
                             BindingFlags.Default | BindingFlags.SetProperty,
-                            null, objRateLateBound, new object[] { value });
+                            null, objRateLateBound, new object[] { value }, CultureInfo.InvariantCulture);
             }
         }
 
@@ -1067,7 +1068,7 @@ namespace ASCOM.DriverAccess
             //this.objAxisRatesLateBound = objAxisRatesLateBound;
             objEnumerator = (IEnumerator)objTypeAxisRates.InvokeMember("GetEnumerator",
                         BindingFlags.Default | BindingFlags.InvokeMethod,
-                        null, objAxisRatesLateBound, new object[] { });
+                        null, objAxisRatesLateBound, new object[] { }, CultureInfo.InvariantCulture);
         }
 
         public void Reset()
@@ -1113,7 +1114,7 @@ namespace ASCOM.DriverAccess
         {
             objAxisRatesLateBound = objTypeScope.InvokeMember("AxisRates",
                         BindingFlags.Default | BindingFlags.InvokeMethod,
-                        null, objScopeLateBound, new object[] { (int)Axis });
+                        null, objScopeLateBound, new object[] { (int)Axis }, CultureInfo.InvariantCulture);
             objTypeAxisRates = objAxisRatesLateBound.GetType();
         }
 
@@ -1136,7 +1137,7 @@ namespace ASCOM.DriverAccess
             {
                 return (int)objTypeAxisRates.InvokeMember("Count",
                             BindingFlags.Default | BindingFlags.GetProperty,
-                            null, objAxisRatesLateBound, new object[] { });
+                            null, objAxisRatesLateBound, new object[] { }, CultureInfo.InvariantCulture);
             }
         }
 
@@ -1172,8 +1173,8 @@ namespace ASCOM.DriverAccess
             objTrackingRatesLateBound = objTypeScope.InvokeMember("TrackingRates",
                                                                   BindingFlags.Default | BindingFlags.GetProperty,
                                                                   null, 
-                                                                  objScopeLateBound, 
-                                                                  new object[] { });
+                                                                  objScopeLateBound,
+                                                                  new object[] { }, CultureInfo.InvariantCulture);
             objTypeTrackingRates = objTrackingRatesLateBound.GetType();
         }
 
@@ -1188,9 +1189,9 @@ namespace ASCOM.DriverAccess
             {
                 return (DriveRates)objTypeTrackingRates.InvokeMember("Item",
                                                                      BindingFlags.Default | BindingFlags.GetProperty,
-                                                                     null, 
-                                                                     objTrackingRatesLateBound, 
-                                                                     new object[] { index });
+                                                                     null,
+                                                                     objTrackingRatesLateBound,
+                                                                     new object[] { index }, CultureInfo.InvariantCulture);
             }
         }
 
@@ -1204,9 +1205,9 @@ namespace ASCOM.DriverAccess
 
             object enumeratorobj = (IEnumerator)objTypeTrackingRates.InvokeMember("GetEnumerator",
                                                                                   BindingFlags.Default | BindingFlags.InvokeMethod,
-                                                                                  null, 
-                                                                                  objTrackingRatesLateBound, 
-                                                                                  new object[] { });
+                                                                                  null,
+                                                                                  objTrackingRatesLateBound,
+                                                                                  new object[] { }, CultureInfo.InvariantCulture);
             IEnumerator enumerator = (IEnumerator)enumeratorobj;
 
             return enumerator;
@@ -1219,11 +1220,11 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-                return (int) objTypeTrackingRates.InvokeMember("Count",
+                return (int)objTypeTrackingRates.InvokeMember("Count",
                                                                BindingFlags.Default | BindingFlags.GetProperty,
-                                                               null, 
-                                                               objTrackingRatesLateBound, 
-                                                               new object[] { });
+                                                               null,
+                                                               objTrackingRatesLateBound,
+                                                               new object[] { }, CultureInfo.InvariantCulture);
             }
         }
 

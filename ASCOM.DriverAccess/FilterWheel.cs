@@ -8,6 +8,7 @@ using System;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using ASCOM.Conform;
+using System.Globalization;
 
 namespace ASCOM.DriverAccess
 {
@@ -23,8 +24,8 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Creates a FilterWheel object with the given Prog ID
         /// </summary>
-        /// <param name="filterWheelID"></param>
-        public FilterWheel(string filterWheelID) : base(filterWheelID)
+        /// <param name="filterWheelId"></param>
+        public FilterWheel(string filterWheelId) : base(filterWheelId)
 		{
             //memberFactory = new MemberFactory(filterWheelID);
             memberFactory = base.MemberFactory; //Get the member factory created by the base class
@@ -44,9 +45,9 @@ namespace ASCOM.DriverAccess
         /// <returns>Prog ID for chosen FilterWheel or null for none</returns>
         public static string Choose(string filterWheelId)
         {
-            Chooser chooser;
-            using (chooser = new Chooser { DeviceType = "FilterWheel" })
+            using (Chooser chooser = new Chooser())
             {
+                chooser.DeviceType = "FilterWheel";
                 return chooser.Choose(filterWheelId);
             }
         }
@@ -94,8 +95,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public short Position
         {
-            get { return Convert.ToInt16(memberFactory.CallMember(1, "Position", new Type[] { }, new object[] { })); }
-            set { memberFactory.CallMember(2, "Position", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToInt16(memberFactory.CallMember(1, "Position", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
+            set { memberFactory.CallMember(2, "Position", new Type[] { }, new object[] { value }, CultureInfo.InvariantCulture); }
         }
 
         #endregion

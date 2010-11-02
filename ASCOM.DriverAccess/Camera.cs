@@ -11,6 +11,7 @@ using System;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using ASCOM.Conform;
+using System.Globalization;
 
 namespace ASCOM.DriverAccess
 {
@@ -23,7 +24,7 @@ namespace ASCOM.DriverAccess
         #region Camera constructors
         private readonly MemberFactory _memberFactory;
         private readonly short _driverInterfaceVersion;
-        
+
         /// <summary>
         /// Creates an instance of the camera class.
         /// </summary>
@@ -39,7 +40,6 @@ namespace ASCOM.DriverAccess
             {
                 _driverInterfaceVersion = 1;
             }
-
 		}
         #endregion
 
@@ -56,9 +56,9 @@ namespace ASCOM.DriverAccess
         /// </returns>
         public static string Choose(string cameraId)
         {
-            Chooser chooser;
-            using (chooser = new Chooser {DeviceType = "Camera"})
+            using (Chooser chooser = new Chooser())
             {
+                chooser.DeviceType = "Camera";
                 return chooser.Choose(cameraId);
             }
         }
@@ -90,8 +90,8 @@ namespace ASCOM.DriverAccess
         /// <exception>Must throw an exception for illegal binning values</exception>
         public short BinX
         {
-           get { return Convert.ToInt16(_memberFactory.CallMember(1, "BinX", new Type[] { }, new object[] { })); }
-           set { _memberFactory.CallMember(2, "BinX", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "BinX", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
+            set { _memberFactory.CallMember(2, "BinX", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -104,8 +104,8 @@ namespace ASCOM.DriverAccess
         /// <exception>Must throw an exception for illegal binning values</exception>
         public short BinY
         {
-           get { return Convert.ToInt16(_memberFactory.CallMember(1, "BinY", new Type[] { }, new object[] { })); }
-           set { _memberFactory.CallMember(2, "BinY", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "BinY", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
+            set { _memberFactory.CallMember(2, "BinY", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace ASCOM.DriverAccess
         /// <exception>Must throw exception if data unavailable.</exception>
         public double CCDTemperature
         {
-            get { return Convert.ToDouble(_memberFactory.CallMember(1, "CCDTemperature", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "CCDTemperature", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref="System.Exception">Must throw exception if the value is not known</exception>
         public int CameraXSize
         {
-           get { return Convert.ToInt32(_memberFactory.CallMember(1, "CameraXSize", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt32(_memberFactory.CallMember(1, "CameraXSize", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref="System.Exception">Must throw exception if the value is not known</exception>
         public int CameraYSize
         {
-           get { return Convert.ToInt32(_memberFactory.CallMember(1, "CameraYSize", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt32(_memberFactory.CallMember(1, "CameraYSize", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace ASCOM.DriverAccess
         /// </value>
         public bool CanAbortExposure
         {
-            get { return (bool)_memberFactory.CallMember(1, "CanAbortExposure", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(_memberFactory.CallMember(1, "CanAbortExposure", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -197,7 +197,7 @@ namespace ASCOM.DriverAccess
         /// occurs if no link established and camera must be queried)</exception>
         public bool CanAsymmetricBin
         {
-            get { return (bool)_memberFactory.CallMember(1, "CanAsymmetricBin", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(_memberFactory.CallMember(1, "CanAsymmetricBin", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace ASCOM.DriverAccess
         /// </value>
         public bool  CanGetCoolerPower
         {
-           get { return (bool)_memberFactory.CallMember(1, "CanGetCoolerPower", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(_memberFactory.CallMember(1, "CanGetCoolerPower", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -221,7 +221,7 @@ namespace ASCOM.DriverAccess
         /// </value>
         public bool CanPulseGuide
         {
-            get { return (bool)_memberFactory.CallMember(1, "CanPulseGuide", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(_memberFactory.CallMember(1, "CanPulseGuide", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace ASCOM.DriverAccess
         /// </value>
         public bool CanSetCCDTemperature
         {
-           get { return (bool)_memberFactory.CallMember(1, "CanSetCCDTemperature", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(_memberFactory.CallMember(1, "CanSetCCDTemperature", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -249,7 +249,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">an error condition such as link failure is present</exception>
         public bool CanStopExposure
         {
-            get { return (bool)_memberFactory.CallMember(1, "CanStopExposure", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(_memberFactory.CallMember(1, "CanStopExposure", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -264,8 +264,8 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">an error condition such as link failure is present</exception>
        public bool CoolerOn
         {
-           get { return (bool)_memberFactory.CallMember(1, "CoolerOn", new Type[] { }, new object[] { }); }
-           set { _memberFactory.CallMember(2, "CoolerOn", new Type[] { }, new object[] { value }); }
+            get { return Convert.ToBoolean(_memberFactory.CallMember(1, "CoolerOn", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
+            set { _memberFactory.CallMember(2, "CoolerOn", new Type[] { }, new object[] { value }); }
         }
 
        /// <summary>
@@ -277,7 +277,7 @@ namespace ASCOM.DriverAccess
        /// <exception cref=" System.Exception">an error condition such as link failure is present</exception>
         public double CoolerPower
         {
-            get { return Convert.ToDouble(_memberFactory.CallMember(1, "CoolerPower", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "CoolerPower", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -289,7 +289,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public double ElectronsPerADU
         {
-            get { return Convert.ToDouble(_memberFactory.CallMember(1, "ElectronsPerADU", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "ElectronsPerADU", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -300,7 +300,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public double FullWellCapacity
         {
-            get { return Convert.ToDouble(_memberFactory.CallMember(1, "FullWellCapacity", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "FullWellCapacity", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -313,7 +313,7 @@ namespace ASCOM.DriverAccess
         /// </value>
        public bool HasShutter
         {
-           get { return (bool)_memberFactory.CallMember(1, "HasShutter", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(_memberFactory.CallMember(1, "HasShutter", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
        /// <summary>
@@ -324,7 +324,7 @@ namespace ASCOM.DriverAccess
        /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public double HeatSinkTemperature
         {
-            get { return Convert.ToDouble(_memberFactory.CallMember(1, "HeatSinkTemperature", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "HeatSinkTemperature", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -373,7 +373,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">hardware or communications link error has occurred.</exception>
         public bool ImageReady
         {
-            get { return (bool)_memberFactory.CallMember(1, "ImageReady", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(_memberFactory.CallMember(1, "ImageReady", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -386,7 +386,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">hardware or communications link error has occurred.</exception>
         public bool IsPulseGuiding
         {
-            get { return (bool)_memberFactory.CallMember(1, "IsPulseGuiding", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(_memberFactory.CallMember(1, "IsPulseGuiding", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -398,7 +398,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if not supported or no exposure has been taken</exception>
         public double LastExposureDuration
         {
-            get { return Convert.ToDouble(_memberFactory.CallMember(1, "LastExposureDuration", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "LastExposureDuration", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -409,7 +409,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if not supported or no exposure has been taken</exception>
         public string LastExposureStartTime
         {
-            get { return (string)_memberFactory.CallMember(1, "LastExposureStartTime", new Type[] { }, new object[] { }); }
+            get { return Convert.ToString(_memberFactory.CallMember(1, "LastExposureStartTime", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -419,7 +419,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public int MaxADU
         {
-            get { return Convert.ToInt32(_memberFactory.CallMember(1, "MaxADU", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt32(_memberFactory.CallMember(1, "MaxADU", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -431,7 +431,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public short MaxBinX
         {
-            get { return Convert.ToInt16(_memberFactory.CallMember(1, "MaxBinX", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "MaxBinX", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -442,7 +442,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public short MaxBinY
         {
-            get { return Convert.ToInt16(_memberFactory.CallMember(1, "MaxBinY", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "MaxBinY", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -453,7 +453,7 @@ namespace ASCOM.DriverAccess
         /// <value>The num X.</value>
         public int NumX
         {
-            get { return Convert.ToInt32(_memberFactory.CallMember(1, "NumX", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt32(_memberFactory.CallMember(1, "NumX", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
             set { _memberFactory.CallMember(2, "NumX", new Type[] { }, new object[] { value }); }
         }
 
@@ -465,7 +465,7 @@ namespace ASCOM.DriverAccess
         /// <value>The num Y.</value>
         public int NumY
         {
-            get { return Convert.ToInt32(_memberFactory.CallMember(1, "NumY", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt32(_memberFactory.CallMember(1, "NumY", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
             set { _memberFactory.CallMember(2, "NumY", new Type[] { }, new object[] { value }); }
         }
 
@@ -477,7 +477,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public double PixelSizeX
         {
-           get { return Convert.ToDouble(_memberFactory.CallMember(1, "PixelSizeX", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "PixelSizeX", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -488,7 +488,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         public double PixelSizeY
         {
-            get { return Convert.ToDouble(_memberFactory.CallMember(1, "PixelSizeY", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "PixelSizeY", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -504,13 +504,13 @@ namespace ASCOM.DriverAccess
         /// Note: directions are nominal and may depend on exact mount wiring.  guideNorth
         /// must be opposite guideSouth, and guideEast must be opposite guideWest.
         /// </summary>
-        /// <param name="direction">The direction.</param>
-        /// <param name="duration">The duration.</param>
+        /// <param name="Direction">The direction.</param>
+        /// <param name="Duration">The duration.</param>
         /// <exception cref=" System.Exception">PulseGuide command is unsupported</exception>
         /// <exception cref=" System.Exception">PulseGuide command is unsuccessful</exception>
-        public void PulseGuide(GuideDirections direction, int duration)
+        public void PulseGuide(GuideDirections Direction, int Duration)
         {
-            _memberFactory.CallMember(3, "PulseGuide", new[] { typeof(GuideDirections), typeof(int) }, new object[] { direction, duration }); 
+            _memberFactory.CallMember(3, "PulseGuide", new[] { typeof(GuideDirections), typeof(int) }, new object[] { Direction, Duration }); 
         }
 
         /// <summary>
@@ -524,21 +524,21 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if CanSetCCDTemperature is False.</exception>
         public double SetCCDTemperature
         {
-            get { return Convert.ToDouble(_memberFactory.CallMember(1, "SetCCDTemperature", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "SetCCDTemperature", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
             set { _memberFactory.CallMember(2, "SetCCDTemperature", new Type[] { }, new object[] { value }); }
         }
 
         /// <summary>
         /// Starts an exposure. Use ImageReady to check when the exposure is complete.
         /// </summary>
-        /// <param name="duration">Duration of exposure in seconds</param>
-        /// <param name="light">True for light frame, False for dark frame (ignored if no shutter)</param>
+        /// <param name="Duration">Duration of exposure in seconds</param>
+        /// <param name="Light">True for light frame, False for dark frame (ignored if no shutter)</param>
         /// <exception cref=" System.Exception">NumX, NumY, XBin, YBin, StartX, StartY, or Duration parameters are invalid.</exception>
         /// <exception cref=" System.Exception">CanAsymmetricBin is False and BinX != BinY</exception>
         /// <exception cref=" System.Exception">the exposure cannot be started for any reason, such as a hardware or communications error</exception>
-        public void StartExposure(double duration, bool light)
+        public void StartExposure(double Duration, bool Light)
         {
-            _memberFactory.CallMember(3, "StartExposure", new[] { typeof(double), typeof(bool) }, new object[] { duration, light }); 
+            _memberFactory.CallMember(3, "StartExposure", new[] { typeof(double), typeof(bool) }, new object[] { Duration, Light }); 
         }
 
         /// <summary>
@@ -548,7 +548,7 @@ namespace ASCOM.DriverAccess
         /// <value>The start X.</value>
         public int StartX
         {
-            get { return Convert.ToInt32(_memberFactory.CallMember(1, "StartX", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt32(_memberFactory.CallMember(1, "StartX", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
             set { _memberFactory.CallMember(2, "StartX", new Type[] { }, new object[] { value }); }
         }
 
@@ -559,7 +559,7 @@ namespace ASCOM.DriverAccess
         /// <value>The start Y.</value>
         public int StartY
         {
-            get { return Convert.ToInt32(_memberFactory.CallMember(1, "StartY", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt32(_memberFactory.CallMember(1, "StartY", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
             set { _memberFactory.CallMember(2, "StartY", new Type[] { }, new object[] { value }); }
         }
 
@@ -584,7 +584,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public short BayerOffsetX 
         {
-            get { return Convert.ToInt16(_memberFactory.CallMember(1, "BayerOffsetX", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "BayerOffsetX", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -592,7 +592,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public short BayerOffsetY 
         {
-            get { return Convert.ToInt16(_memberFactory.CallMember(1, "BayerOffsetY", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "BayerOffsetY", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -604,7 +604,7 @@ namespace ASCOM.DriverAccess
             {
                 if (_driverInterfaceVersion > 1)
                 {
-                    return (bool) _memberFactory.CallMember(1, "CanFastReadout", new Type[] { }, new object[] { });
+                    return Convert.ToBoolean(_memberFactory.CallMember(1, "CanFastReadout", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture);
                 }
                 return false;
             }
@@ -615,7 +615,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double ExposureMax 
         {
-            get { return Convert.ToDouble(_memberFactory.CallMember(1, "ExposureMax", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "ExposureMax", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -623,7 +623,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double ExposureMin 
         {
-            get { return Convert.ToDouble(_memberFactory.CallMember(1, "ExposureMin", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "ExposureMin", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -631,7 +631,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double ExposureResolution 
         {
-            get { return Convert.ToDouble(_memberFactory.CallMember(1, "ExposureResolution", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(_memberFactory.CallMember(1, "ExposureResolution", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -640,7 +640,7 @@ namespace ASCOM.DriverAccess
         public bool FastReadout 
         {
             set { _memberFactory.CallMember(2, "FastReadout", new Type[] { }, new object[] { value }); }
-            get { return (bool)_memberFactory.CallMember(1, "FastReadout", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(_memberFactory.CallMember(1, "FastReadout", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -649,7 +649,7 @@ namespace ASCOM.DriverAccess
         public short Gain 
         {
             set { _memberFactory.CallMember(2, "Gain", new Type[] { }, new object[] { value }); }
-            get { return Convert.ToInt16(_memberFactory.CallMember(1, "Gain", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "Gain", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -657,7 +657,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public short GainMax 
         {
-            get { return Convert.ToInt16(_memberFactory.CallMember(1, "GainMax", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "GainMax", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -665,7 +665,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public short GainMin 
         {
-            get { return Convert.ToInt16(_memberFactory.CallMember(1, "GainMin", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "GainMin", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -681,7 +681,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public short PercentCompleted 
         {
-            get { return Convert.ToInt16(_memberFactory.CallMember(1, "PercentCompleted", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "PercentCompleted", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -689,7 +689,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public short ReadoutMode 
         {
-            get { return Convert.ToInt16(_memberFactory.CallMember(1, "ReadoutMode", new Type[] { }, new object[] { })); }
+            get { return Convert.ToInt16(_memberFactory.CallMember(1, "ReadoutMode", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -705,7 +705,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string SensorName 
         {
-            get { return (string)_memberFactory.CallMember(1, "SensorName", new Type[] { }, new object[] { }); }
+            get { return Convert.ToString(_memberFactory.CallMember(1, "SensorName", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>

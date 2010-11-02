@@ -7,6 +7,7 @@
 using System;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
+using System.Globalization;
 
 namespace ASCOM.DriverAccess
 {
@@ -23,8 +24,8 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Constructor for Dome class. Creates a Dome based on the ProgID in the DomeID string.
         /// </summary>
-        /// <param name="domeID">The progID of the dome to be instantiated</param>
-        public Dome(string domeID) : base(domeID)
+        /// <param name="domeId">The progID of the dome to be instantiated</param>
+        public Dome(string domeId) : base(domeId)
 		{
             memberFactory = base.MemberFactory;
 		}
@@ -38,10 +39,10 @@ namespace ASCOM.DriverAccess
         /// <returns>The Prog ID of the Dome chosen, or Null if no dome is chose, or the dialog is canceled.</returns>
         public static string Choose(string domeId)
         {
-            Chooser oChooser;
-            using (oChooser = new Chooser() {DeviceType = "Dome"})
+            using (Chooser chooser = new Chooser())
             {
-                return oChooser.Choose(domeId);
+                chooser.DeviceType = "Dome";
+                return chooser.Choose(domeId);
             }
         }
 
@@ -66,7 +67,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double Altitude
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "Altitude", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "Altitude", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -76,7 +77,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool AtHome
         {
-           get { return (bool)memberFactory.CallMember(1, "AtHome", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "AtHome", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -86,7 +87,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool AtPark
         {
-            get { return (bool)memberFactory.CallMember(1, "AtPark", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "AtPark", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -94,7 +95,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double Azimuth
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "Azimuth", new Type[] { }, new object[] { })); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "Azimuth", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -102,7 +103,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanFindHome
         {
-            get { return (bool)memberFactory.CallMember(1, "CanFindHome", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "CanFindHome", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -110,7 +111,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanPark
         {
-            get { return (bool)memberFactory.CallMember(1, "CanPark", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "CanPark", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -118,7 +119,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSetAltitude
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSetAltitude", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "CanSetAltitude", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -126,7 +127,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSetAzimuth
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSetAzimuth", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "CanSetAzimuth", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -134,7 +135,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSetPark
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSetPark", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "CanSetPark", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -142,7 +143,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSetShutter
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSetShutter", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "CanSetShutter", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -150,7 +151,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSlave
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSlave", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "CanSlave", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -158,7 +159,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool CanSyncAzimuth
         {
-            get { return (bool)memberFactory.CallMember(1, "CanSyncAzimuth", new Type[] { }, new object[] { }); }
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "CanSyncAzimuth", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -213,7 +214,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public ShutterState ShutterStatus
         {
-             get { return (ShutterState)memberFactory.CallMember(1, "ShutterStatus", new Type[] { }, new object[] { }); }
+            get { return (ShutterState)memberFactory.CallMember(1, "ShutterStatus", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>
@@ -225,7 +226,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Slaved
         {
-            get { return (bool)(memberFactory.CallMember(1, "Slaved", new Type[] { }, new object[] { })); }
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "Slaved", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
             set { memberFactory.CallMember(2, "Slaved", new Type[] { }, new object[] { value }); }
         }
 
@@ -258,7 +259,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Slewing
         {
-            get { return (bool)(memberFactory.CallMember(1, "Slewing", new Type[] { }, new object[] { })); }
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "Slewing", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
