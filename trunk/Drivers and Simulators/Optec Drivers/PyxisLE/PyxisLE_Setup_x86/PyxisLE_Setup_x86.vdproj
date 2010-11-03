@@ -63,6 +63,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_49116EAF24D1402BBEB4C670D675E5FE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4EB11D9BBB944EF78D0DBA2DC8E5594B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -167,6 +173,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_C861CE124D94412B908DE3FC555C8E32"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_49116EAF24D1402BBEB4C670D675E5FE"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -336,6 +348,20 @@
     {
         "CustomAction"
         {
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_2D275519F9644EAAA83372AED77CC459"
+            {
+            "Name" = "8:Primary output from PyxisLE_Control (Active)"
+            "Condition" = "8:INSTALL_CONTROL"
+            "Object" = "8:_62D8F051E14C43FEB70110405FA7BCB0"
+            "FileType" = "3:2"
+            "InstallAction" = "3:4"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:2"
+            "Identifier" = "8:_7E335CE2_F035_488C_84CB_535F3123E046"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_B4A76B0FFE61477394A2F59A75EEAB33"
             {
             "Name" = "8:Primary output from PyxisLE_Control (Active)"
@@ -445,7 +471,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -465,7 +491,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:2"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -536,7 +562,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:2"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -556,7 +582,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:2"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -743,9 +769,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Pyxis LE Programs (x86)"
+        "ProductName" = "8:Optec Pyxis LE Programs (x86)"
         "ProductCode" = "8:{EE5EF93E-585F-454C-8766-BACA8DC8E401}"
-        "PackageCode" = "8:{A69EBF04-688A-4309-A993-99802EBA42E3}"
+        "PackageCode" = "8:{1D122E26-9F38-4F3D-A589-43B96F4B175F}"
         "UpgradeCode" = "8:{76DEDA9D-2B4C-4821-AF37-968A7E0C7FA1}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -762,7 +788,7 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:Setup project for Pyxis LE software (32-Bit)"
         "ARPURLINFOABOUT" = "8:"
-        "ARPPRODUCTICON" = "8:"
+        "ARPPRODUCTICON" = "8:_B1381F41760A4F4B9C0A9EEAF7F3C0E2"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
@@ -1564,6 +1590,34 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:ContentFiles"
             "OutputProjectGuid" = "8:{5343ADF9-2AC8-4E37-8E58-C0525EF38756}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_49116EAF24D1402BBEB4C670D675E5FE"
+            {
+            "SourcePath" = "8:..\\Dependencies\\Optec.EventLogger\\obj\\Release\\Optec.EventLogger.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_FDD1E0F5F4F647B8A6C48AD8E8CC0225"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{9EC2D59F-5842-43FA-A943-625B23295484}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {

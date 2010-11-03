@@ -102,17 +102,17 @@ namespace PyxisLE_Control
         [Description("Configure whether the application automatically checks for updates on startup or not.")]
         public bool CheckForUpdates
         {
-            get { return Properties.Settings.Default.CheckForUpdates; }
+            get { return XmlSettings.CheckForUpdates; }
             set
             {
-                Properties.Settings.Default.CheckForUpdates = value;
-                Properties.Settings.Default.Save();
+                XmlSettings.CheckForUpdates = value;
             }
         }
 
-        [Category("Settings")]
+        [Category("Device Settings")]
         [DisplayName("Zero Offset (°)")]
-        [Description("Adjust the rotators zero point in units of degrees. This is used when homing the device. Changing this value will force the device to home.")]
+        [Description("Adjust the rotators zero point in units of degrees. This is used when homing the device." + 
+            " Changing this value will force the device to home.")]
         public double ZeroOffset
         {
             get {
@@ -124,10 +124,11 @@ namespace PyxisLE_Control
             set 
             {
 
-                string msg = "ATTENTION: Changing the reverse property will cause the device to re-home. " + Environment.NewLine +
-                     "The Zero-Offset property is used to change the point that the rotator 'thinks' is zero degrees PA. The units for " + 
-                     "this property are in stepper motor steps. Positive and negative values are allowed.";
-                DialogResult r = MessageBox.Show(msg, "Continue?", MessageBoxButtons.YesNo,
+                string msg = "CAUTION: Changing this property may cause the rotator to travel more than 360°. " + Environment.NewLine +
+                     "The device will automatically home after the Zero Offset is changed. Changing the Zero Offset essentially changes the" + Environment.NewLine +
+                     " point that the rotator 'thinks' is zero degrees PA. During a home the rotator may travel up to (360 + Zero Offset) degrees." + Environment.NewLine +
+                     "Are you sure you want to continue?";
+                DialogResult r = MessageBox.Show(msg, "CAUTION", MessageBoxButtons.YesNo,
                      MessageBoxIcon.Question);
                 if (r == DialogResult.Yes)
                 {
@@ -141,7 +142,7 @@ namespace PyxisLE_Control
             }
         }
 
-        [Category("Settings")]
+        [Category("Device Settings")]
         [Description("Use this property to reverse the direction of travel for move commands. " + 
             "The False setting will result in counter-clockwise positive moves. The True setting " + 
             "will result in clockwise positive moves.")]
@@ -158,7 +159,7 @@ namespace PyxisLE_Control
             }
         }
 
-        [Category("Settings")]
+        [Category("Device Settings")]
         [DisplayName("Backlash Comp. Enabled")]
         public bool BacklashComp
         {
@@ -172,21 +173,13 @@ namespace PyxisLE_Control
             }
         }
 
-        [Category("Settings")]
+        [Category("Device Settings")]
         [DisplayName("Backlash Steps")]
         public short bklsteps
         {
             get{ return myRotator.BacklashSteps;}
             set{ myRotator.BacklashSteps = value;}
         }
-
-        //[Category("Settings")]
-        //[DisplayName("Return to Last")]
-        //public bool ReturnToLast
-        //{
-        //    get { return myRotator.ReturnToLastOnHome; }
-        //    set { myRotator.ReturnToLastOnHome = value; }
-        //}
 
         [Category("Device Description")]
         [Description("The unique serial number for the connected device.")]
@@ -213,6 +206,17 @@ namespace PyxisLE_Control
         {
             get { return myRotator.FirmwareVersion; }
             set { /* Read Only*/}
+        }
+
+        [Category("Device Settings")]
+        [Description("The position angle that the device travels to during a park routine. This value " +
+            "is relative to the devices position angle. It is NOT affected by changes to Sky PA. Changes to " +
+            "the Zero Offset WILL affect the park position.")]
+        [DisplayName("Park Position(°)")]
+        public float ParkPosition
+        {
+            get { return XmlSettings.ParkPosition; }
+            set { XmlSettings.ParkPosition = value; }
         }
 
     }

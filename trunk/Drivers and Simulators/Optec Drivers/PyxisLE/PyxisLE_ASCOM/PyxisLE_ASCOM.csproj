@@ -103,6 +103,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SolutionVersion.cs">
@@ -125,6 +126,13 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Logger.cs" />
+    <Compile Include="NewVersionChecker.cs" />
+    <Compile Include="NewVersionFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewVersionFrm.designer.cs">
+      <DependentUpon>NewVersionFrm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <DependentUpon>Resources.resx</DependentUpon>
@@ -154,6 +162,9 @@
     <Compile Include="Warning1Form.Designer.cs">
       <DependentUpon>Warning1Form.cs</DependentUpon>
     </Compile>
+    <Compile Include="XmlSettings_A.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AboutBox1.resx">
@@ -161,6 +172,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AdvancedForm.resx">
       <DependentUpon>AdvancedForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewVersionFrm.resx">
+      <DependentUpon>NewVersionFrm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

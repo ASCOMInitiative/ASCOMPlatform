@@ -66,12 +66,13 @@ namespace ASCOM.PyxisLE_ASCOM
         {
 #if DEBUG
             System.Windows.Forms.MessageBox.Show("Constructing Rotator object");
+            EventLogger.LoggingLevel = TraceLevel.Info;
 #endif
             RotatorManager = new Rotators();
             myProfile = new Profile();
             myProfile.DeviceType = "Rotator";
             myRotator = null;
-            EventLogger.LoggingLevel = TraceLevel.Info;
+
         }
 
         #region ASCOM Registration
@@ -202,9 +203,9 @@ namespace ASCOM.PyxisLE_ASCOM
                 if (NewPosition > 360) NewPosition = NewPosition - 360;
                 else if (NewPosition < 0) NewPosition = NewPosition + 360;
                 myRotator.CurrentSkyPA = NewPosition;
-                System.Threading.Thread.Sleep(500);
+                //System.Threading.Thread.Sleep(500);
                 EventLogger.LogMessage("Move Started at " + DateTime.Now.ToLongTimeString(), TraceLevel.Info);
-                while (this.IsMoving) { System.Threading.Thread.Sleep(100); System.Windows.Forms.Application.DoEvents(); }
+                while (this.IsMoving) { System.Threading.Thread.Sleep(50); System.Windows.Forms.Application.DoEvents(); }
                 EventLogger.LogMessage("Returning from move method at " + DateTime.Now.ToLongTimeString(), TraceLevel.Info);
             }
             catch (Exception ex)
@@ -302,7 +303,6 @@ namespace ASCOM.PyxisLE_ASCOM
                 return (float)myRotator.TargetSkyPA;
             }
         }
-
 
 
         #endregion
