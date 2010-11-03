@@ -122,6 +122,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -174,9 +175,13 @@
     <Compile Include="SetSkyPA_Frm.Designer.cs">
       <DependentUpon>SetSkyPA_Frm.cs</DependentUpon>
     </Compile>
+    <Compile Include="XmlSettings.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <None Include="Resources\Rotator_ERROR.png" />
     <EmbeddedResource Include="AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="AdvancedForm.resx">
       <DependentUpon>AdvancedForm.cs</DependentUpon>

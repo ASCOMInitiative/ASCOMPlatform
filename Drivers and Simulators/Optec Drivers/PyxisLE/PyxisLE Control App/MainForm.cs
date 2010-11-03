@@ -58,56 +58,74 @@ namespace PyxisLE_Control
             ControlsDisabledOnDisconnect.Add(RelMoveLbl);
             ControlsDisabledOnDisconnect.Add(IncLabel);
             ControlsDisabledOnDisconnect.Add(RotatorDiagram);
+            ControlsDisabledOnDisconnect.Add(Park_BTN);
+           // ControlsDisabledOnDisconnect.Add(parkToolStripMenuItem);
 
-            EventLogger.LoggingLevel = Properties.Settings.Default.LastTraceLevel;
+            
             this.alwaysOnTopToolStripMenuItem.Checked = Properties.Settings.Default.AlwaysOnTop;
             this.TopMost = Properties.Settings.Default.AlwaysOnTop;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            try
+            {
+                EventLogger.LoggingLevel = XmlSettings.LoggingLevel;
 
-            
-            RotatorMonitor = new Rotators();
-            RotatorMonitor.RotatorAttached += new EventHandler(RotatorListChanged);
-            RotatorMonitor.RotatorRemoved += new EventHandler(RotatorListChanged);
+                RotatorMonitor = new Rotators();
+                RotatorMonitor.RotatorAttached += new EventHandler(RotatorListChanged);
+                RotatorMonitor.RotatorRemoved += new EventHandler(RotatorListChanged);
 
-            // Set the checked property for the tool strip menu items
-            skyPADisplayToolStripMenuItem.Checked = Properties.Settings.Default.ShowSkyPA;
-            rotatorDiagramToolStripMenuItem.Checked = Properties.Settings.Default.ShowRotatorDiagram;
-            homeButtonToolStripMenuItem.Checked = Properties.Settings.Default.ShowHomeButton;
-            absoluteMoveControlsToolStripMenuItem.Checked = Properties.Settings.Default.ShowAbsoluteMove;
-            relativeMoveControlsToolStripMenuItem.Checked = Properties.Settings.Default.ShowRelativeMove;
-            alwaysOnTopToolStripMenuItem.Checked = Properties.Settings.Default.AlwaysOnTop;
+                // Set the checked property for the tool strip menu items
+                skyPADisplayToolStripMenuItem.Checked = Properties.Settings.Default.ShowSkyPA;
+                rotatorDiagramToolStripMenuItem.Checked = Properties.Settings.Default.ShowRotatorDiagram;
+                homeButtonToolStripMenuItem.Checked = Properties.Settings.Default.ShowHomeButton;
+                absoluteMoveControlsToolStripMenuItem.Checked = Properties.Settings.Default.ShowAbsoluteMove;
+                relativeMoveControlsToolStripMenuItem.Checked = Properties.Settings.Default.ShowRelativeMove;
+                alwaysOnTopToolStripMenuItem.Checked = Properties.Settings.Default.AlwaysOnTop;
 
-            // set the event handlers for the tool strip menu items
-            skyPADisplayToolStripMenuItem.Click += new EventHandler(ViewToolStripMenuItemClicked);
-            rotatorDiagramToolStripMenuItem.Click += new EventHandler(ViewToolStripMenuItemClicked);
-            homeButtonToolStripMenuItem.Click += new EventHandler(ViewToolStripMenuItemClicked);
-            absoluteMoveControlsToolStripMenuItem.Click += new EventHandler(ViewToolStripMenuItemClicked);
-            relativeMoveControlsToolStripMenuItem.Click += new EventHandler(ViewToolStripMenuItemClicked);
-            showAllToolStripMenuItem.Click += new EventHandler(ViewToolStripMenuItemClicked);
-            alwaysOnTopToolStripMenuItem.Click += new EventHandler(ViewToolStripMenuItemClicked);
-            updateFormSize();
-            
-            myRotator = FindMyDevice();
-           
-            ThreadStart ts = new ThreadStart(MotionMonitor);
-            MotionMonitorThread = new Thread(ts);
+                // set the event handlers for the tool strip menu items
+                skyPADisplayToolStripMenuItem.Click += new EventHandler(ViewToolStripMenuItemClicked);
+                rotatorDiagramToolStripMenuItem.Click += new EventHandler(ViewToolStripMenuItemClicked);
+                homeButtonToolStripMenuItem.Click += new EventHandler(ViewToolStripMenuItemClicked);
+                absoluteMoveControlsToolStripMenuItem.Click += new EventHandler(ViewToolStripMenuItemClicked);
+                relativeMoveControlsToolStripMenuItem.Click += new EventHandler(ViewToolStripMenuItemClicked);
+                showAllToolStripMenuItem.Click += new EventHandler(ViewToolStripMenuItemClicked);
+                alwaysOnTopToolStripMenuItem.Click += new EventHandler(ViewToolStripMenuItemClicked);
+                updateFormSize();
 
-            StatusLabel.Text = (myRotator != null) ? "Connected to Pyxis LE with serial number: " + myRotator.SerialNumber :
-                StatusLabel.Text = "Searching for Pyxis LE...";
+                myRotator = FindMyDevice();
 
-            updateDisplayNoInvoke();
+                ThreadStart ts = new ThreadStart(MotionMonitor);
+                MotionMonitorThread = new Thread(ts);
+
+                StatusLabel.Text = (myRotator != null) ? "Connected to Pyxis LE with serial number: " + myRotator.SerialNumber :
+                    StatusLabel.Text = "Searching for Pyxis LE...";
+
+                updateDisplayNoInvoke();
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                throw;
+            }
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
-            ExternalControlTimer.Enabled = true;
-
-            if (Properties.Settings.Default.CheckForUpdates)
+            try
             {
-                VersionCheckerBGWorker.RunWorkerAsync();
+                ExternalControlTimer.Enabled = true;
+
+                if (XmlSettings.CheckForUpdates)
+                {
+                    VersionCheckerBGWorker.RunWorkerAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -683,13 +701,13 @@ namespace PyxisLE_Control
                     if (lastDisplayState != DisplayStates.Connected)
                     {
                         RotatorDiagram.Visible = true;
-                        this.RotatorDiagram.Image = (myRotator.Reverse) ?
-                            Properties.Resources.Rotator_REV : Properties.Resources.Rotator_FWD;
                         foreach (Control x in this.ControlsDisabledOnDisconnect)
                         {
                             x.Enabled = true;
                         }
                     }
+                    this.RotatorDiagram.Image = (myRotator.Reverse) ?
+                            Properties.Resources.Rotator_REV : Properties.Resources.Rotator_FWD;
                     if (myRotator.IsMoving) this.StatusLabel.Text = "Rotating...";
                     else if (myRotator.IsHoming) this.StatusLabel.Text = "Homing...";
                     else this.StatusLabel.Text = STATUS_IDLE_MESSAGE;
@@ -825,7 +843,9 @@ namespace PyxisLE_Control
             }
 
             // Adjust the main form size
-            this.Size = new Size(this.Width, formSize + 10);
+            this.MinimumSize = new Size(314, formSize + 10);
+            this.Size = new Size(314, formSize + 10);
+            
             Application.DoEvents();
         }
 
@@ -868,7 +888,7 @@ namespace PyxisLE_Control
             {
                 //Check For A newer verison of the driver
                 EventLogger.LogMessage("Checking for application updates", TraceLevel.Info);
-                if (NewVersionChecker.CheckLatestVerisonNumber(NewVersionChecker.ProductType.HSFWControl))
+                if (NewVersionChecker.CheckLatestVerisonNumber(NewVersionChecker.ProductType.PyxisLE))
                 {
                     //Found a VersionNumber, now check if it's newer
                     Assembly asm = Assembly.GetExecutingAssembly();
@@ -905,7 +925,7 @@ namespace PyxisLE_Control
                 }
                 else
                 {
-                    if (NewVersionChecker.CheckLatestVerisonNumber(NewVersionChecker.ProductType.HSFWControl))
+                    if (NewVersionChecker.CheckLatestVerisonNumber(NewVersionChecker.ProductType.PyxisLE))
                     {
                         //Found a VersionNumber, now check if it's newer
                         Assembly asm = Assembly.GetExecutingAssembly();
@@ -965,15 +985,71 @@ namespace PyxisLE_Control
 
         private void deviceDocumentationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string asmpath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            int i = asmpath.IndexOf("PyxisLE");
-            asmpath = asmpath.Substring(0, i + 5);
-            string fname = Properties.Settings.Default.HelpFileName;
-            asmpath += "\\Documentation\\" + fname;
-            //MessageBox.Show(asmpath);
-            Process p = new Process();
-            p.StartInfo.FileName = asmpath;
-            p.Start();
+            try
+            {
+                string asmpath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                int i = asmpath.IndexOf("PyxisLE");
+                asmpath = asmpath.Substring(0, i + 7);
+                string fname = Properties.Settings.Default.HelpFileName;
+                asmpath += "\\Documentation\\" + fname;
+                //MessageBox.Show(asmpath);
+                Process p = new Process();
+                p.StartInfo.FileName = asmpath;
+                p.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Attention");
+            }
+        }
+
+        private void parkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ParkRotator();
+        }
+
+        private void Park_BTN_Click(object sender, EventArgs e)
+        {
+            ParkRotator();
+        }
+
+        private void ParkRotator()
+        {
+            try
+            {
+                if (myRotator == null)
+                {
+                    return;
+                }
+                else if (myRotator.IsMoving || myRotator.IsHoming)
+                {
+                    MessageBox.Show("Please wait until device has finished its current operation.", "Device Busy");
+                    return;
+                }
+                this.Cursor = Cursors.WaitCursor;
+                myRotator.CurrentDevicePA = (double)XmlSettings.ParkPosition;
+                if (MotionMonitorThread.IsAlive) return;
+                else
+                {
+                    ThreadStart ts = new ThreadStart(MotionMonitor);
+                    MotionMonitorThread = new Thread(ts);
+                    MotionMonitorThread.Start();
+                }
+
+                while (myRotator.IsMoving)
+                {
+                    Application.DoEvents();
+                }
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
         }
 
     }

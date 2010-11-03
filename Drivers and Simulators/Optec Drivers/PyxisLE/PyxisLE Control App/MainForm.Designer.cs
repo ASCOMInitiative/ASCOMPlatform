@@ -50,6 +50,7 @@
             this.deviceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.haltToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.parkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -71,6 +72,7 @@
             this.RelativePanel = new System.Windows.Forms.Panel();
             this.RelMoveLbl = new System.Windows.Forms.Label();
             this.HomePanel = new System.Windows.Forms.Panel();
+            this.Park_BTN = new System.Windows.Forms.Button();
             this.SkyPAPanel = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.Halt_BTN = new System.Windows.Forms.Button();
@@ -96,7 +98,7 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.StatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 494);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 640);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(298, 22);
             this.statusStrip1.TabIndex = 0;
@@ -290,7 +292,8 @@
             // 
             this.deviceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.advancedSetupToolStripMenuItem,
-            this.haltToolStripMenuItem});
+            this.haltToolStripMenuItem,
+            this.parkToolStripMenuItem});
             this.deviceToolStripMenuItem.Name = "deviceToolStripMenuItem";
             this.deviceToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.deviceToolStripMenuItem.Text = "Device";
@@ -308,6 +311,13 @@
             this.haltToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.haltToolStripMenuItem.Text = "Halt";
             this.haltToolStripMenuItem.Click += new System.EventHandler(this.haltToolStripMenuItem_Click);
+            // 
+            // parkToolStripMenuItem
+            // 
+            this.parkToolStripMenuItem.Name = "parkToolStripMenuItem";
+            this.parkToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.parkToolStripMenuItem.Text = "Park";
+            this.parkToolStripMenuItem.Click += new System.EventHandler(this.parkToolStripMenuItem_Click);
             // 
             // viewToolStripMenuItem
             // 
@@ -445,7 +455,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 43F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 43F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(298, 470);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(298, 616);
             this.tableLayoutPanel1.TabIndex = 18;
             // 
             // AbsPanel
@@ -480,7 +490,7 @@
             this.RelativePanel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RelativePanel.Location = new System.Drawing.Point(6, 402);
             this.RelativePanel.Name = "RelativePanel";
-            this.RelativePanel.Size = new System.Drawing.Size(286, 62);
+            this.RelativePanel.Size = new System.Drawing.Size(286, 208);
             this.RelativePanel.TabIndex = 21;
             // 
             // RelMoveLbl
@@ -496,6 +506,7 @@
             // HomePanel
             // 
             this.HomePanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.HomePanel.Controls.Add(this.Park_BTN);
             this.HomePanel.Controls.Add(this.HomeDev_LBL);
             this.HomePanel.Controls.Add(this.HomeBTN);
             this.HomePanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -503,6 +514,16 @@
             this.HomePanel.Name = "HomePanel";
             this.HomePanel.Size = new System.Drawing.Size(286, 37);
             this.HomePanel.TabIndex = 20;
+            // 
+            // Park_BTN
+            // 
+            this.Park_BTN.Location = new System.Drawing.Point(196, 7);
+            this.Park_BTN.Name = "Park_BTN";
+            this.Park_BTN.Size = new System.Drawing.Size(73, 23);
+            this.Park_BTN.TabIndex = 10;
+            this.Park_BTN.Text = "Park";
+            this.Park_BTN.UseVisualStyleBackColor = true;
+            this.Park_BTN.Click += new System.EventHandler(this.Park_BTN_Click);
             // 
             // SkyPAPanel
             // 
@@ -575,14 +596,14 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(298, 516);
+            this.ClientSize = new System.Drawing.Size(298, 662);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MaximumSize = new System.Drawing.Size(314, 700);
-            this.MinimumSize = new System.Drawing.Size(35, 10);
+            this.MinimumSize = new System.Drawing.Size(314, 700);
             this.Name = "MainForm";
             this.Text = "Pyxis LE Control";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
@@ -661,5 +682,7 @@
         private System.Windows.Forms.ToolStripMenuItem showAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ToolStripMenuItem parkToolStripMenuItem;
+        private System.Windows.Forms.Button Park_BTN;
     }
 }

@@ -103,7 +103,7 @@ namespace PyxisLE_Control
 
         private void AboutBox_Load(object sender, EventArgs e)
         {
-            textBoxDescription.Text = "\"These are not the droids you're looking for...\"";
+            textBoxDescription.Text = "Control Program for Optec Pyxis LE Camera Field Rotator.";
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 
-namespace PyxisLE_Control
+namespace ASCOM.PyxisLE_ASCOM
 {
 
     public static class NewVersionChecker
@@ -14,7 +14,7 @@ namespace PyxisLE_Control
         private static bool _NewerVersionAvailable = false;
 
 
-        public enum ProductType { PyxisLE }
+        public enum ProductType { PyxisLE}
 
         public static bool NewerVersionAvailable
         {

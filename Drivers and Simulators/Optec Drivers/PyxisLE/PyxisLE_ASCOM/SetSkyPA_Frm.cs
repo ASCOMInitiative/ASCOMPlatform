@@ -26,7 +26,7 @@ namespace ASCOM.PyxisLE_ASCOM
             TextBox sndr = sender as TextBox;
             try
             {
-                NewPA =  double.Parse(sndr.Text);
+                NewPA = double.Parse(sndr.Text);
                 errorProvider1.Clear();
                 if (NewPA > 360)
                 {
@@ -58,7 +58,7 @@ namespace ASCOM.PyxisLE_ASCOM
                 newValue = double.Parse(this.NewValue_TB.Text);
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
                 this.Close();
-            }     
+            }
         }
 
         private void Cancel_BTN_Click(object sender, EventArgs e)
@@ -69,7 +69,8 @@ namespace ASCOM.PyxisLE_ASCOM
         private void SetSkyPA_Frm_Load(object sender, EventArgs e)
         {
             this.CurrentSkyPA_LBL.Text = oldValue.ToString("000.00°");
-            this.NewValue_TB.Focus();
+            this.Degree_TB.Focus();
+            this.Degree_TB.SelectAll();
         }
 
         public double OldPAValue
@@ -89,6 +90,46 @@ namespace ASCOM.PyxisLE_ASCOM
                 OK_BTN_Click(OK_BTN, EventArgs.Empty);
                 e.Handled = true;
             }
+        }
+
+        private void Degree_TB_TextChanged(object sender, EventArgs e)
+        {
+            double deg = 0;
+            double min = 0;
+            double sec = 0;
+
+            try
+            {
+                deg = (Degree_TB.TextLength > 0) ? double.Parse(Degree_TB.Text) : 0;
+                min = (Min_TB.TextLength > 0) ? double.Parse(Min_TB.Text) : 0;
+                sec = (Sec_TB.TextLength > 0) ? double.Parse(Sec_TB.Text) : 0;
+
+                if (deg > 359.9999)
+                    Degree_TB.Text = "359";
+                if (min > 59.999) Min_TB.Text = "59";
+                if (sec > 59.999) Sec_TB.Text = "59";
+
+                double result = deg + (min / 60) + (sec / (60 * 60));
+                NewValue_TB.Text = result.ToString("000.00");
+            }
+            catch
+            {
+                MessageBox.Show("Invalid value entered");
+            }
+        }
+
+        private void Degree_TB_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (System.Char.IsLetter(e.KeyChar) || System.Char.IsSymbol(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void Degree_TB_Enter(object sender, EventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            tb.SelectAll();
         }
     }
 }

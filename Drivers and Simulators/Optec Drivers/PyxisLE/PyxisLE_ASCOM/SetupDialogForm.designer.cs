@@ -40,6 +40,7 @@ namespace ASCOM.PyxisLE_ASCOM
             this.SetSkyPA_Btn = new System.Windows.Forms.Button();
             this.HomeBTN = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.Park_BTN = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.Relative_NUD = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
@@ -51,11 +52,10 @@ namespace ASCOM.PyxisLE_ASCOM
             this.AbsoluteMove_BTN = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.picASCOM = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.deviceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.parkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,13 +63,16 @@ namespace ASCOM.PyxisLE_ASCOM
             this.StatusCheckTimer = new System.Windows.Forms.Timer(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.picASCOM = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.VersionCheckerBGWorker = new System.ComponentModel.BackgroundWorker();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Relative_NUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // cmdOK
@@ -162,7 +165,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             // HomeBTN
             // 
-            this.HomeBTN.Location = new System.Drawing.Point(101, 16);
+            this.HomeBTN.Location = new System.Drawing.Point(100, 22);
             this.HomeBTN.Name = "HomeBTN";
             this.HomeBTN.Size = new System.Drawing.Size(47, 23);
             this.HomeBTN.TabIndex = 4;
@@ -172,6 +175,7 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.Park_BTN);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.Relative_NUD);
             this.groupBox1.Controls.Add(this.HomeBTN);
@@ -189,6 +193,16 @@ namespace ASCOM.PyxisLE_ASCOM
             this.groupBox1.TabIndex = 12;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Motion Controls";
+            // 
+            // Park_BTN
+            // 
+            this.Park_BTN.Location = new System.Drawing.Point(157, 22);
+            this.Park_BTN.Name = "Park_BTN";
+            this.Park_BTN.Size = new System.Drawing.Size(47, 23);
+            this.Park_BTN.TabIndex = 28;
+            this.Park_BTN.Text = "Park";
+            this.Park_BTN.UseVisualStyleBackColor = true;
+            this.Park_BTN.Click += new System.EventHandler(this.Park_BTN_Click);
             // 
             // label4
             // 
@@ -282,6 +296,7 @@ namespace ASCOM.PyxisLE_ASCOM
             this.AbsoluteMove_TB.TabIndex = 18;
             this.AbsoluteMove_TB.Text = "0";
             this.AbsoluteMove_TB.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.AbsoluteMove_TB.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.AbsoluteMove_TB_KeyPress);
             this.AbsoluteMove_TB.Validating += new System.ComponentModel.CancelEventHandler(this.AbsoluteMove_TB_Validating);
             // 
             // AbsoluteMove_BTN
@@ -307,30 +322,6 @@ namespace ASCOM.PyxisLE_ASCOM
             // 
             this.errorProvider1.ContainerControl = this;
             // 
-            // picASCOM
-            // 
-            this.picASCOM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picASCOM.Image = global::ASCOM.PyxisLE_ASCOM.Properties.Resources.ASCOM;
-            this.picASCOM.Location = new System.Drawing.Point(193, 31);
-            this.picASCOM.Name = "picASCOM";
-            this.picASCOM.Size = new System.Drawing.Size(48, 56);
-            this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.picASCOM.TabIndex = 3;
-            this.picASCOM.TabStop = false;
-            this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
-            this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::ASCOM.PyxisLE_ASCOM.Properties.Resources.Optec_Logo_medium_png;
-            this.pictureBox1.Location = new System.Drawing.Point(8, 26);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(139, 56);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 5;
-            this.pictureBox1.TabStop = false;
-            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -345,7 +336,8 @@ namespace ASCOM.PyxisLE_ASCOM
             // deviceToolStripMenuItem
             // 
             this.deviceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.advancedSettingsToolStripMenuItem});
+            this.advancedSettingsToolStripMenuItem,
+            this.parkToolStripMenuItem});
             this.deviceToolStripMenuItem.Name = "deviceToolStripMenuItem";
             this.deviceToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.deviceToolStripMenuItem.Text = "Device";
@@ -356,6 +348,13 @@ namespace ASCOM.PyxisLE_ASCOM
             this.advancedSettingsToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.advancedSettingsToolStripMenuItem.Text = "Advanced Settings";
             this.advancedSettingsToolStripMenuItem.Click += new System.EventHandler(this.advancedSettingsToolStripMenuItem_Click);
+            // 
+            // parkToolStripMenuItem
+            // 
+            this.parkToolStripMenuItem.Name = "parkToolStripMenuItem";
+            this.parkToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.parkToolStripMenuItem.Text = "Park";
+            this.parkToolStripMenuItem.Click += new System.EventHandler(this.parkToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -379,6 +378,7 @@ namespace ASCOM.PyxisLE_ASCOM
             this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
             this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.checkForUpdatesToolStripMenuItem.Text = "Check for Updates";
+            this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdatesToolStripMenuItem_Click);
             // 
             // documentationToolStripMenuItem
             // 
@@ -409,6 +409,34 @@ namespace ASCOM.PyxisLE_ASCOM
             this.StatusLabel.Size = new System.Drawing.Size(81, 17);
             this.StatusLabel.Text = "Rotator Status";
             // 
+            // picASCOM
+            // 
+            this.picASCOM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.picASCOM.Image = global::ASCOM.PyxisLE_ASCOM.Properties.Resources.ASCOM;
+            this.picASCOM.Location = new System.Drawing.Point(193, 31);
+            this.picASCOM.Name = "picASCOM";
+            this.picASCOM.Size = new System.Drawing.Size(48, 56);
+            this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.picASCOM.TabIndex = 3;
+            this.picASCOM.TabStop = false;
+            this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
+            this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::ASCOM.PyxisLE_ASCOM.Properties.Resources.Optec_Logo_medium_png;
+            this.pictureBox1.Location = new System.Drawing.Point(8, 26);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(139, 56);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 5;
+            this.pictureBox1.TabStop = false;
+            // 
+            // VersionCheckerBGWorker
+            // 
+            this.VersionCheckerBGWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.VersionCheckerBGWorker_DoWork);
+            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -438,16 +466,17 @@ namespace ASCOM.PyxisLE_ASCOM
             this.Text = "PyxisLE_ASCOM Setup";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SetupDialogForm_FormClosing);
             this.Load += new System.EventHandler(this.SetupDialogForm_Load);
+            this.Shown += new System.EventHandler(this.SetupDialogForm_Shown);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Relative_NUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -488,5 +517,8 @@ namespace ASCOM.PyxisLE_ASCOM
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel StatusLabel;
         private System.Windows.Forms.Label label6;
+        private System.ComponentModel.BackgroundWorker VersionCheckerBGWorker;
+        private System.Windows.Forms.Button Park_BTN;
+        private System.Windows.Forms.ToolStripMenuItem parkToolStripMenuItem;
     }
 }

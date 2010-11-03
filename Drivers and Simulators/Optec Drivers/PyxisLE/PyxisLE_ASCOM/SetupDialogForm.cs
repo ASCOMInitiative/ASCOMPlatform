@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Collections;
 using System.Reflection;
+using Optec;
 
 namespace ASCOM.PyxisLE_ASCOM
 {
@@ -33,6 +34,32 @@ namespace ASCOM.PyxisLE_ASCOM
             myProfile.DeviceType = "Rotator";
             ThreadStart ts = new ThreadStart(MotionMonitor);
             MotionMonitorThread = new Thread(ts);
+        }
+
+        private void SetupDialogForm_Load(object sender, EventArgs e)
+        {
+            EventLogger.LoggingLevel = XmlSettings.LoggingLevel;
+
+            ControlList.Add(CurrentPA_LBL);
+            ControlList.Add(label2);
+            ControlList.Add(label3);
+            ControlList.Add(label4);
+            ControlList.Add(label5);
+            ControlList.Add(textBox2);
+            ControlList.Add(SetSkyPA_Btn);
+            ControlList.Add(HomeBTN);
+            ControlList.Add(RelativeForward_BTN);
+            ControlList.Add(RelativeReverse_BTN);
+            ControlList.Add(Relative_NUD);
+            ControlList.Add(AbsoluteMove_TB);
+            ControlList.Add(label3);
+            ControlList.Add(AbsoluteMove_BTN);
+            ControlList.Add(Park_BTN);
+
+            UpdateDeviceList();
+
+
+
         }
 
         void RotatorManager_DeviceListChanged(object sender, EventArgs e)
@@ -139,27 +166,7 @@ namespace ASCOM.PyxisLE_ASCOM
             }
         }
 
-        private void SetupDialogForm_Load(object sender, EventArgs e)
-        {
-            ControlList.Add(CurrentPA_LBL);
-            ControlList.Add(label2);
-            ControlList.Add(label3);
-            ControlList.Add(label4);
-            ControlList.Add(label5);
-            ControlList.Add(textBox2);
-            ControlList.Add(SetSkyPA_Btn);
-            ControlList.Add(HomeBTN);
-            ControlList.Add(RelativeForward_BTN);
-            ControlList.Add(RelativeReverse_BTN);
-            ControlList.Add(Relative_NUD);
-            ControlList.Add(AbsoluteMove_TB);
-            ControlList.Add(label3);
-            ControlList.Add(AbsoluteMove_BTN);
-            UpdateDeviceList();
-
-
-            
-        }
+        
 
         private void EnableDisableControls(bool enable)
         {
@@ -399,15 +406,23 @@ namespace ASCOM.PyxisLE_ASCOM
 
         private void documentationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string asmpath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            int i = asmpath.IndexOf("PyxisLE");
-            asmpath = asmpath.Substring(0, i + 5);
-            string fname = "Pyxis LE Help.chm";
-            asmpath += "\\Documentation\\" + fname;
-            //MessageBox.Show(asmpath);
-            Process p = new Process();
-            p.StartInfo.FileName = asmpath;
-            p.Start();
+            try
+            {
+                string asmpath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                int i = asmpath.IndexOf("PyxisLE");
+                asmpath = asmpath.Substring(0, i + 7);
+                string fname = "Pyxis LE Help.chm";
+                asmpath += "\\Documentation\\" + fname;
+                //MessageBox.Show(asmpath);
+                Process p = new Process();
+                p.StartInfo.FileName = asmpath;
+                p.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Attention");
+                throw;
+            }
         }
 
         private void StatusCheckTimer_Tick(object sender, EventArgs e)
@@ -463,6 +478,139 @@ namespace ASCOM.PyxisLE_ASCOM
             AboutBox1 abb = new AboutBox1();
             abb.ShowDialog();
             abb.Dispose();
+        }
+
+        private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
+                if (VersionCheckerBGWorker.IsBusy)
+                {
+                    string msg = "The Version Checker is currently busy. Please try again in a moment.";
+                    MessageBox.Show(msg);
+                }
+                else
+                {
+                    if (NewVersionChecker.CheckLatestVerisonNumber(NewVersionChecker.ProductType.PyxisLE))
+                    {
+                        //Found a VersionNumber, now check if it's newer
+                        Assembly asm = Assembly.GetExecutingAssembly();
+                        AssemblyName asmName = asm.GetName();
+                        NewVersionChecker.CompareToLatestVersion(asmName.Version);
+                        if (NewVersionChecker.NewerVersionAvailable)
+                        {
+                            NewVersionFrm nvf = new NewVersionFrm(asmName.Version.ToString(),
+                                NewVersionChecker.NewerVersionNumber, NewVersionChecker.NewerVersionURL);
+                            nvf.ShowDialog();
+                        }
+                        else MessageBox.Show("Congratulations! You have the most recent version of this program!\n" +
+                            "This version number is " + asmName.Version.ToString(), "No Update Needed! - V" +
+                            asmName.Version.ToString());
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Unable to connect to the server www.optecinc.com",
+                    "Version Information Unavailable");
+            }
+            finally { this.Cursor = Cursors.Default; }
+        }
+
+        private void VersionCheckerBGWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                //Check For A newer verison of the driver
+                EventLogger.LogMessage("Checking for application updates", TraceLevel.Info);
+                if (NewVersionChecker.CheckLatestVerisonNumber(NewVersionChecker.ProductType.PyxisLE))
+                {
+                    //Found a VersionNumber, now check if it's newer
+                    Assembly asm = Assembly.GetExecutingAssembly();
+                    AssemblyName asmName = asm.GetName();
+                    NewVersionChecker.CompareToLatestVersion(asmName.Version);
+                    if (NewVersionChecker.NewerVersionAvailable)
+                    {
+                        EventLogger.LogMessage("This application is NOT the most recent version available", TraceLevel.Warning);
+                        NewVersionFrm nvf = new NewVersionFrm(asmName.Version.ToString(),
+                            NewVersionChecker.NewerVersionNumber, NewVersionChecker.NewerVersionURL);
+                        nvf.ShowDialog();
+                    }
+                    else
+                    {
+                        EventLogger.LogMessage("This application is the most recent version available", TraceLevel.Info);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+            } // Just ignore all errors. They mean the computer isn't connected to internet.
+        }
+
+        private void Park_BTN_Click(object sender, EventArgs e)
+        {
+            ParkRotator();
+        }
+
+        private void parkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ParkRotator();
+        }
+
+        private void ParkRotator()
+        {
+            try
+            {
+                if (myRotator == null)
+                {
+                    return;
+                }
+                else if (myRotator.IsMoving || myRotator.IsHoming)
+                {
+                    MessageBox.Show("Please wait until device has finished its current operation.", "Device Busy");
+                    return;
+                }
+                this.Cursor = Cursors.WaitCursor;
+                myRotator.CurrentDevicePA = (double)XmlSettings.ParkPosition;
+                while (myRotator.IsMoving)
+                {
+                    Application.DoEvents();
+                }
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private void SetupDialogForm_Shown(object sender, EventArgs e)
+        {
+            // Check for updates now
+            try
+            {
+                if (XmlSettings.CheckForUpdates)
+                {
+                    VersionCheckerBGWorker.RunWorkerAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void AbsoluteMove_TB_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+                AbsoluteMove_BTN_Click(this.AbsoluteMove_BTN, EventArgs.Empty);
         }
     }
 }

@@ -26,9 +26,9 @@ using System.Text;
 using System.Runtime.InteropServices;
 
 using ASCOM;
-using ASCOM.Helper;
-using ASCOM.Helper2;
+using ASCOM.Utilities;
 using ASCOM.Interface;
+using Optec;
 
 namespace ASCOM.Pyxis
 {
@@ -49,13 +49,15 @@ namespace ASCOM.Pyxis
         private static string s_csDriverID = "ASCOM.Pyxis.Rotator";
         // TODO Change the descriptive string for your driver then remove this line
         private static string s_csDriverDescription = "Pyxis Rotator";
+        
 
         //
         // Constructor - Must be public for COM registration!
         //
         public Rotator()
         {
-            // TODO Implement your additional construction here
+            // Setup the Event Logger (User should manually edit XML file to change level.)
+            EventLogger.LoggingLevel = XMLSettings.LoggerTraceLevel;
         }
 
         #region ASCOM Registration
@@ -65,8 +67,8 @@ namespace ASCOM.Pyxis
         //
         private static void RegUnregASCOM(bool bRegister)
         {
-            Helper.Profile P = new Helper.Profile();
-            P.DeviceTypeV = "Rotator";					//  Requires Helper 5.0.3 or later
+            Utilities.Profile P = new Utilities.Profile();
+            P.DeviceType = "Rotator";					//  Requires Helper 5.0.3 or later
             if (bRegister)
                 P.Register(s_csDriverID, s_csDriverDescription);
             else
@@ -100,52 +102,155 @@ namespace ASCOM.Pyxis
 
         public bool CanReverse
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanReverse", false); }
+            get { return true; }
         }
 
         public bool Connected
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Connected", false); }
-            set { throw new PropertyNotImplementedException("Connected", true); }
+            get 
+            { 
+                throw new PropertyNotImplementedException("Connected", false); 
+            }
+            set 
+            {
+                if (value)
+                {
+                    try
+                    {
+                        if (!XMLSettings.PositionIsValid)
+                        {
+                            throw new ApplicationException("The Pyxis must be homed before you can connect"); 
+                        }
+                        OptecPyxis.Connect();
+
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        throw new ASCOM.NotConnectedException("The selected COM Port is already open or inaccessable. " + 
+                            "Verify that another program is not currently using it.");
+                    }
+                }
+                else
+                {
+                    OptecPyxis.Disconnect();
+                }
+            }
         }
 
         public void Halt()
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("Halt");
+            // This is a trick so that we can tell what the device type of the Pyxis device in
+            // the derotation program.
+            string x = "";
+            if (XMLSettings.DeviceType == OptecPyxis.DeviceTypes.TwoInch) x = "2";
+            else x = "3";
+
+            throw new MethodNotImplementedException("Halt (" + x + ")");
         }
 
         public bool IsMoving
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("IsMoving", false); }
+            get 
+            {
+                try
+                {
+                    if (OptecPyxis.CurrentDeviceState == OptecPyxis.DeviceStates.InMotion)
+                        return true;
+                    else return false;
+                }
+                catch(Exception ex)
+                {
+                    EventLogger.LogMessage(ex);
+                    throw;
+                }
+
+            }
         }
 
         public void Move(float Position)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("Move");
+            try
+            {
+                verifyConnected();
+                
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                throw;
+            }
         }
 
         public void MoveAbsolute(float Position)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("MoveAbsolute");
+            try
+            {
+                // Check that the new position is in the range of possible values
+                if (Position < 0 || Position >= 360)
+                {
+                    throw new ASCOM.InvalidValueException("MoveAbsolute", Position.ToString(), "0 through 359.99");
+                }
+                verifyConnected();
+                OptecPyxis.CurrentAdjustedPA = (double)Position;
+                while (OptecPyxis.IsMoving) { System.Windows.Forms.Application.DoEvents(); }
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                throw;
+            }
         }
 
         public float Position
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Position", false); }
+            get
+            {
+                try
+                {
+                    verifyConnected();
+                    return (float)OptecPyxis.CurrentAdjustedPA;
+                }
+                catch (Exception ex)
+                {
+                    EventLogger.LogMessage(ex);
+                    throw;
+                }
+            }
         }
 
         public bool Reverse
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Reverse", false); }
-            set { throw new PropertyNotImplementedException("Reverse", true); }
+            get
+            {
+                try
+                {
+                    verifyConnected();
+                    if (OptecPyxis.getDirectionFlag() == OptecPyxis.CW) return true;
+                    else return false;
+                }
+                catch (Exception ex)
+                {
+                    EventLogger.LogMessage(ex);
+                    throw;
+                }
+            }
+            set
+            {
+                try
+                {
+                    verifyConnected();
+                    if (value) OptecPyxis.setDefaultDirection(OptecPyxis.CW);
+                    else OptecPyxis.setDefaultDirection(OptecPyxis.CCW);
+                }
+                catch (Exception ex)
+                {
+                    EventLogger.LogMessage(ex);
+                    throw;
+                }
+            }
         }
 
         public void SetupDialog()
@@ -156,14 +261,36 @@ namespace ASCOM.Pyxis
 
         public float StepSize
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("StepSize", false); }
+            get 
+            {
+                return 1.0F;    // The pyxis rotators can only move in increments of 1 degree.
+            }
         }
 
         public float TargetPosition
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("TargetPosition", false); }
+            get
+            {
+                try
+                {
+                    verifyConnected();
+                    return (float)OptecPyxis.AdjustedTargetPosition;
+                }
+                catch (Exception ex)
+                {
+                    EventLogger.LogMessage(ex);
+                    throw;
+                }
+            }
+        }
+
+        public void verifyConnected()
+        {
+            if (OptecPyxis.CurrentDeviceState != OptecPyxis.DeviceStates.Connected)
+            {
+                throw new ASCOM.NotConnectedException("The device must be connected for this command to be processed.");
+            }
         }
 
         #endregion
