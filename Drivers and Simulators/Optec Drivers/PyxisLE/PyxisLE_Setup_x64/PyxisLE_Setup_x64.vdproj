@@ -123,6 +123,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C0C6544131CEBCACEBB68D82892EAC29"
+        "OwnerKey" = "8:_6CCBA2DFE86E37494C37CB6D4C58B9C7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_C0E22FFEA51D4A8499862452C4544452"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -178,12 +184,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_06B96B3439CB4DA2B52C06668FDCE4F4"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_B427FDCDE3854E2CA8D78761784293F1"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -227,6 +227,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_8778EB9599A90C97080A11A9CA1450A3"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_06B96B3439CB4DA2B52C06668FDCE4F4"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -509,6 +515,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C0C6544131CEBCACEBB68D82892EAC29"
+            {
+            "SourcePath" = "8:ASCOM.Utilities.tlb"
+            "TargetName" = "8:ASCOM.Utilities.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_C2A36562BE7D429180062A6F324DAAB9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C0E22FFEA51D4A8499862452C4544452"
             {
             "SourcePath" = "8:..\\PyxisLE API\\Resources\\Rotator.ico"
@@ -711,15 +737,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Optec Pyxis LE Programs (x64)"
-        "ProductCode" = "8:{E1504E6C-75E9-4AA0-B600-CFBB6D06BA5C}"
-        "PackageCode" = "8:{96EC1AF9-2DCC-4744-8D8D-1213E18405EF}"
+        "ProductCode" = "8:{22B49CED-E13C-4281-9912-8FDE4CB51360}"
+        "PackageCode" = "8:{D81A5E7E-BD01-4B07-9C3C-B006C74B7C13}"
         "UpgradeCode" = "8:{48E51D1A-9601-4DE2-932B-32BD5815EF51}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.5"
+        "ProductVersion" = "8:1.0.6"
         "Manufacturer" = "8:Optec Inc."
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

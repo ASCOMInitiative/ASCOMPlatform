@@ -171,14 +171,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C861CE124D94412B908DE3FC555C8E32"
+        "MsmKey" = "8:_FB9F6AEA0997090ECBA51B596845DE17"
+        "OwnerKey" = "8:_F8696657F86A501CC84327B09609CA14"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_49116EAF24D1402BBEB4C670D675E5FE"
+        "OwnerKey" = "8:_C861CE124D94412B908DE3FC555C8E32"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -227,6 +227,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_E743663C028EF9A8321F04CA5EF30619"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_49116EAF24D1402BBEB4C670D675E5FE"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -648,6 +654,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FB9F6AEA0997090ECBA51B596845DE17"
+            {
+            "SourcePath" = "8:ASCOM.Utilities.tlb"
+            "TargetName" = "8:ASCOM.Utilities.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_FDD1E0F5F4F647B8A6C48AD8E8CC0225"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -770,15 +796,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Optec Pyxis LE Programs (x86)"
-        "ProductCode" = "8:{EE5EF93E-585F-454C-8766-BACA8DC8E401}"
-        "PackageCode" = "8:{1D122E26-9F38-4F3D-A589-43B96F4B175F}"
+        "ProductCode" = "8:{95828218-9FCD-44C0-92CF-6BB8D8B008FD}"
+        "PackageCode" = "8:{D24E24D3-D901-42D7-87FA-ED0828DB09BE}"
         "UpgradeCode" = "8:{76DEDA9D-2B4C-4821-AF37-968A7E0C7FA1}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.5"
+        "ProductVersion" = "8:1.0.6"
         "Manufacturer" = "8:Optec Inc."
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
