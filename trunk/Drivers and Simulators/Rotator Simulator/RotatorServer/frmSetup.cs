@@ -75,20 +75,11 @@ namespace ASCOM.Simulator
 
 		private void txtRotationRate_TextChanged(object sender, EventArgs e)
 		{
-			if (txtRotationRate.Text != "")
-			{
-				try
-				{
-					m_fRotationRate = Convert.ToSingle(txtRotationRate.Text);
-				}
-				catch (Exception)
-				{
-					m_fRotationRate = 0;
-					txtRotationRate.Text = "";
-				}
-			}
-			else
+			if (! float.TryParse(txtRotationRate.Text, out m_fRotationRate)
+            {
 				m_fRotationRate = 0;
+				txtRotationRate.Text = "";
+            }
 			UpdateUI();
 		}
 

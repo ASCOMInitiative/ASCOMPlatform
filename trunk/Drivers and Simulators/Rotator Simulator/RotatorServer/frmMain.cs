@@ -61,16 +61,10 @@ namespace ASCOM.Simulator
 		private void cmdMove_Click(object sender, EventArgs e)
 		{
 			float newPA;
-			try
-			{
-				newPA = Convert.ToSingle(this.txtPosition.Text);
-			}
-			catch (Exception)
-			{
-				this.txtPosition.Text = "";
-				return;
-			}
-			RotatorHardware.MoveAbsolute(newPA);
+            if (float.TryParse(this.txtPosition.Text, out newPA))
+            {
+			    RotatorHardware.MoveAbsolute(newPA);
+            }
 		}
 
 		private void cmdHalt_Click(object sender, EventArgs e)

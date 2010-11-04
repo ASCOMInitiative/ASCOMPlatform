@@ -11,7 +11,7 @@ namespace ASCOM.Simulator
 	//
 	// This implements the simulated hardware layer.
 	//
-	public class RotatorHardware
+	public static class RotatorHardware
 	{
         /// <summary>
         /// Name of the Driver
