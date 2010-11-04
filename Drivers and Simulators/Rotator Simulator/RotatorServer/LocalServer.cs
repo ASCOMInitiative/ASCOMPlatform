@@ -29,7 +29,7 @@ using Helper = ASCOM.Utilities;
 
 namespace ASCOM.Simulator
 {
-	public class RotatorSimulator
+	public static class RotatorSimulator
 	{
 
 		#region Access to kernel32.dll, user32.dll, and ole32.dll functions
