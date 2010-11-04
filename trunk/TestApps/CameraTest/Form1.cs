@@ -105,16 +105,16 @@ namespace CameraTest
         private void ShowParameters()
         {
             if (oCamera == null) return;
-            lblSizeX.Text = oCamera.CameraXSize.ToString(CultureInfo.InvariantCulture);
-            lblSizeY.Text = oCamera.CameraYSize.ToString(CultureInfo.InvariantCulture);
-            lblPixelSizeX.Text = oCamera.PixelSizeX.ToString("F2", CultureInfo.InvariantCulture);
-            lblPixelSizeY.Text = oCamera.PixelSizeY.ToString("F2", CultureInfo.InvariantCulture);
-            lblMaxBinX.Text = oCamera.MaxBinX.ToString(CultureInfo.InvariantCulture);
-            lblMaxBinY.Text = oCamera.MaxBinY.ToString(CultureInfo.InvariantCulture);
+            lblSizeX.Text = oCamera.CameraXSize.ToString(CultureInfo.CurrentCulture);
+            lblSizeY.Text = oCamera.CameraYSize.ToString(CultureInfo.CurrentCulture);
+            lblPixelSizeX.Text = oCamera.PixelSizeX.ToString("F2", CultureInfo.CurrentCulture);
+            lblPixelSizeY.Text = oCamera.PixelSizeY.ToString("F2", CultureInfo.CurrentCulture);
+            lblMaxBinX.Text = oCamera.MaxBinX.ToString(CultureInfo.CurrentCulture);
+            lblMaxBinY.Text = oCamera.MaxBinY.ToString(CultureInfo.CurrentCulture);
 
             try
             {
-                lblElectronsPerADU.Text = oCamera.ElectronsPerADU.ToString(CultureInfo.InvariantCulture);
+                lblElectronsPerADU.Text = oCamera.ElectronsPerADU.ToString(CultureInfo.CurrentCulture);
             }
             catch
             {
@@ -122,7 +122,7 @@ namespace CameraTest
             }
             try
             {
-                lblFullWellCapacity.Text = oCamera.FullWellCapacity.ToString(CultureInfo.InvariantCulture);
+                lblFullWellCapacity.Text = oCamera.FullWellCapacity.ToString(CultureInfo.CurrentCulture);
             }
             catch
             {
@@ -131,7 +131,7 @@ namespace CameraTest
 
             try
             {
-                lblMaxADU.Text = oCamera.MaxADU.ToString(CultureInfo.InvariantCulture);
+                lblMaxADU.Text = oCamera.MaxADU.ToString(CultureInfo.CurrentCulture);
             }
             catch
             {
@@ -176,8 +176,8 @@ namespace CameraTest
                 groupBoxV2.Visible = true;
                 labelSensorName.Text = oCamera.SensorName;
                 labelSensorType.Text = (oCamera.SensorType).ToString();
-                labelBayerOffsetX.Text = oCamera.BayerOffsetX.ToString(CultureInfo.InvariantCulture);
-                labelBayerOffsetY.Text = Convert.ToString(oCamera.BayerOffsetY, CultureInfo.InvariantCulture);
+                labelBayerOffsetX.Text = oCamera.BayerOffsetX.ToString(CultureInfo.CurrentCulture);
+                labelBayerOffsetY.Text = Convert.ToString(oCamera.BayerOffsetY, CultureInfo.CurrentCulture);
                 labelDriverVersion.Text = oCamera.DriverVersion;
                 labelDriverName.Text = oCamera.Name;
                 //DriverInfo - long
@@ -202,7 +202,7 @@ namespace CameraTest
         {
             try
             {
-                lblCCDTemp.Text = oCamera.CCDTemperature.ToString(CultureInfo.InvariantCulture);
+                lblCCDTemp.Text = oCamera.CCDTemperature.ToString(CultureInfo.CurrentCulture);
             }
             catch
             {
@@ -210,7 +210,7 @@ namespace CameraTest
             }
             try
             {
-                lblHeatSinkTemp.Text = oCamera.HeatSinkTemperature.ToString(CultureInfo.InvariantCulture);
+                lblHeatSinkTemp.Text = oCamera.HeatSinkTemperature.ToString(CultureInfo.CurrentCulture);
             }
             catch
             {
@@ -218,7 +218,7 @@ namespace CameraTest
             }
             try
             {
-                lblCoolerPower.Text = oCamera.CoolerPower.ToString(CultureInfo.InvariantCulture);
+                lblCoolerPower.Text = oCamera.CoolerPower.ToString(CultureInfo.CurrentCulture);
             }
             catch
             {
@@ -612,6 +612,7 @@ namespace CameraTest
                             // cast the array to int
                             if (oCamera.SensorType == ASCOM.DeviceInterface.SensorType.Color)
                             {
+                                // generate a 3 plane colour image array
                                 iarr = new int[oArr.GetLength(0), oArr.GetLength(1), 3];
                                 for (int i = 0; i < iarr.GetLength(0); i++)
                                 {
@@ -625,6 +626,7 @@ namespace CameraTest
                             }
                             else
                             {
+                                // generate a 2 plane monochrome or bayer image array
                                 iarr = new int[oArr.GetLength(0), oArr.GetLength(1)];
                                 for (int i = 0; i < iarr.GetLength(0); i++)
                                 {
@@ -690,6 +692,7 @@ namespace CameraTest
             {
                 if (iarr.Rank == 3)
                 {
+                    // 3 plane colour image
                     fixed (int* pArr = (int[,,])iarr)
                     {
                         int* pA = (int*)pArr;
@@ -710,6 +713,7 @@ namespace CameraTest
                 }
                 else
                 {
+                    // 1 plane monochrome or bayered image
                     fixed (int* pArr = (int[,])iarr)
                     {
                         int* pA = (int*)pArr;
@@ -754,7 +758,7 @@ namespace CameraTest
                         fixed (int* pArr = (int[,])iarr)
                         {
                             int* pA = pArr;
-                            for (int i = 0; i < iarr.GetLength(1) * iarr.GetLength(0); i++)
+                            for (int i = 0; i < iarr.Length; i++)
                             {
                                 int v = *pA++;
                                 if (v < 0) v = 65536 + v;
@@ -1035,26 +1039,26 @@ namespace CameraTest
             // put the other data in the HDU
             imageHdu.AddValue("BZERO", bZero, "");
             imageHdu.AddValue("BSCALE", bScale, "");
-            imageHdu.AddValue("DATAMIN", 0.0, "");
-            imageHdu.AddValue("DATAMAX", oCamera.MaxADU, "");           // pixel values above this level are considered saturated.
+            imageHdu.AddValue("DATAMIN", 0.0, "");      // should this reflect the actual data values
+            imageHdu.AddValue("DATAMAX", oCamera.MaxADU, "pixel values above this level are considered saturated.");
             imageHdu.AddValue("INSTRUME", oCamera.Description, "");
-            imageHdu.AddValue("EXPTIME", oCamera.LastExposureDuration, "");     // duration of exposure in seconds.
+            imageHdu.AddValue("EXPTIME", oCamera.LastExposureDuration, "duration of exposure in seconds.");
             imageHdu.AddValue("DATE-OBS", oCamera.LastExposureStartTime, "");
-            imageHdu.AddValue("XPIXSZ", oCamera.PixelSizeX * oCamera.BinX, ""); // physical X dimension of the sensor's pixels in microns (present only if the information is provided by the camera driver). Includes binning.
-            imageHdu.AddValue("YPIXSZ", oCamera.PixelSizeY * oCamera.BinY, ""); // physical Y dimension of the sensor's pixels in microns (present only if the information is provided by the camera driver). Includes binning.
+            imageHdu.AddValue("XPIXSZ", oCamera.PixelSizeX * oCamera.BinX, "physical X dimension of the sensor's pixels in microns"); //  (present only if the information is provided by the camera driver). Includes binning.
+            imageHdu.AddValue("YPIXSZ", oCamera.PixelSizeY * oCamera.BinY, "physical Y dimension of the sensor's pixels in microns"); //  (present only if the information is provided by the camera driver). Includes binning.
             imageHdu.AddValue("XBINNING", oCamera.BinX, "");
             imageHdu.AddValue("YBINNING", oCamera.BinY, "");
-            imageHdu.AddValue("XORGSUBF", oCamera.StartX, "");        // subframe origin on X axis in binned pixels
-            imageHdu.AddValue("YORGSUBF", oCamera.StartY, "");        // subframe origin on Y axis in binned pixels
+            imageHdu.AddValue("XORGSUBF", oCamera.StartX, "subframe origin on X axis in binned pixels");
+            imageHdu.AddValue("YORGSUBF", oCamera.StartY, "subframe origin on Y axis in binned pixels");
             //imageHdu.AddValue("XPOSSUBF", oCamera.StartX, "");
             //imageHdu.AddValue("YPOSSUBF", oCamera.StartY, "");
             imageHdu.AddValue("CBLACK", (double)imageControl.Minimum, "");
             imageHdu.AddValue("CWHITE", (double)imageControl.Maximum, "");
-            imageHdu.AddValue("SWCREATE", "ASCOM Camera Test", "");     // string indicating the software used to create the file
+            imageHdu.AddValue("SWCREATE", "ASCOM Camera Test", "string indicating the software used to create the file");
             // extensions as specified by SBIG
             try
             {
-                imageHdu.AddValue("CCD_TEMP", oCamera.CCDTemperature, "");  // actual measured sensor temperature at the start of exposure in degrees C. Absent if temperature is not available.
+                imageHdu.AddValue("CCD_TEMP", oCamera.CCDTemperature, "sensor temperature in degrees C");  // TODO sate this at the start of exposure . Absent if temperature is not available.
             }
             finally{}
             if (oCamera.CanSetCCDTemperature)
@@ -1095,15 +1099,15 @@ namespace CameraTest
             }
         }
 
-        private enum SensorType
-        {
-            Monochrome,
-            Color,
-            RGGB,
-            CMYG,
-            CMYG2,
-            LRGB
-        }
+        //private enum SensorType
+        //{
+        //    Monochrome,
+        //    Color,
+        //    RGGB,
+        //    CMYG,
+        //    CMYG2,
+        //    LRGB
+        //}
 
 
 
