@@ -50,6 +50,7 @@ welcome.dfm.miaf
 wizard.dfm
 wizard.dfm.miaf
 $
+icon.ico
 Index.htm
 license.rtf
 moon.bmp
@@ -57,14 +58,6 @@ readme.rtf
 swoosh.avi
 UninstallAscom.exe
 $
-
-
-
-
-
-
-
-
 
 
 
@@ -503,7 +496,7 @@ Ascom Platform 6
 Ascom Platform 6 Installation
 ASCOM Initiative
 http://ascom-standards.org/
-{EE1EBA7A-F203-406C-8286-578C9683E291}
+{62457C6C-3F4E-41BC-A93E-4EE9A7AFE554}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk/
@@ -532,29 +525,18 @@ FALSE
 FALSE
 FALSE
 
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\checkmsi30.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\setupmsi30.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\checknet20.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\setupnet20.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\updates.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\checkmsi31.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\setupmsi31.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\checknet2sp2.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\setupnet2sp2.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\checkmsxml60.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\setupmsxml60.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\checknet30.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\setupnet30.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\checknet3sp2.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\setupnet3sp2.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\checknet351.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\setupnet351.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\checknet2sp1.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\setupnet2sp1.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\checknet3sp1.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\setupnet3sp1.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\checknet35x.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 9 R2\runtimes\setupnet35x.mia
+checkmsi31.mia
+setupmsi31.mia
+checknet2sp1.mia
+setupnet2sp1.mia
+checkmsxml60.mia
+setupmsxml60.mia
+checknet30.mia
+setupnet30.mia
+checknet3sp1.mia
+setupnet3sp1.mia
+checknet35x.mia
+setupnet35x.mia
 $
 FALSE
 

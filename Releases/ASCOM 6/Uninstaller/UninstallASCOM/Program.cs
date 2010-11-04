@@ -24,7 +24,7 @@ namespace UninstallAscom
 
         static void Main()
         {
-           Console.WriteLine("Looking for old ASCOM versions to remove....");
+           Console.WriteLine("Removing previous versions of ASCOM....");
            bool is64BitProcess = (IntPtr.Size == 8);
            bool is64BitOperatingSystem = is64BitProcess || InternalCheckIsWow64();
 
