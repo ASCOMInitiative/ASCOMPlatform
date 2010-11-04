@@ -74,9 +74,9 @@ Partial Class SetupDialogForm
         'picASCOM
         '
         Me.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.picASCOM.ErrorImage = Global.ASCOM.DomeSimulator.My.Resources.Resources.ASCOM
-        Me.picASCOM.Image = Global.ASCOM.DomeSimulator.My.Resources.Resources.ASCOM
-        Me.picASCOM.InitialImage = Global.ASCOM.DomeSimulator.My.Resources.Resources.ASCOM
+        Me.picASCOM.ErrorImage = Global.ASCOM.Simulator.My.Resources.Resources.ASCOM
+        Me.picASCOM.Image = Global.ASCOM.Simulator.My.Resources.Resources.ASCOM
+        Me.picASCOM.InitialImage = Global.ASCOM.Simulator.My.Resources.Resources.ASCOM
         Me.picASCOM.Location = New System.Drawing.Point(354, 12)
         Me.picASCOM.Name = "picASCOM"
         Me.picASCOM.Size = New System.Drawing.Size(48, 56)

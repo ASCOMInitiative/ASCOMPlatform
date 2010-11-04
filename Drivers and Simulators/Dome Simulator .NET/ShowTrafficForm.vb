@@ -23,69 +23,69 @@ Imports System.Windows.Forms
 Public Class ShowTrafficForm
 #Region "Properties"
     Private Const LOGLENGTH As Integer = 2000
-    Private m_iTextOffset As Integer
+    'Private m_iTextOffset As Integer
     Private m_bDisable As Boolean
     Private m_bBOL As Boolean
 
-    Public Sub TrafficChar(ByVal val As String)
+    Public Sub TrafficChar(ByVal value As String)
 
         If m_bDisable Then _
             Exit Sub
 
         If m_bBOL Then
             m_bBOL = False
-            txtTraffic.Text = Strings.Right(txtTraffic.Text & val, LOGLENGTH)
+            txtTraffic.Text = Strings.Right(txtTraffic.Text & value, LOGLENGTH)
         Else
-            txtTraffic.Text = Strings.Right(txtTraffic.Text & " " & val, LOGLENGTH)
+            txtTraffic.Text = Strings.Right(txtTraffic.Text & " " & value, LOGLENGTH)
         End If
 
         txtTraffic.SelectionStart = Len(txtTraffic.Text)
 
     End Sub
 
-    Public Sub TrafficLine(ByVal val As String)
+    Public Sub TrafficLine(ByVal value As String)
 
         If m_bDisable Then _
             Exit Sub
 
         If m_bBOL Then
-            val = val & vbCrLf
+            value = value & vbCrLf
         Else
-            val = vbCrLf & val & vbCrLf
+            value = vbCrLf & value & vbCrLf
         End If
 
         m_bBOL = True
 
-        txtTraffic.Text = Strings.Right(txtTraffic.Text & val, LOGLENGTH)
+        txtTraffic.Text = Strings.Right(txtTraffic.Text & value, LOGLENGTH)
         txtTraffic.SelectionStart = Len(txtTraffic.Text)
 
     End Sub
 
-    Public Sub TrafficStart(ByVal val As String)
+    Public Sub TrafficStart(ByVal value As String)
 
         If m_bDisable Then _
             Exit Sub
 
         If Not m_bBOL Then _
-            val = vbCrLf & val
+            value = vbCrLf & value
 
         m_bBOL = False
 
-        txtTraffic.Text = Strings.Right(txtTraffic.Text & val, LOGLENGTH)
+        txtTraffic.Text = Strings.Right(txtTraffic.Text & value, LOGLENGTH)
         txtTraffic.SelectionStart = Len(txtTraffic.Text)
 
     End Sub
 
-    Public Sub TrafficEnd(ByVal val As String)
+    Public Sub TrafficEnd(ByVal value As String)
 
         If m_bDisable Then _
             Exit Sub
 
-        val = val & vbCrLf
+        value = value & vbCrLf
 
         m_bBOL = True
 
-        txtTraffic.Text = Strings.Right(txtTraffic.Text & val, LOGLENGTH)
+        txtTraffic.Text = Strings.Right(txtTraffic.Text & value, LOGLENGTH)
         txtTraffic.SelectionStart = Len(txtTraffic.Text)
 
     End Sub

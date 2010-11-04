@@ -20,13 +20,14 @@
 ' 22-Jun-2009	rbt	1.0.0	Initial edit, from Dome template
 ' --------------------------------------------------------------------------------
 '
-' Your driver's ID is ASCOM.FilterWheelSimulator.FilterWheel
+' Your driver's ID is ASCOM.Simulator.Dome
 '
 ' The Guid attribute sets the CLSID for ASCOM.DomeWheelSimulator.Dome
 ' The ClassInterface/None addribute prevents an empty interface called
 ' _Dome from being created and used as the [default] interface
 '
 Imports ASCOM.Interface
+Imports System.Globalization
 
 <Guid("70896ae0-b6c4-4303-a945-01219bf40bb4")> _
 <ClassInterface(ClassInterfaceType.None)> _
@@ -35,7 +36,7 @@ Public Class Dome
 
     ' Hand box
 
-    Public Sub New()
+    <System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")> Public Sub New()
 
         Dim RegVer As String = "1"                      ' Registry version, use to change registry if required by new version
 
@@ -66,11 +67,11 @@ Public Class Dome
         ' Fix bad positions (which shouldn't ever happen, ha ha)
         If g_handBox.Left < 0 Then
             g_handBox.Left = 100
-            g_Profile.WriteValue(g_csDriverID, "Left", g_handBox.Left.ToString)
+            g_Profile.WriteValue(g_csDriverID, "Left", g_handBox.Left.ToString(CultureInfo.InvariantCulture))
         End If
         If g_handBox.Top < 0 Then
             g_handBox.Top = 100
-            g_Profile.WriteValue(g_csDriverID, "Top", g_handBox.Top.ToString)
+            g_Profile.WriteValue(g_csDriverID, "Top", g_handBox.Top.ToString(CultureInfo.InvariantCulture))
         End If
 
         g_dOCProgress = 0
@@ -161,7 +162,7 @@ Public Class Dome
         g_timer.Interval = TIMER_INTERVAL * 1000
 
         g_handBox.LabelButtons()
-        g_handBox.RefreshLEDs()
+        g_handBox.RefreshLeds()
 
         ' Show the handbox now
         g_handBox.Show()
@@ -173,43 +174,41 @@ Public Class Dome
 
     Private Shared Sub RegUnregASCOM(ByVal bRegister As Boolean)
 
-        Dim P As New Utilities.Profile()
-        P.DeviceType = "Dome"           '  Requires Helper 5.0.3 or later
-        If bRegister Then
-            P.Register(g_csDriverID, g_csDriverDescription)
-        Else
-            P.Unregister(g_csDriverID)
-        End If
-        Try                                 ' In case Helper becomes native .NET
-            Marshal.ReleaseComObject(P)
-        Catch ex As Exception
-            ' Ignore exception
-        End Try
-        P = Nothing
+        Using P As New Utilities.Profile()
+            P.DeviceType = "Dome"           '  Requires Helper 5.0.3 or later
+            If bRegister Then
+                P.Register(g_csDriverID, g_csDriverDescription)
+            Else
+                P.Unregister(g_csDriverID)
+            End If
+            'Try                                 ' In case Helper becomes native .NET
+            '    Marshal.ReleaseComObject(P)
+            'Catch ex As Exception
+            '    ' Ignore exception
+            'End Try
+        End Using
 
     End Sub
 
     <ComRegisterFunction()> _
-    Public Shared Sub RegisterASCOM(ByVal T As Type)
+    Private Shared Sub RegisterASCOM(ByVal T As Type)
         RegUnregASCOM(True)
     End Sub
 
     <ComUnregisterFunction()> _
-    Public Shared Sub UnregisterASCOM(ByVal T As Type)
+    Private Shared Sub UnregisterASCOM(ByVal T As Type)
         RegUnregASCOM(False)
     End Sub
 
 #End Region
 
 #Region "Private Methods"
-    Private Sub check_connected()
-
+    Private Shared Sub check_connected()
         If Not g_bConnected Then _
             Err.Raise(SCODE_NOT_CONNECTED, ERR_SOURCE, MSG_NOT_CONNECTED)
-
     End Sub
-    Private Sub check_Az(ByVal Az As Double)
 
+    Private Shared Sub check_Az(ByVal Az As Double)
         If Az = INVALID_COORDINATE Then _
             Err.Raise(SCODE_NO_TARGET_COORDS, ERR_SOURCE, _
                 "Azimuth " & MSG_NO_TARGET_COORDS)
@@ -218,9 +217,7 @@ Public Class Dome
         If Az >= 360.0# Or Az < 0.0# Then _
             Err.Raise(SCODE_VAL_OUTOFRANGE, ERR_SOURCE, _
                 "Azimuth " & MSG_VAL_OUTOFRANGE)
-
     End Sub
-
 
 #End Region
 
@@ -605,7 +602,7 @@ Public Class Dome
 
         If Not g_bStandardAtPark Then               ' Non-standard, position
             g_bAtPark = True
-            g_handBox.RefreshLEDs()
+            g_handBox.RefreshLeds()
         End If
 
         g_handBox.LabelButtons()
