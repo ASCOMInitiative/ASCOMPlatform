@@ -30,10 +30,11 @@
 ' 23-Jun-09 rbt     Port to Visual Basic .NET
 ' -----------------------------------------------------------------------------
 Imports System.Windows.Forms
+Imports System.Globalization
 
 <ComVisible(False)> _
 Public Class SetupDialogForm
-    Private m_bResult As Boolean
+    'Private m_bResult As Boolean
 
     Private Sub SetupDialogForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
@@ -50,12 +51,12 @@ Public Class SetupDialogForm
 #Region "Properties"
     Public Property Home() As Double
         Get
-           
-            Double.TryParse(txtHome.Text, Home)
-
-
-            Home = AzScale(Home)
+            Home = 0.0
+            If Double.TryParse(txtHome.Text, Home) Then
+                Home = AzScale(Home)
+            End If
         End Get
+
         Set(ByVal value As Double)
             If value < -360 Or value > 360 Then
                 txtHome.Text = "000.0"
@@ -68,13 +69,13 @@ Public Class SetupDialogForm
 
     Public Property OCDelay() As Double
         Get
-            
-            Double.TryParse(txtOCDelay.Text, OCDelay)
-
-
-            If OCDelay > 30 Then _
-                OCDelay = 30
+            OCDelay = 0
+            If Double.TryParse(txtOCDelay.Text, OCDelay) Then
+                If OCDelay > 30 Then _
+                    OCDelay = 30
+            End If
         End Get
+
         Set(ByVal value As Double)
             If value < 0 Then
                 txtOCDelay.Text = "0"
@@ -86,17 +87,11 @@ Public Class SetupDialogForm
     Public Property Park() As Double
         Get
             Park = 180
-            Try
-                Park = Double.Parse(txtPark.Text)
-            Catch ex As Exception
-
-            End Try
-
-
-
-
-            Park = AzScale(Park)
+            If Double.TryParse(txtPark.Text, NumberStyles.Number, CultureInfo.CurrentCulture, Park) Then
+                Park = AzScale(Park)
+            End If
         End Get
+
         Set(ByVal value As Double)
             If value < -360 Or value > 360 Then
                 txtPark.Text = "000.0"
@@ -111,18 +106,12 @@ Public Class SetupDialogForm
     Public Property AltRate() As Double
         Get
             AltRate = 10
-            Try
-                AltRate = Double.Parse(txtAltRate.Text)
-            Catch ex As Exception
-
-            End Try
-
-
-
-            If AltRate < 1 Then _
-                AltRate = 1
-            If AltRate > 90 Then _
-                AltRate = 90
+            If Double.TryParse(txtAltRate.Text, NumberStyles.Number, CultureInfo.CurrentCulture, AltRate) Then
+                If AltRate < 1 Then _
+                    AltRate = 1
+                If AltRate > 90 Then _
+                    AltRate = 90
+            End If
         End Get
         Set(ByVal value As Double)
             txtAltRate.Text = Format$(value, "0.0")
@@ -131,21 +120,15 @@ Public Class SetupDialogForm
 
     Public Property AzRate() As Double
         Get
-            AzRate = 10
-            Try
-                AzRate = Double.Parse(txtAzRate.Text)
-
-            Catch ex As Exception
-
-            End Try
-
-
-
-            If AzRate < 1 Then _
-                AzRate = 1
-            If AzRate > 90 Then _
-                AzRate = 90
+            AzRate = 1
+            If Double.TryParse(txtAzRate.Text, NumberStyles.Number, CultureInfo.CurrentCulture, AzRate) Then
+                If AzRate < 1 Then _
+                    AzRate = 1
+                If AzRate > 90 Then _
+                    AzRate = 90
+            End If
         End Get
+
         Set(ByVal value As Double)
             txtAzRate.Text = Format$(value, "0.0")
         End Set
@@ -154,18 +137,12 @@ Public Class SetupDialogForm
     Public Property MaxAlt() As Double
         Get
             MaxAlt = 90
-            Try
-                MaxAlt = Double.Parse(txtMaxAlt.Text)
-            Catch ex As Exception
-
-            End Try
-
-
-
-            If MaxAlt < 0 Then _
-                MaxAlt = 0
-            If MaxAlt > 90 Then _
-                MaxAlt = 90
+            If Double.TryParse(txtMaxAlt.Text, NumberStyles.Number, CultureInfo.CurrentCulture, MaxAlt) Then
+                If MaxAlt < 0 Then _
+                    MaxAlt = 0
+                If MaxAlt > 90 Then _
+                    MaxAlt = 90
+            End If
         End Get
         Set(ByVal value As Double)
             txtMaxAlt.Text = Format$(value, "0.0")
@@ -174,19 +151,14 @@ Public Class SetupDialogForm
     Public Property MinAlt() As Double
         Get
             MinAlt = 0
-
-
-            Try
-                MinAlt = Double.Parse(txtMinAlt.Text)
-            Catch ex As Exception
-
-            End Try
-
-            If MinAlt < 0 Then _
-                MinAlt = 0
-            If MinAlt > 90 Then _
-                MinAlt = 90
+            If Double.TryParse(txtMinAlt.Text, NumberStyles.Number, CultureInfo.CurrentCulture, MinAlt) Then
+                If MinAlt < 0 Then _
+                    MinAlt = 0
+                If MinAlt > 90 Then _
+                    MinAlt = 90
+            End If
         End Get
+
         Set(ByVal value As Double)
             txtMinAlt.Text = Format$(value, "0.0")
         End Set
@@ -194,19 +166,14 @@ Public Class SetupDialogForm
     Public Property StepSize() As Double
         Get
             StepSize = 1
-            Try
-                StepSize = Double.Parse(txtStepSize.Text)
-            Catch ex As Exception
-
-            End Try
-
-
-
-            If StepSize < 1 Then _
-                StepSize = 1
-            If StepSize > 90 Then _
-                StepSize = 90
+            If Double.TryParse(txtStepSize.Text, NumberStyles.Number, CultureInfo.CurrentCulture, StepSize) Then
+                If StepSize < 1 Then _
+                    StepSize = 1
+                If StepSize > 90 Then _
+                    StepSize = 90
+            End If
         End Get
+
         Set(ByVal value As Double)
             txtStepSize.Text = Format$(value, "0.0")
         End Set

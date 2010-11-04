@@ -95,7 +95,7 @@ Partial Class ShowTrafficForm
         '
         Me.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand
         Me.picASCOM.ErrorImage = Nothing
-        Me.picASCOM.Image = Global.ASCOM.DomeSimulator.My.Resources.Resources.ASCOM
+        Me.picASCOM.Image = Global.ASCOM.Simulator.My.Resources.Resources.ASCOM
         Me.picASCOM.InitialImage = Nothing
         Me.picASCOM.Location = New System.Drawing.Point(309, 12)
         Me.picASCOM.Name = "picASCOM"

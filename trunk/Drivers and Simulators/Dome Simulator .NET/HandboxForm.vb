@@ -35,13 +35,14 @@
 
 Imports System.Windows.Forms
 Imports ASCOM.Interface
+Imports System.Globalization
 
 <ComVisible(False)> _
 Public Class HandboxForm
-    Public BtnState As Integer                         'Controls the dome slewing buttons
+    Public ButtonState As Integer                         'Controls the dome slewing buttons
 #Region "Public Properties and Methods"
 
-    Public Sub UpdateConfig()
+    Public Shared Sub UpdateConfig()
         g_Profile.WriteValue(ID, "OCDelay", CStr(g_dOCDelay))
         g_Profile.WriteValue(ID, "SetPark", CStr(g_dSetPark))
         g_Profile.WriteValue(ID, "SetHome", CStr(g_dSetHome))
@@ -72,59 +73,60 @@ Public Class HandboxForm
     Public Sub DoSetup()
         g_timer.Enabled = False
 
-        Dim SetupDialog As SetupDialogForm = New SetupDialogForm
+        Using SetupDialog As SetupDialogForm = New SetupDialogForm
 
-        With SetupDialog
-            .OCDelay = g_dOCDelay
-            .AltRate = g_dAltRate
-            .AzRate = g_dAzRate
-            .StepSize = g_dStepSize
-            .MaxAlt = g_dMaxAlt
-            .MinAlt = g_dMinAlt
-            .Park = g_dSetPark
-            .Home = g_dSetHome
-            .chkStartShutterError.Checked = IIf(g_bStartShutterError, 1, 0)
-            .chkSlewingOpenClose.Checked = IIf(g_bSlewingOpenClose, 1, 0)
-            .chkNonFragileAtHome.Checked = IIf(g_bStandardAtHome, 0, 1)   ' Reversed
-            .chkNonFragileAtPark.Checked = IIf(g_bStandardAtPark, 0, 1)   ' Reversed
-
-            .chkCanFindHome.Checked = IIf(g_bCanFindHome, 1, 0)
-            .chkCanPark.Checked = IIf(g_bCanPark, 1, 0)
-            .chkCanSetAltitude.Checked = IIf(g_bCanSetAltitude, 1, 0)
-            .chkCanSetAzimuth.Checked = IIf(g_bCanSetAzimuth, 1, 0)
-            .chkCanSetShutter.Checked = IIf(g_bCanSetShutter, 1, 0)
-            .chkCanSetPark.Checked = IIf(g_bCanSetPark, 1, 0)
-            .chkCanSyncAzimuth.Checked = IIf(g_bCanSyncAzimuth, 1, 0)
-        End With
-
-        Me.Visible = False                       ' May float over setup
-
-        If SetupDialog.ShowDialog() = Windows.Forms.DialogResult.OK Then
             With SetupDialog
-                g_dOCDelay = .OCDelay
-                g_dAltRate = .AltRate
-                g_dAzRate = .AzRate
-                g_dStepSize = .StepSize
-                g_dMaxAlt = .MaxAlt
-                g_dMinAlt = .MinAlt
-                g_dSetPark = .Park
-                g_dSetHome = .Home
-                g_bStartShutterError = (.chkStartShutterError.Checked)
-                g_bSlewingOpenClose = (.chkSlewingOpenClose.Checked)
-                g_bStandardAtHome = Not (.chkNonFragileAtHome.Checked)    ' Reversed
-                g_bStandardAtPark = Not (.chkNonFragileAtPark.Checked)    ' Reversed
+                .OCDelay = g_dOCDelay
+                .AltRate = g_dAltRate
+                .AzRate = g_dAzRate
+                .StepSize = g_dStepSize
+                .MaxAlt = g_dMaxAlt
+                .MinAlt = g_dMinAlt
+                .Park = g_dSetPark
+                .Home = g_dSetHome
+                .chkStartShutterError.Checked = IIf(g_bStartShutterError, 1, 0)
+                .chkSlewingOpenClose.Checked = IIf(g_bSlewingOpenClose, 1, 0)
+                .chkNonFragileAtHome.Checked = IIf(g_bStandardAtHome, 0, 1)   ' Reversed
+                .chkNonFragileAtPark.Checked = IIf(g_bStandardAtPark, 0, 1)   ' Reversed
 
-                g_bCanFindHome = (.chkCanFindHome.Checked)
-                g_bCanPark = (.chkCanPark.Checked)
-                g_bCanSetAltitude = (.chkCanSetAltitude.Checked)
-                g_bCanSetAzimuth = (.chkCanSetAzimuth.Checked)
-                g_bCanSetShutter = (.chkCanSetShutter.Checked)
-                g_bCanSetPark = (.chkCanSetPark.Checked)
-                g_bCanSyncAzimuth = (.chkCanSyncAzimuth.Checked)
+                .chkCanFindHome.Checked = IIf(g_bCanFindHome, 1, 0)
+                .chkCanPark.Checked = IIf(g_bCanPark, 1, 0)
+                .chkCanSetAltitude.Checked = IIf(g_bCanSetAltitude, 1, 0)
+                .chkCanSetAzimuth.Checked = IIf(g_bCanSetAzimuth, 1, 0)
+                .chkCanSetShutter.Checked = IIf(g_bCanSetShutter, 1, 0)
+                .chkCanSetPark.Checked = IIf(g_bCanSetPark, 1, 0)
+                .chkCanSyncAzimuth.Checked = IIf(g_bCanSyncAzimuth, 1, 0)
             End With
 
-            UpdateConfig()
-        End If
+            Me.Visible = False                       ' May float over setup
+
+            If SetupDialog.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                With SetupDialog
+                    g_dOCDelay = .OCDelay
+                    g_dAltRate = .AltRate
+                    g_dAzRate = .AzRate
+                    g_dStepSize = .StepSize
+                    g_dMaxAlt = .MaxAlt
+                    g_dMinAlt = .MinAlt
+                    g_dSetPark = .Park
+                    g_dSetHome = .Home
+                    g_bStartShutterError = (.chkStartShutterError.Checked)
+                    g_bSlewingOpenClose = (.chkSlewingOpenClose.Checked)
+                    g_bStandardAtHome = Not (.chkNonFragileAtHome.Checked)    ' Reversed
+                    g_bStandardAtPark = Not (.chkNonFragileAtPark.Checked)    ' Reversed
+
+                    g_bCanFindHome = (.chkCanFindHome.Checked)
+                    g_bCanPark = (.chkCanPark.Checked)
+                    g_bCanSetAltitude = (.chkCanSetAltitude.Checked)
+                    g_bCanSetAzimuth = (.chkCanSetAzimuth.Checked)
+                    g_bCanSetShutter = (.chkCanSetShutter.Checked)
+                    g_bCanSetPark = (.chkCanSetPark.Checked)
+                    g_bCanSyncAzimuth = (.chkCanSyncAzimuth.Checked)
+                End With
+
+                UpdateConfig()
+            End If
+        End Using
 
         ' range the shutter
         If g_eShutterState = ShutterState.shutterOpen Then
@@ -149,7 +151,7 @@ Public Class HandboxForm
 
 
         LabelButtons()
-        RefreshLEDs()
+        RefreshLeds()
 
         g_timer.Enabled = g_bConnected
 
@@ -157,7 +159,7 @@ Public Class HandboxForm
         Me.BringToFront()
     End Sub
 
-    Public Sub RefreshLEDs()
+    Public Sub RefreshLeds()
 
         lblPARK.ForeColor = IIf(g_bAtPark, System.Drawing.Color.Green, System.Drawing.Color.Red)   ' Green
         lblHOME.ForeColor = IIf(g_bAtHome, System.Drawing.Color.Green, System.Drawing.Color.Red)   ' Green
@@ -233,9 +235,11 @@ Public Class HandboxForm
     Private Sub HandboxForm_Unload() Handles MyBase.Disposed
         If Not g_trafficDialog Is Nothing Then _
             g_trafficDialog.Close()
-        g_Profile.WriteValue(g_csDriverID, "Left", Me.Left.ToString)
-        g_Profile.WriteValue(g_csDriverID, "Top", Me.Top.ToString)
+        g_Profile.WriteValue(g_csDriverID, "Left", Me.Left.ToString(CultureInfo.InvariantCulture))
+        g_Profile.WriteValue(g_csDriverID, "Top", Me.Top.ToString(CultureInfo.InvariantCulture))
     End Sub
+
+    <System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")>
     Private Sub picASCOM_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles picASCOM.Click
         Try
             System.Diagnostics.Process.Start("http://ascom-standards.org/")
@@ -247,6 +251,7 @@ Public Class HandboxForm
             MessageBox.Show(other.Message)
         End Try
     End Sub
+
     Private Sub ButtonSetup_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSetup.Click
         DoSetup()
     End Sub
@@ -285,12 +290,13 @@ Public Class HandboxForm
         If g_bCanFindHome Then _
             HW_FindHome()
     End Sub
+    <System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")>
     Private Sub ButtonGoto_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonGoto.Click
         Dim Az As Double
 
         Az = INVALID_COORDINATE
         Try
-            Az = Double.Parse(txtNewAz.Text)
+            Az = Double.Parse(txtNewAz.Text, CultureInfo.CurrentCulture)
         Catch ex As Exception
 
         End Try
@@ -313,23 +319,15 @@ Public Class HandboxForm
         Dim Az As Double
 
         Az = INVALID_COORDINATE
-        Try
-            Az = Double.Parse(txtNewAz.Text)
-        Catch ex As Exception
-
-        End Try
-
-
-        If Az < -360 Or Az > 360 Then
-            MessageBox.Show("Input value must be between" & _
-                vbCrLf & "+/- 360")
-            Return
+        If Double.TryParse(txtNewAz.Text, NumberStyles.Number, CultureInfo.CurrentCulture, Az) Then
+            If Az < -360 Or Az > 360 Then
+                MessageBox.Show("Input value must be between" & _
+                    vbCrLf & "+/- 360")
+                Return
+            End If
+            Az = AzScale(Az)
+            HW_Sync(Az)
         End If
-
-        Az = AzScale(Az)
-
-
-        HW_Sync(Az)
     End Sub
     Private Sub ButtonOpen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonOpen.Click
         If g_eShutterState = ShutterState.shutterError Then
@@ -339,7 +337,7 @@ Public Class HandboxForm
 
         End If
 
-        BtnState = 7
+        ButtonState = 7
     End Sub
 
     Private Sub ButtonSlewAltitudeUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSlewAltitudeUp.Click
@@ -355,7 +353,7 @@ Public Class HandboxForm
             Return
         End If
 
-        BtnState = 5
+        ButtonState = 5
     End Sub
 
     Private Sub ButtonSlewAltitudeDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSlewAltitudeDown.Click
@@ -371,33 +369,33 @@ Public Class HandboxForm
             Return
         End If
 
-        BtnState = 6
+        ButtonState = 6
     End Sub
 
     Private Sub ButtonClose_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonClose.Click
 
 
-        BtnState = 8
+        ButtonState = 8
     End Sub
 
     Private Sub ButtonSlewStop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSlewStop.Click
-        BtnState = 10
+        ButtonState = 10
     End Sub
 
     Private Sub ButtonClockwise_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonClockwise.Click
-        BtnState = 1
+        ButtonState = 1
     End Sub
 
     Private Sub ButtonCounterClockwise_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonCounterClockwise.Click
-        BtnState = 3
+        ButtonState = 3
     End Sub
 
     Private Sub ButtonStepClockwise_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonStepClockwise.Click
-        BtnState = 2
+        ButtonState = 2
     End Sub
 
     Private Sub ButtonStepCounterClockwise_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonStepCounterClockwise.Click
-        BtnState = 4
+        ButtonState = 4
     End Sub
 #End Region
 

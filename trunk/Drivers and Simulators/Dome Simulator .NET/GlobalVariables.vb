@@ -1,6 +1,4 @@
-﻿Imports ASCOM.Interface
-
-'---------------------------------------------------------------------
+﻿'---------------------------------------------------------------------
 ' Copyright © 2000-2002 SPACE.com Inc., New York, NY
 '
 ' Permission is hereby granted to use this Software for any purpose
@@ -52,6 +50,8 @@
 '                   wake up NOT connected.
 ' 23-Jun-09 rbt     Ported Startub.BAS into Visual Basic .NET
 ' -----------------------------------------------------------------------------
+
+Imports ASCOM.Interface
 
 Module GlobalVariables
 #Region "Error Constants"
@@ -201,8 +201,8 @@ Module GlobalVariables
         ' Handle hand-box state first
         '
 
-        If g_handBox.BtnState <> 0 Then
-            Select Case (g_handBox.BtnState)
+        If g_handBox.ButtonState <> 0 Then
+            Select Case (g_handBox.ButtonState)
                 Case 1 ' Go clockwise
                     HW_Run(True)
                 Case 2 ' step clockwise
@@ -228,7 +228,7 @@ Module GlobalVariables
                     HW_Halt()
             End Select
 
-            g_handBox.BtnState = 0
+            g_handBox.ButtonState = 0
         End If
 
         ' Azimuth slew simulation
@@ -332,6 +332,6 @@ Module GlobalVariables
                 Case ShutterState.shutterError : g_handBox.txtShutter.Text = "Error"
             End Select
         End If
-        g_handBox.RefreshLEDs()
+        g_handBox.RefreshLeds()
     End Sub
 End Module
