@@ -33,8 +33,8 @@ namespace Optec_TCF_S_Focuser
         private const double FIRST_TCFS_CAN_REPORT_BRIGHTNESS = 4.01;
         private const double FIRST_TCFSI_CAN_REPORT_BRIGHTNESS = 3.10;
 
-        private const double STEP_SIZE_MICRONS_TCF_S = 2.0;
-        private const double STEP_SIZE_MICROS_TCF_S3 = 2.5;
+        private const double STEP_SIZE_MICRONS_TCF_S = 2.177;
+        private const double STEP_SIZE_MICROS_TCF_S3 = 2.54;
 
 #if DEBUG
         private const int SERIAL_MODE_REFRESH_DELAY = 500;
