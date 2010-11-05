@@ -1,6 +1,0 @@
-C:\ASCOM Trunk\Releases\ASCOM 6\Uninstaller\UninstallASCOM\bin\Release\UninstallAscom.exe.config
-C:\ASCOM Trunk\Releases\ASCOM 6\Uninstaller\UninstallASCOM\bin\Release\UninstallAscom.exe
-C:\ASCOM Trunk\Releases\ASCOM 6\Uninstaller\UninstallASCOM\bin\Release\UninstallAscom.pdb
-C:\ASCOM Trunk\Releases\ASCOM 6\Uninstaller\UninstallASCOM\obj\Release\ResolveAssemblyReference.cache
-C:\ASCOM Trunk\Releases\ASCOM 6\Uninstaller\UninstallASCOM\obj\Release\UninstallAscom.exe
-C:\ASCOM Trunk\Releases\ASCOM 6\Uninstaller\UninstallASCOM\obj\Release\UninstallAscom.pdb
