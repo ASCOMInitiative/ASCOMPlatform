@@ -233,7 +233,7 @@ namespace ASCOM.TelescopeSimulator
 
 
             if (i == -1) i = assyPath.LastIndexOf('\\');
-            assyPath = assyPath.Remove(i, assyPath.Length - i) + "\\TelescopeSimulatorServedClasses";
+            assyPath = assyPath.Remove(i, assyPath.Length - i) + "\\ServedClasses";
 
             //assyPath = "C:\\Documents and Settings\\Robert Turner\\My Documents\\Projects\\Robert\\ASCOM Platform\\Telescope Simulator .NET\\Telescope\\bin\\Debug";
             TL.LogMessage("ServedClassesPath", assyPath);

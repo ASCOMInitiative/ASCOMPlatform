@@ -7,13 +7,15 @@
 Imports ASCOM.Utilities
 Imports System.IO
 Imports Microsoft.Win32
+Imports System.Security.AccessControl
+Imports System.Security.Principal
 
 Module MigrateProfile
 
     Sub Main()
         Dim args() As String
         Dim PR As Profile
-        Dim parmEraseOnly, parmForce, parmMigrateIfNeeded, parmSavePlatformVersion As Boolean
+        Dim parmEraseOnly, parmForce, parmMigrateIfNeeded, parmSavePlatformVersion, parmCreateRegistryKey As Boolean
         Dim Utl As Util, Key As RegistryKey, CurrentProfileVersion As String
 
         Const LAST_PROFILE_VALUE_NAME As String = "LastPlatformVersion"
@@ -39,6 +41,8 @@ Module MigrateProfile
                             parmMigrateIfNeeded = True
                         Case "SAVEPLATFORMVERSION"
                             parmSavePlatformVersion = True
+                        Case "CREATEREGISTRYKEY"
+                            parmCreateRegistryKey = True
                         Case Else
                     End Select
                 End If
@@ -56,28 +60,34 @@ Module MigrateProfile
                 Key = Nothing
                 Utl.Dispose() 'Dispose of the Util object
                 Utl = Nothing
+            ElseIf parmCreateRegistryKey Then
+                Try
+                    SetRegistryACL()
+                Catch ex As Exception
+                    MsgBox("Exception creating Key: " & ex.ToString)
+                End Try
             Else 'Migrate the Profile if required
-                'Get the version of the Profile last in use
-                Key = Registry.CurrentUser.CreateSubKey(REGISTRY_ROOT_KEY_NAME) 'Create or open a registry key in which to save the value, use HKCU so we do have write accesto it by default
-                CurrentProfileVersion = Key.GetValue(LAST_PROFILE_VALUE_NAME, "Unknown") ' Read the value
-                Key.Close() 'flush the value to disk and close the key
-                Key = Nothing
+                    'Get the version of the Profile last in use
+                    Key = Registry.CurrentUser.CreateSubKey(REGISTRY_ROOT_KEY_NAME) 'Create or open a registry key in which to save the value, use HKCU so we do have write accesto it by default
+                    CurrentProfileVersion = Key.GetValue(LAST_PROFILE_VALUE_NAME, "Unknown") ' Read the value
+                    Key.Close() 'flush the value to disk and close the key
+                    Key = Nothing
 
-                PR = Nothing 'Initialise to remove a compiler warning
-                Try
-                    PR = New Profile(True) 'Do not generate ProfileNotFound exception as we have'nt migrated yet!
-                Catch Ex2 As Exception
-                    MsgBox("MigrateProfile - Unexpected profile creation exception: " & Ex2.ToString)
-                End Try
+                    PR = Nothing 'Initialise to remove a compiler warning
+                    Try
+                        PR = New Profile(True) 'Do not generate ProfileNotFound exception as we have'nt migrated yet!
+                    Catch Ex2 As Exception
+                        MsgBox("MigrateProfile - Unexpected profile creation exception: " & Ex2.ToString)
+                    End Try
 
-                Try
-                    If Not parmEraseOnly Then PR.MigrateProfile(CurrentProfileVersion) ' Migrate the profile and set platform version
-                Catch Ex2 As Exception
-                    MsgBox("MigrateProfile - Unexpected migration exception: " & Ex2.ToString)
-                End Try
+                    Try
+                        If Not parmEraseOnly Then PR.MigrateProfile(CurrentProfileVersion) ' Migrate the profile and set platform version
+                    Catch Ex2 As Exception
+                        MsgBox("MigrateProfile - Unexpected migration exception: " & Ex2.ToString)
+                    End Try
 
-                PR.Dispose() 'Clean up profile object
-                PR = Nothing
+                    PR.Dispose() 'Clean up profile object
+                    PR = Nothing
             End If
         Catch Ex1 As Exception
             MsgBox("MigrateProfile - Unexpected overall migration exception: " & Ex1.ToString)
@@ -112,4 +122,45 @@ Module MigrateProfile
         ' End If
 
     End Sub
+
+    Private Sub SetRegistryACL()
+        'Subroutine to control the migration of a Platform 5.5 profile to Platform 6
+        Dim swLocal As Stopwatch
+        Dim Key As RegistryKey, KeySec As RegistrySecurity, RegAccessRule As RegistryAccessRule
+        Dim DomainSid, Ident As SecurityIdentifier
+
+        swLocal = Stopwatch.StartNew
+
+        'TL.LogMessage("MigrateTo60", "Creating root key ""\""")
+        Key = Registry.LocalMachine.CreateSubKey(REGISTRY_ROOT_KEY_NAME)
+
+        'Set a security ACL on the ASCOM Profile key giving the Users group Full Control of the key
+        'TL.LogMessage("MigrateTo60", "Creating security identifier")
+        DomainSid = New SecurityIdentifier("S-1-0-0") 'Create a starting point domain SID
+        Ident = New SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, DomainSid) 'Create a security Identifier for the BuiltinUsers Group to be passed to the new accessrule
+
+        'TL.LogMessage("MigrateTo60", "Creating new ACL rule")
+        RegAccessRule = New RegistryAccessRule(Ident, _
+                                               RegistryRights.FullControl, _
+                                               InheritanceFlags.ContainerInherit, _
+                                               PropagationFlags.None, _
+                                               AccessControlType.Allow) ' Create the new access permission rule
+
+        'TL.LogMessage("MigrateTo60", "Retrieving current ACL rule")
+        KeySec = Key.GetAccessControl() ' Get existing ACL rules on the key 
+        'TL.LogMessage("MigrateTo60", "Adding new ACL rule")
+        KeySec.AddAccessRule(RegAccessRule) 'Add the new rule to the existing rules
+        'TL.LogMessage("MigrateTo60", "Setting new ACL rule")
+        Key.SetAccessControl(KeySec) 'Apply the new rules to the Profile key
+
+        'TL.LogMessage("MigrateTo60", "Flushing key")
+        Key.Flush() 'Flush the key to make sure the permission is committed
+        'TL.LogMessage("MigrateTo60", "Closing key")
+        Key.Close() 'Close the key after migration
+
+        swLocal.Stop() 'TL.LogMessage("MigrateTo60", "ElapsedTime " & swLocal.ElapsedMilliseconds & " milliseconds")
+        swLocal = Nothing
+    End Sub
+
+
 End Module

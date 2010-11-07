@@ -209,6 +209,7 @@ Public Class DiagnosticsForm
             End If
 
             sec = key.GetAccessControl(Security.AccessControl.AccessControlSections.All)
+            sec = key.GetAccessControl()
             For Each ar As RegistryAccessRule In sec.GetAccessRules(True, True, GetType(NTAccount))
                 TL.LogMessage("ReadRegistryRights", "  User: " & ar.IdentityReference.ToString)
                 TL.LogMessage("ReadRegistryRights", "    Type: " & ar.AccessControlType.ToString)
@@ -553,8 +554,7 @@ Public Class DiagnosticsForm
             GetCOMRegistration("DriverHelper.ChooserSupport")
             GetCOMRegistration("DriverHelper.ProfileAccess")
             GetCOMRegistration("DriverHelper.SerialSupport")
-            GetCOMRegistration("ScopeSim.Telescope")
-
+            
             GetCOMRegistration("ASCOM.Utilities.Chooser")
             GetCOMRegistration("ASCOM.Utilities.KeyValuePair")
             GetCOMRegistration("ASCOM.Utilities.Profile")
@@ -572,6 +572,20 @@ Public Class DiagnosticsForm
             GetCOMRegistration("ASCOM.Astrometry.NOVASCOM.Star")
             GetCOMRegistration("ASCOM.Astrometry.NOVASCOM.VelocityVector")
             GetCOMRegistration("ASCOM.Astrometry.Transform.Transform")
+
+            'New Platform 6 Simulators 
+            GetCOMRegistration("ASCOM.TelescopeSimulator.Telescope")
+            GetCOMRegistration("ASCOM.Simulator.Camera") 'If it exists
+            GetCOMRegistration("ASCOM.FilterWheelSim.FilterWheel")
+            GetCOMRegistration("ASCOM.Simulator.Focuser")
+            GetCOMRegistration("ASCOM.Simulator.SafetyMonitor")
+            GetCOMRegistration("ASCOM.Simulator.Switch")
+
+            'Original Platform 5 simulators if present
+            GetCOMRegistration("ScopeSim.Telescope")
+            GetCOMRegistration("FocusSim.Focuser")
+            GetCOMRegistration("CCDSimulator.Camera")
+
             TL.LogMessage("", "")
         Catch ex As Exception
             TL.LogMessageCrLf("ScanCOMRegistration", "Exception: " & ex.ToString)
@@ -706,9 +720,13 @@ Public Class DiagnosticsForm
         Try
             TL.LogMessage("ProgID", ProgID)
             RKey = Registry.ClassesRoot.OpenSubKey(ProgID)
-            ProcessSubKey(RKey, 1, "None")
-            RKey.Close()
-            TL.LogMessage("Finished", "")
+            If Not (RKey Is Nothing) Then ' Registry key exists so process it
+                ProcessSubKey(RKey, 1, "None")
+                RKey.Close()
+                TL.LogMessage("Finished", "")
+            Else
+                TL.LogMessage("Finished", "*** ProgID " & ProgID & " not found")
+            End If
         Catch ex As Exception
             TL.LogMessageCrLf("Exception", ex.ToString)
         End Try
@@ -983,14 +1001,17 @@ Public Class DiagnosticsForm
     Private Sub ScanInstalledPlatform()
         Dim RegKey As RegistryKey
 
-        RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\microsoft\Windows\Currentversion\uninstall\ASCOM.platform.NET.Components_is1", False)
+        Try
+            RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\microsoft\Windows\Currentversion\uninstall\ASCOM.platform.NET.Components_is1", False)
 
-        TL.LogMessage("Installed Platform", RegKey.GetValue("DisplayName"))
-        TL.LogMessage("Installed Platform", "Inno Setup App Path - " & RegKey.GetValue("Inno Setup: App Path"))
-        TL.LogMessage("Installed Platform", "Inno Setup Version - " & RegKey.GetValue("Inno Setup: Setup Version"))
-        TL.LogMessage("Installed Platform", "Install Date - " & RegKey.GetValue("InstallDate"))
-        TL.LogMessage("Installed Platform", "Install Location - " & RegKey.GetValue("InstallLocation"))
-
+            TL.LogMessage("Installed Platform", RegKey.GetValue("DisplayName"))
+            TL.LogMessage("Installed Platform", "Inno Setup App Path - " & RegKey.GetValue("Inno Setup: App Path"))
+            TL.LogMessage("Installed Platform", "Inno Setup Version - " & RegKey.GetValue("Inno Setup: Setup Version"))
+            TL.LogMessage("Installed Platform", "Install Date - " & RegKey.GetValue("InstallDate"))
+            TL.LogMessage("Installed Platform", "Install Location - " & RegKey.GetValue("InstallLocation"))
+        Catch ex As Exception
+            TL.LogMessage("Installed Platform", "No Inno installer path found")
+        End Try
         TL.BlankLine()
     End Sub
     Sub ScanASCOMDrivers()
