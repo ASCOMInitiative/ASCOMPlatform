@@ -49,11 +49,6 @@ if Variable NEEDSUPGRADE Equals TRUE
   Set Variable PRELIST to $PRELIST$$NEWLINE$Previous Version Uninstallation
 end
 Include Script: checkmsi31
-Include Script: checknet2sp1
-Include Script: checkmsxml60
-Include Script: checknet30
-Include Script: checknet3sp1
-Include Script: checknet35x
 [compiler end]
 [END REGION]
  
@@ -86,16 +81,6 @@ if Variable PREREQ not Equals FALSE
   end
   [DEFINE WEB MEDIA Microsoft Windows Installer 3.1]
   Include Script: setupmsi31
-  [DEFINE WEB MEDIA Microsoft .NET Framework 2.0 with Service Pack 1]
-  Include Script: setupnet2sp1
-  [DEFINE WEB MEDIA Microsoft XML Parser 6.0]
-  Include Script: setupmsxml60
-  [DEFINE WEB MEDIA Microsoft .NET Framework 3.0]
-  Include Script: setupnet30
-  [DEFINE WEB MEDIA Microsoft .NET Framework 3.0 Service Pack 1]
-  Include Script: setupnet3sp1
-  [DEFINE WEB MEDIA Microsoft .NET Framework 3.5]
-  Include Script: setupnet35x
   [compiler end]
   Hide Dialog
 end
@@ -253,31 +238,28 @@ Comment: Modify Target System
 if Variable REMOVE Equals TRUE
   Comment: Uninstall product
   Comment: TO-DO: Insert any additional uninstall commands here
-  Unregister assembly $TARGETDIR$\Platform\Simulators\Camera\ASCOM.Simulator.Camera.dll
-  Unregister assembly $TARGETDIR$\Platform\Simulators\FilterWheel\ASCOM.FilterWheelSim.exe
-  Unregister assembly $TARGETDIR$\Platform\Simulators\Focuser\ASCOM.Simulator.Focuser.dll
-  Unregister assembly $TARGETDIR$\Platform\Simulators\SafetyMonitor\SafetyMonitorSimulatorDriver.dll
-  Unregister assembly $TARGETDIR$\Platform\Simulators\Switch\ASCOM.Simulator.Switch.dll
+  Unregister assembly $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera.dll
+  Unregister assembly $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim.exe
+  Unregister assembly $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser.dll
+  Unregister assembly $COMMONFILES$\ASCOM\SafetyMonitor\SafetyMonitorSimulatorDriver.dll
+  Unregister assembly $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch.dll
   Unregister assembly ASCOM.Utilities, Version=5.5.2.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Astrometry, Version=5.5.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Attributes, Version=6.0.3954.33372, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.DriverAccess, Version=1.0.5.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Unregister assembly ASCOM.DriverAccess, Version=1.0.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Unregister assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Internal.FusionLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Controls, Version=6.0.3961.33512, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Attributes, Version=6.0.3961.33505, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Unregister assembly ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /u $TARGETDIR$\Platform\bin\ASCOM.Utilities.dll
-  Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /u $TARGETDIR$\Platform\bin\ASCOM.Astrometry.dll
-  Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /u $TARGETDIR$\Platform\bin\ASCOM.IConform.dll
-  Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /u $TARGETDIR$\Platform\bin\ASCOM.DeviceInterfaces.dll
-  Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /u $TARGETDIR$\Platform\bin\ASCOM.DriverAccess.dll
-  Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /u $TARGETDIR$\Platform\bin\ASCOM.Attributes.dll
-  Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /u $TARGETDIR$\Platform\bin\ASCOM.Controls.dll
-  Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /u $TARGETDIR$\Platform\bin\ASCOM.Exceptions.dll
+  Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /u $COMMONFILES$\ASCOM\Platform\ASCOM.Utilities.dll
+  Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /u $COMMONFILES$\ASCOM\Platform\ASCOM.Astrometry.dll
+  Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /u $COMMONFILES$\ASCOM\Platform\ASCOM.IConform.dll
+  Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /u $COMMONFILES$\ASCOM\Platform\ASCOM.DeviceInterfaces.dll
+  Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /u $COMMONFILES$\ASCOM\Platform\ASCOM.DriverAccess.dll
+  Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /u $COMMONFILES$\ASCOM\Platform\ASCOM.Attributes.dll
+  Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /u $COMMONFILES$\ASCOM\Platform\ASCOM.Controls.dll
+  Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /u $COMMONFILES$\ASCOM\Platform\ASCOM.Exceptions.dll
   Apply Uninstall (get result into variable SUCCESS)
   if Variable SUCCESS not Equals ERROR
     if Variable SUCCESS not Equals CANCEL
@@ -289,9 +271,9 @@ else
   [END REGION]
   [DEFINE REGION: Perform First Time or Maintenance Installation]
   Comment: Install/Re-Install product
-  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Utilities\Uninstall #TITLE# to $UNINSTALLLINK$
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Uninstall #TITLE# to $UNINSTALLLINK$
   [OFFLINE CONTENT]
-  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Utilities\#TITLE# Update to $UNINSTALLLINK$
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\#TITLE# Update to $UNINSTALLLINK$
   [DEFINE WEB MEDIA Ascom Platform 6]
   if Variable SELECTED Equals TRUE
   end
@@ -302,171 +284,378 @@ else
   if Variable ADVERTISE Equals TRUE
     Apply Advertised (get result into variable SUCCESS)
   else
-    Create Folder $SHORTCUTFILES$\ASCOM Platform 6
+    [DEFINE REGION: Create directory structure]
     Create Folder $TARGETDIR$\Platform\Docs
+    Create Folder $COMMONFILES$\ASCOM
+    Create Folder $COMMONFILES$\ASCOM\Camera
+    Create Folder $COMMONFILES$\ASCOM\FilterWheel
+    Create Folder $COMMONFILES$\ASCOM\FilterWheel\ServedClasses
+    Create Folder $COMMONFILES$\ASCOM\Focuser
+    Create Folder $COMMONFILES$\ASCOM\Platform
+    Create Folder $COMMONFILES$\ASCOM\Platform\v5.5
+    Create Folder $COMMONFILES$\ASCOM\SafetyMonitor
+    Create Folder $COMMONFILES$\ASCOM\Switch
+    Create Folder $COMMONFILES$\ASCOM\Telescope
+    Create Folder $COMMONFILES$\ASCOM\Telescope\ServedClasses
     Create Folder $WINDIR$\Symbols\dll
-    Create Folder $TARGETDIR$\Platform\Utilities
-    Create Folder $TARGETDIR$\Platform\Simulators
-    Create Folder $TARGETDIR$\Platform\Simulators\Camera
-    Create Folder $TARGETDIR$\Platform\Simulators\Telescope
-    Create Folder $TARGETDIR$\Platform\Simulators\Telescope\ServedClasses
-    Create Folder $TARGETDIR$\Platform\Simulators\FilterWheel
-    Create Folder $TARGETDIR$\Platform\Simulators\FilterWheel\ServedClasses
-    Create Folder $TARGETDIR$\Platform\Simulators\Rotator
-    Create Folder $TARGETDIR$\Platform\Simulators\Dome
-    Create Folder $TARGETDIR$\Platform\Simulators\SafetyMonitor
-    Create Folder $TARGETDIR$\Platform\Simulators\Focuser
-    Create Folder $TARGETDIR$\Platform\Simulators\Switch
-    Create Folder $TARGETDIR$\Platform\Bin\v5.5
-    Create Folder $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\Resources\ASCOM.ico to $TARGETDIR$\Platform\Tools
-    Install Files C:\ASCOM Trunk\Help\Platform Supporting Documents\Platform 6.0.pdf to $TARGETDIR$\Platform\Docs
-    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb to $WINDIR$\Symbols\dll
-    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.pdb to $WINDIR$\Symbols\dll
-    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb to $WINDIR$\Symbols\dll
-    Install Files C:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb to $WINDIR$\Symbols\dll
-    Install Files C:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb to $WINDIR$\Symbols\dll
+    Create Folder $SHORTCUTFILES$\ASCOM Platform 6
+    [END REGION]
+    [DEFINE REGION: Platform 5 files]
+    Install Assembly C:\ASCOM Trunk\Interfaces\Master Interfaces\ASCOM.Interfaces.dll to Global Assembly Cache
+    [END REGION]
+    [DEFINE REGION: Platform 5.5 files]
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\VB6Helper\Helper.dll to $COMMONFILES$\ASCOM
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\VB6Helper2\Helper2.dll to $COMMONFILES$\ASCOM
+    Install Files C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.xml to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.pdb to $COMMONFILES$\ASCOM\Platform
     Install Files C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.pdb to $WINDIR$\Symbols\dll
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb to $WINDIR$\Symbols\dll
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $WINDIR$\Symbols\dll
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $WINDIR$\Symbols\dll
+    [END REGION]
+    [DEFINE REGION: Platform 6 files]
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\Resources\ASCOM.ico to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.xml to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
+    Comment: Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.pdb to $WINDIR$\Symbols\dll
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.xml to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb to $WINDIR$\Symbols\dll
+    Install Files C:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.xml to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb to $WINDIR$\Symbols\dll
+    Install Files C:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.xml to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.pdb to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.pdb to $WINDIR$\Symbols\dll
+    Install Files C:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.xml to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb to $WINDIR$\Symbols\dll
+    Install Files C:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.xml to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.pdb to $COMMONFILES$\ASCOM\Platform
     Install Files C:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.pdb to $WINDIR$\Symbols\dll
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.exe to $TARGETDIR$\Platform\Utilities\
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $TARGETDIR$\Platform\Utilities\
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe to $TARGETDIR$\Platform\Utilities
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $TARGETDIR$\Platform\Utilities
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.xml to $TARGETDIR$\Platform\Utilities
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.xml to $TARGETDIR$\Platform\Utilities
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll to $TARGETDIR$\Platform\Simulators\Camera
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe to $TARGETDIR$\Platform\Simulators\Telescope
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulatorServedClasses\ASCOM.TelescopeSimulator.Telescope.dll to $TARGETDIR$\Platform\Simulators\Telescope\ServedClasses
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.dll to $TARGETDIR$\Platform\Simulators\Switch
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ASCOM.FilterWheelSim.exe to $TARGETDIR$\Platform\Simulators\FilterWheel
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ServedClasses\ASCOM.FilterWheelSim.FilterWheel.dll to $TARGETDIR$\Platform\Simulators\FilterWheel\ServedClasses
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\SafetyMonitorSimulatorDriver.dll to $TARGETDIR$\Platform\Simulators\SafetyMonitor
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll to $TARGETDIR$\Platform\Simulators\Focuser
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\VB6Helper\Helper.dll to $TARGETDIR$\Platform\Utilities
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\VB6Helper2\Helper2.dll to $TARGETDIR$\Platform\Utilities
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb to $WINDIR$\Symbols\dll
+    [DEFINE REGION: Platform 6 Astrometry]
+    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb to $WINDIR$\Symbols\dll
+    Install Files C:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.dll to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.pdb to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.dll to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.pdb to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\NOVAS\NOVAS-3\CioFile\cio_ra.bin to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.dll to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.pdb to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.dll to $COMMONFILES$\ASCOM\Platform
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.pdb to $COMMONFILES$\ASCOM\Platform
+    [END REGION]
+    [DEFINE REGION: Platform 6 Documents]
+    Install Files C:\ASCOM Trunk\Help\Platform Supporting Documents\Platform 6.0.pdf to $TARGETDIR$\Platform\Docs
     Install Files C:\ASCOM Trunk\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf to $TARGETDIR$\Platform\Docs
-    Install Files C:\ASCOM Trunk\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe to $TARGETDIR$\Platform\Tools
-    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\DriverAccess.config to $TARGETDIR$\Platform\Tools
-    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\policy.1.0.ASCOM.DriverAccess.dll to $TARGETDIR$\Platform\Tools
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\Setup\policy.5.5.ASCOM.Utilities.dll to $TARGETDIR$\Platform\Tools
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\Setup\policy.5.3.ASCOM.Astrometry.dll to $TARGETDIR$\Platform\Tools
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\Setup\policy.5.3.ASCOM.Utilities.dll to $TARGETDIR$\Platform\Tools
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\Setup\policy.5.5.ASCOM.Astrometry.dll to $TARGETDIR$\Platform\Tools
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.dll to $TARGETDIR$\Platform\Utilities
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.dll to $TARGETDIR$\Platform\Utilities
-    Install Files C:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.dll to $TARGETDIR$\Platform\Utilities
-    Install Files C:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.dll to $TARGETDIR$\Platform\Utilities
-    Install Files C:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.pdb to $TARGETDIR$\Platform\Utilities
-    Install Files C:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.pdb to $TARGETDIR$\Platform\Utilities
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.pdb to $TARGETDIR$\Platform\Utilities
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.pdb to $TARGETDIR$\Platform\Utilities
-    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH to $TARGETDIR$\Platform\Utilities
-    Install Files C:\ASCOM Trunk\NOVAS\NOVAS-3\CioFile\cio_ra.bin to $TARGETDIR$\Platform\Utilities
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.pdb to $WINDIR$\Symbols\dll
     Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Compatible Software (web).url to $TARGETDIR$\Platform\Docs
     Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Drivers and Downloads (web).url to $TARGETDIR$\Platform\Docs
     Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\PlatformHelp.chm to $TARGETDIR$\Platform\Docs
-    Create Shortcut $SHORTCUTFOLDER$\ASCOM Help File to $TARGETDIR$\Platform\Docs\PlatformHelp.chm
     Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Support (web).url to $TARGETDIR$\Platform\Docs
     Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Supported Devices (web).url to $TARGETDIR$\Platform\Docs
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\MigrateProfile\bin\Release\MigrateProfile.exe to $TARGETDIR$\Platform\Tools
-    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.xml to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.tlb to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.xml to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.XML to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\VB6Helper\Helper.dll to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\VB6Helper2\Helper2.dll to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.pdb to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.XML to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.pdb to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.xml to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.pdb to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to $TARGETDIR$\Platform\Bin\v5.5
-    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.pdb to $TARGETDIR$\Platform\Bin\v5.5
-    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.XML to $TARGETDIR$\Platform\Bin\v5.5
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.XML to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb to $TARGETDIR$\Platform\Bin
-    Install Files C:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to $TARGETDIR$\Platform\Bin
+    [END REGION]
+    [DEFINE REGION: Platform 6 Internal]
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\MigrateProfile\bin\Release\MigrateProfile.exe to $COMMONFILES$\ASCOM\Platform\Internal
+    Install Files C:\ASCOM Trunk\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe to $COMMONFILES$\ASCOM\Platform\Internal
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\DriverAccess.config to $COMMONFILES$\ASCOM\Platform\Internal
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\policy.1.0.ASCOM.DriverAccess.dll to $COMMONFILES$\ASCOM\Platform\Internal
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\Setup\policy.5.5.ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\Internal
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\Setup\policy.5.5.ASCOM.Astrometry.dll to $COMMONFILES$\ASCOM\Platform\Internal
+    [END REGION]
+    [DEFINE REGION: Platform 6 assemblies]
     Install Assembly C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to Global Assembly Cache
     Install Assembly C:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to Global Assembly Cache
-    Install Assembly C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DeviceInterfaces.dll to Global Assembly Cache
-    Install Assembly C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
-    Install Assembly C:\ASCOM Trunk\ASCOM.Utilities\Setup\Client Toolkit 1.0.5 Executables\ASCOM.DriverAccess.dll to Global Assembly Cache
+    Install Assembly C:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
     Install Assembly C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll to Global Assembly Cache
     Install Assembly C:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to Global Assembly Cache
     Install Assembly C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to Global Assembly Cache
     Install Assembly C:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to Global Assembly Cache
     Install Assembly C:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to Global Assembly Cache
-    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll to $TARGETDIR$\Platform\Simulators\Camera
-    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ASCOM.FilterWheelSim.exe to $TARGETDIR$\Platform\Simulators\FilterWheel
-    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll to $TARGETDIR$\Platform\Simulators\Focuser
-    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\SafetyMonitorSimulatorDriver.dll to $TARGETDIR$\Platform\Simulators\SafetyMonitor
-    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.dll to $TARGETDIR$\Platform\Simulators\Switch
     Install Assembly C:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll to Global Assembly Cache
-    Install Assembly C:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
+    Install Assembly C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
+    [END REGION]
+    [END REGION]
+    [DEFINE REGION: Platform 6 tools]
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $WINDIR$\Symbols\dll
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe to $TARGETDIR$\Platform\Tools
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $TARGETDIR$\Platform\Tools
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.xml to $TARGETDIR$\Platform\Tools
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.pdb to $WINDIR$\Symbols\dll
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $WINDIR$\Symbols\dll
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.exe to $TARGETDIR$\Platform\Tools
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $TARGETDIR$\Platform\Tools
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.xml to $TARGETDIR$\Platform\Tools
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll to $TARGETDIR$\Platform\Tools
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.pdb to $TARGETDIR$\Platform\Tools
+    [END REGION]
+    [DEFINE REGION: Platform 6 simulators]
+    Comment: Camera simulator
+    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll to $COMMONFILES$\ASCOM\Camera
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.pdb to $COMMONFILES$\ASCOM\Camera
+    Comment: FilterWheel simulator
+    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ASCOM.FilterWheelSim.exe to $COMMONFILES$\ASCOM\FilterWheel
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ASCOM.FilterWheelSim.pdb to $COMMONFILES$\ASCOM\FilterWheel
+    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ServedClasses\ASCOM.FilterWheelSim.FilterWheel.dll to $COMMONFILES$\ASCOM\FilterWheel\ServedClasses\
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.FilterWheel.pdb to $COMMONFILES$\ASCOM\FilterWheel\ServedClasses
+    Comment: Focuser simulator
+    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll to $COMMONFILES$\ASCOM\Focuser
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.pdb to $COMMONFILES$\ASCOM\Focuser
+    Comment: SafetyMonitor simulator
+    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\SafetyMonitorSimulatorDriver.dll to $COMMONFILES$\ASCOM\SafetyMonitor
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\SafetyMonitorSimulatorDriver.pdb to $COMMONFILES$\ASCOM\SafetyMonitor
+    Comment: Switch simulator
+    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.dll to $COMMONFILES$\ASCOM\Switch
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch
+    Comment: Telescope simulator
+    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe to $COMMONFILES$\ASCOM\Telescope
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.pdb to $COMMONFILES$\ASCOM\Telescope
+    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulatorServedClasses\ASCOM.TelescopeSimulator.Telescope.dll to $COMMONFILES$\ASCOM\Telescope\ServedClasses
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulatorServedClasses\ASCOM.TelescopeSimulator.Telescope.pdb to $COMMONFILES$\ASCOM\Telescope\ServedClasses
+    [END REGION]
+    [DEFINE REGION: Create shortcuts]
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Compatible Software (web) to $TARGETDIR$\Platform\Docs\Compatible Software (web).url
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Drivers and Downloads (web) to $TARGETDIR$\Platform\Docs\Drivers and Downloads (web).url
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Platform 6 Client-Driver Interaction V2 to $TARGETDIR$\Platform\Docs\Platform 6 Client-Driver Interaction V2.pdf
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Supported Devices (web) to $TARGETDIR$\Platform\Docs\Supported Devices (web).url
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Utilities\Profile Explorer to $TARGETDIR$\Platform\Utilities\ProfileExplorer.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Utilities\ASCOM Diagnostics to $TARGETDIR$\Platform\Utilities\ASCOM Diagnostics.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Profile Explorer to $TARGETDIR$\Platform\Tools\ProfileExplorer.exe
+    Create Shortcut $DESKTOPDIR$\ASCOM Diagnostics to $TARGETDIR$\Platform\Tools\ASCOM Diagnostics.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\ASCOM Diagnostics to $TARGETDIR$\Platform\Tools\ASCOM Diagnostics.exe
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Platform 6.0 to $TARGETDIR$\Platform\Docs\Platform 6.0.pdf
+    Create Shortcut $SHORTCUTFOLDER$\ASCOM Help File to $TARGETDIR$\Platform\Docs\PlatformHelp.chm
+    Create Shortcut $DESKTOPDIR$\ProfileExplorer to $TARGETDIR$\Platform\Tools\ProfileExplorer.exe
+    [END REGION]
+    [DEFINE REGION: Registry Keys]
+    Comment: Create registry keys
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\CCDSimulator.Camera\\ShowStars, 0
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\CCDSimulator.Camera\\DetectorWidth, 512
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\CCDSimulator.Camera\\DetectorHeight, 512
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\CCDSimulator.Camera\\PixelWidth, 24
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\CCDSimulator.Camera\\PixelHeight, 24
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\ASCOMDome.Dome\\, ASCOM Dome Control
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\DomeSim.Dome\\, Simulator
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\Hub.Dome\\, Generic Hub
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\Pipe.Dome\\, Pipe diagnostic tool
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\POTH.Dome\\, POTH Hub
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FilterColours\\0, 255
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FilterColours\\1, 32768
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FilterColours\\2, 16711680
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FilterColours\\3, 8421504
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FilterColours\\4, 139
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FilterColours\\5, 8421376
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FilterColours\\6, 15631086
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FilterColours\\7, 0
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FilterNames\\0, Red
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FilterNames\\1, Green
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FilterNames\\2, Blue
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FilterNames\\3, Clear
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FilterNames\\4, Ha
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FilterNames\\5, OIII
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FilterNames\\6, LPR
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FilterNames\\7, Dark
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FocusOffsets\\0, 7254
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FocusOffsets\\1, 85
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FocusOffsets\\2, 9484
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FocusOffsets\\3, 486
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FocusOffsets\\4, 6764
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FocusOffsets\\5, 345
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FocusOffsets\\6, 2910
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\FocusOffsets\\7, 5003
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\\, Filter Wheel Simulator [.Net]
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\\RegVer, 1
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\\Position, 0
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\\Slots, 6
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\\Time, 1000
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\\ImplementsNames, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\\ImplementsOffsets, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\\PreemptMoves, False
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\ASCOM.Simulator.Focuser\\, ASCOM Simulator Focuser Driver
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\Capabilities\\CanTempComp, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\Capabilities\\CanTemp, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\Capabilities\\CanStepSize, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\Capabilities\\CanHalt, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\Capabilities\\TempMax, 5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\Capabilities\\TempMin, -5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\Capabilities\\TempPeriod, 500
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\Capabilities\\TempSteps, 10
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\\, Simulator
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\\RegVer, 1.1
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\\Absolute, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\\Synchronous, False
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\\MaxStep, 50000
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\\Position, 25000
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\\StepSize, 20
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\\Temp, 4.84
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\\MaxInc, 50000
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\\AlwaysOnTop, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\\Left, 100
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\\Top, 100
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\\AdvancedSetup, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\Hub.Focuser\\, Generic Hub
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\Pipe.Focuser\\, Pipe diagnostic tool
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\POTH.Focuser\\, POTH Hub
+    Write Registry Key HKLM\SOFTWARE\ASCOM\SafetyMonitor Drivers\ASCOM.Simulator.SafetyMonitor\\, ASCOM Simulator SafetyMonitor Driver
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Switch Drivers\ASCOM.Simulator.Switch\\, ASCOM Simulator Switch Driver
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\V1, False
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanFindHome, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanPark, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\NumMoveAxis, 2
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanPulseGuide, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanSetEquRates, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanSetGuideRates, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanSetPark, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanSetPierSide, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanSetTracking, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanSlew, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanSlewAltAz, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanAlignMode, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanOptics, true
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanSlewAltAzAsync, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanSlewAsync, true
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanSync, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanSyncAltAz, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanUnpark, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanAltAz, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanDateTime, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanDoesRefraction, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanEquatorial, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanLatLongElev, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanSiderealTime, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanPierSide, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanTrackingRates, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\Capabilities\\CanDualAxisPulseGuide, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\\, Telescope Simulator .NET
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\\RegVer, 1
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\\AlwaysOnTop, false
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\\AlignMode, 1
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\\ApertureArea, 0
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\\Aperture, 0
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\\FocalLength, 1.45
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\\AutoTrack, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\\DiscPark, False
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\\NoCoordAtPark, False
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\\Refraction, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\\EquatorialSystem, 1
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\\MaxSlewRate, 20
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\\Elevation, 80
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\\Longitude, -0.2945
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\\Latitude, 51.0791666666667
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\\StartAzimuth, 180
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\\ParkAzimuth, 180
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\\StartAltitude, 49.3965379425308
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\\ParkAltitude, 49.3965379425308
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\\DateDelta, 0
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.TelescopeSimulator.Telescope\\OnTop, False
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOMDome.Telescope\\, ASCOM Dome Control
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\Hub.Telescope\\, Generic Hub
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\Pipe.Telescope\\, Pipe diagnostic tool
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\POTH.Telescope\\, POTH Hub
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanAlignMode, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanAltAz, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanDateTime, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanDoesRefraction, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanEqu, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanFindHome, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanLatLongElev, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanOptics, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanPark, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanPulseGuide, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanSetEquRates, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanSetGuideRates, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanSetPark, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanSetSOP, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanSetTracking, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanSiderealTime, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanSlew, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanSlewAltAz, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanSlewAltAzAsync, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanSlewAsync, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanSOP, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanSync, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanSyncAltAz, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanTrackingRates, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\CanUnpark, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\DualAxisPulseGuide, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\NumMoveAxis, 2
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\Capabilities\\V1, False
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\, Simulator
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\AdvancedSetup, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\AlignMode, 2
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\AlwaysOnTop, False
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\Aperture,  .2
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\ApertureArea,  .0269
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\AutoTrack, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\DateDelta,  0
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\DiscPark, False
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\DoRefraction, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\Elevation,  80
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\EquSystem, 1
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\FocalLength,  1.26
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\Latitude,  51.0791666666667
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\Left, 2374
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\Longitude, -.2945
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\MaxSlewRate,  20
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\NoCoordAtPark, False
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\ParkAltitude,  31.2172150611877
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\ParkAzimuth,  180
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\RegVer, 2.2
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\StartAltitude,  38.8268867495128
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\StartAzimuth,  184.69128807461
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\Top, 444
+    Write Registry Key HKLM\SOFTWARE\ASCOM\\PlatformVersion, 6.0
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Chooser\, 
+    [END REGION]
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Scope Simulator\ScopeSim.exe to $COMMONFILES$\ASCOM\Telescope
     Apply Install (get result into variable SUCCESS)
     if Variable SUCCESS not Equals ERROR
       if Variable SUCCESS not Equals CANCEL
-        Register assembly ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Register assembly ASCOM.Attributes, Version=6.0.3961.33505, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Register assembly ASCOM.Controls, Version=6.0.3961.33512, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Register assembly ASCOM.Internal.FusionLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Register assembly ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Register assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Register assembly ASCOM.DriverAccess, Version=1.0.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Register assembly ASCOM.DriverAccess, Version=1.0.5.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Register assembly ASCOM.Attributes, Version=6.0.3954.33372, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Register assembly ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Set Write Permissions on Registry Key "HKLM\Software\ASCOM" for Users
+        [DEFINE REGION: COM registrations]
+        Register assembly ASCOM.Attributes, Version=6.0.3962.32292, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Astrometry, Version=5.5.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Register assembly ASCOM.Controls, Version=6.0.3962.32293, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Register assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Register assembly ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Register assembly ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Register assembly ASCOM.DriverAccess, Version=1.0.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Register assembly ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Register assembly ASCOM.Internal.FusionLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Utilities, Version=5.5.2.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Comment: Register ASCOM DLLs for com using the /tlb option
-        Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /tlb $TARGETDIR$\Platform\bin\ASCOM.Utilities.dll
-        Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /tlb $TARGETDIR$\Platform\bin\ASCOM.Astrometry.dll
-        Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /tlb $TARGETDIR$\Platform\bin\ASCOM.IConform.dll
-        Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /tlb $TARGETDIR$\Platform\bin\ASCOM.DeviceInterfaces.dll
-        Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /tlb $TARGETDIR$\Platform\bin\ASCOM.DriverAccess.dll
-        Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /tlb $TARGETDIR$\Platform\bin\ASCOM.Attributes.dll
-        Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /tlb $TARGETDIR$\Platform\bin\ASCOM.Controls.dll
-        Run Program %SystemRoot%\Microsoft.NET\Framework\v2.0.50727\regasm.exe /tlb $TARGETDIR$\Platform\bin\ASCOM.Exceptions.dll
-        Comment: Run MigrateProfile before registering any new drivers
-        Run Program $TARGETDIR$\Platform\Tools\MigrateProfile.exe  (WAIT)
-        Comment: Register Simulator DLL files
-        Register Library $TARGETDIR$\Platform\Simulators\Switch\ASCOM.Simulator.Switch.dll
-        Register Library $TARGETDIR$\Platform\Simulators\SafetyMonitor\SafetyMonitorSimulatorDriver.dll
-        Register Library $TARGETDIR$\Platform\Simulators\Focuser\ASCOM.Simulator.Focuser.dll
-        Register Library $TARGETDIR$\Platform\Simulators\Camera\ASCOM.Simulator.Camera.dll
-        Comment: Register these drivers but use the -register option
-        Run Program $TARGETDIR$\Platform\Simulators\Telescope\ASCOM.TelescopeSimulator.exe -register
-        Run Program $TARGETDIR$\Platform\Simulators\FilterWheel\ASCOM.FilterWheelSim.exe -register
+        Comment: Register ASCOM DLLs for com using the /tlb option - NOT SURE WE NEED THIS - speak with Bob
+        Comment: Run Program $WINDIR$\Microsoft.NET\Framework\v2.0.50727\regasm.exe /tlb $COMMONFILES$\ASCOM\Platform\ASCOM.Utilities.dll
+        Comment: Run Program $WINDIR$\Microsoft.NET\Framework\v2.0.50727\regasm.exe /tlb $COMMONFILES$\ASCOM\Platform\ASCOM.Astrometry.dll
+        Comment: Run Program $WINDIR$\Microsoft.NET\Framework\v2.0.50727\regasm.exe /tlb $COMMONFILES$\ASCOM\Platform\ASCOM.IConform.dll
+        Comment: Run Program $WINDIR$\Microsoft.NET\Framework\v2.0.50727\regasm.exe /tlb $COMMONFILES$\ASCOM\Platform\ASCOM.DeviceInterfaces.dll
+        Comment: Run Program $WINDIR$\Microsoft.NET\Framework\v2.0.50727\regasm.exe /tlb $COMMONFILES$\ASCOM\Platform\ASCOM.DriverAccess.dll
+        Comment: Run Program $WINDIR$\Microsoft.NET\Framework\v2.0.50727\regasm.exe /tlb $COMMONFILES$\ASCOM\Platform\ASCOM.Attributes.dll
+        Comment: Run Program $WINDIR$\Microsoft.NET\Framework\v2.0.50727\regasm.exe /tlb $COMMONFILES$\ASCOM\Platform\ASCOM.Controls.dll
+        Comment: Run Program $WINDIR$\Microsoft.NET\Framework\v2.0.50727\regasm.exe /tlb $COMMONFILES$\ASCOM\Platform\ASCOM.Exceptions.dll
+        Comment: Register in-process simulator DLL files with Codebase option
+        Register assembly $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch.dll, set the code base in the registry
+        Register assembly $COMMONFILES$\ASCOM\SafetyMonitor\SafetyMonitorSimulatorDriver.dll, set the code base in the registry
+        Register assembly $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser.dll, set the code base in the registry
+        Register assembly $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera.dll, set the code base in the registry
+        Comment: Register these LocalServer drivers using the -register option
+        Run Program $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator.exe -register
+        Run Program $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim.exe -register
+        Comment: Register original VB6 libraries
+        Register Library $COMMONFILES$\ASCOM\Helper.dll
+        Register Library $COMMONFILES$\ASCOM\Helper2.dll
+        Comment: Register original simulator
+        Run Program $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe /regserver (WAIT)
+        [END REGION]
       end
     end
   end

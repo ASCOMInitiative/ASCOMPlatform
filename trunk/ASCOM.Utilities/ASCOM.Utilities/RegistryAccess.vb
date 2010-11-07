@@ -241,21 +241,22 @@ Friend Class RegistryAccess
             RetVal = "" 'Initialise return value to null string
             Try
                 RetVal = ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName)).GetValue(p_ValueName).ToString
+                TL.LogMessage("  Value", """" & RetVal & """")
             Catch ex As NullReferenceException
                 If Not (p_DefaultValue Is Nothing) Then 'We have been supplied a default value so set it and then return it
                     WriteProfile(p_SubKeyName, p_ValueName, p_DefaultValue)
                     RetVal = p_DefaultValue
-                    TL.LogMessage("GetProfile", "Value not yet set, returning supplied default value: " & p_DefaultValue)
+                    TL.LogMessage("  Value", "Value not yet set, returning supplied default value: " & p_DefaultValue)
                 Else
-                    TL.LogMessage("GetProfile", "Value not yet set and no default value supplied, returning null string")
+                    TL.LogMessage("  Value", "Value not yet set and no default value supplied, returning null string")
                 End If
             Catch ex As Exception 'Any other exception
                 If Not (p_DefaultValue Is Nothing) Then 'We have been supplied a default value so set it and then return it
                     WriteProfile(CleanSubKey(p_SubKeyName), CleanSubKey(p_ValueName), p_DefaultValue)
                     RetVal = p_DefaultValue
-                    TL.LogMessage("GetProfile", "Key not yet set, returning supplied default value: " & p_DefaultValue)
+                    TL.LogMessage("  Value", "Key not yet set, returning supplied default value: " & p_DefaultValue)
                 Else
-                    TL.LogMessageCrLf("GetProfile", "Key not yet set and no default value supplied, throwing exception: " & ex.ToString)
+                    TL.LogMessageCrLf("  Value", "Key not yet set and no default value supplied, throwing exception: " & ex.ToString)
                     Throw New ProfilePersistenceException("GetProfile Exception", ex)
                 End If
             End Try
