@@ -1,4 +1,12 @@
 Comment
+If
+Set Variable
+MessageBox
+If
+Run Program As
+GoTo Label
+End
+End
 Comment
 Code Folding Region
 Comment
@@ -260,6 +268,11 @@ Run Program
 Run Program
 Run Program
 Run Program
+Register Assembly
+Register Assembly
+Run Program
+Register Assembly
+Register Assembly
 Apply Changes
 If
 If
@@ -298,9 +311,14 @@ Create Folder
 Create Folder
 Create Folder
 Create Folder
-Create Folder
 Code Folding Region
 Code Folding Region
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
 Install Assembly
 Code Folding Region
 Code Folding Region
@@ -364,6 +382,8 @@ Install Files
 Install Files
 Install Files
 Install Files
+Install Files
+Create Shortcut
 Install Files
 Code Folding Region
 Code Folding Region
@@ -423,6 +443,8 @@ Install Assembly
 Install Files
 Install Assembly
 Install Files
+Install Files
+Install Files
 Code Folding Region
 Code Folding Region
 Create Shortcut
@@ -438,6 +460,7 @@ Create Shortcut
 Code Folding Region
 Code Folding Region
 Comment
+Set Access Control
 Write Registry
 Write Registry
 Write Registry
@@ -620,7 +643,6 @@ Code Folding Region
 Apply Changes
 If
 If
-Set Access Control
 Code Folding Region
 Register Assembly
 Register Assembly
@@ -632,26 +654,24 @@ Register Assembly
 Register Assembly
 Register Assembly
 Register Assembly
-Comment
-Run Program
-Run Program
-Run Program
-Run Program
-Run Program
-Run Program
-Run Program
-Run Program
+Register Assembly
+Register Assembly
+Register Assembly
 Comment
 Register Assembly
 Register Assembly
 Register Assembly
 Register Assembly
+Comment
+Run Program
 Comment
 Run Program
 Run Program
 Comment
 Register Library
 Register Library
+Comment
+Run Program
 Code Folding Region
 End
 End
@@ -682,9 +702,18 @@ End
 End
 End
 Code Folding Region
+Label
 Comment
 $
-{6D708C8F-3768-4276-900A-CDC17C181B5E}
+{FC7A3C0C-BFF8-4D6B-8C08-D0DD8ADF1ABA}
+{569162D7-C6BF-4929-8F09-E3274078D77A}
+{7DEEC42C-E525-4106-8674-3B81AE1DE53D}
+{2F8A385A-8979-4C4D-94C3-87E6D877AE96}
+{50C70E0F-34B3-4FF2-9C6D-49499C935A67}
+{45D4BA85-EC46-41B3-944E-261F3A23184C}
+{819A655A-21B3-4D69-B773-F5A6C8D5C190}
+{4544B0B9-A654-4CE1-9659-9493745EB181}
+{B57991A4-3DAA-4E0B-9D94-2120C536FFDC}
 {AA62D93F-9E77-4545-9DFC-6281DFF4EED5}
 {DCD13871-CEBE-4697-B0DC-4578CD0208BA}
 {73D4CE89-B727-45A6-8F31-90F9629F1D1A}
@@ -946,6 +975,11 @@ $
 {1B46A6C7-D968-4BAB-8E49-2797B5BF982C}
 {77C63E2F-D662-46D6-B385-34B05C4864DC}
 {866783EB-F748-465B-A56B-2EA1C2506EF6}
+{71D8319A-7DBB-4FCB-9D34-338F145ADAE3}
+{9505D63F-27F0-46A6-A166-46B1BC89B34C}
+{B1EACE6C-17F3-4B7A-BEDD-41F677D50D3D}
+{3B0D3725-689E-4FD0-A2B9-F5018F1BF8F0}
+{EE10DEC0-5D74-4803-B705-764D22A9D51E}
 {C310BE10-8986-434D-A45B-138E9ABB413E}
 {72B2882C-C8A2-44F2-A68E-935EBDAD54EE}
 {9D9E4AAB-80D6-4551-BFD5-5271977F91F7}
@@ -984,10 +1018,15 @@ $
 {F3318935-5EDC-4061-AB01-0EAE3A3673E1}
 {F954EA19-6D44-4955-8A82-E5ED15FEA014}
 {A30B2C0E-AD9A-4689-85E7-E787881411B2}
-{A5AD6533-43A6-4A8F-8161-35CE38F93B22}
 {D38A1F69-03B8-4B59-BF90-99EE576B073F}
 {4A66F92C-2E19-4C17-9BB3-BB699311CC08}
-{6F9A734E-B1F6-4986-8087-A7DEC3EDD076}
+{CE6B7056-9290-46BB-BF97-6D2F32ED4389}
+{5C05B490-5CE6-479E-8A62-D59792E3AA2F}
+{EA525D57-CB91-4890-B2E6-F8251107378C}
+{F52B6B9A-47E7-42E3-8312-09B0DE0721C3}
+{F987D837-F7AC-4F9F-B06A-D6F95F63EF97}
+{B90259A4-51D4-4C4A-800F-A60501CD1457}
+{89BE456F-29B8-4BC4-9E4E-93DB5E130687}
 {034B1149-7192-4DA3-A921-C3921F9E1957}
 {CCDAB73D-9EB7-4331-80A4-57C873E2DF19}
 {228C9A5A-477A-44DC-8D82-CC5FC3C63ADA}
@@ -1050,6 +1089,8 @@ $
 {D5A28E26-C33A-4781-8F20-8C0348D6880E}
 {147485C9-B9A1-4BEB-A494-8B634C6408DB}
 {5619EAE3-8003-4C18-A154-35043F696AC9}
+{74C7EE11-CDE4-4611-BFD9-DE41303B0B00}
+{FF41893F-14D0-4547-A8BF-7FF2DB912D29}
 {EA11EE57-D861-4D16-AFBB-840280DDD526}
 {0542221E-4809-4F83-931E-D22B86019DE3}
 {32C30B95-5DE4-4E6C-89B2-80EF979E2CBB}
@@ -1109,6 +1150,8 @@ $
 {041454B0-73FE-4B1F-AEE6-096A0553BEC1}
 {6DE5DE2B-5099-42B6-B91B-1DFE62D7476E}
 {FBA0F8DC-DC88-4E19-AC84-96B5A2DC6805}
+{1DA97A35-39DE-4048-8897-810554CC74AB}
+{200B08EF-666D-43FC-9C62-F46F5FCAA1A3}
 {0F8F7E53-0359-4437-96D6-7BB5CA573BA9}
 {4CCB6932-09C4-401F-8801-EB337DE56855}
 {6389496C-2EA4-4C08-AEDC-9553ADA6A762}
@@ -1124,6 +1167,7 @@ $
 {3DC47D5C-044F-4938-9466-BE1F496E066E}
 {DA375D0A-28BA-49EC-8C2C-22BE4DD2AF71}
 {9B9F472A-BB4E-44A8-8108-E79EE222AF96}
+{9C444449-8E02-4661-8FEE-81AA729E0C45}
 {D205A263-B078-4480-80D8-F606C17F295E}
 {6FFD2434-CF63-409C-8201-88A40F58D1DA}
 {B3AFA134-E22B-4873-A83A-F3CD59A2F4A9}
@@ -1306,8 +1350,10 @@ $
 {5E169C9B-CF1A-4A1B-9686-B50E2E951483}
 {A43A5EAF-E021-4C2D-BD18-D8FF3912672F}
 {DDAA469F-FF5F-4D84-AAAD-D449F47B325E}
-{4C484FE4-6614-4D2C-9450-CD312ACD911C}
 {82FA46CC-0CBA-455C-8588-3AAC3966D613}
+{C4873090-9694-441B-83F1-CE49C7778BCB}
+{18D724E9-7A38-4C26-83D2-957F25EF20B3}
+{8AA08BB1-C1CB-4ADC-AD93-3FE194071649}
 {9B731B50-C39B-4929-B323-876C8F6AA970}
 {15E11FBB-11D9-4401-BE37-95B8C56BCDCA}
 {3C52FE84-A0E9-4348-AC82-D3C273680AF4}
@@ -1318,26 +1364,21 @@ $
 {51283007-ADA9-4600-832F-473756841CB4}
 {998E9F4B-6244-4801-B43C-322366C8ED1A}
 {152FE3C1-B3E3-4004-833B-4A99E7739221}
-{24A0A742-0AEE-403F-9795-EF69F95E0D6C}
-{081C89A4-70D1-4339-AF9F-9256CD3B4119}
-{177204A8-EA6A-4CC0-BAD8-BCF1B64623B0}
-{D48035EA-08DD-48F6-9791-0E0BD9E6D282}
-{D7A48E78-366C-4910-8B1D-59701DF76C66}
-{7D9B001B-1EDA-4B7E-A508-683F4AAD9CC7}
-{7B22278A-BAA4-4FE0-A124-14CE7E79658A}
-{83E563F9-D241-4074-B1FC-9D65D59AC748}
-{04C30856-0B77-4B89-8660-624BD0FDE9B3}
 {A0F35DB4-4B3B-4C0F-988B-E0AFDB8D0948}
 {E1EB727B-9936-47F1-B91B-C7DD788CA40F}
 {E59D7FF2-497A-45A5-9AB6-E6B0E0EFF515}
 {A866257C-2F52-4F26-8D25-FEFC986DDA5E}
-{4DC14F66-F635-4939-AAE6-486D7493C1DB}
+{3DA4C27F-F37E-442E-BAA7-99C143A2FED5}
+{A56A1F30-1E48-4060-8FF0-A637107F8006}
+{132C09CD-C9E2-40E4-92FF-6ADD17F5EA46}
 {0C9C96AE-1167-4476-A4A4-92333F1A197B}
 {B71A4B1B-A04A-41AB-86C9-A7C631059906}
 {4F86B8E6-F14F-4061-A055-8D37DFCD8C47}
 {2728235F-074E-4344-8299-2E22DA7B1C57}
 {EB8E7494-5BB0-4799-8C62-0B15073FE0ED}
 {7756BB54-7CF4-4F8A-9ADA-0A56E13B4682}
+{DC4FAC5E-8556-4142-8E91-245F6DA6276B}
+{367BB959-F7B9-47E7-94F6-087D1F08B856}
 {EE492636-FA5C-4C18-9389-F58E3C571182}
 {8C88DBF8-2C65-4F6C-AD61-4E6F968F66CD}
 {A2F641C3-444D-42B3-BF5C-76E1D2E983FE}
@@ -1368,10 +1409,9 @@ $
 {AF8A655F-43A5-4534-917E-69112E29BA2A}
 {D21C18C8-4591-461B-B125-BFE78DCCC2FC}
 {05301693-CED9-4B2B-BAF1-4CBA5317E613}
+{C797CF7C-BEB3-4BF4-B1D0-11AA94EA8C4D}
 {B9D0FD66-E710-4718-B047-EB7051EA7850}
 $
-{6D708C8F-3768-4276-900A-CDC17C181B5E}
-.NET Application Setup Project
 {AA62D93F-9E77-4545-9DFC-6281DFF4EED5}
 
 {30ECDE74-A874-4C04-AB17-D2B3CD6A8643}
@@ -1450,8 +1490,6 @@ Set this to your local ASCOM trunk path
 Register these LocalServer drivers using the -register option
 {A0F35DB4-4B3B-4C0F-988B-E0AFDB8D0948}
 Register in-process simulator DLL files with Codebase option
-{24A0A742-0AEE-403F-9795-EF69F95E0D6C}
-Register ASCOM DLLs for com using the /tlb option - NOT SURE WE NEED THIS - speak with Bob
 {DE4FC119-A932-449A-A571-4253796BE4FF}
 TO-DO: Insert command that starts your application here
 {2728235F-074E-4344-8299-2E22DA7B1C57}
@@ -1470,6 +1508,12 @@ SafetyMonitor simulator
 Switch simulator
 {114C6C11-38D9-4063-B64F-90A524F152A4}
 Telescope simulator
+{DC4FAC5E-8556-4142-8E91-245F6DA6276B}
+Register original simulator
+{FC7A3C0C-BFF8-4D6B-8C08-D0DD8ADF1ABA}
+Prompts the user if they want to create an install log
+{A56A1F30-1E48-4060-8FF0-A637107F8006}
+Install the Master Interfaces file
 {E601333E-999C-4EFE-A61F-0D1FFD86E003}
 SHORTCUTFILESALL
 $SHORTCUTFILES$
@@ -1520,13 +1564,16 @@ STARTMENU
 $TITLE$
 {C87A4693-2281-40F0-9077-F1734DCAAACF}
 TARGETDIR
-$PROGRAMFILES$\$TITLE$
+$PROGRAMFILES$\ASCOM\Patform 6
 {D76B8E1E-6853-4301-9530-7B7A3856B734}
 ASCOMTrunkPath$MYAH$MYAH$TRUE
-C:\ASCOM Trunk
+c:\ASCOM Trunk
 {61D5B2F7-A6EA-4852-8EAF-5C1539C6B03A}
 PreviousVersionsInstalled$MYAH$MYAH$TRUE
 True
+{7DEEC42C-E525-4106-8674-3B81AE1DE53D}
+CreateLogFile$MYAH$MYAH$FALSE
+No
 {C8DC86BF-2AAD-4DF5-8EB1-2767DE8783A4}
 CHECKIE
 0
@@ -1792,6 +1839,16 @@ PreviousVersionsInstalled
 0
 True
 FALSE
+{569162D7-C6BF-4929-8F09-E3274078D77A}
+CMDLINE
+1
+/l
+TRUE
+{50C70E0F-34B3-4FF2-9C6D-49499C935A67}
+CreateLogFile
+0
+YES
+FALSE
 {0E0152EA-EEEA-4EA4-9B85-51D60359A442}
 $TITLE$ Setup Error
 This product requires Internet Explorer 5.01 Service Pack 1 or later. Please install it and try again.
@@ -1828,6 +1885,12 @@ This product requires at least User Account Control Elevation.$NEWLINE$$NEWLINE$
 3
 1
 
+{2F8A385A-8979-4C4D-94C3-87E6D877AE96}
+Create Install Log File
+Would you like to create a installation log file for troubleshooting purposes?$NEWLINE$ $NEWLINE$C:\ASCOMInstall.txt$NEWLINE$$NEWLINE$If you select 'Yes' the installer will take more time.
+1
+4
+CreateLogFile
 {C3EA48A0-2F3F-47F5-8BF8-A4C5C3876E56}
 welcome
 WIZARD
@@ -1941,15 +2004,13 @@ TRUE
 TRUE
 FALSE
 {41219729-F0A9-481C-B23E-AFA9369C4FFF}
-$TARGETDIR$\Platform\Docs
+$TARGETDIR$\Docs
 {434F42D5-DDA2-4842-B516-B8420D477985}
 $COMMONFILES$\ASCOM\Platform\v5.5
 {9D5BA99E-2945-40C1-A029-77BC80419EE1}
 $COMMONFILES$\ASCOM\Switch
 {F3318935-5EDC-4061-AB01-0EAE3A3673E1}
 $COMMONFILES$\ASCOM\Telescope
-{A5AD6533-43A6-4A8F-8161-35CE38F93B22}
-$SHORTCUTFILES$\ASCOM Platform 6
 {A30B2C0E-AD9A-4689-85E7-E787881411B2}
 $WINDIR$\Symbols\dll
 {A7DCA34C-913A-45EC-B800-AA51A0742E09}
@@ -2035,7 +2096,7 @@ CHECKSYSTEM
 CHECKSYSTEM
 77
 {B8D235DD-68CB-462E-81A8-5EB169ED24AA}
-C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.pdb
+c:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -2048,7 +2109,7 @@ FALSE
 FALSE
 FALSE
 {BAD0A8C7-73E8-4BBC-AADC-F7FB683A56C6}
-C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb
+c:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2061,7 +2122,7 @@ FALSE
 FALSE
 FALSE
 {B39996BD-908C-423E-8D9F-84FEB91BD338}
-C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll
+c:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2074,7 +2135,7 @@ FALSE
 FALSE
 FALSE
 {3200433D-BFEB-4EA5-A26C-56F38C8AC16C}
-C:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.pdb
+c:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2087,7 +2148,7 @@ FALSE
 FALSE
 FALSE
 {ADB0D4A0-16E1-4E1C-8430-DE7547408C28}
-C:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll
+c:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2100,7 +2161,7 @@ FALSE
 FALSE
 FALSE
 {03241F89-1650-4358-A216-9ACD0C64EAB7}
-C:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb
+c:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2113,7 +2174,7 @@ FALSE
 FALSE
 FALSE
 {FDB8BD82-86A5-494B-9A37-E6A3B123BCD7}
-C:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll
+c:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2126,7 +2187,7 @@ FALSE
 FALSE
 FALSE
 {9D6526D2-21BE-498E-AD70-F5BCAB862954}
-C:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll
+c:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2139,7 +2200,7 @@ FALSE
 FALSE
 FALSE
 {8403F454-A7ED-40FA-ACAB-ABB6721C3759}
-C:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb
+c:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2152,7 +2213,7 @@ FALSE
 FALSE
 FALSE
 {A11C0B42-88D2-49FC-9C71-27D41E676E9B}
-C:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll
+c:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2165,7 +2226,7 @@ FALSE
 FALSE
 FALSE
 {7DB7CD86-15CC-4A30-B80F-C2FF8AC95775}
-C:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb
+c:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2178,7 +2239,7 @@ FALSE
 FALSE
 FALSE
 {86F34EA5-5F8C-4B64-9740-1E458DD787F7}
-C:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll
+c:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2191,7 +2252,7 @@ FALSE
 FALSE
 FALSE
 {228C9A5A-477A-44DC-8D82-CC5FC3C63ADA}
-C:\ASCOM Trunk\ASCOM.Utilities\VB6Helper\Helper.dll
+c:\ASCOM Trunk\ASCOM.Utilities\VB6Helper\Helper.dll
 FALSE|
 $COMMONFILES$\ASCOM
 FALSE
@@ -2204,7 +2265,7 @@ FALSE
 FALSE
 FALSE
 {131B0EA4-591B-4513-83E8-DB895C757C82}
-C:\ASCOM Trunk\ASCOM.Utilities\VB6Helper2\Helper2.dll
+c:\ASCOM Trunk\ASCOM.Utilities\VB6Helper2\Helper2.dll
 FALSE|
 $COMMONFILES$\ASCOM
 FALSE
@@ -2217,7 +2278,7 @@ FALSE
 FALSE
 FALSE
 {2DA6A3AA-BA07-40FF-8032-9937419E3EF1}
-C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll
+c:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v5.5
 FALSE
@@ -2230,7 +2291,7 @@ FALSE
 FALSE
 FALSE
 {CC309713-C76C-4BEE-B366-9955E27CC5CA}
-C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.pdb
+c:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v5.5
 FALSE
@@ -2243,7 +2304,7 @@ FALSE
 FALSE
 FALSE
 {FBA0F8DC-DC88-4E19-AC84-96B5A2DC6805}
-C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulatorServedClasses\ASCOM.TelescopeSimulator.Telescope.pdb
+c:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulatorServedClasses\ASCOM.TelescopeSimulator.Telescope.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Telescope\ServedClasses
 FALSE
@@ -2256,7 +2317,7 @@ FALSE
 FALSE
 FALSE
 {75DD9876-0F33-4847-9196-FB6B7B1C0491}
-C:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.pdb
+c:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Camera
 FALSE
@@ -2269,7 +2330,7 @@ FALSE
 FALSE
 FALSE
 {041454B0-73FE-4B1F-AEE6-096A0553BEC1}
-C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.pdb
+c:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Telescope
 FALSE
@@ -2282,7 +2343,7 @@ FALSE
 FALSE
 FALSE
 {CB314A4C-BA01-4C50-AAE8-3FB9D95DE7A9}
-C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ASCOM.FilterWheelSim.pdb
+c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ASCOM.FilterWheelSim.pdb
 FALSE|
 $COMMONFILES$\ASCOM\FilterWheel
 FALSE
@@ -2295,7 +2356,7 @@ FALSE
 FALSE
 FALSE
 {18C930EE-441F-49CA-BDE8-B6846CF73D3E}
-C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.FilterWheel.pdb
+c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.FilterWheel.pdb
 FALSE|
 $COMMONFILES$\ASCOM\FilterWheel\ServedClasses
 FALSE
@@ -2308,7 +2369,7 @@ FALSE
 FALSE
 FALSE
 {FB0F0EE7-1486-45E6-BCBF-843958845B0A}
-C:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.pdb
+c:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Focuser
 FALSE
@@ -2321,7 +2382,7 @@ FALSE
 FALSE
 FALSE
 {7D3D3EA6-15D5-42D2-ABF9-C969EC519CD9}
-C:\ASCOM Trunk\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\SafetyMonitorSimulatorDriver.pdb
+c:\ASCOM Trunk\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\SafetyMonitorSimulatorDriver.pdb
 FALSE|
 $COMMONFILES$\ASCOM\SafetyMonitor
 FALSE
@@ -2334,7 +2395,7 @@ FALSE
 FALSE
 FALSE
 {88E4D0E0-9629-432B-974B-A54B0EA575AF}
-C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.pdb
+c:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Switch
 FALSE
@@ -2347,7 +2408,7 @@ FALSE
 FALSE
 FALSE
 {68703FE0-080B-4271-BF06-C2A448C05B76}
-C:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb
+c:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -2360,9 +2421,9 @@ FALSE
 FALSE
 FALSE
 {F49BF766-86E0-4A58-BD57-037BE0EE21B2}
-C:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.xml
+c:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.xml
 FALSE|
-$TARGETDIR$\Platform\Tools
+$TARGETDIR$\Tools
 FALSE
 FALSE
 FALSE
@@ -2373,9 +2434,9 @@ FALSE
 FALSE
 FALSE
 {ECF6841C-F752-4309-BF43-88F34AE19464}
-C:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb
+c:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb
 FALSE|
-$TARGETDIR$\Platform\Tools
+$TARGETDIR$\Tools
 FALSE
 FALSE
 FALSE
@@ -2386,9 +2447,9 @@ FALSE
 FALSE
 FALSE
 {C5ADAFD6-3BDA-4E1A-B547-C14F091345D0}
-C:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe
+c:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe
 FALSE|
-$TARGETDIR$\Platform\Tools
+$TARGETDIR$\Tools
 FALSE
 FALSE
 FALSE
@@ -2399,9 +2460,9 @@ FALSE
 FALSE
 FALSE
 {1F3C159D-FE88-4879-BC3F-04497F5BC981}
-C:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.xml
+c:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.xml
 FALSE|
-$TARGETDIR$\Platform\Tools
+$TARGETDIR$\Tools
 FALSE
 FALSE
 FALSE
@@ -2412,9 +2473,9 @@ FALSE
 FALSE
 FALSE
 {17EA2448-DCF0-407B-B13C-43A5B5C3B9EB}
-C:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb
+c:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb
 FALSE|
-$TARGETDIR$\Platform\Tools
+$TARGETDIR$\Tools
 FALSE
 FALSE
 FALSE
@@ -2425,9 +2486,9 @@ FALSE
 FALSE
 FALSE
 {E7D3B842-1106-40BC-9A2D-93B4BEBEC14C}
-C:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.exe
+c:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.exe
 FALSE|
-$TARGETDIR$\Platform\Tools
+$TARGETDIR$\Tools
 FALSE
 FALSE
 FALSE
@@ -2438,7 +2499,7 @@ FALSE
 FALSE
 FALSE
 {306AAF93-E8BF-4165-9968-E6C42BF0A76F}
-C:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb
+c:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -2451,7 +2512,7 @@ FALSE
 FALSE
 FALSE
 {F1E6BCE3-115C-47A1-A63D-E5FE56E5FD0A}
-C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\Resources\ASCOM.ico
+c:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\Resources\ASCOM.ico
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2464,7 +2525,7 @@ FALSE
 FALSE
 FALSE
 {CAF88333-AC83-438B-B2D5-36D77CB17E95}
-C:\ASCOM Trunk\ASCOM.Utilities\MigrateProfile\bin\Release\MigrateProfile.exe
+c:\ASCOM Trunk\ASCOM.Utilities\MigrateProfile\bin\Release\MigrateProfile.exe
 FALSE|
 $COMMONFILES$\ASCOM\Platform\Internal
 FALSE
@@ -2477,7 +2538,7 @@ FALSE
 FALSE
 FALSE
 {E0E205BE-FD7F-4888-BA81-51490D51A6CB}
-C:\ASCOM Trunk\ASCOM.Utilities\Setup\policy.5.5.ASCOM.Astrometry.dll
+c:\ASCOM Trunk\ASCOM.Utilities\Setup\policy.5.5.ASCOM.Astrometry.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\Internal
 FALSE
@@ -2490,7 +2551,7 @@ FALSE
 FALSE
 FALSE
 {EA8340FD-95F0-4442-8599-B6965B29BF60}
-C:\ASCOM Trunk\ASCOM.Utilities\Setup\policy.5.5.ASCOM.Utilities.dll
+c:\ASCOM Trunk\ASCOM.Utilities\Setup\policy.5.5.ASCOM.Utilities.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\Internal
 FALSE
@@ -2503,7 +2564,7 @@ FALSE
 FALSE
 FALSE
 {AC7BB2F6-94E2-4CEB-A3FC-A91ED376D410}
-C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\policy.1.0.ASCOM.DriverAccess.dll
+c:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\policy.1.0.ASCOM.DriverAccess.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\Internal
 FALSE
@@ -2516,7 +2577,7 @@ FALSE
 FALSE
 FALSE
 {A279A89D-CA33-4D43-A3C6-1FAFC559F6CD}
-C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\DriverAccess.config
+c:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\DriverAccess.config
 FALSE|
 $COMMONFILES$\ASCOM\Platform\Internal
 FALSE
@@ -2529,7 +2590,7 @@ FALSE
 FALSE
 FALSE
 {93AEEABF-F0B5-4107-819C-073E20DDEC2C}
-C:\ASCOM Trunk\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe
+c:\ASCOM Trunk\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe
 FALSE|
 $COMMONFILES$\ASCOM\Platform\Internal
 FALSE
@@ -2542,9 +2603,9 @@ FALSE
 FALSE
 FALSE
 {EA11EE57-D861-4D16-AFBB-840280DDD526}
-C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Supported Devices (web).url
+c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Supported Devices (web).url
 FALSE|
-$TARGETDIR$\Platform\Docs
+$TARGETDIR$\Docs
 FALSE
 FALSE
 FALSE
@@ -2555,9 +2616,9 @@ FALSE
 FALSE
 FALSE
 {5619EAE3-8003-4C18-A154-35043F696AC9}
-C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Support (web).url
+c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Support (web).url
 FALSE|
-$TARGETDIR$\Platform\Docs
+$TARGETDIR$\Docs
 FALSE
 FALSE
 FALSE
@@ -2568,9 +2629,9 @@ FALSE
 FALSE
 FALSE
 {147485C9-B9A1-4BEB-A494-8B634C6408DB}
-C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\PlatformHelp.chm
+c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\PlatformHelp.chm
 FALSE|
-$TARGETDIR$\Platform\Docs
+$TARGETDIR$\Docs
 FALSE
 FALSE
 FALSE
@@ -2581,9 +2642,9 @@ FALSE
 FALSE
 FALSE
 {D5A28E26-C33A-4781-8F20-8C0348D6880E}
-C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Drivers and Downloads (web).url
+c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Drivers and Downloads (web).url
 FALSE|
-$TARGETDIR$\Platform\Docs
+$TARGETDIR$\Docs
 FALSE
 FALSE
 FALSE
@@ -2594,9 +2655,9 @@ FALSE
 FALSE
 FALSE
 {F998A3CD-187E-4A5F-9A45-ED1521D70FCA}
-C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Compatible Software (web).url
+c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Compatible Software (web).url
 FALSE|
-$TARGETDIR$\Platform\Docs
+$TARGETDIR$\Docs
 FALSE
 FALSE
 FALSE
@@ -2607,9 +2668,9 @@ FALSE
 FALSE
 FALSE
 {D2A67E43-663A-4BCB-80AB-FA33E296696E}
-C:\ASCOM Trunk\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf
+c:\ASCOM Trunk\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf
 FALSE|
-$TARGETDIR$\Platform\Docs
+$TARGETDIR$\Docs
 FALSE
 FALSE
 FALSE
@@ -2620,9 +2681,9 @@ FALSE
 FALSE
 FALSE
 {D1333008-D39E-418E-A94F-D54516314092}
-C:\ASCOM Trunk\Help\Platform Supporting Documents\Platform 6.0.pdf
+c:\ASCOM Trunk\Help\Platform Supporting Documents\Platform 6.0.pdf
 FALSE|
-$TARGETDIR$\Platform\Docs
+$TARGETDIR$\Docs
 FALSE
 FALSE
 FALSE
@@ -2633,7 +2694,7 @@ FALSE
 FALSE
 FALSE
 {3C21A620-FA47-435F-AF98-CB57904B341B}
-C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb
+c:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -2646,7 +2707,7 @@ FALSE
 FALSE
 FALSE
 {203AF848-821E-4C4F-A85E-1EA057DF7A36}
-C:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb
+c:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -2659,7 +2720,7 @@ FALSE
 FALSE
 FALSE
 {5DAD9FEA-2959-42FC-9F45-6FD38E1B0403}
-C:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb
+c:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -2672,7 +2733,7 @@ FALSE
 FALSE
 FALSE
 {217CE02C-5424-4D0A-9A65-EC7E02D4D0FA}
-C:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb
+c:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -2685,7 +2746,7 @@ FALSE
 FALSE
 FALSE
 {47E08FB1-7C1F-43A5-8BE1-2F46ADB8B21A}
-C:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.pdb
+c:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -2698,9 +2759,9 @@ FALSE
 FALSE
 FALSE
 {DAE1C3BB-A7B2-4703-AE13-1FA8C31AE27F}
-C:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.pdb
+c:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.pdb
 FALSE|
-$TARGETDIR$\Platform\Tools
+$TARGETDIR$\Tools
 FALSE
 FALSE
 FALSE
@@ -2711,9 +2772,9 @@ FALSE
 FALSE
 FALSE
 {0CC3572F-BC2C-4FC4-9939-0A3E04D4B418}
-C:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll
+c:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll
 FALSE|
-$TARGETDIR$\Platform\Tools
+$TARGETDIR$\Tools
 FALSE
 FALSE
 FALSE
@@ -2724,7 +2785,7 @@ FALSE
 FALSE
 FALSE
 {A2A8D814-DB9E-4A06-9944-D1B85EA16DAD}
-C:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.pdb
+c:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -2737,7 +2798,7 @@ FALSE
 FALSE
 FALSE
 {76A1382E-7E8B-4AF8-8BB1-3693C2667EF6}
-C:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.xml
+c:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.xml
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2750,7 +2811,7 @@ FALSE
 FALSE
 FALSE
 {8FEED3D4-EC30-4C9F-A671-46644D3F57B5}
-C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml
+c:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2763,7 +2824,7 @@ FALSE
 FALSE
 FALSE
 {81BDD723-D414-4F30-BFFA-1E4E7F73E6DA}
-C:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.xml
+c:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.xml
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2776,7 +2837,7 @@ FALSE
 FALSE
 FALSE
 {207EE32D-48FE-4367-BC12-20BD31D7CED2}
-C:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.xml
+c:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.xml
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2789,7 +2850,7 @@ FALSE
 FALSE
 FALSE
 {4B1945AB-8F2D-42CF-BCCD-FA6CD5B6DB09}
-C:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.xml
+c:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.xml
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2802,7 +2863,7 @@ FALSE
 FALSE
 FALSE
 {53DDF0ED-1A07-49FE-9F4A-571255328611}
-C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.xml
+c:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.xml
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v5.5
 FALSE
@@ -2815,7 +2876,7 @@ FALSE
 FALSE
 FALSE
 {EBCC44D7-DED8-4DC3-9E57-29EDC8D3435A}
-C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb
+c:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -2828,7 +2889,7 @@ FALSE
 FALSE
 FALSE
 {3515935E-0827-43B8-82FA-7A55DCA3B498}
-C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb
+c:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2841,7 +2902,7 @@ FALSE
 FALSE
 FALSE
 {CCD139A0-6CC7-433B-8E19-1AC55751D6C7}
-C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml
+c:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2854,7 +2915,7 @@ FALSE
 FALSE
 FALSE
 {6B113DAD-FD84-4294-9081-1D2B75C69565}
-C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll
+c:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2867,7 +2928,7 @@ FALSE
 FALSE
 FALSE
 {1EFFEAD3-9835-41A4-A1A5-49E219272B50}
-C:\ASCOM Trunk\NOVAS\NOVAS-3\CioFile\cio_ra.bin
+c:\ASCOM Trunk\NOVAS\NOVAS-3\CioFile\cio_ra.bin
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2880,7 +2941,7 @@ FALSE
 FALSE
 FALSE
 {4BA065C0-5D9B-41DA-B7F1-4366B0483E83}
-C:\ASCOM Trunk\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH
+c:\ASCOM Trunk\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2893,7 +2954,7 @@ FALSE
 FALSE
 FALSE
 {8DDE7C41-8AA4-44D6-B077-0DD12380D8A5}
-C:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.pdb
+c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2906,7 +2967,7 @@ FALSE
 FALSE
 FALSE
 {C2E7BCCC-74AA-435B-8012-A8D31A619165}
-C:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.dll
+c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2919,7 +2980,7 @@ FALSE
 FALSE
 FALSE
 {6885FF28-EE43-4A3F-8F2A-05F59344A557}
-C:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.pdb
+c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2932,7 +2993,7 @@ FALSE
 FALSE
 FALSE
 {25740B0D-B8C8-4E8D-954C-49AA97BB84CD}
-C:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.dll
+c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2945,7 +3006,7 @@ FALSE
 FALSE
 FALSE
 {545E3EB2-B55A-4D60-8455-9416F07FBA4D}
-C:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.pdb
+c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2958,7 +3019,7 @@ FALSE
 FALSE
 FALSE
 {82F8609B-1D28-4ABF-9C61-69C7EAEE5E59}
-C:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.dll
+c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2971,7 +3032,7 @@ FALSE
 FALSE
 FALSE
 {4701DE05-08FE-413F-8BC8-5DD5754A8875}
-C:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.pdb
+c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2984,7 +3045,7 @@ FALSE
 FALSE
 FALSE
 {60EBD3B2-CEF5-4ACF-A7B6-F9BD1D6CB418}
-C:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.dll
+c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -2997,7 +3058,7 @@ FALSE
 FALSE
 FALSE
 {CECA786B-2E07-477F-8602-101D4E116353}
-C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.pdb
+c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -3010,7 +3071,7 @@ FALSE
 FALSE
 FALSE
 {BA632DD6-FB56-45F4-9C0C-78E4C2C9BF89}
-C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.pdb
+c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -3023,7 +3084,7 @@ FALSE
 FALSE
 FALSE
 {64A8C0EE-50AB-43F1-9E61-9DFE50F4BD3A}
-C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.xml
+c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.xml
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -3036,7 +3097,7 @@ FALSE
 FALSE
 FALSE
 {B00DFC9E-D4EA-49AB-9C57-B6C68D33E506}
-C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll
+c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -3049,7 +3110,7 @@ FALSE
 FALSE
 FALSE
 {4B1B7649-5D61-4468-8B4B-266D53792B70}
-C:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.xml
+c:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.xml
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -3062,7 +3123,7 @@ FALSE
 FALSE
 FALSE
 {A2078C6E-216A-4688-B0D9-BA3F9139B043}
-C:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.pdb
+c:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -3075,9 +3136,126 @@ FALSE
 FALSE
 FALSE
 {CE1C2825-8DDD-4DEF-921D-08C600EFBA7B}
-C:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.pdb
+c:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.pdb
 FALSE|
 $WINDIR$\Symbols\dll
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{1DA97A35-39DE-4048-8897-810554CC74AB}
+c:\ASCOM Trunk\Drivers and Simulators\Scope Simulator\ScopeSim.exe
+FALSE|
+$COMMONFILES$\ASCOM\Telescope
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{74C7EE11-CDE4-4611-BFD9-DE41303B0B00}
+c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\ASCOM_Users_Guide.pdf
+FALSE|
+$TARGETDIR$\Docs
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{200B08EF-666D-43FC-9C62-F46F5FCAA1A3}
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Astro32.dll
+FALSE|
+$COMMONFILES$\ASCOM\Telescope
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{F987D837-F7AC-4F9F-B06A-D6F95F63EF97}
+C:\ASCOM Trunk\ASCOM.Utilities\VB6Helper2\Helper2.dll
+FALSE|
+$COMMONFILES$\ASCOM\Platform
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{F52B6B9A-47E7-42E3-8312-09B0DE0721C3}
+C:\ASCOM Trunk\ASCOM.Utilities\VB6Helper\Helper.dll
+FALSE|
+$COMMONFILES$\ASCOM\Platform
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{EA525D57-CB91-4890-B2E6-F8251107378C}
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Helper.tlb
+FALSE|
+$COMMONFILES$\ASCOM\Platform
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{5C05B490-5CE6-479E-8A62-D59792E3AA2F}
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Helper2.tlb
+FALSE|
+$COMMONFILES$\ASCOM\Platform
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{CE6B7056-9290-46BB-BF97-6D2F32ED4389}
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\AscomMasterInterfaces.tlb
+FALSE|
+$COMMONFILES$\ASCOM\Platform
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{B90259A4-51D4-4C4A-800F-A60501CD1457}
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\RegTlb.exe
+FALSE|
+$COMMONFILES$\ASCOM\Platform\Internal
 FALSE
 FALSE
 FALSE
@@ -3103,54 +3281,6 @@ FALSE
 $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator.exe
 FALSE
 -register
-FALSE
-
-{04C30856-0B77-4B89-8660-624BD0FDE9B3}
-$WINDIR$\Microsoft.NET\Framework\v2.0.50727\regasm.exe
-FALSE
-/tlb $COMMONFILES$\ASCOM\Platform\ASCOM.Exceptions.dll
-FALSE
-
-{081C89A4-70D1-4339-AF9F-9256CD3B4119}
-$WINDIR$\Microsoft.NET\Framework\v2.0.50727\regasm.exe
-FALSE
-/tlb $COMMONFILES$\ASCOM\Platform\ASCOM.Utilities.dll
-FALSE
-
-{177204A8-EA6A-4CC0-BAD8-BCF1B64623B0}
-$WINDIR$\Microsoft.NET\Framework\v2.0.50727\regasm.exe
-FALSE
-/tlb $COMMONFILES$\ASCOM\Platform\ASCOM.Astrometry.dll
-FALSE
-
-{D48035EA-08DD-48F6-9791-0E0BD9E6D282}
-$WINDIR$\Microsoft.NET\Framework\v2.0.50727\regasm.exe
-FALSE
-/tlb $COMMONFILES$\ASCOM\Platform\ASCOM.IConform.dll
-FALSE
-
-{D7A48E78-366C-4910-8B1D-59701DF76C66}
-$WINDIR$\Microsoft.NET\Framework\v2.0.50727\regasm.exe
-FALSE
-/tlb $COMMONFILES$\ASCOM\Platform\ASCOM.DeviceInterfaces.dll
-FALSE
-
-{7D9B001B-1EDA-4B7E-A508-683F4AAD9CC7}
-$WINDIR$\Microsoft.NET\Framework\v2.0.50727\regasm.exe
-FALSE
-/tlb $COMMONFILES$\ASCOM\Platform\ASCOM.DriverAccess.dll
-FALSE
-
-{7B22278A-BAA4-4FE0-A124-14CE7E79658A}
-$WINDIR$\Microsoft.NET\Framework\v2.0.50727\regasm.exe
-FALSE
-/tlb $COMMONFILES$\ASCOM\Platform\ASCOM.Attributes.dll
-FALSE
-
-{83E563F9-D241-4074-B1FC-9D65D59AC748}
-$WINDIR$\Microsoft.NET\Framework\v2.0.50727\regasm.exe
-FALSE
-/tlb $COMMONFILES$\ASCOM\Platform\ASCOM.Controls.dll
 FALSE
 
 {866783EB-F748-465B-A56B-2EA1C2506EF6}
@@ -3202,25 +3332,54 @@ FALSE
 FALSE
 
 {12450057-9E54-4CD9-BCA3-5781CAF101B0}
-$TARGETDIR$\Platform\Docs\Platform 6 Client-Driver Interaction V2.pdf
+$TARGETDIR$\Docs\ASCOM_Users_Guide.pdf
 FALSE
+
+FALSE
+
+{367BB959-F7B9-47E7-94F6-087D1F08B856}
+$COMMONFILES$\ASCOM\Telescope\ScopeSim.exe
+FALSE
+/regserver
+TRUE
+
+{132C09CD-C9E2-40E4-92FF-6ADD17F5EA46}
+$COMMONFILES$\ASCOM\Platform\internal\regtlb.exe
+FALSE
+$COMMONFILES$\ASCOM\Platform\AscomMasterInterfaces.tlb
+FALSE
+
+{B1EACE6C-17F3-4B7A-BEDD-41F677D50D3D}
+$COMMONFILES$\ASCOM\Platform\internal\regtlb.exe
+FALSE
+-u $COMMONFILES$\ASCOM\Platform\AscomMasterInterfaces.tlb
+TRUE
+
+{45D4BA85-EC46-41B3-944E-261F3A23184C}
+$EXEFILE$
+
+/l="C:\ASCOMInstall.txt"
+0
+
+
+
 
 FALSE
 
 {4872BD2A-7CB6-40E2-91B2-9BEEC8AA1541}
 $UNINSTALLLINK$
 Uninstall #TITLE#
-$SHORTCUTFILES$\ASCOM Platform 6\Tools
+$SHORTCUTFILES$\ASCOM\Platform 6\Tools
 Removes ASCOM 6
 
 
-C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
+c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 |
 0|
 {C177DEEE-DEEE-4E73-A786-18F225B9F330}
 $UNINSTALLLINK$
 #TITLE# Update
-$SHORTCUTFILES$\ASCOM Platform 6\Tools
+$SHORTCUTFILES$\ASCOM\Platform 6\Tools
 Updates ASCOM 6
 /update
 
@@ -3228,9 +3387,9 @@ c:\ascom trunk\releases\ascom 6\platform\installer project\ASCOM.ico
 |
 0|
 {C75671BE-C676-4459-A526-D41DC9539D28}
-$TARGETDIR$\Platform\Docs\Platform 6.0.pdf
+$TARGETDIR$\Docs\Platform 6.0.pdf
 Platform 6.0
-$SHORTCUTFILES$\ASCOM Platform 6\Docs
+$SHORTCUTFILES$\ASCOM\Platform 6\Docs
 
 
 
@@ -3238,9 +3397,9 @@ $SHORTCUTFILES$\ASCOM Platform 6\Docs
 |
 0|
 {9B88038B-C230-43D2-BB6F-6BD0ED4FBB66}
-$TARGETDIR$\Platform\Tools\ASCOM Diagnostics.exe
+$TARGETDIR$\Tools\ASCOM Diagnostics.exe
 ASCOM Diagnostics
-$SHORTCUTFILES$\ASCOM Platform 6\Tools
+$SHORTCUTFILES$\ASCOM\Platform 6\Tools
 
 
 
@@ -3248,9 +3407,9 @@ $SHORTCUTFILES$\ASCOM Platform 6\Tools
 |
 0|
 {BE6115F2-22CE-4510-B0EF-148B76088808}
-$TARGETDIR$\Platform\Tools\ProfileExplorer.exe
+$TARGETDIR$\Tools\ProfileExplorer.exe
 Profile Explorer
-$SHORTCUTFILES$\ASCOM Platform 6\Tools
+$SHORTCUTFILES$\ASCOM\Platform 6\Tools
 
 
 
@@ -3258,19 +3417,19 @@ $SHORTCUTFILES$\ASCOM Platform 6\Tools
 |
 0|
 {627B7EB2-224E-49AB-95E6-3AE663DB787A}
-$TARGETDIR$\Platform\Docs\Supported Devices (web).url
+$TARGETDIR$\Docs\Supported Devices (web).url
 Supported Devices (web)
-$SHORTCUTFILES$\ASCOM Platform 6\Docs
+$SHORTCUTFILES$\ASCOM\Platform 6\Docs
 
 
 
-C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
+c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 |
 0|
 {2C631ADC-EEB2-4375-B166-D9D9F15F3DAD}
-$TARGETDIR$\Platform\Docs\Platform 6 Client-Driver Interaction V2.pdf
+$TARGETDIR$\Docs\Platform 6 Client-Driver Interaction V2.pdf
 Platform 6 Client-Driver Interaction V2
-$SHORTCUTFILES$\ASCOM Platform 6\Docs
+$SHORTCUTFILES$\ASCOM\Platform 6\Docs
 
 
 
@@ -3278,50 +3437,60 @@ $SHORTCUTFILES$\ASCOM Platform 6\Docs
 |
 0|
 {5932FCA5-986B-4061-828D-B98D9E87246D}
-$TARGETDIR$\Platform\Docs\Drivers and Downloads (web).url
+$TARGETDIR$\Docs\Drivers and Downloads (web).url
 Drivers and Downloads (web)
-$SHORTCUTFILES$\ASCOM Platform 6\Docs
+$SHORTCUTFILES$\ASCOM\Platform 6\Docs
 
 
 
-C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
+c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 |
 0|
 {6389496C-2EA4-4C08-AEDC-9553ADA6A762}
-$TARGETDIR$\Platform\Docs\Compatible Software (web).url
+$TARGETDIR$\Docs\Compatible Software (web).url
 Compatible Software (web)
-$SHORTCUTFILES$\ASCOM Platform 6\Docs
+$SHORTCUTFILES$\ASCOM\Platform 6\Docs
 
 
 
-C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
+c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 |
 0|
 {0F7B99D9-7B72-4712-A88B-CA85AA3FDED3}
-$TARGETDIR$\Platform\Tools\ProfileExplorer.exe
+$TARGETDIR$\Tools\ProfileExplorer.exe
 ProfileExplorer
 $DESKTOPDIR$
 
 
 
 
-
+|
 0|
 {1E006CA0-2BD3-4205-A34E-FF0DFE4734DB}
-$TARGETDIR$\Platform\Docs\PlatformHelp.chm
+$TARGETDIR$\Docs\PlatformHelp.chm
 ASCOM Help File
-$SHORTCUTFOLDER$
+$SHORTCUTFILES$\ASCOM\Platform 6
 
 
 
 
-
+|
 0|
 {02695C8A-C346-4FB1-9EAD-97EA75A65931}
-$TARGETDIR$\Platform\Tools\ASCOM Diagnostics.exe
+$TARGETDIR$\Tools\ASCOM Diagnostics.exe
 ASCOM Diagnostics
 $DESKTOPDIR$
 
+
+
+
+|
+0|
+{FF41893F-14D0-4547-A8BF-7FF2DB912D29}
+$TARGETDIR$\Docs\ASCOM_Users_Guide.pdf
+ASCOM User Guide
+$SHORTCUTFOLDER$
+ASCOM User Guide
 
 
 
@@ -4761,11 +4930,11 @@ FALSE
 {5062E5AD-5E71-43EF-AD58-5CFBD185CE33}
 Ascom Platform 6
 http://www.mywebsite.com/Ascom Platform 6.7zip
-FALSE
+TRUE$MYAH_CARET$
 {B9F03FF1-B7D0-45CA-B193-55FE9886D70A}
 Microsoft Windows Installer 3.1
 http://ascom-standards.org/updates/Microsoft Windows Installer 3.1.7zip
-FALSE
+TRUE$MYAH_CARET$
 {1876D75D-EB95-4A40-B5A7-B2EEA625F3FF}
 Welcome Dialog
 {D75DE30D-797D-43F8-B121-FD261896C05A}
@@ -4788,6 +4957,8 @@ Start Installation
 Maintenance
 {7FAA39FD-F269-4620-AFC3-4EC18E1315B8}
 Main Install
+{C797CF7C-BEB3-4BF4-B1D0-11AA94EA8C4D}
+Finish
 {E24F3840-818F-496B-A341-11F330B7C29E}
 Maintenance
 {E8BF06BC-644B-4054-B9AC-9106EB7F5CD4}
@@ -4826,80 +4997,82 @@ Start Menu
 Welcome Dialog
 {D856EFB9-E65B-489C-9C2C-D3FCA240BFF0}
 Main Install
+{819A655A-21B3-4D69-B773-F5A6C8D5C190}
+Finish
 {FBAA65F1-125D-434F-923A-CCBB4F5BEAA2}
-C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.dll
+c:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.dll
 FALSE
 $COMMONFILES$\ASCOM\Switch
 {8800A43A-644A-46E3-8D34-86F3BB39B751}
-C:\ASCOM Trunk\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\SafetyMonitorSimulatorDriver.dll
+c:\ASCOM Trunk\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\SafetyMonitorSimulatorDriver.dll
 FALSE
 $COMMONFILES$\ASCOM\SafetyMonitor
 {CFAA5810-A98F-4B54-88F7-2CE1565B7AFF}
-C:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll
+c:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll
 FALSE
 $COMMONFILES$\ASCOM\Focuser
 {AC2018F1-0D8C-40B3-BAF2-23B9CB255443}
-C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ASCOM.FilterWheelSim.exe
+c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ASCOM.FilterWheelSim.exe
 FALSE
 $COMMONFILES$\ASCOM\FilterWheel
 {0074A899-4886-4160-A67F-CE7D7413F179}
-C:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll
+c:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll
 FALSE
 $COMMONFILES$\ASCOM\Camera
 {2DCDD8ED-02AB-4509-B231-02506553B915}
-C:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll
+c:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll
 TRUE
 
 {A350138F-81A4-4B7B-9ECF-B4FBA2459FAB}
-C:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll
+c:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll
 TRUE
 
 {44A181A7-A60E-4B1D-A4E0-2CA0C66B92A2}
-C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll
+c:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll
 TRUE
 
 {0118A92C-A114-435F-BD9A-6634F8376586}
-C:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll
+c:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll
 TRUE
 
 {C47D21C9-4B03-4D59-A6B7-292C5175B607}
-C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll
+c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll
 TRUE
 
 {B5576F36-EFEB-4E1D-994D-AEC878A68C0B}
-C:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll
+c:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll
 TRUE
 
 {2B44FCB4-5083-446F-8EEE-EB8232516B33}
-C:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll
+c:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll
 TRUE
 
 {97163320-1FF2-440C-99B8-47AEA273AB24}
-C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll
+c:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll
 TRUE
 $COMMONFILES$\ASCOM\Platform
 {E373DC68-7134-4654-B596-E2073A779F1A}
-C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe
+c:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe
 FALSE
 $COMMONFILES$\ASCOM\Telescope
 {6DE5DE2B-5099-42B6-B91B-1DFE62D7476E}
-C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulatorServedClasses\ASCOM.TelescopeSimulator.Telescope.dll
+c:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulatorServedClasses\ASCOM.TelescopeSimulator.Telescope.dll
 FALSE
 $COMMONFILES$\ASCOM\Telescope\ServedClasses
 {2985BD20-397E-4057-95D7-A9EB35924F74}
-C:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll
-TRUE
-
-{6F9A734E-B1F6-4986-8087-A7DEC3EDD076}
-C:\ASCOM Trunk\Interfaces\Master Interfaces\ASCOM.Interfaces.dll
+c:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll
 TRUE
 
 {2F2EDB50-88FE-4466-8E75-BF69F17C8210}
-C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ServedClasses\ASCOM.FilterWheelSim.FilterWheel.dll
+c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ServedClasses\ASCOM.FilterWheelSim.FilterWheel.dll
 FALSE
 $COMMONFILES$\ASCOM\FilterWheel\ServedClasses\
 {97ED9285-93F6-4F1D-88C4-DA230552456D}
-C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll
+c:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll
+TRUE
+
+{89BE456F-29B8-4BC4-9E4E-93DB5E130687}
+c:\ASCOM Trunk\Interfaces\Master Interfaces\ASCOM.Interfaces.dll
 TRUE
 
 {EB8E7494-5BB0-4799-8C62-0B15073FE0ED}
@@ -4910,7 +5083,7 @@ TRUE
 $COMMONFILES$\ASCOM\Helper2.dll
 TRUE
 
-{4C484FE4-6614-4D2C-9450-CD312ACD911C}
+{9C444449-8E02-4661-8FEE-81AA729E0C45}
 HKLM\Software\ASCOM
 FALSE
 FALSE
@@ -5123,8 +5296,6 @@ $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch.dll|TRUE|TRUE
 $COMMONFILES$\ASCOM\SafetyMonitor\SafetyMonitorSimulatorDriver.dll|TRUE|TRUE
 {A866257C-2F52-4F26-8D25-FEFC986DDA5E}
 $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser.dll|TRUE|TRUE
-{4DC14F66-F635-4939-AAE6-486D7493C1DB}
-$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera.dll|TRUE|TRUE
 {F749ACC0-6A2B-4350-976D-DA22AFD26E7A}
 ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|TRUE|FALSE
 {998E9F4B-6244-4801-B43C-322366C8ED1A}
@@ -5133,6 +5304,22 @@ ASCOM.Internal.FusionLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de
 ASCOM.Astrometry, Version=5.5.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|TRUE
 {05B61BA3-9073-423C-A1E2-6579EF4E6275}
 ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|TRUE|FALSE
+{71D8319A-7DBB-4FCB-9D34-338F145ADAE3}
+ASCOM.Attributes, Version=6.0.3964.30483, Culture=neutral, PublicKeyToken=565de7938946fba7|FALSE
+{9505D63F-27F0-46A6-A166-46B1BC89B34C}
+ASCOM.Controls, Version=6.0.3964.30488, Culture=neutral, PublicKeyToken=565de7938946fba7|FALSE
+{3B0D3725-689E-4FD0-A2B9-F5018F1BF8F0}
+ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|FALSE
+{EE10DEC0-5D74-4803-B705-764D22A9D51E}
+|FALSE
+{8AA08BB1-C1CB-4ADC-AD93-3FE194071649}
+ASCOM.Attributes, Version=6.0.3964.30483, Culture=neutral, PublicKeyToken=565de7938946fba7|TRUE
+{18D724E9-7A38-4C26-83D2-957F25EF20B3}
+ASCOM.Controls, Version=6.0.3964.30488, Culture=neutral, PublicKeyToken=565de7938946fba7|TRUE
+{C4873090-9694-441B-83F1-CE49C7778BCB}
+ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|TRUE
+{3DA4C27F-F37E-442E-BAA7-99C143A2FED5}
+$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera.dll|TRUE|TRUE
 $
 
 
@@ -5279,7 +5466,6 @@ $
 
 
 
-C
 
 
 
@@ -5297,16 +5483,7 @@ C
 
 
 
-
-
-
-
-
-
 C
-
-
-
 
 
 
@@ -5339,95 +5516,7 @@ C
 
 
 
-
-
-
-
-
-
-
 C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -5568,215 +5657,334 @@ C
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 C
-C
-C
-C
-C
-C
-C
-C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5820,6 +6028,27 @@ C
 
 
 $
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
