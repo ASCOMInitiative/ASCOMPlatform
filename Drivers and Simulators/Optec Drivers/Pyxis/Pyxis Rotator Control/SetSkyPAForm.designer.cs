@@ -1,4 +1,4 @@
-﻿namespace ASCOM.Pyxis
+﻿namespace Pyxis_Rotator_Control
 {
     partial class SetSkyPAForm
     {
@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetSkyPAForm));
             this.CancelBTN = new System.Windows.Forms.Button();
             this.OK_BTN = new System.Windows.Forms.Button();
             this.Sec_TB = new System.Windows.Forms.TextBox();
@@ -171,6 +172,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label3);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SetSkyPAForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Set Sky PA";
