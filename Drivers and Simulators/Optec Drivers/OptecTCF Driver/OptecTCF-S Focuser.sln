@@ -51,6 +51,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optec TCF-S Focuser", "Opte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptecTCF-S ASCOM Driver", "OptecTCF-S ASCOM Driver\OptecTCF-S ASCOM Driver.csproj", "{248BFAB5-FA97-409B-AF75-807D3C7EBF8A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installer Files", "Installer Files", "{F8858D7E-E401-4CC4-B106-F7CDB7C0BFCA}"
+	ProjectSection(SolutionItems) = preProject
+		RevisionHistory.txt = RevisionHistory.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
