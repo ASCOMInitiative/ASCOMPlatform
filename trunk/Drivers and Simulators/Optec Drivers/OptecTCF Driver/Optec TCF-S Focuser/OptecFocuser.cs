@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using Optec;
 using System.Threading;
+using System.Globalization;
 
 namespace Optec_TCF_S_Focuser
 {
@@ -564,10 +565,10 @@ namespace Optec_TCF_S_Focuser
                 FirmVerString += response.Substring(0, DecimalIndex);
                 response = response.Substring(DecimalIndex + 1, response.Length - 1 - DecimalIndex);
 
-                FirmVerNum = double.Parse(FirmVerString);
+                FirmVerNum = double.Parse(FirmVerString, CultureInfo.InvariantCulture);
                 firmwareVersion = "V" + FirmVerString;
                 string DevTypeString = response;
-                int DevTypeNum = int.Parse(response);
+                int DevTypeNum = int.Parse(response, CultureInfo.InvariantCulture);
 
                 // Finished parsing the firmware version and device type
                 // Now set the device properties accordingly.
@@ -983,9 +984,9 @@ namespace Optec_TCF_S_Focuser
                     throw new ApplicationException("Communication with the device has been lost. The device state will now be set to Disconnected.");
                 }
             }
-            catch
+            catch (Exception ex)
             {
-
+                Debug.Print(ex.Message);
             }
 
             try
@@ -1029,7 +1030,7 @@ namespace Optec_TCF_S_Focuser
                 {
                     ConsecutivePosTimeouts_AutoMode = 0;
                     // parse the position
-                    int pos = int.Parse(received.Substring(2));
+                    int pos = int.Parse(received.Substring(2), CultureInfo.InvariantCulture);
                     if (pos != currentPosition)
                     {
                         currentPosition = pos;
@@ -1040,7 +1041,7 @@ namespace Optec_TCF_S_Focuser
                 {
                     ConsecutivePosTimeouts_AutoMode = 0;
                     // parse the temperature
-                    double temp = double.Parse(received.Substring(2));
+                    double temp = double.Parse(received.Substring(2), CultureInfo.InvariantCulture);
                     if (temp != currentTemperature)
                     {
                         currentTemperature = temp;
@@ -1088,7 +1089,8 @@ namespace Optec_TCF_S_Focuser
             if (t.Contains("ER=1")) throw new ER1_Exception();
             int i = t.IndexOf("T=") + 2;
             if (i == -1) throw new ApplicationException("No Temp Received");
-            currentTemperature = double.Parse(t.Substring(i, 5));
+            string t2 = t.Substring(i, 5);
+            currentTemperature = double.Parse(t2, CultureInfo.InvariantCulture);
         }
 
         public enum TemperatureUnits { Celsius, Fahrenheit, Kelvin }
@@ -1123,7 +1125,7 @@ namespace Optec_TCF_S_Focuser
             string p = mySerialCommunicator.SendCommand("FPOSxx", 1000);
             int i = p.IndexOf("P=") + 2;
             if (i == -1) throw new ApplicationException("No Temp Received");
-            currentPosition = double.Parse(p.Substring(i, 4));
+            currentPosition = double.Parse(p.Substring(i, 4), CultureInfo.InvariantCulture);
         }
         public enum PositionUnits { Steps, Microns }
         private PositionUnits displayPositionUnits = PositionUnits.Steps;
@@ -1319,7 +1321,8 @@ namespace Optec_TCF_S_Focuser
         [Description("Indicates whether the device is capable of backlash compensation.")]
         public bool HasBacklashCompensation
         {
-            get {
+            get 
+			{
                 if (FirmwareVersion == "V3.10" || FirmwareVersion == "V4.10") return true;
                 else return hasBacklashCompensation; 
             }
@@ -1536,7 +1539,7 @@ namespace Optec_TCF_S_Focuser
                 if (resp.Contains(AorB + "=") && resp.Length >= 5)
                 {
                     int i = resp.IndexOf("=") + 2;
-                    slope = int.Parse(resp.Substring(i, 3));
+                    slope = int.Parse(resp.Substring(i, 3), CultureInfo.InvariantCulture);
                 }
             }
             catch
@@ -1688,7 +1691,6 @@ namespace Optec_TCF_S_Focuser
                 Console.WriteLine("An event listener went kaboom!");
             }
         }
-
     }
 
     public class ER1_Exception : Exception
