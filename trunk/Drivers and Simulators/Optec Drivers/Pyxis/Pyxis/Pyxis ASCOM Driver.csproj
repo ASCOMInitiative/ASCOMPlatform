@@ -50,8 +50,14 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RegisterForComInterop>true</RegisterForComInterop>
-    <PlatformTarget>x86</PlatformTarget>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Optec.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
@@ -76,7 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Driver.cs" />
-    <Compile Include="OptecPyxis.cs" />
+    <Compile Include="OptecPyxisA.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <DependentUpon>Resources.resx</DependentUpon>
@@ -95,12 +101,6 @@
     <Compile Include="SetupDialogForm.designer.cs">
       <DependentUpon>SetupDialogForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="StepRateForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="StepRateForm.Designer.cs">
-      <DependentUpon>StepRateForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="XMLSettingsA.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -116,12 +116,9 @@
       <DependentUpon>SetupDialogForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="StepRateForm.resx">
-      <DependentUpon>StepRateForm.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Test.js" />
+    <None Include="Optec.snk" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ASCOM.png" />

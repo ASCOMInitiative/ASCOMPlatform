@@ -8,7 +8,8 @@ using Optec;
 using System.Diagnostics;
 
 
-namespace ASCOM.Pyxis
+
+namespace Pyxis_Rotator_Control
 {
 
     class XMLSettings
@@ -19,7 +20,6 @@ namespace ASCOM.Pyxis
         private static XDocument PyxisSettingsDocument;
         private const string MainElementName = "PyxisSettings";
 
-        // Static Constructor
         static XMLSettings()
         {
             LoadXML();
@@ -37,7 +37,7 @@ namespace ASCOM.Pyxis
                 if (!System.IO.File.Exists(AppDataSettingsFile))
                 {
                     // First Find out if the folder exists
-                    if (!System.IO.Directory.Exists(AppDataPath))
+                    if(!System.IO.Directory.Exists(AppDataPath))
                         System.IO.Directory.CreateDirectory(AppDataPath);
 
                     // Create the settings file...
@@ -168,5 +168,7 @@ namespace ASCOM.Pyxis
             set { setPropertyInXML("HomeOnStart", value); }
         }
     }
+
+
 
 }

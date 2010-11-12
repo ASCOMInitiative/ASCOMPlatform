@@ -299,7 +299,7 @@ namespace ASCOM.PyxisLE_ASCOM
         {
             get 
             {
-                VerifyConnected();
+                //VerifyConnected();
                 return (float)myRotator.TargetSkyPA;
             }
         }

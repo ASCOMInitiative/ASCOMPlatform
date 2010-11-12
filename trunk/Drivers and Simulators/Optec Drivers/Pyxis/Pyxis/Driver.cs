@@ -70,9 +70,13 @@ namespace ASCOM.Pyxis
             Utilities.Profile P = new Utilities.Profile();
             P.DeviceType = "Rotator";					//  Requires Helper 5.0.3 or later
             if (bRegister)
+            {
                 P.Register(s_csDriverID, s_csDriverDescription);
+            }
             else
+            {
                 P.Unregister(s_csDriverID);
+            }
             try										// In case Helper becomes native .NET
             {
                 Marshal.ReleaseComObject(P);
@@ -85,6 +89,7 @@ namespace ASCOM.Pyxis
         public static void RegisterASCOM(Type t)
         {
             RegUnregASCOM(true);
+         
         }
 
         [ComUnregisterFunction]
@@ -109,8 +114,10 @@ namespace ASCOM.Pyxis
         {
             // TODO Replace this with your implementation
             get 
-            { 
-                throw new PropertyNotImplementedException("Connected", false); 
+            {
+                if (OptecPyxis.CurrentDeviceState == OptecPyxis.DeviceStates.Connected) return true;
+                else return false;
+
             }
             set 
             {
@@ -143,7 +150,7 @@ namespace ASCOM.Pyxis
             // This is a trick so that we can tell what the device type of the Pyxis device in
             // the derotation program.
             string x = "";
-            if (XMLSettings.DeviceType == OptecPyxis.DeviceTypes.TwoInch) x = "2";
+            if (OptecPyxis.DeviceType == OptecPyxis.DeviceTypes.TwoInch) x = "2";
             else x = "3";
 
             throw new MethodNotImplementedException("Halt (" + x + ")");
@@ -155,9 +162,8 @@ namespace ASCOM.Pyxis
             {
                 try
                 {
-                    if (OptecPyxis.CurrentDeviceState == OptecPyxis.DeviceStates.InMotion)
-                        return true;
-                    else return false;
+                    //EventLogger.LogMessage("ASCOM IsMoving =" + OptecPyxis.IsMoving.ToString(), System.Diagnostics.TraceLevel.Verbose);
+                    return OptecPyxis.IsMoving;
                 }
                 catch(Exception ex)
                 {
@@ -172,7 +178,38 @@ namespace ASCOM.Pyxis
         {
             try
             {
-                verifyConnected();
+                System.Windows.Forms.MessageBox.Show("Relative Move of " + Position + " Requested");
+                if (Position >= 1000000)
+                {
+                    // This is a special case for the Pyxis that when used by the Optec Derotation program
+                    // that tells the rotator to move just one step.
+
+                    OptecPyxis.Derotate1Step();
+                    return;
+                }
+
+                // Now check for normal values 
+                if (Position <= -360 || Position >= 360)
+                {
+                    throw new ASCOM.InvalidValueException("Move", Position.ToString(), "-359.99 through 359.99");
+                }
+                if ((int)Position == 0 || (int)Position == 360) return;
+
+                // Finally do the move
+                string msg = "";
+                msg += "CurrentAdjustedPA = " + OptecPyxis.CurrentAdjustedPA.ToString();
+                int finalPos = OptecPyxis.CurrentAdjustedPA + (int)Position;
+                
+                msg += " Final Pos = " + finalPos.ToString();
+                if (finalPos > 360) finalPos -= 360;
+                else if (finalPos < 0) finalPos = 360 + finalPos;
+
+                msg += " Moving to " + (OptecPyxis.CurrentAdjustedPA + finalPos).ToString();
+                System.Windows.Forms.MessageBox.Show(msg);
+                OptecPyxis.CurrentAdjustedPA = finalPos;
+
+                // Don't return until the move is complete
+               // while (OptecPyxis.IsMoving) { }
                 
             }
             catch (Exception ex)
@@ -187,13 +224,14 @@ namespace ASCOM.Pyxis
             try
             {
                 // Check that the new position is in the range of possible values
+                System.Windows.Forms.MessageBox.Show("Moving to " + Position);
                 if (Position < 0 || Position >= 360)
                 {
                     throw new ASCOM.InvalidValueException("MoveAbsolute", Position.ToString(), "0 through 359.99");
                 }
-                verifyConnected();
-                OptecPyxis.CurrentAdjustedPA = (double)Position;
-                while (OptecPyxis.IsMoving) { System.Windows.Forms.Application.DoEvents(); }
+                if(OptecPyxis.CurrentAdjustedPA != (int)Position) 
+                    OptecPyxis.CurrentAdjustedPA = (int)Position;
+               // while (OptecPyxis.IsMoving) { System.Windows.Forms.Application.DoEvents(); }
             }
             catch (Exception ex)
             {
@@ -209,7 +247,6 @@ namespace ASCOM.Pyxis
             {
                 try
                 {
-                    verifyConnected();
                     return (float)OptecPyxis.CurrentAdjustedPA;
                 }
                 catch (Exception ex)
@@ -225,31 +262,11 @@ namespace ASCOM.Pyxis
             // TODO Replace this with your implementation
             get
             {
-                try
-                {
-                    verifyConnected();
-                    if (OptecPyxis.getDirectionFlag() == OptecPyxis.CW) return true;
-                    else return false;
-                }
-                catch (Exception ex)
-                {
-                    EventLogger.LogMessage(ex);
-                    throw;
-                }
+                return OptecPyxis.Reverse;
             }
             set
             {
-                try
-                {
-                    verifyConnected();
-                    if (value) OptecPyxis.setDefaultDirection(OptecPyxis.CW);
-                    else OptecPyxis.setDefaultDirection(OptecPyxis.CCW);
-                }
-                catch (Exception ex)
-                {
-                    EventLogger.LogMessage(ex);
-                    throw;
-                }
+                OptecPyxis.Reverse = value;
             }
         }
 
@@ -274,7 +291,7 @@ namespace ASCOM.Pyxis
             {
                 try
                 {
-                    verifyConnected();
+                    //verifyConnected();
                     return (float)OptecPyxis.AdjustedTargetPosition;
                 }
                 catch (Exception ex)
@@ -282,14 +299,6 @@ namespace ASCOM.Pyxis
                     EventLogger.LogMessage(ex);
                     throw;
                 }
-            }
-        }
-
-        public void verifyConnected()
-        {
-            if (OptecPyxis.CurrentDeviceState != OptecPyxis.DeviceStates.Connected)
-            {
-                throw new ASCOM.NotConnectedException("The device must be connected for this command to be processed.");
             }
         }
 

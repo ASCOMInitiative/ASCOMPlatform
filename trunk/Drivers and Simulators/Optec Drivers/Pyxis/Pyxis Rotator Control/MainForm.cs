@@ -1,32 +1,47 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Drawing;
-using System.Runtime.InteropServices;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Optec;
 using System.IO.Ports;
 using System.Diagnostics;
 
-namespace ASCOM.Pyxis
+namespace Pyxis_Rotator_Control
 {
-    [ComVisible(false)]					// Form not registered for COM!
-    public partial class SetupDialogForm : Form
+    public partial class MainForm : Form
     {
         private static bool ExitPositionUpdaterLoop = true;
 
         #region Form Methods
 
-        public SetupDialogForm()
+        public MainForm()
         {
             InitializeComponent();
+
             OptecPyxis.MotionStarted += new EventHandler(OptecPyxis_MotionStarted);
             OptecPyxis.MotionCompleted += new EventHandler(OptecPyxis_MotionCompleted);
             OptecPyxis.ErrorOccurred += new EventHandler(OptecPyxis_ErrorCodeReceived);
             OptecPyxis.ConnectionEstablished += new EventHandler(OptecPyxis_ConnectionEstablished);
             OptecPyxis.ConnectionTerminated += new EventHandler(OptecPyxis_ConnectionTerminated);
             OptecPyxis.MotionHalted += new EventHandler(OptecPyxis_MotionHalted);
+
+            skyPADisplayToolStripMenuItem.Checked = Properties.Settings.Default.ViewSkyPADisplay;
+            rotatorDiagramToolStripMenuItem.Checked = Properties.Settings.Default.ViewRotatorDiagram;
+            absoluteMoveControlsToolStripMenuItem.Checked = Properties.Settings.Default.ViewAbsoluteMoveControls;
+            relativeMoveControlsToolStripMenuItem.Checked = Properties.Settings.Default.ViewRelativeMoveControls;
+            alwaysOnTopToolStripMenuItem.Checked = Properties.Settings.Default.AlwaysOnTop;
+
+            skyPADisplayToolStripMenuItem.CheckedChanged += new EventHandler(ViewSettingItem_CheckedChanged);
+            rotatorDiagramToolStripMenuItem.CheckedChanged += new EventHandler(ViewSettingItem_CheckedChanged);
+            absoluteMoveControlsToolStripMenuItem.CheckedChanged += new EventHandler(ViewSettingItem_CheckedChanged);
+            relativeMoveControlsToolStripMenuItem.CheckedChanged += new EventHandler(ViewSettingItem_CheckedChanged);
+            alwaysOnTopToolStripMenuItem.CheckedChanged +=new EventHandler(alwaysOnTopToolStripMenuItem_CheckedChanged);
+
+            this.TopMost = Properties.Settings.Default.AlwaysOnTop;
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -45,41 +60,15 @@ namespace ASCOM.Pyxis
             base.OnFormClosing(e);
         }
 
-     
-
-        private void SetupDialogForm_Shown(object sender, EventArgs e)
+        private void MainForm_Shown(object sender, EventArgs e)
         {
             UpdateFormConnectionTerminated();
+            UpdateFormSize();
         }
 
         #endregion
 
         #region Button Clicks / Control Events
-
-        private void cmdOK_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void cmdCancel_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void BrowseToAscom(object sender, EventArgs e)
-        {
-            try
-            {
-                System.Diagnostics.Process.Start("http://ascom-standards.org/");
-            }
-            catch (System.ComponentModel.Win32Exception noBrowser)
-            {
-                if (noBrowser.ErrorCode == -2147467259)
-                    MessageBox.Show(noBrowser.Message);
-            }
-            catch (System.Exception other)
-            {
-                MessageBox.Show(other.Message);
-            }
-        }
 
         private void connectToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -117,6 +106,32 @@ namespace ASCOM.Pyxis
             }
         }
 
+        private void PowerLight_Pic_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
+                if (OptecPyxis.CurrentDeviceState == OptecPyxis.DeviceStates.Disconnected)
+                    OptecPyxis.Connect();
+                else
+                    OptecPyxis.Disconnect();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
         private void cOMPortToolStripMenuItem_MouseEnter(object sender, EventArgs e)
         {
             string currentName = OptecPyxis.PortName;
@@ -148,128 +163,91 @@ namespace ASCOM.Pyxis
             XMLSettings.SavedSerialPortName = Sender.Text;
         }
 
-        private void Home_Btn_Click(object sender, EventArgs e)
+        private void RotatorDiagram_Paint(object sender, PaintEventArgs e)
         {
             try
             {
-                this.Cursor = Cursors.WaitCursor;
-                OptecPyxis.Home();
-            }
-            catch (Exception ex)
-            {
-                EventLogger.LogMessage(ex);
-                MessageBox.Show(ex.Message, "Attention");
-            }
-            finally
-            {
-                this.Cursor = Cursors.Default;
-            }
-        }
+                if (OptecPyxis.CurrentDeviceState == OptecPyxis.DeviceStates.Disconnected) return;
+                else if (OptecPyxis.IsHoming) return;
 
-        private void Park_BTN_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.Cursor = Cursors.WaitCursor;
-                OptecPyxis.ParkRotator();
-            }
-            catch (Exception ex)
-            {
-                EventLogger.LogMessage(ex);
-                MessageBox.Show(ex.Message, "Attention");
-            }
-            finally
-            {
-                this.Cursor = Cursors.Default;
-            }
-        }
+                PictureBox sndr = sender as PictureBox;
+                double center_x = sndr.Size.Width / 2;
+                double center_y = sndr.Size.Height / 2;
 
-        private void Sleep_BTN_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.Cursor = Cursors.WaitCursor;
-                OptecPyxis.PutToSleep();
-                UpdateFormDeviceInSleepMode();
-            }
-            catch (Exception ex)
-            {
-                EventLogger.LogMessage(ex);
-                MessageBox.Show(ex.Message, "Attention");
-            }
-            finally
-            {
-                this.Cursor = Cursors.Default;
-            }
-        }
+                double x_zero = 0;
+                double y_zero = -((double)center_y * 0.72D);
 
-        private void Wake_BTN_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.Cursor = Cursors.WaitCursor;
-                OptecPyxis.Connect();
-                UpdateFormConnectionEstablished();
-            }
-            catch (Exception ex)
-            {
-                EventLogger.LogMessage(ex);
-                MessageBox.Show(ex.Message, "Attention");
-            }
-            finally
-            {
-                this.Cursor = Cursors.Default;
-            }
-        }
+                double RotationAngle_deg = (double)OptecPyxis.CurrentAdjustedPA;
 
-        private void SetSkyPA_BTN_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.Cursor = Cursors.WaitCursor;
-                if (OptecPyxis.CurrentDeviceState != OptecPyxis.DeviceStates.Connected)
+                if (OptecPyxis.Reverse)
                 {
-                    MessageBox.Show("The device must be in the connected state and not moving or homing to perform this action.");
-                    return;
+                    if (RotationAngle_deg == 0) { }
+                    else if (RotationAngle_deg < 180)
+                    {
+                        RotationAngle_deg = 180 + (180 - RotationAngle_deg);
+                    }
+                    else if (RotationAngle_deg > 180)
+                    {
+                        RotationAngle_deg = 180 - (RotationAngle_deg - 180);
+                    }
                 }
-                SetSkyPAForm frm = new SetSkyPAForm();
-                DialogResult result = frm.ShowDialog();
-                double newPA = frm.PA;
-                if (result == System.Windows.Forms.DialogResult.OK)
-                {
-                    //Set the new offset...
-                    OptecPyxis.RedefineSkyPAOffset(newPA);
+                double RotationAngle_Rad = RotationAngle_deg * (Math.PI / 180);
+                double x_rotated = x_zero * Math.Cos(RotationAngle_Rad) + y_zero * Math.Sin(RotationAngle_Rad);
 
-                    // Update the form controls
-                    UpdateFormMotionCompleted();
-                }
+
+                double y_rotated = (-(x_zero) * Math.Sin(RotationAngle_Rad)) + y_zero * Math.Cos(RotationAngle_Rad);
+
+                Graphics g = e.Graphics;
+                Pen p = new Pen(Color.OrangeRed, 3);
+
+                g.DrawLine(p, new Point((int)center_x - 1, (int)center_y), new Point((int)(x_rotated + center_x - 1), (int)(y_rotated + center_y)));
+
             }
             catch (Exception ex)
             {
                 EventLogger.LogMessage(ex);
-                MessageBox.Show(ex.Message, "Attention");
-            }
-            finally
-            {
-                this.Cursor = Cursors.Default;
             }
         }
 
-        private void GoToAdjustedPA_BTN_Click(object sender, EventArgs e)
+        private void RotatorDiagram_Click(object sender, EventArgs e)
         {
-            try
+            if (OptecPyxis.IsHoming || OptecPyxis.IsMoving)
             {
-                this.Cursor = Cursors.WaitCursor;
-                OptecPyxis.CurrentAdjustedPA = (int)double.Parse(this.AdjustedTargetPA_TB.Text);
+                MessageBox.Show(
+                 "Please wait until current move/home is finished.");
+                return;
             }
-            catch (Exception ex)
+            MouseEventArgs ClickedPt = e as MouseEventArgs;
+            double x1 = RotatorDiagram.Size.Width / 2;
+            double y1 = RotatorDiagram.Size.Height / 2;
+            double x2 = ClickedPt.X;
+            double y2 = ClickedPt.Y;
+            double dx = x2 - x1;
+            double dy = y2 - y1;
+
+            // Make sure it is within the blue border
+            double DistFromCenter = Math.Sqrt((Math.Abs(dx) * Math.Abs(dx)) + (Math.Abs(dy) * Math.Abs(dy)));
+            if (((DistFromCenter / y1) <= .76) && ((DistFromCenter / y1) >= .45))
             {
-                EventLogger.LogMessage(ex);
-                MessageBox.Show(ex.Message, "Attention");
-            }
-            finally
-            {
-                this.Cursor = Cursors.Default;
+                double radians = Math.Atan2(dy, dx);
+                double angle = -(radians * (180 / Math.PI) - 180);
+                angle = angle + 90;
+                if (angle > 360) angle = (angle - 360);
+
+                if (OptecPyxis.Reverse)
+                {
+                    if (angle == 0) { }
+                    else if (angle < 180)
+                    {
+                        angle = 180 + (180 - angle);
+                    }
+                    else if (angle > 180)
+                    {
+                        angle = 180 - (angle - 180);
+                    }
+                }
+
+                OptecPyxis.CurrentAdjustedPA = (int)angle;
             }
         }
 
@@ -291,6 +269,25 @@ namespace ASCOM.Pyxis
         private void AdjustedTargetPA_TB_Click(object sender, EventArgs e)
         {
             AdjustedTargetPA_TB.SelectAll();
+        }
+
+        private void GoToAdjustedPA_BTN_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
+                OptecPyxis.CurrentAdjustedPA = (int)double.Parse(this.AdjustedTargetPA_TB.Text);
+
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                MessageBox.Show(ex.Message, "Attention");
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
         }
 
         private void RelMoveFwd_BTN_Click(object sender, EventArgs e)
@@ -340,7 +337,180 @@ namespace ASCOM.Pyxis
             if (OptecPyxis.IsMoving || OptecPyxis.IsHoming)
             {
                 OptecPyxis.HaltMove();
-            } 
+            }  
+        }
+
+        private void Home_Btn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
+                OptecPyxis.Home();
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                MessageBox.Show(ex.Message, "Attention");
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private void sleepToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
+                OptecPyxis.PutToSleep();
+                UpdateFormDeviceInSleepMode();
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                MessageBox.Show(ex.Message, "Attention");
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private void wakeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
+                OptecPyxis.Connect();
+                UpdateFormConnectionEstablished();
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                MessageBox.Show(ex.Message, "Attention");
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private void advancedSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+                if (OptecPyxis.CurrentDeviceState != OptecPyxis.DeviceStates.Connected)
+                {
+                    MessageBox.Show("Pyxis must be connected in order to access its settings");
+                    return;
+                }
+
+                this.Cursor = Cursors.WaitCursor;
+
+                while (OptecPyxis.IsMoving)
+                {
+                    // Wait until device is not moving...
+                }
+
+                AdvancedSettingsForm frm = new AdvancedSettingsForm();
+                frm.ShowDialog();
+
+                // Update the rotator diagram incase it changed...
+                if (OptecPyxis.Reverse) RotatorDiagram.Image = Properties.Resources.Rotator_REV;
+                else RotatorDiagram.Image = Properties.Resources.Rotator_FWD;
+
+                UpdatePosition();
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+
+        }
+
+        private void SetSkyPA_BTN_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
+                if (OptecPyxis.CurrentDeviceState != OptecPyxis.DeviceStates.Connected)
+                {
+                    MessageBox.Show("The device must be in the connected state and not moving or homing to perform this action.");
+                    return;
+                }
+                SetSkyPAForm frm = new SetSkyPAForm();
+                DialogResult result = frm.ShowDialog();
+                double newPA = frm.PA;
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    //Set the new offset...
+                    OptecPyxis.RedefineSkyPAOffset(newPA);
+
+                    // Update the form controls
+                    UpdateFormMotionCompleted();
+                }
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                MessageBox.Show(ex.Message, "Attention");
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private void Park_BTN_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
+                OptecPyxis.ParkRotator();
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                MessageBox.Show(ex.Message, "Attention");
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+
+        }
+
+        private void ViewSettingItem_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.ViewSkyPADisplay = skyPADisplayToolStripMenuItem.Checked;
+            Properties.Settings.Default.ViewRotatorDiagram = rotatorDiagramToolStripMenuItem.Checked;
+            Properties.Settings.Default.ViewAbsoluteMoveControls = absoluteMoveControlsToolStripMenuItem.Checked;
+            Properties.Settings.Default.ViewRelativeMoveControls = relativeMoveControlsToolStripMenuItem.Checked;
+            Properties.Settings.Default.Save();
+            UpdateFormSize();
+        }
+
+        private void alwaysOnTopToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.AlwaysOnTop = alwaysOnTopToolStripMenuItem.Checked;
+            Properties.Settings.Default.Save();
+            this.TopMost = Properties.Settings.Default.AlwaysOnTop;
+        }
+
+        private void showAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            skyPADisplayToolStripMenuItem.Checked = true;
+            rotatorDiagramToolStripMenuItem.Checked = true;
+            absoluteMoveControlsToolStripMenuItem.Checked = true;
+            relativeMoveControlsToolStripMenuItem.Checked = true;
+            Properties.Settings.Default.Save();
         }
 
         #endregion
@@ -381,7 +551,216 @@ namespace ASCOM.Pyxis
 
         #region Update UI Methods
 
+        private delegate void PositionUpdater();
+
         private delegate void DisplayUpdater();
+
+        private void UpdatePosition()
+        {
+            this.CurrentPosition_LBL.Text = OptecPyxis.CurrentAdjustedPA.ToString("000Â°");
+            RotatorDiagram.Refresh();
+        }
+
+        private void UpdateFormSize()
+        {
+            // Adjust the form size and sizes of tablelayout cells to adjust for viewed objects.
+            float skyPADisplayHeight = 55;
+            float rotatorDiagramHeight = 244;
+            float absoluteControlHeight = 84;
+            float relativeControlHeight = 70;
+
+            float formStartHeight = 93;
+
+            if (Properties.Settings.Default.ViewSkyPADisplay)
+            {
+                tableLayoutPanel1.RowStyles[0].Height = skyPADisplayHeight;
+                formStartHeight += skyPADisplayHeight;
+                SkyPA_Panel.Visible = true;
+            }
+            else
+            {
+                tableLayoutPanel1.RowStyles[0].Height = 0;
+                SkyPA_Panel.Visible = false;
+            }
+
+            if (Properties.Settings.Default.ViewRotatorDiagram)
+            {
+                tableLayoutPanel1.RowStyles[1].Height = rotatorDiagramHeight;
+                formStartHeight += rotatorDiagramHeight;
+                RotatorDiagram_Panel.Visible = true;
+            }
+            else
+            {
+                tableLayoutPanel1.RowStyles[1].Height = 0;
+                RotatorDiagram_Panel.Visible = false;
+            }
+
+            if (Properties.Settings.Default.ViewAbsoluteMoveControls)
+            {
+                tableLayoutPanel1.RowStyles[2].Height = absoluteControlHeight;
+                formStartHeight += absoluteControlHeight;
+                AbsoluteMovePanel.Visible = true;
+            }
+            else
+            {
+                tableLayoutPanel1.RowStyles[2].Height = 0;
+                AbsoluteMovePanel.Visible = false;
+
+            }
+
+            if (Properties.Settings.Default.ViewRelativeMoveControls)
+            {
+                tableLayoutPanel1.RowStyles[3].Height = relativeControlHeight;
+                formStartHeight += relativeControlHeight;
+                RelativeMovePanel.Visible = true;
+            }
+            else
+            {
+                tableLayoutPanel1.RowStyles[3].Height = 0;
+                RelativeMovePanel.Visible = false;
+            }
+
+            this.Height = (int)formStartHeight;
+            this.Refresh();
+            Application.DoEvents();
+        }
+
+        private void UpdateFormConnectionEstablished()
+        {
+            PowerLight_Pic.Image = Properties.Resources.RedLight;
+            if (OptecPyxis.Reverse) RotatorDiagram.Image = Properties.Resources.Rotator_REV;
+            else RotatorDiagram.Image = Properties.Resources.Rotator_FWD;
+            sleepToolStripMenuItem.Enabled = true;
+            SetSkyPA_BTN.Enabled = true;
+            Park_BTN.Enabled = true;
+            parkToolStripMenuItem.Enabled = true;
+            Home_Btn.Enabled = true;
+            homeToolStripMenuItem.Enabled = true;
+            wakeToolStripMenuItem.Enabled = false;
+            connectToolStripMenuItem.Enabled = false;
+            disconnectToolStripMenuItem.Enabled = true;
+            CurrentPosition_LBL.Text = OptecPyxis.CurrentAdjustedPA.ToString("000Â°");
+            RelMoveBack_BTN.Enabled = true;
+            RelMoveFwd_BTN.Enabled = true;
+            RelativeIncrement_NUD.Enabled = true;
+            GoToAdjustedPA_BTN.Enabled = true;
+            AdjustedTargetPA_TB.Enabled = true;
+            StatusLabel.Text = "Pyxis Connected and Ready for Action!";
+            RotatorDiagram.Visible = true;
+            RotatorDiagram.Enabled = true;
+            RotatorDiagram.Refresh();
+        }
+
+        private void UpdateFormConnectionTerminated()
+        {
+            PowerLight_Pic.Image = Properties.Resources.GreyLight;
+            RotatorDiagram.Enabled = false;
+            RotatorDiagram.Image = Properties.Resources.Rotator_ERROR;
+            RotatorDiagram.Refresh();
+            Halt_BTN.Enabled = false;
+            SetSkyPA_BTN.Enabled = false; 
+            sleepToolStripMenuItem.Enabled = false;
+            Park_BTN.Enabled = false;
+            parkToolStripMenuItem.Enabled = false;
+            Home_Btn.Enabled = false;
+            homeToolStripMenuItem.Enabled = false;
+            wakeToolStripMenuItem.Enabled = false;
+            connectToolStripMenuItem.Enabled = true;
+            disconnectToolStripMenuItem.Enabled = false;
+            StatusLabel.Text = "Disconnected";
+            Halt_BTN.Enabled = false;
+            RelMoveBack_BTN.Enabled = false;
+            RelMoveFwd_BTN.Enabled = false;
+            RelativeIncrement_NUD.Enabled = false;
+            GoToAdjustedPA_BTN.Enabled = false;
+            AdjustedTargetPA_TB.Enabled = false;
+            CurrentPosition_LBL.Text = "000Â°";
+        }
+
+        private void UpdateFormMotionStarted()
+        {
+            Halt_BTN.Enabled = true;
+            sleepToolStripMenuItem.Enabled = false;
+            SetSkyPA_BTN.Enabled = false;
+            Park_BTN.Enabled = false;
+            parkToolStripMenuItem.Enabled = false;
+            Home_Btn.Enabled = false;
+            homeToolStripMenuItem.Enabled = false;
+            wakeToolStripMenuItem.Enabled = false;
+            RelMoveBack_BTN.Enabled = false;
+            RelMoveFwd_BTN.Enabled = false;
+            RelativeIncrement_NUD.Enabled = false;
+            GoToAdjustedPA_BTN.Enabled = false;
+            AdjustedTargetPA_TB.Enabled = false;
+            if (OptecPyxis.IsMoving) StatusLabel.Text = "Moving to PA: " + OptecPyxis.AdjustedTargetPosition.ToString() + "...";
+            else if (OptecPyxis.IsHoming) StatusLabel.Text = "Pyxis is Homing";
+            StartMotionBackgroundWorker();
+        }
+
+        private void UpdateFormMotionCompleted()
+        {
+            if (OptecPyxis.Reverse) RotatorDiagram.Image = Properties.Resources.Rotator_REV;
+            else RotatorDiagram.Image = Properties.Resources.Rotator_FWD;
+            RotatorDiagram.Enabled = true;
+            ExitPositionUpdaterLoop = true;
+            Halt_BTN.Enabled = false;
+            RelativeIncrement_NUD.Enabled = true;
+            RelMoveBack_BTN.Enabled = true;
+            SetSkyPA_BTN.Enabled = true;
+            Home_Btn.Enabled = true;
+            Park_BTN.Enabled = true;
+            RelMoveFwd_BTN.Enabled = true;
+            GoToAdjustedPA_BTN.Enabled = true;
+            AdjustedTargetPA_TB.Enabled = true;
+            sleepToolStripMenuItem.Enabled = true;
+            homeToolStripMenuItem.Enabled = true;
+            parkToolStripMenuItem.Enabled = true;
+            UpdatePosition();
+            StatusLabel.Text = "Pyxis Ready for Action!";
+            
+        }
+
+        private void UpdateFormMotionHalted()
+        {
+            Halt_BTN.Enabled = false;
+            SetSkyPA_BTN.Enabled = false;
+            sleepToolStripMenuItem.Enabled = false;
+            Park_BTN.Enabled = false;
+            parkToolStripMenuItem.Enabled = false;
+            Home_Btn.Enabled = true;
+            homeToolStripMenuItem.Enabled = true;
+            wakeToolStripMenuItem.Enabled = false;
+            connectToolStripMenuItem.Enabled = true;
+            disconnectToolStripMenuItem.Enabled = true;
+            RotatorDiagram.Enabled = false;
+            RotatorDiagram.Image = Properties.Resources.Rotator_ERROR;
+            StatusLabel.Text = "Device has been Halted. HOME REQUIRED";
+            Halt_BTN.Enabled = false;
+            RelMoveBack_BTN.Enabled = false;
+            RelMoveFwd_BTN.Enabled = false;
+            RelativeIncrement_NUD.Enabled = false;
+            GoToAdjustedPA_BTN.Enabled = false;
+            AdjustedTargetPA_TB.Enabled = false;
+        }
+
+        private void UpdateFormDeviceInSleepMode()
+        {
+
+            sleepToolStripMenuItem.Enabled = false;
+            Park_BTN.Enabled = false;
+            parkToolStripMenuItem.Enabled = false;
+            Home_Btn.Enabled = false;
+            homeToolStripMenuItem.Enabled = false;
+            wakeToolStripMenuItem.Enabled = true;
+            RelativeIncrement_NUD.Enabled = false;
+            RelMoveBack_BTN.Enabled = false;
+            RelMoveFwd_BTN.Enabled = false;
+            Halt_BTN.Enabled = false;
+            SetSkyPA_BTN.Enabled = false;
+            connectToolStripMenuItem.Enabled = false;
+            disconnectToolStripMenuItem.Enabled = false;
+            StatusLabel.Text = "shhh... Rotator is Sleeping!";
+        }
 
         private void StartMotionBackgroundWorker()
         {
@@ -424,155 +803,14 @@ namespace ASCOM.Pyxis
             }
         }
 
-        private delegate void PositionUpdater();
-
-        private void UpdatePosition()
-        {
-            this.CurrentPosition_LBL.Text = OptecPyxis.CurrentAdjustedPA.ToString("000°");
-        }
-
-        private void UpdateFormConnectionEstablished()
-        {
-            propertyGrid1.SelectedObject = new PyxisPropertyGrid();
-            Sleep_BTN.Enabled = true;
-            sleepToolStripMenuItem.Enabled = true;
-            SetSkyPA_BTN.Enabled = true;
-            Park_BTN.Enabled = true;
-            parkToolStripMenuItem.Enabled = true;
-            Home_Btn.Enabled = true;
-            homeToolStripMenuItem.Enabled = true;
-            Wake_BTN.Enabled = false;
-            wakeToolStripMenuItem.Enabled = false;
-            connectToolStripMenuItem.Enabled = false;
-            disconnectToolStripMenuItem.Enabled = true;
-            CurrentPosition_LBL.Text = OptecPyxis.CurrentAdjustedPA.ToString("000°");
-            RelMoveBack_BTN.Enabled = true;
-            RelMoveFwd_BTN.Enabled = true;
-            RelativeIncrement_NUD.Enabled = true;
-            propertyGrid1.Enabled = true;
-            propertyGrid1.Refresh();
-            GoToAdjustedPA_BTN.Enabled = true;
-            AdjustedTargetPA_TB.Enabled = true;
-            StatusLabel.Text = "Pyxis Connected and Ready for Action!";
-        }
-
-        private void UpdateFormConnectionTerminated()
-        {
-            Halt_BTN.Enabled = false;
-            SetSkyPA_BTN.Enabled = false;
-            propertyGrid1.SelectedObject = null;
-            Sleep_BTN.Enabled = false;
-            sleepToolStripMenuItem.Enabled = false;
-            Park_BTN.Enabled = false;
-            parkToolStripMenuItem.Enabled = false;
-            Home_Btn.Enabled = false;
-            homeToolStripMenuItem.Enabled = false;
-            Wake_BTN.Enabled = false;
-            wakeToolStripMenuItem.Enabled = false;
-            connectToolStripMenuItem.Enabled = true;
-            disconnectToolStripMenuItem.Enabled = false;
-            StatusLabel.Text = "Disconnected";
-            propertyGrid1.Enabled = false;
-            Halt_BTN.Enabled = false;
-            RelMoveBack_BTN.Enabled = false;
-            RelMoveFwd_BTN.Enabled = false;
-            RelativeIncrement_NUD.Enabled = false;
-            GoToAdjustedPA_BTN.Enabled = false;
-            AdjustedTargetPA_TB.Enabled = false;
-            CurrentPosition_LBL.Text = "000°";
-        }
-
-        private void UpdateFormMotionStarted()
-        {
-            Halt_BTN.Enabled = true;
-            Sleep_BTN.Enabled = false;
-            sleepToolStripMenuItem.Enabled = false;
-            SetSkyPA_BTN.Enabled = false;
-            Park_BTN.Enabled = false;
-            parkToolStripMenuItem.Enabled = false;
-            Home_Btn.Enabled = false;
-            homeToolStripMenuItem.Enabled = false;
-            Wake_BTN.Enabled = false;
-            wakeToolStripMenuItem.Enabled = false;
-            propertyGrid1.Enabled = false;
-            RelMoveBack_BTN.Enabled = false;
-            RelMoveFwd_BTN.Enabled = false;
-            RelativeIncrement_NUD.Enabled = false;
-            GoToAdjustedPA_BTN.Enabled = false;
-            AdjustedTargetPA_TB.Enabled = false;
-
-            if (OptecPyxis.IsMoving) StatusLabel.Text = "Moving to PA: " + OptecPyxis.AdjustedTargetPosition.ToString() + "...";
-            else if (OptecPyxis.IsHoming) StatusLabel.Text = "Pyxis is Homing";
-            StartMotionBackgroundWorker();
-        }
-
-        private void UpdateFormMotionCompleted()
-        {
-            ExitPositionUpdaterLoop = true;
-            Halt_BTN.Enabled = false;
-            RelativeIncrement_NUD.Enabled = true;
-            RelMoveBack_BTN.Enabled = true;
-            SetSkyPA_BTN.Enabled = true;
-            Home_Btn.Enabled = true;
-            Park_BTN.Enabled = true;
-            Sleep_BTN.Enabled = true;
-            RelMoveFwd_BTN.Enabled = true;
-            GoToAdjustedPA_BTN.Enabled = true;
-            AdjustedTargetPA_TB.Enabled = true;
-            propertyGrid1.Enabled = true;
-            propertyGrid1.Refresh();
-            StatusLabel.Text = "Pyxis Ready for Action!";
-
-        }
-
-        private void UpdateFormMotionHalted()
-        {
-            Halt_BTN.Enabled = false;
-            SetSkyPA_BTN.Enabled = false;
-            Sleep_BTN.Enabled = false;
-            sleepToolStripMenuItem.Enabled = false;
-            Park_BTN.Enabled = false;
-            parkToolStripMenuItem.Enabled = false;
-            Home_Btn.Enabled = true;
-            homeToolStripMenuItem.Enabled = true;
-            Wake_BTN.Enabled = false;
-            wakeToolStripMenuItem.Enabled = false;
-            connectToolStripMenuItem.Enabled = true;
-            disconnectToolStripMenuItem.Enabled = true;
-            StatusLabel.Text = "Device has been Halted. HOME REQUIRED";
-            propertyGrid1.Enabled = false;
-            Halt_BTN.Enabled = false;
-            RelMoveBack_BTN.Enabled = false;
-            RelMoveFwd_BTN.Enabled = false;
-            RelativeIncrement_NUD.Enabled = false;
-            GoToAdjustedPA_BTN.Enabled = false;
-            AdjustedTargetPA_TB.Enabled = false;
-        }
-
-        private void UpdateFormDeviceInSleepMode()
-        {
-            propertyGrid1.Enabled = false;
-            Sleep_BTN.Enabled = false;
-            sleepToolStripMenuItem.Enabled = false;
-            Park_BTN.Enabled = false;
-            parkToolStripMenuItem.Enabled = false;
-            Home_Btn.Enabled = false;
-            homeToolStripMenuItem.Enabled = false;
-            Wake_BTN.Enabled = true;
-            wakeToolStripMenuItem.Enabled = true;
-            RelativeIncrement_NUD.Enabled = false;
-            RelMoveBack_BTN.Enabled = false;
-            RelMoveFwd_BTN.Enabled = false;
-            Halt_BTN.Enabled = false;
-            SetSkyPA_BTN.Enabled = false;
-
-            connectToolStripMenuItem.Enabled = false;
-            disconnectToolStripMenuItem.Enabled = false;
-            StatusLabel.Text = "shhh... Rotator is Sleeping!";
-            propertyGrid1.Refresh();
-        }
-
         #endregion
+
+
+
+
+
+
+
 
     }
 
@@ -628,7 +866,7 @@ namespace ASCOM.Pyxis
                     "in order to change the reverse property. If the device is not at the home position " +
                     "it will move there automatically. Would you like to continue changing this property?",
                     "Attention", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-                if (result == DialogResult.Yes)
+                if(result== DialogResult.Yes)
                     OptecPyxis.Reverse = value;
             }
         }
@@ -651,7 +889,7 @@ namespace ASCOM.Pyxis
             }
         }
 
-        [DisplayName("Slew Rate (°/sec)")]
+        [DisplayName("Slew Rate (Â°/sec)")]
         [Category("Device Settings")]
         [Description("The rotation rate of the device based on the device Resolution and Step Time properties")]
         public double SlewRate
@@ -718,7 +956,7 @@ namespace ASCOM.Pyxis
             }
         }
 
-        [DisplayName("Park Position (°)")]
+        [DisplayName("Park Position (Â°)")]
         [Category("Application Settings")]
         [Description("Enter the position the rotator will travel to when parking")]
         public int ParkPosition
